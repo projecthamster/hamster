@@ -1,0 +1,9 @@
+SUBDIRS = hamster data
+
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
+
+DISTCLEANFILES = 
+
+EXTRA_DIST = \
+	MAINTAINERS \
+	TODO

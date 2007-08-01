@@ -1,0 +1,12 @@
+create table activities(id integer primary key, name varchar2(500), work integer, activity_order integer, deleted integer);
+insert into activities values (0,'Hello world', 0, 3, 0);
+insert into activities values (1,'How are you?', 0, 1, 0);
+insert into activities values (2,'Thanks, fine, but i am the most important of all tasks', 0, 0, 0);
+
+# fact_date is ISO format (YYYYMMDD) date converted to integer
+# this way we will be able to do simple selects
+create table facts(id integer primary key, activity_id integer, fact_date integer, fact_time varchar2(4));
+
+
+1|15|20070729|1108|jauns darbs
+2|5|20070729|1232|Dear Hamsters

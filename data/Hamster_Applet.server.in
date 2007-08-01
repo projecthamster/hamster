@@ -1,0 +1,22 @@
+<oaf_info>
+    <oaf_server iid="OAFIID:Hamster_Applet_Factory" type="exe" location="@LIBEXECDIR@/hamster-applet">
+        <oaf_attribute name="repo_ids" type="stringv">
+            <item value="IDL:Bonobo/GenericFactory:1.0"/>
+            <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="Hamster"/>
+        <oaf_attribute name="description" type="string" value="Time tracking for masses"/>
+    </oaf_server>
+
+    <oaf_server iid="OAFIID:Hamster_Applet" type="factory" location="OAFIID:Hamster_Applet_Factory">
+        <oaf_attribute name="repo_ids" type="stringv">
+            <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+            <item value="IDL:Bonobo/Control:1.0"/>
+            <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="Hamster"/>
+        <oaf_attribute name="description" type="string" value="Time tracking for masses"/>
+        <oaf_attribute name="panel:category" type="string" value="Accessories"/>
+        <oaf_attribute name="panel:icon" type="string" value="bug-buddy.png"/>
+    </oaf_server>
+</oaf_info>
