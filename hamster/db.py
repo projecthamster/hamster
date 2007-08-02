@@ -19,21 +19,14 @@ def get_facts(date):
     return fetchall(query, (date,))
 
 def add_fact(activity_id):
-    last_fact = fetchone("select max(id) from facts")
-    if last_fact: #avoid emptyness
-        id = last_fact[0] + 1
-    else:
-        last_fact = 0
-
-    insert = """INSERT INTO facts(id, activity_id,
-                                  fact_date, fact_time)
-                     VALUES (?, ?, ?, ?)
+    insert = """INSERT INTO facts(activity_id, fact_date, fact_time)
+                     VALUES (?, ?, ?)
              """
 
     fact_date = time.strftime('%Y%m%d')
     fact_time = time.strftime('%H%M')
 
-    execute(insert, (id, activity_id, fact_date, fact_time))
+    execute(insert, (activity_id, fact_date, fact_time))
 
 
 def get_activity_list():
@@ -49,7 +42,6 @@ def get_activity_list():
 
 def remove_activity(id):
     """ sets activity to deleted = True """
-    print "would like to remove activity %d" % (id)
     execute("update activities set deleted = 1 where id = ?", (id,))
 
 def swap_activity(id1, id2):
@@ -99,6 +91,8 @@ def fetchall(query, params = None):
     con = get_connection()
     cur = con.cursor()
 
+    print query, params
+
     if params:
         cur.execute(query, params)
     else:
@@ -120,6 +114,7 @@ def execute(statement, params):
     con = get_connection()
     cur = con.cursor()
 
+    print statement, params
     res = cur.execute(statement, params)
 
     con.commit()
