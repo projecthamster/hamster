@@ -37,7 +37,7 @@ class DayStore(object):
 
             if prev_fact:
                 duration = fact_time - prev_time
-                if not self.totals.has_key('prev_fact'):
+                if not self.totals.has_key(prev_fact):
                     self.totals[prev_fact] = 0
 
                 self.totals[prev_fact] += duration
@@ -60,22 +60,24 @@ class OverviewController:
         self.monday = self.today - dt.timedelta(self.today.weekday())
 
         # now let's set up tree columns!
-        for i in range(7):
+        # the last widget is total totals
+        for i in range(8):
             treeview = self.get_widget('day_' + str(i))
-            timeColumn = gtk.TreeViewColumn('Time')
-            timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-            timeColumn.set_expand(False)
-            timeCell = gtk.CellRendererText()
-            timeColumn.pack_start(timeCell, True)
-            timeColumn.set_attributes(timeCell, text=1)
-            treeview.append_column(timeColumn)
+            if treeview:
+                timeColumn = gtk.TreeViewColumn('Time')
+                timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+                timeColumn.set_expand(False)
+                timeCell = gtk.CellRendererText()
+                timeColumn.pack_start(timeCell, True)
+                timeColumn.set_attributes(timeCell, text=1)
+                treeview.append_column(timeColumn)
 
-            nameColumn = gtk.TreeViewColumn('Name')
-            nameColumn.set_expand(True)
-            nameCell = gtk.CellRendererText()
-            nameColumn.pack_start(nameCell, True)
-            nameColumn.set_attributes(nameCell, text=0)
-            treeview.append_column(nameColumn)
+                nameColumn = gtk.TreeViewColumn('Name')
+                nameColumn.set_expand(True)
+                nameCell = gtk.CellRendererText()
+                nameColumn.pack_start(nameCell, True)
+                nameColumn.set_attributes(nameCell, text=0)
+                treeview.append_column(nameColumn)
 
             treeview = self.get_widget('totals_' + str(i))
             nameColumn = gtk.TreeViewColumn('Name')
@@ -103,11 +105,15 @@ class OverviewController:
 
 
     def load_days(self):
+        self.totals = {}
+        self.total_store = gtk.ListStore(str, str)
+
         for i in range(7):
             current_date = self.monday + dt.timedelta(i)
 
             label = self.get_widget('label_' + str(i))
-            label.set_text(current_date.strftime('%A, %b %d.'))
+            label.set_text('<b>' + current_date.strftime('%A, %b %d.') + '</b>')
+            label.set_use_markup(True);
 
             day = DayStore(current_date.strftime('%Y%m%d'));
 
@@ -116,6 +122,21 @@ class OverviewController:
 
             treeview = self.get_widget('totals_' + str(i))
             treeview.set_model(day.total_store)
+
+            #append totals to week's totals
+            for total in day.totals:
+                if not self.totals.has_key(total):
+                    self.totals[total] = 0
+
+                self.totals[total] += day.totals[total]
+
+        for total in self.totals:
+            in_hours = self.totals[total] / 60.0
+            self.total_store.append(["%.1fh" % in_hours, total])
+
+        treeview = self.get_widget('totals_7')
+        treeview.set_model(self.total_store)
+
 
     def show(self):
         self.window.show_all()
