@@ -7,6 +7,10 @@ insert into activities values (2,'Thanks, fine, but i am the most important of a
 # this way we will be able to do simple selects
 create table facts(id integer primary key, activity_id integer, fact_date integer, fact_time varchar2(4));
 
+# in case if we need upgrade db structure later on
+# this way it'll be more easier to check
+create table version(version integer);
+insert into version values(1);
 
 1|15|20070729|1108|jauns darbs
 2|5|20070729|1232|Dear Hamsters
