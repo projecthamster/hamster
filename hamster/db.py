@@ -5,7 +5,6 @@ import os, time
 import hamster
 
 # we are saving data under $HOME/.hamsterdb
-DBFILE = os.path.join(hamster.USER_HAMSTER_DIR, 'hamster.db')
 con = None # Connection will be created on demand
 
 def get_facts(date):
@@ -82,7 +81,7 @@ def update_activity(activity):
 def get_connection():
     global con
     if con == None:
-        con = sqlite.connect(DBFILE)
+        con = sqlite.connect(hamster.HAMSTER_DB)
 
     con.row_factory = sqlite.Row
     return con
