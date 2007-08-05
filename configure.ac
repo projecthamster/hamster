@@ -1,4 +1,4 @@
-AC_INIT(hamster-applet, 0.1, toms.baugis@gmail.com)
+AC_INIT(hamster-applet, 0.1.1, toms.baugis@gmail.com)
 AC_CONFIG_SRCDIR(hamster/__init__.py)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
@@ -40,19 +40,16 @@ AC_SUBST(LIBDIR)
 
 AS_AC_EXPAND(PYTHONDIR, $pythondir)
 AC_SUBST(PYTHONDIR)
-		
+
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
-PKG_CHECK_MODULES(DESKBAR,
-	gtk+-2.0				>= 2.6
-	pygtk-2.0				>= 2.6
-	pygobject-2.0			>= 2.6
-	gnome-python-2.0		>= 2.10
-	gnome-desktop-2.0		>= 2.10
+PKG_CHECK_MODULES(HAMSTER,
+    pygtk-2.0               >= 2.6
+    pygobject-2.0           >= 2.6
 )
-AC_SUBST(DESKBAR_CFLAGS)
-AC_SUBST(DESKBAR_LIBS)
+AC_SUBST(HAMSTER_CFLAGS)
+AC_SUBST(HAMSTER_LIBS)
 
 AC_MSG_CHECKING([for gnomeapplet module])
 if AC_RUN_LOG([DISPLAY= $PYTHON -c '
@@ -67,32 +64,28 @@ except:
   AC_MSG_RESULT([yes])
 else
   AC_MSG_RESULT([no])
-  AC_MSG_ERROR([gnomeapplet Python module required to build deskbar])
+  AC_MSG_ERROR([gnomeapplet Python module required to build hamster])
 fi
 
-dnl ****************************************************************************
-dnl * PyGTK Codegen and defs files
-dnl ****************************************************************************
-AC_PATH_PROG(PYGTK_CODEGEN, pygtk-codegen-2.0, no)
-if test "x$PYGTK_CODEGEN" = xno; then
-  AC_MSG_ERROR(could not find pygtk-codegen-2.0 script)
+AC_MSG_CHECKING([for pysqlite2 module])
+if AC_RUN_LOG([DISPLAY= $PYTHON -c '
+try:
+    import pysqlite2
+except ImportError, e:
+    if str(e).find("pysqlite2") >= 0:
+          raise
+except:
+    pass
+']); then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+  AC_MSG_ERROR([pysqlite2 Python module required to build hamster])
 fi
 
-AC_MSG_CHECKING(for pygtk defs)
-PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
-AC_SUBST(PYGTK_DEFSDIR)
-AC_MSG_RESULT($PYGTK_DEFSDIR)
 
-dnl ****************************************************************************
-dnl * Check for prctl()
-dnl ****************************************************************************
-AC_CHECK_FUNC(prctl, HAVE_PRCTL="yes", HAVE_PRCTL="yes")
-if test "x$HAVE_PRCTL" = "xyes"; then
-	AC_CHECK_DECL(PR_SET_NAME, STILL_HAVE_PRCTL="yes", STILL_HAVE_PRCTL="no", [#include <sys/prctl.h>])
-	if test "x$STILL_HAVE_PRCTL" = "xyes"; then
-		AC_DEFINE(HAVE_PRCTL, 1, [Defined as 1 if prctl and PR_SET_NAME are available])
-	fi
-fi
+
+
 
 dnl ****************************************************************************
 dnl * --------------------------------------------------------------------------
