@@ -7,6 +7,32 @@ import hamster
 # we are saving data under $HOME/.hamsterdb
 con = None # Connection will be created on demand
 
+def mins(normal_time):
+    """ returns time in minutes since midnight"""
+    return int(normal_time[:2]) * 60 + int(normal_time[2:4])
+
+def get_last_activity():
+    query = """SELECT a.fact_date, a.fact_time, b.name
+                 FROM facts a
+            LEFT JOIN activities b ON a.activity_id = b.id
+             ORDER BY a.fact_date desc, a.fact_time desc
+                LIMIT 1
+    """
+
+    activity = fetchone(query)
+    today = time.strftime('%Y%m%d')
+    now = time.strftime('%H%M')
+
+    if (activity['fact_date'] != int(today)):
+        return None, 0 #nothing today!
+
+    # we are adding 0.1 because we don't have seconds but
+    # would like to differ between nothing and just started something
+    duration = mins(now) - mins(activity['fact_time']) + 0.1
+
+    return activity['name'], duration
+
+
 def get_facts(date):
     query = """SELECT a.id, a.fact_date, a.fact_time, b.name
                  FROM facts a
