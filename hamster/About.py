@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os.path import join
 from gettext import gettext as _
-from hamster.defs import VERSION
+from hamster.defs import *
 import gtk, gnomevfs
 import hamster
 
@@ -19,11 +19,10 @@ def show_about(parent):
     about = gtk.AboutDialog()
     infos = {
         "name" : _("Hamster"),
-        "logo-icon-name" : "bug-buddy",
         "version" : VERSION,
         "comments" : _("Time tracking for masses."),
         "copyright" : "Copyright © 2007 Toms Baugis.",
-        "website" : "http://live.gnome.org/ProjectHamster",
+        "website" : "http://projecthamster.wordpress.com/",
         "website-label" : _("Hamster Website"),
     }
 
@@ -37,6 +36,14 @@ def show_about(parent):
     for prop, val in infos.items():
         about.set_property(prop, val)
 
+
+    hamster_logo = join(DATA_DIR, "hamster-applet", 'art', 'tm.png')
+        
+    zupa = gtk.gdk.pixbuf_new_from_file(hamster_logo)
+    about.set_logo(zupa)
+
     about.connect("response", lambda self, *args: self.destroy())
     about.set_screen(parent.get_screen())
     about.show_all()
+    
+    
