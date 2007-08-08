@@ -47,8 +47,9 @@ class DayStore(object):
         # now we are good to append totals!
         # no sorting - chronological is intuitive
         for total in self.totals:
-            in_hours = self.totals[total] / 60.0
-            self.total_store.append(["%.1fh" % in_hours, total])
+            if (self.totals[total] / 60.0) >= 0.1:
+                in_hours = self.totals[total] / 60.0
+                self.total_store.append(["%.1fh" % in_hours, total])
 
 
 class OverviewController:
@@ -131,8 +132,9 @@ class OverviewController:
                 self.totals[total] += day.totals[total]
 
         for total in self.totals:
-            in_hours = self.totals[total] / 60.0
-            self.total_store.append(["%.1fh" % in_hours, total])
+            if (self.totals[total] / 60.0) >= 0.1:
+                in_hours = self.totals[total] / 60.0
+                self.total_store.append(["%.1fh" % in_hours, total])
 
         treeview = self.get_widget('totals_7')
         treeview.set_model(self.total_store)
