@@ -23,7 +23,5 @@ DISTCLEANFILES = \
 
 EXTRA_DIST = \
 	Hamster_Applet.server.in \
-	$(resources_DATA) \
-	$(server_DATA)
-
+	$(resources_DATA)
 
