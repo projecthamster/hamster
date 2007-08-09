@@ -15,23 +15,11 @@ def get_last_activity():
     query = """SELECT a.fact_date, a.fact_time, b.name
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
-             ORDER BY a.fact_date desc, a.fact_time desc
+             ORDER BY a.fact_date desc, a.fact_time desc, a.id desc
                 LIMIT 1
     """
 
-    activity = fetchone(query)
-    today = time.strftime('%Y%m%d')
-    now = time.strftime('%H%M')
-
-    if (activity['fact_date'] != int(today)):
-        return None, 0 #nothing today!
-
-    # we are adding 0.1 because we don't have seconds but
-    # would like to differ between nothing and just started something
-    duration = mins(now) - mins(activity['fact_time']) + 0.1
-
-    return activity['name'], duration
-
+    return fetchone(query)
 
 def get_facts(date):
     query = """SELECT a.id, a.fact_date, a.fact_time, b.name
@@ -52,7 +40,10 @@ def add_fact(activity_id):
     fact_time = time.strftime('%H%M')
 
     execute(insert, (activity_id, fact_date, fact_time))
+    return get_last_activity()
 
+def remove_fact(fact_id):
+    execute("DELETE FROM facts where id = ?", (fact_id,))
 
 def get_activity_list():
     """returns list of configured activities, in user specified order"""
