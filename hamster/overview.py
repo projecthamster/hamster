@@ -19,8 +19,8 @@ class DayStore(object):
        fill_view(store) to fill the tree and calculate totals """
 
     def __init__(self, date = time.strftime('%Y%m%d')):
-        self.fact_store = gtk.ListStore(str, str)
-        self.total_store = gtk.ListStore(str, str)
+        self.fact_store = gtk.ListStore(int, str, str)
+        self.total_store = gtk.ListStore(int, str, str)
 
         db_facts = hamster.db.get_facts(date)
 
@@ -30,7 +30,7 @@ class DayStore(object):
         for fact in db_facts:
             hours = fact['fact_time'][:2]
             minutes = fact['fact_time'][2:4]
-            self.fact_store.append([fact['name'], hours + ':' + minutes])
+            self.fact_store.append([fact['id'], fact['name'], hours + ':' + minutes])
 
             # we need time only for delta, so let's convert to mins
             fact_time = int(hours) * 60 + int(minutes)
@@ -49,7 +49,7 @@ class DayStore(object):
         for total in self.totals:
             if (self.totals[total] / 60.0) >= 0.1:
                 in_hours = self.totals[total] / 60.0
-                self.total_store.append(["%.1fh" % in_hours, total])
+                self.total_store.append([-1, "%.1fh" % in_hours, total])
 
 
 class OverviewController:
@@ -59,33 +59,39 @@ class OverviewController:
 
         self.today = dt.datetime.today()
         self.monday = self.today - dt.timedelta(self.today.weekday())
+        self.current_view = None
 
         # now let's set up tree columns!
         # the last widget is total totals
         for i in range(8):
             treeview = self.get_widget('day_' + str(i))
+            
             if treeview:
+                treeview.connect("button-press-event", self.single_focus)
+                treeview.connect("key-press-event", self.on_key_pressed)
+                
                 timeColumn = gtk.TreeViewColumn('Time')
                 timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
                 timeColumn.set_expand(False)
                 timeCell = gtk.CellRendererText()
                 timeColumn.pack_start(timeCell, True)
-                timeColumn.set_attributes(timeCell, text=1)
+                timeColumn.set_attributes(timeCell, text=2)
                 treeview.append_column(timeColumn)
 
                 nameColumn = gtk.TreeViewColumn('Name')
                 nameColumn.set_expand(True)
                 nameCell = gtk.CellRendererText()
                 nameColumn.pack_start(nameCell, True)
-                nameColumn.set_attributes(nameCell, text=0)
+                nameColumn.set_attributes(nameCell, text=1)
                 treeview.append_column(nameColumn)
 
             treeview = self.get_widget('totals_' + str(i))
+            treeview.connect("button-press-event", self.single_focus)
             nameColumn = gtk.TreeViewColumn('Name')
             nameColumn.set_expand(True)
             nameCell = gtk.CellRendererText()
             nameColumn.pack_start(nameCell, True)
-            nameColumn.set_attributes(nameCell, text=1)
+            nameColumn.set_attributes(nameCell, text=2)
             treeview.append_column(nameColumn)
 
             timeColumn = gtk.TreeViewColumn('Time')
@@ -93,7 +99,7 @@ class OverviewController:
             timeColumn.set_expand(False)
             timeCell = gtk.CellRendererText()
             timeColumn.pack_start(timeCell, True)
-            timeColumn.set_attributes(timeCell, text=0)
+            timeColumn.set_attributes(timeCell, text=1)
             treeview.append_column(timeColumn)
 
 
@@ -107,7 +113,7 @@ class OverviewController:
 
     def load_days(self):
         self.totals = {}
-        self.total_store = gtk.ListStore(str, str)
+        self.total_store = gtk.ListStore(int, str, str)
 
         for i in range(7):
             current_date = self.monday + dt.timedelta(i)
@@ -134,11 +140,25 @@ class OverviewController:
         for total in self.totals:
             if (self.totals[total] / 60.0) >= 0.1:
                 in_hours = self.totals[total] / 60.0
-                self.total_store.append(["%.1fh" % in_hours, total])
+                self.total_store.append([-1, "%.1fh" % in_hours, total])
 
         treeview = self.get_widget('totals_7')
         treeview.set_model(self.total_store)
 
+    def single_focus(self, tree, event):
+        """ single focus makes sure, that only one window is selected 
+            at the same time """
+        self.current_view = tree
+
+        for i in range(8):
+          treeview = self.get_widget('day_' + str(i))
+          
+          if (treeview and tree != treeview):
+            treeview.get_selection().unselect_all()
+          
+          treeview = self.get_widget('totals_' + str(i))
+          if (tree != treeview):
+            treeview.get_selection().unselect_all()
 
     def show(self):
         self.window.show_all()
@@ -150,7 +170,34 @@ class OverviewController:
     def on_next_clicked(self, button):
         self.monday += dt.timedelta(7)
         self.load_days()
+    
+    def on_key_pressed(self, tree, event_key):
+      if (event_key.keyval == gtk.keysyms.Delete):
+        self.delete_selected()
 
+    def on_remove_clicked(self, button):
+        self.delete_selected()
+
+    def delete_selected(self):
+        view = self.current_view
+        if not view: return  
+      
+        selection = view.get_selection()
+        (model, iter) = selection.get_selected()
+
+        next_row = model.iter_next(iter)
+
+        if next_row:
+            selection.select_iter(next_row)
+        else:
+            path = model.get_path(iter)[0] - 1
+            if path > 0:
+                selection.select_path(path)
+
+
+        hamster.db.remove_fact(model[iter][0])
+        model.remove(iter)
+    
     def on_home_clicked(self, button):
         self.today = dt.datetime.today() #midnight check, huh
         self.monday = self.today - dt.timedelta(self.today.weekday())
