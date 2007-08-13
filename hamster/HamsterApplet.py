@@ -63,11 +63,11 @@ class HamsterApplet(object):
         menu.add(separator)
 
         menu_edit_activities = gtk.MenuItem('Edit activities');
-        menu_edit_activities.connect("activate", edit_activities)
+        menu_edit_activities.connect("activate", self.edit_activities)
         menu.add(menu_edit_activities)
 
         menu_show_overview = gtk.MenuItem('Overview');
-        menu_show_overview.connect("activate", show_overview)
+        menu_show_overview.connect("activate", self.show_overview)
         menu.add(menu_show_overview)
 
         menu.show_all()
@@ -110,31 +110,32 @@ class HamsterApplet(object):
     def changeActivity(self, menu, activity_id):
         self.last_activity = hamster.db.add_fact(activity_id)
 
-def edit_activities(menu_item):
-    from hamster.activities import ActivitiesEditor
-    activities_editor = ActivitiesEditor()
-    store = activities_editor.get_store()
-
-    # inform widgets of changes in model
-    store.connect("row_changed", activities_changed_cb, menu_item.parent)
-    store.connect("rows_reordered", activities_reordered_cb, menu_item.parent)
-    store.connect("row_deleted", activity_deleted_cb, menu_item.parent)
-    activities_editor.show()
-
-def show_overview(menu_item):
-    from hamster.overview import OverviewController
-    overview = OverviewController()
-    overview.show()
+    def activities_changed_cb(self, model, path, row, menu):
+        self.update_menu(menu)
 
 
-def activities_changed_cb(model, path, row, menu):
-    update_menu(menu)
+    def edit_activities(self, menu_item):
+        from hamster.activities import ActivitiesEditor
+        activities_editor = ActivitiesEditor()
+        store = activities_editor.get_store()
 
-def activities_reordered_cb(model, path, row1, row2, menu):
-    update_menu(menu)
+        # inform widgets of changes in model
+        store.connect("row_changed", self.activities_changed_cb, menu_item.parent)
+        store.connect("rows_reordered", self.activities_reordered_cb, menu_item.parent)
+        store.connect("row_deleted", self.activity_deleted_cb, menu_item.parent)
+        activities_editor.show()
 
-def activity_deleted_cb(model, path, menu):
-    update_menu(menu)
+    def show_overview(self, menu_item):
+        from hamster.overview import OverviewController
+        overview = OverviewController()
+        overview.show()
+
+
+    def activities_reordered_cb(self, model, path, row1, row2, menu):
+        self.update_menu(menu)
+
+    def activity_deleted_cb(self, model, path, menu):
+        self.update_menu(menu)
 
 
 
