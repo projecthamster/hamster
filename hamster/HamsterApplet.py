@@ -51,7 +51,7 @@ class HamsterApplet(object):
             item = gtk.RadioMenuItem(prev_item, activity['name'])
 
             #set selected
-            if activity['name'] == self.last_activity['name']:
+            if self.last_activity and activity['name'] == self.last_activity['name']:
                 item.set_active(True);
 
             item.connect("activate", self.changeActivity, activity['id'])
@@ -82,22 +82,25 @@ class HamsterApplet(object):
         today = time.strftime('%Y%m%d')
         now = time.strftime('%H%M')
 
-        if (self.last_activity['fact_date'] != int(today)):
-            tooltip = "Nothing done today!"
+        if self.last_activity:
+          if (self.last_activity['fact_date'] != int(today)):
+              tooltip = "Nothing done today!"
+          else:
+              # we are adding 0.1 because we don't have seconds but
+              # would like to differ between nothing and just started something
+              duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
+
+              if duration < 1:
+                  tooltip = "Just started '%s'!" % (self.last_activity['name'])
+              else:
+                  if duration < 60:
+                      duration = "%d minutes" % (duration)
+                  else:
+                      duration = "%.1fh hours" % (duration / 60.0)
+
+                  tooltip = "You have been doing '%s' for %s" % (self.last_activity['name'], duration)
         else:
-            # we are adding 0.1 because we don't have seconds but
-            # would like to differ between nothing and just started something
-            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
-
-            if duration < 1:
-                tooltip = "Just started '%s'!" % (self.last_activity['name'])
-            else:
-                if duration < 60:
-                    duration = "%d minutes" % (duration)
-                else:
-                    duration = "%.1fh hours" % (duration / 60.0)
-
-                tooltip = "You have been doing '%s' for %s" % (self.last_activity['name'], duration)
+          tooltip = "Welcome to hamster, define your activities!"
 
         self.tooltip.set_tip(event_box, tooltip)
 
