@@ -59,6 +59,10 @@ class HamsterApplet(object):
             prev_item = item
             items.append({'id':activity['id'], 'name':activity['name']})
 
+        menu_show_custom_fact = gtk.MenuItem('Add custom fact...');
+        menu_show_custom_fact.connect("activate", self.show_custom_fact_form)
+        menu.add(menu_show_custom_fact)
+
         separator = gtk.SeparatorMenuItem()
         menu.add(separator)
 
@@ -110,9 +114,8 @@ class HamsterApplet(object):
     def changeActivity(self, menu, activity_id):
         self.last_activity = hamster.db.add_fact(activity_id)
 
-    def activities_changed_cb(self, model, path, row, menu):
-        self.update_menu(menu)
-
+    def refresh_last_activity(self):
+        self.last_activity = hamster.db.get_last_activity()
 
     def edit_activities(self, menu_item):
         from hamster.activities import ActivitiesEditor
@@ -125,18 +128,29 @@ class HamsterApplet(object):
         store.connect("row_deleted", self.activity_deleted_cb, menu_item.parent)
         activities_editor.show()
 
-    def show_overview(self, menu_item):
-        from hamster.overview import OverviewController
-        overview = OverviewController()
-        overview.show()
-
-
     def activities_reordered_cb(self, model, path, row1, row2, menu):
+        self.update_menu(menu)
+
+    def activities_changed_cb(self, model, path, row, menu):
         self.update_menu(menu)
 
     def activity_deleted_cb(self, model, path, menu):
         self.update_menu(menu)
 
+    def show_overview(self, menu_item):
+        from hamster.overview import OverviewController
+        overview = OverviewController()
+        overview.show()
+
+    def show_custom_fact_form(self, menu_item):
+        from hamster.add_custom_fact import CustomFactController
+        custom_fact = CustomFactController()
+        custom_fact.window.connect("destroy", self.post_custom_fact)
+        custom_fact.show()
+
+    def post_custom_fact(self, some_object):
+        self.refresh_last_activity()
+    
 
 
 

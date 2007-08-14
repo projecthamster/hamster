@@ -12,6 +12,7 @@ hamster_PYTHON = \
 	db.py \
 	activities.py \
 	overview.py \
+	add_custom_fact.py \
 	HamsterApplet.py \
 	About.py \
 	__init__.py

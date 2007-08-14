@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Sat Aug  4 18:10:45 2007 by toms@toms-xps-->
+<!--Generated with glade3 3.2.0 on Tue Aug 14 11:45:19 2007 by toms@t-baugis-->
 <glade-interface>
   <requires lib="gnome"/>
-  <widget class="GtkWindow" id="window1">
+  <widget class="GtkWindow" id="custom_fact_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="border_width">12</property>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="border_width">12</property>
         <child>
           <widget class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -22,9 +22,11 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkComboBoxEntry" id="comboboxentry1">
+                  <widget class="GtkComboBoxEntry" id="activity">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <signal name="changed" handler="on_combo_changed"/>
+                    <signal name="editing_done" handler="on_combo_changed"/>
                     <child internal-child="entry">
                       <widget class="GtkEntry" id="comboboxentry-entry1">
                         <property name="visible">True</property>
@@ -50,6 +52,8 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="padding">6</property>
           </packing>
         </child>
@@ -65,7 +69,7 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GnomeDateEdit" id="gnomedateedit1">
+                  <widget class="GnomeDateEdit" id="activity_time">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="dateedit_flags">GNOME_DATE_EDIT_SHOW_TIME | GNOME_DATE_EDIT_24_HR</property>
@@ -89,7 +93,9 @@
             </child>
           </widget>
           <packing>
-            <property name="padding">12</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">6</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -100,21 +106,24 @@
             <property name="spacing">6</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="cancel_button">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Cancel</property>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="ok_button">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Update</property>
+                <property name="label" translatable="yes">Add</property>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="padding">6</property>
@@ -124,8 +133,8 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="padding">6</property>
-            <property name="position">3</property>
+            <property name="padding">12</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </widget>

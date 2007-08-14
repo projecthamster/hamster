@@ -11,6 +11,37 @@ def mins(normal_time):
     """ returns time in minutes since midnight"""
     return int(normal_time[:2]) * 60 + int(normal_time[2:4])
 
+
+def get_activity_by_name(name):
+  """get most recent, preferably not deleted activity 
+     by it's name"""
+  query = """SELECT * from activities 
+              WHERE name = ? 
+           ORDER BY deleted, id desc
+              LIMIT 1
+          """
+  return fetchone(query, (name,))
+
+def add_custom_fact(activity_name, activity_time):
+  """adds custom fact to database. custom means either it is
+     post-factum, or some one-time task"""
+  
+  # we keep year in db as int
+  fact_date = int(time.strftime('%Y%m%d', activity_time))
+  fact_time = time.strftime('%H%M', activity_time)
+  
+  activity = get_activity_by_name(activity_name)
+  
+  if not activity:
+    # insert and mark as deleted at the same time
+    # FIXME - we are adding the custom activity as work, user should be able
+    #         to choose
+    activity = {'id': -1, 'order': -1, 'work': 1, 'name': activity_name}
+    activity['id'] = update_activity(activity)
+    remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
+  
+  add_fact(activity['id'], fact_date, fact_time)
+
 def get_last_activity():
     query = """SELECT a.fact_date, a.fact_time, b.name
                  FROM facts a
@@ -31,14 +62,10 @@ def get_facts(date):
 
     return fetchall(query, (date,))
 
-def add_fact(activity_id):
+def add_fact(activity_id, fact_date = time.strftime('%Y%m%d'), fact_time = time.strftime('%H%M')):
     insert = """INSERT INTO facts(activity_id, fact_date, fact_time)
                      VALUES (?, ?, ?)
              """
-
-    fact_date = time.strftime('%Y%m%d')
-    fact_time = time.strftime('%H%M')
-
     execute(insert, (activity_id, fact_date, fact_time))
     return get_last_activity()
 

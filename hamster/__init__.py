@@ -2,7 +2,7 @@ import os, sys
 from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
 from shutil import copy as copyfile
 
-import gtk
+import gtk, gnome.ui
 
 # Autotools set the actual data_dir in defs.py
 from defs import *
