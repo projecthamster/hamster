@@ -62,7 +62,10 @@ def get_facts(date):
 
     return fetchall(query, (date,))
 
-def add_fact(activity_id, fact_date = time.strftime('%Y%m%d'), fact_time = time.strftime('%H%M')):
+def add_fact(activity_id, fact_date = None, fact_time = None):
+    fact_date = fact_date or time.strftime('%Y%m%d')
+    fact_time = fact_time or time.strftime('%H%M')
+    
     insert = """INSERT INTO facts(activity_id, fact_date, fact_time)
                      VALUES (?, ?, ?)
              """
