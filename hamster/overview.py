@@ -19,28 +19,36 @@ class DayStore(object):
        fill_view(store) to fill the tree and calculate totals """
 
     def __init__(self, date = time.strftime('%Y%m%d')):
-        self.fact_store = gtk.ListStore(int, str, str)
+        self.fact_store = gtk.ListStore(int, str, str, str)
         self.total_store = gtk.ListStore(int, str, str)
 
         db_facts = hamster.db.get_facts(date)
 
-        prev_fact, prev_time = None, None
+        prev_fact, prev_time, prev_iter = None, None, None
         self.totals = {}
 
         for fact in db_facts:
             hours = fact['fact_time'][:2]
             minutes = fact['fact_time'][2:4]
-            self.fact_store.append([fact['id'], fact['name'], hours + ':' + minutes])
 
             # we need time only for delta, so let's convert to mins
             fact_time = int(hours) * 60 + int(minutes)
 
+            duration = None
             if prev_fact:
                 duration = fact_time - prev_time
                 if not self.totals.has_key(prev_fact):
                     self.totals[prev_fact] = 0
 
                 self.totals[prev_fact] += duration
+
+            if prev_iter:
+               current_duration = "%.1fh" % (duration / 60.0)
+               self.fact_store.set(prev_iter, 3, current_duration)
+                
+            prev_iter = self.fact_store.append([fact['id'], fact['name'], 
+                                    hours + ':' + minutes, 
+                                    ""])
 
             prev_fact, prev_time = fact['name'], fact_time
 
@@ -84,6 +92,15 @@ class OverviewController:
                 nameColumn.pack_start(nameCell, True)
                 nameColumn.set_attributes(nameCell, text=1)
                 treeview.append_column(nameColumn)
+                
+                durationColumn = gtk.TreeViewColumn(' ')
+                durationColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+                durationColumn.set_expand(False)
+                durationCell = gtk.CellRendererText()
+                durationColumn.pack_start(durationCell, True)
+                durationColumn.set_attributes(durationCell, text=3)
+                treeview.append_column(durationColumn)
+                
 
             treeview = self.get_widget('totals_' + str(i))
             treeview.connect("button-press-event", self.single_focus)
