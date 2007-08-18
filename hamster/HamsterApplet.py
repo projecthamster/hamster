@@ -1,4 +1,5 @@
 import os, time
+import datetime as dt
 from os.path import *
 import gnomeapplet, gtk
 import hamster, hamster.db
@@ -11,6 +12,10 @@ class HamsterApplet(object):
         self.label = gtk.Label("Hamster")
 
         self.last_activity = hamster.db.get_last_activity()
+
+        today = time.strftime('%Y%m%d')
+        if (self.last_activity['fact_date'] == int(today)):
+            self.label.set_text(self.last_activity['name'])
 
         self.menu = gtk.Menu()
         # build the menu
@@ -112,7 +117,29 @@ class HamsterApplet(object):
         show_about(self.applet)
 
     def changeActivity(self, menu, activity_id):
+        today = int(time.strftime('%Y%m%d'))
+
+        # let's do some checks to see how we change activity
+        if (self.last_activity 
+            and self.last_activity['fact_date'] == today):
+           
+            # avoid dupes
+            if self.last_activity['activity_id'] == activity_id:
+                return
+
+            # if the time  since previous minute is about minute 
+            # then we consider that user has apparently mistaken and delete
+            # the previous task
+            current_mins = hamster.db.mins(time.strftime('%H%M'))
+            prev_mins = hamster.db.mins(self.last_activity['fact_time'])
+            
+            if (1 >= current_mins - prev_mins > 0): 
+                hamster.db.remove_fact(self.last_activity['id'])
+
+        
+    
         self.last_activity = hamster.db.add_fact(activity_id)
+        self.label.set_text(hamster.db.get_last_activity()['name'])
 
     def refresh_last_activity(self):
         self.last_activity = hamster.db.get_last_activity()

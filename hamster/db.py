@@ -43,7 +43,7 @@ def add_custom_fact(activity_name, activity_time):
   add_fact(activity['id'], fact_date, fact_time)
 
 def get_last_activity():
-    query = """SELECT a.fact_date, a.fact_time, b.name
+    query = """SELECT a.id, a.fact_date, a.fact_time, b.name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
              ORDER BY a.fact_date desc, a.fact_time desc, a.id desc
