@@ -52,11 +52,14 @@ class HamsterApplet(object):
         prev_item = None
 
         items = []
+        today = time.strftime('%Y%m%d')
         for activity in activities:
             item = gtk.RadioMenuItem(prev_item, activity['name'])
 
             #set selected
-            if self.last_activity and activity['name'] == self.last_activity['name']:
+            if self.last_activity \
+               and activity['name'] == self.last_activity['name'] \
+               and (self.last_activity['fact_date'] == int(today)):
                 item.set_active(True);
 
             item.connect("activate", self.changeActivity, activity['id'])
@@ -118,6 +121,7 @@ class HamsterApplet(object):
 
     def changeActivity(self, menu, activity_id):
         today = int(time.strftime('%Y%m%d'))
+        fact_time = time.strftime('%H%M')
 
         # let's do some checks to see how we change activity
         if (self.last_activity 
@@ -130,15 +134,16 @@ class HamsterApplet(object):
             # if the time  since previous minute is about minute 
             # then we consider that user has apparently mistaken and delete
             # the previous task
-            current_mins = hamster.db.mins(time.strftime('%H%M'))
+            current_mins = hamster.db.mins(fact_time)
             prev_mins = hamster.db.mins(self.last_activity['fact_time'])
             
             if (1 >= current_mins - prev_mins > 0): 
                 hamster.db.remove_fact(self.last_activity['id'])
+                fact_time = self.last_activity['fact_time']
 
         
     
-        self.last_activity = hamster.db.add_fact(activity_id)
+        self.last_activity = hamster.db.add_fact(activity_id, fact_time = fact_time)
         self.label.set_text(hamster.db.get_last_activity()['name'])
 
     def refresh_last_activity(self):
