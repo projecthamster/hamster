@@ -141,6 +141,8 @@ class HamsterApplet(object):
             item.connect("clicked", self.changeActivity, activity['id'])
             prev_item = item
             items.append({'id':activity['id'], 'name':activity['name']})
+            
+        activity_list.show_all()
 
         return items
         
@@ -223,14 +225,13 @@ class HamsterApplet(object):
         activities_editor.show()
 
     def activities_reordered_cb(self, model, path, row1, row2, menu):
-        self.update_menu(menu)
+        self.update_menu(self.activity_list)
 
     def activities_changed_cb(self, model, path, row, menu):
-        self.update_menu(menu)
-        self.window.queue_resize()
+        self.update_menu(self.activity_list)
 
     def activity_deleted_cb(self, model, path, menu):
-        self.update_menu(menu)
+        self.update_menu(self.activity_list)
 
     def show_overview(self, menu_item):
         self.toggle_window()
