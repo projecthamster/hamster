@@ -3,6 +3,7 @@ import datetime as dt
 from os.path import *
 import gnomeapplet, gtk
 import gtk.glade
+import gobject
 
 
 import hamster, hamster.db
@@ -48,10 +49,13 @@ class HamsterApplet(object):
 
 
         self.last_activity = self.load_today()
+        self.update_label()
 
-        if (self.last_activity):
-            self.label.set_text(self.last_activity['name'])
-
+        # add a timer so we can update duration of current task
+        # a little naggy, still maybe that will remind user to change tasks
+        # six minutes is 0.1h = smallest unit we show in hamster
+        gobject.timeout_add(360000, self.update_label)
+        
 
         self.activity_list = self.menu_wTree.get_widget('activity_list')
         # build the menu
@@ -76,6 +80,29 @@ class HamsterApplet(object):
             ])
 
         self.applet.show_all()
+                
+    def update_label(self):
+        today = time.strftime('%Y%m%d')
+        now = time.strftime('%H%M')
+
+        print "Hic, updating label!", time.strftime('%H:%M:%S')
+
+        if self.last_activity:
+            # we are adding 0.1 because we don't have seconds but
+            # would like to differ between nothing and just started something
+            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
+
+            if duration < 1:
+                tooltip = self.last_activity['name']
+            else:
+                duration = "%.1fh" % (duration / 60.0)
+                label = "%s: %s" % (self.last_activity['name'], duration)
+        else:
+            label = "Hamster: New day!"
+
+        self.label.set_text(label)
+        return True
+        
         
     def load_today(self):
         """sets up today's tree and fills it with records
@@ -120,6 +147,7 @@ class HamsterApplet(object):
     def clicked(self, event_box, event):
         if event.button == 1:
             self.toggle_window()
+            self.update_label()
 
     def on_tooltip(self, event_box, event):
         today = time.strftime('%Y%m%d')
@@ -177,8 +205,9 @@ class HamsterApplet(object):
         
     
         hamster.db.add_fact(activity_id, fact_time = fact_time)
-        self.label.set_text(hamster.db.get_last_activity()['name'])
+
         self.last_activity = self.load_today()
+        self.update_label()
         self.toggle_window()
 
     def edit_activities(self, menu_item):
