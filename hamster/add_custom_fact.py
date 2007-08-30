@@ -16,7 +16,7 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self):
+    def __init__(self, fact_date = None):
         self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
         
@@ -31,6 +31,10 @@ class CustomFactController:
         self.activity_list.set_model(model)
         self.activity_list.set_text_column(0)
         
+        if fact_date:
+            self.get_widget('activity_time').set_time(fact_date)
+
+
         self.wTree.signal_autoconnect(self)
 
     def get_widget(self, name):
