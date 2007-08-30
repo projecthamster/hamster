@@ -18,16 +18,18 @@ class DayStore(object):
        one for totals. It creates those widgets on init, user
        fill_view(store) to fill the tree and calculate totals """
 
-    def __init__(self, date = time.strftime('%Y%m%d')):
+    def __init__(self, date = None):
+        date = date or time.strftime('%Y%m%d')
+        
         self.fact_store = gtk.ListStore(int, str, str, str)
         self.total_store = gtk.ListStore(int, str, str)
 
-        db_facts = hamster.db.get_facts(date)
+        self.facts = hamster.db.get_facts(date)
 
         prev_fact, prev_time, prev_iter = None, None, None
         self.totals = {}
 
-        for fact in db_facts:
+        for fact in self.facts:
             hours = fact['fact_time'][:2]
             minutes = fact['fact_time'][2:4]
 
