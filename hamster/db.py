@@ -53,7 +53,7 @@ def get_last_activity():
     return fetchone(query)
 
 def get_facts(date):
-    query = """SELECT a.id, a.fact_date, a.fact_time, b.name
+    query = """SELECT a.id, a.fact_date, a.fact_time, b.name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
                 WHERE a.fact_date = ?
