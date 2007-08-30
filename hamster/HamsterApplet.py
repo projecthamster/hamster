@@ -119,12 +119,7 @@ class HamsterApplet(object):
         
     def clicked(self, event_box, event):
         if event.button == 1:
-            if self.visible:
-                self.window.hide()
-            else:
-                self.window.show_all()
-            
-            self.visible = not self.visible
+            self.toggle_window()
 
     def on_tooltip(self, event_box, event):
         today = time.strftime('%Y%m%d')
@@ -150,6 +145,7 @@ class HamsterApplet(object):
         self.tooltip.set_tip(event_box, tooltip)
 
     def on_about (self, component, verb):
+        self.toggle_window()
         show_about(self.applet)
 
     def changeActivity(self, item, activity_id):
@@ -183,9 +179,10 @@ class HamsterApplet(object):
         hamster.db.add_fact(activity_id, fact_time = fact_time)
         self.label.set_text(hamster.db.get_last_activity()['name'])
         self.last_activity = self.load_today()
-        self.window.hide()
+        self.toggle_window()
 
     def edit_activities(self, menu_item):
+        self.toggle_window()
         from hamster.activities import ActivitiesEditor
         activities_editor = ActivitiesEditor()
         store = activities_editor.get_store()
@@ -201,12 +198,13 @@ class HamsterApplet(object):
 
     def activities_changed_cb(self, model, path, row, menu):
         self.update_menu(menu)
+        self.window.queue_resize()
 
     def activity_deleted_cb(self, model, path, menu):
         self.update_menu(menu)
 
     def show_overview(self, menu_item):
-        self.window.hide()
+        self.toggle_window()
         from hamster.overview import OverviewController
         overview = OverviewController()
 
@@ -215,7 +213,7 @@ class HamsterApplet(object):
         overview.show()
 
     def show_custom_fact_form(self, menu_item):
-        self.window.hide()
+        self.toggle_window()
         from hamster.add_custom_fact import CustomFactController
         custom_fact = CustomFactController()
         custom_fact.window.connect("destroy", self.post_fact_changes)
@@ -225,5 +223,11 @@ class HamsterApplet(object):
         self.load_today()
     
 
-
+    def toggle_window(self):
+        if self.visible:
+            self.window.hide()
+        else:
+            self.window.show_all()
+        
+        self.visible = not self.visible
 
