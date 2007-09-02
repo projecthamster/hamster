@@ -7,12 +7,6 @@ import gtk, gnome.ui
 # Autotools set the actual data_dir in defs.py
 from defs import *
 
-try:
-    # Allows to load uninstalled .la libs
-    import ltihooks
-except ImportError:
-    pass
-
 # Allow to use not installed hamster
 UNINSTALLED_HAMSTER = False
 def _check(path):
