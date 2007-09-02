@@ -42,7 +42,7 @@ class DayStore(object):
             duration = None
             if prev_fact:
                 duration = fact_time - prev_time
-                if not self.totals.has_key(prev_fact):
+                if prev_fact not in self.totals:
                     self.totals[prev_fact] = 0
 
                 self.totals[prev_fact] += duration
@@ -172,7 +172,7 @@ class OverviewController:
 
             #append totals to week's totals
             for total in day.totals:
-                if not self.totals.has_key(total):
+                if total not in self.totals:
                     self.totals[total] = 0
 
                 self.totals[total] += day.totals[total]
