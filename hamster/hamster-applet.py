@@ -90,7 +90,7 @@ if __name__ == "__main__":
             import trace
             trace = trace.Trace(
                 ignoredirs=[sys.prefix],
-                ignoremods=['sys', 'os', 'getopt', 'libxml2', 'ltihooks'],
+                ignoremods=['sys', 'os', 'getopt'],
                 trace=True,
                 count=False)
             trace.run('gtk.main()')
