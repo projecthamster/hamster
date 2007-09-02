@@ -16,14 +16,13 @@ class HamsterApplet(object):
         self.applet = applet
         self.label = gtk.Label("Hamster")
 
-        self.menu_wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
-        self.menu_wTree.signal_autoconnect(self)
-        self.window = self.menu_wTree.get_widget('menu_window')
+        self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
+        self.w_tree.signal_autoconnect(self)
+        self.window = self.w_tree.get_widget('menu_window')
         self.visible = False
 
-
-
-        treeview = self.menu_wTree.get_widget('today')
+        # init today's tree
+        treeview = self.w_tree.get_widget('today')
         timeColumn = gtk.TreeViewColumn('Time')
         timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         timeColumn.set_expand(False)
@@ -49,29 +48,23 @@ class HamsterApplet(object):
 
 
         self.last_activity = self.load_today()
-        self.update_label()
+        self.update_status()
 
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
         # six minutes is 0.1h = smallest unit we show in hamster
-        gobject.timeout_add(360000, self.update_label)
+        gobject.timeout_add(360000, self.update_status)
         
 
-        self.activity_list = self.menu_wTree.get_widget('activity_list')
+        self.activity_list = self.w_tree.get_widget('activity_list')
         # build the menu
         self.activities = self.update_menu(self.activity_list)
 
     
         self.evBox = gtk.EventBox()
         self.evBox.add(self.label)
-        self.evBox.connect("button-press-event", self.clicked)
-        self.evBox.connect("enter-notify-event", self.on_tooltip)
+        self.evBox.connect("button-press-event", self.panel_clicked)
         self.applet.add(self.evBox)
-
-        self.tooltip = gtk.Tooltips()
-        self.tooltip.set_tip(self.evBox, "Hello, me is hamster!");
-        self.tooltip.enable()
-
 
         self.applet.setup_menu_from_file (
             hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
@@ -81,22 +74,14 @@ class HamsterApplet(object):
 
         self.applet.show_all()
                 
-    def update_label(self):
-        today = time.strftime('%Y%m%d')
-        now = time.strftime('%H%M')
-
-        print "Hic, updating label!", time.strftime('%H:%M:%S')
-
+    def update_status(self):
         if self.last_activity:
+            now = time.strftime('%H%M')
+
             # we are adding 0.1 because we don't have seconds but
             # would like to differ between nothing and just started something
             duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
-
-            if duration < 1:
-                tooltip = self.last_activity['name']
-            else:
-                duration = "%.1fh" % (duration / 60.0)
-                label = "%s: %s" % (self.last_activity['name'], duration)
+            label = "%s: %.1fh" % (self.last_activity['name'], (duration / 60.0))
         else:
             label = "Hamster: New day!"
 
@@ -108,7 +93,7 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        treeview = self.menu_wTree.get_widget('today')        
+        treeview = self.w_tree.get_widget('today')        
         today = time.strftime('%Y%m%d')
         day = DayStore(today);
         treeview.set_model(day.fact_store)
@@ -146,33 +131,11 @@ class HamsterApplet(object):
 
         return items
         
-    def clicked(self, event_box, event):
-        if event.button == 1:
-            self.toggle_window()
-            self.update_label()
-
-    def on_tooltip(self, event_box, event):
-        today = time.strftime('%Y%m%d')
-        now = time.strftime('%H%M')
-
-        if self.last_activity:
-            # we are adding 0.1 because we don't have seconds but
-            # would like to differ between nothing and just started something
-            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
-
-            if duration < 1:
-                tooltip = "Just started '%s'!" % (self.last_activity['name'])
-            else:
-                if duration < 60:
-                    duration = "%d minutes" % (duration)
-                else:
-                    duration = "%.1fh hours" % (duration / 60.0)
-
-                tooltip = "You have been doing '%s' for %s" % (self.last_activity['name'], duration)
-        else:
-            tooltip = "Nothing done today!"
-
-        self.tooltip.set_tip(event_box, tooltip)
+    def panel_clicked(self, event_box, event):
+        if event.button != 1:
+            return
+        self.toggle_window()
+        self.update_status()
 
     def on_about (self, component, verb):
         self.toggle_window()
@@ -209,7 +172,7 @@ class HamsterApplet(object):
         hamster.db.add_fact(activity_id, fact_time = fact_time)
 
         self.last_activity = self.load_today()
-        self.update_label()
+        self.update_status()
         self.toggle_window()
 
     def edit_activities(self, menu_item):
@@ -229,6 +192,7 @@ class HamsterApplet(object):
 
     def activities_changed_cb(self, model, path, row, menu):
         self.update_menu(self.activity_list)
+        self.update_status() #in case if name of current activity changes
 
     def activity_deleted_cb(self, model, path, menu):
         self.update_menu(self.activity_list)
@@ -239,17 +203,17 @@ class HamsterApplet(object):
         overview = OverviewController()
 
         # TODO - grab some real signals here!
-        overview.window.connect("destroy", self.post_fact_changes)
+        overview.window.connect("destroy", self.after_fact_changes)
         overview.show()
 
     def show_custom_fact_form(self, menu_item):
         self.toggle_window()
         from hamster.add_custom_fact import CustomFactController
         custom_fact = CustomFactController()
-        custom_fact.window.connect("destroy", self.post_fact_changes)
+        custom_fact.window.connect("destroy", self.after_fact_changes)
         custom_fact.show()
 
-    def post_fact_changes(self, some_object):
+    def after_fact_changes(self, some_object):
         self.load_today()
     
 
