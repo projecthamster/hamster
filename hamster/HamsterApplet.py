@@ -10,33 +10,73 @@ import hamster, hamster.db
 from hamster.About import show_about
 from hamster.overview import DayStore
 
+class HamsterEventBox(gtk.EventBox):
+    __gsignals__ = {
+        "toggled"         : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_LONG]),
+        "activity_update" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_LONG]),
+        "fact_update"     : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_STRING]),
+    }
+    
+    
+    def __init__(self):
+        gtk.EventBox.__init__(self)
+        self.active = False
+        self.set_visible_window(False)
+        self.connect('button-press-event', self.on_button_press)
+    
+    def on_button_press(self, widget, event):
+        if event.button == 1:
+            self.set_active(not self.active)
+            return True
+                
+    def fact_updated(self):
+        print "yay!"
+
+    def get_active(self):
+        return self.active
+    
+    def set_active(self, active):
+        changed = (self.active != active)
+        self.active = active
+        
+        if changed:
+            self.emit("toggled", active)
+
+    def activity_updated(self, renames):
+        self.emit("activity_update", renames)
+
+    def fact_updated(self, date):
+        self.emit("fact_update", date)
+
 
 class HamsterApplet(object):
+    visible = False # global visibility toggler
+
     def __init__(self, applet):
         self.applet = applet
         self.label = gtk.Label("Hamster")
 
+        # load window of activity switcher and todays view
         self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
         self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('menu_window')
-        self.visible = False
 
         # init today's tree
-        treeview = self.w_tree.get_widget('today')
+        self.treeview = self.w_tree.get_widget('today')
         timeColumn = gtk.TreeViewColumn('Time')
         timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         timeColumn.set_expand(False)
         timeCell = gtk.CellRendererText()
         timeColumn.pack_start(timeCell, True)
         timeColumn.set_attributes(timeCell, text=2)
-        treeview.append_column(timeColumn)
+        self.treeview.append_column(timeColumn)
 
         nameColumn = gtk.TreeViewColumn('Name')
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameColumn.pack_start(nameCell, True)
         nameColumn.set_attributes(nameCell, text=1)
-        treeview.append_column(nameColumn)
+        self.treeview.append_column(nameColumn)
         
         durationColumn = gtk.TreeViewColumn(' ')
         durationColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
@@ -44,10 +84,10 @@ class HamsterApplet(object):
         durationCell = gtk.CellRendererText()
         durationColumn.pack_start(durationCell, True)
         durationColumn.set_attributes(durationCell, text=3)
-        treeview.append_column(durationColumn)
+        self.treeview.append_column(durationColumn)
 
 
-        self.last_activity = self.load_today()
+        self.load_today()
         self.update_status()
 
         # add a timer so we can update duration of current task
@@ -56,15 +96,18 @@ class HamsterApplet(object):
         gobject.timeout_add(360000, self.update_status)
         
 
-        self.activity_list = self.w_tree.get_widget('activity_list')
         # build the menu
-        self.activities = self.update_menu(self.activity_list)
+        self.refresh_menu()
 
     
-        self.evBox = gtk.EventBox()
+        self.evBox = HamsterEventBox()
         self.evBox.add(self.label)
-        self.evBox.connect("button-press-event", self.panel_clicked)
+
         self.applet.add(self.evBox)
+
+        self.evBox.connect ("toggled", self.__show_toggle)
+        self.evBox.connect ("activity_update", self.after_activity_update)
+        self.evBox.connect ("fact_update", self.after_fact_update)
 
         self.applet.setup_menu_from_file (
             hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
@@ -73,7 +116,10 @@ class HamsterApplet(object):
             ])
 
         self.applet.show_all()
-                
+        
+    def panel_clicked(self):
+        self.evBox.set_active(self, not self.evBox.get_active())
+    
     def update_status(self):
         if self.last_activity:
             now = time.strftime('%H%M')
@@ -99,11 +145,13 @@ class HamsterApplet(object):
         treeview.set_model(day.fact_store)
 
         if day.facts:
-            return day.facts[len(day.facts)-1]
+            self.last_activity = day.facts[len(day.facts)-1]
         else:
-            return None
+            self.last_activity = None
 
-    def update_menu(self, activity_list):
+    def refresh_menu(self):
+        activity_list = self.w_tree.get_widget('activity_list')
+
         #remove all items
         children = activity_list.get_children()
         for child in children:
@@ -129,16 +177,9 @@ class HamsterApplet(object):
             
         activity_list.show_all()
 
-        return items
+        return True
         
-    def panel_clicked(self, event_box, event):
-        if event.button != 1:
-            return
-        self.toggle_window()
-        self.update_status()
-
     def on_about (self, component, verb):
-        self.toggle_window()
         show_about(self.applet)
 
     def changeActivity(self, item, activity_id):
@@ -170,58 +211,64 @@ class HamsterApplet(object):
         
     
         hamster.db.add_fact(activity_id, fact_time = fact_time)
-
-        self.last_activity = self.load_today()
-        self.update_status()
-        self.toggle_window()
+        today = time.strftime('%Y%m%d')
+        self.evBox.fact_updated(today)
+        self.evBox.set_active(False)
 
     def edit_activities(self, menu_item):
-        self.toggle_window()
+        self.set_active_main(False)
+        
         from hamster.activities import ActivitiesEditor
-        activities_editor = ActivitiesEditor()
-        store = activities_editor.get_store()
+        activities_editor = ActivitiesEditor(self.evBox)
 
-        # inform widgets of changes in model
-        store.connect("row_changed", self.activities_changed_cb, menu_item.parent)
-        store.connect("rows_reordered", self.activities_reordered_cb, menu_item.parent)
-        store.connect("row_deleted", self.activity_deleted_cb, menu_item.parent)
         activities_editor.show()
 
-    def activities_reordered_cb(self, model, path, row1, row2, menu):
-        self.update_menu(self.activity_list)
+    def after_activity_update(self, widget, renames):
+        print "activities updated"
+        self.refresh_menu()
+        if renames:
+            print "something renamed"
+            self.load_today()
+            self.update_status()
+    
+    def after_fact_update(self, widget, date):
+        print "fact updated"
+        today = time.strftime('%Y%m%d')
 
-    def activities_changed_cb(self, model, path, row, menu):
-        self.update_menu(self.activity_list)
-        self.update_status() #in case if name of current activity changes
-
-    def activity_deleted_cb(self, model, path, menu):
-        self.update_menu(self.activity_list)
-
+        if date == today:
+            print "Fact of today updated"
+            self.load_today()
+            self.refresh_menu()
+            self.update_status()
+    
     def show_overview(self, menu_item):
-        self.toggle_window()
+        self.set_active_main(False)
         from hamster.overview import OverviewController
-        overview = OverviewController()
-
-        # TODO - grab some real signals here!
-        overview.window.connect("destroy", self.after_fact_changes)
+        overview = OverviewController(self.evBox)
         overview.show()
 
     def show_custom_fact_form(self, menu_item):
-        self.toggle_window()
+        self.set_active_main(False)
         from hamster.add_custom_fact import CustomFactController
-        custom_fact = CustomFactController()
-        custom_fact.window.connect("destroy", self.after_fact_changes)
+        custom_fact = CustomFactController(self.evBox)
         custom_fact.show()
 
     def after_fact_changes(self, some_object):
         self.load_today()
     
 
-    def toggle_window(self):
-        if self.visible:
-            self.window.hide()
-        else:
+    def __show_toggle(self, widget, is_active):          
+        print is_active;
+        if is_active:
             self.window.show_all()
-        
-        self.visible = not self.visible
+        else:
+            self.window.hide()
+
+            
+    def get_active_main (self):
+        return self.evBox.get_active ()
+    
+    def set_active_main (self, is_active):
+        self.evBox.set_active (is_active)
+             
 

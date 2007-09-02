@@ -49,9 +49,10 @@ class ActivityStore(gtk.ListStore):
         self[path][self.columns.index(column)] = new_value
 
 class ActivitiesEditor:
-    def __init__(self):
+    def __init__(self, evBox):
         self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "activities.glade"))
         self.window = self.get_widget('activities_window')
+        self.evBox = evBox
 
         activities = hamster.db.get_activity_list()
 
@@ -113,6 +114,9 @@ class ActivitiesEditor:
 
         # update id (necessary for new records)
         tree_row[0] = hamster.db.update_activity(row_data)
+        
+        self.evBox.activity_updated(True)
+
 
     # callbacks
     def work_toggled_cb(self, cell, path, model):
@@ -170,6 +174,7 @@ class ActivitiesEditor:
 
         hamster.db.remove_activity(model[iter][0])
         model.remove(iter)
+        self.evBox.activity_updated(False)
         return
 
 
@@ -182,6 +187,7 @@ class ActivitiesEditor:
         model.move_before(iter, prev_iter)
 
         self.selection_changed_cb(self.selection, model)
+        self.evBox.activity_updated(False)
         return
 
     def on_demote_activity_clicked(self, button):
@@ -192,6 +198,7 @@ class ActivitiesEditor:
         self.store.move_after(iter, next_iter)
 
         self.selection_changed_cb(self.selection, model)
+        self.evBox.activity_updated(False)
         return
 
 

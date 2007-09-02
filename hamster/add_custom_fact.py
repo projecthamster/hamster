@@ -16,9 +16,10 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self, fact_date = None):
+    def __init__(self, evBox, fact_date = None):
         self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
+        self.evBox = evBox
         
         activities = hamster.db.get_activity_list()
         
@@ -32,7 +33,7 @@ class CustomFactController:
         self.activity_list.set_text_column(0)
         
         if fact_date:
-            self.get_widget('activity_time').set_time(fact_date)
+            self.get_widget('activity_time').set_time(time.mktime(fact_date.timetuple()))
 
 
         self.wTree.signal_autoconnect(self)
@@ -49,6 +50,10 @@ class CustomFactController:
         activity_time = time.localtime(self.get_widget('activity_time').get_time())
 
         hamster.db.add_custom_fact(activity, activity_time)
+
+        fact_date = int(time.strftime('%Y%m%d', activity_time))
+        self.evBox.fact_updated(fact_date)
+        
         self.window.destroy()
         
     def on_cancel_clicked(self, button):

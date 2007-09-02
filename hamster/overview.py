@@ -21,7 +21,10 @@ class DayStore(object):
     def __init__(self, date = None):
         date = date or time.strftime('%Y%m%d')
         
-        self.fact_store = gtk.ListStore(int, str, str, str)
+        # ID, Time, Name, Duration, Date
+        self.fact_store = gtk.ListStore(int, str, str, str, str)
+        
+        # Dummy ID to distinct between fact_store, Name, Duration
         self.total_store = gtk.ListStore(int, str, str)
 
         self.facts = hamster.db.get_facts(date)
@@ -50,7 +53,7 @@ class DayStore(object):
                 
             prev_iter = self.fact_store.append([fact['id'], fact['name'], 
                                     hours + ':' + minutes, 
-                                    ""])
+                                    "", date])
 
             prev_fact, prev_time = fact['name'], fact_time
 
@@ -63,13 +66,17 @@ class DayStore(object):
 
 
 class OverviewController:
-    def __init__(self):
+    def __init__(self, evBox):
         self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('overview_window')
+        self.evBox = evBox
 
         self.today = dt.datetime.today()
         self.monday = self.today - dt.timedelta(self.today.weekday())
         self.current_view = None
+        
+        self.evBox.connect ("activity_update", self.after_activity_update)
+        self.evBox.connect ("fact_update", self.after_fact_update)
 
         # now let's set up tree columns!
         # the last widget is total totals
@@ -125,6 +132,19 @@ class OverviewController:
         self.load_days()
         self.wTree.signal_autoconnect(self)
 
+    def after_activity_update(self, widget, renames):
+        if renames:
+            print "w00h00"
+            self.load_days()
+    
+    def after_fact_update(self, widget, date):
+        for i in range(7):
+            current_date = self.monday + dt.timedelta(i)
+            if date == current_date.strftime('%Y%m%d'):
+                print "fact updated"
+                self.load_days()
+                break
+    
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self.wTree.get_widget(name)
@@ -132,6 +152,7 @@ class OverviewController:
 
     def load_days(self):
         self.totals = {}
+        self.selected_date = self.monday
         self.total_store = gtk.ListStore(int, str, str)
 
         for i in range(7):
@@ -171,9 +192,12 @@ class OverviewController:
 
         for i in range(8):
           treeview = self.get_widget('day_' + str(i))
+          if treeview:
+              if tree != treeview:
+                treeview.get_selection().unselect_all()
+              else:
+                self.selected_date = self.monday + dt.timedelta(i)
           
-          if (treeview and tree != treeview):
-            treeview.get_selection().unselect_all()
           
           treeview = self.get_widget('totals_' + str(i))
           if (tree != treeview):
@@ -193,9 +217,18 @@ class OverviewController:
     def on_key_pressed(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Delete):
         self.delete_selected()
+      elif (event_key.keyval == gtk.keysyms.Insert):
+        self.on_add_clicked(self)
 
     def on_remove_clicked(self, button):
         self.delete_selected()
+
+    def on_add_clicked(self, button):
+        from hamster.add_custom_fact import CustomFactController
+        #date = selected_date.strftime('%Y%m%d')
+
+        custom_fact = CustomFactController(self.evBox, self.selected_date)
+        custom_fact.show()
 
     def delete_selected(self):
         view = self.current_view
@@ -215,6 +248,7 @@ class OverviewController:
 
 
         hamster.db.remove_fact(model[iter][0])
+        self.evBox.fact_updated(model[iter][4])
         model.remove(iter)
     
     def on_home_clicked(self, button):
