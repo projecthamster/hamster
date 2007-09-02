@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Thu Aug 30 22:09:49 2007 by toms@toms-xps-->
+<!--Generated with glade3 3.2.0 on Sun Sep  2 12:54:29 2007 by toms@toms-xps-->
 <glade-interface>
   <widget class="GtkWindow" id="menu_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -18,6 +18,7 @@
         <property name="spacing">6</property>
         <child>
           <widget class="GtkVBox" id="today1">
+            <property name="width_request">230</property>
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="spacing">6</property>
