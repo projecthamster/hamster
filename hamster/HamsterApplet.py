@@ -9,6 +9,7 @@ import gobject
 import hamster, hamster.db
 from hamster.About import show_about
 from hamster.overview import DayStore
+from hamster.overview import format_duration
 
 class HamsterEventBox(gtk.EventBox):
     __gsignals__ = {
@@ -85,15 +86,14 @@ class HamsterApplet(object):
         durationColumn.pack_start(durationCell, True)
         durationColumn.set_attributes(durationCell, text=3)
         self.treeview.append_column(durationColumn)
-
-
-        self.load_today()
+        
+        self.today = None
         self.update_status()
 
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
-        # six minutes is 0.1h = smallest unit we show in hamster
-        gobject.timeout_add(360000, self.update_status)
+        # we go for refresh each minute
+        gobject.timeout_add(60000, self.update_status)
         
 
         # build the menu
@@ -121,13 +121,14 @@ class HamsterApplet(object):
         self.evBox.set_active(self, not self.evBox.get_active())
     
     def update_status(self):
+        today = time.strftime('%Y%m%d')
+        if today != self.today:
+            self.load_today()
+
         if self.last_activity:
             now = time.strftime('%H%M')
-
-            # we are adding 0.1 because we don't have seconds but
-            # would like to differ between nothing and just started something
-            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time']) + 0.1
-            label = "%s: %.1fh" % (self.last_activity['name'], (duration / 60.0))
+            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time'])
+            label = "%s: %s" % (self.last_activity['name'], format_duration(duration))
         else:
             label = "Hamster: New day!"
 
@@ -140,8 +141,8 @@ class HamsterApplet(object):
            returns information about last activity"""
 
         treeview = self.w_tree.get_widget('today')        
-        today = time.strftime('%Y%m%d')
-        day = DayStore(today);
+        self.today = time.strftime('%Y%m%d')
+        day = DayStore(self.today);
         treeview.set_model(day.fact_store)
 
         if day.facts:

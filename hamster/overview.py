@@ -13,6 +13,22 @@ import datetime as dt
 
 GLADE_FILE = "overview.glade"
 
+def format_duration(duration):
+    print "Duration: ", duration
+    hours = duration / 60
+    minutes = duration % 60
+    formatted_duration = ""
+    
+    #TODO - convert to list comprehension or that other thing
+    if hours > 0 or minutes > 0:
+        print "here we go"
+        if hours > 0: formatted_duration = "%dh" % hours
+        if minutes > 0: formatted_duration += "%dm" % minutes
+    else:
+        formatted_duration = "Just started!"
+            
+    return formatted_duration
+
 class DayStore(object):
     """A day view contains a treeview for facts of the day and another
        one for totals. It creates those widgets on init, user
@@ -48,7 +64,7 @@ class DayStore(object):
                 self.totals[prev_fact] += duration
 
             if prev_iter:
-               current_duration = "%.1fh" % (duration / 60.0)
+               current_duration = format_duration(duration)
                self.fact_store.set(prev_iter, 3, current_duration)
                 
             prev_iter = self.fact_store.append([fact['id'], fact['name'], 
@@ -60,9 +76,8 @@ class DayStore(object):
         # now we are good to append totals!
         # no sorting - chronological is intuitive
         for total in self.totals:
-            if (self.totals[total] / 60.0) >= 0.1:
-                in_hours = self.totals[total] / 60.0
-                self.total_store.append([-1, "%.1fh" % in_hours, total])
+            if (self.totals[total]) > 0: # TODO - check if this zero check is still necessary (it was 6min check before) 
+                self.total_store.append([-1, format_duration(self.totals[total]), total])
 
 
 class OverviewController:
@@ -134,7 +149,6 @@ class OverviewController:
 
     def after_activity_update(self, widget, renames):
         if renames:
-            print "w00h00"
             self.load_days()
     
     def after_fact_update(self, widget, date):
@@ -178,9 +192,8 @@ class OverviewController:
                 self.totals[total] += day.totals[total]
 
         for total in self.totals:
-            if (self.totals[total] / 60.0) >= 0.1:
-                in_hours = self.totals[total] / 60.0
-                self.total_store.append([-1, "%.1fh" % in_hours, total])
+            if self.totals[total] >= 0: #TODO - check if this zero check is still necessarry
+                self.total_store.append([-1, format_duration(self.totals[total]), total])
 
         treeview = self.get_widget('totals_7')
         treeview.set_model(self.total_store)
