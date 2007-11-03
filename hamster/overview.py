@@ -21,7 +21,6 @@ def format_duration(duration):
     
     #TODO - convert to list comprehension or that other thing
     if hours > 0 or minutes > 0:
-        print "here we go"
         if hours > 0: formatted_duration = "%dh " % hours
         if minutes > 0: formatted_duration += "%dm" % minutes
     else:
