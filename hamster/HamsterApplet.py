@@ -60,7 +60,22 @@ class HamsterApplet(object):
         # load window of activity switcher and todays view
         self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
         self.w_tree.signal_autoconnect(self)
-        self.window = self.w_tree.get_widget('menu_window')
+        self.window = self.w_tree.get_widget('hamster-window')
+        
+        hbox = self.w_tree.get_widget('hamster-window')
+        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
+
+        hbox = self.w_tree.get_widget('hamster-box')
+        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#ddd"))
+
+        hbox = self.w_tree.get_widget('todays-border')
+        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
+
+
+        #hbox = self.w_tree.get_widget('frame1')
+        #hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("darkgray"))
+
+
 
         # init today's tree
         self.treeview = self.w_tree.get_widget('today')
@@ -151,7 +166,7 @@ class HamsterApplet(object):
             self.last_activity = None
 
     def refresh_menu(self):
-        activity_list = self.w_tree.get_widget('activity_list')
+        activity_list = self.w_tree.get_widget('activity-list')
 
         #remove all items
         children = activity_list.get_children()
