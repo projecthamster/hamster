@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sat Nov  3 21:19:27 2007 -->
+<!--Generated with glade3 3.4.0 on Sat Nov  3 21:27:36 2007 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -96,7 +96,7 @@
                                     <property name="xalign">1</property>
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
-                                    <property name="bottom_padding">12</property>
+                                    <property name="bottom_padding">3</property>
                                     <child>
                                       <widget class="GtkButton" id="button3">
                                         <property name="visible">True</property>
@@ -164,6 +164,7 @@
                               <widget class="GtkVBox" id="activity-list">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -206,6 +207,7 @@
                             <property name="yalign">1</property>
                             <property name="xscale">0</property>
                             <property name="yscale">0</property>
+                            <property name="top_padding">12</property>
                             <child>
                               <widget class="GtkButton" id="button1">
                                 <property name="visible">True</property>
@@ -231,7 +233,7 @@
                             <property name="xalign">1</property>
                             <property name="yalign">1</property>
                             <property name="yscale">0</property>
-                            <property name="bottom_padding">12</property>
+                            <property name="top_padding">3</property>
                             <child>
                               <widget class="GtkButton" id="button2">
                                 <property name="visible">True</property>
