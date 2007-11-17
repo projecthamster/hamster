@@ -62,8 +62,7 @@ class HamsterApplet(object):
         self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('hamster-window')
         
-        hbox = self.w_tree.get_widget('hamster-window')
-        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
+        self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
 
         hbox = self.w_tree.get_widget('hamster-box')
         hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#ddd"))
@@ -116,6 +115,7 @@ class HamsterApplet(object):
 
     
         self.evBox = HamsterEventBox()
+        
         self.evBox.add(self.label)
 
         self.applet.add(self.evBox)
@@ -131,7 +131,8 @@ class HamsterApplet(object):
             ])
 
         self.applet.show_all()
-        
+        self.applet.set_background_widget(self.applet)
+    
     def panel_clicked(self):
         self.evBox.set_active(self, not self.evBox.get_active())
     
@@ -273,12 +274,29 @@ class HamsterApplet(object):
         self.load_today()
     
 
-    def __show_toggle(self, widget, is_active):          
-        print is_active;
+    def __show_toggle(self, widget, is_active):
         if is_active:
-            self.window.show_all()
+            self.window.show_all()                
         else:
             self.window.hide()
+            
+        label_geom = self.label.get_allocation()
+        window_geom = self.window.get_allocation()
+        x, y = gtk.gdk.Window.get_origin(self.label.window)
+        x = x - window_geom.width + label_geom.width
+        
+
+        self.popup_dir = self.applet.get_orient()
+
+        if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
+            y = y + label_geom.height + 6;
+        elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
+            y = y - window_geom.height - 6;
+        
+        x = x + 6 #temporary position fix. TODO - replace label with a toggle button
+        
+        self.window.move(x, y)
+    
 
             
     def get_active_main (self):
