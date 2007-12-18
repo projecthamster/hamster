@@ -24,7 +24,7 @@ def format_duration(duration):
         if hours > 0: formatted_duration = "%dh " % hours
         if minutes > 0: formatted_duration += "%dm" % minutes
     else:
-        formatted_duration = "Just started!"
+        formatted_duration = "started!"
             
     return formatted_duration
 
