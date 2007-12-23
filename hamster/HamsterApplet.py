@@ -5,7 +5,7 @@ import gnomeapplet, gtk
 import gtk.glade
 import gobject
 
-import hamster, hamster.db
+import hamster, hamster.db, hamster.eds
 from hamster.About import show_about
 from hamster.overview import DayStore
 from hamster.overview import format_duration
@@ -169,6 +169,10 @@ class HamsterApplet(object):
             #set selected
             if self.last_activity and activity['name'] == self.last_activity['name']:
                 activity_list.set_active_iter(item)
+
+        tasks = hamster.eds.get_eds_tasks()
+        for activity in tasks:
+            item = store.append([activity['name'], -1])
 
         return True
         
