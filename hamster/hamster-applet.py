@@ -34,7 +34,7 @@ def applet_factory(applet, iid):
 # Return a standalone window that holds the applet
 def build_window():
     app = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    app.set_title("Hamster Applet")
+    app.set_title(_(u"Hamster Applet"))
     app.connect("destroy", gtk.main_quit)
 
     applet = gnomeapplet.Applet()
@@ -47,13 +47,13 @@ def build_window():
     return app
 
 def usage():
-    print """=== Hamster applet: Usage
+    print _(u"""=== Hamster applet: Usage
 $ hamster-applet [OPTIONS]
 
 OPTIONS:
     -w, --window    Launch the applet in a standalone window for test purposes (default=no).
     -t, --trace        Use tracing (default=no).
-    """
+    """)
     sys.exit()
 
 if __name__ == "__main__":

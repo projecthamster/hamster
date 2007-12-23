@@ -7,6 +7,20 @@ import gtk, gnome.ui
 # Autotools set the actual data_dir in defs.py
 from defs import *
 
+# Init i18n
+
+import gettext
+from gtk import glade
+import locale
+
+locale.setlocale(locale.LC_ALL, '')
+for module in glade, gettext:
+    module.bindtextdomain('hamster-applet')
+    module.textdomain('hamster-applet')
+
+import __builtin__
+__builtin__._ = gettext.gettext
+
 # Allow to use not installed hamster
 UNINSTALLED_HAMSTER = False
 def _check(path):

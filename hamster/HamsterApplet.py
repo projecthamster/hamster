@@ -52,7 +52,7 @@ class HamsterApplet(object):
 
     def __init__(self, applet):
         self.applet = applet
-        self.label = gtk.Label("Hamster")
+        self.label = gtk.Label(_(u"Hamster"))
 
         # load window of activity switcher and todays view
         self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
@@ -134,7 +134,7 @@ class HamsterApplet(object):
             duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time'])
             label = "%s: %s" % (self.last_activity['name'], format_duration(duration))
         else:
-            label = "No activity"
+            label = _(u"No activity")
 
         self.label.set_text(label)
         return True
