@@ -1,6 +1,7 @@
 EDS_AVAILABLE = False
 try:
     import evolution
+    import evolution.ecal
     EDS_AVAILABLE = True
 except:
     pass
