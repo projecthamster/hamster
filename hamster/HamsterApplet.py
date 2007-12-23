@@ -5,7 +5,6 @@ import gnomeapplet, gtk
 import gtk.glade
 import gobject
 
-
 import hamster, hamster.db
 from hamster.About import show_about
 from hamster.overview import DayStore
@@ -30,9 +29,6 @@ class HamsterEventBox(gtk.EventBox):
             self.set_active(not self.active)
             return True
                 
-    def fact_updated(self):
-        print "yay!"
-
     def get_active(self):
         return self.active
     
@@ -46,7 +42,8 @@ class HamsterEventBox(gtk.EventBox):
     def activity_updated(self, renames):
         self.emit("activity_update", renames)
 
-    def fact_updated(self, date):
+    def fact_updated(self, date = None):
+        date = date or time.strftime('%Y%m%d')
         self.emit("fact_update", date)
 
 
@@ -61,20 +58,10 @@ class HamsterApplet(object):
         self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
         self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('hamster-window')
-        
-        self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
-
-        hbox = self.w_tree.get_widget('hamster-box')
-        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#ddd"))
-
-        hbox = self.w_tree.get_widget('todays-border')
-        hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#999"))
-
-
-        #hbox = self.w_tree.get_widget('frame1')
-        #hbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("darkgray"))
-
-
+        self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
+        activity_list = self.w_tree.get_widget('activity-list')
+        activity_list.set_model(self.items)
+        activity_list.set_text_column(0)
 
         # init today's tree
         self.treeview = self.w_tree.get_widget('today')
@@ -128,6 +115,7 @@ class HamsterApplet(object):
             hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
             None, [
             ("About", self.on_about),
+            ("edit_activities", self.edit_activities),
             ])
 
         self.applet.show_all()
@@ -146,7 +134,7 @@ class HamsterApplet(object):
             duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time'])
             label = "%s: %s" % (self.last_activity['name'], format_duration(duration))
         else:
-            label = "Hamster: New day!"
+            label = "No activity"
 
         self.label.set_text(label)
         return True
@@ -168,71 +156,39 @@ class HamsterApplet(object):
 
     def refresh_menu(self):
         activity_list = self.w_tree.get_widget('activity-list')
-
-        #remove all items
-        children = activity_list.get_children()
-        for child in children:
-            activity_list.remove(child)
+        store = activity_list.get_model()
+        store.clear()
 
         #populate fresh list from DB
         activities = hamster.db.get_activity_list()
         prev_item = None
 
-        items = []
         today = time.strftime('%Y%m%d')
         for activity in activities:
-            item = gtk.RadioButton(prev_item, activity['name'])
-
+            item = store.append([activity['name'], activity['id']])
             #set selected
             if self.last_activity and activity['name'] == self.last_activity['name']:
-                item.set_active(True);
-
-            activity_list.add(item)
-            item.connect("clicked", self.changeActivity, activity['id'])
-            prev_item = item
-            items.append({'id':activity['id'], 'name':activity['name']})
-            
-        activity_list.show_all()
+                activity_list.set_active_iter(item)
 
         return True
         
     def on_about (self, component, verb):
         show_about(self.applet)
 
-    def changeActivity(self, item, activity_id):
-        if item.get_active() == False:
-            return
-            
-        fact_time = time.strftime('%H%M')
+    def activity_changed(self, component):
+        # do stuff only if user has selected something
+        # for other cases activity_edited will be triggered
+        if component.get_active_iter():
+            self.activity_edited(component.child) # forward
 
-        # let's do some checks to see how we change activity
-        if (self.last_activity):
-           
-            # avoid dupes
-            if self.last_activity['activity_id'] == activity_id:
-                return
-
-            # if the time  since previous minute is about minute 
-            # then we consider that user has apparently mistaken and delete
-            # the previous task
-            current_mins = hamster.db.mins(fact_time)
-            prev_mins = hamster.db.mins(self.last_activity['fact_time'])
-            
-            print current_mins, prev_mins
-            print 1 >= current_mins - prev_mins > 0
-            
-            if (1 >= current_mins - prev_mins >= 0): 
-                hamster.db.remove_fact(self.last_activity['id'])
-                fact_time = self.last_activity['fact_time']
-
+    def activity_edited(self, component):
+        activity_name = component.get_text()
+        hamster.db.add_fact(activity_name)
         
-    
-        hamster.db.add_fact(activity_id, fact_time = fact_time)
-        today = time.strftime('%Y%m%d')
-        self.evBox.fact_updated(today)
+        self.evBox.fact_updated()
         self.evBox.set_active(False)
 
-    def edit_activities(self, menu_item):
+    def edit_activities(self, menu_item, verb):
         self.set_active_main(False)
         
         from hamster.activities import ActivitiesEditor
@@ -255,7 +211,6 @@ class HamsterApplet(object):
         if date == today:
             print "Fact of today updated"
             self.load_today()
-            self.refresh_menu()
             self.update_status()
     
     def show_overview(self, menu_item):
@@ -275,16 +230,13 @@ class HamsterApplet(object):
     
 
     def __show_toggle(self, widget, is_active):
-        if is_active:
-            self.window.show_all()                
-        else:
+        if not is_active:
             self.window.hide()
-            
+            return
+
         label_geom = self.label.get_allocation()
         window_geom = self.window.get_allocation()
         x, y = gtk.gdk.Window.get_origin(self.label.window)
-        x = x - window_geom.width + label_geom.width
-        
 
         self.popup_dir = self.applet.get_orient()
 
@@ -293,11 +245,13 @@ class HamsterApplet(object):
         elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
             y = y - window_geom.height - 6;
         
-        x = x + 6 #temporary position fix. TODO - replace label with a toggle button
+        x = x - 6 #temporary position fix. TODO - replace label with a toggle button
         
         self.window.move(x, y)
-    
-
+        self.window.show_all()
+        a_list = self.w_tree.get_widget('activity-list')
+        a_list.child.select_region(0, -1)
+        a_list.grab_focus()
             
     def get_active_main (self):
         return self.evBox.get_active ()

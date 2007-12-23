@@ -26,7 +26,8 @@ def show_about(parent):
         "website-label" : _("Hamster Website"),
     }
 
-    about.set_authors(["Toms Baugis <toms.baugis@gmail.com>"])
+    about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
+                       "Patryk Zawadzki <patrys@pld-linux.org>"])
 #    about.set_artists([])
 #    about.set_documenters([])
 

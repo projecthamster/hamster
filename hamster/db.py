@@ -62,14 +62,49 @@ def get_facts(date):
 
     return fetchall(query, (date,))
 
-def add_fact(activity_id, fact_date = None, fact_time = None):
+def add_fact(activity_name, fact_date = None, fact_time = None):
     fact_date = fact_date or time.strftime('%Y%m%d')
     fact_time = fact_time or time.strftime('%H%M')
+    
+    # try to lookup activity by it's name in db. active ones have priority
+    activity = get_activity_by_name(activity_name)
+
+    if not activity:
+      # insert and mark as deleted at the same time
+      # FIXME - we are adding the custom activity as work, user should be able
+      #         to choose
+      # TODO - this place needs to be refactored also
+      activity = {'id': -1, 'order': -1, 'work': 1, 'name': activity_name}
+      activity['id'] = update_activity(activity)
+      remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
+
+
+    # avoid dupes and facts shorter than minute
+    prev_activity = get_last_activity()
+
+    print "prev %s, cur %s" % (prev_activity['fact_date'], fact_date)
+
+    if str(prev_activity['fact_date']) == fact_date:
+        if prev_activity['id'] == activity['id']:
+            return
+        
+        # if the time  since previous task is about minute 
+        # then we consider that user has apparently mistaken and delete
+        # the previous task
+        current_mins = hamster.db.mins(fact_time)
+        prev_mins = hamster.db.mins(prev_activity['fact_time'])
+        
+        if (1 >= current_mins - prev_mins >= 0): 
+            hamster.db.remove_fact(prev_activity['id'])
+            fact_time = prev_activity['fact_time']
+        
+    
+    
     
     insert = """INSERT INTO facts(activity_id, fact_date, fact_time)
                      VALUES (?, ?, ?)
              """
-    execute(insert, (activity_id, fact_date, fact_time))
+    execute(insert, (activity['id'], fact_date, fact_time))
     return get_last_activity()
 
 def remove_fact(fact_id):
