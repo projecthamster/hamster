@@ -29,7 +29,7 @@ def format_duration(duration):
 
 class DayStore(object):
     """A day view contains a treeview for facts of the day and another
-       one for totals. It creates those widgets on init, user
+       one for totals. It creates those widgets on init, use
        fill_view(store) to fill the tree and calculate totals """
 
     def __init__(self, date = None):
@@ -42,34 +42,33 @@ class DayStore(object):
         self.total_store = gtk.ListStore(int, str, str)
 
         self.facts = hamster.db.get_facts(date)
-
-        prev_fact, prev_time, prev_iter = None, None, None
         self.totals = {}
-
+        
         for fact in self.facts:
-            hours = fact['fact_time'][:2]
-            minutes = fact['fact_time'][2:4]
+            duration = 0
+            start_mins = hamster.db.mins(fact["start_time"][8:])
+            
+            if fact["end_time"]:
+                end_mins = hamster.db.mins(fact["end_time"][8:])
+                duration = end_mins - start_mins
+            
+            fact_name = fact['name']
+            
+            if fact_name not in self.totals:
+                self.totals[fact_name] = 0
 
-            # we need time only for delta, so let's convert to mins
-            fact_time = int(hours) * 60 + int(minutes)
+            self.totals[fact_name] += duration
 
-            duration = None
-            if prev_fact:
-                duration = fact_time - prev_time
-                if prev_fact not in self.totals:
-                    self.totals[prev_fact] = 0
+            if duration > 0:
+                current_duration = format_duration(duration)
+            else:
+                current_duration = ""
 
-                self.totals[prev_fact] += duration
 
-            if prev_iter:
-               current_duration = format_duration(duration)
-               self.fact_store.set(prev_iter, 3, current_duration)
-                
-            prev_iter = self.fact_store.append([fact['id'], fact['name'], 
-                                    hours + ':' + minutes, 
-                                    "", date])
+            self.fact_store.append([fact['id'], fact['name'], 
+                                    fact["start_time"][8:10] + ':' + fact["start_time"][10:], 
+                                    current_duration, fact["start_time"][:8]])
 
-            prev_fact, prev_time = fact['name'], fact_time
 
         # now we are good to append totals!
         # no sorting - chronological is intuitive

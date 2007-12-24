@@ -4,17 +4,19 @@ from pysqlite2 import dbapi2 as sqlite
 import os, time
 import hamster
 
-# we are saving data under $HOME/.hamsterdb
+# we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
 con = None # Connection will be created on demand
 
 def mins(normal_time):
     """ returns time in minutes since midnight"""
-    return int(normal_time[:2]) * 60 + int(normal_time[2:4])
+    if normal_time == "":
+        return 0
+    else:
+        return int(normal_time[:2]) * 60 + int(normal_time[2:4])
 
 
 def get_activity_by_name(name):
-  """get most recent, preferably not deleted activity 
-     by it's name"""
+  """get most recent, preferably not deleted activity by it's name"""
   query = """SELECT * from activities 
               WHERE name = ? 
            ORDER BY deleted, id desc
@@ -26,38 +28,34 @@ def add_custom_fact(activity_name, activity_time):
   """adds custom fact to database. custom means either it is
      post-factum, or some one-time task"""
   
-  # we keep year in db as int
-  fact_date = int(time.strftime('%Y%m%d', activity_time))
-  fact_time = time.strftime('%H%M', activity_time)
-  
-  activity = get_activity_by_name(activity_name)
-  
-  if not activity:
-    # insert and mark as deleted at the same time
-    # FIXME - we are adding the custom activity as work, user should be able
-    #         to choose
-    activity = {'id': -1, 'order': -1, 'work': 1, 'name': activity_name}
-    activity['id'] = update_activity(activity)
-    remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
-  
-  add_fact(activity['id'], fact_date, fact_time)
+  pass # TODO - move everything to add_fact
 
 def get_last_activity():
-    query = """SELECT a.id, a.fact_date, a.fact_time, b.name, b.id as activity_id
+    query = """SELECT a.id, substr(a.start_time, 1, 8) fact_date,
+                      substr(a.start_time, 9, 4) fact_time,
+                      a.end_time,
+                      b.name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
-             ORDER BY a.fact_date desc, a.fact_time desc, a.id desc
+             ORDER BY a.start_time desc, a.id desc
                 LIMIT 1
     """
 
     return fetchone(query)
 
+def finish_activity(id, end_time = None):
+    end_time = end_time or time.strftime('%Y%m%d%H%M')
+    execute("UPDATE facts SET end_time = ? where id = ?", (end_time, id))
+
 def get_facts(date):
-    query = """SELECT a.id, a.fact_date, a.fact_time, b.name, b.id as activity_id
+    query = """SELECT a.id, substr(a.start_time, 1, 8) fact_date,
+                      substr(a.start_time, 9, 4) fact_time,
+                      a.start_time, a.end_time,
+                      b.name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
-                WHERE a.fact_date = ?
-             ORDER BY a.fact_time
+                WHERE fact_date = ?
+             ORDER BY a.start_time
     """
 
     return fetchall(query, (date,))
@@ -95,14 +93,18 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
         if (1 >= current_mins - prev_mins >= 0): 
             hamster.db.remove_fact(prev_activity['id'])
             fact_time = prev_activity['fact_time']
+            prev_activity = get_last_activity()  #get the activity before previous
+    
+    # if we have previous activity - update end_time
+    if prev_activity: #TODO - constraint the update within one day (say, 12 hours, not more)
+        execute("UPDATE facts set end_time = ? where id = ?",
+                (fact_date + fact_time, prev_activity["id"]))
         
-    
-    
-    
-    insert = """INSERT INTO facts(activity_id, fact_date, fact_time)
-                     VALUES (?, ?, ?)
+    #add the new entry
+    insert = """INSERT INTO facts(activity_id, start_time)
+                     VALUES (?, ?)
              """
-    execute(insert, (activity['id'], fact_date, fact_time))
+    execute(insert, (activity['id'], fact_date + fact_time))
     return get_last_activity()
 
 def remove_fact(fact_id):
@@ -189,7 +191,7 @@ def fetchone(query, params = None):
     else:
         return None
 
-def execute(statement, params):
+def execute(statement, params = ()):
     con = get_connection()
     cur = con.cursor()
 

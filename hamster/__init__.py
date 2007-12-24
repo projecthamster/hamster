@@ -1,6 +1,7 @@
 import os, sys
 from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
 from shutil import copy as copyfile
+from hamster import db
 
 import gtk, gnome.ui
 
@@ -52,5 +53,49 @@ if not exists(HAMSTER_DB):
     print "Database not found in %s - installing default from %s!" % (HAMSTER_DB, SHARED_DATA_DIR)
     copyfile(join(SHARED_DATA_DIR, DB_FILE), HAMSTER_DB)
 
+    
 # Path to images, icons
 ART_DATA_DIR = join(SHARED_DATA_DIR, "art")
+
+
+"""upgrade DB to hamster version"""
+version = db.fetchone("select version from version")["version"]
+
+if version <2:
+    """moving from fact_date, fact_time to start_time, end_time"""
+    
+    #create new table and copy data
+    db.execute("""CREATE TABLE facts_new(id integer primary key,
+                                         activity_id integer,
+                                         start_time varchar2(12),
+                                         end_time varchar2(12))""")
+    
+    db.execute("""INSERT INTO facts_new(id, activity_id, start_time)
+                       SELECT id, activity_id, fact_date||fact_time from facts""")
+
+    db.execute("DROP TABLE facts")
+    db.execute("ALTER TABLE facts_new RENAME TO facts")
+
+    # run through all facts and set the end time
+    # if previous fact is not on the same date, then it means that it was the
+    # last one in previous, so remove it
+    # this logic saves our last entry from being deleted, which is good
+    facts = db.fetchall("""SELECT id, activity_id, start_time,
+                                  substr(start_time,1, 8) start_date
+                             FROM facts
+                             ORDER BY start_time""")
+    prev_fact = None
+    
+    for fact in facts:
+        if prev_fact:
+            if prev_fact['start_date'] == fact['start_date']:
+                db.execute("UPDATE facts SET end_time = ? where id = ?",
+                           (fact['start_time'], prev_fact['id']))
+            else:
+                #otherwise that's the last entry of the day - remove it
+                db.execute("delete from facts where id = ?", (prev_fact["id"],))
+                
+        prev_fact = fact
+
+#lock down current version
+db.execute("update version set version=2")

@@ -129,12 +129,18 @@ class HamsterApplet(object):
         if today != self.today:
             self.load_today()
 
-        if self.last_activity:
+        if self.last_activity and self.last_activity["end_time"] == None:
             now = time.strftime('%H%M')
             duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time'])
             label = "%s: %s" % (self.last_activity['name'], format_duration(duration))
+            
+            
+            self.w_tree.get_widget('current_activity').set_text(self.last_activity['name'])
+            self.w_tree.get_widget('stop_tracking').set_sensitive(1);
+            
         else:
             label = _(u"No activity")
+            self.w_tree.get_widget('stop_tracking').set_sensitive(0);
 
         self.label.set_text(label)
         return True
@@ -175,6 +181,11 @@ class HamsterApplet(object):
             item = store.append([activity['name'], -1])
 
         return True
+    
+    def on_stop_tracking(self, button):
+        hamster.db.finish_activity(self.last_activity["id"])
+        self.evBox.fact_updated()
+        self.evBox.set_active(False)
         
     def on_about (self, component, verb):
         show_about(self.applet)
@@ -222,12 +233,6 @@ class HamsterApplet(object):
         from hamster.overview import OverviewController
         overview = OverviewController(self.evBox)
         overview.show()
-
-    def show_custom_fact_form(self, menu_item):
-        self.set_active_main(False)
-        from hamster.add_custom_fact import CustomFactController
-        custom_fact = CustomFactController(self.evBox)
-        custom_fact.show()
 
     def after_fact_changes(self, some_object):
         self.load_today()
