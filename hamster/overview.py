@@ -14,7 +14,6 @@ import datetime as dt
 GLADE_FILE = "overview.glade"
 
 def format_duration(duration):
-    print "Duration: ", duration
     hours = duration / 60
     minutes = duration % 60
     formatted_duration = ""

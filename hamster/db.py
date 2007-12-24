@@ -82,9 +82,7 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
     # avoid dupes and facts shorter than minute
     prev_activity = get_last_activity()
 
-    print "prev %s, cur %s" % (prev_activity['fact_date'], fact_date)
-
-    if str(prev_activity['fact_date']) == fact_date:
+    if prev_activity and str(prev_activity['fact_date']) == fact_date:
         if prev_activity['id'] == activity['id']:
             return
         
