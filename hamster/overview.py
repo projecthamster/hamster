@@ -23,7 +23,7 @@ def format_duration(duration):
         if hours > 0: formatted_duration = "%dh " % hours
         if minutes > 0: formatted_duration += "%dm" % minutes
     else:
-        formatted_duration = "started!"
+        formatted_duration = _(u"started!")
             
     return formatted_duration
 
@@ -107,7 +107,7 @@ class OverviewController:
                 timeColumn.set_attributes(timeCell, text=2)
                 treeview.append_column(timeColumn)
 
-                nameColumn = gtk.TreeViewColumn('Name')
+                nameColumn = gtk.TreeViewColumn(_(u'Name'))
                 nameColumn.set_expand(True)
                 nameCell = gtk.CellRendererText()
                 nameColumn.pack_start(nameCell, True)
@@ -125,14 +125,14 @@ class OverviewController:
 
             treeview = self.get_widget('totals_' + str(i))
             treeview.connect("button-press-event", self.single_focus)
-            nameColumn = gtk.TreeViewColumn('Name')
+            nameColumn = gtk.TreeViewColumn(_(u'Name'))
             nameColumn.set_expand(True)
             nameCell = gtk.CellRendererText()
             nameColumn.pack_start(nameCell, True)
             nameColumn.set_attributes(nameCell, text=2)
             treeview.append_column(nameColumn)
 
-            timeColumn = gtk.TreeViewColumn('Time')
+            timeColumn = gtk.TreeViewColumn(_(u'Time'))
             timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
             timeColumn.set_expand(False)
             timeCell = gtk.CellRendererText()

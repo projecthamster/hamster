@@ -80,7 +80,7 @@ class ActivitiesEditor:
 
         self.treeview = treeview = self.get_widget('activity_list')
 
-        nameColumn = gtk.TreeViewColumn('Name')
+        nameColumn = gtk.TreeViewColumn(_(u'Name'))
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameCell.set_property('editable', True)
@@ -90,7 +90,7 @@ class ActivitiesEditor:
         nameColumn.set_sort_column_id(1)
         treeview.append_column(nameColumn)
 
-        categoryColumn = gtk.TreeViewColumn('Work?')
+        categoryColumn = gtk.TreeViewColumn(_(u'Work?'))
         categoryColumn.set_expand(False)
         categoryCell = gtk.CellRendererToggle()
         categoryCell.set_property('activatable', True);
@@ -150,7 +150,7 @@ class ActivitiesEditor:
     #toolbar button clicks
     def on_add_activity_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
-        new_activity = self.store.append([-1, "New activity", True, -1])
+        new_activity = self.store.append([-1, _(u"New activity"), True, -1])
 
         (model, iter) = self.selection.get_selected()
 
