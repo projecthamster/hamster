@@ -10,6 +10,7 @@ hamsterdir = $(pythondir)/hamster
 hamster_PYTHON = \
 	defs.py \
 	db.py \
+	eds.py \
 	activities.py \
 	overview.py \
 	add_custom_fact.py \
