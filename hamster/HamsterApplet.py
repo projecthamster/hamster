@@ -1,3 +1,4 @@
+# - coding: utf-8 -
 import os, time
 import datetime as dt
 from os.path import *
@@ -132,7 +133,7 @@ class HamsterApplet(object):
         if self.last_activity and self.last_activity["end_time"] == None:
             delta = dt.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
-            label = "%s %s" % (self.last_activity['name'], format_duration(duration))
+            label = "%s %s" % (self.last_activity['name'], format_duration(duration))
             
             
             self.w_tree.get_widget('current_activity').set_text(self.last_activity['name'])

@@ -19,7 +19,7 @@ def format_duration(duration):
     days = hours / 24
     hours %= 24
     minutes = duration % 60
-    formatted_duration = ""
+    formatted_duration = ""
     
     #TODO - convert to list comprehension or that other thing
     if days > 0 or hours > 0 or minutes > 0:
