@@ -97,5 +97,33 @@ if version <2:
                 
         prev_fact = fact
 
+#it was kind of silly not to have datetimes in first place
+if version <3:
+    #create new table and copy data
+    db.execute("""CREATE TABLE facts_new (id integer primary key,
+                                          activity_id integer,
+                                          start_time timestamp,
+                                          end_time timestamp)""")
+    
+    db.execute("""INSERT INTO facts_new (id, activity_id, start_time, end_time)
+                       SELECT id, activity_id,
+                              substr(start_time,1,4) || "-"
+                           || substr(start_time, 5, 2) || "-"
+                           || substr(start_time, 7, 2) || " "
+                           || substr(start_time, 9, 2) || ":"
+                           || substr(start_time, 11, 2) || ":00",
+                              substr(end_time,1,4) || "-"
+                           || substr(end_time, 5, 2) || "-"
+                           || substr(end_time, 7, 2) || " "
+                           || substr(end_time, 9, 2) || ":"
+                           || substr(end_time, 11, 2) || ":00"
+                         FROM facts;
+               """)
+
+    db.execute("DROP TABLE facts")
+    db.execute("ALTER TABLE facts_new RENAME TO facts")
+
+
+
 #lock down current version
-db.execute("update version set version=2")
+db.execute("update version set version=3")

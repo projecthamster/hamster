@@ -1,7 +1,7 @@
 """separate file for database operations"""
 
 from pysqlite2 import dbapi2 as sqlite
-import os, time
+import os, time, datetime
 import hamster
 
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
@@ -13,6 +13,15 @@ def mins(normal_time):
         return 0
     else:
         return int(normal_time[:2]) * 60 + int(normal_time[2:4])
+
+def to_date(dateString):
+    year, month, day = int(dateString[:4]), int(dateString[4:6]), int(dateString[6:8])
+    
+    hour, min = None, None
+    if len(dateString) > 8:
+        hour, min = int(dateString[8:10]), int(dateString[10:12])    
+    
+    return datetime.datetime(year, month, day, hour, min)
 
 
 def get_activity_by_name(name):
@@ -31,8 +40,8 @@ def add_custom_fact(activity_name, activity_time):
   pass # TODO - move everything to add_fact
 
 def get_last_activity():
-    query = """SELECT a.id, substr(a.start_time, 1, 8) fact_date,
-                      substr(a.start_time, 9, 4) fact_time,
+    query = """SELECT a.id, strftime("%Y%m%d", a.start_time) fact_date,
+                      strftime("%H%M", a.start_time) fact_time,
                       a.end_time,
                       b.name, b.id as activity_id
                  FROM facts a
@@ -48,13 +57,13 @@ def finish_activity(id, end_time = None):
     execute("UPDATE facts SET end_time = ? where id = ?", (end_time, id))
 
 def get_facts(date):
-    query = """SELECT a.id, substr(a.start_time, 1, 8) fact_date,
-                      substr(a.start_time, 9, 4) fact_time,
+    query = """SELECT a.id, strftime("%Y%m%d", a.start_time) fact_date,
+                      strftime("%H%M", a.start_time) fact_time,
                       a.start_time, a.end_time,
                       b.name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
-                WHERE fact_date = ?
+                WHERE strftime("%Y%m%d", a.start_time) = ?
              ORDER BY a.start_time
     """
 
@@ -98,13 +107,13 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
     # if we have previous activity - update end_time
     if prev_activity: #TODO - constraint the update within one day (say, 12 hours, not more)
         execute("UPDATE facts set end_time = ? where id = ?",
-                (fact_date + fact_time, prev_activity["id"]))
-        
+                (to_date(fact_date + fact_time), prev_activity["id"]))
+    
     #add the new entry
     insert = """INSERT INTO facts(activity_id, start_time)
                      VALUES (?, ?)
              """
-    execute(insert, (activity['id'], fact_date + fact_time))
+    execute(insert, (activity['id'], to_date(fact_date + fact_time)))
     return get_last_activity()
 
 def remove_fact(fact_id):
@@ -163,7 +172,7 @@ def update_activity(activity):
 def get_connection():
     global con
     if con == None:
-        con = sqlite.connect(hamster.HAMSTER_DB)
+        con = sqlite.connect(hamster.HAMSTER_DB, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
 
     con.row_factory = sqlite.Row
     return con

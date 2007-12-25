@@ -46,10 +46,10 @@ class DayStore(object):
         
         for fact in self.facts:
             duration = 0
-            start_mins = hamster.db.mins(fact["start_time"][8:])
+            start_mins = hamster.db.mins(fact["start_time"].time().strftime("%H%M"))
             
             if fact["end_time"]:
-                end_mins = hamster.db.mins(fact["end_time"][8:])
+                end_mins = hamster.db.mins(fact["end_time"].time().strftime("%H%M"))
                 duration = end_mins - start_mins
             
             fact_name = fact['name']
@@ -66,8 +66,8 @@ class DayStore(object):
 
 
             self.fact_store.append([fact['id'], fact['name'], 
-                                    fact["start_time"][8:10] + ':' + fact["start_time"][10:], 
-                                    current_duration, fact["start_time"][:8]])
+                                    fact["start_time"].time().strftime("%H:%M"), 
+                                    current_duration, fact["start_time"].time().strftime("%Y%m%d")])
 
 
         # now we are good to append totals!
