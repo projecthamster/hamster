@@ -6,6 +6,7 @@ pygtk.require('2.0')
 import os
 import gtk
 import gtk.glade
+from pango import ELLIPSIZE_END
 
 import hamster
 import hamster.db
@@ -91,6 +92,7 @@ class OverviewController:
             treeview = self.get_widget('day_' + str(i))
             
             if treeview:
+                treeview.set_tooltip_column(1)
                 treeview.connect("button-press-event", self.single_focus)
                 treeview.connect("key-press-event", self.on_key_pressed)
                 
@@ -105,6 +107,7 @@ class OverviewController:
                 nameColumn = gtk.TreeViewColumn(_(u'Name'))
                 nameColumn.set_expand(True)
                 nameCell = gtk.CellRendererText()
+                nameCell.set_property('ellipsize', ELLIPSIZE_END)
                 nameColumn.pack_start(nameCell, True)
                 nameColumn.set_attributes(nameCell, text=1)
                 treeview.append_column(nameColumn)
@@ -116,13 +119,14 @@ class OverviewController:
                 durationColumn.pack_start(durationCell, True)
                 durationColumn.set_attributes(durationCell, text=3)
                 treeview.append_column(durationColumn)
-                
 
             treeview = self.get_widget('totals_' + str(i))
+            treeview.set_tooltip_column(2)
             treeview.connect("button-press-event", self.single_focus)
             nameColumn = gtk.TreeViewColumn(_(u'Name'))
             nameColumn.set_expand(True)
             nameCell = gtk.CellRendererText()
+            nameCell.set_property('ellipsize', ELLIPSIZE_END)
             nameColumn.pack_start(nameCell, True)
             nameColumn.set_attributes(nameCell, text=2)
             treeview.append_column(nameColumn)
@@ -134,7 +138,6 @@ class OverviewController:
             timeColumn.pack_start(timeCell, True)
             timeColumn.set_attributes(timeCell, text=1)
             treeview.append_column(timeColumn)
-
 
         self.load_days()
         self.wTree.signal_autoconnect(self)
