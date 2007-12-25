@@ -8,7 +8,7 @@ import hamster
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
 con = None # Connection will be created on demand
 
-def get_activity_by_name(name):
+def __get_activity_by_name(name):
   """get most recent, preferably not deleted activity by it's name"""
   query = """SELECT * from activities 
               WHERE name = ? 
@@ -17,7 +17,7 @@ def get_activity_by_name(name):
           """
   return fetchone(query, (name,))
 
-def get_last_activity():
+def __get_last_activity():
     query = """SELECT a.id AS id,
                       a.start_time AS start_time,
                       a.end_time AS end_time,
@@ -53,7 +53,7 @@ def add_fact(activity_name, fact_time = None):
     start_time = fact_time or datetime.datetime.now()
     
     # try to lookup activity by it's name in db. active ones have priority
-    activity = get_activity_by_name(activity_name)
+    activity = __get_activity_by_name(activity_name)
 
     if not activity:
       # insert and mark as deleted at the same time
@@ -66,7 +66,7 @@ def add_fact(activity_name, fact_time = None):
 
 
     # avoid dupes and facts shorter than minute
-    prev_activity = get_last_activity()
+    prev_activity = __get_last_activity()
 
     if prev_activity and prev_activity['start_time'].date() == start_time.date():
         if prev_activity['id'] == activity['id']:
@@ -92,7 +92,7 @@ def add_fact(activity_name, fact_time = None):
                      VALUES (?, ?, ?)
              """
     execute(insert, (activity['id'], start_time, start_time))
-    return get_last_activity()
+    return __get_last_activity()
 
 def remove_fact(fact_id):
     execute("DELETE FROM facts where id = ?", (fact_id,))

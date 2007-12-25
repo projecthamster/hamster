@@ -10,7 +10,7 @@ import gnome.ui
 import hamster
 import hamster.db
 import time
-import datetime as dt
+import datetime
 
 GLADE_FILE = "add_custom_fact.glade"
 
@@ -47,12 +47,11 @@ class CustomFactController:
 
     def on_ok_clicked(self, button):
         activity = self.activity_list.get_child().get_text()
-        activity_time = time.localtime(self.get_widget('activity_time').get_time())
+        activity_time = datetime.datetime.fromtimestamp(self.get_widget('activity_time').get_time())
 
-        hamster.db.add_custom_fact(activity, activity_time)
+        hamster.db.add_fact(activity, activity_time)
 
-        fact_date = int(time.strftime('%Y%m%d', activity_time))
-        self.evBox.fact_updated(fact_date)
+        self.evBox.fact_updated(activity_time.strftime('%Y%m%d'))
         
         self.window.destroy()
         
