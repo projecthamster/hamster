@@ -71,7 +71,7 @@ class Storage(hamster.storage.Storage):
             # TODO - this place needs to be refactored also
             activity = {'id': -1, 'order': -1, 'work': 1, 'name': activity_name}
             activity['id'] = self.update_activity(activity)
-            remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
+            self.remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
 
         # avoid dupes and facts shorter than minute
         prev_activity = self.__get_last_activity()
