@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# - coding: utf-8 -
 import pygtk
 pygtk.require('2.0')
 
@@ -15,15 +16,16 @@ GLADE_FILE = "overview.glade"
 
 def format_duration(duration):
     hours = duration / 60
+    days = hours / 24
+    hours %= 24
     minutes = duration % 60
-    formatted_duration = ""
+    formatted_duration = ""
     
     #TODO - convert to list comprehension or that other thing
-    if hours > 0 or minutes > 0:
-        if hours > 0: formatted_duration = "%dh " % hours
-        if minutes > 0: formatted_duration += "%dm" % minutes
-    else:
-        formatted_duration = _(u"started!")
+    if days > 0 or hours > 0 or minutes > 0:
+        if days > 0:
+            formatted_duration += "%d:" % days
+        formatted_duration += "%02d:%02d" % (hours, minutes)
             
     return formatted_duration
 
