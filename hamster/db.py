@@ -1,20 +1,22 @@
 """separate file for database operations"""
 
 from pysqlite2 import dbapi2 as sqlite
-import os, time, datetime
+import os, time
+import datetime as dt
 import hamster
 
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
 con = None # Connection will be created on demand
 
 def to_date(dateString):
+    """converts ISO format (YYYYMMDDHHMI) date string to datetime"""
     year, month, day = int(dateString[:4]), int(dateString[4:6]), int(dateString[6:8])
     
     hour, min = None, None
     if len(dateString) > 8:
         hour, min = int(dateString[8:10]), int(dateString[10:12])    
     
-    return datetime.datetime(year, month, day, hour, min)
+    return dt.datetime(year, month, day, hour, min)
 
 
 def get_activity_by_name(name):
@@ -46,7 +48,7 @@ def get_last_activity():
     return fetchone(query)
 
 def finish_activity(id, end_time = None):
-    end_time = end_time or time.strftime('%Y%m%d%H%M')
+    end_time = end_time or dt.datetime.now()
     execute("UPDATE facts SET end_time = ? where id = ?", (end_time, id))
 
 def get_facts(date):
@@ -112,14 +114,15 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
 def remove_fact(fact_id):
     execute("DELETE FROM facts where id = ?", (fact_id,))
 
-def get_activity_list():
+def get_activity_list(pattern = "%"):
     """returns list of configured activities, in user specified order"""
     query = """SELECT *
                  FROM activities
                 WHERE coalesce(deleted, 0) = 0
+                  AND name like ?
              ORDER BY activity_order
     """
-    activities = fetchall(query)
+    activities = fetchall(query, (pattern, ))
 
     return activities
 
