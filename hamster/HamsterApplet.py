@@ -130,8 +130,8 @@ class HamsterApplet(object):
             self.load_today()
 
         if self.last_activity and self.last_activity["end_time"] == None:
-            now = time.strftime('%H%M')
-            duration = hamster.db.mins(now) - hamster.db.mins(self.last_activity['fact_time'])
+            delta = dt.datetime.now() - self.last_activity['start_time']
+            duration = delta.seconds /  60
             label = "%s: %s" % (self.last_activity['name'], format_duration(duration))
             
             

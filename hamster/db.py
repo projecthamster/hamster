@@ -7,13 +7,6 @@ import hamster
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
 con = None # Connection will be created on demand
 
-def mins(normal_time):
-    """ returns time in minutes since midnight"""
-    if normal_time == "":
-        return 0
-    else:
-        return int(normal_time[:2]) * 60 + int(normal_time[2:4])
-
 def to_date(dateString):
     year, month, day = int(dateString[:4]), int(dateString[4:6]), int(dateString[6:8])
     
@@ -96,10 +89,10 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
         # if the time  since previous task is about minute 
         # then we consider that user has apparently mistaken and delete
         # the previous task
-        current_mins = hamster.db.mins(fact_time)
-        prev_mins = hamster.db.mins(prev_activity['fact_time'])
+        start_time = to_date(fact_date + fact_time)
+        delta = (start_time - prev_activity['start_time']) / 60
         
-        if (1 >= current_mins - prev_mins >= 0): 
+        if (1 >= delta >= 0): 
             hamster.db.remove_fact(prev_activity['id'])
             fact_time = prev_activity['fact_time']
             prev_activity = get_last_activity()  #get the activity before previous
