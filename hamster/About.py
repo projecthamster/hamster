@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from os.path import join
 from gettext import gettext as _
-from hamster.defs import *
+from hamster import SHARED_DATA_DIR
+from hamster.defs import VERSION
 import gtk, gnomevfs
 import hamster
 
@@ -38,7 +39,7 @@ def show_about(parent):
         about.set_property(prop, val)
 
 
-    hamster_logo = join(DATA_DIR, "hamster-applet", 'art', 'tm.png')
+    hamster_logo = join(SHARED_DATA_DIR, 'art', 'tm.png')
         
     zupa = gtk.gdk.pixbuf_new_from_file(hamster_logo)
     about.set_logo(zupa)
