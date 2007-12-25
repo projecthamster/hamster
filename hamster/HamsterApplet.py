@@ -7,7 +7,7 @@ import gtk.glade
 import gobject
 from pango import ELLIPSIZE_END
 
-from hamster import storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
 from hamster.About import show_about
 from hamster.overview import DayStore
@@ -115,7 +115,7 @@ class HamsterApplet(object):
 
         self.evBox.connect ("toggled", self.__show_toggle)
         self.evBox.connect ("activity_update", self.after_activity_update)
-        self.evBox.connect ("fact_update", self.after_fact_update)
+        dispatcher.set_handler('fact_updated', self.after_fact_update)
 
         self.applet.setup_menu_from_file (
             SHARED_DATA_DIR, "Hamster_Applet.xml",
@@ -137,7 +137,6 @@ class HamsterApplet(object):
         if self.last_activity:
             # update end time
             storage.touch_activity(self.last_activity)
-            self.evBox.fact_updated()
         return True
 
     def update_status(self):
@@ -203,6 +202,7 @@ class HamsterApplet(object):
     def activity_edited(self, component):
         activity_name = component.get_text()
         self.last_activity = storage.add_fact(activity_name)
+        self.update_status() # dispatch comes before assignment
         self.evBox.set_active(False)
 
     def edit_activities(self, menu_item, verb):
@@ -221,11 +221,10 @@ class HamsterApplet(object):
             self.load_today()
             self.update_status()
     
-    def after_fact_update(self, widget, date):
+    def after_fact_update(self, event, date):
         print "fact updated"
-        today = time.strftime('%Y%m%d')
 
-        if date == today:
+        if date.date() == datetime.date.today():
             print "Fact of today updated"
             self.load_today()
             self.update_status()

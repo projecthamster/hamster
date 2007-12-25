@@ -17,13 +17,16 @@ class Storage(object):
 
     def touch_fact(self, fact, end_time = None):
         end_time = end_time or datetime.datetime.now()
-        return self.__touch_fact(fact, end_time)
+        result = self.__touch_fact(fact, end_time)
+        self.dispatch('fact_updated', fact['start_time'])
+        return result
 
     def get_facts(self, date):
         return self.__get_facts(date)
 
     def remove_fact(self, fact_id):
-        return self.__remove_fact(fact_id)
+        result = self.__remove_fact(fact_id)
+        return result
 
     def get_activity_list(self, pattern = "%"):
         return self.__get_activity_list(pattern)
