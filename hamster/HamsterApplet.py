@@ -5,6 +5,7 @@ from os.path import *
 import gnomeapplet, gtk
 import gtk.glade
 import gobject
+from pango import ELLIPSIZE_END
 
 import hamster, hamster.db, hamster.eds
 from hamster.About import show_about
@@ -66,6 +67,7 @@ class HamsterApplet(object):
 
         # init today's tree
         self.treeview = self.w_tree.get_widget('today')
+        self.treeview.set_tooltip_column(1)
         timeColumn = gtk.TreeViewColumn('Time')
         timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         timeColumn.set_expand(False)
@@ -77,6 +79,7 @@ class HamsterApplet(object):
         nameColumn = gtk.TreeViewColumn('Name')
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
+        nameCell.set_property('ellipsize', ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)
         nameColumn.set_attributes(nameCell, text=1)
         self.treeview.append_column(nameColumn)
@@ -153,7 +156,7 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        treeview = self.w_tree.get_widget('today')        
+        treeview = self.w_tree.get_widget('today')
         self.today = datetime.date.today()
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
