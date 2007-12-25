@@ -32,12 +32,11 @@ def show_about(parent):
 #    about.set_artists([])
 #    about.set_documenters([])
 
-    #translators: These appear in the About dialog, usual format applies.
-    #about.set_translator_credits( _("translator-credits") )
+#    translators: These appear in the About dialog, usual format applies.
+    about.set_translator_credits( _("translator-credits") )
 
     for prop, val in infos.items():
         about.set_property(prop, val)
-
 
     hamster_logo = join(SHARED_DATA_DIR, 'art', 'tm.png')
         
@@ -47,5 +46,4 @@ def show_about(parent):
     about.connect("response", lambda self, *args: self.destroy())
     about.set_screen(parent.get_screen())
     about.show_all()
-    
-    
+
