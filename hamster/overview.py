@@ -35,7 +35,7 @@ class DayStore(object):
        fill_view(store) to fill the tree and calculate totals """
 
     def __init__(self, date = None):
-        date = date or time.strftime('%Y%m%d')
+        date = date or dt.date.today()
         
         # ID, Time, Name, Duration, Date
         self.fact_store = gtk.ListStore(int, str, str, str, str)
@@ -50,7 +50,7 @@ class DayStore(object):
             duration = 0
             
             if fact["end_time"]:
-		delta = fact["end_time"] - fact["start_time"]
+                delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
             
             fact_name = fact['name']
@@ -67,8 +67,8 @@ class DayStore(object):
 
 
             self.fact_store.append([fact['id'], fact['name'], 
-                                    fact["start_time"].time().strftime("%H:%M"), 
-                                    current_duration, fact["start_time"].time().strftime("%Y%m%d")])
+                                    fact["start_time"].strftime("%H:%M"), 
+                                    current_duration, fact["start_time"].strftime("%Y%m%d")])
 
 
         # now we are good to append totals!
@@ -174,7 +174,7 @@ class OverviewController:
             label.set_text('<b>' + current_date.strftime('%A, %b %d.') + '</b>')
             label.set_use_markup(True);
 
-            day = DayStore(current_date.strftime('%Y%m%d'));
+            day = DayStore(current_date);
 
             treeview = self.get_widget('day_' + str(i))
             treeview.set_model(day.fact_store)
@@ -263,7 +263,7 @@ class OverviewController:
         model.remove(iter)
     
     def on_home_clicked(self, button):
-        self.today = dt.datetime.today() #midnight check, huh
+        self.today = dt.date.today() #midnight check, huh
         self.monday = self.today - dt.timedelta(self.today.weekday())
         self.load_days()
 

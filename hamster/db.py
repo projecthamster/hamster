@@ -2,7 +2,7 @@
 
 from pysqlite2 import dbapi2 as sqlite
 import os, time
-import datetime as dt
+import datetime
 import hamster
 
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
@@ -16,7 +16,7 @@ def to_date(dateString):
     if len(dateString) > 8:
         hour, min = int(dateString[8:10]), int(dateString[10:12])    
     
-    return dt.datetime(year, month, day, hour, min)
+    return datetime.datetime(year, month, day, hour, min)
 
 
 def get_activity_by_name(name):
@@ -35,10 +35,10 @@ def add_custom_fact(activity_name, activity_time):
   pass # TODO - move everything to add_fact
 
 def get_last_activity():
-    query = """SELECT a.id, strftime("%Y%m%d", a.start_time) fact_date,
-                      strftime("%H%M", a.start_time) fact_time,
-                      a.end_time,
-                      b.name, b.id as activity_id
+    query = """SELECT a.id AS id,
+                      a.start_time AS start_time,
+                      a.end_time AS end_time,
+                      b.name AS name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
              ORDER BY a.start_time desc, a.id desc
@@ -48,25 +48,26 @@ def get_last_activity():
     return fetchone(query)
 
 def finish_activity(id, end_time = None):
-    end_time = end_time or dt.datetime.now()
+    end_time = end_time or datetime.datetime.now()
     execute("UPDATE facts SET end_time = ? where id = ?", (end_time, id))
 
 def get_facts(date):
-    query = """SELECT a.id, strftime("%Y%m%d", a.start_time) fact_date,
-                      strftime("%H%M", a.start_time) fact_time,
-                      a.start_time, a.end_time,
-                      b.name, b.id as activity_id
+    query = """SELECT a.id AS id,
+                      a.start_time AS start_time,
+                      a.end_time AS end_time,
+                      b.name AS name, b.id as activity_id
                  FROM facts a
             LEFT JOIN activities b ON a.activity_id = b.id
-                WHERE strftime("%Y%m%d", a.start_time) = ?
+                WHERE a.start_time >= ?
+                  AND a.start_time < ?
+             GROUP BY a.id
              ORDER BY a.start_time
     """
+    date = datetime.datetime.combine(date, datetime.time())
+    return fetchall(query, (date, date + datetime.timedelta(days = 1)))
 
-    return fetchall(query, (date,))
-
-def add_fact(activity_name, fact_date = None, fact_time = None):
-    fact_date = fact_date or time.strftime('%Y%m%d')
-    fact_time = fact_time or time.strftime('%H%M')
+def add_fact(activity_name, fact_time = None):
+    start_time = fact_time or datetime.datetime.now()
     
     # try to lookup activity by it's name in db. active ones have priority
     activity = get_activity_by_name(activity_name)
@@ -84,31 +85,30 @@ def add_fact(activity_name, fact_date = None, fact_time = None):
     # avoid dupes and facts shorter than minute
     prev_activity = get_last_activity()
 
-    if prev_activity and str(prev_activity['fact_date']) == fact_date:
+    if prev_activity and prev_activity['start_time'].date() == start_time.date():
         if prev_activity['id'] == activity['id']:
             return
         
         # if the time  since previous task is about minute 
         # then we consider that user has apparently mistaken and delete
         # the previous task
-        start_time = to_date(fact_date + fact_time)
-        delta = (start_time - prev_activity['start_time']) / 60
+        delta = (start_time - prev_activity['start_time'])
         
-        if (1 >= delta >= 0): 
+        if delta.days == 0 and 60 > delta.seconds > 0:
             hamster.db.remove_fact(prev_activity['id'])
-            fact_time = prev_activity['fact_time']
-            prev_activity = get_last_activity()  #get the activity before previous
+            fact_time = prev_activity['start_time']
+            prev_activity = None  # forget about previous as we just removed it
     
     # if we have previous activity - update end_time
     if prev_activity: #TODO - constraint the update within one day (say, 12 hours, not more)
         execute("UPDATE facts set end_time = ? where id = ?",
-                (to_date(fact_date + fact_time), prev_activity["id"]))
+                (start_time, prev_activity["id"]))
     
     #add the new entry
     insert = """INSERT INTO facts(activity_id, start_time)
                      VALUES (?, ?)
              """
-    execute(insert, (activity['id'], to_date(fact_date + fact_time)))
+    execute(insert, (activity['id'], start_time))
     return get_last_activity()
 
 def remove_fact(fact_id):

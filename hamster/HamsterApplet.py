@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 import os, time
-import datetime as dt
+import datetime
 from os.path import *
 import gnomeapplet, gtk
 import gtk.glade
@@ -89,21 +89,19 @@ class HamsterApplet(object):
         durationColumn.set_attributes(durationCell, text=3)
         self.treeview.append_column(durationColumn)
         
-        self.today = None
-        self.update_status()
-
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
         # we go for refresh each minute
         gobject.timeout_add(60000, self.update_status)
         
+        self.evBox = HamsterEventBox()
+        
+        self.today = None
+        self.update_status()
 
         # build the menu
         self.refresh_menu()
 
-    
-        self.evBox = HamsterEventBox()
-        
         self.evBox.add(self.label)
 
         self.applet.add(self.evBox)
@@ -126,12 +124,12 @@ class HamsterApplet(object):
         self.evBox.set_active(self, not self.evBox.get_active())
     
     def update_status(self):
-        today = time.strftime('%Y%m%d')
+        today = datetime.date.today()
         if today != self.today:
             self.load_today()
 
         if self.last_activity and self.last_activity["end_time"] == None:
-            delta = dt.datetime.now() - self.last_activity['start_time']
+            delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = " %s %s" % (self.last_activity['name'], format_duration(duration))
             
@@ -152,7 +150,7 @@ class HamsterApplet(object):
            returns information about last activity"""
 
         treeview = self.w_tree.get_widget('today')        
-        self.today = time.strftime('%Y%m%d')
+        self.today = datetime.date.today()
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
 
@@ -170,7 +168,7 @@ class HamsterApplet(object):
         activities = hamster.db.get_activity_list()
         prev_item = None
 
-        today = time.strftime('%Y%m%d')
+        today = datetime.date.today()
         for activity in activities:
             item = store.append([activity['name'], activity['id']])
             #set selected
