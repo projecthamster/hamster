@@ -6,8 +6,7 @@ import os
 import gtk
 import gtk.glade
 
-import hamster
-import hamster.db
+from hamster import storage, SHARED_DATA_DIR
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -37,7 +36,7 @@ class ActivityStore(gtk.ListStore):
         """ Loads activity list from database, ordered by
             activity_order """
 
-        activity_list = hamster.db.get_activity_list()
+        activity_list = storage.get_activity_list()
 
         for activity in activity_list:
             self.append(ordered_list(activity, self.columns)) #performing the magick, so we don't risk with database field order change
@@ -50,11 +49,11 @@ class ActivityStore(gtk.ListStore):
 
 class ActivitiesEditor:
     def __init__(self, evBox):
-        self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "activities.glade"))
+        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
         self.window = self.get_widget('activities_window')
         self.evBox = evBox
 
-        activities = hamster.db.get_activity_list()
+        activities = storage.get_activity_list()
 
         # create and fill store with activities
         self.store = ActivityStore()
@@ -113,7 +112,7 @@ class ActivitiesEditor:
                       'id': tree_row[0]}
 
         # update id (necessary for new records)
-        tree_row[0] = hamster.db.update_activity(row_data)
+        tree_row[0] = storage.update_activity(row_data)
         
         self.evBox.activity_updated(True)
 
@@ -172,7 +171,7 @@ class ActivitiesEditor:
             if path > 0:
                 self.selection.select_path(path)
 
-        hamster.db.remove_activity(model[iter][0])
+        storage.remove_activity(model[iter][0])
         model.remove(iter)
         self.evBox.activity_updated(False)
         return
@@ -183,7 +182,7 @@ class ActivitiesEditor:
 
         #previous item
         prev_iter = get_prev(self.selection, model)
-        hamster.db.swap_activity(model[iter][0], model[prev_iter][0])
+        storage.swap_activities(model[iter][0], model[prev_iter][0])
         model.move_before(iter, prev_iter)
 
         self.selection_changed_cb(self.selection, model)
@@ -194,7 +193,7 @@ class ActivitiesEditor:
         (model, iter) = self.selection.get_selected()
 
         next_iter = model.iter_next(iter)
-        hamster.db.swap_activity(model[iter][0], model[next_iter][0])
+        storage.swap_activities(model[iter][0], model[next_iter][0])
         self.store.move_after(iter, next_iter)
 
         self.selection_changed_cb(self.selection, model)

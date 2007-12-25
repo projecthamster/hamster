@@ -8,8 +8,7 @@ import gtk
 import gtk.glade
 from pango import ELLIPSIZE_END
 
-import hamster
-import hamster.db
+from hamster import storage, SHARED_DATA_DIR
 import time
 import datetime as dt
 
@@ -43,7 +42,7 @@ class DayStore(object):
         # Dummy ID to distinct between fact_store, Name, Duration
         self.total_store = gtk.ListStore(int, str, str)
 
-        self.facts = hamster.db.get_facts(date)
+        self.facts = storage.get_facts(date)
         self.totals = {}
         
         for fact in self.facts:
@@ -75,7 +74,7 @@ class DayStore(object):
 
 class OverviewController:
     def __init__(self, evBox):
-        self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, GLADE_FILE))
+        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('overview_window')
         self.evBox = evBox
 
@@ -255,7 +254,7 @@ class OverviewController:
                 selection.select_path(path)
 
 
-        hamster.db.remove_fact(model[iter][0])
+        storage.remove_fact(model[iter][0])
         self.evBox.fact_updated(model[iter][4])
         model.remove(iter)
     

@@ -7,7 +7,8 @@ import gtk.glade
 import gobject
 from pango import ELLIPSIZE_END
 
-import hamster, hamster.db, hamster.eds
+from hamster import storage, SHARED_DATA_DIR
+import hamster.eds
 from hamster.About import show_about
 from hamster.overview import DayStore
 from hamster.overview import format_duration
@@ -57,7 +58,7 @@ class HamsterApplet(object):
         self.label = gtk.Label(_(u"Hamster"))
 
         # load window of activity switcher and todays view
-        self.w_tree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, "menu.glade"))
+        self.w_tree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
         self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('hamster-window')
         self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
@@ -117,7 +118,7 @@ class HamsterApplet(object):
         self.evBox.connect ("fact_update", self.after_fact_update)
 
         self.applet.setup_menu_from_file (
-            hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
+            SHARED_DATA_DIR, "Hamster_Applet.xml",
             None, [
             ("About", self.on_about),
             ("edit_activities", self.edit_activities),
@@ -135,7 +136,7 @@ class HamsterApplet(object):
             self.load_today()
         if self.last_activity:
             # update end time
-            hamster.db.finish_activity(self.last_activity['id'])
+            storage.touch_activity(self.last_activity)
             self.evBox.fact_updated()
         return True
 
@@ -167,7 +168,7 @@ class HamsterApplet(object):
         store.clear()
 
         #populate fresh list from DB
-        activities = hamster.db.get_activity_list()
+        activities = storage.get_activity_list()
         prev_item = None
 
         today = datetime.date.today()
@@ -184,7 +185,7 @@ class HamsterApplet(object):
         return True
     
     def on_stop_tracking(self, button):
-        hamster.db.finish_activity(self.last_activity["id"])
+        storage.touch_activity(self.last_activity)
         self.last_activity = None
         self.update_status()
         self.evBox.fact_updated()
@@ -201,9 +202,7 @@ class HamsterApplet(object):
 
     def activity_edited(self, component):
         activity_name = component.get_text()
-        self.last_activity = hamster.db.add_fact(activity_name)
-        
-        self.evBox.fact_updated()
+        self.last_activity = storage.add_fact(activity_name)
         self.evBox.set_active(False)
 
     def edit_activities(self, menu_item, verb):

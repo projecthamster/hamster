@@ -7,8 +7,7 @@ import gtk
 import gtk.glade
 import gnome.ui
 
-import hamster
-import hamster.db
+from hamster import storage, SHARED_DATA_DIR
 import time
 import datetime
 
@@ -17,11 +16,11 @@ GLADE_FILE = "add_custom_fact.glade"
 
 class CustomFactController:
     def __init__(self, evBox, fact_date = None):
-        self.wTree = gtk.glade.XML(os.path.join(hamster.SHARED_DATA_DIR, GLADE_FILE))
+        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
         self.evBox = evBox
         
-        activities = hamster.db.get_activity_list()
+        activities = storage.get_activity_list()
         
         model = gtk.ListStore(str)
         
@@ -49,9 +48,7 @@ class CustomFactController:
         activity = self.activity_list.get_child().get_text()
         activity_time = datetime.datetime.fromtimestamp(self.get_widget('activity_time').get_time())
 
-        hamster.db.add_fact(activity, activity_time)
-
-        self.evBox.fact_updated(activity_time.strftime('%Y%m%d'))
+        storage.add_fact(activity, activity_time)
         
         self.window.destroy()
         
