@@ -22,10 +22,9 @@ def format_duration(duration):
     formatted_duration = ""
     
     #TODO - convert to list comprehension or that other thing
-    if days > 0 or hours > 0 or minutes > 0:
-        if days > 0:
-            formatted_duration += "%d:" % days
-        formatted_duration += "%02d:%02d" % (hours, minutes)
+    if days > 0:
+        formatted_duration += "%d:" % days
+    formatted_duration += "%02d:%02d" % (hours, minutes)
             
     return formatted_duration
 
@@ -49,7 +48,7 @@ class DayStore(object):
         for fact in self.facts:
             duration = 0
             
-            if fact["end_time"]:
+            if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
             
@@ -60,16 +59,11 @@ class DayStore(object):
 
             self.totals[fact_name] += duration
 
-            if duration > 0:
-                current_duration = format_duration(duration)
-            else:
-                current_duration = ""
-
+            current_duration = format_duration(duration)
 
             self.fact_store.append([fact['id'], fact['name'], 
                                     fact["start_time"].strftime("%H:%M"), 
                                     current_duration, fact["start_time"].strftime("%Y%m%d")])
-
 
         # now we are good to append totals!
         # no sorting - chronological is intuitive

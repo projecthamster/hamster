@@ -89,15 +89,18 @@ class HamsterApplet(object):
         durationColumn.set_attributes(durationCell, text=3)
         self.treeview.append_column(durationColumn)
         
-        # add a timer so we can update duration of current task
-        # a little naggy, still maybe that will remind user to change tasks
-        # we go for refresh each minute
-        gobject.timeout_add(60000, self.update_status)
+        self.last_activity = None
         
         self.evBox = HamsterEventBox()
         
         self.today = None
         self.update_status()
+        self.load_today()
+
+        # add a timer so we can update duration of current task
+        # a little naggy, still maybe that will remind user to change tasks
+        # we go for refresh each minute
+        gobject.timeout_add(60000, self.update_tick)
 
         # build the menu
         self.refresh_menu()
@@ -123,27 +126,28 @@ class HamsterApplet(object):
     def panel_clicked(self):
         self.evBox.set_active(self, not self.evBox.get_active())
     
-    def update_status(self):
+    def update_tick(self):
         today = datetime.date.today()
         if today != self.today:
             self.load_today()
+        if self.last_activity:
+            # update end time
+            hamster.db.finish_activity(self.last_activity['id'])
+            self.evBox.fact_updated()
+        return True
 
-        if self.last_activity and self.last_activity["end_time"] == None:
+    def update_status(self):
+        if self.last_activity:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = " %s %s" % (self.last_activity['name'], format_duration(duration))
             
-            
             self.w_tree.get_widget('current_activity').set_text(self.last_activity['name'])
             self.w_tree.get_widget('stop_tracking').set_sensitive(1);
-            
         else:
             label = " %s" % _(u"No activity")
             self.w_tree.get_widget('stop_tracking').set_sensitive(0);
-
         self.label.set_text(label)
-        return True
-        
         
     def load_today(self):
         """sets up today's tree and fills it with records
@@ -153,11 +157,6 @@ class HamsterApplet(object):
         self.today = datetime.date.today()
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
-
-        if day.facts:
-            self.last_activity = day.facts[len(day.facts)-1]
-        else:
-            self.last_activity = None
 
     def refresh_menu(self):
         activity_list = self.w_tree.get_widget('activity-list')
@@ -183,6 +182,8 @@ class HamsterApplet(object):
     
     def on_stop_tracking(self, button):
         hamster.db.finish_activity(self.last_activity["id"])
+        self.last_activity = None
+        self.update_status()
         self.evBox.fact_updated()
         self.evBox.set_active(False)
         
@@ -197,7 +198,7 @@ class HamsterApplet(object):
 
     def activity_edited(self, component):
         activity_name = component.get_text()
-        hamster.db.add_fact(activity_name)
+        self.last_activity = hamster.db.add_fact(activity_name)
         
         self.evBox.fact_updated()
         self.evBox.set_active(False)
@@ -242,6 +243,8 @@ class HamsterApplet(object):
             self.window.hide()
             return
 
+        self.window.show_all()
+
         label_geom = self.label.get_allocation()
         window_geom = self.window.get_allocation()
         x, y = gtk.gdk.Window.get_origin(self.label.window)
@@ -256,7 +259,6 @@ class HamsterApplet(object):
         x = x - 6 #temporary position fix. TODO - replace label with a toggle button
         
         self.window.move(x, y)
-        self.window.show_all()
         a_list = self.w_tree.get_widget('activity-list')
         a_list.child.select_region(0, -1)
         a_list.grab_focus()

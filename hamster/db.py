@@ -8,17 +8,6 @@ import hamster
 # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
 con = None # Connection will be created on demand
 
-def to_date(dateString):
-    """converts ISO format (YYYYMMDDHHMI) date string to datetime"""
-    year, month, day = int(dateString[:4]), int(dateString[4:6]), int(dateString[6:8])
-    
-    hour, min = None, None
-    if len(dateString) > 8:
-        hour, min = int(dateString[8:10]), int(dateString[10:12])    
-    
-    return datetime.datetime(year, month, day, hour, min)
-
-
 def get_activity_by_name(name):
   """get most recent, preferably not deleted activity by it's name"""
   query = """SELECT * from activities 
@@ -27,12 +16,6 @@ def get_activity_by_name(name):
               LIMIT 1
           """
   return fetchone(query, (name,))
-
-def add_custom_fact(activity_name, activity_time):
-  """adds custom fact to database. custom means either it is
-     post-factum, or some one-time task"""
-  
-  pass # TODO - move everything to add_fact
 
 def get_last_activity():
     query = """SELECT a.id AS id,
@@ -105,10 +88,10 @@ def add_fact(activity_name, fact_time = None):
                 (start_time, prev_activity["id"]))
     
     #add the new entry
-    insert = """INSERT INTO facts(activity_id, start_time)
-                     VALUES (?, ?)
+    insert = """INSERT INTO facts(activity_id, start_time, end_time)
+                     VALUES (?, ?, ?)
              """
-    execute(insert, (activity['id'], start_time))
+    execute(insert, (activity['id'], start_time, start_time))
     return get_last_activity()
 
 def remove_fact(fact_id):
