@@ -46,11 +46,10 @@ class DayStore(object):
         
         for fact in self.facts:
             duration = 0
-            start_mins = hamster.db.mins(fact["start_time"].time().strftime("%H%M"))
             
             if fact["end_time"]:
-                end_mins = hamster.db.mins(fact["end_time"].time().strftime("%H%M"))
-                duration = end_mins - start_mins
+		delta = fact["end_time"] - fact["start_time"]
+                duration = 24 * delta.days + delta.seconds / 60
             
             fact_name = fact['name']
             
