@@ -1,7 +1,6 @@
 # - coding: utf-8 -
-import os, time
 import datetime
-from os.path import *
+import os.path
 import gnomeapplet, gtk
 import gtk.glade
 import gobject
@@ -57,22 +56,22 @@ class HamsterApplet(object):
         durationColumn.set_attributes(durationCell, text=3)
         self.treeview.append_column(durationColumn)
         
-        self.last_activity = None
-        
         self.button = gtk.ToggleButton()
         self.button.set_relief(gtk.RELIEF_NONE)
         self.button.set_border_width(0)
         self.button.connect('toggled', self.on_toggle)
         self.button.connect('button_press_event', self.on_button_press)
         
+        self.last_activity = None
+        self.update_label()
+        
         self.today = None
-        self.update_status()
         self.load_today()
 
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
         # we go for refresh each minute
-        gobject.timeout_add_seconds(60, self.update_tick)
+        gobject.timeout_add_seconds(60, self.refresh_hamster)
 
         # build the menu
         self.refresh_menu()
@@ -88,21 +87,16 @@ class HamsterApplet(object):
         self.applet.setup_menu_from_file (
             SHARED_DATA_DIR, "Hamster_Applet.xml",
             None, [
-            ("About", self.on_about),
-            ("edit_activities", self.edit_activities),
+            ("about", self.on_about),
+            ("activities", self.on_edit_activities),
             ])
 
         self.applet.show_all()
         self.applet.set_background_widget(self.applet)
 
-    def on_button_press(self, widget, event):
-        if event.button != 1:
-            self.applet.do_button_press_event(self.applet, event)
-
-    def on_toggle(self, widget):
-        dispatcher.dispatch('panel_visible', self.button.get_active())
-    
-    def update_tick(self):
+    """UI functions"""
+    def refresh_hamster(self):
+        """refresh hamster every x secs - load toady, check last activity etc."""        
         today = datetime.date.today()
         if today != self.today:
             self.load_today()
@@ -111,7 +105,7 @@ class HamsterApplet(object):
             storage.touch_fact(self.last_activity)
         return True
 
-    def update_status(self):
+    def update_label(self):
         if self.last_activity:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
@@ -154,38 +148,47 @@ class HamsterApplet(object):
             item = store.append([activity['name'], -1])
 
         return True
-    
-    def on_stop_tracking(self, button):
-        storage.touch_fact(self.last_activity)
-        self.last_activity = None
-        self.update_status()
-        dispatcher.dispatch('panel_visible', False)
-        
-    def on_about (self, component, verb):
-        show_about(self.applet)
 
-    def activity_changed(self, component):
+    """activity switch events"""
+    def on_activity_switched(self, component):
         # do stuff only if user has selected something
         # for other cases activity_edited will be triggered
         if component.get_active_iter():
-            self.activity_edited(component.child) # forward
+            self.on_activity_entered(component.child) # forward
 
-    def activity_edited(self, component):
+    def on_activity_entered(self, component):
+        """fires, when user writes activity by hand"""
         activity_name = component.get_text()
         self.last_activity = storage.add_fact(activity_name)
-        self.update_status() # dispatch comes before assignment
+        self.update_label() # dispatch comes before assignment
+        dispatcher.dispatch('panel_visible', False)
+        
+    """button events"""
+    def on_stop_tracking(self, button):
+        storage.touch_fact(self.last_activity)
+        self.last_activity = None
+        self.update_label()
         dispatcher.dispatch('panel_visible', False)
 
-    def edit_activities(self, menu_item, verb):
+    def on_overview(self, menu_item):
+        dispatcher.dispatch('panel_visible', False)
+        overview = OverviewController()
+        overview.show()
+
+    def on_about (self, component, verb):
+        show_about(self.applet)
+
+    def on_edit_activities(self, menu_item, verb):
         dispatcher.dispatch('panel_visible', False)
         activities_editor = ActivitiesEditor()
         activities_editor.show()
-
+    
+    """signals"""
     def after_activity_update(self, widget, renames):
         print "activities updated"
         self.refresh_menu()
         self.load_today()
-        self.update_status()
+        self.update_label()
     
     def after_fact_update(self, event, date):
         print "fact updated"
@@ -193,17 +196,23 @@ class HamsterApplet(object):
         if date.date() == datetime.date.today():
             print "Fact of today updated"
             self.load_today()
-            self.update_status()
-    
-    def show_overview(self, menu_item):
-        dispatcher.dispatch('panel_visible', False)
-        overview = OverviewController()
-        overview.show()
+            self.update_label()
 
     def after_fact_changes(self, some_object):
         self.load_today()
 
+    
+    """panel button events"""    
+    def on_button_press(self, widget, event):
+        if event.button != 1:
+            self.applet.do_button_press_event(self.applet, event)
+
+    def on_toggle(self, widget):
+        dispatcher.dispatch('panel_visible', self.button.get_active())
+
     def __show_toggle(self, event, is_active):
+        """main window display and positioning"""
+        
         self.button.set_property('active', is_active)
         if not is_active:
             self.window.hide()
