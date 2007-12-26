@@ -8,7 +8,6 @@
     <property name="title" translatable="yes">Hamster</property>
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon">.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="decorated">False</property>

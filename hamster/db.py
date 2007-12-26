@@ -183,8 +183,10 @@ class Storage(hamster.storage.Storage):
 
         return self.con
 
+    connection = property(get_connection, None)
+
     def fetchall(self, query, params = None):
-        con = self.get_connection()
+        con = self.connection
         cur = con.cursor()
 
         print query, params
@@ -207,7 +209,7 @@ class Storage(hamster.storage.Storage):
             return None
 
     def execute(self, statement, params = ()):
-        con = self.get_connection()
+        con = self.connection
         cur = con.cursor()
 
         print statement, params
