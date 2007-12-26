@@ -8,7 +8,7 @@ import gtk
 import gtk.glade
 from pango import ELLIPSIZE_END
 
-from hamster import storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR
 import time
 import datetime as dt
 
@@ -82,8 +82,8 @@ class OverviewController:
         self.monday = self.today - dt.timedelta(self.today.weekday())
         self.current_view = None
         
-        self.evBox.connect ("activity_update", self.after_activity_update)
-        self.evBox.connect ("fact_update", self.after_fact_update)
+        dispatcher.add_handler('activity_updated', self.after_activity_update)
+        dispatcher.add_handler('day_updated', self.after_fact_update)
 
         # now let's set up tree columns!
         # the last widget is total totals
@@ -148,7 +148,7 @@ class OverviewController:
     def after_fact_update(self, widget, date):
         for i in range(7):
             current_date = self.monday + dt.timedelta(i)
-            if date == current_date.strftime('%Y%m%d'):
+            if date.date() == current_date.date():
                 print "fact updated"
                 self.load_days()
                 break

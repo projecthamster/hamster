@@ -33,7 +33,7 @@ class Storage(hamster.storage.Storage):
         """
         return self.fetchone(query)
 
-    def __touch_activity(self, activity, end_time = None):
+    def __touch_fact(self, activity, end_time = None):
         id = activity['id']
         query = """
                    UPDATE facts

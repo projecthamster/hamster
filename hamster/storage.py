@@ -1,3 +1,5 @@
+import datetime
+
 class Storage(object):
     def __init__(self, parent):
         self.parent = parent
@@ -12,13 +14,13 @@ class Storage(object):
     def add_fact(self, activity_name, fact_time = None):
         result = self.__add_fact(activity_name, fact_time)
         if result:
-            self.dispatch('fact_updated', result['start_time'])
+            self.dispatch('day_updated', result['start_time'])
         return result
 
     def touch_fact(self, fact, end_time = None):
         end_time = end_time or datetime.datetime.now()
         result = self.__touch_fact(fact, end_time)
-        self.dispatch('fact_updated', fact['start_time'])
+        self.dispatch('day_updated', fact['start_time'])
         return result
 
     def get_facts(self, date):

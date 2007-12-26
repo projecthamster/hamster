@@ -14,13 +14,6 @@ from hamster.overview import DayStore
 from hamster.overview import format_duration
 
 class HamsterEventBox(gtk.EventBox):
-    __gsignals__ = {
-        "toggled"         : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_LONG]),
-        "activity_update" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_LONG]),
-        "fact_update"     : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_STRING]),
-    }
-    
-    
     def __init__(self):
         gtk.EventBox.__init__(self)
         self.active = False
@@ -40,14 +33,14 @@ class HamsterEventBox(gtk.EventBox):
         self.active = active
         
         if changed:
-            self.emit("toggled", active)
+            dispatcher.dispatch('panel_visible', active)
 
     def activity_updated(self, renames):
-        self.emit("activity_update", renames)
+        dispatcher.dispatch('activity_updated', renames)
 
     def fact_updated(self, date = None):
-        date = date or time.strftime('%Y%m%d')
-        self.emit("fact_update", date)
+        date = date or datetime.datetime.today()
+        dispatcher.dispatch('day_updated', date)
 
 
 class HamsterApplet(object):
@@ -113,9 +106,9 @@ class HamsterApplet(object):
 
         self.applet.add(self.evBox)
 
-        self.evBox.connect ("toggled", self.__show_toggle)
-        self.evBox.connect ("activity_update", self.after_activity_update)
-        dispatcher.set_handler('fact_updated', self.after_fact_update)
+        dispatcher.add_handler('panel_visible', self.__show_toggle)
+        dispatcher.add_handler('activity_updated', self.after_activity_update)
+        dispatcher.add_handler('day_updated', self.after_fact_update)
 
         self.applet.setup_menu_from_file (
             SHARED_DATA_DIR, "Hamster_Applet.xml",
@@ -136,7 +129,7 @@ class HamsterApplet(object):
             self.load_today()
         if self.last_activity:
             # update end time
-            storage.touch_activity(self.last_activity)
+            storage.touch_fact(self.last_activity)
         return True
 
     def update_status(self):
@@ -184,7 +177,7 @@ class HamsterApplet(object):
         return True
     
     def on_stop_tracking(self, button):
-        storage.touch_activity(self.last_activity)
+        storage.touch_fact(self.last_activity)
         self.last_activity = None
         self.update_status()
         self.evBox.fact_updated()
@@ -239,7 +232,7 @@ class HamsterApplet(object):
         self.load_today()
     
 
-    def __show_toggle(self, widget, is_active):
+    def __show_toggle(self, event, is_active):
         if not is_active:
             self.window.hide()
             return
