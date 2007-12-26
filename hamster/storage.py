@@ -35,8 +35,8 @@ class Storage(object):
         self.dispatch('day_updated', fact['start_time'])
         return result
 
-    def get_activity_list(self, pattern = "%"):
-        return self.__get_activity_list(pattern)
+    def get_activity_list(self, inactive = False, pattern = "%"):
+        return self.__get_activity_list(inactive = inactive, pattern = pattern)
 
     def remove_activity(self, id):
         result = self.__remove_activity(id)

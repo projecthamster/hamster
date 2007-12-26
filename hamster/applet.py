@@ -25,9 +25,15 @@ class HamsterApplet(object):
         self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('hamster-window')
         self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
+        self.activities = gtk.ListStore(gobject.TYPE_STRING)
+        self.completion = gtk.EntryCompletion()
+        self.completion.set_model(self.activities)
+        self.completion.set_text_column(0)
+        self.completion.set_minimum_key_length(1) 
         activity_list = self.w_tree.get_widget('activity-list')
         activity_list.set_model(self.items)
         activity_list.set_text_column(0)
+        activity_list.child.set_completion(self.completion)
 
         # init today's tree
         self.treeview = self.w_tree.get_widget('today')
@@ -103,7 +109,7 @@ class HamsterApplet(object):
         if self.last_activity:
             # update end time
             storage.touch_fact(self.last_activity)
-        return True
+        return False
 
     def update_label(self):
         if self.last_activity:
@@ -128,6 +134,11 @@ class HamsterApplet(object):
         treeview.set_model(day.fact_store)
 
     def refresh_menu(self):
+        all_activities = storage.get_activity_list(inactive = True)
+        self.activities.clear()
+        for activity in all_activities:
+            self.activities.append([activity['name']])
+
         activity_list = self.w_tree.get_widget('activity-list')
         store = activity_list.get_model()
         store.clear()
@@ -155,6 +166,8 @@ class HamsterApplet(object):
         # for other cases activity_edited will be triggered
         if component.get_active_iter():
             self.on_activity_entered(component.child) # forward
+        print 'foo'
+        return True
 
     def on_activity_entered(self, component):
         """fires, when user writes activity by hand"""
@@ -235,6 +248,9 @@ class HamsterApplet(object):
         
         self.window.move(x, y)
         a_list = self.w_tree.get_widget('activity-list')
-        a_list.child.select_region(0, -1)
+        if self.last_activity:
+            a_list.child.select_region(0, -1)
+        else:
+            a_list.child.set_text('')
         a_list.grab_focus()
 

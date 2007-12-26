@@ -124,15 +124,23 @@ class Storage(hamster.storage.Storage):
         """
         self.execute(query, (fact_id,))
 
-    def __get_activity_list(self, pattern = "%"):
+    def __get_activity_list(self, inactive = False, pattern = "%"):
         """returns list of configured activities, in user specified order"""
-        query = """
-                   SELECT *
-                     FROM activities
-                    WHERE coalesce(deleted, 0) = 0
-                      AND name like ?
-                 ORDER BY activity_order
-        """
+        if not inactive:
+            query = """
+                       SELECT *
+                         FROM activities
+                        WHERE coalesce(deleted, 0) = 0
+                          AND name like ?
+                     ORDER BY activity_order
+            """
+        else:
+            query = """
+                       SELECT *
+                         FROM activities
+                        WHERE name like ?
+                     ORDER BY name
+            """
         activities = self.fetchall(query, (pattern, ))
 
         return activities
