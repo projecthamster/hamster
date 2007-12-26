@@ -6,7 +6,7 @@ import os
 import gtk
 import gtk.glade
 
-from hamster import storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()

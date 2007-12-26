@@ -180,7 +180,7 @@ class Storage(hamster.storage.Storage):
                                work = ?
                          WHERE id = ?
             """
-            self.execute(update, (activity['name'], work, activity['id']))
+            self.execute(query, (activity['name'], work, activity['id']))
 
         return activity['id']
 
