@@ -10,8 +10,7 @@ from pango import ELLIPSIZE_END
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
 from hamster.About import show_about
-from hamster.overview import DayStore
-from hamster.overview import format_duration
+from hamster.overview import DayStore, OverviewController, format_duration
 
 class HamsterEventBox(gtk.EventBox):
     def __init__(self):
@@ -45,6 +44,7 @@ class HamsterEventBox(gtk.EventBox):
 
 class HamsterApplet(object):
     visible = False # global visibility toggler
+    overview = None
 
     def __init__(self, applet):
         self.applet = applet
@@ -224,13 +224,11 @@ class HamsterApplet(object):
     
     def show_overview(self, menu_item):
         self.set_active_main(False)
-        from hamster.overview import OverviewController
         overview = OverviewController(self.evBox)
         overview.show()
 
     def after_fact_changes(self, some_object):
         self.load_today()
-    
 
     def __show_toggle(self, event, is_active):
         if not is_active:

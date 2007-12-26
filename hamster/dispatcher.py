@@ -11,7 +11,7 @@ class Dispatcher(object):
     def del_handler(self, event, method):
         if self.handlers.has_key(event):
             if method in self.handlers[event]:
-                self.handlers[event].delete(method)
+                self.handlers[event].remove(method)
 
     def dispatch(self, event, data):
         print 'Dispatching event %s (%s)' % (event, data)

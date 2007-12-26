@@ -170,7 +170,7 @@ class OverviewController:
             label.set_text('<b>' + current_date.strftime('%A, %b %d.') + '</b>')
             label.set_use_markup(True);
 
-            day = DayStore(current_date);
+            day = DayStore(current_date)
 
             treeview = self.get_widget('day_' + str(i))
             treeview.set_model(day.fact_store)
@@ -226,6 +226,12 @@ class OverviewController:
         self.delete_selected()
       elif (event_key.keyval == gtk.keysyms.Insert):
         self.on_add_clicked(self)
+
+    def on_close(self, widget, event):
+        dispatcher.del_handler('activity_updated', self.after_activity_update)
+        dispatcher.del_handler('day_updated', self.after_fact_update)
+        dispatcher.dispatch('overview_closed', ())
+        return False
 
     def on_remove_clicked(self, button):
         self.delete_selected()
