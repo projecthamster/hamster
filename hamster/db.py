@@ -20,6 +20,15 @@ class Storage(hamster.storage.Storage):
         """
         return self.fetchone(query, (name,))
 
+    def __get_fact(self, id):
+        query = """
+                   SELECT *
+                     FROM facts
+                    WHERE id = ? 
+                    LIMIT 1
+        """
+        return self.fetchone(query, (id,))
+
     def __get_last_activity(self):
         query = """
                    SELECT a.id AS id,

@@ -15,10 +15,9 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self, evBox, fact_date = None):
+    def __init__(self, fact_date = None):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
-        self.evBox = evBox
         
         activities = storage.get_activity_list()
         

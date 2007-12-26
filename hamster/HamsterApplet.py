@@ -8,39 +8,10 @@ import gobject
 from pango import ELLIPSIZE_END
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
-import hamster.eds
 from hamster.About import show_about
+from hamster.activities import ActivitiesEditor
+import hamster.eds
 from hamster.overview import DayStore, OverviewController, format_duration
-
-class HamsterEventBox(gtk.EventBox):
-    def __init__(self):
-        gtk.EventBox.__init__(self)
-        self.active = False
-        self.set_visible_window(False)
-        self.connect('button-press-event', self.on_button_press)
-    
-    def on_button_press(self, widget, event):
-        if event.button == 1:
-            self.set_active(not self.active)
-            return True
-                
-    def get_active(self):
-        return self.active
-    
-    def set_active(self, active):
-        changed = (self.active != active)
-        self.active = active
-        
-        if changed:
-            dispatcher.dispatch('panel_visible', active)
-
-    def activity_updated(self, renames):
-        dispatcher.dispatch('activity_updated', renames)
-
-    def fact_updated(self, date = None):
-        date = date or datetime.datetime.today()
-        dispatcher.dispatch('day_updated', date)
-
 
 class HamsterApplet(object):
     visible = False # global visibility toggler
@@ -88,7 +59,9 @@ class HamsterApplet(object):
         
         self.last_activity = None
         
-        self.evBox = HamsterEventBox()
+        self.button = gtk.ToggleButton()
+        self.button.set_relief(gtk.RELIEF_NONE)
+        self.button.connect('toggled', self.panel_clicked)
         
         self.today = None
         self.update_status()
@@ -102,9 +75,9 @@ class HamsterApplet(object):
         # build the menu
         self.refresh_menu()
 
-        self.evBox.add(self.label)
+        self.button.add(self.label)
 
-        self.applet.add(self.evBox)
+        self.applet.add(self.button)
 
         dispatcher.add_handler('panel_visible', self.__show_toggle)
         dispatcher.add_handler('activity_updated', self.after_activity_update)
@@ -120,8 +93,8 @@ class HamsterApplet(object):
         self.applet.show_all()
         self.applet.set_background_widget(self.applet)
     
-    def panel_clicked(self):
-        self.evBox.set_active(self, not self.evBox.get_active())
+    def panel_clicked(self, widget):
+        dispatcher.dispatch('panel_visible', self.button.get_active())
     
     def update_tick(self):
         today = datetime.date.today()
@@ -180,8 +153,7 @@ class HamsterApplet(object):
         storage.touch_fact(self.last_activity)
         self.last_activity = None
         self.update_status()
-        self.evBox.fact_updated()
-        self.evBox.set_active(False)
+        dispatcher.dispatch('panel_visible', False)
         
     def on_about (self, component, verb):
         show_about(self.applet)
@@ -196,23 +168,18 @@ class HamsterApplet(object):
         activity_name = component.get_text()
         self.last_activity = storage.add_fact(activity_name)
         self.update_status() # dispatch comes before assignment
-        self.evBox.set_active(False)
+        dispatcher.dispatch('panel_visible', False)
 
     def edit_activities(self, menu_item, verb):
-        self.set_active_main(False)
-        
-        from hamster.activities import ActivitiesEditor
-        activities_editor = ActivitiesEditor(self.evBox)
-
+        dispatcher.dispatch('panel_visible', False)
+        activities_editor = ActivitiesEditor()
         activities_editor.show()
 
     def after_activity_update(self, widget, renames):
         print "activities updated"
         self.refresh_menu()
-        if renames:
-            print "something renamed"
-            self.load_today()
-            self.update_status()
+        self.load_today()
+        self.update_status()
     
     def after_fact_update(self, event, date):
         print "fact updated"
@@ -223,30 +190,31 @@ class HamsterApplet(object):
             self.update_status()
     
     def show_overview(self, menu_item):
-        self.set_active_main(False)
-        overview = OverviewController(self.evBox)
+        dispatcher.dispatch('panel_visible', False)
+        overview = OverviewController()
         overview.show()
 
     def after_fact_changes(self, some_object):
         self.load_today()
 
     def __show_toggle(self, event, is_active):
+        self.button.set_property('active', is_active)
         if not is_active:
             self.window.hide()
             return
 
         self.window.show_all()
 
-        label_geom = self.label.get_allocation()
+        label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
         x, y = gtk.gdk.Window.get_origin(self.label.window)
 
         self.popup_dir = self.applet.get_orient()
 
         if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
-            y = y + label_geom.height + 6;
+            y = y + label_geom.height;
         elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
-            y = y - window_geom.height - 6;
+            y = y - window_geom.height;
         
         x = x - 6 #temporary position fix. TODO - replace label with a toggle button
         
@@ -254,11 +222,4 @@ class HamsterApplet(object):
         a_list = self.w_tree.get_widget('activity-list')
         a_list.child.select_region(0, -1)
         a_list.grab_focus()
-            
-    def get_active_main (self):
-        return self.evBox.get_active ()
-    
-    def set_active_main (self, is_active):
-        self.evBox.set_active (is_active)
-             
 

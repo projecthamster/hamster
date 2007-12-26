@@ -3,15 +3,16 @@ from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
 from shutil import copy as copyfile
 
 import gtk, gnome.ui
+from gtk import glade
+import gettext
+import locale
 
 # Autotools set the actual data_dir in defs.py
+from db import Storage
 from defs import *
+from dispatcher import Dispatcher
 
 # Init i18n
-
-import gettext
-from gtk import glade
-import locale
 
 locale.setlocale(locale.LC_ALL, '')
 for module in glade, gettext:
@@ -54,11 +55,7 @@ if not exists(HAMSTER_DB):
 
 # Init storage
 
-from hamster.dispatcher import Dispatcher
-
 dispatcher = Dispatcher()
-
-from hamster.db import Storage
 storage = Storage(dispatcher)
     
 # Path to images, icons

@@ -11,6 +11,9 @@ class Storage(object):
     def dispatch(self, event, data):
         self.parent.dispatch(event, data)
 
+    def get_fact(self, id):
+        return self.__get_fact(id)
+
     def add_fact(self, activity_name, fact_time = None):
         result = self.__add_fact(activity_name, fact_time)
         if result:
@@ -27,18 +30,24 @@ class Storage(object):
         return self.__get_facts(date)
 
     def remove_fact(self, fact_id):
+        fact = self.get_fact(fact_id)
         result = self.__remove_fact(fact_id)
+        self.dispatch('day_updated', fact['start_time'])
         return result
 
     def get_activity_list(self, pattern = "%"):
         return self.__get_activity_list(pattern)
 
     def remove_activity(self, id):
-        return self.__remove_activity(id)
+        result = self.__remove_activity(id)
+        self.dispatch('activity_updated', ())
+        return result
 
     def swap_activities(self, id1, id2):
         return self.__swap_activities(id1, id2)
 
     def update_activity(self, activity):
-        return self.__update_activity(activity)
+        result = self.__update_activity(activity)
+        self.dispatch('activity_updated', ())
+        return result
 

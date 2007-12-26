@@ -9,6 +9,7 @@ import gtk.glade
 from pango import ELLIPSIZE_END
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster.add_custom_fact import CustomFactController
 import time
 import datetime as dt
 
@@ -73,10 +74,9 @@ class DayStore(object):
 
 
 class OverviewController:
-    def __init__(self, evBox):
+    def __init__(self):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('overview_window')
-        self.evBox = evBox
 
         self.today = dt.datetime.today()
         self.monday = self.today - dt.timedelta(self.today.weekday())
@@ -142,8 +142,7 @@ class OverviewController:
         self.wTree.signal_autoconnect(self)
 
     def after_activity_update(self, widget, renames):
-        if renames:
-            self.load_days()
+        self.load_days()
     
     def after_fact_update(self, widget, date):
         for i in range(7):
@@ -205,7 +204,6 @@ class OverviewController:
               else:
                 self.selected_date = self.monday + dt.timedelta(i)
           
-          
           treeview = self.get_widget('totals_' + str(i))
           if (tree != treeview):
             treeview.get_selection().unselect_all()
@@ -237,10 +235,9 @@ class OverviewController:
         self.delete_selected()
 
     def on_add_clicked(self, button):
-        from hamster.add_custom_fact import CustomFactController
         #date = selected_date.strftime('%Y%m%d')
 
-        custom_fact = CustomFactController(self.evBox, self.selected_date)
+        custom_fact = CustomFactController(self.selected_date)
         custom_fact.show()
 
     def delete_selected(self):
@@ -261,7 +258,6 @@ class OverviewController:
 
 
         storage.remove_fact(model[iter][0])
-        self.evBox.fact_updated(model[iter][4])
         model.remove(iter)
     
     def on_home_clicked(self, button):
