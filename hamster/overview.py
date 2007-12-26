@@ -95,7 +95,7 @@ class OverviewController:
                 treeview.connect("button-press-event", self.single_focus)
                 treeview.connect("key-press-event", self.on_key_pressed)
                 
-                timeColumn = gtk.TreeViewColumn('Time')
+                timeColumn = gtk.TreeViewColumn(_(u'Time'))
                 timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
                 timeColumn.set_expand(False)
                 timeCell = gtk.CellRendererText()
@@ -255,7 +255,6 @@ class OverviewController:
             path = model.get_path(iter)[0] - 1
             if path > 0:
                 selection.select_path(path)
-
 
         storage.remove_fact(model[iter][0])
         model.remove(iter)
