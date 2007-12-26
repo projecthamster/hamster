@@ -70,7 +70,7 @@ class HamsterApplet(object):
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
         # we go for refresh each minute
-        gobject.timeout_add(60000, self.update_tick)
+        gobject.timeout_add_seconds(60, self.update_tick)
 
         # build the menu
         self.refresh_menu()
