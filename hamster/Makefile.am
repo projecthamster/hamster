@@ -9,13 +9,15 @@ hamsterbin_SCRIPTS = hamster-applet
 hamsterdir = $(pythondir)/hamster
 hamster_PYTHON = \
 	defs.py \
+	dispatcher.py \
+	storage.py \
 	db.py \
 	eds.py \
 	activities.py \
 	overview.py \
 	add_custom_fact.py \
-	HamsterApplet.py \
-	About.py \
+	applet.py \
+	about.py \
 	__init__.py
 
 BUILT_SOURCES = \
