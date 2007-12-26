@@ -8,7 +8,7 @@ import gobject
 from pango import ELLIPSIZE_END
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
-from hamster.About import show_about
+from hamster.about import show_about
 from hamster.activities import ActivitiesEditor
 import hamster.eds
 from hamster.overview import DayStore, OverviewController, format_duration
@@ -61,7 +61,9 @@ class HamsterApplet(object):
         
         self.button = gtk.ToggleButton()
         self.button.set_relief(gtk.RELIEF_NONE)
-        self.button.connect('toggled', self.panel_clicked)
+        self.button.set_border_width(0)
+        self.button.connect('toggled', self.on_toggle)
+        self.button.connect('button_press_event', self.on_button_press)
         
         self.today = None
         self.update_status()
@@ -92,8 +94,12 @@ class HamsterApplet(object):
 
         self.applet.show_all()
         self.applet.set_background_widget(self.applet)
-    
-    def panel_clicked(self, widget):
+
+    def on_button_press(self, widget, event):
+        if event.button != 1:
+            self.applet.do_button_press_event(self.applet, event)
+
+    def on_toggle(self, widget):
         dispatcher.dispatch('panel_visible', self.button.get_active())
     
     def update_tick(self):
