@@ -24,11 +24,11 @@ else:
     print "Running installed hamster, using [@PYTHONDIR@:$PYTHONPATH]"
 
 # Now the path is set, import our applet
-import hamster, hamster.HamsterApplet, hamster.defs
+import hamster, hamster.applet, hamster.defs
 
 def applet_factory(applet, iid):
     print 'Starting Hamster instance:', applet, iid
-    hamster.HamsterApplet.HamsterApplet(applet)
+    hamster.applet.HamsterApplet(applet)
     return True
 
 # Return a standalone window that holds the applet
