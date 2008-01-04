@@ -115,12 +115,12 @@ class HamsterApplet(object):
         if self.last_activity:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
-            label = " %s %s" % (self.last_activity['name'], format_duration(duration))
+            label = "%s %s" % (self.last_activity['name'], format_duration(duration))
             
             self.w_tree.get_widget('current_activity').set_text(self.last_activity['name'])
             self.w_tree.get_widget('stop_tracking').set_sensitive(1);
         else:
-            label = " %s" % _(u"No activity")
+            label = "%s" % _(u"No activity")
             self.w_tree.get_widget('stop_tracking').set_sensitive(0);
         self.label.set_text(label)
         
