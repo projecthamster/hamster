@@ -102,14 +102,14 @@ class HamsterApplet(object):
 
     """UI functions"""
     def refresh_hamster(self):
-        """refresh hamster every x secs - load toady, check last activity etc."""        
+        """refresh hamster every x secs - load today, check last activity etc."""        
         today = datetime.date.today()
         if today != self.today:
             self.load_today()
         if self.last_activity:
             # update end time
             storage.touch_fact(self.last_activity)
-        return False
+        return True
 
     def update_label(self):
         if self.last_activity:
