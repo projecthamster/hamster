@@ -11,6 +11,7 @@ from hamster.about import show_about
 from hamster.activities import ActivitiesEditor
 import hamster.eds
 from hamster.overview import DayStore, OverviewController, format_duration
+from hamster.add_custom_fact import CustomFactController
 
 class HamsterApplet(object):
     visible = False # global visibility toggler
@@ -187,6 +188,11 @@ class HamsterApplet(object):
         dispatcher.dispatch('panel_visible', False)
         overview = OverviewController()
         overview.show()
+
+    def on_custom_fact(self, menu_item):
+        dispatcher.dispatch('panel_visible', False)
+        custom_fact = CustomFactController()
+        custom_fact.show()
 
     def on_about (self, component, verb):
         show_about(self.applet)

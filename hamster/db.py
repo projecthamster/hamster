@@ -6,6 +6,7 @@ import datetime
 import hamster
 import hamster.storage
 
+        
 class Storage(hamster.storage.Storage):
     # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
     con = None # Connection will be created on demand
@@ -21,11 +22,13 @@ class Storage(hamster.storage.Storage):
         return self.fetchone(query, (name,))
 
     def __get_fact(self, id):
-        query = """
-                   SELECT *
-                     FROM facts
-                    WHERE id = ? 
-                    LIMIT 1
+        query = """SELECT a.id AS id,
+                          a.start_time AS start_time,
+                          a.end_time AS end_time,
+                          b.name AS name, b.id as activity_id
+                     FROM facts a
+                LEFT JOIN activities b ON a.activity_id = b.id
+                    WHERE a.id = ? 
         """
         return self.fetchone(query, (id,))
 
@@ -37,7 +40,7 @@ class Storage(hamster.storage.Storage):
                           b.name AS name, b.id as activity_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
-                 ORDER BY a.start_time desc, a.id desc
+                 ORDER BY a.id desc
                     LIMIT 1
         """
         return self.fetchone(query)
@@ -61,7 +64,7 @@ class Storage(hamster.storage.Storage):
                 LEFT JOIN activities b ON a.activity_id = b.id
                     WHERE a.start_time >= ?
                       AND a.start_time < ?
-                 GROUP BY a.id
+                 GROUP BY b.id
                  ORDER BY a.start_time
         """
         date = datetime.datetime.combine(date, datetime.time())
@@ -115,7 +118,11 @@ class Storage(hamster.storage.Storage):
                          VALUES (?, ?, ?)
         """
         self.execute(insert, (activity['id'], start_time, start_time))
-        return self.__get_last_activity()
+
+
+        fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
+        
+        return self.__get_fact(fact_id)
 
     def __remove_fact(self, fact_id):
         query = """
