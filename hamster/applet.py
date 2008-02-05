@@ -161,6 +161,20 @@ class HamsterApplet(object):
 
         return True
 
+
+    def delete_selected(self):
+        selection = self.treeview.get_selection()
+        (model, iter) = selection.get_selected()
+
+        next_row = model.iter_next(iter)
+
+        (cur, col) = self.treeview.get_cursor()
+
+        storage.remove_fact(model[iter][0])
+        
+        self.treeview.set_cursor(cur)
+
+
     """activity switch events"""
     def on_activity_switched(self, component):
         # do stuff only if user has selected something
@@ -176,6 +190,11 @@ class HamsterApplet(object):
         self.last_activity = storage.add_fact(activity_name)
         self.update_label() # dispatch comes before assignment
         dispatcher.dispatch('panel_visible', False)
+
+    """keyboard events"""
+    def on_key_pressed(self, tree, event_key):
+      if (event_key.keyval == gtk.keysyms.Delete):
+        self.delete_selected()
         
     """button events"""
     def on_stop_tracking(self, button):
