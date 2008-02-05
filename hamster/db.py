@@ -64,7 +64,6 @@ class Storage(hamster.storage.Storage):
                 LEFT JOIN activities b ON a.activity_id = b.id
                     WHERE a.start_time >= ?
                       AND a.start_time < ?
-                 GROUP BY b.id
                  ORDER BY a.start_time
         """
         date = datetime.datetime.combine(date, datetime.time())
