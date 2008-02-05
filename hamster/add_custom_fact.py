@@ -8,7 +8,7 @@ import gtk.glade
 import gobject
 import gnome.ui
 
-from hamster import storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
 
 import time
@@ -18,7 +18,9 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self, fact_date = None):
+    def __init__(self,  parent, fact_date = None):
+        self.parent = parent
+        
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
@@ -121,7 +123,11 @@ class CustomFactController:
 
         end_time_mode = self.get_widget("end_time_mode").get_active()
         
-        if end_time_mode != 0:  #we have end time, so let's update it
+        if end_time_mode == 0:  # TODO - check if our fact is the last one
+            self.parent.last_activity = new_fact
+            dispatcher.dispatch("day_updated", new_fact['start_time'])  # let them know that we have new entry
+            
+        else: #we have end time, so let's update it
             if end_time_mode == 1: # specified end  time
                 print "setting specified end time"
                 end_time = datetime.datetime.fromtimestamp(self._get_secs("end"))
