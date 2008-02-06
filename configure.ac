@@ -20,10 +20,17 @@ if test "x$HAVE_PKGCONFIG" = "xno"; then
   AC_MSG_ERROR(you need to have pkgconfig installed !)
 fi
 
+dnl =====
+dnl GConf
+dnl =====
+
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
+AM_GCONF_SOURCE_2
+
 dnl ****************************************************************************
-dnl * Python 2.4
+dnl * Python
 dnl ****************************************************************************
-AM_PATH_PYTHON(2.4)
+AM_PATH_PYTHON(2.5)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 dnl ****************************************************************************
@@ -85,6 +92,20 @@ fi
 
 
 
+dnl ==========================
+dnl Control-Center Keybindings
+dnl ==========================
+
+AC_MSG_CHECKING([whether the GNOME control-center supports custom keybindings])
+if $PKG_CONFIG --variable=keysdir gnome-keybindings > /dev/null; then
+    AC_MSG_RESULT([yes])
+    KEYBINDINGS_DIR="`$PKG_CONFIG --variable=keysdir gnome-keybindings`"
+    AC_SUBST(KEYBINDINGS_DIR)
+else
+    AC_MSG_RESULT([no])
+    KEYBINDINGS_DIR=""
+fi
+AM_CONDITIONAL([CUSTOM_KEYBINDINGS],[test -n "$KEYBINDINGS_DIR"])
 
 
 dnl ****************************************************************************
@@ -94,6 +115,7 @@ AC_OUTPUT([
 Makefile
 hamster/Makefile
 hamster/defs.py
+hamster/keybinder/Makefile
 data/Makefile
 data/art/Makefile
 ])

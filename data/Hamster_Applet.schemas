@@ -1,0 +1,15 @@
+<gconfschemafile>
+    <schemalist>
+        <schema>
+            <key>/schemas/apps/hamster-applet/general/show_window_hotkey</key>
+            <applyto>/apps/hamster-applet/general/show_window_hotkey</applyto>
+            <owner>hamster-applet</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>Show window</short>
+                <long>Keyboard shortcut for showing the Hamster Applet window.</long>
+            </locale>
+        </schema>
+    </schemalist>
+</gconfschemafile>
