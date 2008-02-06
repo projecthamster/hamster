@@ -134,6 +134,14 @@ class HamsterApplet(object):
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
 
+        if len(day.facts) ==0:
+            self.w_tree.get_widget("todays_scroll").hide()
+            self.w_tree.get_widget("no_facts_today").show()
+        else:
+            self.w_tree.get_widget("todays_scroll").show()
+            self.w_tree.get_widget("no_facts_today").hide()
+   
+
     def refresh_menu(self):
         all_activities = storage.get_activity_list(inactive = True)
         self.activities.clear()
@@ -256,7 +264,7 @@ class HamsterApplet(object):
             self.window.hide()
             return
 
-        self.window.show_all()
+        self.window.show()
 
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
