@@ -11,6 +11,9 @@ class Storage(hamster.storage.Storage):
     # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
     con = None # Connection will be created on demand
 
+    def __get_category_list(self):
+        return self.fetchall("SELECT * FROM categories ORDER BY category_order")
+        
     def __get_activity_by_name(self, name):
         """get most recent, preferably not deleted activity by it's name"""
         query = """
@@ -76,11 +79,7 @@ class Storage(hamster.storage.Storage):
         activity = self.__get_activity_by_name(activity_name)
 
         if not activity:
-            # insert and mark as deleted at the same time
-            # FIXME - we are adding the custom activity as work, user should be able
-            #         to choose
-            # TODO - this place needs to be refactored also
-            activity = {'id': -1, 'order': -1, 'work': 1, 'name': activity_name}
+            activity = {'id': -1, 'order': -1, 'category_id': None, 'name': activity_name}
             activity['id'] = self.update_activity(activity)
             self.remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
 
@@ -130,35 +129,61 @@ class Storage(hamster.storage.Storage):
         """
         self.execute(query, (fact_id,))
 
-    def __get_activity_list(self, inactive = False, pattern = "%"):
-        """returns list of configured activities, in user specified order"""
-        if not inactive:
+    def __get_sorted_activities(self):
+        """returns list of acitivities that have categories"""
+        query = """
+                   SELECT a.*, b.category_order
+                     FROM activities a
+                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
+                    WHERE a.category_id > -1
+                      AND a.deleted is null
+                 ORDER BY category_order, activity_order
+        """
+        return self.fetchall(query)
+        
+        
+    def __get_activities(self, category_id = None):
+        """returns list of activities, if category is specified, order by name
+           otherwise - by activity_order"""
+        if category_id:
             query = """
                        SELECT *
                          FROM activities
-                        WHERE coalesce(deleted, 0) = 0
-                          AND name like ?
-                     ORDER BY activity_order
+                        WHERE category_id = ?
+                          AND deleted is null
             """
+            
+            # unsorted entries we sort by name - others by ID
+            if category_id == -1:
+                query += "ORDER BY lower(name)"
+            else:
+                query += "ORDER BY activity_order"
+                
+            activities = self.fetchall(query, (category_id, ))
+            
         else:
             query = """
                        SELECT *
                          FROM activities
-                        WHERE name like ?
-                     ORDER BY name
+                        WHERE deleted is null
+                     ORDER BY lower(name)
             """
-        activities = self.fetchall(query, (pattern, ))
-
+            activities = self.fetchall(query)
+            
         return activities
 
     def __remove_activity(self, id):
-        """ sets activity to deleted = True """
-        query = """
-                   UPDATE activities
-                      SET deleted = 1
-                    WHERE id = ?
-        """
-        self.execute(query, (id,))
+        """ check if we have any facts with this activity and behave accordingly
+            if there are facts - sets activity to deleted = True
+            else, just remove it"""
+        
+        query = "select count(*) as count from facts where activity_id = ?"
+        bound_facts = self.fetchone(query, (id,))['count']
+        
+        if bound_facts > 0:
+            self.execute("UPDATE activities SET deleted = 1 WHERE id = ?", (id,))
+        else:
+            self.execute("delete from activities where id = ?", (id,))
 
     def __swap_activities(self, id1, id2):
         """ swaps nearby activities """
@@ -169,10 +194,6 @@ class Storage(hamster.storage.Storage):
         self.execute("update activities set activity_order = ? where id = ?", (priority2, id1) )
 
     def __update_activity(self, activity):
-        if activity['work']:
-            work = 1
-        else:
-            work = 0
 
         if activity['id'] == -1: # -1 means, we have a new entry!
             new_rec = self.fetchone("select max(id) +1 , max(activity_order) + 1  from activities")
@@ -181,20 +202,19 @@ class Storage(hamster.storage.Storage):
                 new_id, new_order = new_rec[0], new_rec[1]
 
             query = """
-                       INSERT INTO activities
-                                   (id, name, work, activity_order)
+                       INSERT INTO activities (id, name, category_id, activity_order)
                             VALUES (?, ?, ?, ?)
             """
-            self.execute(query, (new_id, activity['name'], work, new_order))
+            self.execute(query, (new_id, activity['name'], activity['category_id'], new_order))
             activity['id'] = new_id
         else: # Update
             query = """
                        UPDATE activities
                            SET name = ?,
-                               work = ?
+                               category_id = ?
                          WHERE id = ?
             """
-            self.execute(query, (activity['name'], work, activity['id']))
+            self.execute(query, (activity['name'], activity['category_id'], activity['id']))
 
         return activity['id']
 
@@ -248,7 +268,6 @@ class Storage(hamster.storage.Storage):
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
     
-            #create new table and copy data
             self.execute("""
                                CREATE TABLE facts_new
                                             (id integer primary key,
@@ -292,7 +311,6 @@ class Storage(hamster.storage.Storage):
 
         #it was kind of silly not to have datetimes in first place
         if version < 3:
-            #create new table and copy data
             self.execute("""
                                CREATE TABLE facts_new
                                             (id integer primary key,
@@ -321,6 +339,93 @@ class Storage(hamster.storage.Storage):
             self.execute("DROP TABLE facts")
             self.execute("ALTER TABLE facts_new RENAME TO facts")
 
+
+        #adding categories table to categorize activities
+        if version < 4:
+            #adding the categories table
+            self.execute("""
+                               CREATE TABLE categories
+                                            (id integer primary key,
+                                             name varchar2(500),
+                                             color_code varchar2(50),
+                                             category_order integer)
+            """)
+
+            # adding default categories, and make sure that uncategorized stays on bottom for starters
+            # set order to 2 in case, if we get work in next lines
+            self.execute("""
+                               INSERT INTO categories
+                                           (id, name, category_order)
+                                    VALUES (1, "Day to day activities", 2);
+               """)
+
+            #check if we have to create work category - consider work everything that has been determined so, and is not deleted
+            work_activities = self.fetchone("""
+                                    SELECT count(*) as work_activities
+                                      FROM activities
+                                     WHERE deleted is null and work=1;
+               """)['work_activities']
+            
+            if work_activities > 0:
+                self.execute("""
+                               INSERT INTO categories
+                                           (id, name, category_order)
+                                    VALUES (2, "Work", 1);
+                  """)
+            
+            # now add category field to activities, before starting the move
+            self.execute("""   ALTER TABLE activities
+                                ADD COLUMN category_id integer;
+               """)
+            
+            
+            # starting the move
+            
+            # first remove all deleted activities with no instances in facts
+            self.execute("""
+                               DELETE FROM activities
+                                     WHERE deleted = 1
+                                       AND id not in(select activity_id from facts);
+             """)
+
+            
+            # moving work / non-work to appropriate categories
+            # exploit false/true = 0/1 thing
+            self.execute("""       UPDATE activities
+                                      SET category_id = work + 1
+                                    WHERE deleted is null
+               """)
+            
+            #finally, set category to -1 where there is none            
+            self.execute("""       UPDATE activities
+                                      SET category_id = -1
+                                    WHERE category_id is null
+               """)
+            
+            # drop work column and forget value of deleted
+            # previously deleted records are now unsorted ones
+            # user will be able to mark them as deleted again, in which case
+            # they won't appear in autocomplete, or in categories
+            # ressurection happens, when user enters the exact same name            
+            self.execute("""
+                               CREATE TABLE activities_new (id integer primary key,
+                                                            name varchar2(500),
+                                                            activity_order integer,
+                                                            deleted integer,
+                                                            category_id integer);
+            """)
+    
+            self.execute("""
+                               INSERT INTO activities_new
+                                           (id, name, activity_order, category_id)
+                                    SELECT id, name, activity_order, category_id
+                                      FROM activities;
+               """)
+
+            self.execute("DROP TABLE activities")
+            self.execute("ALTER TABLE activities_new RENAME TO activities")
+            
+
         #lock down current version
-        self.execute("UPDATE version SET version = 3")
+        self.execute("UPDATE version SET version = 4")
 

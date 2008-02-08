@@ -143,7 +143,7 @@ class HamsterApplet(object):
    
 
     def refresh_menu(self):
-        all_activities = storage.get_activity_list(inactive = True)
+        all_activities = storage.get_activities()
         self.activities.clear()
         for activity in all_activities:
             self.activities.append([activity['name']])
@@ -153,11 +153,10 @@ class HamsterApplet(object):
         store.clear()
 
         #populate fresh list from DB
-        activities = storage.get_activity_list()
-        prev_item = None
+        categorized_activities = storage.get_sorted_activities()
 
         today = datetime.date.today()
-        for activity in activities:
+        for activity in categorized_activities:
             item = store.append([activity['name'], activity['id']])
             #set selected
             if self.last_activity and activity['name'] == self.last_activity['name']:
@@ -189,7 +188,7 @@ class HamsterApplet(object):
         # for other cases activity_edited will be triggered
         if component.get_active_iter():
             self.on_activity_entered(component.child) # forward
-        print 'foo'
+
         return True
 
     def on_activity_entered(self, component):
