@@ -18,7 +18,7 @@ class Storage(hamster.storage.Storage):
         """get most recent, preferably not deleted activity by it's name"""
         query = """
                    SELECT * from activities 
-                    WHERE name = ? 
+                    WHERE lower(name) = lower(?)
                  ORDER BY deleted, id desc
                     LIMIT 1
         """
@@ -79,9 +79,8 @@ class Storage(hamster.storage.Storage):
         activity = self.__get_activity_by_name(activity_name)
 
         if not activity:
-            activity = {'id': -1, 'order': -1, 'category_id': None, 'name': activity_name}
+            activity = {'id': -1, 'order': -1, 'category_id': -1, 'name': activity_name}
             activity['id'] = self.update_activity(activity)
-            self.remove_activity(activity['id']) # removing so custom stuff doesn't start to appear in menu
 
         # avoid dupes and facts shorter than minute
         prev_activity = self.__get_last_activity()
