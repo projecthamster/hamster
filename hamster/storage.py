@@ -46,6 +46,9 @@ class Storage(object):
         self.dispatch('activity_updated', ())
         return result
 
+    def move_activity(self, source_id, target_order, insert_after = True):
+        self.__move_activity(source_id, target_order, insert_after)
+
     def swap_activities(self, id1, id2):
         return self.__swap_activities(id1, id2)
 

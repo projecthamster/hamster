@@ -78,6 +78,13 @@ class ActivityStore(gtk.ListStore):
         self[path][self.columns.index(column)] = new_value
 
 class ActivitiesEditor:
+    TARGETS = [
+        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+        ('text/plain', 0, 1),
+        ('TEXT', 0, 2),
+        ('STRING', 0, 3),
+        ]
+
     def __init__(self):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
         self.window = self.get_widget('activities_window')
@@ -92,6 +99,76 @@ class ActivitiesEditor:
         self.configure_tree()
         self.configure_categories()
         self.wTree.signal_autoconnect(self)
+
+        # Allow enable drag and drop of rows including row move
+        self.treeview.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
+                                                self.TARGETS,
+                                                gtk.gdk.ACTION_DEFAULT|
+                                                gtk.gdk.ACTION_MOVE)
+        self.treeview.enable_model_drag_dest(self.TARGETS,
+                                             gtk.gdk.ACTION_DEFAULT)
+
+        self.category_tree.enable_model_drag_dest(self.TARGETS,
+                                             gtk.gdk.ACTION_DEFAULT)
+
+        self.treeview.connect("drag_data_get", self.drag_data_get_data)
+        self.treeview.connect("drag_data_received",
+                              self.drag_data_received_data)
+
+    def drag_data_get_data(self, treeview, context, selection, target_id,
+                           etime):
+        treeselection = treeview.get_selection()
+        model, iter = treeselection.get_selected()
+        data = model.get_value(iter, 0) #get activity ID
+        selection.set(selection.target, 0, str(data))
+
+    def select_activity(self, id):
+        model = self.treeview.get_model()
+        
+        id_column = self.store.columns.index('id')
+        
+        i = 0
+        for row in model:
+            if row[id_column] == id:
+                self.treeview.set_cursor((i, ))
+            i += 1
+                
+        
+    def drag_data_received_data(self, treeview, context, x, y, selection,
+                                info, etime):
+        model = treeview.get_model()
+        data = selection.data
+        drop_info = treeview.get_dest_row_at_pos(x, y)
+
+        if drop_info:
+            path, position = drop_info
+            iter = model.get_iter(path)
+            if (position == gtk.TREE_VIEW_DROP_BEFORE
+                or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
+                #model.insert_before(iter, [data])
+                print "insert '%s' before '%s'" % (data, model[iter][3])
+                storage.move_activity(int(data), model[iter][3], insert_after = False)
+            else:
+                #model.insert_after(iter, [data])
+                print "insert '%s' after '%s'" % (data, model[iter][3])
+                storage.move_activity(int(data), model[iter][3], insert_after = True)
+        else:
+            #model.append([data])
+            print "append '%s'" % data
+
+        if context.action == gtk.gdk.ACTION_MOVE:
+            context.finish(True, True, etime)
+
+
+        self.store.load(self._get_selected_category())
+
+        self.select_activity(int(data))
+        
+        return
+
+
+
+
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -108,7 +185,7 @@ class ActivitiesEditor:
     def configure_categories(self):
         """ Fills store with activities, and connects it to tree """
 
-        treeview = self.get_widget('category_list')
+        self.category_tree = treeview = self.get_widget('category_list')
 
         nameColumn = gtk.TreeViewColumn(_(u'Category'))
         nameColumn.set_expand(True)
@@ -183,7 +260,7 @@ class ActivitiesEditor:
         else:
             return None
         
-        
+
     def selection_changed_cb(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()

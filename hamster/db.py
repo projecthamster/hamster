@@ -13,6 +13,25 @@ class Storage(hamster.storage.Storage):
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
+    
+    def __move_activity(self, source_id, target_order, insert_after = True):
+        statement = "UPDATE activities SET activity_order = activity_order + 1"
+        
+        if insert_after:
+            statement += " WHERE activity_order > ?"
+        else:
+            statement += " WHERE activity_order >= ?"
+
+        self.execute(statement, (target_order, ))
+        
+        statement = "UPDATE activities SET activity_order = ? WHERE id = ?"
+        
+        if insert_after:
+            self.execute(statement, (target_order + 1, source_id))
+        else:
+            self.execute(statement, (target_order, source_id))
+            
+        
         
     def __get_activity_by_name(self, name):
         """get most recent, preferably not deleted activity by it's name"""
