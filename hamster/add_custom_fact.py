@@ -59,7 +59,7 @@ class CustomFactController:
         self.wTree.signal_autoconnect(self)
         
     def refresh_menu(self):
-        all_activities = storage.get_activity_list(inactive = True)
+        all_activities = storage.get_activities()
         self.activities.clear()
         for activity in all_activities:
             self.activities.append([activity['name']])
@@ -69,7 +69,7 @@ class CustomFactController:
         store.clear()
 
         #populate fresh list from DB
-        activities = storage.get_activity_list()
+        activities = storage.get_sorted_activities()
         prev_item = None
 
         today = datetime.date.today()
