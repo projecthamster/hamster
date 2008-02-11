@@ -13,7 +13,42 @@ class Storage(hamster.storage.Storage):
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
+
+    def __change_category(self, id, category_id):
+        query = "SELECT max(activity_order) + 1 FROM activities WHERE category_id = ?"
+        max_order = self.fetchone(query, (category_id, ))[0]
+        
+        statement = """
+                   UPDATE activities 
+                      SET category_id = ?, activity_order = ?
+                    WHERE id = ?
+        """
+        
+        self.execute(statement, (category_id, max_order, id))
     
+    def __update_category_name(self, id,  new_name):
+        if id == -2: # -1 means, we have a new entry!
+            new_rec = self.fetchone("select max(id) +1 , max(category_order) + 1  from categories")
+            new_id, new_order = 0, 0
+            if new_rec: # handle case when we have no activities at all
+                new_id, new_order = new_rec[0], new_rec[1]
+
+            query = """
+                       INSERT INTO categories (id, name, category_order)
+                            VALUES (?, ?, ?)
+            """
+            self.execute(query, (new_id, new_name, new_order))
+            id = new_id
+        elif id > -1: # Update, and ignore unsorted, if that was somehow triggered
+            update = """
+                       UPDATE categories
+                           SET name = ?
+                         WHERE id = ?
+            """
+            self.execute(update, (new_name, id))
+
+        return id
+        
     def __move_activity(self, source_id, target_order, insert_after = True):
         statement = "UPDATE activities SET activity_order = activity_order + 1"
         
@@ -203,6 +238,15 @@ class Storage(hamster.storage.Storage):
         else:
             self.execute("delete from activities where id = ?", (id,))
 
+    def __remove_category(self, id):
+        """move all activities to unsorted and remove category"""
+        
+        update = "update activities set category_id = -1 where category_id = ?"
+        self.execute(update, (id, ))
+        
+        self.execute("delete from categories where id = ?", (id, ))
+        
+    
     def __swap_activities(self, id1, id2):
         """ swaps nearby activities """
         # TODO - 2 selects and 2 updates is wrong we could live without selects

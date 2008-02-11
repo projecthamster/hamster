@@ -45,9 +45,15 @@ class Storage(object):
         result = self.__remove_activity(id)
         self.dispatch('activity_updated', ())
         return result
+    
+    def remove_category(self, id):
+        self.__remove_category(id)
 
     def move_activity(self, source_id, target_order, insert_after = True):
         self.__move_activity(source_id, target_order, insert_after)
+
+    def change_category(self, id, category_id):
+        self.__change_category(id, category_id)
 
     def swap_activities(self, id1, id2):
         return self.__swap_activities(id1, id2)
@@ -56,6 +62,11 @@ class Storage(object):
         result = self.__update_activity(activity)
         self.dispatch('activity_updated', ())
         return result
+
+    def update_category_name(self, id, new_name):
+        res = self.__update_category_name(id, new_name)
+        return res
+
 
     def get_category_list(self):
         return self.__get_category_list()
