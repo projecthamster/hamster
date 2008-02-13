@@ -26,28 +26,27 @@ class Storage(hamster.storage.Storage):
         
         self.execute(statement, (category_id, max_order, id))
     
-    def __update_category_name(self, id,  new_name):
-        if id == -2: # -1 means, we have a new entry!
-            new_rec = self.fetchone("select max(id) +1 , max(category_order) + 1  from categories")
-            new_id, new_order = 0, 0
-            if new_rec: # handle case when we have no activities at all
-                new_id, new_order = new_rec[0], new_rec[1]
+    def __insert_category(self, name):
+        new_rec = self.fetchone("select max(id) +1 , max(category_order) + 1  from categories")
+        id, order = 0, 0
+        if new_rec: # handle case when we have no activities at all
+            id, order = new_rec[0], new_rec[1]
 
-            query = """
-                       INSERT INTO categories (id, name, category_order)
-                            VALUES (?, ?, ?)
-            """
-            self.execute(query, (new_id, new_name, new_order))
-            id = new_id
-        elif id > -1: # Update, and ignore unsorted, if that was somehow triggered
+        query = """
+                   INSERT INTO categories (id, name, category_order)
+                        VALUES (?, ?, ?)
+        """
+        self.execute(query, (id, name, order))
+        return id
+
+    def __update_category(self, id,  name):
+        if id > -1: # Update, and ignore unsorted, if that was somehow triggered
             update = """
                        UPDATE categories
                            SET name = ?
                          WHERE id = ?
             """
-            self.execute(update, (new_name, id))
-
-        return id
+            self.execute(update, (name, id))        
         
     def __move_activity(self, source_id, target_order, insert_after = True):
         statement = "UPDATE activities SET activity_order = activity_order + 1"
@@ -71,12 +70,18 @@ class Storage(hamster.storage.Storage):
     def __get_activity_by_name(self, name):
         """get most recent, preferably not deleted activity by it's name"""
         query = """
-                   SELECT * from activities 
+                   SELECT id from activities 
                     WHERE lower(name) = lower(?)
                  ORDER BY deleted, id desc
                     LIMIT 1
         """
-        return self.fetchone(query, (name,))
+        
+        res = self.fetchone(query, (name,))
+        
+        if res:
+            return res['id']
+        
+        return None
 
     def __get_fact(self, id):
         query = """SELECT a.id AS id,
@@ -130,17 +135,16 @@ class Storage(hamster.storage.Storage):
         start_time = fact_time or datetime.datetime.now()
         
         # try to lookup activity by it's name in db. active ones have priority
-        activity = self.__get_activity_by_name(activity_name)
+        activity_id = self.__get_activity_by_name(activity_name)
 
-        if not activity:
-            activity = {'id': -1, 'order': -1, 'category_id': -1, 'name': activity_name}
-            activity['id'] = self.update_activity(activity)
+        if not activity_id:
+            activity_id = self.insert_activity(activity_name)
 
         # avoid dupes and facts shorter than minute
         prev_activity = self.__get_last_activity()
 
         if prev_activity and prev_activity['start_time'].date() == start_time.date():
-            if prev_activity['id'] == activity['id']:
+            if prev_activity['id'] == activity_id:
                 return
             
             # if the time  since previous task is about minute 
@@ -168,7 +172,7 @@ class Storage(hamster.storage.Storage):
                                 (activity_id, start_time, end_time)
                          VALUES (?, ?, ?)
         """
-        self.execute(insert, (activity['id'], start_time, start_time))
+        self.execute(insert, (activity_id, start_time, start_time))
 
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
@@ -255,30 +259,27 @@ class Storage(hamster.storage.Storage):
         self.execute("update activities set activity_order = ? where id = ?", (priority1, id2) )
         self.execute("update activities set activity_order = ? where id = ?", (priority2, id1) )
 
-    def __update_activity(self, activity):
+    def __insert_activity(self, name, category_id = -1):
+        new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
+        new_id, new_order = 0, 0
+        if new_rec: # handle case when we have no activities at all
+            new_id, new_order = new_rec[0], new_rec[1]
 
-        if activity['id'] == -1: # -1 means, we have a new entry!
-            new_rec = self.fetchone("select max(id) +1 , max(activity_order) + 1  from activities")
-            new_id, new_order = 0, 0
-            if new_rec: # handle case when we have no activities at all
-                new_id, new_order = new_rec[0], new_rec[1]
+        query = """
+                   INSERT INTO activities (id, name, category_id, activity_order)
+                        VALUES (?, ?, ?, ?)
+        """
+        self.execute(query, (new_id, name, category_id, new_order))
+        return new_id
 
-            query = """
-                       INSERT INTO activities (id, name, category_id, activity_order)
-                            VALUES (?, ?, ?, ?)
-            """
-            self.execute(query, (new_id, activity['name'], activity['category_id'], new_order))
-            activity['id'] = new_id
-        else: # Update
-            query = """
-                       UPDATE activities
-                           SET name = ?,
-                               category_id = ?
-                         WHERE id = ?
-            """
-            self.execute(query, (activity['name'], activity['category_id'], activity['id']))
-
-        return activity['id']
+    def __update_activity(self, id, name, category_id):
+        query = """
+                   UPDATE activities
+                       SET name = ?,
+                           category_id = ?
+                     WHERE id = ?
+        """
+        self.execute(query, (name, category_id, id))
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
