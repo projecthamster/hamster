@@ -121,9 +121,11 @@ class Storage(hamster.storage.Storage):
                    SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
-                          b.name AS name, b.id as activity_id
+                          b.name AS name, b.id as activity_id,
+                          c.name as category, c.id as category_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
+                LEFT JOIN categories c on b.category_id = c.id
                     WHERE a.start_time >= ?
                       AND a.start_time < ?
                  ORDER BY a.start_time
