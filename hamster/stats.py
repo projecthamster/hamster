@@ -18,6 +18,12 @@ import matplotlib.dates
 from matplotlib.dates import drange, DateFormatter, DayLocator, MonthLocator, YearLocator, date2num
 
 
+#some hand-picked tango colors
+color_list = [
+    "#edd400", "#f57900", "#c17d11", "#73d216", "#3465a4", "#75507b", "#cc0000",
+    "#fcaf3e", "#e9b96e", "#8ae234", "#729fcf", "#ad7fa8", "#ef2929",
+    "#c4a000", "#ce5c00", "#8f5902", "#4e9a06", "#204a87", "#5c3566", "a40000"
+]
 
 class StatsViewer:
     def __init__(self):
@@ -140,16 +146,86 @@ class StatsViewer:
 
         week = self.get_week()
         
-        
-        
-            
 
 
 
         fig = Figure()
+
+        category_totals = week["totals"]["by_category"]
         
-        #rc.ylim(ymax=3)
+        # The numbers here are margins from the edge of the graph
+        # You may need to adjust this depending on how you want your
+        # graph to look, and how large your labels are
+        ax = fig.add_axes([0.5, 0.1, 0.45, 0.8])
         
+        i = 0
+        labels = {}
+        for category in category_totals:
+            ax.barh(i, category_totals[category] / 60, color=color_list[i])
+            labels[i] = category
+            i = i + 1
+
+
+        ax.set_yticks(range(len(category_totals)+1))
+        ax.set_yticklabels(labels, va="bottom")
+        
+
+        self.canvas = FigureCanvas(fig) # a gtk.DrawingArea   
+        self.canvas.show()   
+        self.graphview = self.wTree.get_widget("by_category")
+        
+        kids = self.graphview.get_children()
+        if kids:
+            self.graphview.remove(kids[0])
+        
+        self.graphview.pack_start(self.canvas, True, True)
+
+
+
+
+
+
+
+
+        fig = Figure()
+
+        totals = week["totals"]["by_activity"]
+        
+        # The numbers here are margins from the edge of the graph
+        # You may need to adjust this depending on how you want your
+        # graph to look, and how large your labels are
+        ax = fig.add_axes([0.5, 0.1, 0.45, 0.8])
+        
+        i = 0
+        labels = {}
+        for entry in totals:
+            ax.barh(i, totals[entry] / 60, color=color_list[i])
+            labels[i] = entry
+            i = i + 1
+
+
+        ax.set_yticks(range(len(totals)+1))
+        ax.set_yticklabels(labels, va="bottom")
+        
+
+        self.canvas = FigureCanvas(fig) # a gtk.DrawingArea   
+        self.canvas.show()   
+        self.graphview = self.wTree.get_widget("by_activity")
+        
+        kids = self.graphview.get_children()
+        if kids:
+            self.graphview.remove(kids[0])
+        
+        self.graphview.pack_start(self.canvas, True, True)
+
+
+
+
+
+        
+        
+        fig = Figure()
+
         # The numbers here are margins from the edge of the graph
         # You may need to adjust this depending on how you want your
         # graph to look, and how large your labels are
@@ -159,34 +235,14 @@ class StatsViewer:
 
         dates = {}
         for total in totals: 
+            ax.bar(total["num"], total["hours"], color="#8ae234")
             dates[total['num']] = total['date']
         ax.set_xticklabels(dates, ha = "left")
         
-        for total in totals:
-            ax.bar(total["num"], total["hours"], color="#8ae234")
-        
-        #ax.set_title('Total Changed Files')
-        #ax.set_ylabel('Hours')
-        #ax.grid(True)
-        
-        # X axis tick once each day
-        #ax.xaxis.set_major_locator(DayLocator())
-        #ax.xaxis.set_major_locator(MonthLocator())
-        #ax.xaxis.set_minor_locator(DayLocator())
-        #ax.xaxis.set_major_locator(YearLocator())
-        
-        # Use any strftime format strings here
-        #ax.xaxis.set_major_formatter(DateFormatter('%d %b'))
-        #ax.xaxis.set_major_formatter(DateFormatter('%Y/%m'))
-        #ax.xaxis.set_minor_formatter(DateFormatter('%d'))
-        #ax.xaxis.set_major_formatter(DateFormatter('%Y'))
-        #ax.xaxis.set_major_formatter(DateFormatter("%b '%y"))
-        
-        
-        #ax.yrange(10)
+
         self.canvas = FigureCanvas(fig) # a gtk.DrawingArea   
         self.canvas.show()   
-        self.graphview = self.wTree.get_widget("graph_placeholder")
+        self.graphview = self.wTree.get_widget("by_date")
         
         kids = self.graphview.get_children()
         if kids:
