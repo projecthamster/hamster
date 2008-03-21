@@ -23,8 +23,9 @@ resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	activities.glade \
 	overview.glade \
+	stats.glade \
 	add_custom_fact.glade \
-        menu.glade \
+    menu.glade \
 	Hamster_Applet.xml \
 	hamster.db
 

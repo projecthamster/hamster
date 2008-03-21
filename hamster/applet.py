@@ -11,7 +11,7 @@ from hamster.about import show_about
 from hamster.activities import ActivitiesEditor
 from hamster.stats import StatsViewer
 import hamster.eds
-from hamster.overview import DayStore, OverviewController, format_duration
+from hamster.overview import DayStore, format_duration
 from hamster.add_custom_fact import CustomFactController
 
 class HamsterApplet(object):
@@ -213,8 +213,8 @@ class HamsterApplet(object):
 
     def on_overview(self, menu_item):
         dispatcher.dispatch('panel_visible', False)
-        overview = OverviewController()
-        overview.show()
+        stats_viewer = StatsViewer()
+        stats_viewer.show()
 
     def on_custom_fact(self, menu_item):
         dispatcher.dispatch('panel_visible', False)
@@ -228,12 +228,6 @@ class HamsterApplet(object):
         dispatcher.dispatch('panel_visible', False)
         activities_editor = ActivitiesEditor()
         activities_editor.show()
-    
-    def on_show_stats(self, menu_item):
-        dispatcher.dispatch('panel_visible', False)
-        stats_viewer = StatsViewer()
-        stats_viewer.show()
-        
     
     """signals"""
     def after_activity_update(self, widget, renames):

@@ -13,6 +13,8 @@ hamster_PYTHON = \
 	storage.py \
 	db.py \
 	eds.py \
+	stats.py \
+	charting.py \
 	activities.py \
 	overview.py \
 	add_custom_fact.py \
