@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Fri Mar 21 02:10:07 2008 -->
+<!--Generated with glade3 3.4.0 on Fri Mar 21 16:15:09 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="width_request">800</property>
@@ -119,7 +119,7 @@
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="by_category">
+                  <widget class="GtkHBox" id="cairo_by_category">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="border_width">12</property>
@@ -132,7 +132,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="by_activity">
+                  <widget class="GtkHBox" id="cairo_by_activity">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="border_width">12</property>
