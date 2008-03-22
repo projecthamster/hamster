@@ -87,7 +87,7 @@ class Chart(gtk.DrawingArea):
     def __init__(self, **args):
         """here is init"""
         gtk.DrawingArea.__init__(self)
-        self.connect("expose_event", self.expose)
+        self.connect("expose_event", self._expose)
         self.data, self.prev_data = None, None #start off with an empty hand
         
         """now see what we have in args!"""
@@ -108,20 +108,30 @@ class Chart(gtk.DrawingArea):
         self.animation_frames = 20
         self.animation_timeout = 10 #in miliseconds
         
-    def expose(self, widget, event): # expose is when drawing's going on
+    def _expose(self, widget, event): # expose is when drawing's going on
         context = widget.window.cairo_create()
         context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
         context.clip()
         
         if self.orient_vertical:
-            self.bar_chart(context) 
+            self._bar_chart(context) 
         else:
-            self.horizontal_bar_chart(context)
+            self._horizontal_bar_chart(context)
 
         return False
 
     def plot(self, data):
-        self.data, self.max = self.get_factors(data)
+        """Draw chart with given data
+            Currently chart understands only list of two member lists, in label, value
+            fashion. Like:
+                data = [
+                    ["Label1", value1],
+                    ["Label2", value2],
+                    ["Label3", value3],
+                ]
+        """
+        
+        self.data, self.max = self._get_factors(data)
 
         if self.animate:
             """chart animation means gradually moving from previous data set
@@ -133,12 +143,12 @@ class Chart(gtk.DrawingArea):
             # get hell knows what
             if self.prev_data:
                 if len(self.prev_data) != len(self.data):
-                    self.invalidate()
+                    self._invalidate()
                     return
                 for i in range(len(self.prev_data)):
                     if self.data[i][0] != self.prev_data[i][0]:
-                        self.invalidate()
-                        return #here we go home
+                        self._invalidate()
+                        return
                 
             
             self.current_frame = 0
@@ -153,12 +163,14 @@ class Chart(gtk.DrawingArea):
             self.data = copy.deepcopy(self.prev_data)
 
 
-            gobject.timeout_add(self.animation_timeout, self.replot)
+            gobject.timeout_add(self.animation_timeout, self._replot)
         else:
-            self.invalidate()
+            self._invalidate()
 
     
-    def replot(self):
+    def _replot(self):
+        """Internal function to do the math, going from previous set to the
+           new one, and redraw graph"""
         if self.window:    #this can get called before expose    
             self.current_frame = self.current_frame + 1
             
@@ -167,7 +179,7 @@ class Chart(gtk.DrawingArea):
             for i in range(len(self.data)):
                 self.data[i][2] = self.data[i][2] - ((self.prev_data[i][2] - self.new_data[i][2]) / float(self.animation_frames))
                 
-            self.invalidate()
+            self._invalidate()
             
         if self.current_frame < self.animation_frames:
             return True
@@ -175,7 +187,8 @@ class Chart(gtk.DrawingArea):
             self.prev_data = self.new_data
             return False
 
-    def invalidate(self):
+    def _invalidate(self):
+        """Force redrawal of chart"""
         if self.window:    #this can get called before expose    
             alloc = self.get_allocation()
             rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
@@ -183,7 +196,7 @@ class Chart(gtk.DrawingArea):
             self.window.process_updates(True)
             
     
-    def get_factors(self, data):
+    def _get_factors(self, data):
         """get's max value out of data and calculates each record's factor
            against it"""
         max_value = 0
@@ -199,7 +212,7 @@ class Chart(gtk.DrawingArea):
         return res, max_value
     
     
-    def bar_chart(self, context):
+    def _bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height        
         data, records = self.data, len(self.data)
 
@@ -286,7 +299,7 @@ class Chart(gtk.DrawingArea):
 
 
 
-    def horizontal_bar_chart(self, context):
+    def _horizontal_bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height
         data, records = self.data, len(self.data)
         
