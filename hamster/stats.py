@@ -114,16 +114,16 @@ class StatsViewer:
                     by_category[fact["category"]] += duration
                     day_total += duration
 
-            totals['by_day'].append((current_date.strftime('%a'), day_total / 60))
+            totals['by_day'].append([current_date.strftime('%a'), day_total / 60])
             week["days"].append({"date": current_date, "strdate": strdate, "facts": facts})
         
         totals["by_category"] = []
         for category in by_category:
-            totals["by_category"].append((category, by_category[category] / 60))
+            totals["by_category"].append([category, by_category[category] / 60])
             
         totals["by_activity"] = []
         for activity in by_activity:
-            totals["by_activity"].append((activity, by_activity[activity] / 60))
+            totals["by_activity"].append([activity, by_activity[activity] / 60])
             
         duration_sort = lambda a, b: b[1] - a[1]
         
@@ -160,6 +160,11 @@ class StatsViewer:
 
     def on_next_clicked(self, button):
         self.monday += dt.timedelta(7)
+        self.do_graph()
+    
+    def on_home_clicked(self, button):
+        self.today = dt.datetime.today()
+        self.monday = self.today - dt.timedelta(self.today.weekday())
         self.do_graph()
     
     
