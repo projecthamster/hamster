@@ -51,13 +51,13 @@ class StatsViewer:
         eventBox.add(self.day_chart);
         place.add(eventBox)
         
-        self.category_chart = Chart(orient = "horizontal", max_bar_width = 30)
+        self.category_chart = Chart(orient = "horizontal", max_bar_width = 30, animate=False)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_category")
         eventBox.add(self.category_chart);
         place.add(eventBox)
         
-        self.activity_chart = Chart(orient = "horizontal", max_bar_width = 20)
+        self.activity_chart = Chart(orient = "horizontal", max_bar_width = 20, animate=False)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_activity")
         eventBox.add(self.activity_chart);
