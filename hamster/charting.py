@@ -1,12 +1,41 @@
 """Small charting library that enables you to draw simple bar and
-horizontal bar charts. Some documentation might be coming
+horizontal bar charts. This library is not intended for scientific graphs.
+More like some visual clues to the user.
+
+Currently chart understands only list of two member lists, in label, value
+fashion. Like:
+    data = [
+        ["Label1", value1],
+        ["Label2", value2],
+        ["Label3", value3],
+    ]
 
 Author: toms.baugis@gmail.com
 Licensed under LGPL - do whatever you want, and send me some cookies, if you
 feel like it.
+Feel free to contribute - more info at Project Hamster web page:
+http://projecthamster.wordpress.com/
+
+Example:
+    # create new chart object
+    chart = Chart(max_bar_width = 40, collapse_whitespace = True) 
+    
+    eventBox = gtk.EventBox() # charts go into eventboxes, or windows
+    place = self.get_widget("totals_by_day") #just some placeholder
+
+    eventBox.add(chart);
+    place.add(eventBox)
+
+    #Let's imagine that we count how many apples we have gathered, by day
+    data = [["Mon", 20], ["Tue", 12], ["Wed", 80],
+            ["Thu", 60], ["Fri", 40], ["Sat", 0], ["Sun", 0]]
+    self.day_chart.plot(data)
+
 """
 
 import gtk
+import gobject
+import copy
 
 # Tango colors
 light = [(252, 233, 79),  (138, 226, 52),  (252, 175, 62),
@@ -29,10 +58,37 @@ def set_color(context, color):
     
     
 class Chart(gtk.DrawingArea):
+    """Chart constructor. Optional arguments:
+        cycle_colors = [True|False] - should every bar get it's own color.
+                                      Defaults to False
+        orient_vertical = [True|False] - Chart orientation.
+                                         Defaults to vertical
+        max_bar_width = pixels - Maximal width of bar. If not specified,
+                                 bars will stretch to fill whole area
+        collapse_whitespace = [True|False] - If max_bar_width is set, should
+                                             we still fill the graph area with
+                                             the white stuff and grids and such.
+                                             Defaults to false
+        stretch_grid = [True|False] - Should the grid be of fixed or flex
+                                      size. If set to true, graph will be split
+                                      in 4 parts, which will stretch on resize.
+                                      Defaults to False.
+        animate = [True|False] - Should the bars grow/shrink on redrawing.
+                                 Animation happens only if labels and their
+                                 order match.
+                                 Defaults to True.
+
+        Then there are some defaults, you can override:
+        default_grid_stride - If stretch_grid is set to false, this allows you
+                              to choose granularity of grid. Defaults to 50
+        animation_frames - in how many steps should the animation be done
+        animation_timeout - after how many miliseconds should we draw next frame
+    """
     def __init__(self, **args):
+        """here is init"""
         gtk.DrawingArea.__init__(self)
         self.connect("expose_event", self.expose)
-        self.data = None #start off with an empty hand
+        self.data, self.prev_data = None, None #start off with an empty hand
         
         """now see what we have in args!"""
         self.cycle_colors = "cycle_colors" in args and args["cycle_colors"] # defaults to false
@@ -43,10 +99,14 @@ class Chart(gtk.DrawingArea):
         self.collapse_whitespace = "collapse_whitespace" in args and args["collapse_whitespace"] #defaults to false
         
         self.stretch_grid = "stretch_grid" in args and args["stretch_grid"] == True #defaults to false
-        
+
+        self.animate = "animate" not in args or args["animate"] # defaults to true
         
         #and some defaults
         self.default_grid_stride = 50
+        
+        self.animation_frames = 20
+        self.animation_timeout = 10 #in miliseconds
         
     def expose(self, widget, event): # expose is when drawing's going on
         context = widget.window.cairo_create()
@@ -61,14 +121,83 @@ class Chart(gtk.DrawingArea):
         return False
 
     def plot(self, data):
-        self.data = data
+        self.data, self.max = self.get_factors(data)
 
+        if self.animate:
+            """chart animation means gradually moving from previous data set
+               to the new one. prev_data will be the previous set, new_data
+               is copy of the data we have been asked to plot, and data itself
+               will be the moving thing"""
+               
+            # but first we have to check that keys match - otherwise we will
+            # get hell knows what
+            if self.prev_data:
+                if len(self.prev_data) != len(self.data):
+                    self.invalidate()
+                    return
+                for i in range(len(self.prev_data)):
+                    if self.data[i][0] != self.prev_data[i][0]:
+                        self.invalidate()
+                        return #here we go home
+                
+            
+            self.current_frame = 0
+            self.new_data = copy.deepcopy(self.data)
+
+            if not self.prev_data: #if there is no previous data, set it to zero, so we get a growing animation
+                self.prev_data = copy.deepcopy(self.data)
+                for i in range(len(self.prev_data)):
+                    self.prev_data[i][1] = 0
+                    self.prev_data[i][2] = 0
+                    
+            self.data = copy.deepcopy(self.prev_data)
+
+
+            gobject.timeout_add(self.animation_timeout, self.replot)
+        else:
+            self.invalidate()
+
+    
+    def replot(self):
+        if self.window:    #this can get called before expose    
+            self.current_frame = self.current_frame + 1
+            
+            # here we do the magic - go from prev to new
+            # we are fiddling with the calculated sizes instead of raw data - that's much safer
+            for i in range(len(self.data)):
+                self.data[i][2] = self.data[i][2] - ((self.prev_data[i][2] - self.new_data[i][2]) / float(self.animation_frames))
+                
+            self.invalidate()
+            
+        if self.current_frame < self.animation_frames:
+            return True
+        else:
+            self.prev_data = self.new_data
+            return False
+
+    def invalidate(self):
         if self.window:    #this can get called before expose    
             alloc = self.get_allocation()
             rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
             self.window.invalidate_rect(rect, True)
             self.window.process_updates(True)
+            
+    
+    def get_factors(self, data):
+        """get's max value out of data and calculates each record's factor
+           against it"""
+        max_value = 0
         
+        for i in range(len(data)):
+            max_value = max(max_value, data[i][1])
+        
+        res = []
+        for i in range(len(data)):
+            factor = data[i][1] / float(max_value) if max_value > 0 else 0
+            res.append([data[i][0], data[i][1], factor])
+        
+        return res, max_value
+    
     
     def bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height        
@@ -96,13 +225,6 @@ class Chart(gtk.DrawingArea):
 
         context.set_line_width(1)
         
-        
-        #find max, so we know
-        max_value = 0.1
-        for i in data:
-            max_value = max(max_value, i[1] * 1.0)
-        
-
         # TODO put this somewhere else - drawing background and some grid
         context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
         context.set_source_rgb(1, 1, 1)
@@ -135,9 +257,9 @@ class Chart(gtk.DrawingArea):
         # bars themselves
         for i in range(records):
             context.rectangle(graph_x + (step * i),
-                              graph_y + graph_height - (graph_height * (data[i][1] / max_value)),
+                              graph_y + graph_height - (graph_height * data[i][2]),
                               step * 0.8,
-                              (graph_height * (data[i][1] / max_value)))
+                              (graph_height * data[i][2]))
 
             color = 1
             if self.cycle_colors:
@@ -157,9 +279,9 @@ class Chart(gtk.DrawingArea):
             context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 15)
             context.show_text(data[i][0])
 
-        # values for max minn and average
+        # values for max min and average
         context.move_to(rect.x + 10, rect.y + 10)
-        context.show_text(str(max_value))
+        context.show_text(str(int(self.max)))
 
 
 
@@ -170,11 +292,10 @@ class Chart(gtk.DrawingArea):
         
         # ok, start with labels - get the longest now
         # TODO - figure how to wrap text
-        max_extent, max_value = 0, 0.1
+        max_extent = 0
         for i in range(records):
             extent = context.text_extents(data[i][0]) #x, y, width, height
             max_extent = max(max_extent, extent[2])
-            max_value = max(max_value, data[i][1] * 1.0)
             
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
@@ -243,7 +364,7 @@ class Chart(gtk.DrawingArea):
         for i in range(records):
             context.rectangle(graph_x,
                               graph_y + (step * i) + step * 0.1,
-                              (max_size * (data[i][1] / max_value)),
+                              (max_size * data[i][2]),
                               step * 0.8)
 
             color = 1
@@ -259,9 +380,10 @@ class Chart(gtk.DrawingArea):
             context.stroke()
         
 
-        # values for max minn and average
+        # values for max min and average
+        set_color(context, dark[8])
         context.move_to(graph_x + graph_width + 10, graph_y + 10)
-        context.show_text(str(max_value))
+        context.show_text(str(int(self.max)))
         
         
 
