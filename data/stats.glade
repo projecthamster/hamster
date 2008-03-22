@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Fri Mar 21 18:06:37 2008 -->
+<!--Generated with glade3 3.4.0 on Sat Mar 22 02:43:20 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -41,6 +41,7 @@
                   <atkproperty name="AtkObject::accessible_name" translatable="yes">Current week</atkproperty>
                   <atkproperty name="AtkObject::accessible_description" translatable="yes">Go to current week</atkproperty>
                 </accessibility>
+                <signal name="clicked" handler="on_home_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
