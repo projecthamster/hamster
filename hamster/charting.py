@@ -107,8 +107,11 @@ class Chart(gtk.DrawingArea):
         #and some defaults
         self.default_grid_stride = 50
         
-        self.animation_frames = 50
-        self.animation_timeout = 8 #in miliseconds
+        self.animation_frames = 150
+        self.animation_timeout = 20 #in miliseconds
+
+        self.current_frame = self.animation_frames
+        self.freeze_animation = False
         
     def _expose(self, widget, event): # expose is when drawing's going on
         context = widget.window.cairo_create()
@@ -140,7 +143,20 @@ class Chart(gtk.DrawingArea):
                 ]
         """
         
-        self.data, self.max = self._get_factors(data)
+        #check if maybe this chart is animation enabled and we are in middle of animation
+        if self.animate and self.current_frame < self.animation_frames: #something's going on here!
+            self.freeze_animation = True #so we don't catch some nasty race condition
+            
+            self.prev_data = copy.copy(self.data)
+            self.new_data, self.max = self._get_factors(data)
+            
+            #if so, let's start where we are and move to the new set inst
+            self.current_frame = 0 #start the animation from beginning
+            self.freeze_animation = False
+            return
+        
+        
+                
 
         if self.animate:
             """chart animation means gradually moving from previous data set
@@ -148,49 +164,58 @@ class Chart(gtk.DrawingArea):
                is copy of the data we have been asked to plot, and data itself
                will be the moving thing"""
                
-            # but first we have to check that keys match - otherwise we will
-            # get hell knows what
-            if self.prev_data:
-                if len(self.prev_data) != len(self.data):
-                    self.prev_data = self.data
-                    self._invalidate()
-                    return
-
-                for i in range(len(self.prev_data)):
-                    if self.data[i][0] != self.prev_data[i][0]:
-                        self.prev_data = self.data
-                        self._invalidate()
-                        return
-                
-            
             self.current_frame = 0
-            self.new_data = copy.deepcopy(self.data)
+            self.new_data, self.max = self._get_factors(data)
 
             if not self.prev_data: #if there is no previous data, set it to zero, so we get a growing animation
-                self.prev_data = copy.deepcopy(self.data)
+                self.prev_data = copy.copy(self.new_data)
                 for i in range(len(self.prev_data)):
                     self.prev_data[i][1] = 0
                     self.prev_data[i][2] = 0
                     
-            self.data = copy.deepcopy(self.prev_data)
+            self.data = copy.copy(self.prev_data)
 
 
             gobject.timeout_add(self.animation_timeout, self._replot)
         else:
+            self.data, self.max = self._get_factors(data)
             self._invalidate()
 
     
     def _replot(self):
         """Internal function to do the math, going from previous set to the
            new one, and redraw graph"""
+        if self.freeze_animation:
+            return True #just wait until they release us!
+
         if self.window:    #this can get called before expose    
+            # do some sanity checks before thinking about animation
+            # are the source and target of same length?
+            if len(self.prev_data) != len(self.new_data):
+                self.prev_data = copy.copy(self.new_data)
+                self.data = copy.copy(self.new_data)
+                self.current_frame = self.animation_frames #stop animation
+                self._invalidate()
+                return False
+            
+            # have they same labels? (that's important!)
+            for i in range(len(self.prev_data)):
+                if self.prev_data[i][0] != self.new_data[i][0]:
+                    self.prev_data = copy.copy(self.new_data)
+                    self.data = copy.copy(self.new_data)
+                    self.current_frame = self.animation_frames #stop animation
+                    self._invalidate()
+                    return False
+            
+
+            #ok, now we are good!
             self.current_frame = self.current_frame + 1
             
 
             # using sines for some "swoosh" animation (not really noticeable)
             # sin(0) = 0; sin(pi/2) = 1
-            pi_factor = math.sin((math.pi / 2) * (self.current_frame / float(self.animation_frames)))
-            pi_factor = math.sqrt(pi_factor) #stretch it a little so the animation can be seen a little better
+            pi_factor = math.sin((math.pi / 2.0) * (self.current_frame / float(self.animation_frames)))
+            #pi_factor = math.sqrt(pi_factor) #stretch it a little so the animation can be seen a little better
             
             # here we do the magic - go from prev to new
             # we are fiddling with the calculated sizes instead of raw data - that's much safer
@@ -203,7 +228,7 @@ class Chart(gtk.DrawingArea):
         if self.current_frame < self.animation_frames:
             return True
         else:
-            self.prev_data = self.new_data
+            self.prev_data = copy.copy(self.new_data)
             return False
 
     def _invalidate(self):
