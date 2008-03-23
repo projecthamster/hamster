@@ -64,6 +64,15 @@ class StatsViewer:
         place.add(eventBox)
         
         
+        self.day_view = self.get_widget("day")
+        self.week_view = self.get_widget("week")
+        self.month_view = self.get_widget("month")
+
+        self.week_view.set_group(self.day_view)
+        self.month_view.set_group(self.day_view)
+        
+        self.week_view.set_active(True)
+        
         self.do_graph()
 
         
@@ -82,7 +91,7 @@ class StatsViewer:
         return formatted_duration
     
 
-    def get_week(self):
+    def get_facts(self):
         self.fact_store.clear()
         totals = {}
         
@@ -91,8 +100,11 @@ class StatsViewer:
         by_category = {}
         
         week = {"days": [], "totals": []}
-            
-        for i in range(7):
+        
+        #TODO make more readable
+        days = 7 if self.week_view.get_active() else 30
+        
+        for i in range(days):
             current_date = self.monday + dt.timedelta(i)
             strdate = current_date.strftime('%A, %b %d.')
             facts = storage.get_facts(current_date)
@@ -114,8 +126,9 @@ class StatsViewer:
                     by_category[fact["category"]] += duration
                     day_total += duration
 
-            totals['by_day'].append([current_date.strftime('%a'), day_total / 60])
-            week["days"].append({"date": current_date, "strdate": strdate, "facts": facts})
+            strday = current_date.strftime('%a') if days < 20 else current_date.strftime('%d. %b')
+
+            totals['by_day'].append([strday, day_total / 60])
         
         totals["by_category"] = []
         for category in by_category:
@@ -140,11 +153,11 @@ class StatsViewer:
         
 
     def do_graph(self):
-        week = self.get_week()
+        facts = self.get_facts()
 
-        self.day_chart.plot(week["totals"]["by_day"])
-        self.category_chart.plot(week["totals"]["by_category"])
-        self.activity_chart.plot(week["totals"]["by_activity"])
+        self.day_chart.plot(facts["totals"]["by_day"])
+        self.category_chart.plot(facts["totals"]["by_category"])
+        self.activity_chart.plot(facts["totals"]["by_activity"])
 
 
 
@@ -166,6 +179,16 @@ class StatsViewer:
         self.today = dt.datetime.today()
         self.monday = self.today - dt.timedelta(self.today.weekday())
         self.do_graph()
+        
+    def on_day_toggled(self, button):
+        self.do_graph()
+        
+    def on_week_toggled(self, button):
+        self.do_graph()
+        
+    def on_month_toggled(self, button):
+        self.do_graph()
+        
     
     
     def show(self):
