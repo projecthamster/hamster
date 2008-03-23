@@ -37,6 +37,7 @@ import gtk
 import gobject
 import cairo
 import copy
+import math
 
 # Tango colors
 light = [(252, 233, 79),  (138, 226, 52),  (252, 175, 62),
@@ -106,8 +107,8 @@ class Chart(gtk.DrawingArea):
         #and some defaults
         self.default_grid_stride = 50
         
-        self.animation_frames = 20
-        self.animation_timeout = 10 #in miliseconds
+        self.animation_frames = 50
+        self.animation_timeout = 8 #in miliseconds
         
     def _expose(self, widget, event): # expose is when drawing's going on
         context = widget.window.cairo_create()
@@ -185,10 +186,17 @@ class Chart(gtk.DrawingArea):
         if self.window:    #this can get called before expose    
             self.current_frame = self.current_frame + 1
             
+
+            # using sines for some "swoosh" animation (not really noticeable)
+            # sin(0) = 0; sin(pi/2) = 1
+            pi_factor = math.sin((math.pi / 2) * (self.current_frame / float(self.animation_frames)))
+            pi_factor = math.sqrt(pi_factor) #stretch it a little so the animation can be seen a little better
+            
             # here we do the magic - go from prev to new
             # we are fiddling with the calculated sizes instead of raw data - that's much safer
             for i in range(len(self.data)):
-                self.data[i][2] = self.data[i][2] - ((self.prev_data[i][2] - self.new_data[i][2]) / float(self.animation_frames))
+                diff_in_factors = self.prev_data[i][2] - self.new_data[i][2]
+                self.data[i][2] = self.prev_data[i][2] - (diff_in_factors * pi_factor)
                 
             self._invalidate()
             
@@ -278,12 +286,28 @@ class Chart(gtk.DrawingArea):
         
         
         context.set_dash ([]);
+
+
+        # labels
+        set_color(context, dark[8]);
+        for i in range(records):
+            context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
+            context.show_text(data[i][0])
+
+        # values for max min and average
+        context.move_to(rect.x + 10, rect.y + 10)
+        context.show_text(str(int(self.max)))
+
+
+        #flip the matrix vertically, so we do not have to think upside-down
+        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
+
         # bars themselves
         for i in range(records):
             context.rectangle(graph_x + (step * i),
-                              graph_y + graph_height - (graph_height * data[i][2]),
+                              0,
                               step * 0.8,
-                              (graph_height * data[i][2]))
+                              (graph_height * data[i][2]) * 0.9)
 
             color = 1
             if self.cycle_colors:
@@ -297,19 +321,6 @@ class Chart(gtk.DrawingArea):
             set_color(context, dark[color]);
             context.stroke()
         
-        # labels
-        set_color(context, dark[8]);
-        for i in range(records):
-            context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
-            context.show_text(data[i][0])
-
-        # values for max min and average
-        context.move_to(rect.x + 10, rect.y + 10)
-        context.show_text(str(int(self.max)))
-
-
-
-
     def _horizontal_bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height
         data, records = self.data, len(self.data)
@@ -466,18 +477,32 @@ class Chart(gtk.DrawingArea):
         
         context.set_dash ([]);
 
+        # labels
+        set_color(context, dark[8]);
+        for i in range(records):
+            if i % 5 == 0:
+                context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
+                context.show_text(data[i][0])
+
+        # values for max min and average
+        context.move_to(rect.x + 10, rect.y + 10)
+        context.show_text(str(int(self.max)))
+
+
+        #flip the matrix vertically, so we do not have to think upside-down
+        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
+
         set_color(context, dark[3]);
         # bars themselves
         for i in range(records):
             if i == 0:
-                context.move_to(graph_x, graph_y + graph_height)
+                context.move_to(graph_x, 0)
                 
             
-            context.line_to(graph_x + (step * i),
-                              graph_y + graph_height - (graph_height * data[i][2]))
+            context.line_to(graph_x + (step * i), graph_height * data[i][2])
 
             if i == records -1:
-                context.line_to(graph_x  + (step * i), graph_y + graph_height)
+                context.line_to(graph_x  + (step * i), 0)
                 
 
 
@@ -489,16 +514,6 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[3]);
         context.stroke()    
         
-        # labels
-        set_color(context, dark[8]);
-        for i in range(records):
-            if i % 5 == 0:
-                context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
-                context.show_text(data[i][0])
-
-        # values for max min and average
-        context.move_to(rect.x + 10, rect.y + 10)
-        context.show_text(str(int(self.max)))
 
 
 
