@@ -35,6 +35,7 @@ Example:
 
 import gtk
 import gobject
+import cairo
 import copy
 
 # Tango colors
@@ -114,7 +115,14 @@ class Chart(gtk.DrawingArea):
         context.clip()
         
         if self.orient_vertical:
-            self._bar_chart(context) 
+            # for simple bars figure, when there is way too much data for bars
+            # and go to lines (yay!)
+            if (event.area.width / len(self.data)) > 30: #this is big enough
+                self._bar_chart(context)
+            else:
+                self._area_chart(context)
+            
+            
         else:
             self._horizontal_bar_chart(context)
 
@@ -143,10 +151,13 @@ class Chart(gtk.DrawingArea):
             # get hell knows what
             if self.prev_data:
                 if len(self.prev_data) != len(self.data):
+                    self.prev_data = self.data
                     self._invalidate()
                     return
+
                 for i in range(len(self.prev_data)):
                     if self.data[i][0] != self.prev_data[i][0]:
+                        self.prev_data = self.data
                         self._invalidate()
                         return
                 
@@ -289,7 +300,7 @@ class Chart(gtk.DrawingArea):
         # labels
         set_color(context, dark[8]);
         for i in range(records):
-            context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 15)
+            context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
             context.show_text(data[i][0])
 
         # values for max min and average
@@ -399,4 +410,95 @@ class Chart(gtk.DrawingArea):
         context.show_text(str(int(self.max)))
         
         
+    def _area_chart(self, context):
+        rect = self.get_allocation()  #x, y, width, height        
+        data, records = self.data, len(self.data)
+
+        if not data:
+            return
+
+        # graph box dimensions
+        graph_x = rect.x + 50  #give some space to scale labels
+        graph_width = rect.width + rect.x - graph_x
+        
+        step = graph_width / records
+        if self.max_bar_width:
+            step = min(step, self.max_bar_width)
+            if self.collapse_whitespace:
+                graph_width = step * records #no need to have that white stuff
+
+        graph_y = rect.y
+        graph_height = graph_y - rect.x + rect.height - 15
+        
+        max_size = graph_height - 15
+
+
+
+        context.set_line_width(1)
+        
+        # TODO put this somewhere else - drawing background and some grid
+        context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
+        context.set_source_rgb(1, 1, 1)
+        context.fill_preserve()
+        context.stroke()
+
+        context.set_line_width(1)
+        context.set_dash ([1, 3]);
+
+        set_color(context, dark[8])
+        
+        # scale lines
+        stride = self.default_grid_stride if self.stretch_grid == False else int(graph_height / 4)
+            
+        for y in range(graph_y, graph_y + graph_height, stride):
+            context.move_to(graph_x - 10, y)
+            context.line_to(graph_x + graph_width, y)
+
+        # and borders on both sides, so the graph doesn't fall out
+        context.move_to(graph_x - 1, graph_y)
+        context.line_to(graph_x - 1, graph_y + graph_height + 1)
+        context.move_to(graph_x + graph_width, graph_y)
+        context.line_to(graph_x + graph_width, graph_y + graph_height + 1)
+        
+
+        context.stroke()
+        
+        
+        context.set_dash ([]);
+
+        set_color(context, dark[3]);
+        # bars themselves
+        for i in range(records):
+            if i == 0:
+                context.move_to(graph_x, graph_y + graph_height)
+                
+            
+            context.line_to(graph_x + (step * i),
+                              graph_y + graph_height - (graph_height * data[i][2]))
+
+            if i == records -1:
+                context.line_to(graph_x  + (step * i), graph_y + graph_height)
+                
+
+
+        set_color(context, light[3])
+        context.fill_preserve()    
+
+        context.set_line_width(3)
+        context.set_line_join (cairo.LINE_JOIN_ROUND);
+        set_color(context, dark[3]);
+        context.stroke()    
+        
+        # labels
+        set_color(context, dark[8]);
+        for i in range(records):
+            if i % 5 == 0:
+                context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
+                context.show_text(data[i][0])
+
+        # values for max min and average
+        context.move_to(rect.x + 10, rect.y + 10)
+        context.show_text(str(int(self.max)))
+
+
 
