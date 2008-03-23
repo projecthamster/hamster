@@ -168,9 +168,8 @@ class Chart(gtk.DrawingArea):
             self.new_data, self.max = self._get_factors(data)
 
             if not self.prev_data: #if there is no previous data, set it to zero, so we get a growing animation
-                self.prev_data = copy.copy(self.new_data)
+                self.prev_data = copy.deepcopy(self.new_data)
                 for i in range(len(self.prev_data)):
-                    self.prev_data[i][1] = 0
                     self.prev_data[i][2] = 0
                     
             self.data = copy.copy(self.prev_data)
@@ -244,9 +243,12 @@ class Chart(gtk.DrawingArea):
         """get's max value out of data and calculates each record's factor
            against it"""
         max_value = 0
+        self.there_are_floats = False
         
         for i in range(len(data)):
             max_value = max(max_value, data[i][1])
+            if isinstance(data[i][1], float):
+                self.there_are_floats = True #we need to know for the scale labels
         
         res = []
         for i in range(len(data)):
@@ -321,7 +323,8 @@ class Chart(gtk.DrawingArea):
 
         # values for max min and average
         context.move_to(rect.x + 10, rect.y + 10)
-        context.show_text(str(int(self.max)))
+        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        context.show_text(max_label)
 
 
         #flip the matrix vertically, so we do not have to think upside-down
@@ -443,7 +446,8 @@ class Chart(gtk.DrawingArea):
         # values for max min and average
         set_color(context, dark[8])
         context.move_to(graph_x + graph_width + 10, graph_y + 10)
-        context.show_text(str(int(self.max)))
+        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        context.show_text(max_label)
         
         
     def _area_chart(self, context):
@@ -506,7 +510,8 @@ class Chart(gtk.DrawingArea):
 
         # values for max min and average
         context.move_to(rect.x + 10, rect.y + 10)
-        context.show_text(str(int(self.max)))
+        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        context.show_text(max_label)
 
 
         context.rectangle(graph_x, graph_y, graph_width, graph_height + 1)
