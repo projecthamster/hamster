@@ -220,6 +220,19 @@ class StatsViewer:
     
     def on_home_clicked(self, button):
         self.start_date = dt.datetime.today()
+        if self.day_view.get_active():
+            self.end_date = self.start_date + dt.timedelta(1)
+        
+        elif self.week_view.get_active():
+            self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+            self.end_date = self.start_date + dt.timedelta(7) #set to monday
+        
+        elif self.month_view.get_active():
+            self.start_date = self.start_date - dt.timedelta(self.start_date.day - 1) #set to beginning of month
+            first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+            self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
+        
+        self.do_graph()
         
     def on_day_toggled(self, button):
         self.end_date = self.start_date + dt.timedelta(1)
