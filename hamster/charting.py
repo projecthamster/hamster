@@ -432,12 +432,7 @@ class Chart(gtk.DrawingArea):
         graph_x = rect.x + 50  #give some space to scale labels
         graph_width = rect.width + rect.x - graph_x
         
-        step = graph_width / records
-        if self.max_bar_width:
-            step = min(step, self.max_bar_width)
-            if self.collapse_whitespace:
-                graph_width = step * records #no need to have that white stuff
-
+        step = graph_width / (records - 2)
         graph_y = rect.y
         graph_height = graph_y - rect.x + rect.height - 15
         
@@ -448,7 +443,7 @@ class Chart(gtk.DrawingArea):
         context.set_line_width(1)
         
         # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
+        context.rectangle(graph_x, graph_y, graph_width, graph_height)
         context.set_source_rgb(1, 1, 1)
         context.fill_preserve()
         context.stroke()
@@ -489,20 +484,23 @@ class Chart(gtk.DrawingArea):
         context.show_text(str(int(self.max)))
 
 
+        context.rectangle(graph_x, graph_y, graph_width, graph_height + 1)
+        context.clip()
+
         #flip the matrix vertically, so we do not have to think upside-down
         context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
+
 
         set_color(context, dark[3]);
         # bars themselves
         for i in range(records):
-            if i == 0:
-                context.move_to(graph_x, 0)
+            if i == 0: context.move_to(graph_x, -10)
                 
-            
-            context.line_to(graph_x + (step * i), graph_height * data[i][2])
+            context.line_to(graph_x + (step * i), graph_height * data[i][2] * 0.9)
 
             if i == records -1:
-                context.line_to(graph_x  + (step * i), 0)
+                context.line_to(graph_x  + (step * i),  -10)
+                context.line_to(graph_x, -10)
                 
 
 
