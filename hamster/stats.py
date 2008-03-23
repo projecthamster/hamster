@@ -129,17 +129,17 @@ class StatsViewer:
 
             strday = current_date.strftime('%a') if days < 20 else current_date.strftime('%d. %b')
 
-            totals['by_day'].append([strday, day_total / 60])
+            totals['by_day'].append([strday, day_total / 60.0])
         
         totals["by_category"] = []
         for category in by_category:
-            totals["by_category"].append([category, by_category[category] / 60])
+            totals["by_category"].append([category, by_category[category] / 60.0])
             
         totals["by_activity"] = []
         for activity in by_activity:
-            totals["by_activity"].append([activity, by_activity[activity] / 60])
+            totals["by_activity"].append([activity, by_activity[activity] / 60.0])
             
-        duration_sort = lambda a, b: b[1] - a[1]
+        duration_sort = lambda a, b: int(b[1] - a[1])
         
         totals["by_category"].sort(duration_sort)
         totals["by_activity"].sort(duration_sort)
