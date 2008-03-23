@@ -10,15 +10,12 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR
 from hamster.charting import Chart
 
 import datetime  as dt
+import calendar
 
 class StatsViewer:
     def __init__(self):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
-
-        self.today = dt.datetime.today()
-        self.monday = self.today - dt.timedelta(self.today.weekday())
-
 
         self.fact_store = gtk.TreeStore(str, str)
             
@@ -71,8 +68,12 @@ class StatsViewer:
         self.week_view.set_group(self.day_view)
         self.month_view.set_group(self.day_view)
         
+        #initiate the form in the week view
         self.week_view.set_active(True)
-        
+        self.start_date = dt.datetime.today()
+        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+        self.end_date = self.start_date + dt.timedelta(7) #set to monday
+
         self.do_graph()
 
         
@@ -104,8 +105,8 @@ class StatsViewer:
         #TODO make more readable
         days = 7 if self.week_view.get_active() else 30
         
-        for i in range(days):
-            current_date = self.monday + dt.timedelta(i)
+        for i in range((self.end_date - self.start_date).days):
+            current_date = self.start_date + dt.timedelta(i)
             strdate = current_date.strftime('%A, %b %d.')
             facts = storage.get_facts(current_date)
             
@@ -153,6 +154,24 @@ class StatsViewer:
         
 
     def do_graph(self):
+        if self.start_date.year != self.end_date.year:
+            start_str = self.start_date.strftime('%B %d. %Y')
+            end_str = self.end_date.strftime('%B %d. %Y')
+        elif self.start_date.month != self.end_date.month:
+            start_str = self.start_date.strftime('%B %d.')
+            end_str = self.end_date.strftime('%B %d.')
+        else:
+            start_str = self.start_date.strftime('%B %d')
+            end_str = self.end_date.strftime('%d, %Y')
+
+        if self.day_view.get_active(): #single day is an exception
+            label_text = "Overview for %s" % (self.start_date.strftime('%B %d. %Y'))
+        else:
+            label_text = "Overview for %s - %s" % (start_str, end_str)
+        
+        label = self.get_widget("overview_label")
+        label.set_text(label_text)
+        
         facts = self.get_facts()
 
         self.day_chart.plot(facts["totals"]["by_day"])
@@ -168,25 +187,55 @@ class StatsViewer:
         return self.wTree.get_widget(name)
 
     def on_prev_clicked(self, button):
-        self.monday -= dt.timedelta(7)
+        if self.day_view.get_active():
+            self.start_date -= dt.timedelta(1)
+            self.end_date -= dt.timedelta(1)
+        
+        elif self.week_view.get_active():
+            self.start_date -= dt.timedelta(7)
+            self.end_date -= dt.timedelta(7)
+        
+        elif self.month_view.get_active():
+            self.end_date = self.start_date - dt.timedelta(1)
+            first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
+            self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
+        
         self.do_graph()
 
     def on_next_clicked(self, button):
-        self.monday += dt.timedelta(7)
+        if self.day_view.get_active():
+            self.start_date += dt.timedelta(1)
+            self.end_date += dt.timedelta(1)
+        
+        elif self.week_view.get_active():
+            self.start_date += dt.timedelta(7)
+            self.end_date += dt.timedelta(7)
+        
+        elif self.month_view.get_active():
+            self.start_date = self.end_date + dt.timedelta(1)
+            first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+            self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
+        
         self.do_graph()
     
     def on_home_clicked(self, button):
-        self.today = dt.datetime.today()
-        self.monday = self.today - dt.timedelta(self.today.weekday())
-        self.do_graph()
+        self.start_date = dt.datetime.today()
         
     def on_day_toggled(self, button):
+        self.end_date = self.start_date + dt.timedelta(1)
         self.do_graph()
-        
+
     def on_week_toggled(self, button):
+        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+        self.end_date = self.start_date + dt.timedelta(7) #set to monday
         self.do_graph()
+
         
     def on_month_toggled(self, button):
+        self.start_date = self.start_date - dt.timedelta(self.start_date.day - 1) #set to beginning of month
+        first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+        self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
+
         self.do_graph()
         
     
