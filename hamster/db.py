@@ -116,7 +116,7 @@ class Storage(hamster.storage.Storage):
         """
         self.execute(query, (end_time, id))
 
-    def __get_facts(self, date):
+    def __get_facts(self, date, end_date = None):
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
@@ -126,12 +126,12 @@ class Storage(hamster.storage.Storage):
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c on b.category_id = c.id
-                    WHERE a.start_time >= ?
-                      AND a.start_time < ?
+                    WHERE date(a.start_time) >= ? and date(a.start_time) <= ?
                  ORDER BY a.start_time
         """
-        date = datetime.datetime.combine(date, datetime.time())
-        return self.fetchall(query, (date, date + datetime.timedelta(days = 1)))
+        end_date = end_date or date        
+
+        return self.fetchall(query, (date, end_date))
 
     def __add_fact(self, activity_name, fact_time = None):
         start_time = fact_time or datetime.datetime.now()

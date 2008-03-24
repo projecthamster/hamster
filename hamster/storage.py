@@ -26,8 +26,8 @@ class Storage(object):
         self.dispatch('day_updated', fact['start_time'])
         return result
 
-    def get_facts(self, date):
-        return self.__get_facts(date)
+    def get_facts(self, date, end_date = None):
+        return self.__get_facts(date, end_date)
 
     def remove_fact(self, fact_id):
         fact = self.get_fact(fact_id)
