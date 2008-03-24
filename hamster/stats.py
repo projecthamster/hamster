@@ -125,16 +125,22 @@ class StatsViewer:
                 by_activity[fact["name"]] += duration
                 by_category[fact["category"]] += duration
             
-        #TODO make more readable
         days = 7 if self.week_view.get_active() else 30
 
 
-        date_sort = lambda a, b: (b[2] < a[2]) - (a[2] < b[2])
+        date_sort = lambda a, b: (b[4] < a[4]) - (a[4] < b[4])
         totals["by_day"] = []
+
         for day in by_day:
-            strday = day.strftime('%a') if (self.end_date - self.start_date).days < 20 else day.strftime('%d. %b')
-            totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, day])
+            if (self.end_date - self.start_date).days < 20:
+                strday = day.strftime('%a')
+                totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
+            else:
+                strday = day.strftime('%d. %b')
+                background = 7 if day.weekday() in [5, 6] else None
+                totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, background, day])
         totals["by_day"].sort(date_sort)
+            
             
         duration_sort = lambda a, b: int(b[1] - a[1])
         totals["by_activity"] = []

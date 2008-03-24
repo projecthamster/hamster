@@ -170,7 +170,7 @@ class Chart(gtk.DrawingArea):
             if not self.prev_data: #if there is no previous data, set it to zero, so we get a growing animation
                 self.prev_data = copy.deepcopy(self.new_data)
                 for i in range(len(self.prev_data)):
-                    self.prev_data[i][2] = 0
+                    self.prev_data[i]["factor"] = 0
                     
             self.data = copy.copy(self.prev_data)
 
@@ -199,7 +199,7 @@ class Chart(gtk.DrawingArea):
             
             # have they same labels? (that's important!)
             for i in range(len(self.prev_data)):
-                if self.prev_data[i][0] != self.new_data[i][0]:
+                if self.prev_data[i]["label"] != self.new_data[i]["label"]:
                     self.prev_data = copy.copy(self.new_data)
                     self.data = copy.copy(self.new_data)
                     self.current_frame = self.animation_frames #stop animation
@@ -219,8 +219,8 @@ class Chart(gtk.DrawingArea):
             # here we do the magic - go from prev to new
             # we are fiddling with the calculated sizes instead of raw data - that's much safer
             for i in range(len(self.data)):
-                diff_in_factors = self.prev_data[i][2] - self.new_data[i][2]
-                self.data[i][2] = self.prev_data[i][2] - (diff_in_factors * pi_factor)
+                diff_in_factors = self.prev_data[i]["factor"] - self.new_data[i]["factor"]
+                self.data[i]["factor"] = self.prev_data[i]["factor"] - (diff_in_factors * pi_factor)
                 
             self._invalidate()
             
@@ -244,16 +244,31 @@ class Chart(gtk.DrawingArea):
            against it"""
         max_value = 0
         self.there_are_floats = False
+        self.there_are_colors = False
+        self.there_are_backgrounds = False
         
         for i in range(len(data)):
             max_value = max(max_value, data[i][1])
             if isinstance(data[i][1], float):
                 self.there_are_floats = True #we need to know for the scale labels
+                
+            if len(data[i]) > 3 and data[i][2] != None:
+                self.there_are_colors = True
+                
+            if len(data[i]) > 4 and data[i][3] != None:
+                self.there_are_backgrounds = True
+                
         
         res = []
         for i in range(len(data)):
             factor = data[i][1] / float(max_value) if max_value > 0 else 0
-            res.append([data[i][0], data[i][1], factor])
+            
+            res.append({"label": data[i][0],
+                        "value": data[i][1],
+                        "color": data[i][2] if len(data[i]) > 2 else None,
+                        "background": data[i][3] if len(data[i]) > 3 else None,
+                        "factor": factor
+                        })
         
         return res, max_value
     
@@ -269,7 +284,7 @@ class Chart(gtk.DrawingArea):
         graph_x = rect.x + 50  #give some space to scale labels
         graph_width = rect.width + rect.x - graph_x
         
-        step = graph_width / records
+        step = graph_width / float(records)
         if self.max_bar_width:
             step = min(step, self.max_bar_width)
             if self.collapse_whitespace:
@@ -290,9 +305,17 @@ class Chart(gtk.DrawingArea):
         context.fill_preserve()
         context.stroke()
 
+        #backgrounds
+        if self.there_are_backgrounds:
+            for i in range(records):
+                if data[i]["background"] != None:
+                    set_color(context, light[data[i]["background"]]);
+                    context.rectangle(graph_x + (step * i), 0, step, graph_height)
+                    context.fill_preserve()
+                    context.stroke()
+
         context.set_line_width(1)
         context.set_dash ([1, 3]);
-
         set_color(context, dark[8])
         
         # scale lines
@@ -319,7 +342,7 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8]);
         for i in range(records):
             context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
-            context.show_text(data[i][0])
+            context.show_text(data[i]["label"])
 
         # values for max min and average
         context.move_to(rect.x + 10, rect.y + 10)
@@ -332,12 +355,12 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
-            context.rectangle(graph_x + (step * i),
+            context.rectangle(graph_x + (step * i) + (step * 0.1),
                               0,
                               step * 0.8,
-                              (graph_height * data[i][2]) * 0.9)
+                              (graph_height * data[i]["factor"]) * 0.9)
 
-            color = 1
+            color = data[i]["color"] or 1
             if self.cycle_colors:
                 if color_count < records:
                     color = (i + 1) % color_count
@@ -357,7 +380,7 @@ class Chart(gtk.DrawingArea):
         # TODO - figure how to wrap text
         max_extent = 0
         for i in range(records):
-            extent = context.text_extents(data[i][0]) #x, y, width, height
+            extent = context.text_extents(data[i]["label"]) #x, y, width, height
             max_extent = max(max_extent, extent[2])
             
         
@@ -369,7 +392,7 @@ class Chart(gtk.DrawingArea):
         graph_height = graph_y - rect.x + rect.height
         
         
-        step = graph_height / records if records > 0 else 30
+        step = graph_height / float(records) if records > 0 else 30
         if self.max_bar_width:
             step = min(step, self.max_bar_width)
             if self.collapse_whitespace:
@@ -381,10 +404,10 @@ class Chart(gtk.DrawingArea):
         #now let's put the labels and align them right
         set_color(context, dark[8]);
         for i in range(records):
-            extent = context.text_extents(data[i][0]) #x, y, width, height
+            extent = context.text_extents(data[i]["label"]) #x, y, width, height
             
             context.move_to(rect.x + max_extent - extent[2], rect.y + (step * i) + (step + extent[3]) / 2)
-            context.show_text(data[i][0])
+            context.show_text(data[i]["label"])
         
         context.stroke()        
         
@@ -427,10 +450,10 @@ class Chart(gtk.DrawingArea):
         for i in range(records):
             context.rectangle(graph_x,
                               graph_y + (step * i) + step * 0.1,
-                              (max_size * data[i][2]),
+                              (max_size * data[i]["factor"]),
                               step * 0.8)
 
-            color = 1
+            color = data[i]["color"] or 1
             if self.cycle_colors:
                 if color_count < records:
                     color = (i + 1) % color_count
@@ -461,7 +484,7 @@ class Chart(gtk.DrawingArea):
         graph_x = rect.x + 50  #give some space to scale labels
         graph_width = rect.width + rect.x - graph_x
         
-        step = graph_width / (records - 2)
+        step = graph_width / float(records)
         graph_y = rect.y
         graph_height = graph_y - rect.x + rect.height - 15
         
@@ -480,6 +503,17 @@ class Chart(gtk.DrawingArea):
         context.set_line_width(1)
         context.set_dash ([1, 3]);
 
+
+        #backgrounds
+        if self.there_are_backgrounds:
+            for i in range(records):
+                if data[i]["background"] != None:
+                    set_color(context, light[data[i]["background"]]);
+                    context.rectangle(graph_x + (step * i), 1, step, graph_height - 1)
+                    context.fill_preserve()
+                    context.stroke()
+
+            
         set_color(context, dark[8])
         
         # scale lines
@@ -506,7 +540,7 @@ class Chart(gtk.DrawingArea):
         for i in range(records):
             if i % 5 == 0:
                 context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
-                context.show_text(data[i][0])
+                context.show_text(data[i]["label"])
 
         # values for max min and average
         context.move_to(rect.x + 10, rect.y + 10)
@@ -522,15 +556,18 @@ class Chart(gtk.DrawingArea):
 
 
         set_color(context, dark[3]);
-        # bars themselves
+        # chart itself
         for i in range(records):
-            if i == 0: context.move_to(graph_x, -10)
+            if i == 0:
+                context.move_to(graph_x, -10)
+                context.line_to(graph_x, graph_height * data[i]["factor"] * 0.9)
                 
-            context.line_to(graph_x + (step * i), graph_height * data[i][2] * 0.9)
+            context.line_to(graph_x + (step * i) + (step * 0.5), graph_height * data[i]["factor"] * 0.9)
 
-            if i == records -1:
-                context.line_to(graph_x  + (step * i),  -10)
-                context.line_to(graph_x, -10)
+            if i == records - 1:
+                context.line_to(graph_x  + (step * i) + (step * 0.5),  0)
+                context.line_to(graph_x + graph_width, 0)
+                context.line_to(graph_x + graph_width, -10)
                 
 
 
