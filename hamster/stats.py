@@ -11,6 +11,7 @@ from hamster.charting import Chart
 
 import datetime  as dt
 import calendar
+import gobject
 
 class StatsViewer:
     def __init__(self):
@@ -40,8 +41,6 @@ class StatsViewer:
         
         self.fact_tree.set_model(self.fact_store)
         
-        self.wTree.signal_autoconnect(self)
-
         self.day_chart = Chart(max_bar_width = 40, collapse_whitespace = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_day")
@@ -60,6 +59,10 @@ class StatsViewer:
         eventBox.add(self.activity_chart);
         place.add(eventBox)
         
+        self.start_date = dt.date.today()
+        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+        self.end_date = self.start_date + dt.timedelta(6) #set to monday
+
         
         self.day_view = self.get_widget("day")
         self.week_view = self.get_widget("week")
@@ -70,11 +73,9 @@ class StatsViewer:
         
         #initiate the form in the week view
         self.week_view.set_active(True)
-        self.start_date = dt.datetime.today()
-        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
-        self.end_date = self.start_date + dt.timedelta(7) #set to monday
-
+        self.wTree.signal_autoconnect(self)
         self.do_graph()
+
 
         
     def format_duration(self, duration):
@@ -96,53 +97,55 @@ class StatsViewer:
         self.fact_store.clear()
         totals = {}
         
-        totals['by_day'] = []
         by_activity = {}
         by_category = {}
+        by_day = {}
         
         week = {"days": [], "totals": []}
         
+        facts = storage.get_facts(self.start_date, self.end_date)
+        
+        for i in range((self.end_date - self.start_date).days  + 1):
+            day_row = self.fact_store.append(None, [(self.start_date + dt.timedelta(i)).strftime('%A, %b %d.'), ""])
+            by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
+        
+        for fact in facts:
+            start_date = fact["start_time"].date()
+            
+            if fact["end_time"]: # not set if just started
+                delta = fact["end_time"] - fact["start_time"]
+                duration = 24 * delta.days + delta.seconds / 60
+
+                self.fact_store.append(by_day[start_date]["row_pointer"], [fact["name"], self.format_duration(duration)])
+                
+                if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
+                if fact["category"] not in by_category: by_category[fact["category"]] = 0
+
+                by_day[start_date]["duration"] += duration
+                by_activity[fact["name"]] += duration
+                by_category[fact["category"]] += duration
+            
         #TODO make more readable
         days = 7 if self.week_view.get_active() else 30
-        
-        for i in range((self.end_date - self.start_date).days):
-            current_date = self.start_date + dt.timedelta(i)
-            strdate = current_date.strftime('%A, %b %d.')
-            facts = storage.get_facts(current_date)
+
+
+        date_sort = lambda a, b: (b[2] < a[2]) - (a[2] < b[2])
+        totals["by_day"] = []
+        for day in by_day:
+            strday = day.strftime('%a') if (self.end_date - self.start_date).days < 20 else day.strftime('%d. %b')
+            totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, day])
+        totals["by_day"].sort(date_sort)
             
-            day_row = self.fact_store.append(None, [strdate, ""])
-            day_total = 0
-
-            for fact in facts:
-                if fact["end_time"]: # not set if just started
-                    delta = fact["end_time"] - fact["start_time"]
-                    duration = 24 * delta.days + delta.seconds / 60
-
-                    self.fact_store.append(day_row, [fact["name"], self.format_duration(duration)])
-                    
-                    if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
-                    if fact["category"] not in by_category: by_category[fact["category"]] = 0
-
-                    by_activity[fact["name"]] += duration
-                    by_category[fact["category"]] += duration
-                    day_total += duration
-
-            strday = current_date.strftime('%a') if days < 20 else current_date.strftime('%d. %b')
-
-            totals['by_day'].append([strday, day_total / 60.0])
-        
-        totals["by_category"] = []
-        for category in by_category:
-            totals["by_category"].append([category, by_category[category] / 60.0])
-            
+        duration_sort = lambda a, b: int(b[1] - a[1])
         totals["by_activity"] = []
         for activity in by_activity:
             totals["by_activity"].append([activity, by_activity[activity] / 60.0])
-            
-        duration_sort = lambda a, b: int(b[1] - a[1])
-        
-        totals["by_category"].sort(duration_sort)
         totals["by_activity"].sort(duration_sort)
+            
+        totals["by_category"] = []
+        for category in by_category:
+            totals["by_category"].append([category, by_category[category] / 60.0])
+        totals["by_category"].sort(duration_sort)
         
 
         self.fact_tree.expand_all()
@@ -219,13 +222,13 @@ class StatsViewer:
         self.do_graph()
     
     def on_home_clicked(self, button):
-        self.start_date = dt.datetime.today()
+        self.start_date = dt.date.today()
         if self.day_view.get_active():
-            self.end_date = self.start_date + dt.timedelta(1)
+            self.end_date = self.start_date
         
         elif self.week_view.get_active():
             self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
-            self.end_date = self.start_date + dt.timedelta(7) #set to monday
+            self.end_date = self.start_date + dt.timedelta(6)
         
         elif self.month_view.get_active():
             self.start_date = self.start_date - dt.timedelta(self.start_date.day - 1) #set to beginning of month
@@ -235,12 +238,12 @@ class StatsViewer:
         self.do_graph()
         
     def on_day_toggled(self, button):
-        self.end_date = self.start_date + dt.timedelta(1)
+        self.end_date = self.start_date
         self.do_graph()
 
     def on_week_toggled(self, button):
         self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
-        self.end_date = self.start_date + dt.timedelta(7) #set to monday
+        self.end_date = self.start_date + dt.timedelta(6)
         self.do_graph()
 
         
