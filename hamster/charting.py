@@ -121,7 +121,7 @@ class Chart(gtk.DrawingArea):
         if self.orient_vertical:
             # for simple bars figure, when there is way too much data for bars
             # and go to lines (yay!)
-            if (event.area.width / len(self.data)) > 30: #this is big enough
+            if len(self.data) == 0 or (event.area.width / len(self.data)) > 30: #this is big enough
                 self._bar_chart(context)
             else:
                 self._area_chart(context)
