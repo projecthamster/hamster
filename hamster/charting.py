@@ -2,12 +2,12 @@
 horizontal bar charts. This library is not intended for scientific graphs.
 More like some visual clues to the user.
 
-Currently chart understands only list of two member lists, in label, value
+Currently chart understands only list of four member lists, in label, value
 fashion. Like:
     data = [
-        ["Label1", value1],
-        ["Label2", value2],
-        ["Label3", value3],
+        ["Label1", value1, color(optional), background(optional)],
+        ["Label2", value2 color(optional), background(optional)],
+        ["Label3", value3 color(optional), background(optional)],
     ]
 
 Author: toms.baugis@gmail.com
