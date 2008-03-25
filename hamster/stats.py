@@ -41,19 +41,26 @@ class StatsViewer:
         
         self.fact_tree.set_model(self.fact_store)
         
-        self.day_chart = Chart(max_bar_width = 40, collapse_whitespace = True)
+        self.day_chart = Chart(max_bar_width = 40,
+                               collapse_whitespace = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_day")
         eventBox.add(self.day_chart);
         place.add(eventBox)
         
-        self.category_chart = Chart(orient = "horizontal", max_bar_width = 30, animate=False)
+        self.category_chart = Chart(orient = "horizontal",
+                                    max_bar_width = 30,
+                                    animate=False,
+                                    values_on_bars = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_category")
         eventBox.add(self.category_chart);
         place.add(eventBox)
         
-        self.activity_chart = Chart(orient = "horizontal", max_bar_width = 20, animate=False)
+        self.activity_chart = Chart(orient = "horizontal",
+                                    max_bar_width = 20,
+                                    animate = False,
+                                    values_on_bars = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_activity")
         eventBox.add(self.activity_chart);
@@ -116,7 +123,10 @@ class StatsViewer:
                 delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
 
-                self.fact_store.append(by_day[start_date]["row_pointer"], [fact["name"], self.format_duration(duration)])
+                self.fact_store.append(by_day[start_date]["row_pointer"],
+                                       [fact["start_time"].strftime('%H:%M') + " " +
+                                        fact["name"],
+                                        self.format_duration(duration)])
                 
                 if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
                 if fact["category"] not in by_category: by_category[fact["category"]] = 0
