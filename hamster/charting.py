@@ -67,6 +67,8 @@ class Chart(gtk.DrawingArea):
                                          Defaults to vertical
         max_bar_width = pixels - Maximal width of bar. If not specified,
                                  bars will stretch to fill whole area
+        values_on_bars = [True|False] - Should bar values displayed on each bar.
+                                        Defaults to False
         collapse_whitespace = [True|False] - If max_bar_width is set, should
                                              we still fill the graph area with
                                              the white stuff and grids and such.
@@ -98,9 +100,12 @@ class Chart(gtk.DrawingArea):
         
         self.max_bar_width = None
         if "max_bar_width" in args: self.max_bar_width = args["max_bar_width"]        
+
+        self.values_on_bars = "values_on_bars" in args and args["values_on_bars"] #defaults to false
+
         self.collapse_whitespace = "collapse_whitespace" in args and args["collapse_whitespace"] #defaults to false
         
-        self.stretch_grid = "stretch_grid" in args and args["stretch_grid"] == True #defaults to false
+        self.stretch_grid = "stretch_grid" in args and args["stretch_grid"] #defaults to false
 
         self.animate = "animate" not in args or args["animate"] # defaults to true
         
@@ -218,16 +223,30 @@ class Chart(gtk.DrawingArea):
             
             # here we do the magic - go from prev to new
             # we are fiddling with the calculated sizes instead of raw data - that's much safer
+            bars_below_lim = 0
+            
             for i in range(len(self.data)):
                 diff_in_factors = self.prev_data[i]["factor"] - self.new_data[i]["factor"]
-                self.data[i]["factor"] = self.prev_data[i]["factor"] - (diff_in_factors * pi_factor)
+                diff_in_values = self.prev_data[i]["value"] - self.new_data[i]["value"]
                 
-            self._invalidate()
-            
+                if abs(diff_in_factors * pi_factor) < 0.001:
+                    bars_below_lim += 1
+                
+                
+                self.data[i]["factor"] = self.prev_data[i]["factor"] - (diff_in_factors * pi_factor)
+                self.data[i]["value"] = self.prev_data[i]["value"] - (diff_in_values * pi_factor)
+                
+            if bars_below_lim == len(self.data): #all bars done - stop animation!
+                self.current_frame = self.animation_frames
+                
+
         if self.current_frame < self.animation_frames:
+            self._invalidate()
             return True
         else:
+            self.data = copy.copy(self.new_data)
             self.prev_data = copy.copy(self.new_data)
+            self._invalidate()
             return False
 
     def _invalidate(self):
@@ -341,7 +360,9 @@ class Chart(gtk.DrawingArea):
         # labels
         set_color(context, dark[8]);
         for i in range(records):
-            context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
+            extent = context.text_extents(data[i]["label"]) #x, y, width, height
+            context.move_to(graph_x + (step * i) + (step - extent[2]) / 2.0,
+                            graph_y + graph_height + 13)
             context.show_text(data[i]["label"])
 
         # values for max min and average
@@ -355,10 +376,15 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
+            bar_size = graph_height * data[i]["factor"]
+
+            #on animations we keep labels on top, so we need some extra space there
+            bar_size = bar_size * 0.8 if self.values_on_bars and self.animate else bar_size * 0.9
+                
             context.rectangle(graph_x + (step * i) + (step * 0.1),
                               0,
                               step * 0.8,
-                              (graph_height * data[i]["factor"]) * 0.9)
+                              bar_size)
 
             color = data[i]["color"] or 1
             if self.cycle_colors:
@@ -371,6 +397,33 @@ class Chart(gtk.DrawingArea):
             context.fill_preserve()    
             set_color(context, dark[color]);
             context.stroke()
+
+        #values
+        #flip the matrix back, so text doesn't come upside down
+        context.transform(cairo.Matrix(yy = -1, y0 = 0))
+        set_color(context, dark[8])        
+        if self.values_on_bars:
+            for i in range(records):
+                label = "%.1f" % data[i]["value"] if self.there_are_floats else "%d" % data[i]["value"]
+                extent = context.text_extents(label) #x, y, width, height
+                
+                bar_size = graph_height * data[i]["factor"]
+                
+                bar_size = bar_size * 0.8 if self.animate else bar_size * 0.9
+                    
+                vertical_offset = (step - extent[2]) / 2.0
+                
+                if self.animate or bar_size - vertical_offset < extent[3]:
+                    graph_y = -bar_size - 3
+                else:
+                    graph_y = -bar_size + extent[3] + vertical_offset
+                
+                context.move_to(graph_x + (step * i) + (step - extent[2]) / 2.0,
+                                graph_y)
+                context.show_text(label)
+
+
+
         
     def _horizontal_bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height
@@ -466,11 +519,29 @@ class Chart(gtk.DrawingArea):
             context.stroke()
         
 
-        # values for max min and average
-        set_color(context, dark[8])
-        context.move_to(graph_x + graph_width + 10, graph_y + 10)
-        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
-        context.show_text(max_label)
+        #values
+        set_color(context, dark[8])        
+        if self.values_on_bars:
+            for i in range(records):
+                label = "%.1f" % data[i]["value"] if self.there_are_floats else "%d" % data[i]["value"]
+                extent = context.text_extents(label) #x, y, width, height
+                
+                bar_size = max_size * data[i]["factor"]
+                horizontal_offset = (step + extent[3]) / 2.0 - extent[3]
+                
+                if  bar_size - horizontal_offset < extent[2]:
+                    label_x = graph_x + bar_size + horizontal_offset
+                else:
+                    label_x = graph_x + bar_size - extent[2] - horizontal_offset
+                
+                context.move_to(label_x, graph_y + (step * i) + (step + extent[3]) / 2.0)
+                context.show_text(label)
+
+        else:
+            # values for max min and average
+            context.move_to(graph_x + graph_width + 10, graph_y + 10)
+            max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+            context.show_text(max_label)
         
         
     def _area_chart(self, context):
