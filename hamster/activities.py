@@ -196,6 +196,7 @@ class ActivitiesEditor:
             iter = model.get_iter(path)
             
             storage.change_category(int(data), model[iter][0])
+            dispatcher.dispatch('activity_updated', ())
             
             context.finish(True, True, etime)
         else:
@@ -228,6 +229,7 @@ class ActivitiesEditor:
             tree_row[0] = storage.insert_activity(name, category_id)
         else:
             storage.update_activity(id, name, category_id)
+        dispatcher.dispatch('activity_updated', ())
 
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
@@ -240,6 +242,7 @@ class ActivitiesEditor:
             model[path][0] = id
         elif id > -1:  #ignore unsorted category (id = -1)
             storage.update_category(id, name)
+        dispatcher.dispatch('activity_updated', ())
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
@@ -329,6 +332,7 @@ class ActivitiesEditor:
     def on_remove_category_clicked(self, button):
         removable_id = self._del_selected_row(self.category_tree)
         storage.remove_category(removable_id)
+        dispatcher.dispatch('activity_updated', ())
         
         
 
@@ -348,6 +352,7 @@ class ActivitiesEditor:
     def on_remove_activity_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
         storage.remove_activity(removable_id)
+        dispatcher.dispatch('activity_updated', ())
 
     def on_promote_activity_clicked(self, button):
         (model, iter) = self.selection.get_selected()
