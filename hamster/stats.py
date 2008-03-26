@@ -8,6 +8,7 @@ import gtk.glade
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 from hamster.charting import Chart
+from hamster.add_custom_fact import CustomFactController
 
 import datetime  as dt
 import calendar
@@ -18,7 +19,7 @@ class StatsViewer:
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
-        self.fact_store = gtk.TreeStore(str, str)
+        self.fact_store = gtk.TreeStore(int, str, str)
             
 
         self.fact_tree = self.get_widget("facts")
@@ -28,7 +29,7 @@ class StatsViewer:
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameColumn.pack_start(nameCell, True)
-        nameColumn.set_attributes(nameCell, text=0)
+        nameColumn.set_attributes(nameCell, text=1)
         self.fact_tree.append_column(nameColumn)
 
         durationColumn = gtk.TreeViewColumn(' ')
@@ -36,7 +37,7 @@ class StatsViewer:
         durationColumn.set_expand(False)
         durationCell = gtk.CellRendererText()
         durationColumn.pack_start(durationCell, True)
-        durationColumn.set_attributes(durationCell, text=1)
+        durationColumn.set_attributes(durationCell, text=2)
         self.fact_tree.append_column(durationColumn)
         
         self.fact_tree.set_model(self.fact_store)
@@ -80,6 +81,14 @@ class StatsViewer:
         
         #initiate the form in the week view
         self.week_view.set_active(True)
+
+
+        dispatcher.add_handler('activity_updated', self.after_activity_update)
+        dispatcher.add_handler('day_updated', self.after_fact_update)
+
+        selection = self.fact_tree.get_selection()
+        selection.connect('changed', self.on_fact_selection_changed, self.fact_store)
+
         self.wTree.signal_autoconnect(self)
         self.do_graph()
 
@@ -113,7 +122,8 @@ class StatsViewer:
         facts = storage.get_facts(self.start_date, self.end_date)
         
         for i in range((self.end_date - self.start_date).days  + 1):
-            day_row = self.fact_store.append(None, [(self.start_date + dt.timedelta(i)).strftime('%A, %b %d.'), ""])
+            day_row = self.fact_store.append(None, [-1,
+                                                    (self.start_date + dt.timedelta(i)).strftime('%A, %b %d.'), ""])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
         
         for fact in facts:
@@ -124,7 +134,8 @@ class StatsViewer:
                 duration = 24 * delta.days + delta.seconds / 60
 
                 self.fact_store.append(by_day[start_date]["row_pointer"],
-                                       [fact["start_time"].strftime('%H:%M') + " " +
+                                       [fact["id"],
+                                        fact["start_time"].strftime('%H:%M') + " " +
                                         fact["name"],
                                         self.format_duration(duration)])
                 
@@ -270,7 +281,48 @@ class StatsViewer:
 
         self.do_graph()
         
+    def on_remove_clicked(self, button):
+        self.delete_selected()
+
+    def delete_selected(self):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        next_row = model.iter_next(iter)
+
+        if next_row:
+            selection.select_iter(next_row)
+        else:
+            path = model.get_path(iter)[0] - 1
+            if path > 0:
+                selection.select_path(path)
+
+        storage.remove_fact(model[iter][0])
+        model.remove(iter)
+
+    def on_fact_selection_changed(self, selection, model):
+        """ enables and disables action buttons depending on selected item """
+        (model, iter) = selection.get_selected()
+
+        id = -1
+        if iter:
+            id = model[iter][0]
+
+        self.get_widget('remove').set_sensitive(id != -1)
+
+        return True
+        
+    def on_add_clicked(self, button):
+        #date = selected_date.strftime('%Y%m%d')
+
+        custom_fact = CustomFactController(self)
+        custom_fact.show()
+
+    def after_activity_update(self, widget, renames):
+        self.do_graph()
     
+    def after_fact_update(self, event, date):
+        self.do_graph()
     
     def show(self):
         self.window.show_all()
