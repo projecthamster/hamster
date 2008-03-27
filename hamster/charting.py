@@ -384,7 +384,7 @@ class Chart(gtk.DrawingArea):
             context.rectangle(graph_x + (step * i) + (step * 0.1),
                               0,
                               step * 0.8,
-                              bar_size)
+                              round(bar_size))
 
             color = data[i]["color"] or 1
             if self.cycle_colors:
@@ -503,7 +503,7 @@ class Chart(gtk.DrawingArea):
         for i in range(records):
             context.rectangle(graph_x,
                               graph_y + (step * i) + step * 0.1,
-                              (max_size * data[i]["factor"]),
+                              round(max_size * data[i]["factor"]),
                               step * 0.8)
 
             color = data[i]["color"] or 1
