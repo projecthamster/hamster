@@ -315,7 +315,7 @@ class StatsViewer:
     def on_add_clicked(self, button):
         #date = selected_date.strftime('%Y%m%d')
 
-        custom_fact = CustomFactController(self)
+        custom_fact = CustomFactController()
         custom_fact.show()
 
     def after_activity_update(self, widget, renames):
