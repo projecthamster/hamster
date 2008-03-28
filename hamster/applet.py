@@ -21,10 +21,11 @@ class HamsterApplet(object):
     def __init__(self, applet):
         self.applet = applet
         self.label = gtk.Label(_(u"Hamster"))
+        
+        self.prev_time = None
 
         # load window of activity switcher and todays view
         self.w_tree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
-        self.w_tree.signal_autoconnect(self)
         self.window = self.w_tree.get_widget('hamster-window')
         self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
         self.activities = gtk.ListStore(gobject.TYPE_STRING)
@@ -67,14 +68,10 @@ class HamsterApplet(object):
         self.button = gtk.ToggleButton()
         self.button.set_relief(gtk.RELIEF_NONE)
         self.button.set_border_width(0)
-        self.button.connect('toggled', self.on_toggle)
-        self.button.connect('button_press_event', self.on_button_press)
         
-        self.last_activity = None
-        self.update_label()
-        
-        self.today = None
+        self.today, self.last_activity = None, None
         self.load_today()
+        self.update_label()
 
         # add a timer so we can update duration of current task
         # a little naggy, still maybe that will remind user to change tasks
@@ -102,19 +99,26 @@ class HamsterApplet(object):
         self.applet.show_all()
         self.applet.set_background_widget(self.applet)
 
+        self.button.connect('toggled', self.on_toggle)
+        self.button.connect('button_press_event', self.on_button_press)
+        self.w_tree.signal_autoconnect(self)
+
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
         today = datetime.date.today()
-        if today != self.today:
-            self.load_today()
-        if self.last_activity:
-            # update end time
-            storage.touch_fact(self.last_activity)
+            
+        if today != self.today: #ooh, we have date change - let's finish previous task and start a new one!
+            if self.last_activity['end_time'] == None:
+                end_time = datetime.datetime.combine(self.last_activity['start_time'], datetime.time(23, 59))
+                storage.touch_fact(self.last_activity, end_time)
+                storage.add_fact(self.last_activity['name'])
+            
+        self.update_label()
         return True
 
     def update_label(self):
-        if self.last_activity:
+        if self.last_activity and self.last_activity['end_time'] == None:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'], format_duration(duration))
@@ -135,10 +139,12 @@ class HamsterApplet(object):
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
 
-        if len(day.facts) ==0:
+        if len(day.facts) == 0:
+            self.last_activity = None
             self.w_tree.get_widget("todays_scroll").hide()
             self.w_tree.get_widget("no_facts_today").show()
         else:
+            self.last_activity = day.facts[len(day.facts) - 1]
             self.w_tree.get_widget("todays_scroll").show()
             self.w_tree.get_widget("no_facts_today").hide()
    
@@ -195,8 +201,7 @@ class HamsterApplet(object):
     def on_activity_entered(self, component):
         """fires, when user writes activity by hand"""
         activity_name = component.get_text()
-        self.last_activity = storage.add_fact(activity_name)
-        self.update_label() # dispatch comes before assignment
+        storage.add_fact(activity_name)
         dispatcher.dispatch('panel_visible', False)
 
     """keyboard events"""
@@ -218,7 +223,7 @@ class HamsterApplet(object):
 
     def on_custom_fact(self, menu_item):
         dispatcher.dispatch('panel_visible', False)
-        custom_fact = CustomFactController(self)
+        custom_fact = CustomFactController()
         custom_fact.show()
 
     def on_about (self, component, verb):

@@ -102,7 +102,7 @@ class Storage(hamster.storage.Storage):
                           b.name AS name, b.id as activity_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
-                 ORDER BY a.id desc
+                 ORDER BY a.start_time desc
                     LIMIT 1
         """
         return self.fetchone(query)
@@ -115,23 +115,6 @@ class Storage(hamster.storage.Storage):
                     WHERE id = ?
         """
         self.execute(query, (end_time, id))
-
-    def __get_facts(self, date, end_date = None):
-        query = """
-                   SELECT a.id AS id,
-                          a.start_time AS start_time,
-                          a.end_time AS end_time,
-                          b.name AS name, b.id as activity_id,
-                          coalesce(c.name, "Unsorted") as category, c.id as category_id
-                     FROM facts a
-                LEFT JOIN activities b ON a.activity_id = b.id
-                LEFT JOIN categories c on b.category_id = c.id
-                    WHERE date(a.start_time) >= ? and date(a.start_time) <= ?
-                 ORDER BY a.start_time
-        """
-        end_date = end_date or date        
-
-        return self.fetchall(query, (date, end_date))
 
     def __add_fact(self, activity_name, fact_time = None):
         start_time = fact_time or datetime.datetime.now()
@@ -160,7 +143,8 @@ class Storage(hamster.storage.Storage):
                 prev_activity = None  # forget about previous as we just removed it
         
         # if we have previous activity - update end_time
-        if prev_activity: #TODO - constraint the update within one day (say, 12 hours, not more)
+        if prev_activity and (prev_activity['end_time'] == None or
+                              prev_activity['end_time'] > start_time): 
             query = """
                        UPDATE facts
                           SET end_time = ?
@@ -171,15 +155,33 @@ class Storage(hamster.storage.Storage):
         #add the new entry
         insert = """
                     INSERT INTO facts
-                                (activity_id, start_time, end_time)
-                         VALUES (?, ?, ?)
+                                (activity_id, start_time)
+                         VALUES (?, ?)
         """
-        self.execute(insert, (activity_id, start_time, start_time))
+        self.execute(insert, (activity_id, start_time))
 
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
         
         return self.__get_fact(fact_id)
+
+
+    def __get_facts(self, date, end_date = None):
+        query = """
+                   SELECT a.id AS id,
+                          a.start_time AS start_time,
+                          a.end_time AS end_time,
+                          b.name AS name, b.id as activity_id,
+                          coalesce(c.name, "Unsorted") as category, c.id as category_id
+                     FROM facts a
+                LEFT JOIN activities b ON a.activity_id = b.id
+                LEFT JOIN categories c on b.category_id = c.id
+                    WHERE date(a.start_time) >= ? and date(a.start_time) <= ?
+                 ORDER BY a.start_time
+        """
+        end_date = end_date or date        
+
+        return self.fetchall(query, (date, end_date))
 
     def __remove_fact(self, fact_id):
         query = """
