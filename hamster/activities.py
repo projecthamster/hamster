@@ -243,7 +243,7 @@ class ActivitiesEditor:
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
-        model.update(path, 'name', new_text)
+        model[path][1] = new_text
         self.update_activity(model[path])
         return True
 
