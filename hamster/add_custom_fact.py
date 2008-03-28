@@ -18,9 +18,7 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self,  parent, fact_date = None):
-        self.parent = parent
-        
+    def __init__(self,  fact_date = None):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
@@ -40,8 +38,8 @@ class CustomFactController:
         self.hours = gtk.ListStore(gobject.TYPE_STRING)
         
         for i in range(24):
-            self.hours.append([str(i) + ":" + "00" ])
-            self.hours.append([str(i) + ":" + "30" ])
+            self.hours.append(["%02d:00" % i ])
+            self.hours.append(["%02d:30" % i ])
 
         # build the menu
         self.refresh_menu()
@@ -124,7 +122,6 @@ class CustomFactController:
         end_time_mode = self.get_widget("end_time_mode").get_active()
         
         if end_time_mode == 0:  # TODO - check if our fact is the last one
-            self.parent.last_activity = new_fact
             dispatcher.dispatch("day_updated", new_fact['start_time'])  # let them know that we have new entry
             
         else: #we have end time, so let's update it
