@@ -116,8 +116,8 @@ class Storage(hamster.storage.Storage):
         """
         self.execute(query, (end_time, id))
 
-    def __add_fact(self, activity_name, fact_time = None):
-        start_time = fact_time or datetime.datetime.now()
+    def __add_fact(self, activity_name, start_time = None, end_time = None):
+        start_time = start_time or datetime.datetime.now()
         
         # try to lookup activity by it's name in db. active ones have priority
         activity_id = self.__get_activity_by_name(activity_name)
@@ -125,40 +125,70 @@ class Storage(hamster.storage.Storage):
         if not activity_id:
             activity_id = self.insert_activity(activity_name)
 
-        # avoid dupes and facts shorter than minute
-        prev_activity = self.__get_last_activity()
 
-        if prev_activity and prev_activity['start_time'].date() == start_time.date():
-            if prev_activity['id'] == activity_id:
-                return
+        # now fetch facts for the specified day and check if we have to
+        # split or change span 
+        day_facts = self.__get_facts(start_time.date())
+        for fact in day_facts:
+            # first check if maybe we are overlapping end
+            if fact['end_time'] and fact['start_time'] < start_time < fact['end_time']:
+                #set fact's end time to our start one
+                update = """
+                           UPDATE facts
+                              SET end_time = ?
+                            WHERE id = ?
+                """
+                self.execute(update, (start_time, fact["id"]))
+
+                # now check - maybe we are inside the fact. in that case
+                # we should create another task after our one
+                if end_time and end_time < fact['end_time']:
+                    self.__add_fact(fact['name'], end_time, fact['end_time'])
+
+            #now check if maybe we are overlapping start
+            if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time']:
+                #set fact's start time to our end one
+                update = """
+                           UPDATE facts
+                              SET start_time = ?
+                            WHERE id = ?
+                """
+                self.execute(update, (end_time, fact["id"]))
+
+        # lastly check if maybe we are the last task, and if that's true
+        # avoid dupes and facts shorter than a minute
+        if day_facts:
+            last_fact = day_facts[len(day_facts) - 1]
             
-            # if the time  since previous task is about minute 
-            # then we consider that user has apparently mistaken and delete
-            # the previous task
-            delta = (start_time - prev_activity['start_time'])
-        
-            if delta.days == 0 and 60 > delta.seconds > 0:
-                self.remove_fact(prev_activity['id'])
-                fact_time = prev_activity['start_time']
-                prev_activity = None  # forget about previous as we just removed it
-        
-        # if we have previous activity - update end_time
-        if prev_activity and (prev_activity['end_time'] == None or
-                              prev_activity['end_time'] > start_time): 
-            query = """
-                       UPDATE facts
-                          SET end_time = ?
-                        WHERE id = ?
+            if last_fact['end_time'] == None:
+                delta = (start_time - last_fact['start_time'])
+            
+                if 60 > delta.seconds > 0:
+                    self.__remove_fact(last_fact['id'])
+                    start_time = last_fact['start_time']
+                else:
+                    #set previous fact end time
+                    update = """
+                               UPDATE facts
+                                  SET end_time = ?
+                                WHERE id = ?
+                    """
+                    self.execute(update, (start_time, fact["id"]))
+
+
+        # finally add the new entry
+        if not end_time:
+            insert = """
+                        INSERT INTO facts (activity_id, start_time)
+                                   VALUES (?, ?)
             """
-            self.execute(query, (start_time, prev_activity["id"]))
-    
-        #add the new entry
-        insert = """
-                    INSERT INTO facts
-                                (activity_id, start_time)
-                         VALUES (?, ?)
-        """
-        self.execute(insert, (activity_id, start_time))
+            self.execute(insert, (activity_id, start_time))
+        else:
+            insert = """
+                        INSERT INTO facts (activity_id, start_time, end_time)
+                                   VALUES (?, ?, ?)
+            """
+            self.execute(insert, (activity_id, start_time, end_time))
 
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']

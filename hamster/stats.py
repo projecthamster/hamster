@@ -19,7 +19,7 @@ class StatsViewer:
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
-        self.fact_store = gtk.TreeStore(int, str, str)
+        self.fact_store = gtk.TreeStore(int, str, str, str) #id, caption, duration, date (invisible)
             
 
         self.fact_tree = self.get_widget("facts")
@@ -95,6 +95,9 @@ class StatsViewer:
 
         
     def format_duration(self, duration):
+        if duration == None:
+            return None
+        
         hours = duration / 60
         days = hours / 24
         hours %= 24
@@ -122,26 +125,33 @@ class StatsViewer:
         facts = storage.get_facts(self.start_date, self.end_date)
         
         for i in range((self.end_date - self.start_date).days  + 1):
+            current_date = self.start_date + dt.timedelta(i)
             day_row = self.fact_store.append(None, [-1,
-                                                    (self.start_date + dt.timedelta(i)).strftime('%A, %b %d.'), ""])
+                                                    current_date.strftime('%A, %b %d.'),
+                                                    "",
+                                                    current_date.strftime('%Y-%m-%d')])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
         
         for fact in facts:
             start_date = fact["start_time"].date()
             
+            duration = None
             if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
 
-                self.fact_store.append(by_day[start_date]["row_pointer"],
-                                       [fact["id"],
-                                        fact["start_time"].strftime('%H:%M') + " " +
-                                        fact["name"],
-                                        self.format_duration(duration)])
-                
-                if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
-                if fact["category"] not in by_category: by_category[fact["category"]] = 0
+            self.fact_store.append(by_day[start_date]["row_pointer"],
+                                   [fact["id"],
+                                    fact["start_time"].strftime('%H:%M') + " " +
+                                    fact["name"],
+                                    self.format_duration(duration),
+                                    fact["start_time"].strftime('%Y-%m-%d')
+                                    ])
+            
+            if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
+            if fact["category"] not in by_category: by_category[fact["category"]] = 0
 
+            if duration:
                 by_day[start_date]["duration"] += duration
                 by_activity[fact["name"]] += duration
                 by_category[fact["category"]] += duration
@@ -288,6 +298,9 @@ class StatsViewer:
         selection = self.fact_tree.get_selection()
         (model, iter) = selection.get_selected()
 
+        if model[iter][0] == -1:
+            return #not a fact
+
         next_row = model.iter_next(iter)
 
         if next_row:
@@ -298,8 +311,12 @@ class StatsViewer:
                 selection.select_path(path)
 
         storage.remove_fact(model[iter][0])
-        model.remove(iter)
 
+    """keyboard events"""
+    def on_key_pressed(self, tree, event_key):
+      if (event_key.keyval == gtk.keysyms.Delete):
+        self.delete_selected()
+    
     def on_fact_selection_changed(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
@@ -314,8 +331,15 @@ class StatsViewer:
         
     def on_add_clicked(self, button):
         #date = selected_date.strftime('%Y%m%d')
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+        
+        selected_date = model[iter][3].split("-")
+        selected_date = dt.date(int(selected_date[0]),
+                                int(selected_date[1]),
+                                int(selected_date[2]))
 
-        custom_fact = CustomFactController()
+        custom_fact = CustomFactController(selected_date)
         custom_fact.show()
 
     def after_activity_update(self, widget, renames):

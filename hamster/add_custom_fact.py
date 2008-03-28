@@ -50,8 +50,8 @@ class CustomFactController:
         self.get_widget('start_time').set_text(time.strftime("%H:%M"))
         
         self.get_widget('end_time_combo').set_model(self.hours)        
-        #if fact_date:
-        #    self.get_widget('activity_time').set_time(time.mktime(fact_date.timetuple()))
+        if fact_date:
+            self.get_widget('start_date').set_time(time.mktime(fact_date.timetuple()))
 
 
         self.wTree.signal_autoconnect(self)
@@ -97,7 +97,6 @@ class CustomFactController:
 
         if selected == 1:
             # selected to enter end date and time
-            self.get_widget("end_date").set_time(self.get_widget('start_date').get_time())
             self.get_widget("end_time").set_text(self.get_widget('start_time').get_text())
             self.get_widget("fact_end_until").show()
         
@@ -107,7 +106,7 @@ class CustomFactController:
 
     def _get_secs(self, prefix):
         # adds symbolic time to date in seconds
-        a_date = self.get_widget(prefix + '_date').get_time()
+        a_date = self.get_widget('start_date').get_time()
         a_time = self.get_widget(prefix + '_time').get_text()
         return a_date + int(a_time[:2]) * 3600 + int(a_time[3:5]) * 60
         
@@ -116,15 +115,10 @@ class CustomFactController:
         activity = self.get_widget("activity-list").get_child().get_text()
         start_time = datetime.datetime.fromtimestamp(self._get_secs("start"))
 
-        new_fact = storage.add_fact(activity, start_time)
-        
-
+        end_time = None
         end_time_mode = self.get_widget("end_time_mode").get_active()
         
-        if end_time_mode == 0:  # TODO - check if our fact is the last one
-            dispatcher.dispatch("day_updated", new_fact['start_time'])  # let them know that we have new entry
-            
-        else: #we have end time, so let's update it
+        if end_time_mode != 0: #we have end time, so let's update it
             if end_time_mode == 1: # specified end  time
                 print "setting specified end time"
                 end_time = datetime.datetime.fromtimestamp(self._get_secs("end"))
@@ -140,7 +134,7 @@ class CustomFactController:
                 
             print end_time
 
-            storage.touch_fact(new_fact, end_time)
+        storage.add_fact(activity, start_time, end_time)
         
         
         self.window.destroy()

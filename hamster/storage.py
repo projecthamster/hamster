@@ -14,8 +14,8 @@ class Storage(object):
     def get_fact(self, id):
         return self.__get_fact(id)
 
-    def add_fact(self, activity_name, fact_time = None):
-        result = self.__add_fact(activity_name, fact_time)
+    def add_fact(self, activity_name, start_time = None,  end_time = None):
+        result = self.__add_fact(activity_name, start_time, end_time)
         if result:
             self.dispatch('day_updated', result['start_time'])
         return result
