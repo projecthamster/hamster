@@ -16,6 +16,9 @@ import datetime as dt
 GLADE_FILE = "overview.glade"
 
 def format_duration(duration):
+    if duration == None:
+        return None
+    
     hours = duration / 60
     days = hours / 24
     hours %= 24
@@ -47,7 +50,7 @@ class DayStore(object):
         self.totals = {}
         
         for fact in self.facts:
-            duration = 0
+            duration = None
             
             if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
@@ -58,7 +61,8 @@ class DayStore(object):
             if fact_name not in self.totals:
                 self.totals[fact_name] = 0
 
-            self.totals[fact_name] += duration
+            if duration:
+                self.totals[fact_name] += duration
 
             current_duration = format_duration(duration)
 
