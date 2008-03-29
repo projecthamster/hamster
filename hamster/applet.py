@@ -201,6 +201,10 @@ class HamsterApplet(object):
     def on_activity_entered(self, component):
         """fires, when user writes activity by hand"""
         activity_name = component.get_text()
+        
+        if activity_name == "":
+            return
+        
         storage.add_fact(activity_name)
         dispatcher.dispatch('panel_visible', False)
 
