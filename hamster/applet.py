@@ -110,8 +110,8 @@ class HamsterApplet(object):
             
         if today != self.today: #ooh, we have date change - let's finish previous task and start a new one!
             if self.last_activity['end_time'] == None:
-                end_time = datetime.datetime.combine(self.last_activity['start_time'], datetime.time(23, 59))
-                storage.touch_fact(self.last_activity, end_time)
+                end_time = datetime.datetime.combine(self.last_activity['start_time'].date(), datetime.time(23, 59))
+                storage.touch_fact(self.last_activity)
                 storage.add_fact(self.last_activity['name'])
             
         self.update_label()
