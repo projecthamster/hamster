@@ -1,42 +1,56 @@
 SUBDIRS = art
 
-if GCONF_SCHEMAS_INSTALL
-install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
-	$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
-endif
-
+# ******************************************************************************
+# Panel applet bonobo stuff
+# ******************************************************************************
 serverdir = $(libdir)/bonobo/servers
+server_in_files = Hamster_Applet.server.in
+server_DATA = $(server_in_files:.server.in=.server)
 
-server_DATA = Hamster_Applet.server
+# ******************************************************************************
+# GConf Schemas
+# ******************************************************************************
+# GConf Preference Schemas
+schemadir = $(GCONF_SCHEMA_FILE_DIR)
+schema_in_files = hamster-applet.schemas.in
+schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 
-hamsterbindir = $(libdir)/hamster-applet
-
-schemadir       = $(GCONF_SCHEMA_FILE_DIR)
-schema_in_files = Hamster_Applet.schemas
-schema_DATA = Hamster_Applet.schemas
-
-$(server_DATA): $(server_DATA:.server=.server.in)
-	sed -e "s|\@LIBEXECDIR\@|$(hamsterbindir)|" $< > $@
-
+# ******************************************************************************
+# Misc data
+# ******************************************************************************
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
+	Hamster_Applet.xml \
 	activities.glade \
 	stats.glade \
 	add_custom_fact.glade \
     menu.glade \
-	Hamster_Applet.xml \
 	hamster.db
 
+hamsterbindir = $(libdir)/hamster-applet
+
+# ******************************************************************************
+# Build rules
+# ******************************************************************************
+@INTLTOOL_SERVER_RULE@
+@INTLTOOL_SCHEMAS_RULE@
+
+$(server_in_files): $(server_in_files:.server.in=.server.in.in)
+	sed -e "s|\@LIBEXECDIR\@|$(hamsterbindir)|" $< > $@
+
+if GCONF_SCHEMAS_INSTALL
+install-data-local: install-schemas
+install-schemas:
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
+		$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
+endif
 
 DISTCLEANFILES = \
-	$(schema_DATA)		\
-	$(server_in_files) \
-	$(server_DATA)
+	$(schema_DATA) \
+	$(server_DATA) \
+	$(server_in_files)
 
 EXTRA_DIST = \
+	$(schema_in_files) \
 	Hamster_Applet.server.in \
-	$(resources_DATA) \
-	$(schema_in_files)
-	
-	
+	$(resources_DATA)
