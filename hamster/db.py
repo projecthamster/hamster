@@ -27,9 +27,9 @@ class Storage(hamster.storage.Storage):
         self.execute(statement, (category_id, max_order, id))
     
     def __insert_category(self, name):
-        new_rec = self.fetchone("select max(id) +1 , max(category_order) + 1  from categories")
-        id, order = 0, 0
-        if new_rec: # handle case when we have no activities at all
+        new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")
+        id, order = 1, 1
+        if new_rec[0] and new_rec[1]: # handle case when we have no categories at all
             id, order = new_rec[0], new_rec[1]
 
         query = """
@@ -123,7 +123,7 @@ class Storage(hamster.storage.Storage):
         activity_id = self.__get_activity_by_name(activity_name)
 
         if not activity_id:
-            activity_id = self.insert_activity(activity_name)
+            activity_id = self.__insert_activity(activity_name)
 
 
         # now fetch facts for the specified day and check if we have to
@@ -202,7 +202,7 @@ class Storage(hamster.storage.Storage):
                           a.start_time AS start_time,
                           a.end_time AS end_time,
                           b.name AS name, b.id as activity_id,
-                          coalesce(c.name, "Unsorted") as category, c.id as category_id
+                          coalesce(c.name, ?) as category, c.id as category_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c on b.category_id = c.id
@@ -211,7 +211,7 @@ class Storage(hamster.storage.Storage):
         """
         end_date = end_date or date        
 
-        return self.fetchall(query, (date, end_date))
+        return self.fetchall(query, (_("Unsorted"), date, end_date))
 
     def __remove_fact(self, fact_id):
         query = """
@@ -296,7 +296,7 @@ class Storage(hamster.storage.Storage):
     def __insert_activity(self, name, category_id = -1):
         new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
         new_id, new_order = 0, 0
-        if new_rec: # handle case when we have no activities at all
+        if new_rec[0] and new_rec[1]: # handle case when we have no activities at all
             new_id, new_order = new_rec[0], new_rec[1]
 
         query = """
@@ -359,6 +359,18 @@ class Storage(hamster.storage.Storage):
         cur.close()
 
     def run_fixtures(self):
+        # defaults
+        work_category = {"name": _("Work"),
+                         "entries": [_("Reading news"),
+                                     _("Checking stocks"),
+                                     _("Super secret project X"),
+                                     _("World domination")]}
+        
+        nonwork_category = {"name": _("Day to day"),
+                            "entries": [_("Lunch"),
+                                        _("Watering flowers"),
+                                        _("Doing handstands")]}
+        
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
 
@@ -453,8 +465,8 @@ class Storage(hamster.storage.Storage):
             self.execute("""
                                INSERT INTO categories
                                            (id, name, category_order)
-                                    VALUES (1, "Day to day activities", 2);
-               """)
+                                    VALUES (1, ?, 2);
+               """, (nonwork_category["name"],))
 
             #check if we have to create work category - consider work everything that has been determined so, and is not deleted
             work_activities = self.fetchone("""
@@ -467,8 +479,8 @@ class Storage(hamster.storage.Storage):
                 self.execute("""
                                INSERT INTO categories
                                            (id, name, category_order)
-                                    VALUES (2, "Work", 1);
-                  """)
+                                    VALUES (2, ?, 1);
+                  """, (work_category["name"],))
             
             # now add category field to activities, before starting the move
             self.execute("""   ALTER TABLE activities
@@ -525,4 +537,22 @@ class Storage(hamster.storage.Storage):
 
         #lock down current version
         self.execute("UPDATE version SET version = 4")
+        
+        
+        """we start with an empty database and then populate with default
+           values. This way defaults can be localized!"""
+        
+        category_count = self.fetchone("select count(*) from categories")[0]
+        
+        if category_count == 0:
+            work_cat_id = self.__insert_category(_(work_category["name"]))
+            for entry in work_category["entries"]:
+                self.__insert_activity(_(entry), work_cat_id)
+        
+            nonwork_cat_id = self.__insert_category(_(nonwork_category["name"]))
+            for entry in nonwork_category["entries"]:
+                self.__insert_activity(_(entry), nonwork_cat_id)
+        
+        
+        
 

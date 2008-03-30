@@ -34,7 +34,7 @@ class CategoryStore(gtk.ListStore):
                          category['name'],
                          category['category_order']])
         
-        self.append([-1, "Unsorted", 999]) # all activities without category
+        self.append([-1, _("Unsorted"), 999]) # all activities without category
 
 
 class ActivityStore(gtk.ListStore):
