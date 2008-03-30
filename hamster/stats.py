@@ -205,9 +205,9 @@ class StatsViewer:
             end_str = self.end_date.strftime('%d, %Y')
 
         if self.day_view.get_active(): #single day is an exception
-            label_text = "Overview for %s" % (self.start_date.strftime('%B %d. %Y'))
+            label_text = _("Overview for %s") % (self.start_date.strftime('%B %d. %Y'))
         else:
-            label_text = "Overview for %s - %s" % (start_str, end_str)
+            label_text = _("Overview for %s - %s") % (start_str, end_str)
         
         label = self.get_widget("overview_label")
         label.set_text(label_text)
