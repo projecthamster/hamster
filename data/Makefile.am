@@ -22,7 +22,6 @@ $(server_DATA): $(server_DATA:.server=.server.in)
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	activities.glade \
-	overview.glade \
 	stats.glade \
 	add_custom_fact.glade \
     menu.glade \
