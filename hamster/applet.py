@@ -173,7 +173,8 @@ class HamsterApplet(object):
         for activity in categorized_activities:
             item = store.append([activity['name'], activity['id']])
             #set selected
-            if self.last_activity and activity['name'] == self.last_activity['name']:
+            if self.last_activity and activity['name'] == self.last_activity['name'] and \
+               self.last_activity['end_time'] == None:
                 self.w_tree.get_widget('current_activity').set_text(activity['name'])
 
         tasks = hamster.eds.get_eds_tasks()
