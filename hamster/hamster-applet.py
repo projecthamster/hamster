@@ -11,7 +11,6 @@ import gtk, gnomeapplet
 import getopt, sys
 from os.path import *
 import gettext, locale
-from gettext import gettext as _
 
 # Allow to use uninstalled
 def _check(path):
@@ -26,8 +25,7 @@ else:
     print "Running installed hamster, using [@PYTHONDIR@:$PYTHONPATH]"
 
 # Now the path is set, import our applet
-import hamster, hamster.applet, hamster.defs
-
+import hamster.defs
 
 # Setup i18n
 gettext.bindtextdomain('hamster-applet', abspath(join(hamster.defs.DATA_DIR, "locale")))
@@ -40,6 +38,8 @@ if hasattr(locale, 'bind_textdomain_codeset'):
     locale.bind_textdomain_codeset('hamster-applet','UTF-8')
 locale.textdomain('hamster-applet')
 
+hamster.__init_db()
+import hamster.applet
 
 def applet_factory(applet, iid):
     print 'Starting Hamster instance:', applet, iid

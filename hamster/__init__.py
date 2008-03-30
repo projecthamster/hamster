@@ -50,8 +50,16 @@ if not exists(HAMSTER_DB):
 # Init storage
 
 dispatcher = Dispatcher()
-storage = Storage(dispatcher)
+storage = None
     
 # Path to images, icons
 ART_DATA_DIR = join(SHARED_DATA_DIR, "art")
 
+
+def __init_db():
+    """work arround the problem that we need hamster before setting
+       locale info, but that triggers init of DB and thus sets strings
+       before they have been localized"""
+    global storage
+    storage = Storage(dispatcher)
+    
