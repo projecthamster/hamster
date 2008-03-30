@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sun Mar 30 00:10:28 2008 -->
+<!--Generated with glade3 3.4.0 on Sun Mar 30 16:13:27 2008 -->
 <glade-interface>
   <requires lib="gnome"/>
   <widget class="GtkWindow" id="custom_fact_window">
@@ -8,6 +8,7 @@
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Add custom fact - Hamster</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <signal name="key_press_event" handler="on_window_key_pressed"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

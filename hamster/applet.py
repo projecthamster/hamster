@@ -220,6 +220,10 @@ class HamsterApplet(object):
       if (event_key.keyval == gtk.keysyms.Delete):
         self.delete_selected()
         
+    def on_window_key_pressed(self, tree, event_key):
+      if (event_key.keyval == gtk.keysyms.Escape):
+        dispatcher.dispatch('panel_visible', False)
+        
     """button events"""
     def on_stop_tracking(self, button):
         storage.touch_fact(self.last_activity)
