@@ -104,16 +104,16 @@ class CustomFactController:
             # selected to enter duration
             self.get_widget("fact_end_for").show()
 
-    def _get_secs(self, prefix):
+    def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
-        a_date = self.get_widget('start_date').get_time()
-        a_time = self.get_widget(prefix + '_time').get_text()
-        return a_date + int(a_time[:2]) * 3600 + int(a_time[3:5]) * 60
+        a_date = datetime.datetime.fromtimestamp(self.get_widget('start_date').get_time())
+        hours, secs = self.get_widget(prefix + '_time').get_text().split(":")        
+        return datetime.datetime.combine(a_date, datetime.time(int(hours), int(secs)))
         
     
     def on_ok_clicked(self, button):
         activity = self.get_widget("activity-list").get_child().get_text()
-        start_time = datetime.datetime.fromtimestamp(self._get_secs("start"))
+        start_time = self._get_datetime("start")
 
         end_time = None
         end_time_mode = self.get_widget("end_time_mode").get_active()
@@ -121,16 +121,16 @@ class CustomFactController:
         if end_time_mode != 0: #we have end time, so let's update it
             if end_time_mode == 1: # specified end  time
                 print "setting specified end time"
-                end_time = datetime.datetime.fromtimestamp(self._get_secs("end"))
+                end_time = self._get_datetime("end")
                 
             else: #duration
                 print "setting duration"
                 # duration in seconds
-                duration = self.get_widget("duration_hours").get_value() * 3600
-                duration = duration + self.get_widget("duration_mins").get_value() * 60
-                end_time_secs = self._get_secs("start") + duration
+                duration = self.get_widget("duration_hours").get_value() * 60
+                duration = duration + self.get_widget("duration_mins").get_value()
+                end_time_secs = start_time + datetime.timedelta(minutes = duration)
 
-                end_time = datetime.datetime.fromtimestamp(end_time_secs)
+                end_time = end_time_secs
                 
             print end_time
 
