@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-30 02:00+0100\n"
+"POT-Creation-Date: 2008-03-30 15:38+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -142,6 +142,10 @@ msgstr "Projekta mājas lapa"
 msgid "translator-credits"
 msgstr "Toms Bauģis toms.baugis@gmail.com"
 
+#: ../hamster/activities.py:37 ../hamster/db.py:214
+msgid "Unsorted"
+msgstr "Nešķirotie"
+
 #: ../hamster/activities.py:77 ../hamster/stats.py:28
 msgid "Name"
 msgstr "Nosaukums"
@@ -162,6 +166,47 @@ msgstr "Jauna darbība"
 msgid "No activity"
 msgstr "Nekas nenotiek"
 
+#. defaults
+#: ../hamster/db.py:363
+msgid "Work"
+msgstr "Darbi"
+
+#: ../hamster/db.py:364
+msgid "Reading news"
+msgstr "Ziņu lasīšana"
+
+#: ../hamster/db.py:365
+msgid "Checking stocks"
+msgstr "Biržas akciju pārskats"
+
+#: ../hamster/db.py:366
+msgid "Super secret project X"
+msgstr "Super slepenais projekts X"
+
+#: ../hamster/db.py:367
+msgid "World domination"
+msgstr "Pasaules pārņemšana"
+
+#: ../hamster/db.py:369
+msgid "Day to day"
+msgstr "Ikdiena"
+
+#: ../hamster/db.py:370
+msgid "Lunch"
+msgstr "Pusdienas"
+
+#: ../hamster/db.py:371
+msgid "Watering flowers"
+msgstr "Puķu laistīšana"
+
+#: ../hamster/db.py:372
+msgid "Doing handstands"
+msgstr "Stāvēšana uz rokām"
+
+#: ../hamster/db.py:548 ../hamster/db.py:552
+msgid "name"
+msgstr "Nosaukums"
+
 #. single day is an exception
 #: ../hamster/stats.py:208
 #, python-format
@@ -172,3 +217,6 @@ msgstr "%s"
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s"
+
+#~ msgid "Nedarbi"
+#~ msgstr "Pusdienas"
