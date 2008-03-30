@@ -32,7 +32,8 @@ class Keybinder(gobject.GObject):
       if value != None and value.type == gconf.VALUE_STRING:
          self.prevbinding = self.key_combination
          self.key_combination = value.get_string()
-         self.bind()
+         if self.enable_hotkeys:
+             self.bind()
 
    def on_config_enable_hotkeys(self, value=None):
         if value:
