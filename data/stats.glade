@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Fri Mar 28 02:20:41 2008 -->
+<!--Generated with glade3 3.4.0 on Sun Mar 30 00:45:53 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -20,12 +20,7 @@
               <widget class="GtkToolButton" id="prev">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">Previous week</property>
                 <property name="stock_id">gtk-go-back</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Previous week</atkproperty>
-                  <atkproperty name="AtkObject::accessible_description" translatable="yes">Go to previous week</atkproperty>
-                </accessibility>
                 <signal name="clicked" handler="on_prev_clicked"/>
               </widget>
               <packing>
@@ -36,12 +31,8 @@
               <widget class="GtkToolButton" id="home">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">Current week</property>
+                <property name="label">Current span</property>
                 <property name="stock_id">gtk-home</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Current week</atkproperty>
-                  <atkproperty name="AtkObject::accessible_description" translatable="yes">Go to current week</atkproperty>
-                </accessibility>
                 <signal name="clicked" handler="on_home_clicked"/>
               </widget>
               <packing>
@@ -52,12 +43,7 @@
               <widget class="GtkToolButton" id="next">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">Next week</property>
                 <property name="stock_id">gtk-go-forward</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Next week</atkproperty>
-                  <atkproperty name="AtkObject::accessible_description" translatable="yes">Go to next week</atkproperty>
-                </accessibility>
                 <signal name="clicked" handler="on_next_clicked"/>
               </widget>
               <packing>
@@ -110,7 +96,7 @@
               <widget class="GtkRadioToolButton" id="day">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Day View</property>
+                <property name="label" translatable="yes">View Day</property>
                 <property name="icon_name">stock_calendar-view-day</property>
                 <signal name="toggled" handler="on_day_toggled"/>
               </widget>
@@ -122,7 +108,7 @@
               <widget class="GtkRadioToolButton" id="week">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Week View</property>
+                <property name="label" translatable="yes">View Week</property>
                 <property name="icon_name">stock_calendar-view-week</property>
                 <property name="active">True</property>
                 <signal name="toggled" handler="on_week_toggled"/>
@@ -135,7 +121,7 @@
               <widget class="GtkRadioToolButton" id="month">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Month View</property>
+                <property name="label" translatable="yes">View Month</property>
                 <property name="icon_name">stock_calendar-view-month</property>
                 <signal name="toggled" handler="on_month_toggled"/>
               </widget>
