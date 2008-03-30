@@ -20,6 +20,18 @@ if test "x$HAVE_PKGCONFIG" = "xno"; then
   AC_MSG_ERROR(you need to have pkgconfig installed !)
 fi
 
+dnl ==================
+dnl Translation & I18N
+dnl ==================
+
+ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS"`"
+AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
+GETTEXT_PACKAGE=hamster-applet
+AC_PROG_INTLTOOL([0.33])
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [The gettext package])
+AM_GLIB_GNU_GETTEXT
+
 dnl =====
 dnl GConf
 dnl =====
@@ -118,6 +130,7 @@ hamster/defs.py
 hamster/keybinder/Makefile
 data/Makefile
 data/art/Makefile
+po/Makefile.in
 ])
 
 echo

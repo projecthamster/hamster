@@ -13,12 +13,6 @@ from defs import *
 from dispatcher import Dispatcher
 
 # Init i18n
-
-locale.setlocale(locale.LC_ALL, '')
-for module in glade, gettext:
-    module.bindtextdomain('hamster-applet')
-    module.textdomain('hamster-applet')
-
 import __builtin__
 __builtin__._ = gettext.gettext
 
