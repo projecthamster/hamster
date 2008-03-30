@@ -1,62 +1,84 @@
-# -*- coding: utf-8 -*-
-# This file is part of projecthamster, and originally, i believe - tomboy
+import gtk, gobject, gconf
+import hamster, hamster.keybinder
+from hamster.Configuration import Configuration
 
+class Keybinder(gobject.GObject):
+   __gsignals__ = {
+      "activated" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_ULONG]),
+      # When the keybinding changes, passes a boolean indicating wether the keybinding is successful
+      "changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, [gobject.TYPE_BOOLEAN]),
+   }
 
-import sys
+   def __init__(self):
+      gobject.GObject.__init__(self)
+      
+      self.bound = False
+      self.prevbinding = None
+      
+      # Set and retreive global keybinding from gconf
+      self.configuration = Configuration()
+      self.enable_hotkeys = self.configuration.get_enable_hotkeys()
+      self.key_combination = self.configuration.get_show_window_hotkey()
+      if self.key_combination == None:
+         # This is for uninstalled cases, the real default is in the schema
+         self.key_combination = "<Alt>Q"
+      self.configuration.add_show_window_hotkey_change_notify(lambda x, y, z, a: self.on_config_key_combination(z.value))
+      self.configuration.add_enable_hotkeys_change_notify(lambda x, y, z, a: self.on_config_enable_hotkeys(z.value))
+      
+      if self.enable_hotkeys:
+        self.bind()
+      
+   def on_config_key_combination(self, value=None):
+      if value != None and value.type == gconf.VALUE_STRING:
+         self.prevbinding = self.key_combination
+         self.key_combination = value.get_string()
+         self.bind()
 
-import gobject
+   def on_config_enable_hotkeys(self, value=None):
+        if value:
+          value = value.get_bool()
+          
+        self.enable_hotkeys = value
 
-import hamster.keybinder
+        if value:
+            self.bind()
+        else:
+            self.prevbinding = self.key_combination
+            self.unbind()          
+   
+   def on_keyboard_shortcut(self):
+      self.emit('activated', hamster.keybinder.tomboy_keybinder_get_current_event_time())
+   
+   def get_key_combination(self):
+      return self.key_combination
+   
+   def bind(self):
+      if self.bound:
+         self.unbind()
+         
+      try:
+         print 'Binding shortcut %s to popup hamster' % self.key_combination
+         hamster.keybinder.tomboy_keybinder_bind(self.key_combination, self.on_keyboard_shortcut)
+         self.bound = True
+      except KeyError:
+         # if the requested keybinding conflicts with an existing one, a KeyError will be thrown
+         self.bound = False
+      
+      self.emit('changed', self.bound)
+               
+   def unbind(self):
+      try:
+         print 'Unnding shortcut %s to popup hamster' % self.prevbinding
+         hamster.keybinder.tomboy_keybinder_unbind(self.prevbinding)
+         self.bound = False
+      except KeyError:
+         # if the requested keybinding is not bound, a KeyError will be thrown
+         pass
 
-class KeyBinder(gobject.GObject):
-    __gproperties__ = {"show_window_hotkey": (str, "Show window hotkey",
-                       "The hotkey for showing the window", "",
-                       gobject.PARAM_READWRITE),
-                       "show_search_program_hotkey": (str, "Show search \
-                       program hotkey", "The hotkey for showing search \
-                       program", "", gobject.PARAM_READWRITE)}
+if gtk.pygtk_version < (2,8,0):
+   gobject.type_register(Keybinder)
 
-    __gsignals__ = {"activated": (gobject.SIGNAL_RUN_LAST, None,
-                                  (str, gobject.TYPE_ULONG))}
+keybinder = Keybinder()
 
-    def __init__(self, config):
-        gobject.GObject.__init__(self)
-        self.config = config
-        self.props.show_window_hotkey = config.show_window_hotkey
-        self.props.show_search_program_hotkey = config.show_search_program_hotkey
-
-    def do_get_property(self, property):
-        if property.name == "show-window-hotkey":
-            return self.show_window_hotkey
-        elif property.name == "show-search-program-hotkey":
-            return self.show_search_program_hotkey
-
-    def do_set_property(self, property, value):
-        if property.name == "show-window-hotkey":
-            self.show_window_hotkey = value
-        elif property.name == "show-search-program-hotkey":
-            self.show_search_program_hotkey = value
-        self.bind(value, property.name)
-
-    def bind(self, key, name):
-        try:
-            hamster.keybinder.tomboy_keybinder_bind(key, self.__bind_activated,
-                                                 name)
-            if self.config.debug:
-                print "Binded key \"%s\" to %s." % (key, name)
-        except KeyError, ke:
-            print >> sys.stderr, ke
-
-    def __bind_activated(self, name):
-        self.emit("activated", name,
-                  hamster.keybinder.tomboy_keybinder_get_current_event_time())
-
-    def unbind(self, key):
-        try:
-            hamster.keybinder.tomboy_keybinder_unbind(key)
-            if self.config.debug:
-                print "Unbinded key \"%s\"." % (key)
-        except KeyError, ke:
-            print >> sys.stderr, ke
-
-# vim: set sw=4 et sts=4 tw=79 fo+=l:
+def get_hamster_keybinder():
+   return keybinder

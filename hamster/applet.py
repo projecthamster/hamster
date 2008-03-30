@@ -14,6 +14,8 @@ import hamster.eds
 from hamster.overview import DayStore, format_duration
 from hamster.add_custom_fact import CustomFactController
 
+from hamster.KeyBinder import *
+
 class HamsterApplet(object):
     visible = False # global visibility toggler
     overview = None
@@ -102,6 +104,11 @@ class HamsterApplet(object):
         self.button.connect('toggled', self.on_toggle)
         self.button.connect('button_press_event', self.on_button_press)
         self.w_tree.signal_autoconnect(self)
+
+        # init hotkey
+        get_hamster_keybinder().connect('activated', self.on_key_combination_press)
+        get_hamster_keybinder().connect('changed', self.on_key_combination_changed)
+  
 
     """UI functions"""
     def refresh_hamster(self):
@@ -292,3 +299,9 @@ class HamsterApplet(object):
             a_list.child.set_text('')
         a_list.grab_focus()
 
+    def on_key_combination_press(self, widget, time):
+        self.__show_toggle(None, True)
+
+    def on_key_combination_changed(self, keybinder, success):
+        pass      
+        

@@ -1,8 +1,9 @@
-INCLUDES = $(PYTHON_INCLUDES)
+INCLUDES = $(PYTHON_INCLUDES) $(HAMSTER_CFLAGS)
 
 _keybinderdir = $(pythondir)/hamster/keybinder
 _keybinder_LTLIBRARIES = _keybinder.la
 _keybinder_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_keybinder
+_keybinder_la_LIBADD = $(HAMSTER_LIBS)
 _keybinder_la_SOURCES = \
 	_keybindermodule.c \
 	eggaccelerators.c \

@@ -11,5 +11,16 @@
                 <long>Keyboard shortcut for showing the Hamster Applet window.</long>
             </locale>
         </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/general/enable_hotkeys</key>
+            <applyto>/apps/hamster-applet/general/enable_hotkeys</applyto>
+            <owner>hamster-applet</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Enable hotkeys</short>
+                <long>Whether Hamster should listen to configured hotkey.</long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>

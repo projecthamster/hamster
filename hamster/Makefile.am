@@ -1,4 +1,4 @@
-SUBDIRS =
+SUBDIRS = keybinder
 
 hamster-applet: hamster-applet.py
 	sed -e "s|\@PYTHONDIR\@|$(pythondir)/hamster|" $< > $@
@@ -15,6 +15,8 @@ hamster_PYTHON = \
 	eds.py \
 	stats.py \
 	charting.py \
+	Configuration.py \
+	KeyBinder.py \
 	activities.py \
 	overview.py \
 	add_custom_fact.py \

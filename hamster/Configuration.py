@@ -24,10 +24,10 @@ from gettext import gettext as _
 
 import gconf
 
-DIR_HAMSTER = "/apps/projecthamster"
+DIR_HAMSTER = "/apps/hamster-applet"
 
-KEY_ENABLE_HOTKEYS              = "enable_hotkeys"
-KEY_SHOW_WINDOW_HOTKEY          = "show_window_hotkey"
+KEY_ENABLE_HOTKEYS              = "/general/enable_hotkeys"
+KEY_SHOW_WINDOW_HOTKEY          = "/general/show_window_hotkey"
 
 FUNCTION_SUFFIXES = {KEY_ENABLE_HOTKEYS:              'bool',
                      KEY_SHOW_WINDOW_HOTKEY:          'string'}
@@ -47,17 +47,15 @@ class Configuration(object):
         self.base_dir = os.path.expanduser("~/.gnome2/hamster-applet")
 
         self.client = gconf.client_get_default()
-        if self.client.dir_exists(DIR_ONTV):
-            self.client.add_dir(DIR_ONTV, gconf.CLIENT_PRELOAD_RECURSIVE)
-            self.debug = args[0] or os.getenv("ONTV_DEBUG")
+        if self.client.dir_exists(DIR_HAMSTER):
+            self.client.add_dir(DIR_HAMSTER, gconf.CLIENT_PRELOAD_RECURSIVE)
+            self.debug = True
             self.__init_option_cache()
         else:
             #ed = ErrorDialog(_("Could not find configuration directory in GConf"), _("Please make sure that ontv.schemas was correctly installed."))
             #ed.run()
             print "Could not find configuration directory in GConf"
             sys.exit(1)
-
-        self.standalone = args[1]
 
     def __init_option_cache(self):
         self.option_cache = {}
@@ -66,28 +64,34 @@ class Configuration(object):
                                              os.path.basename(key))(False)
 
     def add_notify(self, key, callback):
-        self.client.notify_add(DIR_ONTV + key, callback)
+        self.client.notify_add(DIR_HAMSTER + key, callback)
+
+    def add_show_window_hotkey_change_notify(self, callback):
+        self.add_notify(KEY_SHOW_WINDOW_HOTKEY, callback)
+
+    def add_enable_hotkeys_change_notify(self, callback):
+        self.add_notify(KEY_ENABLE_HOTKEYS, callback)
 
     def __get_option(self, option, type=None):
         if self.debug:
-            print '[GConf get]: %s%s' % (DIR_ONTV, option)
+            print '[GConf get]: %s%s' % (DIR_HAMSTER, option)
         if type:
             return getattr(self.client, 'get_' +
-                           FUNCTION_SUFFIXES[option])(DIR_ONTV + option, type)
+                           FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, type)
         else:
             return getattr(self.client, 'get_' +
-                           FUNCTION_SUFFIXES[option])(DIR_ONTV + option)
+                           FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option)
 
     def __set_option(self, option, value, type=None):
         if self.debug:
-            print '[GConf set]: %s%s=%s' % (DIR_ONTV, option, str(value))
+            print '[GConf set]: %s%s=%s' % (DIR_HAMSTER, option, str(value))
         if type:
             getattr(self.client, 'set_' +
-                    FUNCTION_SUFFIXES[option])(DIR_ONTV + option, type, value)
+                    FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, type, value)
             self.option_cache[option] = value
         else:
             getattr(self.client, 'set_' +
-                    FUNCTION_SUFFIXES[option])(DIR_ONTV + option, value)
+                    FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, value)
             self.option_cache[option] = value
 
     def get_enable_hotkeys(self, use_cache=True):

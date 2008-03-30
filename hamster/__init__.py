@@ -12,6 +12,12 @@ from db import Storage
 from defs import *
 from dispatcher import Dispatcher
 
+try:
+    # Allows to load uninstalled .la libs
+    import ltihooks
+except ImportError:
+    pass
+
 # Init i18n
 import __builtin__
 __builtin__._ = gettext.gettext

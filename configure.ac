@@ -64,8 +64,11 @@ dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
 PKG_CHECK_MODULES(HAMSTER,
+	gtk+-2.0				>= 2.6
     pygtk-2.0               >= 2.6
     pygobject-2.0           >= 2.6
+	gnome-python-2.0		>= 2.10
+
 )
 AC_SUBST(HAMSTER_CFLAGS)
 AC_SUBST(HAMSTER_LIBS)
@@ -85,6 +88,20 @@ else
   AC_MSG_RESULT([no])
   AC_MSG_ERROR([gnomeapplet Python module required to build hamster])
 fi
+
+dnl ****************************************************************************
+dnl * PyGTK Codegen and defs files
+dnl ****************************************************************************
+AC_PATH_PROG(PYGTK_CODEGEN, pygtk-codegen-2.0, no)
+if test "x$PYGTK_CODEGEN" = xno; then
+  AC_MSG_ERROR(could not find pygtk-codegen-2.0 script)
+fi
+
+AC_MSG_CHECKING(for pygtk defs)
+PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
+AC_SUBST(PYGTK_DEFSDIR)
+AC_MSG_RESULT($PYGTK_DEFSDIR)
+
 
 AC_MSG_CHECKING([for pysqlite2 module])
 if AC_RUN_LOG([DISPLAY= $PYTHON -c '

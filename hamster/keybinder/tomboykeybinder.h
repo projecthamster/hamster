@@ -10,7 +10,7 @@ typedef void (* TomboyBindkeyHandler) (char *keystring, gpointer user_data);
 
 void tomboy_keybinder_init   (void);
 
-void tomboy_keybinder_bind   (const char           *keystring,
+gboolean tomboy_keybinder_bind   (const char           *keystring,
 			      TomboyBindkeyHandler  handler,
 			      gpointer              user_data);
 
