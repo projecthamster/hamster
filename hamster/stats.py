@@ -347,6 +347,11 @@ class StatsViewer:
     
     def after_fact_update(self, event, date):
         self.do_graph()
+        
+    def on_close(self, widget, event):
+        dispatcher.del_handler('activity_updated', self.after_activity_update)
+        dispatcher.del_handler('day_updated', self.after_fact_update)
+        return False
     
     def show(self):
         self.window.show_all()
