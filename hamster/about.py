@@ -27,7 +27,8 @@ def show_about(parent):
     }
 
     about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
-                       "Patryk Zawadzki <patrys@pld-linux.org>"])
+                       "Patryk Zawadzki <patrys@pld-linux.org>",
+                       "Peteris Caune <cuu508@gmail.com>"])
 #    about.set_artists([])
 #    about.set_documenters([])
 
