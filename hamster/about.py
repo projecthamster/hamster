@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from os.path import join
-from gettext import gettext as _
 from hamster import SHARED_DATA_DIR
 from hamster.defs import VERSION
 import gtk, gnomevfs
