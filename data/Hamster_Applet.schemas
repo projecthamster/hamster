@@ -5,7 +5,7 @@
             <applyto>/apps/hamster-applet/general/show_window_hotkey</applyto>
             <owner>hamster-applet</owner>
             <type>string</type>
-            <default></default>
+            <default>&lt;Super&gt;H</default>
             <locale name="C">
                 <short>Show window</short>
                 <long>Keyboard shortcut for showing the Hamster Applet window.</long>

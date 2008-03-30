@@ -21,7 +21,7 @@ class Keybinder(gobject.GObject):
       self.key_combination = self.configuration.get_show_window_hotkey()
       if self.key_combination == None:
          # This is for uninstalled cases, the real default is in the schema
-         self.key_combination = "<Alt>Q"
+         self.key_combination = "<Super>H"
       self.configuration.add_show_window_hotkey_change_notify(lambda x, y, z, a: self.on_config_key_combination(z.value))
       self.configuration.add_enable_hotkeys_change_notify(lambda x, y, z, a: self.on_config_enable_hotkeys(z.value))
       
