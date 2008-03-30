@@ -9,5 +9,6 @@ hamster/about.py
 hamster/activities.py
 hamster/add_custom_fact.py
 hamster/applet.py
+hamster/db.py
 hamster/stats.py
 
