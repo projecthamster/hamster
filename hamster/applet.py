@@ -20,7 +20,7 @@ class HamsterApplet(object):
 
     def __init__(self, applet):
         self.applet = applet
-        self.label = gtk.Label(_(u"Hamster"))
+        self.label = gtk.Label(_("Hamster"))
         
         self.prev_time = None
 
@@ -41,7 +41,7 @@ class HamsterApplet(object):
         # init today's tree
         self.treeview = self.w_tree.get_widget('today')
         self.treeview.set_tooltip_column(1)
-        timeColumn = gtk.TreeViewColumn('Time')
+        timeColumn = gtk.TreeViewColumn("Time")
         timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         timeColumn.set_expand(False)
         timeCell = gtk.CellRendererText()
@@ -49,7 +49,7 @@ class HamsterApplet(object):
         timeColumn.set_attributes(timeCell, text=2)
         self.treeview.append_column(timeColumn)
 
-        nameColumn = gtk.TreeViewColumn('Name')
+        nameColumn = gtk.TreeViewColumn("Name")
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameCell.set_property('ellipsize', ELLIPSIZE_END)
@@ -240,16 +240,12 @@ class HamsterApplet(object):
     
     """signals"""
     def after_activity_update(self, widget, renames):
-        print "activities updated"
         self.refresh_menu()
         self.load_today()
         self.update_label()
     
     def after_fact_update(self, event, date):
-        print "fact updated"
-
         if date.date() == datetime.date.today():
-            print "Fact of today updated"
             self.load_today()
             self.update_label()
 
