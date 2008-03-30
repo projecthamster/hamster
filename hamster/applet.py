@@ -174,7 +174,7 @@ class HamsterApplet(object):
             item = store.append([activity['name'], activity['id']])
             #set selected
             if self.last_activity and activity['name'] == self.last_activity['name']:
-                activity_list.set_active_iter(item)
+                self.w_tree.get_widget('current_activity').set_text(activity['name'])
 
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
@@ -201,7 +201,7 @@ class HamsterApplet(object):
         # do stuff only if user has selected something
         # for other cases activity_edited will be triggered
         if component.get_active_iter():
-            self.on_activity_entered(component.child) # forward
+            component.child.activate() # forward
 
         return True
 
