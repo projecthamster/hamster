@@ -1,8 +1,10 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
+data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
 data/activities.glade
 data/add_custom_fact.glade
+data/hamster-applet.schemas.in
 data/menu.glade
 data/stats.glade
 hamster/about.py

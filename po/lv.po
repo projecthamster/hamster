@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-30 15:38+0100\n"
+"POT-Creation-Date: 2008-03-31 00:50+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -16,6 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
+#: ../hamster/about.py:21 ../hamster/applet.py:25
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Laika uzskaite masām!"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -74,10 +83,6 @@ msgstr "minūtēm"
 #: ../data/menu.glade.h:1
 msgid "Add custom fact"
 msgstr "Pievienot vecāku faktu"
-
-#: ../data/menu.glade.h:2 ../hamster/about.py:21 ../hamster/applet.py:23
-msgid "Hamster"
-msgstr "Hamster"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
@@ -138,7 +143,7 @@ msgstr "Projekta mājas lapa"
 #. about.set_artists([])
 #. about.set_documenters([])
 #. translators: These appear in the About dialog, usual format applies.
-#: ../hamster/about.py:35
+#: ../hamster/about.py:36
 msgid "translator-credits"
 msgstr "Toms Bauģis toms.baugis@gmail.com"
 
@@ -162,7 +167,7 @@ msgstr "Jauna kategorija"
 msgid "New activity"
 msgstr "Jauna darbība"
 
-#: ../hamster/applet.py:129
+#: ../hamster/applet.py:136
 msgid "No activity"
 msgstr "Nekas nenotiek"
 

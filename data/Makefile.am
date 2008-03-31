@@ -32,6 +32,7 @@ hamsterbindir = $(libdir)/hamster-applet
 # ******************************************************************************
 # Build rules
 # ******************************************************************************
+@INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_SCHEMAS_RULE@
 
@@ -52,5 +53,5 @@ DISTCLEANFILES = \
 
 EXTRA_DIST = \
 	$(schema_in_files) \
-	Hamster_Applet.server.in \
+	Hamster_Applet.server.in.in \
 	$(resources_DATA)
