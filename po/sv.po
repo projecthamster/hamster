@@ -1,4 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
+h# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -73,7 +73,7 @@ msgid ""
 msgstr ""
 "pågår...\n"
 "till\n"
-"för"
+"i"
 
 #: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
@@ -93,7 +93,7 @@ msgstr "Visa översikt"
 
 #: ../data/menu.glade.h:5
 msgid "Stop tracking"
-msgstr "Avsluta mätning"
+msgstr "Stanna tidtagarur"
 
 #: ../data/menu.glade.h:6
 msgid "_Activity:"
