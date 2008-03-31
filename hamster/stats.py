@@ -67,8 +67,8 @@ class StatsViewer:
         eventBox.add(self.activity_chart);
         place.add(eventBox)
         
-        self.start_date = dt.date.today()
-        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+        self.view_date = dt.date.today()
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
         self.end_date = self.start_date + dt.timedelta(6) #set to monday
 
         
@@ -239,6 +239,8 @@ class StatsViewer:
             self.end_date = self.start_date - dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
             self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
+
+        self.view_date = self.start_date
         
         self.do_graph()
 
@@ -256,37 +258,40 @@ class StatsViewer:
             first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
         
+        self.view_date = self.start_date
         self.do_graph()
     
     def on_home_clicked(self, button):
-        self.start_date = dt.date.today()
+        self.view_date = dt.date.today()
         if self.day_view.get_active():
-            self.end_date = self.start_date
+            self.start_date = self.view_date
+            self.end_date = self.view_date
         
         elif self.week_view.get_active():
-            self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+            self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
             self.end_date = self.start_date + dt.timedelta(6)
         
         elif self.month_view.get_active():
-            self.start_date = self.start_date - dt.timedelta(self.start_date.day - 1) #set to beginning of month
-            first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+            self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
+            first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
         
         self.do_graph()
         
     def on_day_toggled(self, button):
-        self.end_date = self.start_date
+        self.start_date = self.view_date
+        self.end_date = self.view_date
         self.do_graph()
 
     def on_week_toggled(self, button):
-        self.start_date = self.start_date - dt.timedelta(self.start_date.weekday()) #set to monday
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
         self.end_date = self.start_date + dt.timedelta(6)
         self.do_graph()
 
         
     def on_month_toggled(self, button):
-        self.start_date = self.start_date - dt.timedelta(self.start_date.day - 1) #set to beginning of month
-        first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+        self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
+        first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
         self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
 
         self.do_graph()
