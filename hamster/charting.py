@@ -61,8 +61,6 @@ def set_color(context, color):
     
 class Chart(gtk.DrawingArea):
     """Chart constructor. Optional arguments:
-        cycle_colors = [True|False] - should every bar get it's own color.
-                                      Defaults to False
         orient_vertical = [True|False] - Chart orientation.
                                          Defaults to vertical
         max_bar_width = pixels - Maximal width of bar. If not specified,
@@ -95,7 +93,6 @@ class Chart(gtk.DrawingArea):
         self.data, self.prev_data = None, None #start off with an empty hand
         
         """now see what we have in args!"""
-        self.cycle_colors = "cycle_colors" in args and args["cycle_colors"] # defaults to false
         self.orient_vertical = "orient" not in args or args["orient"] == "vertical" # defaults to true
         
         self.max_bar_width = None
@@ -374,34 +371,46 @@ class Chart(gtk.DrawingArea):
         #flip the matrix vertically, so we do not have to think upside-down
         context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
+        context.set_dash ([]);
+        context.set_line_width(0)
+        context.set_antialias(cairo.ANTIALIAS_NONE)
+
         # bars themselves
         for i in range(records):
             bar_size = graph_height * data[i]["factor"]
-
             #on animations we keep labels on top, so we need some extra space there
             bar_size = bar_size * 0.8 if self.values_on_bars and self.animate else bar_size * 0.9
+            bar_size = max(bar_size, 1)
+            
+            bar_x = graph_x + (step * i) + (step * 0.1)
+            bar_width = step * 0.8
+            
                 
-            context.rectangle(graph_x + (step * i) + (step * 0.1),
-                              0,
-                              step * 0.8,
-                              round(bar_size))
-
-            color = data[i]["color"] or 1
-            if self.cycle_colors:
-                if color_count < records:
-                    color = (i + 1) % color_count
-                else:
-                    color = i
-                
-            set_color(context, light[color])
+            context.rectangle(bar_x, 0, bar_width, bar_size)
+            set_color(context, dark[1])
             context.fill_preserve()    
-            set_color(context, dark[color]);
             context.stroke()
+
+            if bar_size > 2:
+                context.rectangle(bar_x + 1, 1, bar_width - 2, bar_size - 2)
+                set_color(context, light[1])
+                context.fill_preserve()    
+                context.stroke()
+
+            if bar_size > 3:
+                context.rectangle(bar_x + 2, 2, bar_width - 4, bar_size - 4)
+                set_color(context, medium[1])
+                context.fill_preserve()    
+                context.stroke()
+
+
 
         #values
         #flip the matrix back, so text doesn't come upside down
         context.transform(cairo.Matrix(yy = -1, y0 = 0))
         set_color(context, dark[8])        
+        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+
         if self.values_on_bars:
             for i in range(records):
                 label = "%.1f" % data[i]["value"] if self.there_are_floats else "%d" % data[i]["value"]
@@ -445,7 +454,7 @@ class Chart(gtk.DrawingArea):
         graph_height = graph_y - rect.x + rect.height
         
         
-        step = graph_height / float(records) if records > 0 else 30
+        step = int(graph_height / float(records)) if records > 0 else 30
         if self.max_bar_width:
             step = min(step, self.max_bar_width)
             if self.collapse_whitespace:
@@ -471,20 +480,19 @@ class Chart(gtk.DrawingArea):
         
         
         # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x - 1, rect.y, graph_width, graph_height)
+        context.rectangle(graph_x, rect.y, graph_width, graph_height)
         context.set_source_rgb(1, 1, 1)
         context.fill_preserve()
         context.stroke()
 
 
-        context.set_line_width(1)
         context.set_dash ([1, 3]);
 
         set_color(context, dark[8])
 
         # scale lines        
         grid_stride = self.default_grid_stride if self.stretch_grid == False else int(graph_width / 4)
-        for x in range(graph_x, graph_x + graph_width, grid_stride):
+        for x in range(graph_x + grid_stride, graph_x + graph_width, grid_stride):
             context.move_to(x-1, graph_y)
             context.line_to(x-1, graph_y + graph_height)
 
@@ -497,29 +505,40 @@ class Chart(gtk.DrawingArea):
 
         context.stroke()
         
+        gap = step * 0.1
         
         context.set_dash ([]);
+        context.set_line_width(0)
+        context.set_antialias(cairo.ANTIALIAS_NONE)
+
         # bars themselves
         for i in range(records):
-            context.rectangle(graph_x,
-                              graph_y + (step * i) + step * 0.1,
-                              round(max_size * data[i]["factor"]),
-                              step * 0.8)
-
             color = data[i]["color"] or 1
-            if self.cycle_colors:
-                if color_count < records:
-                    color = (i + 1) % color_count
-                else:
-                    color = i
-                
-            set_color(context, light[color])
-            context.fill_preserve()    
-            set_color(context, dark[color]);
+            bar_y = graph_y + (step * i) + gap
+            bar_size = max_size * data[i]["factor"]
+            bar_size = max(bar_size, 1)
+            bar_height = step - (gap * 2)
+
+            context.rectangle(graph_x, bar_y, bar_size, bar_height)
+            set_color(context, dark[color])
+            context.fill_preserve()
             context.stroke()
+
+            if bar_size > 2:        
+                context.rectangle(graph_x + 1, bar_y + 1, bar_size - 2, bar_height -2)
+                set_color(context, light[color])
+                context.fill_preserve()
+                context.stroke()
+
+            if bar_size > 4:
+                context.rectangle(graph_x + 2, bar_y + 2, bar_size - 4, bar_height - 4)
+                set_color(context, medium[color])
+                context.fill_preserve()
+                context.stroke()
         
 
         #values
+        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         set_color(context, dark[8])        
         if self.values_on_bars:
             for i in range(records):
