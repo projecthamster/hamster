@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sun Mar 30 16:13:09 2008 -->
+<!--Generated with glade3 3.4.0 on Mon Mar 31 15:30:05 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -99,7 +99,7 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">View Day</property>
-                <property name="icon_name">stock_calendar-view-day</property>
+                <property name="icon">art/stock_calendar-view-day.png</property>
                 <signal name="toggled" handler="on_day_toggled"/>
               </widget>
               <packing>
@@ -111,7 +111,7 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">View Week</property>
-                <property name="icon_name">stock_calendar-view-week</property>
+                <property name="icon">art/stock_calendar-view-week.png</property>
                 <property name="active">True</property>
                 <signal name="toggled" handler="on_week_toggled"/>
               </widget>
@@ -124,7 +124,7 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">View Month</property>
-                <property name="icon_name">stock_calendar-view-month</property>
+                <property name="icon">art/stock_calendar-view-month.png</property>
                 <signal name="toggled" handler="on_month_toggled"/>
               </widget>
               <packing>
