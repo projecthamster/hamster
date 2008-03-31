@@ -156,11 +156,11 @@ class Storage(hamster.storage.Storage):
                 self.execute(update, (end_time, fact["id"]))
 
         # lastly check if maybe we are the last task, and if that's true
-        # avoid dupes and facts shorter than a minute
+        # look if we maybe have to finish it or delete if it was too short
         if day_facts:
             last_fact = day_facts[len(day_facts) - 1]
             
-            if last_fact['end_time'] == None:
+            if last_fact['end_time'] == None and start_time > last_fact['start_time']:
                 delta = (start_time - last_fact['start_time'])
             
                 if 60 > delta.seconds > 0:
@@ -177,18 +177,18 @@ class Storage(hamster.storage.Storage):
 
 
         # finally add the new entry
-        if not end_time:
-            insert = """
-                        INSERT INTO facts (activity_id, start_time)
-                                   VALUES (?, ?)
-            """
-            self.execute(insert, (activity_id, start_time))
-        else:
+        if end_time:
             insert = """
                         INSERT INTO facts (activity_id, start_time, end_time)
                                    VALUES (?, ?, ?)
             """
             self.execute(insert, (activity_id, start_time, end_time))
+        else:
+            insert = """
+                        INSERT INTO facts (activity_id, start_time)
+                                   VALUES (?, ?)
+            """
+            self.execute(insert, (activity_id, start_time))
 
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
