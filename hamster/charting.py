@@ -439,7 +439,7 @@ class Chart(gtk.DrawingArea):
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
         graph_x = int(rect.x + max_extent + 10)
-        graph_width = int(rect.width + rect.x - graph_x - 40)
+        graph_width = int(rect.width + rect.x - graph_x)
 
         graph_y = rect.y
         graph_height = graph_y - rect.x + rect.height
