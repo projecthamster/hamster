@@ -382,8 +382,9 @@ class Chart(gtk.DrawingArea):
             bar_size = bar_size * 0.8 if self.values_on_bars and self.animate else bar_size * 0.9
             bar_size = max(bar_size, 1)
             
-            bar_x = graph_x + (step * i) + (step * 0.1)
-            bar_width = step * 0.8
+            gap = step * 0.05
+            bar_x = graph_x + (step * i) + gap
+            bar_width = step - (gap * 2)
             
                 
             context.rectangle(bar_x, 0, bar_width, bar_size)
@@ -505,7 +506,7 @@ class Chart(gtk.DrawingArea):
 
         context.stroke()
         
-        gap = step * 0.1
+        gap = step * 0.05
         
         context.set_dash ([]);
         context.set_line_width(0)
