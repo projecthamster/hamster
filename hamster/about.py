@@ -21,7 +21,7 @@ def show_about(parent):
         "name" : _("Hamster"),
         "version" : VERSION,
         "comments" : _("Time tracking for masses."),
-        "copyright" : "Copyright © 2007 Toms Baugis.",
+        "copyright" : "Copyright © 2007-2008 Toms Baugis and others",
         "website" : "http://projecthamster.wordpress.com/",
         "website-label" : _("Hamster Website"),
     }
@@ -29,7 +29,7 @@ def show_about(parent):
     about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
                        "Patryk Zawadzki <patrys@pld-linux.org>",
                        "Peteris Caune <cuu508@gmail.com>"])
-#    about.set_artists([])
+    about.set_artists(["Kalle Persson <kalle@nemus.se>"])
 #    about.set_documenters([])
 
 #    translators: These appear in the About dialog, usual format applies.
@@ -38,7 +38,7 @@ def show_about(parent):
     for prop, val in infos.items():
         about.set_property(prop, val)
 
-    hamster_logo = join(SHARED_DATA_DIR, 'art', 'tm.png')
+    hamster_logo = join(SHARED_DATA_DIR, 'art', 'hamster-applet.png')
         
     zupa = gtk.gdk.pixbuf_new_from_file(hamster_logo)
     about.set_logo(zupa)
