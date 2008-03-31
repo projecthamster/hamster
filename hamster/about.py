@@ -29,7 +29,7 @@ def show_about(parent):
     about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
                        "Patryk Zawadzki <patrys@pld-linux.org>",
                        "Peteris Caune <cuu508@gmail.com>"])
-    about.set_artists(["Kalle Persson <kalle@nemus.se>"])
+    about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
 #    about.set_documenters([])
 
 #    translators: These appear in the About dialog, usual format applies.
