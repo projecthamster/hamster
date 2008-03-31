@@ -40,17 +40,17 @@ import copy
 import math
 
 # Tango colors
-light = [(252, 233, 79),  (138, 226, 52),  (252, 175, 62),
-         (114, 159, 207), (173, 127, 168), (233, 185, 110),
-         (239, 41,  41),  (238, 238, 236), (136, 138, 133)]
+light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
+         (138, 226, 52), (114, 159, 207), (173, 127, 168), 
+         (239, 41,  41), (238, 238, 236), (136, 138, 133)]
 
-medium = [(237, 212, 0),   (115, 210, 22),  (245, 121, 0),
-          (52,  101, 164), (117, 80,  123), (193, 125, 17),
-          (204, 0,   0),   (211, 215, 207), (85, 87, 83)]
+medium = [(237, 212, 0),  (245, 121, 0),   (193, 125, 17),
+          (115, 210, 22), (52,  101, 164), (117, 80,  123), 
+          (204, 0,   0),  (211, 215, 207), (85, 87, 83)]
 
-dark = [(196, 160, 0), (78, 154, 6), (206, 92, 0),
-        (32, 74, 135), (92, 53, 102), (143, 89, 2),
-        (164, 0, 0), (186, 189, 182), (46, 52, 54)]
+dark = [(196, 160, 0), (206, 92, 0),    (143, 89, 2),
+        (78, 154, 6),  (32, 74, 135),   (92, 53, 102), 
+        (164, 0, 0),   (186, 189, 182), (46, 52, 54)]
 
 color_count = len(light)
 
@@ -288,6 +288,29 @@ class Chart(gtk.DrawingArea):
         
         return res, max_value
     
+
+    def _draw_bar(self, context, x, y, w, h, color):
+        """ draws a nice bar"""
+        
+        context.rectangle(x, y, w, h)
+        set_color(context, dark[color])
+        context.fill_preserve()    
+        context.stroke()
+
+        if w > 2 and h > 2:
+            context.rectangle(x + 1, y + 1, w - 2, h - 2)
+            set_color(context, light[color])
+            context.fill_preserve()    
+            context.stroke()
+
+        if w > 3 and h > 3:
+            context.rectangle(x + 2, y + 2, w - 4, h - 4)
+            set_color(context, medium[color])
+            context.fill_preserve()    
+            context.stroke()
+
+
+
     
     def _bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height        
@@ -386,23 +409,7 @@ class Chart(gtk.DrawingArea):
             bar_x = graph_x + (step * i) + gap
             bar_width = step - (gap * 2)
             
-                
-            context.rectangle(bar_x, 0, bar_width, bar_size)
-            set_color(context, dark[1])
-            context.fill_preserve()    
-            context.stroke()
-
-            if bar_size > 2:
-                context.rectangle(bar_x + 1, 1, bar_width - 2, bar_size - 2)
-                set_color(context, light[1])
-                context.fill_preserve()    
-                context.stroke()
-
-            if bar_size > 3:
-                context.rectangle(bar_x + 2, 2, bar_width - 4, bar_size - 4)
-                set_color(context, medium[1])
-                context.fill_preserve()    
-                context.stroke()
+            self._draw_bar(context, bar_x, 0, bar_width, bar_size, 3)
 
 
 
@@ -520,23 +527,8 @@ class Chart(gtk.DrawingArea):
             bar_size = max(bar_size, 1)
             bar_height = step - (gap * 2)
 
-            context.rectangle(graph_x, bar_y, bar_size, bar_height)
-            set_color(context, dark[color])
-            context.fill_preserve()
-            context.stroke()
+            self._draw_bar(context, graph_x, bar_y, bar_size, bar_height, 3)
 
-            if bar_size > 2:        
-                context.rectangle(graph_x + 1, bar_y + 1, bar_size - 2, bar_height -2)
-                set_color(context, light[color])
-                context.fill_preserve()
-                context.stroke()
-
-            if bar_size > 4:
-                context.rectangle(graph_x + 2, bar_y + 2, bar_size - 4, bar_height - 4)
-                set_color(context, medium[color])
-                context.fill_preserve()
-                context.stroke()
-        
 
         #values
         context.set_antialias(cairo.ANTIALIAS_DEFAULT)
