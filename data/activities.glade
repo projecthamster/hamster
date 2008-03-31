@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sun Mar 30 05:38:55 2008 -->
+<!--Generated with glade3 3.4.0 on Mon Mar 31 16:14:13 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="activities_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9,6 +9,7 @@
     <property name="default_width">500</property>
     <property name="default_height">400</property>
     <property name="destroy_with_parent">True</property>
+    <property name="icon">hamster-applet.png</property>
     <signal name="destroy" handler="destroy_cb"/>
     <child>
       <widget class="GtkHPaned" id="hpaned1">
