@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sun Mar 30 16:05:21 2008 -->
+<!--Generated with glade3 3.4.0 on Mon Mar 31 16:45:24 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -8,6 +8,7 @@
     <property name="title" translatable="yes">Hamster</property>
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
+    <property name="icon_name">hamster-applet</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="decorated">False</property>
