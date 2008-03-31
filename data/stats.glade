@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Mon Mar 31 15:30:05 2008 -->
+<!--Generated with glade3 3.4.0 on Mon Mar 31 16:14:57 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">Overview - Hamster</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="icon">hamster-applet.png</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
     <signal name="delete_event" handler="on_close"/>
     <child>
@@ -185,13 +186,13 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox2">
-                <property name="width_request">400</property>
+                <property name="width_request">350</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
@@ -296,7 +297,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">True</property>
+                <property name="resize">False</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
