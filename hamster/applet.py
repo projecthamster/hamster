@@ -16,32 +16,50 @@ from hamster.add_custom_fact import CustomFactController
 
 from hamster.KeyBinder import *
 
+class PanelButton(gtk.ToggleButton):
+    def __init__(self):
+        gtk.ToggleButton.__init__(self)
+        self.set_relief(gtk.RELIEF_NONE)
+        self.set_border_width(0)
+        
+        self.label = gtk.Label()
+        self.add(self.label)
+
+    def set_text(self, text):
+        self.label.set_text(text)
+
+    def get_pos(self):
+        return gtk.gdk.Window.get_origin(self.label.window)
+
+    def set_active(self, is_active):
+        self.set_property('active', is_active)
+
+
 class HamsterApplet(object):
     visible = False # global visibility toggler
     overview = None
 
     def __init__(self, applet):
         self.applet = applet
-        self.label = gtk.Label(_("Hamster"))
         
-        self.prev_time = None
-
         # load window of activity switcher and todays view
-        self.w_tree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
-        self.window = self.w_tree.get_widget('hamster-window')
-        self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
+        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
+        self.window = self.glade.get_widget('hamster-window')
+        
         self.activities = gtk.ListStore(gobject.TYPE_STRING)
-        self.completion = gtk.EntryCompletion()
-        self.completion.set_model(self.activities)
-        self.completion.set_text_column(0)
-        self.completion.set_minimum_key_length(1) 
-        activity_list = self.w_tree.get_widget('activity-list')
-        activity_list.set_model(self.items)
-        activity_list.set_text_column(0)
-        activity_list.child.set_completion(self.completion)
+        
+        completion = gtk.EntryCompletion()
+        completion.set_model(self.activities)
+        completion.set_text_column(0)
+        completion.set_minimum_key_length(1)
+        
+        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT))
+        self.activity_list.set_text_column(0)
+        self.activity_list.child.set_completion(completion)
 
         # init today's tree
-        self.treeview = self.w_tree.get_widget('today')
+        self.treeview = self.glade.get_widget('today')
         self.treeview.set_tooltip_column(1)
         timeColumn = gtk.TreeViewColumn("Time")
         timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
@@ -67,9 +85,7 @@ class HamsterApplet(object):
         durationColumn.set_attributes(durationCell, text=3)
         self.treeview.append_column(durationColumn)
         
-        self.button = gtk.ToggleButton()
-        self.button.set_relief(gtk.RELIEF_NONE)
-        self.button.set_border_width(0)
+        self.button = PanelButton()
         
         self.today, self.last_activity = None, None
         self.load_today()
@@ -83,7 +99,6 @@ class HamsterApplet(object):
         # build the menu
         self.refresh_menu()
 
-        self.button.add(self.label)
 
         self.applet.add(self.button)
 
@@ -103,7 +118,7 @@ class HamsterApplet(object):
 
         self.button.connect('toggled', self.on_toggle)
         self.button.connect('button_press_event', self.on_button_press)
-        self.w_tree.signal_autoconnect(self)
+        self.glade.signal_autoconnect(self)
 
         # init hotkey
         get_hamster_keybinder().connect('activated', self.on_key_combination_press)
@@ -130,56 +145,55 @@ class HamsterApplet(object):
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'], format_duration(duration))
             
-            self.w_tree.get_widget('current_activity').set_text(self.last_activity['name'])
-            self.w_tree.get_widget('stop_tracking').set_sensitive(1);
+            self.glade.get_widget('current_activity').set_text(self.last_activity['name'])
+            self.glade.get_widget('stop_tracking').set_sensitive(1);
         else:
             label = "%s" % _(u"No activity")
-            self.w_tree.get_widget('stop_tracking').set_sensitive(0);
-        self.label.set_text(label)
+            self.glade.get_widget('stop_tracking').set_sensitive(0);
+        self.button.set_text(label)
         
     def load_today(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        treeview = self.w_tree.get_widget('today')
+        treeview = self.glade.get_widget('today')
         self.today = datetime.date.today()
         day = DayStore(self.today);
         treeview.set_model(day.fact_store)
 
         if len(day.facts) == 0:
             self.last_activity = None
-            self.w_tree.get_widget("todays_scroll").hide()
-            self.w_tree.get_widget("no_facts_today").show()
+            self.glade.get_widget("todays_scroll").hide()
+            self.glade.get_widget("no_facts_today").show()
         else:
             self.last_activity = day.facts[len(day.facts) - 1]
-            self.w_tree.get_widget("todays_scroll").show()
-            self.w_tree.get_widget("no_facts_today").hide()
+            self.glade.get_widget("todays_scroll").show()
+            self.glade.get_widget("no_facts_today").hide()
    
 
     def refresh_menu(self):
-        all_activities = storage.get_activities()
+        #first populate the autocomplete - contains all entries
         self.activities.clear()
+        all_activities = storage.get_activities()
         for activity in all_activities:
             self.activities.append([activity['name']])
 
-        activity_list = self.w_tree.get_widget('activity-list')
-        store = activity_list.get_model()
+
+        #now populate the menu - contains only categorized entries
+        store = self.activity_list.get_model()
         store.clear()
 
         #populate fresh list from DB
         categorized_activities = storage.get_sorted_activities()
 
-        today = datetime.date.today()
         for activity in categorized_activities:
             item = store.append([activity['name'], activity['id']])
-            #set selected
-            if self.last_activity and activity['name'] == self.last_activity['name'] and \
-               self.last_activity['end_time'] == None:
-                self.w_tree.get_widget('current_activity').set_text(activity['name'])
 
+        # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
-            item = store.append([activity['name'], -1])
+            self.activities.append([activity['name'], -1])
+            store.append([activity['name'], -1])
 
         return True
 
@@ -275,7 +289,7 @@ class HamsterApplet(object):
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         
-        self.button.set_property('active', is_active)
+        self.button.set_active(is_active)
         if not is_active:
             self.window.hide()
             return
@@ -284,24 +298,22 @@ class HamsterApplet(object):
 
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
-        x, y = gtk.gdk.Window.get_origin(self.label.window)
+        
+        x, y = self.button.get_pos()
 
         self.popup_dir = self.applet.get_orient()
-
         if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
             y = y + label_geom.height;
         elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
             y = y - window_geom.height;
         
-        x = x - 6 #temporary position fix. TODO - replace label with a toggle button
-        
         self.window.move(x, y)
-        a_list = self.w_tree.get_widget('activity-list')
+
         if self.last_activity:
-            a_list.child.select_region(0, -1)
+            self.activity_list.child.select_region(0, -1)
         else:
-            a_list.child.set_text('')
-        a_list.grab_focus()
+            self.activity_list.child.set_text('')
+        self.activity_list.grab_focus()
 
     def on_key_combination_press(self, widget, time):
         self.__show_toggle(None, True)
