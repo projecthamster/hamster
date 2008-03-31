@@ -238,7 +238,6 @@ class HamsterApplet(object):
         stats_viewer.show()
 
     def on_custom_fact(self, menu_item):
-        dispatcher.dispatch('panel_visible', False)
         custom_fact = CustomFactController()
         custom_fact.show()
 

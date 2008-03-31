@@ -135,7 +135,7 @@ class CustomFactController:
             print end_time
 
         storage.add_fact(activity, start_time, end_time)
-        
+        dispatcher.dispatch('panel_visible', False)
         
         self.window.destroy()
         
