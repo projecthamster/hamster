@@ -52,7 +52,8 @@ class StatsViewer:
         self.category_chart = Chart(orient = "horizontal",
                                     max_bar_width = 30,
                                     animate=False,
-                                    values_on_bars = True)
+                                    values_on_bars = True,
+                                    stretch_grid = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_category")
         eventBox.add(self.category_chart);
@@ -61,7 +62,8 @@ class StatsViewer:
         self.activity_chart = Chart(orient = "horizontal",
                                     max_bar_width = 20,
                                     animate = False,
-                                    values_on_bars = True)
+                                    values_on_bars = True,
+                                    stretch_grid = True)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_activity")
         eventBox.add(self.activity_chart);
