@@ -5,6 +5,7 @@ pygtk.require('2.0')
 import os
 import gtk
 import gtk.glade
+import pango
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 from hamster.charting import Chart
@@ -24,10 +25,12 @@ class StatsViewer:
 
         self.fact_tree = self.get_widget("facts")
         self.fact_tree.set_headers_visible(False)
+        self.fact_tree.set_tooltip_column(1)
 
         nameColumn = gtk.TreeViewColumn(_(u'Name'))
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
+        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)
         nameColumn.set_attributes(nameCell, text=1)
         self.fact_tree.append_column(nameColumn)
