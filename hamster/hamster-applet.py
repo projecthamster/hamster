@@ -38,6 +38,11 @@ if hasattr(locale, 'bind_textdomain_codeset'):
     locale.bind_textdomain_codeset('hamster-applet','UTF-8')
 locale.textdomain('hamster-applet')
 
+# setting killall name for hamster
+import dl
+libc = dl.open('/lib/libc.so.6')
+libc.call('prctl', 15, 'hamster-applet\0', 0, 0, 0)
+
 hamster.__init_db()
 import hamster.applet
 
