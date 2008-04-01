@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Reloading applet..."
+killall hamster-applet
+echo "Thanks and enjoy!"

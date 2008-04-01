@@ -1,0 +1,31 @@
+hamster-applet (0.1.5.4) unstable; urgency=low
+
+  * Hamster now has a process name for killall, which enables us
+    to kill it on install!
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.3) unstable; urgency=low
+
+  * Fixed antialiasing problems in bar chart
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.2) unstable; urgency=low
+
+  * Minor changes and slight adjustments to Swedish translation
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.1) unstable; urgency=low
+
+  * Fixed window icons, added swedish translation (by Kalle Person)
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5) unstable; urgency=low
+
+  * Initial release
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
