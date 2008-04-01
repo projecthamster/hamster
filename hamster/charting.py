@@ -638,7 +638,7 @@ class Chart(gtk.DrawingArea):
         context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
 
-        set_color(context, dark[3]);
+        set_color(context, dark[4]);
         # chart itself
         for i in range(records):
             if i == 0:
@@ -654,12 +654,12 @@ class Chart(gtk.DrawingArea):
                 
 
 
-        set_color(context, light[3])
+        set_color(context, light[4])
         context.fill_preserve()    
 
         context.set_line_width(3)
         context.set_line_join (cairo.LINE_JOIN_ROUND);
-        set_color(context, dark[3]);
+        set_color(context, dark[4]);
         context.stroke()    
         
 
