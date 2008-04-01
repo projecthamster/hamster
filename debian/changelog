@@ -1,3 +1,10 @@
+hamster-applet (0.1.5.5) unstable; urgency=low
+
+  * Fixed pysqlite dependency
+  * Fixed area chart color
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 1 Apr 2008 15:05:26 +0100
+
 hamster-applet (0.1.5.4) unstable; urgency=low
 
   * Hamster now has a process name for killall, which enables us
