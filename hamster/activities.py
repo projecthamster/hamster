@@ -67,22 +67,23 @@ class ActivitiesEditor:
     
     
     def __init__(self):
-        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
+        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
         self.window = self.get_widget('activities_window')
+
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
+        self.get_widget("activities_label").set_mnemonic_widget(self.activity_tree)
         self.activity_store = ActivityStore()
 
-        nameColumn = gtk.TreeViewColumn(_(u'Name'))
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameCell.set_property('editable', True)
-        nameCell.connect('edited', self.activity_name_edited_cb, self.activity_store)
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_attributes(nameCell, text = 1)
-        nameColumn.set_sort_column_id(1)
-        self.activity_tree.append_column(nameColumn)
+        self.activityColumn = gtk.TreeViewColumn(_(u'Name'))
+        self.activityColumn.set_expand(True)
+        self.activityCell = gtk.CellRendererText()
+        self.activityCell.connect('edited', self.activity_name_edited_cb, self.activity_store)
+        self.activityColumn.pack_start(self.activityCell, True)
+        self.activityColumn.set_attributes(self.activityCell, text = 1)
+        self.activityColumn.set_sort_column_id(1)
+        self.activity_tree.append_column(self.activityColumn)
 
         self.activity_tree.set_model(self.activity_store)
 
@@ -92,18 +93,18 @@ class ActivitiesEditor:
 
         # create and fill category tree
         self.category_tree = self.get_widget('category_list')
+        self.get_widget("categories_label").set_mnemonic_widget(self.category_tree)
         self.category_store = CategoryStore()
 
-        nameColumn = gtk.TreeViewColumn(_(u'Category'))
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameCell.set_property('editable', True)
-        nameCell.connect('edited', self.category_edited_cb, self.category_store)
+        self.categoryColumn = gtk.TreeViewColumn(_(u'Category'))
+        self.categoryColumn.set_expand(True)
+        self.categoryCell = gtk.CellRendererText()
+        self.categoryCell.connect('edited', self.category_edited_cb, self.category_store)
 
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_attributes(nameCell, text = 1)
-        nameColumn.set_sort_column_id(1)
-        self.category_tree.append_column(nameColumn)
+        self.categoryColumn.pack_start(self.categoryCell, True)
+        self.categoryColumn.set_attributes(self.categoryCell, text = 1)
+        self.categoryColumn.set_sort_column_id(1)
+        self.category_tree.append_column(self.categoryColumn)
 
         self.category_store.load()
         self.category_tree.set_model(self.category_store)
@@ -111,7 +112,7 @@ class ActivitiesEditor:
         selection = self.category_tree.get_selection()
         selection.connect('changed', self.category_changed_cb, self.category_store)
 
-        self.wTree.signal_autoconnect(self)
+        self.glade.signal_autoconnect(self)
 
         # Allow enable drag and drop of rows including row move
         self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
@@ -119,10 +120,10 @@ class ActivitiesEditor:
                                                 gtk.gdk.ACTION_DEFAULT|
                                                 gtk.gdk.ACTION_MOVE)
         self.activity_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_DEFAULT)
+                                                  gtk.gdk.ACTION_MOVE)
 
         self.category_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_DEFAULT)
+                                                  gtk.gdk.ACTION_MOVE)
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
         self.activity_tree.connect("drag_data_received",
@@ -134,6 +135,9 @@ class ActivitiesEditor:
         #select first category
         selection = self.category_tree.get_selection()
         selection.select_path((0,))
+        
+        self.prev_selected_activity = None
+        self.prev_selected_category = None
 
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
@@ -151,7 +155,44 @@ class ActivitiesEditor:
                 self.activity_tree.set_cursor((i, ))
             i += 1
                 
-        
+    def on_activity_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
+        self.prev_selected_activity = None
+        try:
+            target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
+            model, source = treeview.get_selection().get_selected()
+
+        except:
+            return
+
+        drop_yes = ("drop_yes", gtk.TARGET_SAME_APP, 0)
+        drop_no = ("drop_no", gtk.TARGET_SAME_APP, 0)
+
+        if drop_position == gtk.TREE_VIEW_DROP_AFTER or \
+           drop_position == gtk.TREE_VIEW_DROP_BEFORE:
+            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
+        else:
+            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
+
+
+    def on_category_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
+        self.prev_selected_category = None
+        try:
+            target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
+            model, source = treeview.get_selection().get_selected()
+
+        except:
+            return
+
+        drop_yes = ("drop_yes", gtk.TARGET_SAME_APP, 0)
+        drop_no = ("drop_no", gtk.TARGET_SAME_APP, 0)
+
+        if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
+           drop_position != gtk.TREE_VIEW_DROP_BEFORE:
+            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
+        else:
+            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
+
+          
     def drag_data_received_data(self, treeview, context, x, y, selection,
                                 info, etime):
         model = treeview.get_model()
@@ -163,15 +204,12 @@ class ActivitiesEditor:
             iter = model.get_iter(path)
             if (position == gtk.TREE_VIEW_DROP_BEFORE
                 or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
-                #model.insert_before(iter, [data])
                 print "insert '%s' before '%s'" % (data, model[iter][3])
                 storage.move_activity(int(data), model[iter][3], insert_after = False)
             else:
-                #model.insert_after(iter, [data])
                 print "insert '%s' after '%s'" % (data, model[iter][3])
                 storage.move_activity(int(data), model[iter][3], insert_after = True)
         else:
-            #model.append([data])
             print "append '%s'" % data
 
         if context.action == gtk.gdk.ACTION_MOVE:
@@ -184,15 +222,15 @@ class ActivitiesEditor:
         
         return
 
-
     def on_category_drop(self, treeview, context, x, y, selection,
                                 info, etime):
         model = self.category_tree.get_model()
         data = selection.data
         drop_info = treeview.get_dest_row_at_pos(x, y)
-
+        
         if drop_info:
             path, position = drop_info
+
             iter = model.get_iter(path)
             
             storage.change_category(int(data), model[iter][0])
@@ -208,7 +246,7 @@ class ActivitiesEditor:
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.wTree.get_widget(name)
+        return self.glade.get_widget(name)
 
     def get_store(self):
         """returns store, so we can add some watchers in case if anything changes"""
@@ -258,11 +296,8 @@ class ActivitiesEditor:
             self.activity_store.load(model[iter][0])
         
         #do not allow to remove the unsorted category
-        self.get_widget('remove_category').set_sensitive(id != -1)
-
         self.get_widget('promote_activity').set_sensitive(False)
         self.get_widget('demote_activity').set_sensitive(False)
-        self.get_widget('remove_activity').set_sensitive(False)
 
         return True
 
@@ -281,8 +316,6 @@ class ActivitiesEditor:
         (model, iter) = selection.get_selected()
         
         # treat any selected case
-        self.get_widget('remove_activity').set_sensitive(iter != None)
-
         unsorted_selected = self._get_selected_category() == -1
         self.get_widget('promote_activity').set_sensitive(False)
         self.get_widget('demote_activity').set_sensitive(False)
@@ -310,12 +343,67 @@ class ActivitiesEditor:
         model.remove(iter)
         return removable_id
         
+    def on_activity_list_button_pressed(self, tree, event):
+        self.activityCell.set_property("editable", False)
+        
+
+    def on_activity_list_button_released(self, tree, event):
+        if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
+            # Get treeview path.
+            path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
+
+            if self.prev_selected_activity == path:
+                self.activityCell.set_property("editable", True)
+                tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+    
+            self.prev_selected_activity = path
+        
+    def on_category_list_button_pressed(self, tree, event):
+        self.activityCell.set_property("editable", False)
+        
+    def on_category_list_button_released(self, tree, event):
+        if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
+            # Get treeview path.
+            path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
+
+            if self.prev_selected_category == path:
+                self.categoryCell.set_property("editable", True)
+                tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+            else:
+                self.categoryCell.set_property("editable", False)
+            
+
+            self.prev_selected_category = path
+        
 
     """keyboard events"""
-    def on_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Delete):
-        self.delete_selected_activity()
-        
+    def on_activity_list_key_pressed(self, tree, event_key):
+        key = event_key.keyval
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+        if (event_key.keyval == gtk.keysyms.Delete):
+            storage.remove_activity(model[iter][0])
+            self._del_selected_row(tree)
+
+        elif key == gtk.keysyms.F2:
+            path = model.get_path(iter)[0]
+            tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+            #tree.grab_focus()
+            #tree.set_cursor(path, start_editing = True)
+
+
+    def on_category_list_key_pressed(self, tree, event_key):
+        key = event_key.keyval
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        if  key == gtk.keysyms.Delete:
+            id = model[iter][0]
+            if id != -1:
+                storage.remove_category(id)
+                self._del_selected_row(tree)
+                
+
     """button events"""
     def on_add_category_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
@@ -326,11 +414,6 @@ class ActivitiesEditor:
                                          focus_cell = None,
                                          start_editing = True)
 
-    def on_remove_category_clicked(self, button):
-        removable_id = self._del_selected_row(self.category_tree)
-        storage.remove_category(removable_id)
-        
-        
 
     def on_add_activity_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
