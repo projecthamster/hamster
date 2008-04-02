@@ -251,17 +251,19 @@ class StatsViewer:
         if self.day_view.get_active():
             self.start_date -= dt.timedelta(1)
             self.end_date -= dt.timedelta(1)
+            self.view_date -= dt.timedelta(1)
         
         elif self.week_view.get_active():
             self.start_date -= dt.timedelta(7)
             self.end_date -= dt.timedelta(7)
+            self.view_date -= dt.timedelta(7)
         
         elif self.month_view.get_active():
             self.end_date = self.start_date - dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
             self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
+            self.view_date -= dt.timedelta(days_in_month - 1)
 
-        self.view_date = self.start_date
         
         self.do_graph()
 
@@ -269,17 +271,19 @@ class StatsViewer:
         if self.day_view.get_active():
             self.start_date += dt.timedelta(1)
             self.end_date += dt.timedelta(1)
+            self.view_date += dt.timedelta(1)
         
         elif self.week_view.get_active():
             self.start_date += dt.timedelta(7)
             self.end_date += dt.timedelta(7)
+            self.view_date += dt.timedelta(7)
         
         elif self.month_view.get_active():
             self.start_date = self.end_date + dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
+            self.view_date += dt.timedelta(days_in_month - 1)
         
-        self.view_date = self.start_date
         self.do_graph()
     
     def on_home_clicked(self, button):
@@ -356,14 +360,15 @@ class StatsViewer:
         return True
         
     def on_add_clicked(self, button):
-        #date = selected_date.strftime('%Y%m%d')
         selection = self.fact_tree.get_selection()
         (model, iter) = selection.get_selected()
-        
-        selected_date = model[iter][3].split("-")
-        selected_date = dt.date(int(selected_date[0]),
-                                int(selected_date[1]),
-                                int(selected_date[2]))
+
+        selected_date = self.view_date
+        if iter:
+            selected_date = model[iter][3].split("-")
+            selected_date = dt.date(int(selected_date[0]),
+                                    int(selected_date[1]),
+                                    int(selected_date[2]))
 
         custom_fact = CustomFactController(selected_date)
         custom_fact.show()
