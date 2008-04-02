@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Mon Mar 31 16:45:24 2008 -->
+<!--Generated with glade3 3.4.0 on Wed Apr  2 22:16:55 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -71,7 +71,8 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">Stop tracking</property>
+                        <property name="label" translatable="yes">_Stop Tracking</property>
+                        <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_stop_tracking"/>
                       </widget>
@@ -166,7 +167,8 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Add custom fact</property>
+                            <property name="label" translatable="yes">Ad_d Older Fact</property>
+                            <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_custom_fact"/>
                           </widget>
@@ -177,7 +179,8 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Show overview</property>
+                            <property name="label" translatable="yes">Show _Overview</property>
+                            <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_overview"/>
                           </widget>

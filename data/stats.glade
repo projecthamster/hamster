@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Mon Mar 31 22:21:42 2008 -->
+<!--Generated with glade3 3.4.0 on Wed Apr  2 23:36:18 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -23,6 +23,7 @@
               <widget class="GtkToolButton" id="prev">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text">Older facts</property>
                 <property name="stock_id">gtk-go-back</property>
                 <signal name="clicked" handler="on_prev_clicked"/>
               </widget>
@@ -34,7 +35,9 @@
               <widget class="GtkToolButton" id="home">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label">Current span</property>
+                <property name="tooltip_text">Today</property>
+                <property name="label">Today</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-home</property>
                 <signal name="clicked" handler="on_home_clicked"/>
               </widget>
@@ -46,6 +49,7 @@
               <widget class="GtkToolButton" id="next">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text">Newer facts</property>
                 <property name="stock_id">gtk-go-forward</property>
                 <signal name="clicked" handler="on_next_clicked"/>
               </widget>
@@ -67,6 +71,7 @@
               <widget class="GtkToolButton" id="remove">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text">Delete fact</property>
                 <property name="stock_id">gtk-remove</property>
                 <signal name="clicked" handler="on_remove_clicked"/>
               </widget>
@@ -78,6 +83,7 @@
               <widget class="GtkToolButton" id="add">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text">Add fact</property>
                 <property name="stock_id">gtk-add</property>
                 <signal name="clicked" handler="on_add_clicked"/>
               </widget>
@@ -99,7 +105,9 @@
               <widget class="GtkRadioToolButton" id="day">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">View Day</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Day</property>
+                <property name="use_underline">True</property>
                 <property name="icon">art/stock_calendar-view-day.png</property>
                 <signal name="toggled" handler="on_day_toggled"/>
               </widget>
@@ -111,7 +119,9 @@
               <widget class="GtkRadioToolButton" id="week">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">View Week</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Week</property>
+                <property name="use_underline">True</property>
                 <property name="icon">art/stock_calendar-view-week.png</property>
                 <property name="active">True</property>
                 <signal name="toggled" handler="on_week_toggled"/>
@@ -124,7 +134,9 @@
               <widget class="GtkRadioToolButton" id="month">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">View Month</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Month</property>
+                <property name="use_underline">True</property>
                 <property name="icon">art/stock_calendar-view-month.png</property>
                 <signal name="toggled" handler="on_month_toggled"/>
               </widget>

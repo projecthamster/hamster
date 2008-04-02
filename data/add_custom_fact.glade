@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Mon Mar 31 16:44:28 2008 -->
+<!--Generated with glade3 3.4.0 on Wed Apr  2 22:32:16 2008 -->
 <glade-interface>
   <requires lib="gnome"/>
   <widget class="GtkWindow" id="custom_fact_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">Add custom fact - Hamster</property>
+    <property name="title" translatable="yes">Add older fact - Hamster</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
@@ -167,8 +167,9 @@ for</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="ypad">6</property>
-                <property name="label" translatable="yes">&lt;b&gt;Date and time&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Date and Time&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
+                <property name="mnemonic_widget">start_date</property>
               </widget>
               <packing>
                 <property name="type">label_item</property>
@@ -210,12 +211,13 @@ for</property>
               </widget>
             </child>
             <child>
-              <widget class="GtkLabel" id="label1">
+              <widget class="GtkLabel" id="activity_label">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="ypad">6</property>
                 <property name="label" translatable="yes">&lt;b&gt;Activity&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
+                <property name="mnemonic_widget">activity-list</property>
               </widget>
               <packing>
                 <property name="type">label_item</property>
@@ -241,7 +243,8 @@ for</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use_underline">True</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
@@ -253,7 +256,8 @@ for</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Add</property>
+                <property name="label" translatable="yes">A_dd</property>
+                <property name="use_underline">True</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
