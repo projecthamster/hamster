@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-31 00:50+0100\n"
+"POT-Creation-Date: 2008-04-02 19:02+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "2);\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
-#: ../hamster/about.py:21 ../hamster/applet.py:25
+#: ../hamster/about.py:21
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -34,17 +34,37 @@ msgstr "Apraksts"
 msgid "_Edit Activities"
 msgstr "Rediģēt Aktivitātes"
 
-#: ../data/activities.glade.h:1 ../data/add_custom_fact.glade.h:3
-msgid "Add"
-msgstr "Pievienot"
+#: ../data/activities.glade.h:1
+msgid " "
+msgstr " "
 
 #: ../data/activities.glade.h:2
 msgid "Edit Activities"
 msgstr "Rediģēt Aktivitātes"
 
 #: ../data/activities.glade.h:3
-msgid "Remove"
-msgstr "Dzēst"
+msgid "Move Down"
+msgstr "Pārvietot Lejup"
+
+#: ../data/activities.glade.h:4
+msgid "Move Up"
+msgstr "Pārvietot Augšup"
+
+#: ../data/activities.glade.h:5
+msgid "New Category"
+msgstr "Jauna kategorija"
+
+#: ../data/activities.glade.h:6
+msgid "_Activities"
+msgstr "Aktivitātes"
+
+#: ../data/activities.glade.h:7
+msgid "_Categories"
+msgstr "Kategorijas"
+
+#: ../data/activities.glade.h:8
+msgid "_New Activity"
+msgstr "Jauna darbība"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:1
 msgid "<b>Activity</b>"
@@ -53,6 +73,10 @@ msgstr "<b>Aktivitāte</b>"
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and time</b>"
 msgstr "<b>Datums un laiks</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add"
+msgstr "Pievienot"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "Add custom fact - Hamster"
@@ -79,6 +103,22 @@ msgstr ""
 #: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
 msgstr "minūtēm"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Enable hotkeys"
+msgstr "Aktivizēt karstos taustiņus"
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Keyboard shortcut for showing the Hamster Applet window."
+msgstr "Karstais taustiņš Hamster aplikācijas parādīšanai"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Show window"
+msgstr "Parādīt logu"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Whether Hamster should listen to configured hotkey."
+msgstr "Vai Hamster aplikācijai būtu jāņem vērā iestatītais karstais taustiņš"
 
 #: ../data/menu.glade.h:1
 msgid "Add custom fact"
@@ -140,7 +180,6 @@ msgstr "Laika uzskaite masām!"
 msgid "Hamster Website"
 msgstr "Projekta mājas lapa"
 
-#. about.set_artists([])
 #. about.set_documenters([])
 #. translators: These appear in the About dialog, usual format applies.
 #: ../hamster/about.py:36
@@ -151,23 +190,23 @@ msgstr "Toms Bauģis toms.baugis@gmail.com"
 msgid "Unsorted"
 msgstr "Nešķirotie"
 
-#: ../hamster/activities.py:77 ../hamster/stats.py:28
+#: ../hamster/activities.py:79 ../hamster/stats.py:31
 msgid "Name"
 msgstr "Nosaukums"
 
-#: ../hamster/activities.py:97
+#: ../hamster/activities.py:99
 msgid "Category"
 msgstr "Kategorija"
 
-#: ../hamster/activities.py:322
+#: ../hamster/activities.py:410
 msgid "New category"
 msgstr "Jauna kategorija"
 
-#: ../hamster/activities.py:339
+#: ../hamster/activities.py:422
 msgid "New activity"
 msgstr "Jauna darbība"
 
-#: ../hamster/applet.py:136
+#: ../hamster/applet.py:151
 msgid "No activity"
 msgstr "Nekas nenotiek"
 
@@ -213,15 +252,18 @@ msgid "name"
 msgstr "Nosaukums"
 
 #. single day is an exception
-#: ../hamster/stats.py:208
+#: ../hamster/stats.py:229
 #, python-format
 msgid "Overview for %s"
 msgstr "%s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:231
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s"
+
+#~ msgid "Remove"
+#~ msgstr "Dzēst"
 
 #~ msgid "Nedarbi"
 #~ msgstr "Pusdienas"
