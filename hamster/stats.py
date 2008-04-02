@@ -26,13 +26,14 @@ class StatsViewer:
         self.fact_tree = self.get_widget("facts")
         self.fact_tree.set_headers_visible(False)
         self.fact_tree.set_tooltip_column(1)
+        self.fact_tree.set_property("show-expanders", False)
 
         nameColumn = gtk.TreeViewColumn(_(u'Name'))
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)
-        nameColumn.set_attributes(nameCell, text=1)
+        nameColumn.set_cell_data_func(nameCell, self.parent_painter)
         self.fact_tree.append_column(nameColumn)
 
         durationColumn = gtk.TreeViewColumn(' ')
@@ -116,6 +117,21 @@ class StatsViewer:
                 
         return formatted_duration
     
+
+    def parent_painter(self, column, cell, model, iter):
+        cell_text = model.get_value(iter, 1)
+        if model.iter_parent(iter) == None:
+            if model.get_path(iter) == (0,):
+                text = '<span weight="heavy">%s</span>' % cell_text
+            else:
+                text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
+                
+            cell.set_property('markup', text)
+
+        else:
+            cell.set_property('text', "   " + cell_text)
+            
+        return
 
     def get_facts(self):
         self.fact_store.clear()
