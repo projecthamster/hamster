@@ -1,4 +1,4 @@
-AC_INIT(hamster-applet, 0.1.5.5-dev, toms.baugis@gmail.com)
+AC_INIT(hamster-applet, 0.1.6.1-dev, toms.baugis@gmail.com)
 AC_CONFIG_SRCDIR(hamster/__init__.py)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
@@ -20,9 +20,9 @@ if test "x$HAVE_PKGCONFIG" = "xno"; then
   AC_MSG_ERROR(you need to have pkgconfig installed !)
 fi
 
-dnl ==================
-dnl Translation & I18N
-dnl ==================
+dnl ****************************************************************************
+dnl * Translation & i18n
+dnl ****************************************************************************
 
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS"`"
 AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
@@ -32,10 +32,9 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [The gettext package])
 AM_GLIB_GNU_GETTEXT
 
-dnl =====
-dnl GConf
-dnl =====
-
+dnl ****************************************************************************
+dnl * GConf support
+dnl ****************************************************************************
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
@@ -59,7 +58,7 @@ AC_SUBST(LIBDIR)
 
 AS_AC_EXPAND(PYTHONDIR, $pythondir)
 AC_SUBST(PYTHONDIR)
-
+		
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************

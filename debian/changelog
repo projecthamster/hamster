@@ -1,3 +1,16 @@
+hamster-applet (0.1.6.1) unstable; urgency=low
+
+  * Kind of fixed problem with gconf schema not appearing
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 3 Apr 2008 04:10:26 +0100
+
+hamster-applet (0.1.6) unstable; urgency=low
+
+  * Enhanced drag and drop behaviour in edit activities window
+  * Added labels, tooltips, spacings, and other flags to enhance experience
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 2 Apr 2008 23:53:26 +0100
+
 hamster-applet (0.1.5.5) unstable; urgency=low
 
   * Fixed pysqlite dependency
