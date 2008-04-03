@@ -201,13 +201,13 @@ class StatsViewer:
         totals["by_activity"].sort(duration_sort)
         
         #now we will limit bars to 6 and sum everything else into others
-        if len(totals["by_activity"]) > 7:
+        if len(totals["by_activity"]) > 12:
             other_total = 0.0
 
-            for i in range(6, len(totals["by_activity"]) - 1):
+            for i in range(11, len(totals["by_activity"]) - 1):
                 other_total += totals["by_activity"][i][1]
                 
-            totals["by_activity"] = totals["by_activity"][:6]
+            totals["by_activity"] = totals["by_activity"][:11]
             totals["by_activity"].append([_("Other"), other_total, 1])
         totals["by_activity"].sort(duration_sort) #sort again, since maybe others summed is bigger
             
@@ -262,39 +262,34 @@ class StatsViewer:
         if self.day_view.get_active():
             self.start_date -= dt.timedelta(1)
             self.end_date -= dt.timedelta(1)
-            self.view_date -= dt.timedelta(1)
         
         elif self.week_view.get_active():
             self.start_date -= dt.timedelta(7)
             self.end_date -= dt.timedelta(7)
-            self.view_date -= dt.timedelta(7)
         
         elif self.month_view.get_active():
             self.end_date = self.start_date - dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
             self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
-            self.view_date -= dt.timedelta(days_in_month - 1)
 
-        
+        self.view_date = self.start_date        
         self.do_graph()
 
     def on_next_clicked(self, button):
         if self.day_view.get_active():
             self.start_date += dt.timedelta(1)
             self.end_date += dt.timedelta(1)
-            self.view_date += dt.timedelta(1)
         
         elif self.week_view.get_active():
             self.start_date += dt.timedelta(7)
             self.end_date += dt.timedelta(7)
-            self.view_date += dt.timedelta(7)
         
         elif self.month_view.get_active():
             self.start_date = self.end_date + dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
-            self.view_date += dt.timedelta(days_in_month - 1)
         
+        self.view_date = self.start_date
         self.do_graph()
     
     def on_home_clicked(self, button):
