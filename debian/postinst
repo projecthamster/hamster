@@ -10,3 +10,6 @@ killall gconfd-2
 echo "Reloading applet..."
 killall hamster-applet
 echo "Thanks and enjoy!"
+
+echo "Rebuilding icon cache..."
+sudo gtk-update-icon-cache -f -t /usr/share/icons/hicolor
