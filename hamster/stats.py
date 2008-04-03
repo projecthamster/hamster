@@ -64,7 +64,7 @@ class StatsViewer:
         place.add(eventBox)
         
         self.activity_chart = Chart(orient = "horizontal",
-                                    max_bar_width = 20,
+                                    max_bar_width = 25,
                                     animate = False,
                                     values_on_bars = True,
                                     stretch_grid = True)
@@ -194,11 +194,22 @@ class StatsViewer:
         totals["by_day"].sort(date_sort)
             
             
-        duration_sort = lambda a, b: int(b[1] - a[1])
+        duration_sort = lambda a, b: (a[1] < b[1]) - (b[1] < a[1])
         totals["by_activity"] = []
         for activity in by_activity:
             totals["by_activity"].append([activity, by_activity[activity] / 60.0])
         totals["by_activity"].sort(duration_sort)
+        
+        #now we will limit bars to 6 and sum everything else into others
+        if len(totals["by_activity"]) > 7:
+            other_total = 0.0
+
+            for i in range(6, len(totals["by_activity"]) - 1):
+                other_total += totals["by_activity"][i][1]
+                
+            totals["by_activity"] = totals["by_activity"][:6]
+            totals["by_activity"].append([_("Other"), other_total, 1])
+        totals["by_activity"].sort(duration_sort) #sort again, since maybe others summed is bigger
             
         totals["by_category"] = []
         for category in by_category:
