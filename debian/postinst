@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# i'd love to have it performed automatically but somehow i could not manage to do that
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+gconftool --makefile-install-rule /usr/share/gconf/schemas/hamster-applet.schemas 
+
+echo "Reloading gconf..."
+killall gconfd-2
+
 echo "Reloading applet..."
 killall hamster-applet
 echo "Thanks and enjoy!"
