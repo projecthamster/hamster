@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-02 19:02+0100\n"
+"POT-Creation-Date: 2008-04-03 17:40+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -43,48 +43,48 @@ msgid "Edit Activities"
 msgstr "Rediģēt Aktivitātes"
 
 #: ../data/activities.glade.h:3
-msgid "Move Down"
-msgstr "Pārvietot Lejup"
+msgid "Move _Down"
+msgstr "Pārvietot L_ejup"
 
 #: ../data/activities.glade.h:4
-msgid "Move Up"
-msgstr "Pārvietot Augšup"
+msgid "Move _Up"
+msgstr "Pārvietot _Augšup"
 
 #: ../data/activities.glade.h:5
-msgid "New Category"
-msgstr "Jauna kategorija"
+msgid "N_ew Category"
+msgstr "Jauna _Kategorija"
 
 #: ../data/activities.glade.h:6
 msgid "_Activities"
-msgstr "Aktivitātes"
+msgstr "Akt_ivitātes"
 
 #: ../data/activities.glade.h:7
 msgid "_Categories"
-msgstr "Kategorijas"
+msgstr "Kate_gorijas"
 
 #: ../data/activities.glade.h:8
 msgid "_New Activity"
-msgstr "Jauna darbība"
+msgstr "_Jauna darbība"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:1
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Aktivitāte</b>"
 
 #: ../data/add_custom_fact.glade.h:2
-msgid "<b>Date and time</b>"
+msgid "<b>Date and Time</b>"
 msgstr "<b>Datums un laiks</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-msgid "Add"
-msgstr "Pievienot"
+msgid "A_dd"
+msgstr "Pi_evienot"
 
 #: ../data/add_custom_fact.glade.h:4
-msgid "Add custom fact - Hamster"
-msgstr "Pievienot faktu - Hamster"
+msgid "Add older fact - Hamster"
+msgstr "Pievienot vecāku faktu - Hamster"
 
 #: ../data/add_custom_fact.glade.h:5
-msgid "Cancel"
-msgstr "Atcelt"
+msgid "_Cancel"
+msgstr "_Atcelt"
 
 #: ../data/add_custom_fact.glade.h:6
 msgid "hours"
@@ -121,56 +121,56 @@ msgid "Whether Hamster should listen to configured hotkey."
 msgstr "Vai Hamster aplikācijai būtu jāņem vērā iestatītais karstais taustiņš"
 
 #: ../data/menu.glade.h:1
-msgid "Add custom fact"
-msgstr "Pievienot vecāku faktu"
+msgid "Ad_d Older Fact"
+msgstr "Pi_evienot Vecāku Faktu"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
 msgstr "Šodien ierakstu nav"
 
 #: ../data/menu.glade.h:4
-msgid "Show overview"
-msgstr "Parādīt pārskatu"
+msgid "Show _Overview"
+msgstr "_Rādīt Pārskatu"
 
 #: ../data/menu.glade.h:5
-msgid "Stop tracking"
-msgstr "Pārtraukt uzskaiti"
-
-#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "Nodarbe:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "Pārtr_aukt uzskaiti"
 
 #: ../data/menu.glade.h:7
 msgid "_Today"
 msgstr "Šodiena"
 
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_Diena"
+
 #: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_Mēnesis"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "_Nedēļa"
+
+#: ../data/stats.glade.h:5
 msgid "<b>Category</b>"
 msgstr "<b>Kategorija</b>"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.glade.h:6
 msgid "<b>Overview</b>"
 msgstr "<b>Pārskats</b>"
 
-#: ../data/stats.glade.h:4
+#: ../data/stats.glade.h:7
 msgid "<b>Week</b>"
 msgstr "<b>Nedēļa</b>"
 
-#: ../data/stats.glade.h:5
+#: ../data/stats.glade.h:8
 msgid "Overview - Hamster"
 msgstr "Pārskats - Hamster"
-
-#: ../data/stats.glade.h:6
-msgid "View Day"
-msgstr "Skatīt dienu"
-
-#: ../data/stats.glade.h:7
-msgid "View Month"
-msgstr "Skatīt mēnesi"
-
-#: ../data/stats.glade.h:8
-msgid "View Week"
-msgstr "Skatīt nedēļu"
 
 #: ../hamster/about.py:23
 msgid "Time tracking for masses."
@@ -251,16 +251,23 @@ msgstr "Stāvēšana uz rokām"
 msgid "name"
 msgstr "Nosaukums"
 
+#: ../hamster/stats.py:211
+msgid "Other"
+msgstr "Citi"
+
 #. single day is an exception
-#: ../hamster/stats.py:229
+#: ../hamster/stats.py:240
 #, python-format
 msgid "Overview for %s"
 msgstr "%s"
 
-#: ../hamster/stats.py:231
+#: ../hamster/stats.py:242
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s"
+
+#~ msgid "Add custom fact"
+#~ msgstr "Pievienot vecāku faktu"
 
 #~ msgid "Remove"
 #~ msgstr "Dzēst"
