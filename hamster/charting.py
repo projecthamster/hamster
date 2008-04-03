@@ -400,6 +400,7 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
+            color = data[i]["color"] if  data[i]["color"] != None else 3
             bar_size = graph_height * data[i]["factor"]
             #on animations we keep labels on top, so we need some extra space there
             bar_size = bar_size * 0.8 if self.values_on_bars and self.animate else bar_size * 0.9
@@ -409,7 +410,7 @@ class Chart(gtk.DrawingArea):
             bar_x = graph_x + (step * i) + gap
             bar_width = step - (gap * 2)
             
-            self._draw_bar(context, bar_x, 0, bar_width, bar_size, 3)
+            self._draw_bar(context, bar_x, 0, bar_width, bar_size, color)
 
 
 
@@ -521,13 +522,13 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
-            color = data[i]["color"] or 1
+            color = data[i]["color"] if  data[i]["color"] != None else 3
             bar_y = graph_y + (step * i) + gap
             bar_size = max_size * data[i]["factor"]
             bar_size = max(bar_size, 1)
             bar_height = step - (gap * 2)
 
-            self._draw_bar(context, graph_x, bar_y, bar_size, bar_height, 3)
+            self._draw_bar(context, graph_x, bar_y, bar_size, bar_height, color)
 
 
         #values
