@@ -1,3 +1,12 @@
+hamster-applet (0.1.6.2) unstable; urgency=low
+
+  * Stop at 12 different activities a day, 12th being total of others
+  * Give more space to activity stats
+  * Put back resize to both sizes, since we are now ellipsizing
+  * updated latvian translation
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 8 Apr 2008 09:58:00 +0100
+
 hamster-applet (0.1.6.1) unstable; urgency=low
 
   * Kind of fixed problem with gconf schema not appearing
