@@ -7,14 +7,19 @@ except:
     pass
 
 def get_eds_tasks():
-    if not EDS_AVAILABLE:
+    if EDS_AVAILABLE == False:
         return []
-    sources = ecal.list_task_sources()
-    tasks = []
-    for source in sources:
-        data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
-        if data:
-            for task in data.get_all_objects():
-                if task.get_status() in [ecal.AL_STATUS_NONE, ecal.AL_STATUS_INPROCESS]:
-                    tasks.append({'name': task.get_summary()})
-    return tasks
+    
+    try:
+        sources = ecal.list_task_sources()
+        tasks = []
+        for source in sources:
+            data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
+            if data:
+                for task in data.get_all_objects():
+                    if task.get_status() in [ecal.AL_STATUS_NONE, ecal.AL_STATUS_INPROCESS]:
+                        tasks.append({'name': task.get_summary()})
+        return tasks
+    except Exception, e: # TODO's are not priority - print warning and go home
+        print e 
+        return []
