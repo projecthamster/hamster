@@ -192,7 +192,7 @@ class HamsterApplet(object):
         # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
-            self.activities.append([activity['name'], -1])
+            self.activities.append([activity['name']])
             store.append([activity['name'], -1])
 
         return True
