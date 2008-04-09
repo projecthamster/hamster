@@ -1,7 +1,7 @@
 EDS_AVAILABLE = False
 try:
     import evolution
-    import evolution.ecal
+    from evolution import ecal
     EDS_AVAILABLE = True
 except:
     pass
@@ -9,12 +9,12 @@ except:
 def get_eds_tasks():
     if not EDS_AVAILABLE:
         return []
-    sources = evolution.ecal.list_task_sources()
+    sources = ecal.list_task_sources()
     tasks = []
     for source in sources:
-        data = evolution.ecal.open_calendar_source(source[1], evolution.ecal.CAL_SOURCE_TYPE_TODO)
+        data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
         if data:
             for task in data.get_all_objects():
-                tasks.append({'name': task.get_summary()})
+                if task.get_status() in [ecal.AL_STATUS_NONE, ecal.AL_STATUS_INPROCESS]:
+                    tasks.append({'name': task.get_summary()})
     return tasks
-
