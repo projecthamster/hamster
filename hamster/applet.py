@@ -2,18 +2,16 @@
 import datetime
 import os.path
 import gnomeapplet, gtk
-import gtk.glade
 import gobject
-from pango import ELLIPSIZE_END
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 from hamster.about import show_about
 from hamster.activities import ActivitiesEditor
 from hamster.stats import StatsViewer
 import hamster.eds
-from hamster.overview import DayStore, format_duration
 from hamster.add_custom_fact import CustomFactController
 
+from hamster.stuff import *
 from hamster.KeyBinder import *
 
 class PanelButton(gtk.ToggleButton):
@@ -61,30 +59,12 @@ class HamsterApplet(object):
         # init today's tree
         self.treeview = self.glade.get_widget('today')
         self.treeview.set_tooltip_column(1)
-        timeColumn = gtk.TreeViewColumn("Time")
-        timeColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        timeColumn.set_expand(False)
-        timeCell = gtk.CellRendererText()
-        timeColumn.pack_start(timeCell, True)
-        timeColumn.set_attributes(timeCell, text=2)
-        self.treeview.append_column(timeColumn)
+        
+        self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
+        self.treeview.append_column(ExpanderColumn("Name", text = 1))
+        self.treeview.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=3))
 
-        nameColumn = gtk.TreeViewColumn("Name")
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameCell.set_property('ellipsize', ELLIPSIZE_END)
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_attributes(nameCell, text=1)
-        self.treeview.append_column(nameColumn)
-        
-        durationColumn = gtk.TreeViewColumn(' ')
-        durationColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        durationColumn.set_expand(False)
-        durationCell = gtk.CellRendererText()
-        durationColumn.pack_start(durationCell, True)
-        durationColumn.set_attributes(durationCell, text=3)
-        self.treeview.append_column(durationColumn)
-        
+
         self.button = PanelButton()
         
         self.today, self.last_activity = None, None

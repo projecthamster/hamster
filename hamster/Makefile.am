@@ -18,7 +18,7 @@ hamster_PYTHON = \
 	Configuration.py \
 	KeyBinder.py \
 	activities.py \
-	overview.py \
+	stuff.py \
 	add_custom_fact.py \
 	applet.py \
 	about.py \

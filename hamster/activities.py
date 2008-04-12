@@ -1,10 +1,8 @@
-#!/usr/bin/env python
 import pygtk
 pygtk.require('2.0')
 
 import os
 import gtk
-import gtk.glade
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 
@@ -451,8 +449,3 @@ class ActivitiesEditor:
 
         self.activity_changed(self.selection, model)
 
-
-if __name__ == '__main__':
-    controller = ActivitiesController()
-    controller.show()
-    gtk.main()

@@ -1,10 +1,8 @@
-#!/usr/bin/env python
 import pygtk
 pygtk.require('2.0')
 
 import os
 import gtk
-import gtk.glade
 import pango
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
@@ -20,9 +18,6 @@ class StatsViewer:
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
-        self.fact_store = gtk.TreeStore(int, str, str, str) #id, caption, duration, date (invisible)
-            
-
         self.fact_tree = self.get_widget("facts")
         self.fact_tree.set_headers_visible(False)
         self.fact_tree.set_tooltip_column(1)
@@ -36,14 +31,9 @@ class StatsViewer:
         nameColumn.set_cell_data_func(nameCell, self.parent_painter)
         self.fact_tree.append_column(nameColumn)
 
-        durationColumn = gtk.TreeViewColumn(' ')
-        durationColumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        durationColumn.set_expand(False)
-        durationCell = gtk.CellRendererText()
-        durationColumn.pack_start(durationCell, True)
-        durationColumn.set_attributes(durationCell, text=2)
-        self.fact_tree.append_column(durationColumn)
+        self.fact_tree.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=2))
         
+        self.fact_store = gtk.TreeStore(int, str, str, str) #id, caption, duration, date (invisible)
         self.fact_tree.set_model(self.fact_store)
         
         self.day_chart = Chart(max_bar_width = 40,

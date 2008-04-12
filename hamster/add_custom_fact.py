@@ -1,12 +1,9 @@
-#!/usr/bin/env python
 import pygtk
 pygtk.require('2.0')
 
 import os
 import gtk
-import gtk.glade
 import gobject
-import gnome.ui
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
@@ -150,10 +147,4 @@ class CustomFactController:
     def on_window_key_pressed(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Escape):
         self.window.destroy()
-    
-if __name__ == '__main__':
-    controller = OverviewController()
-    controller.show()
-    gtk.main()
-
 
