@@ -16,7 +16,7 @@ class Storage(hamster.storage.Storage):
 
     def __change_category(self, id, category_id):
         query = "SELECT max(activity_order) + 1 FROM activities WHERE category_id = ?"
-        max_order = self.fetchone(query, (category_id, ))[0]
+        max_order = self.fetchone(query, (category_id, ))[0] or 1
         
         statement = """
                    UPDATE activities 
