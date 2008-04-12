@@ -32,21 +32,23 @@ class PanelButton(gtk.ToggleButton):
 class HamsterApplet(object):
     def __init__(self, applet):
         self.applet = applet
+        self.button = PanelButton()
         
         # load window of activity switcher and todays view
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
         self.window = self.glade.get_widget('hamster-window')
         
+        # set up drop down menu
+        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT))
+        self.activity_list.set_text_column(0)
+
+        # set up autocompletition for the drop-down menu
         self.activities = gtk.ListStore(gobject.TYPE_STRING)
-        
         completion = gtk.EntryCompletion()
         completion.set_model(self.activities)
         completion.set_text_column(0)
         completion.set_minimum_key_length(1)
-        
-        self.activity_list = self.glade.get_widget('activity-list')
-        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT))
-        self.activity_list.set_text_column(0)
         self.activity_list.child.set_completion(completion)
 
         # init today's tree
@@ -58,15 +60,14 @@ class HamsterApplet(object):
         self.treeview.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=3))
 
 
-        self.button = PanelButton()
-        
-        self.today, self.last_activity = None, None
-        self.load_today()
+        # Load today's data, activities and set label
+        self.last_activity = None
+        self.today = datetime.date.today()
+
+        self.load_day()
         self.update_label()
 
-        # add a timer so we can update duration of current task
-        # a little naggy, still maybe that will remind user to change tasks
-        # we go for refresh each minute
+        # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
         # build the menu
@@ -101,11 +102,12 @@ class HamsterApplet(object):
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
-        today = datetime.date.today()
+        prev_date = self.today
+        self.today = datetime.date.today()
             
-        if today != self.today: #ooh, we have date change - let's finish previous task and start a new one!
+        # if we have date change - let's finish previous task and start a new one
+        if prev_date and prev_date != self.today: 
             if self.last_activity['end_time'] == None:
-                end_time = datetime.datetime.combine(self.last_activity['start_time'].date(), datetime.time(23, 59))
                 storage.touch_fact(self.last_activity)
                 storage.add_fact(self.last_activity['name'])
             
@@ -125,14 +127,11 @@ class HamsterApplet(object):
             self.glade.get_widget('stop_tracking').set_sensitive(0);
         self.button.set_text(label)
         
-    def load_today(self):
+    def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-
-        treeview = self.glade.get_widget('today')
-        self.today = datetime.date.today()
         day = DayStore(self.today);
-        treeview.set_model(day.fact_store)
+        self.treeview.set_model(day.fact_store)
 
         if len(day.facts) == 0:
             self.last_activity = None
@@ -184,13 +183,49 @@ class HamsterApplet(object):
         self.treeview.set_cursor(cur)
 
 
-    """activity switch events"""
+    def __show_toggle(self, event, is_active):
+        """main window display and positioning"""
+        self.button.set_active(is_active)
+        if not is_active:
+            self.window.hide()
+            return
+
+        self.window.show()
+
+        label_geom = self.button.get_allocation()
+        window_geom = self.window.get_allocation()
+        
+        x, y = self.button.get_pos()
+
+        self.popup_dir = self.applet.get_orient()
+        if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
+            y = y + label_geom.height;
+        elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
+            y = y - window_geom.height;
+        
+        self.window.move(x, y)
+
+        if self.last_activity and self.last_activity["end_time"] == None:
+            self.activity_list.child.set_text(self.last_activity["name"])
+            self.activity_list.child.select_region(0, -1)
+        else:
+            self.activity_list.child.set_text('')
+        self.activity_list.grab_focus()
+
+
+    """events"""
+    def on_button_press(self, widget, event):
+        if event.button != 1:
+            self.applet.do_button_press_event(self.applet, event)
+
+    def on_toggle(self, widget):
+        dispatcher.dispatch('panel_visible', self.button.get_active())
+
     def on_activity_switched(self, component):
         # do stuff only if user has selected something
         # for other cases activity_edited will be triggered
         if component.get_active_iter():
             component.child.activate() # forward
-
         return True
 
     def on_activity_entered(self, component):
@@ -203,12 +238,12 @@ class HamsterApplet(object):
         storage.add_fact(activity_name)
         dispatcher.dispatch('panel_visible', False)
 
-    """keyboard events"""
-    def on_key_pressed(self, tree, event_key):
+    """listview events"""
+    def on_todays_keys(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Delete):
         self.delete_selected()
         
-    def on_window_key_pressed(self, tree, event_key):
+    def on_windows_keys(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Escape):
         dispatcher.dispatch('panel_visible', False)
         
@@ -244,57 +279,17 @@ class HamsterApplet(object):
     """signals"""
     def after_activity_update(self, widget, renames):
         self.refresh_menu()
-        self.load_today()
+        self.load_day()
         self.update_label()
     
     def after_fact_update(self, event, date):
         if date.date() == datetime.date.today():
-            self.load_today()
+            self.load_day()
             self.update_label()
 
-    def after_fact_changes(self, some_object):
-        self.load_today()
-
-    
-    """panel button events"""    
-    def on_button_press(self, widget, event):
-        if event.button != 1:
-            self.applet.do_button_press_event(self.applet, event)
-
-    def on_toggle(self, widget):
-        dispatcher.dispatch('panel_visible', self.button.get_active())
-
-    def __show_toggle(self, event, is_active):
-        """main window display and positioning"""
-        
-        self.button.set_active(is_active)
-        if not is_active:
-            self.window.hide()
-            return
-
-        self.window.show()
-
-        label_geom = self.button.get_allocation()
-        window_geom = self.window.get_allocation()
-        
-        x, y = self.button.get_pos()
-
-        self.popup_dir = self.applet.get_orient()
-        if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
-            y = y + label_geom.height;
-        elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
-            y = y - window_geom.height;
-        
-        self.window.move(x, y)
-
-        if self.last_activity:
-            self.activity_list.child.select_region(0, -1)
-        else:
-            self.activity_list.child.set_text('')
-        self.activity_list.grab_focus()
-
+    """global shortcuts"""
     def on_key_combination_press(self, widget, time):
-        self.__show_toggle(None, True)
+        self.__show_toggle(None, not self.button.get_active())
 
     def on_key_combination_changed(self, keybinder, success):
         pass      

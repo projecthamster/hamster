@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Wed Apr  2 22:16:55 2008 -->
+<!--Generated with glade3 3.4.2 on Sat Apr 12 21:30:17 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -12,7 +12,7 @@
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="decorated">False</property>
-    <signal name="key_press_event" handler="on_window_key_pressed"/>
+    <signal name="key_press_event" handler="on_windows_keys"/>
     <child>
       <widget class="GtkEventBox" id="hamster-box">
         <property name="visible">True</property>
@@ -113,7 +113,7 @@
                                 <property name="headers_visible">False</property>
                                 <property name="rules_hint">True</property>
                                 <property name="enable_search">False</property>
-                                <signal name="key_press_event" handler="on_key_pressed"/>
+                                <signal name="key_press_event" handler="on_todays_keys"/>
                               </widget>
                             </child>
                           </widget>
