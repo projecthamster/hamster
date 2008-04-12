@@ -30,10 +30,8 @@ def show_about(parent):
                        "Patryk Zawadzki <patrys@pld-linux.org>",
                        "Peteris Caune <cuu508@gmail.com>"])
     about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
-#    about.set_documenters([])
 
-#    translators: These appear in the About dialog, usual format applies.
-    about.set_translator_credits( _("translator-credits") )
+    about.set_translator_credits(_("translator-credits"))
 
     for prop, val in infos.items():
         about.set_property(prop, val)

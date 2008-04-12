@@ -13,4 +13,4 @@ hamster/add_custom_fact.py
 hamster/applet.py
 hamster/db.py
 hamster/stats.py
-
+hamster/stuff.py

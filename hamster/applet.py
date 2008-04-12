@@ -5,11 +5,7 @@ import gnomeapplet, gtk
 import gobject
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
-from hamster.about import show_about
-from hamster.activities import ActivitiesEditor
-from hamster.stats import StatsViewer
 import hamster.eds
-from hamster.add_custom_fact import CustomFactController
 
 from hamster.stuff import *
 from hamster.KeyBinder import *
@@ -34,9 +30,6 @@ class PanelButton(gtk.ToggleButton):
 
 
 class HamsterApplet(object):
-    visible = False # global visibility toggler
-    overview = None
-
     def __init__(self, applet):
         self.applet = applet
         
@@ -227,18 +220,23 @@ class HamsterApplet(object):
         dispatcher.dispatch('panel_visible', False)
 
     def on_overview(self, menu_item):
+        from hamster.stats import StatsViewer
         dispatcher.dispatch('panel_visible', False)
         stats_viewer = StatsViewer()
         stats_viewer.show()
 
     def on_custom_fact(self, menu_item):
+        from hamster.add_custom_fact import CustomFactController
         custom_fact = CustomFactController()
         custom_fact.show()
 
     def on_about (self, component, verb):
+        from hamster.about import show_about
         show_about(self.applet)
 
     def on_edit_activities(self, menu_item, verb):
+        from hamster.activities import ActivitiesEditor
+
         dispatcher.dispatch('panel_visible', False)
         activities_editor = ActivitiesEditor()
         activities_editor.show()
