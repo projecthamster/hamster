@@ -23,7 +23,7 @@ class StatsViewer:
         self.fact_tree.set_tooltip_column(1)
         self.fact_tree.set_property("show-expanders", False)
 
-        nameColumn = gtk.TreeViewColumn(_(u'Name'))
+        nameColumn = gtk.TreeViewColumn(_("Name"))
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)

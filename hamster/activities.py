@@ -74,7 +74,7 @@ class ActivitiesEditor:
         self.get_widget("activities_label").set_mnemonic_widget(self.activity_tree)
         self.activity_store = ActivityStore()
 
-        self.activityColumn = gtk.TreeViewColumn(_(u'Name'))
+        self.activityColumn = gtk.TreeViewColumn(_("Name"))
         self.activityColumn.set_expand(True)
         self.activityCell = gtk.CellRendererText()
         self.activityCell.connect('edited', self.activity_name_edited_cb, self.activity_store)
@@ -94,7 +94,7 @@ class ActivitiesEditor:
         self.get_widget("categories_label").set_mnemonic_widget(self.category_tree)
         self.category_store = CategoryStore()
 
-        self.categoryColumn = gtk.TreeViewColumn(_(u'Category'))
+        self.categoryColumn = gtk.TreeViewColumn(_("Category"))
         self.categoryColumn.set_expand(True)
         self.categoryCell = gtk.CellRendererText()
         self.categoryCell.connect('edited', self.category_edited_cb, self.category_store)

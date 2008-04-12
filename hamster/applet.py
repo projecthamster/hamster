@@ -60,8 +60,8 @@ class HamsterApplet(object):
         self.treeview = self.glade.get_widget('today')
         self.treeview.set_tooltip_column(1)
         
-        self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
-        self.treeview.append_column(ExpanderColumn("Name", text = 1))
+        self.treeview.append_column(gtk.TreeViewColumn(_("Time"), gtk.CellRendererText(), text=2))
+        self.treeview.append_column(ExpanderColumn(_("Name"), text = 1))
         self.treeview.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=3))
 
 
