@@ -32,6 +32,8 @@ class PanelButton(gtk.ToggleButton):
 class HamsterApplet(object):
     def __init__(self, applet):
         self.applet = applet
+        self.applet.set_applet_flags (gnomeapplet.EXPAND_MINOR);
+
         self.button = PanelButton()
         
         # load window of activity switcher and todays view
@@ -73,6 +75,15 @@ class HamsterApplet(object):
         # build the menu
         self.refresh_menu()
 
+        # remove padding, so we fit on small panels (adapted from clock applet)
+        gtk.rc_parse_string ("""style "hamster-applet-button-style" {
+                GtkWidget::focus-line-width=0
+                GtkWidget::focus-padding=0
+            }
+                                     
+            widget "*.hamster-applet-button" style "hamster-applet-button-style"
+        """);
+        gtk.Widget.set_name (self.button, "hamster-applet-button");
 
         self.applet.add(self.button)
 
