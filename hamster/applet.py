@@ -251,12 +251,16 @@ class HamsterApplet(object):
 
     """listview events"""
     def on_todays_keys(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Delete):
-        self.delete_selected()
+        if (event_key.keyval == gtk.keysyms.Delete):
+            self.delete_selected()
+            return True
+        return False
         
     def on_windows_keys(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Escape):
-        dispatcher.dispatch('panel_visible', False)
+        if (event_key.keyval == gtk.keysyms.Escape):
+            dispatcher.dispatch('panel_visible', False)
+            return True
+        return False
         
     """button events"""
     def on_stop_tracking(self, button):
