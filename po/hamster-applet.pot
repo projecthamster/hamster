@@ -3,92 +3,91 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: lv\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-13 23:59+0100\n"
-"PO-Revision-Date: 2008-03-30 00:51+0000\n"
-"Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
-"Language-Team: Latvian <locale@laka.lv>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
 #: ../hamster/about.py:21
 msgid "Hamster"
-msgstr "Hamster"
+msgstr ""
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr "Laika uzskaite masām!"
+msgstr ""
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "Apraksts"
+msgstr ""
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Edit Activities"
-msgstr "Rediģēt Aktivitātes"
+msgstr ""
 
 #: ../data/activities.glade.h:1
 msgid " "
-msgstr " "
+msgstr ""
 
 #: ../data/activities.glade.h:2
 msgid "Edit Activities"
-msgstr "Rediģēt Aktivitātes"
+msgstr ""
 
 #: ../data/activities.glade.h:3
 msgid "Move _Down"
-msgstr "Pārvietot L_ejup"
+msgstr ""
 
 #: ../data/activities.glade.h:4
 msgid "Move _Up"
-msgstr "Pārvietot _Augšup"
+msgstr ""
 
 #: ../data/activities.glade.h:5
 msgid "N_ew Category"
-msgstr "Jauna _Kategorija"
+msgstr ""
 
 #: ../data/activities.glade.h:6
 msgid "_Activities"
-msgstr "Akt_ivitātes"
+msgstr ""
 
 #: ../data/activities.glade.h:7
 msgid "_Categories"
-msgstr "Kate_gorijas"
+msgstr ""
 
 #: ../data/activities.glade.h:8
 msgid "_New Activity"
-msgstr "_Jauna darbība"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
-msgstr "<b>Aktivitāte</b>"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
-msgstr "<b>Datums un laiks</b>"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:3
 msgid "A_dd"
-msgstr "Pi_evienot"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "Add older fact - Hamster"
-msgstr "Pievienot vecāku faktu - Hamster"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:5
 msgid "_Cancel"
-msgstr "_Atcelt"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:6
 msgid "hours"
-msgstr "stundām"
+msgstr ""
 
 #: ../data/add_custom_fact.glade.h:7
 msgid ""
@@ -96,174 +95,171 @@ msgid ""
 "until\n"
 "for"
 msgstr ""
-"darbība turpinās...\n"
-"līdz\n"
-"uz"
 
 #: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
-msgstr "minūtēm"
+msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Enable hotkeys"
-msgstr "Aktivizēt karstos taustiņus"
+msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Hamster Applet window."
-msgstr "Karstais taustiņš Hamster aplikācijas parādīšanai"
+msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Show window"
-msgstr "Parādīt logu"
+msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Whether Hamster should listen to configured hotkey."
-msgstr "Vai Hamster aplikācijai būtu jāņem vērā iestatītais karstais taustiņš"
+msgstr ""
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Older Fact"
-msgstr "Pi_evienot Vecāku Faktu"
+msgstr ""
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
-msgstr "Šodien ierakstu nav"
+msgstr ""
 
 #: ../data/menu.glade.h:4
 msgid "Show _Overview"
-msgstr "_Rādīt Pārskatu"
+msgstr ""
 
 #: ../data/menu.glade.h:5
 msgid "_Activity:"
-msgstr "Nodarbe:"
+msgstr ""
 
 #: ../data/menu.glade.h:6
 msgid "_Stop Tracking"
-msgstr "Pārtr_aukt uzskaiti"
+msgstr ""
 
 #: ../data/menu.glade.h:7
 msgid "_Today"
-msgstr "Šodiena"
+msgstr ""
 
 #: ../data/stats.glade.h:1
 msgid " _Day"
-msgstr "_Diena"
+msgstr ""
 
 #: ../data/stats.glade.h:2
 msgid " _Month"
-msgstr "_Mēnesis"
+msgstr ""
 
 #: ../data/stats.glade.h:3
 msgid " _Week"
-msgstr "_Nedēļa"
+msgstr ""
 
 #: ../data/stats.glade.h:5
 msgid "<b>Category</b>"
-msgstr "<b>Kategorija</b>"
+msgstr ""
 
 #: ../data/stats.glade.h:6
 msgid "<b>Overview</b>"
-msgstr "<b>Pārskats</b>"
+msgstr ""
 
 #: ../data/stats.glade.h:7
 msgid "<b>Week</b>"
-msgstr "<b>Nedēļa</b>"
+msgstr ""
 
 #: ../data/stats.glade.h:8
 msgid "Overview - Hamster"
-msgstr "Pārskats - Hamster"
+msgstr ""
 
 #: ../hamster/about.py:23
 msgid "Time tracking for masses."
-msgstr "Laika uzskaite masām!"
+msgstr ""
 
 #: ../hamster/about.py:26
 msgid "Hamster Website"
-msgstr "Projekta mājas lapa"
+msgstr ""
 
 #: ../hamster/about.py:34
 msgid "translator-credits"
-msgstr "Toms Bauģis toms.baugis@gmail.com"
+msgstr ""
 
 #: ../hamster/activities.py:35 ../hamster/db.py:214
 msgid "Unsorted"
-msgstr "Nešķirotie"
+msgstr ""
 
 #: ../hamster/activities.py:77 ../hamster/applet.py:61 ../hamster/stats.py:26
 msgid "Name"
-msgstr "Nosaukums"
+msgstr ""
 
 #: ../hamster/activities.py:97
 msgid "Category"
-msgstr "Kategorija"
+msgstr ""
 
 #: ../hamster/activities.py:408
 msgid "New category"
-msgstr "Jauna kategorija"
+msgstr ""
 
 #: ../hamster/activities.py:420
 msgid "New activity"
-msgstr "Jauna darbība"
+msgstr ""
 
 #: ../hamster/applet.py:60
 msgid "Time"
-msgstr "Laiks"
+msgstr ""
 
 #: ../hamster/applet.py:137
 msgid "No activity"
-msgstr "Nekas nenotiek"
+msgstr ""
 
 #. defaults
 #: ../hamster/db.py:363
 msgid "Work"
-msgstr "Darbi"
+msgstr ""
 
 #: ../hamster/db.py:364
 msgid "Reading news"
-msgstr "Ziņu lasīšana"
+msgstr ""
 
 #: ../hamster/db.py:365
 msgid "Checking stocks"
-msgstr "Biržas akciju pārskats"
+msgstr ""
 
 #: ../hamster/db.py:366
 msgid "Super secret project X"
-msgstr "Super slepenais projekts X"
+msgstr ""
 
 #: ../hamster/db.py:367
 msgid "World domination"
-msgstr "Pasaules pārņemšana"
+msgstr ""
 
 #: ../hamster/db.py:369
 msgid "Day to day"
-msgstr "Ikdiena"
+msgstr ""
 
 #: ../hamster/db.py:370
 msgid "Lunch"
-msgstr "Pusdienas"
+msgstr ""
 
 #: ../hamster/db.py:371
 msgid "Watering flowers"
-msgstr "Puķu laistīšana"
+msgstr ""
 
 #: ../hamster/db.py:372
 msgid "Doing handstands"
-msgstr "Stāvēšana uz rokām"
+msgstr ""
 
 #: ../hamster/db.py:548 ../hamster/db.py:552
 msgid "name"
-msgstr "Nosaukums"
+msgstr ""
 
 #: ../hamster/stats.py:201
 msgid "Other"
-msgstr "Citi"
+msgstr ""
 
 #. single day is an exception
 #: ../hamster/stats.py:230
 #, python-format
 msgid "Overview for %s"
-msgstr "%s"
+msgstr ""
 
 #: ../hamster/stats.py:232
 #, python-format
 msgid "Overview for %s - %s"
-msgstr "%s - %s"
+msgstr ""
