@@ -221,6 +221,8 @@ class HamsterApplet(object):
             self.activity_list.child.select_region(0, -1)
         else:
             self.activity_list.child.set_text('')
+
+        self.applet.grab_focus()
         self.activity_list.grab_focus()
 
 
