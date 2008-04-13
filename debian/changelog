@@ -1,3 +1,13 @@
+hamster-applet (0.1.7) unstable; urgency=low
+
+  * Fixed applet vertical sizing issues
+  * Showing Evolution's active TODO's in activity lists
+  * Drop down window now doesn't have double shadow on top of it
+  * Fixed bug with situation, when activities get moved to newly created
+    category
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 13 Apr 2008 14:58:00 +0100
+
 hamster-applet (0.1.6.2) unstable; urgency=low
 
   * Stop at 12 different activities a day, 12th being total of others

@@ -1,6 +1,70 @@
-2007-07-27  Toms  <toms.baugis@gmail.com>
+hamster-applet (0.1.7) unstable; urgency=low
 
-	* folder/file (something.function):
-	                     - 0.1 revision
-			     - i don't know how to write changelogs. 
+  * Fixed applet vertical sizing issues
+  * Showing Evolution's active TODO's in activity lists
+  * Drop down window now doesn't have double shadow on top of it
+  * Fixed bug with situation, when activities get moved to newly created
+    category
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 13 Apr 2008 14:58:00 +0100
+
+hamster-applet (0.1.6.2) unstable; urgency=low
+
+  * Stop at 12 different activities a day, 12th being total of others
+  * Give more space to activity stats
+  * Put back resize to both sizes, since we are now ellipsizing
+  * updated latvian translation
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 8 Apr 2008 09:58:00 +0100
+
+hamster-applet (0.1.6.1) unstable; urgency=low
+
+  * Kind of fixed problem with gconf schema not appearing
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 3 Apr 2008 04:10:26 +0100
+
+hamster-applet (0.1.6) unstable; urgency=low
+
+  * Enhanced drag and drop behaviour in edit activities window
+  * Added labels, tooltips, spacings, and other flags to enhance experience
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 2 Apr 2008 23:53:26 +0100
+
+hamster-applet (0.1.5.5) unstable; urgency=low
+
+  * Fixed pysqlite dependency
+  * Fixed area chart color
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 1 Apr 2008 15:05:26 +0100
+
+hamster-applet (0.1.5.4) unstable; urgency=low
+
+  * Hamster now has a process name for killall, which enables us
+    to kill it on install!
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.3) unstable; urgency=low
+
+  * Fixed antialiasing problems in bar chart
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.2) unstable; urgency=low
+
+  * Minor changes and slight adjustments to Swedish translation
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5.1) unstable; urgency=low
+
+  * Fixed window icons, added swedish translation (by Kalle Person)
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
+
+hamster-applet (0.1.5) unstable; urgency=low
+
+  * Initial release
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 31 Mar 2008 01:09:26 +0100
 
