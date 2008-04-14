@@ -155,17 +155,32 @@ class Storage(hamster.storage.Storage):
                 """
                 self.execute(update, (end_time, fact["id"]))
 
-        # lastly check if maybe we are the last task, and if that's true
+        # now check if maybe we are at the last task, and if that's true
         # look if we maybe have to finish it or delete if it was too short
         if day_facts:
-            last_fact = day_facts[len(day_facts) - 1]
+            last_fact = day_facts[-1]
             
             if last_fact['end_time'] == None and start_time > last_fact['start_time']:
                 delta = (start_time - last_fact['start_time'])
             
-                if 60 > delta.seconds > 0:
+                if 60 >= delta.seconds >= 0:
                     self.__remove_fact(last_fact['id'])
                     start_time = last_fact['start_time']
+
+                    # go further now and check, maybe task before the last one
+                    # is the same we have now. If that happened before less
+                    # than a minute - remove end time!
+                    if len(day_facts) > 2 and day_facts[-2]['name'] == activity_name:
+                        print day_facts[-2]['name'], activity_name, day_facts[-2]['end_time'], start_time
+                        delta = (start_time - day_facts[-2]['end_time'])
+                        if 60 >= delta.seconds >= 0:
+                            update = """
+                                        UPDATE facts
+                                           SET end_time = null
+                                         WHERE id = ?
+                                    """
+                            self.execute(update, (day_facts[-2]["id"],))
+                            return day_facts[-2]
                 else:
                     #set previous fact end time
                     update = """
