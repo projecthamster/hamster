@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Mon Apr 14 09:47:47 2008 -->
+<!--Generated with glade3 3.4.2 on Mon Apr 14 21:53:47 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -205,7 +205,7 @@
             </child>
             <child>
               <widget class="GtkVBox" id="vbox2">
-                <property name="width_request">350</property>
+                <property name="width_request">390</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
@@ -312,7 +312,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">True</property>
+                <property name="resize">False</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
