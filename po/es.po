@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-03 17:40+0100\n"
+"POT-Creation-Date: 2008-04-15 00:51+0100\n"
 "PO-Revision-Date: 2008-04-13 11:17+0100\n"
 "Last-Translator: David Prieto <frandavid100@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
-#: ../data/menu.glade.h:2
+#: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
 #: ../hamster/about.py:21
 msgid "Hamster"
 msgstr "Hamster"
@@ -66,8 +66,7 @@ msgstr "_Categorías"
 msgid "_New Activity"
 msgstr "Nueva _Actividad"
 
-#: ../data/add_custom_fact.glade.h:1
-#: ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Actividad</b>"
 
@@ -181,99 +180,98 @@ msgstr "Registro de tiempo para el pueblo."
 msgid "Hamster Website"
 msgstr "Página web de Hamster"
 
-#. about.set_documenters([])
-#. translators: These appear in the About dialog, usual format applies.
-#: ../hamster/about.py:36
+#: ../hamster/about.py:34
 msgid "translator-credits"
 msgstr "David Prieto frandavid100@gmail.com"
 
-#: ../hamster/activities.py:37
-#: ../hamster/db.py:214
+#: ../hamster/activities.py:35 ../hamster/db.py:229
 msgid "Unsorted"
 msgstr "Sin clasificar"
 
-#: ../hamster/activities.py:79
-#: ../hamster/stats.py:31
+#: ../hamster/activities.py:77 ../hamster/stats.py:26
 msgid "Name"
 msgstr "Nombre"
 
-#: ../hamster/activities.py:99
+#: ../hamster/activities.py:97
 msgid "Category"
 msgstr "Categoría"
 
-#: ../hamster/activities.py:410
+#: ../hamster/activities.py:408
 msgid "New category"
 msgstr "Nueva categoría"
 
-#: ../hamster/activities.py:422
+#: ../hamster/activities.py:420
 msgid "New activity"
 msgstr "Nueva actividad"
 
-#: ../hamster/applet.py:151
+#: ../hamster/applet.py:137
 msgid "No activity"
 msgstr "Sin actividad"
 
 #. defaults
-#: ../hamster/db.py:363
+#: ../hamster/db.py:378
 msgid "Work"
 msgstr "Trabajo"
 
-#: ../hamster/db.py:364
+#: ../hamster/db.py:379
 msgid "Reading news"
 msgstr "Leer las noticias"
 
-#: ../hamster/db.py:365
+#: ../hamster/db.py:380
 msgid "Checking stocks"
 msgstr "Comprobar las existencias"
 
-#: ../hamster/db.py:366
+#: ../hamster/db.py:381
 msgid "Super secret project X"
 msgstr "Proyecto súper secreto X"
 
-#: ../hamster/db.py:367
+#: ../hamster/db.py:382
 msgid "World domination"
 msgstr "Dominar el Mundo"
 
-#: ../hamster/db.py:369
+#: ../hamster/db.py:384
 msgid "Day to day"
 msgstr "Día a día"
 
-#: ../hamster/db.py:370
+#: ../hamster/db.py:385
 msgid "Lunch"
 msgstr "Comer"
 
-#: ../hamster/db.py:371
+#: ../hamster/db.py:386
 msgid "Watering flowers"
 msgstr "Regar las plantas"
 
-#: ../hamster/db.py:372
+#: ../hamster/db.py:387
 msgid "Doing handstands"
 msgstr "Hacer flexiones"
 
-#: ../hamster/db.py:548
-#: ../hamster/db.py:552
+#: ../hamster/db.py:563 ../hamster/db.py:567
 msgid "name"
 msgstr "Nombre"
 
-#: ../hamster/stats.py:211
+#: ../hamster/stats.py:207
 msgid "Other"
 msgstr "Otras"
 
 #. single day is an exception
-#: ../hamster/stats.py:240
+#: ../hamster/stats.py:236
 #, python-format
 msgid "Overview for %s"
 msgstr "Resumen de %s"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:237
+msgid "Day"
+msgstr "Día"
+
+#: ../hamster/stats.py:239 ../hamster/stats.py:242
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Resumen de %s - %s"
 
-#~ msgid "Add custom fact"
-#~ msgstr "Pievienot vecāku faktu"
-#~ msgid "Remove"
-#~ msgstr "Dzēst"
-#~ msgid "Nedarbi"
-#~ msgstr "Pusdienas"
+#: ../hamster/stats.py:240
+msgid "Week"
+msgstr "Semana"
 
+#: ../hamster/stats.py:243
+msgid "Month"
+msgstr "Mes"

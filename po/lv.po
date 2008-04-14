@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-13 23:59+0100\n"
+"POT-Creation-Date: 2008-04-15 00:50+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -184,11 +184,11 @@ msgstr "Projekta mājas lapa"
 msgid "translator-credits"
 msgstr "Toms Bauģis toms.baugis@gmail.com"
 
-#: ../hamster/activities.py:35 ../hamster/db.py:214
+#: ../hamster/activities.py:35 ../hamster/db.py:229
 msgid "Unsorted"
 msgstr "Nešķirotie"
 
-#: ../hamster/activities.py:77 ../hamster/applet.py:61 ../hamster/stats.py:26
+#: ../hamster/activities.py:77 ../hamster/stats.py:26
 msgid "Name"
 msgstr "Nosaukums"
 
@@ -204,66 +204,74 @@ msgstr "Jauna kategorija"
 msgid "New activity"
 msgstr "Jauna darbība"
 
-#: ../hamster/applet.py:60
-msgid "Time"
-msgstr "Laiks"
-
 #: ../hamster/applet.py:137
 msgid "No activity"
 msgstr "Nekas nenotiek"
 
 #. defaults
-#: ../hamster/db.py:363
+#: ../hamster/db.py:378
 msgid "Work"
 msgstr "Darbi"
 
-#: ../hamster/db.py:364
+#: ../hamster/db.py:379
 msgid "Reading news"
 msgstr "Ziņu lasīšana"
 
-#: ../hamster/db.py:365
+#: ../hamster/db.py:380
 msgid "Checking stocks"
 msgstr "Biržas akciju pārskats"
 
-#: ../hamster/db.py:366
+#: ../hamster/db.py:381
 msgid "Super secret project X"
 msgstr "Super slepenais projekts X"
 
-#: ../hamster/db.py:367
+#: ../hamster/db.py:382
 msgid "World domination"
 msgstr "Pasaules pārņemšana"
 
-#: ../hamster/db.py:369
+#: ../hamster/db.py:384
 msgid "Day to day"
 msgstr "Ikdiena"
 
-#: ../hamster/db.py:370
+#: ../hamster/db.py:385
 msgid "Lunch"
 msgstr "Pusdienas"
 
-#: ../hamster/db.py:371
+#: ../hamster/db.py:386
 msgid "Watering flowers"
 msgstr "Puķu laistīšana"
 
-#: ../hamster/db.py:372
+#: ../hamster/db.py:387
 msgid "Doing handstands"
 msgstr "Stāvēšana uz rokām"
 
-#: ../hamster/db.py:548 ../hamster/db.py:552
+#: ../hamster/db.py:563 ../hamster/db.py:567
 msgid "name"
 msgstr "Nosaukums"
 
-#: ../hamster/stats.py:201
+#: ../hamster/stats.py:207
 msgid "Other"
 msgstr "Citi"
 
 #. single day is an exception
-#: ../hamster/stats.py:230
+#: ../hamster/stats.py:236
 #, python-format
 msgid "Overview for %s"
 msgstr "%s"
 
-#: ../hamster/stats.py:232
+#: ../hamster/stats.py:237
+msgid "Day"
+msgstr "Diena"
+
+#: ../hamster/stats.py:239 ../hamster/stats.py:242
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s"
+
+#: ../hamster/stats.py:240
+msgid "Week"
+msgstr "Nedēļa"
+
+#: ../hamster/stats.py:243
+msgid "Month"
+msgstr "Mēnesis"
