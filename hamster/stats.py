@@ -246,7 +246,7 @@ class StatsViewer:
         label.set_text(label_text)
 
         label2 = self.get_widget("dayview_caption")
-        label2.set_markup(_("<b>%s</b>") % (dayview_caption))
+        label2.set_markup("<b>%s</b>" % (dayview_caption))
         
         facts = self.get_facts()
 
