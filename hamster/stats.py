@@ -15,7 +15,7 @@ import gobject
 
 class StatsViewer:
     def __init__(self):
-        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
+        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
         self.fact_tree = self.get_widget("facts")
@@ -36,8 +36,11 @@ class StatsViewer:
         self.fact_store = gtk.TreeStore(int, str, str, str) #id, caption, duration, date (invisible)
         self.fact_tree.set_model(self.fact_store)
         
+        x_offset = 80 # let's nicely align all graphs
+        
         self.day_chart = Chart(max_bar_width = 40,
-                               collapse_whitespace = True)
+                               collapse_whitespace = True,
+                               legend_width = x_offset)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_day")
         eventBox.add(self.day_chart);
@@ -47,7 +50,8 @@ class StatsViewer:
                                     max_bar_width = 30,
                                     animate=False,
                                     values_on_bars = True,
-                                    stretch_grid = True)
+                                    stretch_grid = True,
+                                    legend_width = x_offset)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_category")
         eventBox.add(self.category_chart);
@@ -57,7 +61,8 @@ class StatsViewer:
                                     max_bar_width = 25,
                                     animate = False,
                                     values_on_bars = True,
-                                    stretch_grid = True)
+                                    stretch_grid = True,
+                                    legend_width = x_offset)
         eventBox = gtk.EventBox()
         place = self.get_widget("totals_by_activity")
         eventBox.add(self.activity_chart);
@@ -85,7 +90,8 @@ class StatsViewer:
         selection = self.fact_tree.get_selection()
         selection.connect('changed', self.on_fact_selection_changed, self.fact_store)
 
-        self.wTree.signal_autoconnect(self)
+        self.glade.signal_autoconnect(self)
+        self.fact_tree.grab_focus()
         self.do_graph()
 
 
@@ -254,7 +260,7 @@ class StatsViewer:
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.wTree.get_widget(name)
+        return self.glade.get_widget(name)
 
     def on_prev_clicked(self, button):
         if self.day_view.get_active():
