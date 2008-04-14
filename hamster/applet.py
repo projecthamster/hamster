@@ -257,6 +257,15 @@ class HamsterApplet(object):
             self.delete_selected()
             return True
         return False
+    
+    def on_today_row_activated(self, tree, path, column):
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+        activity_name = model[iter][1]
+        if activity_name:
+            storage.add_fact(activity_name)
+            dispatcher.dispatch('panel_visible', False)        
+        
         
     def on_windows_keys(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape):

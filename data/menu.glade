@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Sun Apr 13 23:50:22 2008 -->
+<!--Generated with glade3 3.4.2 on Mon Apr 14 20:05:59 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -114,6 +114,7 @@
                                 <property name="rules_hint">True</property>
                                 <property name="enable_search">False</property>
                                 <signal name="key_press_event" handler="on_todays_keys"/>
+                                <signal name="row_activated" handler="on_today_row_activated"/>
                               </widget>
                             </child>
                           </widget>
