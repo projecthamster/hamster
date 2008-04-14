@@ -1,3 +1,5 @@
+# - coding: utf-8 -
+
 """Small charting library that enables you to draw simple bar and
 horizontal bar charts. This library is not intended for scientific graphs.
 More like some visual clues to the user.
@@ -79,6 +81,8 @@ class Chart(gtk.DrawingArea):
                                  Animation happens only if labels and their
                                  order match.
                                  Defaults to True.
+        legend_width = pixels - Legend width in pixels. Will keep you graph
+                                from floating horizontally
 
         Then there are some defaults, you can override:
         default_grid_stride - If stretch_grid is set to false, this allows you
@@ -105,6 +109,9 @@ class Chart(gtk.DrawingArea):
         self.stretch_grid = "stretch_grid" in args and args["stretch_grid"] #defaults to false
 
         self.animate = "animate" not in args or args["animate"] # defaults to true
+        
+        self.legend_width = None
+        if "legend_width" in args: self.legend_width = args["legend_width"]
         
         #and some defaults
         self.default_grid_stride = 50
@@ -320,7 +327,7 @@ class Chart(gtk.DrawingArea):
             return
 
         # graph box dimensions
-        graph_x = rect.x + 50  #give some space to scale labels
+        graph_x = self.legend_width or 50 #give some space to scale labels
         graph_width = rect.width + rect.x - graph_x
         
         step = graph_width / float(records)
@@ -386,8 +393,10 @@ class Chart(gtk.DrawingArea):
             context.show_text(data[i]["label"])
 
         # values for max min and average
-        context.move_to(rect.x + 10, rect.y + 10)
         max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        extent = context.text_extents(max_label) #x, y, width, height
+
+        context.move_to(graph_x - extent[2] - 16, rect.y + 10)
         context.show_text(max_label)
 
 
@@ -441,7 +450,22 @@ class Chart(gtk.DrawingArea):
                 context.show_text(label)
 
 
-
+    def _ellipsize_text (self, context, text, width):
+        """try to constrain text into pixels by ellipsizing end
+           TODO - check if cairo maybe has ability to ellipsize automatically
+        """
+        extent = context.text_extents(text) #x, y, width, height
+        if extent[2] <= width:
+            return text
+        
+        res = text
+        while res:
+            res = res[:-1]
+            extent = context.text_extents(res + "…") #x, y, width, height
+            if extent[2] <= width:
+                return res + "…"
+        
+        return text # if can't fit - return what we have
         
     def _horizontal_bar_chart(self, context):
         rect = self.get_allocation()  #x, y, width, height
@@ -449,15 +473,18 @@ class Chart(gtk.DrawingArea):
         
         # ok, start with labels - get the longest now
         # TODO - figure how to wrap text
-        max_extent = 0
-        for i in range(records):
-            extent = context.text_extents(data[i]["label"]) #x, y, width, height
-            max_extent = max(max_extent, extent[2])
-            
+        if self.legend_width:
+            max_extent = self.legend_width
+        else:
+            max_extent = 0
+            for i in range(records):
+                extent = context.text_extents(data[i]["label"]) #x, y, width, height
+                max_extent = max(max_extent, extent[2] + 8)
+        
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
-        graph_x = int(rect.x + max_extent + 10)
-        graph_width = int(rect.width + rect.x - graph_x)
+        graph_x = rect.x + max_extent
+        graph_width = rect.width + rect.x - graph_x
 
         graph_y = rect.y
         graph_height = graph_y - rect.x + rect.height
@@ -472,38 +499,43 @@ class Chart(gtk.DrawingArea):
         max_size = graph_width - 15
 
 
+        ellipsize_label = lambda(text): 3
+
         #now let's put the labels and align them right
         set_color(context, dark[8]);
         for i in range(records):
-            extent = context.text_extents(data[i]["label"]) #x, y, width, height
+            label = data[i]["label"]
+            if self.legend_width:
+                label = self._ellipsize_text(context, label, max_extent - 8)
+            extent = context.text_extents(label) #x, y, width, height
             
-            context.move_to(rect.x + max_extent - extent[2], rect.y + (step * i) + (step + extent[3]) / 2)
-            context.show_text(data[i]["label"])
+            context.move_to(rect.x + max_extent - extent[2] - 8, rect.y + (step * i) + (step + extent[3]) / 2)
+            context.show_text(label)
         
         context.stroke()        
         
         
-
-
         context.set_line_width(1)
         
-        
         # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x, rect.y, graph_width, graph_height)
+        context.rectangle(graph_x, graph_y, graph_width, graph_height)
         context.set_source_rgb(1, 1, 1)
         context.fill_preserve()
         context.stroke()
 
 
         context.set_dash ([1, 3]);
-
         set_color(context, dark[8])
 
         # scale lines        
-        grid_stride = self.default_grid_stride if self.stretch_grid == False else int(graph_width / 4)
-        for x in range(graph_x + grid_stride, graph_x + graph_width, grid_stride):
-            context.move_to(x-1, graph_y)
-            context.line_to(x-1, graph_y + graph_height)
+        grid_stride = self.default_grid_stride if self.stretch_grid == False else (graph_width) / 3.0
+        for x in range(graph_x + grid_stride, graph_x + graph_width - grid_stride, grid_stride):
+            context.move_to(x, graph_y)
+            context.line_to(x, graph_y + graph_height)
+
+        context.move_to(graph_x + graph_width, graph_y)
+        context.line_to(graph_x + graph_width, graph_y + graph_height)
+
 
         # and borders on both sides, so the graph doesn't fall out
         context.move_to(graph_x, graph_y)
@@ -511,9 +543,8 @@ class Chart(gtk.DrawingArea):
         context.move_to(graph_x, graph_y + graph_height)
         context.line_to(graph_x + graph_width, graph_y + graph_height)
 
-
         context.stroke()
-        
+
         gap = step * 0.05
         
         context.set_dash ([]);
@@ -565,7 +596,7 @@ class Chart(gtk.DrawingArea):
             return
 
         # graph box dimensions
-        graph_x = rect.x + 50  #give some space to scale labels
+        graph_x = self.legend_width or 50 #give some space to scale labels
         graph_width = rect.width + rect.x - graph_x
         
         step = graph_width / float(records)
@@ -627,8 +658,10 @@ class Chart(gtk.DrawingArea):
                 context.show_text(data[i]["label"])
 
         # values for max min and average
-        context.move_to(rect.x + 10, rect.y + 10)
         max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        extent = context.text_extents(max_label) #x, y, width, height
+
+        context.move_to(graph_x - extent[2] - 16, rect.y + 10)
         context.show_text(max_label)
 
 
