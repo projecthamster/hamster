@@ -1,3 +1,17 @@
+hamster-applet (0.1.7.3) unstable; urgency=low
+
+  * Added spanish translation - frandavid100
+  * In stats the top caption shows what can be actually seen
+    (day / week / month) - geekout
+  * remove hamster killname, since it breaks x86_64
+  * attempt to package with arch = all
+  * switching tasks on doubleclick in applet main window
+  * some more thinking on accidental facts (forth and back to previous task
+    within minute)
+  * graphs now have fixed offset from left, long labels get ellipsized
+
+ -- Toms <toms.baugis@gmail.com>  Mon, 15 Apr 2008 00:42:00 +0100
+
 hamster-applet (0.1.7.2) unstable; urgency=low
 
   * Fixed focus issues with global hotkeys
