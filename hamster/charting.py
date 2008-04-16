@@ -13,8 +13,6 @@ fashion. Like:
     ]
 
 Author: toms.baugis@gmail.com
-Licensed under LGPL - do whatever you want, and send me some cookies, if you
-feel like it.
 Feel free to contribute - more info at Project Hamster web page:
 http://projecthamster.wordpress.com/
 

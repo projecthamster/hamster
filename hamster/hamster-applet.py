@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-#
-# (C) 2007 Toms Baugis
-# Licensed under the GNU LGPL v3.
 PROFILE = False
 if PROFILE:
     import statprof
