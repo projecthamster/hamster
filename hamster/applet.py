@@ -139,7 +139,7 @@ class HamsterApplet(object):
             
         # if we have date change - let's finish previous task and start a new one
         if prev_date and prev_date != self.today: 
-            if self.last_activity['end_time'] == None:
+            if self.last_activity and self.last_activity['end_time'] == None:
                 storage.touch_fact(self.last_activity)
                 storage.add_fact(self.last_activity['name'])
             
