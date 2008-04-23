@@ -142,6 +142,8 @@ class HamsterApplet(object):
             if self.last_activity and self.last_activity['end_time'] == None:
                 storage.touch_fact(self.last_activity)
                 storage.add_fact(self.last_activity['name'])
+            else:
+                self.load_day()
             
         self.update_label()
         return True
