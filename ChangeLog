@@ -1,3 +1,11 @@
+hamster-applet (0.2) unstable; urgency=low
+
+  * change days on midnight also when there is no current activity
+  * option to stop tracking after certain minutes of idle
+  * simplified versioning to three numbers
+
+ -- Toms <toms.baugis@gmail.com>  Thu, 24 Apr 2008 12:27:05 +0300 
+ 
 hamster-applet (0.1.7.5) unstable; urgency=low
 
   * Fixed midnight crasher
