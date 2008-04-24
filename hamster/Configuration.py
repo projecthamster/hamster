@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2004-2007 Johan Svedberg <johan@svedberg.com>
 # Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
@@ -19,106 +18,54 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os.path
-import sys
-from gettext import gettext as _
-
 import gconf
+from hamster import dispatcher
 
-DIR_HAMSTER = "/apps/hamster-applet"
+class GconfStore(object):
+    """
+    Handles storing to and retrieving values from GConf 
+    """
 
-KEY_ENABLE_HOTKEYS              = "/general/enable_hotkeys"
-KEY_SHOW_WINDOW_HOTKEY          = "/general/show_window_hotkey"
+    # GConf directory for deskbar in window mode and shared settings
+    GCONF_DIR = "/apps/hamster-applet/general"
+    
+    # GConf key for global keybinding
+    GCONF_KEYBINDING = GCONF_DIR + "/keybinding"
+    # GConf key to the setting for the minimum number of chars of a query
+    GCONF_TIMEOUT = GCONF_DIR + "/timeout"
 
-FUNCTION_SUFFIXES = {KEY_ENABLE_HOTKEYS:              'bool',
-                     KEY_SHOW_WINDOW_HOTKEY:          'string'}
+    __instance = None
+        
+    @staticmethod
+    def get_instance():
+        if not GconfStore.__instance:
+            GconfStore.__instance = GconfStore()
+        return GconfStore.__instance
+        
+    def __init__(self):
+        """
+        Do not use the constructor directly. Always use L{get_instance}
+        Because otherwise you will have lots of signals running arround
+        """
+        super(GconfStore, self).__init__()
+        self._client = gconf.client_get_default()
+        self.__connect_notifications()
+        
+    def __connect_notifications(self):
+        self._client.add_dir(self.GCONF_DIR, gconf.CLIENT_PRELOAD_RECURSIVE)
+        self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
+        self._client.notify_add(self.GCONF_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_changed", z.value.get_int()))
+    
+    def get_keybinding(self):
+        return self._client.get_string(self.GCONF_KEYBINDING)
+    
+    def get_timeout(self):
+        return self._client.get_int(self.GCONF_TIMEOUT)
 
-class Configuration(object):
-    """Singleton representing the configuration"""
-
-    instance = None
-
-    def __new__(type, *args):
-        if Configuration.instance is None:
-            Configuration.instance = object.__new__(type)
-            Configuration.instance.__init(*args)
-        return Configuration.instance
-
-    def __init(self, *args):
-        self.base_dir = os.path.expanduser("~/.gnome2/hamster-applet")
-
-        self.client = gconf.client_get_default()
-        if self.client.dir_exists(DIR_HAMSTER):
-            self.client.add_dir(DIR_HAMSTER, gconf.CLIENT_PRELOAD_RECURSIVE)
-            self.debug = True
-            self.__init_option_cache()
-        else:
-            #ed = ErrorDialog(_("Could not find configuration directory in GConf"), _("Please make sure that ontv.schemas was correctly installed."))
-            #ed.run()
-            print "Could not find configuration directory in GConf"
-            sys.exit(1)
-
-    def __init_option_cache(self):
-        self.option_cache = {}
-        for key in FUNCTION_SUFFIXES.keys():
-            self.option_cache[key] = getattr(self, 'get_' +
-                                             os.path.basename(key))(False)
-
-    def add_notify(self, key, callback):
-        self.client.notify_add(DIR_HAMSTER + key, callback)
-
-    def add_show_window_hotkey_change_notify(self, callback):
-        self.add_notify(KEY_SHOW_WINDOW_HOTKEY, callback)
-
-    def add_enable_hotkeys_change_notify(self, callback):
-        self.add_notify(KEY_ENABLE_HOTKEYS, callback)
-
-    def __get_option(self, option, type=None):
-        if self.debug:
-            print '[GConf get]: %s%s' % (DIR_HAMSTER, option)
-        if type:
-            return getattr(self.client, 'get_' +
-                           FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, type)
-        else:
-            return getattr(self.client, 'get_' +
-                           FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option)
-
-    def __set_option(self, option, value, type=None):
-        if self.debug:
-            print '[GConf set]: %s%s=%s' % (DIR_HAMSTER, option, str(value))
-        if type:
-            getattr(self.client, 'set_' +
-                    FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, type, value)
-            self.option_cache[option] = value
-        else:
-            getattr(self.client, 'set_' +
-                    FUNCTION_SUFFIXES[option])(DIR_HAMSTER + option, value)
-            self.option_cache[option] = value
-
-    def get_enable_hotkeys(self, use_cache=True):
-        if use_cache:
-            return self.option_cache[KEY_ENABLE_HOTKEYS]
-        else:
-            return self.__get_option(KEY_ENABLE_HOTKEYS)
-
-    def set_enable_hotkeys(self, enable_hotkeys):
-        self.__set_option(KEY_ENABLE_HOTKEYS, enable_hotkeys)
-
-    enable_hotkeys = property(get_enable_hotkeys, set_enable_hotkeys)
-
-    def get_show_window_hotkey(self, use_cache=True):
-        if use_cache:
-            return self.option_cache[KEY_SHOW_WINDOW_HOTKEY]
-        else:
-            return self.__get_option(KEY_SHOW_WINDOW_HOTKEY)
-
-    def set_show_window_hotkey(self, show_window_hotkey):
-        self.__set_option(KEY_SHOW_WINDOW_HOTKEY,
-                          show_window_hotkey)
-
-    show_window_hotkey = property(get_show_window_hotkey,
-                                  set_show_window_hotkey)
-
-
-
-# vim: set sw=4 et sts=4 tw=79 fo+=l:
+    
+    def set_keybinding(self, binding):
+        self._client.set_string(self.GCONF_KEYBINDING, binding)
+    
+    def set_timeout(self, number):
+        self._client.set_int(self.GCONF_TIMEOUT, int(number))
+    

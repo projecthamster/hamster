@@ -27,6 +27,7 @@ import gobject
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
+from hamster.Configuration import GconfStore
 
 from hamster.stuff import *
 from hamster.KeyBinder import *
@@ -53,6 +54,8 @@ class PanelButton(gtk.ToggleButton):
 
 class HamsterApplet(object):
     def __init__(self, applet):
+        self.config = GconfStore.get_instance()
+        
         self.applet = applet
         self.applet.set_applet_flags (gnomeapplet.EXPAND_MINOR);
 
@@ -128,10 +131,11 @@ class HamsterApplet(object):
         self.glade.signal_autoconnect(self)
 
         # init hotkey
-        get_hamster_keybinder().connect('activated', self.on_key_combination_press)
-        get_hamster_keybinder().connect('changed', self.on_key_combination_changed)
+        dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
+        dispatcher.add_handler('gconf_timeout_changed', self.on_timeout_changed)
   
         # init idle check
+        self.timeout = self.config.get_timeout()
         idle.init()
 
     """UI functions"""
@@ -141,8 +145,9 @@ class HamsterApplet(object):
         self.today = datetime.date.today()
 
         # stop tracking task if computer is idle for 15 minutes
-        if self.last_activity and self.last_activity['end_time'] == None and \
-           idle.getIdleSec() / 60.0 >= 30:
+        if self.timeout and self.last_activity and \
+           self.last_activity['end_time'] == None and \
+           idle.getIdleSec() / 60.0 >= self.timeout:
             storage.touch_fact(self.last_activity)
             
         # if we have date change - let's finish previous task and start a new one
@@ -345,9 +350,9 @@ class HamsterApplet(object):
             self.update_label()
 
     """global shortcuts"""
-    def on_key_combination_press(self, widget, time):
+    def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
-
-    def on_key_combination_changed(self, keybinder, success):
-        pass      
         
+    def on_timeout_changed(self, event, new_timeout):
+        self.timeout = new_timeout
+
