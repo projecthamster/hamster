@@ -1,8 +1,8 @@
 <gconfschemafile>
     <schemalist>
         <schema>
-            <key>/schemas/apps/hamster-applet/general/show_window_hotkey</key>
-            <applyto>/apps/hamster-applet/general/show_window_hotkey</applyto>
+            <key>/schemas/apps/hamster-applet/general/keybinding</key>
+            <applyto>/apps/hamster-applet/general/keybinding</applyto>
             <owner>hamster-applet</owner>
             <type>string</type>
             <default>&lt;Super&gt;H</default>
@@ -12,14 +12,17 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-applet/general/enable_hotkeys</key>
-            <applyto>/apps/hamster-applet/general/enable_hotkeys</applyto>
+            <key>/schemas/apps/hamster-applet/general/timeout</key>
+            <applyto>/apps/hamster-applet/general/timeout</applyto>
             <owner>hamster-applet</owner>
-            <type>bool</type>
-            <default>true</default>
+            <type>int</type>
+            <default>30</default>
             <locale name="C">
-                <short>Enable hotkeys</short>
-                <long>Whether Hamster should listen to configured hotkey.</long>
+                <short>Timeout in minutes</short>
+                <long>
+                    After how many minutes hamster should stop tracking activity
+                    when computer is idle. Set to 0 to disable.
+                </long>
             </locale>
         </schema>
     </schemalist>
