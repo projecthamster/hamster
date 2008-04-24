@@ -30,6 +30,7 @@ import hamster.eds
 
 from hamster.stuff import *
 from hamster.KeyBinder import *
+import idle
 
 class PanelButton(gtk.ToggleButton):
     def __init__(self):
@@ -130,12 +131,19 @@ class HamsterApplet(object):
         get_hamster_keybinder().connect('activated', self.on_key_combination_press)
         get_hamster_keybinder().connect('changed', self.on_key_combination_changed)
   
+        # init idle check
+        idle.init()
 
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
         prev_date = self.today
         self.today = datetime.date.today()
+
+        # stop tracking task if computer is idle for 15 minutes
+        if self.last_activity and self.last_activity['end_time'] == None and \
+           idle.getIdleSec() / 60.0 >= 30:
+            storage.touch_fact(self.last_activity)
             
         # if we have date change - let's finish previous task and start a new one
         if prev_date and prev_date != self.today: 

@@ -45,6 +45,32 @@ AM_PATH_PYTHON(2.5)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
 dnl ****************************************************************************
+dnl * X11
+dnl ****************************************************************************
+PKG_CHECK_EXISTS([xscrnsaver], [have_xscrnsaver=yes], [have_xscrnsaver=no])
+
+if test "x$have_xscrnsaver" = "xyes";then
+    PKG_CHECK_MODULES([XSCRNSAVER], xscrnsaver)
+    AC_SUBST(XSCRNSAVER_LIBS)
+    have_idle=true
+else
+    # Checks for libraries.
+    LIBS=-L$x_libraries
+    AC_CHECK_LIB([X11], [XOpenDisplay])
+    AC_CHECK_LIB([Xext], [XMissingExtension])
+    AC_CHECK_LIB([Xss], [XScreenSaverAllocInfo])
+    XSCRNSAVER_LIBS="$LIBS"
+    AC_SUBST([XSCRNSAVER_LIBS])
+    if test "x$XSCRNSAVER_LIBS" = "x-L";then 
+        have_idle=false
+    else
+        have_idle=true
+    fi
+fi
+
+
+
+dnl ****************************************************************************
 dnl * Write the values of various paths in defs.py
 dnl ****************************************************************************
 AC_SUBST(VERSION)
