@@ -33,7 +33,7 @@ class Dispatcher(object):
             if method in self.handlers[event]:
                 self.handlers[event].remove(method)
 
-    def dispatch(self, event, data):
+    def dispatch(self, event, data = None):
         print 'Dispatching event %s (%s)' % (event, data)
         if self.handlers.has_key(event):
             for handler in self.handlers[event]:
