@@ -1,0 +1,277 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: it\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-30 00:51+0100\n"
+"PO-Revision-Date: 2008-04-30 11:17+0100\n"
+"Last-Translator: Stefano Pedretti <stefano.pedretti@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
+#: ../hamster/about.py:21
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Conteggio del tempo per tutti"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Informazioni su"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Edit Activities"
+msgstr "_Modifica attività"
+
+#: ../data/activities.glade.h:1
+msgid " "
+msgstr " "
+
+#: ../data/activities.glade.h:2
+msgid "Edit Activities"
+msgstr "Modifica attività"
+
+#: ../data/activities.glade.h:3
+msgid "Move _Down"
+msgstr "Sposta _Su"
+
+#: ../data/activities.glade.h:4
+msgid "Move _Up"
+msgstr "Sposta _Giu"
+
+#: ../data/activities.glade.h:5
+msgid "N_ew Category"
+msgstr "Nuova Cat_egoria"
+
+#: ../data/activities.glade.h:6
+msgid "_Activities"
+msgstr "_Attività"
+
+#: ../data/activities.glade.h:7
+msgid "_Categories"
+msgstr "_Categorie"
+
+#: ../data/activities.glade.h:8
+msgid "_New Activity"
+msgstr "_Nuova Attività"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Attività</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data e Ora</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "A_dd"
+msgstr "_Aggiungi"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "Add older fact - Hamster"
+msgstr "Aggiungi eventi trascorsi - Hamster"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "_Cancel"
+msgstr "_Cancella"
+
+#: ../data/add_custom_fact.glade.h:6
+msgid "hours"
+msgstr "ore"
+
+#: ../data/add_custom_fact.glade.h:7
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"in corso...\n"
+"fino a\n"
+"per"
+
+#: ../data/add_custom_fact.glade.h:10
+msgid "minutes"
+msgstr "minuti"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Enable hotkeys"
+msgstr "Abilita tasti di scelta rapida"
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Keyboard shortcut for showing the Hamster Applet window."
+msgstr "Combinazioni di tasti per mostrare la finestra dell'applett Hamster."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Show window"
+msgstr "Mostra finestra"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Whether Hamster should listen to configured hotkey."
+msgstr "Abilitare i tasti di scelta rapida di Hasmster."
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Older Fact"
+msgstr "_Aggiungi un evento trascorso"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "Niente da visualizzare per oggi"
+
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "_Mostra riassunto"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "_Attività:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "Arre_sta conteggio"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "_Oggi"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_Giorno"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_Mese"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "_Settimana"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Categoria</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Riassunto</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Settimana</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Overview - Hamster"
+msgstr "Riassunto - Hamster"
+
+#: ../hamster/about.py:23
+msgid "Time tracking for masses."
+msgstr "Conteggio del tempo per tutti."
+
+#: ../hamster/about.py:26
+msgid "Hamster Website"
+msgstr "Pagina web di Hamster"
+
+#: ../hamster/about.py:34
+msgid "translator-credits"
+msgstr "Stefano Pedretti stefano.pedretti@gmail.com"
+
+#: ../hamster/activities.py:35 ../hamster/db.py:229
+msgid "Unsorted"
+msgstr "Non categorizzati"
+
+#: ../hamster/activities.py:77 ../hamster/stats.py:26
+msgid "Name"
+msgstr "Nome"
+
+#: ../hamster/activities.py:97
+msgid "Category"
+msgstr "Categoriaa"
+
+#: ../hamster/activities.py:408
+msgid "New category"
+msgstr "Nuova categoria"
+
+
+#: ../hamster/activities.py:420
+msgid "New activity"
+msgstr "Nuova attività"
+
+#: ../hamster/applet.py:137
+msgid "No activity"
+msgstr "Nessuna attività"
+
+#. defaults
+#: ../hamster/db.py:378
+msgid "Work"
+msgstr "Lavoro"
+
+#: ../hamster/db.py:379
+msgid "Reading news"
+msgstr "Leggere le notizie"
+
+#: ../hamster/db.py:380
+msgid "Checking stocks"
+msgstr "Controllare le azioni"
+
+#: ../hamster/db.py:381
+msgid "Super secret project X"
+msgstr "Progetto super segreto X"
+
+#: ../hamster/db.py:382
+msgid "World domination"
+msgstr "Conquista del mondo"
+
+#: ../hamster/db.py:384
+msgid "Day to day"
+msgstr "Giorno per giorno"
+
+#: ../hamster/db.py:385
+msgid "Lunch"
+msgstr "Pranzo"
+
+#: ../hamster/db.py:386
+msgid "Watering flowers"
+msgstr "Annaffiare le piante"
+
+#: ../hamster/db.py:387
+msgid "Doing handstands"
+msgstr "Fare le flessioni"
+
+#: ../hamster/db.py:563 ../hamster/db.py:567
+msgid "name"
+msgstr "nome"
+
+#: ../hamster/stats.py:207
+msgid "Other"
+msgstr "Altro"
+
+#. single day is an exception
+#: ../hamster/stats.py:236
+#, python-format
+msgid "Overview for %s"
+msgstr "Riassunto per %s"
+
+#: ../hamster/stats.py:237
+msgid "Day"
+msgstr "Giorno"
+
+#: ../hamster/stats.py:239 ../hamster/stats.py:242
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Riassunto per %s - %s"
+
+#: ../hamster/stats.py:240
+msgid "Week"
+msgstr "Settimana"
+
+#: ../hamster/stats.py:243
+msgid "Month"
+msgstr "Mese"
