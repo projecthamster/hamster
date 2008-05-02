@@ -1,3 +1,11 @@
+hamster-applet (0.3) unstable; urgency=low
+
+  * Added italian translation (Stefano Pedretti)
+  * Many small fixes to activity editing window (setting, focus, F2 for
+    renames and others you would expect)
+
+ -- Toms <toms.baugis@gmail.com>  Sat, 03 May 2008 00:51:00 +0300 
+
 hamster-applet (0.2) unstable; urgency=low
 
   * change days on midnight also when there is no current activity
