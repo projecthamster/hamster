@@ -52,7 +52,7 @@ class CategoryStore(gtk.ListStore):
                          category['name'],
                          category['category_order']])
         
-        self.append([-1, _("Unsorted"), 999]) # all activities without category
+        self.unsorted_category = self.append([-1, _("Unsorted"), 999]) # all activities without category
 
 
 class ActivityStore(gtk.ListStore):
@@ -122,6 +122,7 @@ class ActivitiesEditor:
         self.categoryColumn.pack_start(self.categoryCell, True)
         self.categoryColumn.set_attributes(self.categoryCell, text = 1)
         self.categoryColumn.set_sort_column_id(1)
+        self.categoryColumn.set_cell_data_func(self.categoryCell, self.unsorted_painter)
         self.category_tree.append_column(self.categoryColumn)
 
         self.category_store.load()
@@ -361,6 +362,17 @@ class ActivitiesEditor:
         model.remove(iter)
         return removable_id
         
+    def unsorted_painter(self, column, cell, model, iter):
+        cell_id = model.get_value(iter, 0)
+        cell_text = model.get_value(iter, 1)
+        if cell_id == -1:
+            text = '<span color="#555" style="italic">%s</span>' % cell_text # TODO - should get color from theme
+            cell.set_property('markup', text)
+        else:
+            cell.set_property('text', cell_text)
+            
+        return
+
     def on_activity_list_button_pressed(self, tree, event):
         self.activityCell.set_property("editable", False)
         
@@ -384,7 +396,8 @@ class ActivitiesEditor:
             # Get treeview path.
             path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
 
-            if self.prev_selected_category == path:
+            if self.prev_selected_category == path and \
+               self._get_selected_category() != -1: #do not allow to edit unsorted
                 self.categoryCell.set_property("editable", True)
                 tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
             else:
@@ -403,7 +416,8 @@ class ActivitiesEditor:
             storage.remove_activity(model[iter][0])
             self._del_selected_row(tree)
 
-        elif key == gtk.keysyms.F2:
+        elif key == gtk.keysyms.F2 :
+            self.activityCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
             #tree.grab_focus()
@@ -412,6 +426,10 @@ class ActivitiesEditor:
 
     def on_category_list_key_pressed(self, tree, event_key):
         key = event_key.keyval
+        
+        if self._get_selected_category() == -1:
+            return #ignoring unsorted category
+        
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
 
@@ -420,14 +438,23 @@ class ActivitiesEditor:
             if id != -1:
                 storage.remove_category(id)
                 self._del_selected_row(tree)
+        elif key == gtk.keysyms.F2:
+            self.categoryCell.set_property("editable", True)
+            path = model.get_path(iter)[0]
+            tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+            #tree.grab_focus()
+            #tree.set_cursor(path, start_editing = True)
                 
 
     """button events"""
     def on_add_category_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
-        new_category = self.category_store.append([-2, _(u"New category"), -1])
+        
+        new_category = self.category_store.insert_before(self.category_store.unsorted_category,
+                                                         [-2, _(u"New category"), -1])
 
-        self.category_tree.set_cursor_on_cell((len(self.category_tree.get_model()) - 1, ),
+        self.categoryCell.set_property("editable", True)
+        self.category_tree.set_cursor_on_cell((len(self.category_tree.get_model()) - 2, ),
                                          focus_column = self.category_tree.get_column(0),
                                          focus_cell = None,
                                          start_editing = True)
@@ -441,6 +468,7 @@ class ActivitiesEditor:
 
         (model, iter) = self.selection.get_selected()
 
+        self.activityCell.set_property("editable", True)
         self.activity_tree.set_cursor_on_cell(model.get_string_from_iter(new_activity),
                                          focus_column = self.activity_tree.get_column(0),
                                          focus_cell = None,
