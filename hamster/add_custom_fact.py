@@ -35,7 +35,7 @@ GLADE_FILE = "add_custom_fact.glade"
 
 
 class CustomFactController:
-    def __init__(self,  fact_date = None):
+    def __init__(self,  fact_date = None, fact_id = None):
         self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
@@ -69,6 +69,31 @@ class CustomFactController:
         self.get_widget('end_time_combo').set_model(self.hours)        
         if fact_date:
             self.get_widget('start_date').set_time(time.mktime(fact_date.timetuple()))
+        
+        # handle the case when we get fact_id - that means edit!
+        self.fact_id = fact_id
+        if fact_id:
+            fact = storage.get_fact(fact_id)
+            print fact
+            self.get_widget('start_date').set_time(time.mktime(fact["start_time"].timetuple()))
+            self.get_widget('start_time').set_text("%02d:%02d" % (fact["start_time"].hour, fact["start_time"].minute))
+
+            self.get_widget('activity_name').set_text(fact["name"])
+            self.get_widget("ok").set_sensitive(True)
+            self.get_widget("ok").set_label(_("_Update"))
+            self.window.set_title("Update fact - Hamster")
+            
+            if fact["end_time"]:
+                self.get_widget("end_time_mode").set_active(1)
+                self.get_widget("fact_end_until").show()
+                self.get_widget('end_time').set_text("%02d:%02d" % (fact["end_time"].hour, fact["end_time"].minute))
+                
+                # fill also delta for those relative types, heh
+                for_delta = fact["end_time"] - fact["start_time"]
+                for_hours = for_delta.seconds / 3600
+                for_minutes = (for_delta.seconds - (for_hours * 3600)) / 60
+                self.get_widget('duration_hours').set_value(for_hours)
+                self.get_widget('duration_mins').set_value(for_minutes)
 
 
         self.wTree.signal_autoconnect(self)
@@ -151,8 +176,15 @@ class CustomFactController:
                 
             print end_time
 
+        # do some  trickery here - if we were told to update, let's just
+        # do insert/delete
+        if self.fact_id:
+            storage.remove_fact(self.fact_id)
+
         storage.add_fact(activity, start_time, end_time)
-        dispatcher.dispatch('panel_visible', False)
+
+        if not self.fact_id: #hide panel only on add - on update user will want to see confirmation of changes
+            dispatcher.dispatch('panel_visible', False)
         
         self.window.destroy()
         

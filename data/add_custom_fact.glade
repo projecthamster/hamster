@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Wed Apr  2 22:32:16 2008 -->
+<!--Generated with glade3 3.4.2 on Sun May  4 23:47:05 2008 -->
 <glade-interface>
   <requires lib="gnome"/>
   <widget class="GtkWindow" id="custom_fact_window">
@@ -200,7 +200,7 @@ for</property>
                     <signal name="changed" handler="on_combo_changed"/>
                     <signal name="editing_done" handler="on_combo_changed"/>
                     <child internal-child="entry">
-                      <widget class="GtkEntry" id="comboboxentry-entry1">
+                      <widget class="GtkEntry" id="activity_name">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

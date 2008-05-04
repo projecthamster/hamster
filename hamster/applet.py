@@ -85,6 +85,11 @@ class HamsterApplet(object):
         self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
         self.treeview.append_column(ExpanderColumn("Name", text = 1))
         self.treeview.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=3))
+        
+        edit_cell = gtk.CellRendererPixbuf()
+        edit_cell.set_property("stock_id", "gtk-edit")
+        self.edit_column = gtk.TreeViewColumn("", edit_cell)
+        self.treeview.append_column(self.edit_column)
 
 
         # Load today's data, activities and set label
@@ -138,6 +143,21 @@ class HamsterApplet(object):
         self.timeout = self.config.get_timeout()
         idle.init()
 
+    def on_today_release_event(self, tree, event):
+        pointer = event.window.get_pointer() # x, y, flags
+        path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
+        if path[1] == self.edit_column:
+            selection = tree.get_selection()
+            (model, iter) = selection.get_selected()
+            fact_id = model[iter][0]
+                
+            from hamster.add_custom_fact import CustomFactController
+            custom_fact = CustomFactController(None, fact_id)
+            custom_fact.show()
+            return True
+        
+        return False
+        
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        

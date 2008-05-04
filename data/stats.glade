@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Mon Apr 14 21:53:47 2008 -->
+<!--Generated with glade3 3.4.2 on Mon May  5 00:27:44 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -86,6 +86,17 @@
                 <property name="tooltip_text">Add fact</property>
                 <property name="stock_id">gtk-add</property>
                 <signal name="clicked" handler="on_add_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkToolButton" id="edit">
+                <property name="visible">True</property>
+                <property name="tooltip_text">Edit fact</property>
+                <property name="stock_id">gtk-edit</property>
+                <signal name="clicked" handler="on_edit_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

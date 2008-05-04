@@ -354,6 +354,16 @@ class StatsViewer:
     def on_remove_clicked(self, button):
         self.delete_selected()
 
+    def on_edit_clicked(self, button):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        if model[iter][0] == -1:
+            return #not a fact
+
+        custom_fact = CustomFactController(None, model[iter][0])
+        custom_fact.show()
+
     def delete_selected(self):
         selection = self.fact_tree.get_selection()
         (model, iter) = selection.get_selected()
