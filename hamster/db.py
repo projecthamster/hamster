@@ -167,7 +167,8 @@ class Storage(hamster.storage.Storage):
                     self.__add_fact(fact['name'], end_time, fact['end_time'])
 
             #now check if maybe we are overlapping start
-            if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time']:
+            if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time'] \
+               or not fact['end_time'] and end_time and fact['start_time'] < end_time: # case for the entry before the last one
                 #set fact's start time to our end one
                 update = """
                            UPDATE facts
