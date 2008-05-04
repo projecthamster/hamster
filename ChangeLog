@@ -1,3 +1,9 @@
+hamster-applet (0.4) unstable; urgency=low
+
+  * Fact editing!
+
+ -- Toms <toms.baugis@gmail.com>  Sat, 05 May 2008 00:49:00 +0300 
+
 hamster-applet (0.3) unstable; urgency=low
 
   * Added italian translation (Stefano Pedretti)
