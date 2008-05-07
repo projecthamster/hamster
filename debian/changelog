@@ -1,3 +1,9 @@
+hamster-applet (0.4.1) unstable; urgency=low
+
+  * Fixed usage of spanish and italian translations
+
+ -- Toms <toms.baugis@gmail.com>  Wed, 07 May 2008 15:19:00 +0300 
+
 hamster-applet (0.4) unstable; urgency=low
 
   * Fact editing!
