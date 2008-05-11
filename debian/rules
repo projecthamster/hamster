@@ -12,5 +12,5 @@ include /usr/share/cdbs/1/rules/simple-patchsys.mk
 DEB_CONFIGURE_EXTRA_FLAGS := --datadir=/usr/share
 
 # New python policy
-#binary-install/deskbar-applet::
-#	dh_pycentral -pdeskbar-applet handlers /usr/lib/deskbar-applet/handlers
+binary-install/hamster-applet::
+	dh_pycentral

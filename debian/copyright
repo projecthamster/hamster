@@ -1,17 +1,17 @@
 This package was debianized by Toms <toms.baugis@gmail.com> on
 Mon, 31 Mar 2008 01:09:26 +0100.
 
+It was downloaded via subversion from
+http://projecthamster.googlecode.com/svn/
 
-Upstream Author(s): 
 
+Upstream Author: 
     Toms Baugis <toms.baugis@gmail.com>
 
 Copyright: 
-
     Copyright (C) 2008 Toms Baugis
 
 License:
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -28,6 +28,3 @@ License:
 
 The Debian packaging is (C) 2008, Toms <toms.baugis@gmail.com> and
 is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
