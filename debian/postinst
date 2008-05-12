@@ -1,9 +1,0 @@
-#!/bin/sh
-#DEBHELPER#
-
-# i'd love to have it performed automatically but somehow i could not manage to do that
-gconf-schemas --register /usr/share/gconf/schemas/hamster-applet.schemas 
-
-echo "Rebuilding icon cache..."
-sudo gtk-update-icon-cache -f -t /usr/share/icons/hicolor
-echo "Thanks and enjoy!"
