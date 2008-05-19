@@ -170,14 +170,15 @@ class HamsterApplet(object):
            idle.getIdleSec() / 60.0 >= self.timeout:
             storage.touch_fact(self.last_activity)
             
-        # if we have date change - let's finish previous task and start a new one
-        if prev_date and prev_date != self.today: 
-            if self.last_activity and self.last_activity['end_time'] == None:
+
+        if self.last_activity and self.last_activity['end_time'] == None:
+            # if we have date change - let's finish previous task and start a new one
+            if prev_date and prev_date != self.today: 
                 storage.touch_fact(self.last_activity)
                 storage.add_fact(self.last_activity['name'])
-            else:
+            elif self.button.get_active(): # otherwise if we the day view is visible - update day's durations
                 self.load_day()
-            
+                    
         self.update_label()
         return True
 
@@ -257,6 +258,9 @@ class HamsterApplet(object):
             self.window.hide()
             return
 
+        self.load_day() # reload day each time before showing to avoid outdated last activity
+        self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
+        
         self.window.show()
 
         label_geom = self.button.get_allocation()

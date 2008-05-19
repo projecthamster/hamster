@@ -24,6 +24,7 @@
 import gtk
 from hamster import storage
 from pango import ELLIPSIZE_END
+import datetime as dt
 
 class ExpanderColumn(gtk.TreeViewColumn):
     def __init__(self, label, text):
@@ -76,6 +77,9 @@ class DayStore(object):
             if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
+            elif fact["start_time"].date() == dt.date.today():  # give duration to today's last activity
+                delta = dt.datetime.now() - fact["start_time"]
+                duration = 24 * delta.days + delta.seconds / 60
             
             fact_name = fact['name']
             
@@ -89,7 +93,8 @@ class DayStore(object):
 
             self.fact_store.append([fact['id'], fact['name'], 
                                     fact["start_time"].strftime("%H:%M"), 
-                                    current_duration, fact["start_time"].strftime("%Y%m%d")])
+                                    current_duration,
+                                    fact["start_time"].strftime("%Y%m%d")])
 
         # now we are good to append totals!
         # no sorting - chronological is intuitive
