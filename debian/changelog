@@ -3,7 +3,7 @@ hamster-applet (0.4.2) unstable; urgency=low
   * Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :) 
   * Fixed rules as per bug 532711. Patch by Juanje Ojeda.
 
- -- Toms Baugis <toms.baugis@gmail.com>  Lun, 12 May 2008 21:45:35 +0300 
+ -- Toms Baugis <toms.baugis@gmail.com>  Mon, 12 May 2008 21:45:35 +0300 
 
 hamster-applet (0.4.1) unstable; urgency=low
 
