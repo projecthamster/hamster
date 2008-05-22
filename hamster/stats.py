@@ -25,7 +25,7 @@ import os
 import gtk
 import pango
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster.charting import Chart
 from hamster.add_custom_fact import CustomFactController
 
@@ -114,26 +114,6 @@ class StatsViewer:
         self.fact_tree.grab_focus()
         self.do_graph()
 
-
-        
-    def format_duration(self, duration):
-        if duration == None:
-            return None
-        
-        hours = duration / 60
-        days = hours / 24
-        hours %= 24
-        minutes = duration % 60
-        formatted_duration = ""
-        
-        #TODO - convert to list comprehension or that other thing
-        if days > 0:
-            formatted_duration += "%d:" % days
-        formatted_duration += "%02d:%02d" % (hours, minutes)
-                
-        return formatted_duration
-    
-
     def parent_painter(self, column, cell, model, iter):
         cell_text = model.get_value(iter, 1)
         if model.iter_parent(iter) == None:
@@ -184,7 +164,7 @@ class StatsViewer:
                                    [fact["id"],
                                     fact["start_time"].strftime('%H:%M') + " " +
                                     fact["name"],
-                                    self.format_duration(duration),
+                                    stuff.format_duration(duration),
                                     fact["start_time"].strftime('%Y-%m-%d')
                                     ])
             
