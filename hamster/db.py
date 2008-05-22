@@ -26,6 +26,7 @@ import os, time
 import datetime
 import hamster
 import hamster.storage
+import datetime as dt
 
         
 class Storage(hamster.storage.Storage):
@@ -123,10 +124,11 @@ class Storage(hamster.storage.Storage):
                           b.name AS name, b.id as activity_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
+                    WHERE date(a.start_time) = ?
                  ORDER BY a.start_time desc
                     LIMIT 1
         """
-        return self.fetchone(query)
+        return self.fetchone(query, (dt.date.today(), ))
 
     def __touch_fact(self, activity, end_time = None):
         id = activity['id']
