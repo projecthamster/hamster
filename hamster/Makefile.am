@@ -32,7 +32,7 @@ hamster_PYTHON = \
 	charting.py \
 	Configuration.py \
 	KeyBinder.py \
-	activities.py \
+	preferences.py \
 	stuff.py \
 	add_custom_fact.py \
 	applet.py \

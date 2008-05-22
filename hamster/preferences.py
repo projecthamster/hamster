@@ -82,7 +82,7 @@ class ActivityStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-class ActivitiesEditor:
+class PreferencesEditor:
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
@@ -90,9 +90,9 @@ class ActivitiesEditor:
     
     
     def __init__(self):
-        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
+        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "preferences.glade"))
         self.config = GconfStore.get_instance()
-        self.window = self.get_widget('activities_window')
+        self.window = self.get_widget('preferences_window')
 
 
         # create and fill activity tree

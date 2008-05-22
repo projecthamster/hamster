@@ -125,7 +125,7 @@ class HamsterApplet(object):
             SHARED_DATA_DIR, "Hamster_Applet.xml",
             None, [
             ("about", self.on_about),
-            ("activities", self.on_edit_activities),
+            ("preferences", self.show_preferences),
             ])
 
         self.applet.show_all()
@@ -355,11 +355,11 @@ class HamsterApplet(object):
         from hamster.about import show_about
         show_about(self.applet)
 
-    def on_edit_activities(self, menu_item, verb):
-        from hamster.activities import ActivitiesEditor
+    def show_preferences(self, menu_item, verb):
+        from hamster.preferences import PreferencesEditor
 
         dispatcher.dispatch('panel_visible', False)
-        activities_editor = ActivitiesEditor()
+        activities_editor = PreferencesEditor()
         activities_editor.show()
     
     """signals"""

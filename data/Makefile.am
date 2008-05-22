@@ -21,7 +21,7 @@ schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	Hamster_Applet.xml \
-	activities.glade \
+	preferences.glade \
 	stats.glade \
 	add_custom_fact.glade \
     menu.glade \

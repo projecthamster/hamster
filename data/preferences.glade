@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu May 22 22:11:16 2008 -->
+<!--Generated with glade3 3.4.5 on Thu May 22 22:39:04 2008 -->
 <glade-interface>
-  <widget class="GtkWindow" id="activities_window">
+  <widget class="GtkWindow" id="preferences_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">Edit Activities</property>
+    <property name="title" translatable="yes">Hamster Applet Preferences</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="default_width">600</property>
     <property name="default_height">500</property>
@@ -38,52 +38,51 @@
                         <property name="column_spacing">4</property>
                         <property name="row_spacing">4</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox3">
-                            <property name="width_request">150</property>
+                          <widget class="GtkAlignment" id="alignment10">
                             <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="spacing">4</property>
                             <child>
-                              <widget class="GtkLabel" id="categories_label">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Categories</property>
-                                <property name="use_underline">True</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkScrolledWindow" id="scrolledwindow2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="shadow_type">GTK_SHADOW_IN</property>
-                                <child>
-                                  <widget class="GtkTreeView" id="category_list">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="enable_search">False</property>
-                                    <signal name="button_press_event" handler="on_category_list_button_pressed"/>
-                                    <signal name="drag_motion" handler="on_category_list_drag_motion"/>
-                                    <signal name="key_press_event" handler="on_category_list_key_pressed"/>
-                                    <signal name="button_release_event" handler="on_category_list_button_released"/>
-                                  </widget>
-                                </child>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </widget>
                           <packing>
-                            <property name="x_options"></property>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkAlignment" id="alignment7">
+                            <property name="visible">True</property>
+                            <property name="xalign">1</property>
+                            <property name="xscale">0</property>
+                            <child>
+                              <widget class="GtkButton" id="add_category">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="response_id">0</property>
+                                <signal name="clicked" handler="on_add_category_clicked"/>
+                                <child>
+                                  <widget class="GtkLabel" id="label4">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xpad">4</property>
+                                    <property name="ypad">2</property>
+                                    <property name="label" translatable="yes">N_ew Category</property>
+                                    <property name="use_underline">True</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -270,51 +269,52 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkAlignment" id="alignment7">
+                          <widget class="GtkVBox" id="vbox3">
+                            <property name="width_request">150</property>
                             <property name="visible">True</property>
-                            <property name="xalign">1</property>
-                            <property name="xscale">0</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="spacing">4</property>
                             <child>
-                              <widget class="GtkButton" id="add_category">
+                              <widget class="GtkLabel" id="categories_label">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Categories</property>
+                                <property name="use_underline">True</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkScrolledWindow" id="scrolledwindow2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="response_id">0</property>
-                                <signal name="clicked" handler="on_add_category_clicked"/>
+                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="shadow_type">GTK_SHADOW_IN</property>
                                 <child>
-                                  <widget class="GtkLabel" id="label4">
+                                  <widget class="GtkTreeView" id="category_list">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xpad">4</property>
-                                    <property name="ypad">2</property>
-                                    <property name="label" translatable="yes">N_ew Category</property>
-                                    <property name="use_underline">True</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="enable_search">False</property>
+                                    <signal name="button_press_event" handler="on_category_list_button_pressed"/>
+                                    <signal name="drag_motion" handler="on_category_list_drag_motion"/>
+                                    <signal name="key_press_event" handler="on_category_list_key_pressed"/>
+                                    <signal name="button_release_event" handler="on_category_list_button_released"/>
                                   </widget>
                                 </child>
                               </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </widget>
                           <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkAlignment" id="alignment10">
-                            <property name="visible">True</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="x_options"></property>
                           </packing>
                         </child>
                       </widget>
@@ -455,14 +455,27 @@
                         <property name="column_spacing">4</property>
                         <property name="row_spacing">4</property>
                         <child>
-                          <widget class="GtkLabel" id="label10">
+                          <widget class="GtkComboBox" id="duration_format">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Duration format:</property>
+                            <property name="items" translatable="yes">01:15
+1h15m
+75m</property>
+                            <signal name="changed" handler="on_duration_format_changed"/>
                           </widget>
                           <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label8">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Panel appearance:</property>
+                          </widget>
+                          <packing>
                             <property name="x_options">GTK_FILL</property>
                           </packing>
                         </child>
@@ -480,28 +493,15 @@ Icon and Text</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label8">
+                          <widget class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Panel appearance:</property>
+                            <property name="label" translatable="yes">Duration format:</property>
                           </widget>
                           <packing>
-                            <property name="x_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkComboBox" id="duration_format">
-                            <property name="visible">True</property>
-                            <property name="items" translatable="yes">01:15
-1h15m
-75m</property>
-                            <signal name="changed" handler="on_duration_format_changed"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
                           </packing>
                         </child>
                       </widget>
