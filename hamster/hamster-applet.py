@@ -68,7 +68,7 @@ def applet_factory(applet, iid):
 def build_window():
     app = gtk.Window(gtk.WINDOW_TOPLEVEL)
     app.set_title(_(u"Hamster Applet"))
-    app.connect("destroy", gtk.main_quit)
+    app.connect("destroy", on_destroy)
 
     applet = gnomeapplet.Applet()
     applet.get_orient = lambda: gnomeapplet.ORIENT_DOWN
@@ -78,6 +78,19 @@ def build_window():
     app.show_all()
 
     return app
+
+def on_destroy(event):
+    from hamster.Configuration import GconfStore
+    config = GconfStore.get_instance()
+    
+    # handle config option to stop tracking on shutdown
+    if config.get_stop_on_shutdown():
+        from hamster import storage
+        last_activity = storage.get_last_activity()
+        if last_activity['end_time'] == None:
+            storage.touch_fact(last_activity)
+        
+    gtk.main_quit()
 
 def usage():
     print _(u"""=== Hamster applet: Usage
