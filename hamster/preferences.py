@@ -536,3 +536,6 @@ class PreferencesEditor:
         
     def on_panel_appearance_changed(self, combo):
         self.config.set_panel_appearance(appearances[combo.get_active()])
+        
+    def on_shutdown_track_toggled(self, checkbox):
+        self.config.set_stop_on_shutdown(checkbox.get_active())
