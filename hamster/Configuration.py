@@ -33,10 +33,7 @@ class GconfStore(object):
     GCONF_KEYBINDING = GCONF_DIR + "/keybinding"
     GCONF_TIMEOUT = GCONF_DIR + "/timeout"
     GCONF_ENABLE_TIMEOUT = GCONF_DIR + "/enable_timeout"
-    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"
-    GCONF_DURATION_FORMAT = GCONF_DIR + "/duration_format"
-    GCONF_PANEL_APPEARANCE = GCONF_DIR + "/panel_appearance"
-    
+    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"    
 
     __instance = None
         
@@ -61,8 +58,6 @@ class GconfStore(object):
         self._client.notify_add(self.GCONF_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_changed", z.value.get_int()))
         self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
         self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_DURATION_FORMAT, lambda x, y, z, a: dispatcher.dispatch("gconf_duration_format_changed", z.value.get_string()))
-        self._client.notify_add(self.GCONF_PANEL_APPEARANCE, lambda x, y, z, a: dispatcher.dispatch("gconf_panel_appearance_changed", z.value.get_string()))
     
     def get_keybinding(self):
         return self._client.get_string(self.GCONF_KEYBINDING)
@@ -76,12 +71,6 @@ class GconfStore(object):
     def get_stop_on_shutdown(self):
         return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN)
 
-    def get_duration_format(self):
-        return self._client.get_string(self.GCONF_DURATION_FORMAT)
-
-    def get_panel_appearance(self):
-        return self._client.get_string(self.GCONF_PANEL_APPEARANCE)
-
     #------------------------    
     def set_keybinding(self, binding):
         self._client.set_string(self.GCONF_KEYBINDING, binding)
@@ -94,9 +83,3 @@ class GconfStore(object):
         
     def set_stop_on_shutdown(self, enabled):
         self._client.set_bool(self.GCONF_STOP_ON_SHUTDOWN, enabled)
-        
-    def set_duration_format(self, format):
-        self._client.set_string(self.GCONF_DURATION_FORMAT, format)
-
-    def set_panel_appearance(self, appearance):
-        self._client.set_string(self.GCONF_PANEL_APPEARANCE, appearance)

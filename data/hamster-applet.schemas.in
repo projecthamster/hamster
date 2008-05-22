@@ -51,33 +51,5 @@
                 </long>
             </locale>
         </schema>
-        <schema>
-            <key>/schemas/apps/hamster-applet/general/duration_format</key>
-            <applyto>/apps/hamster-applet/general/duration_format</applyto>
-            <owner>hamster-applet</owner>
-            <type>string</type>
-            <default>fixed</default>
-            <locale name="C">
-                <short>Duration format</short>
-                <long>
-                    Duration format - choose one of those: "fixed" - 01:31,
-                    "symbolic" - 1h31m, "minutes": - 91m
-                </long>
-            </locale>
-        </schema>
-        <schema>
-            <key>/schemas/apps/hamster-applet/general/panel_appearance</key>
-            <applyto>/apps/hamster-applet/general/panel_appearance</applyto>
-            <owner>hamster-applet</owner>
-            <type>string</type>
-            <default>text</default>
-            <locale name="C">
-                <short>Appearance in panel</short>
-                <long>
-                    Appearance in panel: "text" - show duration,
-                    "icon" - show only icon, "both" - show icon and text
-                </long>
-            </locale>
-        </schema>
     </schemalist>
 </gconfschemafile>
