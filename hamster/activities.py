@@ -25,6 +25,7 @@ import os
 import gtk
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster.Configuration import GconfStore
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -77,6 +78,10 @@ class ActivityStore(gtk.ListStore):
                          activity['category_id'],
                          activity['activity_order']])
 
+
+formats = ["fixed", "symbolic", "minutes"]
+appearances = ["text", "icon", "both"]
+
 class ActivitiesEditor:
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
@@ -86,6 +91,7 @@ class ActivitiesEditor:
     
     def __init__(self):
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "activities.glade"))
+        self.config = GconfStore.get_instance()
         self.window = self.get_widget('activities_window')
 
 
@@ -131,6 +137,8 @@ class ActivitiesEditor:
         selection = self.category_tree.get_selection()
         selection.connect('changed', self.category_changed_cb, self.category_store)
 
+        self.load_config()
+
         self.glade.signal_autoconnect(self)
 
         # Allow enable drag and drop of rows including row move
@@ -157,6 +165,19 @@ class ActivitiesEditor:
         
         self.prev_selected_activity = None
         self.prev_selected_category = None
+        
+
+    def load_config(self):
+        self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())
+
+        self.get_widget("idle_track").set_active(self.config.get_timeout_enabled())
+        self.get_widget("slider_mins").set_sensitive(self.config.get_timeout_enabled())
+        self.get_widget("idle_minutes").set_value(self.config.get_timeout())
+
+        self.get_widget("duration_format").set_active(formats.index(self.config.get_duration_format()))
+        self.get_widget("panel_appearance").set_active(appearances.index(self.config.get_panel_appearance()))
+
+        self.get_widget("keybinding").set_text(self.config.get_keybinding())
 
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
@@ -497,3 +518,21 @@ class ActivitiesEditor:
 
         self.activity_changed(self.selection, model)
 
+    def on_close_button_clicked(self, button):
+        self.window.destroy()
+
+    def on_idle_track_toggled(self, checkbox):
+        self.config.set_timeout_enabled(checkbox.get_active())
+        self.get_widget("slider_mins").set_sensitive(checkbox.get_active())
+    
+    def on_keybinding_changed(self, textbox):
+        self.config.set_keybinding(textbox.get_text())
+        
+    def on_idle_minutes_value_changed(self, slider):
+        self.config.set_timeout(slider.get_value())
+        
+    def on_duration_format_changed(self, combo):
+        self.config.set_duration_format(formats[combo.get_active()])
+        
+    def on_panel_appearance_changed(self, combo):
+        self.config.set_panel_appearance(appearances[combo.get_active()])

@@ -31,8 +31,12 @@ class GconfStore(object):
     
     # GConf key for global keybinding
     GCONF_KEYBINDING = GCONF_DIR + "/keybinding"
-    # GConf key to the setting for the minimum number of chars of a query
     GCONF_TIMEOUT = GCONF_DIR + "/timeout"
+    GCONF_ENABLE_TIMEOUT = GCONF_DIR + "/enable_timeout"
+    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"
+    GCONF_DURATION_FORMAT = GCONF_DIR + "/duration_format"
+    GCONF_PANEL_APPEARANCE = GCONF_DIR + "/panel_appearance"
+    
 
     __instance = None
         
@@ -55,6 +59,10 @@ class GconfStore(object):
         self._client.add_dir(self.GCONF_DIR, gconf.CLIENT_PRELOAD_RECURSIVE)
         self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
         self._client.notify_add(self.GCONF_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_changed", z.value.get_int()))
+        self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_DURATION_FORMAT, lambda x, y, z, a: dispatcher.dispatch("gconf_duration_format_changed", z.value.get_string()))
+        self._client.notify_add(self.GCONF_PANEL_APPEARANCE, lambda x, y, z, a: dispatcher.dispatch("gconf_panel_appearance_changed", z.value.get_string()))
     
     def get_keybinding(self):
         return self._client.get_string(self.GCONF_KEYBINDING)
@@ -62,10 +70,33 @@ class GconfStore(object):
     def get_timeout(self):
         return self._client.get_int(self.GCONF_TIMEOUT)
 
-    
+    def get_timeout_enabled(self):
+        return self._client.get_bool(self.GCONF_ENABLE_TIMEOUT)
+
+    def get_stop_on_shutdown(self):
+        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN)
+
+    def get_duration_format(self):
+        return self._client.get_string(self.GCONF_DURATION_FORMAT)
+
+    def get_panel_appearance(self):
+        return self._client.get_string(self.GCONF_PANEL_APPEARANCE)
+
+    #------------------------    
     def set_keybinding(self, binding):
         self._client.set_string(self.GCONF_KEYBINDING, binding)
     
     def set_timeout(self, number):
         self._client.set_int(self.GCONF_TIMEOUT, int(number))
-    
+        
+    def set_timeout_enabled(self, enabled):
+        self._client.set_bool(self.GCONF_ENABLE_TIMEOUT, enabled)
+        
+    def set_stop_on_shutdown(self, enabled):
+        self._client.set_bool(self.GCONF_STOP_ON_SHUTDOWN, enabled)
+        
+    def set_duration_format(self, format):
+        self._client.set_string(self.GCONF_DURATION_FORMAT, format)
+
+    def set_panel_appearance(self, appearance):
+        self._client.set_string(self.GCONF_PANEL_APPEARANCE, appearance)
