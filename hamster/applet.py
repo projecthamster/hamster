@@ -138,9 +138,12 @@ class HamsterApplet(object):
         # init hotkey
         dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
         dispatcher.add_handler('gconf_timeout_changed', self.on_timeout_changed)
+        dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
   
         # init idle check
         self.timeout = self.config.get_timeout()
+        self.timeout_enabled = self.config.get_timeout_enabled()
+        
         idle.init()
 
     def on_today_release_event(self, tree, event):
@@ -164,8 +167,8 @@ class HamsterApplet(object):
         prev_date = self.today
         self.today = datetime.date.today()
 
-        # stop tracking task if computer is idle for 15 minutes
-        if self.timeout and self.last_activity and \
+        # stop tracking task if computer is idle for X minutes
+        if self.timeout_enabled and self.timeout and self.last_activity and \
            self.last_activity['end_time'] == None and \
            idle.getIdleSec() / 60.0 >= self.timeout:
             storage.touch_fact(self.last_activity)
@@ -379,4 +382,8 @@ class HamsterApplet(object):
         
     def on_timeout_changed(self, event, new_timeout):
         self.timeout = new_timeout
+        
+    def on_timeout_enabled_changed(self, event, enabled):
+        # if enabled, set to value, otherwise set to zero, which means disable
+        self.timeout_enabled = enabled
 
