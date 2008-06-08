@@ -1,3 +1,11 @@
+hamster-applet (0.6) unstable; urgency=low
+
+  * Simple reporting via Overview dialog
+  * Added German translation (Pierre-Luc Beaudoin)
+  * Added French translation (Matthias Mailänder)
+  
+ -- Toms Baugis <toms.baugis@gmail.com>  Sat, 08 Jun 2008 23:58:00 +0300 
+
 hamster-applet (0.5) unstable; urgency=low
 
   * Preferences are now editable via user interface
