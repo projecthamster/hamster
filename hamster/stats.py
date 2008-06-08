@@ -217,6 +217,8 @@ class StatsViewer:
         
 
         self.fact_tree.expand_all()
+        
+        self.get_widget("report_button").set_sensitive(len(facts) > 0)
 
 
         week["totals"] = totals
@@ -395,6 +397,11 @@ class StatsViewer:
 
         custom_fact = CustomFactController(selected_date)
         custom_fact.show()
+        
+    def on_report_button_clicked(self, widget):
+        from hamster import reports
+        facts = storage.get_facts(self.start_date, self.end_date)
+        reports.simple(facts, self.start_date, self.end_date)
 
     def after_activity_update(self, widget, renames):
         self.do_graph()

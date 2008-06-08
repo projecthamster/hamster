@@ -29,6 +29,7 @@ hamster_PYTHON = \
 	db.py \
 	eds.py \
 	stats.py \
+	reports.py \
 	charting.py \
 	Configuration.py \
 	KeyBinder.py \
