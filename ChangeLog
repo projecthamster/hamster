@@ -1,3 +1,11 @@
+hamster-applet (0.6.1) unstable; urgency=low
+
+  * Do not eat up middle-click
+  * Fixed fact pushing on overlap
+  * Correct orientation on vertical applets
+  
+ -- Toms Baugis <toms.baugis@gmail.com>  Sat, 09 Jun 2008 23:41:00 +0000 
+
 hamster-applet (0.6) unstable; urgency=low
 
   * Simple reporting via Overview dialog
