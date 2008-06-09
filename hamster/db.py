@@ -168,16 +168,17 @@ class Storage(hamster.storage.Storage):
                 if end_time and end_time < fact['end_time']:
                     self.__add_fact(fact['name'], end_time, fact['end_time'])
 
-            #now check if maybe we are overlapping start
-            if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time'] \
-               or not fact['end_time'] and end_time and fact['start_time'] < end_time: # case for the entry before the last one
-                #set fact's start time to our end one
-                update = """
-                           UPDATE facts
-                              SET start_time = ?
-                            WHERE id = ?
-                """
-                self.execute(update, (end_time, fact["id"]))
+           
+            else: #end's fine? what about start then?
+                if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time'] \
+                or not fact['end_time'] and end_time and fact['start_time'] < end_time: # case for the entry before the last one
+                    #set fact's start time to our end one
+                    update = """
+                               UPDATE facts
+                                  SET start_time = ?
+                                WHERE id = ?
+                    """
+                    self.execute(update, (end_time, fact["id"]))
 
         # now check if maybe we are at the last task, and if that's true
         # look if we maybe have to finish it or delete if it was too short
