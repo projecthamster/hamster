@@ -132,6 +132,8 @@ class HamsterApplet(object):
         self.applet.set_background_widget(self.applet)
 
         self.button.connect('toggled', self.on_toggle)
+        self.button.connect('size_allocate', self.on_applet_size_allocate)
+
         self.button.connect('button_press_event', self.on_button_press)
         self.glade.signal_autoconnect(self)
 
@@ -293,7 +295,7 @@ class HamsterApplet(object):
     def on_button_press(self, widget, event):
         if event.button != 1:
             widget.stop_emission('button_press_event')
-	return False
+        return False
 
     def on_toggle(self, widget):
         dispatcher.dispatch('panel_visible', self.button.get_active())
@@ -388,3 +390,15 @@ class HamsterApplet(object):
         # if enabled, set to value, otherwise set to zero, which means disable
         self.timeout_enabled = enabled
 
+    def on_applet_size_allocate(self, widget, event):
+        self.popup_dir = self.applet.get_orient()
+        
+        if self.popup_dir in [gnomeapplet.ORIENT_LEFT]:
+            new_angle = 270
+        elif self.popup_dir in [gnomeapplet.ORIENT_RIGHT]:
+            new_angle = 90
+        else:
+            new_angle = 0
+
+        if new_angle != self.button.label.get_angle():
+            self.button.label.set_angle(new_angle)
