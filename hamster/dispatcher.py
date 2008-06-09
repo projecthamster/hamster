@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
+# Copyright (C) 2007, 2008 Patryk Zawadzki <patrys at pld-linux.org>
 
 # This file is part of Project Hamster.
 
@@ -34,10 +34,8 @@ class Dispatcher(object):
                 self.handlers[event].remove(method)
 
     def dispatch(self, event, data = None):
-        print 'Dispatching event %s (%s)' % (event, data)
         if self.handlers.has_key(event):
             for handler in self.handlers[event]:
-                print 'using handler %s' % handler
                 handler(event, data)
         else:
             print 'Missing handler for event %s' % event
