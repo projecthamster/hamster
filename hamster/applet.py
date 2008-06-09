@@ -1,7 +1,7 @@
 # - coding: utf-8 -
 
 # Copyright (C) 2007, 2008 Toms Bauģis <toms.baugis at gmail.com>
-# Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
+# Copyright (C) 2007, 2008 Patryk Zawadzki <patrys at pld-linux.org>
 # Copyright (C) 2008 Pēteris Caune <cuu508 at gmail.com>
 
 # This file is part of Project Hamster.
@@ -292,7 +292,8 @@ class HamsterApplet(object):
     """events"""
     def on_button_press(self, widget, event):
         if event.button != 1:
-            self.applet.do_button_press_event(self.applet, event)
+            widget.stop_emission('button_press_event')
+	return False
 
     def on_toggle(self, widget):
         dispatcher.dispatch('panel_visible', self.button.get_active())
