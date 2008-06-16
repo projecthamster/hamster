@@ -18,6 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 from hamster import stuff
 import os
+import datetime as dt
 
 def simple(facts, start_date, end_date):
     if start_date.year != end_date.year:
