@@ -84,12 +84,16 @@ def simple(facts, start_date, end_date):
     
     for fact in facts:
         duration = None
-        if fact["end_time"]: # not set if just started
-            delta = fact["end_time"] - fact["start_time"]
+        end_time = fact["end_time"]
+        if end_time: # not set if just started
+            delta = end_time - fact["start_time"]
             duration = 24 * delta.days + delta.seconds / 60
         elif fact["start_time"].date() == dt.date.today():
-            delta = dt.datetime.now() - fact["start_time"]
-            duration = 24 * delta.days + delta.seconds / 60                
+            end_time = dt.datetime.now()
+            delta = end_time - fact["start_time"]
+            duration = 24 * delta.days + delta.seconds / 60
+        
+        end_time_str = end_time.strftime('%H:%M') if end_time else ""
 
 
         report.write("""<tr>
@@ -103,7 +107,7 @@ def simple(facts, start_date, end_date):
             fact["name"],
             fact["category"] if fact["category"] != _("Unsorted") else "", #do not print unsorted
             fact["start_time"].strftime('%H:%M'),
-            fact["end_time"].strftime('%H:%M'),
+            end_time_str,
             stuff.format_duration(duration)))
     
     report.write("</table></body></html>")
