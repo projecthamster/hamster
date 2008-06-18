@@ -119,7 +119,7 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Day</property>
                 <property name="use_underline">True</property>
-                <property name="icon">stock_calendar-view-day.png</property>
+                <property name="icon">art/stock_calendar-view-day.png</property>
                 <signal name="toggled" handler="on_day_toggled"/>
               </widget>
               <packing>
@@ -133,7 +133,7 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Week</property>
                 <property name="use_underline">True</property>
-                <property name="icon">stock_calendar-view-week.png</property>
+                <property name="icon">art/stock_calendar-view-week.png</property>
                 <property name="active">True</property>
                 <signal name="toggled" handler="on_week_toggled"/>
               </widget>
@@ -148,7 +148,7 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Month</property>
                 <property name="use_underline">True</property>
-                <property name="icon">stock_calendar-view-month.png</property>
+                <property name="icon">art/stock_calendar-view-month.png</property>
                 <signal name="toggled" handler="on_month_toggled"/>
               </widget>
               <packing>
