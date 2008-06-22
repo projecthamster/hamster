@@ -383,6 +383,12 @@ class StatsViewer:
         self.get_widget('remove').set_sensitive(id != -1)
 
         return True
+
+    def on_facts_row_activated(self, tree, path, column):
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+        custom_fact = CustomFactController(None, model[iter][0])
+        custom_fact.show()
         
     def on_add_clicked(self, button):
         selection = self.fact_tree.get_selection()
