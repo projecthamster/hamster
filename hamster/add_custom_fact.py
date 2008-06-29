@@ -80,7 +80,7 @@ class CustomFactController:
 
             self.get_widget('activity_name').set_text(fact["name"])
             self.get_widget("ok").set_sensitive(True)
-            self.get_widget("ok").set_label(_("_Update"))
+            self.get_widget("ok").set_label("gtk-save")
             self.window.set_title("Update fact - Hamster")
             
             if fact["end_time"]:
