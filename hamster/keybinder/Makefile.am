@@ -1,6 +1,6 @@
 INCLUDES = $(PYTHON_INCLUDES) $(HAMSTER_CFLAGS)
 
-_keybinderdir = $(pythondir)/hamster/keybinder
+_keybinderdir = $(pyexecdir)/hamster/keybinder
 _keybinder_LTLIBRARIES = _keybinder.la
 _keybinder_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_keybinder
 _keybinder_la_LIBADD = $(HAMSTER_LIBS)

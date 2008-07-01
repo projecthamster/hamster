@@ -16,12 +16,12 @@ idle_la_LDFLAGS = \
 idle_la_CFLAGS = $(XSCRNSAVER_CFLAGS) $(PYTHON_INCLUDES)
 
 hamster-applet: hamster-applet.py
-	sed -e "s|\@PYTHONDIR\@|$(pythondir)/hamster|" $< > $@
+	sed -e "s|\@PYTHONDIR\@|$(pyexecdir)/hamster|" $< > $@
 
 hamsterbindir = $(libdir)/hamster-applet
 hamsterbin_SCRIPTS = hamster-applet
 
-hamsterdir = $(pythondir)/hamster
+hamsterdir = $(pyexecdir)/hamster
 hamster_PYTHON = \
 	defs.py \
 	dispatcher.py \
