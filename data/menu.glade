@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Jun 29 20:40:32 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Jul  9 11:03:02 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -79,31 +79,10 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_Stop Tracking</property>
+                        <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_stop_tracking"/>
-                        <child>
-                          <widget class="GtkHBox" id="hbox3">
-                            <property name="visible">True</property>
-                            <property name="spacing">4</property>
-                            <child>
-                              <widget class="GtkImage" id="image1">
-                                <property name="visible">True</property>
-                                <property name="stock">gtk-stop</property>
-                              </widget>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label3">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Stop Tracking</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">stop_tracking</property>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </widget>
-                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -198,30 +177,10 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">Ad_d Older Fact</property>
+                            <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_custom_fact"/>
-                            <child>
-                              <widget class="GtkHBox" id="hbox4">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <widget class="GtkImage" id="image2">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-add</property>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label4">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Ad_d Older Fact</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                         </child>
                         <child>
@@ -230,30 +189,10 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">Show _Overview</property>
+                            <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_overview"/>
-                            <child>
-                              <widget class="GtkHBox" id="hbox5">
-                                <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <widget class="GtkImage" id="image3">
-                                    <property name="visible">True</property>
-                                    <property name="pixbuf">art/stock_calendar-view-month.png</property>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label5">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Show _Overview</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="position">1</property>
