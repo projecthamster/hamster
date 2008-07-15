@@ -1,4 +1,4 @@
-hamster-applet (0.6.2) unstable; urgency=low
+hamster-applet (0.6.2) hardy; urgency=low
 
   * Fixed problems with simple report
   * Now you can edit facts in overview by double clicking
