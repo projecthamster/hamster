@@ -1,3 +1,9 @@
+hamster-applet (0.6.2.1) gutsy; urgency=low
+
+  * Building for gutsy (will work on hardy)
+  
+ -- Toms Baugis <toms.baugis@gmail.com>  Tue, 15 Jul 2008 10:27:00 +0000 
+
 hamster-applet (0.6.2) hardy; urgency=low
 
   * Fixed problems with simple report
