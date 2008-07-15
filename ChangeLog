@@ -1,3 +1,16 @@
+hamster-applet (0.6.2) unstable; urgency=low
+
+  * Fixed problems with simple report
+  * Now you can edit facts in overview by double clicking
+  * Added Dutch translation (Hans de Zwart)
+  * Added Russian translation (Sasha Shveik)
+  * Updated French translation (Stephane Raimbaul)
+  * Put icons back in overview window
+  * Stock buttons for add / update fact
+  * Fixed potential popup window positioning issue
+  
+ -- Toms Baugis <toms.baugis@gmail.com>  Tue, 15 Jul 2008 09:27:00 +0000 
+
 hamster-applet (0.6.1) unstable; urgency=low
 
   * Do not eat up middle-click
