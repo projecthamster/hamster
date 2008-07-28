@@ -27,6 +27,10 @@ resources_DATA = \
     menu.glade \
 	hamster.db
 
+xmldir       = $(KEYBINDINGS_DIR)
+xml_in_files = 99-hamster-applet.xml.in
+xml_DATA     = $(xml_in_files:.xml.in=.xml)
+
 hamsterbindir = $(libdir)/hamster-applet
 
 # ******************************************************************************
@@ -35,6 +39,7 @@ hamsterbindir = $(libdir)/hamster-applet
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SERVER_RULE@
 @INTLTOOL_SCHEMAS_RULE@
+@INTLTOOL_XML_RULE@
 
 $(server_in_files): $(server_in_files:.server.in=.server.in.in)
 	sed -e "s|\@LIBEXECDIR\@|$(hamsterbindir)|" $< > $@
@@ -49,9 +54,11 @@ endif
 DISTCLEANFILES = \
 	$(schema_DATA) \
 	$(server_DATA) \
+	$(xml_DATA) \
 	$(server_in_files)
 
 EXTRA_DIST = \
 	$(schema_in_files) \
+	$(xml_in_files) \
 	Hamster_Applet.server.in.in \
 	$(resources_DATA)
