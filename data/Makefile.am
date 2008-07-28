@@ -27,9 +27,12 @@ resources_DATA = \
     menu.glade \
 	hamster.db
 
-xmldir       = $(KEYBINDINGS_DIR)
 xml_in_files = 99-hamster-applet.xml.in
+
+if CUSTOM_KEYBINDINGS
+xmldir       = $(KEYBINDINGS_DIR)
 xml_DATA     = $(xml_in_files:.xml.in=.xml)
+endif
 
 hamsterbindir = $(libdir)/hamster-applet
 
