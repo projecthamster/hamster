@@ -1,16 +1,24 @@
+# Dutch translation for Hamster applet
+#
+# This file is distributed under the same license as the
+# hamster-applet package.
+#
+# Hans de Zwart <hans@hansdezwart.info>, 2008.
+# Hylke Bons <h.bons@student.rug.nl>, 2008.
+# Wouter Bolsterlee <wbolster@gnome.org>, 2008.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Project Hamster\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-14 21:42+0100\n"
-"PO-Revision-Date: 2008-07-08 21:56+0100\n"
-"Last-Translator: Hans de Zwart <hans@hansdezwart.info>\n"
-"Language-Team:  <projecthamster@hansdezwart.info>\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet \n"
+"POT-Creation-Date: 2008-07-28 00:36+0200\n"
+"PO-Revision-Date: 2008-07-28 00:39+0200\n"
+"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Dutch\n"
-"X-Poedit-Country: NETHERLANDS\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
 #: ../hamster/about.py:40
@@ -19,11 +27,11 @@ msgstr "Hamster"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr "Tijdschrijven voor het grote publiek"
+msgstr "Tijdregistratie voor het grote publiek"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "_Over"
+msgstr "I_nfo"
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Preferences"
@@ -35,23 +43,23 @@ msgstr "<b>Activiteiten</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr "<b>Globale Sneltoets</b>"
+msgstr "<b>Globale sneltoets</b>"
 
 #: ../data/preferences.glade.h:3
 msgid "<b>Tracking</b>"
-msgstr "<b>Volgen</b>"
+msgstr "<b>Registratie</b>"
 
 #: ../data/preferences.glade.h:4
 msgid "Hamster Applet Preferences"
-msgstr "Hamster Applet Voorkeuren"
+msgstr "Hamster-voorkeuren"
 
 #: ../data/preferences.glade.h:5
 msgid "Idle minutes:"
-msgstr "Aantal minuten niets doen:"
+msgstr "Aantal minuten inactief:"
 
 #: ../data/preferences.glade.h:6
 msgid "Move _Down"
-msgstr "_Naar beneden"
+msgstr "Oml_aag"
 
 #: ../data/preferences.glade.h:7
 msgid "Move _Up"
@@ -59,15 +67,15 @@ msgstr "_Omhoog"
 
 #: ../data/preferences.glade.h:8
 msgid "N_ew Category"
-msgstr "N_ieuwe Categorie"
+msgstr "_Nieuwe categorie"
 
 #: ../data/preferences.glade.h:9 ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on shutdown"
-msgstr "Stop met volgen als de computer uit gaat"
+msgstr "Stop registratie bij afsluiten"
 
 #: ../data/preferences.glade.h:10
 msgid "Stop tracking when computer becomes idle"
-msgstr "Stop met volgen als de computer niets doet"
+msgstr "Stop registratie tijdens computerinactiviteit"
 
 #: ../data/preferences.glade.h:11
 msgid "_Activities"
@@ -79,7 +87,7 @@ msgstr "_Categorieën"
 
 #: ../data/preferences.glade.h:13
 msgid "_New Activity"
-msgstr "_Nieuwe Activiteit"
+msgstr "_Nieuwe activiteit"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
@@ -87,35 +95,28 @@ msgstr "<b>Activiteit</b>"
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
-msgstr "<b>Datum en Tijd</b>"
+msgstr "<b>Datum en tijd</b>"
 
+# Naam toepassing niet in venstertitel (Wouter Bolsterlee)
 #: ../data/add_custom_fact.glade.h:3
 msgid "Add older fact - Hamster"
-msgstr "Voeg toe - Hamster"
+msgstr "Oude gegevens toevoegen"
 
 #: ../data/add_custom_fact.glade.h:4
-msgid "gtk-add"
-msgstr "gtk-add"
+msgid "hours"
+msgstr "uur"
 
 #: ../data/add_custom_fact.glade.h:5
-msgid "gtk-cancel"
-msgstr "gtk-cancel"
-
-#: ../data/add_custom_fact.glade.h:6
-msgid "hours"
-msgstr "uren"
-
-#: ../data/add_custom_fact.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
 "for"
 msgstr ""
-"aan de gang...\n"
+"aan de gang…\n"
 "tot\n"
-"duur"
+"voor"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/add_custom_fact.glade.h:8
 msgid "minutes"
 msgstr "minuten"
 
@@ -124,29 +125,30 @@ msgid ""
 "After how many minutes hamster should stop tracking activity when computer "
 "is idle. Set to 0 to disable."
 msgstr ""
-"Na hoeveel minuten moet Hamster stoppen met het volgen van de activiteit als "
-"de computer niets doet. Kies 0 om nooit te stoppen."
+"Geeft aan na hoeveel minuten Hamster stopt met het registreren van "
+"activiteit als de computer inactief is. Gebruik de waarde ‘0’ om nooit te "
+"stoppen."
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Hamster Applet window."
-msgstr "Keyboard sneltoets voor het tonen van het Hamster Applet venster."
+msgstr "Sneltoets voor het tonen van het Hamstervenster."
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Show window"
-msgstr "Toon venster"
+msgstr "Venster tonen"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
-msgstr "Stop met het volgen van de huidige activiteit als de computer uit gaat"
+msgstr "Registratie huidige activiteit stoppen bij afsluiten computer"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr ""
-"Stop met het volgen van de huidige activiteit, als de computer niets doet"
+"Registratie huidige activiteit stoppen als de computer niet gebruikt wordt"
 
 #: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on idle"
-msgstr "Stop met volgen als de computer niets doet"
+msgstr "Registratie stoppen bij computerinactiviteit"
 
 #: ../data/hamster-applet.schemas.in.h:8
 msgid "Timeout in minutes"
@@ -154,15 +156,15 @@ msgstr "Timeout in minuten"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Older Fact"
-msgstr "_Voeg toe"
+msgstr "Oudere gegevens toe_voegen"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
-msgstr "Geen activititeiten vandaag"
+msgstr "Geen activiteiten vandaag"
 
 #: ../data/menu.glade.h:4
 msgid "Show _Overview"
-msgstr "Toon _Overzicht"
+msgstr "_Overzicht tonen"
 
 #: ../data/menu.glade.h:5
 msgid "_Activity:"
@@ -170,7 +172,7 @@ msgstr "_Activiteit:"
 
 #: ../data/menu.glade.h:6
 msgid "_Stop Tracking"
-msgstr "_Stop"
+msgstr "Registratie _stoppen"
 
 #: ../data/menu.glade.h:7
 msgid "_Today"
@@ -202,23 +204,29 @@ msgstr "<b>Week</b>"
 
 #: ../data/stats.glade.h:8
 msgid "Generate Report"
-msgstr "Maak rapportage aan"
+msgstr "Rapport aanmaken"
 
+# Naam toepassing niet in venstertitel (Wouter Bolsterlee)
 #: ../data/stats.glade.h:9
 msgid "Overview - Hamster"
-msgstr "Overzicht - Hamster"
+msgstr "Overzicht"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr "Tijdschrijven voor het grote publiek."
+msgstr "Tijdsregistratie voor het grote publiek."
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
-msgstr "Hamster Website"
+msgstr "Hamster-website"
 
 #: ../hamster/about.py:53
 msgid "translator-credits"
-msgstr "vertaling-credits"
+msgstr ""
+"Wouter Bolsterlee\n"
+"Hylke Bons\n"
+"Hans de Zwart\n"
+"\n"
+"Kijk voor meer informatie op http://nl.gnome.org/"
 
 #: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
@@ -240,7 +248,7 @@ msgstr "Nieuwe categorie"
 msgid "New activity"
 msgstr "Nieuwe activiteit"
 
-#: ../hamster/applet.py:218
+#: ../hamster/applet.py:199
 msgid "No activity"
 msgstr "Geen activiteit"
 
@@ -255,15 +263,15 @@ msgstr "Nieuws lezen"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr "Beurs bekijken"
+msgstr "Beurskoersen bekijken"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
-msgstr "Supergeheime project X"
+msgstr "Supergeheim project X"
 
 #: ../hamster/db.py:407
 msgid "World domination"
-msgstr "Wereld overheersing"
+msgstr "Wereldoverheersing"
 
 #: ../hamster/db.py:409
 msgid "Day to day"
@@ -273,9 +281,10 @@ msgstr "Dagelijkse bezigheden"
 msgid "Lunch"
 msgstr "Lunch"
 
+# Vrij vertaald (Wouter Bolsterlee)
 #: ../hamster/db.py:411
 msgid "Watering flowers"
-msgstr "Bloemen water geven"
+msgstr "Plantjes water geven"
 
 #: ../hamster/db.py:412
 msgid "Doing handstands"
@@ -294,7 +303,7 @@ msgstr "Overzicht voor %s"
 #: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
-msgstr "Overzicht voor %s - %s"
+msgstr "Overzicht voor %s — %s"
 
 #: ../hamster/stats.py:210
 msgid "Other"
