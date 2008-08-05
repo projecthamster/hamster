@@ -1,5 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
+data/99-hamster-applet.xml.in
 data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
 data/preferences.glade
