@@ -1,4 +1,4 @@
-2008-08-05	Patryk Zawadzki	<patrys@pld-linux.org>
+2008-08-05  Patryk Zawadzki  <patrys@pld-linux.org>
 	* configure.in: Version 2.23.6
 	* ChangeLog: replaced old changelog with a proper file
 	* NEWS: replaced old news file with old ChangeLog history
