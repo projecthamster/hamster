@@ -1,4 +1,5 @@
 2008-08-05  Patryk Zawadzki  <patrys@pld-linux.org>
+	* COPYING: use GPLv3 instead of old version 2
 	* configure.in: Version 2.23.6
 	* ChangeLog: replaced old changelog with a proper file
 	* NEWS: replaced old news file with old ChangeLog history
