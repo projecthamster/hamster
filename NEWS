@@ -1,3 +1,241 @@
-0.1.3
-  * ummm.. started news file? (i know it is non standard for now)
-  * drop-down menu overhaul in favour of something more cleverer
+==============
+Version 2.23.6
+==============
+  Applet
+	* Follow GNOME version scheme
+	* Properly integrate with Keyboard Shortcuts in gnome-control-center
+  Translations
+	* de(Matthias Mailänder), es(Juanje Ojeda Croissier), fr(Stéphane Raimbault),
+	  it(Stefano Pedretti), lv(Toms Baugis), nl(Wouter Bolsterlee), ru(Sasha Shveik),
+	  sv(Kalle Person)
+
+=============
+Version 0.6.2
+=============
+  Applet
+	* Fixed the header info and updated the Spanish translations
+	* Updated the Dutch translation by Wouter Bolsterlee (#544975)
+	* Disable keybindings if not supported by g-c-c
+	* Properly integrate with GNOME's keyboard binding dialog
+	* Fixed problems with simple report
+	* Now you can edit facts in overview by double clicking
+	* Updated French translation (Stephane Raimbaul)
+	* Put icons back in overview window
+	* Stock buttons for add / update fact
+	* Fixed potential popup window positioning issue
+  Translations
+	* de(Matthias Mailänder), es(Juanje Ojeda Croissier), fr(Stéphane Raimbault),
+	  it(Stefano Pedretti), lv(Toms Baugis), nl(Wouter Bolsterlee), ru(Sasha Shveik),
+	  sv(Kalle Person)
+
+=============
+Version 0.6.1
+=============
+  Applet
+	* Do not eat up middle-click
+	* Fixed fact pushing on overlap
+	* Correct orientation on vertical applets
+  Translations
+	* de(Matthias Mailänder), es(Juanje Ojeda Croissier), fr(Stéphane Raimbault),
+	  it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+===========
+Version 0.6
+===========
+  Applet
+	* Simple reporting via Overview dialog
+  Translations
+	* de(Matthias Mailänder), es(Juanje Ojeda Croissier), fr(Pierre-Luc Beaudoin),
+	  it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+===========
+Version 0.5
+===========
+  Applet
+	* Preferences are now editable via user interface
+	* Added option to stop tracking on shutdown
+	* Current activity is now showing up in totals
+  Translations
+	* es(Juanje Ojeda Croissier), it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+=============
+Version 0.4.1
+=============
+  Applet
+	* Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :) 
+	* Fixed rules as per bug 532711. Patch by Juanje Ojeda.
+  Translations
+	* es(Juanje Ojeda Croissier), it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+=============
+Version 0.4.1
+=============
+  Miscellanous
+	* Fixed usage of spanish and italian translations
+  Translations
+	* es(Juanje Ojeda Croissier), it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+===========
+Version 0.4
+===========
+  Applet
+	* Fact editing!
+  Translations
+	* es(Juanje Ojeda Croissier), it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+===========
+Version 0.3
+===========
+  Applet
+	* Many small fixes to activity editing window (setting, focus, F2 for
+	  renames and others you would expect)
+  Translations
+	* es(Juanje Ojeda Croissier), it(Stefano Pedretti), lv(Toms Baugis), sv(Kalle Person)
+
+===========
+Version 0.2
+===========
+  Applet
+	* change days on midnight also when there is no current activity
+	* option to stop tracking after certain minutes of idle
+	* simplified versioning to three numbers
+  Translations
+	* es(Juanje Ojeda Croissier), lv(Toms Baugis), sv(Kalle Person)
+ 
+===============
+Version 0.1.7.5
+===============
+  Applet
+	* Fixed midnight crasher
+  Translations
+	* es(Juanje Ojeda Croissier), lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.7.4
+===============
+  Applet
+	* Fixed licensing issues
+  Debian
+	* Packaging is back to per arch
+  Translations
+	* es(Juanje Ojeda Croissier), lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.7.3
+===============
+  Applet
+	* In stats the top caption shows what can be actually seen
+	  (day / week / month) - geekout
+	* remove hamster killname, since it breaks x86_64
+	* switching tasks on doubleclick in applet main window
+	* some more thinking on accidental facts (forth and back to previous task
+	  within minute)
+	* graphs now have fixed offset from left, long labels get ellipsized
+  Debian
+	* attempt to package with arch = all
+  Translations
+	* es(Juanje Ojeda Croissier), lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.7.2
+===============
+  Applet
+	* Fixed focus issues with global hotkeys
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.7.1
+===============
+  Applet
+	* Fixed regression with keys ignored in applet window
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+=============
+Version 0.1.7
+=============
+  Applet
+	* Fixed applet vertical sizing issues
+	* Showing Evolution's active TODO's in activity lists
+	* Drop down window now doesn't have double shadow on top of it
+	* Fixed bug with situation, when activities get moved to newly created
+	  category
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.6.2
+===============
+  Applet
+	* Stop at 12 different activities a day, 12th being total of others
+	* Give more space to activity stats
+	* Put back resize to both sizes, since we are now ellipsizing
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.6.1
+===============
+  Applet
+	* Kind of fixed problem with gconf schema not appearing
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+=============
+Version 0.1.6
+=============
+  Applet
+	* Enhanced drag and drop behaviour in edit activities window
+	* Added labels, tooltips, spacings, and other flags to enhance experience
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.5.5
+===============
+  Applet
+	* Fixed pysqlite dependency
+	* Fixed area chart color
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.5.4
+===============
+  Applet
+	* Hamster now has a process name for killall, which enables us to
+	  kill it on install!
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.5.3
+===============
+  Applet
+	* Fixed antialiasing problems in bar chart
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.5.2
+===============
+  Applet
+	* Minor changes and slight adjustments to Swedish translation
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+===============
+Version 0.1.5.1
+===============
+  Applet
+	* Fixed window icons
+  Translations
+	* lv(Toms Baugis), sv(Kalle Person)
+
+=============
+Version 0.1.5
+=============
+  Applet
+	* Initial release
+
