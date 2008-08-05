@@ -1,4 +1,4 @@
-hamster-applet (0.6.2-2) unstable; urgency=low
+hamster-applet (2.23.6-2) unstable; urgency=low
 
   * Fixed the header info and updated the Spanish translations
   * Updated the Dutch translation by Wouter Bolsterlee (#544975)
