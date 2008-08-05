@@ -214,7 +214,7 @@ msgstr "Página web de Hamster"
 #: ../hamster/about.py:53
 msgid "translator-credits"
 msgstr "David Prieto <frandavid100@gmail.com> \n"
-"Juanje Ojeda <jojeda@emergya.es> \n"
+"Juanje Ojeda <jojeda@emergya.es>"
 
 #: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
