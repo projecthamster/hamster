@@ -66,7 +66,7 @@ def applet_factory(applet, iid):
 # Return a standalone window that holds the applet
 def build_window():
     app = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    app.set_title(_(u"Time Tracking Applet"))
+    app.set_title(_(u"Time Tracker"))
     app.connect("destroy", on_destroy)
 
     applet = gnomeapplet.Applet()

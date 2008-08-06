@@ -8,7 +8,7 @@
             <default>&lt;Super&gt;H</default>
             <locale name="C">
                 <short>Show window</short>
-                <long>Keyboard shortcut for showing the Time Tracking Applet window.</long>
+                <long>Keyboard shortcut for showing the Time Tracker window.</long>
             </locale>
         </schema>
         <schema>
