@@ -60,14 +60,13 @@ hamster.__init_db()
 import hamster.applet
 
 def applet_factory(applet, iid):
-    print 'Starting Hamster instance:', applet, iid
     hamster.applet.HamsterApplet(applet)
     return True
 
 # Return a standalone window that holds the applet
 def build_window():
     app = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    app.set_title(_(u"Hamster Applet"))
+    app.set_title(_(u"Time Tracking Applet"))
     app.connect("destroy", on_destroy)
 
     applet = gnomeapplet.Applet()
@@ -93,7 +92,7 @@ def on_destroy(event):
     gtk.main_quit()
 
 def usage():
-    print _(u"""=== Hamster applet: Usage
+    print _(u"""=== Time tracking applet: Usage
 $ hamster-applet [OPTIONS]
 
 OPTIONS:

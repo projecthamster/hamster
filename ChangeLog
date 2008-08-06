@@ -1,3 +1,13 @@
+2008-08-06  Patryk Zawadzki  <patrys@pld-linux.org>
+	* hamster/about.py: Change website link to live.gnome.org
+	* data/Hamster_Applet.server.in.in:
+	* data/add_custom_fact.glade:
+	* data/hamster-applet.schemas.in:
+	* hamster/add_custom_fact.py:
+	* hamster/hamster-applet.py:
+	Don't expose "Hamster" in the UI
+	* configure.in: post-release version bump
+
 2008-08-05  Patryk Zawadzki  <patrys@pld-linux.org>
 	* COPYING: use GPLv3 instead of old version 2
 	* configure.in: Version 2.23.6

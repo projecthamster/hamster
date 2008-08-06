@@ -41,7 +41,7 @@ def show_about(parent):
         "version" : VERSION,
         "comments" : _("Time tracking for masses."),
         "copyright" : "Copyright © 2007-2008 Toms Baugis and others",
-        "website" : "http://projecthamster.wordpress.com/",
+	"website" : "http://live.gnome.org/ProjectHamster",
         "website-label" : _("Hamster Website"),
     }
 
