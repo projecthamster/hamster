@@ -1,5 +1,12 @@
 2008-08-07  Patryk Zawadzki  <patrys@pld-linux.org>
+	* hamster/keybinder/_keybindermodule.c: added Nigel Tao as
+	  the original author, set license to GPLv3+ (original was
+	  GPLv2+)
+	* hamster/keybinder/tomboykeybinder.c:
+	* hamster/keybinder/tomboykeybinder.h:
+	added license
 	* hamster/eds.py: work around bug #546825
+
 2008-08-06  Patryk Zawadzki  <patrys@pld-linux.org>
 	* hamster/about.py: Change website link to live.gnome.org
 	* data/Hamster_Applet.server.in.in:
