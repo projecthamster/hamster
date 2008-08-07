@@ -34,6 +34,9 @@ def get_eds_tasks():
     try:
         sources = ecal.list_task_sources()
         tasks = []
+	if not sources:
+		# BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
+		sources = [('default', 'default')]
         for source in sources:
             data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
             if data:

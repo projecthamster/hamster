@@ -1,3 +1,5 @@
+2008-08-07  Patryk Zawadzki  <patrys@pld-linux.org>
+	* hamster/eds.py: work around bug #546825
 2008-08-06  Patryk Zawadzki  <patrys@pld-linux.org>
 	* hamster/about.py: Change website link to live.gnome.org
 	* data/Hamster_Applet.server.in.in:
