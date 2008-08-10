@@ -21,8 +21,8 @@ import dbus
 
 def getIdleSec():
     bus = dbus.SessionBus()
-    gs = bus.get_object('org.gnome.ScreenSaver', '/org/gnome/ScreenSaver')
     try:
+        gs = bus.get_object('org.gnome.ScreenSaver', '/org/gnome/ScreenSaver')
         return int(gs.GetSessionIdleTime())
     except:
         return 0
