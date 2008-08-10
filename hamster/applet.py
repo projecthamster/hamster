@@ -272,11 +272,15 @@ class HamsterApplet(object):
         x, y = self.button.get_pos()
 
         self.popup_dir = self.applet.get_orient()
-        if self.popup_dir in [gnomeapplet.ORIENT_DOWN]:
-            y = y + label_geom.height;
-        elif self.popup_dir in [gnomeapplet.ORIENT_UP]:
-            y = y - window_geom.height;
-        
+        if self.popup_dir == gnomeapplet.ORIENT_DOWN:
+            y = y + label_geom.height
+        elif self.popup_dir == gnomeapplet.ORIENT_UP:
+            y = y - window_geom.height
+        elif self.popup_dir == gnomeapplet.ORIENT_RIGHT:
+            x = x + label_geom.width
+        elif self.popup_dir == gnomeapplet.ORIENT_LEFT:
+            x = x - window_geom.width
+
         self.window.move(x, y)
 
         if self.last_activity and self.last_activity["end_time"] == None:

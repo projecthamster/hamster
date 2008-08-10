@@ -1,4 +1,6 @@
 2008-08-10  Patryk Zawadzki  <patrys@pld-linux.org>
+	* hamster/applet.py: fix GNOME bug #546845
+	  (patch by Adam Schmalhofer)
 	* hamster/applet.py:
 	* hamster/idle.c:
 	* hamster/idle.py:
