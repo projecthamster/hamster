@@ -1,3 +1,11 @@
+2008-08-10  Patryk Zawadzki  <patrys@pld-linux.org>
+	* hamster/applet.py:
+	* hamster/idle.c:
+	* hamster/idle.py:
+	* hamster/Makefile.am:
+	replaced the XSS-based C code with pure Python version
+	that queries gnome-screensaver over DBus
+
 2008-08-07  Patryk Zawadzki  <patrys@pld-linux.org>
 	* hamster/keybinder/_keybindermodule.c: added Nigel Tao as
 	  the original author, set license to GPLv3+ (original was

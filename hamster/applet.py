@@ -145,8 +145,6 @@ class HamsterApplet(object):
         # init idle check
         self.timeout = self.config.get_timeout()
         self.timeout_enabled = self.config.get_timeout_enabled()
-        
-        idle.init()
 
     def on_today_release_event(self, tree, event):
         pointer = event.window.get_pointer() # x, y, flags
