@@ -12,7 +12,7 @@ XB-Python-Version: ${python:Versions}
 
 Package: hamster-applet
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.8.6), python-glade2 (>= 2.8.6), python-gnome2 (>= 2.12.4), python-gnome2-desktop, python-pysqlite2 (>= 2.3), python-dbus 
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.8.6), python-glade2 (>= 2.8.6), python-gnome2 (>= 2.12.4), python-gnome2-desktop, python-pysqlite2 (>= 2.3), python-dbus, python-gconf (>= 2.22) 
 Provides: ${python:Provides}
 Recommends: python-evolution
 Description: Time tracking applet for GNOME desktop
