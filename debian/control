@@ -14,6 +14,7 @@ Package: hamster-applet
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gtk2 (>= 2.8.6), python-glade2 (>= 2.8.6), python-gnome2 (>= 2.12.4), python-gnome2-desktop, python-pysqlite2 (>= 2.3) 
 Provides: ${python:Provides}
+Recommends: python-evolution
 Description: Time tracking applet for GNOME desktop
  Project Hamster is time tracking for masses. It helps you to keep track on
  how much time you have spent during the day on activities you have set up.
