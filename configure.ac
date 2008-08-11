@@ -1,9 +1,9 @@
-AC_INIT(hamster-applet, 2.23.6.1, toms.baugis@gmail.com)
+AC_INIT([hamster-applet],[2.23.6.1],[toms.baugis@gmail.com])
 AC_CONFIG_SRCDIR(hamster/__init__.py)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 GNOME_COMMON_INIT
 
 AM_MAINTAINER_MODE
@@ -63,10 +63,10 @@ dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
 PKG_CHECK_MODULES(HAMSTER,
-	gtk+-2.0				>= 2.6
-    pygtk-2.0               >= 2.6
-    pygobject-2.0           >= 2.6
-	gnome-python-2.0		>= 2.10
+    gtk+-2.0            >= 2.6
+    pygtk-2.0           >= 2.6
+    pygobject-2.0       >= 2.6
+    gnome-python-2.0    >= 2.10
 
 )
 AC_SUBST(HAMSTER_CFLAGS)
@@ -139,7 +139,7 @@ AM_CONDITIONAL([CUSTOM_KEYBINDINGS],[test -n "$KEYBINDINGS_DIR"])
 dnl ****************************************************************************
 dnl * --------------------------------------------------------------------------
 dnl ****************************************************************************
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 hamster/Makefile
 hamster/defs.py
@@ -148,6 +148,7 @@ data/Makefile
 data/art/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT
 
 echo
 echo $PACKAGE v$VERSION

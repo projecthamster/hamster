@@ -1,6 +1,6 @@
 SUBDIRS = keybinder
 
-INCLUDES = \
+CPPFLAGS = \
 	$(PYTHON_INCLUDES) 
 
 hamster-applet: hamster-applet.py

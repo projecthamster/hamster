@@ -1,4 +1,4 @@
-INCLUDES = $(PYTHON_INCLUDES) $(HAMSTER_CFLAGS)
+CPPFLAGS = $(PYTHON_INCLUDES) $(HAMSTER_CFLAGS)
 
 _keybinderdir = $(pyexecdir)/hamster/keybinder
 _keybinder_LTLIBRARIES = _keybinder.la
@@ -16,7 +16,7 @@ nodist__keybinder_la_SOURCES = _keybinder.c
 _keybinder_PYTHON = \
 	__init__.py
 
-CLEANFILES = _keybinder.c
+#CLEANFILES = _keybinder.c
 EXTRA_DIST = \
 	_keybinder.defs \
 	_keybinder.override \
