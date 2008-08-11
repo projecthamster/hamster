@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-30 00:51+0100\n"
+"POT-Creation-Date: 2008-08-09 20:35+0200\n"
 "PO-Revision-Date: 2008-04-30 11:17+0100\n"
 "Last-Translator: Stefano Pedretti <stefano.pedretti@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
-#: ../hamster/about.py:21
-msgid "Hamster"
-msgstr "Hamster"
+#: ../data/99-hamster-applet.xml.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1
+msgid "Time Tracker"
+msgstr ""
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
@@ -30,38 +30,63 @@ msgid "_About"
 msgstr "_Informazioni su"
 
 #: ../data/Hamster_Applet.xml.h:2
-msgid "_Edit Activities"
-msgstr "_Modifica attività"
+msgid "_Preferences"
+msgstr ""
 
-#: ../data/activities.glade.h:1
-msgid " "
-msgstr " "
+#: ../data/preferences.glade.h:1
+#, fuzzy
+msgid "<b>Activities</b>"
+msgstr "<b>Attività</b>"
 
-#: ../data/activities.glade.h:2
-msgid "Edit Activities"
-msgstr "Modifica attività"
+#: ../data/preferences.glade.h:2
+#, fuzzy
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Categoria</b>"
 
-#: ../data/activities.glade.h:3
+#: ../data/preferences.glade.h:3
+#, fuzzy
+msgid "<b>Tracking</b>"
+msgstr "<b>Settimana</b>"
+
+#: ../data/preferences.glade.h:4
+#, fuzzy
+msgid "Idle minutes:"
+msgstr "minuti"
+
+#: ../data/preferences.glade.h:5
 msgid "Move _Down"
 msgstr "Sposta _Su"
 
-#: ../data/activities.glade.h:4
+#: ../data/preferences.glade.h:6
 msgid "Move _Up"
 msgstr "Sposta _Giu"
 
-#: ../data/activities.glade.h:5
+#: ../data/preferences.glade.h:7
 msgid "N_ew Category"
 msgstr "Nuova Cat_egoria"
 
-#: ../data/activities.glade.h:6
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
+#, fuzzy
+msgid "Stop tracking on shutdown"
+msgstr "Arre_sta conteggio"
+
+#: ../data/preferences.glade.h:9
+msgid "Stop tracking when computer becomes idle"
+msgstr ""
+
+#: ../data/preferences.glade.h:10
+msgid "Time Tracker Preferences"
+msgstr ""
+
+#: ../data/preferences.glade.h:11
 msgid "_Activities"
 msgstr "_Attività"
 
-#: ../data/activities.glade.h:7
+#: ../data/preferences.glade.h:12
 msgid "_Categories"
 msgstr "_Categorie"
 
-#: ../data/activities.glade.h:8
+#: ../data/preferences.glade.h:13
 msgid "_New Activity"
 msgstr "_Nuova Attività"
 
@@ -74,22 +99,15 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Data e Ora</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-msgid "A_dd"
-msgstr "_Aggiungi"
+#, fuzzy
+msgid "Add an older fact"
+msgstr "_Aggiungi un evento trascorso"
 
 #: ../data/add_custom_fact.glade.h:4
-msgid "Add older fact - Hamster"
-msgstr "Aggiungi eventi trascorsi - Hamster"
-
-#: ../data/add_custom_fact.glade.h:5
-msgid "_Cancel"
-msgstr "_Cancella"
-
-#: ../data/add_custom_fact.glade.h:6
 msgid "hours"
 msgstr "ore"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/add_custom_fact.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -99,16 +117,19 @@ msgstr ""
 "fino a\n"
 "per"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/add_custom_fact.glade.h:8
 msgid "minutes"
 msgstr "minuti"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid "Enable hotkeys"
-msgstr "Abilita tasti di scelta rapida"
+msgid ""
+"After how many minutes hamster should stop tracking activity when computer "
+"is idle. Set to 0 to disable."
+msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:2
-msgid "Keyboard shortcut for showing the Hamster Applet window."
+#, fuzzy
+msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Combinazioni di tasti per mostrare la finestra dell'applett Hamster."
 
 #: ../data/hamster-applet.schemas.in.h:3
@@ -116,12 +137,29 @@ msgid "Show window"
 msgstr "Mostra finestra"
 
 #: ../data/hamster-applet.schemas.in.h:4
-msgid "Whether Hamster should listen to configured hotkey."
-msgstr "Abilitare i tasti di scelta rapida di Hasmster."
+msgid "Stop tracking current activity on shutdown"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:6
+#, fuzzy
+msgid "Stop tracking on idle"
+msgstr "Arre_sta conteggio"
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Timeout in minutes"
+msgstr ""
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Older Fact"
 msgstr "_Aggiungi un evento trascorso"
+
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
+msgid "Hamster"
+msgstr "Hamster"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
@@ -168,110 +206,137 @@ msgid "<b>Week</b>"
 msgstr "<b>Settimana</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr ""
+
+#: ../data/stats.glade.h:9
 msgid "Overview - Hamster"
 msgstr "Riassunto - Hamster"
 
-#: ../hamster/about.py:23
+#: ../hamster/about.py:42
 msgid "Time tracking for masses."
 msgstr "Conteggio del tempo per tutti."
 
-#: ../hamster/about.py:26
+#: ../hamster/about.py:45
 msgid "Hamster Website"
 msgstr "Pagina web di Hamster"
 
-#: ../hamster/about.py:34
+#: ../hamster/about.py:53
 msgid "translator-credits"
 msgstr "Stefano Pedretti stefano.pedretti@gmail.com"
 
-#: ../hamster/activities.py:35 ../hamster/db.py:229
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
 msgstr "Non categorizzati"
 
-#: ../hamster/activities.py:77 ../hamster/stats.py:26
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
 msgid "Name"
 msgstr "Nome"
 
-#: ../hamster/activities.py:97
+#: ../hamster/preferences.py:123
 msgid "Category"
 msgstr "Categoriaa"
 
-#: ../hamster/activities.py:408
+#: ../hamster/preferences.py:472
 msgid "New category"
 msgstr "Nuova categoria"
 
-
-#: ../hamster/activities.py:420
+#: ../hamster/preferences.py:485
 msgid "New activity"
 msgstr "Nuova attività"
 
-#: ../hamster/applet.py:137
+#: ../hamster/applet.py:199
 msgid "No activity"
 msgstr "Nessuna attività"
 
 #. defaults
-#: ../hamster/db.py:378
+#: ../hamster/db.py:403
 msgid "Work"
 msgstr "Lavoro"
 
-#: ../hamster/db.py:379
+#: ../hamster/db.py:404
 msgid "Reading news"
 msgstr "Leggere le notizie"
 
-#: ../hamster/db.py:380
+#: ../hamster/db.py:405
 msgid "Checking stocks"
 msgstr "Controllare le azioni"
 
-#: ../hamster/db.py:381
+#: ../hamster/db.py:406
 msgid "Super secret project X"
 msgstr "Progetto super segreto X"
 
-#: ../hamster/db.py:382
+#: ../hamster/db.py:407
 msgid "World domination"
 msgstr "Conquista del mondo"
 
-#: ../hamster/db.py:384
+#: ../hamster/db.py:409
 msgid "Day to day"
 msgstr "Giorno per giorno"
 
-#: ../hamster/db.py:385
+#: ../hamster/db.py:410
 msgid "Lunch"
 msgstr "Pranzo"
 
-#: ../hamster/db.py:386
+#: ../hamster/db.py:411
 msgid "Watering flowers"
 msgstr "Annaffiare le piante"
 
-#: ../hamster/db.py:387
+#: ../hamster/db.py:412
 msgid "Doing handstands"
 msgstr "Fare le flessioni"
 
-#: ../hamster/db.py:563 ../hamster/db.py:567
+#: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
 msgstr "nome"
 
-#: ../hamster/stats.py:207
-msgid "Other"
-msgstr "Altro"
-
 #. single day is an exception
-#: ../hamster/stats.py:236
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
 #, python-format
 msgid "Overview for %s"
 msgstr "Riassunto per %s"
 
-#: ../hamster/stats.py:237
-msgid "Day"
-msgstr "Giorno"
-
-#: ../hamster/stats.py:239 ../hamster/stats.py:242
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Riassunto per %s - %s"
 
-#: ../hamster/stats.py:240
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "Altro"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "Giorno"
+
+#: ../hamster/stats.py:245
 msgid "Week"
 msgstr "Settimana"
 
-#: ../hamster/stats.py:243
+#: ../hamster/stats.py:248
 msgid "Month"
 msgstr "Mese"
+
+#~ msgid "_Edit Activities"
+#~ msgstr "_Modifica attività"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "Edit Activities"
+#~ msgstr "Modifica attività"
+
+#~ msgid "A_dd"
+#~ msgstr "_Aggiungi"
+
+#~ msgid "Add older fact - Hamster"
+#~ msgstr "Aggiungi eventi trascorsi - Hamster"
+
+#~ msgid "_Cancel"
+#~ msgstr "_Cancella"
+
+#~ msgid "Enable hotkeys"
+#~ msgstr "Abilita tasti di scelta rapida"
+
+#~ msgid "Whether Hamster should listen to configured hotkey."
+#~ msgstr "Abilitare i tasti di scelta rapida di Hasmster."

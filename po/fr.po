@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-14 22:04+0100\n"
+"POT-Creation-Date: 2008-08-09 20:35+0200\n"
 "PO-Revision-Date: 2008-07-03 22:03+0200\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -18,10 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit;\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../data/menu.glade.h:2
-#: ../hamster/about.py:40
-msgid "Hamster"
-msgstr "Hamster"
+#: ../data/99-hamster-applet.xml.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1
+msgid "Time Tracker"
+msgstr ""
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
@@ -48,32 +48,33 @@ msgid "<b>Tracking</b>"
 msgstr "<b>Suivi</b>"
 
 #: ../data/preferences.glade.h:4
-msgid "Hamster Applet Preferences"
-msgstr "Préférences de l'applet Hamster"
-
-#: ../data/preferences.glade.h:5
 msgid "Idle minutes:"
 msgstr "Minutes d'inactivité :"
 
-#: ../data/preferences.glade.h:6
+#: ../data/preferences.glade.h:5
 msgid "Move _Down"
 msgstr "Déplacer vers le _bas"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.glade.h:6
 msgid "Move _Up"
 msgstr "Déplacer vers le _haut"
 
-#: ../data/preferences.glade.h:8
+#: ../data/preferences.glade.h:7
 msgid "N_ew Category"
 msgstr "_Nouvelle catégorie"
 
-#: ../data/preferences.glade.h:9 ../data/hamster-applet.schemas.in.h:7
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on shutdown"
 msgstr "_Arrêter le suivi à la fermeture de l'application"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:9
 msgid "Stop tracking when computer becomes idle"
 msgstr "Arrêter le suivi quand l'ordinateur est inactif"
+
+#: ../data/preferences.glade.h:10
+#, fuzzy
+msgid "Time Tracker Preferences"
+msgstr "Préférences de l'applet Hamster"
 
 #: ../data/preferences.glade.h:11
 msgid "_Activities"
@@ -96,8 +97,9 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Date et heure</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-msgid "Add older fact - Hamster"
-msgstr "Ajouter un évènement passé - Hamster"
+#, fuzzy
+msgid "Add an older fact"
+msgstr "_Ajouter un évènement passé"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -126,7 +128,8 @@ msgstr ""
 "lorsque l'ordinateur devient inactif. Définir à 0 pour désactiver."
 
 #: ../data/hamster-applet.schemas.in.h:2
-msgid "Keyboard shortcut for showing the Hamster Applet window."
+#, fuzzy
+msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Raccourci clavier pour afficher la fenêtre d'Hamster."
 
 #: ../data/hamster-applet.schemas.in.h:3
@@ -153,6 +156,10 @@ msgstr "Expiration en minutes"
 #: ../data/menu.glade.h:1
 msgid "Ad_d Older Fact"
 msgstr "_Ajouter un évènement passé"
+
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
+msgid "Hamster"
+msgstr "Hamster"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
@@ -240,7 +247,7 @@ msgstr "Nouvelle catégorie"
 msgid "New activity"
 msgstr "Nouvelle activité"
 
-#: ../hamster/applet.py:218
+#: ../hamster/applet.py:199
 msgid "No activity"
 msgstr "Aucune activité"
 
@@ -311,3 +318,6 @@ msgstr "Semaine"
 #: ../hamster/stats.py:248
 msgid "Month"
 msgstr "Mois"
+
+#~ msgid "Add older fact - Hamster"
+#~ msgstr "Ajouter un évènement passé - Hamster"
