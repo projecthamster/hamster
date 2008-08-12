@@ -16,7 +16,7 @@ nodist__keybinder_la_SOURCES = _keybinder.c
 _keybinder_PYTHON = \
 	__init__.py
 
-#CLEANFILES = _keybinder.c
+CLEANFILES = _keybinder.c
 EXTRA_DIST = \
 	_keybinder.defs \
 	_keybinder.override \
