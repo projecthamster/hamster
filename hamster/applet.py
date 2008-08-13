@@ -264,7 +264,6 @@ class HamsterApplet(object):
         self.load_day() # reload day each time before showing to avoid outdated last activity
         self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
         
-        self.window.show()
 
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
@@ -289,9 +288,14 @@ class HamsterApplet(object):
         else:
             self.activity_list.child.set_text('')
 
-        self.applet.grab_focus()
+        gtk.idle_add(self._delayed_display)  
+        
+    def _delayed_display(self):
+        """show window only when gtk has become idle. otherwise we get
+        mixed results. TODO - this looks like a hack though"""
+        self.window.present()
         self.activity_list.grab_focus()
-
+        
 
     """events"""
     def on_button_press(self, widget, event):
