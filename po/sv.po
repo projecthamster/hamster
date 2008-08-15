@@ -1,29 +1,29 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Swedish translation of hamster-applet.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the hamster-applet package.
+# Kalle Persson <kalle@kallepersson.se>, 2008.
+# Daniel Nylander <po@danielnylander.se>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sv\n"
+"Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 20:35+0200\n"
-"PO-Revision-Date: 2008-03-31 00:51+0000\n"
-"Last-Translator: Kalle Persson <kalle@kallepersson.se>\n"
+"POT-Creation-Date: 2008-08-15 19:26+0200\n"
+"PO-Revision-Date: 2008-08-15 19:40+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 
-#: ../data/99-hamster-applet.xml.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 msgid "Time Tracker"
-msgstr ""
+msgstr "Tidmätare"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr "Tidmätning för massorna"
+msgstr "Tidmätning för alla"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -31,82 +31,73 @@ msgstr "_Om"
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Preferences"
-msgstr ""
+msgstr "_Inställningar"
 
 #: ../data/preferences.glade.h:1
-#, fuzzy
 msgid "<b>Activities</b>"
-msgstr "<b>Aktivitet</b>"
+msgstr "<b>Aktiviteter</b>"
 
 #: ../data/preferences.glade.h:2
-#, fuzzy
 msgid "<b>Global Hotkey</b>"
-msgstr "<b>Kategori</b>"
+msgstr "<b>Allmän snabbtangent</b>"
 
 #: ../data/preferences.glade.h:3
-#, fuzzy
 msgid "<b>Tracking</b>"
-msgstr "<b>Vecka</b>"
+msgstr "<b>Tidmätning</b>"
 
 #: ../data/preferences.glade.h:4
-#, fuzzy
 msgid "Idle minutes:"
-msgstr "minuter"
+msgstr "Inaktivitet i minuter:"
 
 #: ../data/preferences.glade.h:5
 msgid "Move _Down"
-msgstr ""
+msgstr "Flytta _nedåt"
 
 #: ../data/preferences.glade.h:6
 msgid "Move _Up"
-msgstr ""
+msgstr "Flytta _uppåt"
 
 #: ../data/preferences.glade.h:7
-#, fuzzy
 msgid "N_ew Category"
-msgstr "Ny kategori"
+msgstr "N_y kategori"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
-#, fuzzy
+#: ../data/preferences.glade.h:8
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on shutdown"
-msgstr "Stanna tidtagarur"
+msgstr "Stoppa tidmätning vid avstängning"
 
 #: ../data/preferences.glade.h:9
 msgid "Stop tracking when computer becomes idle"
-msgstr ""
+msgstr "Stoppa tidmätning när datorn är inaktiv"
 
 #: ../data/preferences.glade.h:10
 msgid "Time Tracker Preferences"
-msgstr ""
+msgstr "Inställningar för Tidmätare"
 
 #: ../data/preferences.glade.h:11
-#, fuzzy
 msgid "_Activities"
-msgstr "_Redigera aktiviteter"
+msgstr "_Aktiviteter"
 
 #: ../data/preferences.glade.h:12
-#, fuzzy
 msgid "_Categories"
-msgstr "Kategori"
+msgstr "_Kategorier"
 
 #: ../data/preferences.glade.h:13
-#, fuzzy
 msgid "_New Activity"
-msgstr "Ny aktivitet"
+msgstr "_Ny aktivitet"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1
+#: ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Aktivitet</b>"
 
 #: ../data/add_custom_fact.glade.h:2
-#, fuzzy
 msgid "<b>Date and Time</b>"
 msgstr "<b>Datum och tid</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
 msgid "Add an older fact"
-msgstr "Lägg till anpassad händelse"
+msgstr "Lägg till en äldre händelse"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -127,80 +118,73 @@ msgid "minutes"
 msgstr "minuter"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"After how many minutes hamster should stop tracking activity when computer "
-"is idle. Set to 0 to disable."
-msgstr ""
+msgid "After how many minutes hamster should stop tracking activity when computer is idle. Set to 0 to disable."
+msgstr "Efter hur många minuter som Hamster ska stoppa tidmätning av aktiviteten när datorn är inaktiv. Ställ in till 0 för att inaktivera."
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr ""
+msgstr "Tangentbordsgenväg för visning av Tidmätare-fönstret."
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Show window"
-msgstr ""
+msgstr "Visa fönster"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
-msgstr ""
+msgstr "Stoppa tidmätning av aktuell aktivitet vid avstängning"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr ""
+msgstr "Stoppa tidmätning av aktuell aktivitet när datorn blir inaktiv"
 
 #: ../data/hamster-applet.schemas.in.h:6
-#, fuzzy
 msgid "Stop tracking on idle"
-msgstr "Stanna tidtagarur"
+msgstr "Stoppa tidmätning vid inaktivitet"
 
 #: ../data/hamster-applet.schemas.in.h:8
 msgid "Timeout in minutes"
-msgstr ""
+msgstr "Tidsgräns i minuter"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Older Fact"
-msgstr ""
+msgstr "Läg_g till äldre händelse"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
+#: ../hamster/about.py:40
 msgid "Hamster"
 msgstr "Hamster"
 
 #: ../data/menu.glade.h:3
 msgid "No records today"
-msgstr "Inga inlägg idag"
+msgstr "Inga poster idag"
 
 #: ../data/menu.glade.h:4
-#, fuzzy
 msgid "Show _Overview"
-msgstr "Visa översikt"
+msgstr "Visa _översikt"
 
 #: ../data/menu.glade.h:5
 msgid "_Activity:"
 msgstr "_Aktivitet:"
 
 #: ../data/menu.glade.h:6
-#, fuzzy
 msgid "_Stop Tracking"
-msgstr "Stanna tidtagarur"
+msgstr "_Stoppa tidmätning"
 
 #: ../data/menu.glade.h:7
 msgid "_Today"
-msgstr "Idag"
+msgstr "_Idag"
 
 #: ../data/stats.glade.h:1
-#, fuzzy
 msgid " _Day"
-msgstr "Visa dag"
+msgstr "_Dag"
 
 #: ../data/stats.glade.h:2
-#, fuzzy
 msgid " _Month"
-msgstr "Visa månad"
+msgstr "_Månad"
 
 #: ../data/stats.glade.h:3
-#, fuzzy
 msgid " _Week"
-msgstr "Visa vecka"
+msgstr "_Vecka"
 
 #: ../data/stats.glade.h:5
 msgid "<b>Category</b>"
@@ -216,7 +200,7 @@ msgstr "<b>Vecka</b>"
 
 #: ../data/stats.glade.h:8
 msgid "Generate Report"
-msgstr ""
+msgstr "Generera rapport"
 
 #: ../data/stats.glade.h:9
 msgid "Overview - Hamster"
@@ -224,7 +208,7 @@ msgstr "Översikt - Hamster"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr "Tidmätning för massorna"
+msgstr "Tidmätning för alla."
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
@@ -232,13 +216,21 @@ msgstr "Hamsters webbplats"
 
 #: ../hamster/about.py:53
 msgid "translator-credits"
-msgstr "Kalle Persson kalle@kallepersson.se"
+msgstr ""
+"Daniel Nylander\n"
+"Kalle Persson\n"
+"\n"
+"Skicka synpunkter på översättningen till\n"
+"tp-sv@listor.tp-sv.se"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56
+#: ../hamster/db.py:254
+#: ../hamster/reports.py:108
 msgid "Unsorted"
 msgstr "Osorterat"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103
+#: ../hamster/stats.py:46
 msgid "Name"
 msgstr "Namn"
 
@@ -254,7 +246,7 @@ msgstr "Ny kategori"
 msgid "New activity"
 msgstr "Ny aktivitet"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:197
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
@@ -269,7 +261,7 @@ msgstr "Läser nyheter"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr "Kollar aktier"
+msgstr "Kontrollerar aktier"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
@@ -295,53 +287,51 @@ msgstr "Vattna blommorna"
 msgid "Doing handstands"
 msgstr "Stå på händerna"
 
-#: ../hamster/db.py:588 ../hamster/db.py:592
+#: ../hamster/db.py:588
+#: ../hamster/db.py:592
 msgid "name"
 msgstr "namn"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35
+#: ../hamster/stats.py:241
 #, python-format
 msgid "Overview for %s"
 msgstr "Översikt för %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37
+#: ../hamster/stats.py:244
+#: ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Översikt för %s - %s"
 
 #: ../hamster/stats.py:210
 msgid "Other"
-msgstr ""
+msgstr "Övriga"
 
 #: ../hamster/stats.py:242
 msgid "Day"
-msgstr ""
+msgstr "Dag"
 
 #: ../hamster/stats.py:245
-#, fuzzy
 msgid "Week"
-msgstr "Visa vecka"
+msgstr "Vecka"
 
 #: ../hamster/stats.py:248
-#, fuzzy
 msgid "Month"
-msgstr "Visa månad"
+msgstr "Månad"
 
 #~ msgid "Add"
 #~ msgstr "Lägg till"
-
 #~ msgid "Edit Activities"
 #~ msgstr "Redigera aktiviteter"
-
 #~ msgid "Remove"
 #~ msgstr "Ta bort"
-
 #~ msgid "Add custom fact - Hamster"
 #~ msgstr "Lägg till anpassad händelse - Hamster"
-
 #~ msgid "Cancel"
 #~ msgstr "Avbryt"
-
 #~ msgid "Nedarbi"
 #~ msgstr "Pusdienas"
+
