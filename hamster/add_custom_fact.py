@@ -81,7 +81,7 @@ class CustomFactController:
             self.get_widget('activity_name').set_text(fact["name"])
             self.get_widget("ok").set_sensitive(True)
             self.get_widget("ok").set_label("gtk-save")
-            self.window.set_title("Update fact")
+            self.window.set_title(_("Update activity"))
             
             if fact["end_time"]:
                 self.get_widget("end_time_mode").set_active(1)
