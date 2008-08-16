@@ -1,0 +1,299 @@
+# hamster-applet's Portuguese translation.
+# Copyright © 2008 hamster-applet
+# This file is distributed under the same license as the hamster-applet package.
+# Duarte Loreto <happyguy_pt@hotmail.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.24\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-16 23:54+0100\n"
+"PO-Revision-Date: 2008-08-16 23:55+0000\n"
+"Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
+"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1
+msgid "Time Tracker"
+msgstr "Registo Temporal"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Registo do tempo dispendido acessível a qualquer um"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Sobre"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Preferências"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Actividades</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Tecla de Atalho Global</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Registo</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Mover _Abaixo"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Mover Aci_ma"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "Nov_a Categoria"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Parar de registar ao desligar"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Parar de registar quando o computador estiver inactivo"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Preferências do Registo Temporal"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "_Actividades"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Categorias"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "_Nova Actividade"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Actividade</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data e Hora</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Adicionar Actividade Anterior"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "horas"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"em curso...\n"
+"até\n"
+"durante"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minutos"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Atalho de teclado para apresentar a janela do Registo Temporal."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Apresentar a janela"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Parar de registar a actividade actual ao desligar"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+"Parar de registar a actividade actual quando o computador estiver inactivo"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Parar de registar ao ficar inactivo"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "A_dicionar Actividade Anterior"
+
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "Nenhum registo hoje"
+
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "Apresentar o _Resumo"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "_Actividade:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "_Parar de Acompanhar"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "_Hoje"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Dia"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " _Mês"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Semana"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Categoria</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Resumo</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Semana</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr "Gerar Relatório"
+
+#: ../data/stats.glade.h:9
+msgid "Overview - Hamster"
+msgstr "Resumo - Hamster"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Registo do tempo dispendido acessível a qualquer um."
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Página do Hamster"
+
+#: ../hamster/about.py:53
+msgid "translator-credits"
+msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Não ordenado"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Nome"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Categoria"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Nova categoria"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Nova actividade"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Actualizar actividade"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "Nenhuma actividade"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Trabalho"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Ler notícias"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Verificar mercados financeiros"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Projecto super secreto X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Dominar o mundo"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Dia a dia"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Almoço"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Regar as plantas"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Fazer elevações"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "nome"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#, python-format
+msgid "Overview for %s"
+msgstr "Resumo de %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Resumo de %s - %s"
+
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "Outro"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "Dia"
+
+#: ../hamster/stats.py:245
+msgid "Week"
+msgstr "Semana"
+
+#: ../hamster/stats.py:248
+msgid "Month"
+msgstr "Mês"
