@@ -290,7 +290,7 @@ class HamsterApplet(object):
         else:
             self.activity_list.child.set_text('')
 
-        gtk.idle_add(self._delayed_display)  
+        gobject.idle_add(self._delayed_display)  
         
     def _delayed_display(self):
         """show window only when gtk has become idle. otherwise we get
