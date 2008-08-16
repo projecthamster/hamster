@@ -12,20 +12,6 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-applet/general/timeout</key>
-            <applyto>/apps/hamster-applet/general/timeout</applyto>
-            <owner>hamster-applet</owner>
-            <type>int</type>
-            <default>30</default>
-            <locale name="C">
-                <short>Timeout in minutes</short>
-                <long>
-                    After how many minutes hamster should stop tracking activity
-                    when computer is idle. Set to 0 to disable.
-                </long>
-            </locale>
-        </schema>
-        <schema>
             <key>/schemas/apps/hamster-applet/general/enable_timeout</key>
             <applyto>/apps/hamster-applet/general/enable_timeout</applyto>
             <owner>hamster-applet</owner>

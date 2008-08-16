@@ -169,11 +169,7 @@ class PreferencesEditor:
 
     def load_config(self):
         self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())
-
         self.get_widget("idle_track").set_active(self.config.get_timeout_enabled())
-        self.get_widget("slider_mins").set_sensitive(self.config.get_timeout_enabled())
-        self.get_widget("idle_minutes").set_value(self.config.get_timeout())
-
         self.get_widget("keybinding").set_text(self.config.get_keybinding())
 
 
@@ -523,10 +519,6 @@ class PreferencesEditor:
 
     def on_idle_track_toggled(self, checkbox):
         self.config.set_timeout_enabled(checkbox.get_active())
-        self.get_widget("slider_mins").set_sensitive(checkbox.get_active())
     
     def on_keybinding_changed(self, textbox):
         self.config.set_keybinding(textbox.get_text())
-        
-    def on_idle_minutes_value_changed(self, slider):
-        self.config.set_timeout(slider.get_value())
