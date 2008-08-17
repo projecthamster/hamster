@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-07 17:30+0300\n"
+"POT-Creation-Date: 2008-08-17 23:46+0200\n"
 "PO-Revision-Date: 2008-08-07 17:30+0300\n"
 "Last-Translator: Yair Hershkovitz\n"
 "Language-Team: he\n"
@@ -15,7 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/99-hamster-applet.xml.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 msgid "Time Tracker"
 msgstr "מעקב אחרי הזמן"
@@ -45,42 +44,38 @@ msgid "<b>Tracking</b>"
 msgstr "<b>מעקב</b>"
 
 #: ../data/preferences.glade.h:4
-msgid "Idle minutes:"
-msgstr "דקות ללא פעילות:"
-
-#: ../data/preferences.glade.h:5
 msgid "Move _Down"
 msgstr "הזז _למטה"
 
-#: ../data/preferences.glade.h:6
+#: ../data/preferences.glade.h:5
 msgid "Move _Up"
 msgstr "הזז ל_מעלה"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.glade.h:6
 msgid "N_ew Category"
 msgstr "_קטגוריה חדשה"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "הפסק מעקב בכיבוי"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
 msgstr "הפסק מעקב כאשר המחשב לא בשימוש"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
 msgstr "העדפות מעקב זמן"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:10
 msgid "_Activities"
 msgstr "_פעילויות"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:11
 msgid "_Categories"
 msgstr "_קטגוריות"
 
-#: ../data/preferences.glade.h:13
+#: ../data/preferences.glade.h:12
 msgid "_New Activity"
 msgstr "פעילות _חדשה"
 
@@ -93,8 +88,9 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>תאריך ושעה</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-msgid "Add an older fact"
-msgstr "הוסף עובדה ישנה"
+#, fuzzy
+msgid "Add Earlier Activity"
+msgstr "פעילות _חדשה"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -115,40 +111,29 @@ msgid "minutes"
 msgstr "דקות"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"After how many minutes hamster should stop tracking activity when computer "
-"is idle. Set to 0 to disable."
-msgstr ""
-"After how many minutes hamster should stop tracking activity when computer "
-"is idle. Set to 0 to disable."
-
-#: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Keyboard shortcut for showing the Time Tracker window."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
 msgstr "Show window"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
 msgstr "Stop tracking current activity on shutdown"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "Stop tracking current activity, when computer becomes idle"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
 msgstr "Stop tracking on idle"
 
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Timeout in minutes"
-msgstr "Timeout in minutes"
-
 #: ../data/menu.glade.h:1
-msgid "Ad_d Older Fact"
-msgstr "הוסף _עובדה ישנה"
+#, fuzzy
+msgid "Ad_d Earlier Activity"
+msgstr "פעילות _חדשה"
 
 #: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
@@ -232,12 +217,17 @@ msgstr "שם"
 msgid "Category"
 msgstr "קטגוריה"
 
-#: ../hamster/preferences.py:472
+#: ../hamster/preferences.py:468
 msgid "New category"
 msgstr "קטגוריה חדשה"
 
-#: ../hamster/preferences.py:485
+#: ../hamster/preferences.py:481
 msgid "New activity"
+msgstr "פעילות חדשה"
+
+#: ../hamster/add_custom_fact.py:84
+#, fuzzy
+msgid "Update activity"
 msgstr "פעילות חדשה"
 
 #: ../hamster/applet.py:199
@@ -311,3 +301,22 @@ msgstr "שבוע"
 #: ../hamster/stats.py:248
 msgid "Month"
 msgstr "חודש"
+
+#~ msgid "Idle minutes:"
+#~ msgstr "דקות ללא פעילות:"
+
+#~ msgid "Add an older fact"
+#~ msgstr "הוסף עובדה ישנה"
+
+#~ msgid ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+#~ msgstr ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+
+#~ msgid "Timeout in minutes"
+#~ msgstr "Timeout in minutes"
+
+#~ msgid "Ad_d Older Fact"
+#~ msgstr "הוסף _עובדה ישנה"

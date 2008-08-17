@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-16 19:46+0000\n"
+"POT-Creation-Date: 2008-08-17 23:46+0200\n"
 "PO-Revision-Date: 2008-08-17 13:16+0100\n"
 "Last-Translator: Matthias Mailänder <https://launchpad.net/~mailaender>\n"
 "Language-Team: \n"
@@ -57,8 +57,7 @@ msgstr "Hoch bewegen"
 msgid "N_ew Category"
 msgstr "_Neue Kategorie"
 
-#: ../data/preferences.glade.h:7
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "Beim Herunterfahren die Verfolgung anhalten"
 
@@ -82,8 +81,7 @@ msgstr "_Kategorien"
 msgid "_New Activity"
 msgstr "_Neue Tätigkeit"
 
-#: ../data/add_custom_fact.glade.h:1
-#: ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Tätigkeit</b>"
 
@@ -127,7 +125,9 @@ msgstr "Beim Herunterfahren momentane Tätigkeit nicht weiter verfolgen"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Wenn sich der Computer im Leerlauf befindet, die momentane Tätigkeit nicht weiter verfolgen"
+msgstr ""
+"Wenn sich der Computer im Leerlauf befindet, die momentane Tätigkeit nicht "
+"weiter verfolgen"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
@@ -137,8 +137,7 @@ msgstr "Verfolgung anhalten wenn untätig"
 msgid "Ad_d Earlier Activity"
 msgstr "_Neue Tätigkeit hinzufügen"
 
-#: ../data/menu.glade.h:2
-#: ../hamster/about.py:40
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -206,14 +205,11 @@ msgstr "Hamster Website"
 msgid "translator-credits"
 msgstr "Matthias Mailänder https://launchpad.net/~mailaender"
 
-#: ../hamster/preferences.py:56
-#: ../hamster/db.py:254
-#: ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
 msgstr "unsortiert"
 
-#: ../hamster/preferences.py:103
-#: ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
 msgid "Name"
 msgstr "Name"
 
@@ -274,21 +270,17 @@ msgstr "Blumen gießen"
 msgid "Doing handstands"
 msgstr "Handstände machen"
 
-#: ../hamster/db.py:588
-#: ../hamster/db.py:592
+#: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
 msgstr "Name"
 
 #. single day is an exception
-#: ../hamster/reports.py:35
-#: ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
 #, python-format
 msgid "Overview for %s"
 msgstr "Überblick für %s"
 
-#: ../hamster/reports.py:37
-#: ../hamster/stats.py:244
-#: ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Übersicht für %s - %s"
@@ -315,6 +307,7 @@ msgstr "Monat"
 #, fuzzy
 #~ msgid "Add an older fact"
 #~ msgstr "_Alte Begebenheit hinzufügen"
+
 #~ msgid ""
 #~ "After how many minutes hamster should stop tracking activity when "
 #~ "computer is idle. Set to 0 to disable."
@@ -322,16 +315,21 @@ msgstr "Monat"
 #~ "Nach wie vielen Minuten soll Hamster aufhören die Aktivitäten zu "
 #~ "verfolgen wenn der Computer im Leerlauf ist. Auf 0 setzen zum Abschalten "
 #~ "deaktivieren."
+
 #~ msgid "Timeout in minutes"
 #~ msgstr "Zeitabschaltung in Minuten"
+
 #~ msgid "Ad_d Older Fact"
 #~ msgstr "_Alte Begebenheit hinzufügen"
+
 #~ msgid "A_dd"
 #~ msgstr "_Hinzu"
+
 #~ msgid "Add older fact - Hamster"
 #~ msgstr "Alte Gegebenheit hinzufügen - Hamster"
+
 #~ msgid "_Cancel"
 #~ msgstr "_Abbrechen"
+
 #~ msgid "_Update"
 #~ msgstr "_Aktualisieren"
-

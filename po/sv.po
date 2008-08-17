@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-16 13:13+0200\n"
+"POT-Creation-Date: 2008-08-17 23:46+0200\n"
 "PO-Revision-Date: 2008-08-16 13:14+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -46,48 +46,42 @@ msgid "<b>Tracking</b>"
 msgstr "<b>Tidmätning</b>"
 
 #: ../data/preferences.glade.h:4
-msgid "Idle minutes:"
-msgstr "Inaktivitet i minuter:"
-
-#: ../data/preferences.glade.h:5
 msgid "Move _Down"
 msgstr "Flytta _nedåt"
 
-#: ../data/preferences.glade.h:6
+#: ../data/preferences.glade.h:5
 msgid "Move _Up"
 msgstr "Flytta _uppåt"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.glade.h:6
 msgid "N_ew Category"
 msgstr "N_y kategori"
 
-#: ../data/preferences.glade.h:8
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "Stoppa tidmätning vid avstängning"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
 msgstr "Stoppa tidmätning när datorn är inaktiv"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
 msgstr "Inställningar för Tidmätare"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:10
 msgid "_Activities"
 msgstr "_Aktiviteter"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:11
 msgid "_Categories"
 msgstr "_Kategorier"
 
-#: ../data/preferences.glade.h:13
+#: ../data/preferences.glade.h:12
 msgid "_New Activity"
 msgstr "_Ny aktivitet"
 
-#: ../data/add_custom_fact.glade.h:1
-#: ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Aktivitet</b>"
 
@@ -118,39 +112,30 @@ msgid "minutes"
 msgstr "minuter"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid "After how many minutes hamster should stop tracking activity when computer is idle. Set to 0 to disable."
-msgstr "Efter hur många minuter som Hamster ska stoppa tidmätning av aktiviteten när datorn är inaktiv. Ställ in till 0 för att inaktivera."
-
-#: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Tangentbordsgenväg för visning av Tidmätare-fönstret."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
 msgstr "Visa fönster"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
 msgstr "Stoppa tidmätning av aktuell aktivitet vid avstängning"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "Stoppa tidmätning av aktuell aktivitet när datorn blir inaktiv"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
 msgstr "Stoppa tidmätning vid inaktivitet"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Timeout in minutes"
-msgstr "Tidsgräns i minuter"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
 msgstr "Lä_gg till tidigare aktivitet"
 
-#: ../data/menu.glade.h:2
-#: ../hamster/about.py:40
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -223,14 +208,11 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../hamster/preferences.py:56
-#: ../hamster/db.py:254
-#: ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
 msgstr "Osorterat"
 
-#: ../hamster/preferences.py:103
-#: ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
 msgid "Name"
 msgstr "Namn"
 
@@ -238,11 +220,11 @@ msgstr "Namn"
 msgid "Category"
 msgstr "Kategori"
 
-#: ../hamster/preferences.py:472
+#: ../hamster/preferences.py:468
 msgid "New category"
 msgstr "Ny kategori"
 
-#: ../hamster/preferences.py:485
+#: ../hamster/preferences.py:481
 msgid "New activity"
 msgstr "Ny aktivitet"
 
@@ -250,7 +232,7 @@ msgstr "Ny aktivitet"
 msgid "Update activity"
 msgstr "Uppdatera aktivitet"
 
-#: ../hamster/applet.py:197
+#: ../hamster/applet.py:199
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
@@ -291,21 +273,17 @@ msgstr "Vattna blommorna"
 msgid "Doing handstands"
 msgstr "Stå på händerna"
 
-#: ../hamster/db.py:588
-#: ../hamster/db.py:592
+#: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
 msgstr "namn"
 
 #. single day is an exception
-#: ../hamster/reports.py:35
-#: ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
 #, python-format
 msgid "Overview for %s"
 msgstr "Översikt för %s"
 
-#: ../hamster/reports.py:37
-#: ../hamster/stats.py:244
-#: ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Översikt för %s - %s"
@@ -326,20 +304,39 @@ msgstr "Vecka"
 msgid "Month"
 msgstr "Månad"
 
+#~ msgid "Idle minutes:"
+#~ msgstr "Inaktivitet i minuter:"
+
+#~ msgid ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+#~ msgstr ""
+#~ "Efter hur många minuter som Hamster ska stoppa tidmätning av aktiviteten "
+#~ "när datorn är inaktiv. Ställ in till 0 för att inaktivera."
+
+#~ msgid "Timeout in minutes"
+#~ msgstr "Tidsgräns i minuter"
+
 #~ msgid "Add an older fact"
 #~ msgstr "Lägg till en äldre händelse"
+
 #~ msgid "Ad_d Older Fact"
 #~ msgstr "Läg_g till äldre händelse"
+
 #~ msgid "Add"
 #~ msgstr "Lägg till"
+
 #~ msgid "Edit Activities"
 #~ msgstr "Redigera aktiviteter"
+
 #~ msgid "Remove"
 #~ msgstr "Ta bort"
+
 #~ msgid "Add custom fact - Hamster"
 #~ msgstr "Lägg till anpassad händelse - Hamster"
+
 #~ msgid "Cancel"
 #~ msgstr "Avbryt"
+
 #~ msgid "Nedarbi"
 #~ msgstr "Pusdienas"
-

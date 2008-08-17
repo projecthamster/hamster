@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 20:35+0200\n"
+"POT-Creation-Date: 2008-08-17 23:46+0200\n"
 "PO-Revision-Date: 2008-08-05 02:32+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Spanish <gnome-es-list@gnome.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/99-hamster-applet.xml.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 msgid "Time Tracker"
 msgstr "Gestor de tiempo"
@@ -46,42 +45,38 @@ msgid "<b>Tracking</b>"
 msgstr "<b>Registro</b>"
 
 #: ../data/preferences.glade.h:4
-msgid "Idle minutes:"
-msgstr "Minutos de inactividad:"
-
-#: ../data/preferences.glade.h:5
 msgid "Move _Down"
 msgstr "_Bajar"
 
-#: ../data/preferences.glade.h:6
+#: ../data/preferences.glade.h:5
 msgid "Move _Up"
 msgstr "_Subir"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.glade.h:6
 msgid "N_ew Category"
 msgstr "Nueva _Categoría"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "Detener el registro al apagar"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
 msgstr "Detener el registro cuando el ordenador esté inactivo"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
 msgstr "Preferencias del gestor de tiempo"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:10
 msgid "_Activities"
 msgstr "_Actividades"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:11
 msgid "_Categories"
 msgstr "_Categorías"
 
-#: ../data/preferences.glade.h:13
+#: ../data/preferences.glade.h:12
 msgid "_New Activity"
 msgstr "Nueva _Actividad"
 
@@ -94,8 +89,9 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Fecha y hora</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-msgid "Add an older fact"
-msgstr "Añadir un hecho antiguo"
+#, fuzzy
+msgid "Add Earlier Activity"
+msgstr "Nueva _Actividad"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -116,40 +112,29 @@ msgid "minutes"
 msgstr "minutos"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"After how many minutes hamster should stop tracking activity when computer "
-"is idle. Set to 0 to disable."
-msgstr ""
-"Después de cuántos minutos de inactividad debería pararse el registro de "
-"actividades en el ordenador. Poner a 0 para deshabilitar"
-
-#: ../data/hamster-applet.schemas.in.h:2
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Combinación de teclas para mostrar la ventana del gestor de tiempo."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
 msgstr "Mostrar la ventana"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
 msgstr "Parar la actividad actual al apagar"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "Parar la actividad actual cuando el ordenador esté inactivo"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
 msgstr "Detener el registro en inactividad"
 
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Timeout in minutes"
-msgstr "Tiempo de espera, en minutos"
-
 #: ../data/menu.glade.h:1
-msgid "Ad_d Older Fact"
-msgstr "_Añadir un hecho antiguo"
+#, fuzzy
+msgid "Ad_d Earlier Activity"
+msgstr "Nueva _Actividad"
 
 #: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
@@ -233,12 +218,17 @@ msgstr "Nombre"
 msgid "Category"
 msgstr "Categoría"
 
-#: ../hamster/preferences.py:472
+#: ../hamster/preferences.py:468
 msgid "New category"
 msgstr "Nueva categoría"
 
-#: ../hamster/preferences.py:485
+#: ../hamster/preferences.py:481
 msgid "New activity"
+msgstr "Nueva actividad"
+
+#: ../hamster/add_custom_fact.py:84
+#, fuzzy
+msgid "Update activity"
 msgstr "Nueva actividad"
 
 #: ../hamster/applet.py:199
@@ -313,3 +303,21 @@ msgstr "Semana"
 msgid "Month"
 msgstr "Mes"
 
+#~ msgid "Idle minutes:"
+#~ msgstr "Minutos de inactividad:"
+
+#~ msgid "Add an older fact"
+#~ msgstr "Añadir un hecho antiguo"
+
+#~ msgid ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+#~ msgstr ""
+#~ "Después de cuántos minutos de inactividad debería pararse el registro de "
+#~ "actividades en el ordenador. Poner a 0 para deshabilitar"
+
+#~ msgid "Timeout in minutes"
+#~ msgstr "Tiempo de espera, en minutos"
+
+#~ msgid "Ad_d Older Fact"
+#~ msgstr "_Añadir un hecho antiguo"
