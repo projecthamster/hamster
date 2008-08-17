@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 20:35+0200\n"
-"PO-Revision-Date: 2008-06-01 21:01+0100\n"
+"POT-Creation-Date: 2008-08-16 19:46+0000\n"
+"PO-Revision-Date: 2008-08-17 13:16+0100\n"
 "Last-Translator: Matthias Mailänder <https://launchpad.net/~mailaender>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,9 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: ../data/99-hamster-applet.xml.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 msgid "Time Tracker"
-msgstr ""
+msgstr "Zeitverfolgung"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
@@ -28,7 +27,7 @@ msgstr "Zeitverfolgung für die Massen"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "_Über"
+msgstr "_Info"
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Preferences"
@@ -47,47 +46,44 @@ msgid "<b>Tracking</b>"
 msgstr "<b>Verfolgung</b>"
 
 #: ../data/preferences.glade.h:4
-msgid "Idle minutes:"
-msgstr "Minuten bis untätig:"
+msgid "Move _Down"
+msgstr "Herunter bewegen"
 
 #: ../data/preferences.glade.h:5
-msgid "Move _Down"
-msgstr "Runter bewegen"
-
-#: ../data/preferences.glade.h:6
 msgid "Move _Up"
 msgstr "Hoch bewegen"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.glade.h:6
 msgid "N_ew Category"
 msgstr "_Neue Kategorie"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
+#: ../data/preferences.glade.h:7
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
-msgstr "Beim Herunterfahren die Verfolgung anhalten."
+msgstr "Beim Herunterfahren die Verfolgung anhalten"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Im Leerlauf die Verfolgung anhalten"
 
 #: ../data/preferences.glade.h:9
-msgid "Stop tracking when computer becomes idle"
-msgstr "Im Leerlauf die Verfolgung anhalten."
+msgid "Time Tracker Preferences"
+msgstr "Hamster-Applet Einstellungen"
 
 #: ../data/preferences.glade.h:10
-#, fuzzy
-msgid "Time Tracker Preferences"
-msgstr "Hamster Applet Einstellungen"
-
-#: ../data/preferences.glade.h:11
 msgid "_Activities"
 msgstr "_Tätigkeiten"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:11
 msgid "_Categories"
 msgstr "_Kategorien"
 
-#: ../data/preferences.glade.h:13
+#: ../data/preferences.glade.h:12
 msgid "_New Activity"
 msgstr "_Neue Tätigkeit"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1
+#: ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Tätigkeit</b>"
 
@@ -96,9 +92,8 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Datum und Zeit</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
-msgid "Add an older fact"
-msgstr "_Alte Begebenheit hinzufügen"
+msgid "Add Earlier Activity"
+msgstr "Neue Tätigkeit hinzufügen"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -119,45 +114,31 @@ msgid "minutes"
 msgstr "Minuten"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"After how many minutes hamster should stop tracking activity when computer "
-"is idle. Set to 0 to disable."
-msgstr ""
-"Nach wie vielen Minuten soll Hamster aufhören die Aktivitäten zu verfolgen "
-"wenn der Computer im Leerlauf ist. Auf 0 setzen zum Abschalten deaktivieren."
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Tastenkürzel um das Zeitverfolgungsfenster anzuzeigen."
 
 #: ../data/hamster-applet.schemas.in.h:2
-#, fuzzy
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Tastenkürzel um das Hamster Applet Fenster zu zeigen."
+msgid "Show window"
+msgstr "Fenster anzeigen"
 
 #: ../data/hamster-applet.schemas.in.h:3
-msgid "Show window"
-msgstr "Zeige Fenster"
+msgid "Stop tracking current activity on shutdown"
+msgstr "Beim Herunterfahren momentane Tätigkeit nicht weiter verfolgen"
 
 #: ../data/hamster-applet.schemas.in.h:4
-msgid "Stop tracking current activity on shutdown"
-msgstr "Beim Herunterfahren momentane Tätigkeit nicht weiter verfolgen."
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Wenn sich der Computer im Leerlauf befindet, die momentane Tätigkeit nicht weiter verfolgen"
 
 #: ../data/hamster-applet.schemas.in.h:5
-msgid "Stop tracking current activity, when computer becomes idle"
-msgstr ""
-"Wenn sich der Computer im Leerlauf befindet die momentane Tätigkeit nicht "
-"weiter verfolgen."
-
-#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on idle"
 msgstr "Verfolgung anhalten wenn untätig"
 
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Timeout in minutes"
-msgstr "Zeitabschaltung in Minuten"
-
 #: ../data/menu.glade.h:1
-msgid "Ad_d Older Fact"
-msgstr "_Alte Begebenheit hinzufügen"
+msgid "Ad_d Earlier Activity"
+msgstr "_Neue Tätigkeit hinzufügen"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
+#: ../hamster/about.py:40
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -207,7 +188,7 @@ msgstr "<b>Woche</b>"
 
 #: ../data/stats.glade.h:8
 msgid "Generate Report"
-msgstr ""
+msgstr "Bericht erstellen"
 
 #: ../data/stats.glade.h:9
 msgid "Overview - Hamster"
@@ -225,11 +206,14 @@ msgstr "Hamster Website"
 msgid "translator-credits"
 msgstr "Matthias Mailänder https://launchpad.net/~mailaender"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56
+#: ../hamster/db.py:254
+#: ../hamster/reports.py:108
 msgid "Unsorted"
 msgstr "unsortiert"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103
+#: ../hamster/stats.py:46
 msgid "Name"
 msgstr "Name"
 
@@ -237,13 +221,17 @@ msgstr "Name"
 msgid "Category"
 msgstr "Kategorie"
 
-#: ../hamster/preferences.py:472
+#: ../hamster/preferences.py:468
 msgid "New category"
 msgstr "Neue Kategorie"
 
-#: ../hamster/preferences.py:485
+#: ../hamster/preferences.py:481
 msgid "New activity"
 msgstr "Neue Tätigkeit"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Tätigkeit aktualisieren"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
@@ -256,11 +244,11 @@ msgstr "Arbeit"
 
 #: ../hamster/db.py:404
 msgid "Reading news"
-msgstr "Nachrichten lesen"
+msgstr "Nachrichten lesend"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr "Aktienkurse überprüfen"
+msgstr "Aktienkurse überprüfend"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
@@ -286,17 +274,21 @@ msgstr "Blumen gießen"
 msgid "Doing handstands"
 msgstr "Handstände machen"
 
-#: ../hamster/db.py:588 ../hamster/db.py:592
+#: ../hamster/db.py:588
+#: ../hamster/db.py:592
 msgid "name"
 msgstr "Name"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35
+#: ../hamster/stats.py:241
 #, python-format
 msgid "Overview for %s"
 msgstr "Überblick für %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37
+#: ../hamster/stats.py:244
+#: ../hamster/stats.py:247
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Übersicht für %s - %s"
@@ -317,14 +309,29 @@ msgstr "Woche"
 msgid "Month"
 msgstr "Monat"
 
+#~ msgid "Idle minutes:"
+#~ msgstr "Minuten bis untätig:"
+
+#, fuzzy
+#~ msgid "Add an older fact"
+#~ msgstr "_Alte Begebenheit hinzufügen"
+#~ msgid ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+#~ msgstr ""
+#~ "Nach wie vielen Minuten soll Hamster aufhören die Aktivitäten zu "
+#~ "verfolgen wenn der Computer im Leerlauf ist. Auf 0 setzen zum Abschalten "
+#~ "deaktivieren."
+#~ msgid "Timeout in minutes"
+#~ msgstr "Zeitabschaltung in Minuten"
+#~ msgid "Ad_d Older Fact"
+#~ msgstr "_Alte Begebenheit hinzufügen"
 #~ msgid "A_dd"
 #~ msgstr "_Hinzu"
-
 #~ msgid "Add older fact - Hamster"
 #~ msgstr "Alte Gegebenheit hinzufügen - Hamster"
-
 #~ msgid "_Cancel"
 #~ msgstr "_Abbrechen"
-
 #~ msgid "_Update"
 #~ msgstr "_Aktualisieren"
+
