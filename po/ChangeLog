@@ -1,32 +1,199 @@
+2008-08-17  Juanje Ojeda <jojeda@emergya.es>
+
+	* ChangeLog: Updated old changes
+	* de.po, es.po, et.po, fr.po, gl.po, he.po, it.po, lv.po, nb.po,
+	  nl.po, pt.po, ru.po, sv.po: Updated original strings on
+	  translations files
+
+2008-08-17  Juanje Ojeda <jojeda@emergya.es>
+
+	* de.po: Updated german translations (by Matthias Mailänder)
+
 2008-08-17  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* LINGUAS: Add nb.
-	* nb.po: Added Norwegian bokmål translation.
+	* ChangeLog, LINGUAS, nb.po: 2008-08-17 Kjartan Maraas
+	  kmaraas@gnome.org>
+	  
+	  * LINGUAS: Add nb.
+	  * nb.po: Added Norwegian bokmål translation.
 
-2008-08-17  Priit Laes  <plaes at svn dot gnome dot org>
+2008-08-17  Priit Laes <plaes at svn dot gnome dot org>
 
-	* et.po: Translation updated by Ivar Smolin
+	* ChangeLog, LINGUAS, et.po: 2008-08-17 Priit Laes <Priit Laes <plaes at svn dot gnome dot org> at svn
+	  dot gnome dot org>
+	  
+	  * et.po: Translation updated (by Ivar Smolin)
 
 2008-08-17  Yair Hershkovitz  <yairhr@gmail.com>
 
-	* he.po, LINGUAS: Added Hebrew translation.
+	* LINGUAS: updated hebrew translation
+
+2008-08-17  Yair Hershkovitz  <yairhr@gmail.com>
+
+	* ChangeLog, he.po: added hebrew translation
 
 2008-08-16  Duarte Loreto <happyguy_pt@hotmail.com>
 
-	* pt.po: Added Portuguese translation.
-	* LINGUAS: Added Portuguese (pt) to the list.
+	* ChangeLog, LINGUAS, pt.po: 2008-08-16 Duarte Loreto
+	  <happyguy_pt@hotmail.com>
+	  
+	  * pt.po: Added Portuguese translation.
+	  * LINGUAS: Added Portuguese (pt) to the list.
+
+2008-08-16  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: sv.po: Updated Swedish translation
 
 2008-08-15  Daniel Nylander <po@danielnylander.se>
 
-	* sv.po: Updated Swedish translation
+	* ChangeLog, sv.po: sv.po: Updated Swedish translation
 
 2008-08-15  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
-	 gl.po: Added Galician translation
+	* ChangeLog, LINGUAS, gl.po: Added Galician translation
 
-2007-07-27  Toms  <toms.baugis@gmail.com>
+2008-08-12  Patryk Zawadzki  <patrys@pld-linux.org>
 
-	* folder/file (something.function):
-	                     - 0.1 revision
-			     - i don't know how to write changelogs. 
+	* POTFILES.in: - fix bug #547459
+
+2008-08-11  Juanje Ojeda <jojeda@emergya.es>
+
+	* de.po, es.po, fr.po, it.po, lv.po, nl.po, ru.po, sv.po:
+	  * Updated original strings to translate on po files
+	  * Updated the Spanish translations
+
+2008-08-05  Patryk Zawadzki  <patrys@pld-linux.org>
+
+	* POTFILES.in: add keyboard binding to POTFILES.in
+
+2008-08-05  Juanje Ojeda <jojeda@emergya.es>
+
+	* es.po: Fixed minor error with extra \n on msgstr string
+
+2008-08-05  Juanje Ojeda <jojeda@emergya.es>
+
+	* es.po: Fixed the header info and updated the translaions
+
+2008-07-31  Juanje Ojeda <jojeda@emergya.es>
+
+	* nl.po: Updated the Dutch translation by Wouter Bolsterlee
+	  (#544975)
+
+2008-07-14  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS: Dutch translation by Hans de Zwart
+
+2008-07-14  Toms Bauģis <toms.baugis@gmail.com>
+
+	* fr.po: updated translation by Stephane Raimbaul
+
+2008-07-14  Toms Bauģis <toms.baugis@gmail.com>
+
+	* nl.po: Dutch translation by Hans de Zwart
+
+2008-06-22  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS, ru.po: added russian translation (by Sasha Shveik)
+
+2008-06-08  Toms Bauģis <toms.baugis@gmail.com>
+
+	* lv.po: updated latvian translation
+
+2008-06-08  Toms Bauģis <toms.baugis@gmail.com>
+
+	* POTFILES.in: basic reporting (export to HTML)
+
+2008-06-08  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS, fr.po: added french translation (by Pierre-Luc Beaudoin)
+
+2008-06-02  Juanje Ojeda <jojeda@emergya.es>
+
+	* LINGUAS, de.po: Added new translations for German language (by
+	  Matthias Mailänder)
+
+2008-05-23  Toms Bauģis <toms.baugis@gmail.com>
+
+	* lv.po: updated latvian translation
+
+2008-05-23  Toms Bauģis <toms.baugis@gmail.com>
+
+	* POTFILES.in: activities -> preferences
+
+2008-05-07  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS: totally forgot to update LINGUAS!
+
+2008-04-30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* it.po: IT locale by Stefano Pedretti
+
+2008-04-14  Toms Bauģis <toms.baugis@gmail.com>
+
+	* es.po, lv.po: updated trivial changes in es/lv, couldn't get into
+	  swedish -
+	  better leave it to native speakers :)
+
+2008-04-14  Toms Bauģis <toms.baugis@gmail.com>
+
+	* es.po: spanish translation as per via issue 38
+
+2008-04-13  Toms Bauģis <toms.baugis@gmail.com>
+
+	* hamster-applet.pot: forget about template
+
+2008-04-13  Toms Bauģis <toms.baugis@gmail.com>
+
+	* hamster-applet.pot, lv.po: updated translation
+
+2008-04-12  Toms Bauģis <toms.baugis@gmail.com>
+
+	* POTFILES.in: some more minor stuff
+
+2008-04-03  Toms Bauģis <toms.baugis@gmail.com>
+
+	* lv.po: updated latvian translation
+
+2008-04-02  Toms Bauģis <toms.baugis@gmail.com>
+
+	* lv.po: updated translation
+
+2008-03-31  Toms Bauģis <toms.baugis@gmail.com>
+
+	* sv.po: accident in swedish translation :)
+
+2008-03-31  menthos
+
+	* sv.po:
+
+2008-03-31  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS, sv.po: swedish translation
+
+2008-03-31  Toms Bauģis <toms.baugis@gmail.com>
+
+	* POTFILES.in, POTFILES.skip, lv.po: distcheck says that we are
+	  good for distribution now
+
+2008-03-30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* ChangeLog: some tools say we need a changelog here
+
+2008-03-30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* lv.po: updated translation
+
+2008-03-30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* POTFILES.in: adding database to localization
+
+2008-03-30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* LINGUAS, lv.po: yay for first translation, note for me - when
+	  need to update, run this:
+	  intltool-update lv
+
+2008-03-29  Toms Bauģis <toms.baugis@gmail.com>
+
+	* ., LINGUAS, POTFILES.in: starting loco stuff\!
 
