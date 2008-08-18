@@ -37,10 +37,10 @@ gtk.about_dialog_set_url_hook(on_url)
 def show_about(parent):
     about = gtk.AboutDialog()
     infos = {
-        "name" : _("Hamster"),
+        "name" : _("Time Tracker"),
         "version" : VERSION,
         "comments" : _("Time tracking for masses."),
-        "copyright" : "Copyright © 2007-2008 Toms Baugis and others",
+        "copyright" : _("Copyright © 2007-2008 Toms Baugis and others"),
 	"website" : "http://live.gnome.org/ProjectHamster",
         "website-label" : _("Hamster Website"),
     }
