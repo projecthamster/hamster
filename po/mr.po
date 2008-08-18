@@ -1,0 +1,305 @@
+# translation of hamster-applet.HEAD.po to marathi
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sandeep Shedmake <sandeep.shedmake@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet.HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-18 09:41+0000\n"
+"PO-Revision-Date: 2008-08-18 18:14+0530\n"
+"Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
+"Language-Team: marathi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "वेळ मार्गनिर्देशक"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "वापरकर्त्यांकरीता वेळ मार्गनिर्देशन"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "विषयी (_A)"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "प्राधान्यता (_P)"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>कार्य</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>जागतिक हॉटकि</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>मार्गनिर्देशन</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "खाली हलवा (_D)"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "वर हलवा (_U)"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "नविन विभाग (_e)"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "शटडाऊनवेळी मार्गनिर्देशन बंद करा"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "संगणक रिमाके अल्यावर मार्गनिर्देशन बंद करा"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "वेळ मार्गनिर्देशक प्राधान्यता"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "कार्य (_A)"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "विभाग (_C)"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "नविन कार्य (_N)"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>कार्य</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>दिनांक व वेळ</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "पूर्वीचे कार्य जोडा"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "तास"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"प्रगतीत आहे...\n"
+"जोपर्यंत\n"
+"करीता"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "मिनिटे"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "वेळ मार्गनिर्देशक चौकट दर्शविण्याकरीता कळफलकवरील शार्टकट."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "चौकट दर्शवा"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "शटडाऊनवेळी वर्तमान कार्याचे मार्गनिर्देशन थांबवा"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "संगणक रिकामे झाल्यास ,वर्तमान क्रियाचे मार्गनिर्देशन थांबवा"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "रिकामे असल्यावर मार्गनिर्देशन थांबवा"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "पूर्वीचे कार्य जोडा (_d)"
+
+#: ../data/menu.glade.h:2
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "आज कुठलेही रेकॉर्ड नाही"
+
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "पूर्वदृश्य दर्शवा (_O)"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "कार्य (_A):"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "मार्गनिर्देशन थांबवा (_S)"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "आज (_T)"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "दिवस (_D)"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "महिना (_M)"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "आठवडा (_W)"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>विभाग</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>पूर्वदृश्य</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>आठवडा</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr "तपशील बनवा"
+
+#: ../data/stats.glade.h:9
+msgid "Overview - Hamster"
+msgstr "पूर्वदृश्य - Hamster"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "वापरकर्त्यांकरीता वेळ मार्गनिर्देशन."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr ""
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Hamster संकेतस्थळ"
+
+#: ../hamster/about.py:53
+msgid "translator-credits"
+msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008."
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "विनाक्रम"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "नाव"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "विभाग"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "नविन विभाग"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "नविन कार्य"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "अद्ययावत कार्य"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "कार्य नाही"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "काम"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "समाचार वाचत आहे"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "स्टॉक वरील नजर"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "सर्वात गोपनीय प्रकल्प X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "अंतराष्ट्रीय घडामोडी"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "दैनंदिन"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "जेवण"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "फुलांना पानी घाला"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "हातावर उभे राहून करामती करा"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "नाव"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#, python-format
+msgid "Overview for %s"
+msgstr "%s करीता पूर्वदृश्य"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "%s करीता पूर्वदृश्य - %s"
+
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "इतर"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "दिवस"
+
+#: ../hamster/stats.py:245
+msgid "Week"
+msgstr "आठवडा"
+
+#: ../hamster/stats.py:248
+msgid "Month"
+msgstr "महिना"
+
