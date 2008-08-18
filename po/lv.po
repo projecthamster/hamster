@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
+"POT-Creation-Date: 2008-08-18 07:40+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr "Laika uzskaite masām!"
+msgstr "Laika uzskaite visiem"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -35,7 +35,7 @@ msgstr "_Iestatījumi"
 
 #: ../data/preferences.glade.h:1
 msgid "<b>Activities</b>"
-msgstr "<b>Aktivitāte</b>"
+msgstr "<b>Darbības</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
@@ -63,20 +63,19 @@ msgstr "Pārtraukt uzskaiti pie GNOME aizvēršanas"
 
 #: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
-msgstr "Pārtraukt uzskaiti kad dators netiek lietots"
+msgstr "Pārtraukt uzskaiti līdzko dators netiek lietots"
 
 #: ../data/preferences.glade.h:9
-#, fuzzy
 msgid "Time Tracker Preferences"
-msgstr "Hamster Sīklietotnes Uzstādījumi"
+msgstr "Laika Uzskaites Uzstādījumi"
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
-msgstr "Akt_ivitātes"
+msgstr "_Darbības"
 
 #: ../data/preferences.glade.h:11
 msgid "_Categories"
-msgstr "Kate_gorijas"
+msgstr "_Kategorijas"
 
 #: ../data/preferences.glade.h:12
 msgid "_New Activity"
@@ -84,16 +83,15 @@ msgstr "_Jauna darbība"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
-msgstr "<b>Aktivitāte</b>"
+msgstr "<b>Darbība</b>"
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Datums un laiks</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
 msgid "Add Earlier Activity"
-msgstr "_Jauna darbība"
+msgstr "_Pievienot Agrāku Notikumu"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -114,9 +112,8 @@ msgid "minutes"
 msgstr "minūtēm"
 
 #: ../data/hamster-applet.schemas.in.h:1
-#, fuzzy
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Karstais taustiņš Hamster aplikācijas parādīšanai"
+msgstr "Karstais taustiņš laika uzskaites sīklietotnes parādīšanai"
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
@@ -135,9 +132,8 @@ msgid "Stop tracking on idle"
 msgstr "Pārtraukt uzskaiti ja dators netiek lietots"
 
 #: ../data/menu.glade.h:1
-#, fuzzy
 msgid "Ad_d Earlier Activity"
-msgstr "_Jauna darbība"
+msgstr "_Pievienot Agrāku Notikumu"
 
 #: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
@@ -228,9 +224,8 @@ msgid "New activity"
 msgstr "Jauna darbība"
 
 #: ../hamster/add_custom_fact.py:84
-#, fuzzy
 msgid "Update activity"
-msgstr "Jauna darbība"
+msgstr "Labot notikumu"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
@@ -303,33 +298,3 @@ msgstr "Nedēļa"
 #: ../hamster/stats.py:248
 msgid "Month"
 msgstr "Mēnesis"
-
-#~ msgid "Idle minutes:"
-#~ msgstr "Minūtes:"
-
-#, fuzzy
-#~ msgid "Add an older fact"
-#~ msgstr "Pi_evienot Vecāku Faktu"
-
-#~ msgid ""
-#~ "After how many minutes hamster should stop tracking activity when "
-#~ "computer is idle. Set to 0 to disable."
-#~ msgstr "Pēc cik minūtēm pārtraukt uzskaiti, ja dators netiek lietots"
-
-#~ msgid "Timeout in minutes"
-#~ msgstr "Datora nelietošana minūtēs"
-
-#~ msgid "Ad_d Older Fact"
-#~ msgstr "Pi_evienot Vecāku Faktu"
-
-#~ msgid "A_dd"
-#~ msgstr "Pi_evienot"
-
-#~ msgid "Add older fact - Hamster"
-#~ msgstr "Pievienot vecāku faktu - Hamster"
-
-#~ msgid "_Cancel"
-#~ msgstr "_Atcelt"
-
-#~ msgid "_Update"
-#~ msgstr "_Labot"
