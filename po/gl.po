@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
-"PO-Revision-Date: 2008-08-15 13:36+0200\n"
+"POT-Creation-Date: 2008-08-18 14:34+0200\n"
+"PO-Revision-Date: 2008-08-18 14:34+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type:  text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "Xestor de tempo"
 
@@ -88,9 +88,8 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Data e hora</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
 msgid "Add Earlier Activity"
-msgstr "_Nova actividade"
+msgstr "Engadir unha actividade anterior"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -131,11 +130,10 @@ msgid "Stop tracking on idle"
 msgstr "Deter o rexistro en inactividade"
 
 #: ../data/menu.glade.h:1
-#, fuzzy
 msgid "Ad_d Earlier Activity"
-msgstr "_Nova actividade"
+msgstr "_Engadir unha actividade anterior"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -195,6 +193,10 @@ msgstr "Resumo - Hamster"
 msgid "Time tracking for masses."
 msgstr "Xestión de tempo para as masas."
 
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright © 2007-2008 Toms Baugis e outros"
+
 #: ../hamster/about.py:45
 msgid "Hamster Website"
 msgstr "Sitio web de Hamster"
@@ -224,9 +226,8 @@ msgid "New activity"
 msgstr "Nova actividade"
 
 #: ../hamster/add_custom_fact.py:84
-#, fuzzy
 msgid "Update activity"
-msgstr "Nova actividade"
+msgstr "Actualizar actividade"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
