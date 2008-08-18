@@ -23,9 +23,12 @@ import gconf
 # TODO - since we don't allow to specify idle minutes, we should just listen
 # to the SessionIdleChanged signal from org.gnome.Screensaver
 def getIdleSec():
-    bus = dbus.SessionBus()
-    gs = bus.get_object('org.gnome.ScreenSaver', '/org/gnome/ScreenSaver')
-    idle_time = gs.GetSessionIdleTime()
+    try:
+        bus = dbus.SessionBus()
+        gs = bus.get_object('org.gnome.ScreenSaver', '/org/gnome/ScreenSaver')
+        idle_time = gs.GetSessionIdleTime()
+    except:
+        return 0
     
     if idle_time > 0:
         # if we are in idle - grab gconf setting how much is considered idle
