@@ -1,3 +1,9 @@
+2008-08-18  Patryk Zawadzki <patrys@pld-linux.org>
+
+	* tools,
+	  tools/cicl: 
+	  	* add cicl script from cheese
+
 2008-08-18 07:42  Juanje Ojeda <jojeda@emergya.es>
 
 	* hamster/about.py:
