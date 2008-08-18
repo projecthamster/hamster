@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2008-08-17 23:46+0200\n"
 "PO-Revision-Date: 2008-08-05 02:32+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
-"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -54,7 +54,7 @@ msgstr "_Subir"
 
 #: ../data/preferences.glade.h:6
 msgid "N_ew Category"
-msgstr "Nueva _Categoría"
+msgstr "Añadir _categoría"
 
 #: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
@@ -78,7 +78,7 @@ msgstr "_Categorías"
 
 #: ../data/preferences.glade.h:12
 msgid "_New Activity"
-msgstr "Nueva _Actividad"
+msgstr "_Añadir actividad"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
@@ -89,9 +89,8 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>Fecha y hora</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
 msgid "Add Earlier Activity"
-msgstr "Nueva _Actividad"
+msgstr "Añadir una actividad anterior"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -132,9 +131,8 @@ msgid "Stop tracking on idle"
 msgstr "Detener el registro en inactividad"
 
 #: ../data/menu.glade.h:1
-#, fuzzy
 msgid "Ad_d Earlier Activity"
-msgstr "Nueva _Actividad"
+msgstr "Añadir una _actividad anterior"
 
 #: ../data/menu.glade.h:2 ../hamster/about.py:40
 msgid "Hamster"
@@ -220,16 +218,15 @@ msgstr "Categoría"
 
 #: ../hamster/preferences.py:468
 msgid "New category"
-msgstr "Nueva categoría"
+msgstr "Categoría nueva"
 
 #: ../hamster/preferences.py:481
 msgid "New activity"
-msgstr "Nueva actividad"
+msgstr "Actividad nueva"
 
 #: ../hamster/add_custom_fact.py:84
-#, fuzzy
 msgid "Update activity"
-msgstr "Nueva actividad"
+msgstr "Actualizar actividad"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
@@ -303,21 +300,3 @@ msgstr "Semana"
 msgid "Month"
 msgstr "Mes"
 
-#~ msgid "Idle minutes:"
-#~ msgstr "Minutos de inactividad:"
-
-#~ msgid "Add an older fact"
-#~ msgstr "Añadir un hecho antiguo"
-
-#~ msgid ""
-#~ "After how many minutes hamster should stop tracking activity when "
-#~ "computer is idle. Set to 0 to disable."
-#~ msgstr ""
-#~ "Después de cuántos minutos de inactividad debería pararse el registro de "
-#~ "actividades en el ordenador. Poner a 0 para deshabilitar"
-
-#~ msgid "Timeout in minutes"
-#~ msgstr "Tiempo de espera, en minutos"
-
-#~ msgid "Ad_d Older Fact"
-#~ msgstr "_Añadir un hecho antiguo"
