@@ -3,10 +3,10 @@ Version 2.23.9
 ==============
   Applet
 	* Changing name from "Hamster" to "Time Tracker"
-    * Information on when computer becomes idle is now determined from
-      screensaver
-    * Fixes to focusing issues when calling applet with hotkey
-    
+	* Information on when computer becomes idle is now determined from
+	  screensaver
+	* Fixes to focusing issues when calling applet with hotkey
+	
 
   Translations
 	* de (Matthias Mailänder)
@@ -14,12 +14,12 @@ Version 2.23.9
 	* et (Ivar Smolin)
 	* fr (Stéphane Raimbault)
 	* gl (Ignacio Casal Quinteiro)
-    * he (Yair Hershkovitz)
+	* he (Yair Hershkovitz)
 	* it (Stefano Pedretti)
 	* lv (Toms Baugis)
-    * nb (Kjartan Maraas)
+	* nb (Kjartan Maraas)
 	* nl (Wouter Bolsterlee)
-    * pt (Duarte Loreto)
+	* pt (Duarte Loreto)
 	* ru (Sasha Shveik)
 	* sv (Daniel Nylander)
 
