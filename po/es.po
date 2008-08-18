@@ -2,12 +2,12 @@
 # Copyright (C) 2008 Project Hamster Team
 # This file is distributed under the same license as the hamster-applet package.
 # David Prieto <frandavid100@gmail.com>, 2008.
-# Juanje Ojeda Croissier <jojeda@emergya.es>
+# Juanje Ojeda Croissier <jojeda@emergya.es>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
+"POT-Creation-Date: 2008-08-18 14:44+0200\n"
 "PO-Revision-Date: 2008-08-05 02:32+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "Gestor de tiempo"
 
@@ -134,7 +134,7 @@ msgstr "Detener el registro en inactividad"
 msgid "Ad_d Earlier Activity"
 msgstr "Añadir una _actividad anterior"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -194,11 +194,15 @@ msgstr "Resumen - Hamster"
 msgid "Time tracking for masses."
 msgstr "Gestión de tiempo para el pueblo."
 
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright © 2007-2008 Toms Baugis y otros"
+
 #: ../hamster/about.py:45
 msgid "Hamster Website"
 msgstr "Página web de Hamster"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr ""
 "Juanje Ojeda <jojeda@emergya.es> \n"
@@ -299,4 +303,3 @@ msgstr "Semana"
 #: ../hamster/stats.py:248
 msgid "Month"
 msgstr "Mes"
-
