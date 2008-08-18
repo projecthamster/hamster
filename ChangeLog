@@ -1,3 +1,117 @@
+2008-08-18 07:42  Juanje Ojeda <jojeda@emergya.es>
+
+	* hamster/about.py:
+		* Changed Hamster string for the new UI name (Time Tracker)
+		* Added copyright description to the translations
+
+2008-08-18 07:40  Juanje Ojeda <jojeda@emergya.es>
+
+	* po/ChangeLog: Updated po/ChangeLog
+
+2008-08-18 07:39  Juanje Ojeda <jojeda@emergya.es>
+
+	* po/es.po: Fixed some mistakes on Spanish translations
+
+2008-08-18 06:48  Toms Bauģis <toms.baugis@gmail.com>
+
+	* NEWS, configure.ac: version bump - we are ready for UI freeze!
+
+2008-08-18 06:47  Toms Bauģis <toms.baugis@gmail.com>
+
+	* po/lv.po: updated translation
+
+2008-08-18 06:30  Toms Bauģis <toms.baugis@gmail.com>
+
+	* hamster/idle.py: don't die if screensaver is not running (based
+	  on Patryk's previous commit)
+
+2008-08-17 22:44  Juanje Ojeda <jojeda@emergya.es>
+
+	* po/ChangeLog: ChangeLog: Updated old changes
+
+2008-08-17 21:48  Juanje Ojeda <jojeda@emergya.es>
+
+	* po/de.po, po/es.po, po/et.po, po/fr.po, po/gl.po, po/he.po,
+	  po/it.po, po/lv.po, po/nb.po, po/nl.po, po/pt.po, po/ru.po,
+	  po/sv.po: Updated original strings on translations files
+
+2008-08-17 21:32  Juanje Ojeda <jojeda@emergya.es>
+
+	* po/de.po: Updated german translations (by Matthias Mailänder)
+
+2008-08-17 16:14  Kjartan Maraas <kmaraas@gnome.org>
+
+	* po/ChangeLog, po/LINGUAS, po/nb.po: 2008-08-17 Kjartan Maraas
+	  <kmaraas@gnome.org>
+	  
+	  * LINGUAS: Add nb.
+	  * nb.po: Added Norwegian bokmål translation.
+
+2008-08-17 14:32  Priit Laes <plaes at svn dot gnome dot org>
+
+	* po/ChangeLog, po/LINGUAS, po/et.po: 2008-08-17 Priit Laes <plaes
+	  at svn dot gnome dot org>
+	  
+	  * et.po: Translation updated by Ivar Smolin
+
+2008-08-17 08:14  Yair Hershkovitz  <yairhr@gmail.com>
+
+	* po/LINGUAS: updated hebrew translation
+
+2008-08-17 08:08  Yair Hershkovitz  <yairhr@gmail.com>
+
+	* po/ChangeLog, po/he.po: added hebrew translation
+
+2008-08-16 22:53  Duarte Loreto <happyguy_pt@hotmail.com>
+
+	* po/ChangeLog, po/LINGUAS, po/pt.po: 2008-08-16 Duarte Loreto
+	  <happyguy_pt@hotmail.com>
+	  
+	  * pt.po: Added Portuguese translation.
+	  * LINGUAS: Added Portuguese (pt) to the list.
+
+2008-08-16 19:51  Toms Bauģis <toms.baugis@gmail.com>
+
+	* hamster/applet.py: fixed deprecation warning (gtk.idle_add ->
+	  gobject.idle_add)
+
+2008-08-16 19:46  Toms Bauģis <toms.baugis@gmail.com>
+
+	* data/hamster-applet.schemas.in, data/preferences.glade,
+	  hamster/Configuration.py, hamster/applet.py, hamster/idle.py,
+	  hamster/preferences.py: * removing timeout minutes slider,
+	  because we are using setting from screensaver
+	  * on idle, if user requested, stop tracking and set end time to
+	  when idle started (bug reported on web page)
+
+2008-08-16 11:13  Daniel Nylander <po@danielnylander.se>
+
+	* po/sv.po: sv.po: Updated Swedish translation
+
+2008-08-15 19:26  Toms Bauģis <toms.baugis@gmail.com>
+
+	* data/add_custom_fact.glade, data/menu.glade, data/stats.glade,
+	  hamster/add_custom_fact.py: string change - to disambiguate, move
+	  from facts/activities to plain activities
+
+2008-08-15 17:39  Daniel Nylander <po@danielnylander.se>
+
+	* po/ChangeLog, po/sv.po: sv.po: Updated Swedish translation
+
+2008-08-15 14:19  Toms Bauģis <toms.baugis@gmail.com>
+
+	* MAINTAINERS: updated maintainers with my userid (ohhh, first
+	  commit in gnome SVN)
+
+2008-08-15 11:36  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* po/ChangeLog, po/LINGUAS, po/gl.po: Added Galician translation
+
+2008-08-14 12:41  Juanje Ojeda <jojeda@emergya.es>
+
+	* ChangeLog: Filled and merged old logs to the new ChangeLog
+
+
 2008-08-13  Toms Bauģis <toms.baugis@gmail.com>
 
 	* hamster/applet.py: fixes bug #547554 - focusing issues
