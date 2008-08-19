@@ -1,14 +1,14 @@
-# translation of hamster-applet.HEAD.po to marathi
+# translation of mr.po to marathi
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Sandeep Shedmake <sandeep.shedmake@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet.HEAD\n"
+"Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-18 09:41+0000\n"
-"PO-Revision-Date: 2008-08-18 18:14+0530\n"
+"PO-Revision-Date: 2008-08-19 16:39+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -197,7 +197,7 @@ msgstr "वापरकर्त्यांकरीता वेळ मार�
 
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr ""
+msgstr "Copyright © 2007-2008 Toms Baugis and others"
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
