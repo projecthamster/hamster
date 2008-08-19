@@ -544,7 +544,7 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8])
 
         # scale lines        
-        grid_stride = self.default_grid_stride if self.stretch_grid == False else (graph_width) / 3.0
+        grid_stride = self.default_grid_stride if self.stretch_grid == False else int(graph_width / 3.0)
         for x in range(graph_x + grid_stride, graph_x + graph_width - grid_stride, grid_stride):
             context.move_to(x, graph_y)
             context.line_to(x, graph_y + graph_height)
