@@ -1,0 +1,303 @@
+# hamster-applet's Finnish translation.
+# Copyright (C) 2008 Timo Jyrinki.
+# This file is distributed under the same license as the hamster-applet package.
+# Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-19 03:20+0000\n"
+"PO-Revision-Date: 2008-08-19 13:23+0300\n"
+"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
+"Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Ajankäytön seuranta"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Ajankäytön seuranta kaikille"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Tietoja"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Asetukset"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Toimet</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Yleinen pikanäppäin</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Seuranta</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Siirrä _alas"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Siirrä _ylös"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "U_usi luokka"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Pysäytä seuranta sammutettaessa"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Pysäytä seuranta, kun tietokone on jouten"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Ajankäytön seurannan asetukset"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "T_oimet"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Luokat"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "_Uusi toimi"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Toimi</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Päiväys ja aika</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Lisää aikaisempi toimi"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "tuntia"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"käynnissä...\n"
+"kunnes\n"
+"kesto"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minuuttia"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Pikanäppäin ajankäytön seurantaikkunan näyttämiseksi."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Näytä ikkuna"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Pysäytä nykyisen toimen seuranta sammutettaessa"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Pysäytä nykyisen toimen seuranta, kun tietokone on jouten"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Pysäytä seuranta joutenollessa"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Li_sää aikaisempi toimi"
+
+#: ../data/menu.glade.h:2
+msgid "Hamster"
+msgstr "Hamsteri"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "Ei kirjauksia tältä päivältä"
+
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "Näytä _yleiskuva"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "T_oimi:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "Py_säytä seuranta"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "_Tänään"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Päivä"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " _Kuukausi"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Viikko"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Luokka</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Yleiskuva</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Viikko</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr "Luo raportti"
+
+#: ../data/stats.glade.h:9
+msgid "Overview - Hamster"
+msgstr "Yleiskuva - Hamsteri"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Ajankäytön seuranta kaikille vipeltäjille."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Tekijänoikeudet © 2007-2008 Toms Baugis ja muita"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Hamsterin WWW-sivut"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Timo Jyrinki <timo.jyrinki@iki.fi>, 2008."
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Lajittelematon"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Nimi"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Luokka"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Uusi luokka"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Uusi toimi"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Päivitä toimea"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "Ei toimea"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Työ"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Uutisten luku"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Osakekurssien tarkistus"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Tosi salainen projekti X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Maailman valloitus"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Päivittäiset"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Lounas"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Kukkien kastelu"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Käsilläseisonta"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "nimi"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#, python-format
+msgid "Overview for %s"
+msgstr "Yleiskuva kohteesta %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Yleiskuva kohteesta %s - %s"
+
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "Muu"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "Päivä"
+
+#: ../hamster/stats.py:245
+msgid "Week"
+msgstr "Viikko"
+
+#: ../hamster/stats.py:248
+msgid "Month"
+msgstr "Kuukausi"
