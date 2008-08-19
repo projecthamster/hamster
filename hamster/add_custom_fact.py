@@ -139,7 +139,16 @@ class CustomFactController:
 
         if selected == 1:
             # selected to enter end date and time
-            self.get_widget("end_time").set_text(self.get_widget('start_time').get_text())
+            start_date = datetime.datetime.fromtimestamp(self.get_widget('start_date').get_time())
+            if start_date.date() == datetime.date.today():  #in case of today let's add the end time as right now
+                end_time = time.strftime("%H:%M")
+            else: #otherwise settle to the one we have in start time
+                end_time = self.get_widget('start_time').get_text()
+
+            # and set end_time only if it has not been specified before
+            if self.get_widget('end_time').get_text() == '':
+                self.get_widget('end_time').set_text(end_time)
+
             self.get_widget("fact_end_until").show()
         
         elif selected == 2:
