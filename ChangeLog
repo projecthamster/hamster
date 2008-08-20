@@ -1,3 +1,27 @@
+2008-08-20  Juanje Ojeda <jojeda@emergya.es>
+
+	* debian/changelog: 
+	   * Changed version on debian packaging files
+	   * Added last changes on mainstream
+
+2008-08-20  Toms Baugis  <toms.baugis@gmail.com>
+
+	* lv.po: Updated Latvian translation
+
+2008-08-19  Sandeep Shedmake  <sshedmak@redhat.com>
+
+	* mr.po: Updated Marathi Translations
+
+2008-08-19  Timo Jyrinki <timo.jyrinki@iki.fi>
+
+	* fi.po: Added Finnish translation.
+	* LINGUAS: Added fi.
+
+2008-08-18  Djihed Afifi <djihed@gmail.com> 
+
+	* ar.po: Added Arabic Translation.
+	* LINGUAS: Added ar.
+
 2008-08-18  Juanje Ojeda <jojeda@emergya.es>
 
 	* hamster/about.py: Added myself to the about dialog 

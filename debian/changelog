@@ -1,3 +1,12 @@
+hamster-applet (2.23.90) unstable; urgency=low
+
+  * Changing name from "Hamster" to "Time Tracker"
+  * Information on when computer becomes idle is now determined from screensaver
+  * Fixes to focusing issues when calling applet with hotkey
+  * Added or updadated translations for de,es,et,fr,gl,he,it.lv.nb,nl,pt,ru,sv
+
+ -- Juanje Ojeda Croissier <jojeda@emergya.es>  Wed, 20 Aug 2008 11:27:08 +0100
+
 hamster-applet (2.23.6-2) unstable; urgency=low
 
   * Fixed the header info and updated the Spanish translations
