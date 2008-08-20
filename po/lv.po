@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 07:40+0100\n"
+"POT-Creation-Date: 2008-08-20 20:35+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
-msgstr ""
+msgstr "Laika uzskaites programma"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
@@ -135,7 +135,7 @@ msgstr "Pārtraukt uzskaiti ja dators netiek lietots"
 msgid "Ad_d Earlier Activity"
 msgstr "_Pievienot Agrāku Notikumu"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -195,11 +195,15 @@ msgstr "Pārskats - Hamster"
 msgid "Time tracking for masses."
 msgstr "Laika uzskaite masām!"
 
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Autortiesības © 2007-2008 Toms Bauģis un citi"
+
 #: ../hamster/about.py:45
 msgid "Hamster Website"
 msgstr "Projekta mājas lapa"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Toms Bauģis toms.baugis@gmail.com"
 
