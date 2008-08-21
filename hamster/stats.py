@@ -89,8 +89,17 @@ class StatsViewer:
         place.add(eventBox)
         
         self.view_date = dt.date.today()
+        
+        # look if we need to start on sunday or monday, don't work with other
+        # (strange cases) locale first_weekday 1 is sunday
+        self.week_start_sunday = self.locale_first_weekday() == 1
+            
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
-        self.end_date = self.start_date + dt.timedelta(6) #set to monday
+
+        if self.week_start_sunday:
+            self.start_date = self.start_date - dt.timedelta(1)
+        
+        self.end_date = self.start_date + dt.timedelta(6)
 
         
         self.day_view = self.get_widget("day")
@@ -114,6 +123,22 @@ class StatsViewer:
         self.fact_tree.grab_focus()
         self.do_graph()
 
+    def locale_first_weekday(self):
+        """figure if week starts on monday or sunday"""
+        import os
+        first_weekday = 2 #by default settle on monday
+
+        try:
+            process = os.popen("locale first_weekday")
+            first_weekday = int(process.read().strip("\n"))
+            process.close()
+            print '*' * 20, first_weekday
+        except:
+            print "WARNING - Failed to get first weekday from locale"
+            pass
+            
+        return first_weekday
+        
     def parent_painter(self, column, cell, model, iter):
         cell_text = model.get_value(iter, 1)
         if model.iter_parent(iter) == None:
@@ -309,12 +334,14 @@ class StatsViewer:
         
         elif self.week_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
+            if self.week_start_sunday:
+                self.start_date = self.start_date - dt.timedelta(1)
             self.end_date = self.start_date + dt.timedelta(6)
         
         elif self.month_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
             first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
-            self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
+            self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
         
         self.do_graph()
         
@@ -325,6 +352,9 @@ class StatsViewer:
 
     def on_week_toggled(self, button):
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
+        if self.week_start_sunday:
+            self.start_date = self.start_date - dt.timedelta(1)
+
         self.end_date = self.start_date + dt.timedelta(6)
         self.do_graph()
 
@@ -332,7 +362,7 @@ class StatsViewer:
     def on_month_toggled(self, button):
         self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
         first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
-        self.end_date = self.start_date + dt.timedelta(days_in_month - 1) #set to monday
+        self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
 
         self.do_graph()
         
