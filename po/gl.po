@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 14:34+0200\n"
-"PO-Revision-Date: 2008-08-18 14:34+0200\n"
+"POT-Creation-Date: 2008-08-21 17:44+0200\n"
+"PO-Revision-Date: 2008-08-21 17:45+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -133,27 +133,28 @@ msgstr "Deter o rexistro en inactividade"
 msgid "Ad_d Earlier Activity"
 msgstr "_Engadir unha actividade anterior"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Hoxe non hai rexistros"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "_Mostrar un resumo"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "_Actividade:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "_Deter o rexistro"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_Hoxe"
 
@@ -182,12 +183,48 @@ msgid "<b>Week</b>"
 msgstr "<b>Semana</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Engadir actividade"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Eliminar actividade"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Actividades anteriores"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Editar actividade"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "Xerar informe"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Actividades máis novas"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "Resumo - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Mostrar día"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Mostrar mes"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Mostrar semana"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Hoxe"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -201,7 +238,7 @@ msgstr "Copyright © 2007-2008 Toms Baugis e outros"
 msgid "Hamster Website"
 msgstr "Sitio web de Hamster"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Ignacio Casal Quinteiro <nacho.resa@gmail.com>"
 
@@ -275,29 +312,29 @@ msgid "name"
 msgstr "nome"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "Resumo de %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Resumo de %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Outras"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Día"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Semana"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Mes"
 
