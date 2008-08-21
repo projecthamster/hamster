@@ -1,0 +1,310 @@
+# Catalan translation of hamster-applet.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the hamster-applet package.
+# Gil Forcada <gilforcada@guifi.net>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet 2.24\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-15 15:45+0200\n"
+"PO-Revision-Date: 2008-08-21 15:51+0200\n"
+"Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
+"Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1
+msgid "Time Tracker"
+msgstr "Comptador de temps"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Comptador de temps per a tothom"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Activitats</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Drecera global</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Comptador</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Idle minutes:"
+msgstr "Minuts inactiu:"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Down"
+msgstr "Mou cap a_vall"
+
+#: ../data/preferences.glade.h:6
+msgid "Move _Up"
+msgstr "Mou cap _amunt"
+
+#: ../data/preferences.glade.h:7
+msgid "N_ew Category"
+msgstr "Categoria _nova"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:7
+msgid "Stop tracking on shutdown"
+msgstr "Para el comptador en aturar l'ordinador"
+
+#: ../data/preferences.glade.h:9
+msgid "Stop tracking when computer becomes idle"
+msgstr "Atura el comptador quan l'ordinador estigui inactiu"
+
+#: ../data/preferences.glade.h:10
+msgid "Time Tracker Preferences"
+msgstr "Preferències del comptador de temps"
+
+#: ../data/preferences.glade.h:11
+msgid "_Activities"
+msgstr "_Activitats"
+
+#: ../data/preferences.glade.h:12
+msgid "_Categories"
+msgstr "_Categories"
+
+#: ../data/preferences.glade.h:13
+msgid "_New Activity"
+msgstr "Activitat _nova"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Activitat</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data i hora</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add an older fact"
+msgstr "Afegeix un esdeveniment vell"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "hores"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"en progrés...\n"
+"fins\n"
+"per"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minuts"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"After how many minutes hamster should stop tracking activity when computer "
+"is idle. Set to 0 to disable."
+msgstr ""
+"Després de quants minuts el Hamster hauria de parar de comptar activitat "
+"quan l'ordinador estigui inactiu. Establiu-ho a 0 per a inhabilitar-ho."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Drecera de teclat per a mostrar la finestra del Comptador de temps."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Show window"
+msgstr "Mostra la finestra"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity on shutdown"
+msgstr "Para de comptar l'activitat actual en apagar"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Para de comptar l'activitat actual quan l'ordinador estigui inactiu"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on idle"
+msgstr "Para de comptar quan l'ordinador estigui inactiu"
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Timeout in minutes"
+msgstr "Temps d'espera (en minuts)"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Older Fact"
+msgstr "_Afegeix un esdeveniment vell"
+
+#: ../data/menu.glade.h:2 ../hamster/about.py:40
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "No hi ha registres d'avui"
+
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "Mostra una _resum general"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "_Activitat:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "_Para de comptar"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "_Avui"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_Dia"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_Mes"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "_Setmana"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Categoria</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Resum general</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Setmana</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr "Genera un informe"
+
+#: ../data/stats.glade.h:9
+msgid "Overview - Hamster"
+msgstr "Resum general - Hamster"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Comptador de temps per a tothom."
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Lloc web del Hamster"
+
+#: ../hamster/about.py:53
+msgid "translator-credits"
+msgstr "Gil Forcada <gilforcada@guifi.net>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Sense ordre"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Nom"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Categoria"
+
+#: ../hamster/preferences.py:472
+msgid "New category"
+msgstr "Categoria nova"
+
+#: ../hamster/preferences.py:485
+msgid "New activity"
+msgstr "Activitat nova"
+
+#: ../hamster/applet.py:197
+msgid "No activity"
+msgstr "Cap activitat"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Feina"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Llegint notícies"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Comprovant estocs"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Projecte ultra-secret X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Dominació mundial"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Dia a dia"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Dinar"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Regant les flors"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Fent el pi"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "nom"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#, python-format
+msgid "Overview for %s"
+msgstr "Resum per a %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Resum per a %s - %s"
+
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "Altres"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "Dia"
+
+#: ../hamster/stats.py:245
+msgid "Week"
+msgstr "Setmana"
+
+#: ../hamster/stats.py:248
+msgid "Month"
+msgstr "Mes"
