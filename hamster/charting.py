@@ -76,6 +76,9 @@ def set_color(context, color):
     r,g,b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
     context.set_source_rgb(r, g, b)
     
+def set_color_gdk(context, color):
+    r,g,b = color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0
+    context.set_source_rgb(r, g, b)
     
 class Chart(gtk.DrawingArea):
     """Chart constructor. Optional arguments:
@@ -400,8 +403,8 @@ class Chart(gtk.DrawingArea):
         context.set_dash ([]);
 
 
-        # labels
-        set_color(context, dark[8]);
+        # scale labels
+        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
         for i in range(records):
             extent = context.text_extents(data[i]["label"]) #x, y, width, height
             context.move_to(graph_x + (step * i) + (step - extent[2]) / 2.0,
@@ -517,8 +520,8 @@ class Chart(gtk.DrawingArea):
 
         ellipsize_label = lambda(text): 3
 
-        #now let's put the labels and align them right
-        set_color(context, dark[8]);
+        # now let's put scale labels and align them right
+        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
         for i in range(records):
             label = data[i]["label"]
             if self.legend_width:
@@ -666,8 +669,8 @@ class Chart(gtk.DrawingArea):
         
         context.set_dash ([]);
 
-        # labels
-        set_color(context, dark[8]);
+        # scale labels
+        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
         for i in range(records):
             if i % 5 == 0:
                 context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)

@@ -1,3 +1,9 @@
+2008-08-21  Toms Baugis  <toms.baugis@gmail.com>
+
+	* hamster/charting.py: 
+	  Bug 548840 - respect theme colors for graph labels. Patch by
+	  CJ van den Berg
+
 2008-08-21  Toms Baugis <toms.baugis@gmail.com>
 	* hamster/stats.py: be aware of locale's first_weekday - starting week
 	  either on monday or sunday. fixes bug 548102
