@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 20:35+0100\n"
+"POT-Creation-Date: 2008-08-21 13:58+0100\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Baugis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -59,15 +59,15 @@ msgstr "Jauna _Kategorija"
 
 #: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
-msgstr "Pārtraukt uzskaiti pie GNOME aizvēršanas"
+msgstr "Pārtraukt uzskaiti pie datora izslēgšanas"
 
 #: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
-msgstr "Pārtraukt uzskaiti līdzko dators netiek lietots"
+msgstr "Pārtraukt uzskaiti ja dators netiek lietots"
 
 #: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
-msgstr "Laika Uzskaites Uzstādījumi"
+msgstr "Laika uzskaites uzstādījumi"
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
@@ -83,7 +83,7 @@ msgstr "_Jauna darbība"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
-msgstr "<b>Darbība</b>"
+msgstr "<b>Notikums</b>"
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
@@ -121,7 +121,7 @@ msgstr "Parādīt logu"
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
-msgstr "Pārtraukt uzskaiti pie GNOME aizvēršanas"
+msgstr "Pārtraukt uzskaiti pie datora izslēgšanas"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
@@ -135,27 +135,28 @@ msgstr "Pārtraukt uzskaiti ja dators netiek lietots"
 msgid "Ad_d Earlier Activity"
 msgstr "_Pievienot Agrāku Notikumu"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Šodien ierakstu nav"
 
-#: ../data/menu.glade.h:4
-msgid "Show _Overview"
-msgstr "_Rādīt Pārskatu"
-
 #: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "_Rādīt pārskatu"
+
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "Nodarbe:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "Pārtr_aukt uzskaiti"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "Šodiena"
 
@@ -184,16 +185,52 @@ msgid "<b>Week</b>"
 msgstr "<b>Nedēļa</b>"
 
 #: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Izveidot Atskaiti"
+msgid "Add activity"
+msgstr "Pievienot notikumu"
 
 #: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Dzēst notikumu"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Iepriekšējie notikumi"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Labot notikumu"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Izveidot atskaiti"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Jaunāki notikumi"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
-msgstr "Pārskats - Hamster"
+msgstr "Pārskats - laika uzskaite"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Rādīt dienu"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Rādīt mēnesi"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Rādīt nedēļu"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Šodiena"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr "Laika uzskaite masām!"
+msgstr "Laika uzskaite visiem."
 
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
@@ -277,28 +314,28 @@ msgid "name"
 msgstr "Nosaukums"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "%s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Citi"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Diena"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Nedēļa"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Mēnesis"
