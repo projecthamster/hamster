@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
-"PO-Revision-Date: 2008-08-17 14:08+0300\n"
+"POT-Creation-Date: 2008-08-18 07:43+0000\n"
+"PO-Revision-Date: 2008-08-20 22:00+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "Ajajälgija"
 
@@ -136,7 +136,7 @@ msgstr "Jõudeoleku korral jälgimise seiskamine"
 msgid "Ad_d Earlier Activity"
 msgstr "Lisa _varasem tegevus"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -195,6 +195,10 @@ msgstr "Ülevaade - Hamster"
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
 msgstr "Ajakasutuse jälgimise programm laiale kasutajaskonnale."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Autoriõigused © 2007-2008 Toms Baugis ja teised"
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
