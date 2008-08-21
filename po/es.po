@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 14:44+0200\n"
+"POT-Creation-Date: 2008-08-21 13:40+0200\n"
 "PO-Revision-Date: 2008-08-05 02:32+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -183,12 +183,48 @@ msgid "<b>Week</b>"
 msgstr "<b>Semana</b>"
 
 #: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Generar informe"
+msgid "Add activity"
+msgstr "Añadir una actividad"
 
 #: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Borrar una actividad"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Actividades anteriores"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Editar actividad"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Generar un informe"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Actividades posteriores"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "Resumen - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Mostrar un día"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Mostrar un mes"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Mostrar una semana"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Hoy"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -278,28 +314,28 @@ msgid "name"
 msgstr "nombre"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "Resumen de %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Resumen de %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Otras"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Día"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Semana"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Mes"

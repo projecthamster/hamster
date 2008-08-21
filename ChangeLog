@@ -1,3 +1,9 @@
+2008-08-21  Juanje Ojeda <jojeda@emergya.es> 
+
+	* data/stats.glade: Market for translations some missing 
+	  strings (tooltips). Fixes bug #548852
+	* po/es.po: Updated Spanish translations
+
 2008-08-21  Toms Baugis  <toms.baugis@gmail.com>
 
 	* hamster/charting.py: 
