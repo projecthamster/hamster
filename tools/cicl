@@ -59,7 +59,7 @@ AUTHOR="2"
 
 # debian and ubuntu system do not set the EDITOR environment variable
 if [ -z $EDITOR ]; then
-  EDITOR="vim"
+  EDITOR="nano"
 fi
 
 ##############
