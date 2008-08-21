@@ -1,3 +1,7 @@
+2008-08-21  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* nl.po: Updated Dutch translation by Wouter Bolsterlee.
+
 2008-08-21  Gil Forcada  <gforcada@gnome.org>
 
 	* ca.po: Added Catalan translation.
@@ -127,12 +131,11 @@
 
 2008-08-05  Juanje Ojeda <jojeda@emergya.es>
 
-	* es.po: Fixed the header info and updated the translaions
+	* es.po: Fixed the header info and updated the translations
 
 2008-07-31  Juanje Ojeda <jojeda@emergya.es>
 
-	* nl.po: Updated the Dutch translation by Wouter Bolsterlee
-	  (#544975)
+	* nl.po: Updated Dutch translation by Wouter Bolsterlee. (#544975)
 
 2008-07-14  Toms Bauģis <toms.baugis@gmail.com>
 
