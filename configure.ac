@@ -24,13 +24,11 @@ dnl ****************************************************************************
 dnl * Translation & i18n
 dnl ****************************************************************************
 
-ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS"`"
-AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
 GETTEXT_PACKAGE=hamster-applet
-IT_PROG_INTLTOOL([0.35])
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [The gettext package])
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
+IT_PROG_INTLTOOL([0.37.1])
 
 dnl ****************************************************************************
 dnl * GConf support
