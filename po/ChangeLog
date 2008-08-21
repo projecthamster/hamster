@@ -1,3 +1,11 @@
+2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+
+	reviewed by: Vladimir Melo.
+
+	* LINGUAS: Added pt_BR.
+	* pt_BR.po: Added Brazilian Portuguese translation by Enrico
+	Nicoletto.
+
 2008-08-20  Toms Baugis  <toms.baugis@gmail.com>
 
 	* lv.po: Updated Latvian translation

@@ -1,0 +1,320 @@
+# Brazilian Portuguese Translation of Hamster Applet
+# This file is distributed under the same license as the hamster-applet package.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# Enrico Nicoletto <liverig@gmail.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-20 21:49+0000\n"
+"PO-Revision-Date: 2008-08-20 22:01-0300\n"
+"Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
+"Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Gestor de Tempo"
+
+# Pode ser traduzido tanto 'para as massas', como 'para pesssoas comuns'. Fica a critério do tradutor.
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Gestão de tempo para pessoas comuns"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Sobre"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Preferências"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Atividades</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Tecla de atalho global</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Registros</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Mover para _baixo"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Mover para _cima"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "N_ova categoria"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Parar de registrar ao desligar"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Parar de registrar quando o computador estiver ocioso"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Preferências do Gestor de Tempo"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "_Atividades"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Categorias"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "_Nova atividade"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Atividade</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data e hora</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Adicionar Atividade Recente"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "horas"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"em progresso...\n"
+"até\n"
+"durante"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minutos"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Atalho de teclado para mostrar a janela do Gestor de Tempo."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Mostrar janela"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Parar a atividade de registro atual ao desligar"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+"Parar a atividade de registro atual, quando o computador estiver ocioso"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Parar de registrar durante ociosidade"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Ad_icionar atividade recente"
+
+#: ../data/menu.glade.h:2
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:3
+msgid "No records today"
+msgstr "Nenhum registro hoje"
+
+# Visão Geral ou Resumo.
+#: ../data/menu.glade.h:4
+msgid "Show _Overview"
+msgstr "Mostrar re_sumo"
+
+#: ../data/menu.glade.h:5
+msgid "_Activity:"
+msgstr "A_tividade:"
+
+#: ../data/menu.glade.h:6
+msgid "_Stop Tracking"
+msgstr "Pa_rar registro"
+
+#: ../data/menu.glade.h:7
+msgid "_Today"
+msgstr "_Hoje"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Dia"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " _Mês"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " Se_mana"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Categoria</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Resumo</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Semana</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Generate Report"
+msgstr "Gerar relatório"
+
+#: ../data/stats.glade.h:9
+msgid "Overview - Hamster"
+msgstr "Resumo - Hamster"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Gestão de tempo para pessoas comuns."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright © 2007-2008 Toms Baugis e outros"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Site do Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Enrico Nicoletto <liverig@gmail.com>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Sem clasificação"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Nome"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Categoria"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Nova categoria"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Nova atividade"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Atualizar atividade"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "Sem atividade"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Trabalho"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Ler as notícias"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Verificar ações"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Projeto super secreto X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Dominar o mundo"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Dia-a-dia"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Almoçar"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Regar as flores"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Fazer flexões"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "nome"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#, python-format
+msgid "Overview for %s"
+msgstr "Resumo de %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Resumo de %s - %s"
+
+#: ../hamster/stats.py:210
+msgid "Other"
+msgstr "Outros"
+
+#: ../hamster/stats.py:242
+msgid "Day"
+msgstr "Dia"
+
+#: ../hamster/stats.py:245
+msgid "Week"
+msgstr "Semana"
+
+#: ../hamster/stats.py:248
+msgid "Month"
+msgstr "Mês"
+
+#~ msgid "Idle minutes:"
+#~ msgstr "Minutos de ociosidade:"
+
+#~ msgid ""
+#~ "After how many minutes hamster should stop tracking activity when "
+#~ "computer is idle. Set to 0 to disable."
+#~ msgstr ""
+#~ "Depois de quantos minutos o hamster deve parar de registrar atividade "
+#~ "quando o computador estiver ocioso. Defina como 0 para desabilitar."
+
+#~ msgid "Timeout in minutes"
+#~ msgstr "Tempo de espera em minutos"
