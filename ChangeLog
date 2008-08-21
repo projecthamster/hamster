@@ -1,3 +1,7 @@
+2008-08-21  Toms Baugis <toms.baugis@gmail.com>
+	* hamster/stats.py: be aware of locale's first_weekday - starting week
+	  either on monday or sunday. fixes bug 548102
+
 2008-08-20  Juanje Ojeda <jojeda@emergya.es>
 
 	* debian/changelog: 

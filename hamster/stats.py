@@ -132,7 +132,6 @@ class StatsViewer:
             process = os.popen("locale first_weekday")
             first_weekday = int(process.read().strip("\n"))
             process.close()
-            print '*' * 20, first_weekday
         except:
             print "WARNING - Failed to get first weekday from locale"
             pass
