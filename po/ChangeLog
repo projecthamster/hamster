@@ -1,3 +1,8 @@
+2008-08-22  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+
+	* pl.po: Added Polish translation
+	* LINGUAS: Added pl
+
 2008-08-22  Sweta Kothari  <swkothar@redhat.com>
 
 	* gu.po: Committed Gujarati Translation.
