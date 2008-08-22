@@ -1,0 +1,343 @@
+# Chinese (Taiwan) translation of hamster-applet.
+# Copyright (C) 2003-06 Free Software Foundation, Inc.
+# Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>, 2008
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet 2.23.90\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-22 20:23+0800\n"
+"PO-Revision-Date: 2008-08-22 20:23+0800\n"
+"Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
+"Language-Team: Chinese/Traditional <community@linuxhall.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "時間追蹤程式"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "各式活動的時間追蹤程式"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "關於(_A)"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>活動</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>全域捷徑鍵</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>追蹤</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "下移(_D)"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "上移(_U)"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "新增分類(_E)"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "關機時停止追蹤"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "當電腦為閒置狀態時停止追蹤"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "時間追蹤程式偏好設定"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "活動(_A)"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "分類(_C)"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "新增活動(_N)"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>活動</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>日期和時間</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "加入較早的活動"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "小時"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"正在進行...\n"
+"直到\n"
+"於"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "分鐘"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "用來顯示時間追蹤程式視窗的鍵盤捷徑鍵。"
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "顯示視窗"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "關機時停止追蹤目前的活動"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "當電腦為閒置狀態時停止追蹤目前的活動"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "閒置時停止追蹤"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "加入較早的活動(_D)"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr "今天沒有紀錄"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "顯示概覽(_O)"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "活動(_A):"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "停止追蹤(_S)"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "今天(_T)"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "天(_D)"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "月(_M)"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "週(_W)"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>分類</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>概覽</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>週</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "加入活動"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "刪除活動"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "較早的活動"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "編輯活動"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "產生報告"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "較新的活動"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "概覽 - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "顯示日"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "顯示月份"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "顯示週數"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "今天"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "各式活動的時間追蹤程式。"
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "版權所有 © 2007-2008 Toms Baugis 和其他人"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Hamster 網站"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr ""
+"如對翻譯有任何意見，請送一封電子郵件給\n"
+"以下地址，GNOME 翻譯團隊會盡快回覆您：\n"
+"community@linuxhall.org\n"
+"\n"
+"Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2008"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "未排序"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "名稱"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "分類"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "新增分類"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "新增活動"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "更新活動"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "沒有活動"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "工作"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "閱讀新聞"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "檢查股票"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "超級秘密專案 X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "征服世界"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "日常"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "午餐"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "澆花"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "倒立"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "名稱"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#, python-format
+msgid "Overview for %s"
+msgstr "%s 的概覽"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "%s 的概覽 - %s"
+
+#: ../hamster/stats.py:234
+msgid "Other"
+msgstr "其他"
+
+#: ../hamster/stats.py:266
+msgid "Day"
+msgstr "天"
+
+#: ../hamster/stats.py:269
+msgid "Week"
+msgstr "週"
+
+#: ../hamster/stats.py:272
+msgid "Month"
+msgstr "月"
