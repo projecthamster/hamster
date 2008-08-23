@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-19 03:20+0000\n"
-"PO-Revision-Date: 2008-08-19 13:23+0300\n"
+"POT-Creation-Date: 2008-08-23 23:32+0300\n"
+"PO-Revision-Date: 2008-08-23 23:31+0300\n"
 "Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -134,27 +134,28 @@ msgstr "Pysäytä seuranta joutenollessa"
 msgid "Ad_d Earlier Activity"
 msgstr "Li_sää aikaisempi toimi"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamsteri"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Ei kirjauksia tältä päivältä"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "Näytä _yleiskuva"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "T_oimi:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "Py_säytä seuranta"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_Tänään"
 
@@ -183,12 +184,48 @@ msgid "<b>Week</b>"
 msgstr "<b>Viikko</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Lisää toimi"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Poista toimi"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Aiemmat toimet"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Muokkaa toimea"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "Luo raportti"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Uudemmat toimet"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "Yleiskuva - Hamsteri"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Näytä päivä"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Näytä kuukausi"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Näytä viikko"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Tänään"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -276,28 +313,28 @@ msgid "name"
 msgstr "nimi"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "Yleiskuva kohteesta %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Yleiskuva kohteesta %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Muu"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Päivä"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Viikko"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Kuukausi"
