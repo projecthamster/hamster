@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 21:49+0000\n"
-"PO-Revision-Date: 2008-08-20 22:01-0300\n"
+"POT-Creation-Date: 2008-08-22 19:02-0400\n"
+"PO-Revision-Date: 2008-08-21 19:24-0300\n"
 "Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -137,28 +137,29 @@ msgstr "Parar de registrar durante ociosidade"
 msgid "Ad_d Earlier Activity"
 msgstr "Ad_icionar atividade recente"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Nenhum registro hoje"
 
 # Visão Geral ou Resumo.
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "Mostrar re_sumo"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "A_tividade:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "Pa_rar registro"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_Hoje"
 
@@ -187,12 +188,49 @@ msgid "<b>Week</b>"
 msgstr "<b>Semana</b>"
 
 #: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Gerar relatório"
+msgid "Add activity"
+msgstr "Adiciona atividade"
 
 #: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Exclui atividade"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Atividades recentes"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Edita atividade"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Gera relatório"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Atividades novas"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "Resumo - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Mostra dia"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Mostra mês"
+
+# Visão Geral ou Resumo.
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Mostra semana"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Hoje"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -280,29 +318,29 @@ msgid "name"
 msgstr "nome"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "Resumo de %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Resumo de %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Outros"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Dia"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Semana"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Mês"
 
