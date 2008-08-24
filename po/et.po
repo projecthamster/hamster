@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 07:43+0000\n"
-"PO-Revision-Date: 2008-08-20 22:00+0300\n"
+"POT-Creation-Date: 2008-08-21 12:16+0000\n"
+"PO-Revision-Date: 2008-08-24 10:17+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -185,12 +185,48 @@ msgid "<b>Week</b>"
 msgstr "<b>Nädal</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Lisa tegevus"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Kustuta tegevus"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Varasemad tegevused"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Muuda tegevust"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "Genereeri aruanne"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Uuemad tegevused"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "Ülevaade - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Näita päeva"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Näita kuud"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Näita nädalat"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Täna"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -204,7 +240,7 @@ msgstr "Autoriõigused © 2007-2008 Toms Baugis ja teised"
 msgid "Hamster Website"
 msgstr "Hamstri veebisait"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Ivar Smolin <okul@linux.ee>, 2008."
 
@@ -278,28 +314,28 @@ msgid "name"
 msgstr "nimi"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "Päeva %s ülevaade"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Perioodi %s - %s ülevaade"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "Muu"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "Päev"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "Nädal"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "Kuu"
