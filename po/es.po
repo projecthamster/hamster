@@ -5,9 +5,9 @@
 # Juanje Ojeda Croissier <jojeda@emergya.es>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: es\n"
+"Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 13:40+0200\n"
+"POT-Creation-Date: 2008-08-23 19:32+0200\n"
 "PO-Revision-Date: 2008-08-05 02:32+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -54,7 +54,7 @@ msgstr "_Subir"
 
 #: ../data/preferences.glade.h:6
 msgid "N_ew Category"
-msgstr "Añadir _categoría"
+msgstr "A_ñadir categoría"
 
 #: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
@@ -70,15 +70,15 @@ msgstr "Preferencias del gestor de tiempo"
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
-msgstr "_Actividades"
+msgstr "Acti_vidades"
 
 #: ../data/preferences.glade.h:11
 msgid "_Categories"
-msgstr "_Categorías"
+msgstr "Categ_orías"
 
 #: ../data/preferences.glade.h:12
 msgid "_New Activity"
-msgstr "_Añadir actividad"
+msgstr "Añadir ac_tividad"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
@@ -134,27 +134,28 @@ msgstr "Detener el registro en inactividad"
 msgid "Ad_d Earlier Activity"
 msgstr "Añadir una _actividad anterior"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Hoy no hay registros"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "_Mostrar un resumen"
 
-#: ../data/menu.glade.h:5
-msgid "_Activity:"
-msgstr "_Actividad:"
-
 #: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "Acti_vidad:"
+
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "_Detener el registro"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_Hoy"
 

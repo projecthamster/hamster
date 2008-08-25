@@ -1,3 +1,10 @@
+2008-08-25  Juanje Ojeda <jojeda@emergya.es>
+
+	* es.po: 
+		- Fixed the mnemonic keys for Spanish translations. Some of
+	them were duplicated.
+		- Changed the 'Project-Id-Version' to "hamster-applet.HEAD"
+
 2008-08-25  Priit Laes  <plaes at svn dot gnome dot org>
 
 	* et.po: Translation updated by Ivar Smolin
@@ -31,7 +38,7 @@
 
 2008-08-21  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
-	 gl.po: Updated Galician translation
+	* gl.po: Updated Galician translation
 
 2008-08-21  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
