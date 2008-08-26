@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
+"POT-Creation-Date: 2008-08-21 12:16+0000\n"
 "PO-Revision-Date: 2008-08-07 17:30+0300\n"
 "Last-Translator: Yair Hershkovitz\n"
 "Language-Team: he\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "מעקב אחרי הזמן"
 
@@ -88,9 +88,8 @@ msgid "<b>Date and Time</b>"
 msgstr "<b>תאריך ושעה</b>"
 
 #: ../data/add_custom_fact.glade.h:3
-#, fuzzy
 msgid "Add Earlier Activity"
-msgstr "פעילות _חדשה"
+msgstr "הוסף פעילות קודמת"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -131,11 +130,10 @@ msgid "Stop tracking on idle"
 msgstr "Stop tracking on idle"
 
 #: ../data/menu.glade.h:1
-#, fuzzy
 msgid "Ad_d Earlier Activity"
-msgstr "פעילות _חדשה"
+msgstr "הוסף פעילות _קודמת"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
+#: ../data/menu.glade.h:2
 msgid "Hamster"
 msgstr "Hamster"
 
@@ -184,22 +182,62 @@ msgid "<b>Week</b>"
 msgstr "<b>שבוע</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "הוסף פעילות"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "מחק פעילות"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "פעילויות קודמות"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "ערוך פעילות"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "צור דיווח"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "פעילויות חדשות יותר"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "סקירה - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "הצג יום"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "הצג חודש"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "הצג שבוע"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "היום"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
 msgstr "מעקב אחרי הזמן - להמונים."
 
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright © 2007-2008 Toms Baugis and others"
+
 #: ../hamster/about.py:45
 msgid "Hamster Website"
 msgstr "האתר של Hamster"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr ""
 "פרוייקט תרגום GNOME לעברית:\n"
@@ -226,9 +264,8 @@ msgid "New activity"
 msgstr "פעילות חדשה"
 
 #: ../hamster/add_custom_fact.py:84
-#, fuzzy
 msgid "Update activity"
-msgstr "פעילות חדשה"
+msgstr "עדכן פעילות"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
@@ -276,29 +313,29 @@ msgid "name"
 msgstr "שם"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "סקירה עבור %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "סקירה עבור %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "אחר"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "יום"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "שבוע"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "חודש"
 
