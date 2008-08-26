@@ -1,99 +1,101 @@
 # Arabic translations for gnome package.
 # Copyright (C) 2008 THE gnome'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome package.
-# Automatically generated, 2008.
 #
+# Anas Afif Emad, <anas.e87@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome 2-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:11+0100\n"
-"PO-Revision-Date: 2008-08-18 18:11+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2008-08-26 14:48+0100\n"
+"PO-Revision-Date: 2008-08-23 17:21+0200\n"
+"Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
-msgstr ""
+msgstr "مقتفي الوقت"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr ""
+msgstr "مقتفي الوقت للجماهير"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr ""
+msgstr "_حول"
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Preferences"
-msgstr ""
+msgstr "ت_فضيلات"
 
 #: ../data/preferences.glade.h:1
 msgid "<b>Activities</b>"
-msgstr ""
+msgstr "<b>نشاطات</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr ""
+msgstr "</b>مفتاح ساخن عالمي<b>"
 
 #: ../data/preferences.glade.h:3
 msgid "<b>Tracking</b>"
-msgstr ""
+msgstr "التتبع"
 
 #: ../data/preferences.glade.h:4
 msgid "Move _Down"
-msgstr ""
+msgstr "إنتقل للأ_سفل"
 
 #: ../data/preferences.glade.h:5
 msgid "Move _Up"
-msgstr ""
+msgstr "إنتقل للأ_على"
 
 #: ../data/preferences.glade.h:6
 msgid "N_ew Category"
-msgstr ""
+msgstr "_فئة جديدة"
 
 #: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
-msgstr ""
+msgstr "توقّف عن التتبع عند إيقاف التشغيل"
 
 #: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
-msgstr ""
+msgstr "توقّف عن التتبع عندما يصبح الكمبيوتر خاملاً"
 
 #: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
-msgstr ""
+msgstr "تفضيلات مقتفي الوقت"
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
-msgstr ""
+msgstr "_نشاطات"
 
 #: ../data/preferences.glade.h:11
 msgid "_Categories"
-msgstr ""
+msgstr "_فئات"
 
 #: ../data/preferences.glade.h:12
 msgid "_New Activity"
-msgstr ""
+msgstr "نشاط _جديد"
 
 #: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
-msgstr ""
+msgstr "<b>النشاط</b>"
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
-msgstr ""
+msgstr "<b>التاريخ والوقت</b>"
 
 #: ../data/add_custom_fact.glade.h:3
 msgid "Add Earlier Activity"
-msgstr ""
+msgstr "أضف نشاط سابق"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
-msgstr ""
+msgstr "ساعات"
 
 #: ../data/add_custom_fact.glade.h:5
 msgid ""
@@ -101,199 +103,249 @@ msgid ""
 "until\n"
 "for"
 msgstr ""
+"جار التقدّم...\n"
+"حتى\n"
+"لمدة"
 
 #: ../data/add_custom_fact.glade.h:8
 msgid "minutes"
-msgstr ""
+msgstr "دقائق"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr ""
+msgstr "اختصار لوحة المفاتيح لإظهار نافذة مقتفي الوقت"
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
-msgstr ""
+msgstr "أظّهر النافذة"
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
-msgstr ""
+msgstr "توقف عن تتبع النشاط الحالي عند إيقاف التشغيل"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr ""
+msgstr "توقف عن تتبع النشاط الحالي. عندما يصبح الكمبيوتر خاملاً"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
-msgstr ""
+msgstr "توقف عن التتبع عند الخمول"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
-msgstr ""
+msgstr "أ_ضف نشاطاً سابقاً"
 
-#: ../data/menu.glade.h:2
-msgid "Hamster"
-msgstr ""
-
+#. This title appears only when debugging from console. Leave it as is.
 #: ../data/menu.glade.h:3
-msgid "No records today"
-msgstr ""
+msgid "Hamster"
+msgstr "هامستر"
 
 #: ../data/menu.glade.h:4
-msgid "Show _Overview"
-msgstr ""
+msgid "No records today"
+msgstr "لا سجلّات اليوم"
 
 #: ../data/menu.glade.h:5
-msgid "_Activity:"
-msgstr ""
+msgid "Show _Overview"
+msgstr "أظهر ل_محة"
 
 #: ../data/menu.glade.h:6
-msgid "_Stop Tracking"
-msgstr ""
+msgid "_Activity:"
+msgstr "ال_نّشاط:"
 
 #: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "ت_وّقف عن التتبع"
+
+#: ../data/menu.glade.h:8
 msgid "_Today"
-msgstr ""
+msgstr "ال_يوم"
 
 #: ../data/stats.glade.h:1
 msgid " _Day"
-msgstr ""
+msgstr "ي_وم"
 
 #: ../data/stats.glade.h:2
 msgid " _Month"
-msgstr ""
+msgstr "_شهر"
 
 #: ../data/stats.glade.h:3
 msgid " _Week"
-msgstr ""
+msgstr "_أسبوع"
 
 #: ../data/stats.glade.h:5
 msgid "<b>Category</b>"
-msgstr ""
+msgstr "<b>الفئة</b>"
 
 #: ../data/stats.glade.h:6
 msgid "<b>Overview</b>"
-msgstr ""
+msgstr "<b>لمحة</b>"
 
 #: ../data/stats.glade.h:7
 msgid "<b>Week</b>"
-msgstr ""
+msgstr "<b>أسبوع</b>"
 
 #: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr ""
+#, fuzzy
+msgid "Add activity"
+msgstr "لا نشاطات"
 
 #: ../data/stats.glade.h:9
+#, fuzzy
+msgid "Delete activity"
+msgstr "نشاط جديد"
+
+#: ../data/stats.glade.h:10
+#, fuzzy
+msgid "Earlier activities"
+msgstr "أضف نشاط سابق"
+
+#: ../data/stats.glade.h:11
+#, fuzzy
+msgid "Edit activity"
+msgstr "تحديث النّشاط"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "ولّد تقريراً"
+
+#: ../data/stats.glade.h:13
+#, fuzzy
+msgid "Newer activities"
+msgstr "نشاط جديد"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
+msgstr "لمحة عامة - هامستر"
+
+#: ../data/stats.glade.h:15
+#, fuzzy
+msgid "Show day"
+msgstr "أظّهر النافذة"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
 msgstr ""
+
+#: ../data/stats.glade.h:17
+#, fuzzy
+msgid "Show week"
+msgstr "أظهر ل_محة"
+
+#: ../data/stats.glade.h:18
+#, fuzzy
+msgid "Today"
+msgstr "ال_يوم"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr ""
+msgstr "مقتفي الوقت للجماهير."
 
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr ""
+msgstr "حقوق النشر© 2007-2008 توم باوغيس وآخرون"
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
-msgstr ""
+msgstr "موقع هامستر على الإنترنت"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr ""
+"فريق عرب آيز للترجمة http://www.arabeyes.org:\n"
+"أنس عفيف عماد <anas.e87@gmail.com>"
 
 #: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
 msgid "Unsorted"
-msgstr ""
+msgstr "غير مصنّف"
 
 #: ../hamster/preferences.py:103 ../hamster/stats.py:46
 msgid "Name"
-msgstr ""
+msgstr "الاسم"
 
 #: ../hamster/preferences.py:123
 msgid "Category"
-msgstr ""
+msgstr "الفئة"
 
 #: ../hamster/preferences.py:468
 msgid "New category"
-msgstr ""
+msgstr "فئة جديدة"
 
 #: ../hamster/preferences.py:481
 msgid "New activity"
-msgstr ""
+msgstr "نشاط جديد"
 
 #: ../hamster/add_custom_fact.py:84
 msgid "Update activity"
-msgstr ""
+msgstr "تحديث النّشاط"
 
 #: ../hamster/applet.py:199
 msgid "No activity"
-msgstr ""
+msgstr "لا نشاطات"
 
 #. defaults
 #: ../hamster/db.py:403
 msgid "Work"
-msgstr ""
+msgstr "عمل"
 
 #: ../hamster/db.py:404
 msgid "Reading news"
-msgstr ""
+msgstr "قراءة الأخبار"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr ""
+msgstr "مراقبة الأسهم"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
-msgstr ""
+msgstr "المشروع س السرّي للغاية"
 
 #: ../hamster/db.py:407
 msgid "World domination"
-msgstr ""
+msgstr "السيطرة على العالم"
 
 #: ../hamster/db.py:409
 msgid "Day to day"
-msgstr ""
+msgstr "يوم بيوم"
 
 #: ../hamster/db.py:410
 msgid "Lunch"
-msgstr ""
+msgstr "الغداء"
 
 #: ../hamster/db.py:411
 msgid "Watering flowers"
-msgstr ""
+msgstr "سقاية الأزهار"
 
 #: ../hamster/db.py:412
 msgid "Doing handstands"
-msgstr ""
+msgstr "الوقوف على اليدين"
 
 #: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
-msgstr ""
+msgstr "الاسم"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
-msgstr ""
+msgstr "لمحة عن %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
-msgstr ""
+msgstr "لمحة عن %s - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
-msgstr ""
+msgstr "أخرى"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
-msgstr ""
+msgstr "يوم"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
-msgstr ""
+msgstr "أسبوع"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
-msgstr ""
+msgstr "شهر"
