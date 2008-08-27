@@ -1,3 +1,8 @@
+2008-08-27  Jovan Naumovski  <jovan@lugola.net>
+
+	* mk.po: Added Macedonian translation.
+	* LINGUAS: added 'mk' to the list.
+
 2008-08-26  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* ChangeLog, he.po: added hebrew translation
