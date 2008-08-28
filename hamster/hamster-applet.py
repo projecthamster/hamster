@@ -86,7 +86,7 @@ def on_destroy(event):
     if config.get_stop_on_shutdown():
         from hamster import storage
         last_activity = storage.get_last_activity()
-        if last_activity['end_time'] == None:
+        if last_activity and last_activity['end_time'] == None:
             storage.touch_fact(last_activity)
         
     gtk.main_quit()
