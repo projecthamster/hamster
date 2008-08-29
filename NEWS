@@ -1,4 +1,40 @@
 ===============
+Version 2.23.91
+===============
+  Applet
+	* When adding earlier activity in current day, set default end time to now
+	* In overview start week with monday/sunday depending on locale (bug 548102)
+    * Respect theme colors for graph labels
+      (bug 548840) patch by CJ van den Berg
+    * Fixed fail on exit when there is no last activity
+	
+
+  Translations
+    * ar (Anas Afif Emad)
+    * ca (Gil Forcada)
+	* de (Matthias Mailänder)
+	* es (Juanje Ojeda Croissier)
+	* et (Ivar Smolin)
+    * fi (Timo Jyrinki)
+	* fr (Claude Paroz)
+	* gl (Ignacio Casal Quinteiro)
+    * gu (Sweta Kothari)
+	* he (Yair Hershkovitz)
+	* it (Stefano Pedretti)
+	* lv (Toms Baugis)
+    * mk (Jovan Naumovski)
+    * mr (Sandeep Shedmake)
+	* nb (Kjartan Maraas)
+	* nl (Wouter Bolsterlee)
+    * pl (Tomasz Dominikowski)
+	* pt (Duarte Loreto)
+    * pt_BR (Vladimir Melo)
+	* ru (Sasha Shveik)
+	* sv (Daniel Nylander)
+    * zh_HK (Chao-Hsiung Liao)
+    * zh_TW (Chao-Hsiung Liao)
+
+===============
 Version 2.23.90
 ===============
   Applet
