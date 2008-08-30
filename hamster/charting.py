@@ -356,7 +356,7 @@ class Chart(gtk.DrawingArea):
                 graph_width = step * records #no need to have that white stuff
 
         graph_y = rect.y
-        graph_height = graph_y - rect.x + rect.height - 15
+        graph_height = rect.height - 15
         
         max_size = graph_height - 15
 
@@ -506,7 +506,7 @@ class Chart(gtk.DrawingArea):
         graph_width = rect.width + rect.x - graph_x
 
         graph_y = rect.y
-        graph_height = graph_y - rect.x + rect.height
+        graph_height = rect.height
         
         
         step = int(graph_height / float(records)) if records > 0 else 30
@@ -620,7 +620,7 @@ class Chart(gtk.DrawingArea):
         
         step = graph_width / float(records)
         graph_y = rect.y
-        graph_height = graph_y - rect.x + rect.height - 15
+        graph_height = rect.height - 15
         
         max_size = graph_height - 15
 
