@@ -1,0 +1,342 @@
+# translation of eu.po to Basque
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: eu\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-30 15:59+0200\n"
+"PO-Revision-Date: 2008-08-30 17:57+0200\n"
+"Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
+"Language-Team: Basque <itzulpena@euskalgnu.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Denboraren jarraipena"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Denboraren jarraipena herriarentzako"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "Honi _buruz"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Hobespenak"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Jarduerak</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Laster-tekla globalak</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Jarraipena</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Eraman _behera"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Eraman _gora"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "Kategoria _berria"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Gelditu jarraipena itzaltzean"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Gelditu jarraipena ordenagailua inaktibo jartzean"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Denboraren jarraipenaren hobespenak"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "_Jarduerak"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Kategoriak"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "Jarduera _berria"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Jarduera</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data eta ordua</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Gehitu aurreko jarduera"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "ordu"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"lanean...\n"
+"noiz arte\n"
+"iraupena"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minutu"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Laster-tekla denboraren jarraipenaren leihoa erakusteko."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Erakutsi leihoa"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Gelditu uneko jardueraren jarraipena itzaltzean"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Gelditu uneko jardueraren jarraipena, ordenagailua inaktibo jartzean"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Gelditu jarraipena inaktibo jartzean"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Gehitu _aurreko jarduera"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr "Gaur ez dago erregistrorik"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Erakutsi _aurkezpen orokorra"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "_Jarduera:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Gelditu jarraipena"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "_Gaur"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Eguna"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " _Hilabetea"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Astea"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Kategoria</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Aurkezpen orokorra</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Astea</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Gehitu jarduera"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Ezabatu jarduera"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Aurreko jarduerak"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Editatu jarduera"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Sortu txostena"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Jarduera berrienak"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Aurkezpen orokorra - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Erakutsi eguna"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Erakutsi hilabetea"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Erakutsi astea"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Gaur"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Denboraren jarraipena herriarentzako."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright-a © 2007-2008 Toms Baugis eta beste batzuk"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Hamster-en webgunea"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Iñaki Larrañaga Murgoitio  <dooteo@euskalgnu.org>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Ordenatu gabe"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Izena"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Kategoria"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Kategoria berria"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Jarduera berria"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Eguneratu jarduera"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "Jarduerarik ez"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Lana"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Berriak irakurtzea"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Burtsa-baloreak begiratzea"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "X proiektu supersekretua"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Munduaz jabetzea"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Egunez egun"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Bazkaria"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Uretako loreak"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Beroketak egitea"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "izena"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#, python-format
+msgid "Overview for %s"
+msgstr "%s(r)en aurkezpen orokorra"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Aurkezpen orokorra: %s - %s"
+
+#: ../hamster/stats.py:234
+msgid "Other"
+msgstr "Bestelakoa"
+
+#: ../hamster/stats.py:266
+msgid "Day"
+msgstr "Eguna"
+
+#: ../hamster/stats.py:269
+msgid "Week"
+msgstr "Astea"
+
+#: ../hamster/stats.py:272
+msgid "Month"
+msgstr "Hilabetea"
+
