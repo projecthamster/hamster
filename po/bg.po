@@ -1,0 +1,348 @@
+# Bulgarian translation of hamster-applet po-file.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the hamster-applet package.
+# Alexander Shopov <ash@contact.bg>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet trunk\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-01 12:08+0300\n"
+"PO-Revision-Date: 2008-09-01 12:07+0300\n"
+"Last-Translator: Alexander Shopov <ash@contact.bg>\n"
+"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Отчитане на времето"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Лесно отчитане на времето"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Относно"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Настройки"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Дейности</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Глобална клавишна комбинация</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Отчитане</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "На_горе"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "На_долу"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "Нова _категория"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Преустановяване на отчитането при изключване на компютъра"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Преустановяване на отчитането при бездействие на компютъра"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Настройки на отчитането на времето"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "_Дейности"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Категории"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "_Нова дейност"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Дейност</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Дата и време</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Добавяне на нова дейност"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "часа"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"тече…\n"
+"до\n"
+"за"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "минути"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Клавишна комбинация за показването на прозореца за отчитане на време."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Показване на прозореца"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr ""
+"Преустановяване на отчитането на текущата дейност при изключване на компютъра"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+"Преустановяване на отчитането на текущата дейност, когато компютърът "
+"бездейства"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Преустановяване на отчитането при бездействие"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Добавяне на _предишна дейност"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr "Няма записи за днес"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "_Показване на прегледа"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "_Дейност:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Преустановяване на отчитането"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "Д_нес"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_Ден"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_Месец"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Седмица"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Категория</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Преглед</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Седмица</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Добавяне на дейност"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Изтриване на дейност"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Предишни дейности"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Редактиране на дейност"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Създаване на отчет"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "По-нови дейности"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Преглед — Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Показване на деня"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Показване на месеца"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Показване на седмицата"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Днес"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Лесно отчитане на времето."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Авторски права: © 2007-2008 Toms Baugis и др."
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Уеб сайт на Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr ""
+"Александър Шопов <ash@contact.bg>\n"
+"\n"
+"Проектът за превод на GNOME има нужда от подкрепа.\n"
+"Научете повече за нас на http://gnome.cult.bg\n"
+"Докладвайте за грешки на http://gnome.cult.bg/bugs"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+msgid "Unsorted"
+msgstr "Без подредба"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Име"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Категория"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Нова категория"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Нова дейност"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Обновяване на дейността"
+
+#: ../hamster/applet.py:199
+msgid "No activity"
+msgstr "Без дейност"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Работа"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Четене на новини"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Проверка на фондовата борса"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Супер тайния проект Ь"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Световно господство"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Ежедневни"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Обяд"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Поливане на цветя"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "На челна стойка"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "име"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#, python-format
+msgid "Overview for %s"
+msgstr "Отчет за %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Отчет за %s до %s"
+
+#: ../hamster/stats.py:234
+msgid "Other"
+msgstr "Други"
+
+#: ../hamster/stats.py:266
+msgid "Day"
+msgstr "Ден"
+
+#: ../hamster/stats.py:269
+msgid "Week"
+msgstr "Седмица"
+
+#: ../hamster/stats.py:272
+msgid "Month"
+msgstr "Месец"
