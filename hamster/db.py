@@ -129,14 +129,17 @@ class Storage(hamster.storage.Storage):
         """
         return self.fetchone(query, (dt.date.today(), ))
 
-    def __touch_fact(self, activity, end_time = None):
-        id = activity['id']
-        query = """
-                   UPDATE facts
-                      SET end_time = ?
-                    WHERE id = ?
-        """
-        self.execute(query, (end_time, id))
+    def __touch_fact(self, fact, end_time):
+        # tasks under one minute do not count
+        if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
+            self.__remove_fact(fact['id'])
+        else:
+            query = """
+                       UPDATE facts
+                          SET end_time = ?
+                        WHERE id = ?
+            """
+            self.execute(query, (end_time, fact['id']))
 
     def __add_fact(self, activity_name, start_time = None, end_time = None):
         start_time = start_time or datetime.datetime.now()
