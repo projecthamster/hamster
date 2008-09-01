@@ -93,8 +93,13 @@ def simple(facts, start_date, end_date):
             delta = end_time - fact["start_time"]
             duration = 24 * delta.days + delta.seconds / 60
         
-        end_time_str = end_time.strftime('%H:%M') if end_time else ""
+        end_time_str = ""
+        if end_time:
+            end_time_str = end_time.strftime('%H:%M')
 
+        category = ""
+        if fact["category"] != _("Unsorted"): #do not print "unsorted"
+            category = fact["category"]
 
         report.write("""<tr>
                             <td>%s</td>
@@ -105,7 +110,7 @@ def simple(facts, start_date, end_date):
                             <td>%s</td>
 </tr>""" % (fact["start_time"].strftime("%d.%m.%y"),
             fact["name"],
-            fact["category"] if fact["category"] != _("Unsorted") else "", #do not print unsorted
+            category, 
             fact["start_time"].strftime('%H:%M'),
             end_time_str,
             stuff.format_duration(duration)))
