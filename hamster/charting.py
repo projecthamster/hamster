@@ -303,12 +303,22 @@ class Chart(gtk.DrawingArea):
         
         res = []
         for i in range(len(data)):
-            factor = data[i][1] / float(max_value) if max_value > 0 else 0
+            factor = 0
+            if max_value > 0:
+                factor = data[i][1] / float(max_value)
             
+            color = None
+            if len(data[i]) > 2:
+                color = data[i][2]
+            
+            background = None
+            if len(data[i]) > 3:
+                background = data[i][3]
+                
             res.append({"label": data[i][0],
                         "value": data[i][1],
-                        "color": data[i][2] if len(data[i]) > 2 else None,
-                        "background": data[i][3] if len(data[i]) > 3 else None,
+                        "color":  color,
+                        "background":  background,
                         "factor": factor
                         })
         
@@ -384,7 +394,9 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8])
         
         # scale lines
-        stride = self.default_grid_stride if self.stretch_grid == False else int(graph_height / 4)
+        stride = int(graph_height / 4)
+        if self.stretch_grid == False:
+            stride = self.default_grid_stride
             
         for y in range(graph_y, graph_y + graph_height, stride):
             context.move_to(graph_x - 10, y)
@@ -412,7 +424,10 @@ class Chart(gtk.DrawingArea):
             context.show_text(data[i]["label"])
 
         # values for max min and average
-        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        max_label = "%d" % self.max
+        if self.there_are_floats:
+            max_label = "%.1f" % self.max
+
         extent = context.text_extents(max_label) #x, y, width, height
 
         context.move_to(graph_x - extent[2] - 16, rect.y + 10)
@@ -428,10 +443,15 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
-            color = data[i]["color"] if  data[i]["color"] != None else 3
+            color = data[i]["color"] or 3
+
             bar_size = graph_height * data[i]["factor"]
             #on animations we keep labels on top, so we need some extra space there
-            bar_size = bar_size * 0.8 if self.values_on_bars and self.animate else bar_size * 0.9
+            if self.values_on_bars and self.animate:
+                bar_size = bar_size * 0.8
+            else:
+                bar_size = bar_size * 0.9
+                
             bar_size = max(bar_size, 1)
             
             gap = step * 0.05
@@ -450,12 +470,18 @@ class Chart(gtk.DrawingArea):
 
         if self.values_on_bars:
             for i in range(records):
-                label = "%.1f" % data[i]["value"] if self.there_are_floats else "%d" % data[i]["value"]
+                if self.there_are_floats:
+                    label = "%.1f" % data[i]["value"]
+                else:
+                    label = "%d" % data[i]["value"]
                 extent = context.text_extents(label) #x, y, width, height
                 
                 bar_size = graph_height * data[i]["factor"]
                 
-                bar_size = bar_size * 0.8 if self.animate else bar_size * 0.9
+                if self.animate:
+                    bar_size = bar_size * 0.8
+                else:
+                    bar_size = bar_size * 0.9
                     
                 vertical_offset = (step - extent[2]) / 2.0
                 
@@ -509,7 +535,11 @@ class Chart(gtk.DrawingArea):
         graph_height = rect.height
         
         
-        step = int(graph_height / float(records)) if records > 0 else 30
+        if records > 0:
+            step = int(graph_height / float(records))
+        else:
+            step = 30
+            
         if self.max_bar_width:
             step = min(step, self.max_bar_width)
             if self.collapse_whitespace:
@@ -547,7 +577,11 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8])
 
         # scale lines        
-        grid_stride = self.default_grid_stride if self.stretch_grid == False else int(graph_width / 3.0)
+        if self.stretch_grid == False:
+            grid_stride = self.default_grid_stride
+        else:
+            grid_stride = int(graph_width / 3.0)
+            
         for x in range(graph_x + grid_stride, graph_x + graph_width - grid_stride, grid_stride):
             context.move_to(x, graph_y)
             context.line_to(x, graph_y + graph_height)
@@ -572,7 +606,7 @@ class Chart(gtk.DrawingArea):
 
         # bars themselves
         for i in range(records):
-            color = data[i]["color"] if  data[i]["color"] != None else 3
+            color = data[i]["color"] or 3
             bar_y = graph_y + (step * i) + gap
             bar_size = max_size * data[i]["factor"]
             bar_size = max(bar_size, 1)
@@ -586,7 +620,10 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8])        
         if self.values_on_bars:
             for i in range(records):
-                label = "%.1f" % data[i]["value"] if self.there_are_floats else "%d" % data[i]["value"]
+                if self.there_are_floats:
+                    label = "%.1f" % data[i]["value"]
+                else:
+                    label = "%d" % data[i]["value"]
                 extent = context.text_extents(label) #x, y, width, height
                 
                 bar_size = max_size * data[i]["factor"]
@@ -603,7 +640,11 @@ class Chart(gtk.DrawingArea):
         else:
             # values for max min and average
             context.move_to(graph_x + graph_width + 10, graph_y + 10)
-            max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+            if self.there_are_floats:
+                max_label = "%.1f" % self.max
+            else:
+                max_label = "%d" % self.max
+                
             context.show_text(max_label)
         
         
@@ -651,7 +692,10 @@ class Chart(gtk.DrawingArea):
         set_color(context, dark[8])
         
         # scale lines
-        stride = self.default_grid_stride if self.stretch_grid == False else int(graph_height / 4)
+        if self.stretch_grid == False:
+            stride = self.default_grid_stride
+        else:
+            stride = int(graph_height / 4)
             
         for y in range(graph_y, graph_y + graph_height, stride):
             context.move_to(graph_x - 10, y)
@@ -677,7 +721,11 @@ class Chart(gtk.DrawingArea):
                 context.show_text(data[i]["label"])
 
         # values for max min and average
-        max_label = "%.1f" % self.max if self.there_are_floats else "%d" % self.max
+        if self.there_are_floats:
+            max_label = "%.1f" % self.max
+        else:
+            max_label = "%d" % self.max
+            
         extent = context.text_extents(max_label) #x, y, width, height
 
         context.move_to(graph_x - extent[2] - 16, rect.y + 10)
