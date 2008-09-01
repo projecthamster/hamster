@@ -50,9 +50,8 @@ class Storage(hamster.storage.Storage):
     
     def __insert_category(self, name):
         new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")
-        id, order = 1, 1
-        if new_rec[0] and new_rec[1]: # handle case when we have no categories at all
-            id, order = new_rec[0], new_rec[1]
+
+        id, order = new_rec[0] or 1, new_rec[1] or 1
 
         query = """
                    INSERT INTO categories (id, name, category_order)
@@ -335,9 +334,7 @@ class Storage(hamster.storage.Storage):
 
     def __insert_activity(self, name, category_id = -1):
         new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
-        new_id, new_order = 0, 0
-        if new_rec[0] and new_rec[1]: # handle case when we have no activities at all
-            new_id, new_order = new_rec[0], new_rec[1]
+        new_id, new_order = new_rec[0] or 1, new_rec[1] or 1
 
         query = """
                    INSERT INTO activities (id, name, category_id, activity_order)
