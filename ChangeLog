@@ -1,3 +1,41 @@
+2008-09-01  Juanje Ojeda <jojeda@emergya.es> 
+
+	* configure.ac: Changed python version from 2.5 to 2.4
+	Fixs (with the previous commits) the bug #548914
+
+2008-09-01   Toms Baugis  <toms.baugis@gmail.com>
+
+	* hamster/db.py: For new databases, start activity ID with 1
+	  instead of 0.
+	  Otherwise the first activity is doomed in "unsorted category"
+	  fixes bug #549561.
+	* hamster/reports.py: Changed <action> if <condition> else
+	  <alternative action>
+	  expressions that were introduced in python 2.5 to the good old
+	  way of doing things.
+	  Bug #548914 - hamster should be able to work with python 2.4
+	* hamster/charting.py, hamster/stats.py: Changed <action> if
+	  <condition> else <alternative action>
+	  expressions that were introduced in python 2.5 to the good old
+	  way of doing things.
+	  Bug #548914 - hamster should be able to work with python 2.4
+
+2008-08-30   Toms Baugis  <toms.baugis@gmail.com>
+
+	* hamster/charting.py: totally awesome confusion between width and
+	  height
+
+2008-08-29   Toms Baugis  <toms.baugis@gmail.com>
+
+	* configure.ac: +1 in trunk
+	* NEWS: version bump
+	* configure.ac: we should be +1 in trunk
+
+2008-08-28  Juanje Ojeda <jojeda@emergya.es> 
+
+	* hamster/hamster-applet.py: Fixed fail on exit when there is no
+	end time on the las activity.
+
 2008-08-21  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	* configure.ac: Unbreak i18n (and the build) by using
