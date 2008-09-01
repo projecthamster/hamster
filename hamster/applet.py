@@ -148,7 +148,8 @@ class HamsterApplet(object):
     def on_today_release_event(self, tree, event):
         pointer = event.window.get_pointer() # x, y, flags
         path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
-        if path[1] == self.edit_column:
+        
+        if path and path[1] == self.edit_column:
             selection = tree.get_selection()
             (model, iter) = selection.get_selected()
             fact_id = model[iter][0]
