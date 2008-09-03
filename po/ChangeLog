@@ -1,3 +1,8 @@
+2008-09-03  Matej Urbančič  <mateju@svn.gnome.org>
+
+	* LINGUAS: Added 'sl' to the list
+	* sl.po: Added Slovenian translation.
+
 2008-09-03  Philip Withnall  <philip@tecnocode.co.uk>
 
 	* LINGUAS: Added en_GB.
