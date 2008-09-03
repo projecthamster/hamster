@@ -1,0 +1,353 @@
+# This file is distributed under the same license as the package.
+#
+# Matej Urbančič <mateju@svn.gnome.org>, 2008
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libgwether\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-03 06:28+0000\n"
+"PO-Revision-Date: 2008-09-03 11:09+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"Language-Team: Slovenian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
+"X-Poedit-Language: Slovenian\n"
+"X-Poedit-Country: SLOVENIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Časomer"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Časomer za množice."
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_O Programu"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Lastnosti"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Dejavnosti</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Splošne hitre tipke</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Merjenje časa</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Premakni _dol"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Premakni _gor"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "_Nova kategorija"
+
+#: ../data/preferences.glade.h:7
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Zaustavi merjenje ob ugašanju računalnika"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Zaustavi merjenje, ko računalnik ni dejaven"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Lastnosti merjenja časa"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "_Dejavnosti"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Kategorije"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "_Nova dejavnost"
+
+#: ../data/add_custom_fact.glade.h:1
+#: ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Dejavnost</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Datum in čas</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Dodaj zgodnejšo dejavnost"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "ure"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"v teku ...\n"
+"do\n"
+"za"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "minute"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Tipkovna bližnjica za prikaz okna časomera."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Prikaži okno"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Zaustavi merjenje trenutne dejavnosti ob ugašanju računalnika"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Zaustavi merjenje trenutne dejavnosti, ko računalnik ni dejaven"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Zaustavi merjenje ob neaktivnosti"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "_Dodaj zgodnejšo dejavnost"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr "Danes ni zapisov"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Prikaži _pregled"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "_Dejavnost:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Zaustavi merjenje"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "_Danes"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_Dan"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_Mesec"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "_Teden"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Kategorija</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Pregled</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Teden</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Dodaj dejavnost"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Izbriši dejavnost"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Zgodnejše dejavnosti"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Uredi dejavnost"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Ustvari poročilo"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Kasnejše dejavnosti"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Pregled - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Prikaži dan"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Prikaži mesec"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Prikaži teden"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Danes"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Časomer za množice."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Avtorska zaščita © 2007-2008 Toms Baugis in drugi"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Spletna stran programa Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Matej Urbančič <mateju@svn.gnome.org>"
+
+#: ../hamster/preferences.py:56
+#: ../hamster/db.py:256
+#: ../hamster/reports.py:101
+msgid "Unsorted"
+msgstr "Nerazvrščeno"
+
+#: ../hamster/preferences.py:103
+#: ../hamster/stats.py:46
+msgid "Name"
+msgstr "Ime"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Kategorija"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Nova kategorija"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Nova dejavnost"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Posodobi dejavnost"
+
+#: ../hamster/applet.py:200
+msgid "No activity"
+msgstr "Ni dejavnosti"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Služba"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Branje novic"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Preverjanje delnic"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Tajni projekt X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Zavlada svetu"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Iz dneva v dan"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Kosilo"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Zalivanje rož"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Stoja na glavi"
+
+#: ../hamster/db.py:588
+#: ../hamster/db.py:592
+msgid "name"
+msgstr "ime"
+
+#. single day is an exception
+#: ../hamster/reports.py:35
+#: ../hamster/stats.py:270
+#, python-format
+msgid "Overview for %s"
+msgstr "Pregled za %s"
+
+#: ../hamster/reports.py:37
+#: ../hamster/stats.py:273
+#: ../hamster/stats.py:276
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Pregled za %s - %s"
+
+#: ../hamster/stats.py:239
+msgid "Other"
+msgstr "Ostalo"
+
+#: ../hamster/stats.py:271
+msgid "Day"
+msgstr "Dan"
+
+#: ../hamster/stats.py:274
+msgid "Week"
+msgstr "Teden"
+
+#: ../hamster/stats.py:277
+msgid "Month"
+msgstr "Mesec"
+
