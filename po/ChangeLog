@@ -1,3 +1,8 @@
+2008-09-05  Runa Bhattacharjee  <runab@redhat.com>
+
+	* bn_IN.po: Added Bengali India Translation
+	* LINGUAS: Added Bengali India (bn_IN) to the list of languages
+
 2008-09-05  Sweta Kothari  <swkothar@redhat.com>
 
 	* gu.po: Committed Gujarati Translation.
