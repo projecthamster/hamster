@@ -1,3 +1,8 @@
+2008-09-06  Gintautas Miliauskas  <gintas@akl.lt>
+
+	* LINGUAS: Added Lithuanian (lt).
+	* lt.po: Added Lithuanian translation.
+
 2008-09-05  Runa Bhattacharjee  <runab@redhat.com>
 
 	* bn_IN.po: Added Bengali India Translation
