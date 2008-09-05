@@ -1,14 +1,14 @@
-# translation of hamster-applet.HEAD.po to Gujarati
+# translation of hamster-applet.HEAD.gu.po to Gujarati
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Sweta Kothari <swkothar@redhat.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet.HEAD\n"
+"Project-Id-Version: hamster-applet.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-22 03:19+0000\n"
-"PO-Revision-Date: 2008-08-22 17:58+0530\n"
+"POT-Creation-Date: 2008-08-22 12:38+0000\n"
+"PO-Revision-Date: 2008-09-05 13:26+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -230,7 +230,7 @@ msgstr "આજે"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr ""
+msgstr "આમ જનતા માટે સમય શોધી રહ્યા છે."
 
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
@@ -287,15 +287,15 @@ msgstr "સ્ટોકો ચકાસી રહ્યા છે"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
-msgstr ""
+msgstr "ઉત્તમ ખાનગી પ્રોજેક્ટ X"
 
 #: ../hamster/db.py:407
 msgid "World domination"
-msgstr ""
+msgstr "દુનિયામાં વર્ચસ્વ"
 
 #: ../hamster/db.py:409
 msgid "Day to day"
-msgstr ""
+msgstr "રોજ-બ-રોજ"
 
 #: ../hamster/db.py:410
 msgid "Lunch"
@@ -303,11 +303,11 @@ msgstr "આરંભ કરના"
 
 #: ../hamster/db.py:411
 msgid "Watering flowers"
-msgstr ""
+msgstr "ફૂલોમાં પાણી નાંખી રહ્યા છે"
 
 #: ../hamster/db.py:412
 msgid "Doing handstands"
-msgstr ""
+msgstr "હાથને આધાર આપી રહ્યા છે"
 
 #: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
