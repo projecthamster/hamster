@@ -1,3 +1,9 @@
+2008-09-07  Petr Kovar  <pknbe@volny.cz>
+
+	* cs.po: Added Czech translation by Adrian Gunis
+	(bug #550725).
+	* LINGUAS: Added "cs".
+
 2008-09-06  Gintautas Miliauskas  <gintas@akl.lt>
 
 	* LINGUAS: Added Lithuanian (lt).

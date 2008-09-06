@@ -1,0 +1,341 @@
+# Czech translation of hamster-applet.
+# Copyright (C) 2008 the author(s) of hamster-applet.
+# This file is distributed under the same license as the hamster-applet package.
+# Adrian Guniš <andygun@seznam.cz>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-07 01:47+0200\n"
+"PO-Revision-Date: 2008-09-03 21:20+0100\n"
+"Last-Translator: Adrian Guniš <andygun@seznam.cz>\n"
+"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Czech\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "Měřič času"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr "Sledování času pro každého"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "O _aplikaci"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "_Nastavení"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Činnosti</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Globální klávesová zkratka</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Sledování</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "Přesunout _níže"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "Přesunout _výše"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "N_ová kategorie"
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr "Zastavit sledování při vypnutí počítače"
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr "Zastavit sledování při nečinnosti počítače"
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr "Nastavení měřiče času"
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr "Č_innosti"
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "_Kategorie"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr "No_vá činnost"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Činnost</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Datum a čas</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Přidat starší činnost"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "hod."
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"probíhá...\n"
+"do\n"
+"po dobu"
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "min."
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Klávesová zkratka pro zobrazení okna Měřiče času."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr "Zobrazit okno"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr "Zastavit sledování aktuální činnosti při vypnutí počítače"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Zastavit sledování aktuální činnosti při nečinnosti počítače"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr "Zastavit sledování při nečinnosti"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Při_dat starší činnosti"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr "Dnes žádné záznamy"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Zobrazit _přehled"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "Č_innost:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Zastavit sledování"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "D_nes"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Den"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " _Měsíc"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Týden"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Kategorie</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Přehled</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Týden</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Přidat činnost"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Smazat činnost"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Starší činnosti"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Upravit činnost"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Vytvořit zprávu"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Novější činnosti"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Přehled - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Zobrazit den"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Zobrazit měsíc"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Zobrazit týden"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "Dnes"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr "Sledování času pro každého."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Copyright © 2007-2008 Toms Baugis a další"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Webová stránka aplikace Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Adrian Guniš <andygun@seznam.cz>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
+msgid "Unsorted"
+msgstr "Nesetříděno"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "Název"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "Kategorie"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr "Nová kategorie"
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr "Nová činnost"
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr "Aktualizace činnosti"
+
+#: ../hamster/applet.py:200
+msgid "No activity"
+msgstr "Žádná činnost"
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "Práce"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr "Čtení novinek"
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr "Kontrolování zásob"
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr "Supertajný projekt X"
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr "Hra World domination"
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr "Každý den"
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr "Oběd"
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr "Zalévání květin"
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr "Cvičení"
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "název"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:270
+#, python-format
+msgid "Overview for %s"
+msgstr "Přehled za %s"
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:273 ../hamster/stats.py:276
+#, python-format
+msgid "Overview for %s - %s"
+msgstr "Přehled za %s - %s"
+
+#: ../hamster/stats.py:239
+msgid "Other"
+msgstr "Ostatní"
+
+#: ../hamster/stats.py:271
+msgid "Day"
+msgstr "Den"
+
+#: ../hamster/stats.py:274
+msgid "Week"
+msgstr "Týden"
+
+#: ../hamster/stats.py:277
+msgid "Month"
+msgstr "Měsíc"
