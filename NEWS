@@ -1,4 +1,45 @@
 ===============
+Version 2.23.92
+===============
+  Applet
+    * fixed code so that it works also with Python 2.4
+    * Fixed bug with tasks falling into unsorted category (bug #548914)
+    * Fixed error when switching tasks with doubleclick
+	
+
+  Translations
+    * ar (Anas Afif Emad)
+    * bg (Alexander Shopov)
+    * bn_IN (Runa Bhattacharjee)
+    * ca (Gil Forcada)
+    * cs (Adrian Guniš)
+    * de (Matthias Mailänder)
+    * en_GB (Philip Withnall)
+    * es (Juanje Ojeda Croissier)
+    * et (Ivar Smolin)
+    * eu (Iñaki Larrañaga Murgoitio)
+    * fi (Timo Jyrinki)
+    * fr (Claude Paroz)
+    * gl (Ignacio Casal Quinteiro)
+    * gu (Sweta Kothari)
+    * he (Yair Hershkovitz)
+    * it (Stefano Pedretti)
+    * lt (Gintautas Miliauskas)
+    * lv (Toms Baugis)
+    * mk (Jovan Naumovski)
+    * mr (Sandeep Shedmake)
+    * nb (Kjartan Maraas)
+    * nl (Wouter Bolsterlee)
+    * pl (Tomasz Dominikowski)
+    * pt (Duarte Loreto)
+    * pt_BR (Vladimir Melo)
+    * ru (Sasha Shveik)
+    * sl (Matej Urbančič)
+    * sv (Daniel Nylander)
+    * zh_HK (Chao-Hsiung Liao)
+    * zh_TW (Chao-Hsiung Liao)
+
+===============
 Version 2.23.91
 ===============
   Applet
