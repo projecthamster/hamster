@@ -1,3 +1,8 @@
+2008-09-08  Toms Baugis <toms.baugis@gmail.com> 
+
+	* configure.ac: Bumped dependency of pygtk to 2.12 and pygobject to 2.14
+          to avoid faulty installations
+
 2008-09-01  Juanje Ojeda <jojeda@emergya.es> 
 
 	* configure.ac: Changed python version from 2.5 to 2.4
