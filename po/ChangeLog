@@ -1,3 +1,8 @@
+2008-09-09  I. Felix <ifelix@redhat.com>
+
+	* ta.po:  Tamil Translation updated by Shakthi kannan
+	* LINGUAS: Added Tamil (ta) to The List of Languages.
+
 2008-09-09 Baris Cicek <baris@teamforce.name.tr>
 	
 	* LINGUAS: Added tr (Turkish)
