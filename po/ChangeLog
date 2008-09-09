@@ -1,3 +1,8 @@
+2008-09-09 Baris Cicek <baris@teamforce.name.tr>
+	
+	* LINGUAS: Added tr (Turkish)
+	* tr.po: Added Turkish translation
+	
 2008-09-09  Hendrik Richter  <hendrikr@gnome.org>
 
 	* de.po: Updated German translation.
