@@ -13,19 +13,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-22 14:20+0000\n"
-"PO-Revision-Date: 2008-08-24 13:22+0100\n"
+"POT-Creation-Date: 2008-09-10 19:41+0200\n"
+"PO-Revision-Date: 2008-09-10 19:40+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
-#: ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "Zarządzanie czasem"
 
@@ -43,7 +43,7 @@ msgstr "_Preferencje"
 
 #: ../data/preferences.glade.h:1
 msgid "<b>Activities</b>"
-msgstr "<b>Działalności</b>"
+msgstr "<b>Czynności</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
@@ -65,8 +65,7 @@ msgstr "Przesuń _w górę"
 msgid "N_ew Category"
 msgstr "N_owa kategoria"
 
-#: ../data/preferences.glade.h:7
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "Zatrzymanie śledzenia przy wyłączeniu komputera"
 
@@ -80,7 +79,7 @@ msgstr "Preferencje "
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
-msgstr "_Działalności"
+msgstr "_Czynności"
 
 #: ../data/preferences.glade.h:11
 msgid "_Categories"
@@ -88,12 +87,11 @@ msgstr "_Kategorie"
 
 #: ../data/preferences.glade.h:12
 msgid "_New Activity"
-msgstr "_Nowa działalność"
+msgstr "_Nowa czynność"
 
-#: ../data/add_custom_fact.glade.h:1
-#: ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
-msgstr "<b>Działalność</b>"
+msgstr "<b>Czynność</b>"
 
 #: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
@@ -101,7 +99,7 @@ msgstr "<b>Data i czas</b>"
 
 #: ../data/add_custom_fact.glade.h:3
 msgid "Add Earlier Activity"
-msgstr "Dodawanie wcześniejszej działalności"
+msgstr "Dodawanie wcześniejszej czynności"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -131,11 +129,12 @@ msgstr "Wyświetlanie okna"
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
-msgstr "Zatrzymanie śledzenia bieżącej działalności przy wyłączeniu komputera"
+msgstr "Zatrzymanie śledzenia bieżącej czynności przy wyłączeniu komputera"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Zatrzymanie śledzenia bieżącej działalności podczas bezczynności komputera"
+msgstr ""
+"Zatrzymanie śledzenia bieżącej czynności podczas bezczynności komputera"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
@@ -143,7 +142,7 @@ msgstr "Zatrzymanie czasu podczas bezczynności"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
-msgstr "Dodaj _wcześniejszą działalność"
+msgstr "Dodaj _wcześniejszą czynność"
 
 #. This title appears only when debugging from console. Leave it as is.
 #: ../data/menu.glade.h:3
@@ -160,7 +159,7 @@ msgstr "Wyświetl p_odgląd"
 
 #: ../data/menu.glade.h:6
 msgid "_Activity:"
-msgstr "_Działalność:"
+msgstr "_Czynność:"
 
 #: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
@@ -196,19 +195,19 @@ msgstr "<b>Tydzień</b>"
 
 #: ../data/stats.glade.h:8
 msgid "Add activity"
-msgstr "Dodaje działalność"
+msgstr "Dodaje czynność"
 
 #: ../data/stats.glade.h:9
 msgid "Delete activity"
-msgstr "Usuwa działność"
+msgstr "Usuwa czynność"
 
 #: ../data/stats.glade.h:10
 msgid "Earlier activities"
-msgstr "Wcześniejsze działalności"
+msgstr "Wcześniejsze czynności"
 
 #: ../data/stats.glade.h:11
 msgid "Edit activity"
-msgstr "Modyfikuje działalność"
+msgstr "Modyfikuje czynność"
 
 #: ../data/stats.glade.h:12
 msgid "Generate Report"
@@ -216,7 +215,7 @@ msgstr "Wygeneruj raport"
 
 #: ../data/stats.glade.h:13
 msgid "Newer activities"
-msgstr "Nowsze działalności"
+msgstr "Nowsze czynności"
 
 #: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
@@ -256,14 +255,11 @@ msgstr ""
 "Aviary.pl <gnomepl@aviary.pl>, 2008\n"
 "Tomasz Dominikowski <tdominikowski@aviary.pl>, 2008"
 
-#: ../hamster/preferences.py:56
-#: ../hamster/db.py:254
-#: ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "Bez sortowania"
 
-#: ../hamster/preferences.py:103
-#: ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
 msgid "Name"
 msgstr "Nazwa"
 
@@ -277,15 +273,15 @@ msgstr "Nowa kategoria"
 
 #: ../hamster/preferences.py:481
 msgid "New activity"
-msgstr "Nowa działalność"
+msgstr "Nowa czynność"
 
 #: ../hamster/add_custom_fact.py:84
 msgid "Update activity"
-msgstr "Aktualizowanie działalności"
+msgstr "Aktualizowanie czynności"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
-msgstr "Brak działalności"
+msgstr "Brak czynności"
 
 #. defaults
 #: ../hamster/db.py:403
@@ -298,7 +294,7 @@ msgstr "Czytanie wiadomości"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr "Sprawdzanie "
+msgstr "Sprawdzanie notowań giełdowych"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
@@ -325,53 +321,52 @@ msgstr "Podlewanie kwiatów"
 msgid "Doing handstands"
 msgstr "Stanie na rękach"
 
-#: ../hamster/db.py:588
-#: ../hamster/db.py:592
+#: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
 msgstr "nazwa"
 
 #. single day is an exception
-#: ../hamster/reports.py:35
-#: ../hamster/stats.py:265
+#: ../hamster/reports.py:35 ../hamster/stats.py:270
 #, python-format
 msgid "Overview for %s"
 msgstr "Przegląd dla %s"
 
-#: ../hamster/reports.py:37
-#: ../hamster/stats.py:268
-#: ../hamster/stats.py:271
+#: ../hamster/reports.py:37 ../hamster/stats.py:273 ../hamster/stats.py:276
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Przegląd dla %s - %s"
 
-#: ../hamster/stats.py:234
+#: ../hamster/stats.py:239
 msgid "Other"
 msgstr "Inne"
 
-#: ../hamster/stats.py:266
+#: ../hamster/stats.py:271
 msgid "Day"
 msgstr "Dzień"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:274
 msgid "Week"
 msgstr "Tydzień"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:277
 msgid "Month"
 msgstr "Miesiąc"
 
 #~ msgid "Idle minutes:"
 #~ msgstr "Minut bezczynności:"
+
 #~ msgid "Add an older fact"
 #~ msgstr "Dodawanie poprzedniego faktu"
+
 #~ msgid ""
 #~ "After how many minutes hamster should stop tracking activity when "
 #~ "computer is idle. Set to 0 to disable."
 #~ msgstr ""
 #~ "Po ilu minutach program Hamster ma zatrzymać śledzenie, gdy komputer "
 #~ "staje się bezczynny. Wartość \"0\" wyłącza tę funkcję."
+
 #~ msgid "Timeout in minutes"
 #~ msgstr "Limit czasu w minutach"
+
 #~ msgid "Ad_d Older Fact"
 #~ msgstr "Dodaj _starszy fakt"
-
