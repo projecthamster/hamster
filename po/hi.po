@@ -1,0 +1,339 @@
+# translation of hamster-applet.HEAD.po to Hindi
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Rajesh Ranjan <rranjan@redhat.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet.HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-11 05:13+0000\n"
+"PO-Revision-Date: 2008-09-11 17:03+0530\n"
+"Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
+"Language-Team: Hindi <hindi.sf.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n\n\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Time Tracker"
+msgstr "टाइम ट्रेकर"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+msgid "Time tracking for masses"
+msgstr ""
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "के बारे में (_A)"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Preferences"
+msgstr "वरीयताएं (_P)"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr ""
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr ""
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr ""
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "नीचे खिसकाएँ (_D)"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "ऊपर जाएं (_U)"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr ""
+
+#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking on shutdown"
+msgstr ""
+
+#: ../data/preferences.glade.h:8
+msgid "Stop tracking when computer becomes idle"
+msgstr ""
+
+#: ../data/preferences.glade.h:9
+msgid "Time Tracker Preferences"
+msgstr ""
+
+#: ../data/preferences.glade.h:10
+msgid "_Activities"
+msgstr ""
+
+#: ../data/preferences.glade.h:11
+msgid "_Categories"
+msgstr "श्रेणी (_C)"
+
+#: ../data/preferences.glade.h:12
+msgid "_New Activity"
+msgstr ""
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>गतिविधि</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr ""
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr ""
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "hours"
+msgstr "घंटे"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+
+#: ../data/add_custom_fact.glade.h:8
+msgid "minutes"
+msgstr "मिनट्स"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Show window"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Stop tracking current activity on shutdown"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking on idle"
+msgstr ""
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr ""
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr ""
+
+#: ../data/menu.glade.h:4
+msgid "No records today"
+msgstr ""
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr ""
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr ""
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr ""
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "आज (_T)"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr ""
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr ""
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr ""
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr ""
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr ""
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr ""
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr ""
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr ""
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr ""
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr ""
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "रिपोर्ट बनाएं"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr ""
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr ""
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr ""
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr ""
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr ""
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "आज"
+
+#: ../hamster/about.py:42
+msgid "Time tracking for masses."
+msgstr ""
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr ""
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr ""
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "संगीता कुमारी (sangeeta09@gmail.com)"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
+msgid "Unsorted"
+msgstr "बिना छांटा"
+
+#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+msgid "Name"
+msgstr "नाम"
+
+#: ../hamster/preferences.py:123
+msgid "Category"
+msgstr "श्रेणी"
+
+#: ../hamster/preferences.py:468
+msgid "New category"
+msgstr ""
+
+#: ../hamster/preferences.py:481
+msgid "New activity"
+msgstr ""
+
+#: ../hamster/add_custom_fact.py:84
+msgid "Update activity"
+msgstr ""
+
+#: ../hamster/applet.py:200
+msgid "No activity"
+msgstr ""
+
+#. defaults
+#: ../hamster/db.py:403
+msgid "Work"
+msgstr "कार्यस्थल"
+
+#: ../hamster/db.py:404
+msgid "Reading news"
+msgstr ""
+
+#: ../hamster/db.py:405
+msgid "Checking stocks"
+msgstr ""
+
+#: ../hamster/db.py:406
+msgid "Super secret project X"
+msgstr ""
+
+#: ../hamster/db.py:407
+msgid "World domination"
+msgstr ""
+
+#: ../hamster/db.py:409
+msgid "Day to day"
+msgstr ""
+
+#: ../hamster/db.py:410
+msgid "Lunch"
+msgstr ""
+
+#: ../hamster/db.py:411
+msgid "Watering flowers"
+msgstr ""
+
+#: ../hamster/db.py:412
+msgid "Doing handstands"
+msgstr ""
+
+#: ../hamster/db.py:588 ../hamster/db.py:592
+msgid "name"
+msgstr "नाम"
+
+#. single day is an exception
+#: ../hamster/reports.py:35 ../hamster/stats.py:270
+#, python-format
+msgid "Overview for %s"
+msgstr ""
+
+#: ../hamster/reports.py:37 ../hamster/stats.py:273 ../hamster/stats.py:276
+#, python-format
+msgid "Overview for %s - %s"
+msgstr ""
+
+#: ../hamster/stats.py:239
+msgid "Other"
+msgstr "अन्य"
+
+#: ../hamster/stats.py:271
+msgid "Day"
+msgstr "दिन"
+
+#: ../hamster/stats.py:274
+msgid "Week"
+msgstr "सप्ताह"
+
+#: ../hamster/stats.py:277
+msgid "Month"
+msgstr "माह"
+
