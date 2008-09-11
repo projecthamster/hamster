@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 09:41+0000\n"
-"PO-Revision-Date: 2008-08-19 16:39+0530\n"
+"POT-Creation-Date: 2008-08-21 12:16+0000\n"
+"PO-Revision-Date: 2008-09-11 09:14+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -184,12 +184,56 @@ msgid "<b>Week</b>"
 msgstr "<b>आठवडा</b>"
 
 #: ../data/stats.glade.h:8
+#, fuzzy
+msgid "Add activity"
+msgstr "कार्य नाही"
+
+#: ../data/stats.glade.h:9
+#, fuzzy
+msgid "Delete activity"
+msgstr "नविन कार्य"
+
+#: ../data/stats.glade.h:10
+#, fuzzy
+msgid "Earlier activities"
+msgstr "पूर्वीचे कार्य जोडा"
+
+#: ../data/stats.glade.h:11
+#, fuzzy
+msgid "Edit activity"
+msgstr "अद्ययावत कार्य"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "तपशील बनवा"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+#, fuzzy
+msgid "Newer activities"
+msgstr "नविन कार्य"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "पूर्वदृश्य - Hamster"
+
+#: ../data/stats.glade.h:15
+#, fuzzy
+msgid "Show day"
+msgstr "चौकट दर्शवा"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "महिना दर्शवा"
+
+#: ../data/stats.glade.h:17
+#, fuzzy
+msgid "Show week"
+msgstr "पूर्वदृश्य दर्शवा (_O)"
+
+#: ../data/stats.glade.h:18
+#, fuzzy
+msgid "Today"
+msgstr "आज (_T)"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
@@ -203,7 +247,7 @@ msgstr "Copyright © 2007-2008 Toms Baugis and others"
 msgid "Hamster Website"
 msgstr "Hamster संकेतस्थळ"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008."
 
@@ -277,29 +321,29 @@ msgid "name"
 msgstr "नाव"
 
 #. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#: ../hamster/reports.py:35 ../hamster/stats.py:265
 #, python-format
 msgid "Overview for %s"
 msgstr "%s करीता पूर्वदृश्य"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s करीता पूर्वदृश्य - %s"
 
-#: ../hamster/stats.py:210
+#: ../hamster/stats.py:234
 msgid "Other"
 msgstr "इतर"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:266
 msgid "Day"
 msgstr "दिवस"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:269
 msgid "Week"
 msgstr "आठवडा"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:272
 msgid "Month"
 msgstr "महिना"
 
