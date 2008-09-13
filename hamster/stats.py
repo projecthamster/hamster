@@ -167,8 +167,10 @@ class StatsViewer:
         
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
+            # date format in overview window fact listing
+            fact_date = current_date.strftime(_('%A, %b %d.'))
             day_row = self.fact_store.append(None, [-1,
-                                                    current_date.strftime('%A, %b %d.'),
+                                                    fact_date,
                                                     "",
                                                     current_date.strftime('%Y-%m-%d')])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
@@ -213,7 +215,8 @@ class StatsViewer:
                 strday = day.strftime('%a')
                 totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
             else:
-                strday = day.strftime('%d. %b')
+                # date format in month chart in overview window (click on "month" to see it)
+                strday = day.strftime(_('%d. %b'))
                 background = None
                 if day.weekday() in [5, 6]:
                     background = 7
@@ -257,17 +260,26 @@ class StatsViewer:
 
     def do_graph(self):
         if self.start_date.year != self.end_date.year:
-            start_str = self.start_date.strftime('%B %d. %Y')
-            end_str = self.end_date.strftime('%B %d. %Y')
+            # start date format for overview label if start and end years don't match
+            start_str = self.start_date.strftime(_('%B %d. %Y'))
+            # end date format for overview label if start and end years don't match
+            end_str = self.end_date.strftime(_('%B %d. %Y'))
         elif self.start_date.month != self.end_date.month:
-            start_str = self.start_date.strftime('%B %d.')
-            end_str = self.end_date.strftime('%B %d.')
+            # start date format for overview label if start and end month do not match
+            start_str = self.start_date.strftime(_('%B %d.'))
+            # end date format for overview label if start and end month do not match
+            end_str = self.end_date.strftime(_('%B %d.'))
         else:
-            start_str = self.start_date.strftime('%B %d')
-            end_str = self.end_date.strftime('%d, %Y')
+            # start date format for overview label for interval in same month
+            start_str = self.start_date.strftime(_('%B %d'))
+            # end date format for overview label for interval in same month
+            end_str = self.end_date.strftime(_('%d, %Y'))
 
-        if self.day_view.get_active(): #single day is an exception
-            label_text = _("Overview for %s") % (self.start_date.strftime('%B %d. %Y'))
+        if self.day_view.get_active():
+            # date format for single day
+            date_str = self.start_date.strftime(_('%B %d. %Y'))
+            # overview label for single day
+            label_text = _("Overview for %s") % (date_str)
             dayview_caption = _("Day")
         elif self.week_view.get_active():
             label_text = _("Overview for %s - %s") % (start_str, end_str)

@@ -22,17 +22,17 @@ import datetime as dt
 
 def simple(facts, start_date, end_date):
     if start_date.year != end_date.year:
-        start_str = start_date.strftime('%B %d. %Y')
-        end_str = end_date.strftime('%B %d. %Y')
+        start_str = start_date.strftime(_('%B %d. %Y'))
+        end_str = end_date.strftime(_('%B %d. %Y'))
     elif start_date.month != end_date.month:
-        start_str = start_date.strftime('%B %d')
-        end_str = end_date.strftime('%B %d')
+        start_str = start_date.strftime(_('%B %d'))
+        end_str = end_date.strftime(_('%B %d'))
     else:
-        start_str = start_date.strftime('%B %d')
-        end_str = end_date.strftime('%d, %Y')
+        start_str = start_date.strftime(_('%B %d'))
+        end_str = end_date.strftime(_('%d, %Y'))
 
     if start_date == end_date:
-        title = _("Overview for %s") % (start_date.strftime('%B %d. %Y'))
+        title = _("Overview for %s") % (start_date.strftime(_('%B %d. %Y')))
     else:
         title = _("Overview for %s - %s") % (start_str, end_str)
 
@@ -100,7 +100,7 @@ def simple(facts, start_date, end_date):
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted"
             category = fact["category"]
-
+        # date format in HTML report
         report.write("""<tr>
                             <td>%s</td>
                             <td>%s</td>
@@ -108,7 +108,7 @@ def simple(facts, start_date, end_date):
                             <td>%s</td>
                             <td>%s</td>
                             <td>%s</td>
-</tr>""" % (fact["start_time"].strftime("%d.%m.%y"),
+</tr>""" % (fact["start_time"].strftime(_("%d.%m.%y")),
             fact["name"],
             category, 
             fact["start_time"].strftime('%H:%M'),
