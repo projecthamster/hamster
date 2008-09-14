@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome 2-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 14:48+0100\n"
+"POT-Creation-Date: 2008-09-14 11:10+0100\n"
 "PO-Revision-Date: 2008-08-23 17:21+0200\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -254,7 +254,7 @@ msgstr ""
 "فريق عرب آيز للترجمة http://www.arabeyes.org:\n"
 "أنس عفيف عماد <anas.e87@gmail.com>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "غير مصنّف"
 
@@ -278,7 +278,7 @@ msgstr "نشاط جديد"
 msgid "Update activity"
 msgstr "تحديث النّشاط"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "لا نشاطات"
 
@@ -323,29 +323,69 @@ msgstr "الوقوف على اليدين"
 msgid "name"
 msgstr "الاسم"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr ""
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr ""
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr ""
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "لمحة عن %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "لمحة عن %s - %s"
 
-#: ../hamster/stats.py:234
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr ""
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr ""
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr ""
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "أخرى"
 
-#: ../hamster/stats.py:266
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr ""
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "يوم"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "أسبوع"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "شهر"
