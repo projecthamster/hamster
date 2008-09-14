@@ -2,14 +2,16 @@
 # This file is distributed under the same license as the hamster-applet package.
 # Copyright (C) 2008 Free Software Foundation, Inc.
 # Enrico Nicoletto <liverig@gmail.com>, 2008.
+# Henrique P. Machado <zehrique@gmail.com>, 2008.
+# Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-22 19:02-0400\n"
+"POT-Creation-Date: 2008-09-13 20:32+0000\n"
 "PO-Revision-Date: 2008-08-21 19:24-0300\n"
-"Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
+"Last-Translator: Henrique P. Machado <zehrique@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -92,7 +94,7 @@ msgstr "<b>Data e hora</b>"
 
 #: ../data/add_custom_fact.glade.h:3
 msgid "Add Earlier Activity"
-msgstr "Adicionar Atividade Recente"
+msgstr "Adicionar atividade recente"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -246,9 +248,12 @@ msgstr "Site do Hamster"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
-msgstr "Enrico Nicoletto <liverig@gmail.com>"
+msgstr ""
+"Enrico Nicoletto <liverig@gmail.com>\n"
+"Henrique P. Machado <zehrique@gmail.com>\n"
+"Leonardo Ferreira Fontenelle <leonardof@gnome.org>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "Sem clasificação"
 
@@ -272,7 +277,7 @@ msgstr "Nova atividade"
 msgid "Update activity"
 msgstr "Atualizar atividade"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "Sem atividade"
 
@@ -317,30 +322,70 @@ msgstr "Fazer flexões"
 msgid "name"
 msgstr "nome"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%d de %B de %Y"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%d de %B"
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d, %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "Resumo de %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Resumo de %s - %s"
 
-#: ../hamster/stats.py:234
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%d/%m/%Y"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %d de %b."
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%d de %b"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "Outros"
 
-#: ../hamster/stats.py:266
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%d de %B."
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "Dia"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "Semana"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "Mês"
 
