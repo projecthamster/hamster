@@ -73,12 +73,12 @@ def simple(facts, start_date, end_date):
     
     report.write("""<table>
         <tr>
-            <th>Date</th>
-            <th>Activity</th>
-            <th>Category</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Duration</th>
+            <th>""" + _("Date") + """</th>
+            <th>""" + _("Activity") + """</th>
+            <th>""" + _("Category") + """</th>
+            <th>""" + _("Start") + """</th>
+            <th>""" + _("End") + """</th>
+            <th>""" + _("Duration") + """</th>
         </tr>""")
     
     
