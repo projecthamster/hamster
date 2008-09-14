@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 12:16+0000\n"
-"PO-Revision-Date: 2008-08-24 10:17+0300\n"
+"POT-Creation-Date: 2008-09-13 20:32+0000\n"
+"PO-Revision-Date: 2008-09-14 10:35+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -136,27 +136,28 @@ msgstr "Jõudeoleku korral jälgimise seiskamine"
 msgid "Ad_d Earlier Activity"
 msgstr "Lisa _varasem tegevus"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "Tänase kohta pole ühtegi kirjet"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "_Näita ülevaadet"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "T_egevus:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "_Lõpeta jälgimine"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_Täna"
 
@@ -244,7 +245,7 @@ msgstr "Hamstri veebisait"
 msgid "translator-credits"
 msgstr "Ivar Smolin <okul@linux.ee>, 2008."
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "Sortimata"
 
@@ -268,7 +269,7 @@ msgstr "Uus tegevus"
 msgid "Update activity"
 msgstr "Tegevuse uuendamine"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "Tegevust pole"
 
@@ -313,29 +314,69 @@ msgstr "Kätekõverduste tegemine"
 msgid "name"
 msgstr "nimi"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%d. %B %Y"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%d. %B"
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d. %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "Päeva %s ülevaade"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Perioodi %s - %s ülevaade"
 
-#: ../hamster/stats.py:234
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%d.%m.%y"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %d. %b"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%d. %b"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "Muu"
 
-#: ../hamster/stats.py:266
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%d. %B"
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "Päev"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "Nädal"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "Kuu"
