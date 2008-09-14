@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-06 02:38+0300\n"
-"PO-Revision-Date: 2008-09-06 02:38+0300\n"
+"POT-Creation-Date: 2008-09-14 13:58+0300\n"
+"PO-Revision-Date: 2008-09-14 13:58+0300\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -315,29 +315,69 @@ msgstr "Stovėjimas ant rankų"
 msgid "name"
 msgstr "pavadinimas"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:270
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%Y %B %d"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%B %d"
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d, %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "Apžvalga %s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:273 ../hamster/stats.py:276
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Apžvalga %s – %s"
 
-#: ../hamster/stats.py:239
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%Y-%m-%d"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %b %d"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%b %d"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "Kita"
 
-#: ../hamster/stats.py:271
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%B %d"
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "Diena"
 
-#: ../hamster/stats.py:274
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "Savaitė"
 
-#: ../hamster/stats.py:277
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "Mėnuo"
