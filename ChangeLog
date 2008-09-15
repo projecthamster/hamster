@@ -1,3 +1,8 @@
+2008-09-15  Toms Baugis <toms.baugis@gmail.com> 
+
+	* full fix to avoid amiguity in strings involving dates. fixes
+          bug 552156
+
 2008-09-08  Toms Baugis <toms.baugis@gmail.com> 
 
 	* configure.ac: Bumped dependency of pygtk to 2.12 and pygobject to 2.14
