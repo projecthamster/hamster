@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 12:16+0000\n"
-"PO-Revision-Date: 2008-09-11 10:37+0530\n"
+"POT-Creation-Date: 2008-09-14 22:51+0000\n"
+"PO-Revision-Date: 2008-09-15 09:58+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -135,27 +135,28 @@ msgstr "रिकामे असल्यावर मार्गनिर्�
 msgid "Ad_d Earlier Activity"
 msgstr "पूर्वीचे कार्य जोडा (_d)"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4
 msgid "No records today"
 msgstr "आज कुठलेही रेकॉर्ड नाही"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "पूर्वदृश्य दर्शवा (_O)"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "कार्य (_A):"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "मार्गनिर्देशन थांबवा (_S)"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "आज (_T)"
 
@@ -243,7 +244,7 @@ msgstr "Hamster संकेतस्थळ"
 msgid "translator-credits"
 msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008."
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "विनाक्रम"
 
@@ -251,7 +252,7 @@ msgstr "विनाक्रम"
 msgid "Name"
 msgstr "नाव"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "विभाग"
 
@@ -267,7 +268,7 @@ msgstr "नविन कार्य"
 msgid "Update activity"
 msgstr "अद्ययावत कार्य"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "कार्य नाही"
 
@@ -312,30 +313,90 @@ msgstr "हातावर उभे राहून करामती कर�
 msgid "name"
 msgstr "नाव"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%B %d. %Y"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%B %d"
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d, %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "%s करीता पूर्वदृश्य"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s करीता पूर्वदृश्य - %s"
 
-#: ../hamster/stats.py:234
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "दिनांक"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "कार्य"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "सुरू करा"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "समाप्त"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "अवधी"
+
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%d.%m.%y"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %b %d."
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%d. %b"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "इतर"
 
-#: ../hamster/stats.py:266
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%B %d."
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "दिवस"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "आठवडा"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "महिना"
 
