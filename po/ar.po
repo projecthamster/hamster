@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome 2-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-14 11:10+0100\n"
-"PO-Revision-Date: 2008-08-23 17:21+0200\n"
+"POT-Creation-Date: 2008-09-15 10:43+0100\n"
+"PO-Revision-Date: 2008-09-14 16:16+0200\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -185,54 +185,46 @@ msgid "<b>Week</b>"
 msgstr "<b>أسبوع</b>"
 
 #: ../data/stats.glade.h:8
-#, fuzzy
 msgid "Add activity"
-msgstr "لا نشاطات"
+msgstr "أضف نشاط"
 
 #: ../data/stats.glade.h:9
-#, fuzzy
 msgid "Delete activity"
-msgstr "نشاط جديد"
+msgstr "إحذف نشاط"
 
 #: ../data/stats.glade.h:10
-#, fuzzy
 msgid "Earlier activities"
-msgstr "أضف نشاط سابق"
+msgstr "الأنشطة السابقة"
 
 #: ../data/stats.glade.h:11
-#, fuzzy
 msgid "Edit activity"
-msgstr "تحديث النّشاط"
+msgstr "حرّر النّشاط"
 
 #: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "ولّد تقريراً"
 
 #: ../data/stats.glade.h:13
-#, fuzzy
 msgid "Newer activities"
-msgstr "نشاط جديد"
+msgstr "الأنشطة الأحدث"
 
 #: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
 msgstr "لمحة عامة - هامستر"
 
 #: ../data/stats.glade.h:15
-#, fuzzy
 msgid "Show day"
-msgstr "أظّهر النافذة"
+msgstr "أظهر اليوم"
 
 #: ../data/stats.glade.h:16
 msgid "Show month"
-msgstr ""
+msgstr "أظهر الشهر"
 
 #: ../data/stats.glade.h:17
-#, fuzzy
 msgid "Show week"
-msgstr "أظهر ل_محة"
+msgstr "أظهر الأسبوع"
 
 #: ../data/stats.glade.h:18
-#, fuzzy
 msgid "Today"
 msgstr "ال_يوم"
 
@@ -262,7 +254,7 @@ msgstr "غير مصنّف"
 msgid "Name"
 msgstr "الاسم"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "الفئة"
 
@@ -329,18 +321,18 @@ msgstr "الاسم"
 #: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
 #: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
 msgid "%B %d. %Y"
-msgstr ""
+msgstr "%B %d. %Y"
 
 #. start date format for overview label for interval in same month
 #: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
 #: ../hamster/stats.py:274
 msgid "%B %d"
-msgstr ""
+msgstr "%B %d"
 
 #. end date format for overview label for interval in same month
 #: ../hamster/reports.py:32 ../hamster/stats.py:276
 msgid "%d, %Y"
-msgstr ""
+msgstr "%d, %Y"
 
 #. overview label for single day
 #: ../hamster/reports.py:35 ../hamster/stats.py:282
@@ -353,20 +345,41 @@ msgstr "لمحة عن %s"
 msgid "Overview for %s - %s"
 msgstr "لمحة عن %s - %s"
 
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr ""
+
+#: ../hamster/reports.py:77
+#, fuzzy
+msgid "Activity"
+msgstr "ال_نّشاط:"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr ""
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr ""
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr ""
+
 #. date format in HTML report
 #: ../hamster/reports.py:111
 msgid "%d.%m.%y"
-msgstr ""
+msgstr "%d.%m.%y"
 
 #. date format in overview window fact listing
 #: ../hamster/stats.py:171
 msgid "%A, %b %d."
-msgstr ""
+msgstr "%A, %b %d."
 
 #. date format in month chart in overview window (click on "month" to see it)
 #: ../hamster/stats.py:219
 msgid "%d. %b"
-msgstr ""
+msgstr "%d. %b"
 
 #: ../hamster/stats.py:242
 msgid "Other"
@@ -376,7 +389,7 @@ msgstr "أخرى"
 #. end date format for overview label if start and end month do not match
 #: ../hamster/stats.py:269 ../hamster/stats.py:271
 msgid "%B %d."
-msgstr ""
+msgstr "%B %d."
 
 #: ../hamster/stats.py:283
 msgid "Day"
