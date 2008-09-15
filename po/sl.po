@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libgwether\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-03 06:28+0000\n"
-"PO-Revision-Date: 2008-09-03 11:09+0100\n"
+"POT-Creation-Date: 2008-09-14 22:51+0000\n"
+"PO-Revision-Date: 2008-09-15 08:42+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian\n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "Hamster"
 
 #: ../data/menu.glade.h:4
 msgid "No records today"
-msgstr "Danes ni zapisov"
+msgstr "Za današnji dan ni zapisov"
 
 #: ../data/menu.glade.h:5
 msgid "Show _Overview"
@@ -260,6 +260,7 @@ msgid "Name"
 msgstr "Ime"
 
 #: ../hamster/preferences.py:123
+#: ../hamster/reports.py:78
 msgid "Category"
 msgstr "Kategorija"
 
@@ -321,33 +322,101 @@ msgstr "Stoja na glavi"
 msgid "name"
 msgstr "ime"
 
-#. single day is an exception
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25
+#: ../hamster/reports.py:26
 #: ../hamster/reports.py:35
-#: ../hamster/stats.py:270
+#: ../hamster/stats.py:264
+#: ../hamster/stats.py:266
+#: ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%d. %B %Y"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28
+#: ../hamster/reports.py:29
+#: ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%d. %B "
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32
+#: ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d, %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35
+#: ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "Pregled za %s"
 
 #: ../hamster/reports.py:37
-#: ../hamster/stats.py:273
-#: ../hamster/stats.py:276
+#: ../hamster/stats.py:285
+#: ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Pregled za %s - %s"
 
-#: ../hamster/stats.py:239
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "Datum"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "Dejavnost"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "Začetek"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "Konec"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "Trajanje"
+
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%d.%m.%y"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %d. %b"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%d. %b"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "Ostalo"
 
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269
 #: ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%d. %B"
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "Dan"
 
-#: ../hamster/stats.py:274
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "Teden"
 
-#: ../hamster/stats.py:277
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "Mesec"
 
