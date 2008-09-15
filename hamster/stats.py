@@ -156,38 +156,37 @@ class StatsViewer:
     def get_facts(self):
         self.fact_store.clear()
         totals = {}
-        
+
         by_activity = {}
         by_category = {}
         by_day = {}
-        
+
         week = {"days": [], "totals": []}
-        
+
         facts = storage.get_facts(self.start_date, self.end_date)
-        
+
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
             # date format in overview window fact listing
             # prefix is "o_",letter after prefix is regular python format. you can use all of them
-            fact_date = _("%(o_A)s, %(o_b)s %(o_d)s.") %  stuff.dateDict(current_date, "o_")
-            
-            
+            fact_date = _("%(o_A)s, %(o_b)s %(o_d)s") %  stuff.dateDict(current_date, "o_")
+
             day_row = self.fact_store.append(None, [-1,
                                                     fact_date,
                                                     "",
                                                     current_date.strftime('%Y-%m-%d')])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
-        
+
         for fact in facts:
             start_date = fact["start_time"].date()
-            
+
             duration = None
             if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
             elif fact["start_time"].date() == dt.date.today():
                 delta = dt.datetime.now() - fact["start_time"]
-                duration = 24 * delta.days + delta.seconds / 60                
+                duration = 24 * delta.days + delta.seconds / 60
 
             self.fact_store.append(by_day[start_date]["row_pointer"],
                                    [fact["id"],
@@ -196,7 +195,7 @@ class StatsViewer:
                                     stuff.format_duration(duration),
                                     fact["start_time"].strftime('%Y-%m-%d')
                                     ])
-            
+
             if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
             if fact["category"] not in by_category: by_category[fact["category"]] = 0
 
@@ -204,7 +203,7 @@ class StatsViewer:
                 by_day[start_date]["duration"] += duration
                 by_activity[fact["name"]] += duration
                 by_category[fact["category"]] += duration
-            
+
         days = 30
         if self.week_view.get_active():
             days = 7
@@ -220,7 +219,7 @@ class StatsViewer:
             else:
                 # date format in month chart in overview window (click on "month" to see it)
                 # prefix is "m_", letter after prefix is regular python format. you can use all of them
-                strday = _("%(m_d)s., %(m_b)s") %  stuff.dateDict(day, "m_")
+                strday = _("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")
 
                 background = None
                 if day.weekday() in [5, 6]:
@@ -272,23 +271,23 @@ class StatsViewer:
             # overview label if start and end years don't match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
+            overview_label = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif self.start_date.month != self.end_date.month:
             #overview label if start and end month do not match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s. - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
+            overview_label = _("Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         else:
             #overview label for interval in same month
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s - %(end_d)s. %(end_Y)s") % dates_dict
+            overview_label = _("Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
         if self.day_view.get_active():
             # overview label for single day
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s") % dates_dict
+            overview_label = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
             dayview_caption = _("Day")
         elif self.week_view.get_active():
             dayview_caption = _("Week")
