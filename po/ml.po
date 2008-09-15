@@ -2,15 +2,15 @@
 # Copyright (C) 2008 hamster-applet'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the hamster-applet package.
 # Jeffrey|ജെഫ്രി  Antony|ആന്റണി <jeffreyantony@gmail.com>, 2008.
+# പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet'\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-08 03:22+0000\n"
-"PO-Revision-Date: 2008-09-08 21:25-0500\n"
-"Last-Translator: Jeffrey|ജെഫ്രി  Antony|ആന്റണി <jeffreyantony@gmail.com>\n"
-"Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc-"
-"discuss@googlegroups.com>\n"
+"POT-Creation-Date: 2008-09-14 22:51+0000\n"
+"PO-Revision-Date: 2008-09-14 19:35-0500\n"
+"Last-Translator: പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>\n"
+"Language-Team: Malayalam <smc-discuss@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -121,7 +121,8 @@ msgstr "ജാലകം കാണിക്കുക"
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
-msgstr "കമ്പ്യൂട്ടര്‍ നിര്‍ത്തിക്കൊണ്ടിരിക്കുമ്പോള്‍ ആ സമയത്തു് നടക്കുന്ന പ്രവര്‍ത്തനങ്ങളുടെ നിരീക്ഷണം നിര്‍ത്തുക"
+msgstr ""
+"കമ്പ്യൂട്ടര്‍ നിര്‍ത്തിക്കൊണ്ടിരിക്കുമ്പോള്‍ ആ സമയത്തു് നടക്കുന്ന പ്രവര്‍ത്തനങ്ങളുടെ നിരീക്ഷണം നിര്‍ത്തുക"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
@@ -242,7 +243,8 @@ msgstr "ഹാംസ്റ്റര്‍ വെബ്സൈറ്റ് "
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
-msgstr "ജെഫ്രി ആന്റണി  <jeffreyantony@gmail.com> "
+msgstr "ജെഫ്രി ആന്റണി  <jeffreyantony@gmail.com>\n"
+"പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>"
 
 #: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
@@ -252,7 +254,7 @@ msgstr "തരംതിരിക്കാത്തവ"
 msgid "Name"
 msgstr "പേരു്"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "ഇനം"
 
@@ -313,30 +315,90 @@ msgstr "ഹസ്തദാനം ചെയ്തുകൊണ്ടിരിയ�
 msgid "name"
 msgstr "പേരു്"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:270
+#. start date format for overview label if start and end years don't match
+#. end date format for overview label if start and end years don't match
+#. date format for single day
+#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
+#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
+msgid "%B %d. %Y"
+msgstr "%B %d. %Y"
+
+#. start date format for overview label for interval in same month
+#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
+#: ../hamster/stats.py:274
+msgid "%B %d"
+msgstr "%B %d"
+
+#. end date format for overview label for interval in same month
+#: ../hamster/reports.py:32 ../hamster/stats.py:276
+msgid "%d, %Y"
+msgstr "%d, %Y"
+
+#. overview label for single day
+#: ../hamster/reports.py:35 ../hamster/stats.py:282
 #, python-format
 msgid "Overview for %s"
 msgstr "%s ന്റെ അവലോകനം"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:273 ../hamster/stats.py:276
+#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "%s - %s ന്റെ അവലോകനം"
 
-#: ../hamster/stats.py:239
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "തിയ്യതി"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "പ്രവര്‍ത്തനങ്ങള്‍"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "തുടക്കം"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "അവസാനം"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "കാലാവധി"
+
+#. date format in HTML report
+#: ../hamster/reports.py:111
+msgid "%d.%m.%y"
+msgstr "%d.%m.%y"
+
+#. date format in overview window fact listing
+#: ../hamster/stats.py:171
+msgid "%A, %b %d."
+msgstr "%A, %b %d."
+
+#. date format in month chart in overview window (click on "month" to see it)
+#: ../hamster/stats.py:219
+msgid "%d. %b"
+msgstr "%d. %b"
+
+#: ../hamster/stats.py:242
 msgid "Other"
 msgstr "വേറെ"
 
-#: ../hamster/stats.py:271
+#. start date format for overview label if start and end month do not match
+#. end date format for overview label if start and end month do not match
+#: ../hamster/stats.py:269 ../hamster/stats.py:271
+msgid "%B %d."
+msgstr "%B %d."
+
+#: ../hamster/stats.py:283
 msgid "Day"
 msgstr "ദിവസം"
 
-#: ../hamster/stats.py:274
+#: ../hamster/stats.py:286
 msgid "Week"
 msgstr "ആഴ്ച"
 
-#: ../hamster/stats.py:277
+#: ../hamster/stats.py:289
 msgid "Month"
 msgstr "മാസം"
 
