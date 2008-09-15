@@ -168,7 +168,10 @@ class StatsViewer:
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
             # date format in overview window fact listing
-            fact_date = current_date.strftime(_('%A, %b %d.'))
+            # prefix is "o_",letter after prefix is regular python format. you can use all of them
+            fact_date = _("%(o_A)s, %(o_b)s %(o_d)s.") %  stuff.dateDict(current_date, "o_")
+            
+            
             day_row = self.fact_store.append(None, [-1,
                                                     fact_date,
                                                     "",
@@ -216,7 +219,9 @@ class StatsViewer:
                 totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
             else:
                 # date format in month chart in overview window (click on "month" to see it)
-                strday = day.strftime(_('%d. %b'))
+                # prefix is "m_", letter after prefix is regular python format. you can use all of them
+                strday = _("%(m_d)s., %(m_b)s") %  stuff.dateDict(day, "m_")
+
                 background = None
                 if day.weekday() in [5, 6]:
                     background = 7
@@ -259,37 +264,40 @@ class StatsViewer:
         
 
     def do_graph(self):
+        dates_dict = stuff.dateDict(self.start_date, "start_")
+        dates_dict.update(stuff.dateDict(self.end_date, "end_"))
+        
+        
         if self.start_date.year != self.end_date.year:
-            # start date format for overview label if start and end years don't match
-            start_str = self.start_date.strftime(_('%B %d. %Y'))
-            # end date format for overview label if start and end years don't match
-            end_str = self.end_date.strftime(_('%B %d. %Y'))
+            # overview label if start and end years don't match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            overview_label = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
         elif self.start_date.month != self.end_date.month:
-            # start date format for overview label if start and end month do not match
-            start_str = self.start_date.strftime(_('%B %d.'))
-            # end date format for overview label if start and end month do not match
-            end_str = self.end_date.strftime(_('%B %d.'))
+            #overview label if start and end month do not match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            overview_label = _("Overview for %(start_B)s %(start_d)s. - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
         else:
-            # start date format for overview label for interval in same month
-            start_str = self.start_date.strftime(_('%B %d'))
-            # end date format for overview label for interval in same month
-            end_str = self.end_date.strftime(_('%d, %Y'))
+            #overview label for interval in same month
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            overview_label = _("Overview for %(start_B)s %(start_d)s - %(end_d)s. %(end_Y)s") % dates_dict
 
         if self.day_view.get_active():
-            # date format for single day
-            date_str = self.start_date.strftime(_('%B %d. %Y'))
             # overview label for single day
-            label_text = _("Overview for %s") % (date_str)
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            overview_label = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s") % dates_dict
             dayview_caption = _("Day")
         elif self.week_view.get_active():
-            label_text = _("Overview for %s - %s") % (start_str, end_str)
             dayview_caption = _("Week")
         else:
-            label_text = _("Overview for %s - %s") % (start_str, end_str)
             dayview_caption = _("Month")
         
+        
         label = self.get_widget("overview_label")
-        label.set_text(label_text)
+        label.set_text(overview_label)
 
         label2 = self.get_widget("dayview_caption")
         label2.set_markup("<b>%s</b>" % (dayview_caption))

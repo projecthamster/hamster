@@ -54,6 +54,34 @@ def format_duration(minutes):
             
     return formatted_duration
 
+def dateDict(date, prefix):
+    """converts date into dictionary, having prefix for all the keys"""
+    res = {}
+    
+    res[prefix+"a"] = date.strftime("%a")
+    res[prefix+"A"] = date.strftime("%A")
+    res[prefix+"b"] = date.strftime("%b")
+    res[prefix+"B"] = date.strftime("%B")
+    res[prefix+"c"] = date.strftime("%c")
+    res[prefix+"d"] = date.strftime("%d")
+    res[prefix+"H"] = date.strftime("%H")
+    res[prefix+"I"] = date.strftime("%I")
+    res[prefix+"j"] = date.strftime("%j")
+    res[prefix+"m"] = date.strftime("%m")
+    res[prefix+"M"] = date.strftime("%M")
+    res[prefix+"p"] = date.strftime("%p")
+    res[prefix+"S"] = date.strftime("%S")
+    res[prefix+"U"] = date.strftime("%U")
+    res[prefix+"w"] = date.strftime("%w")
+    res[prefix+"W"] = date.strftime("%W")
+    res[prefix+"x"] = date.strftime("%x")
+    res[prefix+"X"] = date.strftime("%X")
+    res[prefix+"y"] = date.strftime("%y")
+    res[prefix+"Y"] = date.strftime("%Y")
+    res[prefix+"Z"] = date.strftime("%Z")
+    
+    return res
+
 class DayStore(object):
     """A day view contains a treeview for facts of the day and another
        one for totals. It creates those widgets on init, use

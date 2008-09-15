@@ -21,20 +21,20 @@ import os
 import datetime as dt
 
 def simple(facts, start_date, end_date):
+    dates_dict = stuff.dateDict(start_date, "start_")
+    dates_dict.update(stuff.dateDict(end_date, "end_"))
+    
+    
     if start_date.year != end_date.year:
-        start_str = start_date.strftime(_('%B %d. %Y'))
-        end_str = end_date.strftime(_('%B %d. %Y'))
+        title = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
     elif start_date.month != end_date.month:
-        start_str = start_date.strftime(_('%B %d'))
-        end_str = end_date.strftime(_('%B %d'))
+        title = _("Overview for %(start_B)s %(start_d)s. - %(end_B)s %(end_d)s. %(end_Y)s") % dates_dict
     else:
-        start_str = start_date.strftime(_('%B %d'))
-        end_str = end_date.strftime(_('%d, %Y'))
+        title = _("Overview for %(start_B)s %(start_d)s - %(end_d)s. %(end_Y)s") % dates_dict
 
     if start_date == end_date:
-        title = _("Overview for %s") % (start_date.strftime(_('%B %d. %Y')))
-    else:
-        title = _("Overview for %s - %s") % (start_str, end_str)
+        title = _("Overview for %(start_B)s %(start_d)s. %(start_Y)s") % dates_dict
+    
 
     report_path = os.path.join(os.path.expanduser("~"), "%s.html" % title)
     report = open(report_path, "w")    
@@ -108,7 +108,7 @@ def simple(facts, start_date, end_date):
                             <td>%s</td>
                             <td>%s</td>
                             <td>%s</td>
-</tr>""" % (fact["start_time"].strftime(_("%d.%m.%y")),
+</tr>""" % (_("%(report_d)s.%(report_m)s.%(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
             fact["name"],
             category, 
             fact["start_time"].strftime('%H:%M'),
