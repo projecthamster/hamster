@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet 2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-14 22:40+0100\n"
+"POT-Creation-Date: 2008-09-15 07:27+0100\n"
 "PO-Revision-Date: 2008-09-03 07:18+0100\n"
 "Last-Translator: Philip Withnall <philip@tecnocode.co.uk>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -251,7 +251,7 @@ msgstr "Unsorted"
 msgid "Name"
 msgstr "Name"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "Category"
 
@@ -341,6 +341,26 @@ msgstr "Overview for %s"
 #, python-format
 msgid "Overview for %s - %s"
 msgstr "Overview for %s - %s"
+
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "Date"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "Activity"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "Start"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "End"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "Duration"
 
 #. date format in HTML report
 #: ../hamster/reports.py:111
