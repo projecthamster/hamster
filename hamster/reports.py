@@ -100,7 +100,7 @@ def simple(facts, start_date, end_date):
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted"
             category = fact["category"]
-        # date format in HTML report
+        # fact date column in HTML report
         report.write("""<tr>
                             <td>%s</td>
                             <td>%s</td>
