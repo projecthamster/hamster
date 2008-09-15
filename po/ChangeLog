@@ -1,3 +1,7 @@
+2008-09-15  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* nl.po: Updated Dutch translation by Wouter Bolsterlee.
+
 2008-09-15  Philip Withnall  <philip@tecnocode.co.uk>
 
 	* en_GB.po: Updated British English translation.
@@ -136,7 +140,7 @@
 
 	* ChangeLog, he.po: added hebrew translation
 
-2008-08-26  Djihed Afifi <djihed@gmail.com> 
+2008-08-26  Djihed Afifi <djihed@gmail.com>
 
 	* ar.po: Updated Arabic Translation by Anas Afif Emad.
 
@@ -151,7 +155,7 @@
 
 2008-08-25  Juanje Ojeda <jojeda@emergya.es>
 
-	* es.po: 
+	* es.po:
 		- Fixed the mnemonic keys for Spanish translations. Some of
 	them were duplicated.
 		- Changed the 'Project-Id-Version' to "hamster-applet.HEAD"
@@ -229,7 +233,7 @@
 	* fi.po: Added Finnish translation.
 	* LINGUAS: Added fi.
 
-2008-08-18  Djihed Afifi <djihed@gmail.com> 
+2008-08-18  Djihed Afifi <djihed@gmail.com>
 
 	* ar.po: Added Arabic Translation.
 	* LINGUAS: Added ar.
@@ -265,7 +269,7 @@
 
 	* ChangeLog, LINGUAS, nb.po: 2008-08-17 Kjartan Maraas
 	  kmaraas@gnome.org>
-	  
+	
 	  * LINGUAS: Add nb.
 	  * nb.po: Added Norwegian bokmål translation.
 
@@ -273,7 +277,7 @@
 
 	* ChangeLog, LINGUAS, et.po: 2008-08-17 Priit Laes <plaes at svn
 	  dot gnome dot org>
-	  
+	
 	  * et.po: Translation updated (by Ivar Smolin)
 
 2008-08-17  Yair Hershkovitz  <yairhr@gmail.com>
@@ -288,7 +292,7 @@
 
 	* ChangeLog, LINGUAS, pt.po: 2008-08-16 Duarte Loreto
 	  <happyguy_pt@hotmail.com>
-	  
+	
 	  * pt.po: Added Portuguese translation.
 	  * LINGUAS: Added Portuguese (pt) to the list.
 
