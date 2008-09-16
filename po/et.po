@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-13 20:32+0000\n"
-"PO-Revision-Date: 2008-09-14 10:35+0300\n"
+"POT-Creation-Date: 2008-09-15 12:36+0000\n"
+"PO-Revision-Date: 2008-09-15 18:00+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -253,7 +253,7 @@ msgstr "Sortimata"
 msgid "Name"
 msgstr "Nimi"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "Kategooria"
 
@@ -314,69 +314,119 @@ msgstr "Kätekõverduste tegemine"
 msgid "name"
 msgstr "nimi"
 
-#. start date format for overview label if start and end years don't match
-#. end date format for overview label if start and end years don't match
-#. date format for single day
-#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
-#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
-msgid "%B %d. %Y"
-msgstr "%d. %B %Y"
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:29 ../hamster/stats.py:275
+#, python-format
+msgid ""
+"Overview for %(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %"
+"(end_Y)s"
+msgstr ""
 
-#. start date format for overview label for interval in same month
-#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
-#: ../hamster/stats.py:274
-msgid "%B %d"
-msgstr "%d. %B"
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:31 ../hamster/stats.py:280
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s. - %(end_B)s %(end_d)s. %(end_Y)s"
+msgstr ""
 
-#. end date format for overview label for interval in same month
-#: ../hamster/reports.py:32 ../hamster/stats.py:276
-msgid "%d, %Y"
-msgstr "%d. %Y"
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:33 ../hamster/stats.py:285
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s - %(end_d)s. %(end_Y)s"
+msgstr ""
 
 #. overview label for single day
-#: ../hamster/reports.py:35 ../hamster/stats.py:282
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:291
 #, python-format
-msgid "Overview for %s"
-msgstr "Päeva %s ülevaade"
+msgid "Overview for %(start_B)s %(start_d)s. %(start_Y)s"
+msgstr ""
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
-#, python-format
-msgid "Overview for %s - %s"
-msgstr "Perioodi %s - %s ülevaade"
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "Kuupäev"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "Tegevus"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "Algus"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "Lõpp"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "Kestus"
 
 #. date format in HTML report
 #: ../hamster/reports.py:111
-msgid "%d.%m.%y"
-msgstr "%d.%m.%y"
+#, python-format
+msgid "%(report_d)s.%(report_m)s.%(report_Y)s"
+msgstr ""
 
 #. date format in overview window fact listing
-#: ../hamster/stats.py:171
-msgid "%A, %b %d."
-msgstr "%A, %d. %b"
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:172
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s."
+msgstr ""
 
 #. date format in month chart in overview window (click on "month" to see it)
-#: ../hamster/stats.py:219
-msgid "%d. %b"
-msgstr "%d. %b"
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:223
+#, python-format
+msgid "%(m_d)s., %(m_b)s"
+msgstr ""
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:247
 msgid "Other"
 msgstr "Muu"
 
-#. start date format for overview label if start and end month do not match
-#. end date format for overview label if start and end month do not match
-#: ../hamster/stats.py:269 ../hamster/stats.py:271
-msgid "%B %d."
-msgstr "%d. %B"
-
-#: ../hamster/stats.py:283
+#: ../hamster/stats.py:292
 msgid "Day"
 msgstr "Päev"
 
-#: ../hamster/stats.py:286
+#: ../hamster/stats.py:294
 msgid "Week"
 msgstr "Nädal"
 
-#: ../hamster/stats.py:289
+#: ../hamster/stats.py:296
 msgid "Month"
 msgstr "Kuu"
+
+#~ msgid "%B %d. %Y"
+#~ msgstr "%d. %B %Y"
+
+#~ msgid "%B %d"
+#~ msgstr "%d. %B"
+
+#~ msgid "%d, %Y"
+#~ msgstr "%d. %Y"
+
+#~ msgid "Overview for %s"
+#~ msgstr "Päeva %s ülevaade"
+
+#~ msgid "Overview for %s - %s"
+#~ msgstr "Perioodi %s - %s ülevaade"
+
+#~ msgid "%d.%m.%y"
+#~ msgstr "%d.%m.%y"
+
+#~ msgid "%A, %b %d."
+#~ msgstr "%A, %d. %b"
+
+#~ msgid "%d. %b"
+#~ msgstr "%d. %b"
+
+#~ msgid "%B %d."
+#~ msgstr "%d. %B"
