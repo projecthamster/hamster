@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-15 12:36+0000\n"
-"PO-Revision-Date: 2008-09-16 15:06+0530\n"
+"POT-Creation-Date: 2008-09-15 13:17+0000\n"
+"PO-Revision-Date: 2008-09-17 09:17+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -322,8 +322,8 @@ msgid ""
 "Overview for %(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %"
 "(end_Y)s"
 msgstr ""
-"%(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %"
-"(end_Y)s करीता संक्षिप्त आढवा"
+"%(start_B)s %(start_d)s. %(start_Y)s - %(end_B)s %(end_d)s. %(end_Y)s करीता "
+"संक्षिप्त आढवा"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
@@ -369,7 +369,7 @@ msgstr "समाप्त"
 msgid "Duration"
 msgstr "अवधी"
 
-#. date format in HTML report
+#. fact date column in HTML report
 #: ../hamster/reports.py:111
 #, python-format
 msgid "%(report_d)s.%(report_m)s.%(report_Y)s"
