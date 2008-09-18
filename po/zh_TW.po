@@ -4,17 +4,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet 2.23.90\n"
+"Project-Id-Version: hamster-applet 2.23.93\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-22 20:23+0800\n"
-"PO-Revision-Date: 2008-08-22 20:23+0800\n"
+"POT-Creation-Date: 2008-09-16 16:34+0800\n"
+"PO-Revision-Date: 2008-09-17 13:55+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese/Traditional <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../hamster/about.py:40
 msgid "Time Tracker"
 msgstr "時間追蹤程式"
 
@@ -54,7 +55,8 @@ msgstr "上移(_U)"
 msgid "N_ew Category"
 msgstr "新增分類(_E)"
 
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "關機時停止追蹤"
 
@@ -78,7 +80,8 @@ msgstr "分類(_C)"
 msgid "_New Activity"
 msgstr "新增活動(_N)"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1
+#: ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>活動</b>"
 
@@ -246,15 +249,19 @@ msgstr ""
 "\n"
 "Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2008"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56
+#: ../hamster/db.py:256
+#: ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "未排序"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103
+#: ../hamster/stats.py:46
 msgid "Name"
 msgstr "名稱"
 
 #: ../hamster/preferences.py:123
+#: ../hamster/reports.py:78
 msgid "Category"
 msgstr "分類"
 
@@ -270,7 +277,7 @@ msgstr "新增活動"
 msgid "Update activity"
 msgstr "更新活動"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "沒有活動"
 
@@ -311,33 +318,105 @@ msgstr "澆花"
 msgid "Doing handstands"
 msgstr "倒立"
 
-#: ../hamster/db.py:588 ../hamster/db.py:592
+#: ../hamster/db.py:588
+#: ../hamster/db.py:592
 msgid "name"
 msgstr "名稱"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:29
+#: ../hamster/stats.py:274
 #, python-format
-msgid "Overview for %s"
-msgstr "%s 的概覽"
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "概覽： %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:31
+#: ../hamster/stats.py:279
 #, python-format
-msgid "Overview for %s - %s"
-msgstr "%s 的概覽 - %s"
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "概覽： %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 
-#: ../hamster/stats.py:234
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:33
+#: ../hamster/stats.py:284
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "概覽： %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36
+#: ../hamster/stats.py:290
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "概覽： %(start_B)s %(start_d)s, %(start_Y)s"
+
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "日期"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "活動"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "開始"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "結束"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "期間"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:111
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:172
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:222
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_b)s %(m_d)s"
+
+#: ../hamster/stats.py:246
 msgid "Other"
 msgstr "其他"
 
-#: ../hamster/stats.py:266
+#: ../hamster/stats.py:291
 msgid "Day"
 msgstr "天"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:293
 msgid "Week"
 msgstr "週"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:295
 msgid "Month"
 msgstr "月"
+
+#~ msgid "Overview for %s"
+#~ msgstr "%s 的概覽"
+#~ msgid "Overview for %s - %s"
+#~ msgstr "%s 的概覽 - %s"
+
