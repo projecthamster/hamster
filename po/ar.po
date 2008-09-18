@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome 2-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-15 10:43+0100\n"
-"PO-Revision-Date: 2008-09-14 16:16+0200\n"
-"Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
+"POT-Creation-Date: 2008-09-18 02:54+0100\n"
+"PO-Revision-Date: 2008-09-18 02:28+0100\n"
+"Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -315,90 +315,119 @@ msgstr "الوقوف على اليدين"
 msgid "name"
 msgstr "الاسم"
 
-#. start date format for overview label if start and end years don't match
-#. end date format for overview label if start and end years don't match
-#. date format for single day
-#: ../hamster/reports.py:25 ../hamster/reports.py:26 ../hamster/reports.py:35
-#: ../hamster/stats.py:264 ../hamster/stats.py:266 ../hamster/stats.py:280
-msgid "%B %d. %Y"
-msgstr "%B %d. %Y"
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:29 ../hamster/stats.py:274
+#, python-format
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr ""
 
-#. start date format for overview label for interval in same month
-#: ../hamster/reports.py:28 ../hamster/reports.py:29 ../hamster/reports.py:31
-#: ../hamster/stats.py:274
-msgid "%B %d"
-msgstr "%B %d"
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:31 ../hamster/stats.py:279
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
 
-#. end date format for overview label for interval in same month
-#: ../hamster/reports.py:32 ../hamster/stats.py:276
-msgid "%d, %Y"
-msgstr "%d, %Y"
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr ""
 
 #. overview label for single day
-#: ../hamster/reports.py:35 ../hamster/stats.py:282
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:290
 #, python-format
-msgid "Overview for %s"
-msgstr "لمحة عن %s"
-
-#: ../hamster/reports.py:37 ../hamster/stats.py:285 ../hamster/stats.py:288
-#, python-format
-msgid "Overview for %s - %s"
-msgstr "لمحة عن %s - %s"
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr ""
 
 #: ../hamster/reports.py:76
 msgid "Date"
-msgstr ""
+msgstr "تاريخ "
 
 #: ../hamster/reports.py:77
-#, fuzzy
 msgid "Activity"
-msgstr "ال_نّشاط:"
+msgstr "نشاط"
 
 #: ../hamster/reports.py:79
 msgid "Start"
-msgstr ""
+msgstr "بداية"
 
 #: ../hamster/reports.py:80
 msgid "End"
-msgstr ""
+msgstr "نهاية"
 
 #: ../hamster/reports.py:81
 msgid "Duration"
+msgstr "مدّة"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:111
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr ""
 
-#. date format in HTML report
-#: ../hamster/reports.py:111
-msgid "%d.%m.%y"
-msgstr "%d.%m.%y"
-
 #. date format in overview window fact listing
-#: ../hamster/stats.py:171
-msgid "%A, %b %d."
-msgstr "%A, %b %d."
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:172
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr ""
 
 #. date format in month chart in overview window (click on "month" to see it)
-#: ../hamster/stats.py:219
-msgid "%d. %b"
-msgstr "%d. %b"
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:222
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr ""
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:246
 msgid "Other"
 msgstr "أخرى"
 
-#. start date format for overview label if start and end month do not match
-#. end date format for overview label if start and end month do not match
-#: ../hamster/stats.py:269 ../hamster/stats.py:271
-msgid "%B %d."
-msgstr "%B %d."
-
-#: ../hamster/stats.py:283
+#: ../hamster/stats.py:291
 msgid "Day"
 msgstr "يوم"
 
-#: ../hamster/stats.py:286
+#: ../hamster/stats.py:293
 msgid "Week"
 msgstr "أسبوع"
 
-#: ../hamster/stats.py:289
+#: ../hamster/stats.py:295
 msgid "Month"
 msgstr "شهر"
+
+#~ msgid "%B %d. %Y"
+#~ msgstr "%B %d. %Y"
+
+#~ msgid "%B %d"
+#~ msgstr "%B %d"
+
+#~ msgid "%d, %Y"
+#~ msgstr "%d, %Y"
+
+#~ msgid "Overview for %s"
+#~ msgstr "لمحة عن %s"
+
+#~ msgid "Overview for %s - %s"
+#~ msgstr "لمحة عن %s - %s"
+
+#~ msgid "%d.%m.%y"
+#~ msgstr "%d.%m.%y"
+
+#~ msgid "%A, %b %d."
+#~ msgstr "%A, %b %d."
+
+#~ msgid "%d. %b"
+#~ msgstr "%d. %b"
+
+#~ msgid "%B %d."
+#~ msgstr "%B %d."
