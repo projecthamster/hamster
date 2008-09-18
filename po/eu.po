@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-30 15:59+0200\n"
-"PO-Revision-Date: 2008-08-30 17:57+0200\n"
+"POT-Creation-Date: 2008-09-18 10:31+0200\n"
+"PO-Revision-Date: 2008-09-18 10:43+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -244,7 +244,7 @@ msgstr "Hamster-en webgunea"
 msgid "translator-credits"
 msgstr "Iñaki Larrañaga Murgoitio  <dooteo@euskalgnu.org>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
 msgstr "Ordenatu gabe"
 
@@ -252,7 +252,7 @@ msgstr "Ordenatu gabe"
 msgid "Name"
 msgstr "Izena"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "Kategoria"
 
@@ -268,7 +268,7 @@ msgstr "Jarduera berria"
 msgid "Update activity"
 msgstr "Eguneratu jarduera"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:200
 msgid "No activity"
 msgstr "Jarduerarik ez"
 
@@ -313,30 +313,93 @@ msgstr "Beroketak egitea"
 msgid "name"
 msgstr "izena"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:29 ../hamster/stats.py:274
 #, python-format
-msgid "Overview for %s"
-msgstr "%s(r)en aurkezpen orokorra"
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr "Aurkezpen orokorra: %(start_Y)s/%(start_B)s/%(start_d)s – %(end_Y)s/%(end_B)s/%(end_d)s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:31 ../hamster/stats.py:279
 #, python-format
-msgid "Overview for %s - %s"
-msgstr "Aurkezpen orokorra: %s - %s"
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Aurkezpen orokorra: %(start_d)s/%(start_B)s – %(end_Y)s/%(end_B)s/%(end_d)s"
 
-#: ../hamster/stats.py:234
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Aurkezpen orokorra: %(start_B)s/%(start_d)s – %(end_d)s, %(end_Y)s"
+
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:290
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Aurkezpen orokorra: %(start_Y)s/%(start_B)s/%(start_d)s"
+
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "Data"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "Jarduera"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "Hasi"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "Amaitu"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "Iraupena"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:111
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_Y)s/%(report_b)s/%(report_d)s"
+
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:172
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:222
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_b)s %(m_d)s"
+
+#: ../hamster/stats.py:246
 msgid "Other"
 msgstr "Bestelakoa"
 
-#: ../hamster/stats.py:266
+#: ../hamster/stats.py:291
 msgid "Day"
 msgstr "Eguna"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:293
 msgid "Week"
 msgstr "Astea"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:295
 msgid "Month"
 msgstr "Hilabetea"
 
