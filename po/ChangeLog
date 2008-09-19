@@ -1,3 +1,8 @@
+2008-09-19 Shankar Prasad  <svenkate@redhat.com>
+
+        * kn.po: Added Kannada Translation
+        * LINGUAS: Added kn to list of Languges
+
 2008-09-19  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* LINGUAS: Added 'th'.
