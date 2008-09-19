@@ -104,8 +104,8 @@ msgid ""
 "for"
 msgstr ""
 "folyamatban...\n"
-"eddig\n"
-"ennyiszer"
+"ennyi ideig\n"
+"eddig"
 
 #: ../data/add_custom_fact.glade.h:8
 msgid "minutes"
@@ -148,7 +148,7 @@ msgstr "Ma nincsenek bejegyzések"
 
 #: ../data/menu.glade.h:5
 msgid "Show _Overview"
-msgstr "Áttekintés _megjelenítése"
+msgstr "Áttekintés m_egjelenítése"
 
 #: ../data/menu.glade.h:6
 msgid "_Activity:"
@@ -212,7 +212,7 @@ msgstr "Újabb tevékenységek"
 
 #: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
-msgstr "Áttekintés - Hamster"
+msgstr "Áttekintés – Hamster"
 
 #: ../data/stats.glade.h:15
 msgid "Show day"
@@ -331,7 +331,7 @@ msgstr "Áttekintés: %(start_Y)s. %(start_B)s %(start_d)s. – %(end_Y)s. %(end
 #: ../hamster/reports.py:31 ../hamster/stats.py:279
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Áttekintés: %(end_Y)s. %(start_B)s %(start_d)s. – %(end_B)s %(end_d)s."
+msgstr "Áttekintés: %(start_B)s %(start_d)s. – %(end_B)s %(end_d)s. %(end_Y)s."
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
@@ -339,7 +339,7 @@ msgstr "Áttekintés: %(end_Y)s. %(start_B)s %(start_d)s. – %(end_B)s %(end_d)
 #: ../hamster/reports.py:33 ../hamster/stats.py:284
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Áttekintés: %(end_Y)s. %(start_B)s %(start_d)s. – %(end_d)s."
+msgstr "Áttekintés: %(start_B)s %(start_d)s. – %(end_d)s. %(end_Y)s."
 
 #. overview label for single day
 #. letter after prefixes (start_, end_) is the one of
