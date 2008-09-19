@@ -1,3 +1,8 @@
+2008-09-19  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	* LINGUAS: Added 'th'.
+	* th.po: Added Thai translation.
+
 2008-09-19  Gabor Kelemen  <kelemeng@gnome.hu>
 
 	* hu.po: Translation updated.
