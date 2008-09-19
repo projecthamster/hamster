@@ -1,6 +1,7 @@
 2008-09-20  Nikos Charonitakis  <nikosx@gmail.com>
 
 	* el.po: Updated Greek translation by Ilias Makris <ilmakris@sch.gr>.
+	* LINGUAS: Added 'el'
 
 2008-09-19  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
 
