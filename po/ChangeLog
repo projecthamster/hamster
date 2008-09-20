@@ -1,3 +1,7 @@
+2008-09-20 Goran Rakić <grakic@devbase.net>
+
+	* LINGUAS, sr.po, sr@latin.po: Added Serbian translation (by Mirko Spasić).
+
 2008-09-20  Laurent Dhima  <laurenti@alblinux.net>
 
 	* sq.po: Updated Albanian Translation.
