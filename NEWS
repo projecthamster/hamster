@@ -1,4 +1,57 @@
 ===============
+Version 2.24.0
+===============
+  Applet
+    * some more strings available for translation, but the main changes are
+      the updated translations
+
+  Updated translations
+    * ar (Djihed Afifi)
+    * bg (Alexander Shopov)
+    * bn_IN (Runa Bhattacharjee)
+    * ca (Gil Forcada)
+    * cs (Petr Kovar)
+    * da (Ask Hjorth Larsen)
+    * de (Hendrik Richter)
+    * el (Nikos Charonitakis)
+    * en_GB (Philip Withnall)
+    * es (Jorge González)
+    * et (Ivar Smolin)
+    * eu (Iñaki Larrañaga Murgoitio)
+    * fi (Timo Jyrinki)
+    * fr (Claude Paroz)
+    * gl (Ignacio Casal Quinteiro)
+    * gu (Sweta Kothari)
+    * he (Yair Hershkovitz)
+    * hi (Rajesh Ranjan)
+    * hu (Gabor Kelemen)
+    * it (Milo Casagrande)
+    * kn (Shankar Prasad)
+    * ko (Changwoo Ryu)
+    * lt (Gintautas Miliauskas)
+    * lv (Toms Baugis)
+    * mk (Jovan Naumovski)
+    * ml (പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ )
+    * mr (Sandeep Shedmake)
+    * nb (Kjartan Maraas)
+    * nl (Wouter Bolsterlee)
+    * pa (Amanpreet Singh Alam)
+    * pl (Tomasz Dominikowski)
+    * pt (Duarte Loreto)
+    * pt_BR (Vladimir Melo)
+    * ru (Alexandre Prokoudine)
+    * sl (Matej Urbančič)
+    * sq (Laurent Dhima)
+    * sr (Горан Ракић)
+    * sr@latin (Goran Rakić)
+    * sv (Daniel Nylander)
+    * ta (Kannan Subramanian)
+    * th (Theppitak Karoonboonyanan)
+    * tr (Baris Cicek)
+    * zh_HK (Chao-Hsiung Liao)
+    * zh_TW (Chao-Hsiung Liao)
+
+===============
 Version 2.23.92
 ===============
   Applet
