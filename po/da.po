@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster Applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-20 22:42+0200\n"
-"PO-Revision-Date: 2008-09-20 16:11+0200\n"
+"POT-Creation-Date: 2008-09-22 03:20+0200\n"
+"PO-Revision-Date: 2008-09-22 02:53+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -327,6 +327,8 @@ msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
 "(end_Y)s"
 msgstr ""
+"Oversigt for %(start_d)s. %(start_B)s, %(start_Y)s – %(end_d)s. %(end_B)s, %"
+"(end_Y)s"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
@@ -334,7 +336,7 @@ msgstr ""
 #: ../hamster/reports.py:31 ../hamster/stats.py:279
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
+msgstr "Oversigt for %(start_d)s. %(start_B)s – %(end_d)s %(end_B)s, %(end_Y)s"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
@@ -342,7 +344,7 @@ msgstr ""
 #: ../hamster/reports.py:33 ../hamster/stats.py:284
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr ""
+msgstr "Oversigt for %(start_d)s. – %(end_d)s. %(start_B)s, %(end_Y)s"
 
 #. overview label for single day
 #. letter after prefixes (start_, end_) is the one of
@@ -350,48 +352,47 @@ msgstr ""
 #: ../hamster/reports.py:36 ../hamster/stats.py:290
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr ""
+msgstr "Oversigt for %(start_d)s. %(start_B)s, %(start_Y)s"
 
 #: ../hamster/reports.py:76
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: ../hamster/reports.py:77
-#, fuzzy
 msgid "Activity"
-msgstr "_Aktivitet:"
+msgstr "Aktivitet"
 
 #: ../hamster/reports.py:79
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: ../hamster/reports.py:80
 msgid "End"
-msgstr ""
+msgstr "Slut"
 
 #: ../hamster/reports.py:81
 msgid "Duration"
-msgstr ""
+msgstr "Varighed"
 
 #. fact date column in HTML report
 #: ../hamster/reports.py:111
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr ""
+msgstr "%(report_d)s. %(report_b)s, %(report_Y)s"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
 #: ../hamster/stats.py:172
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr ""
+msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
 
 #. date format in month chart in overview window (click on "month" to see it)
 #. prefix is "m_", letter after prefix is regular python format. you can use all of them
 #: ../hamster/stats.py:222
 #, python-format
 msgid "%(m_b)s %(m_d)s"
-msgstr ""
+msgstr "%(m_d)s. %(m_b)s"
 
 #: ../hamster/stats.py:246
 msgid "Other"
