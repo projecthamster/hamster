@@ -1,3 +1,7 @@
+2008-09-22  Toms Baugis <toms.baugis@gmail.com>
+
+	* LINGUAS: Removing mention of ukranian translation, since there is none
+
 2008-09-22  Priit Laes  <plaes at svn dot gnome dot org>
 
 	* et.po: Translation updated by Ivar Smolin
