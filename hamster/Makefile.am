@@ -26,6 +26,7 @@ hamster_PYTHON = \
 	add_custom_fact.py \
 	applet.py \
 	about.py \
+	hamsterdbus.py \
 	idle.py \
 	__init__.py
 

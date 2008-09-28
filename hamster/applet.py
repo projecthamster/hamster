@@ -24,6 +24,9 @@ import datetime
 import os.path
 import gnomeapplet, gtk
 import gobject
+import dbus
+import dbus.service
+import dbus.mainloop.glib
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
@@ -31,6 +34,8 @@ from hamster.Configuration import GconfStore
 
 from hamster.stuff import *
 from hamster.KeyBinder import *
+from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController 
+
 import idle
 
 class PanelButton(gtk.ToggleButton):
@@ -91,6 +96,13 @@ class HamsterApplet(object):
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.treeview.append_column(self.edit_column)
 
+	# DBus Setup
+	try:
+	    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+            name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
+            self.dbusController = HamsterDbusController(bus_name = name)
+	except dbus.DBusException, e:
+	    print "can't init dbus: %s" % e
 
         # Load today's data, activities and set label
         self.last_activity = None
@@ -98,6 +110,9 @@ class HamsterApplet(object):
 
         self.load_day()
         self.update_label()
+
+        # Hamster DBusController current fact initialising
+	self.__update_fact()
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
@@ -201,6 +216,9 @@ class HamsterApplet(object):
             self.glade.get_widget('stop_tracking').set_sensitive(0);
         self.button.set_text(label)
         
+        # Hamster DBusController current activity updating
+	self.dbusController.update_activity(label)
+
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
@@ -255,6 +273,14 @@ class HamsterApplet(object):
         storage.remove_fact(model[iter][0])
         
         self.treeview.set_cursor(cur)
+
+
+    def __update_fact(self):
+	"""dbus controller current fact updating"""
+	if self.last_activity and self.last_activity['end_time'] == None:
+	    self.dbusController.update_fact(self.last_activity["name"])
+	else:
+	    self.dbusController.update_fact(_(u'No activity'))
 
 
     def __show_toggle(self, event, is_active):
@@ -387,6 +413,8 @@ class HamsterApplet(object):
         if date.date() == datetime.date.today():
             self.load_day()
             self.update_label()
+
+	self.__update_fact()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):

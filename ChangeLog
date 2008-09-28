@@ -1,3 +1,11 @@
+2008-09-28  Juanje Ojeda <jojeda@emergya.es> 
+
+	* hamster/hamsterdbus.py,
+	  hamster/Makefile.am,
+	  hamster/applet.py: Added basic DBUS interface by J. Félix Ontañón. 
+	Fixs the bug #535863
+	* configure.ac: Updated version.
+
 2008-09-15  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	* hamster/reports.py:
@@ -8,9 +16,9 @@
 
 2008-09-15  Toms Baugis <toms.baugis@gmail.com> 
 
-	* /trunk/hamster/reports.py:
-	* /trunk/hamster/stats.py:
-	* /trunk/hamster/stuff.py:
+	* hamster/reports.py:
+	* hamster/stats.py:
+	* hamster/stuff.py:
 
 	Avoid amiguity in strings involving dates. Bug #552156.
 
