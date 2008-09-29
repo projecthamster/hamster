@@ -29,9 +29,10 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster.charting import Chart
 from hamster.add_custom_fact import CustomFactController
 
-import datetime  as dt
+import datetime as dt
 import calendar
 import gobject
+import time
 
 class StatsViewer:
     def __init__(self):
@@ -90,14 +91,9 @@ class StatsViewer:
         
         self.view_date = dt.date.today()
         
-        # look if we need to start on sunday or monday, don't work with other
-        # (strange cases) locale first_weekday 1 is sunday
-        self.week_start_sunday = self.locale_first_weekday() == 1
-            
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
-
-        if self.week_start_sunday:
-            self.start_date = self.start_date - dt.timedelta(1)
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1) #set to monday
+        # look if we need to start on sunday or monday
+        self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
         
         self.end_date = self.start_date + dt.timedelta(6)
 
@@ -126,12 +122,16 @@ class StatsViewer:
     def locale_first_weekday(self):
         """figure if week starts on monday or sunday"""
         import os
-        first_weekday = 2 #by default settle on monday
+        first_weekday = 6 #by default settle on monday
 
         try:
-            process = os.popen("locale first_weekday")
-            first_weekday = int(process.read().strip("\n"))
+            process = os.popen("locale first_weekday week-1stday")
+            week_offset, week_start = process.read().split('\n')[:2]
             process.close()
+            week_start = dt.date(*time.strptime(week_start, "%Y%m%d")[:3])
+            week_offset = dt.timedelta(int(week_offset) - 1)
+            beginning = week_start + week_offset
+            first_weekday = int(beginning.strftime("%w"))
         except:
             print "WARNING - Failed to get first weekday from locale"
             pass
@@ -356,9 +356,8 @@ class StatsViewer:
             self.end_date = self.view_date
         
         elif self.week_view.get_active():
-            self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
-            if self.week_start_sunday:
-                self.start_date = self.start_date - dt.timedelta(1)
+            self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+            self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
             self.end_date = self.start_date + dt.timedelta(6)
         
         elif self.month_view.get_active():
@@ -374,9 +373,8 @@ class StatsViewer:
         self.do_graph()
 
     def on_week_toggled(self, button):
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday()) #set to monday
-        if self.week_start_sunday:
-            self.start_date = self.start_date - dt.timedelta(1)
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+        self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
 
         self.end_date = self.start_date + dt.timedelta(6)
         self.do_graph()

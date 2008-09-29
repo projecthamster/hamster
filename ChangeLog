@@ -1,3 +1,9 @@
+2008-09-29  Patryk Zawadzki <patrys@pld-linux.org>
+
+	* hamster/stats.py: 
+	  Properly handle first day of week for all locale values.
+	  Fixes #554256.
+
 2008-09-28  Juanje Ojeda <jojeda@emergya.es> 
 
 	* hamster/hamsterdbus.py,
