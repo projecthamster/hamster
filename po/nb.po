@@ -1,27 +1,27 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Norwegian bokmål translation of hamster-applet.
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Kjartan Maraas <kmaraas@gnome.org>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-17 23:46+0200\n"
-"PO-Revision-Date: 2008-08-17 18:13+0200\n"
+"POT-Creation-Date: 2008-10-07 14:20+0200\n"
+"PO-Revision-Date: 2008-10-07 14:19+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norsk bokal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Time Tracker"
-msgstr ""
+msgstr "Tidsporing"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 msgid "Time tracking for masses"
-msgstr ""
+msgstr "Tidsporing for massene"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -37,11 +37,11 @@ msgstr "<b>Aktiviteter</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr ""
+msgstr "<b>Global hurtigtast</b>"
 
 #: ../data/preferences.glade.h:3
 msgid "<b>Tracking</b>"
-msgstr ""
+msgstr "<b>Sporing</b>"
 
 #: ../data/preferences.glade.h:4
 msgid "Move _Down"
@@ -57,15 +57,15 @@ msgstr "_Ny kategori"
 
 #: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking on shutdown"
-msgstr ""
+msgstr "Stopp sporing når datamaskinen slås av"
 
 #: ../data/preferences.glade.h:8
 msgid "Stop tracking when computer becomes idle"
-msgstr ""
+msgstr "Stopp sporing når datamaskinen er inaktiv"
 
 #: ../data/preferences.glade.h:9
 msgid "Time Tracker Preferences"
-msgstr ""
+msgstr "Brukervalg for tidsporing"
 
 #: ../data/preferences.glade.h:10
 msgid "_Activities"
@@ -89,7 +89,7 @@ msgstr "<b>Dato og klokkeslett</b>"
 
 #: ../data/add_custom_fact.glade.h:3
 msgid "Add Earlier Activity"
-msgstr ""
+msgstr "Legg til tidligere aktivitet"
 
 #: ../data/add_custom_fact.glade.h:4
 msgid "hours"
@@ -101,6 +101,9 @@ msgid ""
 "until\n"
 "for"
 msgstr ""
+"i gang\n"
+"inntil\n"
+"for"
 
 #: ../data/add_custom_fact.glade.h:8
 msgid "minutes"
@@ -108,7 +111,7 @@ msgstr "minutter"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr ""
+msgstr "Tastatursnarvei for å vise tidsporingsvinduet."
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Show window"
@@ -116,41 +119,42 @@ msgstr "Vis vindu"
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
-msgstr ""
+msgstr "Stopp sporing av denne aktiviteten når datamaskinen slås av"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr ""
+msgstr "Stopp sporing av denne aktiviteten når datamaskinen blir inaktiv"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking on idle"
-msgstr ""
+msgstr "Stopp sporing når datamaskinen er inaktiv"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
-msgstr ""
+msgstr "Leg_g til tidligere aktivitet"
 
-#: ../data/menu.glade.h:2 ../hamster/about.py:40
-msgid "Hamster"
-msgstr ""
-
+#. This title appears only when debugging from console. Leave it as is.
 #: ../data/menu.glade.h:3
-msgid "No records today"
-msgstr ""
+msgid "Hamster"
+msgstr "Hamster"
 
 #: ../data/menu.glade.h:4
-msgid "Show _Overview"
-msgstr ""
+msgid "No records today"
+msgstr "Ingen oppføringer i dag"
 
 #: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Vis _oversikt"
+
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "_Aktivitet:"
 
-#: ../data/menu.glade.h:6
-msgid "_Stop Tracking"
-msgstr ""
-
 #: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Stopp sporing"
+
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "_I dag"
 
@@ -179,34 +183,74 @@ msgid "<b>Week</b>"
 msgstr "<b>Uke</b>"
 
 #: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Legg til aktivitet"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Slett aktivitet"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Tidligere aktiviteter"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Rediger aktivitet"
+
+#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "Lag rapport"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Nyere aktiviteter"
+
+#: ../data/stats.glade.h:14
 msgid "Overview - Hamster"
-msgstr ""
+msgstr "Oversikt - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Vis dag"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Vis måned"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Vis uke"
+
+#: ../data/stats.glade.h:18
+msgid "Today"
+msgstr "I dag"
 
 #: ../hamster/about.py:42
 msgid "Time tracking for masses."
-msgstr ""
+msgstr "Tidstyring for massene."
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Opphavsrett © 2007-2008 Toms Baugis og andre"
 
 #: ../hamster/about.py:45
 msgid "Hamster Website"
-msgstr ""
+msgstr "Hamster nettsted"
 
-#: ../hamster/about.py:53
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
 msgid "Unsorted"
-msgstr ""
+msgstr "Usortert"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/stats.py:47
 msgid "Name"
 msgstr "Navn"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:78
 msgid "Category"
 msgstr "Kategori"
 
@@ -220,9 +264,9 @@ msgstr "Ny aktivitet"
 
 #: ../hamster/add_custom_fact.py:84
 msgid "Update activity"
-msgstr ""
+msgstr "Oppdater aktivitet"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:215 ../hamster/applet.py:283
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
@@ -233,23 +277,23 @@ msgstr "Arbeid"
 
 #: ../hamster/db.py:404
 msgid "Reading news"
-msgstr ""
+msgstr "Leser nyheter"
 
 #: ../hamster/db.py:405
 msgid "Checking stocks"
-msgstr ""
+msgstr "Sjekker aksjer"
 
 #: ../hamster/db.py:406
 msgid "Super secret project X"
-msgstr ""
+msgstr "Superhemmelig prosjekt X"
 
 #: ../hamster/db.py:407
 msgid "World domination"
-msgstr ""
+msgstr "Verdensherredømme"
 
 #: ../hamster/db.py:409
 msgid "Day to day"
-msgstr ""
+msgstr "Dag til dag"
 
 #: ../hamster/db.py:410
 msgid "Lunch"
@@ -257,39 +301,104 @@ msgstr "Lunsj"
 
 #: ../hamster/db.py:411
 msgid "Watering flowers"
-msgstr ""
+msgstr "Vanner blomster"
 
 #: ../hamster/db.py:412
 msgid "Doing handstands"
-msgstr ""
+msgstr "Står på hendene"
 
 #: ../hamster/db.py:588 ../hamster/db.py:592
 msgid "name"
 msgstr "navn"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:241
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:29 ../hamster/stats.py:274
 #, python-format
-msgid "Overview for %s"
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
 msgstr ""
+"Oversikt for %(start_B)s %(start_d)s, %(start_Y)s - %(end_B)s %(end_d)s, %"
+"(end_Y)s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:244 ../hamster/stats.py:247
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:31 ../hamster/stats.py:279
 #, python-format
-msgid "Overview for %s - %s"
-msgstr ""
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Oversikt for %(start_B)s %(start_d)s - %(end_B)s %(end_d)s, %(end_Y)s"
 
-#: ../hamster/stats.py:210
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Oversikt for %(start_B)s %(start_d)s - %(end_d)s, %(end_Y)s"
+
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:290
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Oversikt for %(start_B)s %(start_d)s, %(start_Y)s"
+
+#: ../hamster/reports.py:76
+msgid "Date"
+msgstr "Dato"
+
+#: ../hamster/reports.py:77
+msgid "Activity"
+msgstr "Aktivitet"
+
+#: ../hamster/reports.py:79
+msgid "Start"
+msgstr "Start"
+
+#: ../hamster/reports.py:80
+msgid "End"
+msgstr "Slutt"
+
+#: ../hamster/reports.py:81
+msgid "Duration"
+msgstr "Varighet"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:111
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:172
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:222
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_b)s %(m_d)s"
+
+#: ../hamster/stats.py:246
 msgid "Other"
 msgstr "Annet"
 
-#: ../hamster/stats.py:242
+#: ../hamster/stats.py:291
 msgid "Day"
 msgstr "Dag"
 
-#: ../hamster/stats.py:245
+#: ../hamster/stats.py:293
 msgid "Week"
 msgstr "Uke"
 
-#: ../hamster/stats.py:248
+#: ../hamster/stats.py:295
 msgid "Month"
 msgstr "Måned"
