@@ -458,7 +458,10 @@ class PreferencesEditor:
             tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
             #tree.grab_focus()
             #tree.set_cursor(path, start_editing = True)
-                
+
+    def on_preferences_window_key_press(self, widget, event):
+	if event.keyval == gtk.keysyms.Escape:
+	    self.window.destroy()     
 
     """button events"""
     def on_add_category_clicked(self, button):
