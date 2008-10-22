@@ -37,5 +37,19 @@
                 </long>
             </locale>
         </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/general/notify_interval</key>
+            <applyto>/apps/hamster-applet/general/notify_interval</applyto>
+            <owner>hamster-applet</owner>
+            <type>int</type>
+            <default>30</default>
+            <locale name="C">
+                <short>Remind of current task every x minutes</short>
+                <long>
+                    Remind of current task every specified amount of minutes.
+                    Set to 0 or bigger than 120 to disable reminder.
+                </long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>

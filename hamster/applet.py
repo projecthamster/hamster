@@ -38,6 +38,30 @@ from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 import idle
 
+try:
+    import pynotify
+    PYNOTIFY = True
+except:
+    PYNOTIFY = False
+    
+class Notifier(object):
+    def __init__(self, app_name, icon, attach):
+        self._icon = icon
+        self._attach = attach
+        self._notify = None
+        # Title of reminder baloon
+        self.summary = _("Time Tracker")
+      
+        if not pynotify.is_initted():
+            pynotify.init(app_name)
+
+    def msg(self, body, switch_cb, stop_cb):
+        self._notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
+        self._notify.add_action("refresh", _("Switch Task"), switch_cb)
+        self._notify.add_action("no", _("Stop Tracking"), stop_cb)
+        self._notify.show()
+
+
 class PanelButton(gtk.ToggleButton):
     def __init__(self):
         gtk.ToggleButton.__init__(self)
@@ -96,14 +120,14 @@ class HamsterApplet(object):
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.treeview.append_column(self.edit_column)
 
-	# DBus Setup
-	try:
-	    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        # DBus Setup
+        try:
+            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
             name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
             self.dbusController = HamsterDbusController(bus_name = name)
-	except dbus.DBusException, e:
-	    print "can't init dbus: %s" % e
-
+        except dbus.DBusException, e:
+            print "can't init dbus: %s" % e
+    
         # Load today's data, activities and set label
         self.last_activity = None
         self.today = datetime.date.today()
@@ -112,7 +136,7 @@ class HamsterApplet(object):
         self.update_label()
 
         # Hamster DBusController current fact initialising
-	self.__update_fact()
+        self.__update_fact()
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
@@ -154,11 +178,17 @@ class HamsterApplet(object):
 
         # init hotkey
         dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
-        dispatcher.add_handler('gconf_timeout_changed', self.on_timeout_changed)
-        dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
-  
+
         # init idle check
-        self.timeout_enabled = self.config.get_timeout_enabled()
+        dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
+        self.on_timeout_enabled_changed(None, self.config.get_timeout_enabled())
+        
+        # init nagging timeout
+        if PYNOTIFY:
+            self.notify = Notifier('HamsterApplet', gtk.STOCK_DIALOG_QUESTION, self.button)
+            dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
+            self.on_notify_interval_changed(None, self.config.get_notify_interval())
+
 
     def on_today_release_event(self, tree, event):
         pointer = event.window.get_pointer() # x, y, flags
@@ -193,6 +223,11 @@ class HamsterApplet(object):
             
 
         if self.last_activity and self.last_activity['end_time'] == None:
+            # if we have running task and nagging is enabled
+            # check if maybe it is time to nag
+            if self.notify_interval:
+                self.check_user()
+
             # if we have date change - let's finish previous task and start a new one
             if prev_date and prev_date != self.today: 
                 storage.touch_fact(self.last_activity)
@@ -217,7 +252,24 @@ class HamsterApplet(object):
         self.button.set_text(label)
         
         # Hamster DBusController current activity updating
-	self.dbusController.update_activity(label)
+        self.dbusController.update_activity(label)
+
+    def check_user(self):
+        print "going for user"
+        delta = datetime.datetime.now() - self.last_activity['start_time']
+        duration = delta.seconds /  60
+                 
+        if duration and duration % self.notify_interval == 0:
+            # activity reminder
+            msg = _(u"Are you still working on <b>%s</b>?") % self.last_activity['name']
+            self.notify.msg(msg, self.switch_cb, self.stop_cb)
+
+    def switch_cb(self, n, action):
+        self.__show_toggle(None, not self.button.get_active())	
+
+    def stop_cb(self, n, action):
+        self.on_stop_tracking(None)
+
 
     def load_day(self):
         """sets up today's tree and fills it with records
@@ -276,11 +328,11 @@ class HamsterApplet(object):
 
 
     def __update_fact(self):
-	"""dbus controller current fact updating"""
-	if self.last_activity and self.last_activity['end_time'] == None:
-	    self.dbusController.update_fact(self.last_activity["name"])
-	else:
-	    self.dbusController.update_fact(_(u'No activity'))
+        """dbus controller current fact updating"""
+        if self.last_activity and self.last_activity['end_time'] == None:
+            self.dbusController.update_fact(self.last_activity["name"])
+        else:
+            self.dbusController.update_fact(_(u'No activity'))
 
 
     def __show_toggle(self, event, is_active):
@@ -413,15 +465,12 @@ class HamsterApplet(object):
         if date.date() == datetime.date.today():
             self.load_day()
             self.update_label()
-
-	self.__update_fact()
+    
+        self.__update_fact()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
-        
-    def on_timeout_changed(self, event, new_timeout):
-        self.timeout = new_timeout
         
     def on_timeout_enabled_changed(self, event, enabled):
         # if enabled, set to value, otherwise set to zero, which means disable
@@ -439,3 +488,9 @@ class HamsterApplet(object):
 
         if new_angle != self.button.label.get_angle():
             self.button.label.set_angle(new_angle)
+
+    def on_notify_interval_changed(self, event, new_interval):
+        if PYNOTIFY and 0 < new_interval < 121:
+            self.notify_interval = new_interval
+        else:
+            self.notify_interval = None

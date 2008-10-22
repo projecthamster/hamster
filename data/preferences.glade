@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Oct 20 23:45:26 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Oct 22 17:13:15 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="preferences_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -371,6 +371,47 @@
                           </widget>
                           <packing>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkFrame" id="notification_preference_frame">
+                            <property name="visible">True</property>
+                            <property name="no_show_all">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment1">
+                                <property name="visible">True</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <widget class="GtkHScale" id="notify_interval">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="adjustment">5 5 121 1 0 0</property>
+                                    <property name="show_fill_level">True</property>
+                                    <property name="restrict_to_fill_level">False</property>
+                                    <property name="digits">0</property>
+                                    <property name="value_pos">GTK_POS_BOTTOM</property>
+                                    <signal name="value_changed" handler="on_notify_interval_value_changed"/>
+                                    <signal name="format_value" handler="on_notify_interval_format_value"/>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label1">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Remind of current activity every:</property>
+                                <property name="use_markup">True</property>
+                              </widget>
+                              <packing>
+                                <property name="type">label_item</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="padding">8</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>

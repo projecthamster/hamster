@@ -32,7 +32,8 @@ class GconfStore(object):
     # GConf key for global keybinding
     GCONF_KEYBINDING = GCONF_DIR + "/keybinding"
     GCONF_ENABLE_TIMEOUT = GCONF_DIR + "/enable_timeout"
-    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"    
+    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"  
+    GCONF_NOTIFY_INTERVAL = GCONF_DIR + "/notify_interval" 
 
     __instance = None
         
@@ -56,6 +57,8 @@ class GconfStore(object):
         self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
         self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
         self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
+
     
     def get_keybinding(self):
         return self._client.get_string(self.GCONF_KEYBINDING)
@@ -65,6 +68,9 @@ class GconfStore(object):
 
     def get_stop_on_shutdown(self):
         return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN)
+        
+    def get_notify_interval(self):
+    	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL)
 
     #------------------------    
     def set_keybinding(self, binding):
@@ -75,3 +81,6 @@ class GconfStore(object):
         
     def set_stop_on_shutdown(self, enabled):
         self._client.set_bool(self.GCONF_STOP_ON_SHUTDOWN, enabled)
+    
+    def set_notify_interval(self, interval):
+    	return self._client.set_int(self.GCONF_NOTIFY_INTERVAL, interval)

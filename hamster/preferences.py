@@ -166,10 +166,17 @@ class PreferencesEditor:
         self.prev_selected_activity = None
         self.prev_selected_category = None
         
+        # disable notification thing if pynotify is not available
+        try:
+            import pynotify
+        except:
+            self.get_widget("notification_preference_frame").hide()
+
 
     def load_config(self):
         self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())
         self.get_widget("idle_track").set_active(self.config.get_timeout_enabled())
+        self.get_widget("notify_interval").set_value(self.config.get_notify_interval())
         self.get_widget("keybinding").set_text(self.config.get_keybinding())
 
 
@@ -460,8 +467,8 @@ class PreferencesEditor:
             #tree.set_cursor(path, start_editing = True)
 
     def on_preferences_window_key_press(self, widget, event):
-	if event.keyval == gtk.keysyms.Escape:
-	    self.window.destroy()     
+        if event.keyval == gtk.keysyms.Escape:
+            self.window.destroy()     
 
     """button events"""
     def on_add_category_clicked(self, button):
@@ -522,6 +529,19 @@ class PreferencesEditor:
 
     def on_idle_track_toggled(self, checkbox):
         self.config.set_timeout_enabled(checkbox.get_active())
+
+    def on_notify_interval_format_value(self, slider, value):
+        if value <=120:
+            # notify interval slider value label
+            label = _("%(interval_minutes)d minutes" % {'interval_minutes': value})
+        else:
+            # notify interval slider value label
+            label = _("Never")
+        
+        return label
+    
+    def on_notify_interval_value_changed(self, scale):
+        self.config.set_notify_interval(int(scale.get_value()))
     
     def on_keybinding_changed(self, textbox):
         self.config.set_keybinding(textbox.get_text())
