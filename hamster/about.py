@@ -21,15 +21,15 @@
 from os.path import join
 from hamster import SHARED_DATA_DIR
 from hamster.defs import VERSION
-import gtk, gnomevfs
+import gtk
 import hamster
 
 
 def on_email(about, mail):
-    gnomevfs.url_show("mailto:%s" % mail)
+    gtk.show_uri(gtk.gdk.Screen(), "mailto:%s" % mail, 0L)
 
 def on_url(about, link):
-    gnomevfs.url_show(link)
+    gtk.show_uri(gtk.gdk.Screen(), link, 0L)
 
 gtk.about_dialog_set_email_hook(on_email)
 gtk.about_dialog_set_url_hook(on_url)
