@@ -21,7 +21,14 @@
 
 """separate file for database operations"""
 
-from pysqlite2 import dbapi2 as sqlite
+try:
+    import sqlite3 as sqlite
+except ImportError:
+    try:
+        from pysqlite2 import dbapi2 as sqlite
+    except ImportError:
+        print "Error: Neither sqlite3 nor pysqlite2 found"
+        raise
 import os, time
 import datetime
 import hamster
