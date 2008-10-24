@@ -68,14 +68,14 @@ class CustomFactController:
         
         self.get_widget('end_time_combo').set_model(self.hours)        
         if fact_date:
-            self.get_widget('start_date').set_time(time.mktime(fact_date.timetuple()))
+            self.get_widget('start_date').set_time(int(time.mktime(fact_date.timetuple())))
         
         # handle the case when we get fact_id - that means edit!
         self.fact_id = fact_id
         if fact_id:
             fact = storage.get_fact(fact_id)
             print fact
-            self.get_widget('start_date').set_time(time.mktime(fact["start_time"].timetuple()))
+            self.get_widget('start_date').set_time(int(time.mktime(fact["start_time"].timetuple())))
             self.get_widget('start_time').set_text("%02d:%02d" % (fact["start_time"].hour, fact["start_time"].minute))
 
             self.get_widget('activity_name').set_text(fact["name"])
