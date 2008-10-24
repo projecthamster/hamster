@@ -51,9 +51,9 @@ class Storage(object):
 
     def remove_fact(self, fact_id):
         fact = self.get_fact(fact_id)
-        result = self.__remove_fact(fact_id)
-        self.dispatch('day_updated', fact['start_time'])
-        return result
+        if fact:
+            self.__remove_fact(fact_id)
+            self.dispatch('day_updated', fact['start_time'])
 
     def get_sorted_activities(self):
         return self.__get_sorted_activities()
