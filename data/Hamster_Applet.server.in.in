@@ -5,7 +5,7 @@
             <item value="IDL:Bonobo/Unknown:1.0"/>
         </oaf_attribute>
         <oaf_attribute name="name" type="string" _value="Time Tracker"/>
-        <oaf_attribute name="description" type="string" _value="Time tracking for masses"/>
+        <oaf_attribute name="description" type="string" _value="Project Hamster - track your time"/>
     </oaf_server>
 
     <oaf_server iid="OAFIID:Hamster_Applet" type="factory" location="OAFIID:Hamster_Applet_Factory">
@@ -15,7 +15,7 @@
             <item value="IDL:Bonobo/Unknown:1.0"/>
         </oaf_attribute>
         <oaf_attribute name="name" type="string" _value="Time Tracker"/>
-        <oaf_attribute name="description" type="string" _value="Time tracking for masses"/>
+        <oaf_attribute name="description" type="string" _value="Project Hamster - track your time"/>
         <oaf_attribute name="panel:category" type="string" value="Accessories"/>
         <oaf_attribute name="panel:icon" type="string" value="hamster-applet"/>
     </oaf_server>
