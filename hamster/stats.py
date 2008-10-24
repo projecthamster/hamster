@@ -271,17 +271,17 @@ class StatsViewer:
             # overview label if start and end years don't match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            overview_label = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif self.start_date.month != self.end_date.month:
             #overview label if start and end month do not match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         else:
             #overview label for interval in same month
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+            overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
         if self.day_view.get_active():
             # overview label for single day

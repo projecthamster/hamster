@@ -26,11 +26,11 @@ def simple(facts, start_date, end_date):
     
     
     if start_date.year != end_date.year:
-        title = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     elif start_date.month != end_date.month:
-        title = _("Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     else:
-        title = _("Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+        title = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
     if start_date == end_date:
         title = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
