@@ -39,18 +39,18 @@ def show_about(parent):
     infos = {
         "name" : _("Time Tracker"),
         "version" : VERSION,
-        "comments" : _("Time tracking for masses."),
-        "copyright" : _("Copyright © 2007-2008 Toms Baugis and others"),
-	"website" : "http://live.gnome.org/ProjectHamster",
+        "comments" : _("Project Hamster - track your time"),
+        "copyright" : _(u"Copyright © 2007-2008 Toms Baugis and others"),
+        "website" : "http://live.gnome.org/ProjectHamster",
         "website-label" : _("Hamster Website"),
     }
-
+    
     about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
                        "Patryk Zawadzki <patrys@pld-linux.org>",
                        "Peteris Caune <cuu508@gmail.com>",
-		       "Juanje Ojeda <jojeda@emergya.es>"])
+                       "Juanje Ojeda <jojeda@emergya.es>"])
     about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
-
+    
     about.set_translator_credits(_("translator-credits"))
 
     for prop, val in infos.items():
@@ -60,8 +60,14 @@ def show_about(parent):
         
     zupa = gtk.gdk.pixbuf_new_from_file(hamster_logo)
     about.set_logo(zupa)
+    
+    def on_destroy():
+        print "byee"
+        parent.about = None
 
     about.connect("response", lambda self, *args: self.destroy())
+    about.connect("destroy", lambda self, *args: on_destroy())
     about.set_screen(parent.get_screen())
     about.show_all()
+    parent.about = about
 

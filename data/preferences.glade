@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Oct 22 17:13:15 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Oct 24 15:40:58 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="preferences_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -12,7 +12,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="key_press_event" handler="on_preferences_window_key_press"/>
-    <signal name="destroy" handler="destroy_cb"/>
+    <signal name="destroy" handler="on_preferences_window_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

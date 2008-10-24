@@ -88,6 +88,9 @@ class HamsterApplet(object):
         self.applet = applet
         self.applet.set_applet_flags (gnomeapplet.EXPAND_MINOR);
 
+        self.preferences_editor = None
+        self.applet.about = None
+
         self.button = PanelButton()
         
         # load window of activity switcher and todays view
@@ -445,15 +448,22 @@ class HamsterApplet(object):
         custom_fact.show()
 
     def on_about (self, component, verb):
-        from hamster.about import show_about
-        show_about(self.applet)
+        if self.applet.about:
+            self.applet.about.present()
+        else:
+            from hamster.about import show_about
+            show_about(self.applet)
 
     def show_preferences(self, menu_item, verb):
         from hamster.preferences import PreferencesEditor
 
         dispatcher.dispatch('panel_visible', False)
-        activities_editor = PreferencesEditor()
-        activities_editor.show()
+        
+        if self.preferences_editor and self.preferences_editor.window:
+            self.preferences_editor.window.present()
+        else:
+            self.preferences_editor = PreferencesEditor()
+            self.preferences_editor.show()
     
     """signals"""
     def after_activity_update(self, widget, renames):

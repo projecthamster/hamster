@@ -545,3 +545,7 @@ class PreferencesEditor:
     
     def on_keybinding_changed(self, textbox):
         self.config.set_keybinding(textbox.get_text())
+
+    def on_preferences_window_destroy(self, window):
+        self.window = None
+        
