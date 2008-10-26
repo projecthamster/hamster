@@ -26,6 +26,8 @@ import gtk
 import gobject
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster.stuff import *
+
 import hamster.eds
 
 import time
@@ -36,20 +38,28 @@ GLADE_FILE = "add_custom_fact.glade"
 
 class CustomFactController:
     def __init__(self,  fact_date = None, fact_id = None):
-        self.wTree = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
+        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
-        # load window of activity switcher and todays view
-        self.items = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT)
-        self.activities = gtk.ListStore(gobject.TYPE_STRING)
-        self.completion = gtk.EntryCompletion()
-        self.completion.set_model(self.activities)
-        self.completion.set_text_column(0)
-        self.completion.set_minimum_key_length(1) 
-        activity_list = self.wTree.get_widget('activity-list')
-        activity_list.set_model(self.items)
-        activity_list.set_text_column(0)
-        activity_list.child.set_completion(self.completion)
+        # set up drop down menu
+        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_INT))
+        category_cell = CategoryCell()  
+        self.activity_list.pack_start(category_cell, False)
+        self.activity_list.add_attribute(category_cell, 'text', 1)
+        self.activity_list.set_text_column(0)
+
+        # set up autocompletition
+        self.activities = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+        completion = gtk.EntryCompletion()
+        completion.set_model(self.activities)
+        completion.set_text_column(0)
+        completion.set_minimum_key_length(1)
+        category_cell = CategoryCell()  
+        completion.pack_start(category_cell, False)
+        completion.add_attribute(category_cell, 'text', 1)
+
+        self.activity_list.child.set_completion(completion)
 
 
         self.hours = gtk.ListStore(gobject.TYPE_STRING)
@@ -96,13 +106,13 @@ class CustomFactController:
                 self.get_widget('duration_mins').set_value(for_minutes)
 
 
-        self.wTree.signal_autoconnect(self)
+        self.glade.signal_autoconnect(self)
         
     def refresh_menu(self):
         all_activities = storage.get_activities()
         self.activities.clear()
         for activity in all_activities:
-            self.activities.append([activity['name']])
+            self.activities.append([activity['name'], activity['category']])
 
         activity_list = self.get_widget('activity-list')
         store = activity_list.get_model()
@@ -114,7 +124,7 @@ class CustomFactController:
 
         today = datetime.date.today()
         for activity in activities:
-            item = store.append([activity['name'], activity['id']])
+            item = store.append([activity['name'], activity['category'], activity['id']])
 
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
@@ -125,7 +135,7 @@ class CustomFactController:
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.wTree.get_widget(name)
+        return self.glade.get_widget(name)
 
     def show(self):
         self.window.show()

@@ -23,8 +23,20 @@
 
 import gtk
 from hamster import storage
+import pango
 from pango import ELLIPSIZE_END
+
 import datetime as dt
+
+class CategoryCell(gtk.CellRendererText):
+    def __init__(self):
+        gtk.CellRendererText.__init__(self)        
+        self.set_property('alignment', pango.ALIGN_RIGHT)
+        
+        insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE]
+        self.set_property('foreground-gdk', insensitive_color)
+        self.set_property('scale', pango.SCALE_SMALL)
+        self.set_property('yalign', 0.0)
 
 class ExpanderColumn(gtk.TreeViewColumn):
     def __init__(self, label, text):

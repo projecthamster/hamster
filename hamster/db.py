@@ -272,7 +272,7 @@ class Storage(hamster.storage.Storage):
     def __get_sorted_activities(self):
         """returns list of acitivities that have categories"""
         query = """
-                   SELECT a.*, b.category_order
+                   SELECT a.*, b.name as category, b.category_order
                      FROM activities a
                 LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                     WHERE a.category_id > -1
@@ -287,26 +287,28 @@ class Storage(hamster.storage.Storage):
            otherwise - by activity_order"""
         if category_id:
             query = """
-                       SELECT *
-                         FROM activities
+                       SELECT a.*, b.name as category
+                         FROM activities a
+                    LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                         WHERE category_id = ?
                           AND deleted is null
             """
             
             # unsorted entries we sort by name - others by ID
             if category_id == -1:
-                query += "ORDER BY lower(name)"
+                query += "ORDER BY lower(a.name)"
             else:
-                query += "ORDER BY activity_order"
+                query += "ORDER BY a.activity_order"
                 
             activities = self.fetchall(query, (category_id, ))
             
         else:
             query = """
-                       SELECT *
-                         FROM activities
+                       SELECT a.*, b.name as category
+                         FROM activities a
+                    LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                         WHERE deleted is null
-                     ORDER BY lower(name)
+                     ORDER BY lower(a.name)
             """
             activities = self.fetchall(query)
             

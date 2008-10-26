@@ -181,18 +181,27 @@ class HamsterApplet(object):
         # load window of activity switcher and todays view
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
         self.window = self.glade.get_widget('hamster-window')
+
+
         
         # set up drop down menu
         self.activity_list = self.glade.get_widget('activity-list')
-        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_INT))
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_INT))
+        category_cell = CategoryCell()  
+        self.activity_list.pack_start(category_cell, False)
+        self.activity_list.add_attribute(category_cell, 'text', 1)
         self.activity_list.set_text_column(0)
 
-        # set up autocompletition for the drop-down menu
-        self.activities = gtk.ListStore(gobject.TYPE_STRING)
+        # set up autocompletition
+        self.activities = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
         completion = gtk.EntryCompletion()
         completion.set_model(self.activities)
         completion.set_text_column(0)
         completion.set_minimum_key_length(1)
+        category_cell = CategoryCell()  
+        completion.pack_start(category_cell, False)
+        completion.add_attribute(category_cell, 'text', 1)
+
         self.activity_list.child.set_completion(completion)
 
         # init today's tree
@@ -379,7 +388,7 @@ class HamsterApplet(object):
         self.activities.clear()
         all_activities = storage.get_activities()
         for activity in all_activities:
-            self.activities.append([activity['name']])
+            self.activities.append([activity['name'], activity['category']])
 
 
         #now populate the menu - contains only categorized entries
@@ -390,7 +399,7 @@ class HamsterApplet(object):
         categorized_activities = storage.get_sorted_activities()
 
         for activity in categorized_activities:
-            item = store.append([activity['name'], activity['id']])
+            item = store.append([activity['name'], activity['category'], activity['id']])
 
         # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()
