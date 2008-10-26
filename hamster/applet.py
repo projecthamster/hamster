@@ -69,16 +69,101 @@ class PanelButton(gtk.ToggleButton):
         self.set_border_width(0)
         
         self.label = gtk.Label()
-        self.add(self.label)
+        self.label.set_justify(gtk.JUSTIFY_CENTER)
 
-    def set_text(self, text):
-        self.label.set_text(text)
+        self.label.connect('style-set', self.on_label_style_set)
+        self.connect('size_allocate', self.on_size_allocate)
+
+        self.add(self.label)
+        
+        self.activity, self.duration = None, None
+        self.prev_size = 0
+
+    def set_active(self, is_active):
+        self.set_property('active', is_active)
+
+    def set_text(self, activity, duration):
+        self.activity = activity
+        self.duration = duration
+        self.reformat_label()
+        
+    def reformat_label(self):
+        label = self.activity
+        if self.duration:
+            if self.use_two_line_format():
+                label = "%s\n%s" % (self.activity, self.duration)
+            else:
+                label = "%s %s" % (self.activity, self.duration)
+        
+        label = '<span gravity=\"south\">' + label + '</span>'
+        self.label.set_markup(label)
 
     def get_pos(self):
         return gtk.gdk.Window.get_origin(self.label.window)
 
-    def set_active(self, is_active):
-        self.set_property('active', is_active)
+
+    def use_two_line_format(self):
+        if not self.get_parent():
+            return False
+
+        popup_dir = self.get_parent().get_orient()
+ 
+        orient_vertical = popup_dir in [gnomeapplet.ORIENT_LEFT] or \
+                          popup_dir in [gnomeapplet.ORIENT_RIGHT]
+
+
+        import pango
+        context = self.label.get_pango_context()
+        metrics = context.get_metrics(self.label.style.font_desc,
+                                      pango.Context.get_language(context))
+        ascent = pango.FontMetrics.get_ascent(metrics)
+        descent = pango.FontMetrics.get_descent(metrics)
+
+        if orient_vertical == False:
+            thickness = self.style.ythickness;
+        else:
+            thickness = self.style.xthickness;
+
+        focus_width = self.style_get_property("focus-line-width")
+        focus_pad = self.style_get_property("focus-padding")
+
+        required_size = 2 * ((pango.PIXELS(ascent + descent) ) + 2 * (focus_width + focus_pad + thickness))
+
+        if orient_vertical:
+            available_size = self.get_allocation().width
+        else:
+            available_size = self.get_allocation().height
+        
+        return required_size <= available_size
+
+    def on_label_style_set(self, widget, something):
+        self.reformat_label()
+
+
+    def on_size_allocate(self, widget, allocation):
+        if not self.get_parent():
+            return
+
+        self.popup_dir = self.get_parent().get_orient()
+        
+        orient_vertical = True
+        new_size = allocation.width
+        if self.popup_dir in [gnomeapplet.ORIENT_LEFT]:
+            new_angle = 270
+        elif self.popup_dir in [gnomeapplet.ORIENT_RIGHT]:
+            new_angle = 90
+        else:
+            new_angle = 0
+            orient_vertical = False
+            new_size = allocation.height
+        
+        if new_angle != self.label.get_angle():
+            self.label.set_angle(new_angle)
+
+        if new_size != self.prev_size:
+            self.reformat_label()
+
+        self.prev_size = new_size
 
 
 class HamsterApplet(object):
@@ -174,7 +259,6 @@ class HamsterApplet(object):
         self.applet.set_background_widget(self.applet)
 
         self.button.connect('toggled', self.on_toggle)
-        self.button.connect('size_allocate', self.on_applet_size_allocate)
 
         self.button.connect('button_press_event', self.on_button_press)
         self.glade.signal_autoconnect(self)
@@ -191,7 +275,6 @@ class HamsterApplet(object):
             self.notify = Notifier('HamsterApplet', gtk.STOCK_DIALOG_QUESTION, self.button)
             dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
-
 
     def on_today_release_event(self, tree, event):
         pointer = event.window.get_pointer() # x, y, flags
@@ -246,19 +329,20 @@ class HamsterApplet(object):
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'], format_duration(duration))
+            self.button.set_text(self.last_activity['name'], format_duration(duration))
             
             self.glade.get_widget('current_activity').set_text(self.last_activity['name'])
             self.glade.get_widget('stop_tracking').set_sensitive(1);
         else:
             label = "%s" % _(u"No activity")
+            self.button.set_text(label, None)
             self.glade.get_widget('stop_tracking').set_sensitive(0);
-        self.button.set_text(label)
+        
         
         # Hamster DBusController current activity updating
         self.dbusController.update_activity(label)
 
     def check_user(self):
-        print "going for user"
         delta = datetime.datetime.now() - self.last_activity['start_time']
         duration = delta.seconds /  60
                  
@@ -485,19 +569,6 @@ class HamsterApplet(object):
     def on_timeout_enabled_changed(self, event, enabled):
         # if enabled, set to value, otherwise set to zero, which means disable
         self.timeout_enabled = enabled
-
-    def on_applet_size_allocate(self, widget, event):
-        self.popup_dir = self.applet.get_orient()
-        
-        if self.popup_dir in [gnomeapplet.ORIENT_LEFT]:
-            new_angle = 270
-        elif self.popup_dir in [gnomeapplet.ORIENT_RIGHT]:
-            new_angle = 90
-        else:
-            new_angle = 0
-
-        if new_angle != self.button.label.get_angle():
-            self.button.label.set_angle(new_angle)
 
     def on_notify_interval_changed(self, event, new_interval):
         if PYNOTIFY and 0 < new_interval < 121:
