@@ -56,13 +56,9 @@ def show_about(parent):
     for prop, val in infos.items():
         about.set_property(prop, val)
 
-    hamster_logo = join(SHARED_DATA_DIR, 'art', 'hamster-applet.png')
-        
-    zupa = gtk.gdk.pixbuf_new_from_file(hamster_logo)
-    about.set_logo(zupa)
+    about.set_logo_icon_name("hamster-applet")
     
     def on_destroy():
-        print "byee"
         parent.about = None
 
     about.connect("response", lambda self, *args: self.destroy())

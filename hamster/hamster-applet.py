@@ -125,6 +125,8 @@ if __name__ == "__main__":
         'do_trace': do_trace,
     }
 
+    gtk.window_set_default_icon_name("hamster-applet")
+
     if standalone:
         import gnome
         gnome.init(hamster.defs.PACKAGE, hamster.defs.VERSION)
