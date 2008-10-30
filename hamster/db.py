@@ -55,7 +55,7 @@ class Storage(hamster.storage.Storage):
         
         self.execute(statement, (category_id, max_order, id))
     
-    def __insert_category(self, name):
+    def __add_category(self, name):
         new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")
 
         id, order = new_rec[0] or 1, new_rec[1] or 1
@@ -199,12 +199,12 @@ class Storage(hamster.storage.Storage):
             if category_name:
                 category_id = self.__get_category_by_name(category_name)
                 if not category_id:
-                    category_id = self.__insert_category(category_name)
+                    category_id = self.__add_category(category_name)
         
         activity_id = self.__get_activity_by_name(activity_name, category_id)
 
         if not activity_id:
-            activity_id = self.__insert_activity(activity_name, category_id)
+            activity_id = self.__add_activity(activity_name, category_id)
 
 
         # now fetch facts for the specified day and check if we have to
@@ -407,7 +407,8 @@ class Storage(hamster.storage.Storage):
         self.execute("update activities set activity_order = ? where id = ?", (priority1, id2) )
         self.execute("update activities set activity_order = ? where id = ?", (priority2, id1) )
 
-    def __insert_activity(self, name, category_id = -1):
+    def __add_activity(self, name, category_id = None):
+        category_id = category_id or -1
         new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
         new_id, new_order = new_rec[0] or 1, new_rec[1] or 1
 
@@ -657,13 +658,13 @@ class Storage(hamster.storage.Storage):
         category_count = self.fetchone("select count(*) from categories")[0]
         
         if category_count == 0:
-            work_cat_id = self.__insert_category(_(work_category["name"]))
+            work_cat_id = self.__add_category(_(work_category["name"]))
             for entry in work_category["entries"]:
-                self.__insert_activity(_(entry), work_cat_id)
+                self.__add_activity(_(entry), work_cat_id)
         
-            nonwork_cat_id = self.__insert_category(_(nonwork_category["name"]))
+            nonwork_cat_id = self.__add_category(_(nonwork_category["name"]))
             for entry in nonwork_category["entries"]:
-                self.__insert_activity(_(entry), nonwork_cat_id)
+                self.__add_activity(_(entry), nonwork_cat_id)
         
         
         

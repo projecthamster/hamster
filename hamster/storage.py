@@ -93,8 +93,8 @@ class Storage(object):
         self.__update_activity(id, name, category_id)
         self.dispatch('activity_updated', ())
     
-    def insert_activity(self, name, category_id = -1):
-        new_id = self.__insert_activity(name, category_id)
+    def add_activity(self, name, category_id = -1):
+        new_id = self.__add_activity(name, category_id)
         self.dispatch('activity_updated', ())
         return new_id
 
@@ -102,8 +102,8 @@ class Storage(object):
         self.__update_category(id, name)
         self.dispatch('activity_updated', ())
 
-    def insert_category(self, name):
-        res = self.__insert_category(name)
+    def add_category(self, name):
+        res = self.__add_category(name)
         self.dispatch('activity_updated', ())
         return res
 

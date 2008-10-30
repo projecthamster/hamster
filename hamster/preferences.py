@@ -303,7 +303,7 @@ class PreferencesEditor:
         id = tree_row[0]
         
         if id == -1:
-            tree_row[0] = storage.insert_activity(name, category_id)
+            tree_row[0] = storage.add_activity(name, category_id)
         else:
             storage.update_activity(id, name, category_id)
 
@@ -314,7 +314,7 @@ class PreferencesEditor:
         name = model[path][1]
         
         if id == -2:
-            id = storage.insert_category(name)
+            id = storage.add_category(name)
             model[path][0] = id
         elif id > -1:  #ignore unsorted category (id = -1)
             storage.update_category(id, name)
