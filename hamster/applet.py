@@ -198,6 +198,8 @@ class HamsterApplet(object):
         completion.set_model(self.activities)
         completion.set_text_column(0)
         completion.set_minimum_key_length(1)
+        completion.set_inline_completion(True)
+
         category_cell = CategoryCell()  
         completion.pack_start(category_cell, False)
         completion.add_attribute(category_cell, 'text', 1)
