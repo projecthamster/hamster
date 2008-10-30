@@ -44,16 +44,34 @@ class Storage(hamster.storage.Storage):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
 
     def __change_category(self, id, category_id):
-        query = "SELECT max(activity_order) + 1 FROM activities WHERE category_id = ?"
-        max_order = self.fetchone(query, (category_id, ))[0] or 1
+        # first check if we don't have an activity with same name before us
+        activity = self.fetchone("select name from activities where id = ?", (id, ))
+        existing_id = self.__get_activity_by_name(activity['name'], category_id)
         
-        statement = """
-                   UPDATE activities 
-                      SET category_id = ?, activity_order = ?
-                    WHERE id = ?
-        """
+        if existing_id: #ooh, we have something here!
+            # first move all facts that belong to movable activity to the new one
+            update = """
+                       UPDATE facts
+                          SET activity_id = ?
+                        WHERE activity_id = ?
+            """
+            
+            self.execute(update, (existing_id, id))
+            
+            # and now get rid of our friend
+            self.__remove_activity(id)
         
-        self.execute(statement, (category_id, max_order, id))
+        else: #just moving        
+            query = "SELECT max(activity_order) + 1 FROM activities WHERE category_id = ?"
+            max_order = self.fetchone(query, (category_id, ))[0] or 1
+            
+            statement = """
+                       UPDATE activities 
+                          SET category_id = ?, activity_order = ?
+                        WHERE id = ?
+            """
+            
+            self.execute(statement, (category_id, max_order, id))
     
     def __add_category(self, name):
         new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")
