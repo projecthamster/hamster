@@ -303,9 +303,18 @@ class PreferencesEditor:
         id = tree_row[0]
         
         if id == -1:
+            #search for activities with same name
+            activities = storage.get_activities(category_id)
+            for activity in activities:
+                if activity['name'].lower() == name:
+                    self.select_activity(activity['id'])
+                    return False
+            
             tree_row[0] = storage.add_activity(name, category_id)
         else:
             storage.update_activity(id, name, category_id)
+            
+        return True
 
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
@@ -322,8 +331,15 @@ class PreferencesEditor:
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
         model[path][1] = new_text
-        self.update_activity(model[path])
-        return True
+        res = self.update_activity(model[path])
+        
+        # if update fails on new activity - it's because it is a dupe
+        # so we remove it
+        if not res and model[path][0] == -1: 
+           self.activity_store.remove(model.get_iter(path))
+        
+        return res
+        
 
     def category_changed_cb(self, selection, model):
         """ enables and disables action buttons depending on selected item """

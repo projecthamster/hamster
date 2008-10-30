@@ -408,6 +408,12 @@ class Storage(hamster.storage.Storage):
         self.execute("update activities set activity_order = ? where id = ?", (priority2, id1) )
 
     def __add_activity(self, name, category_id = None):
+        # first check that we don't have anything like that yet
+        activity_id = self.__get_activity_by_name(name, category_id)
+        if activity_id:
+            return activity_id
+        
+        #now do the create bit
         category_id = category_id or -1
         new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
         new_id, new_order = new_rec[0] or 1, new_rec[1] or 1
