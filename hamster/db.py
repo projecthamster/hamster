@@ -269,19 +269,6 @@ class Storage(hamster.storage.Storage):
         """
         self.execute(query, (fact_id,))
 
-    def __get_sorted_activities(self):
-        """returns list of acitivities that have categories"""
-        query = """
-                   SELECT a.*, b.name as category, b.category_order
-                     FROM activities a
-                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                    WHERE a.category_id > -1
-                      AND a.deleted is null
-                 ORDER BY category_order, activity_order
-        """
-        return self.fetchall(query)
-        
-        
     def __get_activities(self, category_id = None):
         """returns list of activities, if category is specified, order by name
            otherwise - by activity_order"""
@@ -312,6 +299,33 @@ class Storage(hamster.storage.Storage):
             """
             activities = self.fetchall(query)
             
+        return activities
+
+    def __get_sorted_activities(self):
+        """returns list of acitivities that have categories"""
+        query = """
+                   SELECT a.*, b.name as category, b.category_order
+                     FROM activities a
+                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
+                    WHERE a.category_id > -1
+                      AND a.deleted is null
+                 ORDER BY category_order, activity_order
+        """
+        return self.fetchall(query)
+        
+    def __get_autocomplete_activities(self):
+        """returns list of activities for autocomplete,
+           activity names converted to lowercase"""
+
+        query = """
+                   SELECT lower(a.name) as name, b.name as category
+                     FROM activities a
+                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
+                    WHERE deleted is null
+                 ORDER BY lower(a.name)
+        """
+        activities = self.fetchall(query)
+        
         return activities
 
     def __remove_activity(self, id):

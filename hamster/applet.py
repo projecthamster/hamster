@@ -386,9 +386,9 @@ class HamsterApplet(object):
    
 
     def refresh_menu(self):
-        #first populate the autocomplete - contains all entries
+        #first populate the autocomplete - contains all entries in lowercase
         self.activities.clear()
-        all_activities = storage.get_activities()
+        all_activities = storage.get_autocomplete_activities()
         for activity in all_activities:
             self.activities.append([activity['name'], activity['category']])
 

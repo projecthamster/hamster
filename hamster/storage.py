@@ -55,11 +55,14 @@ class Storage(object):
             self.__remove_fact(fact_id)
             self.dispatch('day_updated', fact['start_time'])
 
+    def get_activities(self, category_id = None):
+        return self.__get_activities(category_id = category_id)
+    
     def get_sorted_activities(self):
         return self.__get_sorted_activities()
         
-    def get_activities(self, category_id = None):
-        return self.__get_activities(category_id = category_id)
+    def get_autocomplete_activities(self):
+        return self.__get_autocomplete_activities()
     
     def get_last_activity(self):
         return self.__get_last_activity()

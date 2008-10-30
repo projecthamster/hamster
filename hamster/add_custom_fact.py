@@ -109,7 +109,7 @@ class CustomFactController:
         self.glade.signal_autoconnect(self)
         
     def refresh_menu(self):
-        all_activities = storage.get_activities()
+        all_activities = storage.get_autocomplete_activities()
         self.activities.clear()
         for activity in all_activities:
             self.activities.append([activity['name'], activity['category']])
