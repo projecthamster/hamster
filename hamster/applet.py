@@ -182,29 +182,7 @@ class HamsterApplet(object):
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
         self.window = self.glade.get_widget('hamster-window')
 
-
-        
-        # set up drop down menu
-        self.activity_list = self.glade.get_widget('activity-list')
-        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_INT))
-        category_cell = CategoryCell()  
-        self.activity_list.pack_start(category_cell, False)
-        self.activity_list.add_attribute(category_cell, 'text', 1)
-        self.activity_list.set_text_column(0)
-
-        # set up autocompletition
-        self.activities = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-        completion = gtk.EntryCompletion()
-        completion.set_model(self.activities)
-        completion.set_text_column(0)
-        completion.set_minimum_key_length(1)
-        completion.set_inline_completion(True)
-
-        category_cell = CategoryCell()  
-        completion.pack_start(category_cell, False)
-        completion.add_attribute(category_cell, 'text', 1)
-
-        self.activity_list.child.set_completion(completion)
+        self.set_dropdown()
 
         # init today's tree
         self.treeview = self.glade.get_widget('today')
@@ -286,6 +264,56 @@ class HamsterApplet(object):
             self.notify = Notifier('HamsterApplet', gtk.STOCK_DIALOG_QUESTION, self.button)
             dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
+
+
+    def set_dropdown(self):
+        # set up drop down menu
+        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
+                                                   gobject.TYPE_STRING,
+                                                   gobject.TYPE_STRING))
+
+        self.activity_list.clear()
+        activity_cell = gtk.CellRendererText()
+        self.activity_list.pack_start(activity_cell, True)
+        self.activity_list.add_attribute(activity_cell, 'text', 0)
+        category_cell = CategoryCell()  
+        self.activity_list.pack_start(category_cell, False)
+        self.activity_list.add_attribute(category_cell, 'text', 1)
+        
+        self.activity_list.set_property("text-column", 2)
+
+
+        # set up autocompletition
+        self.activities = gtk.ListStore(gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING)
+        completion = gtk.EntryCompletion()
+        completion.set_model(self.activities)
+
+        activity_cell = gtk.CellRendererText()
+        completion.pack_start(activity_cell, True)
+        completion.add_attribute(activity_cell, 'text', 0)
+        completion.set_property("text-column", 2)
+
+        category_cell = CategoryCell()  
+        completion.pack_start(category_cell, False)
+        completion.add_attribute(category_cell, 'text', 1)
+
+
+        def match_func(completion, key, iter):
+            model = completion.get_model()
+            text = model.get_value(iter, 2)
+            if text and text.startswith(key):
+                return True
+            return False
+
+        completion.set_match_func(match_func)
+        completion.set_minimum_key_length(1)
+        completion.set_inline_completion(True)
+
+        self.activity_list.child.set_completion(completion)
+        
 
     def on_today_release_event(self, tree, event):
         pointer = event.window.get_pointer() # x, y, flags
@@ -390,7 +418,10 @@ class HamsterApplet(object):
         self.activities.clear()
         all_activities = storage.get_autocomplete_activities()
         for activity in all_activities:
-            self.activities.append([activity['name'], activity['category']])
+            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            self.activities.append([activity['name'],
+                                    activity['category'],
+                                    activity_category])
 
 
         #now populate the menu - contains only categorized entries
@@ -401,7 +432,10 @@ class HamsterApplet(object):
         categorized_activities = storage.get_sorted_activities()
 
         for activity in categorized_activities:
-            item = store.append([activity['name'], activity['category'], activity['id']])
+            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            item = store.append([activity['name'],
+                                 activity['category'],
+                                 activity_category])
 
         # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()

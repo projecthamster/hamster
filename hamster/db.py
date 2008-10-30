@@ -95,16 +95,55 @@ class Storage(hamster.storage.Storage):
             
         
         
-    def __get_activity_by_name(self, name):
+    def __get_activity_by_name(self, name, category_id = None):
         """get most recent, preferably not deleted activity by it's name"""
+        
+        if category_id:
+            query = """
+                       SELECT id, deleted from activities 
+                        WHERE lower(name) = lower(?)
+                          AND category_id = ?
+                     ORDER BY deleted, id desc
+                        LIMIT 1
+            """
+            
+            res = self.fetchone(query, (name, category_id))
+        else:
+            query = """
+                       SELECT id, deleted from activities 
+                        WHERE lower(name) = lower(?)
+                     ORDER BY deleted, id desc
+                        LIMIT 1
+            """
+            
+            res = self.fetchone(query, (name,))
+        
+        if res:
+            # if the activity was marked as deleted, ressurect on first call
+            # and put in the unsorted category
+            if res['deleted']:
+                update = """
+                            UPDATE activities
+                               SET deleted = null, category_id = -1
+                             WHERE id = ?
+                        """
+                self.execute(update, (res['id'], ))
+            
+            return res['id']
+        
+        return None
+
+    def __get_category_by_name(self, name):
+        """returns category by it's name"""        
+
         query = """
-                   SELECT id from activities 
+                   SELECT id from categories
                     WHERE lower(name) = lower(?)
-                 ORDER BY deleted, id desc
+                 ORDER BY id desc
                     LIMIT 1
         """
-        
-        res = self.fetchone(query, (name,))
+            
+        res = self.fetchone(query, (name, ))
         
         if res:
             return res['id']
@@ -152,10 +191,20 @@ class Storage(hamster.storage.Storage):
         start_time = start_time or datetime.datetime.now()
         
         # try to lookup activity by it's name in db. active ones have priority
-        activity_id = self.__get_activity_by_name(activity_name)
+        category_id = None
+        if activity_name.find("@") > 0:
+            #at symbol marks category
+            activity_name, category_name = activity_name.split("@")
+            
+            if category_name:
+                category_id = self.__get_category_by_name(category_name)
+                if not category_id:
+                    category_id = self.__insert_category(category_name)
+        
+        activity_id = self.__get_activity_by_name(activity_name, category_id)
 
         if not activity_id:
-            activity_id = self.__insert_activity(activity_name)
+            activity_id = self.__insert_activity(activity_name, category_id)
 
 
         # now fetch facts for the specified day and check if we have to

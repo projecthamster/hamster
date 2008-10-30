@@ -41,26 +41,7 @@ class CustomFactController:
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
-        # set up drop down menu
-        self.activity_list = self.glade.get_widget('activity-list')
-        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_INT))
-        category_cell = CategoryCell()  
-        self.activity_list.pack_start(category_cell, False)
-        self.activity_list.add_attribute(category_cell, 'text', 1)
-        self.activity_list.set_text_column(0)
-
-        # set up autocompletition
-        self.activities = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-        completion = gtk.EntryCompletion()
-        completion.set_model(self.activities)
-        completion.set_text_column(0)
-        completion.set_minimum_key_length(1)
-        category_cell = CategoryCell()  
-        completion.pack_start(category_cell, False)
-        completion.add_attribute(category_cell, 'text', 1)
-
-        self.activity_list.child.set_completion(completion)
-
+        self.set_dropdown()
 
         self.hours = gtk.ListStore(gobject.TYPE_STRING)
         
@@ -107,29 +88,84 @@ class CustomFactController:
 
 
         self.glade.signal_autoconnect(self)
-        
-    def refresh_menu(self):
-        all_activities = storage.get_autocomplete_activities()
-        self.activities.clear()
-        for activity in all_activities:
-            self.activities.append([activity['name'], activity['category']])
 
-        activity_list = self.get_widget('activity-list')
-        store = activity_list.get_model()
+    def set_dropdown(self):
+        # set up drop down menu
+        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
+                                                   gobject.TYPE_STRING,
+                                                   gobject.TYPE_STRING))
+
+        self.activity_list.clear()
+        activity_cell = gtk.CellRendererText()
+        self.activity_list.pack_start(activity_cell, True)
+        self.activity_list.add_attribute(activity_cell, 'text', 0)
+        category_cell = CategoryCell()  
+        self.activity_list.pack_start(category_cell, False)
+        self.activity_list.add_attribute(category_cell, 'text', 1)
+        
+        self.activity_list.set_property("text-column", 2)
+
+
+        # set up autocompletition
+        self.activities = gtk.ListStore(gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING)
+        completion = gtk.EntryCompletion()
+        completion.set_model(self.activities)
+
+        activity_cell = gtk.CellRendererText()
+        completion.pack_start(activity_cell, True)
+        completion.add_attribute(activity_cell, 'text', 0)
+        completion.set_property("text-column", 2)
+
+        category_cell = CategoryCell()  
+        completion.pack_start(category_cell, False)
+        completion.add_attribute(category_cell, 'text', 1)
+
+        def match_func(completion, key, iter):
+            model = completion.get_model()
+            text = model.get_value(iter, 2)
+            if text and text.startswith(key):
+                return True
+            return False
+
+        completion.set_match_func(match_func)
+        completion.set_minimum_key_length(1)
+        completion.set_inline_completion(True)
+
+        self.activity_list.child.set_completion(completion)
+
+
+    def refresh_menu(self):
+        #first populate the autocomplete - contains all entries in lowercase
+        self.activities.clear()
+        all_activities = storage.get_autocomplete_activities()
+        for activity in all_activities:
+            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            self.activities.append([activity['name'],
+                                    activity['category'],
+                                    activity_category])
+
+
+        #now populate the menu - contains only categorized entries
+        store = self.activity_list.get_model()
         store.clear()
 
         #populate fresh list from DB
-        activities = storage.get_sorted_activities()
-        prev_item = None
+        categorized_activities = storage.get_sorted_activities()
 
-        today = datetime.date.today()
-        for activity in activities:
-            item = store.append([activity['name'], activity['category'], activity['id']])
+        for activity in categorized_activities:
+            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            item = store.append([activity['name'],
+                                 activity['category'],
+                                 activity_category])
 
+        # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
-            item = store.append([activity['name'], -1])
-            
+            self.activities.append([activity['name']])
+            store.append([activity['name'], -1])
 
         return True
 
