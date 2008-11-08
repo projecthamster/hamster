@@ -48,7 +48,7 @@ def simple(facts, start_date, end_date):
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="hamster-applet" />
     <title>%s</title>
-    <style>
+    <style type="text/css">
         body {
             padding: 12px;
         }
@@ -56,11 +56,18 @@ def simple(facts, start_date, end_date):
             border-bottom: 1px solid gray;
             padding-bottom: 4px;
         }
-        table {margin-left: 24px}
+        h2 {
+            margin-top: 2em;
+        }
+        table {
+            margin-left: 24px
+        }
         th {
             text-align: left;
         }
-        tr {padding: 6px;}
+        tr {
+            padding: 6px;
+        }
         td {
             padding: 2px;
             padding-right: 24px;
@@ -71,7 +78,6 @@ def simple(facts, start_date, end_date):
 <body>""" % title)
     
     report.write("<h1>%s</h1>" % title)
-    
     
     report.write("""<table>
         <tr>
@@ -85,6 +91,7 @@ def simple(facts, start_date, end_date):
     
     #get id of last activity so we know when to show current duration
     last_activity_id = storage.get_last_activity()["id"]
+    sum_time = {}
     
     for fact in facts:
         duration = None
@@ -101,7 +108,7 @@ def simple(facts, start_date, end_date):
             end_time_str = end_time.strftime('%H:%M')
 
         category = ""
-        if fact["category"] != _("Unsorted"): #do not print "unsorted"
+        if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
             category = fact["category"]
         # fact date column in HTML report
         report.write("""<tr>
@@ -117,8 +124,37 @@ def simple(facts, start_date, end_date):
             fact["start_time"].strftime('%H:%M'),
             end_time_str,
             stuff.format_duration(duration) or ""))
+
+
+
+        # save data for summary table
+        if duration:
+            id_string = "<td>%s</td><td>%s</td>" % (fact["category"], fact["name"])
+            if id_string in sum_time:
+                sum_time[id_string] += duration
+            else:
+                sum_time[id_string] = duration
+     
+    report.write("</table>")
+
+    # summary table
+    report.write("\n<h2>%s</h2>\n" % _("Summary of Activities"))
+    report.write("""<table>
+    <tr>
+        <th>""" + _("Category") + """</th>
+        <th>""" + _("Activity") + """</th>
+        <th>""" + _("Duration") + """</th>
+    </tr>\n""")
+    tot_time = 0
+    for key in sorted(sum_time.keys()):
+        report.write("    <tr>%s<td>%s</td></tr>\n" % (key, stuff.format_duration(sum_time[key])))
+        tot_time += sum_time[key]
+    report.write("    <tr><th colspan=\"2\">Total Time:</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
+    report.write("</table>\n")
+
+    report.write("</body>\n</html>")
+
     
-    report.write("</table></body></html>")
     report.close()
 
     webbrowser.open_new("file://"+report_path)
