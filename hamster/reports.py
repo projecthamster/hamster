@@ -17,7 +17,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-from hamster import stuff
+from hamster import stuff, storage
 import os
 import datetime as dt
 import webbrowser
@@ -83,20 +83,21 @@ def simple(facts, start_date, end_date):
             <th>""" + _("Duration") + """</th>
         </tr>""")
     
+    #get id of last activity so we know when to show current duration
+    last_activity_id = storage.get_last_activity()["id"]
     
     for fact in facts:
         duration = None
         end_time = fact["end_time"]
-        if end_time: # not set if just started
-            delta = end_time - fact["start_time"]
-            duration = 24 * delta.days + delta.seconds / 60
-        elif fact["start_time"].date() == dt.date.today():
-            end_time = dt.datetime.now()
-            delta = end_time - fact["start_time"]
-            duration = 24 * delta.days + delta.seconds / 60
         
+        # ongoing task in current day
+        if not end_time and fact["id"] == last_activity_id:
+            end_time = dt.datetime.now()
+
         end_time_str = ""
         if end_time:
+            delta = end_time - fact["start_time"]
+            duration = 24 * 60 * delta.days + delta.seconds / 60
             end_time_str = end_time.strftime('%H:%M')
 
         category = ""
@@ -115,7 +116,7 @@ def simple(facts, start_date, end_date):
             category, 
             fact["start_time"].strftime('%H:%M'),
             end_time_str,
-            stuff.format_duration(duration)))
+            stuff.format_duration(duration) or ""))
     
     report.write("</table></body></html>")
     report.close()
