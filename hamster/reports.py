@@ -1,6 +1,7 @@
 # - coding: utf-8 -
 
 # Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008 Nathan Samson <nathansamson at gmail dot com>
 
 # This file is part of Project Hamster.
 
@@ -19,6 +20,7 @@
 from hamster import stuff
 import os
 import datetime as dt
+import webbrowser
 
 def simple(facts, start_date, end_date):
     dates_dict = stuff.dateDict(start_date, "start_")
@@ -118,5 +120,5 @@ def simple(facts, start_date, end_date):
     report.write("</table></body></html>")
     report.close()
 
-    os.system("gnome-open %s" % report_path.replace(" ", "\ "))
+    webbrowser.open_new("file://"+report_path)
     
