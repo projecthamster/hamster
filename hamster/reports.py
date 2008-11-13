@@ -2,6 +2,7 @@
 
 # Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2008 Nathan Samson <nathansamson at gmail dot com>
+# Copyright (C) 2008 Giorgos Logiotatidis  <seadog at sealabs dot net>
 
 # This file is part of Project Hamster.
 
@@ -40,7 +41,6 @@ def simple(facts, start_date, end_date):
 
     report_path = os.path.join(os.path.expanduser("~"), "%s.html" % title)
     report = open(report_path, "w")    
-    
     report.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -50,48 +50,68 @@ def simple(facts, start_date, end_date):
     <title>%s</title>
     <style type="text/css">
         body {
+            font-family: "Sans" ;
+            font-size: 12px;
             padding: 12px;
+            color: #303030;
+            
         }
         h1 {
-            border-bottom: 1px solid gray;
+            border-bottom: 2px solid #303030;
             padding-bottom: 4px;
         }
         h2 {
             margin-top: 2em;
+            border-bottom: 2px solid #303030;
         }
         table {
-            margin-left: 24px
+            width:800px;
         }
         th {
+            font-size: 14px;
+            text-align: center;
+            padding-bottom: 6px;
+        }
+  
+        .smallCell {
+            text-align: center;
+            width: 100px;
+            padding: 3px;
+        }
+
+        .largeCell {
             text-align: left;
+            padding: 3px 3px 3px 5px;
+        }     
+        .row1 {
+        	background-color: #EAE8E3;
         }
-        tr {
-            padding: 6px;
-        }
-        td {
-            padding: 2px;
-            padding-right: 24px;
-        }
+
+        .row2 {
+        	background-color: #ffffff;
+        }   
 
     </style>
 </head>
-<body>""" % title)
+<body>""" % title)    
+  
     
     report.write("<h1>%s</h1>" % title)
     
     report.write("""<table>
         <tr>
-            <th>""" + _("Date") + """</th>
-            <th>""" + _("Activity") + """</th>
-            <th>""" + _("Category") + """</th>
-            <th>""" + _("Start") + """</th>
-            <th>""" + _("End") + """</th>
-            <th>""" + _("Duration") + """</th>
+            <th>Date</th>
+            <th class="largeCell">Activity</th>
+            <th>Category</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
         </tr>""")
     
     #get id of last activity so we know when to show current duration
     last_activity_id = storage.get_last_activity()["id"]
     sum_time = {}
+    rowcount = 1
     
     for fact in facts:
         duration = None
@@ -111,25 +131,30 @@ def simple(facts, start_date, end_date):
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
             category = fact["category"]
         # fact date column in HTML report
-        report.write("""<tr>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-</tr>""" % (_("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
+        report.write("""<tr class="row%s">
+                            <td class="smallCell">%s</td>
+                            <td class="largeCell">%s</td>
+                            <td class="smallCell">%s</td>
+                            <td class="smallCell">%s</td>
+                            <td class="smallCell">%s</td>
+                            <td class="smallCell">%s</td>
+                        </tr>
+                       """ % (rowcount, _("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
             fact["name"],
             category, 
             fact["start_time"].strftime('%H:%M'),
             end_time_str,
             stuff.format_duration(duration) or ""))
-
+            
+        if rowcount == 1:
+            rowcount = 2
+        else:
+            rowcount = 1
 
 
         # save data for summary table
         if duration:
-            id_string = "<td>%s</td><td>%s</td>" % (fact["category"], fact["name"])
+            id_string = "<td class=\"smallCell\">%s</td><td class=\"largeCell\">%s</td>" % (fact["category"], fact["name"])
             if id_string in sum_time:
                 sum_time[id_string] += duration
             else:
@@ -138,18 +163,24 @@ def simple(facts, start_date, end_date):
     report.write("</table>")
 
     # summary table
-    report.write("\n<h2>%s</h2>\n" % _("Summary of Activities"))
+    report.write("\n<h2>%s</h2>\n" % _("Totals"))
     report.write("""<table>
     <tr>
-        <th>""" + _("Category") + """</th>
-        <th>""" + _("Activity") + """</th>
-        <th>""" + _("Duration") + """</th>
+        <th class="smallCell">""" + _("Category") + """</th>
+        <th class="largeCell">""" + _("Activity") + """</th>
+        <th class="smallCell">""" + _("Duration") + """</th>
     </tr>\n""")
     tot_time = 0
+    rowcount = 1
     for key in sorted(sum_time.keys()):
-        report.write("    <tr>%s<td>%s</td></tr>\n" % (key, stuff.format_duration(sum_time[key])))
+        report.write("    <tr class=\"row%s\">%s<td class=\"smallCell\">%s</td></tr>\n" % (rowcount, key, stuff.format_duration(sum_time[key])))
         tot_time += sum_time[key]
-    report.write("    <tr><th colspan=\"2\">Total Time:</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
+      
+        if rowcount == 1:
+            rowcount = 2
+        else:
+            rowcount = 1       
+    report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">Total Time:</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
     report.write("</table>\n")
 
     report.write("</body>\n</html>")
