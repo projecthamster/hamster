@@ -109,7 +109,7 @@ def simple(facts, start_date, end_date):
         </tr>""")
     
     #get id of last activity so we know when to show current duration
-    last_activity_id = storage.get_last_activity()["id"]
+    last_activity = storage.get_last_activity()
     sum_time = {}
     rowcount = 1
     
@@ -118,7 +118,7 @@ def simple(facts, start_date, end_date):
         end_time = fact["end_time"]
         
         # ongoing task in current day
-        if not end_time and fact["id"] == last_activity_id:
+        if not end_time and last_activity and fact["id"] == last_activity["id"]:
             end_time = dt.datetime.now()
 
         end_time_str = ""
