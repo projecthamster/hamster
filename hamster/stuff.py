@@ -105,9 +105,6 @@ class DayStore(object):
         # ID, Time, Name, Duration, Date
         self.fact_store = gtk.ListStore(int, str, str, str, str)
         
-        # Dummy ID to distinct between fact_store, Name, Duration
-        self.total_store = gtk.ListStore(int, str, str)
-
         self.facts = storage.get_facts(date)
         self.totals = {}
         
@@ -135,10 +132,4 @@ class DayStore(object):
                                     fact["start_time"].strftime("%H:%M"), 
                                     current_duration,
                                     fact["start_time"].strftime("%Y%m%d")])
-
-        # now we are good to append totals!
-        # no sorting - chronological is intuitive
-        for total in self.totals:
-            if (self.totals[total]) > 0: # TODO - check if this zero check is still necessary (it was 6min check before) 
-                self.total_store.append([-1, format_duration(self.totals[total]), total])
 
