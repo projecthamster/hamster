@@ -121,13 +121,13 @@ class DayStore(object):
                 delta = dt.datetime.now() - fact["start_time"]
                 duration = 24 * delta.days + delta.seconds / 60
             
-            fact_name = fact['name']
+            fact_category = fact['category']
             
-            if fact_name not in self.totals:
-                self.totals[fact_name] = 0
+            if fact_category not in self.totals:
+                self.totals[fact_category] = 0
 
             if duration:
-                self.totals[fact_name] += duration
+                self.totals[fact_category] += duration
 
             current_duration = format_duration(duration)
 

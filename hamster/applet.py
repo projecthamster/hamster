@@ -406,11 +406,19 @@ class HamsterApplet(object):
         if len(day.facts) == 0:
             self.last_activity = None
             self.glade.get_widget("todays_scroll").hide()
-            self.glade.get_widget("no_facts_today").show()
+            
+            self.glade.get_widget("fact_totals").set_text(_("No records today"))
         else:
             self.last_activity = day.facts[len(day.facts) - 1]
             self.glade.get_widget("todays_scroll").show()
-            self.glade.get_widget("no_facts_today").hide()
+            
+            total_string = ""
+            for total in day.totals:
+                total_string += _("%(category)s: %(duration)s, ") % ({'category': total,
+                                                                      'duration': format_duration(day.totals[total])})
+
+            total_string = total_string.rstrip(", ") # trailing slash
+            self.glade.get_widget("fact_totals").set_text(total_string)
    
 
     def refresh_menu(self):
