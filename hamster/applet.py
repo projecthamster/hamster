@@ -181,6 +181,7 @@ class HamsterApplet(object):
         # load window of activity switcher and todays view
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
         self.window = self.glade.get_widget('hamster-window')
+        self.window.set_keep_above(True)
 
         self.set_dropdown()
 
