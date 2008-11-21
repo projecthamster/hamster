@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Oct 24 16:40:17 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Nov 21 17:55:13 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="stats_window">
     <property name="height_request">600</property>
@@ -95,6 +95,7 @@
             <child>
               <widget class="GtkToolButton" id="edit">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Edit activity</property>
                 <property name="stock_id">gtk-edit</property>
                 <signal name="clicked" handler="on_edit_clicked"/>
