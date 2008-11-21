@@ -214,8 +214,7 @@ class Storage(hamster.storage.Storage):
         description = None
         if activity_name.find(",") > 0:
             activity_name, description = activity_name.split(",", 1)
-        
-        description = description.strip()
+            description = description.strip()
         
         # now check if maybe there is also a category
         category_id = None
