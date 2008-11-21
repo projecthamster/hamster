@@ -54,7 +54,7 @@ class StatsViewer:
 
         self.fact_tree.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=2))
         
-        self.fact_store = gtk.TreeStore(int, str, str, str) #id, caption, duration, date (invisible)
+        self.fact_store = gtk.TreeStore(int, str, str, str, str) #id, caption, duration, date (invisible), description
         self.fact_tree.set_model(self.fact_store)
         
         x_offset = 80 # let's nicely align all graphs
@@ -149,8 +149,16 @@ class StatsViewer:
             cell.set_property('markup', text)
 
         else:
-            cell.set_property('text', "   " + cell_text)
-            
+            activity_name = cell_text
+            description = model.get_value(iter, 4)
+    
+            text = "   %s" % activity_name
+            if description:
+                text+= """\n             <span style="italic" size="small">%s</span>""" % (description)
+                
+            cell.set_property('markup', text)
+
+
         return
 
     def get_facts(self):
@@ -174,7 +182,8 @@ class StatsViewer:
             day_row = self.fact_store.append(None, [-1,
                                                     fact_date,
                                                     "",
-                                                    current_date.strftime('%Y-%m-%d')])
+                                                    current_date.strftime('%Y-%m-%d'),
+                                                    ""])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
 
         for fact in facts:
@@ -193,7 +202,8 @@ class StatsViewer:
                                     fact["start_time"].strftime('%H:%M') + " " +
                                     fact["name"],
                                     stuff.format_duration(duration),
-                                    fact["start_time"].strftime('%Y-%m-%d')
+                                    fact["start_time"].strftime('%Y-%m-%d'),
+                                    fact["description"]
                                     ])
 
             if fact["name"] not in by_activity: by_activity[fact["name"]] = 0

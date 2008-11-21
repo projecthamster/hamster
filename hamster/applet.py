@@ -167,6 +167,19 @@ class PanelButton(gtk.ToggleButton):
 
 
 class HamsterApplet(object):
+    def name_painter(self, column, cell, model, iter):
+        activity_name = model.get_value(iter, 1)
+        description = model.get_value(iter, 5)
+
+        text = """%s""" % activity_name
+        if description:
+            text+= """\n<span style="italic" size="small">%s</span>""" % (description)
+            
+        cell.set_property('markup', text)
+            
+        return
+
+
     def __init__(self, applet):
         self.config = GconfStore.get_instance()
         
@@ -190,8 +203,15 @@ class HamsterApplet(object):
         self.treeview.set_tooltip_column(1)
         
         self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
-        self.treeview.append_column(ExpanderColumn("Name", text = 1))
-        self.treeview.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=3))
+
+        nameColumn = gtk.TreeViewColumn(_("Name"))
+        nameColumn.set_expand(True)
+        nameCell = gtk.CellRendererText()
+        nameColumn.pack_start(nameCell, True)
+        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        nameColumn.set_cell_data_func(nameCell, self.name_painter)
+        self.treeview.append_column(nameColumn)
+
         
         edit_cell = gtk.CellRendererPixbuf()
         edit_cell.set_property("stock_id", "gtk-edit")

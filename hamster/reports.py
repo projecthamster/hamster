@@ -106,6 +106,7 @@ def simple(facts, start_date, end_date):
             <th>Start</th>
             <th>End</th>
             <th>Duration</th>
+            <th class="largeCell">Description</th>
         </tr>""")
     
     #get id of last activity so we know when to show current duration
@@ -130,6 +131,9 @@ def simple(facts, start_date, end_date):
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
             category = fact["category"]
+
+        description = fact["description"] or ""            
+            
         # fact date column in HTML report
         report.write("""<tr class="row%s">
                             <td class="smallCell">%s</td>
@@ -138,13 +142,15 @@ def simple(facts, start_date, end_date):
                             <td class="smallCell">%s</td>
                             <td class="smallCell">%s</td>
                             <td class="smallCell">%s</td>
+                            <td class="largeCell">%s</td>
                         </tr>
                        """ % (rowcount, _("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
             fact["name"],
             category, 
             fact["start_time"].strftime('%H:%M'),
             end_time_str,
-            stuff.format_duration(duration) or ""))
+            stuff.format_duration(duration) or "",
+            description))
             
         if rowcount == 1:
             rowcount = 2

@@ -102,8 +102,8 @@ class DayStore(object):
     def __init__(self, date = None):
         date = date or dt.date.today()
         
-        # ID, Time, Name, Duration, Date
-        self.fact_store = gtk.ListStore(int, str, str, str, str)
+        # ID, Time, Name, Duration, Date, Description
+        self.fact_store = gtk.ListStore(int, str, str, str, str, str)
         
         self.facts = storage.get_facts(date)
         self.totals = {}
@@ -131,5 +131,6 @@ class DayStore(object):
             self.fact_store.append([fact['id'], fact['name'], 
                                     fact["start_time"].strftime("%H:%M"), 
                                     current_duration,
-                                    fact["start_time"].strftime("%Y%m%d")])
+                                    fact["start_time"].strftime("%Y%m%d"),
+                                    fact["description"]])
 

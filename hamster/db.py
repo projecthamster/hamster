@@ -172,6 +172,7 @@ class Storage(hamster.storage.Storage):
         query = """SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
+                          a.description as description,
                           b.name AS name, b.id as activity_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
@@ -184,6 +185,7 @@ class Storage(hamster.storage.Storage):
                    SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
+                          a.description as description,
                           b.name AS name, b.id as activity_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
@@ -208,17 +210,26 @@ class Storage(hamster.storage.Storage):
     def __add_fact(self, activity_name, start_time = None, end_time = None):
         start_time = start_time or datetime.datetime.now()
         
-        # try to lookup activity by it's name in db. active ones have priority
+        #see if we have description of activity somewhere here (delimited by comma)
+        description = None
+        if activity_name.find(",") > 0:
+            activity_name, description = activity_name.split(",", 1)
+        
+        description = description.strip()
+        
+        # now check if maybe there is also a category
         category_id = None
         if activity_name.find("@") > 0:
             #at symbol marks category
-            activity_name, category_name = activity_name.split("@")
+            activity_name, category_name = activity_name.split("@", 1)
             
             if category_name:
+                category_name = category_name.strip()
                 category_id = self.__get_category_by_name(category_name)
                 if not category_id:
                     category_id = self.__add_category(category_name)
         
+        # try to find activity
         activity_id = self.__get_activity_by_name(activity_name, category_id)
 
         if not activity_id:
@@ -293,19 +304,11 @@ class Storage(hamster.storage.Storage):
 
 
         # finally add the new entry
-        if end_time:
-            insert = """
-                        INSERT INTO facts (activity_id, start_time, end_time)
-                                   VALUES (?, ?, ?)
-            """
-            self.execute(insert, (activity_id, start_time, end_time))
-        else:
-            insert = """
-                        INSERT INTO facts (activity_id, start_time)
-                                   VALUES (?, ?)
-            """
-            self.execute(insert, (activity_id, start_time))
-
+        insert = """
+                    INSERT INTO facts (activity_id, start_time, end_time, description)
+                               VALUES (?, ?, ?, ?)
+        """
+        self.execute(insert, (activity_id, start_time, end_time, description))
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
         
@@ -317,6 +320,7 @@ class Storage(hamster.storage.Storage):
                    SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
+                          a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, c.id as category_id
                      FROM facts a
@@ -670,10 +674,12 @@ class Storage(hamster.storage.Storage):
 
             self.execute("DROP TABLE activities")
             self.execute("ALTER TABLE activities_new RENAME TO activities")
-            
+        
+        if version < 5:
+            self.execute("ALTER TABLE facts add column description varchar2")
 
         #lock down current version
-        self.execute("UPDATE version SET version = 4")
+        self.execute("UPDATE version SET version = 5")
         
         
         """we start with an empty database and then populate with default
