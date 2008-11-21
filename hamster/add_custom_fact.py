@@ -70,6 +70,11 @@ class CustomFactController:
             self.get_widget('start_time').set_text("%02d:%02d" % (fact["start_time"].hour, fact["start_time"].minute))
 
             self.get_widget('activity_name').set_text(fact["name"])
+            
+            buf = gtk.TextBuffer()
+            buf.set_text(fact["description"] or "")
+            self.get_widget('description').set_buffer(buf)
+
             self.get_widget("ok").set_sensitive(True)
             self.get_widget("ok").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
@@ -211,6 +216,27 @@ class CustomFactController:
     
     def on_ok_clicked(self, button):
         activity = self.get_widget("activity-list").get_child().get_text()
+
+        # juggle with description - break into parts and then put together
+        buf = self.get_widget('description').get_buffer()
+        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
+        description = description.strip()
+        
+        # user might also type description in the activity name - strip it here
+        # and remember value
+        inline_description = None
+        if activity.find(",") != -1:
+            activity, inline_description  = activity.split(",", 1)
+            inline_description = inline_description.strip()
+        
+        # description field is prior to inline description
+        description = description or inline_description
+        
+        if description:
+            activity = "%s, %s" % (activity, description)
+
+        
+        
         start_time = self._get_datetime("start")
 
         end_time = None
