@@ -164,8 +164,9 @@ class CustomFactController:
         # finally add TODO tasks from evolution to both lists
         tasks = hamster.eds.get_eds_tasks()
         for activity in tasks:
-            self.activities.append([activity['name']])
-            store.append([activity['name'], -1])
+            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            self.activities.append([activity['name'],activity['category'],activity_category])
+            store.append([activity['name'], activity['category'], activity_category])
 
         return True
 

@@ -37,12 +37,15 @@ def get_eds_tasks():
         if not sources:
             # BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
             sources = [('default', 'default')]
+
         for source in sources:
+            category = source[0]
+
             data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
             if data:
                 for task in data.get_all_objects():
-                    if task.get_status() in [ecal.AL_STATUS_NONE, ecal.AL_STATUS_INPROCESS]:
-                        tasks.append({'name': task.get_summary()})
+                    if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
+                        tasks.append({'name': task.get_summary(), 'category' : category})
         return tasks
     except Exception, e: # TODO's are not priority - print warning and go home
         print e 
