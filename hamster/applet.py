@@ -242,6 +242,7 @@ class HamsterApplet(object):
             SHARED_DATA_DIR, "Hamster_Applet.xml",
             None, [
             ("about", self.on_about),
+            ("overview", self.show_overview),
             ("preferences", self.show_preferences),
             ])
 
@@ -510,6 +511,11 @@ class HamsterApplet(object):
         else:
             self.activity_list.child.set_text('')
 
+        # doing unstick / stick here, because sometimes while switching
+        # between workplaces window still manages to dissappear
+        self.window.unstick()
+        self.window.stick() #show on all desktops
+
         gobject.idle_add(self._delayed_display)  
         
     def _delayed_display(self):
@@ -579,6 +585,9 @@ class HamsterApplet(object):
         dispatcher.dispatch('panel_visible', False)
         stats_viewer = StatsViewer()
         stats_viewer.show()
+
+    def show_overview(self, menu_item, verb):
+        return self.on_overview(menu_item)
 
     def on_custom_fact(self, menu_item):
         from hamster.add_custom_fact import CustomFactController

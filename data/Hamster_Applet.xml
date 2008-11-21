@@ -1,6 +1,7 @@
 <Root>
     <popups>
         <popup name="button3">
+            <menuitem name="Overview" verb="overview" _label="_Overview"/>
             <menuitem name="Preferences" verb="preferences" _label="_Preferences" pixtype="stock" pixname="gtk-preferences"/>
             <menuitem name="About" verb="about" _label="_About" pixtype="stock" pixname="gtk-about" />
         </popup>
