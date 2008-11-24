@@ -513,6 +513,7 @@ class Storage(hamster.storage.Storage):
         
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
+        current_version = 5
 
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
@@ -677,9 +678,13 @@ class Storage(hamster.storage.Storage):
         if version < 5:
             self.execute("ALTER TABLE facts add column description varchar2")
 
-        #lock down current version
-        self.execute("UPDATE version SET version = 5")
+
+        # at the happy end, update version number 
+        if version < current_version:
+            #lock down current version
+            self.execute("UPDATE version SET version = %d") % current_version
         
+
         
         """we start with an empty database and then populate with default
            values. This way defaults can be localized!"""
