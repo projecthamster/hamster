@@ -75,6 +75,12 @@ if not exists(HAMSTER_DB):
     print "Database not found in %s - installing default from %s!" % (HAMSTER_DB, SHARED_DATA_DIR)
     copyfile(join(SHARED_DATA_DIR, DB_FILE), HAMSTER_DB)
 
+	#change also permissions - sometimes they are 444
+    try:
+    	os.chmod(HAMSTER_DB, 0664)
+    except Exception, msg:	
+        print 'Error:could not change mode on %s!' % (HAMSTER_DB)
+
 # Init storage
 
 dispatcher = Dispatcher()
