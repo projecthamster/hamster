@@ -682,7 +682,7 @@ class Storage(hamster.storage.Storage):
         # at the happy end, update version number 
         if version < current_version:
             #lock down current version
-            self.execute("UPDATE version SET version = %d") % current_version
+            self.execute("UPDATE version SET version = %d" % current_version) 
         
 
         
