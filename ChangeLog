@@ -1,3 +1,8 @@
+2008-11-28  Patryk Zawadzki <patrys@pld-linux.org>
+
+	* configure.ac: 
+	  Reverse the sqlite check to accomodate for python 2.6 and 3.0.
+
 2008-09-29  Patryk Zawadzki <patrys@pld-linux.org>
 
 	* hamster/stats.py: 

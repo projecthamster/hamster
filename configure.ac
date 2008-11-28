@@ -100,23 +100,7 @@ AC_SUBST(PYGTK_DEFSDIR)
 AC_MSG_RESULT($PYGTK_DEFSDIR)
 
 
-if test "x$PYTHON_VERSION" = "x2.5"; then
-    AC_MSG_CHECKING([for python sqlite module])
-    if AC_RUN_LOG([DISPLAY= $PYTHON -c '
-try:
-    import sqlite3
-except ImportError, e:
-    if str(e).find("sqlite3") >= 0:
-        raise
-except:
-    pass
-    ']); then
-      AC_MSG_RESULT([yes])
-    else
-      AC_MSG_RESULT([no])
-      AC_MSG_ERROR([Python 2.5: inbuilt sqlite is required to build hamster])
-    fi
-else
+if test "x$PYTHON_VERSION" = "x2.4"; then
     AC_MSG_CHECKING([for pysqlite2 module])
     if AC_RUN_LOG([DISPLAY= $PYTHON -c '
 try:
@@ -131,6 +115,22 @@ except:
     else
       AC_MSG_RESULT([no])
       AC_MSG_ERROR([Python 2.4: pysqlite2 module required to build hamster])
+    fi
+else
+    AC_MSG_CHECKING([for python sqlite module])
+    if AC_RUN_LOG([DISPLAY= $PYTHON -c '
+try:
+    import sqlite3
+except ImportError, e:
+    if str(e).find("sqlite3") >= 0:
+        raise
+except:
+    pass
+    ']); then
+      AC_MSG_RESULT([yes])
+    else
+      AC_MSG_RESULT([no])
+      AC_MSG_ERROR([Python 2.5+: inbuilt sqlite is required to build hamster])
     fi
 fi
 
