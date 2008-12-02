@@ -1,4 +1,5 @@
 SUBDIRS = keybinder
+ACLOCAL_AMFLAGS = -I m4
 
 CPPFLAGS = \
 	$(PYTHON_INCLUDES) 
