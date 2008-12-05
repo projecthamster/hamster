@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-13 15:36+0800\n"
-"PO-Revision-Date: 2008-11-13 15:36+0800\n"
+"POT-Creation-Date: 2008-12-02 14:12+0800\n"
+"PO-Revision-Date: 2008-11-25 15:41+0800\n"
 "Last-Translator: Ray Wang <wanglei1123@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -31,6 +31,10 @@ msgid "_About"
 msgstr "关于(_A)"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "概要(_O)"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "首选项(_P)"
 
@@ -99,20 +103,28 @@ msgid "Add Earlier Activity"
 msgstr "添加较早的活动"
 
 #: ../data/add_custom_fact.glade.h:4
+msgid "Description:"
+msgstr "描述："
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "Name:"
+msgstr "名称："
+
+#: ../data/add_custom_fact.glade.h:6
 msgid "hours"
 msgstr "小时"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/add_custom_fact.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
 "for"
 msgstr ""
-"正在进行...\n"
+"正在进行\n"
 "直到\n"
 "持续"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
 msgstr "分"
 
@@ -155,7 +167,7 @@ msgstr "添加较早的活动(_D)"
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:4 ../hamster/applet.py:432
 msgid "No records today"
 msgstr "今天没有记录"
 
@@ -253,20 +265,20 @@ msgstr "Hamster 网站"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
-msgstr "Ray Wang <wanglei1123@gmail.com>, 2008"
-"\n"
-"Funda Wang <fundawang@gmail.com, 2008"
+msgstr ""
+"Ray Wang <wanglei1123@gmail.com>, 2008\n"
+"Funda Wang <fundawang@gmail.com>, 2008"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:330 ../hamster/reports.py:111
+#: ../hamster/preferences.py:56 ../hamster/db.py:333 ../hamster/reports.py:132
 msgid "Unsorted"
 msgstr "未分类"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:47
+#: ../hamster/preferences.py:103 ../hamster/applet.py:207
+#: ../hamster/stats.py:47
 msgid "Name"
 msgstr "名称"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:86
-#: ../hamster/reports.py:144
+#: ../hamster/preferences.py:123 ../hamster/reports.py:175
 msgid "Category"
 msgstr "类别"
 
@@ -289,7 +301,7 @@ msgstr "%(interval_minutes)d 分"
 msgid "Never"
 msgstr "从不"
 
-#: ../hamster/add_custom_fact.py:75
+#: ../hamster/add_custom_fact.py:80
 msgid "Update activity"
 msgstr "更新活动"
 
@@ -301,61 +313,66 @@ msgstr "切换任务"
 msgid "Stop Tracking"
 msgstr "停止跟踪"
 
-#: ../hamster/applet.py:376 ../hamster/applet.py:467
+#: ../hamster/applet.py:398 ../hamster/applet.py:498
 msgid "No activity"
 msgstr "没有活动"
 
 #. activity reminder
-#: ../hamster/applet.py:390
+#: ../hamster/applet.py:412
 #, python-format
 msgid "Are you still working on <b>%s</b>?"
 msgstr "您是否仍在<b>%s</b>？"
 
+#: ../hamster/applet.py:439
+#, python-format
+msgid "%(category)s: %(duration)s, "
+msgstr "%(category)s：%(duration)s，"
+
 #. defaults
-#: ../hamster/db.py:500
+#: ../hamster/db.py:503
 msgid "Work"
 msgstr "工作"
 
-#: ../hamster/db.py:501
+#: ../hamster/db.py:504
 msgid "Reading news"
 msgstr "阅读新闻"
 
-#: ../hamster/db.py:502
+#: ../hamster/db.py:505
 msgid "Checking stocks"
 msgstr "查看股票"
 
-#: ../hamster/db.py:503
+#: ../hamster/db.py:506
 msgid "Super secret project X"
 msgstr "进行绝密项目"
 
-#: ../hamster/db.py:504
+#: ../hamster/db.py:507
 msgid "World domination"
 msgstr "征服世界"
 
-#: ../hamster/db.py:506
+#: ../hamster/db.py:509
 msgid "Day to day"
 msgstr "日常"
 
-#: ../hamster/db.py:507
+#: ../hamster/db.py:510
 msgid "Lunch"
 msgstr "吃午饭"
 
-#: ../hamster/db.py:508
+#: ../hamster/db.py:511
 msgid "Watering flowers"
 msgstr "浇花"
 
-#: ../hamster/db.py:509
+#: ../hamster/db.py:512
 msgid "Doing handstands"
 msgstr "玩倒立"
 
-#: ../hamster/db.py:685 ../hamster/db.py:689
+#: ../hamster/db.py:695 ../hamster/db.py:699
 msgid "name"
 msgstr "名称"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:31 ../hamster/stats.py:274
+#: ../hamster/reports.py:32 ../hamster/stats.py:284
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -367,7 +384,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:33 ../hamster/stats.py:279
+#: ../hamster/reports.py:34 ../hamster/stats.py:289
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "概要：%(start_Y)s年%(start_m)s月%(start_d)s日至%(end_m)s月%(end_d)s日"
@@ -375,7 +392,7 @@ msgstr "概要：%(start_Y)s年%(start_m)s月%(start_d)s日至%(end_m)s月%(end_
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:35 ../hamster/stats.py:284
+#: ../hamster/reports.py:36 ../hamster/stats.py:294
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "概要：%(start_Y)s年%(start_m)s月%(start_d)s日至%(end_d)s日"
@@ -383,68 +400,68 @@ msgstr "概要：%(start_Y)s年%(start_m)s月%(start_d)s日至%(end_d)s日"
 #. overview label for single day
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:38 ../hamster/stats.py:290
+#: ../hamster/reports.py:39 ../hamster/stats.py:300
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "概要：%(start_Y)s年%(start_m)s月%(start_d)s日"
 
-#: ../hamster/reports.py:84
-msgid "Date"
-msgstr "日期"
-
-#: ../hamster/reports.py:85 ../hamster/reports.py:145
-msgid "Activity"
-msgstr "活动"
-
-#: ../hamster/reports.py:87
-msgid "Start"
-msgstr "开始"
-
-#: ../hamster/reports.py:88
-msgid "End"
-msgstr "结束"
-
-#: ../hamster/reports.py:89 ../hamster/reports.py:146
-msgid "Duration"
-msgstr "期间"
-
 #. fact date column in HTML report
-#: ../hamster/reports.py:121
+#: ../hamster/reports.py:147
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_Y)s年%(report_m)s月%(report_d)s日"
 
 #. summary table
-#: ../hamster/reports.py:141
-msgid "Summary of Activities"
-msgstr "活动摘要"
+#: ../hamster/reports.py:172
+msgid "Totals"
+msgstr "总计"
+
+#: ../hamster/reports.py:176
+msgid "Activity"
+msgstr "活动"
+
+#: ../hamster/reports.py:177
+msgid "Duration"
+msgstr "期间"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:172
+#: ../hamster/stats.py:180
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_m)s月%(o_d)s日%(o_A)s"
 
 #. date format in month chart in overview window (click on "month" to see it)
 #. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:232
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_m)s月%(m_d)s日"
 
-#: ../hamster/stats.py:246
+#: ../hamster/stats.py:256
 msgid "Other"
 msgstr "其他"
 
-#: ../hamster/stats.py:291
+#: ../hamster/stats.py:301
 msgid "Day"
 msgstr "天"
 
-#: ../hamster/stats.py:293
+#: ../hamster/stats.py:303
 msgid "Week"
 msgstr "周"
 
-#: ../hamster/stats.py:295
+#: ../hamster/stats.py:305
 msgid "Month"
 msgstr "月"
+
+#~ msgid "Date"
+#~ msgstr "日期"
+
+#~ msgid "Start"
+#~ msgstr "开始"
+
+#~ msgid "End"
+#~ msgstr "结束"
+
+#~ msgid "Summary of Activities"
+#~ msgstr "活动摘要"
