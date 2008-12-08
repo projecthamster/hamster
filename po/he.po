@@ -6,8 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 12:16+0000\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&amp;component=general\n"
+"POT-Creation-Date: 2008-11-21 18:46+0000\n"
 "PO-Revision-Date: 2008-08-07 17:30+0300\n"
 "Last-Translator: Yair Hershkovitz\n"
 "Language-Team: he\n"
@@ -15,19 +16,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
+msgid "Project Hamster - track your time"
+msgstr "פרוייקט Hamster - עקוב אחר הזמן שלך"
+
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/applet.py:53
 msgid "Time Tracker"
 msgstr "מעקב אחרי הזמן"
-
-#: ../data/Hamster_Applet.server.in.in.h:2
-msgid "Time tracking for masses"
-msgstr "מעקב אחרי הזמן - להמונים"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "_אודות"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "_סקירה"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_העדפות"
 
@@ -55,27 +62,31 @@ msgstr "הזז ל_מעלה"
 msgid "N_ew Category"
 msgstr "_קטגוריה חדשה"
 
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7
+msgid "Remind of current activity every:"
+msgstr "הזכר את הפעילות הנוכחית כל:"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking on shutdown"
 msgstr "הפסק מעקב בכיבוי"
 
-#: ../data/preferences.glade.h:8
+#: ../data/preferences.glade.h:9
 msgid "Stop tracking when computer becomes idle"
 msgstr "הפסק מעקב כאשר המחשב לא בשימוש"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:10
 msgid "Time Tracker Preferences"
 msgstr "העדפות מעקב זמן"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:11
 msgid "_Activities"
 msgstr "_פעילויות"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:12
 msgid "_Categories"
 msgstr "_קטגוריות"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:13
 msgid "_New Activity"
 msgstr "פעילות _חדשה"
 
@@ -92,10 +103,18 @@ msgid "Add Earlier Activity"
 msgstr "הוסף פעילות קודמת"
 
 #: ../data/add_custom_fact.glade.h:4
+msgid "Description:"
+msgstr "תיאור:"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "Name:"
+msgstr "שם:"
+
+#: ../data/add_custom_fact.glade.h:6
 msgid "hours"
 msgstr "שעות"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/add_custom_fact.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -105,7 +124,7 @@ msgstr ""
 "עד\n"
 "במשך"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
 msgstr "דקות"
 
@@ -114,18 +133,30 @@ msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Keyboard shortcut for showing the Time Tracker window."
 
 #: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "Remind of current task every x minutes"
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Show window"
 msgstr "Show window"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking current activity on shutdown"
 msgstr "Stop tracking current activity on shutdown"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "Stop tracking current activity, when computer becomes idle"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on idle"
 msgstr "Stop tracking on idle"
 
@@ -133,27 +164,28 @@ msgstr "Stop tracking on idle"
 msgid "Ad_d Earlier Activity"
 msgstr "הוסף פעילות _קודמת"
 
-#: ../data/menu.glade.h:2
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:3
+#: ../data/menu.glade.h:4 ../hamster/applet.py:432
 msgid "No records today"
 msgstr "אין רשומות מהיום"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:5
 msgid "Show _Overview"
 msgstr "הצג _סקירה"
 
-#: ../data/menu.glade.h:5
+#: ../data/menu.glade.h:6
 msgid "_Activity:"
 msgstr "_פעילות:"
 
-#: ../data/menu.glade.h:6
+#: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
 msgstr "ה_פסק מעקב"
 
-#: ../data/menu.glade.h:7
+#: ../data/menu.glade.h:8
 msgid "_Today"
 msgstr "ה_יום"
 
@@ -225,10 +257,6 @@ msgstr "הצג שבוע"
 msgid "Today"
 msgstr "היום"
 
-#: ../hamster/about.py:42
-msgid "Time tracking for masses."
-msgstr "מעקב אחרי הזמן - להמונים."
-
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
 msgstr "Copyright © 2007-2008 Toms Baugis and others"
@@ -243,101 +271,205 @@ msgstr ""
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:254 ../hamster/reports.py:108
+#: ../hamster/preferences.py:56 ../hamster/db.py:333 ../hamster/reports.py:132
 msgid "Unsorted"
 msgstr "לא ממוין"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/applet.py:207
+#: ../hamster/stats.py:47
 msgid "Name"
 msgstr "שם"
 
-#: ../hamster/preferences.py:123
+#: ../hamster/preferences.py:123 ../hamster/reports.py:175
 msgid "Category"
 msgstr "קטגוריה"
 
-#: ../hamster/preferences.py:468
+#: ../hamster/preferences.py:494
 msgid "New category"
 msgstr "קטגוריה חדשה"
 
-#: ../hamster/preferences.py:481
+#: ../hamster/preferences.py:507
 msgid "New activity"
 msgstr "פעילות חדשה"
 
-#: ../hamster/add_custom_fact.py:84
+#. notify interval slider value label
+#: ../hamster/preferences.py:552
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d דקות"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:555
+msgid "Never"
+msgstr "לעולם לא"
+
+#: ../hamster/add_custom_fact.py:80
 msgid "Update activity"
 msgstr "עדכן פעילות"
 
-#: ../hamster/applet.py:199
+#: ../hamster/applet.py:60
+msgid "Switch Task"
+msgstr "החלף משימה"
+
+#: ../hamster/applet.py:61
+msgid "Stop Tracking"
+msgstr "הפסק מעקב"
+
+#: ../hamster/applet.py:398 ../hamster/applet.py:498
 msgid "No activity"
 msgstr "אין פעילות"
 
+#. activity reminder
+#: ../hamster/applet.py:412
+#, python-format
+msgid "Are you still working on <b>%s</b>?"
+msgstr "האם אתה עדייו עובד על <b>%s</b>?"
+
+#: ../hamster/applet.py:439
+#, python-format
+msgid "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration)s, "
+
 #. defaults
-#: ../hamster/db.py:403
+#: ../hamster/db.py:503
 msgid "Work"
 msgstr "עבודה"
 
-#: ../hamster/db.py:404
+#: ../hamster/db.py:504
 msgid "Reading news"
 msgstr "קורא חדשות"
 
-#: ../hamster/db.py:405
+#: ../hamster/db.py:505
 msgid "Checking stocks"
 msgstr "בודק מניות"
 
-#: ../hamster/db.py:406
+#: ../hamster/db.py:506
 msgid "Super secret project X"
 msgstr "פרוייקט סופר סודי S"
 
-#: ../hamster/db.py:407
+#: ../hamster/db.py:507
 msgid "World domination"
 msgstr "שליטה עולמית"
 
-#: ../hamster/db.py:409
+#: ../hamster/db.py:509
 msgid "Day to day"
 msgstr "יום יומי"
 
-#: ../hamster/db.py:410
+#: ../hamster/db.py:510
 msgid "Lunch"
 msgstr "ארוחת צהריים"
 
-#: ../hamster/db.py:411
+#: ../hamster/db.py:511
 msgid "Watering flowers"
 msgstr "השקיית פרחים"
 
-#: ../hamster/db.py:412
+#: ../hamster/db.py:512
 msgid "Doing handstands"
 msgstr "עמידת ידיים"
 
-#: ../hamster/db.py:588 ../hamster/db.py:592
+#: ../hamster/db.py:690 ../hamster/db.py:694
 msgid "name"
 msgstr "שם"
 
-#. single day is an exception
-#: ../hamster/reports.py:35 ../hamster/stats.py:265
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:32 ../hamster/stats.py:284
 #, python-format
-msgid "Overview for %s"
-msgstr "סקירה עבור %s"
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr ""
+"סקירה עבור %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
 
-#: ../hamster/reports.py:37 ../hamster/stats.py:268 ../hamster/stats.py:271
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:34 ../hamster/stats.py:289
 #, python-format
-msgid "Overview for %s - %s"
-msgstr "סקירה עבור %s - %s"
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"סקירה עבור %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 
-#: ../hamster/stats.py:234
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:294
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr ""
+"סקירה עבור %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:39 ../hamster/stats.py:300
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr ""
+"סקירה עבור %(start_B)s %(start_d)s, %(start_Y)s"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:147
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#. summary table
+#: ../hamster/reports.py:172
+msgid "Totals"
+msgstr "סך הכל"
+
+#: ../hamster/reports.py:176
+msgid "Activity"
+msgstr "פעילות"
+
+#: ../hamster/reports.py:177
+msgid "Duration"
+msgstr "משך"
+
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:180
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:232
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_b)s %(m_d)s"
+
+#: ../hamster/stats.py:256
 msgid "Other"
 msgstr "אחר"
 
-#: ../hamster/stats.py:266
+#: ../hamster/stats.py:301
 msgid "Day"
 msgstr "יום"
 
-#: ../hamster/stats.py:269
+#: ../hamster/stats.py:303
 msgid "Week"
 msgstr "שבוע"
 
-#: ../hamster/stats.py:272
+#: ../hamster/stats.py:305
 msgid "Month"
 msgstr "חודש"
+
+#~ msgid "Time tracking for masses"
+#~ msgstr "מעקב אחרי הזמן - להמונים"
+
+#~ msgid "Time tracking for masses."
+#~ msgstr "מעקב אחרי הזמן - להמונים."
+
+#~ msgid "Overview for %s"
+#~ msgstr "סקירה עבור %s"
+
+#~ msgid "Overview for %s - %s"
+#~ msgstr "סקירה עבור %s - %s"
 
 #~ msgid "Idle minutes:"
 #~ msgstr "דקות ללא פעילות:"
