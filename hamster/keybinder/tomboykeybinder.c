@@ -20,7 +20,6 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkwindow.h>
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
 
