@@ -36,7 +36,7 @@ class HamsterDbusController(dbus.service.Object):
 
     @dbus.service.signal(HAMSTER_URI)
     def update_activity(self, activity):
-	self.activity = activity
+        self.activity = activity
 
     @dbus.service.method(HAMSTER_URI)
     def get_fact(self):
@@ -44,4 +44,4 @@ class HamsterDbusController(dbus.service.Object):
 
     @dbus.service.signal(HAMSTER_URI)
     def update_fact(self, fact):
-	self.fact = fact
+        self.fact = fact
