@@ -223,6 +223,12 @@ class HamsterApplet(object):
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
             name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
             self.dbusController = HamsterDbusController(bus_name = name)
+
+            # let's also attach our listeners here
+            bus = dbus.SessionBus()
+            bus.add_signal_receiver(self.on_idle_changed,
+                                    dbus_interface="org.gnome.ScreenSaver",
+                                    signal_name="SessionIdleChanged")
         except dbus.DBusException, e:
             print "can't init dbus: %s" % e
     
@@ -288,6 +294,13 @@ class HamsterApplet(object):
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
 
 
+    def on_idle_changed(self, state):
+        print "Idle state changed. Idle: ", state
+        # refresh when we are out of idle
+        # (like, instantly after computer has been turned on!
+        if state == 0:
+            self.refresh_hamster() 
+        
     def set_dropdown(self):
         # set up drop down menu
         self.activity_list = self.glade.get_widget('activity-list')
