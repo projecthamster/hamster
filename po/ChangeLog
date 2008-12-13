@@ -1,3 +1,8 @@
+2008-12-11  Erdal Ronahi  <erdal.ronahi@gmail.com>
+
+	* LINGUAS: Added ku for Kurdish
+	* ku.po: Added new initial translation for Kurdish
+
 2008-12-08  Yair Hershkovitz  <yairhr@gmail.com>
 
 	* he.po: Updated hebrew translation
