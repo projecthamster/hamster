@@ -1,4 +1,39 @@
 ===============
+Version 2.25.3
+===============
+  We were late for 2.25.1 and 2.25.2, so here we go - changes since 2.24.0!
+  
+  Applet - changes
+    * Now it is possible to add description after activity, delimiting with
+      comma: "watering flowers, begonias" will add activity "watering flowers"
+      with description "begonias". Likewise you can go for cacti, and
+      forgetmenots
+    * Task category can be seen in dropdown and can be specified on fly to
+      autocreate: working@new project - will create category "new project"
+      and add activity "working" to it
+    * Hamster now can remind of itself every once in a while, interval is set
+      in preferences (George Logiotatidis)
+    * Sending dbus signals on activity change (Juanje Croissier)
+      
+  Applet - love
+    * Applet now again can be found in applet list by searching for 'hamster'
+    * Get instant totals per category for today, in applet dropdown
+    * Improvements in report - somewhat nicer look and there are also totals
+      (Giorgos Logiotatidis)
+    * Use vertical space if we have some on panel and show applet in two lines
+  
+  Updated translations
+    * bg.po (Alexander Shopov)
+    * el (Nick Agianniotis)
+    * he (Yair Hershkovitz)
+    * ku (Erdal Ronahi)
+    * lv (Toms Bauģis)
+    * sv (Daniel Nylander)
+    * zh_CN (Ray Wang)
+
+    
+
+===============
 Version 2.24.0
 ===============
   Applet
