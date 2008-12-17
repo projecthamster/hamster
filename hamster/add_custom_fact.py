@@ -274,11 +274,15 @@ class CustomFactController:
         self.window.destroy()
         
     def on_combo_changed(self, combo):
-      # do not allow empty tasks
-      activity = self.get_widget("activity-list").get_child().get_text()
-      self.get_widget("ok").set_sensitive(activity != '')
+        # do not allow empty tasks
+        activity = self.get_widget("activity-list").get_child().get_text()
+        self.get_widget("ok").set_sensitive(activity != '')
 
     def on_window_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Escape):
-        self.window.destroy()
+        if (event_key.keyval == gtk.keysyms.Escape):
+            self.window.destroy()
+        elif (event_key.keyval == gtk.keysyms.Return or
+              event_key.keyval == gtk.keysyms.KP_Enter):
+            self.on_ok_clicked(None)
+
 
