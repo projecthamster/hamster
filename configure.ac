@@ -73,6 +73,10 @@ AC_SUBST(HAMSTER_LIBS)
 AC_MSG_CHECKING([for gnomeapplet module])
 if AC_RUN_LOG([DISPLAY= $PYTHON -c '
 try:
+    import pygtk
+    pygtk.require("2.0")
+    import gtk
+    gtk.gdk.threads_init()
     import gnomeapplet
 except ImportError, e:
     if str(e).find("gnomeapplet") >= 0:

@@ -22,7 +22,13 @@
 
 import datetime
 import os.path
-import gnomeapplet, gtk
+
+import pygtk
+pygtk.require("2.0")
+import gtk
+gtk.gdk.threads_init()
+
+import gnomeapplet
 import gobject
 import dbus
 import dbus.service
