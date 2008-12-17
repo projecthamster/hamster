@@ -52,7 +52,11 @@ class StatsViewer:
         nameColumn.set_cell_data_func(nameCell, self.parent_painter)
         self.fact_tree.append_column(nameColumn)
 
-        self.fact_tree.append_column(gtk.TreeViewColumn("", gtk.CellRendererText(), text=2))
+        timeColumn = gtk.TreeViewColumn(_("Duration"))
+        timeCell = gtk.CellRendererText()
+        timeColumn.pack_end(timeCell, True)
+        timeColumn.set_cell_data_func(timeCell, self.duration_painter)
+        self.fact_tree.append_column(timeColumn)
         
         self.fact_store = gtk.TreeStore(int, str, str, str, str) #id, caption, duration, date (invisible), description
         self.fact_tree.set_model(self.fact_store)
@@ -158,8 +162,14 @@ class StatsViewer:
                 
             cell.set_property('markup', text)
 
-
-        return
+    def duration_painter(self, column, cell, model, iter):
+        text = model.get_value(iter, 2)
+        if model.iter_parent(iter) == None:
+            if model.get_path(iter) == (0,):
+                text = '<span weight="heavy">%s</span>' % text
+            else:
+                text = '<span weight="heavy" rise="-20000">%s</span>' % text
+        cell.set_property('markup', text)
 
     def get_facts(self):
         self.fact_store.clear()
@@ -223,6 +233,8 @@ class StatsViewer:
         totals["by_day"] = []
 
         for day in by_day:
+            self.fact_store.set_value(by_day[day]["row_pointer"], 2,
+                stuff.format_duration(by_day[day]["duration"]))
             if (self.end_date - self.start_date).days < 20:
                 strday = day.strftime('%a')
                 totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
