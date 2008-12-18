@@ -27,6 +27,24 @@ import pango
 from pango import ELLIPSIZE_END
 
 import datetime as dt
+import locale
+
+# it seems that python or something has bug of sorts, that breaks stuff for
+# japanese locale, so we have this locale from and to ut8 magic in some places
+# see bug 562298
+def locale_from_utf8(utf8_str):
+    try:
+        retval = unicode (utf8_str, "utf-8").encode(locale.getpreferredencoding())
+    except:
+        retval = utf8_str
+    return retval
+
+def locale_to_utf8(locale_str):
+    try:
+        retval = unicode (locale_str, locale.getpreferredencoding()).encode("utf-8")
+    except:
+        retval = locale_str
+    return retval
 
 class CategoryCell(gtk.CellRendererText):
     def __init__(self):
@@ -92,6 +110,9 @@ def dateDict(date, prefix):
     res[prefix+"Y"] = date.strftime("%Y")
     res[prefix+"Z"] = date.strftime("%Z")
     
+    for i, value in res.items():
+        res[i] = locale_to_utf8(value)
+
     return res
 
 class DayStore(object):

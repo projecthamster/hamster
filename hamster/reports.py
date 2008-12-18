@@ -40,6 +40,7 @@ def simple(facts, start_date, end_date):
     
 
     report_path = os.path.join(os.path.expanduser("~"), "%s.html" % title)
+    report_path = stuff.locale_from_utf8(report_path)
     report = open(report_path, "w")    
     report.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -236,7 +236,7 @@ class StatsViewer:
             self.fact_store.set_value(by_day[day]["row_pointer"], 2,
                 stuff.format_duration(by_day[day]["duration"]))
             if (self.end_date - self.start_date).days < 20:
-                strday = day.strftime('%a')
+                strday = stuff.locale_to_utf8(day.strftime('%a'))
                 totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
             else:
                 # date format in month chart in overview window (click on "month" to see it)
