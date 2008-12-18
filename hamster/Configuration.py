@@ -61,16 +61,16 @@ class GconfStore(object):
 
     
     def get_keybinding(self):
-        return self._client.get_string(self.GCONF_KEYBINDING)
+        return self._client.get_string(self.GCONF_KEYBINDING) or ""
     
     def get_timeout_enabled(self):
-        return self._client.get_bool(self.GCONF_ENABLE_TIMEOUT)
+        return self._client.get_bool(self.GCONF_ENABLE_TIMEOUT) or False
 
     def get_stop_on_shutdown(self):
-        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN)
+        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN) or True
         
     def get_notify_interval(self):
-    	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL)
+    	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL) or 27
 
     #------------------------    
     def set_keybinding(self, binding):
