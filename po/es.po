@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-25 05:54+0000\n"
-"PO-Revision-Date: 2008-09-19 20:06+0200\n"
+"POT-Creation-Date: 2008-12-30 16:40+0000\n"
+"PO-Revision-Date: 2008-12-30 16:52+0000\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -138,8 +138,8 @@ msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or bigger "
 "than 120 to disable reminder."
 msgstr ""
-"Recordar la tarea actual cada número de minutos especificados. Poner a 0 o "
-"a más de 120 para deshabilitar el recordatorio."
+"Recordar la tarea actual cada número de minutos especificados. Poner a 0 o a "
+"más de 120 para deshabilitar el recordatorio."
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Remind of current task every x minutes"
@@ -281,7 +281,8 @@ msgstr "Sin clasificar"
 msgid "Name"
 msgstr "Nombre"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:176
+#: ../hamster/preferences.py:123 ../hamster/reports.py:106
+#: ../hamster/reports.py:176
 msgid "Category"
 msgstr "Categoría"
 
@@ -409,6 +410,30 @@ msgstr "Resumen de %(start_B)s, del %(start_d)s al %(end_d)s de %(end_Y)s"
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Resumen del %(start_d)s de %(start_B)s de %(start_Y)s"
 
+#: ../hamster/reports.py:104
+msgid "Date"
+msgstr "Fecha"
+
+#: ../hamster/reports.py:105 ../hamster/reports.py:177
+msgid "Activity"
+msgstr "Actividad"
+
+#: ../hamster/reports.py:107
+msgid "Start"
+msgstr "Inicio"
+
+#: ../hamster/reports.py:108
+msgid "End"
+msgstr "Fin"
+
+#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:55
+msgid "Duration"
+msgstr "Duración"
+
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Descripción"
+
 #. fact date column in HTML report
 #: ../hamster/reports.py:148
 #, python-format
@@ -420,13 +445,9 @@ msgstr "%(report_d)s/%(report_b)s/%(report_Y)s"
 msgid "Totals"
 msgstr "Totales"
 
-#: ../hamster/reports.py:177
-msgid "Activity"
-msgstr "Actividad"
-
-#: ../hamster/reports.py:178 ../hamster/stats.py:55
-msgid "Duration"
-msgstr "Duración"
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "Tiempo total"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
@@ -457,4 +478,3 @@ msgstr "Semana"
 #: ../hamster/stats.py:317
 msgid "Month"
 msgstr "Mes"
-
