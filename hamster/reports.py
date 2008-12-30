@@ -36,7 +36,7 @@ def simple(facts, start_date, end_date):
         title = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
     if start_date == end_date:
-        title = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
+        title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
     
 
     report_path = os.path.join(os.path.expanduser("~"), "%s.html" % title)
@@ -101,13 +101,13 @@ def simple(facts, start_date, end_date):
     
     report.write("""<table>
         <tr>
-            <th>Date</th>
-            <th class="largeCell">Activity</th>
-            <th>Category</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Duration</th>
-            <th class="largeCell">Description</th>
+            <th>""" + _("Date") + """</th>
+            <th class="largeCell">""" + _("Activity") + """</th>
+            <th>""" + _("Category") + """</th>
+            <th>""" + _("Start") + """</th>
+            <th>""" + _("End") + """</th>
+            <th>""" + _("Duration") + """</th>
+            <th class="largeCell">""" + _("Description") + """</th>
         </tr>""")
     
     #get id of last activity so we know when to show current duration
@@ -187,7 +187,7 @@ def simple(facts, start_date, end_date):
             rowcount = 2
         else:
             rowcount = 1       
-    report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">Total Time:</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
+    report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">" + _("Total Time") + ":</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
     report.write("</table>\n")
 
     report.write("</body>\n</html>")
