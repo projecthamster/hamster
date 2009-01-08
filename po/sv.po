@@ -1,15 +1,15 @@
 # Swedish translation of hamster-applet.
-# Copyright (C) 2008 Free Software Foundation, Inc.
+# Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the hamster-applet package.
 # Kalle Persson <kalle@kallepersson.se>, 2008.
-# Daniel Nylander <po@danielnylander.se>, 2008.
+# Daniel Nylander <po@danielnylander.se>, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-01 21:28+0100\n"
-"PO-Revision-Date: 2008-12-01 21:28+0100\n"
+"POT-Creation-Date: 2009-01-08 01:48+0100\n"
+"PO-Revision-Date: 2009-01-08 01:48+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "Hamster-projektet - mät din tid"
 #. Title of reminder baloon
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../hamster/about.py:40
-#: ../hamster/applet.py:53
+#: ../hamster/applet.py:59
 msgid "Time Tracker"
 msgstr "Tidmätare"
 
@@ -171,7 +171,7 @@ msgid "Hamster"
 msgstr "Hamster"
 
 #: ../data/menu.glade.h:4
-#: ../hamster/applet.py:432
+#: ../hamster/applet.py:451
 msgid "No records today"
 msgstr "Inga poster idag"
 
@@ -278,18 +278,19 @@ msgstr ""
 
 #: ../hamster/preferences.py:56
 #: ../hamster/db.py:333
-#: ../hamster/reports.py:132
+#: ../hamster/reports.py:133
 msgid "Unsorted"
 msgstr "Osorterat"
 
 #: ../hamster/preferences.py:103
-#: ../hamster/applet.py:207
+#: ../hamster/applet.py:213
 #: ../hamster/stats.py:47
 msgid "Name"
 msgstr "Namn"
 
 #: ../hamster/preferences.py:123
-#: ../hamster/reports.py:175
+#: ../hamster/reports.py:106
+#: ../hamster/reports.py:176
 msgid "Category"
 msgstr "Kategori"
 
@@ -316,26 +317,26 @@ msgstr "Aldrig"
 msgid "Update activity"
 msgstr "Uppdatera aktivitet"
 
-#: ../hamster/applet.py:60
+#: ../hamster/applet.py:66
 msgid "Switch Task"
 msgstr "Växla uppgift"
 
-#: ../hamster/applet.py:61
+#: ../hamster/applet.py:67
 msgid "Stop Tracking"
 msgstr "Stoppa tidmätning"
 
-#: ../hamster/applet.py:398
-#: ../hamster/applet.py:498
+#: ../hamster/applet.py:417
+#: ../hamster/applet.py:517
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
 #. activity reminder
-#: ../hamster/applet.py:412
+#: ../hamster/applet.py:431
 #, python-format
 msgid "Are you still working on <b>%s</b>?"
 msgstr "Arbetar du fortfarande på <b>%s</b>?"
 
-#: ../hamster/applet.py:439
+#: ../hamster/applet.py:458
 #, python-format
 msgid "%(category)s: %(duration)s, "
 msgstr "%(category)s: %(duration)s, "
@@ -386,7 +387,7 @@ msgstr "namn"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:32
-#: ../hamster/stats.py:284
+#: ../hamster/stats.py:296
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
@@ -395,7 +396,7 @@ msgstr "Översikt för %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:34
-#: ../hamster/stats.py:289
+#: ../hamster/stats.py:301
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
@@ -404,7 +405,7 @@ msgstr "Översikt för %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:36
-#: ../hamster/stats.py:294
+#: ../hamster/stats.py:306
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s - %(end_d)s %(start_B)s %(end_Y)s"
@@ -413,66 +414,83 @@ msgstr "Översikt för %(start_d)s - %(end_d)s %(start_B)s %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:39
-#: ../hamster/stats.py:300
+#: ../hamster/stats.py:312
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s %(start_Y)s"
 
+#: ../hamster/reports.py:104
+msgid "Date"
+msgstr "Datum"
+
+#: ../hamster/reports.py:105
+#: ../hamster/reports.py:177
+msgid "Activity"
+msgstr "Aktivitet"
+
+#: ../hamster/reports.py:107
+msgid "Start"
+msgstr "Start"
+
+#: ../hamster/reports.py:108
+msgid "End"
+msgstr "Slut"
+
+#: ../hamster/reports.py:109
+#: ../hamster/reports.py:178
+#: ../hamster/stats.py:55
+msgid "Duration"
+msgstr "Längd"
+
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Beskrivning"
+
 #. fact date column in HTML report
-#: ../hamster/reports.py:147
+#: ../hamster/reports.py:148
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_d)s %(report_b)s %(report_Y)s"
 
 #. summary table
-#: ../hamster/reports.py:172
+#: ../hamster/reports.py:173
 msgid "Totals"
 msgstr "Totalt"
 
-#: ../hamster/reports.py:176
-msgid "Activity"
-msgstr "Aktivitet"
-
-#: ../hamster/reports.py:177
-msgid "Duration"
-msgstr "Längd"
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "Total tid"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:180
+#: ../hamster/stats.py:190
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_d)s %(o_b)s"
 
 #. date format in month chart in overview window (click on "month" to see it)
 #. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:232
+#: ../hamster/stats.py:244
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_d)s %(m_b)s"
 
-#: ../hamster/stats.py:256
+#: ../hamster/stats.py:268
 msgid "Other"
 msgstr "Övriga"
 
-#: ../hamster/stats.py:301
+#: ../hamster/stats.py:313
 msgid "Day"
 msgstr "Dag"
 
-#: ../hamster/stats.py:303
+#: ../hamster/stats.py:315
 msgid "Week"
 msgstr "Vecka"
 
-#: ../hamster/stats.py:305
+#: ../hamster/stats.py:317
 msgid "Month"
 msgstr "Månad"
 
-#~ msgid "Date"
-#~ msgstr "Datum"
-#~ msgid "Start"
-#~ msgstr "Start"
-#~ msgid "End"
-#~ msgstr "Slut"
 #~ msgid "Summary of Activities"
 #~ msgstr "Sammandrag av aktiviteter"
 #~ msgid "Time tracking for masses"
