@@ -1,14 +1,14 @@
 # Norwegian bokmål translation of hamster-applet.
 # Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Kjartan Maraas <kmaraas@gnome.org>, 2008.
+# Kjartan Maraas <kmaraas@gnome.org>, 2008-2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-05 15:54+0100\n"
-"PO-Revision-Date: 2009-01-05 15:56+0100\n"
+"POT-Creation-Date: 2009-01-12 15:23+0100\n"
+"PO-Revision-Date: 2009-01-12 15:24+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norsk bokal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr "_Ny kategori"
 
 #: ../data/preferences.glade.h:7
 msgid "Remind of current activity every:"
-msgstr ""
+msgstr "Vis påminnelse om nåværende aktivitet:"
 
 #: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking on shutdown"
@@ -318,8 +318,8 @@ msgstr "Ingen aktivitet"
 #. activity reminder
 #: ../hamster/applet.py:431
 #, python-format
-msgid "Are you still working on <b>%s</b>?"
-msgstr "Arbeider du fremdeles på <b>%s</b>?"
+msgid "Working on <b>%s</b>"
+msgstr "Arbeider på <b>%s</b>?"
 
 #: ../hamster/applet.py:458
 #, python-format
