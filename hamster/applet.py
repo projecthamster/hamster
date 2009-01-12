@@ -428,7 +428,7 @@ class HamsterApplet(object):
                  
         if duration and duration % self.notify_interval == 0:
             # activity reminder
-            msg = _(u"Are you still working on <b>%s</b>?") % self.last_activity['name']
+            msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
             self.notify.msg(msg, self.switch_cb, self.stop_cb)
 
     def switch_cb(self, n, action):
