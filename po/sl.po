@@ -1,13 +1,13 @@
 # This file is distributed under the same license as the package.
 #
-# Matej Urbančič <mateju@svn.gnome.org>, 2008
+# Matej Urbančič <mateju@svn.gnome.org>, 2008 - 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libgwether\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&amp;component=general\n"
-"POT-Creation-Date: 2008-12-17 10:53+0000\n"
-"PO-Revision-Date: 2008-12-17 20:11+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-01-12 14:25+0000\n"
+"PO-Revision-Date: 2009-01-15 17:00+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr "Matej Urbančič <mateju@svn.gnome.org>"
 
 #: ../hamster/preferences.py:56
 #: ../hamster/db.py:333
-#: ../hamster/reports.py:132
+#: ../hamster/reports.py:133
 msgid "Unsorted"
 msgstr "Nerazvrščeno"
 
@@ -285,7 +285,8 @@ msgid "Name"
 msgstr "Ime"
 
 #: ../hamster/preferences.py:123
-#: ../hamster/reports.py:175
+#: ../hamster/reports.py:106
+#: ../hamster/reports.py:176
 msgid "Category"
 msgstr "Kategorija"
 
@@ -328,8 +329,8 @@ msgstr "Ni dejavnosti"
 #. activity reminder
 #: ../hamster/applet.py:431
 #, python-format
-msgid "Are you still working on <b>%s</b>?"
-msgstr "Ali še vedno delate z<b>%s</b>?"
+msgid "Working on <b>%s</b>"
+msgstr "_Opozorilo na <b>%s</b>"
 
 #: ../hamster/applet.py:458
 #, python-format
@@ -414,25 +415,47 @@ msgstr "Overview for %(start_d)s. %(start_B)s - %(end_d)s. %(end_Y)s"
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Pregled %(start_d)s. %(start_B)s %(start_Y)s"
 
+#: ../hamster/reports.py:104
+msgid "Date"
+msgstr "Datum"
+
+#: ../hamster/reports.py:105
+#: ../hamster/reports.py:177
+msgid "Activity"
+msgstr "Dejavnost"
+
+#: ../hamster/reports.py:107
+msgid "Start"
+msgstr "Začetek"
+
+#: ../hamster/reports.py:108
+msgid "End"
+msgstr "Konec"
+
+#: ../hamster/reports.py:109
+#: ../hamster/reports.py:178
+#: ../hamster/stats.py:55
+msgid "Duration"
+msgstr "Trajanje"
+
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Opis"
+
 #. fact date column in HTML report
-#: ../hamster/reports.py:147
+#: ../hamster/reports.py:148
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
 
 #. summary table
-#: ../hamster/reports.py:172
+#: ../hamster/reports.py:173
 msgid "Totals"
 msgstr "Skupno"
 
-#: ../hamster/reports.py:176
-msgid "Activity"
-msgstr "Dejavnost"
-
-#: ../hamster/reports.py:177
-#: ../hamster/stats.py:55
-msgid "Duration"
-msgstr "Trajanje"
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "Skupni čas"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
@@ -468,12 +491,6 @@ msgstr "Mesec"
 #~ msgstr "Časomer za množice."
 #~ msgid "Time tracking for masses."
 #~ msgstr "Časomer za množice."
-#~ msgid "Date"
-#~ msgstr "Datum"
-#~ msgid "Start"
-#~ msgstr "Začetek"
-#~ msgid "End"
-#~ msgstr "Konec"
 #~ msgid "%B %d. %Y"
 #~ msgstr "%d. %B %Y"
 #~ msgid "%B %d"
