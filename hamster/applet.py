@@ -411,7 +411,6 @@ class HamsterApplet(object):
             label = "%s %s" % (self.last_activity['name'], format_duration(duration))
             self.button.set_text(self.last_activity['name'], format_duration(duration))
             
-            self.glade.get_widget('current_activity').set_text(self.last_activity['name'])
             self.glade.get_widget('stop_tracking').set_sensitive(1);
         else:
             label = "%s" % _(u"No activity")
@@ -526,7 +525,9 @@ class HamsterApplet(object):
 
         self.load_day() # reload day each time before showing to avoid outdated last activity
         self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
-        
+
+        if self.last_activity: #reset value of current_activity input, maybe we have some leftovers there
+            self.glade.get_widget('current_activity').set_text(self.last_activity['name'])        
 
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
