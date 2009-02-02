@@ -42,6 +42,12 @@ from hamster.stuff import *
 from hamster.KeyBinder import *
 from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController 
 
+# controllers for other windows
+from hamster.add_custom_fact import CustomFactController
+from hamster.stats import StatsViewer
+from hamster.about import show_about
+from hamster.preferences import PreferencesEditor
+
 import idle
 
 try:
@@ -61,10 +67,12 @@ class Notifier(object):
         if not pynotify.is_initted():
             pynotify.init(app_name)
 
-    def msg(self, body, switch_cb, stop_cb):
+    def msg(self, body, edit_cb, switch_cb):
         self._notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
-        self._notify.add_action("refresh", _("Switch Task"), switch_cb)
-        self._notify.add_action("no", _("Stop Tracking"), stop_cb)
+        #translators: this is edit activity action in the notifier bubble
+        self._notify.add_action("edit", _("Edit"), edit_cb)
+        #translators: this is switch activity action in the notifier bubble
+        self._notify.add_action("switch", _("Switch"), switch_cb)
         self._notify.show()
 
 
@@ -365,7 +373,6 @@ class HamsterApplet(object):
             (model, iter) = selection.get_selected()
             fact_id = model[iter][0]
                 
-            from hamster.add_custom_fact import CustomFactController
             custom_fact = CustomFactController(None, fact_id)
             custom_fact.show()
             return True
@@ -428,13 +435,14 @@ class HamsterApplet(object):
         if duration and duration % self.notify_interval == 0:
             # activity reminder
             msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
-            self.notify.msg(msg, self.switch_cb, self.stop_cb)
+            self.notify.msg(msg, self.edit_cb, self.switch_cb)
+
+    def edit_cb(self, n, action):
+        custom_fact = CustomFactController(None, self.last_activity['id'])
+        custom_fact.show()
 
     def switch_cb(self, n, action):
         self.__show_toggle(None, not self.button.get_active())	
-
-    def stop_cb(self, n, action):
-        self.on_stop_tracking(None)
 
 
     def load_day(self):
@@ -622,7 +630,6 @@ class HamsterApplet(object):
         dispatcher.dispatch('panel_visible', False)
 
     def on_overview(self, menu_item):
-        from hamster.stats import StatsViewer
         dispatcher.dispatch('panel_visible', False)
         stats_viewer = StatsViewer()
         stats_viewer.show()
@@ -631,7 +638,6 @@ class HamsterApplet(object):
         return self.on_overview(menu_item)
 
     def on_custom_fact(self, menu_item):
-        from hamster.add_custom_fact import CustomFactController
         custom_fact = CustomFactController()
         custom_fact.show()
 
@@ -639,12 +645,9 @@ class HamsterApplet(object):
         if self.applet.about:
             self.applet.about.present()
         else:
-            from hamster.about import show_about
             show_about(self.applet)
 
     def show_preferences(self, menu_item, verb):
-        from hamster.preferences import PreferencesEditor
-
         dispatcher.dispatch('panel_visible', False)
         
         if self.preferences_editor and self.preferences_editor.window:
