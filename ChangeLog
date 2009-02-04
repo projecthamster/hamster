@@ -1,5 +1,10 @@
 2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
 
+	* hamster/hamster-applet.py: 
+	  Actuall don't break it.
+
+2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
+
 	* hamster/db.py,
 	  hamster/hamster-applet.py,
 	  hamster/ltihooks.py: 
