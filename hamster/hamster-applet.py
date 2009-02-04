@@ -34,13 +34,9 @@ import gettext, locale
 def _check(path):
     return exists(path) and isdir(path) and isfile(path+"/AUTHORS")
 
-name = join(dirname(__file__), '..')
 if _check(name):
     print 'Running uninstalled hamster, modifying PYTHONPATH'
-    sys.path.insert(0, abspath(name))
-else:
-    sys.path.insert(0, abspath("@PYTHONDIR@"))
-    print "Running installed hamster, using [@PYTHONDIR@:$PYTHONPATH]"
+    sys.path.insert(0, 'keybinder/.libs')
 
 # Now the path is set, import our applet
 import hamster.defs

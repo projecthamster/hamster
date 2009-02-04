@@ -1,3 +1,11 @@
+2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
+
+	* hamster/db.py,
+	  hamster/hamster-applet.py,
+	  hamster/ltihooks.py: 
+	  Drop the unholy arcane magic modifying the path and importing
+	  process.
+
 2008-12-30  Juanje Ojeda <jojeda@emergya.es> 
 
 	* hamster/reports.py: Added i18n stuff to some missing strings.
