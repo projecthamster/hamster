@@ -270,12 +270,10 @@ class PreferencesEditor:
         
         if drop_info:
             path, position = drop_info
-
             iter = model.get_iter(path)
+            changed = storage.change_category(int(data), model[iter][0])
             
-            storage.change_category(int(data), model[iter][0])
-            
-            context.finish(True, True, etime)
+            context.finish(changed, True, etime)
         else:
             context.finish(False, True, etime)
 

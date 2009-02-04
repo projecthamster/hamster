@@ -48,6 +48,9 @@ class Storage(hamster.storage.Storage):
         activity = self.fetchone("select name from activities where id = ?", (id, ))
         existing_id = self.__get_activity_by_name(activity['name'], category_id)
         
+        if id == existing_id: # we are already there, go home
+            return False
+        
         if existing_id: #ooh, we have something here!
             # first move all facts that belong to movable activity to the new one
             update = """
@@ -72,6 +75,8 @@ class Storage(hamster.storage.Storage):
             """
             
             self.execute(statement, (category_id, max_order, id))
+        
+        return True
     
     def __add_category(self, name):
         new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")

@@ -81,8 +81,10 @@ class Storage(object):
         self.dispatch('activity_updated', ())
 
     def change_category(self, id, category_id):
-        self.__change_category(id, category_id)
-        self.dispatch('activity_updated', ())
+        changed = self.__change_category(id, category_id)
+        if changed:
+            self.dispatch('activity_updated', ())
+        return changed
 
     def swap_activities(self, id1, id2):
         res = self.__swap_activities(id1, id2)
