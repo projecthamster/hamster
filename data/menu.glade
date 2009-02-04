@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Nov 17 23:09:58 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Feb  4 22:28:05 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
@@ -54,6 +54,7 @@
                         <property name="yscale">0</property>
                         <child>
                           <widget class="GtkComboBoxEntry" id="activity-list">
+                            <property name="width_request">250</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <signal name="changed" handler="on_activity_switched"/>
