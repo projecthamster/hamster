@@ -35,11 +35,11 @@ def _check(path):
     return os.path.exists(path) and os.path.isdir(path) \
            and os.path.isfile(path + "/AUTHORS")
 
-name = os.path.join(os.path.dirname(__file__), '..')
+name = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if _check(name):
     print 'Running uninstalled hamster, modifying PYTHONPATH'
-    sys.path.insert(0, '..')
-    sys.path.insert(0, 'keybinder/.libs')
+    sys.path.insert(0, os.path.join(name, "hamster", "keybinder/.libs"))
+    sys.path.insert(0, name)
 
 # Now the path is set, import our applet
 import hamster.defs
