@@ -31,14 +31,8 @@ import locale
 
 # Autotools set the actual data_dir in defs.py
 from db import Storage
-from defs import *
+import defs
 from dispatcher import Dispatcher
-
-try:
-    # Allows to load uninstalled .la libs
-    import ltihooks
-except ImportError:
-    pass
 
 # Init i18n
 import __builtin__
@@ -58,7 +52,7 @@ if _check(name):
 if UNINSTALLED_HAMSTER:
     SHARED_DATA_DIR = abspath(join(dirname(__file__), '..', 'data'))
 else:
-    SHARED_DATA_DIR = join(DATA_DIR, "hamster-applet")
+    SHARED_DATA_DIR = join(defs.DATA_DIR, "hamster-applet")
 print "Data Dir: %s" % SHARED_DATA_DIR
 
 USER_HAMSTER_DIR = expanduser("~/.gnome2/hamster-applet")
@@ -75,9 +69,9 @@ if not exists(HAMSTER_DB):
     print "Database not found in %s - installing default from %s!" % (HAMSTER_DB, SHARED_DATA_DIR)
     copyfile(join(SHARED_DATA_DIR, DB_FILE), HAMSTER_DB)
 
-	#change also permissions - sometimes they are 444
+    #change also permissions - sometimes they are 444
     try:
-    	os.chmod(HAMSTER_DB, 0664)
+        os.chmod(HAMSTER_DB, 0664)
     except Exception, msg:	
         print 'Error:could not change mode on %s!' % (HAMSTER_DB)
 
@@ -91,7 +85,7 @@ ART_DATA_DIR = join(SHARED_DATA_DIR, "art")
 
 
 def __init_db():
-    """work arround the problem that we need hamster before setting
+    """work around the problem that we need hamster before setting
        locale info, but that triggers init of DB and thus sets strings
        before they have been localized"""
     global storage

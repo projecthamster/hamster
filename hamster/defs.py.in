@@ -3,6 +3,3 @@ LIB_DIR = "@LIBDIR@"
 VERSION = "@VERSION@"
 PACKAGE = "@PACKAGE@"
 PYTHONDIR = "@PYTHONDIR@"
-
-import sys, os.path 
-sys.path.append(".libs") 
