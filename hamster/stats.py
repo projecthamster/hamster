@@ -495,7 +495,9 @@ class StatsViewer:
         return False
 
     def on_window_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Escape):
+      if (event_key.keyval == gtk.keysyms.Escape
+          or (event_key.keyval == gtk.keysyms.w 
+              and event_key.state & gtk.gdk.CONTROL_MASK)):
         self.window.destroy()
     
     def show(self):

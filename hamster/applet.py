@@ -617,7 +617,9 @@ class HamsterApplet(object):
         
         
     def on_windows_keys(self, tree, event_key):
-        if (event_key.keyval == gtk.keysyms.Escape):
+        if (event_key.keyval == gtk.keysyms.Escape
+          or (event_key.keyval == gtk.keysyms.w 
+              and event_key.state & gtk.gdk.CONTROL_MASK)):
             dispatcher.dispatch('panel_visible', False)
             return True
         return False
