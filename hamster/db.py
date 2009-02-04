@@ -125,7 +125,6 @@ class Storage(hamster.storage.Storage):
                         LIMIT 1
             """
             
-            print '!!!!!!!!!!! %s' % type(name)
             res = self.fetchone(query, (name, category_id))
         else:
             query = """
