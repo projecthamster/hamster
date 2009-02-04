@@ -23,8 +23,11 @@
 import os
 from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
 from shutil import copy as copyfile
+import gtk, gnome.ui 	 
+from gtk import glade
 import gettext
-
+import locale
+	 
 # Autotools set the actual data_dir in defs.py
 from db import Storage
 import defs
