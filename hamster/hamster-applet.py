@@ -38,6 +38,7 @@ def _check(path):
 name = os.path.join(os.path.dirname(__file__), '..')
 if _check(name):
     print 'Running uninstalled hamster, modifying PYTHONPATH'
+    sys.path.insert(0, '..')
     sys.path.insert(0, 'keybinder/.libs')
 
 # Now the path is set, import our applet

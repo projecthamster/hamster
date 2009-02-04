@@ -592,7 +592,7 @@ class HamsterApplet(object):
 
     def on_activity_entered(self, component):
         """fires, when user writes activity by hand"""
-        activity_name = component.get_text()
+        activity_name = component.get_text().decode('utf8', 'replace')
         
         if activity_name == "":
             return

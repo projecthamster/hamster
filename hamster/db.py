@@ -82,7 +82,7 @@ class Storage(hamster.storage.Storage):
                    INSERT INTO categories (id, name, category_order)
                         VALUES (?, ?, ?)
         """
-        self.execute(query, (id, name.encode('utf-8'), order))
+        self.execute(query, (id, name, order))
         return id
 
     def __update_category(self, id,  name):
@@ -125,7 +125,8 @@ class Storage(hamster.storage.Storage):
                         LIMIT 1
             """
             
-            res = self.fetchone(query, (name.encode('utf-8'), category_id))
+            print '!!!!!!!!!!! %s' % type(name)
+            res = self.fetchone(query, (name, category_id))
         else:
             query = """
                        SELECT id, deleted from activities 
@@ -133,8 +134,8 @@ class Storage(hamster.storage.Storage):
                      ORDER BY deleted, id desc
                         LIMIT 1
             """
-            
-            res = self.fetchone(query, (name.encode('utf-8'), ))
+
+            res = self.fetchone(query, (name, ))
         
         if res:
             # if the activity was marked as deleted, ressurect on first call
@@ -161,7 +162,7 @@ class Storage(hamster.storage.Storage):
                     LIMIT 1
         """
             
-        res = self.fetchone(query, (name.encode('utf-8'), ))
+        res = self.fetchone(query, (name, ))
         
         if res:
             return res['id']
@@ -448,7 +449,7 @@ class Storage(hamster.storage.Storage):
                    INSERT INTO activities (id, name, category_id, activity_order)
                         VALUES (?, ?, ?, ?)
         """
-        self.execute(query, (new_id, name.encode('utf-8'), category_id, new_order))
+        self.execute(query, (new_id, name, category_id, new_order))
         return new_id
 
     def __update_activity(self, id, name, category_id):
@@ -458,7 +459,7 @@ class Storage(hamster.storage.Storage):
                            category_id = ?
                      WHERE id = ?
         """
-        self.execute(query, (name.encode('utf-8'), category_id, id))
+        self.execute(query, (name, category_id, id))
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):

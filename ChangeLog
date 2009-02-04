@@ -1,5 +1,13 @@
 2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
 
+	* hamster/applet.py,
+	  hamster/db.py,
+	  hamster/hamster-applet.py: 
+	  Make it work with Unicode locales (at least assuming GTK+
+	  always return UTF-8).
+
+2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
+
 	* hamster/hamster-applet.py: 
 	  Actuall don't break it.
 
