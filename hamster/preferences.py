@@ -195,6 +195,14 @@ class PreferencesEditor:
                 self.activity_tree.set_cursor((i, ))
             i += 1
                 
+    def select_category(self, id):
+        model = self.category_tree.get_model()
+        i = 0
+        for row in model:
+            if row[0] == id:
+                self.category_tree.set_cursor((i, ))
+            i += 1
+                
     def on_activity_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
         self.prev_selected_activity = None
         try:
@@ -293,50 +301,46 @@ class PreferencesEditor:
     def show(self):
         self.window.show_all()
 
-    def update_activity(self, tree_row):
-        print "Update activity: ", tree_row[3]
-        #map to dictionary, for easier updates
-        name = tree_row[1]
-        category_id = tree_row[2]
-        id = tree_row[0]
-        
-        if id == -1:
-            #search for activities with same name
-            activities = storage.get_activities(category_id)
-            for activity in activities:
-                if activity['name'].lower() == name:
-                    self.select_activity(activity['id'])
-                    return False
-            
-            tree_row[0] = storage.add_activity(name, category_id)
-        else:
-            storage.update_activity(id, name, category_id)
-            
-        return True
-
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
-        model[path][1] = new_text
         id = model[path][0]
-        name = model[path][1]
-        
-        if id == -2:
-            id = storage.add_category(name)
+        if id == -1:
+            return False #ignoring unsorted category
+
+        #look for dupes
+        categories = storage.get_category_list()
+        for category in categories:
+            if category['name'].lower() == new_text.lower():
+                if id == -2: # that was a new category
+                    self.category_store.remove(model.get_iter(path))
+                self.select_category(category['id'])
+                return False
+
+        if id == -2: #new category
+            id = storage.add_category(new_text)
             model[path][0] = id
-        elif id > -1:  #ignore unsorted category (id = -1)
-            storage.update_category(id, name)
+        else:
+            storage.update_category(id, new_text)
+
+        model[path][1] = new_text
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
+        id = model[path][0]
+        category_id = model[path][2]
+        
+        #look for dupes
+        activities = storage.get_activities(category_id)
+        for activity in activities:
+            if activity['name'].lower() == new_text.lower():
+                if id == -1: # that was a new category
+                    self.activity_store.remove(model.get_iter(path))
+                self.select_activity(activity['id'])
+                return False
+        
+        model[path][0] = storage.add_activity(new_text, category_id)
         model[path][1] = new_text
-        res = self.update_activity(model[path])
-        
-        # if update fails on new activity - it's because it is a dupe
-        # so we remove it
-        if not res and model[path][0] == -1: 
-           self.activity_store.remove(model.get_iter(path))
-        
-        return res
+        return True
         
 
     def category_changed_cb(self, selection, model):
@@ -481,7 +485,21 @@ class PreferencesEditor:
             #tree.set_cursor(path, start_editing = True)
 
     def on_preferences_window_key_press(self, widget, event):
+        # ctrl+w means close window
+        if (event.keyval == gtk.keysyms.w \
+            and event.state & gtk.gdk.CONTROL_MASK):
+            self.window.destroy()
+
+        # escape can mean several things
         if event.keyval == gtk.keysyms.Escape:
+            #check, maybe we are editing stuff
+            if self.activityCell.get_property("editable"):
+                self.activityCell.set_property("editable", False)
+                return
+            if self.categoryCell.get_property("editable"):
+                self.categoryCell.set_property("editable", False)
+                return
+
             self.window.destroy()     
 
     """button events"""
