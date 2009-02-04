@@ -27,14 +27,15 @@ if PROFILE:
 
 import gtk, gnomeapplet
 import getopt, sys
-from os.path import *
+import os.path
 import gettext, locale
 
 # Allow to use uninstalled
 def _check(path):
-    return exists(path) and isdir(path) and isfile(path+"/AUTHORS")
+    return os.path.exists(path) and os.path.isdir(path) \
+           and os.path.isfile(path + "/AUTHORS")
 
-name = join(dirname(__file__), '..')
+name = os.path.join(os.path.dirname(__file__), '..')
 if _check(name):
     print 'Running uninstalled hamster, modifying PYTHONPATH'
     sys.path.insert(0, 'keybinder/.libs')
@@ -43,12 +44,14 @@ if _check(name):
 import hamster.defs
 
 # Setup i18n
-gettext.bindtextdomain('hamster-applet', abspath(join(hamster.defs.DATA_DIR, "locale")))
+locale_dir = os.path.abspath(os.path.join(hamster.defs.DATA_DIR, "locale"))
+
+gettext.bindtextdomain('hamster-applet', locale_dir)
 if hasattr(gettext, 'bind_textdomain_codeset'):
     gettext.bind_textdomain_codeset('hamster-applet','UTF-8')
 gettext.textdomain('hamster-applet')
 
-locale.bindtextdomain('hamster-applet', abspath(join(hamster.defs.DATA_DIR, "locale")))
+locale.bindtextdomain('hamster-applet', locale_dir)
 if hasattr(locale, 'bind_textdomain_codeset'):
     locale.bind_textdomain_codeset('hamster-applet','UTF-8')
 locale.textdomain('hamster-applet')
