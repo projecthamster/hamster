@@ -1,3 +1,7 @@
+2009-02-09  Juanje Ojeda <jojeda@emergya.es> 
+
+	* hamster/preferences.py: Fixed issue with i18n strings.
+
 2009-02-04  Patryk Zawadzki <patrys@pld-linux.org>
 
 	* hamster/applet.py,
