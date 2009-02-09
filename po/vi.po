@@ -1,0 +1,497 @@
+# Vietnamese translation for Hamster Applet.
+# Copyright © 2009 GNOME I18N Project for Vietnamese.
+# Clytie Siddall <clytie@riverland.net.au>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet TRUNK\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-02-08 23:57+0000\n"
+"PO-Revision-Date: 2009-02-09 17:29+1030\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: LocFactoryEditor 1.8\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../hamster/about.py:42
+msgid "Project Hamster - track your time"
+msgstr "Dự án Hamster — theo dõi thời gian làm"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../hamster/about.py:40
+#: ../hamster/applet.py:65
+#. Title of reminder baloon
+msgid "Time Tracker"
+msgstr "Theo dõi Thời gian"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "G_iới thiệu"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "T_oàn cảnh"
+
+#: ../data/Hamster_Applet.xml.h:3
+msgid "_Preferences"
+msgstr "Tù_y thích"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Hoạt động</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Phím tắt Toàn cục</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Theo dõi</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr ""
+"Đưa _Xuống"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr ""
+"Đưa _Lên"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "Loại mớ_i"
+
+#: ../data/preferences.glade.h:7
+msgid "Remind of current activity every:"
+msgstr "Nhắc nhở về hoạt động hiện thời mỗi:"
+
+#: ../data/preferences.glade.h:8
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking on shutdown"
+msgstr "Dừng theo dõi khi tắt máy"
+
+#: ../data/preferences.glade.h:9
+msgid "Stop tracking when computer becomes idle"
+msgstr "Dừng theo dõi khi máy tính bắt đầu nghỉ"
+
+#: ../data/preferences.glade.h:10
+msgid "Time Tracker Preferences"
+msgstr "Tùy thích Theo dõi Thời gian"
+
+#: ../data/preferences.glade.h:11
+msgid "_Activities"
+msgstr "_Hoạt động"
+
+#: ../data/preferences.glade.h:12
+msgid "_Categories"
+msgstr "_Loại"
+
+#: ../data/preferences.glade.h:13
+msgid "_New Activity"
+msgstr "Hoạt động mớ_i"
+
+#: ../data/add_custom_fact.glade.h:1
+#: ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Hoạt động</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Ngày và Giờ</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Thêm hoạt động trước"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "Description:"
+msgstr "Mô tả:"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "Name:"
+msgstr "Tên:"
+
+#: ../data/add_custom_fact.glade.h:6
+msgid "hours"
+msgstr "giờ"
+
+#: ../data/add_custom_fact.glade.h:7
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr "đang tiến hành...\n"
+"đến\n"
+"trong"
+
+#: ../data/add_custom_fact.glade.h:10
+msgid "minutes"
+msgstr "phút"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Phím tắt hiển thị cửa sổ Theo dõi Thời gian."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr "Nhắc nhở về tác vụ hiện thời mỗi số phút đã ghi rõ. Đặt thành 0 hay hơn 120 để tắt chức năng nhắc nhở."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "Nhắc nhở về tác vụ hiện thời mỗi x phút"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Show window"
+msgstr "Hiện cửa sổ"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity on shutdown"
+msgstr "Dừng theo dõi hoạt động hiện thời khi tắt máy"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Dừng theo dõi hoạt động hiện thời khi máy tính vào tình trạng nghỉ"
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "Stop tracking on idle"
+msgstr "Đừng theo dõi khi nghỉ"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "Thêm hoạt động t_rước"
+
+#: ../data/menu.glade.h:3
+#. This title appears only when debugging from console. Leave it as is.
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4
+#: ../hamster/applet.py:458
+msgid "No records today"
+msgstr "Không tìm thấy"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Hiện T_oàn cảnh"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "_Hoạt động:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Dừng theo dõi"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "Hô_m nay"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr " _Ngày"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr " T_háng"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr " _Tuần"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Phân loại</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Toàn cảnh</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Tuần</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Thêm hoạt động"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Xoá hoạt động"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Hoạt động trước"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Sửa hoạt động"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Tạo báo cáo"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Hoạt động mới"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Toàn cảnh — Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Hiển thị ngày"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Hiển thị tháng"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Hiển thị tuần"
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Tác quyền © năm 2007-2008 của Toms Baugis và người khác"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Trang Web Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr ""
+"Nhóm Việt hóa GNOME <gnomevi-list@lists.sourceforge.net>"
+
+#: ../hamster/preferences.py:56
+#: ../hamster/db.py:343
+#: ../hamster/reports.py:133
+msgid "Unsorted"
+msgstr "Chưa sắp xếp"
+
+#: ../hamster/preferences.py:103
+#: ../hamster/applet.py:221
+#: ../hamster/stats.py:47
+msgid "Name"
+msgstr "Tên"
+
+#: ../hamster/preferences.py:123
+#: ../hamster/reports.py:106
+#: ../hamster/reports.py:176
+msgid "Category"
+msgstr "Loại"
+
+#: ../hamster/preferences.py:510
+msgid "New category"
+msgstr "Loại mới"
+
+#: ../hamster/preferences.py:523
+msgid "New activity"
+msgstr "Hoạt động mới"
+
+#: ../hamster/preferences.py:568
+#, python-format
+#. notify interval slider value label
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d phút"
+
+#: ../hamster/preferences.py:571
+#. notify interval slider value label
+msgid "Never"
+msgstr "Không bao giờ"
+
+#: ../hamster/add_custom_fact.py:80
+msgid "Update activity"
+msgstr "Cập nhật hoạt động"
+
+#: ../hamster/applet.py:73
+#. translators: this is edit activity action in the notifier bubble
+msgid "Edit"
+msgstr "Sửa"
+
+#: ../hamster/applet.py:75
+#. translators: this is switch activity action in the notifier bubble
+msgid "Switch"
+msgstr "Chuyển đổi"
+
+#: ../hamster/applet.py:423
+#: ../hamster/applet.py:524
+msgid "No activity"
+msgstr "Không có hoạt động"
+
+#: ../hamster/applet.py:437
+#, python-format
+#. activity reminder
+msgid "Working on <b>%s</b>"
+msgstr "Đang làm <b>%s</b>"
+
+# Variable: don't translate/Biến: đừng dịch
+#: ../hamster/applet.py:465
+#, python-format
+msgid "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration)s, "
+
+#: ../hamster/db.py:513
+#. defaults
+msgid "Work"
+msgstr "Chỗ làm"
+
+#: ../hamster/db.py:514
+msgid "Reading news"
+msgstr "Đang đọc tin tức"
+
+#: ../hamster/db.py:515
+msgid "Checking stocks"
+msgstr "Đang kiểm tra các chứng khoán"
+
+#: ../hamster/db.py:516
+msgid "Super secret project X"
+msgstr "Dự án rất mật X"
+
+#: ../hamster/db.py:517
+msgid "World domination"
+msgstr "Thống trị thố giới"
+
+#: ../hamster/db.py:519
+msgid "Day to day"
+msgstr "Hằng ngày"
+
+#: ../hamster/db.py:520
+msgid "Lunch"
+msgstr "Ăn trưa"
+
+#: ../hamster/db.py:521
+msgid "Watering flowers"
+msgstr "Đang tưới các hoa"
+
+#: ../hamster/db.py:522
+msgid "Doing handstands"
+msgstr "Đang tư thế trồng chuối"
+
+#: ../hamster/db.py:705
+#: ../hamster/db.py:709
+msgid "name"
+msgstr "tên"
+
+#: ../hamster/reports.py:32
+#: ../hamster/stats.py:296
+#, python-format
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr "Toàn cảnh về %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+
+#: ../hamster/reports.py:34
+#: ../hamster/stats.py:301
+#, python-format
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Toàn cảnh về %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#: ../hamster/reports.py:36
+#: ../hamster/stats.py:306
+#, python-format
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Toàn cảnh về %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#: ../hamster/reports.py:39
+#: ../hamster/stats.py:312
+#, python-format
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Toàn cảnh về %(start_B)s %(start_d)s, %(start_Y)s"
+
+#: ../hamster/reports.py:104
+msgid "Date"
+msgstr "Ngày"
+
+#: ../hamster/reports.py:105
+#: ../hamster/reports.py:177
+msgid "Activity"
+msgstr "Hoạt động"
+
+#: ../hamster/reports.py:107
+msgid "Start"
+msgstr "Đầu"
+
+#: ../hamster/reports.py:108
+msgid "End"
+msgstr "Cuối"
+
+#: ../hamster/reports.py:109
+#: ../hamster/reports.py:178
+#: ../hamster/stats.py:55
+msgid "Duration"
+msgstr ""
+"Thời gian"
+
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Mô tả"
+
+# Variable: don't translate/Biến: đừng dịch
+#: ../hamster/reports.py:148
+#, python-format
+#. fact date column in HTML report
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#: ../hamster/reports.py:173
+#. summary table
+msgid "Totals"
+msgstr "Tổng số"
+
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "Tổng thời gian"
+
+# Variable: don't translate/Biến: đừng dịch
+#: ../hamster/stats.py:190
+#, python-format
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+# Variable: don't translate/Biến: đừng dịch
+#: ../hamster/stats.py:244
+#, python-format
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_b)s %(m_d)s"
+
+#: ../hamster/stats.py:268
+msgid "Other"
+msgstr "Khác"
+
+#: ../hamster/stats.py:313
+msgid "Day"
+msgstr "Ngày"
+
+#: ../hamster/stats.py:315
+msgid "Week"
+msgstr "Tuần"
+
+#: ../hamster/stats.py:317
+msgid "Month"
+msgstr "Tháng"
