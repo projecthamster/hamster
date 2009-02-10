@@ -313,7 +313,6 @@ msgstr "Editar"
 
 #. translators: this is switch activity action in the notifier bubble
 #: ../hamster/applet.py:75
-#, fuzzy
 #| msgid "Switch Task"
 msgid "Switch"
 msgstr "Cambiar"
