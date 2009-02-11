@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-08 01:48+0100\n"
-"PO-Revision-Date: 2009-01-08 01:48+0100\n"
+"POT-Creation-Date: 2009-02-11 04:17+0100\n"
+"PO-Revision-Date: 2009-02-11 04:17+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "Hamster-projektet - mät din tid"
 #. Title of reminder baloon
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../hamster/about.py:40
-#: ../hamster/applet.py:59
+#: ../hamster/applet.py:65
 msgid "Time Tracker"
 msgstr "Tidmätare"
 
@@ -171,7 +171,7 @@ msgid "Hamster"
 msgstr "Hamster"
 
 #: ../data/menu.glade.h:4
-#: ../hamster/applet.py:451
+#: ../hamster/applet.py:458
 msgid "No records today"
 msgstr "Inga poster idag"
 
@@ -255,10 +255,6 @@ msgstr "Visa månad"
 msgid "Show week"
 msgstr "Visa vecka"
 
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "Idag"
-
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
 msgstr "Copyright © 2007-2008 Toms Baugis och andra"
@@ -277,13 +273,13 @@ msgstr ""
 "tp-sv@listor.tp-sv.se"
 
 #: ../hamster/preferences.py:56
-#: ../hamster/db.py:333
+#: ../hamster/db.py:343
 #: ../hamster/reports.py:133
 msgid "Unsorted"
 msgstr "Osorterat"
 
 #: ../hamster/preferences.py:103
-#: ../hamster/applet.py:213
+#: ../hamster/applet.py:221
 #: ../hamster/stats.py:47
 msgid "Name"
 msgstr "Namn"
@@ -294,22 +290,22 @@ msgstr "Namn"
 msgid "Category"
 msgstr "Kategori"
 
-#: ../hamster/preferences.py:494
+#: ../hamster/preferences.py:510
 msgid "New category"
 msgstr "Ny kategori"
 
-#: ../hamster/preferences.py:507
+#: ../hamster/preferences.py:523
 msgid "New activity"
 msgstr "Ny aktivitet"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:552
+#: ../hamster/preferences.py:568
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minuter"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:555
+#: ../hamster/preferences.py:571
 msgid "Never"
 msgstr "Aldrig"
 
@@ -317,69 +313,71 @@ msgstr "Aldrig"
 msgid "Update activity"
 msgstr "Uppdatera aktivitet"
 
-#: ../hamster/applet.py:66
-msgid "Switch Task"
-msgstr "Växla uppgift"
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "Redigera"
 
-#: ../hamster/applet.py:67
-msgid "Stop Tracking"
-msgstr "Stoppa tidmätning"
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "Växla"
 
-#: ../hamster/applet.py:417
-#: ../hamster/applet.py:517
+#: ../hamster/applet.py:423
+#: ../hamster/applet.py:524
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
 #. activity reminder
-#: ../hamster/applet.py:431
+#: ../hamster/applet.py:437
 #, python-format
-msgid "Are you still working on <b>%s</b>?"
-msgstr "Arbetar du fortfarande på <b>%s</b>?"
+msgid "Working on <b>%s</b>"
+msgstr "Arbetar på <b>%s</b>"
 
-#: ../hamster/applet.py:458
+#: ../hamster/applet.py:465
 #, python-format
 msgid "%(category)s: %(duration)s, "
 msgstr "%(category)s: %(duration)s, "
 
 #. defaults
-#: ../hamster/db.py:503
+#: ../hamster/db.py:513
 msgid "Work"
 msgstr "Arbete"
 
-#: ../hamster/db.py:504
+#: ../hamster/db.py:514
 msgid "Reading news"
 msgstr "Läser nyheter"
 
-#: ../hamster/db.py:505
+#: ../hamster/db.py:515
 msgid "Checking stocks"
 msgstr "Kontrollerar aktier"
 
-#: ../hamster/db.py:506
+#: ../hamster/db.py:516
 msgid "Super secret project X"
 msgstr "Superhemligt projekt X"
 
-#: ../hamster/db.py:507
+#: ../hamster/db.py:517
 msgid "World domination"
 msgstr "Världsherravälde"
 
-#: ../hamster/db.py:509
+#: ../hamster/db.py:519
 msgid "Day to day"
 msgstr "Dag för dag"
 
-#: ../hamster/db.py:510
+#: ../hamster/db.py:520
 msgid "Lunch"
 msgstr "Lunch"
 
-#: ../hamster/db.py:511
+#: ../hamster/db.py:521
 msgid "Watering flowers"
 msgstr "Vattna blommorna"
 
-#: ../hamster/db.py:512
+#: ../hamster/db.py:522
 msgid "Doing handstands"
 msgstr "Stå på händerna"
 
-#: ../hamster/db.py:695
-#: ../hamster/db.py:699
+#: ../hamster/db.py:705
+#: ../hamster/db.py:709
 msgid "name"
 msgstr "namn"
 
@@ -491,6 +489,10 @@ msgstr "Vecka"
 msgid "Month"
 msgstr "Månad"
 
+#~ msgid "Today"
+#~ msgstr "Idag"
+#~ msgid "Stop Tracking"
+#~ msgstr "Stoppa tidmätning"
 #~ msgid "Summary of Activities"
 #~ msgstr "Sammandrag av aktiviteter"
 #~ msgid "Time tracking for masses"
