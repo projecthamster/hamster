@@ -1,33 +1,39 @@
 # Thai translation of hamster-applet.
-# Copyright (C) 2008 Free Software Foundation, Inc.
+# Copyright (C) 2008-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the hamster-applet package.
-# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2008.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2008-2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-19 14:51+0700\n"
-"PO-Revision-Date: 2008-09-19 14:53+0700\n"
+"POT-Creation-Date: 2009-02-12 21:09+0700\n"
+"PO-Revision-Date: 2009-02-12 21:21+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
+msgid "Project Hamster - track your time"
+msgstr "โครงการ Hamster - ติดตามการใช้เวลาของคุณ"
+
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/applet.py:65
 msgid "Time Tracker"
 msgstr "ติดตามการใช้เวลา"
-
-#: ../data/Hamster_Applet.server.in.in.h:2
-msgid "Time tracking for masses"
-msgstr "เครื่องมือติดตามการใช้เวลาสำหรับมหาชน"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "_ภาพรวม"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
@@ -55,27 +61,31 @@ msgstr "เลื่อน_ขึ้น"
 msgid "N_ew Category"
 msgstr "หมวดใ_หม่"
 
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7
+msgid "Remind of current activity every:"
+msgstr "แจ้งเตือนกิจกรรมปัจจุบันทุกๆ:"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking on shutdown"
 msgstr "หยุดติดตามเมื่อปิดเครื่อง"
 
-#: ../data/preferences.glade.h:8
+#: ../data/preferences.glade.h:9
 msgid "Stop tracking when computer becomes idle"
 msgstr "หยุดติดตามเมื่อไม่มีการโต้ตอบกับเครื่อง"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:10
 msgid "Time Tracker Preferences"
 msgstr "ปรับแต่งเครื่องมือติดตามการใช้เวลา"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.glade.h:11
 msgid "_Activities"
 msgstr "_กิจกรรม"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:12
 msgid "_Categories"
 msgstr "ห_มวด"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:13
 msgid "_New Activity"
 msgstr "กิ_จกรรมใหม่"
 
@@ -92,10 +102,18 @@ msgid "Add Earlier Activity"
 msgstr "เพิ่มกิจกรรมในอดีต"
 
 #: ../data/add_custom_fact.glade.h:4
+msgid "Description:"
+msgstr "คำบรรยาย:"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "Name:"
+msgstr "ชื่อ:"
+
+#: ../data/add_custom_fact.glade.h:6
 msgid "hours"
 msgstr "ชั่วโมง"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/add_custom_fact.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -105,7 +123,7 @@ msgstr ""
 "ถึง\n"
 "เป็นเวลา"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
 msgstr "นาที"
 
@@ -114,18 +132,30 @@ msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "ปุ่มลัดสำหรับแสดงหน้าต่างเครื่องมือติดตามการใช้เวลา"
 
 #: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"แจ้งเตือนภารกิจปัจจุบันทุกๆ ช่วงจำนวนนาทีที่กำหนด กำหนดเป็นค่า 0 หรือมากกว่า 120 "
+"หากต้องการปิดการแจ้งเตือน"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "แจ้งเตือนภารกิจปัจจุบันทุกๆ x นาที"
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Show window"
 msgstr "แสดงหน้าต่าง"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking current activity on shutdown"
 msgstr "หยุดติดตามกิจกรรมที่ดำเนินอยู่เมื่อปิดเครื่อง"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "หยุดติดตามกิจกรรมที่ดำเนินอยู่เมื่อไม่มีการโต้ตอบกับเครื่อง"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on idle"
 msgstr "หยุดติดตามเมื่อไม่มีการโต้ตอบกับเครื่อง"
 
@@ -138,7 +168,7 @@ msgstr "เพิ่มกิจกรรมใน_อดีต"
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:4 ../hamster/applet.py:458
 msgid "No records today"
 msgstr "ไม่มีข้อมูลสำหรับวันนี้"
 
@@ -222,14 +252,6 @@ msgstr "แสดงข้อมูลรายเดือน"
 msgid "Show week"
 msgstr "แสดงข้อมูลรายสัปดาห์"
 
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "วันนี้"
-
-#: ../hamster/about.py:42
-msgid "Time tracking for masses."
-msgstr "เครื่องมือติดตามการใช้เวลาสำหรับมหาชน"
-
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
 msgstr "สงวนลิขสิทธิ์ © 2007-2008 Toms Baugis และคนอื่นๆ"
@@ -242,79 +264,113 @@ msgstr "เว็บไซต์ของ Hamster"
 msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
+#: ../hamster/preferences.py:56 ../hamster/db.py:343 ../hamster/reports.py:133
 msgid "Unsorted"
 msgstr "ไม่แยกหมวด"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:103 ../hamster/applet.py:221
+#: ../hamster/stats.py:47
 msgid "Name"
 msgstr "ชื่อ"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:78
+#: ../hamster/preferences.py:123 ../hamster/reports.py:106
+#: ../hamster/reports.py:176
 msgid "Category"
 msgstr "หมวด"
 
-#: ../hamster/preferences.py:468
+#: ../hamster/preferences.py:510
 msgid "New category"
 msgstr "หมวดใหม่"
 
-#: ../hamster/preferences.py:481
+#: ../hamster/preferences.py:523
 msgid "New activity"
 msgstr "กิจกรรมใหม่"
 
-#: ../hamster/add_custom_fact.py:84
+#. notify interval slider value label
+#: ../hamster/preferences.py:568
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d นาที"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:571
+msgid "Never"
+msgstr "ไม่แจ้ง"
+
+#: ../hamster/add_custom_fact.py:80
 msgid "Update activity"
 msgstr "ปรับข้อมูลกิจกรรม"
 
-#: ../hamster/applet.py:200
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "แก้ไข"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "สลับ"
+
+#: ../hamster/applet.py:423 ../hamster/applet.py:524
 msgid "No activity"
 msgstr "ไม่มีกิจกรรม"
 
+#. activity reminder
+#: ../hamster/applet.py:437
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "กำลังทำภารกิจ <b>%s</b>"
+
+#: ../hamster/applet.py:465
+#, python-format
+msgid "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration)s, "
+
 #. defaults
-#: ../hamster/db.py:403
+#: ../hamster/db.py:513
 msgid "Work"
 msgstr "งาน"
 
-#: ../hamster/db.py:404
+#: ../hamster/db.py:514
 msgid "Reading news"
 msgstr "อ่านข่าว"
 
-#: ../hamster/db.py:405
+#: ../hamster/db.py:515
 msgid "Checking stocks"
 msgstr "ตรวจสอบราคาหุ้น"
 
-#: ../hamster/db.py:406
+#: ../hamster/db.py:516
 msgid "Super secret project X"
 msgstr "โครงการลับสุดยอด"
 
-#: ../hamster/db.py:407
+#: ../hamster/db.py:517
 msgid "World domination"
 msgstr "ครองโลก"
 
-#: ../hamster/db.py:409
+#: ../hamster/db.py:519
 msgid "Day to day"
 msgstr "กิจวัตรประจำวัน"
 
-#: ../hamster/db.py:410
+#: ../hamster/db.py:520
 msgid "Lunch"
 msgstr "อาหารเที่ยง"
 
-#: ../hamster/db.py:411
+#: ../hamster/db.py:521
 msgid "Watering flowers"
 msgstr "รดน้ำต้นไม้"
 
-#: ../hamster/db.py:412
+#: ../hamster/db.py:522
 msgid "Doing handstands"
 msgstr "หกคะเมน"
 
-#: ../hamster/db.py:588 ../hamster/db.py:592
+#: ../hamster/db.py:705 ../hamster/db.py:709
 msgid "name"
 msgstr "name"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:29 ../hamster/stats.py:274
+#: ../hamster/reports.py:32 ../hamster/stats.py:296
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -326,7 +382,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:31 ../hamster/stats.py:279
+#: ../hamster/reports.py:34 ../hamster/stats.py:301
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "ภาพรวมสำหรับ %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
@@ -334,7 +390,7 @@ msgstr "ภาพรวมสำหรับ %(start_d)s %(start_B)s – %(end_d
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#: ../hamster/reports.py:36 ../hamster/stats.py:306
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "ภาพรวมสำหรับ %(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
@@ -342,63 +398,85 @@ msgstr "ภาพรวมสำหรับ %(start_d)s – %(end_d)s %(start_B
 #. overview label for single day
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:290
+#: ../hamster/reports.py:39 ../hamster/stats.py:312
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "ภาพรวมสำหรับ %(start_d)s %(start_B)s %(start_Y)s"
 
-#: ../hamster/reports.py:76
+#: ../hamster/reports.py:104
 msgid "Date"
 msgstr "วันที่"
 
-#: ../hamster/reports.py:77
+#: ../hamster/reports.py:105 ../hamster/reports.py:177
 msgid "Activity"
 msgstr "กิจกรรม"
 
-#: ../hamster/reports.py:79
+#: ../hamster/reports.py:107
 msgid "Start"
 msgstr "เริ่ม"
 
-#: ../hamster/reports.py:80
+#: ../hamster/reports.py:108
 msgid "End"
 msgstr "สิ้นสุด"
 
-#: ../hamster/reports.py:81
+#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:55
 msgid "Duration"
 msgstr "ระยะเวลา"
 
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "คำบรรยาย"
+
 #. fact date column in HTML report
-#: ../hamster/reports.py:111
+#: ../hamster/reports.py:148
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_d)s %(report_b)s %(report_Y)s"
 
+#. summary table
+#: ../hamster/reports.py:173
+msgid "Totals"
+msgstr "เวลารวม"
+
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "เวลารวม"
+
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:172
+#: ../hamster/stats.py:190
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s %(o_d)s %(o_b)s"
 
 #. date format in month chart in overview window (click on "month" to see it)
 #. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:244
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_d)s %(m_b)s"
 
-#: ../hamster/stats.py:246
+#: ../hamster/stats.py:268
 msgid "Other"
 msgstr "อื่นๆ"
 
-#: ../hamster/stats.py:291
+#: ../hamster/stats.py:313
 msgid "Day"
 msgstr "รายวัน"
 
-#: ../hamster/stats.py:293
+#: ../hamster/stats.py:315
 msgid "Week"
 msgstr "รายสัปดาห์"
 
-#: ../hamster/stats.py:295
+#: ../hamster/stats.py:317
 msgid "Month"
 msgstr "รายเดือน"
+
+#~ msgid "Time tracking for masses"
+#~ msgstr "เครื่องมือติดตามการใช้เวลาสำหรับมหาชน"
+
+#~ msgid "Today"
+#~ msgstr "วันนี้"
+
+#~ msgid "Time tracking for masses."
+#~ msgstr "เครื่องมือติดตามการใช้เวลาสำหรับมหาชน"
