@@ -26,12 +26,12 @@ import gtk
 import pango
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster.charting import Chart
+from hamster import charting
+
 from hamster.add_custom_fact import CustomFactController
 
 import datetime as dt
 import calendar
-import gobject
 import time
 
 class StatsViewer:
@@ -58,46 +58,66 @@ class StatsViewer:
         timeColumn.set_cell_data_func(timeCell, self.duration_painter)
         self.fact_tree.append_column(timeColumn)
         
-        self.fact_store = gtk.TreeStore(int, str, str, str, str) #id, caption, duration, date (invisible), description
+        #id, caption, duration, date (invisible), description
+        self.fact_store = gtk.TreeStore(int, str, str, str, str) 
         self.fact_tree.set_model(self.fact_store)
+
+        
+        graph_frame = self.get_widget("graph_frame")
+        
+        background = (0.975,0.975,0.975)
+        
+        graph_frame.modify_bg(gtk.STATE_NORMAL,
+                              gtk.gdk.Color(*[b*65536.0 for b in background]))
+
+        
+
         
         x_offset = 80 # let's nicely align all graphs
         
-        self.day_chart = Chart(max_bar_width = 40,
-                               collapse_whitespace = True,
-                               legend_width = x_offset)
-        eventBox = gtk.EventBox()
-        place = self.get_widget("totals_by_day")
-        eventBox.add(self.day_chart);
-        place.add(eventBox)
+        self.category_chart = charting.Chart(background = background,
+                                             bar_base_color = (238,221,221),
+                                             bars_beveled = False,
+                                             legend_width = x_offset,
+                                             max_bar_width = 35
+                                             )
+
+        category_box = self.get_widget("totals_by_category")
+        category_box.add(self.category_chart)
+        category_box.set_size_request(120, -1)
         
-        self.category_chart = Chart(orient = "horizontal",
-                                    max_bar_width = 30,
-                                    animate=False,
-                                    values_on_bars = True,
-                                    stretch_grid = True,
-                                    legend_width = x_offset)
-        eventBox = gtk.EventBox()
-        place = self.get_widget("totals_by_category")
-        eventBox.add(self.category_chart);
-        place.add(eventBox)
+
+        self.day_chart = charting.Chart(background = background,
+                                        bar_base_color = (220, 220, 220),
+                                        bars_beveled = False,
+                                        show_series = False,
+                                        max_bar_width = 35,
+                                        grid_stride = 4)
+
+        self.get_widget("totals_by_day").add(self.day_chart)
+
+
         
-        self.activity_chart = Chart(orient = "horizontal",
-                                    max_bar_width = 25,
-                                    animate = False,
-                                    values_on_bars = True,
-                                    stretch_grid = True,
-                                    legend_width = x_offset)
-        eventBox = gtk.EventBox()
-        place = self.get_widget("totals_by_activity")
-        eventBox.add(self.activity_chart);
-        place.add(eventBox)
+        self.activity_chart = charting.Chart(orient = "horizontal",
+                                             max_bar_width = 25,
+                                             values_on_bars = True,
+                                             stretch_grid = True,
+                                             legend_width = x_offset,
+                                             value_format = "%.1f",
+                                             background = background,
+                                             bars_beveled = False,
+                                             animate = False)
+        self.get_widget("totals_by_activity").add(self.activity_chart);
+
         
         self.view_date = dt.date.today()
         
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1) #set to monday
+         #set to monday
+        self.start_date = self.view_date - \
+                                      dt.timedelta(self.view_date.weekday() + 1)
         # look if we need to start on sunday or monday
-        self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
+        self.start_date = self.start_date + \
+                                      dt.timedelta(self.locale_first_weekday())
         
         self.end_date = self.start_date + dt.timedelta(6)
 
@@ -117,7 +137,8 @@ class StatsViewer:
         dispatcher.add_handler('day_updated', self.after_fact_update)
 
         selection = self.fact_tree.get_selection()
-        selection.connect('changed', self.on_fact_selection_changed, self.fact_store)
+        selection.connect('changed', self.on_fact_selection_changed,
+                          self.fact_store)
 
         self.glade.signal_autoconnect(self)
         self.fact_tree.grab_focus()
@@ -171,17 +192,13 @@ class StatsViewer:
                 text = '<span weight="heavy" rise="-20000">%s</span>' % text
         cell.set_property('markup', text)
 
-    def get_facts(self):
+    def get_facts(self, facts):
         self.fact_store.clear()
         totals = {}
 
         by_activity = {}
         by_category = {}
         by_day = {}
-
-        week = {"days": [], "totals": []}
-
-        facts = storage.get_facts(self.start_date, self.end_date)
 
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
@@ -195,6 +212,9 @@ class StatsViewer:
                                                     current_date.strftime('%Y-%m-%d'),
                                                     ""])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
+
+                
+                
 
         for fact in facts:
             start_date = fact["start_time"].date()
@@ -216,72 +236,80 @@ class StatsViewer:
                                     fact["description"]
                                     ])
 
-            if fact["name"] not in by_activity: by_activity[fact["name"]] = 0
-            if fact["category"] not in by_category: by_category[fact["category"]] = 0
-
             if duration:
                 by_day[start_date]["duration"] += duration
-                by_activity[fact["name"]] += duration
-                by_category[fact["category"]] += duration
 
-        days = 30
-        if self.week_view.get_active():
-            days = 7
-
-
-        date_sort = lambda a, b: (b[4] < a[4]) - (a[4] < b[4])
-        totals["by_day"] = []
 
         for day in by_day:
             self.fact_store.set_value(by_day[day]["row_pointer"], 2,
                 stuff.format_duration(by_day[day]["duration"]))
-            if (self.end_date - self.start_date).days < 20:
-                strday = stuff.locale_to_utf8(day.strftime('%a'))
-                totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, None, day])
-            else:
-                # date format in month chart in overview window (click on "month" to see it)
-                # prefix is "m_", letter after prefix is regular python format. you can use all of them
-                strday = _("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")
 
-                background = None
-                if day.weekday() in [5, 6]:
-                    background = 7
-
-                totals["by_day"].append([strday, by_day[day]["duration"] / 60.0, None, background, day])
-        totals["by_day"].sort(date_sort)
-            
-            
-        duration_sort = lambda a, b: (a[1] < b[1]) - (b[1] < a[1])
-        totals["by_activity"] = []
-        for activity in by_activity:
-            totals["by_activity"].append([activity, by_activity[activity] / 60.0])
-        totals["by_activity"].sort(duration_sort)
-        
-        #now we will limit bars to 6 and sum everything else into others
-        if len(totals["by_activity"]) > 12:
-            other_total = 0.0
-
-            for i in range(11, len(totals["by_activity"]) - 1):
-                other_total += totals["by_activity"][i][1]
-                
-            totals["by_activity"] = totals["by_activity"][:11]
-            totals["by_activity"].append([_("Other"), other_total, 1])
-        totals["by_activity"].sort(duration_sort) #sort again, since maybe others summed is bigger
-            
-        totals["by_category"] = []
-        for category in by_category:
-            totals["by_category"].append([category, by_category[category] / 60.0])
-        totals["by_category"].sort(duration_sort)
-        
 
         self.fact_tree.expand_all()
         
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
 
 
-        week["totals"] = totals
+        
+    def get_totals(self, facts, all_days):
+        # get list of used activities in interval
+        activities = [act[0] for act in
+              storage.get_interval_activity_ids(self.start_date, self.end_date)]
+
+        # get list of used categories in interval
+        categories = [cat[0] for cat in storage.get_popular_categories()]
+
+        # fill in the activity totals blanks
+        # don't want to add ability to be able to specify color per bar
+        # so we will be disguising our bar chart as multibar chart
+        activity_totals = {}
+        for act in activities:
+            activity_totals[act] = {}
+            for cat in categories:
+                activity_totals[act][cat] = 0
+
+        # fill in the category totals blanks
+        day_category_totals = {}
+        for day in all_days:
+            day_category_totals[day] = {}
+            for cat in categories:
+                day_category_totals[day][cat] = 0
             
-        return week
+        #now we do the counting
+        for fact in facts:
+            duration = None
+            start_date = fact['start_time'].date()
+            
+            if fact["end_time"]: # not set if just started
+                delta = fact["end_time"] - fact["start_time"]
+                duration = 24 * delta.days + delta.seconds / 60
+            elif start_date == dt.date.today():
+                delta = dt.datetime.now() - fact["start_time"]
+                duration = 24 * delta.days + delta.seconds / 60
+
+            activity_totals[fact['name']][fact['category']] += duration or 0
+            day_category_totals[start_date][fact['category']] += duration or 0
+
+
+        # convert dictionaries into lists so we don't have to care about keys anymore
+        res_categories = []
+        for day in all_days:
+            res_categories.append([day_category_totals[day][cat] / 60.0 for cat in categories])
+            
+        #sort activities by duration, longest first
+        activity_totals = activity_totals.items()
+        activity_totals = sorted(activity_totals,
+                                 key = lambda(k,v): (max(v.values()), k),
+                                 reverse = True)
+        
+        activities = [] #we have changed the order
+        res_activities = []
+        for act in activity_totals:
+            activities.append(act[0])
+            res_activities.append([act[1][cat] / 60.0 for cat in categories])
+
+        return {'keys': activities, 'values': res_activities}, \
+               {'keys': categories, 'values': res_categories}
         
 
     def do_graph(self):
@@ -290,6 +318,7 @@ class StatsViewer:
         
         
         if self.start_date.year != self.end_date.year:
+        
             # overview label if start and end years don't match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
@@ -321,16 +350,51 @@ class StatsViewer:
         label.set_text(overview_label)
 
         label2 = self.get_widget("dayview_caption")
-        label2.set_markup("<b>%s</b>" % (dayview_caption))
+        label2.set_markup("%s" % (dayview_caption))
         
-        facts = self.get_facts()
+        
+        
+        fact_list = storage.get_facts(self.start_date, self.end_date)
 
-        self.day_chart.plot(facts["totals"]["by_day"])
-        self.category_chart.plot(facts["totals"]["by_category"])
-        self.activity_chart.plot(facts["totals"]["by_activity"])
+        all_days = [self.start_date + dt.timedelta(i)
+                    for i in range((self.end_date - self.start_date).days  + 1)]        
+
+        self.get_facts(fact_list)
+        activity_totals, day_category_totals = self.get_totals(fact_list, all_days)
+
+        
+        categories = [cat[0] for cat in storage.get_popular_categories()]
+        self.activity_chart.plot2(activity_totals['keys'],
+                                  activity_totals['values'],
+                                  series_keys = categories)
 
 
+        #show days or dates depending on scale
+        if (self.end_date - self.start_date).days < 20:
+            day_keys = [day.strftime("%a") for day in all_days]
+        else:
+            day_keys = [day.strftime(_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")) for day in all_days]
 
+
+        self.day_chart.plot2(day_keys, day_category_totals['values'],
+                             series_keys = day_category_totals['keys'])
+
+        category_totals = [[sum(value) for value in zip(*day_category_totals['values'])]]
+        self.category_chart.plot2([_("Total")], category_totals,
+                                  series_keys = day_category_totals['keys'])
+        
+        
+        #total string in right bottom corner, maybe temporar
+        total_string = ""
+        for i in range(len(day_category_totals['keys'])):
+            if category_totals[0][i] > 0:
+                total_string += _("%(category)s: %(duration).1f, ") % \
+                                ({'category': day_category_totals['keys'][i],
+                                  'duration': category_totals[0][i]})
+
+        total_string = total_string.rstrip(", ") # trailing slash
+        self.get_widget("totals").set_text(total_string);
+        
 
 
     def get_widget(self, name):

@@ -26,8 +26,8 @@ Currently chart understands only list of four member lists, in label, value
 fashion. Like:
     data = [
         ["Label1", value1, color(optional), background(optional)],
-        ["Label2", value2 color(optional), background(optional)],
-        ["Label3", value3 color(optional), background(optional)],
+        ["Label2", value2, color(optional), background(optional)],
+        ["Label3", value3, color(optional), background(optional)],
     ]
 
 Author: toms.baugis@gmail.com
@@ -36,7 +36,7 @@ http://projecthamster.wordpress.com/
 
 Example:
     # create new chart object
-    chart = Chart(max_bar_width = 40, collapse_whitespace = True) 
+    chart = Chart(max_bar_width = 40) 
     
     eventBox = gtk.EventBox() # charts go into eventboxes, or windows
     place = self.get_widget("totals_by_day") #just some placeholder
@@ -72,8 +72,11 @@ dark = [(196, 160, 0), (206, 92, 0),    (143, 89, 2),
 
 color_count = len(light)
 
-def set_color(context, color):
-    r,g,b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
+def set_color(context, color, g = None, b = None):
+    if g and b:
+        r,g,b = color / 255.0, g / 255.0, b / 255.0
+    else:
+        r,g,b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
     context.set_source_rgb(r, g, b)
     
 def set_color_gdk(context, color):
@@ -88,10 +91,6 @@ class Chart(gtk.DrawingArea):
                                  bars will stretch to fill whole area
         values_on_bars = [True|False] - Should bar values displayed on each bar.
                                         Defaults to False
-        collapse_whitespace = [True|False] - If max_bar_width is set, should
-                                             we still fill the graph area with
-                                             the white stuff and grids and such.
-                                             Defaults to false
         stretch_grid = [True|False] - Should the grid be of fixed or flex
                                       size. If set to true, graph will be split
                                       in 4 parts, which will stretch on resize.
@@ -113,7 +112,7 @@ class Chart(gtk.DrawingArea):
         """here is init"""
         gtk.DrawingArea.__init__(self)
         self.connect("expose_event", self._expose)
-        self.data, self.prev_data = None, None #start off with an empty hand
+        self.data, self.prev_factors = None, None #start off with an empty hand
         
         """now see what we have in args!"""
         self.orient_vertical = "orient" not in args or args["orient"] == "vertical" # defaults to true
@@ -123,154 +122,225 @@ class Chart(gtk.DrawingArea):
 
         self.values_on_bars = "values_on_bars" in args and args["values_on_bars"] #defaults to false
 
-        self.collapse_whitespace = "collapse_whitespace" in args and args["collapse_whitespace"] #defaults to false
-        
         self.stretch_grid = "stretch_grid" in args and args["stretch_grid"] #defaults to false
 
         self.animate = "animate" not in args or args["animate"] # defaults to true
+
+        self.show_scale = "show_scale" not in args or args["show_scale"] # defaults to true
         
-        self.legend_width = None
-        if "legend_width" in args: self.legend_width = args["legend_width"]
+        self.background = args.get("background", None)
+        self.chart_background = args.get("chart_background", None)
+        self.bar_base_color = args.get("bar_base_color", None)
         
+        self.bars_beveled = "bars_beveled" not in args or args["bars_beveled"] # defaults to true
+        
+        
+        self.legend_width = args.get("legend_width", 0)
+        
+        self.show_total = "show_total" in args and args["show_total"] #defaults to false
+        
+        self.labels_at_end = "labels_at_end" in args and args["labels_at_end"] #defaults to false
+
         #and some defaults
         self.default_grid_stride = 50
         
-        self.animation_frames = 150
-        self.animation_timeout = 20 #in miliseconds
+        self.animation_frames = 100
+        self.animation_timeout = 15 #in miliseconds
 
         self.current_frame = self.animation_frames
         self.freeze_animation = False
         
-    def _expose(self, widget, event): # expose is when drawing's going on
-        context = widget.window.cairo_create()
-        context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
-        context.clip()
+        self.value_format = args.get("value_format", "%s")
+        
+        self.show_series = "show_series" not in args or args["show_series"] # defaults to true
+        
+        if "legend_keys" in args: self.legend_keys = args["legend_keys"]
+
+
+        self.grid_stride = args.get("grid_stride", None)
+        
+
+
+        self.keys, self.series_keys = None, None
+        self.factors = None
+        self.row_max = 0
+        self.current_max = 0
+        
+    def _expose(self, widget, event):
+        """expose is when drawing's going on, like on _invalidate"""
+
+        self.context = widget.window.cairo_create()
+        self.context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
+        self.context.clip()
         
         if self.orient_vertical:
-            # for simple bars figure, when there is way too much data for bars
-            # and go to lines (yay!)
-            if len(self.data) == 0 or (widget.allocation.width / len(self.data)) > 30: #this is big enough
-                self._bar_chart(context)
-            else:
-                self._area_chart(context)
-            
-            
+            self._multibar_chart(self.context)
         else:
-            self._horizontal_bar_chart(context)
+            self._horizontal_bar_chart()
 
         return False
 
-    def plot(self, data):
-        """Draw chart with given data
-            Currently chart understands only list of two member lists, in label, value
-            fashion. Like:
-                data = [
-                    ["Label1", value1],
-                    ["Label2", value2],
-                    ["Label3", value3],
-                ]
-        """
+
+    def get_row_max(self, values):
+        res = None
+        for row in values:
+            if type(row) in [int, float]:
+                res = max(res, row)
+            else:
+                res = max(res, sum(row))    
+        return res    
+    
+    def calculate_factors(self, values, max_value):
+        factors = []
+        max_value = float(max_value) #factors need precision
+        if not values: return None
+
+        if not max_value:
+            if type(values[0]) in [int, float]:
+                return [0] * len(values)
+            else:
+                return [[0] * len(values[0])] * len(values)
+            
+        
+        for row in values:
+            if type(row) in [int, float]:
+                factors.append(row / max_value)
+            else:
+                factors.append([col / max_value for col in row])
+                
+        return factors
+
+
+    def plot2(self, keys, data, series_keys = None):
+        """Draw chart with given data"""
+        
+        self.data = data
+
+        self.prev_keys, self.prev_series_keys = copy.copy(self.keys), copy.copy(self.series_keys)
+
+        self.keys, self.series_keys = keys, series_keys
+        
+        if not self.data:
+            self._invalidate()
+            return
+        
+
+        self.prev_factors = copy.copy(self.factors)
+        self.prev_row_max = self.row_max
+
+        self.row_max = self.get_row_max(data)
+        self.new_factors = self.calculate_factors(data, self.row_max)
         
         #check if maybe this chart is animation enabled and we are in middle of animation
         if self.animate and self.current_frame < self.animation_frames: #something's going on here!
             self.freeze_animation = True #so we don't catch some nasty race condition
-            
-            self.prev_data = copy.copy(self.data)
-            self.new_data, self.max = self._get_factors(data)
-            
+
             #if so, let's start where we are and move to the new set inst
             self.current_frame = 0 #start the animation from beginning
             self.freeze_animation = False
             return
-        
-        
-                
+
+
 
         if self.animate:
-            """chart animation means gradually moving from previous data set
-               to the new one. prev_data will be the previous set, new_data
-               is copy of the data we have been asked to plot, and data itself
+            """chart animation gradually moves from current data set
+               to the new one. prev_factors will be the previous set, new_factors
+               is what we have been asked to plot, and factors itself
                will be the moving thing"""
                
             self.current_frame = 0
-            self.new_data, self.max = self._get_factors(data)
 
-            if not self.prev_data: #if there is no previous data, set it to zero, so we get a growing animation
-                self.prev_data = copy.deepcopy(self.new_data)
-                for i in range(len(self.prev_data)):
-                    self.prev_data[i]["factor"] = 0
+            #if there is no previous data, set it to zero, so we get a growing animation
+            if not self.prev_factors:
+                if series_keys:
+                    #watch out of mutable arrays
+                    self.factors = self.prev_factors = \
+                              [[0] * len(series_keys) for x in range(len(keys))]
+                else:
+                    self.factors = self.prev_factors = [0] * len(keys)
                     
-            self.data = copy.copy(self.prev_data)
+                self.prev_keys, self.prev_series_keys = self.keys, self.series_keys
+                    
+
 
 
             gobject.timeout_add(self.animation_timeout, self._replot)
         else:
-            self.data, self.max = self._get_factors(data)
+            self.factors = self.new_factors
             self._invalidate()
 
-    
+        
+    def _smoothstep(self, v, start, end):
+        smooth = 1 - (1 - v) * (1 - v)
+        return (end * smooth) + (start * (1-smooth))
+
     def _replot(self):
         """Internal function to do the math, going from previous set to the
            new one, and redraw graph"""
         if self.freeze_animation:
             return True #just wait until they release us!
 
-        if self.window:    #this can get called before expose    
-            # do some sanity checks before thinking about animation
-            # are the source and target of same length?
-            if len(self.prev_data) != len(self.new_data):
-                self.prev_data = copy.copy(self.new_data)
-                self.data = copy.copy(self.new_data)
-                self.current_frame = self.animation_frames #stop animation
-                self._invalidate()
-                return False
-            
-            # have they same labels? (that's important!)
-            for i in range(len(self.prev_data)):
-                if self.prev_data[i]["label"] != self.new_data[i]["label"]:
-                    self.prev_data = copy.copy(self.new_data)
-                    self.data = copy.copy(self.new_data)
-                    self.current_frame = self.animation_frames #stop animation
-                    self._invalidate()
-                    return False
-            
 
-            #ok, now we are good!
-            self.current_frame = self.current_frame + 1
-            
-
-            # using sines for some "swoosh" animation (not really noticeable)
-            # sin(0) = 0; sin(pi/2) = 1
-            pi_factor = math.sin((math.pi / 2.0) * (self.current_frame / float(self.animation_frames)))
-            #pi_factor = math.sqrt(pi_factor) #stretch it a little so the animation can be seen a little better
-            
-            # here we do the magic - go from prev to new
-            # we are fiddling with the calculated sizes instead of raw data - that's much safer
-            bars_below_lim = 0
-            
-            for i in range(len(self.data)):
-                diff_in_factors = self.prev_data[i]["factor"] - self.new_data[i]["factor"]
-                diff_in_values = self.prev_data[i]["value"] - self.new_data[i]["value"]
-                
-                if abs(diff_in_factors * pi_factor) < 0.001:
-                    bars_below_lim += 1
-                
-                
-                self.data[i]["factor"] = self.prev_data[i]["factor"] - (diff_in_factors * pi_factor)
-                self.data[i]["value"] = self.prev_data[i]["value"] - (diff_in_values * pi_factor)
-                
-            if bars_below_lim == len(self.data): #all bars done - stop animation!
-                self.current_frame = self.animation_frames
-                
-
-        if self.current_frame < self.animation_frames:
-            self._invalidate()
-            return True
-        else:
-            self.data = copy.copy(self.new_data)
-            self.prev_data = copy.copy(self.new_data)
+        if self.current_frame == self.animation_frames:
+            return False;
+        
+        
+        #this can get called before expose    
+        if not self.window:
             self._invalidate()
             return False
+
+        #ok, now we are good!
+        self.current_frame = self.current_frame + 1
+
+
+        frame = self.current_frame / float(self.animation_frames)
+
+        self.current_max = self._smoothstep(frame, self.prev_row_max, self.row_max)
+
+        # do some sanity checks before thinking about animation
+        # are the source and target of same length?
+        similar_keys = False
+        for i in range(min(len(self.keys), len(self.prev_keys))):
+            if self.keys[i] == self.prev_keys[i]:
+                similar_keys = True
+                break
+
+        if not similar_keys:
+            self.factors = self.new_factors
+            self._invalidate()
+            return True
+        
+        keys_len = len(self.keys)
+        prev_keys_len = len(self.prev_keys)
+        
+        if self.series_keys:
+            ser_keys_len = len(self.series_keys)
+            prev_ser_keys_len = len(self.prev_series_keys)
+        
+        for i in range(len(self.keys)):
+            if i < keys_len and i < prev_keys_len \
+               and self.keys[i] == self.prev_keys[i]:
+               
+                if self.series_keys:
+                    for j in range(len(self.series_keys)):
+                        if j < ser_keys_len and j < prev_ser_keys_len \
+                           and self.series_keys[j] == self.prev_series_keys[j]:
+                            self.factors[i][j] = self._smoothstep(frame,  self.prev_factors[i][j], self.new_factors[i][j])
+                        elif j>= len(self.factors[i]):
+                            self.factors.append(self.new_factors[i][j])
+                        else:
+                            self.factors[i][j] = self.new_factors[i][j]
+                else:
+                    self.factors[i] = self._smoothstep(frame,  self.prev_factors[i], self.new_factors[i])
+            elif i >= len(self.factors):
+                self.factors.append(self.new_factors[i])
+            else:
+                self.factors[i] = self.new_factors[i]
+
+        self._invalidate()
+
+        return self.current_frame < self.animation_frames #return if there is still work to do
 
     def _invalidate(self):
         """Force redrawal of chart"""
@@ -279,286 +349,138 @@ class Chart(gtk.DrawingArea):
             rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
             self.window.invalidate_rect(rect, True)
             self.window.process_updates(True)
-            
-    
-    def _get_factors(self, data):
-        """get's max value out of data and calculates each record's factor
-           against it"""
-        max_value = 0
-        self.there_are_floats = False
-        self.there_are_colors = False
-        self.there_are_backgrounds = False
-        
-        for i in range(len(data)):
-            max_value = max(max_value, data[i][1])
-            if isinstance(data[i][1], float):
-                self.there_are_floats = True #we need to know for the scale labels
-                
-            if len(data[i]) > 3 and data[i][2] != None:
-                self.there_are_colors = True
-                
-            if len(data[i]) > 4 and data[i][3] != None:
-                self.there_are_backgrounds = True
-                
-        
-        res = []
-        for i in range(len(data)):
-            factor = 0
-            if max_value > 0:
-                factor = data[i][1] / float(max_value)
-            
-            color = None
-            if len(data[i]) > 2:
-                color = data[i][2]
-            
-            background = None
-            if len(data[i]) > 3:
-                background = data[i][3]
-                
-            res.append({"label": data[i][0],
-                        "value": data[i][1],
-                        "color":  color,
-                        "background":  background,
-                        "factor": factor
-                        })
-        
-        return res, max_value
-    
 
-    def _draw_bar(self, context, x, y, w, h, color):
+
+    def _draw_bar(self, x, y, w, h, color = None):
         """ draws a nice bar"""
+        context = self.context
         
-        context.rectangle(x, y, w, h)
-        set_color(context, dark[color])
-        context.fill_preserve()    
-        context.stroke()
+        base_color = color or self.bar_base_color or (220, 220, 220)
 
-        if w > 2 and h > 2:
-            context.rectangle(x + 1, y + 1, w - 2, h - 2)
-            set_color(context, light[color])
+        if self.bars_beveled:
+            context.rectangle(x, y, w, h)
+            set_color(context, *[b - 30 for b in base_color])
             context.fill_preserve()    
             context.stroke()
-
-        if w > 3 and h > 3:
-            context.rectangle(x + 2, y + 2, w - 4, h - 4)
-            set_color(context, medium[color])
-            context.fill_preserve()    
-            context.stroke()
-
-
-
+            if w > 2 and h > 2:
+                context.rectangle(x + 1, y + 1, w - 2, h - 2)
+                set_color(context, *[b + 20 for b in base_color])
+                context.fill_preserve()    
+                context.stroke()
     
-    def _bar_chart(self, context):
-        rect = self.get_allocation()  #x, y, width, height        
-        data, records = self.data, len(self.data)
-
-        if not data:
-            return
-
-        # graph box dimensions
-        graph_x = self.legend_width or 50 #give some space to scale labels
-        graph_width = rect.width + rect.x - graph_x
-        
-        step = graph_width / float(records)
-        if self.max_bar_width:
-            step = min(step, self.max_bar_width)
-            if self.collapse_whitespace:
-                graph_width = step * records #no need to have that white stuff
-
-        graph_y = rect.y
-        graph_height = rect.height - 15
-        
-        max_size = graph_height - 15
-
-
-
-        context.set_line_width(1)
-        
-        # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
-        context.set_source_rgb(1, 1, 1)
-        context.fill_preserve()
-        context.stroke()
-
-        #backgrounds
-        if self.there_are_backgrounds:
-            for i in range(records):
-                if data[i]["background"] != None:
-                    set_color(context, light[data[i]["background"]]);
-                    context.rectangle(graph_x + (step * i), 0, step, graph_height)
-                    context.fill_preserve()
-                    context.stroke()
-
-        context.set_line_width(1)
-        context.set_dash ([1, 3]);
-        set_color(context, dark[8])
-        
-        # scale lines
-        stride = int(graph_height / 4)
-        if self.stretch_grid == False:
-            stride = self.default_grid_stride
+            if w > 3 and h > 3:
+                context.rectangle(x + 2, y + 2, w - 4, h - 4)
+                set_color(context, *base_color)
+                context.fill_preserve()    
+                context.stroke()
+        else:
+            context.rectangle(x, y, w, h)
+            set_color(context, *base_color)
+            context.fill_preserve()    
+            context.stroke()
             
-        for y in range(graph_y, graph_y + graph_height, stride):
-            context.move_to(graph_x - 10, y)
-            context.line_to(graph_x + graph_width, y)
-
-        # and borders on both sides, so the graph doesn't fall out
-        context.move_to(graph_x - 1, graph_y)
-        context.line_to(graph_x - 1, graph_y + graph_height + 1)
-        context.move_to(graph_x + graph_width, graph_y)
-        context.line_to(graph_x + graph_width, graph_y + graph_height + 1)
-        
-
-        context.stroke()
-        
-        
-        context.set_dash ([]);
 
 
-        # scale labels
-        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
-        for i in range(records):
-            extent = context.text_extents(data[i]["label"]) #x, y, width, height
-            context.move_to(graph_x + (step * i) + (step - extent[2]) / 2.0,
-                            graph_y + graph_height + 13)
-            context.show_text(data[i]["label"])
-
-        # values for max min and average
-        max_label = "%d" % self.max
-        if self.there_are_floats:
-            max_label = "%.1f" % self.max
-
-        extent = context.text_extents(max_label) #x, y, width, height
-
-        context.move_to(graph_x - extent[2] - 16, rect.y + 10)
-        context.show_text(max_label)
-
-
-        #flip the matrix vertically, so we do not have to think upside-down
-        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
-
-        context.set_dash ([]);
-        context.set_line_width(0)
-        context.set_antialias(cairo.ANTIALIAS_NONE)
-
-        # bars themselves
-        for i in range(records):
-            color = data[i]["color"] or 3
-
-            bar_size = graph_height * data[i]["factor"]
-            #on animations we keep labels on top, so we need some extra space there
-            if self.values_on_bars and self.animate:
-                bar_size = bar_size * 0.8
-            else:
-                bar_size = bar_size * 0.9
-                
-            bar_size = max(bar_size, 1)
-            
-            gap = step * 0.05
-            bar_x = graph_x + (step * i) + gap
-            bar_width = step - (gap * 2)
-            
-            self._draw_bar(context, bar_x, 0, bar_width, bar_size, color)
-
-
-
-        #values
-        #flip the matrix back, so text doesn't come upside down
-        context.transform(cairo.Matrix(yy = -1, y0 = 0))
-        set_color(context, dark[8])        
-        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
-
-        if self.values_on_bars:
-            for i in range(records):
-                if self.there_are_floats:
-                    label = "%.1f" % data[i]["value"]
-                else:
-                    label = "%d" % data[i]["value"]
-                extent = context.text_extents(label) #x, y, width, height
-                
-                bar_size = graph_height * data[i]["factor"]
-                
-                if self.animate:
-                    bar_size = bar_size * 0.8
-                else:
-                    bar_size = bar_size * 0.9
-                    
-                vertical_offset = (step - extent[2]) / 2.0
-                
-                if self.animate or bar_size - vertical_offset < extent[3]:
-                    graph_y = -bar_size - 3
-                else:
-                    graph_y = -bar_size + extent[3] + vertical_offset
-                
-                context.move_to(graph_x + (step * i) + (step - extent[2]) / 2.0,
-                                graph_y)
-                context.show_text(label)
-
-
-    def _ellipsize_text (self, context, text, width):
+    def _ellipsize_text (self, text, width):
         """try to constrain text into pixels by ellipsizing end
            TODO - check if cairo maybe has ability to ellipsize automatically
         """
-        extent = context.text_extents(text) #x, y, width, height
+        extent = self.context.text_extents(text) #x, y, width, height
         if extent[2] <= width:
             return text
         
         res = text
         while res:
             res = res[:-1]
-            extent = context.text_extents(res + "…") #x, y, width, height
+            extent = self.context.text_extents(res + "…") #x, y, width, height
             if extent[2] <= width:
                 return res + "…"
         
         return text # if can't fit - return what we have
+
+
+    def _longest_label(self, labels):
+        max_extent = 0
+        for label in labels:
+            extent = self.context.text_extents(label) #x, y, width, height
+            max_extent = max(max_extent, extent[2] + 8)
         
-    def _horizontal_bar_chart(self, context):
-        rect = self.get_allocation()  #x, y, width, height
-        data, records = self.data, len(self.data)
+        return max_extent
+
+
+    def _horizontal_bar_chart(self):
+        rect = self.get_allocation()  #x, y, width, height of the whole drawing area
         
-        # ok, start with labels - get the longest now
+        rowcount, keys = len(self.keys), self.keys
+        
+        context = self.context
+        
+        # get the longest label
         # TODO - figure how to wrap text
-        if self.legend_width:
-            max_extent = self.legend_width
-        else:
-            max_extent = 0
-            for i in range(records):
-                extent = context.text_extents(data[i]["label"]) #x, y, width, height
-                max_extent = max(max_extent, extent[2] + 8)
+        longest_label = max(self.legend_width, self._longest_label(keys))
         
+        if self.background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(rect.x, rect.y, rect.width, rect.height)
+            
+            context.set_source_rgb(*self.background)
+            context.fill_preserve()
+            context.stroke()
+            
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
-        graph_x = rect.x + max_extent
+        graph_x = rect.x + longest_label
         graph_width = rect.width + rect.x - graph_x
+        graph_y, graph_height = rect.y, rect.height
 
-        graph_y = rect.y
-        graph_height = rect.height
+
+        if self.chart_background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(graph_x, graph_y, graph_width, graph_height)
+            context.set_source_rgb(*self.chart_background)
+            context.fill_preserve()
+            context.stroke()
         
-        
-        if records > 0:
-            step = int(graph_height / float(records))
-        else:
-            step = 30
+
+        """
+        # stripes for the case i decided that they are not annoying
+        for i in range(0, round(self.current_max), 10):
+            x = graph_x + (graph_width * (i / float(self.current_max)))
+            w = (graph_width * (5 / float(self.current_max)))
+
+            context.set_source_rgb(0.90, 0.90, 0.90)
+            context.rectangle(x + w, graph_y, w, graph_height)
+            context.fill_preserve()
+            context.stroke()
             
-        if self.max_bar_width:
-            step = min(step, self.max_bar_width)
-            if self.collapse_whitespace:
-                graph_height = step * records #resize graph accordingly
+            context.set_source_rgb(0.70, 0.70, 0.70)
+            context.move_to(x, graph_y + graph_height - 2)
+
+            context.show_text(str(i))
+        """    
+    
+        if not self.data:  #if we have nothing, let's go home
+            return
+
         
-        max_size = graph_width - 15
+        bar_width = int(graph_height / float(rowcount))
+        if self.max_bar_width:
+            bar_width = min(bar_width, self.max_bar_width)
 
+        
+        max_bar_size = graph_width - 15
+        gap = bar_width * 0.05
 
-        ellipsize_label = lambda(text): 3
-
-        # now let's put scale labels and align them right
+        # keys
         set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
-        for i in range(records):
-            label = data[i]["label"]
-            if self.legend_width:
-                label = self._ellipsize_text(context, label, max_extent - 8)
+        for i in range(rowcount):
+            label = keys[i]
+            
+            if self.legend_width > 0:
+                label = self._ellipsize_text(label, longest_label - 8)
             extent = context.text_extents(label) #x, y, width, height
             
-            context.move_to(rect.x + max_extent - extent[2] - 8, rect.y + (step * i) + (step + extent[3]) / 2)
+            context.move_to(rect.x + longest_label - extent[2] - 8, rect.y + (bar_width * i) + (bar_width + extent[3]) / 2)
             context.show_text(label)
         
         context.stroke()        
@@ -566,203 +488,255 @@ class Chart(gtk.DrawingArea):
         
         context.set_line_width(1)
         
-        # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x, graph_y, graph_width, graph_height)
-        context.set_source_rgb(1, 1, 1)
-        context.fill_preserve()
-        context.stroke()
 
-
-        context.set_dash ([1, 3]);
-        set_color(context, dark[8])
-
-        # scale lines        
-        if self.stretch_grid == False:
-            grid_stride = self.default_grid_stride
-        else:
-            grid_stride = int(graph_width / 3.0)
-            
-        for x in range(graph_x + grid_stride, graph_x + graph_width - grid_stride, grid_stride):
-            context.move_to(x, graph_y)
-            context.line_to(x, graph_y + graph_height)
-
-        context.move_to(graph_x + graph_width, graph_y)
-        context.line_to(graph_x + graph_width, graph_y + graph_height)
-
-
-        # and borders on both sides, so the graph doesn't fall out
-        context.move_to(graph_x, graph_y)
-        context.line_to(graph_x + graph_width, graph_y)
-        context.move_to(graph_x, graph_y + graph_height)
-        context.line_to(graph_x + graph_width, graph_y + graph_height)
-
-        context.stroke()
-
-        gap = step * 0.05
         
         context.set_dash ([]);
         context.set_line_width(0)
         context.set_antialias(cairo.ANTIALIAS_NONE)
 
-        # bars themselves
-        for i in range(records):
-            color = data[i]["color"] or 3
-            bar_y = graph_y + (step * i) + gap
-            bar_size = max_size * data[i]["factor"]
-            bar_size = max(bar_size, 1)
-            bar_height = step - (gap * 2)
 
-            self._draw_bar(context, graph_x, bar_y, bar_size, bar_height, color)
+        # bars themselves
+        for i in range(rowcount):
+            bar_start = 0
+            base_color = self.bar_base_color or (220, 220, 220)
+
+            gap = bar_width * 0.05
+
+            bar_y = graph_y + (bar_width * i) + gap
+
+            for j in range(len(self.factors[i])):
+                factor = self.factors[i][j]
+                if factor > 0:
+                    bar_size = max_bar_size * factor
+                    bar_height = bar_width - (gap * 2)
+                    
+                    self._draw_bar(graph_x,
+                                   bar_y,
+                                   bar_size,
+                                   bar_height,
+                                   [col - (j * 22) for col in base_color])
+    
+                    bar_start += bar_size
 
 
         #values
         context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         set_color(context, dark[8])        
         if self.values_on_bars:
-            for i in range(records):
-                if self.there_are_floats:
-                    label = "%.1f" % data[i]["value"]
-                else:
-                    label = "%d" % data[i]["value"]
+            for i in range(rowcount):
+                label = self.value_format % sum(self.data[i])
+                factor = sum(self.factors[i])
                 extent = context.text_extents(label) #x, y, width, height
                 
-                bar_size = max_size * data[i]["factor"]
-                horizontal_offset = (step + extent[3]) / 2.0 - extent[3]
+                bar_size = max_bar_size * factor
+                horizontal_offset = (bar_width + extent[3]) / 2.0 - extent[3]
                 
                 if  bar_size - horizontal_offset < extent[2]:
                     label_x = graph_x + bar_size + horizontal_offset
                 else:
                     label_x = graph_x + bar_size - extent[2] - horizontal_offset
                 
-                context.move_to(label_x, graph_y + (step * i) + (step + extent[3]) / 2.0)
+                context.move_to(label_x, graph_y + (bar_width * i) + (bar_width + extent[3]) / 2.0)
                 context.show_text(label)
-
         else:
-            # values for max min and average
-            context.move_to(graph_x + graph_width + 10, graph_y + 10)
-            if self.there_are_floats:
-                max_label = "%.1f" % self.max
-            else:
-                max_label = "%d" % self.max
-                
+            # show max value
+            context.move_to(graph_x + graph_width - 30, graph_y + 10)
+            max_label = self.value_format % self.current_max
             context.show_text(max_label)
-        
-        
-    def _area_chart(self, context):
-        rect = self.get_allocation()  #x, y, width, height        
-        data, records = self.data, len(self.data)
 
-        if not data:
-            return
+    def _multibar_chart(self, context):
+        rect = self.get_allocation()  #x, y, width, height        
+
+        rowcount, keys = len(self.keys), self.keys
 
         # graph box dimensions
-        graph_x = self.legend_width or 50 #give some space to scale labels
-        graph_width = rect.width + rect.x - graph_x
+        if self.show_scale:
+            self.legend_width = max(self.legend_width, 20)
         
-        step = graph_width / float(records)
+        if self.series_keys and self.labels_at_end:
+            graph_x = 0
+            graph_width = rect.width - max(self.legend_width, self._longest_label(self.series_keys))
+        else:
+            graph_x = self.legend_width #give some space to scale labels
+            graph_width = rect.width + rect.x - graph_x - 10
+
         graph_y = rect.y
         graph_height = rect.height - 15
-        
-        max_size = graph_height - 15
-
-
 
         context.set_line_width(1)
         
-        # TODO put this somewhere else - drawing background and some grid
-        context.rectangle(graph_x, graph_y, graph_width, graph_height)
-        context.set_source_rgb(1, 1, 1)
-        context.fill_preserve()
-        context.stroke()
-
-        context.set_line_width(1)
-        context.set_dash ([1, 3]);
-
-
-        #backgrounds
-        if self.there_are_backgrounds:
-            for i in range(records):
-                if data[i]["background"] != None:
-                    set_color(context, light[data[i]["background"]]);
-                    context.rectangle(graph_x + (step * i), 1, step, graph_height - 1)
-                    context.fill_preserve()
-                    context.stroke()
-
+        if self.background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(rect.x, rect.y, rect.width, rect.height)
             
-        set_color(context, dark[8])
-        
-        # scale lines
-        if self.stretch_grid == False:
-            stride = self.default_grid_stride
-        else:
-            stride = int(graph_height / 4)
+            context.set_source_rgb(*self.background)
+            context.fill_preserve()
+            context.stroke()
             
-        for y in range(graph_y, graph_y + graph_height, stride):
-            context.move_to(graph_x - 10, y)
-            context.line_to(graph_x + graph_width, y)
 
-        # and borders on both sides, so the graph doesn't fall out
-        context.move_to(graph_x - 1, graph_y)
-        context.line_to(graph_x - 1, graph_y + graph_height + 1)
-        context.move_to(graph_x + graph_width, graph_y)
-        context.line_to(graph_x + graph_width, graph_y + graph_height + 1)
-        
+        if self.chart_background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
+            context.set_source_rgb(*self.chart_background)
+            context.fill_preserve()
+            context.stroke()
 
-        context.stroke()
-        
-        
-        context.set_dash ([]);
+        bar_width = min(graph_width / float(rowcount), self.max_bar_width)
 
-        # scale labels
-        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
-        for i in range(records):
-            if i % 5 == 0:
-                context.move_to(graph_x + 5 + (step * i), graph_y + graph_height + 13)
-                context.show_text(data[i]["label"])
 
-        # values for max min and average
-        if self.there_are_floats:
-            max_label = "%.1f" % self.max
-        else:
-            max_label = "%d" % self.max
+        # keys
+        prev_end = None
+        set_color(context, dark[8]);
+        for i in range(len(keys)):
+            extent = context.text_extents(keys[i]) #x, y, width, height
+            intended_x = graph_x + (bar_width * i) + (bar_width - extent[2]) / 2.0
             
-        extent = context.text_extents(max_label) #x, y, width, height
+            if not prev_end or intended_x > prev_end:
+                context.move_to(intended_x, graph_y + graph_height + 13)
+                context.show_text(keys[i])
+            
+                prev_end = intended_x + extent[2] + 10
+                
 
-        context.move_to(graph_x - extent[2] - 16, rect.y + 10)
-        context.show_text(max_label)
+        # maximal
+        if self.show_total:
+            max_label = "%d" % self.row_max
+            extent = context.text_extents(max_label) #x, y, width, height
+            context.move_to(graph_x - extent[2] - 16, rect.y + 10)
+            context.show_text(max_label)
 
-
-        context.rectangle(graph_x, graph_y, graph_width, graph_height + 1)
-        context.clip()
 
         #flip the matrix vertically, so we do not have to think upside-down
         context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
+        context.set_dash ([]);
+        context.set_line_width(0)
+        context.set_antialias(cairo.ANTIALIAS_NONE)
+    
+        max_bar_size = graph_height
+        #make sure bars don't hit the ceiling
+        if self.animate:
+            max_bar_size = graph_height - 10
 
-        set_color(context, dark[4]);
-        # chart itself
-        for i in range(records):
-            if i == 0:
-                context.move_to(graph_x, -10)
-                context.line_to(graph_x, graph_height * data[i]["factor"] * 0.9)
+
+        # bars themselves
+        for i in range(rowcount):
+            color = 3
+
+            bar_start = 0
+            
+            base_color = self.bar_base_color or (220, 220, 220)
+
+            gap = bar_width * 0.05
+            bar_x = graph_x + (bar_width * i) + gap
+
+            for j in range(len(self.factors[i])):
+                factor = self.factors[i][j]
+                if factor > 0:
+                    bar_size = max_bar_size * factor
+                    
+                    self._draw_bar(bar_x+1,
+                                   bar_start,
+                                   bar_width-2 - (gap * 2),
+                                   bar_size,
+                                   [col - (j * 22) for col in base_color])
+    
+                    bar_start += bar_size
+                color +=1
+                if color > 2:
+                    color = 0
+
+
+        #flip the matrix back, so text doesn't come upside down
+        context.transform(cairo.Matrix(yy = -1, y0 = 0))
+        set_color(context, dark[8])        
+        context.set_line_width(1)
+        label_height = 10
+
+
+
+        #white grid and scale values
+        if self.grid_stride and self.row_max:
+            # if grid stride is less than 1 then we consider it to be percentage
+            if self.grid_stride < 1:
+                grid_stride = int(self.row_max * self.grid_stride)
+            else:
+                grid_stride = int(self.grid_stride)
+            
+            context.set_line_width(1)
+            for i in range(grid_stride, int(self.row_max), grid_stride):
+                y = - max_bar_size * (i / self.row_max)
+                label = str(i)
+                extent = context.text_extents(label) #x, y, width, height
+
+                context.move_to(rect.x + self.legend_width - extent[2] - 2, y + label_height / 2)
+                set_color(context, medium[8])
+                context.show_text(label)
+                context.stroke()
+
+                set_color(context, (255,255,255))
+                context.move_to(graph_x, y)
+                context.line_to(graph_x + graph_width, y)
+                context.stroke()
+            
+
+        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+
+
+        #series keys
+        if self.show_series:
+            #put series keys
+            longest_label = max(self.legend_width, self._longest_label(self.series_keys))
+            set_color(context, dark[8]);
+            
+            y = 0
+            label_y = None
+
+            # if labels are at end, then we need show them for the last bar! 
+            if self.labels_at_end:
+                factors = self.factors[0]
+            else:
+                factors = self.factors[-1]
+    
+            for j in range(len(factors)):
+                factor = factors[j]
+                bar_size = factor * max_bar_size
                 
-            context.line_to(graph_x + (step * i) + (step * 0.5), graph_height * data[i]["factor"] * 0.9)
+                if round(bar_size) > 0:
+                    label = "%s" % self.series_keys[j]
+                    
+                    
+                    if self.legend_width:
+                        label = self._ellipsize_text(label, longest_label - 8)
+    
+                    extent = context.text_extents(label) #x, y, width, height
+                    
+                    y -= bar_size
+                    intended_position = round(y + (bar_size + extent[3]) / 2)
+                    
+                    if label_y:
+                        label_y = min(intended_position, label_y - label_height * 1.5)
+                    else:
+                        label_y = intended_position
+                    
+                    if self.labels_at_end:
+                        label_x = graph_x + graph_width 
+                        line_x1 = graph_x + graph_width - 1
+                        line_x2 = graph_x + graph_width - 6
+                    else:
+                        label_x = rect.x + longest_label - extent[2] - 8
+                        line_x1 = rect.x + longest_label - 4
+                        line_x2 = rect.x + longest_label + 1
 
-            if i == records - 1:
-                context.line_to(graph_x  + (step * i) + (step * 0.5),  0)
-                context.line_to(graph_x + graph_width, 0)
-                context.line_to(graph_x + graph_width, -10)
-                
 
+                    context.move_to(label_x, label_y)
+                    context.show_text(label)
+                    
+                    if label_y != intended_position:
+                        context.move_to(line_x1, label_y - extent[3] / 2)
+                        context.line_to(line_x2, round(y + bar_size / 2))
 
-        set_color(context, light[4])
-        context.fill_preserve()    
-
-        context.set_line_width(3)
-        context.set_line_join (cairo.LINE_JOIN_ROUND);
-        set_color(context, dark[4]);
-        context.stroke()    
+                    
+                    
+            context.stroke()        
         
-
-
-

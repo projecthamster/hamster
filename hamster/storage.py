@@ -49,6 +49,12 @@ class Storage(object):
     def get_facts(self, date, end_date = None):
         return self.__get_facts(date, end_date)
 
+    def get_popular_categories(self):
+        return self.__get_popular_categories()
+
+    def get_interval_activity_ids(self, date, end_date = None):
+        return self.__get_interval_activity_ids(date, end_date)
+
     def remove_fact(self, fact_id):
         fact = self.get_fact(fact_id)
         if fact:

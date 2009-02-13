@@ -331,7 +331,7 @@ class Storage(hamster.storage.Storage):
                           a.end_time AS end_time,
                           a.description as description,
                           b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, c.id as category_id
+                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c on b.category_id = c.id
@@ -342,6 +342,33 @@ class Storage(hamster.storage.Storage):
 
         return self.fetchall(query, (_("Unsorted"), date, end_date))
 
+    def __get_popular_categories(self):
+        """returns categories used in the specified interval"""
+        query = """
+                   SELECT coalesce(c.name, ?) as category, count(a.id) as popularity
+                     FROM facts a
+                LEFT JOIN activities b on a.activity_id = b.id
+                LEFT JOIN categories c on c.id = b.category_id
+                 GROUP BY b.category_id
+                 ORDER BY popularity desc
+        """
+        return self.fetchall(query, (_("Unsorted"), ))
+
+    def __get_interval_activity_ids(self, date, end_date = None):
+        """returns activities used in the specified interval"""
+        query = """
+                   SELECT a.name, coalesce(b.name, ?) as category_name
+                     FROM activities a
+                LEFT JOIN categories b on b.id = a.category_id
+                    WHERE a.id in (SELECT activity_id from facts
+                                  WHERE date(start_time) >= ?
+                                    AND date(start_time) <= ?)
+        """
+        end_date = end_date or date        
+
+        return self.fetchall(query, (_("Unsorted"), date, end_date))
+        
+    
     def __remove_fact(self, fact_id):
         query = """
                    DELETE FROM facts
