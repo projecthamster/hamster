@@ -1,4 +1,4 @@
-AC_INIT([hamster-applet],[2.25.91],[toms.baugis@gmail.com])
+AC_INIT([hamster-applet],[2.27.1],[toms.baugis@gmail.com])
 AC_CONFIG_SRCDIR(hamster/__init__.py)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
