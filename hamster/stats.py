@@ -69,7 +69,7 @@ class StatsViewer(object):
         background = (0.975,0.975,0.975)
         
         graph_frame.modify_bg(gtk.STATE_NORMAL,
-                              gtk.gdk.Color(*[b*65536.0 for b in background]))
+                              gtk.gdk.Color(*[int(b*65536.0) for b in background]))
 
         
 
