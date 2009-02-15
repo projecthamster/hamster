@@ -105,14 +105,12 @@ class Chart(gtk.DrawingArea):
         animation_timeout - after how many miliseconds should we draw next frame
     """
     def __init__(self, **args):
-        """here is init"""
         gtk.DrawingArea.__init__(self)
         self.connect("expose_event", self._expose)
-        self.data, self.prev_factors = None, None #start off with an empty hand
-        
-        """now see what we have in args!"""
+
+        """now let's see what we have in args!"""
         self.orient_vertical = "orient" not in args or args["orient"] == "vertical" # defaults to true
-        
+
         self.max_bar_width = args.get("max_bar_width", 0)
 
         self.values_on_bars = "values_on_bars" in args and args["values_on_bars"] #defaults to false
@@ -152,7 +150,6 @@ class Chart(gtk.DrawingArea):
         self.grid_stride = args.get("grid_stride", None)
         
 
-
         self.keys, self.series_keys = None, None
         self.factors = None
         self.row_max = 0
@@ -164,9 +161,19 @@ class Chart(gtk.DrawingArea):
         self.context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
         self.context.clip()
         
-        self.x, self.y, self.width, self.height = self.get_allocation()  #x, y, width, height      
+        alloc = self.get_allocation()  #x, y, width, height
+        self.width, self.height = alloc[2], alloc[3]
+
+
+        # fill whole area 
+        if self.background:
+            self.context.rectangle(0, 0, self.width, self.height)
+            self.context.set_source_rgb(*self.background)
+            self.context.fill_preserve()
+            self.context.stroke()
         
-        self.draw()
+        #forward to specific implementations
+        self._draw()
 
         return False
 
@@ -207,16 +214,15 @@ class Chart(gtk.DrawingArea):
         self.data = data
 
         self.prev_keys, self.prev_series_keys = copy.copy(self.keys), copy.copy(self.series_keys)
-
-        self.keys, self.series_keys = keys, series_keys
-        
-        if not self.data:
-            self._invalidate()
-            return
-        
-
         self.prev_factors = copy.copy(self.factors)
         self.prev_row_max = self.row_max
+
+        self.keys, self.series_keys = keys, series_keys
+
+        if not data: #if there is no data, let's just draw blank
+            self._invalidate()
+            return
+
 
         self.row_max = self.get_row_max(data)
         self.new_factors = self.calculate_factors(data, self.row_max)
@@ -340,6 +346,11 @@ class Chart(gtk.DrawingArea):
             self.window.invalidate_rect(rect, True)
             self.window.process_updates(True)
 
+    def _fill_area(self, x, y, w, h, color):
+        self.context.rectangle(x, y, w, h)
+        self.context.set_source_rgb(*[c / 256.0 for c in color])
+        self.context.fill_preserve()
+        self.context.stroke()
 
     def _draw_bar(self, x, y, w, h, color = None):
         """ draws a nice bar"""
@@ -348,28 +359,19 @@ class Chart(gtk.DrawingArea):
         base_color = color or self.bar_base_color or (220, 220, 220)
 
         if self.bars_beveled:
-            context.rectangle(x, y, w, h)
-            set_color(context, *[b - 30 for b in base_color])
-            context.fill_preserve()    
-            context.stroke()
+            self._fill_area(x, y, w, h,
+                            [b - 30 for b in base_color])
+
             if w > 2 and h > 2:
-                context.rectangle(x + 1, y + 1, w - 2, h - 2)
-                set_color(context, *[b + 20 for b in base_color])
-                context.fill_preserve()    
-                context.stroke()
+                self._fill_area(x + 1, y + 1, w - 2, h - 2,
+                                [b + 20 for b in base_color])
     
             if w > 3 and h > 3:
-                context.rectangle(x + 2, y + 2, w - 4, h - 4)
-                set_color(context, *base_color)
-                context.fill_preserve()    
-                context.stroke()
+                self._fill_area(x + 2, y + 2, w - 4, h - 4, base_color)
         else:
-            context.rectangle(x, y, w, h)
-            set_color(context, *base_color)
-            context.fill_preserve()    
-            context.stroke()
-            
+            self._fill_area(x, y, w, h, base_color)
 
+    
 
     def _ellipsize_text (self, text, width):
         """try to constrain text into pixels by ellipsizing end
@@ -402,72 +404,16 @@ class Chart(gtk.DrawingArea):
 
 
 class BarChart(Chart):
-    def draw(self):
+    def _draw_moving_parts(self):
+        graph_x, graph_y, graph_width, graph_height = self.graph_x, self.graph_y, self.graph_width, self.graph_height
+        
         context = self.context
+        keys, rowcount = self.keys, len(self.keys)
         
-        rowcount, keys = len(self.keys), self.keys
-
-        # graph box dimensions
-        if self.show_scale:
-            self.legend_width = max(self.legend_width, 20)
-        
-        if self.series_keys and self.labels_at_end:
-            graph_x = 0
-            graph_width = self.width - max(self.legend_width, self._longest_label(self.series_keys))
-        else:
-            graph_x = self.legend_width #give some space to scale labels
-            graph_width = self.width + self.x - graph_x - 10
-
-        graph_y = self.y
-        graph_height = self.height - 15
-
-        context.set_line_width(1)
-        
-        if self.background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(self.x, self.y, self.width, self.height)
-            
-            context.set_source_rgb(*self.background)
-            context.fill_preserve()
-            context.stroke()
-            
-
-        if self.chart_background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(graph_x - 1, graph_y, graph_width, graph_height)
-            context.set_source_rgb(*self.chart_background)
-            context.fill_preserve()
-            context.stroke()
-
-        bar_width = min(graph_width / float(rowcount), self.max_bar_width)
-
-
-        # keys
-        prev_end = None
-        set_color(context, dark[8]);
-        for i in range(len(keys)):
-            extent = context.text_extents(keys[i]) #x, y, width, height
-            intended_x = graph_x + (bar_width * i) + (bar_width - extent[2]) / 2.0
-            
-            if not prev_end or intended_x > prev_end:
-                context.move_to(intended_x, graph_y + graph_height + 13)
-                context.show_text(keys[i])
-            
-                prev_end = intended_x + extent[2] + 10
-                
-
-        # maximal
-        if self.show_total:
-            max_label = "%d" % self.row_max
-            extent = context.text_extents(max_label) #x, y, width, height
-            context.move_to(graph_x - extent[2] - 16, self.y + 10)
-            context.show_text(max_label)
-
-
+        """draw moving parts"""
         #flip the matrix vertically, so we do not have to think upside-down
         context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
-        context.set_dash ([]);
         context.set_line_width(0)
         context.set_antialias(cairo.ANTIALIAS_NONE)
     
@@ -485,8 +431,8 @@ class BarChart(Chart):
             
             base_color = self.bar_base_color or (220, 220, 220)
 
-            gap = bar_width * 0.05
-            bar_x = graph_x + (bar_width * i) + gap
+            gap = self.bar_width * 0.05
+            bar_x = graph_x + (self.bar_width * i) + gap
 
             for j in range(len(self.factors[i])):
                 factor = self.factors[i][j]
@@ -495,7 +441,7 @@ class BarChart(Chart):
                     
                     self._draw_bar(bar_x+1,
                                    bar_start,
-                                   bar_width-2 - (gap * 2),
+                                   self.bar_width-2 - (gap * 2),
                                    bar_size,
                                    [col - (j * 22) for col in base_color])
     
@@ -527,7 +473,7 @@ class BarChart(Chart):
                 label = str(i)
                 extent = context.text_extents(label) #x, y, width, height
 
-                context.move_to(self.x + self.legend_width - extent[2] - 2, y + label_height / 2)
+                context.move_to(self.legend_width - extent[2] - 2, y + label_height / 2)
                 set_color(context, medium[8])
                 context.show_text(label)
                 context.stroke()
@@ -582,9 +528,9 @@ class BarChart(Chart):
                         line_x1 = graph_x + graph_width - 1
                         line_x2 = graph_x + graph_width - 6
                     else:
-                        label_x = self.x + longest_label - extent[2] - 8
-                        line_x1 = self.x + longest_label - 4
-                        line_x2 = self.x + longest_label + 1
+                        label_x = longest_label - extent[2] - 8
+                        line_x1 = longest_label - 4
+                        line_x2 = longest_label + 1
 
 
                     context.move_to(label_x, label_y)
@@ -600,9 +546,69 @@ class BarChart(Chart):
 
 
 
+    
+    def _draw(self):
+        context = self.context
+        
+        rowcount, keys = len(self.keys), self.keys
+
+        # graph box dimensions
+        if self.show_scale:
+            self.legend_width = max(self.legend_width, 20)
+        
+        if self.series_keys and self.labels_at_end:
+            graph_x = 0
+            graph_width = self.width - max(self.legend_width, self._longest_label(self.series_keys))
+        else:
+            graph_x = self.legend_width #give some space to scale labels
+            graph_width = self.width + 0 - graph_x - 10
+
+        graph_y = 0
+        graph_height = self.height - 15
+
+        self.graph_x, self.graph_y, self.graph_width, self.graph_height = graph_x, graph_y, graph_width, graph_height
+
+        context.set_line_width(1)
+        
+        if self.chart_background:
+            self._fill_area(graph_x - 1, graph_y, graph_width, graph_height,
+                            self.chart_background)
+
+
+        self.bar_width = min(graph_width / float(rowcount), self.max_bar_width)
+
+
+        # keys
+        prev_end = None
+        set_color(context, dark[8]);
+        for i in range(len(keys)):
+            extent = context.text_extents(keys[i]) #x, y, width, height
+            intended_x = graph_x + (self.bar_width * i) + (self.bar_width - extent[2]) / 2.0
+            
+            if not prev_end or intended_x > prev_end:
+                context.move_to(intended_x, graph_y + graph_height + 13)
+                context.show_text(keys[i])
+            
+                prev_end = intended_x + extent[2] + 10
+                
+
+        # maximal
+        if self.show_total:
+            max_label = "%d" % self.row_max
+            extent = context.text_extents(max_label) #x, y, width, height
+            context.move_to(graph_x - extent[2] - 16, 10)
+            context.show_text(max_label)
+
+        self._draw_moving_parts()
+
+
+
+
+
+
 
 class HorizontalBarChart(Chart):
-    def draw(self):
+    def _draw(self):
         rowcount, keys = len(self.keys), self.keys
         
         context = self.context
@@ -611,27 +617,15 @@ class HorizontalBarChart(Chart):
         # TODO - figure how to wrap text
         longest_label = max(self.legend_width, self._longest_label(keys))
         
-        if self.background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(self.x, self.y, self.width, self.height)
-            
-            context.set_source_rgb(*self.background)
-            context.fill_preserve()
-            context.stroke()
-            
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
-        graph_x = self.x + longest_label
-        graph_width = self.width + self.x - graph_x
-        graph_y, graph_height = self.y, self.height
+        graph_x = longest_label
+        graph_width = self.width + 0 - graph_x
+        graph_y, graph_height = 0, self.height
 
 
         if self.chart_background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(graph_x, graph_y, graph_width, graph_height)
-            context.set_source_rgb(*self.chart_background)
-            context.fill_preserve()
-            context.stroke()
+            self._fill_area(graph_x, graph_y, graph_width, graph_height, self.chart_background)
         
 
         """
@@ -672,7 +666,7 @@ class HorizontalBarChart(Chart):
                 label = self._ellipsize_text(label, longest_label - 8)
             extent = context.text_extents(label) #x, y, width, height
             
-            context.move_to(self.x + longest_label - extent[2] - 8, self.y + (bar_width * i) + (bar_width + extent[3]) / 2)
+            context.move_to(longest_label - extent[2] - 8, (bar_width * i) + (bar_width + extent[3]) / 2)
             context.show_text(label)
         
         context.stroke()        
@@ -682,7 +676,6 @@ class HorizontalBarChart(Chart):
         
 
         
-        context.set_dash ([]);
         context.set_line_width(0)
         context.set_antialias(cairo.ANTIALIAS_NONE)
 
