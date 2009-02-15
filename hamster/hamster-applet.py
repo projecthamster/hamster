@@ -19,16 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
-PROFILE = False
-if PROFILE:
-    import statprof
-    statprof.start()
-
 import gtk, gnomeapplet
 import getopt, sys
 import os.path
 import gettext, locale
+import gnome
 
 # Allow to use uninstalled
 def _check(path):
@@ -61,23 +56,9 @@ hamster.__init_db()
 import hamster.applet
 
 def applet_factory(applet, iid):
+    applet.connect("destroy", on_destroy)
     hamster.applet.HamsterApplet(applet)
     return True
-
-# Return a standalone window that holds the applet
-def build_window():
-    app = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    app.set_title(_(u"Time Tracker"))
-    app.connect("destroy", on_destroy)
-
-    applet = gnomeapplet.Applet()
-    applet.get_orient = lambda: gnomeapplet.ORIENT_DOWN
-    applet_factory(applet, None)
-    applet.reparent(app)
-
-    app.show_all()
-
-    return app
 
 def on_destroy(event):
     from hamster.Configuration import GconfStore
@@ -98,16 +79,16 @@ $ hamster-applet [OPTIONS]
 
 OPTIONS:
     -w, --window    Launch the applet in a standalone window for test purposes (default=no).
-    -t, --trace        Use tracing (default=no).
+    -o, --overview  Launch just the overview window
     """)
     sys.exit()
 
 if __name__ == "__main__":
     standalone = False
-    do_trace = False
+    show_overview = False
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "wt", ["window", "trace"])
+        opts, args = getopt.getopt(sys.argv[1:], "wo", ["window", "overview"])
     except getopt.GetoptError:
         # Unknown args were passed, we fallback to bahave as if
         # no options were passed
@@ -118,32 +99,30 @@ if __name__ == "__main__":
     for o, a in opts:
         if o in ("-w", "--window"):
             standalone = True
-        elif o in ("-t", "--trace"):
-            do_trace = True
+        elif o in ("-o", "--overview"):
+            show_overview = True
 
-    print 'Running with options:', {
-        'standalone': standalone,
-        'do_trace': do_trace,
-    }
 
     gtk.window_set_default_icon_name("hamster-applet")
 
     if standalone:
-        import gnome
         gnome.init(hamster.defs.PACKAGE, hamster.defs.VERSION)
-        build_window()
 
-        # run the new command using the given trace
-        if do_trace:
-            import trace
-            trace = trace.Trace(
-                ignoredirs=[sys.prefix],
-                ignoremods=['sys', 'os', 'getopt'],
-                trace=True,
-                count=False)
-            trace.run('gtk.main()')
-        else:
-            gtk.main()
+        app = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        app.set_title(_(u"Time Tracker"))
+    
+        applet = gnomeapplet.Applet()
+        applet_factory(applet, None)
+        applet.reparent(app)
+        app.show_all()
+
+        gtk.main()
+
+    elif show_overview:
+        from hamster.stats import StatsViewer
+        stats_viewer = StatsViewer(True)
+        stats_viewer.show()
+        gtk.main()
 
     else:
         gnomeapplet.bonobo_factory(
@@ -152,8 +131,3 @@ if __name__ == "__main__":
             hamster.defs.PACKAGE,
             hamster.defs.VERSION,
             applet_factory)
-
-    if PROFILE:
-        statprof.stop()
-        statprof.display()
-
