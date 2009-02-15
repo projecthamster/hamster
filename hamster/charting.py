@@ -47,7 +47,7 @@ Example:
 
 import gtk
 import gobject
-import cairo
+import cairo, pango
 import copy
 import math
 
@@ -137,7 +137,7 @@ class Chart(gtk.DrawingArea):
         #and some defaults
         self.default_grid_stride = 50
         
-        self.animation_frames = 100
+        self.animation_frames = 50
         self.animation_timeout = 15 #in miliseconds
 
         self.current_frame = self.animation_frames
@@ -160,6 +160,9 @@ class Chart(gtk.DrawingArea):
         self.context = widget.window.cairo_create()
         self.context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
         self.context.clip()
+
+        self.layout = self.context.create_layout()
+        self.layout.set_font_description(pango.FontDescription("Sans 8"))
         
         alloc = self.get_allocation()  #x, y, width, height
         self.width, self.height = alloc[2], alloc[3]
@@ -373,29 +376,12 @@ class Chart(gtk.DrawingArea):
 
     
 
-    def _ellipsize_text (self, text, width):
-        """try to constrain text into pixels by ellipsizing end
-           TODO - check if cairo maybe has ability to ellipsize automatically
-        """
-        extent = self.context.text_extents(text) #x, y, width, height
-        if extent[2] <= width:
-            return text
-        
-        res = text
-        while res:
-            res = res[:-1]
-            extent = self.context.text_extents(res + "…") #x, y, width, height
-            if extent[2] <= width:
-                return res + "…"
-        
-        return text # if can't fit - return what we have
-
-
     def _longest_label(self, labels):
         max_extent = 0
         for label in labels:
-            extent = self.context.text_extents(label) #x, y, width, height
-            max_extent = max(max_extent, extent[2] + 8)
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
+            max_extent = max(label_w + 5, max_extent)
         
         return max_extent
 
@@ -406,22 +392,24 @@ class Chart(gtk.DrawingArea):
 class BarChart(Chart):
     def _draw_moving_parts(self):
         graph_x, graph_y, graph_width, graph_height = self.graph_x, self.graph_y, self.graph_width, self.graph_height
-        
         context = self.context
         keys, rowcount = self.keys, len(self.keys)
-        
-        """draw moving parts"""
-        #flip the matrix vertically, so we do not have to think upside-down
-        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
-        context.set_line_width(0)
-        context.set_antialias(cairo.ANTIALIAS_NONE)
-    
+        legend_width = self.legend_width or self._longest_label(keys)
+
         max_bar_size = graph_height
         #make sure bars don't hit the ceiling
         if self.animate:
             max_bar_size = graph_height - 10
 
+
+        context.set_antialias(cairo.ANTIALIAS_NONE)
+        
+        """draw moving parts"""
+        #flip the matrix vertically, so we do not have to think upside-down
+        context.save()
+        context.set_line_width(0)
+        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
         # bars themselves
         for i in range(rowcount):
@@ -439,9 +427,9 @@ class BarChart(Chart):
                 if factor > 0:
                     bar_size = max_bar_size * factor
                     
-                    self._draw_bar(bar_x+1,
+                    self._draw_bar(bar_x,
                                    bar_start,
-                                   self.bar_width-2 - (gap * 2),
+                                   self.bar_width - (gap * 2),
                                    bar_size,
                                    [col - (j * 22) for col in base_color])
     
@@ -451,13 +439,13 @@ class BarChart(Chart):
                     color = 0
 
 
+        context.restore()
         #flip the matrix back, so text doesn't come upside down
-        context.transform(cairo.Matrix(yy = -1, y0 = 0))
-        set_color(context, dark[8])        
-        context.set_line_width(1)
-        label_height = 10
+        context.transform(cairo.Matrix(yy = 1, y0 = graph_height))
 
-
+        context.save()
+        
+        self.layout.set_width(-1)
 
         #white grid and scale values
         if self.grid_stride and self.row_max:
@@ -471,11 +459,13 @@ class BarChart(Chart):
             for i in range(grid_stride, int(self.row_max), grid_stride):
                 y = - max_bar_size * (i / self.row_max)
                 label = str(i)
-                extent = context.text_extents(label) #x, y, width, height
 
-                context.move_to(self.legend_width - extent[2] - 2, y + label_height / 2)
+                self.layout.set_text(label)
+                label_w, label_h = self.layout.get_pixel_size()
+
+                context.move_to(legend_width - label_w, y - label_h / 2)
                 set_color(context, medium[8])
-                context.show_text(label)
+                context.show_layout(self.layout)
                 context.stroke()
 
                 set_color(context, (255,255,255))
@@ -484,13 +474,13 @@ class BarChart(Chart):
                 context.stroke()
             
 
-        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+        context.restore()
 
+        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
 
         #series keys
         if self.show_series:
             #put series keys
-            longest_label = max(self.legend_width, self._longest_label(self.series_keys))
             set_color(context, dark[8]);
             
             y = 0
@@ -501,6 +491,13 @@ class BarChart(Chart):
                 factors = self.factors[0]
             else:
                 factors = self.factors[-1]
+
+            self.layout.set_ellipsize(pango.ELLIPSIZE_END)
+            self.layout.set_width(legend_width * 1000)
+            if self.labels_at_end:
+                self.layout.set_alignment(pango.ALIGN_LEFT)
+            else:
+                self.layout.set_alignment(pango.ALIGN_RIGHT)
     
             for j in range(len(factors)):
                 factor = factors[j]
@@ -510,16 +507,14 @@ class BarChart(Chart):
                     label = "%s" % self.series_keys[j]
                     
                     
-                    if self.legend_width:
-                        label = self._ellipsize_text(label, longest_label - 8)
-    
-                    extent = context.text_extents(label) #x, y, width, height
+                    self.layout.set_text(label)
+                    label_w, label_h = self.layout.get_pixel_size()
                     
                     y -= bar_size
-                    intended_position = round(y + (bar_size + extent[3]) / 2)
+                    intended_position = round(y + (bar_size - label_h) / 2)
                     
                     if label_y:
-                        label_y = min(intended_position, label_y - label_height * 1.5)
+                        label_y = min(intended_position, label_y - label_h)
                     else:
                         label_y = intended_position
                     
@@ -528,16 +523,16 @@ class BarChart(Chart):
                         line_x1 = graph_x + graph_width - 1
                         line_x2 = graph_x + graph_width - 6
                     else:
-                        label_x = longest_label - extent[2] - 8
-                        line_x1 = longest_label - 4
-                        line_x2 = longest_label + 1
+                        label_x = 0
+                        line_x1 = legend_width + 2
+                        line_x2 = legend_width + 8
 
 
                     context.move_to(label_x, label_y)
-                    context.show_text(label)
-                    
+                    context.show_layout(self.layout)
+
                     if label_y != intended_position:
-                        context.move_to(line_x1, label_y - extent[3] / 2)
+                        context.move_to(line_x1, label_y + label_h / 2)
                         context.line_to(line_x2, round(y + bar_size / 2))
 
                     
@@ -553,15 +548,17 @@ class BarChart(Chart):
         rowcount, keys = len(self.keys), self.keys
 
         # graph box dimensions
+        legend_width = self.legend_width or self._longest_label(keys)
+
         if self.show_scale:
-            self.legend_width = max(self.legend_width, 20)
+            legend_width = max(self.legend_width, 20)
         
         if self.series_keys and self.labels_at_end:
             graph_x = 0
-            graph_width = self.width - max(self.legend_width, self._longest_label(self.series_keys))
+            graph_width = self.width - max(legend_width, self._longest_label(self.series_keys))
         else:
-            graph_x = self.legend_width #give some space to scale labels
-            graph_width = self.width + 0 - graph_x - 10
+            graph_x = legend_width + 8 # give some space to scale labels
+            graph_width = self.width - graph_x - 10
 
         graph_y = 0
         graph_height = self.height - 15
@@ -581,23 +578,34 @@ class BarChart(Chart):
         # keys
         prev_end = None
         set_color(context, dark[8]);
+        self.layout.set_width(-1)
+
         for i in range(len(keys)):
-            extent = context.text_extents(keys[i]) #x, y, width, height
-            intended_x = graph_x + (self.bar_width * i) + (self.bar_width - extent[2]) / 2.0
+            self.layout.set_text(keys[i])
+            label_w, label_h = self.layout.get_pixel_size()
+
+            intended_x = graph_x + (self.bar_width * i) + (self.bar_width - label_w) / 2.0
             
             if not prev_end or intended_x > prev_end:
-                context.move_to(intended_x, graph_y + graph_height + 13)
-                context.show_text(keys[i])
+                context.move_to(intended_x, graph_y + graph_height + 4)
+                context.show_layout(self.layout)
             
-                prev_end = intended_x + extent[2] + 10
+                prev_end = intended_x + label_w + 10
+                
+        context.stroke()
                 
 
         # maximal
         if self.show_total:
             max_label = "%d" % self.row_max
-            extent = context.text_extents(max_label) #x, y, width, height
-            context.move_to(graph_x - extent[2] - 16, 10)
-            context.show_text(max_label)
+
+            self.layout.set_text(max_label)
+            label_w, label_h = self.layout.get_pixel_size()
+
+            context.move_to(graph_x - label_w - 16, 10)
+            context.show_layout(self.layout)
+            
+            context.stroke()
 
         self._draw_moving_parts()
 
@@ -613,14 +621,13 @@ class HorizontalBarChart(Chart):
         
         context = self.context
         
-        # get the longest label
-        # TODO - figure how to wrap text
-        longest_label = max(self.legend_width, self._longest_label(keys))
-        
-        
         #push graph to the right, so it doesn't overlap, and add little padding aswell
-        graph_x = longest_label
-        graph_width = self.width + 0 - graph_x
+        legend_width = self.legend_width or self._longest_label(keys)
+
+        graph_x = legend_width
+        graph_x += 8 #add another 8 pixes of padding
+        
+        graph_width = self.width - graph_x
         graph_y, graph_height = 0, self.height
 
 
@@ -657,19 +664,24 @@ class HorizontalBarChart(Chart):
         max_bar_size = graph_width - 15
         gap = bar_width * 0.05
 
+
+        self.layout.set_alignment(pango.ALIGN_RIGHT)
+        self.layout.set_ellipsize(pango.ELLIPSIZE_END)
+        
+        self.layout.set_width(legend_width * 1000)
+
         # keys
         set_color(context, dark[8])        
         for i in range(rowcount):
             label = keys[i]
             
-            if self.legend_width > 0:
-                label = self._ellipsize_text(label, longest_label - 8)
-            extent = context.text_extents(label) #x, y, width, height
-            
-            context.move_to(longest_label - extent[2] - 8, (bar_width * i) + (bar_width + extent[3]) / 2)
-            context.show_text(label)
-        
-        context.stroke()        
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
+
+            context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
+            context.show_layout(self.layout)
+        context.stroke()
+
         
         
         context.set_line_width(1)
@@ -705,28 +717,35 @@ class HorizontalBarChart(Chart):
 
 
         #values
+
+        self.layout.set_width(-1)
         context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         set_color(context, dark[8])        
+
+
         if self.values_on_bars:
             for i in range(rowcount):
                 label = self.value_format % sum(self.data[i])
                 factor = sum(self.factors[i])
-                extent = context.text_extents(label) #x, y, width, height
-                
+
+                self.layout.set_text(label)
+                label_w, label_h = self.layout.get_pixel_size()
+
                 bar_size = max_bar_size * factor
-                horizontal_offset = (bar_width + extent[3]) / 2.0 - extent[3]
+                vertical_padding = (bar_width + label_h) / 2.0 - label_h
                 
-                if  bar_size - horizontal_offset < extent[2]:
-                    label_x = graph_x + bar_size + horizontal_offset
+                if  bar_size - vertical_padding < label_w:
+                    label_x = graph_x + bar_size + vertical_padding
                 else:
-                    label_x = graph_x + bar_size - extent[2] - horizontal_offset
+                    label_x = graph_x + bar_size - label_w - vertical_padding
                 
-                context.move_to(label_x, graph_y + (bar_width * i) + (bar_width + extent[3]) / 2.0)
-                context.show_text(label)
+                context.move_to(label_x, graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
+                context.show_layout(self.layout)
         else:
             # show max value
             context.move_to(graph_x + graph_width - 30, graph_y + 10)
             max_label = self.value_format % self.current_max
-            context.show_text(max_label)
+            self.layout.set_text(max_label)
+            context.show_layout(self.layout)
 
 
