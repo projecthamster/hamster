@@ -74,7 +74,7 @@ class StatsViewer(object):
         
 
         
-        x_offset = 80 # let's nicely align all graphs
+        x_offset = 90 # let's nicely align all graphs
         
         self.category_chart = charting.BarChart(background = background,
                                              bar_base_color = (238,221,221),
@@ -85,7 +85,7 @@ class StatsViewer(object):
 
         category_box = self.get_widget("totals_by_category")
         category_box.add(self.category_chart)
-        category_box.set_size_request(120, -1)
+        category_box.set_size_request(130, -1)
         
 
         self.day_chart = charting.BarChart(background = background,
