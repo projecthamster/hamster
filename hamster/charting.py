@@ -18,17 +18,11 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Small charting library that enables you to draw simple bar and
+"""Small charting library that enables you to draw bar and
 horizontal bar charts. This library is not intended for scientific graphs.
 More like some visual clues to the user.
 
-Currently chart understands only list of four member lists, in label, value
-fashion. Like:
-    data = [
-        ["Label1", value1, color(optional), background(optional)],
-        ["Label2", value2, color(optional), background(optional)],
-        ["Label3", value3, color(optional), background(optional)],
-    ]
+For graph options see the Chart class and Chart.plot function
 
 Author: toms.baugis@gmail.com
 Feel free to contribute - more info at Project Hamster web page:
@@ -79,7 +73,9 @@ def set_color(context, color, g = None, b = None):
         r,g,b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
     context.set_source_rgb(r, g, b)
     
+
 def set_color_gdk(context, color):
+    # set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
     r,g,b = color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0
     context.set_source_rgb(r, g, b)
     
@@ -117,8 +113,7 @@ class Chart(gtk.DrawingArea):
         """now see what we have in args!"""
         self.orient_vertical = "orient" not in args or args["orient"] == "vertical" # defaults to true
         
-        self.max_bar_width = None
-        if "max_bar_width" in args: self.max_bar_width = args["max_bar_width"]        
+        self.max_bar_width = args.get("max_bar_width", 0)
 
         self.values_on_bars = "values_on_bars" in args and args["values_on_bars"] #defaults to false
 
@@ -154,9 +149,6 @@ class Chart(gtk.DrawingArea):
         
         self.show_series = "show_series" not in args or args["show_series"] # defaults to true
         
-        if "legend_keys" in args: self.legend_keys = args["legend_keys"]
-
-
         self.grid_stride = args.get("grid_stride", None)
         
 
@@ -168,15 +160,13 @@ class Chart(gtk.DrawingArea):
         
     def _expose(self, widget, event):
         """expose is when drawing's going on, like on _invalidate"""
-
         self.context = widget.window.cairo_create()
         self.context.rectangle(event.area.x, event.area.y, event.area.width, event.area.height)
         self.context.clip()
         
-        if self.orient_vertical:
-            self._multibar_chart(self.context)
-        else:
-            self._horizontal_bar_chart()
+        self.x, self.y, self.width, self.height = self.get_allocation()  #x, y, width, height      
+        
+        self.draw()
 
         return False
 
@@ -211,7 +201,7 @@ class Chart(gtk.DrawingArea):
         return factors
 
 
-    def plot2(self, keys, data, series_keys = None):
+    def plot(self, keys, data, series_keys = None):
         """Draw chart with given data"""
         
         self.data = data
@@ -407,146 +397,14 @@ class Chart(gtk.DrawingArea):
         
         return max_extent
 
+    def draw(self):
+        print "OMG OMG, not implemented!!!"
 
-    def _horizontal_bar_chart(self):
-        rect = self.get_allocation()  #x, y, width, height of the whole drawing area
-        
-        rowcount, keys = len(self.keys), self.keys
-        
+
+class BarChart(Chart):
+    def draw(self):
         context = self.context
         
-        # get the longest label
-        # TODO - figure how to wrap text
-        longest_label = max(self.legend_width, self._longest_label(keys))
-        
-        if self.background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(rect.x, rect.y, rect.width, rect.height)
-            
-            context.set_source_rgb(*self.background)
-            context.fill_preserve()
-            context.stroke()
-            
-        
-        #push graph to the right, so it doesn't overlap, and add little padding aswell
-        graph_x = rect.x + longest_label
-        graph_width = rect.width + rect.x - graph_x
-        graph_y, graph_height = rect.y, rect.height
-
-
-        if self.chart_background:
-            # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(graph_x, graph_y, graph_width, graph_height)
-            context.set_source_rgb(*self.chart_background)
-            context.fill_preserve()
-            context.stroke()
-        
-
-        """
-        # stripes for the case i decided that they are not annoying
-        for i in range(0, round(self.current_max), 10):
-            x = graph_x + (graph_width * (i / float(self.current_max)))
-            w = (graph_width * (5 / float(self.current_max)))
-
-            context.set_source_rgb(0.90, 0.90, 0.90)
-            context.rectangle(x + w, graph_y, w, graph_height)
-            context.fill_preserve()
-            context.stroke()
-            
-            context.set_source_rgb(0.70, 0.70, 0.70)
-            context.move_to(x, graph_y + graph_height - 2)
-
-            context.show_text(str(i))
-        """    
-    
-        if not self.data:  #if we have nothing, let's go home
-            return
-
-        
-        bar_width = int(graph_height / float(rowcount))
-        if self.max_bar_width:
-            bar_width = min(bar_width, self.max_bar_width)
-
-        
-        max_bar_size = graph_width - 15
-        gap = bar_width * 0.05
-
-        # keys
-        set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
-        for i in range(rowcount):
-            label = keys[i]
-            
-            if self.legend_width > 0:
-                label = self._ellipsize_text(label, longest_label - 8)
-            extent = context.text_extents(label) #x, y, width, height
-            
-            context.move_to(rect.x + longest_label - extent[2] - 8, rect.y + (bar_width * i) + (bar_width + extent[3]) / 2)
-            context.show_text(label)
-        
-        context.stroke()        
-        
-        
-        context.set_line_width(1)
-        
-
-        
-        context.set_dash ([]);
-        context.set_line_width(0)
-        context.set_antialias(cairo.ANTIALIAS_NONE)
-
-
-        # bars themselves
-        for i in range(rowcount):
-            bar_start = 0
-            base_color = self.bar_base_color or (220, 220, 220)
-
-            gap = bar_width * 0.05
-
-            bar_y = graph_y + (bar_width * i) + gap
-
-            for j in range(len(self.factors[i])):
-                factor = self.factors[i][j]
-                if factor > 0:
-                    bar_size = max_bar_size * factor
-                    bar_height = bar_width - (gap * 2)
-                    
-                    self._draw_bar(graph_x,
-                                   bar_y,
-                                   bar_size,
-                                   bar_height,
-                                   [col - (j * 22) for col in base_color])
-    
-                    bar_start += bar_size
-
-
-        #values
-        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
-        set_color(context, dark[8])        
-        if self.values_on_bars:
-            for i in range(rowcount):
-                label = self.value_format % sum(self.data[i])
-                factor = sum(self.factors[i])
-                extent = context.text_extents(label) #x, y, width, height
-                
-                bar_size = max_bar_size * factor
-                horizontal_offset = (bar_width + extent[3]) / 2.0 - extent[3]
-                
-                if  bar_size - horizontal_offset < extent[2]:
-                    label_x = graph_x + bar_size + horizontal_offset
-                else:
-                    label_x = graph_x + bar_size - extent[2] - horizontal_offset
-                
-                context.move_to(label_x, graph_y + (bar_width * i) + (bar_width + extent[3]) / 2.0)
-                context.show_text(label)
-        else:
-            # show max value
-            context.move_to(graph_x + graph_width - 30, graph_y + 10)
-            max_label = self.value_format % self.current_max
-            context.show_text(max_label)
-
-    def _multibar_chart(self, context):
-        rect = self.get_allocation()  #x, y, width, height        
-
         rowcount, keys = len(self.keys), self.keys
 
         # graph box dimensions
@@ -555,19 +413,19 @@ class Chart(gtk.DrawingArea):
         
         if self.series_keys and self.labels_at_end:
             graph_x = 0
-            graph_width = rect.width - max(self.legend_width, self._longest_label(self.series_keys))
+            graph_width = self.width - max(self.legend_width, self._longest_label(self.series_keys))
         else:
             graph_x = self.legend_width #give some space to scale labels
-            graph_width = rect.width + rect.x - graph_x - 10
+            graph_width = self.width + self.x - graph_x - 10
 
-        graph_y = rect.y
-        graph_height = rect.height - 15
+        graph_y = self.y
+        graph_height = self.height - 15
 
         context.set_line_width(1)
         
         if self.background:
             # TODO put this somewhere else - drawing background and some grid
-            context.rectangle(rect.x, rect.y, rect.width, rect.height)
+            context.rectangle(self.x, self.y, self.width, self.height)
             
             context.set_source_rgb(*self.background)
             context.fill_preserve()
@@ -602,7 +460,7 @@ class Chart(gtk.DrawingArea):
         if self.show_total:
             max_label = "%d" % self.row_max
             extent = context.text_extents(max_label) #x, y, width, height
-            context.move_to(graph_x - extent[2] - 16, rect.y + 10)
+            context.move_to(graph_x - extent[2] - 16, self.y + 10)
             context.show_text(max_label)
 
 
@@ -669,7 +527,7 @@ class Chart(gtk.DrawingArea):
                 label = str(i)
                 extent = context.text_extents(label) #x, y, width, height
 
-                context.move_to(rect.x + self.legend_width - extent[2] - 2, y + label_height / 2)
+                context.move_to(self.x + self.legend_width - extent[2] - 2, y + label_height / 2)
                 set_color(context, medium[8])
                 context.show_text(label)
                 context.stroke()
@@ -724,9 +582,9 @@ class Chart(gtk.DrawingArea):
                         line_x1 = graph_x + graph_width - 1
                         line_x2 = graph_x + graph_width - 6
                     else:
-                        label_x = rect.x + longest_label - extent[2] - 8
-                        line_x1 = rect.x + longest_label - 4
-                        line_x2 = rect.x + longest_label + 1
+                        label_x = self.x + longest_label - extent[2] - 8
+                        line_x1 = self.x + longest_label - 4
+                        line_x2 = self.x + longest_label + 1
 
 
                     context.move_to(label_x, label_y)
@@ -739,4 +597,143 @@ class Chart(gtk.DrawingArea):
                     
                     
             context.stroke()        
+
+
+
+
+class HorizontalBarChart(Chart):
+    def draw(self):
+        rowcount, keys = len(self.keys), self.keys
         
+        context = self.context
+        
+        # get the longest label
+        # TODO - figure how to wrap text
+        longest_label = max(self.legend_width, self._longest_label(keys))
+        
+        if self.background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(self.x, self.y, self.width, self.height)
+            
+            context.set_source_rgb(*self.background)
+            context.fill_preserve()
+            context.stroke()
+            
+        
+        #push graph to the right, so it doesn't overlap, and add little padding aswell
+        graph_x = self.x + longest_label
+        graph_width = self.width + self.x - graph_x
+        graph_y, graph_height = self.y, self.height
+
+
+        if self.chart_background:
+            # TODO put this somewhere else - drawing background and some grid
+            context.rectangle(graph_x, graph_y, graph_width, graph_height)
+            context.set_source_rgb(*self.chart_background)
+            context.fill_preserve()
+            context.stroke()
+        
+
+        """
+        # stripes for the case i decided that they are not annoying
+        for i in range(0, round(self.current_max), 10):
+            x = graph_x + (graph_width * (i / float(self.current_max)))
+            w = (graph_width * (5 / float(self.current_max)))
+
+            context.set_source_rgb(0.90, 0.90, 0.90)
+            context.rectangle(x + w, graph_y, w, graph_height)
+            context.fill_preserve()
+            context.stroke()
+            
+            context.set_source_rgb(0.70, 0.70, 0.70)
+            context.move_to(x, graph_y + graph_height - 2)
+
+            context.show_text(str(i))
+        """    
+    
+        if not self.data:  #if we have nothing, let's go home
+            return
+
+        
+        bar_width = int(graph_height / float(rowcount))
+        if self.max_bar_width:
+            bar_width = min(bar_width, self.max_bar_width)
+
+        
+        max_bar_size = graph_width - 15
+        gap = bar_width * 0.05
+
+        # keys
+        set_color(context, dark[8])        
+        for i in range(rowcount):
+            label = keys[i]
+            
+            if self.legend_width > 0:
+                label = self._ellipsize_text(label, longest_label - 8)
+            extent = context.text_extents(label) #x, y, width, height
+            
+            context.move_to(self.x + longest_label - extent[2] - 8, self.y + (bar_width * i) + (bar_width + extent[3]) / 2)
+            context.show_text(label)
+        
+        context.stroke()        
+        
+        
+        context.set_line_width(1)
+        
+
+        
+        context.set_dash ([]);
+        context.set_line_width(0)
+        context.set_antialias(cairo.ANTIALIAS_NONE)
+
+
+        # bars themselves
+        for i in range(rowcount):
+            bar_start = 0
+            base_color = self.bar_base_color or (220, 220, 220)
+
+            gap = bar_width * 0.05
+
+            bar_y = graph_y + (bar_width * i) + gap
+
+            for j in range(len(self.factors[i])):
+                factor = self.factors[i][j]
+                if factor > 0:
+                    bar_size = max_bar_size * factor
+                    bar_height = bar_width - (gap * 2)
+                    
+                    self._draw_bar(graph_x,
+                                   bar_y,
+                                   bar_size,
+                                   bar_height,
+                                   [col - (j * 22) for col in base_color])
+    
+                    bar_start += bar_size
+
+
+        #values
+        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+        set_color(context, dark[8])        
+        if self.values_on_bars:
+            for i in range(rowcount):
+                label = self.value_format % sum(self.data[i])
+                factor = sum(self.factors[i])
+                extent = context.text_extents(label) #x, y, width, height
+                
+                bar_size = max_bar_size * factor
+                horizontal_offset = (bar_width + extent[3]) / 2.0 - extent[3]
+                
+                if  bar_size - horizontal_offset < extent[2]:
+                    label_x = graph_x + bar_size + horizontal_offset
+                else:
+                    label_x = graph_x + bar_size - extent[2] - horizontal_offset
+                
+                context.move_to(label_x, graph_y + (bar_width * i) + (bar_width + extent[3]) / 2.0)
+                context.show_text(label)
+        else:
+            # show max value
+            context.move_to(graph_x + graph_width - 30, graph_y + 10)
+            max_label = self.value_format % self.current_max
+            context.show_text(max_label)
+
+

@@ -34,8 +34,9 @@ import datetime as dt
 import calendar
 import time
 
-class StatsViewer:
-    def __init__(self):
+class StatsViewer(object):
+    def __init__(self, main_window = False):
+        self.main_window = main_window
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
@@ -75,7 +76,7 @@ class StatsViewer:
         
         x_offset = 80 # let's nicely align all graphs
         
-        self.category_chart = charting.Chart(background = background,
+        self.category_chart = charting.BarChart(background = background,
                                              bar_base_color = (238,221,221),
                                              bars_beveled = False,
                                              legend_width = x_offset,
@@ -87,7 +88,7 @@ class StatsViewer:
         category_box.set_size_request(120, -1)
         
 
-        self.day_chart = charting.Chart(background = background,
+        self.day_chart = charting.BarChart(background = background,
                                         bar_base_color = (220, 220, 220),
                                         bars_beveled = False,
                                         show_series = False,
@@ -98,7 +99,7 @@ class StatsViewer:
 
 
         
-        self.activity_chart = charting.Chart(orient = "horizontal",
+        self.activity_chart = charting.HorizontalBarChart(orient = "horizontal",
                                              max_bar_width = 25,
                                              values_on_bars = True,
                                              stretch_grid = True,
@@ -122,12 +123,9 @@ class StatsViewer:
         self.end_date = self.start_date + dt.timedelta(6)
 
         
-        self.day_view = self.get_widget("day")
         self.week_view = self.get_widget("week")
         self.month_view = self.get_widget("month")
-
-        self.week_view.set_group(self.day_view)
-        self.month_view.set_group(self.day_view)
+        self.month_view.set_group(self.week_view)
         
         #initiate the form in the week view
         self.week_view.set_active(True)
@@ -334,13 +332,7 @@ class StatsViewer:
             # standard python date formatting ones- you can use all of them
             overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
-        if self.day_view.get_active():
-            # overview label for single day
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            overview_label = _("Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
-            dayview_caption = _("Day")
-        elif self.week_view.get_active():
+        if self.week_view.get_active():
             dayview_caption = _("Week")
         else:
             dayview_caption = _("Month")
@@ -364,7 +356,7 @@ class StatsViewer:
 
         
         categories = [cat[0] for cat in storage.get_popular_categories()]
-        self.activity_chart.plot2(activity_totals['keys'],
+        self.activity_chart.plot(activity_totals['keys'],
                                   activity_totals['values'],
                                   series_keys = categories)
 
@@ -376,11 +368,11 @@ class StatsViewer:
             day_keys = [day.strftime(_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")) for day in all_days]
 
 
-        self.day_chart.plot2(day_keys, day_category_totals['values'],
+        self.day_chart.plot(day_keys, day_category_totals['values'],
                              series_keys = day_category_totals['keys'])
 
         category_totals = [[sum(value) for value in zip(*day_category_totals['values'])]]
-        self.category_chart.plot2([_("Total")], category_totals,
+        self.category_chart.plot([_("Total")], category_totals,
                                   series_keys = day_category_totals['keys'])
         
         
@@ -402,11 +394,7 @@ class StatsViewer:
         return self.glade.get_widget(name)
 
     def on_prev_clicked(self, button):
-        if self.day_view.get_active():
-            self.start_date -= dt.timedelta(1)
-            self.end_date -= dt.timedelta(1)
-        
-        elif self.week_view.get_active():
+        if self.week_view.get_active():
             self.start_date -= dt.timedelta(7)
             self.end_date -= dt.timedelta(7)
         
@@ -419,11 +407,7 @@ class StatsViewer:
         self.do_graph()
 
     def on_next_clicked(self, button):
-        if self.day_view.get_active():
-            self.start_date += dt.timedelta(1)
-            self.end_date += dt.timedelta(1)
-        
-        elif self.week_view.get_active():
+        if self.week_view.get_active():
             self.start_date += dt.timedelta(7)
             self.end_date += dt.timedelta(7)
         
@@ -437,11 +421,7 @@ class StatsViewer:
     
     def on_home_clicked(self, button):
         self.view_date = dt.date.today()
-        if self.day_view.get_active():
-            self.start_date = self.view_date
-            self.end_date = self.view_date
-        
-        elif self.week_view.get_active():
+        if self.week_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
             self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
             self.end_date = self.start_date + dt.timedelta(6)
@@ -556,7 +536,11 @@ class StatsViewer:
     def on_close(self, widget, event):
         dispatcher.del_handler('activity_updated', self.after_activity_update)
         dispatcher.del_handler('day_updated', self.after_fact_update)
-        return False
+        
+        if self.main_window:
+            gtk.main_quit()
+        else:
+            return False
 
     def on_window_key_pressed(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Escape
