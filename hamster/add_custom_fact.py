@@ -63,6 +63,8 @@ class CustomFactController:
         
         # handle the case when we get fact_id - that means edit!
         self.fact_id = fact_id
+        self.get_widget("ok").set_sensitive(False)
+
         if fact_id:
             fact = storage.get_fact(fact_id)
             print fact
@@ -216,6 +218,9 @@ class CustomFactController:
     
     def on_ok_clicked(self, button):
         activity = self.get_widget("activity-list").get_child().get_text()
+        
+        if not activity:
+            return False
 
         # juggle with description - break into parts and then put together
         buf = self.get_widget('description').get_buffer()
