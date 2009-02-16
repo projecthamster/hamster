@@ -347,6 +347,15 @@ class StatsViewer(object):
         
         
         fact_list = storage.get_facts(self.start_date, self.end_date)
+        
+        if not fact_list:
+            self.get_widget("graphs").hide()
+            self.get_widget("no_data_label").show()
+            return 
+        else:
+            self.get_widget("graphs").show()
+            self.get_widget("no_data_label").hide()
+            
 
         all_days = [self.start_date + dt.timedelta(i)
                     for i in range((self.end_date - self.start_date).days  + 1)]        
@@ -549,5 +558,5 @@ class StatsViewer(object):
         self.window.destroy()
     
     def show(self):
-        self.window.show_all()
+        self.window.show()
 

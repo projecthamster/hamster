@@ -213,6 +213,7 @@ class Chart(gtk.DrawingArea):
 
     def plot(self, keys, data, series_keys = None):
         """Draw chart with given data"""
+        self.show()
         
         self.data = data
 
@@ -267,6 +268,7 @@ class Chart(gtk.DrawingArea):
         else:
             self.factors = self.new_factors
             self._invalidate()
+            
 
         
     def _smoothstep(self, v, start, end):
