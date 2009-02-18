@@ -47,6 +47,7 @@ class CustomFactController:
         self.set_dropdown()
         self.refresh_menu()
 
+        self.get_widget("in_progress").set_active(False)
         self.get_widget("save_button").set_sensitive(False)
 
         if fact_id:
@@ -63,8 +64,6 @@ class CustomFactController:
 
             if not fact["end_time"] and fact["start_time"].date() == datetime.datetime.today():
                 self.get_widget("in_progress").set_active(True)
-            else:
-                self.get_widget("in_progress").set_active(False)
 
             self.get_widget("save_button").set_sensitive(True)
             self.get_widget("save_button").set_label("gtk-save")
@@ -83,7 +82,6 @@ class CustomFactController:
                 if fact_date == datetime.date.today():
                     # for today time is now
                     fact_date = datetime.datetime.now()
-                    self.get_widget("in_progress").set_active(True)
                 else:
                     # for other days it is 8am
                     fact_date = datetime.datetime(fact_date.year,
@@ -91,8 +89,7 @@ class CustomFactController:
                                                   fact_date.day,
                                                   8)
         else:
-            end_date = start_date = fact_date or datetime.datetime.now()
-            self.get_widget("in_progress").set_active(True)
+            end_date = start_date = datetime.datetime.now()
 
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
@@ -308,7 +305,6 @@ class CustomFactController:
 
     def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
-        print prefix + "_date"
         date = self.figure_date(self.get_widget(prefix + '_date').get_text())
         time = self.figure_time(self.get_widget(prefix + '_time').get_text())
         
@@ -421,23 +417,24 @@ class CustomFactController:
         if focus_time and focus_time < i_time:
             focus_time += datetime.timedelta(days = 1)
         
-        end_time = i_time + datetime.timedelta(hours = 24)
+        if start_time:
+            end_time = i_time + datetime.timedelta(hours = 12)
+        else:
+            end_time = i_time + datetime.timedelta(hours = 24)
+        
         i, focus_row = 0, None
         while i_time < end_time:
             row_text = self.format_time(i_time)
             if start_time:
                 delta = (i_time - start_time).seconds / 60
-                if delta == 0:
-                    delta_text = _("0 mins")
-                elif delta == 30:
-                    delta_text = _("30 mins")
-                elif delta == 60:
-                    delta_text = _("1 hr")
-                elif delta % 60 == 0:
-                    delta_text = _("%d hrs" % (delta / 60))
-                else:
-                    delta_text = _("%.1f hrs" % (delta / 60.0))
                 
+                if delta % 60 == 0:
+                    delta_text = "%dh" % (delta / 60.0)
+                elif delta / 60 == 0:
+                    delta_text = "%dmin" % (delta % 60.0)
+                else:
+                    delta_text = "%dh %dmin" % (delta / 60.0, delta % 60)
+
                 row_text = "%s (%s)" % (row_text, delta_text)
 
             hours.append([row_text])
@@ -447,7 +444,13 @@ class CustomFactController:
                 focus_row = i
             
             i += 1
-            i_time += datetime.timedelta(minutes = 30)
+
+            if start_time:
+                i_time += datetime.timedelta(minutes = 15)
+            else:
+                i_time += datetime.timedelta(minutes = 30)
+
+            
 
 
         self.time_tree.set_model(hours)        
@@ -515,6 +518,10 @@ class CustomFactController:
         widget = None
         if self.get_widget("start_time").is_focus():
             widget = self.get_widget("start_time")
+            self.get_widget("end_time") \
+                .set_text(self.format_time(time + datetime.timedelta(minutes=30))) #set also end time on start time change
+
+
         elif self.get_widget("end_time").is_focus():
             start_datetime = self._get_datetime("start")
             start_time = self.figure_time(self.get_widget("start_time").get_text())
