@@ -48,7 +48,6 @@ class CustomFactController:
         self.refresh_menu()
 
         self.get_widget("in_progress").set_active(False)
-        self.get_widget("save_button").set_sensitive(False)
 
         if fact_id:
             fact = storage.get_fact(fact_id)
@@ -65,7 +64,6 @@ class CustomFactController:
             if not fact["end_time"] and fact["start_time"].date() == datetime.datetime.today():
                 self.get_widget("in_progress").set_active(True)
 
-            self.get_widget("save_button").set_sensitive(True)
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
@@ -101,6 +99,7 @@ class CustomFactController:
         self.get_widget('end_date').set_text(self.format_date(end_date))
         self.get_widget('end_time').set_text(self.format_time(end_date))
 
+        self.validate_fields()
 
         self.init_calendar_window()
         self.init_time_window()
@@ -141,6 +140,7 @@ class CustomFactController:
             widget.set_text(self.format_date(date))
 
         self.calendar_window.hide()        
+        self.validate_fields()
         
     def format_date(self, date):
         if not date:
@@ -277,31 +277,6 @@ class CustomFactController:
 
     def show(self):
         self.window.show()
-        
-    def on_end_time_mode_changed(self, widget):
-        selected = widget.get_active()
-
-        #those will get handy, when user changes end time condition
-        self.get_widget("fact_end_until").hide()
-        self.get_widget("fact_end_for").hide()
-
-        if selected == 1:
-            # selected to enter end date and time
-            start_date = datetime.datetime.fromtimestamp(self.get_widget('start_date').get_time())
-            if start_date.date() == datetime.date.today():  #in case of today let's add the end time as right now
-                end_time = time.strftime("%H:%M")
-            else: #otherwise settle to the one we have in start time
-                end_time = self.get_widget('start_time').get_text()
-
-            # and set end_time only if it has not been specified before
-            if self.get_widget('end_time').get_text() == '':
-                self.get_widget('end_time').set_text(end_time)
-
-            self.get_widget("fact_end_until").show()
-        
-        elif selected == 2:
-            # selected to enter duration
-            self.get_widget("fact_end_for").show()
 
     def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
@@ -390,6 +365,7 @@ class CustomFactController:
 
     def on_date_focus_out_event(self, event, something):
         self.calendar_window.hide()
+        self.validate_fields()
     
 
     def on_start_time_focus_in_event(self, entry, event):
@@ -397,18 +373,20 @@ class CustomFactController:
 
     def on_start_time_focus_out_event(self, event, something):
         self.time_window.hide()
+        self.validate_fields()
         
     def on_end_time_focus_in_event(self, entry, event):
         start_time = self.figure_time(self.get_widget("start_time").get_text())
-        
         self.show_time_window(entry, start_time)
 
     def on_end_time_focus_out_event(self, event, something):
         self.time_window.hide()
+        self.validate_fields()
     
     def on_in_progress_toggled(self, check):
         self.get_widget("end_time").set_sensitive(not check.get_active())
         self.get_widget("end_date").set_sensitive(not check.get_active())
+        self.validate_fields()
 
     def show_time_window(self, widget, start_time = None):
 
@@ -542,6 +520,7 @@ class CustomFactController:
 
         widget.set_position(len(time_text))
         self.time_window.hide()        
+        self.validate_fields()
         
 
     
@@ -581,10 +560,25 @@ class CustomFactController:
     def on_cancel_clicked(self, button):
         self.window.destroy()
         
-    def on_combo_changed(self, combo):
+    def on_activity_combo_changed(self, combo):
+        self.validate_fields()
+
+    def validate_fields(self):
         # do not allow empty tasks
-        activity = self.get_widget("activity-list").get_child().get_text()
-        self.get_widget("ok").set_sensitive(activity != '')
+
+        activity_text = self.get_widget("activity_text").get_text()
+        start_time = self._get_datetime("start")
+
+        end_time = self._get_datetime("end")
+        if self.get_widget("in_progress").get_active():
+            end_time = datetime.datetime.now()
+        
+        looks_good = False
+        if activity_text != "" and start_time and end_time and \
+           (end_time - start_time).days == 0:
+            looks_good = True
+
+        self.get_widget("save_button").set_sensitive(looks_good)
 
     def on_window_key_pressed(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape
