@@ -67,7 +67,7 @@ class GconfStore(object):
         return self._client.get_bool(self.GCONF_ENABLE_TIMEOUT) or False
 
     def get_stop_on_shutdown(self):
-        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN) or True
+        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN) or False
         
     def get_notify_interval(self):
     	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL) or 27
