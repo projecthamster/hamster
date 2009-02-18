@@ -24,6 +24,7 @@ pygtk.require('2.0')
 import os
 import gtk
 import gobject
+import re
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 from hamster.stuff import *
@@ -35,70 +36,166 @@ import datetime
 
 GLADE_FILE = "add_custom_fact.glade"
 
-
 class CustomFactController:
     def __init__(self,  fact_date = None, fact_id = None):
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
-        self.set_dropdown()
-
-        self.hours = gtk.ListStore(gobject.TYPE_STRING)
-        
-        for i in range(24):
-            self.hours.append(["%02d:00" % i ])
-            self.hours.append(["%02d:30" % i ])
-
         # build the menu
-        self.refresh_menu()
-        
-        self.get_widget('end_time_mode').set_active(0)
-        
-        self.get_widget('start_time_combo').set_model(self.hours)        
-        self.get_widget('start_time').set_text(time.strftime("%H:%M"))
-        
-        self.get_widget('end_time_combo').set_model(self.hours)        
-        if fact_date:
-            self.get_widget('start_date').set_time(int(time.mktime(fact_date.timetuple())))
-        
-        # handle the case when we get fact_id - that means edit!
         self.fact_id = fact_id
-        self.get_widget("ok").set_sensitive(False)
+
+        self.set_dropdown()
+        self.refresh_menu()
+
+        self.get_widget("save_button").set_sensitive(False)
 
         if fact_id:
             fact = storage.get_fact(fact_id)
             print fact
-            self.get_widget('start_date').set_time(int(time.mktime(fact["start_time"].timetuple())))
-            self.get_widget('start_time').set_text("%02d:%02d" % (fact["start_time"].hour, fact["start_time"].minute))
-
-            self.get_widget('activity_name').set_text(fact["name"])
+            self.get_widget('activity_text').set_text(fact["name"])
+            
+            start_date = fact["start_time"]
+            end_date = fact["end_time"]
             
             buf = gtk.TextBuffer()
             buf.set_text(fact["description"] or "")
             self.get_widget('description').set_buffer(buf)
 
-            self.get_widget("ok").set_sensitive(True)
-            self.get_widget("ok").set_label("gtk-save")
-            self.window.set_title(_("Update activity"))
-            
-            if fact["end_time"]:
-                self.get_widget("end_time_mode").set_active(1)
-                self.get_widget("fact_end_until").show()
-                self.get_widget('end_time').set_text("%02d:%02d" % (fact["end_time"].hour, fact["end_time"].minute))
-                
-                # fill also delta for those relative types, heh
-                for_delta = fact["end_time"] - fact["start_time"]
-                for_hours = for_delta.seconds / 3600
-                for_minutes = (for_delta.seconds - (for_hours * 3600)) / 60
-                self.get_widget('duration_hours').set_value(for_hours)
-                self.get_widget('duration_mins').set_value(for_minutes)
+            if not fact["end_time"] and fact["start_time"].date() == datetime.datetime.today():
+                self.get_widget("in_progress").set_active(True)
+            else:
+                self.get_widget("in_progress").set_active(False)
 
+            self.get_widget("save_button").set_sensitive(True)
+            self.get_widget("save_button").set_label("gtk-save")
+            self.window.set_title(_("Update activity"))
+
+        elif fact_date and fact_date != datetime.date.today():
+            # we are asked to add task in some day, but time has not
+            # been specified - two things we can do
+            # if there is end time of last activity, then we start from there
+            # if end time is missing, or there are no activities at all
+            # then we start from 8am (pretty default)
+            last_activity = storage.get_facts(fact_date)
+            if last_activity and last_activity[len(last_activity)-1]["end_time"]:
+                fact_date = last_activity[len(last_activity)-1]["end_time"]
+            else:
+                if fact_date == datetime.date.today():
+                    # for today time is now
+                    fact_date = datetime.datetime.now()
+                    self.get_widget("in_progress").set_active(True)
+                else:
+                    # for other days it is 8am
+                    fact_date = datetime.datetime(fact_date.year,
+                                                  fact_date.month,
+                                                  fact_date.day,
+                                                  8)
+        else:
+            end_date = start_date = fact_date or datetime.datetime.now()
+            self.get_widget("in_progress").set_active(True)
+
+
+        self.on_in_progress_toggled(self.get_widget("in_progress"))
+
+
+        self.get_widget('start_date').set_text(self.format_date(start_date))
+        self.get_widget('start_time').set_text(self.format_time(start_date))
+        
+        self.get_widget('end_date').set_text(self.format_date(end_date))
+        self.get_widget('end_time').set_text(self.format_time(end_date))
+
+
+        self.init_calendar_window()
+        self.init_time_window()
 
         self.glade.signal_autoconnect(self)
 
+    def init_calendar_window(self):
+        self.calendar_window = self.glade.get_widget('calendar_window')
+        self.date_calendar = gtk.Calendar()
+        #self.date_calendar.mark_day(datetime.date.today().day) #mark day marks day in all months, hahaha
+        self.date_calendar.connect("day-selected", self.on_day_selected)
+        self.date_calendar.connect("day-selected-double-click", self.on_day_selected_double_click)
+        self.date_calendar.connect("button-press-event", self.on_cal_button_press_event)
+        self.glade.get_widget("calendar_box").add(self.date_calendar)
+
+    def on_cal_button_press_event(self, calendar, event):
+        self.prev_cal_day = calendar.get_date()[2]
+
+    def on_day_selected_double_click(self, calendar):
+        self.prev_cal_day = None
+        self.on_day_selected(calendar) #forward
+        
+    def on_day_selected(self, calendar):
+        if self.prev_cal_day == calendar.get_date()[2]:
+            return
+        
+        cal_date = calendar.get_date()
+
+        date = datetime.date(cal_date[0], cal_date[1] + 1, cal_date[2])
+        
+        widget = None
+        if self.get_widget("start_date").is_focus():
+            widget = self.get_widget("start_date")
+        elif self.get_widget("end_date").is_focus():
+            widget = self.get_widget("end_date")
+            
+        if widget:
+            widget.set_text(self.format_date(date))
+
+        self.calendar_window.hide()        
+        
+    def format_date(self, date):
+        if not date:
+            return ""
+        else:
+            return date.strftime("%x")
+        
+    def init_time_window(self):
+        self.time_window = self.glade.get_widget('time_window')
+        self.time_tree = self.get_widget('time_tree')
+        self.time_tree.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=0))
+
+
+    def on_date_button_press_event(self, button, event):
+        if self.calendar_window.get_property("visible"):
+            self.calendar_window.hide()
+
+    def on_time_button_press_event(self, button, event):
+        if self.time_window.get_property("visible"):
+            self.time_window.hide()
+        
+        
+    def figure_time(self, str_time):
+        # strip everything non-numeric and consider hours to be first number
+        # and minutes - second number
+        numbers = re.split("\D", str_time)
+        numbers = filter(lambda x: x!="", numbers)
+        hours, minutes = None, None
+        
+        if len(numbers) >= 1:
+            hours = int(numbers[0])
+            
+        if len(numbers) >= 2:
+            minutes = int(numbers[1])
+            
+        if (hours == None and minutes == None) or hours > 24 or minutes > 60:
+            return None #no can do
+
+        """ this breaks 24 hour mode, when hours are given
+        #if hours specified in 12 hour mode, default to PM
+        #TODO - laame, show me how to do this better, pleease
+        am = datetime.time(1, 00).strftime("%p")
+        if hours <= 11 and str_time.find(am) < 0:
+            hours += 12
+        """
+        
+        return datetime.datetime(1900, 1, 1, hours, minutes)
+
+
     def set_dropdown(self):
         # set up drop down menu
-        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list = self.glade.get_widget('activity_combo')
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
@@ -142,7 +239,7 @@ class CustomFactController:
         completion.set_inline_completion(True)
 
         self.activity_list.child.set_completion(completion)
-
+        
 
     def refresh_menu(self):
         #first populate the autocomplete - contains all entries in lowercase
@@ -211,16 +308,14 @@ class CustomFactController:
 
     def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
-        a_date = datetime.datetime.fromtimestamp(self.get_widget('start_date').get_time())
-        hours, secs = self.get_widget(prefix + '_time').get_text().split(":")        
-        return datetime.datetime.combine(a_date, datetime.time(int(hours), int(secs)))
+        print prefix + "_date"
+        date = self.figure_date(self.get_widget(prefix + '_date').get_text())
+        time = self.figure_time(self.get_widget(prefix + '_time').get_text())
         
+        return datetime.datetime.combine(date, time.time())
     
-    def on_ok_clicked(self, button):
-        activity = self.get_widget("activity-list").get_child().get_text()
-        
-        if not activity:
-            return False
+    def figure_description(self):
+        activity = self.get_widget("activity_text").get_text()
 
         # juggle with description - break into parts and then put together
         buf = self.get_widget('description').get_buffer()
@@ -235,33 +330,29 @@ class CustomFactController:
             inline_description = inline_description.strip()
         
         # description field is prior to inline description
-        description = description or inline_description
+        return description or inline_description
         
+        
+    
+    def on_save_button_clicked(self, button):
+        activity = self.get_widget("activity_text").get_text()
+        
+        if not activity:
+            return False
+
+        description = self.figure_description()
+
         if description:
             activity = "%s, %s" % (activity, description)
 
         
-        
         start_time = self._get_datetime("start")
 
-        end_time = None
-        end_time_mode = self.get_widget("end_time_mode").get_active()
-        
-        if end_time_mode != 0: #we have end time, so let's update it
-            if end_time_mode == 1: # specified end  time
-                print "setting specified end time"
-                end_time = self._get_datetime("end")
-                
-            else: #duration
-                print "setting duration"
-                # duration in seconds
-                duration = self.get_widget("duration_hours").get_value() * 60
-                duration = duration + self.get_widget("duration_mins").get_value()
-                end_time_secs = start_time + datetime.timedelta(minutes = duration)
+        if self.get_widget("in_progress").get_active():
+            end_time = None
+        else:
+            end_time = self._get_datetime("end")
 
-                end_time = end_time_secs
-                
-            print end_time
 
         # do some  trickery here - if we were told to update, let's just
         # do insert/delete
@@ -274,6 +365,206 @@ class CustomFactController:
             dispatcher.dispatch('panel_visible', False)
         
         self.window.destroy()
+    
+    def figure_date(self, date_str):
+        if not date_str:
+            return ""
+        
+        return datetime.datetime.strptime(date_str, "%x")
+    
+    def on_date_focus_in_event(self, entry, event):
+        window = entry.get_parent_window()
+        x, y= window.get_origin()
+
+        alloc = entry.get_allocation()
+        
+        date = self.figure_date(entry.get_text())
+        if date:
+            self.prev_cal_day = date.day #avoid 
+            self.date_calendar.select_month(date.month-1, date.year)
+            self.date_calendar.select_day(date.day)
+        
+        self.calendar_window.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.calendar_window.show_all()
+
+    def on_date_focus_out_event(self, event, something):
+        self.calendar_window.hide()
+    
+
+    def on_start_time_focus_in_event(self, entry, event):
+        self.show_time_window(entry)
+
+    def on_start_time_focus_out_event(self, event, something):
+        self.time_window.hide()
+        
+    def on_end_time_focus_in_event(self, entry, event):
+        start_time = self.figure_time(self.get_widget("start_time").get_text())
+        
+        self.show_time_window(entry, start_time)
+
+    def on_end_time_focus_out_event(self, event, something):
+        self.time_window.hide()
+    
+    def on_in_progress_toggled(self, check):
+        self.get_widget("end_time").set_sensitive(not check.get_active())
+        self.get_widget("end_date").set_sensitive(not check.get_active())
+
+    def show_time_window(self, widget, start_time = None):
+
+        focus_time = self.figure_time(widget.get_text())
+        
+        hours = gtk.ListStore(gobject.TYPE_STRING)
+        
+        # populate times
+        i_time = start_time or datetime.datetime(1900, 1, 1, 0, 0)
+        
+        if focus_time and focus_time < i_time:
+            focus_time += datetime.timedelta(days = 1)
+        
+        end_time = i_time + datetime.timedelta(hours = 24)
+        i, focus_row = 0, None
+        while i_time < end_time:
+            row_text = self.format_time(i_time)
+            if start_time:
+                delta = (i_time - start_time).seconds / 60
+                if delta == 0:
+                    delta_text = _("0 mins")
+                elif delta == 30:
+                    delta_text = _("30 mins")
+                elif delta == 60:
+                    delta_text = _("1 hr")
+                elif delta % 60 == 0:
+                    delta_text = _("%d hrs" % (delta / 60))
+                else:
+                    delta_text = _("%.1f hrs" % (delta / 60.0))
+                
+                row_text = "%s (%s)" % (row_text, delta_text)
+
+            hours.append([row_text])
+            
+            
+            if focus_time and i_time <= focus_time <= i_time + datetime.timedelta(minutes = 30):
+                focus_row = i
+            
+            i += 1
+            i_time += datetime.timedelta(minutes = 30)
+
+
+        self.time_tree.set_model(hours)        
+
+
+        #focus on row
+        if focus_row != None:
+            self.time_tree.set_cursor(focus_row)
+            self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
+        
+
+
+        #move popup under the widget
+        alloc = widget.get_allocation()
+        w = alloc.width
+        if start_time:
+            w = w * 2
+        self.time_tree.set_size_request(w, alloc.height * 5)
+
+        window = widget.get_parent_window()
+        x, y= window.get_origin()
+
+        self.time_window.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.time_window.show_all()
+
+    
+    def on_date_key_press_event(self, entry, event):
+        cal_date = self.date_calendar.get_date()
+        date = datetime.date(cal_date[0], cal_date[1]+1, cal_date[2])
+        enter_pressed = False
+
+        if event.keyval == gtk.keysyms.Up:
+            date = date - datetime.timedelta(days=1)
+        elif event.keyval == gtk.keysyms.Down:
+            date = date + datetime.timedelta(days=1)
+        elif (event.keyval == gtk.keysyms.Return or
+              event.keyval == gtk.keysyms.KP_Enter):
+            enter_pressed = True
+        elif (event.keyval == gtk.keysyms.Escape):
+            self.calendar_window.hide()
+        else:
+            return False
+        
+        if enter_pressed:
+            self.prev_cal_day = "borken"
+        else:
+            self.prev_cal_day = date.day #prev_cal_day is our only way of checking that date is right
+        
+        self.date_calendar.select_month(date.month, date.year)
+        self.date_calendar.select_day(date.day)
+        return True
+    
+    def format_time(self, time):
+        if not time:
+            return ""
+        
+        #return time.strftime("%I:%M%p").lstrip("0").lower()
+        return time.strftime("%H:%M").lower()
+    
+    def set_time(self, time_text):
+        #convert forth and back so we have text formated as we want
+        time = self.figure_time(time_text)
+        time_text = self.format_time(time) 
+        
+        widget = None
+        if self.get_widget("start_time").is_focus():
+            widget = self.get_widget("start_time")
+        elif self.get_widget("end_time").is_focus():
+            start_datetime = self._get_datetime("start")
+            start_time = self.figure_time(self.get_widget("start_time").get_text())
+            delta = abs(time - start_time)
+
+            end_date = start_datetime + delta
+            self.get_widget("end_date").set_text(self.format_date(end_date))
+
+            widget = self.get_widget("end_time")
+
+        if widget:
+            widget.set_text(time_text)
+
+        widget.set_position(len(time_text))
+        self.time_window.hide()        
+        
+
+    
+    def on_time_tree_button_press_event(self, tree, event):
+        model, iter = tree.get_selection().get_selected()
+        time = model.get_value(iter, 0)
+        self.set_time(time)
+        
+        
+    def on_time_key_press_event(self, entry, event):
+        if not self.time_tree.get_cursor():
+            return
+        
+        i = self.time_tree.get_cursor()[0][0]
+
+        if event.keyval == gtk.keysyms.Up:
+            i-=1
+        elif event.keyval == gtk.keysyms.Down:
+            i+=1
+        elif (event.keyval == gtk.keysyms.Return or
+              event.keyval == gtk.keysyms.KP_Enter):
+            
+            self.set_time(self.time_tree.get_model()[i][0])
+        elif (event.keyval == gtk.keysyms.Escape):
+            self.time_window.hide()
+        else:
+            return False
+        
+        # keep it in the sane borders
+        i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
+        
+        self.time_tree.set_cursor(i)
+        self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+        return True
+        
         
     def on_cancel_clicked(self, button):
         self.window.destroy()
@@ -287,9 +578,11 @@ class CustomFactController:
         if (event_key.keyval == gtk.keysyms.Escape
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
+            
+            if self.calendar_window.get_property("visible") or \
+               self.time_window.get_property("visible"):
+                return False
+            
             self.window.destroy()
-        elif (event_key.keyval == gtk.keysyms.Return or
-              event_key.keyval == gtk.keysyms.KP_Enter):
-            self.on_ok_clicked(None)
 
 
