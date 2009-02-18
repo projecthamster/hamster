@@ -248,7 +248,6 @@ class HamsterApplet(object):
     
         # Load today's data, activities and set label
         self.last_activity = None
-        self.today = datetime.date.today()
 
         self.load_day()
         self.update_label()
@@ -382,9 +381,6 @@ class HamsterApplet(object):
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
-        prev_date = self.today
-        self.today = datetime.date.today()
-
         # stop tracking task if computer is idle for X minutes
         if self.timeout_enabled and self.last_activity and \
            self.last_activity['end_time'] == None:
@@ -402,10 +398,7 @@ class HamsterApplet(object):
                 self.check_user()
 
             # if we have date change - let's finish previous task and start a new one
-            if prev_date and prev_date != self.today: 
-                storage.touch_fact(self.last_activity)
-                storage.add_fact(self.last_activity['name'])
-            elif self.button.get_active(): # otherwise if we the day view is visible - update day's durations
+            if self.button.get_active(): # otherwise if we the day view is visible - update day's durations
                 self.load_day()
                     
         self.update_label()
@@ -448,7 +441,7 @@ class HamsterApplet(object):
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-        day = DayStore(self.today);
+        day = DayStore(datetime.date.today());
         self.treeview.set_model(day.fact_store)
 
         if len(day.facts) == 0:

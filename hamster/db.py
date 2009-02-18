@@ -34,7 +34,7 @@ import datetime
 import hamster
 import hamster.storage
 import datetime as dt
-
+import copy
         
 class Storage(hamster.storage.Storage):
     # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
@@ -336,11 +336,59 @@ class Storage(hamster.storage.Storage):
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c on b.category_id = c.id
                     WHERE date(a.start_time) >= ? and date(a.start_time) <= ?
+                       OR date(a.end_time) >= ? and date(a.end_time) <= ?
                  ORDER BY a.start_time
         """
-        end_date = end_date or date        
+        end_date = end_date or date
+        
+        facts = self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
+        res = []
 
-        return self.fetchall(query, (_("Unsorted"), date, end_date))
+
+        for fact in facts:
+            
+            start_date = fact["start_time"].date()
+            if fact["end_time"]:
+                end_date = fact["end_time"].date()
+            else:
+                end_date = None
+                                   
+            f = dict(
+                id = fact["id"],
+                start_time = fact["start_time"],
+                end_time = fact["end_time"],
+                description = fact["description"],
+                name = fact["name"],
+                activity_id = fact["activity_id"],
+                category = fact["category"],
+                category_id = fact["category_id"]
+            )
+            
+            
+            if not end_date or start_date == end_date:
+                if end_date:
+                    f["delta"] = fact["end_time"] - fact["start_time"]
+                elif start_date == dt.date.today() \
+                          and fact["start_time"] < dt.datetime.now():
+                    f["delta"] = dt.datetime.now() -  fact["start_time"]
+                else:
+                    f["delta"] = None
+
+                res.append(f)
+            else:
+                #if start and end dates do not much, let's populate two entries!
+                if date <= f["start_time"].date()  <= end_date:
+                    start_fact = copy.copy(f)
+                    start_fact["end_time"] = dt.datetime.combine(start_fact["start_time"], dt.time(23, 59))
+                    start_fact["delta"] = start_fact["end_time"] - start_fact["start_time"]
+                    res.append(start_fact)
+
+                if date <= fact["end_time"].date()  <= end_date:
+                    end_fact = copy.copy(f)
+                    end_fact["start_time"] = dt.datetime.combine(end_fact["end_time"], dt.time(0, 0))
+                    end_fact["delta"] = end_fact["end_time"] - end_fact["start_time"]
+                    res.append(end_fact)
+        return res
 
     def __get_popular_categories(self):
         """returns categories used in the specified interval"""

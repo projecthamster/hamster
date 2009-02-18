@@ -120,14 +120,12 @@ def simple(facts, start_date, end_date):
         end_time = fact["end_time"]
         
         # ongoing task in current day
-        if not end_time and last_activity and fact["id"] == last_activity["id"]:
-            end_time = dt.datetime.now()
-
         end_time_str = ""
         if end_time:
-            delta = end_time - fact["start_time"]
-            duration = 24 * 60 * delta.days + delta.seconds / 60
             end_time_str = end_time.strftime('%H:%M')
+
+        if fact["delta"]:
+            duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
 
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list

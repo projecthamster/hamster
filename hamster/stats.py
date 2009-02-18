@@ -218,12 +218,8 @@ class StatsViewer(object):
             start_date = fact["start_time"].date()
 
             duration = None
-            if fact["end_time"]: # not set if just started
-                delta = fact["end_time"] - fact["start_time"]
-                duration = 24 * delta.days + delta.seconds / 60
-            elif fact["start_time"].date() == dt.date.today():
-                delta = dt.datetime.now() - fact["start_time"]
-                duration = 24 * delta.days + delta.seconds / 60
+            if fact["delta"]:
+                duration = 24 * fact["delta"].days + fact["delta"].seconds / 60
 
             self.fact_store.append(by_day[start_date]["row_pointer"],
                                    [fact["id"],
