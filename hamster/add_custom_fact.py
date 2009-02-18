@@ -308,7 +308,12 @@ class CustomFactController:
         date = self.figure_date(self.get_widget(prefix + '_date').get_text())
         time = self.figure_time(self.get_widget(prefix + '_time').get_text())
         
-        return datetime.datetime.combine(date, time.time())
+        if time and date:
+            return datetime.datetime.combine(date, time.time())
+        elif not date:
+            return None
+        else:
+            return date
     
     def figure_description(self):
         activity = self.get_widget("activity_text").get_text()
