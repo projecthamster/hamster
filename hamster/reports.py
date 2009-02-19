@@ -110,8 +110,6 @@ def simple(facts, start_date, end_date):
             <th class="largeCell">""" + _("Description") + """</th>
         </tr>""")
     
-    #get id of last activity so we know when to show current duration
-    last_activity = storage.get_last_activity()
     sum_time = {}
     rowcount = 1
     
