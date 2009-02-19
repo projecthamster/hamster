@@ -115,6 +115,16 @@ def dateDict(date, prefix):
 
     return res
 
+def escape_pango(text):
+    if not text:
+        return text
+    
+    text = text.replace ("&", "&amp;")
+    text = text.replace("<", "&lt;")
+    text = text.replace(">", "&gt;")
+    return text
+
+
 class DayStore(object):
     """A day view contains a treeview for facts of the day and another
        one for totals. It creates those widgets on init, use
@@ -127,6 +137,7 @@ class DayStore(object):
         self.fact_store = gtk.ListStore(int, str, str, str, str, str)
         
         self.facts = storage.get_facts(date)
+        
         self.totals = {}
         
         for fact in self.facts:
@@ -145,9 +156,9 @@ class DayStore(object):
 
             current_duration = format_duration(duration)
 
-            self.fact_store.append([fact['id'], fact['name'], 
+            self.fact_store.append([fact['id'], escape_pango(fact['name']), 
                                     fact["start_time"].strftime("%H:%M"), 
                                     current_duration,
                                     fact["start_time"].strftime("%Y%m%d"),
-                                    fact["description"]])
+                                    escape_pango(fact["description"])])
 

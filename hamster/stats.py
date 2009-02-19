@@ -172,8 +172,8 @@ class StatsViewer(object):
             cell.set_property('markup', text)
 
         else:
-            activity_name = cell_text
-            description = model.get_value(iter, 4)
+            activity_name = stuff.escape_pango(cell_text)
+            description = stuff.escape_pango(model.get_value(iter, 4))
     
             text = "   %s" % activity_name
             if description:
