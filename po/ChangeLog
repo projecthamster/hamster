@@ -1,3 +1,10 @@
+2009-02-19  Manoj Kumar Giri <mgiri@redhat.com>
+
+	* LINGUAS: Added or for Oriya Language.
+	
+	* or.po: Updated Oriya Translation by Arun Mohapatra.
+	 
+
 2009-02-16  Ilkka Tuohela <hile@iki.fi>
 
 	* fi.po: Updated Finnish translation.
