@@ -447,8 +447,8 @@ class HamsterApplet(object):
 
         self.last_activity = None
         last_activity = storage.get_last_activity()
-        if last_activity and last_activity["end_time"] == None \
-           and last_activity["start_time"].date() >= today - datetime.timedelta(days=1):
+        if last_activity and last_activity["start_time"].date() >= \
+                                            today - datetime.timedelta(days=1):
             self.last_activity = last_activity
         
         if len(day.facts) == 0:
