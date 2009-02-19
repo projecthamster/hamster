@@ -48,6 +48,7 @@ class CustomFactController:
         self.refresh_menu()
 
         self.get_widget("in_progress").set_active(False)
+        end_date = None
 
         if fact_id:
             fact = storage.get_fact(fact_id)
@@ -75,14 +76,14 @@ class CustomFactController:
             # then we start from 8am (pretty default)
             last_activity = storage.get_facts(fact_date)
             if last_activity and last_activity[len(last_activity)-1]["end_time"]:
-                fact_date = last_activity[len(last_activity)-1]["end_time"]
+                start_date = last_activity[len(last_activity)-1]["end_time"]
             else:
                 if fact_date == datetime.date.today():
                     # for today time is now
-                    fact_date = datetime.datetime.now()
+                    start_date = datetime.datetime.now()
                 else:
                     # for other days it is 8am
-                    fact_date = datetime.datetime(fact_date.year,
+                    start_date = datetime.datetime(fact_date.year,
                                                   fact_date.month,
                                                   fact_date.day,
                                                   8)
