@@ -109,6 +109,7 @@ class PanelButton(gtk.ToggleButton):
             else:
                 label = "%s %s" % (self.activity, self.duration)
         
+        label = escape_pango(label)
         label = '<span gravity=\"south\">' + label + '</span>'
         self.label.set_markup(label)
 
@@ -440,16 +441,20 @@ class HamsterApplet(object):
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-        day = DayStore(datetime.date.today());
+        today = datetime.date.today()
+        day = DayStore(today);
         self.treeview.set_model(day.fact_store)
 
+        self.last_activity = None
+        last_activity = storage.get_last_activity()
+        if last_activity and last_activity["end_time"] == None \
+           and last_activity["start_time"].date() >= today - datetime.timedelta(days=1):
+            self.last_activity = last_activity
+        
         if len(day.facts) == 0:
-            self.last_activity = None
             self.glade.get_widget("todays_scroll").hide()
-            
             self.glade.get_widget("fact_totals").set_text(_("No records today"))
         else:
-            self.last_activity = day.facts[len(day.facts) - 1]
             self.glade.get_widget("todays_scroll").show()
             
             total_string = ""
@@ -657,9 +662,8 @@ class HamsterApplet(object):
         self.update_label()
     
     def after_fact_update(self, event, date):
-        if date.date() == datetime.date.today():
-            self.load_day()
-            self.update_label()
+        self.load_day()
+        self.update_label()
     
         self.__update_fact()
 
