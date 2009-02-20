@@ -206,7 +206,7 @@ class Storage(hamster.storage.Storage):
             last = self.fetchone(query, (_("Unsorted"),
                                          dt.date.today() - dt.timedelta(days=1)))
 
-        if last["end_time"]: #will consider as last only if it is going on
+        if last and last["end_time"]: #will consider as last only if it is going on
            last = None
         
         return last
