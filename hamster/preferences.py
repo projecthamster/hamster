@@ -317,7 +317,7 @@ class PreferencesEditor:
                 return False
 
         if id == -2: #new category
-            id = storage.add_category(new_text)
+            id = storage.add_category(new_text.decode("utf-8"))
             model[path][0] = id
         else:
             storage.update_category(id, new_text)
@@ -338,7 +338,7 @@ class PreferencesEditor:
                 self.select_activity(activity['id'])
                 return False
         
-        model[path][0] = storage.add_activity(new_text, category_id)
+        model[path][0] = storage.add_activity(new_text.decode("utf-8"), category_id)
         model[path][1] = new_text
         return True
         

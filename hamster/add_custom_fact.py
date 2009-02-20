@@ -91,16 +91,13 @@ class CustomFactController:
             end_date = start_date = datetime.datetime.now()
 
 
-        self.on_in_progress_toggled(self.get_widget("in_progress"))
-
-
         self.get_widget('start_date').set_text(self.format_date(start_date))
         self.get_widget('start_time').set_text(self.format_time(start_date))
         
         self.get_widget('end_date').set_text(self.format_date(end_date))
         self.get_widget('end_time').set_text(self.format_time(end_date))
 
-        self.validate_fields()
+        self.on_in_progress_toggled(self.get_widget("in_progress"))
 
         self.init_calendar_window()
         self.init_time_window()
@@ -142,12 +139,6 @@ class CustomFactController:
 
         self.calendar_window.hide()        
         self.validate_fields()
-        
-    def format_date(self, date):
-        if not date:
-            return ""
-        else:
-            return date.strftime("%x")
         
     def init_time_window(self):
         self.time_window = self.glade.get_widget('time_window')
@@ -292,11 +283,12 @@ class CustomFactController:
             return date
     
     def figure_description(self):
-        activity = self.get_widget("activity_text").get_text()
+        activity = self.get_widget("activity_text").get_text().decode("utf-8")
 
         # juggle with description - break into parts and then put together
         buf = self.get_widget('description').get_buffer()
-        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
+        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
+                         .decode("utf-8")
         description = description.strip()
         
         # user might also type description in the activity name - strip it here
@@ -312,7 +304,7 @@ class CustomFactController:
         
     
     def on_save_button_clicked(self, button):
-        activity = self.get_widget("activity_text").get_text()
+        activity = self.get_widget("activity_text").get_text().decode("utf-8")
         
         if not activity:
             return False
@@ -331,14 +323,15 @@ class CustomFactController:
             end_time = self._get_datetime("end")
 
 
-        # do some  trickery here - if we were told to update, let's just
-        # do insert/delete
+        storage.add_fact(activity, start_time, end_time)
+
+        # we don't do updates, we do insert/delete. So now it is time to delete
         if self.fact_id:
             storage.remove_fact(self.fact_id)
 
-        storage.add_fact(activity, start_time, end_time)
 
-        if not self.fact_id: #hide panel only on add - on update user will want to see confirmation of changes
+        # hide panel only on add - on update user will want to see changes
+        if not self.fact_id: 
             dispatcher.dispatch('panel_visible', False)
         
         self.window.destroy()
@@ -348,6 +341,12 @@ class CustomFactController:
             return ""
         
         return datetime.datetime.strptime(date_str, "%x")
+
+    def format_date(self, date):
+        if not date:
+            return ""
+        else:
+            return date.strftime("%x")
     
     def on_date_focus_in_event(self, entry, event):
         window = entry.get_parent_window()
