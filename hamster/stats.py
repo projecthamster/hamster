@@ -137,6 +137,7 @@ class StatsViewer(object):
         selection = self.fact_tree.get_selection()
         selection.connect('changed', self.on_fact_selection_changed,
                           self.fact_store)
+        self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
 
         self.glade.signal_autoconnect(self)
         self.fact_tree.grab_focus()
@@ -250,23 +251,20 @@ class StatsViewer(object):
         activities = [act[0] for act in
               storage.get_interval_activity_ids(self.start_date, self.end_date)]
 
-        # get list of used categories in interval
-        categories = [cat[0] for cat in storage.get_popular_categories()]
-
         # fill in the activity totals blanks
         # don't want to add ability to be able to specify color per bar
         # so we will be disguising our bar chart as multibar chart
         activity_totals = {}
         for act in activities:
             activity_totals[act] = {}
-            for cat in categories:
+            for cat in self.popular_categories:
                 activity_totals[act][cat] = 0
 
         # fill in the category totals blanks
         day_category_totals = {}
         for day in all_days:
             day_category_totals[day] = {}
-            for cat in categories:
+            for cat in self.popular_categories:
                 day_category_totals[day][cat] = 0
             
         #now we do the counting
@@ -288,7 +286,8 @@ class StatsViewer(object):
         # convert dictionaries into lists so we don't have to care about keys anymore
         res_categories = []
         for day in all_days:
-            res_categories.append([day_category_totals[day][cat] / 60.0 for cat in categories])
+            res_categories.append([day_category_totals[day][cat] / 60.0
+                                            for cat in self.popular_categories])
             
         #sort activities by duration, longest first
         activity_totals = activity_totals.items()
@@ -300,10 +299,11 @@ class StatsViewer(object):
         res_activities = []
         for act in activity_totals:
             activities.append(act[0])
-            res_activities.append([act[1][cat] / 60.0 for cat in categories])
+            res_activities.append([act[1][cat] / 60.0
+                                            for cat in self.popular_categories])
 
         return {'keys': activities, 'values': res_activities}, \
-               {'keys': categories, 'values': res_categories}
+               {'keys': self.popular_categories, 'values': res_categories}
         
 
     def do_graph(self):
@@ -358,10 +358,10 @@ class StatsViewer(object):
         activity_totals, day_category_totals = self.get_totals(fact_list, all_days)
 
         
-        categories = [cat[0] for cat in storage.get_popular_categories()]
+        
         self.activity_chart.plot(activity_totals['keys'],
                                   activity_totals['values'],
-                                  stack_keys = categories)
+                                  stack_keys = self.popular_categories)
 
 
         #show days or dates depending on scale
@@ -534,6 +534,7 @@ class StatsViewer(object):
         self.do_graph()
     
     def after_fact_update(self, event, date):
+        self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
         self.do_graph()
         
     def on_close(self, widget, event):
