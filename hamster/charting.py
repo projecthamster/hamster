@@ -81,7 +81,7 @@ def set_color_gdk(context, color):
     
 class Integrator(object):
     """an iterator, inspired by "visualizing data" book to simplify animation"""
-    def __init__(self, start_value, precision = 0, frames = 50):
+    def __init__(self, start_value, frames = 50):
         """precision determines, until which decimal number we go"""
         self.value = start_value
         self.target_value = start_value
@@ -102,18 +102,14 @@ class Integrator(object):
         moving = self.current_frame < self.frames
         if moving:
             self.current_frame +=1
-            self.value = self._smoothstep(self.current_frame / self.frames,
-                                          self.value, self.target_value)
-        return (round(self.value,4) - round(self.target_value,4) != 0) and moving
+            v = self.current_frame / self.frames
+            self.value = (self.target_value * v) + (self.value * (1-v))
+        return moving and (round(self.value, 4) - round(self.target_value, 4) != 0)
 
     def finish(self):
         self.current_frame = 0.0
         self.value = self.target_value
 
-    def _smoothstep(self, v, start, end):
-        smooth = 1 - (1 - v)
-        return (end * smooth) + (start * (1-smooth))
-        
 
 def size_list(set, target_set):
     """turns set lenghts into target set - trim it, stretches it, but
@@ -199,7 +195,82 @@ class Chart(gtk.DrawingArea):
         self.current_max = None
         self.integrators = []
         self.moving = False
+
+
+    def plot(self, keys, data, stack_keys = None):
+        """Draw chart with given data"""
+        self.keys, self.data, self.stack_keys = keys, data, stack_keys
+
+        self.show()
+
+        if not data: #if there is no data, let's just draw blank
+            self._invalidate()
+            return
+
+
+        min, self.max_value = get_limits(data)
+
+        if not self.current_max:
+            self.current_max = Integrator(0)
+        else:
+            self.current_max.target(self.max_value)
         
+        self._update_targets()
+        
+        if self.animate:
+            if not self.moving: #if we are moving, then there is a timeout somewhere already
+                gobject.timeout_add(self.animation_timeout, self._interpolate)
+        else:
+            def finish_all(integrators):
+                for i in range(len(integrators)):
+                    if type(integrators[i]) == list:
+                        finish_all(integrators[i])
+                    else:
+                        integrators[i].finish()
+    
+            finish_all(self.integrators)
+
+
+            self._invalidate()
+
+
+    def _interpolate(self):
+        """Internal function to do the math, going from previous set to the
+           new one, and redraw graph"""
+        #this can get called before expose    
+        if not self.window:
+            self._invalidate()
+            return False
+
+        #ok, now we are good!
+        self.current_max.update()
+
+
+        def update_all(integrators):
+            still_moving = False
+            for z in range(len(integrators)):
+                if isinstance(integrators[z], list):
+                    still_moving = update_all(integrators[z]) or still_moving
+                else:
+                    still_moving = integrators[z].update() or still_moving
+            return still_moving
+
+        self.moving = update_all(self.integrators)
+
+        self._invalidate()
+        
+        return self.moving #return if there is still work to do
+
+
+    def _invalidate(self):
+        """Force graph redraw"""
+        if self.window:    #this can get called before expose    
+            alloc = self.get_allocation()
+            rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
+            self.window.invalidate_rect(rect, True)
+            self.window.process_updates(True)
+
+
     def _expose(self, widget, event):
         """expose is when drawing's going on, like on _invalidate"""
         self.context = widget.window.cairo_create()
@@ -229,49 +300,7 @@ class Chart(gtk.DrawingArea):
         return False
 
 
-    def plot(self, keys, data, stack_keys = None):
-        """Draw chart with given data"""
-        self.keys, self.data, self.stack_keys = keys, data, stack_keys
-
-        self.show()
-
-        if not data: #if there is no data, let's just draw blank
-            self._invalidate()
-            return
-
-
-        min, self.max_value = get_limits(data)
-
-        if not self.current_max:
-            self.current_max = Integrator(0)
-        else:
-            self.current_max.target(self.max_value)
-        
-        self._redo_factors()
-        
-        if self.animate:
-            if not self.moving: #if we are moving, then there is a timeout somewhere already
-                gobject.timeout_add(self.animation_timeout, self._replot)
-        else:
-            def finish_all(integrators):
-                for i in range(len(integrators)):
-                    if type(integrators[i]) == list:
-                        finish_all(integrators[i])
-                    else:
-                        integrators[i].finish()
-    
-            finish_all(self.integrators)
-
-
-            self._invalidate()
-            
-
-        
-    def _smoothstep(self, v, start, end):
-        smooth = 1 - (1 - v) * (1 - v)
-        return (end * smooth) + (start * (1-smooth))
-        
-    def _redo_factors(self):
+    def _update_targets(self):
         # calculates new factors and then updates existing set
         max_value = float(self.max_value) or 1 # avoid division by zero
         
@@ -284,7 +313,7 @@ class Chart(gtk.DrawingArea):
                     integrators[i] = retarget(integrators[i], new_values[i])
                 else:
                     if isinstance(integrators[i], Integrator) == False:
-                        integrators[i] = Integrator(0, 1) #8 numbers after comma :)
+                        integrators[i] = Integrator(0)
 
                     integrators[i].target(new_values[i] / max_value)
             
@@ -292,44 +321,6 @@ class Chart(gtk.DrawingArea):
     
         retarget(self.integrators, self.data)
     
-
-
-
-    def _replot(self):
-        """Internal function to do the math, going from previous set to the
-           new one, and redraw graph"""
-        #this can get called before expose    
-        if not self.window:
-            self._invalidate()
-            return False
-
-        #ok, now we are good!
-        self.current_max.update()
-
-
-        def update_all(integrators):
-            still_moving = False
-            for z in range(len(integrators)):
-                if type(integrators[z]) == list:
-                    still_moving = update_all(integrators[z]) or still_moving
-                else:
-                    still_moving = integrators[z].update() or still_moving
-            return still_moving
-
-        self.moving = update_all(self.integrators)
-
-        self._invalidate()
-        
-        return self.moving #return if there is still work to do
-
-    def _invalidate(self):
-        """Force redrawal of chart"""
-        if self.window:    #this can get called before expose    
-            alloc = self.get_allocation()
-            rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
-
     def _fill_area(self, x, y, w, h, color):
         self.context.rectangle(x, y, w, h)
         self.context.set_source_rgb(*[c / 256.0 for c in color])
@@ -355,7 +346,6 @@ class Chart(gtk.DrawingArea):
         else:
             self._fill_area(x, y, w, h, base_color)
 
-    
 
     def _longest_label(self, labels):
         max_extent = 0
