@@ -50,6 +50,7 @@ import gobject
 import cairo, pango
 import copy
 import math
+from sys import maxint
 
 # Tango colors
 light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
@@ -81,26 +82,71 @@ def set_color_gdk(context, color):
     
 class Integrator(object):
     """an iterator, inspired by "visualizing data" book to simplify animation"""
-    def __init__(self, start_value, precision = 0):
+    def __init__(self, start_value, precision = 0, frames = 50):
         """precision determines, until which decimal number we go"""
         self.value = start_value
         self.target_value = start_value
-        self.precision = precision
+        self.frames = float(frames)
+        self.current_frame = 0
+        
+    def __repr__(self):
+        return "<Integrator %s, %s>" % (self.value, self.target_value)
         
     def target(self, value):
         """target next value"""
+        self.current_frame = 0
         self.target_value = value
         
     def update(self):
         """goes from current to target value
         if there is any action needed. returns false when done"""
-        self.value += (self.target_value - self.value) / 10.0
-        
-        return round(self.value, self.precision) != round(self.target_value,
-                                                          self.precision)
+        moving = self.current_frame < self.frames
+        if moving:
+            self.current_frame +=1
+            self.value = self._smoothstep(self.current_frame / self.frames,
+                                          self.value, self.target_value)
+        return (round(self.value,4) - round(self.target_value,4) != 0) and moving
 
+    def finish(self):
+        self.current_frame = 0.0
+        self.value = self.target_value
+
+    def _smoothstep(self, v, start, end):
+        smooth = 1 - (1 - v)
+        return (end * smooth) + (start * (1-smooth))
+        
+
+def size_list(set, target_set):
+    """turns set lenghts into target set - trim it, stretches it, but
+       keeps values for cases when lengths match
+    """
+    set = set[:min(len(set), len(target_set))] #shrink to target
+    set += target_set[len(set):] #grow to target
+
+    #nest
+    for i in range(len(set)):
+        if type(set[i]) == list:
+            set[i] = size_list(set[i], target_set[i])
+    return set
+
+def get_limits(set, stack_subfactors = True):
+    # stack_subfactors indicates whether we should sum up nested lists
+    max_value, min_value = -maxint, maxint
+    for col in set:
+        if type(col) in [int, float]:
+            max_value = max(col, max_value)
+            min_value = min(col, min_value)
+        elif stack_subfactors:
+            max_value = max(sum(col), max_value)
+            min_value = min(sum(col), min_value)
+        else:
+            for row in col:
+                max_value = max(row, max_value)
+                min_value = max(row, min_value)
+
+    return min_value, max_value
     
-    
+
 class Chart(gtk.DrawingArea):
     """Chart constructor. Optional arguments:
         orient_vertical = [True|False] - Chart orientation.
@@ -160,7 +206,7 @@ class Chart(gtk.DrawingArea):
         self.default_grid_stride = 50
         
         self.animation_frames = 50
-        self.animation_timeout = 15 #in miliseconds
+        self.animation_timeout = 16 #in miliseconds, targetting 60fps
 
         self.current_frame = self.animation_frames
         self.freeze_animation = False
@@ -172,10 +218,9 @@ class Chart(gtk.DrawingArea):
         self.grid_stride = args.get("grid_stride", None)
         
 
-        self.keys, self.series_keys = None, None
-        self.factors = None
-        self.row_max = 0
-        self.current_max = 0
+        self.current_max = None
+        self.integrators = []
+        self.moving = False
         
     def _expose(self, widget, event):
         """expose is when drawing's going on, like on _invalidate"""
@@ -203,92 +248,47 @@ class Chart(gtk.DrawingArea):
         return False
 
 
-    def get_row_max(self, values):
-        res = None
-        for row in values:
-            if type(row) in [int, float]:
-                res = max(res, row)
-            else:
-                res = max(res, sum(row))    
-        return res    
-    
-    def calculate_factors(self, values, max_value):
-        factors = []
-        max_value = float(max_value) #factors need precision
-        if not values: return None
-
-        if not max_value:
-            if type(values[0]) in [int, float]:
-                return [0] * len(values)
-            else:
-                return [[0] * len(values[0])] * len(values)
-            
-        
-        for row in values:
-            if type(row) in [int, float]:
-                factors.append(row / max_value)
-            else:
-                factors.append([col / max_value for col in row])
-                
-        return factors
-
-
-    def plot(self, keys, data, series_keys = None):
+    def plot(self, keys, data, stack_keys = None):
         """Draw chart with given data"""
+        self.keys, self.data, self.stack_keys = keys, data, stack_keys
+
         self.show()
-        
-        self.data = data
-
-        self.prev_keys, self.prev_series_keys = copy.copy(self.keys), copy.copy(self.series_keys)
-        self.prev_factors = copy.copy(self.factors)
-        self.prev_row_max = self.row_max
-
-        self.keys, self.series_keys = keys, series_keys
 
         if not data: #if there is no data, let's just draw blank
             self._invalidate()
             return
 
 
-        self.row_max = self.get_row_max(data)
-        self.new_factors = self.calculate_factors(data, self.row_max)
-        
-        #check if maybe this chart is animation enabled and we are in middle of animation
-        if self.animate and self.current_frame < self.animation_frames: #something's going on here!
-            self.freeze_animation = True #so we don't catch some nasty race condition
-
-            #if so, let's start where we are and move to the new set inst
-            self.current_frame = 0 #start the animation from beginning
-            self.freeze_animation = False
-            return
+        #if we are moving, freeze for moment until we recalculate things
+        self.freeze_animation = self.moving
 
 
+        min, self.max_value = get_limits(data)
 
-        if self.animate:
-            """chart animation gradually moves from current data set
-               to the new one. prev_factors will be the previous set, new_factors
-               is what we have been asked to plot, and factors itself
-               will be the moving thing"""
-               
-            self.current_frame = 0
-
-            #if there is no previous data, set it to zero, so we get a growing animation
-            if not self.prev_factors:
-                if series_keys:
-                    #watch out of mutable arrays
-                    self.factors = self.prev_factors = \
-                              [[0] * len(series_keys) for x in range(len(keys))]
-                else:
-                    self.factors = self.prev_factors = [0] * len(keys)
-                    
-                self.prev_keys, self.prev_series_keys = self.keys, self.series_keys
-                    
-
-
-
-            gobject.timeout_add(self.animation_timeout, self._replot)
+        if not self.current_max:
+            self.current_max = Integrator(0)
         else:
-            self.factors = self.new_factors
+            self.current_max.target(self.max_value)
+        
+        self._redo_factors()
+        
+        if self.animate:
+            #resume or call replot!
+            if self.freeze_animation:
+                self.freeze_animation = False
+            else:
+                gobject.timeout_add(self.animation_timeout, self._replot)
+        else:
+            def finish_all(integrators):
+                for i in range(len(integrators)):
+                    if type(integrators[i]) == list:
+                        finish_all(integrators[i])
+                    else:
+                        integrators[i].finish()
+    
+            finish_all(self.integrators)
+
+
             self._invalidate()
             
 
@@ -296,6 +296,30 @@ class Chart(gtk.DrawingArea):
     def _smoothstep(self, v, start, end):
         smooth = 1 - (1 - v) * (1 - v)
         return (end * smooth) + (start * (1-smooth))
+        
+    def _redo_factors(self):
+        # calculates new factors and then updates existing set
+        max_value = float(self.max_value) or 1 # avoid division by zero
+        
+        self.integrators = size_list(self.integrators, self.data)
+
+        #need function to go recursive
+        def retarget(integrators, new_values):
+            for i in range(len(new_values)):
+                if type(new_values[i]) == list:
+                    integrators[i] = retarget(integrators[i], new_values[i])
+                else:
+                    if isinstance(integrators[i], Integrator) == False:
+                        integrators[i] = Integrator(0, 1) #8 numbers after comma :)
+
+                    integrators[i].target(new_values[i] / max_value)
+            
+            return integrators
+    
+        retarget(self.integrators, self.data)
+    
+
+
 
     def _replot(self):
         """Internal function to do the math, going from previous set to the
@@ -303,67 +327,29 @@ class Chart(gtk.DrawingArea):
         if self.freeze_animation:
             return True #just wait until they release us!
 
-
-        if self.current_frame == self.animation_frames:
-            return False;
-        
-        
         #this can get called before expose    
         if not self.window:
             self._invalidate()
             return False
 
         #ok, now we are good!
-        self.current_frame = self.current_frame + 1
+        self.current_max.update()
 
 
-        frame = self.current_frame / float(self.animation_frames)
-
-        self.current_max = self._smoothstep(frame, self.prev_row_max, self.row_max)
-
-        # do some sanity checks before thinking about animation
-        # are the source and target of same length?
-        similar_keys = False
-        for i in range(min(len(self.keys), len(self.prev_keys))):
-            if self.keys[i] == self.prev_keys[i]:
-                similar_keys = True
-                break
-
-        if not similar_keys:
-            self.factors = self.new_factors
-            self._invalidate()
-            return True
-        
-        keys_len = len(self.keys)
-        prev_keys_len = len(self.prev_keys)
-        
-        if self.series_keys:
-            ser_keys_len = len(self.series_keys)
-            prev_ser_keys_len = len(self.prev_series_keys)
-        
-        for i in range(len(self.keys)):
-            if i < keys_len and i < prev_keys_len \
-               and self.keys[i] == self.prev_keys[i]:
-               
-                if self.series_keys:
-                    for j in range(len(self.series_keys)):
-                        if j < ser_keys_len and j < prev_ser_keys_len \
-                           and self.series_keys[j] == self.prev_series_keys[j]:
-                            self.factors[i][j] = self._smoothstep(frame,  self.prev_factors[i][j], self.new_factors[i][j])
-                        elif j>= len(self.factors[i]):
-                            self.factors.append(self.new_factors[i][j])
-                        else:
-                            self.factors[i][j] = self.new_factors[i][j]
+        def update_all(integrators):
+            still_moving = False
+            for z in range(len(integrators)):
+                if type(integrators[z]) == list:
+                    still_moving = update_all(integrators[z]) or still_moving
                 else:
-                    self.factors[i] = self._smoothstep(frame,  self.prev_factors[i], self.new_factors[i])
-            elif i >= len(self.factors):
-                self.factors.append(self.new_factors[i])
-            else:
-                self.factors[i] = self.new_factors[i]
+                    still_moving = integrators[z].update() or still_moving
+            return still_moving
+
+        self.moving = update_all(self.integrators)
 
         self._invalidate()
-
-        return self.current_frame < self.animation_frames #return if there is still work to do
+        
+        return self.moving #return if there is still work to do
 
     def _invalidate(self):
         """Force redrawal of chart"""
@@ -446,8 +432,9 @@ class BarChart(Chart):
             gap = self.bar_width * 0.05
             bar_x = graph_x + (self.bar_width * i) + gap
 
-            for j in range(len(self.factors[i])):
-                factor = self.factors[i][j]
+            for j in range(len(self.integrators[i])):
+                factor = self.integrators[i][j].value
+
                 if factor > 0:
                     bar_size = max_bar_size * factor
                     
@@ -472,16 +459,16 @@ class BarChart(Chart):
         self.layout.set_width(-1)
 
         #white grid and scale values
-        if self.grid_stride and self.row_max:
+        if self.grid_stride and self.max_value:
             # if grid stride is less than 1 then we consider it to be percentage
             if self.grid_stride < 1:
-                grid_stride = int(self.row_max * self.grid_stride)
+                grid_stride = int(self.max_value * self.grid_stride)
             else:
                 grid_stride = int(self.grid_stride)
             
             context.set_line_width(1)
-            for i in range(grid_stride, int(self.row_max), grid_stride):
-                y = - max_bar_size * (i / self.row_max)
+            for i in range(grid_stride, int(self.max_value), grid_stride):
+                y = - max_bar_size * (i / self.max_value)
                 label = str(i)
 
                 self.layout.set_text(label)
@@ -512,9 +499,9 @@ class BarChart(Chart):
 
             # if labels are at end, then we need show them for the last bar! 
             if self.labels_at_end:
-                factors = self.factors[0]
+                factors = self.integrators[0]
             else:
-                factors = self.factors[-1]
+                factors = self.integrators[-1]
 
             self.layout.set_ellipsize(pango.ELLIPSIZE_END)
             self.layout.set_width(legend_width * 1000)
@@ -524,11 +511,11 @@ class BarChart(Chart):
                 self.layout.set_alignment(pango.ALIGN_RIGHT)
     
             for j in range(len(factors)):
-                factor = factors[j]
+                factor = factors[j].value
                 bar_size = factor * max_bar_size
                 
                 if round(bar_size) > 0:
-                    label = "%s" % self.series_keys[j]
+                    label = "%s" % self.stack_keys[j]
                     
                     
                     self.layout.set_text(label)
@@ -577,9 +564,9 @@ class BarChart(Chart):
         if self.show_scale:
             legend_width = max(self.legend_width, 20)
         
-        if self.series_keys and self.labels_at_end:
+        if self.stack_keys and self.labels_at_end:
             graph_x = 0
-            graph_width = self.width - max(legend_width, self._longest_label(self.series_keys))
+            graph_width = self.width - max(legend_width, self._longest_label(self.stack_keys))
         else:
             graph_x = legend_width + 8 # give some space to scale labels
             graph_width = self.width - graph_x - 10
@@ -621,7 +608,7 @@ class BarChart(Chart):
 
         # maximal
         if self.show_total:
-            max_label = "%d" % self.row_max
+            max_label = "%d" % self.max_value
 
             self.layout.set_text(max_label)
             label_w, label_h = self.layout.get_pixel_size()
@@ -661,9 +648,9 @@ class HorizontalBarChart(Chart):
 
         """
         # stripes for the case i decided that they are not annoying
-        for i in range(0, round(self.current_max), 10):
-            x = graph_x + (graph_width * (i / float(self.current_max)))
-            w = (graph_width * (5 / float(self.current_max)))
+        for i in range(0, round(self.current_max.value), 10):
+            x = graph_x + (graph_width * (i / float(self.current_max.value)))
+            w = (graph_width * (5 / float(self.current_max.value)))
 
             context.set_source_rgb(0.90, 0.90, 0.90)
             context.rectangle(x + w, graph_y, w, graph_height)
@@ -725,8 +712,8 @@ class HorizontalBarChart(Chart):
 
             bar_y = graph_y + (bar_width * i) + gap
 
-            for j in range(len(self.factors[i])):
-                factor = self.factors[i][j]
+            for j in range(len(self.integrators[i])):
+                factor = self.integrators[i][j].value
                 if factor > 0:
                     bar_size = max_bar_size * factor
                     bar_height = bar_width - (gap * 2)
@@ -750,7 +737,7 @@ class HorizontalBarChart(Chart):
         if self.values_on_bars:
             for i in range(rowcount):
                 label = self.value_format % sum(self.data[i])
-                factor = sum(self.factors[i])
+                factor = sum([integrator.value for integrator in self.integrators[i]])
 
                 self.layout.set_text(label)
                 label_w, label_h = self.layout.get_pixel_size()
@@ -768,7 +755,7 @@ class HorizontalBarChart(Chart):
         else:
             # show max value
             context.move_to(graph_x + graph_width - 30, graph_y + 10)
-            max_label = self.value_format % self.current_max
+            max_label = self.value_format % self.current_max.value
             self.layout.set_text(max_label)
             context.show_layout(self.layout)
 
