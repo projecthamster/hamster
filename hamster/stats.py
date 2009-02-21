@@ -340,8 +340,6 @@ class StatsViewer(object):
         label2 = self.get_widget("dayview_caption")
         label2.set_markup("%s" % (dayview_caption))
         
-        
-        
         fact_list = storage.get_facts(self.start_date, self.end_date)
         
         if not fact_list:
@@ -363,7 +361,7 @@ class StatsViewer(object):
         categories = [cat[0] for cat in storage.get_popular_categories()]
         self.activity_chart.plot(activity_totals['keys'],
                                   activity_totals['values'],
-                                  series_keys = categories)
+                                  stack_keys = categories)
 
 
         #show days or dates depending on scale
@@ -374,11 +372,11 @@ class StatsViewer(object):
 
 
         self.day_chart.plot(day_keys, day_category_totals['values'],
-                             series_keys = day_category_totals['keys'])
+                             stack_keys = day_category_totals['keys'])
 
         category_totals = [[sum(value) for value in zip(*day_category_totals['values'])]]
         self.category_chart.plot([_("Total")], category_totals,
-                                  series_keys = day_category_totals['keys'])
+                                  stack_keys = day_category_totals['keys'])
         
         
         #total string in right bottom corner, maybe temporar
