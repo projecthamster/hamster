@@ -79,6 +79,28 @@ def set_color_gdk(context, color):
     r,g,b = color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0
     context.set_source_rgb(r, g, b)
     
+class Integrator(object):
+    """an iterator, inspired by "visualizing data" book to simplify animation"""
+    def __init__(self, start_value, precision = 0):
+        """precision determines, until which decimal number we go"""
+        self.value = start_value
+        self.target_value = start_value
+        self.precision = precision
+        
+    def target(self, value):
+        """target next value"""
+        self.target_value = value
+        
+    def update(self):
+        """goes from current to target value
+        if there is any action needed. returns false when done"""
+        self.value += (self.target_value - self.value) / 10.0
+        
+        return round(self.value, self.precision) != round(self.target_value,
+                                                          self.precision)
+
+    
+    
 class Chart(gtk.DrawingArea):
     """Chart constructor. Optional arguments:
         orient_vertical = [True|False] - Chart orientation.
