@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+import sys; sys.path.insert(0, "../..")
+
 import unittest
-from ..hamster import charting
+from hamster import charting
 
 class TestIteratorFunctions(unittest.TestCase):
     def testOneStep(self):
