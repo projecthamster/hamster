@@ -80,7 +80,8 @@ class StatsViewer(object):
                                              bar_base_color = (238,221,221),
                                              bars_beveled = False,
                                              legend_width = x_offset,
-                                             max_bar_width = 35
+                                             max_bar_width = 35,
+                                             show_stack_labels = True
                                              )
 
         category_box = self.get_widget("totals_by_category")
@@ -91,9 +92,10 @@ class StatsViewer(object):
         self.day_chart = charting.BarChart(background = background,
                                         bar_base_color = (220, 220, 220),
                                         bars_beveled = False,
-                                        show_series = False,
+                                        show_scale = True,
                                         max_bar_width = 35,
-                                        grid_stride = 4)
+                                        grid_stride = 4,
+                                        legend_width = 20)
 
         self.get_widget("totals_by_day").add(self.day_chart)
 
