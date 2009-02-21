@@ -303,7 +303,6 @@ class Storage(hamster.storage.Storage):
                     # is the same we have now. If that happened before less
                     # than a minute - remove end time!
                     if len(day_facts) > 2 and day_facts[-2]['name'] == activity_name:
-                        print day_facts[-2]['name'], activity_name, day_facts[-2]['end_time'], start_time
                         delta = (start_time - day_facts[-2]['end_time'])
                         if 60 >= delta.seconds >= 0:
                             update = """
@@ -425,7 +424,6 @@ class Storage(hamster.storage.Storage):
 
                 res.append(f)
             elif fact_start_date != fact_end_date:
-                print date, end_date
                 # check if maybe we have to split activity in two
                 if date <= f["start_time"].date()  <= end_date:
                     start_fact = copy.copy(f)
