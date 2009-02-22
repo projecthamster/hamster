@@ -40,38 +40,14 @@ class StatsViewer(object):
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
-        self.fact_tree = self.get_widget("facts")
-        self.fact_tree.set_headers_visible(False)
-        self.fact_tree.set_tooltip_column(1)
-        self.fact_tree.set_property("show-expanders", False)
-
-        nameColumn = gtk.TreeViewColumn(_("Name"))
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_cell_data_func(nameCell, self.parent_painter)
-        self.fact_tree.append_column(nameColumn)
-
-        timeColumn = gtk.TreeViewColumn(_("Duration"))
-        timeCell = gtk.CellRendererText()
-        timeColumn.pack_end(timeCell, True)
-        timeColumn.set_cell_data_func(timeCell, self.duration_painter)
-        self.fact_tree.append_column(timeColumn)
-        
         #id, caption, duration, date (invisible), description
         self.fact_store = gtk.TreeStore(int, str, str, str, str) 
-        self.fact_tree.set_model(self.fact_store)
-
+        self.setup_tree()
         
         graph_frame = self.get_widget("graph_frame")
-        
         background = (0.975,0.975,0.975)
-        
         graph_frame.modify_bg(gtk.STATE_NORMAL,
                               gtk.gdk.Color(*[int(b*65536.0) for b in background]))
-
-        
 
         
         x_offset = 90 # let's nicely align all graphs
@@ -83,7 +59,6 @@ class StatsViewer(object):
                                              max_bar_width = 35,
                                              show_stack_labels = True
                                              )
-
         category_box = self.get_widget("totals_by_category")
         category_box.add(self.category_chart)
         category_box.set_size_request(130, -1)
@@ -96,11 +71,9 @@ class StatsViewer(object):
                                         max_bar_width = 35,
                                         grid_stride = 4,
                                         legend_width = 20)
-
         self.get_widget("totals_by_day").add(self.day_chart)
 
 
-        
         self.activity_chart = charting.HorizontalBarChart(orient = "horizontal",
                                              max_bar_width = 25,
                                              values_on_bars = True,
@@ -159,6 +132,61 @@ class StatsViewer(object):
         """
         self.do_graph()
 
+    def setup_tree(self):
+        def parent_painter(column, cell, model, iter):
+            cell_text = model.get_value(iter, 1)
+            if model.iter_parent(iter) == None:
+                if model.get_path(iter) == (0,):
+                    text = '<span weight="heavy">%s</span>' % cell_text
+                else:
+                    text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
+                    
+                cell.set_property('markup', text)
+    
+            else:
+                activity_name = stuff.escape_pango(cell_text)
+                description = stuff.escape_pango(model.get_value(iter, 4))
+        
+                text = "   %s" % activity_name
+                if description:
+                    text+= """\n             <span style="italic" size="small">%s</span>""" % (description)
+                    
+                cell.set_property('markup', text)
+    
+        def duration_painter(column, cell, model, iter):
+            text = model.get_value(iter, 2)
+            if model.iter_parent(iter) == None:
+                if model.get_path(iter) == (0,):
+                    text = '<span weight="heavy">%s</span>' % text
+                else:
+                    text = '<span weight="heavy" rise="-20000">%s</span>' % text
+            cell.set_property('markup', text)
+    
+
+        self.fact_tree = self.get_widget("facts")
+        self.fact_tree.set_headers_visible(False)
+        self.fact_tree.set_tooltip_column(1)
+        self.fact_tree.set_property("show-expanders", False)
+
+        # name
+        nameColumn = gtk.TreeViewColumn()
+        nameColumn.set_expand(True)
+        nameCell = gtk.CellRendererText()
+        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        nameColumn.pack_start(nameCell, True)
+        nameColumn.set_cell_data_func(nameCell, parent_painter)
+        self.fact_tree.append_column(nameColumn)
+
+        # duration
+        timeColumn = gtk.TreeViewColumn()
+        timeCell = gtk.CellRendererText()
+        timeColumn.pack_end(timeCell, True)
+        timeColumn.set_cell_data_func(timeCell, duration_painter)
+        self.fact_tree.append_column(timeColumn)
+        
+        self.fact_tree.set_model(self.fact_store)
+        
+        
     def locale_first_weekday(self):
         """figure if week starts on monday or sunday"""
         import os
@@ -178,35 +206,6 @@ class StatsViewer(object):
             
         return first_weekday
         
-    def parent_painter(self, column, cell, model, iter):
-        cell_text = model.get_value(iter, 1)
-        if model.iter_parent(iter) == None:
-            if model.get_path(iter) == (0,):
-                text = '<span weight="heavy">%s</span>' % cell_text
-            else:
-                text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
-                
-            cell.set_property('markup', text)
-
-        else:
-            activity_name = stuff.escape_pango(cell_text)
-            description = stuff.escape_pango(model.get_value(iter, 4))
-    
-            text = "   %s" % activity_name
-            if description:
-                text+= """\n             <span style="italic" size="small">%s</span>""" % (description)
-                
-            cell.set_property('markup', text)
-
-    def duration_painter(self, column, cell, model, iter):
-        text = model.get_value(iter, 2)
-        if model.iter_parent(iter) == None:
-            if model.get_path(iter) == (0,):
-                text = '<span weight="heavy">%s</span>' % text
-            else:
-                text = '<span weight="heavy" rise="-20000">%s</span>' % text
-        cell.set_property('markup', text)
-
     def get_facts(self, facts):
         self.fact_store.clear()
         totals = {}
