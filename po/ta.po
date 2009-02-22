@@ -86,23 +86,23 @@ msgstr "வகைகள் (_C)"
 msgid "_New Activity"
 msgstr "புதிய செயல்பாடு (_N)"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>செயல்பாடு</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>தேதி மற்றும் நேரம்</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "hours"
 msgstr "மணி நேரம்"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -112,7 +112,7 @@ msgstr ""
 "...வரை\n"
 "அதற்காக"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "minutes"
 msgstr "நிமிடங்கள்"
 
@@ -269,7 +269,7 @@ msgstr "புதிய வகை"
 msgid "New activity"
 msgstr "புதிய செயல்பாடு"
 
-#: ../hamster/add_custom_fact.py:84
+#: ../hamster/edit_activity.py:84
 msgid "Update activity"
 msgstr "செயல்பாட்டை நிகழ்நிலைப்படுத்தவும்"
 

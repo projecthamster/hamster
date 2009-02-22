@@ -3,13 +3,13 @@
 data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
 data/preferences.glade
-data/add_custom_fact.glade
+data/edit_activity.glade
 data/hamster-applet.schemas.in
 data/menu.glade
 data/stats.glade
 hamster/about.py
 hamster/preferences.py
-hamster/add_custom_fact.py
+hamster/edit_activity.py
 hamster/applet.py
 hamster/db.py
 hamster/reports.py

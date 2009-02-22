@@ -83,23 +83,23 @@ msgstr "_Kategorijos"
 msgid "_New Activity"
 msgstr "_Naujas užsiėmimas"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Užsiėmimas</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Data ir laikas</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "Pridėti ankstesnį užsiėmimą"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "hours"
 msgstr "valandos"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -109,7 +109,7 @@ msgstr ""
 "iki\n"
 " "
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "minutes"
 msgstr "minutės"
 
@@ -266,7 +266,7 @@ msgstr "Nauja kategorija"
 msgid "New activity"
 msgstr "Naujas užsiėmimas"
 
-#: ../hamster/add_custom_fact.py:84
+#: ../hamster/edit_activity.py:84
 msgid "Update activity"
 msgstr "Atnaujinti užsiėmimą"
 

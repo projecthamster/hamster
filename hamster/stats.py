@@ -28,7 +28,7 @@ import pango
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster import charting
 
-from hamster.add_custom_fact import CustomFactController
+from hamster.edit_activity import CustomFactController
 
 import datetime as dt
 import calendar
@@ -143,6 +143,20 @@ class StatsViewer(object):
 
         self.glade.signal_autoconnect(self)
         self.fact_tree.grab_focus()
+        
+        """
+        # this will help when profiling!
+        import gobject
+        self.i = 0
+        def redraw():
+            self.do_graph()
+            self.start_date -= dt.timedelta(7)
+            self.end_date -= dt.timedelta(7)
+            self.i +=1
+            return self.i < 50
+            
+        gobject.timeout_add(400, redraw)
+        """
         self.do_graph()
 
     def locale_first_weekday(self):
@@ -379,6 +393,7 @@ class StatsViewer(object):
         category_totals = [[sum(value) for value in zip(*day_category_totals['values'])]]
         self.category_chart.plot([_("Total")], category_totals,
                                   stack_keys = day_category_totals['keys'])
+
         
         
         #total string in right bottom corner, maybe temporar

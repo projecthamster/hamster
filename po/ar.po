@@ -81,23 +81,23 @@ msgstr "_فئات"
 msgid "_New Activity"
 msgstr "نشاط _جديد"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>النشاط</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>التاريخ والوقت</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "أضف نشاط سابق"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "hours"
 msgstr "ساعات"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -107,7 +107,7 @@ msgstr ""
 "حتى\n"
 "لمدة"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "minutes"
 msgstr "دقائق"
 
@@ -266,7 +266,7 @@ msgstr "فئة جديدة"
 msgid "New activity"
 msgstr "نشاط جديد"
 
-#: ../hamster/add_custom_fact.py:84
+#: ../hamster/edit_activity.py:84
 msgid "Update activity"
 msgstr "تحديث النّشاط"
 

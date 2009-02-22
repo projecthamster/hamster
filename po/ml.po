@@ -81,23 +81,23 @@ msgstr "_ഇനങ്ങള്‍"
 msgid "_New Activity"
 msgstr "_പുതിയ പ്രവര്‍ത്തനങ്ങള്‍"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>പ്രവര്‍ത്തനങ്ങള്‍</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>സമയവും തിയതിയും</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "മുമ്പത്തെ പ്രവര്‍ത്തനങ്ങള്‍ ചേര്‍ക്കുക"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "hours"
 msgstr "മണിക്കൂറുകള്‍"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -107,7 +107,7 @@ msgstr ""
 "until\n"
 "for"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "minutes"
 msgstr "മിനുട്ടുകള്‍"
 
@@ -266,7 +266,7 @@ msgstr "പുതിയ ഇനം"
 msgid "New activity"
 msgstr "പുതിയ പ്രവര്‍ത്തനങ്ങള്‍"
 
-#: ../hamster/add_custom_fact.py:84
+#: ../hamster/edit_activity.py:84
 msgid "Update activity"
 msgstr "പ്രവര്‍ത്തനങ്ങള്‍ പുതുക്കുക"
 

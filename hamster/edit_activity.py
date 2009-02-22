@@ -34,7 +34,7 @@ import hamster.eds
 import time
 import datetime
 
-GLADE_FILE = "add_custom_fact.glade"
+GLADE_FILE = "edit_activity.glade"
 
 class CustomFactController:
     def __init__(self,  fact_date = None, fact_id = None):

@@ -24,7 +24,7 @@ hamster_PYTHON = \
 	KeyBinder.py \
 	preferences.py \
 	stuff.py \
-	add_custom_fact.py \
+	edit_activity.py \
 	applet.py \
 	about.py \
 	hamsterdbus.py \

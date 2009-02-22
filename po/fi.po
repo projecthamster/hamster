@@ -90,31 +90,31 @@ msgstr "_Luokat"
 msgid "_New Activity"
 msgstr "_Uusi toimi"
 
-#: ../data/add_custom_fact.glade.h:1
+#: ../data/edit_activity.glade.h:1
 msgid "<b>Activity</b>"
 msgstr "<b>Toimi</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Päiväys ja aika</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "Lisää aikaisempi toimi"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "Description:"
 msgstr "Kuvaus:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Name:"
 msgstr "Nimi:"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "hours"
 msgstr "tuntia"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -124,7 +124,7 @@ msgstr ""
 "kunnes\n"
 "kesto"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 msgid "minutes"
 msgstr "minuuttia"
 
@@ -291,7 +291,7 @@ msgstr "%(interval_minutes)d minuutti"
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../hamster/add_custom_fact.py:82
+#: ../hamster/edit_activity.py:82
 msgid "Update activity"
 msgstr "Päivitä toimea"
 

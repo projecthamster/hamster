@@ -43,7 +43,7 @@ from hamster.KeyBinder import *
 from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController 
 
 # controllers for other windows
-from hamster.add_custom_fact import CustomFactController
+from hamster.edit_activity import CustomFactController
 from hamster.stats import StatsViewer
 from hamster.about import show_about
 from hamster.preferences import PreferencesEditor
@@ -203,6 +203,7 @@ class HamsterApplet(object):
 
         self.preferences_editor = None
         self.applet.about = None
+        self.open_fact_editors = []
 
         self.button = PanelButton()
         

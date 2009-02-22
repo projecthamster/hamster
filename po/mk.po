@@ -81,23 +81,23 @@ msgstr "_Категории"
 msgid "_New Activity"
 msgstr "_Нова активност"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Активност</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Датум и време</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "Додај претходна активност"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "hours"
 msgstr "часови"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid ""
 "in progress...\n"
 "until\n"
@@ -107,7 +107,7 @@ msgstr ""
 "до\n"
 "за"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "minutes"
 msgstr "минути"
 
@@ -264,7 +264,7 @@ msgstr "Нова категорија"
 msgid "New activity"
 msgstr "Нова активност"
 
-#: ../hamster/add_custom_fact.py:84
+#: ../hamster/edit_activity.py:84
 msgid "Update activity"
 msgstr "Ажурирај активност"
 

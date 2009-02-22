@@ -95,47 +95,47 @@ msgstr "_Categorias"
 msgid "_New Activity"
 msgstr "_Nova atividade"
 
-#: ../data/add_custom_fact.glade.h:1
+#: ../data/edit_activity.glade.h:1
 msgid "20/01/08"
 msgstr ""
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "20/01/09"
 msgstr ""
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "3:30pm"
 msgstr ""
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 #, fuzzy
 #| msgid "_Activity:"
 msgid "Activity:"
 msgstr "A_tividade:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Add Earlier Activity"
 msgstr "Adicionar atividade recente"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "Description:"
 msgstr "Descrição:"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 #, fuzzy
 #| msgid "Name:"
 msgid "Time:"
 msgstr "Nome:"
 
-#: ../data/add_custom_fact.glade.h:8
+#: ../data/edit_activity.glade.h:8
 msgid "gtk-cancel"
 msgstr ""
 
-#: ../data/add_custom_fact.glade.h:9
+#: ../data/edit_activity.glade.h:9
 msgid "gtk-save"
 msgstr ""
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 #, fuzzy
 #| msgid ""
 #| "in progress...\n"
@@ -147,7 +147,7 @@ msgstr ""
 "até\n"
 "durante"
 
-#: ../data/add_custom_fact.glade.h:11
+#: ../data/edit_activity.glade.h:11
 msgid "to"
 msgstr ""
 
@@ -323,7 +323,7 @@ msgstr "%(interval_minutes)d minutos"
 msgid "Never"
 msgstr "Nunca"
 
-#: ../hamster/add_custom_fact.py:69
+#: ../hamster/edit_activity.py:69
 msgid "Update activity"
 msgstr "Atualizar atividade"
 

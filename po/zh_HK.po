@@ -88,31 +88,31 @@ msgstr "分類(_C)"
 msgid "_New Activity"
 msgstr "新增活動(_N)"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>活動</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>日期和時間</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "加入較早的活動"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "Description:"
 msgstr "描述:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Name:"
 msgstr "名稱:"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "hours"
 msgstr "小時"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -122,7 +122,7 @@ msgstr ""
 "直到\n"
 "於"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 msgid "minutes"
 msgstr "分鐘"
 
@@ -299,7 +299,7 @@ msgstr "%(interval_minutes)d 分鐘"
 msgid "Never"
 msgstr "永不"
 
-#: ../hamster/add_custom_fact.py:80
+#: ../hamster/edit_activity.py:80
 msgid "Update activity"
 msgstr "更新活動"
 

@@ -23,7 +23,7 @@ resources_DATA = \
 	Hamster_Applet.xml \
 	preferences.glade \
 	stats.glade \
-	add_custom_fact.glade \
+	edit_activity.glade \
     menu.glade \
 	hamster.db
 

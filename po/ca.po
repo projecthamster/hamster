@@ -89,31 +89,31 @@ msgstr "_Categories"
 msgid "_New Activity"
 msgstr "Activitat _nova"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Activitat</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Data i hora</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "Afegeix una activitat prèvia"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "Description:"
 msgstr "Descripció:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Name:"
 msgstr "Nom:"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "hours"
 msgstr "hores"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -123,7 +123,7 @@ msgstr ""
 "fins\n"
 "per"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 msgid "minutes"
 msgstr "minuts"
 
@@ -297,7 +297,7 @@ msgstr "%(interval_minutes)d minuts"
 msgid "Never"
 msgstr "Mai"
 
-#: ../hamster/add_custom_fact.py:80
+#: ../hamster/edit_activity.py:80
 msgid "Update activity"
 msgstr "Actualitza l'activitat"
 

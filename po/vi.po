@@ -96,32 +96,32 @@ msgstr "_Loại"
 msgid "_New Activity"
 msgstr "Hoạt động mớ_i"
 
-#: ../data/add_custom_fact.glade.h:1
+#: ../data/edit_activity.glade.h:1
 #: ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>Hoạt động</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>Ngày và Giờ</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "Thêm hoạt động trước"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "Description:"
 msgstr "Mô tả:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Name:"
 msgstr "Tên:"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "hours"
 msgstr "giờ"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -130,7 +130,7 @@ msgstr "đang tiến hành...\n"
 "đến\n"
 "trong"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 msgid "minutes"
 msgstr "phút"
 
@@ -308,7 +308,7 @@ msgstr "%(interval_minutes)d phút"
 msgid "Never"
 msgstr "Không bao giờ"
 
-#: ../hamster/add_custom_fact.py:80
+#: ../hamster/edit_activity.py:80
 msgid "Update activity"
 msgstr "Cập nhật hoạt động"
 

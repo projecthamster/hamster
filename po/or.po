@@ -93,31 +93,31 @@ msgstr "ବିଭାଗଗୁଡିକ (_C)"
 msgid "_New Activity"
 msgstr "ନୁତନ କାର୍ଯ୍ୟକ୍ରମ (_N)"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>କାର୍ଯ୍ୟକ୍ରମ</b>"
 
-#: ../data/add_custom_fact.glade.h:2
+#: ../data/edit_activity.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>ତାରିଖ ଏବଂ ସମୟ</b>"
 
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "ପୁର୍ବ କାର୍ଯ୍ୟକ୍ରମକୁ ଯୋଗ କରନ୍ତୁ"
 
-#: ../data/add_custom_fact.glade.h:4
+#: ../data/edit_activity.glade.h:4
 msgid "Description:"
 msgstr "ବର୍ଣ୍ଣନା:"
 
-#: ../data/add_custom_fact.glade.h:5
+#: ../data/edit_activity.glade.h:5
 msgid "Name:"
 msgstr "ନାମ:"
 
-#: ../data/add_custom_fact.glade.h:6
+#: ../data/edit_activity.glade.h:6
 msgid "hours"
 msgstr "ଘଣ୍ଟା"
 
-#: ../data/add_custom_fact.glade.h:7
+#: ../data/edit_activity.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -127,7 +127,7 @@ msgstr ""
 "ପର୍ଯ୍ୟନ୍ତ\n"
 "ନିମନ୍ତେ"
 
-#: ../data/add_custom_fact.glade.h:10
+#: ../data/edit_activity.glade.h:10
 msgid "minutes"
 msgstr "ମିନିଟ"
 
@@ -303,7 +303,7 @@ msgstr "%(interval_minutes)d ମିନିଟ"
 msgid "Never"
 msgstr "କେବେ ନୁହଁ"
 
-#: ../hamster/add_custom_fact.py:80
+#: ../hamster/edit_activity.py:80
 msgid "Update activity"
 msgstr "କାର୍ଯ୍ୟକ୍ରମକୁ ଅଦ୍ୟତନ କରନ୍ତୁ"
 
