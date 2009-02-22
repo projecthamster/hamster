@@ -407,7 +407,7 @@ class Storage(hamster.storage.Storage):
                 if fact_start_date == today and fact["start_time"] < now:
                     # today, present
                     f["delta"] = now -  fact["start_time"]
-                elif fact_start_date == yesterday and f["id"] == last_activity["id"]:
+                elif last_activity and fact_start_date == yesterday and f["id"] == last_activity["id"]:
                     # last fact and it is in yesterday - split it!
                     #first yesterday until midnight
                     f["end_time"] = dt.datetime.combine(today, dt.time(0,0))
