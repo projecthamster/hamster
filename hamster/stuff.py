@@ -56,16 +56,30 @@ class CategoryCell(gtk.CellRendererText):
         self.set_property('scale', pango.SCALE_SMALL)
         self.set_property('yalign', 0.0)
 
-class ExpanderColumn(gtk.TreeViewColumn):
-    def __init__(self, label, text):
-        gtk.TreeViewColumn.__init__(self, label)
+
+
+class ActivityColumn(gtk.TreeViewColumn):
+    def activity_painter(self, column, cell, model, iter):
+        activity_name = model.get_value(iter, self.name)
+        description = model.get_value(iter, self.description)
+        text = activity_name
+
+        if description:
+            text+= """\n<span style="italic" size="small">%s</span>""" % (description)
+            
+        cell.set_property('markup', text)
+            
+        return
         
+    def __init__(self, name, description):
+        gtk.TreeViewColumn.__init__(self)
+        
+        self.name, self.description = name, description
         self.set_expand(True)
         cell = gtk.CellRendererText()
-        cell.set_property('ellipsize', ELLIPSIZE_END)
         self.pack_start(cell, True)
-        self.set_attributes(cell, text=text)
-
+        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        self.set_cell_data_func(cell, self.activity_painter)
 
 def format_duration(minutes):
     if minutes == None:

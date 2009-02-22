@@ -38,7 +38,7 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
 from hamster.Configuration import GconfStore
 
-from hamster.stuff import *
+from hamster import stuff
 from hamster.KeyBinder import *
 from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController 
 
@@ -109,7 +109,7 @@ class PanelButton(gtk.ToggleButton):
             else:
                 label = "%s %s" % (self.activity, self.duration)
         
-        label = escape_pango(label)
+        label = stuff.escape_pango(label)
         label = '<span gravity=\"south\">' + label + '</span>'
         self.label.set_markup(label)
 
@@ -182,19 +182,6 @@ class PanelButton(gtk.ToggleButton):
 
 
 class HamsterApplet(object):
-    def name_painter(self, column, cell, model, iter):
-        activity_name = model.get_value(iter, 1)
-        description = model.get_value(iter, 5)
-
-        text = """%s""" % activity_name
-        if description:
-            text+= """\n<span style="italic" size="small">%s</span>""" % (description)
-            
-        cell.set_property('markup', text)
-            
-        return
-
-
     def __init__(self, applet):
         self.config = GconfStore.get_instance()
         
@@ -214,24 +201,7 @@ class HamsterApplet(object):
         self.set_dropdown()
 
         # init today's tree
-        self.treeview = self.glade.get_widget('today')
-        self.treeview.set_tooltip_column(1)
-        
-        self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
-
-        nameColumn = gtk.TreeViewColumn(_("Name"))
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameColumn.pack_start(nameCell, True)
-        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        nameColumn.set_cell_data_func(nameCell, self.name_painter)
-        self.treeview.append_column(nameColumn)
-
-        
-        edit_cell = gtk.CellRendererPixbuf()
-        edit_cell.set_property("stock_id", "gtk-edit")
-        self.edit_column = gtk.TreeViewColumn("", edit_cell)
-        self.treeview.append_column(self.edit_column)
+        self.setup_activity_tree()
 
         # DBus Setup
         try:
@@ -307,6 +277,24 @@ class HamsterApplet(object):
             dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
 
+    def setup_activity_tree(self):
+        self.treeview = self.glade.get_widget('today')
+        self.treeview.set_tooltip_column(1)
+        
+        self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
+
+        nameColumn = stuff.ActivityColumn(name=1, description=5)
+        self.treeview.append_column(nameColumn)
+
+        
+        timeColumn = gtk.TreeViewColumn(_("Duration"), gtk.CellRendererText(), text=3)
+        self.treeview.append_column(timeColumn)
+
+        edit_cell = gtk.CellRendererPixbuf()
+        edit_cell.set_property("stock_id", "gtk-edit")
+        self.edit_column = gtk.TreeViewColumn("", edit_cell)
+        self.treeview.append_column(self.edit_column)
+
 
     def on_idle_changed(self, state):
         print "Idle state changed. Idle: ", state
@@ -326,7 +314,7 @@ class HamsterApplet(object):
         activity_cell = gtk.CellRendererText()
         self.activity_list.pack_start(activity_cell, True)
         self.activity_list.add_attribute(activity_cell, 'text', 0)
-        category_cell = CategoryCell()  
+        category_cell = stuff.CategoryCell()  
         self.activity_list.pack_start(category_cell, False)
         self.activity_list.add_attribute(category_cell, 'text', 1)
         
@@ -345,7 +333,7 @@ class HamsterApplet(object):
         completion.add_attribute(activity_cell, 'text', 0)
         completion.set_property("text-column", 2)
 
-        category_cell = CategoryCell()  
+        category_cell = stuff.CategoryCell()  
         completion.pack_start(category_cell, False)
         completion.add_attribute(category_cell, 'text', 1)
 
@@ -409,8 +397,10 @@ class HamsterApplet(object):
         if self.last_activity and self.last_activity['end_time'] == None:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
-            label = "%s %s" % (self.last_activity['name'], format_duration(duration))
-            self.button.set_text(self.last_activity['name'], format_duration(duration))
+            label = "%s %s" % (self.last_activity['name'],
+                                                stuff.format_duration(duration))
+            self.button.set_text(self.last_activity['name'],
+                                                stuff.format_duration(duration))
             
             self.glade.get_widget('stop_tracking').set_sensitive(1);
         else:
@@ -443,7 +433,7 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
         today = datetime.date.today()
-        day = DayStore(today);
+        day = stuff.DayStore(today);
         self.treeview.set_model(day.fact_store)
 
         self.last_activity = None
@@ -460,8 +450,9 @@ class HamsterApplet(object):
             
             total_string = ""
             for total in day.totals:
-                total_string += _("%(category)s: %(duration)s, ") % ({'category': total,
-                                                                      'duration': format_duration(day.totals[total])})
+                total_string += _("%(category)s: %(duration)s, ") % \
+                        ({'category': total,
+                          'duration': stuff.format_duration(day.totals[total])})
 
             total_string = total_string.rstrip(", ") # trailing slash
             self.glade.get_widget("fact_totals").set_text(total_string)

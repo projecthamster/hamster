@@ -26,9 +26,7 @@ import gtk
 import gobject
 import re
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR
-from hamster.stuff import *
-
+from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 import hamster.eds
 
 import time
@@ -193,7 +191,7 @@ class CustomFactController:
         activity_cell = gtk.CellRendererText()
         self.activity_list.pack_start(activity_cell, True)
         self.activity_list.add_attribute(activity_cell, 'text', 0)
-        category_cell = CategoryCell()  
+        category_cell = stuff.CategoryCell()  
         self.activity_list.pack_start(category_cell, False)
         self.activity_list.add_attribute(category_cell, 'text', 1)
         
@@ -212,7 +210,7 @@ class CustomFactController:
         completion.add_attribute(activity_cell, 'text', 0)
         completion.set_property("text-column", 2)
 
-        category_cell = CategoryCell()  
+        category_cell = stuff.CategoryCell()  
         completion.pack_start(category_cell, False)
         completion.add_attribute(category_cell, 'text', 1)
 
