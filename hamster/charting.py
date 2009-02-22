@@ -212,8 +212,7 @@ class Chart(gtk.DrawingArea):
 
         if not self.current_max:
             self.current_max = Integrator(0)
-        else:
-            self.current_max.target(self.max_value)
+        self.current_max.target(self.max_value)
         
         self._update_targets()
         
@@ -274,6 +273,8 @@ class Chart(gtk.DrawingArea):
     def _expose(self, widget, event):
         """expose is when drawing's going on, like on _invalidate"""
         self.context = widget.window.cairo_create()
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+
         self.context.rectangle(event.area.x, event.area.y,
                                event.area.width, event.area.height)
         self.context.clip()
@@ -391,7 +392,6 @@ class BarChart(Chart):
         graph_y = 0
         graph_height = self.height - 15
 
-        self.graph_x, self.graph_y, self.graph_width, self.graph_height = graph_x, graph_y, graph_width, graph_height
 
 
         self.context.set_line_width(1)
@@ -436,11 +436,8 @@ class BarChart(Chart):
             
             self.context.stroke()
 
-        self._draw_moving_parts()
 
-
-    def _draw_moving_parts(self):
-        graph_x, graph_y, graph_width, graph_height = self.graph_x, self.graph_y, self.graph_width, self.graph_height
+        
         context = self.context
         keys, rowcount = self.keys, len(self.keys)
 
@@ -451,13 +448,9 @@ class BarChart(Chart):
             max_bar_size = graph_height - 10
 
 
-        context.set_antialias(cairo.ANTIALIAS_NONE)
-        
         """draw moving parts"""
         #flip the matrix vertically, so we do not have to think upside-down
-        context.save()
         context.set_line_width(0)
-        context.transform(cairo.Matrix(yy = -1, y0 = graph_height))
 
         # bars
         for i in range(rowcount):
@@ -475,20 +468,15 @@ class BarChart(Chart):
 
                 if factor > 0:
                     bar_size = max_bar_size * factor
+                    bar_start += bar_size
                     
                     self._draw_bar(bar_x,
-                                   bar_start,
+                                   graph_height - bar_start,
                                    self.bar_width - (gap * 2),
                                    bar_size,
                                    [col - (j * 22) for col in base_color])
-    
-                    bar_start += bar_size
-                color +=1
-                if color > 2:
-                    color = 0
 
 
-        context.restore()
         #flip the matrix back, so text doesn't come upside down
         context.transform(cairo.Matrix(yy = 1, y0 = graph_height))
 
@@ -524,10 +512,11 @@ class BarChart(Chart):
 
         context.restore()
 
-        context.set_antialias(cairo.ANTIALIAS_DEFAULT)
-
-        #series keys
+        context.set_line_width(1)
+        #stack keys
         if self.show_stack_labels:
+            self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+
             #put series keys
             set_color(context, dark[8]);
             
@@ -572,8 +561,8 @@ class BarChart(Chart):
                         line_x2 = graph_x + graph_width - 6
                     else:
                         label_x = -8
-                        line_x1 = graph_x + 2
-                        line_x2 = graph_x + 8
+                        line_x1 = graph_x - 6
+                        line_x2 = graph_x
 
 
                     context.move_to(label_x, label_y)
@@ -586,14 +575,6 @@ class BarChart(Chart):
                     
                     
             context.stroke()        
-
-
-
-    
-
-
-
-
 
 
 
@@ -614,14 +595,13 @@ class HorizontalBarChart(Chart):
         if self.chart_background:
             self._fill_area(graph_x, graph_y, graph_width, graph_height, self.chart_background)
         
-
         """
         # stripes for the case i decided that they are not annoying
         for i in range(0, round(self.current_max.value), 10):
             x = graph_x + (graph_width * (i / float(self.current_max.value)))
             w = (graph_width * (5 / float(self.current_max.value)))
 
-            self.context.set_source_rgb(0.90, 0.90, 0.90)
+            self.context.set_source_rgb(0.93, 0.93, 0.93)
             self.context.rectangle(x + w, graph_y, w, graph_height)
             self.context.fill_preserve()
             self.context.stroke()
@@ -630,7 +610,7 @@ class HorizontalBarChart(Chart):
             self.context.move_to(x, graph_y + graph_height - 2)
 
             self.context.show_text(str(i))
-        """    
+        """
     
         if not self.data:  #if we have nothing, let's go home
             return
@@ -669,10 +649,11 @@ class HorizontalBarChart(Chart):
 
         
         self.context.set_line_width(0)
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
 
 
-        # bars themselves
+        # bars and labels
+        self.layout.set_width(-1)
+
         for i in range(rowcount):
             bar_start = 0
             base_color = self.bar_base_color or (220, 220, 220)
@@ -681,13 +662,15 @@ class HorizontalBarChart(Chart):
 
             bar_y = graph_y + (bar_width * i) + gap
 
+
             for j in range(len(self.integrators[i])):
                 factor = self.integrators[i][j].value
+
                 if factor > 0:
                     bar_size = max_bar_size * factor
                     bar_height = bar_width - (gap * 2)
                     
-                    self._draw_bar(graph_x,
+                    self._draw_bar(graph_x + bar_start,
                                    bar_y,
                                    bar_size,
                                    bar_height,
@@ -695,37 +678,19 @@ class HorizontalBarChart(Chart):
     
                     bar_start += bar_size
 
+            set_color(self.context, dark[8])        
+            label = self.value_format % sum(self.data[i])
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
 
-        #values
-
-        self.layout.set_width(-1)
-        self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
-        set_color(self.context, dark[8])        
-
-
-        if self.values_on_bars:
-            for i in range(rowcount):
-                label = self.value_format % sum(self.data[i])
-                factor = sum([integrator.value for integrator in self.integrators[i]])
-
-                self.layout.set_text(label)
-                label_w, label_h = self.layout.get_pixel_size()
-
-                bar_size = max_bar_size * factor
-                vertical_padding = (bar_width + label_h) / 2.0 - label_h
-                
-                if  bar_size - vertical_padding < label_w:
-                    label_x = graph_x + bar_size + vertical_padding
-                else:
-                    label_x = graph_x + bar_size - label_w - vertical_padding
-                
-                self.context.move_to(label_x, graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
-                self.context.show_layout(self.layout)
-        else:
-            # show max value
-            self.context.move_to(graph_x + graph_width - 30, graph_y + 10)
-            max_label = self.value_format % self.current_max.value
-            self.layout.set_text(max_label)
+            vertical_padding = (bar_width + label_h) / 2.0 - label_h
+            
+            if  bar_start - vertical_padding < label_w:
+                label_x = graph_x + bar_start + vertical_padding
+            else:
+                label_x = graph_x + bar_start - label_w - vertical_padding
+            
+            self.context.move_to(label_x, graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
             self.context.show_layout(self.layout)
 
 
