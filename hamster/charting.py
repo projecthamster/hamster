@@ -144,54 +144,60 @@ def get_limits(set, stack_subfactors = True):
 
 class Chart(gtk.DrawingArea):
     """Chart constructor. Optional arguments:
-        max_bar_width = pixels - Maximal width of bar. If not specified,
+        self.max_bar_width     = pixels. Maximal width of bar. If not specified,
                                  bars will stretch to fill whole area
-        values_on_bars = [True|False] - Should bar values displayed on each bar.
-                                        Defaults to False
-        show_scale = [True|False] - whethere scale labels should be displayed
-        stretch_grid = [True|False] - Should the grid be of fixed or flex
-                                      size. If set to true, graph will be split
-                                      in 4 parts, which will stretch on resize.
-                                      Defaults to False.
-        animate = [True|False] - Should the bars grow/shrink on redrawing.
-                                 Animation happens only if labels and their
-                                 order match.
-                                 Defaults to True.
-        legend_width = pixels - Legend width in pixels. Will keep you graph
-                                from floating horizontally
+        self.legend_width      = pixels. Legend width will keep you graph
+                                 from floating around.
+        self.animate           = Should transitions be animated.
+                                 Defaults to TRUE
+        self.framerate         = Frame rate for animation. Defaults to 60
 
-        Then there are some defaults, you can override:
-        default_grid_stride - If stretch_grid is set to false, this allows you
-                              to choose granularity of grid. Defaults to 50
-        animation_frames - in how many steps should the animation be done
-        animation_timeout - after how many miliseconds should we draw next frame
+        self.background        = Tripplet-tuple of background color in RGB
+        self.chart_background  = Tripplet-tuple of chart background color in RGB
+        self.bar_base_color    = Tripplet-tuple of bar color in RGB
+        self.bars_beveled      = Should bars be beveled. 
+
+        self.show_scale        = Should we show scale values. See grid_stride!
+        self.grid_stride       = Step of grid. If expressed in normalized range
+                                 (0..1), will be treated as percentage.
+                                 Otherwise will be striding through maximal value.
+                                 Defaults to 0. Which is "don't draw"
+
+        self.values_on_bars    = Should values for each bar displayed on top of
+                                 it.
+        self.value_format      = Format string for values. Defaults to "%s"
+
+        self.show_stack_labels = If the labels of stack bar chart should be
+                                 displayed. Defaults to False
+        self.labels_at_end     = If stack bars are displayed, this allows to
+                                 show them at right end of graph.
     """
     def __init__(self, **args):
         gtk.DrawingArea.__init__(self)
+        self.context = None
+        self.layout = None
         self.connect("expose_event", self._expose)
 
-        self.max_bar_width    = args.get("max_bar_width", 0)
-        self.legend_width     = args.get("legend_width", 0)
-        self.animate          = args.get("animate", True)
+        self.max_bar_width     = args.get("max_bar_width", 0)
+        self.legend_width      = args.get("legend_width", 0)
+        self.animate           = args.get("animate", True)
 
-        self.background       = args.get("background", None)
-        self.chart_background = args.get("chart_background", None)
-        self.bar_base_color   = args.get("bar_base_color", None)
+        self.background        = args.get("background", None)
+        self.chart_background  = args.get("chart_background", None)
+        self.bar_base_color    = args.get("bar_base_color", None)
 
-        self.grid_stride      = args.get("grid_stride", None)
-        self.bars_beveled     = "bars_beveled" not in args or args["bars_beveled"] # defaults to true
-
-        self.values_on_bars   = "values_on_bars" in args and args["values_on_bars"] #defaults to false
-        self.value_format     = args.get("value_format", "%s")
-        self.show_scale       = args.get("show_scale", False)
-        self.show_total       = "show_total" in args and args["show_total"] #defaults to false
+        self.grid_stride       = args.get("grid_stride", None)
+        self.bars_beveled      = args.get("bars_beveled", True)
+        self.values_on_bars    = args.get("values_on_bars", False)
+        self.value_format      = args.get("value_format", "%s")
+        self.show_scale        = args.get("show_scale", False)
 
         self.show_stack_labels = args.get("show_stack_labels", False)
-        self.labels_at_end    = "labels_at_end" in args and args["labels_at_end"] #defaults to false
+        self.labels_at_end     = args.get("labels_at_end", False)
+        self.framerate         = args.get("framerate", 60)
 
 
         #and some defaults
-        self.animation_timeout = 16 #in miliseconds, targetting 60fps
         self.current_max = None
         self.integrators = []
         self.moving = False
@@ -218,7 +224,7 @@ class Chart(gtk.DrawingArea):
         
         if self.animate:
             if not self.moving: #if we are moving, then there is a timeout somewhere already
-                gobject.timeout_add(self.animation_timeout, self._interpolate)
+                gobject.timeout_add(1000 / self.framerate, self._interpolate)
         else:
             def finish_all(integrators):
                 for i in range(len(integrators)):
@@ -423,18 +429,6 @@ class BarChart(Chart):
                 
         self.context.stroke()
                 
-
-        # maximal
-        if self.show_total:
-            max_label = "%d" % self.max_value
-
-            self.layout.set_text(max_label)
-            label_w, label_h = self.layout.get_pixel_size()
-
-            self.context.move_to(graph_x - label_w - 16, 10)
-            self.context.show_layout(self.layout)
-            
-            self.context.stroke()
 
 
         
