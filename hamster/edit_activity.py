@@ -31,8 +31,118 @@ import hamster.eds
 
 import time
 import datetime
+import colorsys
 
 GLADE_FILE = "edit_activity.glade"
+
+import cairo, pango
+class Dayline(gtk.DrawingArea):
+    def __init__(self, **args):
+        gtk.DrawingArea.__init__(self)
+        self.context = None
+        self.layout = None
+        self.connect("expose_event", self._expose)
+        self.highlight = None
+
+    def draw(self, day_facts, highlight = None):
+        """Draw chart with given data"""
+        self.facts = day_facts
+        self.highlight = highlight
+        self.show()
+        self._invalidate()
+
+
+    def _invalidate(self):
+        """Force graph redraw"""
+        if self.window:    #this can get called before expose    
+            alloc = self.get_allocation()
+            rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
+            self.window.invalidate_rect(rect, True)
+            self.window.process_updates(True)            
+
+
+    def _expose(self, widget, event):
+        """expose is when drawing's going on, like on _invalidate"""
+        self.context = widget.window.cairo_create()
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+
+        self.context.rectangle(event.area.x, event.area.y,
+                               event.area.width, event.area.height)
+        self.context.clip()
+        
+        alloc = self.get_allocation()  #x, y, width, height
+        self.width = alloc.width
+        self.height = alloc.height
+        self._draw(self.context)
+
+        return False
+
+    def _draw(self, context):
+        #TODO - use system colors and fonts
+ 
+        context.set_line_width(1)
+        
+        minute_pixel = self.width / float(60 *24)
+        
+        #run from end to beginning so the rectangle fillings do not erase text
+        self.facts.reverse()
+
+        graph_y = 1
+        graph_height = self.height - 15
+
+
+        
+        context.set_source_rgb(1, 1, 1)
+        context.rectangle(0, graph_y-1, self.width, graph_height)
+        context.fill()
+        context.set_source_rgb(0.7, 0.7, 0.7)
+        context.rectangle(0, graph_y-1, self.width-1, graph_height)
+        context.stroke()
+
+        
+        context.set_source_rgb(0.86, 0.86, 0.86)
+        for fact in self.facts:
+            start_minutes = fact["start_time"].hour * 60 \
+                                                    + fact["start_time"].minute
+
+            if fact["end_time"]:
+                end_minutes = fact["end_time"].hour * 60 \
+                                                      + fact["end_time"].minute
+            else:
+                end_minutes = start_minutes
+            
+            context.rectangle(minute_pixel * start_minutes, graph_y,
+                              minute_pixel * (end_minutes - start_minutes), graph_height - 1)
+        context.fill()
+
+
+        #highlight rectangle
+        if self.highlight:
+            start_minutes = self.highlight[0].hour * 60 + self.highlight[0].minute
+            end_minutes = self.highlight[1].hour * 60 + self.highlight[1].minute
+            
+            rgb = colorsys.hls_to_rgb(.6, .7, .5)
+            context.set_source_rgba(rgb[0], rgb[1], rgb[2], 0.5)
+
+            context.rectangle(minute_pixel * start_minutes, graph_y-1,
+                              minute_pixel * (end_minutes - start_minutes), graph_height)
+            context.fill_preserve()
+            context.set_source_rgb(*rgb)
+            context.stroke()
+            
+
+        #scale labels
+        context.set_source_rgb(0, 0, 0)
+        for i in range(0, 24, 4):
+            context.move_to(minute_pixel * i * 60, graph_height + 12)
+
+            context.show_text("%s:00" % i)
+
+        context.stroke()
+
+
+
+
 
 class CustomFactController:
     def __init__(self,  fact_date = None, fact_id = None):
@@ -86,8 +196,13 @@ class CustomFactController:
                                                   fact_date.day,
                                                   8)
         else:
-            end_date = start_date = datetime.datetime.now()
+            start_date = datetime.datetime.now()
+            end_date = start_date + datetime.timedelta(minutes = 30)
 
+        self.dayline = Dayline()
+        self.glade.get_widget("day_preview").add(self.dayline)
+
+        self.draw_preview(start_date.date())
 
         self.get_widget('start_date').set_text(self.format_date(start_date))
         self.get_widget('start_time').set_text(self.format_time(start_date))
@@ -102,6 +217,11 @@ class CustomFactController:
 
         self.glade.signal_autoconnect(self)
 
+    def draw_preview(self, date, highlight = None):
+        day_facts = storage.get_facts(date)
+        self.dayline.draw(day_facts, highlight)
+        
+        
     def init_calendar_window(self):
         self.calendar_window = self.glade.get_widget('calendar_window')
         self.date_calendar = gtk.Calendar()
@@ -275,10 +395,8 @@ class CustomFactController:
         
         if time and date:
             return datetime.datetime.combine(date, time.time())
-        elif not date:
-            return None
         else:
-            return date
+            return None
     
     def figure_description(self):
         activity = self.get_widget("activity_text").get_text().decode("utf-8")
@@ -570,6 +688,11 @@ class CustomFactController:
         end_time = self._get_datetime("end")
         if self.get_widget("in_progress").get_active():
             end_time = datetime.datetime.now()
+
+        if start_time:
+            self.draw_preview(start_time.date(), [start_time, end_time])
+
+
         
         looks_good = False
         if activity_text != "" and start_time and end_time and \
