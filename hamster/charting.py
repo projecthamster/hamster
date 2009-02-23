@@ -298,7 +298,7 @@ class Chart(gtk.DrawingArea):
         if self.background:
             self.context.rectangle(0, 0, self.width, self.height)
             self.context.set_source_rgb(*self.background)
-            self.context.fill_preserve()
+            self.context.fill()
             self.context.stroke()
         
         #forward to specific implementations
@@ -331,7 +331,7 @@ class Chart(gtk.DrawingArea):
     def _fill_area(self, x, y, w, h, color):
         self.context.rectangle(x, y, w, h)
         self.context.set_source_rgb(*[c / 256.0 for c in color])
-        self.context.fill_preserve()
+        self.context.fill()
         self.context.stroke()
 
     def _draw_bar(self, x, y, w, h, color = None):
@@ -597,7 +597,7 @@ class HorizontalBarChart(Chart):
 
             self.context.set_source_rgb(0.93, 0.93, 0.93)
             self.context.rectangle(x + w, graph_y, w, graph_height)
-            self.context.fill_preserve()
+            self.context.fill()
             self.context.stroke()
             
             self.context.set_source_rgb(0.70, 0.70, 0.70)
