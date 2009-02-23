@@ -1,3 +1,9 @@
+2009-02-23  Danishka Navin  <danishka@gmail.com>
+        
+	* LINGUAS: Added si for Sinhala Language.
+
+        * si.po: updated Sinhala translation by Randika Rathugama.
+
 2009-02-22  Baris Cicek  <baris@teamforce.name.tr>
 
 	* tr.po: Updated Turkish translation.
