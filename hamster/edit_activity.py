@@ -42,13 +42,112 @@ class Dayline(gtk.DrawingArea):
         self.context = None
         self.layout = None
         self.connect("expose_event", self._expose)
-        self.highlight = None
 
+        self.set_events(gtk.gdk.EXPOSURE_MASK
+                                 | gtk.gdk.LEAVE_NOTIFY_MASK
+                                 | gtk.gdk.BUTTON_PRESS_MASK
+                                 | gtk.gdk.BUTTON_RELEASE_MASK
+                                 | gtk.gdk.POINTER_MOTION_MASK
+                                 | gtk.gdk.POINTER_MOTION_HINT_MASK)
+        self.connect("button_release_event", self.on_button_release)
+        self.connect("motion_notify_event", self.draw_cursor)
+        self.highlight_start, self.highlight_end = None, None
+        self.drag_start = None
+        self.move_type = ""
+
+    def on_button_release(self, area, event):
+        if event.state & gtk.gdk.BUTTON1_MASK:
+            if self.drag_start:
+                self.drag_start = None
+                #now calculate back from pixels into minutes
+                
+                start_minutes = int(self.highlight_start / self.minute_pixel) 
+                end_minutes = int(self.highlight_end / self.minute_pixel) 
+                
+                print start_minutes / 60, start_minutes % 60
+                print end_minutes / 60, end_minutes % 60
+                self.highlight = [
+                    datetime.time(start_minutes / 60, start_minutes % 60),
+                    datetime.time(end_minutes / 60, end_minutes % 60)
+                ]
+                
+
+        
+    def draw_cursor(self, area, event):
+        if event.is_hint:
+            x, y, state = event.window.get_pointer()
+        else:
+            x = event.x
+            y = event.y
+            state = event.state
+
+        mouse_down = state & gtk.gdk.BUTTON1_MASK
+            
+        #print x, self.highlight_start, self.highlight_end
+        if self.highlight_start:
+            start_drag = abs(x - self.highlight_start) < 5
+            end_drag = abs(x - self.highlight_end) < 5
+            if start_drag and end_drag:
+                start_drag = abs(x - self.highlight_start) < abs(x - self.highlight_end)
+
+            in_between = self.highlight_start <= x <= self.highlight_end
+                
+            
+            if mouse_down and not self.drag_start:
+                self.drag_start = x
+                if start_drag:
+                    self.move_type = "start"
+                elif end_drag:
+                    self.move_type = "end"
+                elif in_between:
+                    self.move_type = "move"
+                    self.drag_start = x - self.highlight_start
+                else:
+                    self.move_type = None
+                    self.drag_start = None
+
+            
+            if mouse_down and self.drag_start:
+                x = max(0, min(x, 60*24 / self.minute_pixel))
+                start, end = 0, 0
+                if self.move_type == "start":
+                    start = x
+                elif self.move_type == "end":
+                    end = x
+                elif self.move_type == "move":
+                    width = self.highlight_end - self.highlight_start
+                    start = x - self.drag_start
+                    end = self.highlight_start + width
+                    
+                start = max(0, min(start, (60*23+59) * self.minute_pixel))
+                end = max(0, min(end, (60*23+59) * self.minute_pixel))
+                
+                if (end - start) > 10:
+                    print "zzzzzzzzzzzzzz", start, end
+                    self.highlight_start = start
+                    self.highlight_end = end
+                    self._invalidate()
+
+            if start_drag:
+                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_SIDE))
+            elif end_drag:
+                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.RIGHT_SIDE))
+            elif in_between:
+                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
+            else:
+                area.window.set_cursor(None)
+                
+                    
+
+
+                
+        
     def draw(self, day_facts, highlight = None):
         """Draw chart with given data"""
         self.facts = day_facts
         self.highlight = highlight
         self.show()
+        
         self._invalidate()
 
 
@@ -81,8 +180,15 @@ class Dayline(gtk.DrawingArea):
         #TODO - use system colors and fonts
  
         context.set_line_width(1)
-        
-        minute_pixel = self.width / float(60 *24)
+
+        self.minute_pixel = self.width / float(60 * 24)
+
+        if self.highlight:
+            self.highlight_start = (self.highlight[0].hour * 60 + self.highlight[0].minute) * self.minute_pixel
+            self.highlight_end = (self.highlight[1].hour * 60 + self.highlight[1].minute)  * self.minute_pixel
+            self.highlight = None
+
+        minute_pixel = self.minute_pixel        
         
         #run from end to beginning so the rectangle fillings do not erase text
         self.facts.reverse()
@@ -117,15 +223,12 @@ class Dayline(gtk.DrawingArea):
 
 
         #highlight rectangle
-        if self.highlight:
-            start_minutes = self.highlight[0].hour * 60 + self.highlight[0].minute
-            end_minutes = self.highlight[1].hour * 60 + self.highlight[1].minute
-            
+        if self.highlight_start:
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
             context.set_source_rgba(rgb[0], rgb[1], rgb[2], 0.5)
 
-            context.rectangle(minute_pixel * start_minutes, graph_y-1,
-                              minute_pixel * (end_minutes - start_minutes), graph_height)
+            context.rectangle(self.highlight_start, graph_y-1,
+                              self.highlight_end - self.highlight_start, graph_height)
             context.fill_preserve()
             context.set_source_rgb(*rgb)
             context.stroke()
@@ -201,8 +304,6 @@ class CustomFactController:
 
         self.dayline = Dayline()
         self.glade.get_widget("day_preview").add(self.dayline)
-
-        self.draw_preview(start_date.date())
 
         self.get_widget('start_date').set_text(self.format_date(start_date))
         self.get_widget('start_time').set_text(self.format_time(start_date))
