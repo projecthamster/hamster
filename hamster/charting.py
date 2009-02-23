@@ -299,10 +299,10 @@ class Chart(gtk.DrawingArea):
             self.context.rectangle(0, 0, self.width, self.height)
             self.context.set_source_rgb(*self.background)
             self.context.fill()
-            self.context.stroke()
         
         #forward to specific implementations
         self._draw()
+        self.context.stroke()
 
         return False
 
@@ -332,7 +332,6 @@ class Chart(gtk.DrawingArea):
         self.context.rectangle(x, y, w, h)
         self.context.set_source_rgb(*[c / 256.0 for c in color])
         self.context.fill()
-        self.context.stroke()
 
     def _draw_bar(self, x, y, w, h, color = None):
         """ draws a nice bar"""
@@ -427,8 +426,6 @@ class BarChart(Chart):
             
                 prev_end = intended_x + label_w + 10
                 
-        self.context.stroke()
-                
 
 
         
@@ -474,7 +471,6 @@ class BarChart(Chart):
         #flip the matrix back, so text doesn't come upside down
         context.transform(cairo.Matrix(yy = 1, y0 = graph_height))
 
-        context.save()
         
         self.layout.set_width(-1)
 
@@ -496,15 +492,10 @@ class BarChart(Chart):
                     context.move_to(graph_x - label_w - 8, y - label_h / 2)
                     set_color(context, medium[8])
                     context.show_layout(self.layout)
-                    context.stroke()
 
                 set_color(context, (255,255,255))
                 context.move_to(graph_x, y)
                 context.line_to(graph_x + graph_width, y)
-                context.stroke()
-            
-
-        context.restore()
 
         context.set_line_width(1)
         #stack keys
@@ -568,7 +559,6 @@ class BarChart(Chart):
 
                     
                     
-            context.stroke()        
 
 
 
@@ -634,7 +624,6 @@ class HorizontalBarChart(Chart):
 
             self.context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
             self.context.show_layout(self.layout)
-        self.context.stroke()
 
         
         
