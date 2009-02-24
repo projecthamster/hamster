@@ -200,8 +200,6 @@ class Dayline(gtk.DrawingArea):
         graph_y = 1
         graph_height = self.height - 15
 
-
-        
         context.set_source_rgb(1, 1, 1)
         context.rectangle(0, graph_y-1, self.width, graph_height)
         context.fill()
@@ -209,7 +207,6 @@ class Dayline(gtk.DrawingArea):
         context.rectangle(0, graph_y-1, self.width-1, graph_height)
         context.stroke()
 
-        
         context.set_source_rgb(0.86, 0.86, 0.86)
         for fact in self.facts:
             start_minutes = fact["start_time"].hour * 60 \
@@ -282,6 +279,12 @@ class CustomFactController:
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
+
+            if not end_date:
+                if start_date.date() == dt.date.today():
+                    end_date = dt.datetime.now()
+                else:
+                    end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
         elif fact_date and fact_date != dt.date.today():
             # we are asked to add task in some day, but time has not
