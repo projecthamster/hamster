@@ -30,7 +30,7 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 import hamster.eds
 
 import time
-import datetime
+import datetime as dt
 import colorsys
 
 GLADE_FILE = "edit_activity.glade"
@@ -54,6 +54,7 @@ class Dayline(gtk.DrawingArea):
         self.highlight_start, self.highlight_end = None, None
         self.drag_start = None
         self.move_type = ""
+        self.on_time_changed = None
 
     def on_button_release(self, area, event):
         if event.state & gtk.gdk.BUTTON1_MASK:
@@ -64,12 +65,11 @@ class Dayline(gtk.DrawingArea):
                 start_minutes = int(self.highlight_start / self.minute_pixel) 
                 end_minutes = int(self.highlight_end / self.minute_pixel) 
                 
-                print start_minutes / 60, start_minutes % 60
-                print end_minutes / 60, end_minutes % 60
-                self.highlight = [
-                    datetime.time(start_minutes / 60, start_minutes % 60),
-                    datetime.time(end_minutes / 60, end_minutes % 60)
-                ]
+                start_time = dt.time(start_minutes / 60, start_minutes % 60)
+                end_time = dt.time(end_minutes / 60, end_minutes % 60)
+                self.highlight = [start_time, end_time]
+                if self.on_time_changed:
+                    self.on_time_changed(self.highlight[0], self.highlight[1])
                 
 
         
@@ -84,7 +84,7 @@ class Dayline(gtk.DrawingArea):
         mouse_down = state & gtk.gdk.BUTTON1_MASK
             
         #print x, self.highlight_start, self.highlight_end
-        if self.highlight_start:
+        if self.highlight_start != None:
             start_drag = abs(x - self.highlight_start) < 5
             end_drag = abs(x - self.highlight_end) < 5
             if start_drag and end_drag:
@@ -108,22 +108,25 @@ class Dayline(gtk.DrawingArea):
 
             
             if mouse_down and self.drag_start:
-                x = max(0, min(x, 60*24 / self.minute_pixel))
                 start, end = 0, 0
                 if self.move_type == "start":
-                    start = x
+                    if 0 <= x <= self.width:
+                        start = x
+                        end = self.highlight_end
                 elif self.move_type == "end":
-                    end = x
+                    if 0 <= x <= self.width:
+                        start = self.highlight_start
+                        end = x
                 elif self.move_type == "move":
                     width = self.highlight_end - self.highlight_start
                     start = x - self.drag_start
-                    end = self.highlight_start + width
+                    start = max(0, min(start, self.width))
+                    end = start + width
+                    if end > self.width:
+                        end = self.width
+                        start = end - width
                     
-                start = max(0, min(start, (60*23+59) * self.minute_pixel))
-                end = max(0, min(end, (60*23+59) * self.minute_pixel))
-                
-                if (end - start) > 10:
-                    print "zzzzzzzzzzzzzz", start, end
+                if end - start > 1:
                     self.highlight_start = start
                     self.highlight_end = end
                     self._invalidate()
@@ -181,7 +184,8 @@ class Dayline(gtk.DrawingArea):
  
         context.set_line_width(1)
 
-        self.minute_pixel = self.width / float(60 * 24)
+        # we operate only with the full day for now (no scrolling around, i'm afraid)
+        self.minute_pixel = self.width / float(60 * 23 + 59)
 
         if self.highlight:
             self.highlight_start = (self.highlight[0].hour * 60 + self.highlight[0].minute) * self.minute_pixel
@@ -223,7 +227,7 @@ class Dayline(gtk.DrawingArea):
 
 
         #highlight rectangle
-        if self.highlight_start:
+        if self.highlight_start != None:
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
             context.set_source_rgba(rgb[0], rgb[1], rgb[2], 0.5)
 
@@ -273,13 +277,13 @@ class CustomFactController:
             buf.set_text(fact["description"] or "")
             self.get_widget('description').set_buffer(buf)
 
-            if not fact["end_time"] and fact["start_time"].date() == datetime.datetime.today():
+            if not fact["end_time"] and fact["start_time"].date() == dt.datetime.today():
                 self.get_widget("in_progress").set_active(True)
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
-        elif fact_date and fact_date != datetime.date.today():
+        elif fact_date and fact_date != dt.date.today():
             # we are asked to add task in some day, but time has not
             # been specified - two things we can do
             # if there is end time of last activity, then we start from there
@@ -289,27 +293,26 @@ class CustomFactController:
             if last_activity and last_activity[len(last_activity)-1]["end_time"]:
                 start_date = last_activity[len(last_activity)-1]["end_time"]
             else:
-                if fact_date == datetime.date.today():
+                if fact_date == dt.date.today():
                     # for today time is now
-                    start_date = datetime.datetime.now()
+                    start_date = dt.datetime.now()
                 else:
                     # for other days it is 8am
-                    start_date = datetime.datetime(fact_date.year,
+                    start_date = dt.datetime(fact_date.year,
                                                   fact_date.month,
                                                   fact_date.day,
                                                   8)
         else:
-            start_date = datetime.datetime.now()
-            end_date = start_date + datetime.timedelta(minutes = 30)
+            start_date = dt.datetime.now()
+            end_date = start_date + dt.timedelta(minutes = 30)
 
         self.dayline = Dayline()
+        self.dayline.on_time_changed = self.update_time
         self.glade.get_widget("day_preview").add(self.dayline)
 
         self.get_widget('start_date').set_text(self.format_date(start_date))
-        self.get_widget('start_time').set_text(self.format_time(start_date))
-        
         self.get_widget('end_date').set_text(self.format_date(end_date))
-        self.get_widget('end_time').set_text(self.format_time(end_date))
+        self.update_time(start_date, end_date)
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
 
@@ -318,6 +321,10 @@ class CustomFactController:
 
         self.glade.signal_autoconnect(self)
 
+    def update_time(self, start_time, end_time):
+        self.get_widget("start_time").set_text(self.format_time(start_time))
+        self.get_widget("end_time").set_text(self.format_time(end_time))
+        
     def draw_preview(self, date, highlight = None):
         day_facts = storage.get_facts(date)
         self.dayline.draw(day_facts, highlight)
@@ -326,7 +333,7 @@ class CustomFactController:
     def init_calendar_window(self):
         self.calendar_window = self.glade.get_widget('calendar_window')
         self.date_calendar = gtk.Calendar()
-        #self.date_calendar.mark_day(datetime.date.today().day) #mark day marks day in all months, hahaha
+        #self.date_calendar.mark_day(dt.date.today().day) #mark day marks day in all months, hahaha
         self.date_calendar.connect("day-selected", self.on_day_selected)
         self.date_calendar.connect("day-selected-double-click", self.on_day_selected_double_click)
         self.date_calendar.connect("button-press-event", self.on_cal_button_press_event)
@@ -345,7 +352,7 @@ class CustomFactController:
         
         cal_date = calendar.get_date()
 
-        date = datetime.date(cal_date[0], cal_date[1] + 1, cal_date[2])
+        date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
         
         widget = None
         if self.get_widget("start_date").is_focus():
@@ -393,12 +400,12 @@ class CustomFactController:
         """ this breaks 24 hour mode, when hours are given
         #if hours specified in 12 hour mode, default to PM
         #TODO - laame, show me how to do this better, pleease
-        am = datetime.time(1, 00).strftime("%p")
+        am = dt.time(1, 00).strftime("%p")
         if hours <= 11 and str_time.find(am) < 0:
             hours += 12
         """
         
-        return datetime.datetime(1900, 1, 1, hours, minutes)
+        return dt.datetime(1900, 1, 1, hours, minutes)
 
 
     def set_dropdown(self):
@@ -495,7 +502,7 @@ class CustomFactController:
         time = self.figure_time(self.get_widget(prefix + '_time').get_text())
         
         if time and date:
-            return datetime.datetime.combine(date, time.time())
+            return dt.datetime.combine(date, time.time())
         else:
             return None
     
@@ -557,7 +564,7 @@ class CustomFactController:
         if not date_str:
             return ""
         
-        return datetime.datetime.strptime(date_str, "%x")
+        return dt.datetime.strptime(date_str, "%x")
 
     def format_date(self, date):
         if not date:
@@ -612,15 +619,15 @@ class CustomFactController:
         hours = gtk.ListStore(gobject.TYPE_STRING)
         
         # populate times
-        i_time = start_time or datetime.datetime(1900, 1, 1, 0, 0)
+        i_time = start_time or dt.datetime(1900, 1, 1, 0, 0)
         
         if focus_time and focus_time < i_time:
-            focus_time += datetime.timedelta(days = 1)
+            focus_time += dt.timedelta(days = 1)
         
         if start_time:
-            end_time = i_time + datetime.timedelta(hours = 12)
+            end_time = i_time + dt.timedelta(hours = 12)
         else:
-            end_time = i_time + datetime.timedelta(hours = 24)
+            end_time = i_time + dt.timedelta(hours = 24)
         
         i, focus_row = 0, None
         while i_time < end_time:
@@ -640,15 +647,15 @@ class CustomFactController:
             hours.append([row_text])
             
             
-            if focus_time and i_time <= focus_time <= i_time + datetime.timedelta(minutes = 30):
+            if focus_time and i_time <= focus_time <= i_time + dt.timedelta(minutes = 30):
                 focus_row = i
             
             i += 1
 
             if start_time:
-                i_time += datetime.timedelta(minutes = 15)
+                i_time += dt.timedelta(minutes = 15)
             else:
-                i_time += datetime.timedelta(minutes = 30)
+                i_time += dt.timedelta(minutes = 30)
 
             
 
@@ -679,13 +686,13 @@ class CustomFactController:
     
     def on_date_key_press_event(self, entry, event):
         cal_date = self.date_calendar.get_date()
-        date = datetime.date(cal_date[0], cal_date[1]+1, cal_date[2])
+        date = dt.date(cal_date[0], cal_date[1]+1, cal_date[2])
         enter_pressed = False
 
         if event.keyval == gtk.keysyms.Up:
-            date = date - datetime.timedelta(days=1)
+            date = date - dt.timedelta(days=1)
         elif event.keyval == gtk.keysyms.Down:
-            date = date + datetime.timedelta(days=1)
+            date = date + dt.timedelta(days=1)
         elif (event.keyval == gtk.keysyms.Return or
               event.keyval == gtk.keysyms.KP_Enter):
             enter_pressed = True
@@ -719,7 +726,7 @@ class CustomFactController:
         if self.get_widget("start_time").is_focus():
             widget = self.get_widget("start_time")
             self.get_widget("end_time") \
-                .set_text(self.format_time(time + datetime.timedelta(minutes=30))) #set also end time on start time change
+                .set_text(self.format_time(time + dt.timedelta(minutes=30))) #set also end time on start time change
 
 
         elif self.get_widget("end_time").is_focus():
@@ -788,7 +795,7 @@ class CustomFactController:
 
         end_time = self._get_datetime("end")
         if self.get_widget("in_progress").get_active():
-            end_time = datetime.datetime.now()
+            end_time = dt.datetime.now()
 
         if start_time:
             self.draw_preview(start_time.date(), [start_time, end_time])
