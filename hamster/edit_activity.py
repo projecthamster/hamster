@@ -711,8 +711,8 @@ class CustomFactController:
         return True
     
     def format_time(self, time):
-        if not time:
-            return ""
+        if time == None:
+            return None
         
         #return time.strftime("%I:%M%p").lstrip("0").lower()
         return time.strftime("%H:%M").lower()
