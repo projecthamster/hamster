@@ -35,8 +35,8 @@ import calendar
 import time
 
 class StatsViewer(object):
-    def __init__(self, main_window = False):
-        self.main_window = main_window
+    def __init__(self, parent = None):
+        self.parent = parent# determine if app shut shut down on close
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
@@ -482,7 +482,7 @@ class StatsViewer(object):
         if model[iter][0] == -1:
             return #not a fact
 
-        custom_fact = CustomFactController(None, model[iter][0])
+        custom_fact = CustomFactController(self, None, model[iter][0])
         custom_fact.show()
 
     def delete_selected(self):
@@ -524,7 +524,7 @@ class StatsViewer(object):
     def on_facts_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        custom_fact = CustomFactController(None, model[iter][0])
+        custom_fact = CustomFactController(self, None, model[iter][0])
         custom_fact.show()
         
     def on_add_clicked(self, button):
@@ -538,7 +538,7 @@ class StatsViewer(object):
                                     int(selected_date[1]),
                                     int(selected_date[2]))
 
-        custom_fact = CustomFactController(selected_date)
+        custom_fact = CustomFactController(self, selected_date)
         custom_fact.show()
         
     def on_report_button_clicked(self, widget):
@@ -556,18 +556,22 @@ class StatsViewer(object):
     def on_close(self, widget, event):
         dispatcher.del_handler('activity_updated', self.after_activity_update)
         dispatcher.del_handler('day_updated', self.after_fact_update)
-        
-        if self.main_window:
-            gtk.main_quit()
-        else:
-            return False
+        self.close_window()        
 
     def on_window_key_pressed(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Escape
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
-        self.window.destroy()
+        self.close_window()
     
+    
+    def close_window(self):
+        if not self.parent:
+            gtk.main_quit()
+        else:
+            self.window.destroy()
+            return False
+        
     def show(self):
         self.window.show()
 

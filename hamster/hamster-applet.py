@@ -74,34 +74,31 @@ def on_destroy(event):
     gtk.main_quit()
 
 def usage():
-    print _(u"""=== Time tracking applet: Usage
+    print _(u"""Time tracker: Usage
 $ hamster-applet [OPTIONS]
 
 OPTIONS:
-    -w, --window    Launch the applet in a standalone window for test purposes (default=no).
-    -o, --overview  Launch just the overview window
+    -w, --window   Launch the applet in a standalone window for test purposes (default=no).
+    -s, --start    [stats|edit|prefs] Which window to launch on startup.
+                   Use "stats" for overview window, "edit" to add new activity
+                   and "prefs" to launch preferences
     """)
     sys.exit()
 
 if __name__ == "__main__":
     standalone = False
-    show_overview = False
+    start_window = None
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "wo", ["window", "overview"])
+        opts, args = getopt.getopt(sys.argv[1:], "ws:", ["window", "start="])
     except getopt.GetoptError:
-        # Unknown args were passed, we fallback to bahave as if
-        # no options were passed
-        print "WARNING: Unknown arguments passed, using defaults."
-        opts = []
-        args = sys.argv[1:]
+        usage() 
 
-    for o, a in opts:
-        if o in ("-w", "--window"):
+    for opt, args in opts:
+        if opt in ("-w", "--window"):
             standalone = True
-        elif o in ("-o", "--overview"):
-            show_overview = True
-
+        elif opt in ("-s", "--start"):
+            start_window = args
 
     gtk.window_set_default_icon_name("hamster-applet")
 
@@ -118,10 +115,17 @@ if __name__ == "__main__":
 
         gtk.main()
 
-    elif show_overview:
-        from hamster.stats import StatsViewer
-        stats_viewer = StatsViewer(True)
-        stats_viewer.show()
+    elif start_window:
+        if start_window == "stats":
+            from hamster.stats import StatsViewer
+            stats_viewer = StatsViewer().show()
+        elif start_window == "edit":
+            from hamster.edit_activity import CustomFactController
+            CustomFactController().show()
+        elif start_window == "prefs":
+            from hamster.preferences import PreferencesEditor
+            PreferencesEditor().show()
+            
         gtk.main()
 
     else:

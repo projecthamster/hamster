@@ -89,7 +89,8 @@ class PreferencesEditor:
         ]
     
     
-    def __init__(self):
+    def __init__(self, parent = None):
+        self.parent = parent
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "preferences.glade"))
         self.config = GconfStore.get_instance()
         self.window = self.get_widget('preferences_window')
@@ -488,7 +489,7 @@ class PreferencesEditor:
         # ctrl+w means close window
         if (event.keyval == gtk.keysyms.w \
             and event.state & gtk.gdk.CONTROL_MASK):
-            self.window.destroy()
+            self.close_window()
 
         # escape can mean several things
         if event.keyval == gtk.keysyms.Escape:
@@ -500,7 +501,7 @@ class PreferencesEditor:
                 self.categoryCell.set_property("editable", False)
                 return
 
-            self.window.destroy()     
+            self.close_window()     
 
     """button events"""
     def on_add_category_clicked(self, button):
@@ -554,7 +555,17 @@ class PreferencesEditor:
         self.activity_changed(self.selection, model)
 
     def on_close_button_clicked(self, button):
-        self.window.destroy()
+        self.close_window()
+
+    def on_close(self, widget, event):
+        self.close_window()        
+    
+    def close_window(self):
+        if not self.parent:
+            gtk.main_quit()
+        else:
+            self.window.destroy()
+            return False
 
     def on_shutdown_track_toggled(self, checkbox):
         self.config.set_stop_on_shutdown(checkbox.get_active())

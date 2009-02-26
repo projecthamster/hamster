@@ -361,7 +361,7 @@ class HamsterApplet(object):
             (model, iter) = selection.get_selected()
             fact_id = model[iter][0]
                 
-            custom_fact = CustomFactController(None, fact_id)
+            custom_fact = CustomFactController(self, None, fact_id)
             custom_fact.show()
             return True
         
@@ -422,7 +422,7 @@ class HamsterApplet(object):
             self.notify.msg(msg, self.edit_cb, self.switch_cb)
 
     def edit_cb(self, n, action):
-        custom_fact = CustomFactController(None, self.last_activity['id'])
+        custom_fact = CustomFactController(self, None, self.last_activity['id'])
         custom_fact.show()
 
     def switch_cb(self, n, action):
@@ -622,14 +622,14 @@ class HamsterApplet(object):
 
     def on_overview(self, menu_item):
         dispatcher.dispatch('panel_visible', False)
-        stats_viewer = StatsViewer()
+        stats_viewer = StatsViewer(self)
         stats_viewer.show()
 
     def show_overview(self, menu_item, verb):
         return self.on_overview(menu_item)
 
     def on_custom_fact(self, menu_item):
-        custom_fact = CustomFactController()
+        custom_fact = CustomFactController(self)
         custom_fact.show()
 
     def on_about (self, component, verb):
@@ -644,7 +644,7 @@ class HamsterApplet(object):
         if self.preferences_editor and self.preferences_editor.window:
             self.preferences_editor.window.present()
         else:
-            self.preferences_editor = PreferencesEditor()
+            self.preferences_editor = PreferencesEditor(self)
             self.preferences_editor.show()
     
     """signals"""

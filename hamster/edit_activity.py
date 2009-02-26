@@ -245,11 +245,9 @@ class Dayline(gtk.DrawingArea):
         context.stroke()
 
 
-
-
-
 class CustomFactController:
-    def __init__(self,  fact_date = None, fact_id = None):
+    def __init__(self,  parent = None, fact_date = None, fact_id = None):
+        self.parent = parent
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
@@ -280,12 +278,6 @@ class CustomFactController:
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
-            if not end_date:
-                if start_date.date() == dt.date.today():
-                    end_date = dt.datetime.now()
-                else:
-                    end_date = end_date or start_date + dt.timedelta(minutes = 30)
-
         elif fact_date and fact_date != dt.date.today():
             # we are asked to add task in some day, but time has not
             # been specified - two things we can do
@@ -305,9 +297,13 @@ class CustomFactController:
                                                   fact_date.month,
                                                   fact_date.day,
                                                   8)
-        else:
-            start_date = dt.datetime.now()
-            end_date = start_date + dt.timedelta(minutes = 30)
+
+        start_date = start_date or dt.datetime.now()
+        if not end_date:
+            if start_date.date() == dt.date.today():
+                end_date = dt.datetime.now()
+            else:
+                end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
         self.dayline = Dayline()
         self.dayline.on_time_changed = self.update_time
@@ -561,7 +557,7 @@ class CustomFactController:
         if not self.fact_id: 
             dispatcher.dispatch('panel_visible', False)
         
-        self.window.destroy()
+        self.close_window()
     
     def figure_date(self, date_str):
         if not date_str:
@@ -785,7 +781,7 @@ class CustomFactController:
         
         
     def on_cancel_clicked(self, button):
-        self.window.destroy()
+        self.close_window()
         
     def on_activity_combo_changed(self, combo):
         self.validate_fields()
@@ -820,7 +816,16 @@ class CustomFactController:
             if self.calendar_window.get_property("visible") or \
                self.time_window.get_property("visible"):
                 return False
-            
+
+            self.close_window()            
+
+    def on_close(self, widget, event):
+        self.close_window()        
+
+    def close_window(self):
+        if not self.parent:
+            gtk.main_quit()
+        else:
             self.window.destroy()
-
-
+            return False
+        
