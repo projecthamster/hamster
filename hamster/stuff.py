@@ -29,6 +29,9 @@ from pango import ELLIPSIZE_END
 import datetime as dt
 import locale
 
+def zero_hour(date):
+    return dt.datetime.combine(date.date(), dt.time(0,0))
+    
 # it seems that python or something has bug of sorts, that breaks stuff for
 # japanese locale, so we have this locale from and to ut8 magic in some places
 # see bug 562298

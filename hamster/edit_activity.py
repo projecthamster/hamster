@@ -33,9 +33,20 @@ import time
 import datetime as dt
 import colorsys
 
+import gobject
+
 GLADE_FILE = "edit_activity.glade"
 
 import cairo, pango
+
+""" TODO:
+     * use integrator for smooth movement of scale
+     * load previos and next days on demand
+     * hook into notifications and refresh our days if some evil neighbour edit
+       fact window has dared to edit facts
+     * sort out animation (move stuff from charting.py and this place into
+       some hamster.Area!
+"""
 class Dayline(gtk.DrawingArea):
     def __init__(self, **args):
         gtk.DrawingArea.__init__(self)
@@ -55,23 +66,48 @@ class Dayline(gtk.DrawingArea):
         self.drag_start = None
         self.move_type = ""
         self.on_time_changed = None
-
+        
+        self.range_start = None
+        self.scrolling = False
+        
+    
     def on_button_release(self, area, event):
-        if event.state & gtk.gdk.BUTTON1_MASK:
-            if self.drag_start:
-                self.drag_start = None
-                #now calculate back from pixels into minutes
-                
-                start_minutes = int(self.highlight_start / self.minute_pixel) 
-                end_minutes = int(self.highlight_end / self.minute_pixel) 
-                
-                start_time = dt.time(start_minutes / 60, start_minutes % 60)
-                end_time = dt.time(end_minutes / 60, end_minutes % 60)
-                self.highlight = [start_time, end_time]
-                if self.on_time_changed:
-                    self.on_time_changed(self.highlight[0], self.highlight[1])
-                
+        if self.drag_start:
+            self.drag_start = None
+        else:
+            return
 
+        if event.state & gtk.gdk.BUTTON1_MASK:
+            #now calculate back from pixels into minutes
+            start_time = int(self.highlight_start / self.minute_pixel)
+            start_time = self.range_start + dt.timedelta(minutes = start_time) + dt.timedelta(hours=4)
+            
+            end_time = int(self.highlight_end / self.minute_pixel) 
+            end_time = self.range_start + dt.timedelta(minutes = end_time) + dt.timedelta(hours=4)
+            
+
+            self.highlight = [start_time, end_time]
+            if self.on_time_changed:
+                self.on_time_changed(self.highlight[0], self.highlight[1])
+                
+    def scroll(self):
+        scrolled = False
+        
+        if round(self.highlight_start) <= 0:
+
+            self.range_start = self.range_start - dt.timedelta(minutes=30)
+            scrolled = True
+        if self.highlight_end >= self.width:
+            self.range_start = self.range_start + dt.timedelta(minutes=30)
+            scrolled = True
+
+        if scrolled:
+            self._invalidate()
+        else:
+            self.scrolling = False
+
+        return scrolled
+        
         
     def draw_cursor(self, area, event):
         if event.is_hint:
@@ -85,8 +121,9 @@ class Dayline(gtk.DrawingArea):
             
         #print x, self.highlight_start, self.highlight_end
         if self.highlight_start != None:
-            start_drag = abs(x - self.highlight_start) < 5
-            end_drag = abs(x - self.highlight_end) < 5
+            start_drag = 10 > (self.highlight_start - x) > -1
+            end_drag = 10 > (x - self.highlight_end) > -1
+
             if start_drag and end_drag:
                 start_drag = abs(x - self.highlight_start) < abs(x - self.highlight_end)
 
@@ -103,8 +140,8 @@ class Dayline(gtk.DrawingArea):
                     self.move_type = "move"
                     self.drag_start = x - self.highlight_start
                 else:
-                    self.move_type = None
-                    self.drag_start = None
+                    self.move_type = "scale_drag"
+                    self.drag_start_time = self.range_start
 
             
             if mouse_down and self.drag_start:
@@ -121,14 +158,27 @@ class Dayline(gtk.DrawingArea):
                     width = self.highlight_end - self.highlight_start
                     start = x - self.drag_start
                     start = max(0, min(start, self.width))
+                    
                     end = start + width
                     if end > self.width:
                         end = self.width
                         start = end - width
-                    
+
                 if end - start > 1:
                     self.highlight_start = start
                     self.highlight_end = end
+                    self._invalidate()
+
+                if self.highlight_start == 0 or self.highlight_end == self.width:
+                    if not self.scrolling:
+                        self.scrolling = True
+                        gobject.timeout_add(1000 / 60, self.scroll)
+
+
+                
+
+                if self.move_type == "scale_drag":
+                    self.range_start = self.drag_start_time + dt.timedelta(minutes = ((self.drag_start - x) / self.minute_pixel))
                     self._invalidate()
 
             if start_drag:
@@ -140,18 +190,29 @@ class Dayline(gtk.DrawingArea):
             else:
                 area.window.set_cursor(None)
                 
+            
+            #now calculate back from pixels into minutes
+            start_time = int(self.highlight_start / self.minute_pixel)
+            start_time = self.range_start + dt.timedelta(minutes = start_time) + dt.timedelta(hours=4)
                     
-
+            end_time = int(self.highlight_end / self.minute_pixel) 
+            end_time = self.range_start + dt.timedelta(minutes = end_time) + dt.timedelta(hours=4)
+            if self.on_time_changed:
+                self.on_time_changed(start_time, end_time)
 
                 
         
     def draw(self, day_facts, highlight = None):
         """Draw chart with given data"""
         self.facts = day_facts
+        
+        self.range_start = stuff.zero_hour(highlight[0]) - dt.timedelta(hours=4)
+        
         self.highlight = highlight
         self.show()
         
         self._invalidate()
+
 
 
     def _invalidate(self):
@@ -171,56 +232,97 @@ class Dayline(gtk.DrawingArea):
         self.context.rectangle(event.area.x, event.area.y,
                                event.area.width, event.area.height)
         self.context.clip()
+
+        self.layout = self.context.create_layout()
+        font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        font.set_size(8 * pango.SCALE)
+        self.layout.set_font_description(font)
+
         
         alloc = self.get_allocation()  #x, y, width, height
         self.width = alloc.width
+
+
         self.height = alloc.height
         self._draw(self.context)
-
         return False
-
+    
+    def _minutes_from_start(self, date):
+            delta = (date - self.range_start)
+            return delta.days * 24 * 60 + delta.seconds / 60
+            
     def _draw(self, context):
         #TODO - use system colors and fonts
  
         context.set_line_width(1)
 
-        # we operate only with the full day for now (no scrolling around, i'm afraid)
-        self.minute_pixel = self.width / float(60 * 23 + 59)
+        #we will buffer 4 hours to both sides so partial labels also appear
+        range_end = self.range_start + dt.timedelta(hours = 24 + 2*4)
 
-        if self.highlight:
-            self.highlight_start = (self.highlight[0].hour * 60 + self.highlight[0].minute) * self.minute_pixel
-            self.highlight_end = (self.highlight[1].hour * 60 + self.highlight[1].minute)  * self.minute_pixel
-            self.highlight = None
+        minutes = self._minutes_from_start(range_end)
 
-        minute_pixel = self.minute_pixel        
-        
-        #run from end to beginning so the rectangle fillings do not erase text
-        self.facts.reverse()
+        self.minute_pixel = self.width / float(24 * 60)
+        minute_pixel = self.minute_pixel
+
+        self.graph_x = -minute_pixel * 4 * 60
+
 
         graph_y = 1
         graph_height = self.height - 15
 
+        
+        # graph area
         context.set_source_rgb(1, 1, 1)
-        context.rectangle(0, graph_y-1, self.width, graph_height)
+        context.rectangle(0, graph_y - 1, self.width, graph_height)
         context.fill()
         context.set_source_rgb(0.7, 0.7, 0.7)
-        context.rectangle(0, graph_y-1, self.width-1, graph_height)
+        context.rectangle(0, graph_y-1, self.width - 1, graph_height)
         context.stroke()
+    
+        #time scale
 
-        context.set_source_rgb(0.86, 0.86, 0.86)
+        #scale labels
+        context.set_source_rgb(0, 0, 0)
+        for i in range(minutes):
+            label_time = (self.range_start + dt.timedelta(minutes=i))
+            if label_time.minute == 0 and label_time.hour % 4 == 0:
+                if label_time.hour == 0:
+                    context.set_source_rgb(0.8, 0.8, 0.8)
+                    context.move_to(self.graph_x + minute_pixel * i, 0)
+                    context.line_to(self.graph_x + minute_pixel * i, graph_height)
+                    context.move_to(self.graph_x + minute_pixel * i, graph_height + 2)                
+                    label_minutes = label_time.strftime("%b %d.")
+                else:
+                    context.move_to(self.graph_x + minute_pixel * i, graph_height + 2)                
+                    label_minutes = label_time.strftime("%H:%M")
+
+                context.set_source_rgb(0, 0, 0)
+                self.layout.set_text(label_minutes)
+                context.show_layout(self.layout)
+        context.stroke()
+        
+        #bars
+        context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
         for fact in self.facts:
-            start_minutes = fact["start_time"].hour * 60 \
-                                                    + fact["start_time"].minute
-
+            start_minutes = self._minutes_from_start(fact["start_time"])
+            
             if fact["end_time"]:
-                end_minutes = fact["end_time"].hour * 60 \
-                                                      + fact["end_time"].minute
+                end_minutes = self._minutes_from_start(fact["end_time"])
             else:
                 end_minutes = start_minutes
             
-            context.rectangle(minute_pixel * start_minutes, graph_y,
-                              minute_pixel * (end_minutes - start_minutes), graph_height - 1)
+            if (self.graph_x + end_minutes * minute_pixel) > 0 and \
+                (self.graph_x + start_minutes * minute_pixel) < self.width:
+                    context.rectangle(self.graph_x + start_minutes * minute_pixel, graph_y,
+                                      minute_pixel * (end_minutes - start_minutes), graph_height - 1)
         context.fill()
+        
+        
+
+        if self.highlight:
+            self.highlight_start = self.graph_x + self._minutes_from_start(self.highlight[0]) * self.minute_pixel
+            self.highlight_end = self.graph_x + self._minutes_from_start(self.highlight[1])  * self.minute_pixel
+            self.highlight = None
 
 
         #highlight rectangle
@@ -233,16 +335,8 @@ class Dayline(gtk.DrawingArea):
             context.fill_preserve()
             context.set_source_rgb(*rgb)
             context.stroke()
-            
+        
 
-        #scale labels
-        context.set_source_rgb(0, 0, 0)
-        for i in range(0, 24, 4):
-            context.move_to(minute_pixel * i * 60, graph_height + 12)
-
-            context.show_text("%s:00" % i)
-
-        context.stroke()
 
 
 class CustomFactController:
@@ -291,8 +385,6 @@ class CustomFactController:
         self.dayline.on_time_changed = self.update_time
         self.glade.get_widget("day_preview").add(self.dayline)
 
-        self.get_widget('start_date').set_text(self.format_date(start_date))
-        self.get_widget('end_date').set_text(self.format_date(end_date))
         self.update_time(start_date, end_date)
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
@@ -304,7 +396,11 @@ class CustomFactController:
 
     def update_time(self, start_time, end_time):
         self.get_widget("start_time").set_text(self.format_time(start_time))
+        self.get_widget('start_date').set_text(self.format_date(start_time))
+
         self.get_widget("end_time").set_text(self.format_time(end_time))
+        self.get_widget('end_date').set_text(self.format_date(end_time))
+
         
     def draw_preview(self, date, highlight = None):
         day_facts = storage.get_facts(date)
