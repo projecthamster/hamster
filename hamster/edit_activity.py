@@ -247,19 +247,12 @@ class Dayline(gtk.DrawingArea):
 
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        self.parent = parent
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
         self.window = self.get_widget('custom_fact_window')
 
-        # build the menu
-        self.fact_id = fact_id
+        self.parent, self.fact_id = parent, fact_id
 
-        self.set_dropdown()
-        self.refresh_menu()
-
-        self.get_widget("in_progress").set_active(False)
-        end_date = None
-
+        start_date, end_date = None, None
         if fact_id:
             fact = storage.get_fact(fact_id)
             print fact
@@ -279,31 +272,20 @@ class CustomFactController:
             self.window.set_title(_("Update activity"))
 
         elif fact_date and fact_date != dt.date.today():
-            # we are asked to add task in some day, but time has not
-            # been specified - two things we can do
-            # if there is end time of last activity, then we start from there
-            # if end time is missing, or there are no activities at all
-            # then we start from 8am (pretty default)
+            # if there is previous activity with end time - attach to it
+            # otherwise let's start at 8am
             last_activity = storage.get_facts(fact_date)
             if last_activity and last_activity[len(last_activity)-1]["end_time"]:
                 start_date = last_activity[len(last_activity)-1]["end_time"]
             else:
-                if fact_date == dt.date.today():
-                    # for today time is now
-                    start_date = dt.datetime.now()
-                else:
-                    # for other days it is 8am
-                    start_date = dt.datetime(fact_date.year,
-                                                  fact_date.month,
-                                                  fact_date.day,
-                                                  8)
+                start_date = dt.datetime(fact_date.year, fact_date.month,
+                                         fact_date.day, 8)
 
         start_date = start_date or dt.datetime.now()
-        if not end_date:
-            if start_date.date() == dt.date.today():
-                end_date = dt.datetime.now()
-            else:
-                end_date = end_date or start_date + dt.timedelta(minutes = 30)
+        end_date = end_date or start_date + dt.timedelta(minutes = 30)
+
+        self.set_dropdown()
+        self.refresh_menu()
 
         self.dayline = Dayline()
         self.dayline.on_time_changed = self.update_time
