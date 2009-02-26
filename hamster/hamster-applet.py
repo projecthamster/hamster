@@ -83,7 +83,6 @@ OPTIONS:
                    Use "stats" for overview window, "edit" to add new activity
                    and "prefs" to launch preferences
     """)
-    sys.exit()
 
 if __name__ == "__main__":
     standalone = False
@@ -91,14 +90,18 @@ if __name__ == "__main__":
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "ws:", ["window", "start="])
-    except getopt.GetoptError:
-        usage() 
 
-    for opt, args in opts:
-        if opt in ("-w", "--window"):
-            standalone = True
-        elif opt in ("-s", "--start"):
-            start_window = args
+        for opt, args in opts:
+            if opt in ("-w", "--window"):
+                standalone = True
+            elif opt in ("-s", "--start"):
+                start_window = args
+                
+            
+    except getopt.GetoptError:
+        usage()
+        print "Starting nevertheless, because applet dies otherwise (TODO)"
+
 
     gtk.window_set_default_icon_name("hamster-applet")
 
