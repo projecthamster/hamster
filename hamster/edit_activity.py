@@ -95,10 +95,10 @@ class Dayline(gtk.DrawingArea):
         
         if round(self.highlight_start) <= 0:
 
-            self.range_start = self.range_start - dt.timedelta(minutes=30)
+            self.range_start = self.range_start - dt.timedelta(minutes=15)
             scrolled = True
         if self.highlight_end >= self.width:
-            self.range_start = self.range_start + dt.timedelta(minutes=30)
+            self.range_start = self.range_start + dt.timedelta(minutes=15)
             scrolled = True
 
         if scrolled:
@@ -206,7 +206,7 @@ class Dayline(gtk.DrawingArea):
         """Draw chart with given data"""
         self.facts = day_facts
         
-        self.range_start = stuff.zero_hour(highlight[0]) - dt.timedelta(hours=4)
+        self.range_start = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
         
         self.highlight = highlight
         self.show()
@@ -257,11 +257,11 @@ class Dayline(gtk.DrawingArea):
         context.set_line_width(1)
 
         #we will buffer 4 hours to both sides so partial labels also appear
-        range_end = self.range_start + dt.timedelta(hours = 24 + 2*4)
+        range_end = self.range_start + dt.timedelta(hours = 12 + 2*4)
 
         minutes = self._minutes_from_start(range_end)
 
-        self.minute_pixel = self.width / float(24 * 60)
+        self.minute_pixel = self.width / float(12 * 60)
         minute_pixel = self.minute_pixel
 
         self.graph_x = -minute_pixel * 4 * 60
@@ -285,19 +285,22 @@ class Dayline(gtk.DrawingArea):
         context.set_source_rgb(0, 0, 0)
         for i in range(minutes):
             label_time = (self.range_start + dt.timedelta(minutes=i))
-            if label_time.minute == 0 and label_time.hour % 4 == 0:
+            if label_time.minute == 0 and label_time.hour % 2 == 0:
                 if label_time.hour == 0:
                     context.set_source_rgb(0.8, 0.8, 0.8)
                     context.move_to(self.graph_x + minute_pixel * i, 0)
                     context.line_to(self.graph_x + minute_pixel * i, graph_height)
-                    context.move_to(self.graph_x + minute_pixel * i, graph_height + 2)                
                     label_minutes = label_time.strftime("%b %d.")
                 else:
-                    context.move_to(self.graph_x + minute_pixel * i, graph_height + 2)                
                     label_minutes = label_time.strftime("%H:%M")
 
                 context.set_source_rgb(0, 0, 0)
                 self.layout.set_text(label_minutes)
+                label_w, label_h = self.layout.get_pixel_size()
+                
+                context.move_to(self.graph_x + minute_pixel * i - label_w/2,
+                                graph_height + 2)                
+
                 context.show_layout(self.layout)
         context.stroke()
         
@@ -877,7 +880,11 @@ class CustomFactController:
         if start_time:
             self.draw_preview(start_time.date(), [start_time, end_time])
 
-
+        if (end_time < start_time or (end_time - start_time).days > 0):
+            end_time = start_time + dt.timedelta(minutes = 30)
+            self.update_time(start_time, end_time)
+            self.validate_fields()
+            return
         
         looks_good = False
         if activity_text != "" and start_time and end_time and \
