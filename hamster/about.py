@@ -37,17 +37,20 @@ gtk.about_dialog_set_url_hook(on_url)
 def show_about(parent):
     about = gtk.AboutDialog()
     infos = {
-        "name" : _("Time Tracker"),
+        "program-name" : _("Time Tracker"),
+        "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
         "version" : VERSION,
         "comments" : _("Project Hamster - track your time"),
-        "copyright" : _(u"Copyright © 2007-2008 Toms Baugis and others"),
+        "copyright" : _(u"Copyright © 2007-2009 Toms Bauģis and others"),
         "website" : "http://live.gnome.org/ProjectHamster",
-        "website-label" : _("Hamster Website"),
+        "website-label" : _("Project Hamster Website"),
+        "title": _("About Time Tracker"),
+        "wrap-license": True
     }
     
-    about.set_authors(["Toms Baugis <toms.baugis@gmail.com>",
+    about.set_authors(["Toms Bauģis <toms.baugis@gmail.com>",
                        "Patryk Zawadzki <patrys@pld-linux.org>",
-                       "Peteris Caune <cuu508@gmail.com>",
+                       "Pēteris Caune <cuu508@gmail.com>",
                        "Juanje Ojeda <jojeda@emergya.es>"])
     about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
     
