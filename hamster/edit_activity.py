@@ -362,8 +362,8 @@ class CustomFactController:
             buf.set_text(fact["description"] or "")
             self.get_widget('description').set_buffer(buf)
 
-            if not fact["end_time"] and fact["start_time"].date() == dt.datetime.today():
-                self.get_widget("in_progress").set_active(True)
+            if not end_date and fact["start_time"].date() == dt.date.today():
+                end_date = dt.datetime.now()
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
