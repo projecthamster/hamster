@@ -312,7 +312,8 @@ class Dayline(gtk.DrawingArea):
             if fact["end_time"]:
                 end_minutes = self._minutes_from_start(fact["end_time"])
             else:
-                end_minutes = start_minutes
+                if fact["start_time"].date() == dt.date.today():
+                    end_minutes = self._minutes_from_start(dt.datetime.now())
             
             if (self.graph_x + end_minutes * minute_pixel) > 0 and \
                 (self.graph_x + start_minutes * minute_pixel) < self.width:
