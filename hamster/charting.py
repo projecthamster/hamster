@@ -120,8 +120,7 @@ class Integrator(object):
         if there is any action needed. returns velocity, which is synonym from
         delta. Use it to determine when animation is done (experiment to find
         value that fits you!"""
-        if self.targeting:
-          self.force += self.attraction * (self.target_value - self.current_value)
+        self.force += self.attraction * (self.target_value - self.current_value)
     
         self.accel = self.force / self.mass
         self.vel = (self.vel + self.accel) * self.damping
