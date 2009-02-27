@@ -51,6 +51,8 @@ import cairo, pango
 import copy
 import math
 from sys import maxint
+import datetime as dt
+import time
 
 # Tango colors
 light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
@@ -81,34 +83,62 @@ def set_color_gdk(context, color):
     
 class Integrator(object):
     """an iterator, inspired by "visualizing data" book to simplify animation"""
-    def __init__(self, start_value, frames = 50):
-        """precision determines, until which decimal number we go"""
-        self.value = start_value
+    def __init__(self, start_value, damping = 0.5, attraction = 0.2):
+        #if we got datetime, convert it to unix time, so we operate with numbers again
+        self.current_value = start_value
+        if type(start_value) == dt.datetime:
+            self.current_value = int(time.mktime(start_value.timetuple()))
+            
+        self.value_type = type(start_value)
+
         self.target_value = start_value
-        self.frames = float(frames)
         self.current_frame = 0
+
+        self.targeting = False
+        self.vel, self.accel, self.force = 0, 0, 0
+        self.mass = 1
+        self.damping = damping
+        self.attraction = attraction
+
+
         
     def __repr__(self):
-        return "<Integrator %s, %s>" % (self.value, self.target_value)
+        current, target = self.current_value, self.target_value
+        if self.value_type == dt.datetime:
+            current = dt.datetime.fromtimestamp(current)
+            target = dt.datetime.fromtimestamp(target)
+        return "<Integrator %s, %s>" % (current, target)
         
     def target(self, value):
         """target next value"""
-        self.current_frame = 0
         self.target_value = value
+        if type(value) == dt.datetime:
+            self.target_value = int(time.mktime(value.timetuple()))
         
     def update(self):
         """goes from current to target value
-        if there is any action needed. returns false when done"""
-        moving = self.current_frame < self.frames
-        if moving:
-            self.current_frame +=1
-            v = self.current_frame / self.frames
-            self.value = (self.target_value * v) + (self.value * (1-v))
-        return moving and (round(self.value, 4) - round(self.target_value, 4) != 0)
+        if there is any action needed. returns velocity, which is synonym from
+        delta. Use it to determine when animation is done (experiment to find
+        value that fits you!"""
+        if self.targeting:
+          self.force += self.attraction * (self.target_value - self.current_value)
+    
+        self.accel = self.force / self.mass
+        self.vel = (self.vel + self.accel) * self.damping
+        self.current_value += self.vel    
+        self.force = 0
+        return abs(self.vel)
 
     def finish(self):
-        self.current_frame = 0.0
-        self.value = self.target_value
+        self.current_value = self.target_value
+    
+    @property
+    def value(self):
+        if self.value_type == dt.datetime:
+            return dt.datetime.fromtimestamp(self.current_value)
+        else:
+            return self.current_value
+        
 
 
 def size_list(set, target_set):
@@ -257,7 +287,7 @@ class Chart(gtk.DrawingArea):
                 if isinstance(integrators[z], list):
                     still_moving = update_all(integrators[z]) or still_moving
                 else:
-                    still_moving = integrators[z].update() or still_moving
+                    still_moving = integrators[z].update() > 0.0001 or still_moving
             return still_moving
 
         self.moving = update_all(self.integrators)
