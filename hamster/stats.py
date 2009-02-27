@@ -40,8 +40,8 @@ class StatsViewer(object):
         self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
         self.window = self.get_widget('stats_window')
 
-        #id, caption, duration, date (invisible), description
-        self.fact_store = gtk.TreeStore(int, str, str, str, str) 
+        #id, caption, duration, date (invisible), description, category
+        self.fact_store = gtk.TreeStore(int, str, str, str, str, str) 
         self.setup_tree()
         
         graph_frame = self.get_widget("graph_frame")
@@ -146,13 +146,11 @@ class StatsViewer(object):
             else:
                 activity_name = stuff.escape_pango(cell_text)
                 description = stuff.escape_pango(model.get_value(iter, 4))
-        
-                text = "   %s" % activity_name
-                if description:
-                    text+= """\n             <span style="italic" size="small">%s</span>""" % (description)
-                    
-                cell.set_property('markup', text)
-    
+                category = stuff.escape_pango(model.get_value(iter, 5))
+
+                markup = stuff.format_activity(activity_name, category, description, pad_description = True)            
+                cell.set_property('markup', markup)
+
         def duration_painter(column, cell, model, iter):
             text = model.get_value(iter, 2)
             if model.iter_parent(iter) == None:
@@ -162,6 +160,9 @@ class StatsViewer(object):
                     text = '<span weight="heavy" rise="-20000">%s</span>' % text
             cell.set_property('markup', text)
     
+
+        self.insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE].to_string()
+
 
         self.fact_tree = self.get_widget("facts")
         self.fact_tree.set_headers_visible(False)
@@ -224,7 +225,7 @@ class StatsViewer(object):
                                                     fact_date,
                                                     "",
                                                     current_date.strftime('%Y-%m-%d'),
-                                                    ""])
+                                                    "", ""])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
 
                 
@@ -243,7 +244,8 @@ class StatsViewer(object):
                                     fact["name"],
                                     stuff.format_duration(duration),
                                     fact["start_time"].strftime('%Y-%m-%d'),
-                                    fact["description"]
+                                    fact["description"],
+                                    fact["category"]
                                     ])
 
             if duration:

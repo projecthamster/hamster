@@ -50,6 +50,8 @@ from hamster.preferences import PreferencesEditor
 
 import idle
 
+import pango
+
 try:
     import pynotify
     PYNOTIFY = True
@@ -127,7 +129,6 @@ class PanelButton(gtk.ToggleButton):
                           popup_dir in [gnomeapplet.ORIENT_RIGHT]
 
 
-        import pango
         context = self.label.get_pango_context()
         metrics = context.get_metrics(self.label.style.font_desc,
                                       pango.Context.get_language(context))
@@ -283,7 +284,7 @@ class HamsterApplet(object):
         
         self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
 
-        nameColumn = stuff.ActivityColumn(name=1, description=5)
+        nameColumn = stuff.ActivityColumn(name=1, description=5, category=6)
         self.treeview.append_column(nameColumn)
 
         
@@ -314,6 +315,7 @@ class HamsterApplet(object):
         activity_cell = gtk.CellRendererText()
         self.activity_list.pack_start(activity_cell, True)
         self.activity_list.add_attribute(activity_cell, 'text', 0)
+
         category_cell = stuff.CategoryCell()  
         self.activity_list.pack_start(category_cell, False)
         self.activity_list.add_attribute(category_cell, 'text', 1)

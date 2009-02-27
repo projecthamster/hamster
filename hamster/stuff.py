@@ -60,24 +60,37 @@ class CategoryCell(gtk.CellRendererText):
         self.set_property('yalign', 0.0)
 
 
+insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE].to_string()
+def format_activity(name, category, description, pad_description = False):
+    "returns pango markup for activity with category and description"
+    text = name    
+    if category:
+        text += """ - <span color="%s" size="x-small">%s</span>""" % (insensitive_color, category)
+
+    if description:
+        text+= "\n"
+        if pad_description:
+            text += "          "
+
+        text += """<span style="italic" size="small">%s</span>""" % description
+        
+    return text
+    
 
 class ActivityColumn(gtk.TreeViewColumn):
     def activity_painter(self, column, cell, model, iter):
         activity_name = model.get_value(iter, self.name)
         description = model.get_value(iter, self.description)
-        text = activity_name
-
-        if description:
-            text+= """\n<span style="italic" size="small">%s</span>""" % (description)
-            
-        cell.set_property('markup', text)
-            
+        category = model.get_value(iter, self.category)
+        
+        markup = format_activity(activity_name, category, description)            
+        cell.set_property('markup', markup)
         return
         
-    def __init__(self, name, description):
+    def __init__(self, name, description, category = None):
         gtk.TreeViewColumn.__init__(self)
         
-        self.name, self.description = name, description
+        self.name, self.description, self.category = name, description, category
         self.set_expand(True)
         cell = gtk.CellRendererText()
         self.pack_start(cell, True)
@@ -150,8 +163,8 @@ class DayStore(object):
     def __init__(self, date = None):
         date = date or dt.date.today()
         
-        # ID, Time, Name, Duration, Date, Description
-        self.fact_store = gtk.ListStore(int, str, str, str, str, str)
+        # ID, Time, Name, Duration, Date, Description, Category
+        self.fact_store = gtk.ListStore(int, str, str, str, str, str, str)
         
         self.facts = storage.get_facts(date)
         
@@ -177,5 +190,6 @@ class DayStore(object):
                                     fact["start_time"].strftime("%H:%M"), 
                                     current_duration,
                                     fact["start_time"].strftime("%Y%m%d"),
-                                    escape_pango(fact["description"])])
+                                    escape_pango(fact["description"]),
+                                    escape_pango(fact["category"])])
 
