@@ -607,7 +607,8 @@ class Storage(hamster.storage.Storage):
         con = self.connection
         cur = con.cursor()
 
-        print query, params
+        if hamster.trace_sql:
+            print query, params
 
         if params:
             cur.execute(query, params)
@@ -630,7 +631,9 @@ class Storage(hamster.storage.Storage):
         con = self.connection
         cur = con.cursor()
 
-        print statement, params
+        if hamster.trace_sql:
+            print statement, params
+
         res = cur.execute(statement, params)
 
         con.commit()

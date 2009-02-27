@@ -78,6 +78,7 @@ if not exists(HAMSTER_DB):
 
 dispatcher = Dispatcher()
 storage = None
+trace_sql = False
     
 # Path to images, icons
 ART_DATA_DIR = join(SHARED_DATA_DIR, "art")

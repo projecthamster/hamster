@@ -89,13 +89,15 @@ if __name__ == "__main__":
     start_window = None
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ws:", ["window", "start="])
+        opts, args = getopt.getopt(sys.argv[1:], "ws:t", ["window", "start=", "trace-sql"])
 
         for opt, args in opts:
             if opt in ("-w", "--window"):
                 standalone = True
             elif opt in ("-s", "--start"):
                 start_window = args
+            elif opt in ("-t", "--trace-sql"):
+                hamster.trace_sql = True
                 
             
     except getopt.GetoptError:
