@@ -111,6 +111,7 @@ class Integrator(object):
         
     def target(self, value):
         """target next value"""
+        self.targeting = True
         self.target_value = value
         if type(value) == dt.datetime:
             self.target_value = int(time.mktime(value.timetuple()))
@@ -120,8 +121,10 @@ class Integrator(object):
         if there is any action needed. returns velocity, which is synonym from
         delta. Use it to determine when animation is done (experiment to find
         value that fits you!"""
-        self.force += self.attraction * (self.target_value - self.current_value)
-    
+
+        if self.targeting:
+            self.force += self.attraction * (self.target_value - self.current_value)
+
         self.accel = self.force / self.mass
         self.vel = (self.vel + self.accel) * self.damping
         self.current_value += self.vel    
