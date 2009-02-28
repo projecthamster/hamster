@@ -365,8 +365,11 @@ class CustomFactController:
         start_date, end_date = None, None
         if fact_id:
             fact = storage.get_fact(fact_id)
-            print fact
-            self.get_widget('activity_text').set_text(fact["name"])
+
+            label = fact['name']
+            if fact['category'] != _("Unsorted"):
+                label += "@%s" %  fact['category']
+            self.get_widget('activity_text').set_text(label)
             
             start_date = fact["start_time"]
             end_date = fact["end_time"]
@@ -555,7 +558,9 @@ class CustomFactController:
         self.activities.clear()
         all_activities = storage.get_autocomplete_activities()
         for activity in all_activities:
-            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            activity_category = activity['name']
+            if activity['category']:
+                activity_category += "@%s" % activity['category']
             self.activities.append([activity['name'],
                                     activity['category'],
                                     activity_category])
@@ -569,7 +574,9 @@ class CustomFactController:
         categorized_activities = storage.get_sorted_activities()
 
         for activity in categorized_activities:
-            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            activity_category = activity['name']
+            if activity['category']:
+                activity_category += "@%s" % activity['category']
             item = store.append([activity['name'],
                                  activity['category'],
                                  activity_category])

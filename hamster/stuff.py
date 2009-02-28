@@ -64,7 +64,7 @@ insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE].to_string()
 def format_activity(name, category, description, pad_description = False):
     "returns pango markup for activity with category and description"
     text = name    
-    if category:
+    if category and category != _("Unsorted"):
         text += """ - <span color="%s" size="x-small">%s</span>""" % (insensitive_color, category)
 
     if description:

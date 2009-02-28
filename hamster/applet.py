@@ -465,7 +465,10 @@ class HamsterApplet(object):
         self.activities.clear()
         all_activities = storage.get_autocomplete_activities()
         for activity in all_activities:
-            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            activity_category = activity['name']
+            if activity['category']:
+                activity_category += "@%s" % activity['category']
+                
             self.activities.append([activity['name'],
                                     activity['category'],
                                     activity_category])
@@ -479,7 +482,10 @@ class HamsterApplet(object):
         categorized_activities = storage.get_sorted_activities()
 
         for activity in categorized_activities:
-            activity_category = "%s@%s" % (activity['name'], activity['category'])
+            activity_category = activity['name']
+            if activity['category']:
+                activity_category += "@%s" % activity['category']
+
             item = store.append([activity['name'],
                                  activity['category'],
                                  activity_category])
@@ -525,9 +531,6 @@ class HamsterApplet(object):
         self.load_day() # reload day each time before showing to avoid outdated last activity
         self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
 
-        if self.last_activity: #reset value of current_activity input, maybe we have some leftovers there
-            self.glade.get_widget('current_activity').set_text(self.last_activity['name'])        
-
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
         
@@ -545,8 +548,13 @@ class HamsterApplet(object):
 
         self.window.move(x, y)
 
+
         if self.last_activity and self.last_activity["end_time"] == None:
-            self.activity_list.child.set_text(self.last_activity["name"])
+            label = self.last_activity['name']
+            if self.last_activity['category'] != _("Unsorted"):
+                label += "@%s" %  self.last_activity['category']
+            self.activity_list.child.set_text(label)
+
             self.activity_list.child.select_region(0, -1)
         else:
             self.activity_list.child.set_text('')
