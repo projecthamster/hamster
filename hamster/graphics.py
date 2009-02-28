@@ -1,0 +1,116 @@
+import time, datetime as dt
+import gtk
+
+import pango, cairo
+
+class Area(gtk.DrawingArea):
+    """Abstraction on top of DrawingArea to work specifically with cairo"""
+    def __init__(self):
+        gtk.DrawingArea.__init__(self)
+        self.context = None
+        self.layout = None
+        self.connect("expose_event", self._on_expose)
+        self.width = None
+        self.height = None
+
+    def redraw_canvas(self):
+        """Force graph redraw"""
+        if self.window:    #this can get called before expose
+            alloc = self.get_allocation()
+            self.queue_draw_area(alloc.x, alloc.y, alloc.width, alloc.height)
+            self.window.process_updates(True)
+
+
+    def _on_expose(self, widget, event):
+        """expose is when drawing's going on, like on _invalidate"""
+        self.context = widget.window.cairo_create()
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+        self.context.rectangle(event.area.x, event.area.y,
+                               event.area.width, event.area.height)
+        self.context.clip()
+
+        self.layout = self.context.create_layout()
+        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font.set_size(8 * pango.SCALE)
+        self.layout.set_font_description(default_font)
+        
+
+        alloc = self.get_allocation()  #x, y, width, height
+        self.width, self.height = alloc.width, alloc.height
+
+    def fill_area(self, x, y, w, h, color):
+        if color[0] > 1: color = [c / 256.0 for c in color]
+
+        self.context.set_source_rgb(*color)
+        self.context.rectangle(x, y, w, h)
+        self.context.fill()
+
+    def longest_label(self, labels):
+        """returns width of the longest label"""
+        max_extent = 0
+        for label in labels:
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
+            max_extent = max(label_w + 5, max_extent)
+        
+        return max_extent
+        
+
+class Integrator(object):
+    """an iterator, inspired by "visualizing data" book to simplify animation"""
+    def __init__(self, start_value, damping = 0.5, attraction = 0.2):
+        #if we got datetime, convert it to unix time, so we operate with numbers again
+        self.current_value = start_value
+        if type(start_value) == dt.datetime:
+            self.current_value = int(time.mktime(start_value.timetuple()))
+            
+        self.value_type = type(start_value)
+
+        self.target_value = start_value
+        self.current_frame = 0
+
+        self.targeting = False
+        self.vel, self.accel, self.force = 0, 0, 0
+        self.mass = 1
+        self.damping = damping
+        self.attraction = attraction
+
+    def __repr__(self):
+        current, target = self.current_value, self.target_value
+        if self.value_type == dt.datetime:
+            current = dt.datetime.fromtimestamp(current)
+            target = dt.datetime.fromtimestamp(target)
+        return "<Integrator %s, %s>" % (current, target)
+        
+    def target(self, value):
+        """target next value"""
+        self.targeting = True
+        self.target_value = value
+        if type(value) == dt.datetime:
+            self.target_value = int(time.mktime(value.timetuple()))
+        
+    def update(self):
+        """goes from current to target value
+        if there is any action needed. returns velocity, which is synonym from
+        delta. Use it to determine when animation is done (experiment to find
+        value that fits you!"""
+
+        if self.targeting:
+            self.force += self.attraction * (self.target_value - self.current_value)
+
+        self.accel = self.force / self.mass
+        self.vel = (self.vel + self.accel) * self.damping
+        self.current_value += self.vel    
+        self.force = 0
+        return abs(self.vel)
+
+    def finish(self):
+        self.current_value = self.target_value
+    
+    @property
+    def value(self):
+        if self.value_type == dt.datetime:
+            return dt.datetime.fromtimestamp(self.current_value)
+        else:
+            return self.current_value
+ 

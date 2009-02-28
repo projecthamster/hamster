@@ -53,6 +53,7 @@ import math
 from sys import maxint
 import datetime as dt
 import time
+from hamster import graphics
 
 # Tango colors
 light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
@@ -81,68 +82,6 @@ def set_color_gdk(context, color):
     r,g,b = color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0
     context.set_source_rgb(r, g, b)
     
-class Integrator(object):
-    """an iterator, inspired by "visualizing data" book to simplify animation"""
-    def __init__(self, start_value, damping = 0.5, attraction = 0.2):
-        #if we got datetime, convert it to unix time, so we operate with numbers again
-        self.current_value = start_value
-        if type(start_value) == dt.datetime:
-            self.current_value = int(time.mktime(start_value.timetuple()))
-            
-        self.value_type = type(start_value)
-
-        self.target_value = start_value
-        self.current_frame = 0
-
-        self.targeting = False
-        self.vel, self.accel, self.force = 0, 0, 0
-        self.mass = 1
-        self.damping = damping
-        self.attraction = attraction
-
-
-        
-    def __repr__(self):
-        current, target = self.current_value, self.target_value
-        if self.value_type == dt.datetime:
-            current = dt.datetime.fromtimestamp(current)
-            target = dt.datetime.fromtimestamp(target)
-        return "<Integrator %s, %s>" % (current, target)
-        
-    def target(self, value):
-        """target next value"""
-        self.targeting = True
-        self.target_value = value
-        if type(value) == dt.datetime:
-            self.target_value = int(time.mktime(value.timetuple()))
-        
-    def update(self):
-        """goes from current to target value
-        if there is any action needed. returns velocity, which is synonym from
-        delta. Use it to determine when animation is done (experiment to find
-        value that fits you!"""
-
-        if self.targeting:
-            self.force += self.attraction * (self.target_value - self.current_value)
-
-        self.accel = self.force / self.mass
-        self.vel = (self.vel + self.accel) * self.damping
-        self.current_value += self.vel    
-        self.force = 0
-        return abs(self.vel)
-
-    def finish(self):
-        self.current_value = self.target_value
-    
-    @property
-    def value(self):
-        if self.value_type == dt.datetime:
-            return dt.datetime.fromtimestamp(self.current_value)
-        else:
-            return self.current_value
-        
-
-
 def size_list(set, target_set):
     """turns set lenghts into target set - trim it, stretches it, but
        keeps values for cases when lengths match
@@ -174,7 +113,7 @@ def get_limits(set, stack_subfactors = True):
     return min_value, max_value
     
 
-class Chart(gtk.DrawingArea):
+class Chart(graphics.Area):
     """Chart constructor. Optional arguments:
         self.max_bar_width     = pixels. Maximal width of bar. If not specified,
                                  bars will stretch to fill whole area
@@ -205,9 +144,7 @@ class Chart(gtk.DrawingArea):
                                  show them at right end of graph.
     """
     def __init__(self, **args):
-        gtk.DrawingArea.__init__(self)
-        self.context = None
-        self.layout = None
+        graphics.Area.__init__(self)
         self.connect("expose_event", self._expose)
 
         self.max_bar_width     = args.get("max_bar_width", 0)
@@ -235,6 +172,26 @@ class Chart(gtk.DrawingArea):
         self.moving = False
 
 
+    def draw_bar(self, x, y, w, h, color = None):
+        """ draws a simple bar"""
+        context = self.context
+        
+        base_color = color or self.bar_base_color or (220, 220, 220)
+
+        if self.bars_beveled:
+            self.fill_area(x, y, w, h,
+                            [b - 30 for b in base_color])
+
+            if w > 2 and h > 2:
+                self.fill_area(x + 1, y + 1, w - 2, h - 2,
+                                [b + 20 for b in base_color])
+    
+            if w > 3 and h > 3:
+                self.fill_area(x + 2, y + 2, w - 4, h - 4, base_color)
+        else:
+            self.fill_area(x, y, w, h, base_color)
+
+
     def plot(self, keys, data, stack_keys = None):
         """Draw chart with given data"""
         self.keys, self.data, self.stack_keys = keys, data, stack_keys
@@ -242,14 +199,14 @@ class Chart(gtk.DrawingArea):
         self.show()
 
         if not data: #if there is no data, let's just draw blank
-            self._invalidate()
+            self.redraw_canvas()
             return
 
 
         min, self.max_value = get_limits(data)
 
         if not self.current_max:
-            self.current_max = Integrator(0)
+            self.current_max = graphics.Integrator(0)
         self.current_max.target(self.max_value)
         
         self._update_targets()
@@ -268,7 +225,7 @@ class Chart(gtk.DrawingArea):
             finish_all(self.integrators)
 
 
-            self._invalidate()
+            self.redraw_canvas()
 
 
     def _interpolate(self):
@@ -276,7 +233,7 @@ class Chart(gtk.DrawingArea):
            new one, and redraw graph"""
         #this can get called before expose    
         if not self.window:
-            self._invalidate()
+            self.redraw_canvas()
             return False
 
         #ok, now we are good!
@@ -294,38 +251,12 @@ class Chart(gtk.DrawingArea):
 
         self.moving = update_all(self.integrators)
 
-        self._invalidate()
+        self.redraw_canvas()
         
         return self.moving #return if there is still work to do
 
-
-    def _invalidate(self):
-        """Force graph redraw"""
-        if self.window:    #this can get called before expose    
-            alloc = self.get_allocation()
-            rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)
-
-
     def _expose(self, widget, event):
-        """expose is when drawing's going on, like on _invalidate"""
-        self.context = widget.window.cairo_create()
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
-
-        self.context.rectangle(event.area.x, event.area.y,
-                               event.area.width, event.area.height)
-        self.context.clip()
-
-        self.layout = self.context.create_layout()
-        
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(8 * pango.SCALE)
-        self.layout.set_font_description(default_font)
-        
-        alloc = self.get_allocation()  #x, y, width, height
-        self.width, self.height = alloc[2], alloc[3]
-
+        """expose is when drawing's going on, like on invalidate"""
         # fill whole area 
         if self.background:
             self.context.rectangle(0, 0, self.width, self.height)
@@ -351,8 +282,8 @@ class Chart(gtk.DrawingArea):
                 if type(new_values[i]) == list:
                     integrators[i] = retarget(integrators[i], new_values[i])
                 else:
-                    if isinstance(integrators[i], Integrator) == False:
-                        integrators[i] = Integrator(0)
+                    if isinstance(integrators[i], graphics.Integrator) == False:
+                        integrators[i] = graphics.Integrator(0)
 
                     integrators[i].target(new_values[i] / max_value)
             
@@ -360,40 +291,6 @@ class Chart(gtk.DrawingArea):
     
         retarget(self.integrators, self.data)
     
-    def _fill_area(self, x, y, w, h, color):
-        self.context.rectangle(x, y, w, h)
-        self.context.set_source_rgb(*[c / 256.0 for c in color])
-        self.context.fill()
-
-    def _draw_bar(self, x, y, w, h, color = None):
-        """ draws a nice bar"""
-        context = self.context
-        
-        base_color = color or self.bar_base_color or (220, 220, 220)
-
-        if self.bars_beveled:
-            self._fill_area(x, y, w, h,
-                            [b - 30 for b in base_color])
-
-            if w > 2 and h > 2:
-                self._fill_area(x + 1, y + 1, w - 2, h - 2,
-                                [b + 20 for b in base_color])
-    
-            if w > 3 and h > 3:
-                self._fill_area(x + 2, y + 2, w - 4, h - 4, base_color)
-        else:
-            self._fill_area(x, y, w, h, base_color)
-
-
-    def _longest_label(self, labels):
-        max_extent = 0
-        for label in labels:
-            self.layout.set_text(label)
-            label_w, label_h = self.layout.get_pixel_size()
-            max_extent = max(label_w + 5, max_extent)
-        
-        return max_extent
-
     def draw(self):
         print "OMG OMG, not implemented!!!"
 
@@ -403,7 +300,7 @@ class BarChart(Chart):
         # graph box dimensions
 
         if self.show_stack_labels:
-            legend_width = self.legend_width or self._longest_label(self.keys)
+            legend_width = self.legend_width or self.longest_label(self.keys)
         elif self.show_scale:
             if self.grid_stride < 1:
                 grid_stride = int(self.max_value * self.grid_stride)
@@ -412,7 +309,7 @@ class BarChart(Chart):
 
             scale_labels = [self.value_format % i
                   for i in range(grid_stride, int(self.max_value), grid_stride)]
-            legend_width = self.legend_width or self._longest_label(scale_labels)
+            legend_width = self.legend_width or self.longest_label(scale_labels)
         else:
             legend_width = self.legend_width
 
@@ -434,7 +331,7 @@ class BarChart(Chart):
         self.context.set_line_width(1)
         
         if self.chart_background:
-            self._fill_area(graph_x - 1, graph_y, graph_width, graph_height,
+            self.fill_area(graph_x - 1, graph_y, graph_width, graph_height,
                             self.chart_background)
 
 
@@ -493,11 +390,11 @@ class BarChart(Chart):
                     bar_size = max_bar_size * factor
                     bar_start += bar_size
                     
-                    self._draw_bar(bar_x,
-                                   graph_height - bar_start,
-                                   self.bar_width - (gap * 2),
-                                   bar_size,
-                                   [col - (j * 22) for col in base_color])
+                    self.draw_bar(bar_x,
+                                  graph_height - bar_start,
+                                  self.bar_width - (gap * 2),
+                                  bar_size,
+                                  [col - (j * 22) for col in base_color])
 
 
         #flip the matrix back, so text doesn't come upside down
@@ -599,7 +496,7 @@ class HorizontalBarChart(Chart):
         rowcount, keys = len(self.keys), self.keys
         
         #push graph to the right, so it doesn't overlap, and add little padding aswell
-        legend_width = self.legend_width or self._longest_label(keys)
+        legend_width = self.legend_width or self.longest_label(keys)
 
         graph_x = legend_width
         graph_x += 8 #add another 8 pixes of padding
@@ -609,7 +506,7 @@ class HorizontalBarChart(Chart):
 
 
         if self.chart_background:
-            self._fill_area(graph_x, graph_y, graph_width, graph_height, self.chart_background)
+            self.fill_area(graph_x, graph_y, graph_width, graph_height, self.chart_background)
         
         """
         # stripes for the case i decided that they are not annoying
@@ -685,11 +582,11 @@ class HorizontalBarChart(Chart):
                     bar_size = max_bar_size * factor
                     bar_height = bar_width - (gap * 2)
                     
-                    self._draw_bar(graph_x + bar_start,
-                                   bar_y,
-                                   bar_size,
-                                   bar_height,
-                                   [col - (j * 22) for col in base_color])
+                    self.draw_bar(graph_x + bar_start,
+                                  bar_y,
+                                  bar_size,
+                                  bar_height,
+                                  [col - (j * 22) for col in base_color])
     
                     bar_start += bar_size
 

@@ -3,23 +3,23 @@ import sys, os.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import unittest
-from hamster import charting
+from hamster import graphics
 
 class TestIteratorFunctions(unittest.TestCase):
     def test_target_bigger(self):
-        integrator = charting.Integrator(0, 0)
+        integrator = graphics.Integrator(0, 0)
         integrator.target(10)
         integrator.update()
         assert 0 < integrator.value < 10, "not going up as expected %f" \
                                                               % integrator.value
     def test_target_lesser(self):
-        integrator = charting.Integrator(0, 0)
+        integrator = graphics.Integrator(0, 0)
         integrator.target(-10)
         integrator.update()
         assert -10 < integrator.value < 0, "not going down as expected %f" \
                                                               % integrator.value
     def test_reaches_target(self):
-        integrator = charting.Integrator(0, 0)
+        integrator = graphics.Integrator(0, 0)
         integrator.target(10)
         
         while integrator.update():

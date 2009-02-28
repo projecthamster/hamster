@@ -27,7 +27,7 @@ import gobject
 import re
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster import charting
+from hamster import graphics
 import hamster.eds
 
 import time
@@ -43,12 +43,10 @@ import cairo, pango
 """ TODO:
      * hook into notifications and refresh our days if some evil neighbour edit
        fact window has dared to edit facts
-     * sort out animation (move stuff from charting.py and this place into
-       some hamster.Area!
 """
-class Dayline(gtk.DrawingArea):
-    def __init__(self, **args):
-        gtk.DrawingArea.__init__(self)
+class Dayline(graphics.Area):
+    def __init__(self):
+        graphics.Area.__init__(self)
         self.context = None
         self.layout = None
         self.connect("expose_event", self._expose)
@@ -116,7 +114,7 @@ class Dayline(gtk.DrawingArea):
                 self.days.append(date_plus)
         
         
-        self._invalidate()
+        self.redraw_canvas()
         if moving:
             return True
         else:
@@ -185,7 +183,7 @@ class Dayline(gtk.DrawingArea):
                 if end - start > 1:
                     self.highlight_start = start
                     self.highlight_end = end
-                    self._invalidate()
+                    self.redraw_canvas()
 
                 if self.move_type == "scale_drag":
                     self.range_start.target(self.drag_start_time + dt.timedelta(minutes = ((self.drag_start - x) / self.minute_pixel)))
@@ -211,45 +209,17 @@ class Dayline(gtk.DrawingArea):
         
         start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
         
-        self.range_start = charting.Integrator(start_time, damping = 0.5, attraction = 0.7)
+        self.range_start = graphics.Integrator(start_time, damping = 0.5, attraction = 0.7)
 
         self.highlight = highlight
         
         self.show()
         
-        self._invalidate()
-
-
-
-    def _invalidate(self):
-        """Force graph redraw"""
-        if self.window:    #this can get called before expose    
-            alloc = self.get_allocation()
-            rect = gtk.gdk.Rectangle(alloc.x, alloc.y, alloc.width, alloc.height)
-            self.window.invalidate_rect(rect, True)
-            self.window.process_updates(True)            
+        self.redraw_canvas()
 
 
     def _expose(self, widget, event):
         """expose is when drawing's going on, like on _invalidate"""
-        self.context = widget.window.cairo_create()
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
-
-        self.context.rectangle(event.area.x, event.area.y,
-                               event.area.width, event.area.height)
-        self.context.clip()
-
-        self.layout = self.context.create_layout()
-        font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        font.set_size(8 * pango.SCALE)
-        self.layout.set_font_description(font)
-
-        
-        alloc = self.get_allocation()  #x, y, width, height
-        self.width = alloc.width
-
-
-        self.height = alloc.height
         self._draw(self.context)
         return False
     
@@ -273,14 +243,13 @@ class Dayline(gtk.DrawingArea):
         self.graph_x = -minute_pixel * 4 * 60
 
 
-        graph_y = 1
-        graph_height = self.height - 15
+        graph_y = 4
+        graph_height = self.height - 25
+        graph_y2 = graph_y + graph_height
 
         
         # graph area
-        context.set_source_rgb(1, 1, 1)
-        context.rectangle(0, graph_y - 1, self.width, graph_height)
-        context.fill()
+        self.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
         context.set_source_rgb(0.7, 0.7, 0.7)
         context.rectangle(0, graph_y-1, self.width - 1, graph_height)
         context.stroke()
@@ -294,8 +263,8 @@ class Dayline(gtk.DrawingArea):
             if label_time.minute == 0 and label_time.hour % 2 == 0:
                 if label_time.hour == 0:
                     context.set_source_rgb(0.8, 0.8, 0.8)
-                    context.move_to(self.graph_x + minute_pixel * i, 0)
-                    context.line_to(self.graph_x + minute_pixel * i, graph_height)
+                    context.move_to(self.graph_x + minute_pixel * i, graph_y)
+                    context.line_to(self.graph_x + minute_pixel * i, graph_y2)
                     label_minutes = label_time.strftime("%b %d.")
                 else:
                     label_minutes = label_time.strftime("%H:%M")
@@ -305,7 +274,7 @@ class Dayline(gtk.DrawingArea):
                 label_w, label_h = self.layout.get_pixel_size()
                 
                 context.move_to(self.graph_x + minute_pixel * i - label_w/2,
-                                graph_height + 2)                
+                                graph_y2 + 6)                
 
                 context.show_layout(self.layout)
         context.stroke()
@@ -340,8 +309,8 @@ class Dayline(gtk.DrawingArea):
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
             context.set_source_rgba(rgb[0], rgb[1], rgb[2], 0.5)
 
-            context.rectangle(self.highlight_start, graph_y-1,
-                              self.highlight_end - self.highlight_start, graph_height)
+            context.rectangle(self.highlight_start, graph_y-3,
+                              self.highlight_end - self.highlight_start, graph_height + 4)
             context.fill_preserve()
             context.set_source_rgb(*rgb)
             context.stroke()
