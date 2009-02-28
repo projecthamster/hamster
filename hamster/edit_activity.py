@@ -41,8 +41,6 @@ GLADE_FILE = "edit_activity.glade"
 import cairo, pango
 
 """ TODO:
-     * use integrator for smooth movement of scale
-     * load previos and next days on demand
      * hook into notifications and refresh our days if some evil neighbour edit
        fact window has dared to edit facts
      * sort out animation (move stuff from charting.py and this place into
@@ -66,10 +64,12 @@ class Dayline(gtk.DrawingArea):
         self.highlight_start, self.highlight_end = None, None
         self.drag_start = None
         self.move_type = ""
-        self.on_time_changed = None
+        self.on_time_changed = None #override this with your func to get notified when user changes date
+        self.on_more_data = None #supplement with more data func that accepts single date
         
         self.range_start = None
         self.in_motion = False
+        self.days = []
         
     
     def on_button_release(self, area, event):
@@ -105,6 +105,21 @@ class Dayline(gtk.DrawingArea):
     def animate_scale(self):
 
         moving = self.range_start.update() > 5
+        
+        # check if maybe we are approaching day boundaries and should ask for
+        # more data!
+        if self.on_more_data:
+            now = self.range_start.value
+            date_plus = (now + dt.timedelta(hours = 12 + 2*4 + 1)).date()
+            date_minus = (now - dt.timedelta(hours=1)).date()
+
+            if date_minus != now.date() and date_minus not in self.days:
+                self.facts += self.on_more_data(date_minus)
+                self.days.append(date_minus)
+            elif date_plus != now.date() and date_plus not in self.days:
+                self.facts += self.on_more_data(date_plus)
+                self.days.append(date_plus)
+        
         
         self._invalidate()
         if moving:
@@ -198,6 +213,8 @@ class Dayline(gtk.DrawingArea):
     def draw(self, day_facts, highlight = None):
         """Draw chart with given data"""
         self.facts = day_facts
+        if self.facts:
+            self.days.append(self.facts[0]["start_time"].date())
         
         start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
         self.range_start = charting.Integrator(start_time, damping = 0.5, attraction = 0.7)
@@ -384,6 +401,7 @@ class CustomFactController:
 
         self.dayline = Dayline()
         self.dayline.on_time_changed = self.update_time
+        self.dayline.on_more_data = storage.get_facts
         self.glade.get_widget("day_preview").add(self.dayline)
 
         self.update_time(start_date, end_date)
