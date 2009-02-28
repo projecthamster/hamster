@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-01-12 12:45+0000\n"
+"POT-Creation-Date: 2009-02-14 00:59+0000\n"
 "PO-Revision-Date: 2008-08-07 17:30+0300\n"
 "Last-Translator: Yair Hershkovitz\n"
 "Language-Team: he\n"
@@ -22,7 +22,7 @@ msgstr "פרוייקט Hamster - עקוב אחר הזמן שלך"
 
 #. Title of reminder baloon
 #: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/applet.py:59
+#: ../hamster/applet.py:65
 msgid "Time Tracker"
 msgstr "מעקב אחרי הזמן"
 
@@ -90,31 +90,31 @@ msgstr "_קטגוריות"
 msgid "_New Activity"
 msgstr "פעילות _חדשה"
 
-#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
 msgid "<b>Activity</b>"
 msgstr "<b>פעילות</b>"
 
-#: ../data/edit_activity.glade.h:2
+#: ../data/add_custom_fact.glade.h:2
 msgid "<b>Date and Time</b>"
 msgstr "<b>תאריך ושעה</b>"
 
-#: ../data/edit_activity.glade.h:3
+#: ../data/add_custom_fact.glade.h:3
 msgid "Add Earlier Activity"
 msgstr "הוסף פעילות קודמת"
 
-#: ../data/edit_activity.glade.h:4
+#: ../data/add_custom_fact.glade.h:4
 msgid "Description:"
 msgstr "תיאור:"
 
-#: ../data/edit_activity.glade.h:5
+#: ../data/add_custom_fact.glade.h:5
 msgid "Name:"
 msgstr "שם:"
 
-#: ../data/edit_activity.glade.h:6
+#: ../data/add_custom_fact.glade.h:6
 msgid "hours"
 msgstr "שעות"
 
-#: ../data/edit_activity.glade.h:7
+#: ../data/add_custom_fact.glade.h:7
 msgid ""
 "in progress...\n"
 "until\n"
@@ -124,7 +124,7 @@ msgstr ""
 "עד\n"
 "במשך"
 
-#: ../data/edit_activity.glade.h:10
+#: ../data/add_custom_fact.glade.h:10
 msgid "minutes"
 msgstr "דקות"
 
@@ -169,7 +169,7 @@ msgstr "הוסף פעילות _קודמת"
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:451
+#: ../data/menu.glade.h:4 ../hamster/applet.py:458
 msgid "No records today"
 msgstr "אין רשומות מהיום"
 
@@ -253,10 +253,6 @@ msgstr "הצג חודש"
 msgid "Show week"
 msgstr "הצג שבוע"
 
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "היום"
-
 #: ../hamster/about.py:43
 msgid "Copyright © 2007-2008 Toms Baugis and others"
 msgstr "Copyright © 2007-2008 Toms Baugis and others"
@@ -271,11 +267,11 @@ msgstr ""
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:333 ../hamster/reports.py:133
+#: ../hamster/preferences.py:56 ../hamster/db.py:343 ../hamster/reports.py:133
 msgid "Unsorted"
 msgstr "לא ממוין"
 
-#: ../hamster/preferences.py:103 ../hamster/applet.py:213
+#: ../hamster/preferences.py:103 ../hamster/applet.py:221
 #: ../hamster/stats.py:47
 msgid "Name"
 msgstr "שם"
@@ -285,91 +281,93 @@ msgstr "שם"
 msgid "Category"
 msgstr "קטגוריה"
 
-#: ../hamster/preferences.py:494
+#: ../hamster/preferences.py:510
 msgid "New category"
 msgstr "קטגוריה חדשה"
 
-#: ../hamster/preferences.py:507
+#: ../hamster/preferences.py:523
 msgid "New activity"
 msgstr "פעילות חדשה"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:552
+#: ../hamster/preferences.py:568
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d דקות"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:555
+#: ../hamster/preferences.py:571
 msgid "Never"
 msgstr "לעולם לא"
 
-#: ../hamster/edit_activity.py:80
+#: ../hamster/add_custom_fact.py:80
 msgid "Update activity"
 msgstr "עדכן פעילות"
 
-#: ../hamster/applet.py:66
-msgid "Switch Task"
-msgstr "החלף משימה"
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "עריכה"
 
-#: ../hamster/applet.py:67
-msgid "Stop Tracking"
-msgstr "הפסק מעקב"
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+#| msgid "Switch Task"
+msgid "Switch"
+msgstr "החלפה"
 
-#: ../hamster/applet.py:417 ../hamster/applet.py:517
+#: ../hamster/applet.py:423 ../hamster/applet.py:524
 msgid "No activity"
 msgstr "אין פעילות"
 
 #. activity reminder
-#: ../hamster/applet.py:431
+#: ../hamster/applet.py:437
 #, python-format
-#| msgid "Are you still working on <b>%s</b>?"
 msgid "Working on <b>%s</b>"
 msgstr "עובד על <b>%s</b>"
 
-#: ../hamster/applet.py:458
+#: ../hamster/applet.py:465
 #, python-format
 msgid "%(category)s: %(duration)s, "
 msgstr "%(category)s: %(duration)s, "
 
 #. defaults
-#: ../hamster/db.py:503
+#: ../hamster/db.py:513
 msgid "Work"
 msgstr "עבודה"
 
-#: ../hamster/db.py:504
+#: ../hamster/db.py:514
 msgid "Reading news"
 msgstr "קורא חדשות"
 
-#: ../hamster/db.py:505
+#: ../hamster/db.py:515
 msgid "Checking stocks"
 msgstr "בודק מניות"
 
-#: ../hamster/db.py:506
+#: ../hamster/db.py:516
 msgid "Super secret project X"
 msgstr "פרוייקט סופר סודי S"
 
-#: ../hamster/db.py:507
+#: ../hamster/db.py:517
 msgid "World domination"
 msgstr "שליטה עולמית"
 
-#: ../hamster/db.py:509
+#: ../hamster/db.py:519
 msgid "Day to day"
 msgstr "יום יומי"
 
-#: ../hamster/db.py:510
+#: ../hamster/db.py:520
 msgid "Lunch"
 msgstr "ארוחת צהריים"
 
-#: ../hamster/db.py:511
+#: ../hamster/db.py:521
 msgid "Watering flowers"
 msgstr "השקיית פרחים"
 
-#: ../hamster/db.py:512
+#: ../hamster/db.py:522
 msgid "Doing handstands"
 msgstr "עמידת ידיים"
 
-#: ../hamster/db.py:695 ../hamster/db.py:699
+#: ../hamster/db.py:705 ../hamster/db.py:709
 msgid "name"
 msgstr "שם"
 
@@ -430,7 +428,6 @@ msgid "Duration"
 msgstr "משך"
 
 #: ../hamster/reports.py:110
-#| msgid "Description:"
 msgid "Description"
 msgstr "תיאור"
 
@@ -446,7 +443,6 @@ msgid "Totals"
 msgstr "סך הכל"
 
 #: ../hamster/reports.py:190
-#| msgid "Totals"
 msgid "Total Time"
 msgstr "סך כל הזמן"
 
@@ -479,6 +475,12 @@ msgstr "שבוע"
 #: ../hamster/stats.py:317
 msgid "Month"
 msgstr "חודש"
+
+#~ msgid "Today"
+#~ msgstr "היום"
+
+#~ msgid "Stop Tracking"
+#~ msgstr "הפסק מעקב"
 
 #~ msgid "Time tracking for masses"
 #~ msgstr "מעקב אחרי הזמן - להמונים"
