@@ -76,21 +76,10 @@ class Dayline(gtk.DrawingArea):
         if not self.drag_start:
             return
         
-        self.drag_start = None
+        self.drag_start, self.move_type = None, None
 
         if event.state & gtk.gdk.BUTTON1_MASK:
             self.call_parent_time_changed()
-                
-    def scroll(self):
-        if round(self.highlight_start) <= 0:
-            self.range_start.target(self.range_start.value - dt.timedelta(minutes=30))
-        if self.highlight_end >= self.width:
-            self.range_start.target(self.range_start.value + dt.timedelta(minutes=30))
-
-        if not self.in_motion:
-            self.in_motion = True
-            gobject.timeout_add(1000 / 30, self.animate_scale)
-    
     
     def call_parent_time_changed(self):
         #now calculate back from pixels into minutes
@@ -102,9 +91,15 @@ class Dayline(gtk.DrawingArea):
         if self.on_time_changed:
             self.on_time_changed(start_time, end_time)
         
+    def scroll_to_range_start(self):
+        if not self.in_motion:
+            self.in_motion = True
+            gobject.timeout_add(1000 / 30, self.animate_scale)
+        
+        
     def animate_scale(self):
-
         moving = self.range_start.update() > 5
+        
         
         # check if maybe we are approaching day boundaries and should ask for
         # more data!
@@ -194,9 +189,7 @@ class Dayline(gtk.DrawingArea):
 
                 if self.move_type == "scale_drag":
                     self.range_start.target(self.drag_start_time + dt.timedelta(minutes = ((self.drag_start - x) / self.minute_pixel)))
-                    if not self.in_motion:
-                        self.in_motion = True
-                        gobject.timeout_add(1000 / 30, self.animate_scale)
+                    self.scroll_to_range_start()
 
                 self.call_parent_time_changed()
 
@@ -217,9 +210,11 @@ class Dayline(gtk.DrawingArea):
             self.days.append(self.facts[0]["start_time"].date())
         
         start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
-        self.range_start = charting.Integrator(start_time, damping = 0.5, attraction = 0.7)
         
+        self.range_start = charting.Integrator(start_time, damping = 0.5, attraction = 0.7)
+
         self.highlight = highlight
+        
         self.show()
         
         self._invalidate()
@@ -351,9 +346,12 @@ class Dayline(gtk.DrawingArea):
             context.set_source_rgb(*rgb)
             context.stroke()
         
-        if self.highlight_start == 0 or self.highlight_end == self.width:
-            self.scroll()
-
+        if self.move_type == "move" and (self.highlight_start == 0 or self.highlight_end == self.width):
+            if self.highlight_start == 0:
+                self.range_start.target(self.range_start.value - dt.timedelta(minutes=30))
+            if self.highlight_end == self.width:
+                self.range_start.target(self.range_start.value + dt.timedelta(minutes=30))
+            self.scroll_to_range_start()
 
 
 
