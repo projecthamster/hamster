@@ -81,11 +81,11 @@ class Dayline(graphics.Area):
     
     def call_parent_time_changed(self):
         #now calculate back from pixels into minutes
-        start_time = int(self.highlight_start / self.minute_pixel)
-        start_time = self.range_start.value + dt.timedelta(minutes = start_time) + dt.timedelta(hours=4)
+        start_time = self.get_value_at_pos(x = self.highlight_start)
+        start_time = self.range_start.value + dt.timedelta(minutes = start_time) 
                 
-        end_time = int(self.highlight_end / self.minute_pixel) 
-        end_time = self.range_start.value + dt.timedelta(minutes = end_time) + dt.timedelta(hours=4)
+        end_time = self.get_value_at_pos(x = self.highlight_end) 
+        end_time = self.range_start.value + dt.timedelta(minutes = end_time)
         if self.on_time_changed:
             self.on_time_changed(start_time, end_time)
         
@@ -186,7 +186,8 @@ class Dayline(graphics.Area):
                     self.redraw_canvas()
 
                 if self.move_type == "scale_drag":
-                    self.range_start.target(self.drag_start_time + dt.timedelta(minutes = ((self.drag_start - x) / self.minute_pixel)))
+                    self.range_start.target(self.drag_start_time +
+                                            dt.timedelta(minutes = self.get_value_at_pos(x = self.drag_start) - self.get_value_at_pos(x = x)))
                     self.scroll_to_range_start()
 
                 self.call_parent_time_changed()
@@ -233,14 +234,12 @@ class Dayline(graphics.Area):
         context.set_line_width(1)
 
         #we will buffer 4 hours to both sides so partial labels also appear
-        range_end = self.range_start.value + dt.timedelta(hours = 12 + 2*4)
+        range_end = self.range_start.value + dt.timedelta(hours = 12 + 2 * 4)        
+        self.graph_x = -self.width / 3 #so x moves one third out of screen
+        self.set_value_range(x_min = 0, x_max = 12 * 60)
 
         minutes = self._minutes_from_start(range_end)
 
-        self.minute_pixel = self.width / float(12 * 60)
-        minute_pixel = self.minute_pixel
-
-        self.graph_x = -minute_pixel * 4 * 60
 
 
         graph_y = 4
@@ -263,8 +262,8 @@ class Dayline(graphics.Area):
             if label_time.minute == 0 and label_time.hour % 2 == 0:
                 if label_time.hour == 0:
                     context.set_source_rgb(0.8, 0.8, 0.8)
-                    context.move_to(self.graph_x + minute_pixel * i, graph_y)
-                    context.line_to(self.graph_x + minute_pixel * i, graph_y2)
+                    self.move_to(i, graph_y)
+                    self.line_to(i, graph_y2)
                     label_minutes = label_time.strftime("%b %d.")
                 else:
                     label_minutes = label_time.strftime("%H:%M")
@@ -273,7 +272,7 @@ class Dayline(graphics.Area):
                 self.layout.set_text(label_minutes)
                 label_w, label_h = self.layout.get_pixel_size()
                 
-                context.move_to(self.graph_x + minute_pixel * i - label_w/2,
+                context.move_to(self.get_pixel(x_value=i) - label_w/2,
                                 graph_y2 + 6)                
 
                 context.show_layout(self.layout)
@@ -290,17 +289,17 @@ class Dayline(graphics.Area):
                 if fact["start_time"].date() == dt.date.today():
                     end_minutes = self._minutes_from_start(dt.datetime.now())
             
-            if (self.graph_x + end_minutes * minute_pixel) > 0 and \
-                (self.graph_x + start_minutes * minute_pixel) < self.width:
-                    context.rectangle(self.graph_x + start_minutes * minute_pixel, graph_y,
-                                      minute_pixel * (end_minutes - start_minutes), graph_height - 1)
+            if self.get_pixel(x_value = end_minutes) > 0 and \
+                self.get_pixel(x_value = start_minutes) < self.width:
+                    context.rectangle(self.get_pixel(x_value = start_minutes), graph_y,
+                                      self.get_pixel(x_value=end_minutes) - self.get_pixel(x_value=start_minutes), graph_height - 1)
         context.fill()
         
         
 
         if self.highlight:
-            self.highlight_start = self.graph_x + self._minutes_from_start(self.highlight[0]) * self.minute_pixel
-            self.highlight_end = self.graph_x + self._minutes_from_start(self.highlight[1])  * self.minute_pixel
+            self.highlight_start =self.get_pixel(x_value= self._minutes_from_start(self.highlight[0]))
+            self.highlight_end = self.get_pixel(x_value=self._minutes_from_start(self.highlight[1]))
             self.highlight = None
 
 

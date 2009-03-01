@@ -174,8 +174,6 @@ class Chart(graphics.Area):
 
     def draw_bar(self, x, y, w, h, color = None):
         """ draws a simple bar"""
-        context = self.context
-        
         base_color = color or self.bar_base_color or (220, 220, 220)
 
         if self.bars_beveled:
@@ -264,7 +262,7 @@ class Chart(graphics.Area):
             self.context.fill()
         
         #forward to specific implementations
-        self._draw()
+        self._draw(self.context)
         self.context.stroke()
 
         return False
@@ -296,9 +294,8 @@ class Chart(graphics.Area):
 
 
 class BarChart(Chart):
-    def _draw(self):
-        # graph box dimensions
-
+    def _draw(self, context):
+        # determine graph dimensions
         if self.show_stack_labels:
             legend_width = self.legend_width or self.longest_label(self.keys)
         elif self.show_scale:
@@ -306,7 +303,7 @@ class BarChart(Chart):
                 grid_stride = int(self.max_value * self.grid_stride)
             else:
                 grid_stride = int(self.grid_stride)
-
+            
             scale_labels = [self.value_format % i
                   for i in range(grid_stride, int(self.max_value), grid_stride)]
             legend_width = self.legend_width or self.longest_label(scale_labels)
@@ -314,74 +311,55 @@ class BarChart(Chart):
             legend_width = self.legend_width
 
         if self.stack_keys and self.labels_at_end:
-            graph_x = 0
-            graph_width = self.width - legend_width
+            self.graph_x = 0
+            self.graph_width = self.width - legend_width
         else:
-            graph_x = legend_width + 8 # give some space to scale labels
-            graph_width = self.width - graph_x - 10
+            self.graph_x = legend_width + 8 # give some space to scale labels
+            self.graph_width = self.width - self.graph_x - 10
 
-            
-            
+        self.graph_y = 0
+        self.graph_height = self.height - 15
 
-        graph_y = 0
-        graph_height = self.height - 15
-
-
-
-        self.context.set_line_width(1)
-        
         if self.chart_background:
-            self.fill_area(graph_x - 1, graph_y, graph_width, graph_height,
-                            self.chart_background)
+            self.fill_area(self.graph_x, self.graph_y,
+                           self.graph_width, self.graph_height,
+                           self.chart_background)
 
 
-        self.bar_width = min(graph_width / float(len(self.keys)), self.max_bar_width)
+        # flip hamster.graphics matrix so we don't think upside down
+        self.set_value_range(y_max = 0, y_min = self.graph_height)
+
+        # bars and keys
+        max_bar_size = self.graph_height
+        #make sure bars don't hit the ceiling
+        if self.animate:
+            max_bar_size = self.graph_height - 10
 
 
-        # keys
-        prev_end = None
-        set_color(self.context, dark[8]);
+        bar_width = min(self.graph_width / float(len(self.keys)),
+                                                             self.max_bar_width)
+        gap = bar_width * 0.05
+
+        prev_label_end = None
         self.layout.set_width(-1)
 
         for i in range(len(self.keys)):
+            set_color(context, dark[8]);
             self.layout.set_text(self.keys[i])
             label_w, label_h = self.layout.get_pixel_size()
 
-            intended_x = graph_x + (self.bar_width * i) + (self.bar_width - label_w) / 2.0
+            intended_x = (bar_width * i) + (bar_width - label_w) / 2.0
             
-            if not prev_end or intended_x > prev_end:
-                self.context.move_to(intended_x, graph_y + graph_height + 4)
-                self.context.show_layout(self.layout)
+            if not prev_label_end or intended_x > prev_label_end:
+                self.move_to(intended_x, -4)
+                context.show_layout(self.layout)
             
-                prev_end = intended_x + label_w + 10
+                prev_label_end = intended_x + label_w + 10
                 
 
-
-        
-        context = self.context
-        keys, rowcount = self.keys, len(self.keys)
-
-
-        max_bar_size = graph_height
-        #make sure bars don't hit the ceiling
-        if self.animate:
-            max_bar_size = graph_height - 10
-
-
-        """draw moving parts"""
-        #flip the matrix vertically, so we do not have to think upside-down
-        context.set_line_width(0)
-
-        # bars
-        for i in range(rowcount):
-            color = 3
-
             bar_start = 0
-            
             base_color = self.bar_base_color or (220, 220, 220)
-
-            gap = self.bar_width * 0.05
-            bar_x = graph_x + (self.bar_width * i) + gap
+            bar_x = self.graph_x + bar_width * i + gap
 
             for j in range(len(self.integrators[i])):
                 factor = self.integrators[i][j].value
@@ -391,19 +369,14 @@ class BarChart(Chart):
                     bar_start += bar_size
                     
                     self.draw_bar(bar_x,
-                                  graph_height - bar_start,
-                                  self.bar_width - (gap * 2),
+                                  self.graph_height - bar_start,
+                                  bar_width - (gap * 2),
                                   bar_size,
                                   [col - (j * 22) for col in base_color])
 
 
-        #flip the matrix back, so text doesn't come upside down
-        context.transform(cairo.Matrix(yy = 1, y0 = graph_height))
-
-        
-        self.layout.set_width(-1)
-
         #white grid and scale values
+        self.layout.set_width(-1)
         if self.grid_stride and self.max_value:
             # if grid stride is less than 1 then we consider it to be percentage
             if self.grid_stride < 1:
@@ -413,28 +386,31 @@ class BarChart(Chart):
             
             context.set_line_width(1)
             for i in range(grid_stride, int(self.max_value), grid_stride):
-                y = - max_bar_size * (i / self.max_value)
+                y = max_bar_size * (i / self.max_value)
 
                 if self.show_scale:
                     self.layout.set_text(self.value_format % i)
                     label_w, label_h = self.layout.get_pixel_size()
-                    context.move_to(graph_x - label_w - 8, y - label_h / 2)
+                    context.move_to(self.graph_x - label_w - 8,
+                                    self.get_pixel(y_value=y) - label_h / 2)
                     set_color(context, medium[8])
                     context.show_layout(self.layout)
 
                 set_color(context, (255,255,255))
-                context.move_to(graph_x, y)
-                context.line_to(graph_x + graph_width, y)
+                self.move_to(0, y)
+                self.line_to(self.graph_width, y)
 
-        context.set_line_width(1)
+
         #stack keys
+        context.save()
         if self.show_stack_labels:
-            self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+            context.set_line_width(1)
+            context.set_antialias(cairo.ANTIALIAS_DEFAULT)
 
             #put series keys
             set_color(context, dark[8]);
             
-            y = 0
+            y = self.graph_height
             label_y = None
 
             # if labels are at end, then we need show them for the last bar! 
@@ -444,7 +420,7 @@ class BarChart(Chart):
                 factors = self.integrators[-1]
 
             self.layout.set_ellipsize(pango.ELLIPSIZE_END)
-            self.layout.set_width(graph_x * pango.SCALE)
+            self.layout.set_width(self.graph_x * pango.SCALE)
             if self.labels_at_end:
                 self.layout.set_alignment(pango.ALIGN_LEFT)
             else:
@@ -470,13 +446,13 @@ class BarChart(Chart):
                         label_y = intended_position
                     
                     if self.labels_at_end:
-                        label_x = graph_x + graph_width 
-                        line_x1 = graph_x + graph_width - 1
-                        line_x2 = graph_x + graph_width - 6
+                        label_x = self.graph_x + self.graph_width 
+                        line_x1 = self.graph_x + self.graph_width - 1
+                        line_x2 = self.graph_x + self.graph_width - 6
                     else:
                         label_x = -8
-                        line_x1 = graph_x - 6
-                        line_x2 = graph_x
+                        line_x1 = self.graph_x - 6
+                        line_x2 = self.graph_x
 
 
                     context.move_to(label_x, label_y)
@@ -486,103 +462,95 @@ class BarChart(Chart):
                         context.move_to(line_x1, label_y + label_h / 2)
                         context.line_to(line_x2, round(y + bar_size / 2))
 
-                    
-                    
-
+        context.stroke()
+        context.restore()
 
 
 class HorizontalBarChart(Chart):
-    def _draw(self):
+    def _draw(self, context):
         rowcount, keys = len(self.keys), self.keys
         
-        #push graph to the right, so it doesn't overlap, and add little padding aswell
+        # push graph to the right, so it doesn't overlap
         legend_width = self.legend_width or self.longest_label(keys)
 
-        graph_x = legend_width
-        graph_x += 8 #add another 8 pixes of padding
+        self.graph_x = legend_width
+        self.graph_x += 8 #add another 8 pixes of padding
         
-        graph_width = self.width - graph_x
-        graph_y, graph_height = 0, self.height
+        self.graph_width = self.width - self.graph_x
+        self.graph_y, self.graph_height = 0, self.height
 
 
         if self.chart_background:
-            self.fill_area(graph_x, graph_y, graph_width, graph_height, self.chart_background)
+            self.fill_area(self.graph_x, self.graph_y, self.graph_width, self.graph_height, self.chart_background)
         
-        """
+
         # stripes for the case i decided that they are not annoying
-        for i in range(0, round(self.current_max.value), 10):
-            x = graph_x + (graph_width * (i / float(self.current_max.value)))
-            w = (graph_width * (5 / float(self.current_max.value)))
-
-            self.context.set_source_rgb(0.93, 0.93, 0.93)
-            self.context.rectangle(x + w, graph_y, w, graph_height)
-            self.context.fill()
-            self.context.stroke()
-            
-            self.context.set_source_rgb(0.70, 0.70, 0.70)
-            self.context.move_to(x, graph_y + graph_height - 2)
-
-            self.context.show_text(str(i))
         """
+        for i in range(0, int(self.current_max.value), 10):
+            x = self.graph_x + (self.graph_width * (i / float(self.current_max.value)))
+            w = (self.graph_width * (5 / float(self.current_max.value)))
+
+            context.set_source_rgb(0.93, 0.93, 0.93)
+            context.rectangle(x + w, self.graph_y, w, self.graph_height)
+            context.fill()
+            context.stroke()
+            
+            context.set_source_rgb(0.70, 0.70, 0.70)
+            context.move_to(x, self.graph_y + self.graph_height - 2)
+
+            context.show_text(str(i))
+        """
+
     
         if not self.data:  #if we have nothing, let's go home
             return
 
         
-        bar_width = int(graph_height / float(rowcount))
+        bar_width = int(self.graph_height / float(rowcount))
         if self.max_bar_width:
             bar_width = min(bar_width, self.max_bar_width)
 
         
-        max_bar_size = graph_width - 15
+        max_bar_size = self.graph_width - 15
         gap = bar_width * 0.05
 
 
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
         
+
+        
+        context.set_line_width(0)
+
+        # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
 
-        # keys
-        set_color(self.context, dark[8])        
         for i in range(rowcount):
+            self.layout.set_width(legend_width * pango.SCALE)
+            set_color(context, dark[8])        
             label = keys[i]
             
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
-            self.context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
-            self.context.show_layout(self.layout)
+            context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
+            context.show_layout(self.layout)
 
-        
-        
-        self.context.set_line_width(1)
-        
-
-        
-        self.context.set_line_width(0)
-
-
-        # bars and labels
-        self.layout.set_width(-1)
-
-        for i in range(rowcount):
             bar_start = 0
             base_color = self.bar_base_color or (220, 220, 220)
 
             gap = bar_width * 0.05
 
-            bar_y = graph_y + (bar_width * i) + gap
+            bar_y = self.graph_y + (bar_width * i) + gap
 
 
             for j in range(len(self.integrators[i])):
                 factor = self.integrators[i][j].value
-
                 if factor > 0:
                     bar_size = max_bar_size * factor
                     bar_height = bar_width - (gap * 2)
                     
-                    self.draw_bar(graph_x + bar_start,
+                    self.draw_bar(self.graph_x + bar_start,
                                   bar_y,
                                   bar_size,
                                   bar_height,
@@ -590,19 +558,21 @@ class HorizontalBarChart(Chart):
     
                     bar_start += bar_size
 
-            set_color(self.context, dark[8])        
+
+            # values on bars
+            set_color(context, dark[8])        
             label = self.value_format % sum(self.data[i])
+            self.layout.set_width(-1)
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
             vertical_padding = (bar_width + label_h) / 2.0 - label_h
-            
             if  bar_start - vertical_padding < label_w:
-                label_x = graph_x + bar_start + vertical_padding
+                label_x = self.graph_x + bar_start + vertical_padding
             else:
-                label_x = graph_x + bar_start - label_w - vertical_padding
+                label_x = self.graph_x + bar_start - label_w - vertical_padding
             
-            self.context.move_to(label_x, graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
-            self.context.show_layout(self.layout)
+            context.move_to(label_x, self.graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
+            context.show_layout(self.layout)
 
-
+        context.stroke()

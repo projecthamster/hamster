@@ -12,6 +12,11 @@ class Area(gtk.DrawingArea):
         self.connect("expose_event", self._on_expose)
         self.width = None
         self.height = None
+        self.value_boundaries = None #x_min, x_max, y_min, y_max
+        
+        # use these to mark area where the "real" drawing is going on
+        self.graph_x, self.graph_y = 0, 0
+        self.graph_width, self.graph_height = None, None 
 
     def redraw_canvas(self):
         """Force graph redraw"""
@@ -38,6 +43,84 @@ class Area(gtk.DrawingArea):
         alloc = self.get_allocation()  #x, y, width, height
         self.width, self.height = alloc.width, alloc.height
 
+
+    def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):
+        """sets up our internal conversion matrix, because cairo one will
+        scale also fonts and we need something in between!"""
+        
+        #store given params, we might redo the math later
+        if not self.value_boundaries:
+            self.value_boundaries = [x_min, x_max, y_min, y_max]
+        else:
+            if x_min != None:
+                self.value_boundaries[0] = x_min
+            if x_max != None:
+                self.value_boundaries[1] = x_max
+            if y_min != None:
+                self.value_boundaries[2] = y_min
+            if y_max != None:
+                self.value_boundaries[3] = y_max 
+        self.x_factor, self.y_factor = None, None #set those to none to be recalculated on next call
+
+    def _get_factors(self):
+        if not self.x_factor:
+            self.x_factor = 1
+            if self.value_boundaries[0] != None and self.value_boundaries[1] != None:
+                self.x_factor = float(self.graph_width or self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
+                
+        if not self.y_factor:            
+            self.y_factor = 1
+            if self.value_boundaries[2] != None and self.value_boundaries[3] != None:
+                self.y_factor = float(self.graph_height or self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
+
+        return self.x_factor, self.y_factor        
+
+
+    def get_pixel(self, x_value = None, y_value = None):
+        """returns screen pixel position for value x and y. Useful to
+        get and then pad something
+
+        x = min1 + (max1 - min1) * (x / abs(max2-min2))  
+            => min1 + const1 * x / const2
+            => const3 = const1 / const2
+            => min + x * const3
+        """
+        x_factor, y_factor = self._get_factors()
+
+        if x_value != None:
+            if self.value_boundaries[0] != None:
+                if self.value_boundaries[1] > self.value_boundaries[0]:
+                    x_value = self.value_boundaries[0] + x_value * x_factor
+                else: #case when min is larger than max (flipped)
+                    x_value = self.value_boundaries[1] - x_value * x_factor
+            if y_value == None:
+                return x_value + self.graph_x
+
+        if y_value != None:
+            if self.value_boundaries[2] != None:
+                if self.value_boundaries[3] > self.value_boundaries[2]:
+                    y_value = self.value_boundaries[2] + y_value * y_factor
+                else: #case when min is larger than max (flipped)
+                    y_value = self.value_boundaries[2] - y_value * y_factor
+            if x_value == None:
+                return y_value + self.graph_y
+            
+        return x_value + self.graph_x, y_value + self.graph_y
+
+    def get_value_at_pos(self, x = None, y = None):
+        """returns mapped value at the coordinates x,y"""
+        x_factor, y_factor = self._get_factors()
+        
+        if x != None:
+            x = (x - self.graph_x)  / x_factor
+            if y == None:
+                return x
+        if y != None:
+            y = (y - self.graph_x) / y_factor
+            if x == None:
+                return y
+        return x, y            
+        
     def fill_area(self, x, y, w, h, color):
         if color[0] > 1: color = [c / 256.0 for c in color]
 
@@ -54,6 +137,13 @@ class Area(gtk.DrawingArea):
             max_extent = max(label_w + 5, max_extent)
         
         return max_extent
+    
+    def move_to(self, x, y):
+        """our copy of moveto that takes into account our transformations"""
+        self.context.move_to(*self.get_pixel(x, y))
+
+    def line_to(self, x, y):
+        self.context.line_to(*self.get_pixel(x, y))
         
 
 class Integrator(object):
