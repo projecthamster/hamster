@@ -210,6 +210,9 @@ class HamsterApplet(object):
             name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
             self.dbusController = HamsterDbusController(bus_name = name)
 
+            # Set up connection to the screensaver
+            self.dbusIdleListener = idle.DbusIdleListener()
+
             # let's also attach our listeners here
             bus = dbus.SessionBus()
             bus.add_signal_receiver(self.on_idle_changed,
@@ -375,8 +378,13 @@ class HamsterApplet(object):
         # stop tracking task if computer is idle for X minutes
         if self.timeout_enabled and self.last_activity and \
            self.last_activity['end_time'] == None:
-            idle_minutes = idle.getIdleSec() / 60.0
-            if idle_minutes > 0:
+            if self.dbusIdleListener.is_idle:
+                # Only subtract idle time from the running task when
+                # idleness is due to time out, not a screen lock.
+                if self.dbusIdleListener.is_screen_locked:
+                    idle_minutes = 0
+                else:
+                    idle_minutes = idle.getIdleSec() / 60.0
                 current_time = datetime.datetime.now()
                 idle_from = current_time - datetime.timedelta(minutes = idle_minutes)
                 storage.touch_fact(self.last_activity, end_time = idle_from)
