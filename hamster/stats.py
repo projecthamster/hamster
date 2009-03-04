@@ -70,7 +70,10 @@ class StatsViewer(object):
                                         show_scale = True,
                                         max_bar_width = 35,
                                         grid_stride = 4,
-                                        legend_width = 20)
+                                        legend_width = 20,
+                                        more_on_left = self.more_on_left,
+                                        less_on_left = self.less_on_left,
+                                        min_key_count = 8)
         self.get_widget("totals_by_day").add(self.day_chart)
 
 
@@ -93,9 +96,9 @@ class StatsViewer(object):
                                       dt.timedelta(self.view_date.weekday() + 1)
         # look if we need to start on sunday or monday
         self.start_date = self.start_date + \
-                                      dt.timedelta(self.locale_first_weekday())
+                                      dt.timedelta(self.locale_first_weekday() - 1)
         
-        self.end_date = self.start_date + dt.timedelta(6)
+        self.end_date = self.start_date + dt.timedelta(7)
 
         
         self.week_view = self.get_widget("week")
@@ -132,6 +135,16 @@ class StatsViewer(object):
         """
         self.do_graph()
 
+    def more_on_left(self):
+        z = min(round((self.end_date - self.start_date).days / 21.0)+1, 5)
+        self.start_date = self.start_date - dt.timedelta(days = z)
+        self.do_graph()
+        
+    def less_on_left(self):
+        z = min(round((self.end_date - self.start_date).days / 21.0)+1, 5)
+        self.start_date = self.start_date + dt.timedelta(days=z)
+        self.do_graph()
+        
     def setup_tree(self):
         def parent_painter(column, cell, model, iter):
             cell_text = model.get_value(iter, 1)
@@ -444,8 +457,8 @@ class StatsViewer(object):
         self.view_date = dt.date.today()
         if self.week_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-            self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
-            self.end_date = self.start_date + dt.timedelta(6)
+            self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday() -1)
+            self.end_date = self.start_date + dt.timedelta(7)
         
         elif self.month_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month

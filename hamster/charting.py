@@ -22,6 +22,10 @@
 horizontal bar charts. This library is not intended for scientific graphs.
 More like some visual clues to the user.
 
+DISCLAIMER: It is a bit of a minefield because it has been created and tweaked
+around hamster, so if you decide to use this lib in your own project, please do
+not be afraid to file bugs against it in hamster, and i'll see what i can do!
+
 For graph options see the Chart class and Chart.plot function
 
 Author: toms.baugis@gmail.com
@@ -165,13 +169,82 @@ class Chart(graphics.Area):
         self.labels_at_end     = args.get("labels_at_end", False)
         self.framerate         = args.get("framerate", 60)
 
+        # more data from left side function
+        self.more_on_left      = args.get("more_on_left", None)
+        self.less_on_left      = args.get("less_on_left", None)
+        self.min_key_count     = args.get("min_key_count", None)
+
+
+        if self.more_on_left:
+            self.drag_start, self.move_type = None, None
+            self.set_events(gtk.gdk.EXPOSURE_MASK
+                                     | gtk.gdk.LEAVE_NOTIFY_MASK
+                                     | gtk.gdk.BUTTON_PRESS_MASK
+                                     | gtk.gdk.BUTTON_RELEASE_MASK
+                                     | gtk.gdk.POINTER_MOTION_MASK
+                                     | gtk.gdk.POINTER_MOTION_HINT_MASK)
+            self.connect("button_release_event", self.on_mouse_release)
+            self.connect("motion_notify_event", self.on_mouse_move)
+            
 
         #and some defaults
         self.current_max = None
         self.integrators = []
         self.moving = False
+        self.drag_x = 0
+        self.before_drag_animate = None
+            
 
 
+    def on_mouse_release(self, area, event):
+        #TODO - when mouse is released, reset graph_x to the current bar
+        if not self.drag_start:
+            return
+        self.drag_x = 0
+        self.drag_start, self.move_type = None, None
+        self.animate = self.before_drag_animate
+        self.redraw_canvas()
+
+
+    def on_mouse_move(self, area, event):
+        if event.is_hint:
+            x, y, state = event.window.get_pointer()
+        else:
+            x = event.x
+            y = event.y
+            state = event.state
+
+        mouse_down = state & gtk.gdk.BUTTON1_MASK
+        
+        if mouse_down and not self.drag_start:
+            self.before_drag_animate = self.animate
+            self.animate = False
+
+            self.drag_start = x
+            self.move_type = "left_side"
+            
+        if self.move_type == "left_side":
+            #the "give me more" gesture on left side
+            self.drag_x = x - self.drag_start
+            if self.drag_x < 0 and len(self.keys) <= self.min_key_count:
+                self.drag_x = 0
+
+            #we are going for more, if we have dragged out previous one!
+            if self.graph_x >= self.legend_width:
+                self.drag_x = 0
+                self.drag_start = x
+                self.more_on_left()
+                return
+    
+            if self.drag_x <= -self.legend_width and len(self.keys) > self.min_key_count:
+                self.drag_x = 0
+                self.drag_start = x
+                self.less_on_left()
+                return
+
+            self.redraw_canvas()
+        
+        
     def draw_bar(self, x, y, w, h, color = None):
         """ draws a simple bar"""
         base_color = color or self.bar_base_color or (220, 220, 220)
@@ -221,6 +294,7 @@ class Chart(graphics.Area):
                         integrators[i].finish()
     
             finish_all(self.integrators)
+            self.current_max.finish()
 
 
             self.redraw_canvas()
@@ -306,7 +380,7 @@ class BarChart(Chart):
             
             scale_labels = [self.value_format % i
                   for i in range(grid_stride, int(self.max_value), grid_stride)]
-            legend_width = self.legend_width or self.longest_label(scale_labels)
+            self.legend_width = legend_width = self.legend_width or self.longest_label(scale_labels)
         else:
             legend_width = self.legend_width
 
@@ -326,19 +400,37 @@ class BarChart(Chart):
                            self.chart_background)
 
 
+
+        if self.more_on_left:
+            #if there is more on left, clip the first one so we can preload it
+
+            bar_width = min(self.graph_width / float(len(self.keys) - 1),
+                                                                 self.max_bar_width)
+            gap = bar_width * 0.05
+    
+            z = (1 - 1.0 / len(self.keys))
+            z = z * z
+            
+            self.graph_x = legend_width  - bar_width + self.drag_x
+            self.graph_width = self.width - self.graph_x - 10
+
+        self.context.stroke()
+
+        bar_width = min(self.graph_width / float(len(self.keys)),
+                                                             self.max_bar_width)
+        gap = bar_width * 0.05
+
         # flip hamster.graphics matrix so we don't think upside down
         self.set_value_range(y_max = 0, y_min = self.graph_height)
 
         # bars and keys
         max_bar_size = self.graph_height
         #make sure bars don't hit the ceiling
-        if self.animate:
+        if self.animate or self.before_drag_animate:
             max_bar_size = self.graph_height - 10
 
 
-        bar_width = min(self.graph_width / float(len(self.keys)),
-                                                             self.max_bar_width)
-        gap = bar_width * 0.05
+
 
         prev_label_end = None
         self.layout.set_width(-1)
@@ -354,7 +446,7 @@ class BarChart(Chart):
                 self.move_to(intended_x, -4)
                 context.show_layout(self.layout)
             
-                prev_label_end = intended_x + label_w + 10
+                prev_label_end = intended_x + label_w + 3
                 
 
             bar_start = 0
@@ -375,6 +467,12 @@ class BarChart(Chart):
                                   [col - (j * 22) for col in base_color])
 
 
+
+
+        #fill with white background (necessary for those dragging cases)
+        if self.background:
+            self.fill_area(0, 0, legend_width, self.height, self.background)
+
         #white grid and scale values
         self.layout.set_width(-1)
         if self.grid_stride and self.max_value:
@@ -391,14 +489,14 @@ class BarChart(Chart):
                 if self.show_scale:
                     self.layout.set_text(self.value_format % i)
                     label_w, label_h = self.layout.get_pixel_size()
-                    context.move_to(self.graph_x - label_w - 8,
+                    context.move_to(legend_width - label_w - 8,
                                     self.get_pixel(y_value=y) - label_h / 2)
                     set_color(context, medium[8])
                     context.show_layout(self.layout)
 
-                set_color(context, (255,255,255))
-                self.move_to(0, y)
-                self.line_to(self.graph_width, y)
+                set_color(context, (255, 255, 255))
+                self.context.move_to(legend_width, self.get_pixel(y_value=y))
+                self.context.line_to(self.width, self.get_pixel(y_value=y))
 
 
         #stack keys
