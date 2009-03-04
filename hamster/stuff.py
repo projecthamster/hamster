@@ -97,21 +97,28 @@ class ActivityColumn(gtk.TreeViewColumn):
         cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.set_cell_data_func(cell, self.activity_painter)
 
-def format_duration(minutes):
-    if minutes == None:
-        return None
+def format_duration(minutes, human = True):
+    if not minutes:
+        return ""
     
     hours = minutes / 60
-    days = hours / 24
-    hours %= 24
     minutes = minutes % 60
     formatted_duration = ""
     
-    #TODO - convert to list comprehension or that other thing
-    if days > 0:
-        formatted_duration += "%d:" % days
-    formatted_duration += "%02d:%02d" % (hours, minutes)
-            
+    if human:
+        if minutes % 60 == 0:
+            # duration in round hours
+            formatted_duration += _("%dh") % (hours)
+        elif hours == 0:
+            # duration less than hour
+            formatted_duration += _("%dmin") % (minutes % 60.0)
+        else:
+            # x hours, y minutes
+            formatted_duration += _("%dh %dmin") % (hours, minutes % 60)
+    else:
+        formatted_duration += "%02d:%02d" % (hours, minutes)
+    
+    
     return formatted_duration
 
 def dateDict(date, prefix):
@@ -153,43 +160,3 @@ def escape_pango(text):
     text = text.replace("<", "&lt;")
     text = text.replace(">", "&gt;")
     return text
-
-
-class DayStore(object):
-    """A day view contains a treeview for facts of the day and another
-       one for totals. It creates those widgets on init, use
-       fill_view(store) to fill the tree and calculate totals """
-
-    def __init__(self, date = None):
-        date = date or dt.date.today()
-        
-        # ID, Time, Name, Duration, Date, Description, Category
-        self.fact_store = gtk.ListStore(int, str, str, str, str, str, str)
-        
-        self.facts = storage.get_facts(date)
-        
-        self.totals = {}
-        
-        for fact in self.facts:
-            duration = None
-            
-            if fact["delta"]:
-                duration = 24 * fact["delta"].days + fact["delta"].seconds / 60
-            
-            fact_category = fact['category']
-            
-            if fact_category not in self.totals:
-                self.totals[fact_category] = 0
-
-            if duration:
-                self.totals[fact_category] += duration
-
-            current_duration = format_duration(duration)
-
-            self.fact_store.append([fact['id'], escape_pango(fact['name']), 
-                                    fact["start_time"].strftime("%H:%M"), 
-                                    current_duration,
-                                    fact["start_time"].strftime("%Y%m%d"),
-                                    escape_pango(fact["description"]),
-                                    escape_pango(fact["category"])])
-

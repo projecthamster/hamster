@@ -291,7 +291,10 @@ class HamsterApplet(object):
         self.treeview.append_column(nameColumn)
 
         
-        timeColumn = gtk.TreeViewColumn(_("Duration"), gtk.CellRendererText(), text=3)
+        duration_cell = gtk.CellRendererText()
+        duration_cell.set_property("xalign", 1)
+        timeColumn = gtk.TreeViewColumn(_("Duration"), duration_cell, text=3)
+        
         self.treeview.append_column(timeColumn)
 
         edit_cell = gtk.CellRendererPixbuf()
@@ -408,9 +411,9 @@ class HamsterApplet(object):
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'],
-                                                stuff.format_duration(duration))
+                                                stuff.format_duration(duration, False))
             self.button.set_text(self.last_activity['name'],
-                                                stuff.format_duration(duration))
+                                                stuff.format_duration(duration, False))
             
             self.glade.get_widget('stop_tracking').set_sensitive(1);
         else:
@@ -443,28 +446,63 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
         today = datetime.date.today()
-        day = stuff.DayStore(today);
-        self.treeview.set_model(day.fact_store)
 
         self.last_activity = None
         last_activity = storage.get_last_activity()
         if last_activity and last_activity["start_time"].date() >= \
                                             today - datetime.timedelta(days=1):
             self.last_activity = last_activity
+
+
+        # ID, Time, Name, Duration, Date, Description, Category
+        fact_store = gtk.ListStore(int, str, str, str, str, str, str)
+        facts = storage.get_facts(today)
         
-        if len(day.facts) == 0:
+        totals = {}
+        
+        for fact in facts:
+            duration = None
+            
+            if fact["delta"]:
+                duration = 24 * fact["delta"].days + fact["delta"].seconds / 60
+            
+            fact_category = fact['category']
+            
+            if fact_category not in totals:
+                totals[fact_category] = 0
+
+            if duration:
+                totals[fact_category] += duration
+
+            current_duration = stuff.format_duration(duration)
+            
+            fact_store.append([fact['id'],
+                                    stuff.escape_pango(fact['name']), 
+                                    fact["start_time"].strftime("%H:%M"), 
+                                    "%s" % current_duration,
+                                    fact["start_time"].strftime("%H:%M"),
+                                    stuff.escape_pango(fact["description"]),
+                                    stuff.escape_pango(fact["category"])])
+
+
+
+        self.treeview.set_model(fact_store)
+
+        
+        if len(facts) == 0:
             self.glade.get_widget("todays_scroll").hide()
             self.glade.get_widget("fact_totals").set_text(_("No records today"))
         else:
             self.glade.get_widget("todays_scroll").show()
             
-            total_string = ""
-            for total in day.totals:
-                total_string += _("%(category)s: %(duration)s, ") % \
+            total_strings = []
+            for total in totals:
+                # listing of today's categories and time spent in them
+                total_strings.append(_("%(category)s: %(duration)s") % \
                         ({'category': total,
-                          'duration': stuff.format_duration(day.totals[total])})
+                          'duration': _("%.1fh") % (totals[total] / 60.0)}))
 
-            total_string = total_string.rstrip(", ") # trailing slash
+            total_string = ", ".join(total_strings)
             self.glade.get_widget("fact_totals").set_text(total_string)
    
 
