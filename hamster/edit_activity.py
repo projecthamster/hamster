@@ -700,18 +700,17 @@ class CustomFactController:
         
         i, focus_row = 0, None
         while i_time < end_time:
+            if start_time:
+                i_time += dt.timedelta(minutes = 15)
+            else:
+                i_time += dt.timedelta(minutes = 30)
+
             row_text = self.format_time(i_time)
             if start_time:
                 delta = (i_time - start_time).seconds / 60
+                delta_text = stuff.format_duration(delta)
                 
-                if delta % 60 == 0:
-                    delta_text = "%dh" % (delta / 60.0)
-                elif delta / 60 == 0:
-                    delta_text = "%dmin" % (delta % 60.0)
-                else:
-                    delta_text = "%dh %dmin" % (delta / 60.0, delta % 60)
-
-                row_text = "%s (%s)" % (row_text, delta_text)
+                row_text += " (%s)" % delta_text
 
             hours.append([row_text])
             
@@ -720,11 +719,6 @@ class CustomFactController:
                 focus_row = i
             
             i += 1
-
-            if start_time:
-                i_time += dt.timedelta(minutes = 15)
-            else:
-                i_time += dt.timedelta(minutes = 30)
 
             
 
