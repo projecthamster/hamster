@@ -70,10 +70,7 @@ class StatsViewer(object):
                                         show_scale = True,
                                         max_bar_width = 35,
                                         grid_stride = 4,
-                                        legend_width = 20,
-                                        more_on_left = self.more_on_left,
-                                        less_on_left = self.less_on_left,
-                                        min_key_count = 8)
+                                        legend_width = 20)
         self.get_widget("totals_by_day").add(self.day_chart)
 
 
@@ -96,9 +93,9 @@ class StatsViewer(object):
                                       dt.timedelta(self.view_date.weekday() + 1)
         # look if we need to start on sunday or monday
         self.start_date = self.start_date + \
-                                      dt.timedelta(self.locale_first_weekday() - 1)
+                                      dt.timedelta(self.locale_first_weekday())
         
-        self.end_date = self.start_date + dt.timedelta(7)
+        self.end_date = self.start_date + dt.timedelta(6)
 
         
         self.week_view = self.get_widget("week")
@@ -165,6 +162,10 @@ class StatsViewer(object):
                 cell.set_property('markup', markup)
 
         def duration_painter(column, cell, model, iter):
+            cell.set_property('xalign', 1)
+            cell.set_property('yalign', 0)
+    
+
             text = model.get_value(iter, 2)
             if model.iter_parent(iter) == None:
                 if model.get_path(iter) == (0,):
@@ -173,9 +174,6 @@ class StatsViewer(object):
                     text = '<span weight="heavy" rise="-20000">%s</span>' % text
             cell.set_property('markup', text)
     
-
-        self.insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE].to_string()
-
 
         self.fact_tree = self.get_widget("facts")
         self.fact_tree.set_headers_visible(False)
@@ -196,6 +194,10 @@ class StatsViewer(object):
         timeCell = gtk.CellRendererText()
         timeColumn.pack_end(timeCell, True)
         timeColumn.set_cell_data_func(timeCell, duration_painter)
+
+
+
+
         self.fact_tree.append_column(timeColumn)
         
         self.fact_tree.set_model(self.fact_store)
@@ -457,8 +459,8 @@ class StatsViewer(object):
         self.view_date = dt.date.today()
         if self.week_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-            self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday() -1)
-            self.end_date = self.start_date + dt.timedelta(7)
+            self.start_date = self.start_date + dt.timedelta(self.locale_first_weekday())
+            self.end_date = self.start_date + dt.timedelta(6)
         
         elif self.month_view.get_active():
             self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
