@@ -373,10 +373,13 @@ class StatsViewer(object):
         label2.set_markup("%s" % (dayview_caption))
         
         fact_list = storage.get_facts(self.start_date, self.end_date)
+
+        self.get_facts(fact_list)
         
         if not fact_list:
             self.get_widget("graphs").hide()
             self.get_widget("no_data_label").show()
+            self.get_widget("totals").set_text("");
             return 
         else:
             self.get_widget("graphs").show()
@@ -386,7 +389,6 @@ class StatsViewer(object):
         all_days = [self.start_date + dt.timedelta(i)
                     for i in range((self.end_date - self.start_date).days  + 1)]        
 
-        self.get_facts(fact_list)
         activity_totals, day_category_totals = self.get_totals(fact_list, all_days)
 
         
