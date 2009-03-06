@@ -464,12 +464,12 @@ class Storage(hamster.storage.Storage):
                      FROM activities a
                 LEFT JOIN categories b on b.id = a.category_id
                     WHERE a.id in (SELECT activity_id from facts
-                                  WHERE date(start_time) >= ?
-                                    AND date(start_time) <= ?)
+                                    WHERE (date(start_time) >= ? and date(start_time) <= ?)
+                                       OR (date(end_time) >= ? and date(end_time) <= ?))
         """
         end_date = end_date or date        
 
-        return self.fetchall(query, (_("Unsorted"), date, end_date))
+        return self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
         
     
     def __remove_fact(self, fact_id):
