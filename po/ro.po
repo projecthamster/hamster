@@ -1,0 +1,473 @@
+# This file is distributed under the same license as the gnome-user-share package.
+# Alex Szasz
+# Adi Roiban https://launchpad.net/~adiroiban, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: Gnome\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-03-09 21:30+0200\n"
+"PO-Revision-Date: 2009-03-06 16:08+0200\n"
+"Last-Translator: Adi Roiban <adi@roiban.ro>\n"
+"Language-Team: Gnome Romanian Team <gnomero-list@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
+msgid "Project Hamster - track your time"
+msgstr "Proiect Hamster - pontați timpul"
+
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/applet.py:65
+msgid "Time Tracker"
+msgstr "Pontator"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_Despre"
+
+#: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "Privire _generală"
+
+#: ../data/Hamster_Applet.xml.h:3
+msgid "_Preferences"
+msgstr "_Preferințe"
+
+#: ../data/preferences.glade.h:1
+msgid "<b>Activities</b>"
+msgstr "<b>Activități</b>"
+
+#: ../data/preferences.glade.h:2
+msgid "<b>Global Hotkey</b>"
+msgstr "<b>Tastă rapidă globală</b>"
+
+#: ../data/preferences.glade.h:3
+msgid "<b>Tracking</b>"
+msgstr "<b>Pontare</b>"
+
+#: ../data/preferences.glade.h:4
+msgid "Move _Down"
+msgstr "_Mută în jos"
+
+#: ../data/preferences.glade.h:5
+msgid "Move _Up"
+msgstr "M_ută în sus"
+
+#: ../data/preferences.glade.h:6
+msgid "N_ew Category"
+msgstr "Cat_egorie nouă"
+
+#: ../data/preferences.glade.h:7
+msgid "Remind of current activity every:"
+msgstr "Amintește-mi activitatea curentă la fiecare:"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking on shutdown"
+msgstr "Oprește pontarea la oprirea calculatorului"
+
+#: ../data/preferences.glade.h:9
+msgid "Stop tracking when computer becomes idle"
+msgstr "Oprește pontarea când calculatorul e inactiv"
+
+#: ../data/preferences.glade.h:10
+msgid "Time Tracker Preferences"
+msgstr "Preferințe pentru pontare"
+
+#: ../data/preferences.glade.h:11
+msgid "_Activities"
+msgstr "_Activități"
+
+#: ../data/preferences.glade.h:12
+msgid "_Categories"
+msgstr "Cate_gorii"
+
+#: ../data/preferences.glade.h:13
+msgid "_New Activity"
+msgstr "Activitate _nouă"
+
+#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
+msgid "<b>Activity</b>"
+msgstr "<b>Activitate</b>"
+
+#: ../data/add_custom_fact.glade.h:2
+msgid "<b>Date and Time</b>"
+msgstr "<b>Data și ora</b>"
+
+#: ../data/add_custom_fact.glade.h:3
+msgid "Add Earlier Activity"
+msgstr "Adaugă o activitate anterioară"
+
+#: ../data/add_custom_fact.glade.h:4
+msgid "Description:"
+msgstr "Descriere:"
+
+#: ../data/add_custom_fact.glade.h:5
+msgid "Name:"
+msgstr "Nume:"
+
+#: ../data/add_custom_fact.glade.h:6
+msgid "hours"
+msgstr "ore"
+
+#: ../data/add_custom_fact.glade.h:7
+msgid ""
+"in progress...\n"
+"until\n"
+"for"
+msgstr ""
+"în derulare...\n"
+"până la\n"
+"timp de"
+
+#: ../data/add_custom_fact.glade.h:10
+msgid "minutes"
+msgstr "minute"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Combinație de taste pentru a afișa fereastra de pontare."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"Amintește despre sarcina curentă la un interval de minute. Folosiți 0 sau "
+"mai mare de 120 pentru dezactivare."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "Amintește de sarcina curentă la fiecare x minute"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Show window"
+msgstr "Arată fereastra"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity on shutdown"
+msgstr "Oprește pontarea activității curente la oprirea calculatorului"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Oprește pontarea activității curente când calculatorul devine inactiv"
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "Stop tracking on idle"
+msgstr "Oprește pontarea în inactivitate"
+
+#: ../data/menu.glade.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "A_daugă o activitate anterioară"
+
+#. This title appears only when debugging from console. Leave it as is.
+#: ../data/menu.glade.h:3
+msgid "Hamster"
+msgstr "Hamster"
+
+#: ../data/menu.glade.h:4 ../hamster/applet.py:459
+msgid "No records today"
+msgstr "Nicio înregistrare pentru astăzi"
+
+#: ../data/menu.glade.h:5
+msgid "Show _Overview"
+msgstr "Arată _sumarul"
+
+#: ../data/menu.glade.h:6
+msgid "_Activity:"
+msgstr "_Activitate:"
+
+#: ../data/menu.glade.h:7
+msgid "_Stop Tracking"
+msgstr "_Oprește pontarea"
+
+#: ../data/menu.glade.h:8
+msgid "_Today"
+msgstr "As_tăzi"
+
+#: ../data/stats.glade.h:1
+msgid " _Day"
+msgstr "_ Zi"
+
+#: ../data/stats.glade.h:2
+msgid " _Month"
+msgstr "_ Lună"
+
+#: ../data/stats.glade.h:3
+msgid " _Week"
+msgstr "_ Săptămână"
+
+#: ../data/stats.glade.h:5
+msgid "<b>Category</b>"
+msgstr "<b>Categorie</b>"
+
+#: ../data/stats.glade.h:6
+msgid "<b>Overview</b>"
+msgstr "<b>Sumar</b>"
+
+#: ../data/stats.glade.h:7
+msgid "<b>Week</b>"
+msgstr "<b>Săptămână</b>"
+
+#: ../data/stats.glade.h:8
+msgid "Add activity"
+msgstr "Adaugă o activitate"
+
+#: ../data/stats.glade.h:9
+msgid "Delete activity"
+msgstr "Șterge activitatea"
+
+#: ../data/stats.glade.h:10
+msgid "Earlier activities"
+msgstr "Activități anterioare"
+
+#: ../data/stats.glade.h:11
+msgid "Edit activity"
+msgstr "Editează activitatea"
+
+#: ../data/stats.glade.h:12
+msgid "Generate Report"
+msgstr "Generează un raport"
+
+#: ../data/stats.glade.h:13
+msgid "Newer activities"
+msgstr "Activități mai noi"
+
+#: ../data/stats.glade.h:14
+msgid "Overview - Hamster"
+msgstr "Sumar - Hamster"
+
+#: ../data/stats.glade.h:15
+msgid "Show day"
+msgstr "Arată ziua"
+
+#: ../data/stats.glade.h:16
+msgid "Show month"
+msgstr "Arată luna"
+
+#: ../data/stats.glade.h:17
+msgid "Show week"
+msgstr "Arată săptămâna"
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgstr "Drepturi de autor pe 2007-2008 Tomis Baugis și alții"
+
+#: ../hamster/about.py:45
+msgid "Hamster Website"
+msgstr "Pagina web Hamster"
+
+#: ../hamster/about.py:54
+msgid "translator-credits"
+msgstr "Alexandru Szasz <alexxed@gmail.com>"
+
+#: ../hamster/preferences.py:56 ../hamster/db.py:343 ../hamster/reports.py:133
+msgid "Unsorted"
+msgstr "Nesortat"
+
+#: ../hamster/preferences.py:103 ../hamster/applet.py:222
+#: ../hamster/stats.py:47
+msgid "Name"
+msgstr "Nume"
+
+#: ../hamster/preferences.py:123 ../hamster/reports.py:106
+#: ../hamster/reports.py:176
+msgid "Category"
+msgstr "Categorie"
+
+#: ../hamster/preferences.py:511
+msgid "New category"
+msgstr "Categorie nouă"
+
+#: ../hamster/preferences.py:524
+msgid "New activity"
+msgstr "Activitate nouă"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:569
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d minute"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:572
+msgid "Never"
+msgstr "Niciodată"
+
+#: ../hamster/add_custom_fact.py:82
+msgid "Update activity"
+msgstr "Actualizează activitatea"
+
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "Editează"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "Comută"
+
+#: ../hamster/applet.py:424 ../hamster/applet.py:525
+msgid "No activity"
+msgstr "Nicio activitate"
+
+#. activity reminder
+#: ../hamster/applet.py:438
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Se lucrează la <b>%s</b>"
+
+#: ../hamster/applet.py:466
+#, python-format
+msgid "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration)s, "
+
+#. defaults
+#: ../hamster/db.py:513
+msgid "Work"
+msgstr "Servici"
+
+#: ../hamster/db.py:514
+msgid "Reading news"
+msgstr "Citit presa"
+
+#: ../hamster/db.py:515
+msgid "Checking stocks"
+msgstr "Verificat stocuri"
+
+#: ../hamster/db.py:516
+msgid "Super secret project X"
+msgstr "Proiectul super secret X"
+
+#: ../hamster/db.py:517
+msgid "World domination"
+msgstr "Dominarea lumii"
+
+#: ../hamster/db.py:519
+msgid "Day to day"
+msgstr "Zi de zi"
+
+#: ../hamster/db.py:520
+msgid "Lunch"
+msgstr "Gustare"
+
+#: ../hamster/db.py:521
+msgid "Watering flowers"
+msgstr "Udat flori"
+
+#: ../hamster/db.py:522
+msgid "Doing handstands"
+msgstr "Genoflexiuni"
+
+#: ../hamster/db.py:705 ../hamster/db.py:709
+msgid "name"
+msgstr "nume"
+
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:32 ../hamster/stats.py:296
+#, python-format
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr ""
+"Sumar pentru %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %"
+"(end_Y)s"
+
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:34 ../hamster/stats.py:301
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Sumar pentru %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:36 ../hamster/stats.py:306
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Sumar pentru %(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
+
+#. overview label for single day
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#: ../hamster/reports.py:39 ../hamster/stats.py:312
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Sumar pentru %(start_d)s %(start_B)s %(start_Y)s"
+
+#: ../hamster/reports.py:104
+msgid "Date"
+msgstr "Dată"
+
+#: ../hamster/reports.py:105 ../hamster/reports.py:177
+msgid "Activity"
+msgstr "Activitate"
+
+#: ../hamster/reports.py:107
+msgid "Start"
+msgstr "Început"
+
+#: ../hamster/reports.py:108
+msgid "End"
+msgstr "Sfârșit"
+
+#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:55
+msgid "Duration"
+msgstr "Durată"
+
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Descriere"
+
+#. fact date column in HTML report
+#: ../hamster/reports.py:148
+#, python-format
+msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+msgstr "%(report_d)s %(report_b)s %(report_Y)s"
+
+#. summary table
+#: ../hamster/reports.py:173
+msgid "Totals"
+msgstr "Totaluri"
+
+#: ../hamster/reports.py:190
+msgid "Total Time"
+msgstr "Timp total"
+
+#. date format in overview window fact listing
+#. prefix is "o_",letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:190
+#, python-format
+msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgstr "%(o_A)s, %(o_d)s %(o_b)s"
+
+#. date format in month chart in overview window (click on "month" to see it)
+#. prefix is "m_", letter after prefix is regular python format. you can use all of them
+#: ../hamster/stats.py:244
+#, python-format
+msgid "%(m_b)s %(m_d)s"
+msgstr "%(m_d)s %(m_b)s"
+
+#: ../hamster/stats.py:268
+msgid "Other"
+msgstr "Alta"
+
+#: ../hamster/stats.py:313
+msgid "Day"
+msgstr "Zi"
+
+#: ../hamster/stats.py:315
+msgid "Week"
+msgstr "Săptămână"
+
+#: ../hamster/stats.py:317
+msgid "Month"
+msgstr "Lună"

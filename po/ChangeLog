@@ -1,3 +1,8 @@
+2009-03-09  Mișu Moldovan  <dumol@gnome.ro>
+
+	* LINGUAS: Added ro for Romanian.
+	* ro.po: Added Romanian translation by Alex Szasz
+
 2009-03-08  Gil Forcada  <gforcada@gnome.org>
 
 	* ca.po: Minor fix to Catalan translation by David Planella.
