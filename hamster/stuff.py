@@ -99,7 +99,10 @@ class ActivityColumn(gtk.TreeViewColumn):
 
 def format_duration(minutes, human = True):
     if not minutes:
-        return ""
+        if human:
+            return ""
+        else:
+            return "00:00"
     
     hours = minutes / 60
     minutes = minutes % 60
