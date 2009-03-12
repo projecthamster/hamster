@@ -34,8 +34,7 @@ import defs
 from dispatcher import Dispatcher
 
 # Init i18n
-import __builtin__
-__builtin__._ = gettext.gettext
+gettext.install("hamster-applet", unicode = True)
 
 # Allow to use not installed hamster
 UNINSTALLED_HAMSTER = False
