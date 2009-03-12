@@ -42,15 +42,13 @@ import hamster.defs
 # Setup i18n
 locale_dir = os.path.abspath(os.path.join(hamster.defs.DATA_DIR, "locale"))
 
-gettext.bindtextdomain('hamster-applet', locale_dir)
-if hasattr(gettext, 'bind_textdomain_codeset'):
-    gettext.bind_textdomain_codeset('hamster-applet','UTF-8')
-gettext.textdomain('hamster-applet')
+for module in (gettext, locale, gtk.glade):
+    module.bindtextdomain('hamster-applet', locale_dir)
+    module.textdomain('hamster-applet')
 
-locale.bindtextdomain('hamster-applet', locale_dir)
-if hasattr(locale, 'bind_textdomain_codeset'):
-    locale.bind_textdomain_codeset('hamster-applet','UTF-8')
-locale.textdomain('hamster-applet')
+    if hasattr(module, 'bind_textdomain_codeset'):
+        module.bind_textdomain_codeset('hamster-applet','UTF-8')
+
 
 hamster.__init_db()
 import hamster.applet
