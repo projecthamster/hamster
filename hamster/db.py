@@ -185,7 +185,7 @@ class Storage(hamster.storage.Storage):
                 LEFT JOIN categories c on b.category_id = c.id
                     WHERE a.id = ? 
         """
-        return self.fetchone(query, (_("Unsorted"), id))
+        return self.fetchone(query, (_(u"Unsorted"), id))
 
     def __get_last_activity(self):
         query = """
@@ -202,10 +202,10 @@ class Storage(hamster.storage.Storage):
                  ORDER BY a.start_time desc
                     LIMIT 1
         """
-        last = self.fetchone(query, (_("Unsorted"), dt.date.today()))
+        last = self.fetchone(query, (_(u"Unsorted"), dt.date.today()))
         if not last:
             #try yesterday if there is nothing today
-            last = self.fetchone(query, (_("Unsorted"),
+            last = self.fetchone(query, (_(u"Unsorted"),
                                          dt.date.today() - dt.timedelta(days=1)))
 
         if last and last["end_time"]: #will consider as last only if it is going on
@@ -353,7 +353,7 @@ class Storage(hamster.storage.Storage):
         """
         end_date = end_date or date
         
-        facts = self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
+        facts = self.fetchall(query, (_(u"Unsorted"), date, end_date, date, end_date))
         res = []
 
         today = dt.date.today()
@@ -455,7 +455,7 @@ class Storage(hamster.storage.Storage):
                  GROUP BY b.category_id
                  ORDER BY popularity desc
         """
-        return self.fetchall(query, (_("Unsorted"), ))
+        return self.fetchall(query, (_(u"Unsorted"), ))
 
     def __get_interval_activity_ids(self, date, end_date = None):
         """returns activities used in the specified interval"""
@@ -469,7 +469,7 @@ class Storage(hamster.storage.Storage):
         """
         end_date = end_date or date        
 
-        return self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
+        return self.fetchall(query, (_(u"Unsorted"), date, end_date, date, end_date))
         
     
     def __remove_fact(self, fact_id):
@@ -643,16 +643,16 @@ class Storage(hamster.storage.Storage):
 
     def run_fixtures(self):
         # defaults
-        work_category = {"name": _("Work"),
-                         "entries": [_("Reading news"),
-                                     _("Checking stocks"),
-                                     _("Super secret project X"),
-                                     _("World domination")]}
+        work_category = {"name": _(u"Work"),
+                         "entries": [_(u"Reading news"),
+                                     _(u"Checking stocks"),
+                                     _(u"Super secret project X"),
+                                     _(u"World domination")]}
         
-        nonwork_category = {"name": _("Day to day"),
-                            "entries": [_("Lunch"),
-                                        _("Watering flowers"),
-                                        _("Doing handstands")]}
+        nonwork_category = {"name": _(u"Day to day"),
+                            "entries": [_(u"Lunch"),
+                                        _(u"Watering flowers"),
+                                        _(u"Doing handstands")]}
         
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
