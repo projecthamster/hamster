@@ -50,7 +50,7 @@ msgstr "<b>Глобальные сочетания клавиш</b>"
 
 #: ../data/preferences.glade.h:3
 msgid "<b>Tracking</b>"
-msgstr "<b>Учет</b>"
+msgstr "<b>Учёт</b>"
 
 #: ../data/preferences.glade.h:4
 msgid "Move _Down"
@@ -195,7 +195,7 @@ msgstr "_Занятие:"
 
 #: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
-msgstr "Прекратить _учет"
+msgstr "Прекратить _учёт"
 
 #: ../data/menu.glade.h:8
 msgid "_Today"
