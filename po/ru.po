@@ -1,15 +1,16 @@
 # Russian Translation for GNOME Hamster-Applet
-# Copyright (C) 2008 Project Hamster Team
-# This file is distributed under the same license as the projecthamster package.
+# Copyright (C) 2009 Free Software Foundation Inc.
+#
+# This file is distributed under the same license as the project-hamster package.
 # Sasha Shveik <sasha.shveik@gmail.com>, 2008
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Hamster 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 18:05+0000\n"
-"PO-Revision-Date: 2008-09-21 20:09+0300\n"
-"Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
+"POT-Creation-Date: 2009-03-14 01:06+0300\n"
+"PO-Revision-Date: 2009-03-13 15:46+0300\n"
+"Last-Translator: Yuriy Penkin <yuriy.penkin@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,26 +18,31 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: Russia\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1
-#: ../hamster/about.py:40
-msgid "Time Tracker"
-msgstr "Учет времени"
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
+msgid "Project Hamster - track your time"
+msgstr "Проект hamster - следи за своим временем"
 
-#: ../data/Hamster_Applet.server.in.in.h:2
-msgid "Time tracking for masses"
-msgstr "Учет времени для всех"
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/about.py:41 ../hamster/applet.py:67
+msgid "Time Tracker"
+msgstr "Учёт времени"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "_О программе"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "_Обзор"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_Параметры"
 
 #: ../data/preferences.glade.h:1
 msgid "<b>Activities</b>"
-msgstr "<b>Мероприятия</b>"
+msgstr "<b>Занятия</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
@@ -59,91 +65,123 @@ msgid "N_ew Category"
 msgstr "_Создать категорию"
 
 #: ../data/preferences.glade.h:7
-#: ../data/hamster-applet.schemas.in.h:6
+msgid "Remind of current activity every:"
+msgstr "Напоминать о текущем занятии каждые:"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking on shutdown"
 msgstr "Прекращать отслеживание при выключении компьютера"
 
-#: ../data/preferences.glade.h:8
+#: ../data/preferences.glade.h:9
 msgid "Stop tracking when computer becomes idle"
 msgstr "Прекращать отслеживание при бездействии компьютера"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.glade.h:10
 msgid "Time Tracker Preferences"
 msgstr "Настройки апплета отслеживания времени"
 
-#: ../data/preferences.glade.h:10
-msgid "_Activities"
-msgstr "_Мероприятия"
-
 #: ../data/preferences.glade.h:11
+msgid "_Activities"
+msgstr "_Занятия"
+
+#: ../data/preferences.glade.h:12
 msgid "_Categories"
 msgstr "_Категории"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:13
 msgid "_New Activity"
-msgstr "_Создать мероприятие"
+msgstr "_Создать занятие"
 
 #: ../data/edit_activity.glade.h:1
-#: ../data/stats.glade.h:4
-msgid "<b>Activity</b>"
-msgstr "<b>Мероприятие</b>"
+msgid "20/01/08"
+msgstr "20.01.08"
 
 #: ../data/edit_activity.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b>Дата и Время</b>"
+msgid "20/01/09"
+msgstr "20.01.09"
 
 #: ../data/edit_activity.glade.h:3
-msgid "Add Earlier Activity"
-msgstr "Добавить мероприятие"
+msgid "3:30pm"
+msgstr "15:30"
 
 #: ../data/edit_activity.glade.h:4
-msgid "hours"
-msgstr "часов"
+msgid "Activity:"
+msgstr "Занятие:"
 
 #: ../data/edit_activity.glade.h:5
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"в процессе...\n"
-"до\n"
-"длительностью"
+msgid "Add Earlier Activity"
+msgstr "Добавить другое занятие"
+
+#: ../data/edit_activity.glade.h:6
+msgid "Description:"
+msgstr "Описание:"
+
+#: ../data/edit_activity.glade.h:7
+msgid "Preview:"
+msgstr "Предварительный просмотр:"
 
 #: ../data/edit_activity.glade.h:8
-msgid "minutes"
-msgstr "минут"
+msgid "Time:"
+msgstr "Время:"
+
+#: ../data/edit_activity.glade.h:9
+msgid "gtk-cancel"
+msgstr "gtk-cancel"
+
+#: ../data/edit_activity.glade.h:10
+msgid "gtk-save"
+msgstr "gtk-save"
+
+#: ../data/edit_activity.glade.h:11
+msgid "in progress"
+msgstr "в процессе"
+
+#: ../data/edit_activity.glade.h:12
+msgid "to"
+msgstr "до"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Сочетание клавиш для отображения окна апплета отслеживания времени."
 
 #: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"Включает напоминание о текущей задаче периодически через заданное число "
+"минут. Значение 0 или более 120 отключает напоминание"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "Напоминать о текущей задаче периодически через заданное число минут"
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Show window"
 msgstr "Показать окно"
 
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Stop tracking current activity on shutdown"
-msgstr "Прекратить отслеживание текущей активности при выключении компьютера"
-
-#: ../data/hamster-applet.schemas.in.h:4
-msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Прекратить отслеживание текущей активности при бездействии компьютера"
-
 #: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity on shutdown"
+msgstr "Прекратить отслеживание текущего занятия при выключении компьютера"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr "Прекратить отслеживание текущего занятия при бездействии компьютера"
+
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on idle"
 msgstr "Прекратить отслеживание при бездействии"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
-msgstr "Добавить меро_приятие"
+msgstr "Д_обавить другое занятие"
 
 #. This title appears only when debugging from console. Leave it as is.
 #: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:4 ../hamster/applet.py:494
 msgid "No records today"
 msgstr "Нет записей за сегодня"
 
@@ -153,7 +191,7 @@ msgstr "Показать _обзор"
 
 #: ../data/menu.glade.h:6
 msgid "_Activity:"
-msgstr "_Мероприятие:"
+msgstr "_Событие:"
 
 #: ../data/menu.glade.h:7
 msgid "_Stop Tracking"
@@ -164,179 +202,208 @@ msgid "_Today"
 msgstr "_Сегодня"
 
 #: ../data/stats.glade.h:1
-msgid " _Day"
-msgstr "_День"
-
-#: ../data/stats.glade.h:2
 msgid " _Month"
 msgstr "_Месяц"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.glade.h:2
 msgid " _Week"
 msgstr "_Неделя"
 
-#: ../data/stats.glade.h:5
-msgid "<b>Category</b>"
-msgstr "<b>Категория</b>"
-
-#: ../data/stats.glade.h:6
+#: ../data/stats.glade.h:3
 msgid "<b>Overview</b>"
 msgstr "<b>Обзор</b>"
 
+#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+msgid "Activity"
+msgstr "Событие"
+
+#: ../data/stats.glade.h:5
+msgid "Add activity"
+msgstr "Добавить событие"
+
+#: ../data/stats.glade.h:6
+msgid "Delete activity"
+msgstr "Удалить событие"
+
 #: ../data/stats.glade.h:7
-msgid "<b>Week</b>"
-msgstr "<b>Неделя</b>"
+msgid "Edit activity"
+msgstr "Редактировать событие"
 
 #: ../data/stats.glade.h:8
-msgid "Add activity"
-msgstr "Добавить мероприятие"
-
-#: ../data/stats.glade.h:9
-msgid "Delete activity"
-msgstr "Удалить мероприятие"
-
-#: ../data/stats.glade.h:10
-msgid "Earlier activities"
-msgstr "Предыдущие мероприятия"
-
-#: ../data/stats.glade.h:11
-msgid "Edit activity"
-msgstr "Редактировать мероприятие"
-
-#: ../data/stats.glade.h:12
 msgid "Generate Report"
 msgstr "Создать отчёт"
 
-#: ../data/stats.glade.h:13
+#: ../data/stats.glade.h:9
 msgid "Newer activities"
-msgstr "Последующие мероприятия"
+msgstr "Последующие события"
 
-#: ../data/stats.glade.h:14
+#: ../data/stats.glade.h:10
+msgid "No data for this interval"
+msgstr "Данные за этот интервал недоступны"
+
+#: ../data/stats.glade.h:11
 msgid "Overview - Hamster"
 msgstr "Обзор — Hamster"
 
-#: ../data/stats.glade.h:15
-msgid "Show day"
-msgstr "Обзор дня"
-
-#: ../data/stats.glade.h:16
+#: ../data/stats.glade.h:12
 msgid "Show month"
 msgstr "Обзор месяца"
 
-#: ../data/stats.glade.h:17
+#: ../data/stats.glade.h:13
 msgid "Show week"
 msgstr "Обзор недели"
 
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "Сегодня"
+#: ../data/stats.glade.h:14 ../hamster/stats.py:364
+msgid "Week"
+msgstr "Неделя"
 
-#: ../hamster/about.py:42
-msgid "Time tracking for masses."
-msgstr "Отслеживание времени для всех."
+#: ../hamster/about.py:44
+msgid "Copyright © 2007-2009 Toms Bauģis and others"
+msgstr "Авторское право © 2007-2009 Toms Baugis и другие"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Авторское право © 2007-2008 Toms Baugis и другие"
+#: ../hamster/about.py:46
+msgid "Project Hamster Website"
+msgstr "Веб-сайт апплета для учёта времени"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Веб-сайт апплета для учета времени"
+#: ../hamster/about.py:47
+msgid "About Time Tracker"
+msgstr "Об апплете"
 
-#: ../hamster/about.py:54
+#: ../hamster/about.py:57
 msgid "translator-credits"
 msgstr ""
 "Sasha Shveik\n"
 "Юрий Пенкин <yuriy.penkin@gmail.com>"
 
-#: ../hamster/preferences.py:56
-#: ../hamster/db.py:256
-#: ../hamster/reports.py:101
+#. try yesterday if there is nothing today
+#: ../hamster/preferences.py:56 ../hamster/edit_activity.py:338
+#: ../hamster/applet.py:600 ../hamster/db.py:188 ../hamster/db.py:205
+#: ../hamster/db.py:208 ../hamster/db.py:356 ../hamster/db.py:458
+#: ../hamster/db.py:472 ../hamster/reports.py:129 ../hamster/stuff.py:67
 msgid "Unsorted"
 msgstr "Несортированные"
 
-#: ../hamster/preferences.py:103
-#: ../hamster/stats.py:46
+#: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "Название"
 
-#: ../hamster/preferences.py:123
-#: ../hamster/reports.py:78
+#: ../hamster/preferences.py:124 ../hamster/reports.py:106
+#: ../hamster/reports.py:172
 msgid "Category"
 msgstr "Категория"
 
-#: ../hamster/preferences.py:468
+#: ../hamster/preferences.py:511
 msgid "New category"
 msgstr "Новая категория"
 
-#: ../hamster/preferences.py:481
+#: ../hamster/preferences.py:524
 msgid "New activity"
-msgstr "Новое мероприятие"
+msgstr "Новое событие"
 
-#: ../hamster/edit_activity.py:84
+#. notify interval slider value label
+#: ../hamster/preferences.py:579
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "Минуты: %(interval_minutes)d"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:582
+msgid "Never"
+msgstr "Никогда"
+
+#: ../hamster/edit_activity.py:353
 msgid "Update activity"
-msgstr "Обновить мероприятие"
+msgstr "Обновить событие"
 
-#: ../hamster/applet.py:200
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Edit"
+msgstr "Править"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:77
+msgid "Switch"
+msgstr "Переключиться"
+
+#: ../hamster/applet.py:296 ../hamster/reports.py:109
+#: ../hamster/reports.py:174
+msgid "Duration"
+msgstr "Длительность"
+
+#: ../hamster/applet.py:420 ../hamster/applet.py:567
 msgid "No activity"
-msgstr "Нет мероприятий"
+msgstr "Нет событий"
+
+#. activity reminder
+#: ../hamster/applet.py:434
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Текущая задача: <b>%s</b>"
+
+#. listing of today's categories and time spent in them
+#: ../hamster/applet.py:501
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#: ../hamster/applet.py:503
+#, python-format
+msgid "%.1fh"
+msgstr "%.1fч"
 
 #. defaults
-#: ../hamster/db.py:403
+#: ../hamster/db.py:646
 msgid "Work"
 msgstr "Работа"
 
-#: ../hamster/db.py:404
+#: ../hamster/db.py:647
 msgid "Reading news"
 msgstr "Чтение новостей"
 
-#: ../hamster/db.py:405
+#: ../hamster/db.py:648
 msgid "Checking stocks"
 msgstr "Проверка курса ценных бумаг"
 
-#: ../hamster/db.py:406
+#: ../hamster/db.py:649
 msgid "Super secret project X"
 msgstr "Суперсекретный проект Х"
 
-#: ../hamster/db.py:407
+#: ../hamster/db.py:650
 msgid "World domination"
 msgstr "Мировое господство"
 
-#: ../hamster/db.py:409
+#: ../hamster/db.py:652
 msgid "Day to day"
 msgstr "Ежедневная рутина"
 
-#: ../hamster/db.py:410
+#: ../hamster/db.py:653
 msgid "Lunch"
 msgstr "Обед"
 
-#: ../hamster/db.py:411
+#: ../hamster/db.py:654
 msgid "Watering flowers"
 msgstr "Полив цветов"
 
-#: ../hamster/db.py:412
+#: ../hamster/db.py:655
 msgid "Doing handstands"
 msgstr "Стояние на голове"
-
-#: ../hamster/db.py:588
-#: ../hamster/db.py:592
-msgid "name"
-msgstr "название"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:29
-#: ../hamster/stats.py:274
+#: ../hamster/reports.py:32 ../hamster/stats.py:351
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Обзор за %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid ""
+"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr ""
+"Обзор за %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)"
+"s"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:31
-#: ../hamster/stats.py:279
+#: ../hamster/reports.py:34 ../hamster/stats.py:356
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Обзор за %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -344,104 +411,86 @@ msgstr "Обзор за %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:33
-#: ../hamster/stats.py:284
+#: ../hamster/reports.py:36 ../hamster/stats.py:361
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Обзор за %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 
-#. overview label for single day
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36
-#: ../hamster/stats.py:290
+#: ../hamster/reports.py:39
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Обзор за %(start_B)s %(start_d)s, %(start_Y)s"
 
-#: ../hamster/reports.py:76
+#: ../hamster/reports.py:104
 msgid "Date"
 msgstr "Дата"
 
-#: ../hamster/reports.py:77
-msgid "Activity"
-msgstr "Мероприятие"
-
-#: ../hamster/reports.py:79
+#: ../hamster/reports.py:107
 msgid "Start"
 msgstr "Начало"
 
-#: ../hamster/reports.py:80
+#: ../hamster/reports.py:108
 msgid "End"
 msgstr "Окончание"
 
-#: ../hamster/reports.py:81
-msgid "Duration"
-msgstr "Длительность"
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Описание"
 
 #. fact date column in HTML report
-#: ../hamster/reports.py:111
+#: ../hamster/reports.py:144
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
 
+#. summary table
+#: ../hamster/reports.py:169
+msgid "Totals"
+msgstr "Всего"
+
+#: ../hamster/reports.py:186
+msgid "Total Time"
+msgstr "Общее время"
+
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:172
+#: ../hamster/stats.py:237
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_b)s %(o_d)s"
 
-#. date format in month chart in overview window (click on "month" to see it)
-#. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:366
+msgid "Month"
+msgstr "Месяц"
+
+#: ../hamster/stats.py:405
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_b)s %(m_d)s"
 
-#: ../hamster/stats.py:246
-msgid "Other"
-msgstr "Другой"
+#: ../hamster/stats.py:412
+msgid "Total"
+msgstr "Всего"
 
-#: ../hamster/stats.py:291
-msgid "Day"
-msgstr "День"
+#: ../hamster/stats.py:421
+#, python-format
+msgid "%(category)s: %(duration).1f, "
+msgstr "%(category)s: %(duration).lf, "
 
-#: ../hamster/stats.py:293
-msgid "Week"
-msgstr "Неделя"
+#. duration in round hours
+#: ../hamster/stuff.py:114
+#, python-format
+msgid "%dh"
+msgstr "%dч"
 
-#: ../hamster/stats.py:295
-msgid "Month"
-msgstr "Месяц"
+#. duration less than hour
+#: ../hamster/stuff.py:117
+#, python-format
+msgid "%dmin"
+msgstr "%dмин"
 
-#~ msgid "Overview for %s"
-#~ msgstr "Обзор для %s"
-#~ msgid "Overview for %s - %s"
-#~ msgstr "Обзор для %s - %s"
-#~ msgid "Idle minutes:"
-#~ msgstr "Минут бездействия:"
-
-#, fuzzy
-#~ msgid "Add an older fact"
-#~ msgstr "Добавить пропущенную активность"
-#~ msgid ""
-#~ "After how many minutes hamster should stop tracking activity when "
-#~ "computer is idle. Set to 0 to disable."
-#~ msgstr ""
-#~ "Через сколько минут после начала простаивания компьютера Hamster должен "
-#~ "прекратить отслеживание активности. Установите 0 для отключения этой "
-#~ "настройки."
-#~ msgid "Timeout in minutes"
-#~ msgstr "Тайм-аут в минутах"
-#~ msgid "Ad_d Older Fact"
-#~ msgstr "Добавить пропущенную активность"
-#~ msgid "A_dd"
-#~ msgstr "_Добавить"
-#~ msgid "Add older fact - Hamster"
-#~ msgstr "Добавить пропущенную активность - Hamster"
-#~ msgid "_Cancel"
-#~ msgstr "_Отмена"
-#~ msgid "_Update"
-#~ msgstr "_Обновить"
-
+#. x hours, y minutes
+#: ../hamster/stuff.py:120
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dч %dмин"
