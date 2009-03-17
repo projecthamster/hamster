@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 15:45+0100\n"
-"PO-Revision-Date: 2009-02-22 17:54+0100\n"
+"POT-Creation-Date: 2009-03-17 01:56+0100\n"
+"PO-Revision-Date: 2009-03-04 20:48+0100\n"
 "Last-Translator: Adrian Guniš <andygun696@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Měřič času"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "O _aplikaci"
+msgstr "O _appletu"
 
 #: ../data/Hamster_Applet.xml.h:2
 msgid "_Overview"
@@ -92,22 +92,25 @@ msgstr "_Kategorie"
 msgid "_New Activity"
 msgstr "No_vá činnost"
 
+# Tohle bude asi nějaká chyba
 #: ../data/edit_activity.glade.h:1
+#, fuzzy
 msgid "20/01/08"
-msgstr ""
+msgstr "20.01.2008"
 
 #: ../data/edit_activity.glade.h:2
+#, fuzzy
 msgid "20/01/09"
-msgstr ""
+msgstr "20.01.2009"
 
 #: ../data/edit_activity.glade.h:3
+#, fuzzy
 msgid "3:30pm"
-msgstr ""
+msgstr "15:30"
 
 #: ../data/edit_activity.glade.h:4
-#, fuzzy
 msgid "Activity:"
-msgstr "Č_innost:"
+msgstr "Činnost:"
 
 #: ../data/edit_activity.glade.h:5
 msgid "Add Earlier Activity"
@@ -119,32 +122,29 @@ msgstr "Popis:"
 
 #: ../data/edit_activity.glade.h:7
 msgid "Preview:"
-msgstr ""
+msgstr "Náhled:"
 
 #: ../data/edit_activity.glade.h:8
-#, fuzzy
 msgid "Time:"
-msgstr "Název:"
+msgstr "Čas:"
 
 #: ../data/edit_activity.glade.h:9
 msgid "gtk-cancel"
-msgstr ""
+msgstr "gtk-cancel"
 
 #: ../data/edit_activity.glade.h:10
 msgid "gtk-save"
-msgstr ""
+msgstr "gtk-save"
 
 #: ../data/edit_activity.glade.h:11
-#, fuzzy
 msgid "in progress"
-msgstr ""
-"probíhá...\n"
-"do\n"
-"po dobu"
+msgstr "probíhá"
 
+# nemohu ověřit, co překlad znamená, applet se mi nenačte
 #: ../data/edit_activity.glade.h:12
+#, fuzzy
 msgid "to"
-msgstr ""
+msgstr "do"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
@@ -187,7 +187,7 @@ msgstr "Při_dat starší činnosti"
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:457
+#: ../data/menu.glade.h:4 ../hamster/applet.py:494
 msgid "No records today"
 msgstr "Dnes žádné záznamy"
 
@@ -245,7 +245,7 @@ msgstr "Novější činnosti"
 
 #: ../data/stats.glade.h:10
 msgid "No data for this interval"
-msgstr ""
+msgstr "Žádná data v tomto intervalu"
 
 #: ../data/stats.glade.h:11
 msgid "Overview - Hamster"
@@ -259,24 +259,21 @@ msgstr "Zobrazit měsíc"
 msgid "Show week"
 msgstr "Zobrazit týden"
 
-#: ../data/stats.glade.h:14 ../hamster/stats.py:349
+#: ../data/stats.glade.h:14 ../hamster/stats.py:364
 msgid "Week"
 msgstr "Týden"
 
 #: ../hamster/about.py:44
-#, fuzzy
 msgid "Copyright © 2007-2009 Toms Bauģis and others"
-msgstr "Copyright © 2007-2008 Toms Baugis a další"
+msgstr "Copyright © 2007-2009 Toms Bauģis a další"
 
 #: ../hamster/about.py:46
-#, fuzzy
 msgid "Project Hamster Website"
-msgstr "Webová stránka aplikace Hamster"
+msgstr "Webová stránka projektu Hamster"
 
 #: ../hamster/about.py:47
-#, fuzzy
 msgid "About Time Tracker"
-msgstr "Měřič času"
+msgstr "O appletu Měřič času"
 
 #: ../hamster/about.py:57
 msgid "translator-credits"
@@ -284,7 +281,7 @@ msgstr "Adrian Guniš <andygun696@gmail.com>"
 
 #. try yesterday if there is nothing today
 #: ../hamster/preferences.py:56 ../hamster/edit_activity.py:338
-#: ../hamster/applet.py:562 ../hamster/db.py:188 ../hamster/db.py:205
+#: ../hamster/applet.py:600 ../hamster/db.py:188 ../hamster/db.py:205
 #: ../hamster/db.py:208 ../hamster/db.py:356 ../hamster/db.py:458
 #: ../hamster/db.py:472 ../hamster/reports.py:129 ../hamster/stuff.py:67
 msgid "Unsorted"
@@ -332,25 +329,31 @@ msgstr "Upravit"
 msgid "Switch"
 msgstr "Přepnout"
 
-#: ../hamster/applet.py:294 ../hamster/reports.py:109
+#: ../hamster/applet.py:296 ../hamster/reports.py:109
 #: ../hamster/reports.py:174
 msgid "Duration"
 msgstr "Trvání"
 
-#: ../hamster/applet.py:417 ../hamster/applet.py:529
+#: ../hamster/applet.py:420 ../hamster/applet.py:567
 msgid "No activity"
 msgstr "Žádná činnost"
 
 #. activity reminder
-#: ../hamster/applet.py:431
+#: ../hamster/applet.py:434
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Pracuje se na <b>%s</b>"
 
-#: ../hamster/applet.py:463
-#, python-format
-msgid "%(category)s: %(duration)s, "
+#. listing of today's categories and time spent in them
+#: ../hamster/applet.py:501
+#, fuzzy, python-format
+msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s, "
+
+#: ../hamster/applet.py:503
+#, python-format
+msgid "%.1fh"
+msgstr ""
 
 #. defaults
 #: ../hamster/db.py:646
@@ -389,15 +392,11 @@ msgstr "Zalévání květin"
 msgid "Doing handstands"
 msgstr "Cvičení"
 
-#: ../hamster/db.py:838 ../hamster/db.py:842
-msgid "name"
-msgstr "název"
-
 # Nevím, jak nastavit formáty datumu. Když jsem provedl zápis jako "Přehled za %(start_d)s. %(start_B)s %(start_Y)s", tak se to při zkoušce překladu nijak neprojevilo (př.: "Přehled za zář 15. 2008"), takže jsem to vrátil na původní.
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:336
+#: ../hamster/reports.py:32 ../hamster/stats.py:351
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -409,7 +408,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:341
+#: ../hamster/reports.py:34 ../hamster/stats.py:356
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Přehled za %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s"
@@ -417,7 +416,7 @@ msgstr "Přehled za %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s"
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:346
+#: ../hamster/reports.py:36 ../hamster/stats.py:361
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Přehled za %(start_d)s. - %(end_d)s. %(start_B)s %(end_Y)s"
@@ -460,29 +459,49 @@ msgstr "Celkový čas"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:237
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
 
-#: ../hamster/stats.py:351
+#: ../hamster/stats.py:366
 msgid "Month"
 msgstr "Měsíc"
 
-#: ../hamster/stats.py:388
+#: ../hamster/stats.py:405
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_d)s. %(m_b)s"
 
-#: ../hamster/stats.py:395
-#, fuzzy
+#: ../hamster/stats.py:412
 msgid "Total"
 msgstr "Celkem"
 
-#: ../hamster/stats.py:404
-#, fuzzy, python-format
+#: ../hamster/stats.py:421
+#, python-format
 msgid "%(category)s: %(duration).1f, "
-msgstr "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration).1f, "
+
+#. duration in round hours
+#: ../hamster/stuff.py:114
+#, python-format
+msgid "%dh"
+msgstr ""
+
+#. duration less than hour
+#: ../hamster/stuff.py:117
+#, python-format
+msgid "%dmin"
+msgstr ""
+
+#. x hours, y minutes
+#: ../hamster/stuff.py:120
+#, python-format
+msgid "%dh %dmin"
+msgstr ""
+
+#~ msgid "name"
+#~ msgstr "název"
 
 #~ msgid "<b>Activity</b>"
 #~ msgstr "<b>Činnost</b>"
