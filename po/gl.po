@@ -1,33 +1,46 @@
-# translation of gl.po to Galego
+# translation of hamster-applet.po to Galego.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2008.
+# This file is distributed under the same license as the hamster-applet package.
+# Fran Diéguez <fran.dieguez@mabishu.com>, 2009.
+# Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun.org>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-20 10:10+0200\n"
-"PO-Revision-Date: 2008-09-20 10:12+0200\n"
-"Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
+"POT-Creation-Date: 2009-03-18 21:03+0100\n"
+"PO-Revision-Date: 2009-03-10 20:17+0000\n"
+"Last-Translator: Suso Baleato <suso.baleato@xunta.es>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: gl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
+msgid "Project Hamster - track your time"
+msgstr "Proxecto Hamster - xestione o seu tempo"
+
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/about.py:41 ../hamster/applet.py:67
 msgid "Time Tracker"
 msgstr "Xestor de tempo"
 
-#: ../data/Hamster_Applet.server.in.in.h:2
-msgid "Time tracking for masses"
-msgstr "Xestor de tempo para as masas"
-
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "_Sobre"
+msgstr "S_obre"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "V_isión xeral"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_Preferencias"
 
@@ -37,7 +50,7 @@ msgstr "<b>Actividades</b>"
 
 #: ../data/preferences.glade.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr "<b>Atallo de teclado global</b>"
+msgstr "<b>Tecla rápida global</b>"
 
 #: ../data/preferences.glade.h:3
 msgid "<b>Tracking</b>"
@@ -45,106 +58,141 @@ msgstr "<b>Rexistro</b>"
 
 #: ../data/preferences.glade.h:4
 msgid "Move _Down"
-msgstr "_Baixar"
+msgstr "Mover cara a a_baixo"
 
 #: ../data/preferences.glade.h:5
 msgid "Move _Up"
-msgstr "_Subir"
+msgstr "Mover cara a a_rriba"
 
 #: ../data/preferences.glade.h:6
 msgid "N_ew Category"
-msgstr "N_ova categoría"
+msgstr "Categoría n_ova"
 
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7
+msgid "Remind of current activity every:"
+msgstr "Recordar a actividade en curso cada:"
+
+#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking on shutdown"
 msgstr "Deter o rexistro ao apagar"
 
-#: ../data/preferences.glade.h:8
-msgid "Stop tracking when computer becomes idle"
-msgstr "Deter o rexistro cando o computador esté inactivo"
-
 #: ../data/preferences.glade.h:9
-msgid "Time Tracker Preferences"
-msgstr "Preferencias do xestor de tempo"
+msgid "Stop tracking when computer becomes idle"
+msgstr "Deter o rexistro cando o computador estea inactivo"
 
 #: ../data/preferences.glade.h:10
+msgid "Time Tracker Preferences"
+msgstr "Preferencias do Xestor de tempo"
+
+#: ../data/preferences.glade.h:11
 msgid "_Activities"
 msgstr "_Actividades"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.glade.h:12
 msgid "_Categories"
 msgstr "_Categorías"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.glade.h:13
 msgid "_New Activity"
-msgstr "_Nova actividade"
+msgstr "Actividade _nova"
 
-#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
-msgid "<b>Activity</b>"
-msgstr "<b>Actividade</b>"
+#: ../data/edit_activity.glade.h:1
+msgid "20/01/08"
+msgstr "20/01/08"
 
 #: ../data/edit_activity.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b>Data e hora</b>"
+msgid "20/01/09"
+msgstr "20/01/09"
 
 #: ../data/edit_activity.glade.h:3
+msgid "3:30pm"
+msgstr "3:30pm"
+
+#: ../data/edit_activity.glade.h:4
+msgid "Activity:"
+msgstr "Actividade:"
+
+#: ../data/edit_activity.glade.h:5
 msgid "Add Earlier Activity"
 msgstr "Engadir unha actividade anterior"
 
-#: ../data/edit_activity.glade.h:4
-msgid "hours"
-msgstr "horas"
+#: ../data/edit_activity.glade.h:6
+msgid "Description:"
+msgstr "Descrición:"
 
-#: ../data/edit_activity.glade.h:5
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"en progreso...\n"
-"até\n"
-"durante"
+#: ../data/edit_activity.glade.h:7
+msgid "Preview:"
+msgstr "Previsualizar:"
 
 #: ../data/edit_activity.glade.h:8
-msgid "minutes"
-msgstr "minutos"
+msgid "Time:"
+msgstr "Hora:"
+
+#: ../data/edit_activity.glade.h:9
+msgid "gtk-cancel"
+msgstr "gtk-cancel"
+
+#: ../data/edit_activity.glade.h:10
+msgid "gtk-save"
+msgstr "gtk-save"
+
+#: ../data/edit_activity.glade.h:11
+msgid "in progress"
+msgstr "en progreso"
+
+#: ../data/edit_activity.glade.h:12
+msgid "to"
+msgstr "a"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Atallo de teclado para mostrar a ventá do xestor de tempo."
+msgstr "Atallo de teclado para mostrar a xanela do Xestor de tempo."
 
 #: ../data/hamster-applet.schemas.in.h:2
-msgid "Show window"
-msgstr "Mostrar a ventá"
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"Recordar a actividade en curso cada número específico de minutos. "
+"Estabelecer como 0 ou como máis de 120 para desactivar o aviso."
 
 #: ../data/hamster-applet.schemas.in.h:3
-msgid "Stop tracking current activity on shutdown"
-msgstr "Deter a actividade actual ao apagar"
+msgid "Remind of current task every x minutes"
+msgstr "Recordar a actividade en curso cada x minutos"
 
 #: ../data/hamster-applet.schemas.in.h:4
-msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Deter a actividade actual cando o computador esté inactivo"
+msgid "Show window"
+msgstr "Mostrar a xanela"
 
 #: ../data/hamster-applet.schemas.in.h:5
+msgid "Stop tracking current activity on shutdown"
+msgstr "Deter o rexistro da actividade en curso ao apagar"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Stop tracking current activity, when computer becomes idle"
+msgstr ""
+"Deter o rexistro da actividade en curso cando o computador estea inactivo"
+
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on idle"
-msgstr "Deter o rexistro en inactividade"
+msgstr "Deter o rexistro ao estar inactivo"
 
 #: ../data/menu.glade.h:1
 msgid "Ad_d Earlier Activity"
-msgstr "_Engadir unha actividade anterior"
+msgstr "Enga_dir unha actividade anterior"
 
 #. This title appears only when debugging from console. Leave it as is.
 #: ../data/menu.glade.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4
+#: ../data/menu.glade.h:4 ../hamster/applet.py:494
 msgid "No records today"
 msgstr "Hoxe non hai rexistros"
 
 #: ../data/menu.glade.h:5
 msgid "Show _Overview"
-msgstr "_Mostrar un resumo"
+msgstr "Mostrar a _visión xeral"
 
 #: ../data/menu.glade.h:6
 msgid "_Activity:"
@@ -159,271 +207,352 @@ msgid "_Today"
 msgstr "_Hoxe"
 
 #: ../data/stats.glade.h:1
-msgid " _Day"
-msgstr " _Día"
-
-#: ../data/stats.glade.h:2
 msgid " _Month"
 msgstr " _Mes"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.glade.h:2
 msgid " _Week"
 msgstr " _Semana"
 
-#: ../data/stats.glade.h:5
-msgid "<b>Category</b>"
-msgstr "<b>Categoría</b>"
-
-#: ../data/stats.glade.h:6
+#: ../data/stats.glade.h:3
 msgid "<b>Overview</b>"
-msgstr "<b>Resumo</b>"
+msgstr "<b>Visión xeral</b>"
 
-#: ../data/stats.glade.h:7
-msgid "<b>Week</b>"
-msgstr "<b>Semana</b>"
+#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+msgid "Activity"
+msgstr "Actividade"
 
-#: ../data/stats.glade.h:8
+#: ../data/stats.glade.h:5
 msgid "Add activity"
 msgstr "Engadir actividade"
 
-#: ../data/stats.glade.h:9
+#: ../data/stats.glade.h:6
 msgid "Delete activity"
 msgstr "Eliminar actividade"
 
-#: ../data/stats.glade.h:10
-msgid "Earlier activities"
-msgstr "Actividades anteriores"
-
-#: ../data/stats.glade.h:11
+#: ../data/stats.glade.h:7
 msgid "Edit activity"
 msgstr "Editar actividade"
 
-#: ../data/stats.glade.h:12
+#: ../data/stats.glade.h:8
 msgid "Generate Report"
 msgstr "Xerar informe"
 
-#: ../data/stats.glade.h:13
+#: ../data/stats.glade.h:9
 msgid "Newer activities"
-msgstr "Actividades máis novas"
+msgstr "Actividades máis recentes"
 
-#: ../data/stats.glade.h:14
+#: ../data/stats.glade.h:10
+msgid "No data for this interval"
+msgstr "Non hai datos para este intervalo"
+
+#: ../data/stats.glade.h:11
 msgid "Overview - Hamster"
-msgstr "Resumo - Hamster"
+msgstr "Visión xeral - Hamster"
 
-#: ../data/stats.glade.h:15
-msgid "Show day"
-msgstr "Mostrar día"
-
-#: ../data/stats.glade.h:16
+#: ../data/stats.glade.h:12
 msgid "Show month"
-msgstr "Mostrar mes"
+msgstr "Mostrar o mes"
 
-#: ../data/stats.glade.h:17
+#: ../data/stats.glade.h:13
 msgid "Show week"
-msgstr "Mostrar semana"
+msgstr "Mostrar a semana"
 
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "Hoxe"
+#: ../data/stats.glade.h:14 ../hamster/stats.py:364
+msgid "Week"
+msgstr "Semana"
 
-#: ../hamster/about.py:42
-msgid "Time tracking for masses."
-msgstr "Xestión de tempo para as masas."
+#: ../hamster/about.py:44
+msgid "Copyright © 2007-2009 Toms Bauģis and others"
+msgstr "Copyright © 2007-2009 Toms Bauģis e outros"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Copyright © 2007-2008 Toms Baugis e outros"
+#: ../hamster/about.py:46
+msgid "Project Hamster Website"
+msgstr "Sitio web do proxecto Hamster"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Sitio web de Hamster"
+#: ../hamster/about.py:47
+msgid "About Time Tracker"
+msgstr "Sobre o xestor de tempo"
 
-#: ../hamster/about.py:54
+#: ../hamster/about.py:57
 msgid "translator-credits"
-msgstr "Ignacio Casal Quinteiro <nacho.resa@gmail.com>"
+msgstr "Suso Baleato <suso.baleato@xunta.es>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
+#. try yesterday if there is nothing today
+#: ../hamster/preferences.py:56 ../hamster/edit_activity.py:338
+#: ../hamster/applet.py:600 ../hamster/db.py:188 ../hamster/db.py:205
+#: ../hamster/db.py:208 ../hamster/db.py:356 ../hamster/db.py:458
+#: ../hamster/db.py:472 ../hamster/reports.py:129 ../hamster/stuff.py:67
 msgid "Unsorted"
 msgstr "Sen clasificar"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "Nome"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:78
+#: ../hamster/preferences.py:124 ../hamster/reports.py:106
+#: ../hamster/reports.py:172
 msgid "Category"
 msgstr "Categoría"
 
-#: ../hamster/preferences.py:468
+#: ../hamster/preferences.py:511
 msgid "New category"
-msgstr "Nova categoría"
+msgstr "Categoría nova"
 
-#: ../hamster/preferences.py:481
+#: ../hamster/preferences.py:524
 msgid "New activity"
-msgstr "Nova actividade"
+msgstr "Actividade nova"
 
-#: ../hamster/edit_activity.py:84
+#. notify interval slider value label
+#: ../hamster/preferences.py:579
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d minutos"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:582
+msgid "Never"
+msgstr "Nunca"
+
+#: ../hamster/edit_activity.py:353
 msgid "Update activity"
-msgstr "Actualizar actividade"
+msgstr "Actividade de actualización"
 
-#: ../hamster/applet.py:200
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Edit"
+msgstr "Editar"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:77
+msgid "Switch"
+msgstr "Conectar"
+
+#: ../hamster/applet.py:296 ../hamster/reports.py:109
+#: ../hamster/reports.py:174
+msgid "Duration"
+msgstr "Duración"
+
+#: ../hamster/applet.py:420 ../hamster/applet.py:567
 msgid "No activity"
-msgstr "Sen actividade"
+msgstr "Non hai actividades"
+
+#. activity reminder
+#: ../hamster/applet.py:434
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Traballando en <b>%s</b>"
+
+#. listing of today's categories and time spent in them
+#: ../hamster/applet.py:501
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#: ../hamster/applet.py:503
+#, python-format
+msgid "%.1fh"
+msgstr "%.1fh"
 
 #. defaults
-#: ../hamster/db.py:403
+#: ../hamster/db.py:646
 msgid "Work"
 msgstr "Traballo"
 
-#: ../hamster/db.py:404
+#: ../hamster/db.py:647
 msgid "Reading news"
-msgstr "Ler as noticias"
+msgstr "Lendo as noticias"
 
-#: ../hamster/db.py:405
+#: ../hamster/db.py:648
 msgid "Checking stocks"
-msgstr "Comprobar as existencias"
+msgstr "Comprobando os inventarios"
 
-#: ../hamster/db.py:406
+#: ../hamster/db.py:649
 msgid "Super secret project X"
-msgstr "Proxecto súper secreto X"
+msgstr "Proxecto X súper secreto"
 
-#: ../hamster/db.py:407
+#: ../hamster/db.py:650
 msgid "World domination"
-msgstr "Dominar o mundo"
+msgstr "Dominación do mundo"
 
-#: ../hamster/db.py:409
+#: ../hamster/db.py:652
 msgid "Day to day"
 msgstr "Día a día"
 
-#: ../hamster/db.py:410
+#: ../hamster/db.py:653
 msgid "Lunch"
-msgstr "Almorzar"
+msgstr "Xantar"
 
-#: ../hamster/db.py:411
+#: ../hamster/db.py:654
 msgid "Watering flowers"
 msgstr "Regar as plantas"
 
-#: ../hamster/db.py:412
+#: ../hamster/db.py:655
 msgid "Doing handstands"
-msgstr "Facer flexións"
-
-#: ../hamster/db.py:588 ../hamster/db.py:592
-msgid "name"
-msgstr "nome"
+msgstr "Facendo o pino"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:29 ../hamster/stats.py:274
+#: ../hamster/reports.py:32 ../hamster/stats.py:351
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
 "(end_Y)s"
 msgstr ""
-"Resumo desde o %(start_d)s %(start_B)s, %(start_Y)s até o %(end_d)s %(end_B)"
-"s, %(end_Y)s"
+"Visión xeral para %(start_B)s %(start_d)s, %(start_Y)s &ndash; %(end_B)s %"
+"(end_d)s, %(end_Y)s"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:31 ../hamster/stats.py:279
+#: ../hamster/reports.py:34 ../hamster/stats.py:356
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Resumo do %(start_d)s %(start_B)s al %(end_d)s %(end_B)s de %(end_Y)s"
+msgstr ""
+"Visión xeral para %(start_B)s %(start_d)s &ndash; %(end_B)s %(end_d)s, %"
+"(end_Y)s"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#: ../hamster/reports.py:36 ../hamster/stats.py:361
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Resumo de %(start_B)s, do %(start_d)s ao %(end_d)s de %(end_Y)s"
+msgstr "Visión xeral para %(start_B)s %(start_d)s &ndash; %(end_d)s, %(end_Y)s"
 
-#. overview label for single day
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:290
+#: ../hamster/reports.py:39
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Resumo do %(start_d)s de %(start_B)s de %(start_Y)s"
+msgstr "Visión xeral para %(start_B)s %(start_d)s, %(start_Y)s"
 
-#: ../hamster/reports.py:76
+#: ../hamster/reports.py:104
 msgid "Date"
 msgstr "Data"
 
-#: ../hamster/reports.py:77
-msgid "Activity"
-msgstr "Actividade"
-
-#: ../hamster/reports.py:79
+#: ../hamster/reports.py:107
 msgid "Start"
-msgstr "Inicio"
+msgstr "Comezo"
 
-#: ../hamster/reports.py:80
+#: ../hamster/reports.py:108
 msgid "End"
 msgstr "Fin"
 
-#: ../hamster/reports.py:81
-msgid "Duration"
-msgstr "Duración"
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Descrición"
 
 #. fact date column in HTML report
-#: ../hamster/reports.py:111
+#: ../hamster/reports.py:144
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_d)s/%(report_b)s/%(report_Y)s"
+msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#. summary table
+#: ../hamster/reports.py:169
+msgid "Totals"
+msgstr "Totais"
+
+#: ../hamster/reports.py:186
+msgid "Total Time"
+msgstr "Tempo total"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:172
+#: ../hamster/stats.py:237
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_d)s de %(o_b)s"
+msgstr "%(o_A)s, %(o_b)s %(o_d)s"
 
-#. date format in month chart in overview window (click on "month" to see it)
-#. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:366
+msgid "Month"
+msgstr "Mes"
+
+#: ../hamster/stats.py:405
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_b)s %(m_d)s"
 
-#: ../hamster/stats.py:246
-msgid "Other"
-msgstr "Outras"
+#: ../hamster/stats.py:412
+msgid "Total"
+msgstr "Total"
 
-#: ../hamster/stats.py:291
-msgid "Day"
-msgstr "Día"
+#: ../hamster/stats.py:421
+#, python-format
+msgid "%(category)s: %(duration).1f, "
+msgstr "%(category)s: %(duration).1f, "
 
-#: ../hamster/stats.py:293
-msgid "Week"
-msgstr "Semana"
+#. duration in round hours
+#: ../hamster/stuff.py:114
+#, python-format
+msgid "%dh"
+msgstr "%dh"
 
-#: ../hamster/stats.py:295
-msgid "Month"
-msgstr "Mes"
+#. duration less than hour
+#: ../hamster/stuff.py:117
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
 
-#~ msgid "Overview for %s"
-#~ msgstr "Resumo de %s"
+#. x hours, y minutes
+#: ../hamster/stuff.py:120
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
 
-#~ msgid "Overview for %s - %s"
-#~ msgstr "Resumo de %s - %s"
+#~ msgid "<b>Activity</b>"
+#~ msgstr "<b>Actividade</b>"
 
-#~ msgid "Idle minutes:"
-#~ msgstr "Minutos de inactividade:"
+#~ msgid "<b>Date and Time</b>"
+#~ msgstr "<b>Hora e data</b>"
 
-#~ msgid "Add an older fact"
-#~ msgstr "Engadir un feito antigo"
+#~ msgid "Name:"
+#~ msgstr "Nome:"
+
+#~ msgid "hours"
+#~ msgstr "horas"
 
 #~ msgid ""
-#~ "After how many minutes hamster should stop tracking activity when "
-#~ "computer is idle. Set to 0 to disable."
+#~ "in progress...\n"
+#~ "until\n"
+#~ "for"
 #~ msgstr ""
-#~ "Despois de cantos minutos de inactividade debería deterse o rexistro de "
-#~ "actividades no computador. Por a 0 para desactivar."
+#~ "en progreso...\n"
+#~ "até\n"
+#~ "para"
 
-#~ msgid "Timeout in minutes"
-#~ msgstr "Tempo de espera, en minutos"
+#~ msgid "minutes"
+#~ msgstr "minutos"
 
-#~ msgid "Ad_d Older Fact"
-#~ msgstr "_Engadir un feito antigo"
+#~ msgid " _Day"
+#~ msgstr " _Día"
+
+#~ msgid "<b>Category</b>"
+#~ msgstr "<b>Categoría</b>"
+
+#~ msgid "<b>Week</b>"
+#~ msgstr "<b>Semana</b>"
+
+#~ msgid "Earlier activities"
+#~ msgstr "Actividades anteriores"
+
+#~ msgid "Show day"
+#~ msgstr "Mostrar o día"
+
+#~ msgid "Copyright © 2007-2008 Toms Baugis and others"
+#~ msgstr "Copyright © 2007-2008 Toms Baugis e outros"
+
+#~ msgid "Hamster Website"
+#~ msgstr "Sitio web do Hamster"
+
+#~ msgid "%(category)s: %(duration)s, "
+#~ msgstr "%(category)s: %(duration)s, "
+
+#~ msgid "name"
+#~ msgstr "nome"
+
+#~ msgid "Other"
+#~ msgstr "Outro"
+
+#~ msgid "Day"
+#~ msgstr "Día"
