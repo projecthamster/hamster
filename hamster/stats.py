@@ -402,15 +402,21 @@ class StatsViewer(object):
         if (self.end_date - self.start_date).days < 20:
             day_keys = [day.strftime("%a") for day in all_days]
         else:
-            day_keys = [day.strftime(_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")) for day in all_days]
+            day_keys = [_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_") for day in all_days]
 
 
         self.day_chart.plot(day_keys, day_category_totals['values'],
                              stack_keys = day_category_totals['keys'])
 
         category_totals = [[sum(value) for value in zip(*day_category_totals['values'])]]
+        
+        category_keys = []
+        for i in range(len(day_category_totals['keys'])):
+            category_keys.append("%s %.1f" % (day_category_totals['keys'][i], category_totals[0][i]))
+        
+
         self.category_chart.plot([_("Total")], category_totals,
-                                  stack_keys = day_category_totals['keys'])
+                                  stack_keys = category_keys)
 
         
         
