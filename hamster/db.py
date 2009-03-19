@@ -427,15 +427,17 @@ class Storage(hamster.storage.Storage):
                 res.append(f)
             elif fact_start_date != fact_end_date:
                 # check if maybe we have to split activity in two
-                if date <= f["start_time"].date()  <= end_date:
+                if date <= fact["start_time"].date()  <= end_date:
                     start_fact = copy.copy(f)
-                    start_fact["end_time"] = dt.datetime.combine(end_date, dt.time(0, 0))
+                    start_fact["end_time"] = dt.datetime.combine(f["end_time"],
+                                                                 dt.time(0, 0))
                     start_fact["delta"] = start_fact["end_time"] - start_fact["start_time"]
                     res.append(start_fact)
 
                 if date <= fact["end_time"].date()  <= end_date:
                     end_fact = copy.copy(f)
-                    end_fact["start_time"] = dt.datetime.combine(end_fact["end_time"], dt.time(0, 0))
+                    end_fact["start_time"] = dt.datetime.combine(f["end_time"],
+                                                                 dt.time(0, 0))
                     end_fact["delta"] = end_fact["end_time"] - end_fact["start_time"]
                     res.append(end_fact)
             else:
