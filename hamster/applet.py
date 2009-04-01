@@ -71,10 +71,13 @@ class Notifier(object):
 
     def msg(self, body, edit_cb, switch_cb):
         self._notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
-        #translators: this is edit activity action in the notifier bubble
-        self._notify.add_action("edit", _("Edit"), edit_cb)
-        #translators: this is switch activity action in the notifier bubble
-        self._notify.add_action("switch", _("Switch"), switch_cb)
+
+        if "actions" in pynotify.get_server_caps():
+            #translators: this is edit activity action in the notifier bubble
+            self._notify.add_action("edit", _("Edit"), edit_cb)
+            #translators: this is switch activity action in the notifier bubble
+            self._notify.add_action("switch", _("Switch"), switch_cb)
+            
         self._notify.show()
 
 
