@@ -36,8 +36,6 @@ import colorsys
 
 import gobject
 
-GLADE_FILE = "edit_activity.glade"
-
 import cairo, pango
 
 """ TODO:
