@@ -2,11 +2,11 @@
 # Please keep this file sorted alphabetically.
 data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
-data/preferences.glade
-data/edit_activity.glade
+data/preferences.ui
+data/edit_activity.ui
 data/hamster-applet.schemas.in
-data/menu.glade
-data/stats.glade
+data/applet.ui
+data/stats.ui
 hamster/about.py
 hamster/preferences.py
 hamster/edit_activity.py
