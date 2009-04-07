@@ -323,7 +323,7 @@ class Dayline(graphics.Area):
 
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, GLADE_FILE))
+        self._gui = stuff.load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
 
         self.parent, self.fact_id = parent, fact_id
@@ -369,7 +369,7 @@ class CustomFactController:
         self.dayline = Dayline()
         self.dayline.on_time_changed = self.update_time
         self.dayline.on_more_data = storage.get_facts
-        self.glade.get_widget("day_preview").add(self.dayline)
+        self._gui.get_object("day_preview").add(self.dayline)
 
         self.update_time(start_date, end_date)
 
@@ -378,7 +378,7 @@ class CustomFactController:
         self.init_calendar_window()
         self.init_time_window()
 
-        self.glade.signal_autoconnect(self)
+        self._gui.connect_signals(self)
 
     def update_time(self, start_time, end_time):
         self.get_widget("start_time").set_text(self.format_time(start_time))
@@ -394,13 +394,13 @@ class CustomFactController:
         
         
     def init_calendar_window(self):
-        self.calendar_window = self.glade.get_widget('calendar_window')
+        self.calendar_window = self._gui.get_object('calendar_window')
         self.date_calendar = gtk.Calendar()
         #self.date_calendar.mark_day(dt.date.today().day) #mark day marks day in all months, hahaha
         self.date_calendar.connect("day-selected", self.on_day_selected)
         self.date_calendar.connect("day-selected-double-click", self.on_day_selected_double_click)
         self.date_calendar.connect("button-press-event", self.on_cal_button_press_event)
-        self.glade.get_widget("calendar_box").add(self.date_calendar)
+        self._gui.get_object("calendar_box").add(self.date_calendar)
 
     def on_cal_button_press_event(self, calendar, event):
         self.prev_cal_day = calendar.get_date()[2]
@@ -430,7 +430,7 @@ class CustomFactController:
         self.validate_fields()
         
     def init_time_window(self):
-        self.time_window = self.glade.get_widget('time_window')
+        self.time_window = self._gui.get_object('time_window')
         self.time_tree = self.get_widget('time_tree')
         self.time_tree.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=0))
 
@@ -473,7 +473,7 @@ class CustomFactController:
 
     def set_dropdown(self):
         # set up drop down menu
-        self.activity_list = self.glade.get_widget('activity_combo')
+        self.activity_list = self._gui.get_object('activity_combo')
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
@@ -558,7 +558,7 @@ class CustomFactController:
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.glade.get_widget(name)
+        return self._gui.get_object(name)
 
     def show(self):
         self.window.show()
