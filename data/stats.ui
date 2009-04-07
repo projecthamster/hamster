@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
-<!--Generated with glade3 3.4.5 on Mon Feb 16 11:04:36 2009 -->
 <interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
   <object class="GtkWindow" id="stats_window">
     <property name="width_request">600</property>
     <property name="height_request">400</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">Overview - Hamster</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
     <property name="icon_name">hamster-applet</property>
-    <signal handler="on_window_key_pressed" name="key_press_event"/>
-    <signal handler="on_close" name="delete_event"/>
+    <signal name="key_press_event" handler="on_window_key_pressed"/>
+    <signal name="delete_event" handler="on_close"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -20,16 +22,17 @@
           <object class="GtkToolbar" id="toolbar3">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="toolbar_style">GTK_TOOLBAR_BOTH_HORIZ</property>
+            <property name="toolbar_style">both-horiz</property>
             <child>
               <object class="GtkToolButton" id="prev">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text">Earlier activities</property>
                 <property name="stock_id">gtk-go-back</property>
-                <signal handler="on_prev_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_prev_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -41,9 +44,10 @@
                 <property name="label">Today</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-home</property>
-                <signal handler="on_home_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_home_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -53,9 +57,10 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Newer activities</property>
                 <property name="stock_id">gtk-go-forward</property>
-                <signal handler="on_next_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_next_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -64,6 +69,9 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
             </child>
             <child>
               <object class="GtkToolButton" id="remove">
@@ -72,9 +80,10 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Delete activity</property>
                 <property name="stock_id">gtk-remove</property>
-                <signal handler="on_remove_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_remove_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -84,9 +93,10 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Add activity</property>
                 <property name="stock_id">gtk-add</property>
-                <signal handler="on_add_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_add_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -96,9 +106,10 @@
                 <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Edit activity</property>
                 <property name="stock_id">gtk-edit</property>
-                <signal handler="on_edit_clicked" name="clicked"/>
+                <signal name="clicked" handler="on_edit_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -107,6 +118,9 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
             </child>
             <child>
               <object class="GtkRadioToolButton" id="week">
@@ -116,11 +130,12 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Week</property>
                 <property name="use_underline">True</property>
-                <property name="icon">art/stock_calendar-view-week.png</property>
+                <property name="icon_widget">week_icon</property>
                 <property name="active">True</property>
-                <signal handler="on_week_toggled" name="toggled"/>
+                <signal name="toggled" handler="on_week_toggled"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -132,16 +147,18 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Month</property>
                 <property name="use_underline">True</property>
-                <property name="icon">art/stock_calendar-view-month.png</property>
-                <signal handler="on_month_toggled" name="toggled"/>
+                <property name="icon_widget">month_icon</property>
+                <signal name="toggled" handler="on_month_toggled"/>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -182,20 +199,23 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="facts">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="enable_search">False</property>
-                        <signal handler="on_key_pressed" name="key_press_event"/>
-                        <signal handler="on_facts_row_activated" name="row_activated"/>
+                        <signal name="key_press_event" handler="on_key_pressed"/>
+                        <signal name="row_activated" handler="on_facts_row_activated"/>
                       </object>
                     </child>
                   </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkAlignment" id="alignment2">
@@ -205,11 +225,11 @@
                     <property name="top_padding">6</property>
                     <child>
                       <object class="GtkButton" id="report_button">
+                        <property name="label" translatable="yes">Generate Report</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Generate Report</property>
-                        <signal handler="on_report_button_clicked" name="clicked"/>
+                        <signal name="clicked" handler="on_report_button_clicked"/>
                       </object>
                     </child>
                   </object>
@@ -231,9 +251,9 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkEventBox" id="graph_frame">
                         <property name="visible">True</property>
@@ -253,7 +273,7 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="label_xalign">0</property>
-                                    <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                    <property name="shadow_type">none</property>
                                     <child>
                                       <object class="GtkHBox" id="hbox1">
                                         <property name="visible">True</property>
@@ -269,6 +289,7 @@
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -293,13 +314,16 @@
                                       </object>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkFrame" id="frame39">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="label_xalign">0</property>
-                                    <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                    <property name="shadow_type">none</property>
                                     <child>
                                       <object class="GtkEventBox" id="totals_by_activity">
                                         <property name="visible">True</property>
@@ -323,6 +347,9 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="no_data_label">
@@ -337,6 +364,9 @@
                       </object>
                     </child>
                   </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkAlignment" id="alignment3">
@@ -369,5 +399,13 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="week_icon">
+    <property name="visible">True</property>
+    <property name="pixbuf">stock_calendar-view-week.png</property>
+  </object>
+  <object class="GtkImage" id="month_icon">
+    <property name="visible">True</property>
+    <property name="pixbuf">stock_calendar-view-month.png</property>
   </object>
 </interface>

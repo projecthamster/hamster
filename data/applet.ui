@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
-<!--Generated with glade3 3.4.5 on Wed Feb  4 22:28:05 2009 -->
 <interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkWindow" id="hamster-window">
     <property name="can_focus">True</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property comments="This title appears only when debugging from console. Leave it as is." name="title" translatable="yes">Hamster</property>
+    <property name="title" translatable="yes" comments="This title appears only when debugging from console. Leave it as is.">Hamster</property>
     <property name="resizable">False</property>
-    <property name="window_position">GTK_WIN_POS_MOUSE</property>
+    <property name="window_position">mouse</property>
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">hamster-applet</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU</property>
+    <property name="type_hint">dropdown-menu</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="decorated">False</property>
-    <signal handler="on_windows_keys" name="key_press_event"/>
+    <signal name="key_press_event" handler="on_windows_keys"/>
     <child>
       <object class="GtkEventBox" id="hamster-box">
         <property name="visible">True</property>
@@ -23,7 +24,7 @@
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="label_xalign">0</property>
-            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="shadow_type">out</property>
             <child>
               <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
@@ -45,6 +46,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -56,16 +58,7 @@
                             <property name="width_request">250</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <signal handler="on_activity_switched" name="changed"/>
-                            <child internal-child="entry">
-                              <object class="GtkEntry" id="current_activity">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="has_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <signal handler="on_activity_entered" name="activate"/>
-                              </object>
-                            </child>
+                            <signal name="changed" handler="on_activity_switched"/>
                           </object>
                         </child>
                       </object>
@@ -75,13 +68,13 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="stop_tracking">
+                        <property name="label" translatable="yes">_Stop Tracking</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">_Stop Tracking</property>
                         <property name="use_underline">True</property>
-                        <signal handler="on_stop_tracking" name="clicked"/>
+                        <signal name="clicked" handler="on_stop_tracking"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -91,6 +84,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -109,9 +103,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                            <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
-                            <property name="shadow_type">GTK_SHADOW_IN</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">never</property>
+                            <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="today">
                                 <property name="visible">True</property>
@@ -120,12 +114,15 @@
                                 <property name="headers_visible">False</property>
                                 <property name="rules_hint">True</property>
                                 <property name="enable_search">False</property>
-                                <signal handler="on_todays_keys" name="key_press_event"/>
-                                <signal handler="on_today_row_activated" name="row_activated"/>
-                                <signal handler="on_today_release_event" name="button_release_event"/>
+                                <signal name="key_press_event" handler="on_todays_keys"/>
+                                <signal name="row_activated" handler="on_today_row_activated"/>
+                                <signal name="button_release_event" handler="on_today_release_event"/>
                               </object>
                             </child>
                           </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="fact_totals">
@@ -169,24 +166,27 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="button2">
+                            <property name="label" translatable="yes">Ad_d Earlier Activity</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Ad_d Earlier Activity</property>
                             <property name="use_underline">True</property>
-                            <signal handler="on_custom_fact" name="clicked"/>
+                            <signal name="clicked" handler="on_custom_fact"/>
                           </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="button1">
+                            <property name="label" translatable="yes">Show _Overview</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label" translatable="yes">Show _Overview</property>
                             <property name="use_underline">True</property>
-                            <signal handler="on_overview" name="clicked"/>
+                            <signal name="clicked" handler="on_overview"/>
                           </object>
                           <packing>
                             <property name="position">1</property>
@@ -202,7 +202,7 @@
                 </child>
               </object>
             </child>
-            <child type="label">
+            <child type="label_item">
               <placeholder/>
             </child>
           </object>
