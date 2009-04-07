@@ -335,7 +335,7 @@ class CustomFactController:
             label = fact['name']
             if fact['category'] != _("Unsorted"):
                 label += "@%s" %  fact['category']
-            self.get_widget('activity_text').set_text(label)
+            self.get_widget('activity_combo').child.set_text(label)
             
             start_date = fact["start_time"]
             end_date = fact["end_time"]
@@ -574,7 +574,7 @@ class CustomFactController:
             return None
     
     def figure_description(self):
-        activity = self.get_widget("activity_text").get_text().decode("utf-8")
+        activity = self.get_widget("activity_combo").child.get_text().decode("utf-8")
 
         # juggle with description - break into parts and then put together
         buf = self.get_widget('description').get_buffer()
@@ -595,7 +595,7 @@ class CustomFactController:
         
     
     def on_save_button_clicked(self, button):
-        activity = self.get_widget("activity_text").get_text().decode("utf-8")
+        activity = self.get_widget("activity_combo").child.get_text().decode("utf-8")
         
         if not activity:
             return False
@@ -851,7 +851,7 @@ class CustomFactController:
     def validate_fields(self):
         # do not allow empty tasks
 
-        activity_text = self.get_widget("activity_text").get_text()
+        activity_text = self.get_widget("activity_combo").child.get_text()
         start_time = self._get_datetime("start")
 
         end_time = self._get_datetime("end")
