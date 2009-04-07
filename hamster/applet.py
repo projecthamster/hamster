@@ -199,8 +199,8 @@ class HamsterApplet(object):
         self.button = PanelButton()
         
         # load window of activity switcher and todays view
-        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "menu.glade"))
-        self.window = self.glade.get_widget('hamster-window')
+        self._gui = stuff.load_ui_file("applet.ui")
+        self.window = self._gui.get_object('hamster-window')
 
         self.set_dropdown()
 
@@ -269,7 +269,7 @@ class HamsterApplet(object):
         self.button.connect('toggled', self.on_toggle)
 
         self.button.connect('button_press_event', self.on_button_press)
-        self.glade.signal_autoconnect(self)
+        self._gui.connect_signals(self)
 
         # init hotkey
         dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
@@ -285,7 +285,7 @@ class HamsterApplet(object):
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
 
     def setup_activity_tree(self):
-        self.treeview = self.glade.get_widget('today')
+        self.treeview = self._gui.get_object('today')
         self.treeview.set_tooltip_column(1)
         
         self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
@@ -315,7 +315,7 @@ class HamsterApplet(object):
         
     def set_dropdown(self):
         # set up drop down menu
-        self.activity_list = self.glade.get_widget('activity-list')
+        self.activity_list = self._gui.get_object('activity-list')
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
@@ -418,11 +418,11 @@ class HamsterApplet(object):
             self.button.set_text(self.last_activity['name'],
                                                 stuff.format_duration(duration, False))
             
-            self.glade.get_widget('stop_tracking').set_sensitive(1);
+            self._gui.get_object('stop_tracking').set_sensitive(1);
         else:
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
-            self.glade.get_widget('stop_tracking').set_sensitive(0);
+            self._gui.get_object('stop_tracking').set_sensitive(0);
         
         
         # Hamster DBusController current activity updating
@@ -493,10 +493,10 @@ class HamsterApplet(object):
 
         
         if len(facts) == 0:
-            self.glade.get_widget("todays_scroll").hide()
-            self.glade.get_widget("fact_totals").set_text(_("No records today"))
+            self._gui.get_object("todays_scroll").hide()
+            self._gui.get_object("fact_totals").set_text(_("No records today"))
         else:
-            self.glade.get_widget("todays_scroll").show()
+            self._gui.get_object("todays_scroll").show()
             
             total_strings = []
             for total in totals:
@@ -506,7 +506,7 @@ class HamsterApplet(object):
                           'duration': _("%.1fh") % (totals[total] / 60.0)}))
 
             total_string = ", ".join(total_strings)
-            self.glade.get_widget("fact_totals").set_text(total_string)
+            self._gui.get_object("fact_totals").set_text(total_string)
    
 
     def refresh_menu(self):

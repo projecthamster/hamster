@@ -24,7 +24,6 @@ import os
 from os.path import join, exists, isdir, isfile, dirname, abspath, expanduser
 from shutil import copy as copyfile
 import gtk	 
-from gtk import glade
 import gettext
 import locale
 	 

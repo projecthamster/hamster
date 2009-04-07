@@ -21,10 +21,10 @@ schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	Hamster_Applet.xml \
-	preferences.glade \
-	stats.glade \
-	edit_activity.glade \
-    menu.glade \
+	preferences.ui \
+	stats.ui \
+	edit_activity.ui \
+        applet.ui \
 	hamster.db
 
 xml_in_files = 99-hamster-applet.xml

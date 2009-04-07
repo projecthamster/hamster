@@ -22,12 +22,18 @@
 # cells, columns, trees and other
 
 import gtk
-from hamster import storage
+from hamster import storage, SHARED_DATA_DIR
 import pango
 from pango import ELLIPSIZE_END
 
 import datetime as dt
 import locale
+import os
+
+def load_ui_file(name):
+    ui = gtk.Builder()
+    ui.add_from_file(os.path.join(SHARED_DATA_DIR, name))
+    return ui 
 
 def zero_hour(date):
     return dt.datetime.combine(date.date(), dt.time(0,0))

@@ -24,7 +24,7 @@ pygtk.require('2.0')
 import os
 import gtk
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster.Configuration import GconfStore
 
 def get_prev(selection, model):
@@ -91,7 +91,7 @@ class PreferencesEditor:
     
     def __init__(self, parent = None):
         self.parent = parent
-        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "preferences.glade"))
+        self._gui = stuff.load_ui_file("preferences.ui")
         self.config = GconfStore.get_instance()
         self.window = self.get_widget('preferences_window')
 
@@ -140,7 +140,7 @@ class PreferencesEditor:
 
         self.load_config()
 
-        self.glade.signal_autoconnect(self)
+        self._gui.connect_signals(self)
 
         # Allow enable drag and drop of rows including row move
         self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
@@ -293,7 +293,7 @@ class PreferencesEditor:
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.glade.get_widget(name)
+        return self._gui.get_object(name)
 
     def get_store(self):
         """returns store, so we can add some watchers in case if anything changes"""

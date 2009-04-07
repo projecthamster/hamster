@@ -42,7 +42,7 @@ import hamster.defs
 # Setup i18n
 locale_dir = os.path.abspath(os.path.join(hamster.defs.DATA_DIR, "locale"))
 
-for module in (gettext, locale, gtk.glade):
+for module in (gettext, locale):
     module.bindtextdomain('hamster-applet', locale_dir)
     module.textdomain('hamster-applet')
 

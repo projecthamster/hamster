@@ -37,7 +37,7 @@ import time
 class StatsViewer(object):
     def __init__(self, parent = None):
         self.parent = parent# determine if app shut shut down on close
-        self.glade = gtk.glade.XML(os.path.join(SHARED_DATA_DIR, "stats.glade"))
+        self._gui = stuff.load_ui_file("stats.ui")
         self.window = self.get_widget('stats_window')
 
         #id, caption, duration, date (invisible), description, category
@@ -114,7 +114,7 @@ class StatsViewer(object):
                           self.fact_store)
         self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
 
-        self.glade.signal_autoconnect(self)
+        self._gui.connect_signals(self)
         self.fact_tree.grab_focus()
         
         """
@@ -435,7 +435,7 @@ class StatsViewer(object):
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self.glade.get_widget(name)
+        return self._gui.get_object(name)
 
     def on_prev_clicked(self, button):
         if self.week_view.get_active():
