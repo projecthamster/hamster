@@ -316,6 +316,8 @@ class HamsterApplet(object):
     def set_dropdown(self):
         # set up drop down menu
         self.activity_list = self._gui.get_object('activity-list')
+        self.activity_list.child.connect('activate', self.on_activity_entered)
+
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
