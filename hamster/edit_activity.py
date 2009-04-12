@@ -410,6 +410,9 @@ class CustomFactController:
         self.on_day_selected(calendar) #forward
         
     def on_day_selected(self, calendar):
+        if self.calendar_window.get_property("visible") == False:
+            return
+        
         if self.prev_cal_day == calendar.get_date()[2]:
             return
         
@@ -628,10 +631,10 @@ class CustomFactController:
         self.close_window()
     
     def figure_date(self, date_str):
-        if not date_str:
-            return ""
-        
-        return dt.datetime.strptime(date_str, "%x")
+        try:
+            return dt.datetime.strptime(date_str, "%x")
+        except:
+            return None
 
     def format_date(self, date):
         if not date:
@@ -746,8 +749,14 @@ class CustomFactController:
 
     
     def on_date_key_press_event(self, entry, event):
-        cal_date = self.date_calendar.get_date()
-        date = dt.date(cal_date[0], cal_date[1]+1, cal_date[2])
+        if self.calendar_window.get_property("visible"):
+            cal_date = self.date_calendar.get_date()
+            date = dt.date(cal_date[0], cal_date[1], cal_date[2])
+        else:
+            date = self.figure_date(entry.get_text())
+            if not date:
+                return
+
         enter_pressed = False
 
         if event.keyval == gtk.keysyms.Up:
@@ -759,7 +768,10 @@ class CustomFactController:
             enter_pressed = True
         elif (event.keyval == gtk.keysyms.Escape):
             self.calendar_window.hide()
+        elif event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
+            return False #keep calendar open and allow user to walk in text
         else:
+            self.calendar_window.hide()
             return False
         
         if enter_pressed:
@@ -828,10 +840,15 @@ class CustomFactController:
         elif (event.keyval == gtk.keysyms.Return or
               event.keyval == gtk.keysyms.KP_Enter):
             
-            self.set_time(self.time_tree.get_model()[i][0])
+            if self.time_window.get_property("visible"):
+                self.set_time(self.time_tree.get_model()[i][0])
+            else:
+                self.set_time(entry.get_text())
         elif (event.keyval == gtk.keysyms.Escape):
             self.time_window.hide()
         else:
+            #any kind of other input
+            self.time_window.hide()
             return False
         
         # keep it in the sane borders
