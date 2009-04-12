@@ -617,12 +617,11 @@ class CustomFactController:
         else:
             end_time = self._get_datetime("end")
 
-
-        storage.add_fact(activity, start_time, end_time)
-
         # we don't do updates, we do insert/delete. So now it is time to delete
         if self.fact_id:
             storage.remove_fact(self.fact_id)
+
+        storage.add_fact(activity, start_time, end_time)
 
 
         # hide panel only on add - on update user will want to see changes
