@@ -490,6 +490,7 @@ class CustomFactController:
         self.activity_list.add_attribute(category_cell, 'text', 1)
         
         self.activity_list.set_property("text-column", 2)
+        self.activity_list.child.connect('key-press-event', self.on_activity_list_key_pressed)
 
 
         # set up autocompletition
@@ -641,6 +642,12 @@ class CustomFactController:
             return ""
         else:
             return date.strftime("%x")
+
+    def on_activity_list_key_pressed(self, entry, event):
+        #treating tab as keydown to be able to cycle through available values
+        if event.keyval == gtk.keysyms.Tab:
+            event.keyval = gtk.keysyms.Down
+        return False
     
     def on_date_focus_in_event(self, entry, event):
         window = entry.get_parent_window()

@@ -317,6 +317,7 @@ class HamsterApplet(object):
         # set up drop down menu
         self.activity_list = self._gui.get_object('activity-list')
         self.activity_list.child.connect('activate', self.on_activity_entered)
+        self.activity_list.child.connect('key-press-event', self.on_activity_list_key_pressed)
 
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
@@ -633,6 +634,12 @@ class HamsterApplet(object):
     def on_toggle(self, widget):
         dispatcher.dispatch('panel_visible', self.button.get_active())
 
+    def on_activity_list_key_pressed(self, entry, event):
+        #treating tab as keydown to be able to cycle through available values
+        if event.keyval == gtk.keysyms.Tab:
+            event.keyval = gtk.keysyms.Down
+        return False
+        
     def on_activity_switched(self, component):
         # do stuff only if user has selected something
         # for other cases activity_edited will be triggered
