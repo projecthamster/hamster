@@ -212,7 +212,6 @@ class Storage(hamster.storage.Storage):
            last = None
         
         return last
-
     def __touch_fact(self, fact, end_time):
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
@@ -224,6 +223,63 @@ class Storage(hamster.storage.Storage):
                         WHERE id = ?
             """
             self.execute(query, (end_time, fact['id']))
+
+    def __solve_overlaps(self, start_time, end_time):
+        """finds facts that happen in given interval and shifts them to
+        make room for new fact"""
+        
+        # in case of missing end_time, treat is as ongoing task, but only
+        # if that's not too far in past
+        if not end_time and (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
+            end_time = dt.datetime.now()
+            
+        
+        # activities that we are overlapping.
+        # second OR clause is for elimination - |new fact--|---old-fact--|--new fact|
+        query = """
+                   SELECT a.*, b.name
+                     FROM facts a
+                LEFT JOIN activities b on b.id = a.activity_id
+                    WHERE ((start_time < ? and end_time > ?)
+                           OR (start_time < ? and end_time > ?))
+                           
+                       OR ((start_time < ? and start_time > ?)
+                           OR (end_time < ? and end_time > ?))
+                 ORDER BY start_time
+                """
+        conflicts = self.fetchall(query, (start_time, start_time, end_time, end_time,
+                                          end_time, start_time, end_time, start_time))
+        
+        for fact in conflicts:
+            # split - truncate until beginning of new entry and create new activity for end
+            if fact["start_time"] < start_time < fact["end_time"] and \
+               fact["start_time"] < end_time < fact["end_time"]:
+                
+                print "splitting %s" % fact["name"]
+                self.execute("""UPDATE facts
+                                   SET end_time = ?
+                                 WHERE id = ?""", (start_time, fact["id"]))
+                self.__add_fact(fact["name"], end_time, fact["end_time"])
+
+            #eliminate
+            elif fact["end_time"] and \
+                 start_time < fact["start_time"] < end_time and \
+                 start_time < fact["end_time"] < end_time:
+                print "eliminating %s" % fact["name"]
+                self.__remove_fact(fact["id"])
+            
+            # overlap start
+            elif start_time < fact["start_time"] < end_time:
+                print "Overlapping start of %s" % fact["name"]
+                self.execute("UPDATE facts SET start_time=? WHERE id=?",
+                             (end_time, fact["id"]))
+            
+            # overlap end
+            elif start_time < fact["end_time"] < end_time:
+                print "Overlapping end of %s" % fact["name"]
+                self.execute("UPDATE facts SET end_time=? WHERE id=?",
+                             (start_time, fact["id"]))
+
 
     def __add_fact(self, activity_name, start_time = None, end_time = None):
         start_time = start_time or datetime.datetime.now()
@@ -253,75 +309,31 @@ class Storage(hamster.storage.Storage):
             activity_id = self.__add_activity(activity_name, category_id)
 
 
-        # now fetch facts for the specified day and check if we have to
-        # split or change span 
-        day_facts = self.__get_facts(start_time.date())
-        for fact in day_facts:
-            # first check if maybe we are overlapping end
-            if fact['end_time'] and fact['start_time'] < start_time < fact['end_time']:
-                #set fact's end time to our start one
-                update = """
-                           UPDATE facts
-                              SET end_time = ?
-                            WHERE id = ?
-                """
-                self.execute(update, (start_time, fact["id"]))
+        # if we are working on +/- current day - check the last_activity
+        if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
+            last_activity = self.__get_last_activity()
 
-                # now check - maybe we are inside the fact. in that case
-                # we should create another task after our one
-                if end_time and end_time < fact['end_time']:
-                    self.__add_fact(fact['name'], end_time, fact['end_time'])
-
-           
-            else: #end's fine? what about start then?
-                if fact['end_time'] and end_time and fact['start_time'] < end_time < fact['end_time'] \
-                or not fact['end_time'] and end_time and fact['start_time'] < end_time: # case for the entry before the last one
-                    #set fact's start time to our end one
-                    update = """
-                               UPDATE facts
-                                  SET start_time = ?
-                                WHERE id = ?
-                    """
-                    self.execute(update, (end_time, fact["id"]))
-
-        # now check if maybe we are at the last task, and if that's true
-        # look if we maybe have to finish it or delete if it was too short
-        if day_facts:
-            last_fact = day_facts[-1]
-            
-            if last_fact['end_time'] == None and last_fact['start_time'] < start_time:
+            if last_activity and last_activity['start_time'] < start_time:
                 #if this is the same, ongoing activity, then there is no need to create another one
-                if last_fact['activity_id'] == activity_id:
-                    return last_fact
+                if last_activity['activity_id'] == activity_id:
+                    return last_activity
                 
-                
-                delta = (start_time - last_fact['start_time'])
-            
-                if 60 >= delta.seconds >= 0:
-                    self.__remove_fact(last_fact['id'])
-                    start_time = last_fact['start_time']
-
-                    # go further now and check, maybe task before the last one
-                    # is the same we have now. If that happened before less
-                    # than a minute - remove end time!
-                    if len(day_facts) > 2 and day_facts[-2]['name'] == activity_name:
-                        delta = (start_time - day_facts[-2]['end_time'])
-                        if 60 >= delta.seconds >= 0:
-                            update = """
-                                        UPDATE facts
-                                           SET end_time = null
-                                         WHERE id = ?
-                                    """
-                            self.execute(update, (day_facts[-2]["id"],))
-                            return day_facts[-2]
+                # if it happened in last minute - remove previous entry or stop it
+                if 60 >= (start_time - last_activity['start_time']).seconds >= 0:
+                    self.__remove_fact(last_activity['id'])
+                    start_time = last_activity['start_time']
                 else:
-                    #set previous fact end time
+                    #stop 
                     update = """
                                UPDATE facts
                                   SET end_time = ?
                                 WHERE id = ?
                     """
-                    self.execute(update, (start_time, fact["id"]))
+                    self.execute(update, (start_time, last_activity["id"]))
+
+
+        #done with the current activity, now we can solve overlaps
+        self.__solve_overlaps(start_time, end_time)
 
 
         # finally add the new entry
