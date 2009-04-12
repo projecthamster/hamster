@@ -28,12 +28,6 @@ except:
     pass
 
 def get_eds_tasks():
-    # the development version of evolution API causes whole thing to hang
-    # http://bugzilla.gnome.org/show_bug.cgi?id=571503
-    # disabling until we get some solution.
-    print "INFO: Not importing evolution tasks, see http://bugzilla.gnome.org/show_bug.cgi?id=571503"
-    return [] 
-    
     if EDS_AVAILABLE == False:
         return []
     
