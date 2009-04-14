@@ -278,11 +278,36 @@ class HamsterApplet(object):
         dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
         self.on_timeout_enabled_changed(None, self.config.get_timeout_enabled())
         
+        
         # init nagging timeout
         if PYNOTIFY:
             self.notify = Notifier('HamsterApplet', gtk.STOCK_DIALOG_QUESTION, self.button)
             dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
+
+    def give_more_info(self):
+        def on_response(self, widget):
+            self.destroy()
+        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
+        message_dialog.set_property("title", _("What to type in the activity box?"))
+        message_dialog.connect("response", on_response)
+        
+        more_info = _("""There is simple syntax that enables you to add details to your activities:
+        
+"@" symbol marks category. Example: "watering flowers@home" will start tracking activity "watering flowers" in category "home".
+
+Comma (",") marks beginning of description. Example: "watering flowers, begonias and forgetmenots" will start tracking activity "watering flowers" and add description "begonias and forgetmenots" to it.
+
+Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
+
+Now, start tracking!
+        """)
+        
+        message_dialog.set_markup(more_info)
+        message_dialog.show()
+        
+    def on_more_info_button_clicked(self, button):
+        self.give_more_info()
 
     def setup_activity_tree(self):
         self.treeview = self._gui.get_object('today')
@@ -608,8 +633,10 @@ class HamsterApplet(object):
             self.activity_list.child.set_text(label)
 
             self.activity_list.child.select_region(0, -1)
+            self._gui.get_object("more_info_label").hide()
         else:
             self.activity_list.child.set_text('')
+            self._gui.get_object("more_info_label").show()
 
         # doing unstick / stick here, because sometimes while switching
         # between workplaces window still manages to dissappear
