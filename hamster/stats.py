@@ -379,7 +379,6 @@ class StatsViewer(object):
         if not fact_list:
             self.get_widget("graphs").hide()
             self.get_widget("no_data_label").show()
-            self.get_widget("totals").set_text("");
             return 
         else:
             self.get_widget("graphs").show()
@@ -417,20 +416,6 @@ class StatsViewer(object):
 
         self.category_chart.plot([_("Total")], category_totals,
                                   stack_keys = category_keys)
-
-        
-        
-        #total string in right bottom corner, maybe temporar
-        total_string = ""
-        for i in range(len(day_category_totals['keys'])):
-            if category_totals[0][i] > 0:
-                total_string += _("%(category)s: %(duration).1f, ") % \
-                                ({'category': day_category_totals['keys'][i],
-                                  'duration': category_totals[0][i]})
-
-        total_string = total_string.rstrip(", ") # trailing slash
-        self.get_widget("totals").set_text(total_string);
-        
 
 
     def get_widget(self, name):
