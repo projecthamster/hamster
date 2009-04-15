@@ -69,7 +69,8 @@ def on_destroy(event):
         if last_activity and last_activity['end_time'] == None:
             storage.touch_fact(last_activity)
         
-    gtk.main_quit()
+    if gtk.main_level():
+        gtk.main_quit()
 
 def usage():
     print _(u"""Time tracker: Usage
