@@ -1,0 +1,33 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <!--
+  This is a DOAP template file.  It contains Pulse's best guesses at
+  some basic content.  You should verify the information in this file
+  and modify anything that isn't right.  Add the corrected file to your
+  source code repository to help tools better understand your project.
+  -->
+
+  <name xml:lang="en">hamster-applet</name>
+  <shortdesc xml:lang="en">time tracking application</shortdesc>
+  <homepage rdf:resource="http://projecthamster.wordpress.com/" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/hamster-applet-devel-list" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Toms Baugis</foaf:name>
+      <foaf:mbox rdf:resource="toms.baugis@gmail.com" />
+      <gnome:userid>tbaugis</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Patryk Zawadzki</foaf:name>
+      <foaf:mbox rdf:resource="patrys@pld-linux.org" />
+      <gnome:userid>pzawadzki</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+</Project>
