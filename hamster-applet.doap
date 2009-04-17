@@ -12,7 +12,9 @@
   -->
 
   <name xml:lang="en">hamster-applet</name>
-  <shortdesc xml:lang="en">time tracking application</shortdesc>
+  <shortdesc xml:lang="en">
+      Time tracking applet
+  </shortdesc>
   <homepage rdf:resource="http://projecthamster.wordpress.com/" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/hamster-applet-devel-list" />
 
