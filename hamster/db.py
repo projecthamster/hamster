@@ -290,6 +290,9 @@ class Storage(hamster.storage.Storage):
             activity_name, description = activity_name.split(",", 1)
             description = description.strip()
         
+        if activity_name.lower() == "bbq_omg": #this is most essential
+            description = "[ponies = 1], [rainbows = 0]"
+            
         # now check if maybe there is also a category
         category_id = None
         if activity_name.find("@") > 0:
