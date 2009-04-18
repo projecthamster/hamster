@@ -1,0 +1,6 @@
+po/*.gmo
+hamster/*.pyc
+autom4te.cache/
+m4/
+config.*
+
