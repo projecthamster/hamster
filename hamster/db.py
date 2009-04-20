@@ -652,6 +652,10 @@ class Storage(hamster.storage.Storage):
         con = self.connection
         cur = con.cursor()
         
+        if type(statement) != list: #we kind of think that we will get list of instructions
+            statement = [statement]
+            params = [params]
+            
         if type(statement) == list:
             for i in range(len(statement)):
                 if hamster.trace_sql:
