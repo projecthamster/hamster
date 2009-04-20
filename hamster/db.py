@@ -25,6 +25,7 @@ try:
     import sqlite3 as sqlite
 except ImportError:
     try:
+        print "Using sqlite2"
         from pysqlite2 import dbapi2 as sqlite
     except ImportError:
         print "Error: Neither sqlite3 nor pysqlite2 found"
@@ -577,13 +578,12 @@ class Storage(hamster.storage.Storage):
         self.execute("delete from categories where id = ?", (id, ))
         
     
-    def __swap_activities(self, id1, id2):
+    def __swap_activities(self, id1, priority1, id2, priority2):
         """ swaps nearby activities """
         # TODO - 2 selects and 2 updates is wrong we could live without selects
-        priority1 = self.fetchone("select activity_order from activities where id = ?", (id1,))[0]
-        priority2 = self.fetchone("select activity_order from activities where id = ?", (id2,))[0]
-        self.execute("update activities set activity_order = ? where id = ?", (priority1, id2) )
-        self.execute("update activities set activity_order = ? where id = ?", (priority2, id1) )
+        self.execute(["update activities set activity_order = ? where id = ?",
+                      "update activities set activity_order = ? where id = ?"],
+                      [(priority1, id2), (priority2, id1)])
 
     def __add_activity(self, name, category_id = None):
         # first check that we don't have anything like that yet
@@ -647,17 +647,21 @@ class Storage(hamster.storage.Storage):
             return None
 
     def execute(self, statement, params = ()):
+        """execute sql statement. optionally you can give multiple statements
+        to save on cursor creation and closure"""
         con = self.connection
         cur = con.cursor()
-
-        if hamster.trace_sql:
-            print statement, params
-
-        res = cur.execute(statement, params)
+        
+        if type(statement) == list:
+            for i in range(len(statement)):
+                if hamster.trace_sql:
+                    print statement[i], params[i]
+         
+                res = cur.execute(statement[i], params[i])
 
         con.commit()
         cur.close()
-
+        
     def run_fixtures(self):
         # defaults
         work_category = {"name": _("Work"),

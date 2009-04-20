@@ -583,7 +583,8 @@ class PreferencesEditor:
 
         #previous item
         prev_iter = get_prev(self.selection, model)
-        storage.swap_activities(model[iter][0], model[prev_iter][0])
+        storage.swap_activities(model[iter][0], model[iter][3],
+                                model[prev_iter][0], model[prev_iter][3])
         model.move_before(iter, prev_iter)
 
         self.activity_changed(self.selection, model)
@@ -592,7 +593,8 @@ class PreferencesEditor:
         (model, iter) = self.selection.get_selected()
 
         next_iter = model.iter_next(iter)
-        storage.swap_activities(model[iter][0], model[next_iter][0])
+        storage.swap_activities(model[iter][0], model[iter][3],
+                                model[next_iter][0], model[next_iter][3])
         self.activity_store.move_after(iter, next_iter)
 
         self.activity_changed(self.selection, model)

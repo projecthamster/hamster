@@ -93,8 +93,8 @@ class Storage(object):
             self.dispatch('activity_updated', ())
         return changed
 
-    def swap_activities(self, id1, id2):
-        res = self.__swap_activities(id1, id2)
+    def swap_activities(self, id1, priority1, id2, priority2):
+        res = self.__swap_activities(id1, priority1, id2, priority2)
         self.dispatch('activity_updated', ())
         return res
 
