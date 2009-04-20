@@ -351,12 +351,16 @@ class PreferencesEditor:
         if iter == None:
             self.activity_store.clear()
         else:
+            self.prev_selected_activity = None
+
             id = model[iter][0]
             self.activity_store.load(model[iter][0])
         
-        #do not allow to remove the unsorted category
-        self.get_widget('promote_activity').set_sensitive(False)
-        self.get_widget('demote_activity').set_sensitive(False)
+        #start with nothing
+        self.get_widget('activity_up').set_sensitive(False)
+        self.get_widget('activity_down').set_sensitive(False)
+        self.get_widget('activity_edit').set_sensitive(False)
+        self.get_widget('activity_remove').set_sensitive(False)
 
         return True
 
@@ -376,14 +380,18 @@ class PreferencesEditor:
         
         # treat any selected case
         unsorted_selected = self._get_selected_category() == -1
-        self.get_widget('promote_activity').set_sensitive(False)
-        self.get_widget('demote_activity').set_sensitive(False)
+        self.get_widget('activity_up').set_sensitive(False)
+        self.get_widget('activity_down').set_sensitive(False)
+
+        self.get_widget('activity_edit').set_sensitive(iter != None)
+        self.get_widget('activity_remove').set_sensitive(iter != None)
+        
         if iter != None and not unsorted_selected:
             first_item = model.get_path(iter) == (0,)
-            self.get_widget('promote_activity').set_sensitive(not first_item)
+            self.get_widget('activity_up').set_sensitive(not first_item)
 
             last_item = model.iter_next(iter) == None
-            self.get_widget('demote_activity').set_sensitive(not last_item)
+            self.get_widget('activity_down').set_sensitive(not last_item)
 
     def _del_selected_row(self, tree):
         selection = tree.get_selection()
@@ -447,14 +455,26 @@ class PreferencesEditor:
             self.prev_selected_category = path
         
 
+    def on_activity_remove_clicked(self, button):
+        self.remove_current_activity()
+
+    def on_activity_edit_clicked(self, button):
+        self.activityCell.set_property("editable", True)
+
+        selection = self.activity_tree.get_selection()
+        (model, iter) = selection.get_selected()
+        path = model.get_path(iter)[0]
+        self.activity_tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+        
+
+
     """keyboard events"""
     def on_activity_list_key_pressed(self, tree, event_key):
         key = event_key.keyval
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
         if (event_key.keyval == gtk.keysyms.Delete):
-            storage.remove_activity(model[iter][0])
-            self._del_selected_row(tree)
+            self.remove_current_activity()
 
         elif key == gtk.keysyms.F2 :
             self.activityCell.set_property("editable", True)
@@ -463,7 +483,25 @@ class PreferencesEditor:
             #tree.grab_focus()
             #tree.set_cursor(path, start_editing = True)
 
+    def remove_current_activity(self):
+        selection = self.activity_tree.get_selection()
+        (model, iter) = selection.get_selected()
+        storage.remove_activity(model[iter][0])
+        self._del_selected_row(self.activity_tree)
 
+
+    def on_category_remove_clicked(self, button):
+        self.remove_current_category()
+        
+    def on_category_edit_clicked(self, button):
+        self.categoryCell.set_property("editable", True)
+
+        selection = self.category_tree.get_selection()
+        (model, iter) = selection.get_selected()
+        path = model.get_path(iter)[0]
+        self.category_tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+        
+        
     def on_category_list_key_pressed(self, tree, event_key):
         key = event_key.keyval
         
@@ -474,16 +512,21 @@ class PreferencesEditor:
         (model, iter) = selection.get_selected()
 
         if  key == gtk.keysyms.Delete:
-            id = model[iter][0]
-            if id != -1:
-                storage.remove_category(id)
-                self._del_selected_row(tree)
+            self.remove_current_category()
         elif key == gtk.keysyms.F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
             #tree.grab_focus()
             #tree.set_cursor(path, start_editing = True)
+
+    def remove_current_category(self):
+        selection = self.category_tree.get_selection()
+        (model, iter) = selection.get_selected()
+        id = model[iter][0]
+        if id != -1:
+            storage.remove_category(id)
+            self._del_selected_row(self.category_tree)
 
     def on_preferences_window_key_press(self, widget, event):
         # ctrl+w means close window
@@ -504,7 +547,7 @@ class PreferencesEditor:
             self.close_window()     
 
     """button events"""
-    def on_add_category_clicked(self, button):
+    def on_category_add_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
         
         new_category = self.category_store.insert_before(self.category_store.unsorted_category,
@@ -517,7 +560,7 @@ class PreferencesEditor:
                                          start_editing = True)
 
 
-    def on_add_activity_clicked(self, button):
+    def on_activity_add_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
         
@@ -531,11 +574,11 @@ class PreferencesEditor:
                                          focus_cell = None,
                                          start_editing = True)
 
-    def on_remove_activity_clicked(self, button):
+    def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
         storage.remove_activity(removable_id)
 
-    def on_promote_activity_clicked(self, button):
+    def on_activity_up_clicked(self, button):
         (model, iter) = self.selection.get_selected()
 
         #previous item
@@ -545,7 +588,7 @@ class PreferencesEditor:
 
         self.activity_changed(self.selection, model)
 
-    def on_demote_activity_clicked(self, button):
+    def on_activity_down_clicked(self, button):
         (model, iter) = self.selection.get_selected()
 
         next_iter = model.iter_next(iter)

@@ -13,8 +13,8 @@
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Time Tracker Preferences</property>
     <property name="window_position">center</property>
-    <property name="default_width">600</property>
-    <property name="default_height">500</property>
+    <property name="default_width">550</property>
+    <property name="default_height">550</property>
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="destroy" handler="on_preferences_window_destroy"/>
@@ -23,351 +23,36 @@
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkFrame" id="frame2">
+            <property name="height_request">200</property>
             <property name="visible">True</property>
-            <property name="spacing">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
-              <object class="GtkFrame" id="frame2">
-                <property name="height_request">250</property>
+              <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="top_padding">8</property>
+                <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment3">
+                  <object class="GtkHPaned" id="hpaned1">
                     <property name="visible">True</property>
-                    <property name="top_padding">8</property>
-                    <property name="left_padding">12</property>
+                    <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkTable" id="table1">
+                      <object class="GtkVBox" id="vbox3">
+                        <property name="width_request">150</property>
                         <property name="visible">True</property>
-                        <property name="n_rows">2</property>
-                        <property name="n_columns">2</property>
-                        <property name="column_spacing">4</property>
-                        <property name="row_spacing">4</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">4</property>
                         <child>
-                          <object class="GtkVBox" id="vbox3">
-                            <property name="width_request">150</property>
+                          <object class="GtkLabel" id="categories_label">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="spacing">4</property>
-                            <child>
-                              <object class="GtkLabel" id="categories_label">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Categories</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="hscrollbar_policy">automatic</property>
-                                <property name="vscrollbar_policy">automatic</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="category_list">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="enable_search">False</property>
-                                    <signal name="button_press_event" handler="on_category_list_button_pressed"/>
-                                    <signal name="drag_motion" handler="on_category_list_drag_motion"/>
-                                    <signal name="key_press_event" handler="on_category_list_key_pressed"/>
-                                    <signal name="button_release_event" handler="on_category_list_button_released"/>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="x_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkVBox" id="vbox4">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="spacing">4</property>
-                            <child>
-                              <object class="GtkLabel" id="activities_label">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Activities</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAlignment" id="alignment8">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkHBox" id="hbox2">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="spacing">4</property>
-                                    <child>
-                                      <object class="GtkScrolledWindow" id="scrolledwindow1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="hscrollbar_policy">automatic</property>
-                                        <property name="vscrollbar_policy">automatic</property>
-                                        <property name="shadow_type">in</property>
-                                        <child>
-                                          <object class="GtkTreeView" id="activity_list">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="headers_visible">False</property>
-                                            <property name="rules_hint">True</property>
-                                            <property name="enable_search">False</property>
-                                            <property name="enable_tree_lines">True</property>
-                                            <signal name="button_press_event" handler="on_activity_list_button_pressed"/>
-                                            <signal name="drag_motion" handler="on_activity_list_drag_motion"/>
-                                            <signal name="key_press_event" handler="on_activity_list_key_pressed"/>
-                                            <signal name="cursor_changed" handler="row_selected_cb"/>
-                                            <signal name="button_release_event" handler="on_activity_list_button_released"/>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment9">
-                                        <property name="visible">True</property>
-                                        <property name="yalign">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkVBox" id="vbox5">
-                                            <property name="visible">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="spacing">4</property>
-                                            <child>
-                                              <object class="GtkButton" id="add_activity">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <signal name="clicked" handler="on_add_activity_clicked"/>
-                                                <child>
-                                                  <object class="GtkLabel" id="add_activity_label">
-                                                    <property name="visible">True</property>
-                                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="ypad">2</property>
-                                                    <property name="label" translatable="yes">_New Activity</property>
-                                                    <property name="use_underline">True</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="promote_activity">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <signal name="clicked" handler="on_promote_activity_clicked"/>
-                                                <child>
-                                                  <object class="GtkHBox" id="hbox3">
-                                                    <property name="visible">True</property>
-                                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="spacing">4</property>
-                                                    <child>
-                                                      <object class="GtkImage" id="image1">
-                                                        <property name="visible">True</property>
-                                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="stock">gtk-go-up</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="label5">
-                                                        <property name="visible">True</property>
-                                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="label" translatable="yes">Move _Up</property>
-                                                        <property name="use_underline">True</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="demote_activity">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <signal name="clicked" handler="on_demote_activity_clicked"/>
-                                                <child>
-                                                  <object class="GtkHBox" id="hbox5">
-                                                    <property name="visible">True</property>
-                                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                    <property name="spacing">4</property>
-                                                    <child>
-                                                      <object class="GtkImage" id="image3">
-                                                        <property name="visible">True</property>
-                                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="stock">gtk-go-down</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="label6">
-                                                        <property name="visible">True</property>
-                                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                        <property name="label" translatable="yes">Move _Down</property>
-                                                        <property name="use_underline">True</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="position">2</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment7">
-                            <property name="visible">True</property>
-                            <property name="xalign">1</property>
-                            <property name="xscale">0</property>
-                            <child>
-                              <object class="GtkButton" id="add_category">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <signal name="clicked" handler="on_add_category_clicked"/>
-                                <child>
-                                  <object class="GtkLabel" id="label4">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xpad">4</property>
-                                    <property name="ypad">2</property>
-                                    <property name="label" translatable="yes">N_ew Category</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment10">
-                            <property name="visible">True</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Activities&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="frame3">
-                <property name="visible">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment4">
-                    <property name="visible">True</property>
-                    <property name="top_padding">8</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkVBox" id="vbox7">
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkCheckButton" id="shutdown_track">
-                            <property name="label" translatable="yes">Stop tracking on shutdown</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_shutdown_track_toggled"/>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Categories</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -375,106 +60,325 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="idle_track">
-                            <property name="label" translatable="yes">Stop tracking when computer becomes idle</property>
+                          <object class="GtkScrolledWindow" id="scrolledwindow2">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_idle_track_toggled"/>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="category_list">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="headers_visible">False</property>
+                                <property name="enable_search">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Category list</property>
+                                  </object>
+                                </child>
+                                <signal name="button_press_event" handler="on_category_list_button_pressed"/>
+                                <signal name="drag_motion" handler="on_category_list_drag_motion"/>
+                                <signal name="key_press_event" handler="on_category_list_key_pressed"/>
+                                <signal name="button_release_event" handler="on_category_list_button_released"/>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFrame" id="notification_preference_frame">
+                          <object class="GtkHBox" id="hbox3">
                             <property name="visible">True</property>
-                            <property name="no_show_all">True</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">none</property>
+                            <property name="spacing">4</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment1">
+                              <object class="GtkButton" id="category_add">
                                 <property name="visible">True</property>
-                                <property name="left_padding">12</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Add category</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_category_add_clicked"/>
                                 <child>
-                                  <object class="GtkHScale" id="notify_interval">
+                                  <object class="GtkImage" id="image1">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment1</property>
-                                    <property name="show_fill_level">True</property>
-                                    <property name="restrict_to_fill_level">False</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
-                                    <signal name="value_changed" handler="on_notify_interval_value_changed"/>
-                                    <signal name="format_value" handler="on_notify_interval_format_value"/>
+                                    <property name="icon_name">list-add</property>
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label1">
+                            <child>
+                              <object class="GtkButton" id="category_remove">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Remind of current activity every:</property>
-                                <property name="use_markup">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Remove category</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_category_remove_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image2">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">list-remove</property>
+                                  </object>
+                                </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="category_edit">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Edit category</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_category_edit_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image3">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">gtk-edit</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
-                            <property name="padding">8</property>
+                            <property name="expand">False</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="resize">False</property>
+                        <property name="shrink">True</property>
+                      </packing>
                     </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Tracking&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="frame1">
-                <property name="visible">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment6">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="xscale">0.30000001192092896</property>
-                    <property name="top_padding">8</property>
-                    <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkEntry" id="keybinding">
+                      <object class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <signal name="changed" handler="on_keybinding_changed"/>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkLabel" id="activities_label">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Activities</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="alignment8">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="scrolledwindow1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="hscrollbar_policy">automatic</property>
+                                <property name="vscrollbar_policy">automatic</property>
+                                <property name="shadow_type">in</property>
+                                <child>
+                                  <object class="GtkTreeView" id="activity_list">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="rules_hint">True</property>
+                                    <property name="enable_search">False</property>
+                                    <property name="enable_tree_lines">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="dummy">
+                                        <property name="AtkObject::accessible-name" translatable="yes">Activity list</property>
+                                      </object>
+                                    </child>
+                                    <signal name="button_press_event" handler="on_activity_list_button_pressed"/>
+                                    <signal name="drag_motion" handler="on_activity_list_drag_motion"/>
+                                    <signal name="key_press_event" handler="on_activity_list_key_pressed"/>
+                                    <signal name="button_release_event" handler="on_activity_list_button_released"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox2">
+                            <property name="visible">True</property>
+                            <property name="spacing">4</property>
+                            <child>
+                              <object class="GtkButton" id="activity_add">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Add activity</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_activity_add_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image4">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">list-add</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="activity_remove">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Remove activity</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_activity_remove_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image5">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">list-remove</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="activity_edit">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Edit activity</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_activity_edit_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image6">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">gtk-edit</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="activity_up">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Move activity up</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_activity_up_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image7">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">up</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="activity_down">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dummy">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Move activity down</property>
+                                  </object>
+                                </child>
+                                <signal name="clicked" handler="on_activity_down_clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image8">
+                                    <property name="visible">True</property>
+                                    <property name="icon_name">down</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">True</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label7">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Global Hotkey&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">2</property>
-              </packing>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Activities&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -482,11 +386,140 @@
           </packing>
         </child>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
-            <property name="xalign">1</property>
-            <property name="xscale">0</property>
-            <property name="top_padding">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment4">
+                <property name="visible">True</property>
+                <property name="top_padding">8</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox7">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkCheckButton" id="shutdown_track">
+                        <property name="label" translatable="yes">Stop tracking on shutdown</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_shutdown_track_toggled"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="idle_track">
+                        <property name="label" translatable="yes">Stop tracking when computer becomes idle</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_idle_track_toggled"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="notification_preference_frame">
+                        <property name="visible">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment1">
+                            <property name="visible">True</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkHScale" id="notify_interval">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">adjustment1</property>
+                                <property name="show_fill_level">True</property>
+                                <property name="restrict_to_fill_level">False</property>
+                                <property name="digits">0</property>
+                                <property name="value_pos">bottom</property>
+                                <signal name="value_changed" handler="on_notify_interval_value_changed"/>
+                                <signal name="format_value" handler="on_notify_interval_format_value"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label1">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Remind of current activity every:</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="padding">8</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Tracking&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame1">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment6">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xscale">0.30000001192092896</property>
+                <property name="top_padding">8</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkEntry" id="keybinding">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <signal name="changed" handler="on_keybinding_changed"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label7">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Global Hotkey&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHButtonBox" id="hbuttonbox3">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="label">gtk-close</property>
@@ -496,11 +529,16 @@
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="position">1</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
