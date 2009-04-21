@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-requires gtk+ 2.12 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="value">5</property>
@@ -75,7 +75,7 @@
                                 <property name="headers_visible">False</property>
                                 <property name="enable_search">False</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_category_list">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Category list</property>
                                   </object>
                                 </child>
@@ -100,7 +100,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_add_category">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Add category</property>
                                   </object>
                                 </child>
@@ -123,7 +123,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_remove_category">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Remove category</property>
                                   </object>
                                 </child>
@@ -146,7 +146,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_edit_category">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Edit category</property>
                                   </object>
                                 </child>
@@ -218,7 +218,7 @@
                                     <property name="enable_search">False</property>
                                     <property name="enable_tree_lines">True</property>
                                     <child internal-child="accessible">
-                                      <object class="AtkObject" id="atk_activity_list">
+                                      <object class="AtkObject" id="dummy">
                                         <property name="AtkObject::accessible-name" translatable="yes">Activity list</property>
                                       </object>
                                     </child>
@@ -245,7 +245,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_add_activity">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Add activity</property>
                                   </object>
                                 </child>
@@ -268,7 +268,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_remove_activity">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Remove activity</property>
                                   </object>
                                 </child>
@@ -291,7 +291,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_edit_activity">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Edit activity</property>
                                   </object>
                                 </child>
@@ -314,7 +314,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_move_activity_up">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Move activity up</property>
                                   </object>
                                 </child>
@@ -337,7 +337,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="atk_move_activity_down">
+                                  <object class="AtkObject" id="dummy">
                                     <property name="AtkObject::accessible-name" translatable="yes">Move activity down</property>
                                   </object>
                                 </child>
