@@ -84,7 +84,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">12</property>
-                        <property name="text" translatable="yes">20/01/09</property>
                         <signal name="button_press_event" handler="on_date_button_press_event"/>
                         <signal name="key_press_event" handler="on_date_key_press_event"/>
                         <signal name="focus_out_event" handler="on_date_focus_out_event"/>
@@ -99,7 +98,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">7</property>
-                        <property name="text" translatable="yes">3:30pm</property>
                         <signal name="button_press_event" handler="on_time_button_press_event"/>
                         <signal name="key_press_event" handler="on_time_key_press_event"/>
                         <signal name="focus_out_event" handler="on_start_time_focus_out_event"/>
@@ -133,7 +131,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">7</property>
-                        <property name="text" translatable="yes">3:30pm</property>
                         <signal name="button_press_event" handler="on_time_button_press_event"/>
                         <signal name="key_press_event" handler="on_time_key_press_event"/>
                         <signal name="focus_out_event" handler="on_end_time_focus_out_event"/>
@@ -148,7 +145,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">12</property>
-                        <property name="text" translatable="yes">20/01/08</property>
                         <signal name="button_press_event" handler="on_date_button_press_event"/>
                         <signal name="key_press_event" handler="on_date_key_press_event"/>
                         <signal name="focus_out_event" handler="on_date_focus_out_event"/>
