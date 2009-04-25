@@ -20,7 +20,8 @@ hamster_PYTHON = \
 	stats.py \
 	reports.py \
 	charting.py \
-    graphics.py \
+        widgets.py \
+        graphics.py \
 	Configuration.py \
 	KeyBinder.py \
 	preferences.py \
