@@ -8,10 +8,11 @@ data/hamster-applet.schemas.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/stats.ui
 hamster/about.py
-hamster/preferences.py
-hamster/edit_activity.py
 hamster/applet.py
 hamster/db.py
+hamster/edit_activity.py
+hamster/preferences.py
 hamster/reports.py
 hamster/stats.py
 hamster/stuff.py
+hamster/widgets.py

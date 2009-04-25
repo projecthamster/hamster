@@ -80,14 +80,11 @@
                     <property name="visible">True</property>
                     <property name="spacing">4</property>
                     <child>
-                      <object class="GtkEntry" id="start_date">
+                      <object class="GtkAlignment" id="start_date_placeholder">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">12</property>
-                        <signal name="button_press_event" handler="on_date_button_press_event"/>
-                        <signal name="key_press_event" handler="on_date_key_press_event"/>
-                        <signal name="focus_out_event" handler="on_date_focus_out_event"/>
-                        <signal name="focus_in_event" handler="on_date_focus_in_event"/>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">0</property>
@@ -141,14 +138,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="end_date">
+                      <object class="GtkAlignment" id="end_date_placeholder">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">12</property>
-                        <signal name="button_press_event" handler="on_date_button_press_event"/>
-                        <signal name="key_press_event" handler="on_date_key_press_event"/>
-                        <signal name="focus_out_event" handler="on_date_focus_out_event"/>
-                        <signal name="focus_in_event" handler="on_date_focus_in_event"/>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

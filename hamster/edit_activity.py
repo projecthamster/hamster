@@ -27,14 +27,12 @@ import gobject
 import re
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster import graphics
+from hamster import graphics, widgets
 import hamster.eds
 
 import time
 import datetime as dt
 import colorsys
-
-import gobject
 
 import cairo, pango
 
@@ -356,6 +354,14 @@ class CustomFactController:
         start_date = start_date or dt.datetime.now()
         end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
+
+        self.start_date = widgets.HamsterCalendar()
+        self.start_date.connect("date-entered", self.validate_fields)
+        self.get_widget("start_date_placeholder").add(self.start_date)
+        self.end_date = widgets.HamsterCalendar()
+        self.get_widget("end_date_placeholder").add(self.end_date)
+        self.end_date.connect("date-entered", self.validate_fields)
+
         self.set_dropdown()
         self.refresh_menu()
 
@@ -368,17 +374,16 @@ class CustomFactController:
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
 
-        self.init_calendar_window()
         self.init_time_window()
 
         self._gui.connect_signals(self)
 
     def update_time(self, start_time, end_time):
         self.get_widget("start_time").set_text(self.format_time(start_time))
-        self.get_widget('start_date').set_text(self.format_date(start_time))
+        self.start_date.set_date(start_time)
 
         self.get_widget("end_time").set_text(self.format_time(end_time))
-        self.get_widget('end_date').set_text(self.format_date(end_time))
+        self.end_date.set_date(end_time)
 
         
     def draw_preview(self, date, highlight = None):
@@ -386,54 +391,10 @@ class CustomFactController:
         self.dayline.draw(day_facts, highlight)
         
         
-    def init_calendar_window(self):
-        self.calendar_window = self._gui.get_object('calendar_window')
-        self.date_calendar = gtk.Calendar()
-        #self.date_calendar.mark_day(dt.date.today().day) #mark day marks day in all months, hahaha
-        self.date_calendar.connect("day-selected", self.on_day_selected)
-        self.date_calendar.connect("day-selected-double-click", self.on_day_selected_double_click)
-        self.date_calendar.connect("button-press-event", self.on_cal_button_press_event)
-        self._gui.get_object("calendar_box").add(self.date_calendar)
-
-    def on_cal_button_press_event(self, calendar, event):
-        self.prev_cal_day = calendar.get_date()[2]
-
-    def on_day_selected_double_click(self, calendar):
-        self.prev_cal_day = None
-        self.on_day_selected(calendar) #forward
-        
-    def on_day_selected(self, calendar):
-        if self.calendar_window.get_property("visible") == False:
-            return
-        
-        if self.prev_cal_day == calendar.get_date()[2]:
-            return
-        
-        cal_date = calendar.get_date()
-
-        date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
-        
-        widget = None
-        if self.get_widget("start_date").is_focus():
-            widget = self.get_widget("start_date")
-        elif self.get_widget("end_date").is_focus():
-            widget = self.get_widget("end_date")
-            
-        if widget:
-            widget.set_text(self.format_date(date))
-
-        self.calendar_window.hide()        
-        self.validate_fields()
-        
     def init_time_window(self):
         self.time_window = self._gui.get_object('time_window')
         self.time_tree = self.get_widget('time_tree')
         self.time_tree.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=0))
-
-
-    def on_date_button_press_event(self, button, event):
-        if self.calendar_window.get_property("visible"):
-            self.calendar_window.hide()
 
     def on_time_button_press_event(self, button, event):
         if self.time_window.get_property("visible"):
@@ -562,7 +523,7 @@ class CustomFactController:
 
     def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
-        date = self.figure_date(self.get_widget(prefix + '_date').get_text())
+        date = getattr(self, prefix + '_date').get_date()
         time = self.figure_time(self.get_widget(prefix + '_time').get_text())
         
         if time and date:
@@ -623,44 +584,12 @@ class CustomFactController:
         
         self.close_window()
     
-    def figure_date(self, date_str):
-        try:
-            return dt.datetime.strptime(date_str, "%x")
-        except:
-            return None
-
-    def format_date(self, date):
-        if not date:
-            return ""
-        else:
-            return date.strftime("%x")
-
     def on_activity_list_key_pressed(self, entry, event):
         #treating tab as keydown to be able to cycle through available values
         if event.keyval == gtk.keysyms.Tab:
             event.keyval = gtk.keysyms.Down
         return False
     
-    def on_date_focus_in_event(self, entry, event):
-        window = entry.get_parent_window()
-        x, y= window.get_origin()
-
-        alloc = entry.get_allocation()
-        
-        date = self.figure_date(entry.get_text())
-        if date:
-            self.prev_cal_day = date.day #avoid 
-            self.date_calendar.select_month(date.month-1, date.year)
-            self.date_calendar.select_day(date.day)
-        
-        self.calendar_window.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.calendar_window.show_all()
-
-    def on_date_focus_out_event(self, event, something):
-        self.calendar_window.hide()
-        self.validate_fields()
-    
-
     def on_start_time_focus_in_event(self, entry, event):
         self.show_time_window(entry)
 
@@ -678,7 +607,7 @@ class CustomFactController:
     
     def on_in_progress_toggled(self, check):
         self.get_widget("end_time").set_sensitive(not check.get_active())
-        self.get_widget("end_date").set_sensitive(not check.get_active())
+        self.end_date.set_sensitive(not check.get_active())
         self.validate_fields()
 
     def show_time_window(self, widget, start_time = None):
@@ -747,41 +676,6 @@ class CustomFactController:
         self.time_window.show_all()
 
     
-    def on_date_key_press_event(self, entry, event):
-        if self.calendar_window.get_property("visible"):
-            cal_date = self.date_calendar.get_date()
-            date = dt.date(cal_date[0], cal_date[1], cal_date[2])
-        else:
-            date = self.figure_date(entry.get_text())
-            if not date:
-                return
-
-        enter_pressed = False
-
-        if event.keyval == gtk.keysyms.Up:
-            date = date - dt.timedelta(days=1)
-        elif event.keyval == gtk.keysyms.Down:
-            date = date + dt.timedelta(days=1)
-        elif (event.keyval == gtk.keysyms.Return or
-              event.keyval == gtk.keysyms.KP_Enter):
-            enter_pressed = True
-        elif (event.keyval == gtk.keysyms.Escape):
-            self.calendar_window.hide()
-        elif event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
-            return False #keep calendar open and allow user to walk in text
-        else:
-            self.calendar_window.hide()
-            return False
-        
-        if enter_pressed:
-            self.prev_cal_day = "borken"
-        else:
-            self.prev_cal_day = date.day #prev_cal_day is our only way of checking that date is right
-        
-        self.date_calendar.select_month(date.month, date.year)
-        self.date_calendar.select_day(date.day)
-        return True
-    
     def format_time(self, time):
         if time == None:
             return None
@@ -807,7 +701,7 @@ class CustomFactController:
             delta = abs(time - start_time)
 
             end_date = start_datetime + delta
-            self.get_widget("end_date").set_text(self.format_date(end_date))
+            self.end_date.set_date(end_date)
 
             widget = self.get_widget("end_time")
 
@@ -864,7 +758,7 @@ class CustomFactController:
     def on_activity_combo_changed(self, combo):
         self.validate_fields()
 
-    def validate_fields(self):
+    def validate_fields(self, event = None):
         # do not allow empty tasks
 
         activity_text = self.get_widget("activity_combo").child.get_text()
@@ -895,7 +789,8 @@ class CustomFactController:
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
             
-            if self.calendar_window.get_property("visible") or \
+            if self.start_date.calendar_window.get_property("visible") or \
+               self.end_date.calendar_window.get_property("visible") or \
                self.time_window.get_property("visible"):
                 return False
 
