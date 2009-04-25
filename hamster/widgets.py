@@ -17,11 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
+from hamster.stuff import format_duration
 import gtk
 import datetime as dt
 import calendar
 import gobject
+import re
+
 
 class DateInput(gtk.Entry):
     """ a text entry widget with calendar popup"""
@@ -30,19 +32,24 @@ class DateInput(gtk.Entry):
     }
 
 
-    def __init__(self):
+    def __init__(self, date = None):
         gtk.Entry.__init__(self)
-    
+        
+        self.set_width_chars(12) #12 is enough for 12-oct-2009, which is verbose
+        if date:
+            self.set_date(date)
+
+        self.news = False
         self.prev_cal_day = None #workaround
         self.calendar_window = gtk.Window(type = gtk.WINDOW_POPUP)
         calendar_box = gtk.HBox()
-        
-        
+
         self.date_calendar = gtk.Calendar()
-        
         self.date_calendar.connect("day-selected", self._on_day_selected)
-        self.date_calendar.connect("day-selected-double-click", self.__on_day_selected_double_click)
-        self.date_calendar.connect("button-press-event", self._on_cal_button_press_event)
+        self.date_calendar.connect("day-selected-double-click",
+                                   self.__on_day_selected_double_click)
+        self.date_calendar.connect("button-press-event",
+                                   self._on_cal_button_press_event)
         calendar_box.add(self.date_calendar)
         self.calendar_window.add(calendar_box)
 
@@ -50,6 +57,7 @@ class DateInput(gtk.Entry):
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("focus-in-event", self._on_focus_in_event)
         self.connect("focus-out-event", self._on_focus_out_event)
+        self.connect("changed", self._on_text_changed)
         self.show()
 
     def set_date(self, date):
@@ -72,6 +80,9 @@ class DateInput(gtk.Entry):
         else:
             return date.strftime("%x")
 
+    def _on_text_changed(self, widget):
+        self.news = True
+        
     def _on_button_press_event(self, button, event):
         if self.calendar_window.get_property("visible"):
             self.calendar_window.hide()
@@ -96,8 +107,10 @@ class DateInput(gtk.Entry):
         
         self.set_text(self._format_date(date))
 
-        self.calendar_window.hide()        
-        self.emit("date-entered")
+        self.calendar_window.hide()
+        if self.news:
+            self.emit("date-entered")
+            self.news = False
         
     
     def _on_focus_in_event(self, entry, event):
@@ -117,7 +130,9 @@ class DateInput(gtk.Entry):
 
     def _on_focus_out_event(self, event, something):
         self.calendar_window.hide()
-        self.emit("date-entered")
+        if self.news:
+            self.emit("date-entered")
+            self.news = False
     
     def _on_key_press_event(self, entry, event):
         if self.calendar_window.get_property("visible"):
@@ -148,8 +163,229 @@ class DateInput(gtk.Entry):
         if enter_pressed:
             self.prev_cal_day = "borken"
         else:
-            self.prev_cal_day = date.day #prev_cal_day is our only way of checking that date is right
+            #prev_cal_day is our only way of checking that date is right
+            self.prev_cal_day = date.day 
         
         self.date_calendar.select_month(date.month, date.year)
         self.date_calendar.select_day(date.day)
         return True
+
+
+class TimeInput(gtk.Entry):
+    __gsignals__ = {
+        'time-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
+
+    def __init__(self, time = None, start_time = None):
+        gtk.Entry.__init__(self)
+
+        self.start_time = start_time
+        self.news = False
+
+        self.set_width_chars(7) #7 is like 11:24pm
+        if time:
+            self.set_time(time)
+
+
+        self.time_window = gtk.Window(type = gtk.WINDOW_POPUP)
+        time_box = gtk.ScrolledWindow()
+        time_box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
+
+        self.time_tree = gtk.TreeView()
+        self.time_tree.set_headers_visible(False)
+        self.time_tree.set_hover_selection(True)
+
+        self.time_tree.append_column(gtk.TreeViewColumn("Time",
+                                                        gtk.CellRendererText(),
+                                                        text=0))
+        self.time_tree.connect("button-press-event",
+                               self._on_time_tree_button_press_event)
+
+        time_box.add(self.time_tree)
+        self.time_window.add(time_box)
+
+        self.connect("button-press-event", self._on_button_press_event)
+        self.connect("key-press-event", self._on_key_press_event)
+        self.connect("focus-in-event", self._on_focus_in_event)
+        self.connect("focus-out-event", self._on_focus_out_event)
+        self.connect("changed", self._on_text_changed)
+        self.show()
+
+
+    def set_start_time(self, start_time):
+        """ set the start time. when start time is set, drop down list
+            will start from start time and duration will be displayed in
+            brackets
+        """
+        self.start_time = start_time
+
+    def set_time(self, time):
+        self.set_text(self._format_time(time))
+        
+    def _on_text_changed(self, widget):
+        self.news = True
+        
+    def _select_time(self, time_text):
+        #convert forth and back so we have text formated as we want
+        time = self.figure_time(time_text)
+        time_text = self._format_time(time) 
+        
+        self.set_text(time_text)
+        self.set_position(len(time_text))
+        self.time_window.hide()
+        if self.news:
+            self.emit("time-entered")
+            self.news = False
+    
+    def get_time(self):
+        return self.figure_time(self.get_text())
+
+    def _format_time(self, time):
+        if time == None:
+            return None
+        
+        #return time.strftime("%I:%M%p").lstrip("0").lower()
+        return time.strftime("%H:%M").lower()
+    
+
+    def _on_focus_in_event(self, entry, event):
+        self.show_time_window()
+
+    def _on_focus_out_event(self, event, something):
+        self.time_window.hide()
+        if self.news:
+            self.emit("time-entered")
+            self.news = False
+        
+
+    def show_time_window(self):
+        focus_time = self.figure_time(self.get_text())
+        
+        hours = gtk.ListStore(gobject.TYPE_STRING)
+        
+        # populate times
+        i_time = self.start_time or dt.datetime(1900, 1, 1, 0, 0)
+        
+        if focus_time and focus_time < i_time:
+            focus_time += dt.timedelta(days = 1)
+        
+        if self.start_time:
+            end_time = i_time + dt.timedelta(hours = 12)
+        else:
+            end_time = i_time + dt.timedelta(hours = 24)
+        
+        i, focus_row = 0, None
+        while i_time < end_time:
+            if self.start_time:
+                i_time += dt.timedelta(minutes = 15)
+            else:
+                i_time += dt.timedelta(minutes = 30)
+
+            row_text = self._format_time(i_time)
+            if self.start_time:
+                delta = (i_time - self.start_time).seconds / 60
+                delta_text = format_duration(delta)
+                
+                row_text += " (%s)" % delta_text
+
+            hours.append([row_text])
+            
+            
+            if focus_time and i_time <= focus_time <= i_time + dt.timedelta(minutes = 30):
+                focus_row = i
+            
+            i += 1
+
+        self.time_tree.set_model(hours)        
+
+        #focus on row
+        if focus_row != None:
+            self.time_tree.set_cursor(focus_row)
+            self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
+        
+        #move popup under the widget
+        alloc = self.get_allocation()
+        w = alloc.width
+        if self.start_time:
+            w = w * 2
+        self.time_tree.set_size_request(w, alloc.height * 5)
+
+        window = self.get_parent_window()
+        x, y= window.get_origin()
+
+        self.time_window.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.time_window.show_all()
+
+    
+    def _on_time_tree_button_press_event(self, tree, event):
+        model, iter = tree.get_selection().get_selected()
+        time = model.get_value(iter, 0)
+        self._select_time(time)
+        
+        
+    def _on_key_press_event(self, entry, event):
+        if not self.time_tree.get_cursor():
+            return
+        
+        i = self.time_tree.get_cursor()[0][0]
+
+        if event.keyval == gtk.keysyms.Up:
+            i-=1
+        elif event.keyval == gtk.keysyms.Down:
+            i+=1
+        elif (event.keyval == gtk.keysyms.Return or
+              event.keyval == gtk.keysyms.KP_Enter):
+            
+            if self.time_window.get_property("visible"):
+                self._select_time(self.time_tree.get_model()[i][0])
+            else:
+                self._select_time(entry.get_text())
+        elif (event.keyval == gtk.keysyms.Escape):
+            self.time_window.hide()
+        else:
+            #any kind of other input
+            self.time_window.hide()
+            return False
+        
+        # keep it in the sane borders
+        i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
+        
+        self.time_tree.set_cursor(i)
+        self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+        return True
+        
+        
+    def _on_button_press_event(self, button, event):
+        if self.time_window.get_property("visible"):
+            self.time_window.hide()
+        
+        
+    def figure_time(self, str_time):
+        # strip everything non-numeric and consider hours to be first number
+        # and minutes - second number
+        numbers = re.split("\D", str_time)
+        numbers = filter(lambda x: x!="", numbers)
+        hours, minutes = None, None
+        
+        if len(numbers) >= 1:
+            hours = int(numbers[0])
+            
+        if len(numbers) >= 2:
+            minutes = int(numbers[1])
+            
+        if (hours == None and minutes == None) or hours > 24 or minutes > 60:
+            return None #no can do
+
+        """ this breaks 24 hour mode, when hours are given
+        #if hours specified in 12 hour mode, default to PM
+        #TODO - laame, show me how to do this better, pleease
+        am = dt.time(1, 00).strftime("%p")
+        if hours <= 11 and str_time.find(am) < 0:
+            hours += 12
+        """
+        
+        return dt.datetime(1900, 1, 1, hours, minutes)
+
+
+    

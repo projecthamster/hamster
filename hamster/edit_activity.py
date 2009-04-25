@@ -24,7 +24,6 @@ pygtk.require('2.0')
 import os
 import gtk
 import gobject
-import re
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster import graphics, widgets
@@ -355,12 +354,22 @@ class CustomFactController:
         end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
 
-        self.start_date = widgets.DateInput()
-        self.start_date.connect("date-entered", self.validate_fields)
+        self.start_date = widgets.DateInput(start_date)
         self.get_widget("start_date_placeholder").add(self.start_date)
-        self.end_date = widgets.DateInput()
+        self.start_date.connect("date-entered", self.validate_fields)
+        
+        self.end_date = widgets.DateInput(end_date)
         self.get_widget("end_date_placeholder").add(self.end_date)
         self.end_date.connect("date-entered", self.validate_fields)
+
+        self.start_time = widgets.TimeInput(start_date)
+        self.get_widget("start_time_placeholder").add(self.start_time)
+        self.start_time.connect("time-entered", self.on_start_time_entered)
+        
+        self.end_time = widgets.TimeInput(end_date, start_date)
+        self.get_widget("end_time_placeholder").add(self.end_time)
+        self.end_time.connect("time-entered", self.on_end_time_entered)
+
 
         self.set_dropdown()
         self.refresh_menu()
@@ -370,19 +379,13 @@ class CustomFactController:
         self.dayline.on_more_data = storage.get_facts
         self._gui.get_object("day_preview").add(self.dayline)
 
-        self.update_time(start_date, end_date)
-
         self.on_in_progress_toggled(self.get_widget("in_progress"))
-
-        self.init_time_window()
-
         self._gui.connect_signals(self)
 
     def update_time(self, start_time, end_time):
-        self.get_widget("start_time").set_text(self.format_time(start_time))
+        self.start_time.set_time(start_time)
         self.start_date.set_date(start_time)
-
-        self.get_widget("end_time").set_text(self.format_time(end_time))
+        self.end_time.set_time(end_time)
         self.end_date.set_date(end_time)
 
         
@@ -391,42 +394,6 @@ class CustomFactController:
         self.dayline.draw(day_facts, highlight)
         
         
-    def init_time_window(self):
-        self.time_window = self._gui.get_object('time_window')
-        self.time_tree = self.get_widget('time_tree')
-        self.time_tree.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=0))
-
-    def on_time_button_press_event(self, button, event):
-        if self.time_window.get_property("visible"):
-            self.time_window.hide()
-        
-        
-    def figure_time(self, str_time):
-        # strip everything non-numeric and consider hours to be first number
-        # and minutes - second number
-        numbers = re.split("\D", str_time)
-        numbers = filter(lambda x: x!="", numbers)
-        hours, minutes = None, None
-        
-        if len(numbers) >= 1:
-            hours = int(numbers[0])
-            
-        if len(numbers) >= 2:
-            minutes = int(numbers[1])
-            
-        if (hours == None and minutes == None) or hours > 24 or minutes > 60:
-            return None #no can do
-
-        """ this breaks 24 hour mode, when hours are given
-        #if hours specified in 12 hour mode, default to PM
-        #TODO - laame, show me how to do this better, pleease
-        am = dt.time(1, 00).strftime("%p")
-        if hours <= 11 and str_time.find(am) < 0:
-            hours += 12
-        """
-        
-        return dt.datetime(1900, 1, 1, hours, minutes)
-
 
     def set_dropdown(self):
         # set up drop down menu
@@ -524,7 +491,7 @@ class CustomFactController:
     def _get_datetime(self, prefix):
         # adds symbolic time to date in seconds
         date = getattr(self, prefix + '_date').get_date()
-        time = self.figure_time(self.get_widget(prefix + '_time').get_text())
+        time = getattr(self, prefix + '_time').get_time()
         
         if time and date:
             return dt.datetime.combine(date, time.time())
@@ -589,178 +556,31 @@ class CustomFactController:
         if event.keyval == gtk.keysyms.Tab:
             event.keyval = gtk.keysyms.Down
         return False
-    
-    def on_start_time_focus_in_event(self, entry, event):
-        self.show_time_window(entry)
-
-    def on_start_time_focus_out_event(self, event, something):
-        self.time_window.hide()
-        self.validate_fields()
         
-    def on_end_time_focus_in_event(self, entry, event):
-        start_time = self.figure_time(self.get_widget("start_time").get_text())
-        self.show_time_window(entry, start_time)
-
-    def on_end_time_focus_out_event(self, event, something):
-        self.time_window.hide()
-        self.validate_fields()
-    
     def on_in_progress_toggled(self, check):
-        self.get_widget("end_time").set_sensitive(not check.get_active())
+        self.end_time.set_sensitive(not check.get_active())
         self.end_date.set_sensitive(not check.get_active())
         self.validate_fields()
 
-    def show_time_window(self, widget, start_time = None):
-
-        focus_time = self.figure_time(widget.get_text())
-        
-        hours = gtk.ListStore(gobject.TYPE_STRING)
-        
-        # populate times
-        i_time = start_time or dt.datetime(1900, 1, 1, 0, 0)
-        
-        if focus_time and focus_time < i_time:
-            focus_time += dt.timedelta(days = 1)
-        
-        if start_time:
-            end_time = i_time + dt.timedelta(hours = 12)
-        else:
-            end_time = i_time + dt.timedelta(hours = 24)
-        
-        i, focus_row = 0, None
-        while i_time < end_time:
-            if start_time:
-                i_time += dt.timedelta(minutes = 15)
-            else:
-                i_time += dt.timedelta(minutes = 30)
-
-            row_text = self.format_time(i_time)
-            if start_time:
-                delta = (i_time - start_time).seconds / 60
-                delta_text = stuff.format_duration(delta)
-                
-                row_text += " (%s)" % delta_text
-
-            hours.append([row_text])
-            
-            
-            if focus_time and i_time <= focus_time <= i_time + dt.timedelta(minutes = 30):
-                focus_row = i
-            
-            i += 1
-
-            
-
-
-        self.time_tree.set_model(hours)        
-
-
-        #focus on row
-        if focus_row != None:
-            self.time_tree.set_cursor(focus_row)
-            self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
-        
-
-
-        #move popup under the widget
-        alloc = widget.get_allocation()
-        w = alloc.width
-        if start_time:
-            w = w * 2
-        self.time_tree.set_size_request(w, alloc.height * 5)
-
-        window = widget.get_parent_window()
-        x, y= window.get_origin()
-
-        self.time_window.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.time_window.show_all()
-
-    
-    def format_time(self, time):
-        if time == None:
-            return None
-        
-        #return time.strftime("%I:%M%p").lstrip("0").lower()
-        return time.strftime("%H:%M").lower()
-    
-    def set_time(self, time_text):
-        #convert forth and back so we have text formated as we want
-        time = self.figure_time(time_text)
-        time_text = self.format_time(time) 
-        
-        widget = None
-        if self.get_widget("start_time").is_focus():
-            widget = self.get_widget("start_time")
-            self.get_widget("end_time") \
-                .set_text(self.format_time(time + dt.timedelta(minutes=30))) #set also end time on start time change
-
-
-        elif self.get_widget("end_time").is_focus():
-            start_datetime = self._get_datetime("start")
-            start_time = self.figure_time(self.get_widget("start_time").get_text())
-            delta = abs(time - start_time)
-
-            end_date = start_datetime + delta
-            self.end_date.set_date(end_date)
-
-            widget = self.get_widget("end_time")
-
-        if widget:
-            widget.set_text(time_text)
-
-        widget.set_position(len(time_text))
-        self.time_window.hide()        
-        self.validate_fields()
-        
-
-    
-    def on_time_tree_button_press_event(self, tree, event):
-        model, iter = tree.get_selection().get_selected()
-        time = model.get_value(iter, 0)
-        self.set_time(time)
-        
-        
-    def on_time_key_press_event(self, entry, event):
-        if not self.time_tree.get_cursor():
-            return
-        
-        i = self.time_tree.get_cursor()[0][0]
-
-        if event.keyval == gtk.keysyms.Up:
-            i-=1
-        elif event.keyval == gtk.keysyms.Down:
-            i+=1
-        elif (event.keyval == gtk.keysyms.Return or
-              event.keyval == gtk.keysyms.KP_Enter):
-            
-            if self.time_window.get_property("visible"):
-                self.set_time(self.time_tree.get_model()[i][0])
-            else:
-                self.set_time(entry.get_text())
-        elif (event.keyval == gtk.keysyms.Escape):
-            self.time_window.hide()
-        else:
-            #any kind of other input
-            self.time_window.hide()
-            return False
-        
-        # keep it in the sane borders
-        i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
-        
-        self.time_tree.set_cursor(i)
-        self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
-        return True
-        
-        
     def on_cancel_clicked(self, button):
         self.close_window()
         
     def on_activity_combo_changed(self, combo):
         self.validate_fields()
 
-    def validate_fields(self, event = None):
-        # do not allow empty tasks
-
+    def on_start_time_entered(self, widget):
+        self.end_time.set_time(self.start_time.get_time() +
+                                                     dt.timedelta(minutes = 30))
+        self.end_time.set_start_time(self.start_time.get_time())
+        self.validate_fields()
+        
+    def on_end_time_entered(self, widget):
+        if self.end_time.get_time() < self.start_time.get_time():
+            self.end_date.set_date(self.start_date.get_date() +
+                                                          dt.timedelta(days=1))
+        self.validate_fields()
+        
+    def validate_fields(self, widget = None):
         activity_text = self.get_widget("activity_combo").child.get_text()
         start_time = self._get_datetime("start")
 
@@ -776,7 +596,7 @@ class CustomFactController:
             self.update_time(start_time, end_time)
             self.validate_fields()
             return
-        
+
         looks_good = False
         if activity_text != "" and start_time and end_time and \
            (end_time - start_time).days == 0:
