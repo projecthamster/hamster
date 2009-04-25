@@ -45,9 +45,6 @@ import cairo, pango
 class Dayline(graphics.Area):
     def __init__(self):
         graphics.Area.__init__(self)
-        self.context = None
-        self.layout = None
-        self.connect("expose_event", self._expose)
 
         self.set_events(gtk.gdk.EXPOSURE_MASK
                                  | gtk.gdk.LEAVE_NOTIFY_MASK
@@ -217,16 +214,12 @@ class Dayline(graphics.Area):
         self.redraw_canvas()
 
 
-    def _expose(self, widget, event):
-        """expose is when drawing's going on, like on _invalidate"""
-        self._draw(self.context)
-        return False
-    
     def _minutes_from_start(self, date):
             delta = (date - self.range_start.value)
             return delta.days * 24 * 60 + delta.seconds / 60
             
-    def _draw(self, context):
+    def _render(self):
+        context = self.context
         #TODO - use system colors and fonts
  
         context.set_line_width(1)

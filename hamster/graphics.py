@@ -5,11 +5,42 @@ import pango, cairo
 
 class Area(gtk.DrawingArea):
     """Abstraction on top of DrawingArea to work specifically with cairo"""
+    __gsignals__ = {
+        "expose-event": "override",
+        "configure_event": "override",
+    }
+
+    def do_configure_event ( self, event ):
+        (self.__width, self.__height) = self.window.get_size()
+        self.queue_draw()
+                    
+    def do_expose_event ( self, event ):
+        self.width, self.height = self.window.get_size()
+        self.context = self.window.cairo_create()
+
+
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+        self.context.rectangle(event.area.x, event.area.y,
+                               event.area.width, event.area.height)
+        self.context.clip()
+
+        self.layout = self.context.create_layout()
+        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font.set_size(8 * pango.SCALE)
+        self.layout.set_font_description(default_font)
+        
+
+        alloc = self.get_allocation()  #x, y, width, height
+        self.width, self.height = alloc.width, alloc.height
+        
+        self._render()
+
+
+
     def __init__(self):
         gtk.DrawingArea.__init__(self)
         self.context = None
         self.layout = None
-        self.connect("expose_event", self._on_expose)
         self.width = None
         self.height = None
         self.value_boundaries = None #x_min, x_max, y_min, y_max
@@ -26,22 +57,8 @@ class Area(gtk.DrawingArea):
             self.window.process_updates(True)
 
 
-    def _on_expose(self, widget, event):
-        """expose is when drawing's going on, like on _invalidate"""
-        self.context = widget.window.cairo_create()
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
-        self.context.rectangle(event.area.x, event.area.y,
-                               event.area.width, event.area.height)
-        self.context.clip()
-
-        self.layout = self.context.create_layout()
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(8 * pango.SCALE)
-        self.layout.set_font_description(default_font)
-        
-
-        alloc = self.get_allocation()  #x, y, width, height
-        self.width, self.height = alloc.width, alloc.height
+    def _render(self):
+        raise NotImplementedError
 
 
     def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):

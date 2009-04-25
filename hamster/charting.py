@@ -149,7 +149,6 @@ class Chart(graphics.Area):
     """
     def __init__(self, **args):
         graphics.Area.__init__(self)
-        self.connect("expose_event", self._expose)
 
         self.max_bar_width     = args.get("max_bar_width", 0)
         self.legend_width      = args.get("legend_width", 0)
@@ -327,20 +326,13 @@ class Chart(graphics.Area):
         
         return self.moving #return if there is still work to do
 
-    def _expose(self, widget, event):
-        """expose is when drawing's going on, like on invalidate"""
+    def _render(self):
         # fill whole area 
         if self.background:
             self.context.rectangle(0, 0, self.width, self.height)
             self.context.set_source_rgb(*self.background)
             self.context.fill()
         
-        #forward to specific implementations
-        self._draw(self.context)
-        self.context.stroke()
-
-        return False
-
 
     def _update_targets(self):
         # calculates new factors and then updates existing set
@@ -368,7 +360,10 @@ class Chart(graphics.Area):
 
 
 class BarChart(Chart):
-    def _draw(self, context):
+    def _render(self):
+        context = self.context
+        Chart._render(self)
+        
         # determine graph dimensions
         if self.show_stack_labels:
             legend_width = self.legend_width or self.longest_label(self.keys)
@@ -565,7 +560,9 @@ class BarChart(Chart):
 
 
 class HorizontalBarChart(Chart):
-    def _draw(self, context):
+    def _render(self):
+        context = self.context
+        Chart._render(self)
         rowcount, keys = len(self.keys), self.keys
         
         # push graph to the right, so it doesn't overlap
