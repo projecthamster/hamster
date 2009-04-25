@@ -40,50 +40,50 @@ class HamsterCalendar(gtk.Entry):
         
         self.date_calendar = gtk.Calendar()
         
-        self.date_calendar.connect("day-selected", self.on_day_selected)
-        self.date_calendar.connect("day-selected-double-click", self.on_day_selected_double_click)
-        self.date_calendar.connect("button-press-event", self.on_cal_button_press_event)
+        self.date_calendar.connect("day-selected", self._on_day_selected)
+        self.date_calendar.connect("day-selected-double-click", self.__on_day_selected_double_click)
+        self.date_calendar.connect("button-press-event", self._on_cal_button_press_event)
         calendar_box.add(self.date_calendar)
         self.calendar_window.add(calendar_box)
 
-        self.connect("button-press-event", self.on_button_press_event)
-        self.connect("key-press-event", self.on_key_press_event)
-        self.connect("focus-in-event", self.on_focus_in_event)
-        self.connect("focus-out-event", self.on_focus_out_event)
+        self.connect("button-press-event", self._on_button_press_event)
+        self.connect("key-press-event", self._on_key_press_event)
+        self.connect("focus-in-event", self._on_focus_in_event)
+        self.connect("focus-out-event", self._on_focus_out_event)
         self.show()
 
     def set_date(self, date):
         """sets date to specified, using default format"""
-        self.set_text(self.format_date(date))
+        self.set_text(self._format_date(date))
 
     def get_date(self):
         """sets date to specified, using default format"""
-        return self.figure_date(self.get_text())
+        return self._figure_date(self.get_text())
 
-    def figure_date(self, date_str):
+    def _figure_date(self, date_str):
         try:
             return dt.datetime.strptime(date_str, "%x")
         except:
             return None
 
-    def format_date(self, date):
+    def _format_date(self, date):
         if not date:
             return ""
         else:
             return date.strftime("%x")
 
-    def on_button_press_event(self, button, event):
+    def _on_button_press_event(self, button, event):
         if self.calendar_window.get_property("visible"):
             self.calendar_window.hide()
 
-    def on_day_selected_double_click(self, calendar):
+    def __on_day_selected_double_click(self, calendar):
         self.prev_cal_day = None
-        self.on_day_selected(calendar) #forward
+        self._on_day_selected(calendar) #forward
         
-    def on_cal_button_press_event(self, calendar, event):
+    def _on_cal_button_press_event(self, calendar, event):
         self.prev_cal_day = calendar.get_date()[2]
 
-    def on_day_selected(self, calendar):
+    def _on_day_selected(self, calendar):
         if self.calendar_window.get_property("visible") == False:
             return
         
@@ -94,19 +94,19 @@ class HamsterCalendar(gtk.Entry):
 
         date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
         
-        self.set_text(self.format_date(date))
+        self.set_text(self._format_date(date))
 
         self.calendar_window.hide()        
         self.emit("date-entered")
         
     
-    def on_focus_in_event(self, entry, event):
+    def _on_focus_in_event(self, entry, event):
         window = entry.get_parent_window()
         x, y= window.get_origin()
 
         alloc = entry.get_allocation()
         
-        date = self.figure_date(entry.get_text())
+        date = self._figure_date(entry.get_text())
         if date:
             self.prev_cal_day = date.day #avoid 
             self.date_calendar.select_month(date.month-1, date.year)
@@ -115,16 +115,16 @@ class HamsterCalendar(gtk.Entry):
         self.calendar_window.move(x + alloc.x,y + alloc.y + alloc.height)
         self.calendar_window.show_all()
 
-    def on_focus_out_event(self, event, something):
+    def _on_focus_out_event(self, event, something):
         self.calendar_window.hide()
         self.emit("date-entered")
     
-    def on_key_press_event(self, entry, event):
+    def _on_key_press_event(self, entry, event):
         if self.calendar_window.get_property("visible"):
             cal_date = self.date_calendar.get_date()
             date = dt.date(cal_date[0], cal_date[1], cal_date[2])
         else:
-            date = self.figure_date(entry.get_text())
+            date = self._figure_date(entry.get_text())
             if not date:
                 return
 
