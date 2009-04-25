@@ -1,323 +1,241 @@
-# rakendi "Hamster" eesti keele tõlge.
-# Estonian translation of Hamster applet.
+# projektihamstri eesti keele tõlge.
+# Estonian translation of Project Hamster.
 #
-# Copyright (C) 2008 The GNOME Project.
+# Copyright (C) 2008, 2009 The GNOME Project.
 # This file is distributed under the same license as the hamster-applet package.
 #
-# Ivar Smolin <okul@linux.ee>, 2008.
+# Ivar Smolin <okul@linux.ee>, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-20 09:22+0000\n"
-"PO-Revision-Date: 2008-09-21 08:37+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-04-14 18:43+0000\n"
+"PO-Revision-Date: 2009-04-19 10:50+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
+msgid "Project Hamster - track your time"
+msgstr "Projektihamster - ajajälgija"
+
+#. Title of reminder baloon
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
+#: ../hamster/about.py:41 ../hamster/applet.py:67
 msgid "Time Tracker"
 msgstr "Ajajälgija"
-
-#: ../data/Hamster_Applet.server.in.in.h:2
-msgid "Time tracking for masses"
-msgstr "Ajakasutuse jälgimise programm laiale kasutajaskonnale"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "_Rakendist lähemalt"
 
 #: ../data/Hamster_Applet.xml.h:2
+msgid "_Overview"
+msgstr "Üle_vaade"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_Eelistused"
-
-#: ../data/preferences.glade.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>Tegevused</b>"
-
-#: ../data/preferences.glade.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Globaalne kiirklahv</b>"
-
-#: ../data/preferences.glade.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>Jälgimine</b>"
-
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "Liiguta ü_les"
-
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "Liiguta _alla"
-
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "_Uus kategooria"
-
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking on shutdown"
-msgstr "Seiskamisel lõpetatakse jälgimine"
-
-#: ../data/preferences.glade.h:8
-msgid "Stop tracking when computer becomes idle"
-msgstr "Jälgimine seisatakse, kui arvuti jääb jõude"
-
-#: ../data/preferences.glade.h:9
-msgid "Time Tracker Preferences"
-msgstr "Ajajälgija eelistused"
-
-#: ../data/preferences.glade.h:10
-msgid "_Activities"
-msgstr "_Tegevused"
-
-#: ../data/preferences.glade.h:11
-msgid "_Categories"
-msgstr "_Kategooriad"
-
-#: ../data/preferences.glade.h:12
-msgid "_New Activity"
-msgstr "Uus te_gevus"
-
-#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
-msgid "<b>Activity</b>"
-msgstr "<b>Tegevus</b>"
-
-#: ../data/edit_activity.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b>Kuupäev ja kellaaeg</b>"
-
-#: ../data/edit_activity.glade.h:3
-msgid "Add Earlier Activity"
-msgstr "Varasema tegevuse lisamine"
-
-#: ../data/edit_activity.glade.h:4
-msgid "hours"
-msgstr "tundi"
-
-#: ../data/edit_activity.glade.h:5
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"hetkel toimumas...\n"
-"kuni\n"
-"kestusega"
-
-#: ../data/edit_activity.glade.h:8
-msgid "minutes"
-msgstr "minutit"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks."
 
 #: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or bigger "
+"than 120 to disable reminder."
+msgstr ""
+"Jooksva tegevuse kohta antakse teada kindlaksmääratud hulga minutite järel. "
+"Väärtuse 0 või 120-st suurema väärtuse korral on meeldetuletaja keelatud."
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind of current task every x minutes"
+msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Show window"
 msgstr "Akna näitamine"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Stop tracking current activity on shutdown"
 msgstr "Käesoleva tegevuse jälgimise seiskamine programmi seiskamisel"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "Arvuti jõudeoleku korral käesoleva tegevuse jälgimise seiskamine"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking on idle"
 msgstr "Jõudeoleku korral jälgimise seiskamine"
 
-#: ../data/menu.glade.h:1
-msgid "Ad_d Earlier Activity"
-msgstr "Lisa _varasem tegevus"
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking on shutdown"
+msgstr "Seiskamisel lõpetatakse jälgimine"
 
-#. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
-msgid "Hamster"
-msgstr "Hamster"
+#: ../hamster/about.py:44
+msgid "Copyright © 2007-2009 Toms Bauģis and others"
+msgstr "Autoriõigused © 2007-2009 Toms Baugis ja teised"
 
-#: ../data/menu.glade.h:4
-msgid "No records today"
-msgstr "Tänase kohta pole ühtegi kirjet"
+#: ../hamster/about.py:46
+msgid "Project Hamster Website"
+msgstr "Projektihamstri veebisait"
 
-#: ../data/menu.glade.h:5
-msgid "Show _Overview"
-msgstr "_Näita ülevaadet"
+#: ../hamster/about.py:47
+msgid "About Time Tracker"
+msgstr "Ajajälgijast lähemalt"
 
-#: ../data/menu.glade.h:6
-msgid "_Activity:"
-msgstr "T_egevus:"
-
-#: ../data/menu.glade.h:7
-msgid "_Stop Tracking"
-msgstr "_Lõpeta jälgimine"
-
-#: ../data/menu.glade.h:8
-msgid "_Today"
-msgstr "_Täna"
-
-#: ../data/stats.glade.h:1
-msgid " _Day"
-msgstr " _Päev"
-
-#: ../data/stats.glade.h:2
-msgid " _Month"
-msgstr " _Kuu"
-
-#: ../data/stats.glade.h:3
-msgid " _Week"
-msgstr " _Nädal"
-
-#: ../data/stats.glade.h:5
-msgid "<b>Category</b>"
-msgstr "<b>Kategooria</b>"
-
-#: ../data/stats.glade.h:6
-msgid "<b>Overview</b>"
-msgstr "<b>Ülevaade</b>"
-
-#: ../data/stats.glade.h:7
-msgid "<b>Week</b>"
-msgstr "<b>Nädal</b>"
-
-#: ../data/stats.glade.h:8
-msgid "Add activity"
-msgstr "Lisa tegevus"
-
-#: ../data/stats.glade.h:9
-msgid "Delete activity"
-msgstr "Kustuta tegevus"
-
-#: ../data/stats.glade.h:10
-msgid "Earlier activities"
-msgstr "Varasemad tegevused"
-
-#: ../data/stats.glade.h:11
-msgid "Edit activity"
-msgstr "Muuda tegevust"
-
-#: ../data/stats.glade.h:12
-msgid "Generate Report"
-msgstr "Genereeri aruanne"
-
-#: ../data/stats.glade.h:13
-msgid "Newer activities"
-msgstr "Uuemad tegevused"
-
-#: ../data/stats.glade.h:14
-msgid "Overview - Hamster"
-msgstr "Ülevaade - Hamster"
-
-#: ../data/stats.glade.h:15
-msgid "Show day"
-msgstr "Näita päeva"
-
-#: ../data/stats.glade.h:16
-msgid "Show month"
-msgstr "Näita kuud"
-
-#: ../data/stats.glade.h:17
-msgid "Show week"
-msgstr "Näita nädalat"
-
-#: ../data/stats.glade.h:18
-msgid "Today"
-msgstr "Täna"
-
-#: ../hamster/about.py:42
-msgid "Time tracking for masses."
-msgstr "Ajakasutuse jälgimise programm laiale kasutajaskonnale."
-
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Autoriõigused © 2007-2008 Toms Baugis ja teised"
-
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Hamstri veebisait"
-
-#: ../hamster/about.py:54
+#: ../hamster/about.py:57
 msgid "translator-credits"
-msgstr "Ivar Smolin <okul@linux.ee>, 2008."
+msgstr "Ivar Smolin <okul@linux.ee>, 2008, 2009."
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:256 ../hamster/reports.py:101
+#. try yesterday if there is nothing today
+#: ../hamster/preferences.py:56 ../hamster/edit_activity.py:336
+#: ../hamster/applet.py:631 ../hamster/db.py:188 ../hamster/db.py:205
+#: ../hamster/db.py:208 ../hamster/db.py:368 ../hamster/db.py:472
+#: ../hamster/db.py:486 ../hamster/reports.py:129 ../hamster/stuff.py:73
 msgid "Unsorted"
 msgstr "Sortimata"
 
-#: ../hamster/preferences.py:103 ../hamster/stats.py:46
+#: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "Nimi"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:78
+#: ../hamster/preferences.py:124 ../hamster/reports.py:106
+#: ../hamster/reports.py:172
 msgid "Category"
 msgstr "Kategooria"
 
-#: ../hamster/preferences.py:468
+#: ../hamster/preferences.py:511
 msgid "New category"
 msgstr "Uus kategooria"
 
-#: ../hamster/preferences.py:481
+#: ../hamster/preferences.py:524
 msgid "New activity"
 msgstr "Uus tegevus"
 
-#: ../hamster/edit_activity.py:84
+#. notify interval slider value label
+#: ../hamster/preferences.py:579
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d minuti järel"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:582
+msgid "Never"
+msgstr "Mitte kunagi"
+
+#: ../hamster/edit_activity.py:351
 msgid "Update activity"
 msgstr "Tegevuse uuendamine"
 
-#: ../hamster/applet.py:200
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:77
+msgid "Edit"
+msgstr "Muuda"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:79
+msgid "Switch"
+msgstr "Vaheta"
+
+#: ../hamster/applet.py:292
+msgid "What to type in the activity box?"
+msgstr ""
+
+#: ../hamster/applet.py:295
+msgid ""
+"There is simple syntax that enables you to add details to your activities:\n"
+"        \n"
+"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
+"tracking activity \"watering flowers\" in category \"home\".\n"
+"\n"
+"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking activity \"watering flowers"
+"\" and add description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+
+#: ../hamster/applet.py:324 ../hamster/reports.py:109
+#: ../hamster/reports.py:174
+msgid "Duration"
+msgstr "Kestus"
+
+#: ../hamster/applet.py:451 ../hamster/applet.py:598
 msgid "No activity"
 msgstr "Tegevust pole"
 
+#. activity reminder
+#: ../hamster/applet.py:465
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Jooksev tegevus: <b>%s</b>"
+
+#: ../hamster/applet.py:525
+msgid "No records today"
+msgstr "Tänase kohta pole ühtegi kirjet"
+
+#. listing of today's categories and time spent in them
+#: ../hamster/applet.py:532
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#: ../hamster/applet.py:534
+#, python-format
+msgid "%.1fh"
+msgstr "%.1ft"
+
 #. defaults
-#: ../hamster/db.py:403
+#: ../hamster/db.py:660
 msgid "Work"
 msgstr "Töö"
 
-#: ../hamster/db.py:404
+#: ../hamster/db.py:661
 msgid "Reading news"
 msgstr "Uudistelugemine"
 
-#: ../hamster/db.py:405
+#: ../hamster/db.py:662
 msgid "Checking stocks"
 msgstr "Aktsiakursside jälgimine"
 
-#: ../hamster/db.py:406
+#: ../hamster/db.py:663
 msgid "Super secret project X"
 msgstr "Eriti salajane projekt X"
 
-#: ../hamster/db.py:407
+#: ../hamster/db.py:664
 msgid "World domination"
 msgstr "Võimuhaaramine"
 
-#: ../hamster/db.py:409
+#: ../hamster/db.py:666
 msgid "Day to day"
 msgstr "Päevast päeva"
 
-#: ../hamster/db.py:410
+#: ../hamster/db.py:667
 msgid "Lunch"
 msgstr "Lõunatamine"
 
-#: ../hamster/db.py:411
+#: ../hamster/db.py:668
 msgid "Watering flowers"
 msgstr "Lillede kastmine"
 
-#: ../hamster/db.py:412
+#: ../hamster/db.py:669
 msgid "Doing handstands"
 msgstr "Kätekõverduste tegemine"
-
-#: ../hamster/db.py:588 ../hamster/db.py:592
-msgid "name"
-msgstr "nimi"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:29 ../hamster/stats.py:274
+#: ../hamster/reports.py:32 ../hamster/stats.py:351
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -329,7 +247,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:31 ../hamster/stats.py:279
+#: ../hamster/reports.py:34 ../hamster/stats.py:356
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -338,71 +256,89 @@ msgstr ""
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:33 ../hamster/stats.py:284
+#: ../hamster/reports.py:36 ../hamster/stats.py:361
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
 
-#. overview label for single day
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:290
+#: ../hamster/reports.py:39
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Päeva %(start_d)s. %(start_B)s %(start_Y)s ülevaade"
 
-#: ../hamster/reports.py:76
+#: ../hamster/reports.py:104
 msgid "Date"
 msgstr "Kuupäev"
 
-#: ../hamster/reports.py:77
+#: ../hamster/reports.py:105 ../hamster/reports.py:173
 msgid "Activity"
 msgstr "Tegevus"
 
-#: ../hamster/reports.py:79
+#: ../hamster/reports.py:107
 msgid "Start"
 msgstr "Algus"
 
-#: ../hamster/reports.py:80
+#: ../hamster/reports.py:108
 msgid "End"
 msgstr "Lõpp"
 
-#: ../hamster/reports.py:81
-msgid "Duration"
-msgstr "Kestus"
+#: ../hamster/reports.py:110
+msgid "Description"
+msgstr "Kirjeldus"
 
 #. fact date column in HTML report
-#: ../hamster/reports.py:111
+#: ../hamster/reports.py:144
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
 
+#. summary table
+#: ../hamster/reports.py:169
+msgid "Totals"
+msgstr "Kokku"
+
+#: ../hamster/reports.py:186
+msgid "Total Time"
+msgstr "Aega kokku"
+
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:172
+#: ../hamster/stats.py:237
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
 
-#. date format in month chart in overview window (click on "month" to see it)
-#. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:222
+#: ../hamster/stats.py:364
+msgid "Week"
+msgstr "Nädal"
+
+#: ../hamster/stats.py:366
+msgid "Month"
+msgstr "Kuu"
+
+#: ../hamster/stats.py:404
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_d)s. %(m_b)s"
 
-#: ../hamster/stats.py:246
-msgid "Other"
-msgstr "Muu"
+#: ../hamster/stats.py:417
+msgid "Total"
+msgstr "Kokku"
 
-#: ../hamster/stats.py:291
-msgid "Day"
-msgstr "Päev"
+#. duration in round hours
+#: ../hamster/stuff.py:120
+#, python-format
+msgid "%dh"
+msgstr "%dt"
 
-#: ../hamster/stats.py:293
-msgid "Week"
-msgstr "Nädal"
+#. duration less than hour
+#: ../hamster/stuff.py:123
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
 
-#: ../hamster/stats.py:295
-msgid "Month"
-msgstr "Kuu"
+#. x hours, y minutes
+#: ../hamster/stuff.py:126
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dt %dmin"
