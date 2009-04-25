@@ -23,7 +23,7 @@ import datetime as dt
 import calendar
 import gobject
 
-class HamsterCalendar(gtk.Entry):
+class DateInput(gtk.Entry):
     """ a text entry widget with calendar popup"""
     __gsignals__ = {
         'date-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),

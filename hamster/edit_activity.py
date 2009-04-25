@@ -355,10 +355,10 @@ class CustomFactController:
         end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
 
-        self.start_date = widgets.HamsterCalendar()
+        self.start_date = widgets.DateInput()
         self.start_date.connect("date-entered", self.validate_fields)
         self.get_widget("start_date_placeholder").add(self.start_date)
-        self.end_date = widgets.HamsterCalendar()
+        self.end_date = widgets.DateInput()
         self.get_widget("end_date_placeholder").add(self.end_date)
         self.end_date.connect("date-entered", self.validate_fields)
 
