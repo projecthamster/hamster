@@ -272,16 +272,12 @@ class TimeInput(gtk.Entry):
         
         if self.start_time:
             end_time = i_time + dt.timedelta(hours = 12)
+            i_time += dt.timedelta(minutes = 15)
         else:
             end_time = i_time + dt.timedelta(hours = 24)
         
         i, focus_row = 0, None
         while i_time < end_time:
-            if self.start_time:
-                i_time += dt.timedelta(minutes = 15)
-            else:
-                i_time += dt.timedelta(minutes = 30)
-
             row_text = self._format_time(i_time)
             if self.start_time:
                 delta = (i_time - self.start_time).seconds / 60
@@ -291,10 +287,15 @@ class TimeInput(gtk.Entry):
 
             hours.append([row_text])
             
-            
-            if focus_time and i_time <= focus_time <= i_time + dt.timedelta(minutes = 30):
+            if focus_time and i_time <= focus_time <= i_time + \
+                                                     dt.timedelta(minutes = 30):
                 focus_row = i
             
+            if self.start_time:
+                i_time += dt.timedelta(minutes = 15)
+            else:
+                i_time += dt.timedelta(minutes = 30)
+
             i += 1
 
         self.time_tree.set_model(hours)        
