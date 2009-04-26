@@ -15,14 +15,14 @@
   <maintainer>
     <foaf:Person>
       <foaf:name>Toms Baugis</foaf:name>
-      <foaf:mbox rdf:resource="toms.baugis@gmail.com" />
+      <foaf:mbox rdf:resource="mailto:toms.baugis@gmail.com" />
       <gnome:userid>tbaugis</gnome:userid>
     </foaf:Person>
   </maintainer>
   <maintainer>
     <foaf:Person>
       <foaf:name>Patryk Zawadzki</foaf:name>
-      <foaf:mbox rdf:resource="patrys@pld-linux.org" />
+      <foaf:mbox rdf:resource="mailto:patrys@pld-linux.org" />
       <gnome:userid>pzawadzki</gnome:userid>
     </foaf:Person>
   </maintainer>
