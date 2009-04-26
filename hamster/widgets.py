@@ -24,7 +24,6 @@ import calendar
 import gobject
 import re
 
-
 class DateInput(gtk.Entry):
     """ a text entry widget with calendar popup"""
     __gsignals__ = {
@@ -41,7 +40,7 @@ class DateInput(gtk.Entry):
 
         self.news = False
         self.prev_cal_day = None #workaround
-        self.calendar_window = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
         calendar_box = gtk.HBox()
 
         self.date_calendar = gtk.Calendar()
@@ -51,7 +50,7 @@ class DateInput(gtk.Entry):
         self.date_calendar.connect("button-press-event",
                                    self._on_cal_button_press_event)
         calendar_box.add(self.date_calendar)
-        self.calendar_window.add(calendar_box)
+        self.popup.add(calendar_box)
 
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
@@ -84,8 +83,7 @@ class DateInput(gtk.Entry):
         self.news = True
         
     def _on_button_press_event(self, button, event):
-        if self.calendar_window.get_property("visible"):
-            self.calendar_window.hide()
+        self.popup.show()
 
     def __on_day_selected_double_click(self, calendar):
         self.prev_cal_day = None
@@ -95,7 +93,7 @@ class DateInput(gtk.Entry):
         self.prev_cal_day = calendar.get_date()[2]
 
     def _on_day_selected(self, calendar):
-        if self.calendar_window.get_property("visible") == False:
+        if self.popup.get_property("visible") == False:
             return
         
         if self.prev_cal_day == calendar.get_date()[2]:
@@ -107,7 +105,7 @@ class DateInput(gtk.Entry):
         
         self.set_text(self._format_date(date))
 
-        self.calendar_window.hide()
+        self.popup.hide()
         if self.news:
             self.emit("date-entered")
             self.news = False
@@ -125,17 +123,17 @@ class DateInput(gtk.Entry):
             self.date_calendar.select_month(date.month-1, date.year)
             self.date_calendar.select_day(date.day)
         
-        self.calendar_window.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.calendar_window.show_all()
+        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.popup.show_all()
 
     def _on_focus_out_event(self, event, something):
-        self.calendar_window.hide()
+        self.popup.hide()
         if self.news:
             self.emit("date-entered")
             self.news = False
     
     def _on_key_press_event(self, entry, event):
-        if self.calendar_window.get_property("visible"):
+        if self.popup.get_property("visible"):
             cal_date = self.date_calendar.get_date()
             date = dt.date(cal_date[0], cal_date[1], cal_date[2])
         else:
@@ -153,11 +151,11 @@ class DateInput(gtk.Entry):
               event.keyval == gtk.keysyms.KP_Enter):
             enter_pressed = True
         elif (event.keyval == gtk.keysyms.Escape):
-            self.calendar_window.hide()
+            self.popup.hide()
         elif event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
             return False #keep calendar open and allow user to walk in text
         else:
-            self.calendar_window.hide()
+            self.popup.hide()
             return False
         
         if enter_pressed:
@@ -188,7 +186,7 @@ class TimeInput(gtk.Entry):
             self.set_time(time)
 
 
-        self.time_window = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
 
@@ -203,7 +201,7 @@ class TimeInput(gtk.Entry):
                                self._on_time_tree_button_press_event)
 
         time_box.add(self.time_tree)
-        self.time_window.add(time_box)
+        self.popup.add(time_box)
 
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
@@ -233,7 +231,7 @@ class TimeInput(gtk.Entry):
         
         self.set_text(time_text)
         self.set_position(len(time_text))
-        self.time_window.hide()
+        self.popup.hide()
         if self.news:
             self.emit("time-entered")
             self.news = False
@@ -250,16 +248,16 @@ class TimeInput(gtk.Entry):
     
 
     def _on_focus_in_event(self, entry, event):
-        self.show_time_window()
+        self.show_popup()
 
     def _on_focus_out_event(self, event, something):
-        self.time_window.hide()
+        self.popup.hide()
         if self.news:
             self.emit("time-entered")
             self.news = False
         
 
-    def show_time_window(self):
+    def show_popup(self):
         focus_time = self.figure_time(self.get_text())
         
         hours = gtk.ListStore(gobject.TYPE_STRING)
@@ -277,6 +275,7 @@ class TimeInput(gtk.Entry):
             end_time = i_time + dt.timedelta(hours = 24)
         
         i, focus_row = 0, None
+        
         while i_time < end_time:
             row_text = self._format_time(i_time)
             if self.start_time:
@@ -315,8 +314,8 @@ class TimeInput(gtk.Entry):
         window = self.get_parent_window()
         x, y= window.get_origin()
 
-        self.time_window.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.time_window.show_all()
+        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.popup.show_all()
 
     
     def _on_time_tree_button_press_event(self, tree, event):
@@ -326,10 +325,12 @@ class TimeInput(gtk.Entry):
         
         
     def _on_key_press_event(self, entry, event):
-        if not self.time_tree.get_cursor():
+        cursor = self.time_tree.get_cursor()
+
+        if not cursor or not cursor[0]:
             return
         
-        i = self.time_tree.get_cursor()[0][0]
+        i = cursor[0][0]
 
         if event.keyval == gtk.keysyms.Up:
             i-=1
@@ -338,15 +339,15 @@ class TimeInput(gtk.Entry):
         elif (event.keyval == gtk.keysyms.Return or
               event.keyval == gtk.keysyms.KP_Enter):
             
-            if self.time_window.get_property("visible"):
+            if self.popup.get_property("visible"):
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
         elif (event.keyval == gtk.keysyms.Escape):
-            self.time_window.hide()
+            self.popup.hide()
         else:
             #any kind of other input
-            self.time_window.hide()
+            self.popup.hide()
             return False
         
         # keep it in the sane borders
@@ -358,8 +359,7 @@ class TimeInput(gtk.Entry):
         
         
     def _on_button_press_event(self, button, event):
-        if self.time_window.get_property("visible"):
-            self.time_window.hide()
+        self.popup.show()
         
         
     def figure_time(self, str_time):

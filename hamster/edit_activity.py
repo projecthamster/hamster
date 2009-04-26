@@ -609,9 +609,10 @@ class CustomFactController:
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
             
-            if self.start_date.calendar_window.get_property("visible") or \
-               self.end_date.calendar_window.get_property("visible") or \
-               self.time_window.get_property("visible"):
+            if self.start_date.popup.get_property("visible") or \
+               self.end_date.popup.get_property("visible") or \
+               self.start_time.popup.get_property("visible") or \
+               self.end_time.popup.get_property("visible"):
                 return False
 
             self.close_window()            
