@@ -696,7 +696,7 @@ Now, start tracking!
     def on_today_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        activity_name = model[iter][1]
+        activity_name = model[iter][1].decode('utf8', 'replace')
         if activity_name:
             storage.add_fact(activity_name)
             dispatcher.dispatch('panel_visible', False)        
