@@ -1,4 +1,44 @@
 ===============
+Version 2.27.1
+===============
+  * Overview window graphs have been redone and now are less noisy
+  * Tasks now can span over midnight, showing correct per-day totals in overview
+  * Add earlier activity / edit activity has been overhauled and now is much
+    easier to use. An experimental preview has been added
+  * In preferences UI buttons have been added for editing and deletion
+  * Glade files have been migrated to gtkbuilder format
+  * now it is possible to start overview and other windows straight from command
+    line using "-s [stats|edit|prefs]" switch 
+    
+  Updated translations:
+    * ca.po (David Planella)
+    * cs.po (Petr Kovář)
+    * da.po (Ask Hjorth Larsen)
+    * de.po (Hendrik Richter)
+    * el.po (Kostas Papadimas)
+    * en_GB.po (Philip Withnall)
+    * et.po (Ivar Smolin)
+    * fi.po (Ilkka Tuohela)
+    * fr.po (Claude Paroz)
+    * gl.po (Ignacio Casal Quinteiro)
+    * he.po (Yair Hershkovitz)
+    * kn.po (Shankar Prasad)
+    * lt.po (Gintautas Miliauskas)
+    * lv.po (Toms Bauģis)
+    * nl.po (Wouter Bolsterlee)
+    * or.po (Manoj Kuamr Giri)
+    * pl.po (Łukasz Jernaś)
+    * pt_BR.po (Vladimir Melo)
+    * ro.po (Mișu Moldovan)
+    * ru.po (Nickolay V. Shmyrev)
+    * si.po (Danishka Navin)
+    * sl.po (Matej Urban)
+    * sv.po (Daniel Nylander)
+    * tr.po (Baris Cicek)
+    * zh_CN.po (Aron Xu)
+  
+
+===============
 Version 2.25.3
 ===============
   We were late for 2.25.1 and 2.25.2, so here we go - changes since 2.24.0!
