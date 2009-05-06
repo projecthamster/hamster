@@ -437,45 +437,16 @@
                             <property name="visible">True</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkVBox" id="vbox2">
+                              <object class="GtkHScale" id="notify_interval">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkHScale" id="notify_interval">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment1</property>
-                                    <property name="show_fill_level">True</property>
-                                    <property name="restrict_to_fill_level">False</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
-                                    <signal name="value_changed" handler="on_notify_interval_value_changed"/>
-                                    <signal name="format_value" handler="on_notify_interval_format_value"/>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="alignment2">
-                                    <property name="visible">True</property>
-                                    <property name="top_padding">8</property>
-                                    <property name="left_padding">4</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="notify_on_idle">
-                                        <property name="label" translatable="yes">remind also when no activity is set</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_notify_on_idle_toggled"/>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">adjustment1</property>
+                                <property name="show_fill_level">True</property>
+                                <property name="restrict_to_fill_level">False</property>
+                                <property name="digits">0</property>
+                                <property name="value_pos">bottom</property>
+                                <signal name="value_changed" handler="on_notify_interval_value_changed"/>
+                                <signal name="format_value" handler="on_notify_interval_format_value"/>
                               </object>
                             </child>
                           </object>

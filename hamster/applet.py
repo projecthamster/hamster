@@ -62,23 +62,27 @@ class Notifier(object):
     def __init__(self, app_name, icon, attach):
         self._icon = icon
         self._attach = attach
-        self._notify = None
-        # Title of reminder baloon
+        # Title of reminder notification
         self.summary = _("Time Tracker")
       
         if not pynotify.is_initted():
             pynotify.init(app_name)
 
     def msg(self, body, edit_cb, switch_cb):
-        self._notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
+        notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
 
         if "actions" in pynotify.get_server_caps():
             #translators: this is edit activity action in the notifier bubble
-            self._notify.add_action("edit", _("Edit"), edit_cb)
+            notify.add_action("edit", _("Edit"), edit_cb)
             #translators: this is switch activity action in the notifier bubble
-            self._notify.add_action("switch", _("Switch"), switch_cb)
+            notify.add_action("switch", _("Switch"), switch_cb)
             
-        self._notify.show()
+        notify.show()
+    
+    def msg_low(self, message):
+        notify = pynotify.Notification(self.summary, message, self._icon, self._attach)
+        notify.set_urgency(pynotify.URGENCY_LOW)
+        notify.show()
 
 
 class PanelButton(gtk.ToggleButton):
@@ -279,9 +283,6 @@ class HamsterApplet(object):
         # init idle check
         dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
         self.timeout_enabled = self.config.get_timeout_enabled()
-
-        dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
-        self.notify_on_idle = self.config.get_notify_on_idle()
         
         
         # init nagging timeout
@@ -469,11 +470,10 @@ Now, start tracking!
                 # activity reminder
                 msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
                 self.notify.msg(msg, self.edit_cb, self.switch_cb)
-        elif self.notify_on_idle:
+        else:
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour *60) % self.notify_interval == 0:
-                msg = _(u"No activity")
-                self.notify.msg(msg, self.edit_cb, self.switch_cb)
+                self.notify.msg_low(_(u"No activity"))
 
     def edit_cb(self, n, action):
         custom_fact = CustomFactController(self, None, self.last_activity['id'])
@@ -771,10 +771,6 @@ Now, start tracking!
     def on_timeout_enabled_changed(self, event, enabled):
         # if enabled, set to value, otherwise set to zero, which means disable
         self.timeout_enabled = enabled
-
-    def on_notify_on_idle_changed(self, event, enabled):
-        # if enabled, set to value, otherwise set to zero, which means disable
-        self.notify_on_idle = enabled
 
     def on_notify_interval_changed(self, event, new_interval):
         if PYNOTIFY and 0 < new_interval < 121:

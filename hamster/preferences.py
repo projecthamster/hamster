@@ -179,7 +179,6 @@ class PreferencesEditor:
         self.get_widget("idle_track").set_active(self.config.get_timeout_enabled())
         self.get_widget("notify_interval").set_value(self.config.get_notify_interval())
         self.get_widget("keybinding").set_text(self.config.get_keybinding())
-        self.get_widget("notify_on_idle").set_active(self.config.get_notify_on_idle())
 
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
@@ -619,9 +618,6 @@ class PreferencesEditor:
     def on_idle_track_toggled(self, checkbox):
         self.config.set_timeout_enabled(checkbox.get_active())
 
-    def on_notify_on_idle_toggled(self, checkbox):
-        self.config.set_notify_on_idle(checkbox.get_active())
-
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
@@ -635,7 +631,6 @@ class PreferencesEditor:
     def on_notify_interval_value_changed(self, scale):
         value = int(scale.get_value())
         self.config.set_notify_interval(value)
-        self.get_widget("notify_on_idle").set_sensitive(value <= 120)
     
     def on_keybinding_changed(self, textbox):
         self.config.set_keybinding(textbox.get_text())

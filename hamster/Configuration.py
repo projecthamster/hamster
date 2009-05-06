@@ -34,7 +34,6 @@ class GconfStore(object):
     GCONF_ENABLE_TIMEOUT = GCONF_DIR + "/enable_timeout"
     GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"  
     GCONF_NOTIFY_INTERVAL = GCONF_DIR + "/notify_interval" 
-    GCONF_NOTIFY_ON_IDLE = GCONF_DIR + "/notify_on_idle"
 
     __instance = None
         
@@ -59,8 +58,6 @@ class GconfStore(object):
         self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
         self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
         self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
-        self._client.notify_add(self.GCONF_NOTIFY_ON_IDLE, lambda x, y, z, a: dispatcher.dispatch("gconf_notify_on_idle_changed", z.value.get_bool()))
-
     
     def get_keybinding(self):
         return self._client.get_string(self.GCONF_KEYBINDING) or ""
@@ -73,9 +70,6 @@ class GconfStore(object):
         
     def get_notify_interval(self):
     	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL) or 27
-
-    def get_notify_on_idle(self):
-    	return self._client.get_bool(self.GCONF_NOTIFY_ON_IDLE) or False
 
     #------------------------    
     def set_keybinding(self, binding):
@@ -90,6 +84,3 @@ class GconfStore(object):
     def set_notify_interval(self, interval):
     	return self._client.set_int(self.GCONF_NOTIFY_INTERVAL, interval)
 
-    def set_notify_on_idle(self, enabled):
-        self._client.set_bool(self.GCONF_NOTIFY_ON_IDLE, enabled)
-        

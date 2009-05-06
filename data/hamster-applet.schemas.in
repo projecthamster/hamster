@@ -51,19 +51,5 @@
                 </long>
             </locale>
         </schema>
-        <schema>
-            <key>/schemas/apps/hamster-applet/general/notify_on_idle</key>
-            <applyto>/apps/hamster-applet/general/notify_on_idle</applyto>
-            <owner>hamster-applet</owner>
-            <type>bool</type>
-            <default>false</default>
-            <locale name="C">
-                <short>Remind also when no activity is set</short>
-                <long>
-                    Remind every notify_interval minutes also if no activity
-                    has been started.
-                </long>
-            </locale>
-        </schema>
     </schemalist>
 </gconfschemafile>
