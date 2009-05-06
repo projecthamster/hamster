@@ -278,7 +278,10 @@ class HamsterApplet(object):
 
         # init idle check
         dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
-        self.on_timeout_enabled_changed(None, self.config.get_timeout_enabled())
+        self.timeout_enabled = self.config.get_timeout_enabled()
+
+        dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
+        self.notify_on_idle = self.config.get_notify_on_idle()
         
         
         # init nagging timeout
@@ -426,17 +429,12 @@ Now, start tracking!
                 storage.touch_fact(self.last_activity, end_time = idle_from)
             
 
-        if self.last_activity and self.last_activity['end_time'] == None:
-            # if we have running task and nagging is enabled
-            # check if maybe it is time to nag
-            if self.notify_interval:
-                self.check_user()
-
             # if we have date change - let's finish previous task and start a new one
             if self.button.get_active(): # otherwise if we the day view is visible - update day's durations
                 self.load_day()
                     
         self.update_label()
+        self.check_user()
         return True
 
     def update_label(self):
@@ -459,13 +457,23 @@ Now, start tracking!
         self.dbusController.update_activity(label)
 
     def check_user(self):
-        delta = datetime.datetime.now() - self.last_activity['start_time']
-        duration = delta.seconds /  60
-                 
-        if duration and duration % self.notify_interval == 0:
-            # activity reminder
-            msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
-            self.notify.msg(msg, self.edit_cb, self.switch_cb)
+        if not self.notify_interval: #no interval means "never"
+            return
+        
+        now = datetime.datetime.now()
+        if self.last_activity:
+            delta = now - self.last_activity['start_time']
+            duration = delta.seconds /  60
+
+            if duration and duration % self.notify_interval == 0:
+                # activity reminder
+                msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
+                self.notify.msg(msg, self.edit_cb, self.switch_cb)
+        elif self.notify_on_idle:
+            #if we have no last activity, let's just calculate duration from 00:00
+            if (now.minute + now.hour *60) % self.notify_interval == 0:
+                msg = _(u"No activity")
+                self.notify.msg(msg, self.edit_cb, self.switch_cb)
 
     def edit_cb(self, n, action):
         custom_fact = CustomFactController(self, None, self.last_activity['id'])
@@ -763,6 +771,10 @@ Now, start tracking!
     def on_timeout_enabled_changed(self, event, enabled):
         # if enabled, set to value, otherwise set to zero, which means disable
         self.timeout_enabled = enabled
+
+    def on_notify_on_idle_changed(self, event, enabled):
+        # if enabled, set to value, otherwise set to zero, which means disable
+        self.notify_on_idle = enabled
 
     def on_notify_interval_changed(self, event, new_interval):
         if PYNOTIFY and 0 < new_interval < 121:
