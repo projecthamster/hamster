@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2009-05-06 12:07+0000\n"
-"PO-Revision-Date: 2009-05-08 16:02+0300\n"
+"PO-Revision-Date: 2009-05-10 11:45+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -43,11 +43,11 @@ msgstr "_Eelistused"
 
 #: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
-msgstr ""
+msgstr "<b>Tegevused</b>"
 
 #: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr ""
+msgstr "<b>Globaalne kiirklahv</b>"
 
 #: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
@@ -58,34 +58,24 @@ msgid "Activity list"
 msgstr "Tegevuste nimekiri"
 
 #: ../data/preferences.ui.h:5 ../data/stats.ui.h:5
-#, fuzzy
-#| msgid "Activity"
 msgid "Add activity"
-msgstr "Tegevus"
+msgstr ""
 
 #: ../data/preferences.ui.h:6
-#, fuzzy
-#| msgid "New category"
 msgid "Add category"
-msgstr "Uus kategooria"
+msgstr ""
 
 #: ../data/preferences.ui.h:7
-#, fuzzy
-#| msgid "Category"
 msgid "Category list"
-msgstr "Kategooria"
+msgstr "Kategooriate nimekiri"
 
 #: ../data/preferences.ui.h:8 ../data/stats.ui.h:7
-#, fuzzy
-#| msgid "Update activity"
 msgid "Edit activity"
-msgstr "Tegevuse uuendamine"
+msgstr ""
 
 #: ../data/preferences.ui.h:9
-#, fuzzy
-#| msgid "New category"
 msgid "Edit category"
-msgstr "Uus kategooria"
+msgstr ""
 
 #: ../data/preferences.ui.h:10
 msgid "Move activity down"
@@ -96,10 +86,8 @@ msgid "Move activity up"
 msgstr "Tegevuse liigutamine ülespoole"
 
 #: ../data/preferences.ui.h:12
-#, fuzzy
-#| msgid "Remind of current task every x minutes"
 msgid "Remind of current activity every:"
-msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
+msgstr "Jooksvast tegevusest antakse teada iga:"
 
 #: ../data/preferences.ui.h:13
 msgid "Remove activity"
@@ -114,16 +102,12 @@ msgid "Stop tracking on shutdown"
 msgstr "Seiskamisel lõpetatakse jälgimine"
 
 #: ../data/preferences.ui.h:16
-#, fuzzy
-#| msgid "Stop tracking current activity, when computer becomes idle"
 msgid "Stop tracking when computer becomes idle"
-msgstr "Arvuti jõudeoleku korral käesoleva tegevuse jälgimise seiskamine"
+msgstr "Arvuti jõudeoleku korral tegevuste jälgimine peatatakse"
 
 #: ../data/preferences.ui.h:17
-#, fuzzy
-#| msgid "Time Tracker"
 msgid "Time Tracker Preferences"
-msgstr "Ajajälgija"
+msgstr "Ajajälgija eelistused"
 
 #: ../data/preferences.ui.h:18
 msgid "_Activities"
@@ -138,10 +122,8 @@ msgid "Activity:"
 msgstr "Tegevus:"
 
 #: ../data/edit_activity.ui.h:2
-#, fuzzy
-#| msgid "Update activity"
 msgid "Add Earlier Activity"
-msgstr "Tegevuse uuendamine"
+msgstr ""
 
 #: ../data/edit_activity.ui.h:3
 msgid "Description:"
@@ -149,7 +131,7 @@ msgstr "Kirjeldus:"
 
 #: ../data/edit_activity.ui.h:4
 msgid "Preview:"
-msgstr ""
+msgstr "Eelvaade:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
@@ -207,10 +189,8 @@ msgid ""
 msgstr ""
 
 #: ../data/applet.ui.h:3
-#, fuzzy
-#| msgid "Update activity"
 msgid "Ad_d Earlier Activity"
-msgstr "Tegevuse uuendamine"
+msgstr ""
 
 #. This title appears only when debugging from console. Leave it as is.
 #: ../data/applet.ui.h:5
@@ -222,10 +202,8 @@ msgid "No records today"
 msgstr "Tänase kohta pole ühtegi kirjet"
 
 #: ../data/applet.ui.h:7
-#, fuzzy
-#| msgid "_Overview"
 msgid "Show _Overview"
-msgstr "Üle_vaade"
+msgstr ""
 
 #: ../data/applet.ui.h:8
 msgid "_Activity:"
@@ -265,7 +243,7 @@ msgstr ""
 
 #: ../data/stats.ui.h:9
 msgid "No data for this interval"
-msgstr ""
+msgstr "Selle vahemiku kohta puuduvad andmed"
 
 #: ../data/stats.ui.h:10
 msgid "Overview - Hamster"
