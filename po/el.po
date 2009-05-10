@@ -1,39 +1,37 @@
-# translation of hamster-applet.HEAD.po to
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Greek translation of Hamster Applet
+# Copyright (C) 2009, Free Software Foundation, Inc.
+# This file is distributed under the same license as the Hamster Applet package.
 #
 # Jennie Petoumenou <epetoumenou@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-02-14 00:59+0000\n"
-"PO-Revision-Date: 2009-03-01 15:41+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-05-08 20:59+0000\n"
+"PO-Revision-Date: 2009-05-10 17:37+0300\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
 msgid "Project Hamster - track your time"
 msgstr "Hamster - Καταγράψτε το χρόνο σας"
 
-#. Title of reminder baloon
+#. Title of reminder notification
 #: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/applet.py:65
+#: ../hamster/about.py:41 ../hamster/applet.py:66
 msgid "Time Tracker"
 msgstr "Καταγραφέας χρόνου"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
-msgstr "_Περί"
+msgstr "Π_ερί"
 
 #: ../data/Hamster_Applet.xml.h:2
-#| msgid "Show _Overview"
 msgid "_Overview"
 msgstr "_Επισκόπηση"
 
@@ -41,347 +39,451 @@ msgstr "_Επισκόπηση"
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
-#: ../data/preferences.glade.h:1
+#: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
 msgstr "<b>Δραστηριότητες</b>"
 
-#: ../data/preferences.glade.h:2
+#: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
-msgstr "<b>Καθολικές συντομεύσεις</b>"
+msgstr "<b>Καθολική συντόμευση</b>"
 
-#: ../data/preferences.glade.h:3
+#: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
 msgstr "<b>Καταγραφή</b>"
 
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "Μετακίνηση _κάτω"
+#: ../data/preferences.ui.h:4
+#| msgid "Activity"
+msgid "Activity list"
+msgstr "Λίστα δραστηριοτήτων"
 
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "Μετακίνηση _πάνω"
+#: ../data/preferences.ui.h:5 ../data/stats.ui.h:5
+msgid "Add activity"
+msgstr "Προσθήκη δραστηριότητας"
 
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "N_έα κατηγορία"
+#: ../data/preferences.ui.h:6
+#| msgid "New category"
+msgid "Add category"
+msgstr "Προσθήκη κατηγορίας"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.ui.h:7
+#| msgid "Category"
+msgid "Category list"
+msgstr "Λίστα κατηγοριών"
+
+#: ../data/preferences.ui.h:8 ../data/stats.ui.h:7
+msgid "Edit activity"
+msgstr "Επεξεργασία δραστηριότητας"
+
+#: ../data/preferences.ui.h:9
+#| msgid "New category"
+msgid "Edit category"
+msgstr "Επεξεργασία κατηγορίας"
+
+#: ../data/preferences.ui.h:10
+#| msgid "No activity"
+msgid "Move activity down"
+msgstr "Μετακίνηση κάτω"
+
+#: ../data/preferences.ui.h:11
+#| msgid "No activity"
+msgid "Move activity up"
+msgstr "Μετακίνηση πάνω"
+
+#: ../data/preferences.ui.h:12
 msgid "Remind of current activity every:"
 msgstr "Υπενθύμιση των τρεχουσών δραστηριοτήτων κάθε:"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:13
+#| msgid "No activity"
+msgid "Remove activity"
+msgstr "Αφαίρεση δραστηριότητας"
+
+#: ../data/preferences.ui.h:14
+#| msgid "New category"
+msgid "Remove category"
+msgstr "Αφαίρεση κατηγορίας"
+
+#: ../data/preferences.ui.h:15 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "Διακοπή καταγραφής κατά τον τερματισμό"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.ui.h:16
 msgid "Stop tracking when computer becomes idle"
 msgstr "Διακοπή καταγραφής όταν ο υπολογιστής αδρανοποιείται"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.ui.h:17
 msgid "Time Tracker Preferences"
 msgstr "Προτιμήσεις καταγραφέα χρόνου"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.ui.h:18
 msgid "_Activities"
-msgstr "Δρ_αστηριότητες"
+msgstr "_Δραστηριότητες"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.ui.h:19
 msgid "_Categories"
-msgstr "_Κατηγορίες"
+msgstr "Κατη_γορίες"
 
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "_Νέα δραστηριότητα"
+#: ../data/preferences.ui.h:20
+#| msgid "Remind of current activity every:"
+msgid "remind also when no activity is set"
+msgstr "υπενθύμιση και όταν δεν έχει οριστεί δραστηριότητα"
 
-#: ../data/add_custom_fact.glade.h:1 ../data/stats.glade.h:4
-msgid "<b>Activity</b>"
-msgstr "<b>Δραστηριότητα</b>"
+#: ../data/edit_activity.ui.h:1
+#| msgid "_Activity:"
+msgid "Activity:"
+msgstr "Δραστηριότητα:"
 
-#: ../data/add_custom_fact.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b> Ημερομηνία και χρόνος</b>"
-
-#: ../data/add_custom_fact.glade.h:3
+#: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
 msgstr "Προσθήκη προηγούμενης δραστηριότητας"
 
-#: ../data/add_custom_fact.glade.h:4
-#| msgid "Duration"
+#: ../data/edit_activity.ui.h:3
 msgid "Description:"
 msgstr "Περιγραφή:"
 
-#: ../data/add_custom_fact.glade.h:5
-#| msgid "Name"
-msgid "Name:"
-msgstr "Όνομα:"
+#: ../data/edit_activity.ui.h:4
+msgid "Preview:"
+msgstr "Προεπισκόπηση:"
 
-#: ../data/add_custom_fact.glade.h:6
-msgid "hours"
-msgstr "ώρες"
+#: ../data/edit_activity.ui.h:5
+#| msgid "Name:"
+msgid "Time:"
+msgstr "Χρόνος:"
 
-#: ../data/add_custom_fact.glade.h:7
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"σε εξέλιξη...\n"
-"μέχρι\n"
-"για"
+#: ../data/edit_activity.ui.h:6
+#| msgid ""
+#| "in progress...\n"
+#| "until\n"
+#| "for"
+msgid "in progress"
+msgstr "σε εξέλιξη"
 
-#: ../data/add_custom_fact.glade.h:10
-msgid "minutes"
-msgstr "λεπτά"
+#: ../data/edit_activity.ui.h:7
+msgid "to"
+msgstr "μέχρι"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Συντόμευση πληκτρολογίου για εμφάνιση παραθύρου καταγραφέα χρόνου."
 
 #: ../data/hamster-applet.schemas.in.h:2
+#| msgid "Remind of current activity every:"
+msgid "Remind also when no activity is set"
+msgstr "Υπενθύμιση και όταν δεν έχει οριστεί δραστηριότητα"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid ""
+"Remind every notify_interval minutes also if no activity has been started."
+msgstr ""
+"Να γίνεται υπενθύμιση κάθε διάστημα_υπενθύμισης λεπτά ακόμα και αν δεν έχει "
+"ξεκινήσει μια δραστηριότητα."
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or bigger "
 "than 120 to disable reminder."
-msgstr "Υπενθύμιση "
+msgstr ""
+"Υπενθύμιση της τρέχουσας δραστηριότητας κάθε ορισμένο αριθμό λεπτών. Ορίστε "
+"το σε 0 ή σε μεγαλύτερο από 120 για να απενεργοποιήσετε την υπενθύμιση."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Υπενθύμιση τρέχουσας εργασίας κάθε x λεπτά"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "Εμφάνιση παραθύρου"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "Διακοπή καταγραφής παρούσας δραστηριότητας κατά τον τερματισμό"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Διακοπή καταγραφής παρούσας δραστηριότητας, όταν ο υπολογιστής αδρανοποιείται"
+msgstr ""
+"Διακοπή καταγραφής παρούσας δραστηριότητας, όταν ο υπολογιστής αδρανοποιείται"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "Διακοπή καταγραφής κατά την αδρανοποίηση"
 
-#: ../data/menu.glade.h:1
+#: ../data/applet.ui.h:1
+msgid ""
+"<span size=\"small\" >Type in activity and hit Enter to start tracking!</"
+"span>"
+msgstr ""
+"<span size=\"small\" >Πληκτρολογήστε τη δραστηριότητα και πατήστε Enter για "
+"να αρχίσει η καταγραφή!</span>"
+
+#: ../data/applet.ui.h:2
+msgid ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Θέλω να μάθω "
+"περισσότερα</span>"
+
+#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "Πρόσθεση προηγούμενης _δραστηριότητας"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
+#: ../data/applet.ui.h:5
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:458
+#: ../data/applet.ui.h:6 ../hamster/applet.py:538
 msgid "No records today"
 msgstr "Όχι εγγραφές σήμερα"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:7
 msgid "Show _Overview"
 msgstr "Εμφάνιση _επισκόπησης"
 
-#: ../data/menu.glade.h:6
+#: ../data/applet.ui.h:8
 msgid "_Activity:"
 msgstr "Δρ_αστηριότητα:"
 
-#: ../data/menu.glade.h:7
+#: ../data/applet.ui.h:9
 msgid "_Stop Tracking"
 msgstr "_Διακοπή καταγραφής"
 
-#: ../data/menu.glade.h:8
+#: ../data/applet.ui.h:10
 msgid "_Today"
 msgstr "_Σήμερα"
 
-#: ../data/stats.glade.h:1
-msgid " _Day"
-msgstr " _Ημέρα"
-
-#: ../data/stats.glade.h:2
+#: ../data/stats.ui.h:1
 msgid " _Month"
 msgstr " _Μήνας"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.ui.h:2
 msgid " _Week"
 msgstr " Ε_βδομάδα"
 
-#: ../data/stats.glade.h:5
-msgid "<b>Category</b>"
-msgstr "<b>Κατηγορία</b>"
-
-#: ../data/stats.glade.h:6
+#: ../data/stats.ui.h:3
 msgid "<b>Overview</b>"
 msgstr "<b>Επισκόπηση</b>"
 
-#: ../data/stats.glade.h:7
-msgid "<b>Week</b>"
-msgstr "<b>Εβδομάδα</b>"
+#: ../data/stats.ui.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+msgid "Activity"
+msgstr "Δραστηριότητα"
 
-#: ../data/stats.glade.h:8
-msgid "Add activity"
-msgstr "Προσθήκη δραστηριότητας"
-
-#: ../data/stats.glade.h:9
+#: ../data/stats.ui.h:6
 msgid "Delete activity"
 msgstr "Διαγραφή δραστηριότητας"
 
-#: ../data/stats.glade.h:10
-msgid "Earlier activities"
-msgstr "Προηγούμενες δραστηριότητες"
-
-#: ../data/stats.glade.h:11
-msgid "Edit activity"
-msgstr "Επεξεργασία δραστηριότητας"
-
-#: ../data/stats.glade.h:12
-msgid "Generate Report"
-msgstr "Δημιουργία αναφοράς"
-
-#: ../data/stats.glade.h:13
+#: ../data/stats.ui.h:8
 msgid "Newer activities"
 msgstr "Νεότερες δραστηριότητες"
 
-#: ../data/stats.glade.h:14
+#: ../data/stats.ui.h:9
+msgid "No data for this interval"
+msgstr "Δεν υπάρχουν δεδομένα για αυτή την περίοδο"
+
+#: ../data/stats.ui.h:10
 msgid "Overview - Hamster"
 msgstr "Επισκόπηση - Hamster"
 
-#: ../data/stats.glade.h:15
-msgid "Show day"
-msgstr "Εμφάνιση ημέρας"
+#: ../data/stats.ui.h:11
+msgid "Save as HTML"
+msgstr "Αποθήκευση ως HTML"
 
-#: ../data/stats.glade.h:16
+#: ../data/stats.ui.h:12
 msgid "Show month"
 msgstr "Εμφάνιση μήνα"
 
-#: ../data/stats.glade.h:17
+#: ../data/stats.ui.h:13
 msgid "Show week"
 msgstr "Εμφάνιση εβδομάδας"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Πνευματικά δικαιώματα © 2007-2008 Toms Baugis και άλλοι"
+#: ../data/stats.ui.h:14 ../hamster/stats.py:364
+msgid "Week"
+msgstr "Εβδομάδα"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Ιστοσελίδα του Hamster"
+#: ../hamster/about.py:44
+#| msgid "Copyright © 2007-2008 Toms Baugis and others"
+msgid "Copyright © 2007-2009 Toms Bauģis and others"
+msgstr "Πνευματικά δικαιώματα © 2007-2009 Toms Baugis και άλλοι"
 
-#: ../hamster/about.py:54
+#: ../hamster/about.py:46
+#| msgid "Hamster Website"
+msgid "Project Hamster Website"
+msgstr "Ιστότοπος του Hamster"
+
+#: ../hamster/about.py:47
+#| msgid "Time Tracker"
+msgid "About Time Tracker"
+msgstr "Περί του Καταγραφέα χρόνου"
+
+#: ../hamster/about.py:57
 msgid "translator-credits"
 msgstr ""
 "Ελληνική μεταφραστική ομάδα GNOME\n"
 " Κώστας Παπαδήμας <pkst@gnome.org>\n"
 " Ηλίας Μακρής <ilmakris@sch.gr>\n"
 " Νίκος Αγιαννιώτης <nickagian@gmail.com>\n"
-"Τζένη Πετούμενου <epetoumenou@gmail.com>\n"
+" Τζένη Πετούμενου <epetoumenou@gmail.com>\n"
+" Μάριος Ζηντίλης <m.zindilis@dmajor.org>\n"
 "\n"
 "Για περισσότερα δείτε http://www.gnome.gr/"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:343 ../hamster/reports.py:133
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:76
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:78
+msgid "Switch"
+msgstr "Αλλαγή"
+
+#: ../hamster/applet.py:301
+msgid "What to type in the activity box?"
+msgstr "Τι να πληκτρολογήσω στο πεδίο δραστηριότητας;"
+
+#: ../hamster/applet.py:304
+msgid ""
+"There is simple syntax that enables you to add details to your activities:\n"
+"        \n"
+"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
+"tracking activity \"watering flowers\" in category \"home\".\n"
+"\n"
+"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking activity \"watering flowers"
+"\" and add description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+"Ένα απλό συντακτικό σας επιτρέπει να προσθέσετε λεπτομέρειες στις "
+"δραστηριότητές σας:\n"
+"        \n"
+"Το σύμβολο \"@\" συμβολίζει την κατηγορία. Παράδειγμα: \"πότισμα "
+"λουλουδιών@σπίτι\" θα αρχίσει να καταγράφει τη δραστηριότητα \"πότισμα "
+"λουλουδιών\" στην κατηγορία \"σπίτι\".\n"
+"\n"
+"Το κόμμα (\",\") συμβολίζει την αρχή μιας περιγραφής. Παράδειγμα \"πότισμα "
+"λουλουδιών, γιούλια και βιόλες\" θα αρχίσει να καταγράφει τη δραστηριότητα "
+"\"πότισμα λουλουδιών\" και θα προσθέσει σ' αυτήν την περιγραφή \"γιούλια και "
+"βιόλες\".\n"
+"\n"
+"Και τα δύο μπορούν να συνδυαστούν: το \"πότισμα λουλουδιών@σπίτι, γιούλια "
+"και βιόλες\" θα δουλέψει μια χαρά!\n"
+"\n"
+"Τώρα αρχίστε να καταγράφετε!\n"
+"        "
+
+#: ../hamster/applet.py:333 ../hamster/reports.py:109
+#: ../hamster/reports.py:174
+msgid "Duration"
+msgstr "Διάρκεια"
+
+#: ../hamster/applet.py:455 ../hamster/applet.py:479 ../hamster/applet.py:611
+msgid "No activity"
+msgstr "Χωρίς δραστηριότητα"
+
+#. activity reminder
+#: ../hamster/applet.py:474
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Ενασχόληση με: <b>%s</b>"
+
+#. listing of today's categories and time spent in them
+#: ../hamster/applet.py:545
+#, python-format
+#| msgid "%(category)s: %(duration)s, "
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#: ../hamster/applet.py:547
+#, python-format
+msgid "%.1fh"
+msgstr "%.1fh"
+
+#. try yesterday if there is nothing today
+#: ../hamster/applet.py:644 ../hamster/db.py:189 ../hamster/db.py:206
+#: ../hamster/db.py:209 ../hamster/db.py:372 ../hamster/db.py:476
+#: ../hamster/db.py:490 ../hamster/edit_activity.py:326
+#: ../hamster/preferences.py:56 ../hamster/reports.py:129
+#: ../hamster/stuff.py:73
 msgid "Unsorted"
 msgstr "Αταξινόμητα"
 
-#: ../hamster/preferences.py:103 ../hamster/applet.py:221
-#: ../hamster/stats.py:47
+#. defaults
+#: ../hamster/db.py:671
+msgid "Work"
+msgstr "Εργασία"
+
+#: ../hamster/db.py:672
+msgid "Reading news"
+msgstr "Ανάγνωση νέων"
+
+#: ../hamster/db.py:673
+msgid "Checking stocks"
+msgstr "Έλεγχος μετοχών"
+
+#: ../hamster/db.py:674
+msgid "Super secret project X"
+msgstr "Σούπερ μυστική εργασία Χ"
+
+#: ../hamster/db.py:675
+msgid "World domination"
+msgstr "Παγκόσμια κυριαρχία"
+
+#: ../hamster/db.py:677
+msgid "Day to day"
+msgstr "Από ημέρα σε ημέρα"
+
+#: ../hamster/db.py:678
+msgid "Lunch"
+msgstr "Γεύμα"
+
+#: ../hamster/db.py:679
+msgid "Watering flowers"
+msgstr "Πότισμα λουλουδιών"
+
+#: ../hamster/db.py:680
+msgid "Doing handstands"
+msgstr "Γυμναστική"
+
+#: ../hamster/edit_activity.py:341
+msgid "Update activity"
+msgstr "Ενημέρωση δραστηριότητας"
+
+#: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:106
-#: ../hamster/reports.py:176
+#: ../hamster/preferences.py:124 ../hamster/reports.py:106
+#: ../hamster/reports.py:172
 msgid "Category"
 msgstr "Κατηγορία"
 
-#: ../hamster/preferences.py:510
+#: ../hamster/preferences.py:555
 msgid "New category"
 msgstr "Νέα κατηγορία"
 
-#: ../hamster/preferences.py:523
+#: ../hamster/preferences.py:568
 msgid "New activity"
 msgstr "Νέα δραστηριότητα"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:568
+#: ../hamster/preferences.py:628
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d λεπτά"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:571
+#: ../hamster/preferences.py:631
 msgid "Never"
 msgstr "Ποτέ"
-
-#: ../hamster/add_custom_fact.py:80
-msgid "Update activity"
-msgstr "Ενημέρωση δραστηριότητας"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Επεξεργασία"
-
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Switch"
-msgstr "Αλλαγή"
-
-#: ../hamster/applet.py:423 ../hamster/applet.py:524
-msgid "No activity"
-msgstr "Χωρίς δραστηριότητα"
-
-#. activity reminder
-#: ../hamster/applet.py:437
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "Ενασχόληση με: <b>%s</b>"
-
-#: ../hamster/applet.py:465
-#, python-format
-msgid "%(category)s: %(duration)s, "
-msgstr "%(category)s: %(duration)s, "
-
-#. defaults
-#: ../hamster/db.py:513
-msgid "Work"
-msgstr "Εργασία"
-
-#: ../hamster/db.py:514
-msgid "Reading news"
-msgstr "Ανάγνωση νέων"
-
-#: ../hamster/db.py:515
-msgid "Checking stocks"
-msgstr "Έλεγχος μετοχών"
-
-#: ../hamster/db.py:516
-msgid "Super secret project X"
-msgstr "Σούπερ μυστική εργασία Χ"
-
-#: ../hamster/db.py:517
-msgid "World domination"
-msgstr "Παγκόσμια κυριαρχία"
-
-#: ../hamster/db.py:519
-msgid "Day to day"
-msgstr "Από ημέρα σε ημέρα"
-
-#: ../hamster/db.py:520
-msgid "Lunch"
-msgstr "Γεύμα"
-
-#: ../hamster/db.py:521
-msgid "Watering flowers"
-msgstr "Καμία ενέργεια"
-
-#: ../hamster/db.py:522
-msgid "Doing handstands"
-msgstr "Καμία ενέργεια"
-
-#: ../hamster/db.py:705 ../hamster/db.py:709
-msgid "name"
-msgstr "όνομα"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:296
+#: ../hamster/reports.py:32 ../hamster/stats.py:351
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -393,23 +495,21 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:301
+#: ../hamster/reports.py:34 ../hamster/stats.py:356
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Επισκόπηση για %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"Επισκόπηση για %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:306
+#: ../hamster/reports.py:36 ../hamster/stats.py:361
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Επισκόπηση για %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 
-#. overview label for single day
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:39 ../hamster/stats.py:312
+#: ../hamster/reports.py:39
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Επισκόπηση για %(start_B)s %(start_d)s, %(start_Y)s"
@@ -417,10 +517,6 @@ msgstr "Επισκόπηση για %(start_B)s %(start_d)s, %(start_Y)s"
 #: ../hamster/reports.py:104
 msgid "Date"
 msgstr "Ημερομηνία"
-
-#: ../hamster/reports.py:105 ../hamster/reports.py:177
-msgid "Activity"
-msgstr "Δραστηριότητα"
 
 #: ../hamster/reports.py:107
 msgid "Start"
@@ -430,59 +526,114 @@ msgstr "Έναρξη"
 msgid "End"
 msgstr "Τέλος"
 
-#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:55
-msgid "Duration"
-msgstr "Διάρκεια"
-
 #: ../hamster/reports.py:110
-#| msgid "Duration"
 msgid "Description"
 msgstr "Περιγραφή"
 
 #. fact date column in HTML report
-#: ../hamster/reports.py:148
+#: ../hamster/reports.py:144
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
 
 #. summary table
-#: ../hamster/reports.py:173
+#: ../hamster/reports.py:169
 msgid "Totals"
 msgstr "Συνολικά"
 
-#: ../hamster/reports.py:190
+#: ../hamster/reports.py:186
 msgid "Total Time"
 msgstr "Συνολικός χρόνος"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:190
+#: ../hamster/stats.py:237
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_b)s %(o_d)s"
 
-#. date format in month chart in overview window (click on "month" to see it)
-#. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:244
+#: ../hamster/stats.py:366
+msgid "Month"
+msgstr "Μήνας"
+
+#: ../hamster/stats.py:404
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_b)s %(m_d)s"
 
-#: ../hamster/stats.py:268
-msgid "Other"
-msgstr "Άλλο"
+#: ../hamster/stats.py:417
+#| msgid "Totals"
+msgid "Total"
+msgstr "Συνολικά"
 
-#: ../hamster/stats.py:313
-msgid "Day"
-msgstr "Ημέρα"
+#. duration in round hours
+#: ../hamster/stuff.py:120
+#, python-format
+msgid "%dh"
+msgstr "%dh"
 
-#: ../hamster/stats.py:315
-msgid "Week"
-msgstr "Εβδομάδα"
+#. duration less than hour
+#: ../hamster/stuff.py:123
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
 
-#: ../hamster/stats.py:317
-msgid "Month"
-msgstr "Μήνας"
+#. x hours, y minutes
+#: ../hamster/stuff.py:126
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#~ msgid "Move _Down"
+#~ msgstr "Μετακίνηση _κάτω"
+
+#~ msgid "Move _Up"
+#~ msgstr "Μετακίνηση _πάνω"
+
+#~ msgid "N_ew Category"
+#~ msgstr "N_έα κατηγορία"
+
+#~ msgid "_New Activity"
+#~ msgstr "_Νέα δραστηριότητα"
+
+#~ msgid "<b>Activity</b>"
+#~ msgstr "<b>Δραστηριότητα</b>"
+
+#~ msgid "<b>Date and Time</b>"
+#~ msgstr "<b> Ημερομηνία και χρόνος</b>"
+
+#~ msgid "hours"
+#~ msgstr "ώρες"
+
+#~ msgid "minutes"
+#~ msgstr "λεπτά"
+
+#~ msgid " _Day"
+#~ msgstr " _Ημέρα"
+
+#~ msgid "<b>Category</b>"
+#~ msgstr "<b>Κατηγορία</b>"
+
+#~ msgid "<b>Week</b>"
+#~ msgstr "<b>Εβδομάδα</b>"
+
+#~ msgid "Earlier activities"
+#~ msgstr "Προηγούμενες δραστηριότητες"
+
+#~ msgid "Generate Report"
+#~ msgstr "Δημιουργία αναφοράς"
+
+#~ msgid "Show day"
+#~ msgstr "Εμφάνιση ημέρας"
+
+#~ msgid "name"
+#~ msgstr "όνομα"
+
+#~ msgid "Other"
+#~ msgstr "Άλλο"
+
+#~ msgid "Day"
+#~ msgstr "Ημέρα"
 
 #~ msgid "Time tracking for masses"
 #~ msgstr "Καταγραφή χρόνου για μάζες"
@@ -495,4 +646,3 @@ msgstr "Μήνας"
 
 #~ msgid "Stop Tracking"
 #~ msgstr "Διακοπή καταγραφής"
-
