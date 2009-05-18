@@ -406,7 +406,7 @@ Now, start tracking!
         path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
         
         if path and path[1] == self.edit_column:
-			self._open_edit_activity()
+            self._open_edit_activity()
             return True
         
         return False
@@ -711,7 +711,7 @@ Now, start tracking!
         (model, iter) = selection.get_selected()
         fact_id = model[iter][0]
             
-        custom_fact = CustomFactController(None, fact_id)
+        custom_fact = CustomFactController(self, None, fact_id)
         custom_fact.show()        
     
     def on_today_row_activated(self, tree, path, column):
@@ -727,7 +727,8 @@ Now, start tracking!
                     description = description.decode('utf8', 'replace')
                     activity_name = "%s, %s" % (activity_name, description)
                     
-                self.add_fact(activity_name)
+                storage.add_fact(activity_name)
+                dispatcher.dispatch('panel_visible', False)
         
         
     def on_windows_keys(self, tree, event_key):
