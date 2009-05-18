@@ -336,6 +336,7 @@ Now, start tracking!
 
         edit_cell = gtk.CellRendererPixbuf()
         edit_cell.set_property("stock_id", "gtk-edit")
+        edit_cell.set_property("mode", gtk.CELL_RENDERER_MODE_ACTIVATABLE)
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.treeview.append_column(self.edit_column)
 
@@ -405,12 +406,7 @@ Now, start tracking!
         path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
         
         if path and path[1] == self.edit_column:
-            selection = tree.get_selection()
-            (model, iter) = selection.get_selected()
-            fact_id = model[iter][0]
-                
-            custom_fact = CustomFactController(self, None, fact_id)
-            custom_fact.show()
+			self._open_edit_activity()
             return True
         
         return False
@@ -698,11 +694,25 @@ Now, start tracking!
         dispatcher.dispatch('panel_visible', False)
 
     """listview events"""
-    def on_todays_keys(self, tree, event_key):
-        if (event_key.keyval == gtk.keysyms.Delete):
+    def on_todays_keys(self, tree, event):
+        if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
             return True
+        elif (event.keyval == gtk.keysyms.e  \
+              and event.state & gtk.gdk.CONTROL_MASK):
+            self._open_edit_activity()
+            return True
+            
         return False
+    
+    def _open_edit_activity(self):
+        """opens activity editor for selected row"""
+        selection = self.treeview.get_selection()
+        (model, iter) = selection.get_selected()
+        fact_id = model[iter][0]
+            
+        custom_fact = CustomFactController(None, fact_id)
+        custom_fact.show()        
     
     def on_today_row_activated(self, tree, path, column):
         if column == self.edit_column:
