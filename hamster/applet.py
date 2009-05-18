@@ -705,12 +705,19 @@ Now, start tracking!
         return False
     
     def on_today_row_activated(self, tree, path, column):
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
-        activity_name = model[iter][1].decode('utf8', 'replace')
-        if activity_name:
-            storage.add_fact(activity_name)
-            dispatcher.dispatch('panel_visible', False)        
+        if column == self.edit_column:
+            self._open_edit_activity()
+        else:
+            selection = tree.get_selection()
+            (model, iter) = selection.get_selected()
+            activity_name = model[iter][1].decode('utf8', 'replace')
+            if activity_name:
+                description = model[iter][5]
+                if description:
+                    description = description.decode('utf8', 'replace')
+                    activity_name = "%s, %s" % (activity_name, description)
+                    
+                self.add_fact(activity_name)
         
         
     def on_windows_keys(self, tree, event_key):
