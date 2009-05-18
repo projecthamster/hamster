@@ -319,11 +319,11 @@ class Storage(hamster.storage.Storage):
 
             if last_activity and last_activity['start_time'] < start_time:
                 #if this is the same, ongoing activity, then there is no need to create another one
-                if last_activity['activity_id'] == activity_id:
+                if not description and last_activity['activity_id'] == activity_id:
                     return last_activity
                 
-                # if it happened in last minute - remove previous entry or stop it
-                if 60 >= (start_time - last_activity['start_time']).seconds >= 0:
+                if not description and not last_activity["description"] \
+                   and 60 >= (start_time - last_activity['start_time']).seconds >= 0:
                     self.__remove_fact(last_activity['id'])
                     start_time = last_activity['start_time']
                 else:
