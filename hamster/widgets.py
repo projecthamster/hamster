@@ -226,7 +226,7 @@ class TimeInput(gtk.Entry):
         
     def _select_time(self, time_text):
         #convert forth and back so we have text formated as we want
-        time = self.figure_time(time_text)
+        time = figure_time(time_text)
         time_text = self._format_time(time) 
         
         self.set_text(time_text)
@@ -237,7 +237,7 @@ class TimeInput(gtk.Entry):
             self.news = False
     
     def get_time(self):
-        return self.figure_time(self.get_text())
+        return figure_time(self.get_text())
 
     def _format_time(self, time):
         if time == None:
@@ -258,7 +258,7 @@ class TimeInput(gtk.Entry):
         
 
     def show_popup(self):
-        focus_time = self.figure_time(self.get_text())
+        focus_time = figure_time(self.get_text())
         
         hours = gtk.ListStore(gobject.TYPE_STRING)
         
