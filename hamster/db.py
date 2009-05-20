@@ -34,6 +34,7 @@ import os, time
 import datetime
 import hamster
 import hamster.storage
+from hamster import stuff
 import datetime as dt
 import copy
         
@@ -283,34 +284,24 @@ class Storage(hamster.storage.Storage):
 
 
     def __add_fact(self, activity_name, start_time = None, end_time = None):
-        start_time = start_time or datetime.datetime.now()
-        
-        #see if we have description of activity somewhere here (delimited by comma)
-        description = None
-        if activity_name.find(",") > 0:
-            activity_name, description = activity_name.split(",", 1)
-            description = description.strip()
-        
-        if activity_name.lower() in ("bbq_omg", "barbeque_omg"): #this is most essential
-            description = "[ponies = 1], [rainbows = 0]"
+        activity = stuff.parse_activity_input(activity_name)
+        start_time = activity.start_time or start_time or datetime.datetime.now()
+        end_time = activity.end_time or end_time
+
             
         # now check if maybe there is also a category
         category_id = None
-        if activity_name.find("@") > 0:
-            #at symbol marks category
-            activity_name, category_name = activity_name.split("@", 1)
-            
-            if category_name:
-                category_name = category_name.strip()
-                category_id = self.__get_category_by_name(category_name)
-                if not category_id:
-                    category_id = self.__add_category(category_name)
+        if activity.category_name:
+            category_id = self.__get_category_by_name(category_name)
+            if not category_id:
+                category_id = self.__add_category(category_name)
         
         # try to find activity
-        activity_id = self.__get_activity_by_name(activity_name, category_id)
-
+        activity_id = self.__get_activity_by_name(activity.activity_name,
+                                                  category_id)
         if not activity_id:
-            activity_id = self.__add_activity(activity_name, category_id)
+            activity_id = self.__add_activity(activity.activity_name,
+                                              category_id)
 
 
         # if we are working on +/- current day - check the last_activity
@@ -319,10 +310,12 @@ class Storage(hamster.storage.Storage):
 
             if last_activity and last_activity['start_time'] < start_time:
                 #if this is the same, ongoing activity, then there is no need to create another one
-                if not description and last_activity['activity_id'] == activity_id:
+                if not activity.description \
+                   and last_activity['activity_id'] == activity_id:
                     return last_activity
                 
-                if not description and not last_activity["description"] \
+                if not activity.description \
+                   and not last_activity["description"] \
                    and 60 >= (start_time - last_activity['start_time']).seconds >= 0:
                     self.__remove_fact(last_activity['id'])
                     start_time = last_activity['start_time']
@@ -345,7 +338,7 @@ class Storage(hamster.storage.Storage):
                     INSERT INTO facts (activity_id, start_time, end_time, description)
                                VALUES (?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, description))
+        self.execute(insert, (activity_id, start_time, end_time, activity.description))
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
         
