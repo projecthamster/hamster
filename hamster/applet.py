@@ -418,9 +418,10 @@ Now, start tracking!
         self.completion.clear()
 
         if activity.start_time:
+            bgcolor = gtk.Style().bg[gtk.STATE_NORMAL].to_string()
             time_cell = gtk.CellRendererPixbuf()
             time_cell.set_property("icon-name", "appointment-new")
-            time_cell.set_property("cell-background", "#f6f6f6")
+            time_cell.set_property("cell-background", bgcolor)
             
             self.completion.pack_start(time_cell, False)
 
@@ -431,7 +432,7 @@ Now, start tracking!
                 
             time_cell.set_property("text", time)
             time_cell.set_property("scale", 0.8)
-            time_cell.set_property("cell-background", "#f6f6f6")
+            time_cell.set_property("cell-background", bgcolor)
             self.completion.pack_start(time_cell, False)
 
         activity_cell = gtk.CellRendererText()
