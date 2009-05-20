@@ -208,7 +208,15 @@ class HamsterApplet(object):
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
 
+
+
+        # set up autocompletition
+        self.activities = gtk.ListStore(gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING,
+                                        gobject.TYPE_STRING)
+        
         self.set_dropdown()
+        self.init_autocomplete()
 
         # init today's tree
         self.setup_activity_tree()
@@ -353,6 +361,7 @@ Now, start tracking!
         self.activity_list = self._gui.get_object('activity-list')
         self.activity_list.child.connect('activate', self.on_activity_entered)
         self.activity_list.child.connect('key-press-event', self.on_activity_list_key_pressed)
+        self.activity_list.child.connect('changed', self.on_activity_entry_changed)
 
         self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
@@ -370,35 +379,82 @@ Now, start tracking!
         self.activity_list.set_property("text-column", 2)
 
 
-        # set up autocompletition
-        self.activities = gtk.ListStore(gobject.TYPE_STRING,
-                                        gobject.TYPE_STRING,
-                                        gobject.TYPE_STRING)
-        completion = gtk.EntryCompletion()
-        completion.set_model(self.activities)
+    def init_autocomplete(self):
+        self.completion = gtk.EntryCompletion()
+        self.completion.set_model(self.activities)
+        self.completion.set_minimum_key_length(1)
+        self.completion.set_inline_completion(True)
+        self.completion.set_popup_set_width(False)
+        self.completion.connect("match-selected", self.on_match_selected)
+        self.activity_list.child.set_completion(self.completion)
+
+    def on_match_selected(self, completion, model, iter):
+        entry = completion.get_entry()
+        activity = stuff.parse_activity_input(entry.get_text())
+        
+        res = ""
+        
+        if activity.start_time:
+            res += "%s" % activity.start_time.strftime("%H:%M")
+            if activity.end_time:
+                res += "-%s" % activity.start_time.strftime("%H:%M")
+        
+            res += " "
+        
+        res += model.get_value(iter, 2)
+        
+        entry.set_text(res)
+        entry.set_position(len(res))
+        return True
+    
+    def set_autocomplete(self):
+        """parses input and generates autocomplete according to what has
+        to be completed now"""
+        
+        input_text = self.activity_list.child.get_text()
+        activity = stuff.parse_activity_input(input_text)
+        
+        
+        self.completion.clear()
+
+        if activity.start_time:
+            time_cell = gtk.CellRendererPixbuf()
+            time_cell.set_property("icon-name", "appointment-new")
+            time_cell.set_property("cell-background", "#f6f6f6")
+            
+            self.completion.pack_start(time_cell, False)
+
+            time_cell = gtk.CellRendererText()
+            time = activity.start_time.strftime("%H:%M")
+            if activity.end_time:
+                time += "-%s" % activity.end_time.strftime("%H:%M")
+                
+            time_cell.set_property("text", time)
+            time_cell.set_property("scale", 0.8)
+            time_cell.set_property("cell-background", "#f6f6f6")
+            self.completion.pack_start(time_cell, False)
 
         activity_cell = gtk.CellRendererText()
-        completion.pack_start(activity_cell, True)
-        completion.add_attribute(activity_cell, 'text', 0)
-        completion.set_property("text-column", 2)
+        self.completion.pack_start(activity_cell, True)
+        self.completion.add_attribute(activity_cell, 'text', 0)
+        #self.completion.set_property("text-column", 2)
 
         category_cell = stuff.CategoryCell()  
-        completion.pack_start(category_cell, False)
-        completion.add_attribute(category_cell, 'text', 1)
+        self.completion.pack_start(category_cell, False)
+        self.completion.add_attribute(category_cell, 'text', 1)
 
 
         def match_func(completion, key, iter):
             model = completion.get_model()
             text = model.get_value(iter, 2)
-            if text and text.startswith(key):
+            
+            #TODO add category autcomplete
+
+            if text and text.startswith(activity.activity_name):
                 return True
             return False
 
-        completion.set_match_func(match_func)
-        completion.set_minimum_key_length(1)
-        completion.set_inline_completion(True)
-
-        self.activity_list.child.set_completion(completion)
+        self.completion.set_match_func(match_func)
         
 
     def on_today_release_event(self, tree, event):
@@ -674,6 +730,11 @@ Now, start tracking!
         #treating tab as keydown to be able to cycle through available values
         if event.keyval == gtk.keysyms.Tab:
             event.keyval = gtk.keysyms.Down
+        
+        return False
+    
+    def on_activity_entry_changed(self, entry):
+        self.set_autocomplete()
         return False
         
     def on_activity_switched(self, component):
