@@ -22,15 +22,16 @@
 # cells, columns, trees and other
 
 import gtk
-from hamster import storage, SHARED_DATA_DIR
 import pango
 from pango import ELLIPSIZE_END
 
 import datetime as dt
+import re
 import locale
 import os
 
 def load_ui_file(name):
+    from hamster import SHARED_DATA_DIR
     ui = gtk.Builder()
     ui.add_from_file(os.path.join(SHARED_DATA_DIR, name))
     return ui 
@@ -169,3 +170,75 @@ def escape_pango(text):
     text = text.replace("<", "&lt;")
     text = text.replace(">", "&gt;")
     return text
+
+def figure_time(str_time):
+    if not str_time:
+        return None
+    
+    # strip everything non-numeric and consider hours to be first number
+    # and minutes - second number
+    numbers = re.split("\D", str_time)
+    numbers = filter(lambda x: x!="", numbers)
+    
+    hours, minutes = None, None
+    
+    if len(numbers) == 1 and len(numbers[0]) == 4:
+        hours, minutes = int(numbers[0][:2]), int(numbers[0][2:])
+    else:
+        if len(numbers) >= 1:
+            hours = int(numbers[0])
+        if len(numbers) >= 2:
+            minutes = int(numbers[1])
+        
+    if (hours == None or minutes == None) or hours > 24 or minutes > 60:
+        return None #no can do
+
+    return dt.datetime.now().replace(hour = hours, minute = minutes)
+
+def parse_activity_input(text):
+    """Currently pretty braindead function that tries to parse arbitrary input
+    into a activity"""
+    class InputParseResult(object):
+        def __init__(self):
+            self.activity_name = None
+            self.category_name = None
+            self.start_time = None
+            self.end_time = None
+            self.description = None
+            self.tags = []
+            
+    
+    res = InputParseResult()
+    
+    potential_time = text.split(" ")[0]
+    potential_end_time = None
+    if potential_time.find("-") > -1:
+        potential_time, potential_end_time = potential_time.split("-", 2)
+        res.end_time = figure_time(potential_end_time)
+    
+    res.start_time = figure_time(potential_time)
+    
+    #remove parts that worked
+    if potential_end_time and not res.end_time:
+        text = text[text.find("-"):]
+    elif res.start_time:
+        text = text[text.find(" ")+1:]
+    
+    #see if we have description of activity somewhere here (delimited by comma)
+    if text.find(",") > 0:
+        text, res.description = text.split(",", 1)
+        res.description = res.description.strip()
+
+    if text.find("@") > 0:
+        text, res.category_name = text.split("@", 1)
+        res.category_name = res.category_name.strip()
+
+    #only thing left now is the activity name itself
+    res.activity_name = text
+
+    #this is most essential
+    if (text.find("bbq") > -1 or text.find("barbeque") > -1
+        or text.find("barbecue") > -1)  and text.find("omg") > -1:
+        res.description = "[ponies = 1], [rainbows = 0]"
+
+    return res

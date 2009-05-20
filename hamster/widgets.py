@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from hamster.stuff import format_duration
+from hamster.stuff import format_duration, figure_time
 import gtk
 import datetime as dt
 import calendar
@@ -360,33 +360,6 @@ class TimeInput(gtk.Entry):
         
     def _on_button_press_event(self, button, event):
         self.popup.show()
-        
-        
-    def figure_time(self, str_time):
-        # strip everything non-numeric and consider hours to be first number
-        # and minutes - second number
-        numbers = re.split("\D", str_time)
-        numbers = filter(lambda x: x!="", numbers)
-        hours, minutes = None, None
-        
-        if len(numbers) >= 1:
-            hours = int(numbers[0])
-            
-        if len(numbers) >= 2:
-            minutes = int(numbers[1])
-            
-        if (hours == None and minutes == None) or hours > 24 or minutes > 60:
-            return None #no can do
-
-        """ this breaks 24 hour mode, when hours are given
-        #if hours specified in 12 hour mode, default to PM
-        #TODO - laame, show me how to do this better, pleease
-        am = dt.time(1, 00).strftime("%p")
-        if hours <= 11 and str_time.find(am) < 0:
-            hours += 12
-        """
-        
-        return dt.datetime(1900, 1, 1, hours, minutes)
 
 
     
