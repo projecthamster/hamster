@@ -215,7 +215,11 @@ class HamsterApplet(object):
                                         gobject.TYPE_STRING,
                                         gobject.TYPE_STRING)
         
+        # build the menu
         self.set_dropdown()
+
+        self.refresh_menu()
+        
         self.init_autocomplete()
 
         # init today's tree
@@ -241,6 +245,8 @@ class HamsterApplet(object):
         # Load today's data, activities and set label
         self.last_activity = None
 
+
+
         self.load_day()
         self.update_label()
 
@@ -250,8 +256,6 @@ class HamsterApplet(object):
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
-        # build the menu
-        self.refresh_menu()
 
         # remove padding, so we fit on small panels (adapted from clock applet)
         gtk.rc_parse_string ("""style "hamster-applet-button-style" {
@@ -380,17 +384,24 @@ Now, start tracking!
 
 
     def init_autocomplete(self):
+        #fillable, activity_name, category
+        self.autocomplete_store = gtk.ListStore(gobject.TYPE_STRING,
+                                                gobject.TYPE_STRING,
+                                                gobject.TYPE_STRING)
         self.completion = gtk.EntryCompletion()
-        self.completion.set_model(self.activities)
+        self.completion.set_model(self.autocomplete_store)
         self.completion.set_minimum_key_length(1)
         self.completion.set_inline_completion(True)
         self.completion.set_popup_set_width(False)
-        self.completion.connect("match-selected", self.on_match_selected)
+        self.completion.set_text_column(0)
         self.activity_list.child.set_completion(self.completion)
+        
 
     def on_match_selected(self, completion, model, iter):
         entry = completion.get_entry()
         activity = stuff.parse_activity_input(entry.get_text())
+        
+        fillable = model.get_value(iter, 0)
         
         res = ""
         
@@ -400,23 +411,56 @@ Now, start tracking!
                 res += "-%s" % activity.start_time.strftime("%H:%M")
         
             res += " "
+            #strip time
+            fillable = fillable[fillable.find(" ")+1:]
         
-        res += model.get_value(iter, 2)
+        res += fillable
         
         entry.set_text(res)
         entry.set_position(len(res))
         return True
     
-    def set_autocomplete(self):
+    def redo_autocomplete(self):
         """parses input and generates autocomplete according to what has
         to be completed now"""
+        #TODO turn this whole thing into a widget
         
         input_text = self.activity_list.child.get_text()
-        activity = stuff.parse_activity_input(input_text)
+        
+        if not input_text:
+            return
         
         
-        self.completion.clear()
+        entry = self.activity_list.child
+        parsed_activity = stuff.parse_activity_input(entry.get_text())
 
+        self.autocomplete_store.clear()
+        if input_text.find("@") > 0:
+            for category in self.all_categories:
+                fillable = input_text[:input_text.find("@") + 1] + category['name']
+                print fillable
+                self.autocomplete_store.append([fillable,
+                                                category['name'],
+                                                category['name']
+                                               ])
+        else:
+            for activity in self.all_activities:
+                fillable = activity['name']
+                if activity['category']:
+                    fillable += "@%s" % activity['category']
+                    
+                if parsed_activity.start_time:
+                    fillable = entry.get_text()[:entry.get_text().find(" ")+1] + fillable
+    
+                print fillable
+                self.autocomplete_store.append([fillable,
+                                                activity['name'],
+                                                activity['category']
+                                               ])
+
+                
+        activity = stuff.parse_activity_input(input_text)
+        self.completion.clear()
         if activity.start_time:
             bgcolor = gtk.Style().bg[gtk.STATE_NORMAL].to_string()
             time_cell = gtk.CellRendererPixbuf()
@@ -437,25 +481,14 @@ Now, start tracking!
 
         activity_cell = gtk.CellRendererText()
         self.completion.pack_start(activity_cell, True)
-        self.completion.add_attribute(activity_cell, 'text', 0)
+        self.completion.add_attribute(activity_cell, 'text', 1)
         #self.completion.set_property("text-column", 2)
 
-        category_cell = stuff.CategoryCell()  
-        self.completion.pack_start(category_cell, False)
-        self.completion.add_attribute(category_cell, 'text', 1)
-
-
-        def match_func(completion, key, iter):
-            model = completion.get_model()
-            text = model.get_value(iter, 2)
-            
-            #TODO add category autcomplete
-
-            if text and text.startswith(activity.activity_name):
-                return True
-            return False
-
-        self.completion.set_match_func(match_func)
+        if input_text.find("@") == -1:
+            #no need for category cell when we populate categories
+            category_cell = stuff.CategoryCell()  
+            self.completion.pack_start(category_cell, False)
+            self.completion.add_attribute(category_cell, 'text', 2)
         
 
     def on_today_release_event(self, tree, event):
@@ -606,7 +639,11 @@ Now, start tracking!
     def refresh_menu(self):
         #first populate the autocomplete - contains all entries in lowercase
         self.activities.clear()
-        all_activities = storage.get_autocomplete_activities()
+        self.all_activities = all_activities = storage.get_autocomplete_activities()
+        self.all_categories = storage.get_category_list()
+        
+        
+        
         for activity in all_activities:
             activity_category = activity['name']
             if activity['category']:
@@ -735,7 +772,7 @@ Now, start tracking!
         return False
     
     def on_activity_entry_changed(self, entry):
-        self.set_autocomplete()
+        self.redo_autocomplete()
         return False
         
     def on_activity_switched(self, component):
