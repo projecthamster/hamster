@@ -193,7 +193,8 @@ def figure_time(str_time):
     if (hours == None or minutes == None) or hours > 24 or minutes > 60:
         return None #no can do
 
-    return dt.datetime.now().replace(hour = hours, minute = minutes)
+    return dt.datetime.now().replace(hour = hours, minute = minutes,
+                                     second = 0, microsecond = 0)
 
 def parse_activity_input(text):
     """Currently pretty braindead function that tries to parse arbitrary input
