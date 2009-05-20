@@ -292,9 +292,9 @@ class Storage(hamster.storage.Storage):
         # now check if maybe there is also a category
         category_id = None
         if activity.category_name:
-            category_id = self.__get_category_by_name(category_name)
+            category_id = self.__get_category_by_name(activity.category_name)
             if not category_id:
-                category_id = self.__add_category(category_name)
+                category_id = self.__add_category(activity.category_name)
         
         # try to find activity
         activity_id = self.__get_activity_by_name(activity.activity_name,
