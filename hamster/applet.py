@@ -424,6 +424,7 @@ Now, start tracking!
         """parses input and generates autocomplete according to what has
         to be completed now"""
         #TODO turn this whole thing into a widget
+        self.autocomplete_store.clear()
         
         input_text = self.activity_list.child.get_text()
         
@@ -434,15 +435,18 @@ Now, start tracking!
         entry = self.activity_list.child
         parsed_activity = stuff.parse_activity_input(entry.get_text())
 
-        self.autocomplete_store.clear()
         if input_text.find("@") > 0:
+            key = input_text[input_text.find("@")+1:]
             for category in self.all_categories:
-                fillable = input_text[:input_text.find("@") + 1] + category['name']
-                print fillable
-                self.autocomplete_store.append([fillable,
-                                                category['name'],
-                                                category['name']
-                                               ])
+                if category['name'].startswith(key):
+                    fillable = input_text[:input_text.find("@") + 1] + category['name']
+                    self.autocomplete_store.append([fillable,
+                                                    category['name'],
+                                                    category['name']
+                                                   ])
+            if len(self.autocomplete_store) <= 1:
+                #avoid popup on single result
+                self.autocomplete_store.clear()
         else:
             for activity in self.all_activities:
                 fillable = activity['name']
@@ -452,7 +456,6 @@ Now, start tracking!
                 if parsed_activity.start_time:
                     fillable = entry.get_text()[:entry.get_text().find(" ")+1] + fillable
     
-                print fillable
                 self.autocomplete_store.append([fillable,
                                                 activity['name'],
                                                 activity['category']
@@ -704,6 +707,20 @@ Now, start tracking!
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
+
+        if self.last_activity and self.last_activity["end_time"] == None:
+            label = self.last_activity['name']
+            if self.last_activity['category'] != _("Unsorted"):
+                label += "@%s" %  self.last_activity['category']
+            self.activity_list.child.set_text(label)
+
+            self.activity_list.child.select_region(0, -1)
+            self._gui.get_object("more_info_label").hide()
+        else:
+            self.activity_list.child.set_text('')
+            self._gui.get_object("more_info_label").show()
+
+
         if not is_active:
             self.window.hide()
             return
@@ -729,17 +746,6 @@ Now, start tracking!
         self.window.move(x, y)
 
 
-        if self.last_activity and self.last_activity["end_time"] == None:
-            label = self.last_activity['name']
-            if self.last_activity['category'] != _("Unsorted"):
-                label += "@%s" %  self.last_activity['category']
-            self.activity_list.child.set_text(label)
-
-            self.activity_list.child.select_region(0, -1)
-            self._gui.get_object("more_info_label").hide()
-        else:
-            self.activity_list.child.set_text('')
-            self._gui.get_object("more_info_label").show()
 
         # doing unstick / stick here, because sometimes while switching
         # between workplaces window still manages to dissappear
