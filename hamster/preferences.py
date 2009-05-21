@@ -340,7 +340,11 @@ class PreferencesEditor:
                 self.select_activity(activity['id'])
                 return False
         
-        model[path][0] = storage.add_activity(new_text.decode("utf-8"), category_id)
+        
+        if id == -1: #new activity -> add
+            model[path][0] = storage.add_activity(new_text.decode("utf-8"), category_id)
+        else: #existing activity -> update
+            storage.update_activity(id, new_text.decode("utf-8"), category_id)
         model[path][1] = new_text
         return True
         
