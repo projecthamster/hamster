@@ -77,10 +77,12 @@ def usage():
 $ hamster-applet [OPTIONS]
 
 OPTIONS:
-    -w, --window   Launch the applet in a standalone window for test purposes (default=no).
-    -s, --start    [stats|edit|prefs] Which window to launch on startup.
-                   Use "stats" for overview window, "edit" to add new activity
-                   and "prefs" to launch preferences
+    -w, --window    Launch the applet in a standalone window for test purposes
+                    (default=no).
+    -s, --start     [stats|edit|prefs] Which window to launch on startup.
+                    Use "stats" for overview window, "edit" to add new activity
+                    and "prefs" to launch preferences
+    -t  --trace-sql print out sql statements in terminal
     """)
 
 if __name__ == "__main__":
