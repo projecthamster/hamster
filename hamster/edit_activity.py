@@ -357,10 +357,6 @@ class CustomFactController:
         self.start_date = widgets.DateInput(start_date)
         self.get_widget("start_date_placeholder").add(self.start_date)
         self.start_date.connect("date-entered", self.validate_fields)
-        
-        self.end_date = widgets.DateInput(end_date)
-        self.get_widget("end_date_placeholder").add(self.end_date)
-        self.end_date.connect("date-entered", self.validate_fields)
 
         self.start_time = widgets.TimeInput(start_date)
         self.get_widget("start_time_placeholder").add(self.start_time)
@@ -369,6 +365,7 @@ class CustomFactController:
         self.end_time = widgets.TimeInput(end_date, start_date)
         self.get_widget("end_time_placeholder").add(self.end_time)
         self.end_time.connect("time-entered", self.on_end_time_entered)
+        self.set_end_date_label(end_date)
 
 
         self.set_dropdown()
@@ -386,7 +383,7 @@ class CustomFactController:
         self.start_time.set_time(start_time)
         self.start_date.set_date(start_time)
         self.end_time.set_time(end_time)
-        self.end_date.set_date(end_time)
+        self.set_end_date_label(end_time)
 
         
     def draw_preview(self, date, highlight = None):
@@ -489,9 +486,18 @@ class CustomFactController:
         self.window.show()
 
     def _get_datetime(self, prefix):
-        # adds symbolic time to date in seconds
-        date = getattr(self, prefix + '_date').get_date()
-        time = getattr(self, prefix + '_time').get_time()
+        start_time = self.start_time.get_time()
+        start_date = self.start_date.get_date()
+
+        if prefix == "end":
+            end_time = self.end_time.get_time()
+            end_date = start_date
+            if end_time < start_time:
+                end_date = start_date + dt.timedelta(days=1)
+            self.set_end_date_label(end_date)
+            time, date = end_time, end_date
+        else:
+            time, date = start_time, start_date
         
         if time and date:
             return dt.datetime.combine(date, time.time())
@@ -517,8 +523,6 @@ class CustomFactController:
         # description field is prior to inline description
         return description or inline_description
         
-        
-    
     def on_save_button_clicked(self, button):
         activity = self.get_widget("activity_combo").child.get_text().decode("utf-8")
         
@@ -559,7 +563,6 @@ class CustomFactController:
         
     def on_in_progress_toggled(self, check):
         self.end_time.set_sensitive(not check.get_active())
-        self.end_date.set_sensitive(not check.get_active())
         self.validate_fields()
 
     def on_cancel_clicked(self, button):
@@ -575,11 +578,11 @@ class CustomFactController:
         self.validate_fields()
         
     def on_end_time_entered(self, widget):
-        if self.end_time.get_time() < self.start_time.get_time():
-            self.end_date.set_date(self.start_date.get_date() +
-                                                          dt.timedelta(days=1))
         self.validate_fields()
-        
+    
+    def set_end_date_label(self, some_date):
+        self.get_widget("end_date_label").set_text(some_date.strftime("%x"))
+    
     def validate_fields(self, widget = None):
         activity_text = self.get_widget("activity_combo").child.get_text()
         start_time = self._get_datetime("start")
@@ -588,14 +591,18 @@ class CustomFactController:
         if self.get_widget("in_progress").get_active():
             end_time = dt.datetime.now()
 
+        # if we are too far, just roll back for one day
+        if ((end_time - start_time).days > 0): 
+            end_time -= dt.timedelta(days=1)
+            self.update_time(start_time, end_time)
+
         if start_time:
             self.draw_preview(start_time.date(), [start_time, end_time])
 
+        # if end time is not in proper distance, do the brutal +30 minutes reset
         if (end_time < start_time or (end_time - start_time).days > 0):
             end_time = start_time + dt.timedelta(minutes = 30)
             self.update_time(start_time, end_time)
-            self.validate_fields()
-            return
 
         looks_good = False
         if activity_text != "" and start_time and end_time and \
@@ -610,7 +617,6 @@ class CustomFactController:
               and event_key.state & gtk.gdk.CONTROL_MASK)):
             
             if self.start_date.popup.get_property("visible") or \
-               self.end_date.popup.get_property("visible") or \
                self.start_time.popup.get_property("visible") or \
                self.end_time.popup.get_property("visible"):
                 return False

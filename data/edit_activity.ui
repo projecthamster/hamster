@@ -135,7 +135,10 @@
                       <object class="GtkAlignment" id="end_date_placeholder">
                         <property name="visible">True</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkLabel" id="end_date_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">label</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
