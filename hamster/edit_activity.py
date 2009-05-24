@@ -56,7 +56,8 @@ class Dayline(graphics.Area):
         self.move_type = ""
         self.on_time_changed = None #override this with your func to get notified when user changes date
         self.on_more_data = None #supplement with more data func that accepts single date
-        
+        self.in_progress = False
+
         self.range_start = None
         self.in_motion = False
         self.days = []
@@ -70,7 +71,10 @@ class Dayline(graphics.Area):
 
         if event.state & gtk.gdk.BUTTON1_MASK:
             self.call_parent_time_changed()
-    
+
+    def set_in_progress(self, in_progress):
+        self.in_progress = in_progress
+
     def call_parent_time_changed(self):
         #now calculate back from pixels into minutes
         start_time = self.get_value_at_pos(x = self.highlight_start)
@@ -130,14 +134,20 @@ class Dayline(graphics.Area):
         #print x, self.highlight_start, self.highlight_end
         if self.highlight_start != None:
             start_drag = 10 > (self.highlight_start - x) > -1
+
             end_drag = 10 > (x - self.highlight_end) > -1
 
             if start_drag and end_drag:
                 start_drag = abs(x - self.highlight_start) < abs(x - self.highlight_end)
 
             in_between = self.highlight_start <= x <= self.highlight_end
-                
-            
+            scale = True
+
+            if self.in_progress:
+                end_drag = False
+                in_between = False
+                scale = False
+
             if mouse_down and not self.drag_start:
                 self.drag_start = x
                 if start_drag:
@@ -147,7 +157,7 @@ class Dayline(graphics.Area):
                 elif in_between:
                     self.move_type = "move"
                     self.drag_start = x - self.highlight_start
-                else:
+                elif scale:
                     self.move_type = "scale_drag"
                     self.drag_start_time = self.range_start.value
 
@@ -334,8 +344,10 @@ class CustomFactController:
             buf.set_text(fact["description"] or "")
             self.get_widget('description').set_buffer(buf)
 
-            if not end_date and fact["start_time"].date() == dt.date.today():
-                end_date = dt.datetime.now()
+            if not end_date:
+                self.get_widget("in_progress").set_active(True)
+                if (dt.datetime.now() - start_date).days == 0:
+                    end_date = dt.datetime.now()
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
@@ -562,8 +574,12 @@ class CustomFactController:
         return False
         
     def on_in_progress_toggled(self, check):
-        self.end_time.set_sensitive(not check.get_active())
+        sensitive = not check.get_active()
+        self.end_time.set_sensitive(sensitive)
+        self.get_widget("end_label").set_sensitive(sensitive)
+        self.get_widget("end_date_label").set_sensitive(sensitive)
         self.validate_fields()
+        self.dayline.set_in_progress(not sensitive)
 
     def on_cancel_clicked(self, button):
         self.close_window()
