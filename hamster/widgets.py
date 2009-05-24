@@ -240,7 +240,7 @@ class TimeInput(gtk.Entry):
         return figure_time(self.get_text())
 
     def _format_time(self, time):
-        if time == None:
+        if time is None:
             return None
         
         #return time.strftime("%I:%M%p").lstrip("0").lower()

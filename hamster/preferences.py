@@ -25,7 +25,7 @@ import os
 import gtk
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster.Configuration import GconfStore
+from hamster.configuration import GconfStore
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -67,7 +67,7 @@ class ActivityStore(gtk.ListStore):
             
         self.clear()
 
-        if category_id == None:
+        if category_id is None:
             return
         
         activity_list = storage.get_activities(category_id)
@@ -353,7 +353,7 @@ class PreferencesEditor:
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
         id = 0
-        if iter == None:
+        if iter is None:
             self.activity_store.clear()
         else:
             self.prev_selected_activity = None
@@ -395,7 +395,7 @@ class PreferencesEditor:
             first_item = model.get_path(iter) == (0,)
             self.get_widget('activity_up').set_sensitive(not first_item)
 
-            last_item = model.iter_next(iter) == None
+            last_item = model.iter_next(iter) is None
             self.get_widget('activity_down').set_sensitive(not last_item)
 
     def _del_selected_row(self, tree):

@@ -607,7 +607,7 @@ class Storage(hamster.storage.Storage):
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
-        if self.con == None:
+        if self.con is None:
             self.con = sqlite.connect(hamster.HAMSTER_DB, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
             self.con.row_factory = sqlite.Row
 
@@ -645,11 +645,11 @@ class Storage(hamster.storage.Storage):
         con = self.connection
         cur = con.cursor()
         
-        if type(statement) != list: #we kind of think that we will get list of instructions
+        if isinstance(statement, list) == False: #we kind of think that we will get list of instructions
             statement = [statement]
             params = [params]
             
-        if type(statement) == list:
+        if isinstance(statement, list):
             for i in range(len(statement)):
                 if hamster.trace_sql:
                     print statement[i], params[i]

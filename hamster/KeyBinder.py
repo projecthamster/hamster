@@ -32,7 +32,7 @@ class Keybinder(object):
         self.prevbinding = None
         
         self.key_combination = self.config.get_keybinding()
-        if self.key_combination == None:
+        if self.key_combination is None:
             # This is for uninstalled cases, the real default is in the schema
             self.key_combination = "<Super>H"
     

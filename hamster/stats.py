@@ -145,7 +145,7 @@ class StatsViewer(object):
     def setup_tree(self):
         def parent_painter(column, cell, model, iter):
             cell_text = model.get_value(iter, 1)
-            if model.iter_parent(iter) == None:
+            if model.iter_parent(iter) is None:
                 if model.get_path(iter) == (0,):
                     text = '<span weight="heavy">%s</span>' % cell_text
                 else:
@@ -167,7 +167,7 @@ class StatsViewer(object):
     
 
             text = model.get_value(iter, 2)
-            if model.iter_parent(iter) == None:
+            if model.iter_parent(iter) is None:
                 if model.get_path(iter) == (0,):
                     text = '<span weight="heavy">%s</span>' % text
                 else:

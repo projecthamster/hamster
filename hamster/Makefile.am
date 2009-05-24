@@ -22,7 +22,7 @@ hamster_PYTHON = \
 	charting.py \
         widgets.py \
         graphics.py \
-	Configuration.py \
+	configuration.py \
 	KeyBinder.py \
 	preferences.py \
 	stuff.py \

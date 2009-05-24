@@ -10,9 +10,9 @@ class TestActivityInputParsing(unittest.TestCase):
         # plain activity name
         activity = stuff.parse_activity_input("just a simple case")
         self.assertEquals(activity.activity_name, "just a simple case")
-        assert activity.category_name == None and activity.start_time == None \
-               and activity.end_time == None and activity.category_name == None\
-               and activity.description == None
+        assert activity.category_name is None and activity.start_time is None \
+               and activity.end_time is None and activity.category_name is None\
+               and activity.description is None
 
     def test_with_start_time(self):
         # with time
@@ -21,9 +21,9 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEquals(activity.start_time.strftime("%H:%M"), "12:35")
 
         #rest must be empty        
-        assert activity.category_name == None \
-               and activity.end_time == None and activity.category_name == None\
-               and activity.description == None
+        assert activity.category_name is None \
+               and activity.end_time is None and activity.category_name is None\
+               and activity.description is None
 
     def test_with_start_and_end_time(self):
         # with time
@@ -33,26 +33,26 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEquals(activity.end_time.strftime("%H:%M"), "14:25")
 
         #rest must be empty        
-        assert activity.category_name == None \
-               and activity.category_name == None\
-               and activity.description == None
+        assert activity.category_name is None \
+               and activity.category_name is None\
+               and activity.description is None
 
     def test_category(self):
         # plain activity name
         activity = stuff.parse_activity_input("just a simple case@hamster")
         self.assertEquals(activity.activity_name, "just a simple case")
         self.assertEquals(activity.category_name, "hamster")
-        assert activity.start_time == None \
-               and activity.end_time == None \
-               and activity.description == None
+        assert activity.start_time is None \
+               and activity.end_time is None \
+               and activity.description is None
 
     def test_description(self):
         # plain activity name
         activity = stuff.parse_activity_input("case, with added description")
         self.assertEquals(activity.activity_name, "case")
         self.assertEquals(activity.description, "with added description")
-        assert activity.category_name == None and activity.start_time == None \
-               and activity.end_time == None and activity.category_name == None
+        assert activity.category_name is None and activity.start_time is None \
+               and activity.end_time is None and activity.category_name is None
 
     def test_full(self):
         # plain activity name

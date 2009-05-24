@@ -36,7 +36,7 @@ import dbus.mainloop.glib
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR
 import hamster.eds
-from hamster.Configuration import GconfStore
+from hamster.configuration import GconfStore
 
 from hamster import stuff
 from hamster.KeyBinder import *
@@ -509,7 +509,7 @@ Now, start tracking!
         """refresh hamster every x secs - load today, check last activity etc."""        
         # stop tracking task if computer is idle for X minutes
         if self.timeout_enabled and self.last_activity and \
-           self.last_activity['end_time'] == None:
+           self.last_activity['end_time'] is None:
             if self.dbusIdleListener.is_idle:
                 # Only subtract idle time from the running task when
                 # idleness is due to time out, not a screen lock.
@@ -531,7 +531,7 @@ Now, start tracking!
         return True
 
     def update_label(self):
-        if self.last_activity and self.last_activity['end_time'] == None:
+        if self.last_activity and self.last_activity['end_time'] is None:
             delta = datetime.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'],
@@ -698,7 +698,7 @@ Now, start tracking!
 
     def __update_fact(self):
         """dbus controller current fact updating"""
-        if self.last_activity and self.last_activity['end_time'] == None:
+        if self.last_activity and self.last_activity['end_time'] is None:
             self.dbusController.update_fact(self.last_activity["name"])
         else:
             self.dbusController.update_fact(_(u'No activity'))
@@ -708,7 +708,7 @@ Now, start tracking!
         """main window display and positioning"""
         self.button.set_active(is_active)
 
-        if self.last_activity and self.last_activity["end_time"] == None:
+        if self.last_activity and self.last_activity["end_time"] is None:
             label = self.last_activity['name']
             if self.last_activity['category'] != _("Unsorted"):
                 label += "@%s" %  self.last_activity['category']

@@ -95,7 +95,7 @@ def size_list(set, target_set):
 
     #nest
     for i in range(len(set)):
-        if type(set[i]) == list:
+        if isinstance(set[i], list):
             set[i] = size_list(set[i], target_set[i])
     return set
 
@@ -287,7 +287,7 @@ class Chart(graphics.Area):
         else:
             def finish_all(integrators):
                 for i in range(len(integrators)):
-                    if type(integrators[i]) == list:
+                    if isinstance(integrators[i], list):
                         finish_all(integrators[i])
                     else:
                         integrators[i].finish()
@@ -343,7 +343,7 @@ class Chart(graphics.Area):
         #need function to go recursive
         def retarget(integrators, new_values):
             for i in range(len(new_values)):
-                if type(new_values[i]) == list:
+                if isinstance(new_values[i], list):
                     integrators[i] = retarget(integrators[i], new_values[i])
                 else:
                     if isinstance(integrators[i], graphics.Integrator) == False:

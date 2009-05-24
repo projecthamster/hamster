@@ -190,7 +190,7 @@ def figure_time(str_time):
         if len(numbers) >= 2:
             minutes = int(numbers[1])
         
-    if (hours == None or minutes == None) or hours > 24 or minutes > 60:
+    if (hours is None or minutes is None) or hours > 24 or minutes > 60:
         return None #no can do
 
     return dt.datetime.now().replace(hour = hours, minute = minutes,

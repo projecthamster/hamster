@@ -110,7 +110,7 @@ class Area(gtk.DrawingArea):
                     x_value = self.value_boundaries[0] + x_value * x_factor
                 else: #case when min is larger than max (flipped)
                     x_value = self.value_boundaries[1] - x_value * x_factor
-            if y_value == None:
+            if y_value is None:
                 return x_value + self.graph_x
 
         if y_value != None:
@@ -119,7 +119,7 @@ class Area(gtk.DrawingArea):
                     y_value = self.value_boundaries[2] + y_value * y_factor
                 else: #case when min is larger than max (flipped)
                     y_value = self.value_boundaries[2] - y_value * y_factor
-            if x_value == None:
+            if x_value is None:
                 return y_value + self.graph_y
             
         return x_value + self.graph_x, y_value + self.graph_y
@@ -130,11 +130,11 @@ class Area(gtk.DrawingArea):
         
         if x != None:
             x = (x - self.graph_x)  / x_factor
-            if y == None:
+            if y is None:
                 return x
         if y != None:
             y = (y - self.graph_x) / y_factor
-            if x == None:
+            if x is None:
                 return y
         return x, y            
         
@@ -168,7 +168,7 @@ class Integrator(object):
     def __init__(self, start_value, damping = 0.5, attraction = 0.2):
         #if we got datetime, convert it to unix time, so we operate with numbers again
         self.current_value = start_value
-        if type(start_value) == dt.datetime:
+        if isinstance(start_value, dt.datetime):
             self.current_value = int(time.mktime(start_value.timetuple()))
             
         self.value_type = type(start_value)
@@ -193,7 +193,7 @@ class Integrator(object):
         """target next value"""
         self.targeting = True
         self.target_value = value
-        if type(value) == dt.datetime:
+        if isinstance(value, dt.datetime):
             self.target_value = int(time.mktime(value.timetuple()))
         
     def update(self):

@@ -90,7 +90,7 @@
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="yalign">0.50999999046325684</property>
-                                    <property name="label" translatable="yes">&lt;span size="small" &gt;Type in activity and hit Enter to start tracking!&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">&lt;span size="small" &gt;Type in an activity and hit Enter to start tracking!&lt;/span&gt;</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                   <packing>
