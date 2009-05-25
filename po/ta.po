@@ -9,18 +9,19 @@
 # Shakthi Kannan <shakthimaan@gmail.com>, 2008.
 # I. Felix <ifelix@redhat.com>, 2008.
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
+# Dr.T.Vasudevan <agnihot3@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamsterta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-07 07:09+0530\n"
-"PO-Revision-Date: 2009-05-22 18:27+0530\n"
-"Last-Translator: Dr.T.vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
+"POT-Creation-Date: 2009-05-25 17:51+0530\n"
+"PO-Revision-Date: 2009-05-25 17:57+0530\n"
+"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: American English <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.2\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\\n"
 "\n"
 
@@ -102,7 +103,7 @@ msgstr "செயலை நீக்கு"
 msgid "Remove category"
 msgstr "வகையை நீக்கு"
 
-#: ../data/preferences.ui.h:15 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:15 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "முடித்து வைத்ததும் தேடலை நிறுத்தவும்"
 
@@ -121,6 +122,10 @@ msgstr "செயல்பாடுகள் (_A)"
 #: ../data/preferences.ui.h:19
 msgid "_Categories"
 msgstr "வகைகள் (_C)"
+
+#: ../data/preferences.ui.h:20
+msgid "remind also when no activity is set"
+msgstr " செயல் அமைக்காத போதும் நினைவுறுத்துக"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -147,6 +152,10 @@ msgid "in progress"
 msgstr "முன்னேற்றத்தில் உள்ளது"
 
 #: ../data/edit_activity.ui.h:7
+msgid "label"
+msgstr "அடையாள சீட்டு"
+
+#: ../data/edit_activity.ui.h:8
 msgid "to"
 msgstr "வரை"
 
@@ -155,28 +164,36 @@ msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டுவதற்கான விசைப் பலகைக் குறுக்கு வழி"
 
 #: ../data/hamster-applet.schemas.in.h:2
+msgid "Remind also when no activity is set"
+msgstr " செயல் அமைக்காத போதும் நினைவுறுத்துக"
+
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Remind every notify_interval minutes also if no activity has been started."
+msgstr " (_i)  செயல் அமைக்காத போதும் நினைவுறுத்த வேண்டிய இடைவெளியில் நினைவுறுத்துக"
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or bigger "
 "than 120 to disable reminder."
 msgstr "தற்போதைய செயலை நினைவுறுத்த இடைவெளி நிமிடங்களில் 0 முதல் 120 வரை அமைக்கவும்"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ஒவ்வொரு x நிமிடங்களும் நடப்பு வேலையை நினைவுறுத்துக"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "சாளரத்தைக் காட்டவும்"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "முடித்து வைத்ததும் தற்போதைய செயல்பாட்டுத் தேடலை நிறுத்தவும்"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr "கணினி இயக்கம் நின்றதும் தற்போதைய செயல்பாட்டுத் தேடலை நிறுத்தவும்"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "இயக்கமற்ற நிலையில் தேடலை நிறுத்தவும்"
 
@@ -184,7 +201,9 @@ msgstr "இயக்கமற்ற நிலையில் தேடலை ந
 msgid ""
 "<span size=\"small\" >Type in activity and hit Enter to start tracking!</"
 "span>"
-msgstr "<span size=\"small\" > செயலை உள்ளிட்டுவிட்டு கண்காணிக்க என்டர் விசையை அமுக்கவும்.</span>"
+msgstr ""
+"<span size=\"small\" > செயலை உள்ளிட்டுவிட்டு கண்காணிக்க என்டர் விசையை அமுக்கவும்.</"
+"span>"
 
 #: ../data/applet.ui.h:2
 msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
@@ -199,7 +218,7 @@ msgstr "முந்தைய செயல்பாட்டைச் சேர�
 msgid "Hamster"
 msgstr "ஹாம்ஸ்டர்"
 
-#: ../data/applet.ui.h:6 ../hamster/applet.py:535
+#: ../data/applet.ui.h:6 ../hamster/applet.py:627
 msgid "No records today"
 msgstr "இன்று பதிவுக் குறிப்புகள் எதுவும் இல்லை"
 
@@ -293,11 +312,11 @@ msgstr "திருத்து"
 msgid "Switch"
 msgstr "மாற்றி"
 
-#: ../hamster/applet.py:298
+#: ../hamster/applet.py:313
 msgid "What to type in the activity box?"
 msgstr "செயல் பெட்டியில் என்ன உள்ளிட வேண்டும்?"
 
-#: ../hamster/applet.py:301
+#: ../hamster/applet.py:316
 #, fuzzy
 msgid ""
 "There is simple syntax that enables you to add details to your activities:\n"
@@ -315,90 +334,90 @@ msgid ""
 "Now, start tracking!\n"
 "        "
 msgstr ""
-"There is simple syntax that enables you to add details to your activities:\n"
+"உங்கள் செயல்பாடுகளுக்கு விவரங்கள் சேர்க்க இப்போது எளிய சொற்றொடர் உள்ளது.:\n"
 "        \n"
-"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
-"tracking activity \"watering flowers\" in category \"home\".\n"
+"\"@\" குறி வகையை  காட்டுகிறது. உதாரணம்: \"பூக்களுக்கு தண்ணீர்@வீட்டில்\" என்பது "
+"\"பூக்களுக்கு தண்ணீர்\" செயலை  தொடர ஆரம்பிக்கும்  \"வீட்டில்\" வகையில்.\n"
 "\n"
-"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking activity \"watering flowers"
-"\" and add description \"begonias and forgetmenots\" to it.\n"
+"காற்புள்ளி (\",\") விவரத்தின் ஆரம்பத்தை  குறிக்கிறது. உதாரணம்: \"பூக்களுக்கு தண்ணீர், "
+"ரோஜாவும் மல்லியும்\"  \"பூக்களுக்கு தண்ணீர்"
+"\" செயலை  தொடர ஆரம்பிக்கும்  \"ரோஜாவும் மல்லியும்\" என்ற விவரத்தையும் சேர்க்கும்.\n"
 "\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
+"இரண்டைய்டும் ஒன்று சேர்க்கலாம்: \"பூக்களுக்கு தண்ணீர்@வீட்டில், ரோஜாவும் மல்லியும்\" "
+"அதே செயலையே செய்யும்!\n"
 "\n"
-"Now, start tracking!\n"
+"இப்ப தொடர ஆரம்பிக்கலாமா!\n"
 "        "
 
-#: ../hamster/applet.py:330 ../hamster/reports.py:109
+#: ../hamster/applet.py:345 ../hamster/reports.py:109
 #: ../hamster/reports.py:174
 msgid "Duration"
 msgstr "காலஅளவு"
 
-#: ../hamster/applet.py:452 ../hamster/applet.py:476 ../hamster/applet.py:608
+#: ../hamster/applet.py:544 ../hamster/applet.py:568 ../hamster/applet.py:704
 msgid "No activity"
 msgstr "செயல்பாடு இல்லை"
 
 #. activity reminder
-#: ../hamster/applet.py:471
+#: ../hamster/applet.py:563
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "வேலை செய்வது இதில்<b>%s</b>"
 
 #. listing of today's categories and time spent in them
-#: ../hamster/applet.py:542
+#: ../hamster/applet.py:634
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
-#: ../hamster/applet.py:544
+#: ../hamster/applet.py:636
 #, python-format
 msgid "%.1fh"
 msgstr "%.1fh"
 
 #. try yesterday if there is nothing today
-#: ../hamster/applet.py:641 ../hamster/db.py:189 ../hamster/db.py:206
-#: ../hamster/db.py:209 ../hamster/db.py:372 ../hamster/db.py:476
-#: ../hamster/db.py:490 ../hamster/edit_activity.py:326
+#: ../hamster/applet.py:713 ../hamster/db.py:190 ../hamster/db.py:207
+#: ../hamster/db.py:210 ../hamster/db.py:365 ../hamster/db.py:469
+#: ../hamster/db.py:483 ../hamster/edit_activity.py:326
 #: ../hamster/preferences.py:56 ../hamster/reports.py:129
-#: ../hamster/stuff.py:73
+#: ../hamster/stuff.py:74
 msgid "Unsorted"
 msgstr "இனம் பிரிக்கப்படாதவை"
 
 #. defaults
-#: ../hamster/db.py:671
+#: ../hamster/db.py:664
 msgid "Work"
 msgstr "பணி"
 
-#: ../hamster/db.py:672
+#: ../hamster/db.py:665
 msgid "Reading news"
 msgstr "செய்திகள் வாசிப்பு"
 
-#: ../hamster/db.py:673
+#: ../hamster/db.py:666
 msgid "Checking stocks"
 msgstr "வணிகப் பங்குகள் சரிபார்த்தல்"
 
-#: ../hamster/db.py:674
+#: ../hamster/db.py:667
 msgid "Super secret project X"
 msgstr "மிக ரகசியத் திட்டம் எக்ஸ்"
 
-#: ../hamster/db.py:675
+#: ../hamster/db.py:668
 msgid "World domination"
 msgstr "உலக ஆதிக்கம்"
 
-#: ../hamster/db.py:677
+#: ../hamster/db.py:670
 msgid "Day to day"
 msgstr "அன்றாடம்"
 
-#: ../hamster/db.py:678
+#: ../hamster/db.py:671
 msgid "Lunch"
 msgstr "மதிய உணவு"
 
-#: ../hamster/db.py:679
+#: ../hamster/db.py:672
 msgid "Watering flowers"
 msgstr "பூக்களுக்குத் தண்ணீர் பாய்ச்சுதல்"
 
-#: ../hamster/db.py:680
+#: ../hamster/db.py:673
 msgid "Doing handstands"
 msgstr "தலைகீழாய் நிற்றல்"
 
@@ -415,22 +434,22 @@ msgstr "பெயர்"
 msgid "Category"
 msgstr "வகை"
 
-#: ../hamster/preferences.py:554
+#: ../hamster/preferences.py:559
 msgid "New category"
 msgstr "புதிய வகை"
 
-#: ../hamster/preferences.py:567
+#: ../hamster/preferences.py:572
 msgid "New activity"
 msgstr "புதிய செயல்பாடு"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:624
+#: ../hamster/preferences.py:632
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minutes"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:627
+#: ../hamster/preferences.py:635
 msgid "Never"
 msgstr "எப்போதுமில்லை"
 
@@ -519,19 +538,19 @@ msgid "Total"
 msgstr "மொத்தம்"
 
 #. duration in round hours
-#: ../hamster/stuff.py:120
+#: ../hamster/stuff.py:121
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../hamster/stuff.py:123
+#: ../hamster/stuff.py:124
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:126
+#: ../hamster/stuff.py:127
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
