@@ -97,7 +97,7 @@ class DbusIdleListener(object):
         # for it above, but even so we still hear from ourselves
         # (hamster messages).
         if not message.get_interface() == self.screensaver_uri:
-            return
+            return True
 
         # Signal type messages have a value of 4, and method_call type
         # ones have a value of 1.  I'm not sure how important it is to
@@ -120,5 +120,7 @@ class DbusIdleListener(object):
             if __debug__:
                 print "Screen Lock Requested"
             self.is_screen_locked = True
+        
+        return True
 
 
