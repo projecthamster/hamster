@@ -21,7 +21,7 @@
 
 import gtk, gconf
 import hamster, hamster.keybinder
-from hamster.Configuration import GconfStore
+from hamster.configuration import GconfStore
 from hamster import dispatcher
 
 class Keybinder(object):
