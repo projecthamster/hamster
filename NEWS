@@ -1,4 +1,24 @@
 ===============
+Version 2.27.2
+===============
+  * Now a reminder is displayed every configured amount of time also when no
+    activity is being tracked. (Can be disabled in preferences)
+  * Allow to switch to same task if description differs
+  * Activity edit icon in dropdown is now keyboard accessible
+  * Start time and end time can be specified when typing in task.
+       Example: 00:04 Hamster
+  * slightly smarter autocomplete with category suggestions when after @ symbol
+  * fixes to edit activity dialog's end time field
+  
+  Updated translations:
+    * el.po (Jennie Petoumenou)
+    * et.po (Ivar Smolin)
+    * ta.po (Dr.T.vasudevan)
+    * uk.po (Maxim V. Dziumanenko)
+    * ca@valencia.po (Gil Forcada/Miquel Esplà)
+  
+  
+===============
 Version 2.27.1
 ===============
   * Overview window graphs have been redone and now are less noisy
