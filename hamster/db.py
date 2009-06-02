@@ -356,13 +356,17 @@ class Storage(hamster.storage.Storage):
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c on b.category_id = c.id
-                    WHERE (date(a.start_time) >= ? and date(a.start_time) <= ?)
-                       OR (date(a.end_time) >= ? and date(a.end_time) <= ?)
+                    WHERE a.start_time >= ? and a.start_time <= ?
                  ORDER BY a.start_time
         """
         end_date = end_date or date
+
+        #FIXME: add preference to set that
+        split_time = dt.time(5, 30)
+        datetime_from = dt.datetime.combine(date, split_time)
+        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
         
-        facts = self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
+        facts = self.fetchall(query, (_("Unsorted"), datetime_from, datetime_to))
         res = []
 
         today = dt.date.today()
@@ -376,28 +380,9 @@ class Storage(hamster.storage.Storage):
                                    or abs(end_date-today).days < 2:
             last_activity = self.__get_last_activity()
 
-        # deal with late-night workers!
-        if not facts and date == today:
-            # no facts today?! let's get last fact of yesterday
-            if last_activity:
-                # last fact has not finished, we think that it is still ongoing
-                f = dict(
-                    id = last_activity["id"],
-                    start_time = dt.datetime.combine(date, dt.time(0,0)),
-                    end_time = now,
-                    description = last_activity["description"],
-                    name = last_activity["name"],
-                    activity_id = last_activity["activity_id"],
-                    category = last_activity["category"],
-                    category_id = last_activity["category_id"],
-                    delta = now - dt.datetime.combine(date, dt.time(0,0))
-                )
-            
-                return [f]
-
-
         for fact in facts:
-            fact_start_date = fact["start_time"].date()
+            fact_start_date = fact["start_time"].date() \
+                + dt.timedelta(-1 if fact["start_time"].time() < split_time else 0)
             if fact["end_time"]:
                 fact_end_date = fact["end_time"].date()
             else:
@@ -406,6 +391,7 @@ class Storage(hamster.storage.Storage):
             f = dict(
                 id = fact["id"],
                 start_time = fact["start_time"],
+                date = fact_start_date,
                 end_time = fact["end_time"],
                 description = fact["description"],
                 name = fact["name"],
@@ -415,40 +401,13 @@ class Storage(hamster.storage.Storage):
             )
             
             if not fact_end_date:
-                if fact_start_date == today and fact["start_time"] < now:
+                if f["id"] == last_activity["id"] and fact["start_time"] < now:
                     # today, present
-                    f["delta"] = now -  fact["start_time"]
-                elif last_activity and fact_start_date == yesterday and f["id"] == last_activity["id"]:
-                    # last fact and it is in yesterday - split it!
-                    #first yesterday until midnight
-                    f["end_time"] = dt.datetime.combine(today, dt.time(0,0))
-                    f["delta"] = f["end_time"] - f["start_time"]
-                    res.append(f)
-                    
-                    #and now today until now
-                    f = copy.copy(f)
-                    f["start_time"] = dt.datetime.combine(today, dt.time(0, 0))
-                    f["end_time"] = now
-                    f["delta"] = f["end_time"] - f["start_time"]
+                    f["delta"] = now - fact["start_time"]
                 else:
                     f["delta"] = None
 
                 res.append(f)
-            elif fact_start_date != fact_end_date:
-                # check if maybe we have to split activity in two
-                if date <= fact["start_time"].date()  <= end_date:
-                    start_fact = copy.copy(f)
-                    start_fact["end_time"] = dt.datetime.combine(f["end_time"],
-                                                                 dt.time(0, 0))
-                    start_fact["delta"] = start_fact["end_time"] - start_fact["start_time"]
-                    res.append(start_fact)
-
-                if date <= fact["end_time"].date()  <= end_date:
-                    end_fact = copy.copy(f)
-                    end_fact["start_time"] = dt.datetime.combine(f["end_time"],
-                                                                 dt.time(0, 0))
-                    end_fact["delta"] = end_fact["end_time"] - end_fact["start_time"]
-                    res.append(end_fact)
             else:
                 #else is we have end date and it is the same date
                 f["delta"] = fact["end_time"] - fact["start_time"]

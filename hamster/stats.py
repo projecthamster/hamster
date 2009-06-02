@@ -247,7 +247,7 @@ class StatsViewer(object):
                 
 
         for fact in facts:
-            start_date = fact["start_time"].date()
+            start_date = fact["date"]
 
             duration = None
             if fact["delta"]:
@@ -302,7 +302,7 @@ class StatsViewer(object):
         #now we do the counting
         for fact in facts:
             duration = None
-            start_date = fact['start_time'].date()
+            start_date = fact['date']
             
             if fact["end_time"]: # not set if just started
                 delta = fact["end_time"] - fact["start_time"]
