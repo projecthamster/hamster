@@ -40,7 +40,7 @@ from hamster.configuration import GconfStore
 
 from hamster import stuff
 from hamster.KeyBinder import *
-from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController 
+from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
 from hamster.edit_activity import CustomFactController
@@ -546,9 +546,6 @@ Now, start tracking!
             self._gui.get_object('stop_tracking').set_sensitive(0);
         
         
-        # Hamster DBusController current activity updating
-        self.dbusController.update_activity(label)
-
     def check_user(self):
         if not self.notify_interval: #no interval means "never"
             return
@@ -698,12 +695,15 @@ Now, start tracking!
 
     def __update_fact(self):
         """dbus controller current fact updating"""
-        if self.last_activity and self.last_activity['end_time'] is None:
-            self.dbusController.update_fact(self.last_activity["name"])
+        last_activity_id = 0
+        
+        if not self.last_activity:
+            self.dbusController.TrackingStopped()
         else:
-            self.dbusController.update_fact(_(u'No activity'))
+            last_activity_id = self.last_activity['id']
 
-
+        self.dbusController.FactUpdated(last_activity_id)
+            
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
@@ -887,7 +887,6 @@ Now, start tracking!
     def after_fact_update(self, event, date):
         self.load_day()
         self.update_label()
-    
         self.__update_fact()
 
     """global shortcuts"""

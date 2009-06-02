@@ -1,6 +1,7 @@
 # - coding: utf-8 -
 
 # Copyright (C) 2008, J. Félix Ontañón <fontanon at emergya dot es>
+# Thanks to John Carr for helpful patching
 
 # This file is part of Project Hamster.
 
@@ -19,29 +20,206 @@
 
 import dbus
 import dbus.service
+import datetime
+from calendar import timegm
 
-HAMSTER_URI = "org.gnome.hamster"
-HAMSTER_PATH = "/org/gnome/hamster"
+from hamster import storage
+
+# DBus service parameters
+HAMSTER_URI = "org.gnome.Hamster"
+HAMSTER_PATH = "/org/gnome/Hamster"
+
+# Data-keys used in hamster to refer 
+# facts, categories and activities
+FCT_KEY = 'id'
+ACT_KEY = 'name'
+CAT_KEY = 'category'
+DSC_KEY = 'description'
+SRT_KEY = 'start_time'
+END_KEY = 'end_time'
 
 class HamsterDbusController(dbus.service.Object):
-    activity = "Undefined"
-    fact = "Undefined"
+    # Non-initialized current fact id
+    current_fact_id = 0
 
     def __init__(self, bus_name):
+        """HamsterDbusController encapsulates the dbus api logic
+        for the hamster-applet and performs the necesary conversion
+        between dbus types and hamster-applet data types
+        """
         dbus.service.Object.__init__(self, bus_name, HAMSTER_PATH)
 
+    @staticmethod
+    def to_dbus_fact(fact):
+        """Perform the conversion between fact database query and 
+        dbus supported data types
+        """
+
+        # Default fact values
+        dbus_fact = {FCT_KEY: 0, ACT_KEY:'', CAT_KEY:'', DSC_KEY:'',
+                SRT_KEY:0, END_KEY:0}
+
+        if fact:
+            # Workaround for fill values
+            fact_keys = fact.keys()
+
+            for key in (FCT_KEY, ACT_KEY, CAT_KEY, DSC_KEY):
+                if key in fact_keys and fact[key]: 
+                    dbus_fact[key] = fact[key]
+    
+            for key in (SRT_KEY, END_KEY):
+                if key in fact_keys and fact[key]:
+                    # Convert datetime to unix timestamp (seconds since epoch)
+                    dbus_fact[key] = timegm(fact[key].timetuple())
+
+        return dbus_fact
+
+    @dbus.service.method(HAMSTER_URI, out_signature='a{sv}')
+    def GetCurrentFact(self):
+        """Gets the current displaying fact
+        Returns Dict of:
+        i id: Unique fact identifier
+        s name: Activity name
+        s category: Category name
+        s description: Description of the fact
+        u start_time: Seconds since epoch (timestamp)
+        u end_time: Seconds since epoch (timestamp)
+        """
+        return HamsterDbusController.to_dbus_fact(storage.get_last_activity())
+
+    @dbus.service.method(HAMSTER_URI, in_signature='i', out_signature='a{sv}')
+    def GetFactById(self, fact_id):
+        """Gets the current displaying fact
+        Parameters:
+        i id: Unique fact identifier
+        Returns Dict of:
+        i id: Unique fact identifier
+        s name: Activity name
+        s category: Category name
+        s description: Description of the fact
+        u start_time: Seconds since epoch (timestamp)
+        u end_time: Seconds since epoch (timestamp)
+        """
+        return HamsterDbusController.to_dbus_fact(storage.get_fact(fact_id))
+
+    @dbus.service.method(HAMSTER_URI, out_signature='a(ss)')
+    def GetActivities(self):
+        """Gets all defined activities with matching category
+        Returns Array of:
+        s activity: Activity name
+        s category: Category name
+        """
+        activities = []
+        for act in storage.get_autocomplete_activities():
+            activities.append((act[ACT_KEY] or '', act[CAT_KEY] or ''))
+        return activities
+
+    @dbus.service.method(HAMSTER_URI, out_signature='as')
+    def GetCategories(self):
+        """Gets all defined categories
+        Returns Array of:
+        s category: Category name
+        """
+        categories = []
+        for i in storage.get_category_list():
+            categories.append(i[ACT_KEY] or '')
+        return categories
+
+    @dbus.service.method(HAMSTER_URI, in_signature='suu', out_signature='i')
+    def AddFact(self, activity, start_time, end_time):
+        """Add a new fact
+        Parameters:
+        s activity: Activity name with optional category and/or description
+                    in the form 'activity_name[@category_name][,description]'
+                    Activity and matching category will be refered or created 
+                    on the fly.
+        u start_time: Seconds since epoch (timestamp). Use 0 for 'now'
+        u end_time: Seconds since epoch (timestamp). 
+                    Use 0 for i 'in progress task'
+        """
+        #TODO: Assert start > end ?
+        start, end = None, None
+
+        if start_time:
+            start = datetime.datetime.utcfromtimestamp(start_time)
+        if end_time:
+            end = datetime.datetime.utcfromtimestamp(end_time)
+
+        fact = storage.add_fact(activity, start, end)
+        return fact[FCT_KEY]
+
+    @dbus.service.method(HAMSTER_URI, in_signature='ss')
+    def AddActivity(self, activity, category):
+        """Add a new activity
+        Parameters:
+        s activity: Activity name
+        s category: Category name. It will be created if it doesn't exists
+                    Use '' for Unsorted activity
+        """
+        category_id = None
+
+        if category:
+            category_id = storage.get_category_by_name(category) \
+                    or storage.add_category(category)
+
+        storage.add_activity(activity, category_id)
+
+    @dbus.service.method(HAMSTER_URI, in_signature='s')
+    def AddCategory(self, category):
+        """Add a new category
+        Parameters:
+        s category: category name
+        """
+        if category and not storage.get_category_by_name(category):
+            storage.add_category(category)
+
     @dbus.service.method(HAMSTER_URI)
-    def get_activity(self):
-        return self.activity
+    def StopTracking(self):
+        """Stops the current fact tracking"""
+        last_activity = storage.get_last_activity()
+        if last_activity:
+            storage.touch_fact(last_activity)
+
+    @dbus.service.method(HAMSTER_URI, in_signature='i')
+    def RemoveFact(self, fact_id):
+        """Removes a fact
+        Parameters:
+        i id: Unique fact identifier
+        """
+        storage.remove_fact(fact_id)
+
+    @dbus.service.method(HAMSTER_URI, in_signature='ss')
+    def RemoveActivity(self, activity, category):
+        """Removes an activity
+        Parameters:
+        s activity: Activity name
+        s category: Category name. Use '' for Unsorted activity
+        """
+        category_id = storage.get_category_by_name(category)
+        activity_id = storage.get_activity_by_name(activity, category_id)
+
+        if activity_id:
+            storage.remove_activity(activity_id)
+
+    @dbus.service.method(HAMSTER_URI, in_signature='s')
+    def RemoveCategory(self, category):
+        """Removes a category
+        Parameters:
+        s category: Category name
+        """
+        category_id = storage.get_category_by_name(category)
+        if category_id:
+            storage.remove_category(category_id)
+
+    @dbus.service.signal(HAMSTER_URI, signature='i')
+    def FactUpdated(self, fact_id):
+        """Notice fact changes
+        Parameters:
+        i id: Unique fact identifier
+        """
+        self.current_fact_id = fact_id
 
     @dbus.service.signal(HAMSTER_URI)
-    def update_activity(self, activity):
-        self.activity = activity
-
-    @dbus.service.method(HAMSTER_URI)
-    def get_fact(self):
-        return self.fact
-
-    @dbus.service.signal(HAMSTER_URI)
-    def update_fact(self, fact):
-        self.fact = fact
+    def TrackingStopped(self):
+        """Notice the fact tracking has been stopped"""
+        self.current_fact_id = 0
