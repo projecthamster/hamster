@@ -355,8 +355,8 @@ class Storage(hamster.storage.Storage):
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
-                LEFT JOIN categories c on b.category_id = c.id
-                    WHERE a.start_time >= ? and a.start_time <= ?
+                LEFT JOIN categories c ON b.category_id = c.id
+                    WHERE a.end_time >= ? AND a.start_time <= ?
                  ORDER BY a.start_time
         """
         end_date = end_date or date
@@ -370,28 +370,52 @@ class Storage(hamster.storage.Storage):
         res = []
 
         today = dt.date.today()
-        yesterday = dt.date.today() - dt.timedelta(days=1)
+        yesterday = dt.date.today() - dt.timedelta(days = 1)
         now = dt.datetime.now()
         
-
         # fetch last activity here - we will be looking it up for comparisons
         last_activity = None
-        if date >= today >= end_date or abs(date-today).days < 2 \
-                                   or abs(end_date-today).days < 2:
+        if date >= today >= end_date or abs(date - today).days < 2 \
+                                   or abs(end_date - today).days < 2:
             last_activity = self.__get_last_activity()
 
         for fact in facts:
-            fact_start_date = fact["start_time"].date() \
-                + dt.timedelta(-1 if fact["start_time"].time() < split_time else 0)
+            # heuristics to assign tasks to proper days
             if fact["end_time"]:
-                fact_end_date = fact["end_time"].date()
+                fact_end_time = fact["end_time"]
             else:
-                fact_end_date = None
+                fact_end_date = now
+
+            fact_start_date = fact["start_time"].date() \
+                - dt.timedelta(1 if fact["start_time"].time() < split_time else 0)
+            fact_end_date = fact_end_time.date() \
+                - dt.timedelta(1 if fact_end_time.time() < split_time else 0)
+            fact_date_span = fact_end_date - fact_start_date
+
+            # check if the task spans across two dates
+            if fact_date_span.days == 1:
+                datetime_split = dt.datetime.combine(fact_end_date, split_time)
+                start_date_duration = datetime_split - fact["start_time"]
+                end_date_duration = fact_end_time - datetime_split
+                if start_date_duration > end_date_duration:
+                    # most of the task was done during the previous day
+                    fact_date = fact_start_date
+                else:
+                    fact_date = fact_end_date
+            else:
+                # either doesn't span or more than 24 hrs tracked
+                # (in which case we give up)
+                fact_date = fact_start_date
+
+            if fact_date < date or fact_date > end_date:
+                # due to spanning we've jumped outside of given period
+                continue
                                    
             f = dict(
                 id = fact["id"],
                 start_time = fact["start_time"],
-                date = fact_start_date,
+                date = fact_date,
+                delta = fact_end_time - fact["start_time"],
                 end_time = fact["end_time"],
                 description = fact["description"],
                 name = fact["name"],
@@ -399,19 +423,7 @@ class Storage(hamster.storage.Storage):
                 category = fact["category"],
                 category_id = fact["category_id"]
             )
-            
-            if not fact_end_date:
-                if f["id"] == last_activity["id"] and fact["start_time"] < now:
-                    # today, present
-                    f["delta"] = now - fact["start_time"]
-                else:
-                    f["delta"] = None
-
-                res.append(f)
-            else:
-                #else is we have end date and it is the same date
-                f["delta"] = fact["end_time"] - fact["start_time"]
-                res.append(f)
+            res.append(f)
 
         return res
 
