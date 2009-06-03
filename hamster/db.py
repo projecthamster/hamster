@@ -356,7 +356,7 @@ class Storage(hamster.storage.Storage):
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
-                    WHERE a.end_time >= ? AND a.start_time <= ?
+                    WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
                  ORDER BY a.start_time
         """
         end_date = end_date or date
@@ -384,7 +384,7 @@ class Storage(hamster.storage.Storage):
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
             else:
-                fact_end_date = now
+                fact_end_time = now
 
             fact_start_date = fact["start_time"].date() \
                 - dt.timedelta(1 if fact["start_time"].time() < split_time else 0)

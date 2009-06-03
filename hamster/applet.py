@@ -594,7 +594,7 @@ Now, start tracking!
             duration = None
             
             if fact["delta"]:
-                duration = 24 * fact["delta"].days + fact["delta"].seconds / 60
+                duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
             
             fact_category = fact['category']
             
