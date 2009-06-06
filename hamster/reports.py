@@ -46,7 +46,7 @@ def simple(facts, start_date, end_date, format, filename):
     
     if format == "tsv":
         #comment of cvs file structure
-        report.write(_("#activity, start datetime ISO, end datetime ISO, duration in minutes, category, description\n"))
+        report.write(_("#activity\tstart datetime ISO\tend datetime ISO\tduration minutes\tcategory\tdescription\n"))
         for fact in facts:
             fact["description"] = fact["description"] or ""
             fact["category"] = fact["category"] or _("Unsorted")
