@@ -552,9 +552,83 @@ class StatsViewer(object):
         custom_fact.show()
         
     def on_report_button_clicked(self, widget):
-        from hamster import reports
-        facts = storage.get_facts(self.start_date, self.end_date)
-        reports.simple(facts, self.start_date, self.end_date)
+        chooser = gtk.FileChooserDialog(title = _("Save report - Time Tracker"),
+                                        parent = None,
+                                        action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                        buttons=(gtk.STOCK_CANCEL,
+                                                 gtk.RESPONSE_CANCEL,
+                                                 gtk.STOCK_SAVE,
+                                                 gtk.RESPONSE_OK))
+
+        chooser.set_current_folder(os.path.expanduser("~"))
+
+        #set suggested name to something readable, replace backslashes with dots
+        #so the name is valid in linux
+        filename = "Time track %s - %s" % (self.start_date.strftime("%x").replace("/", "."),
+                                           self.end_date.strftime("%x").replace("/", "."))
+        chooser.set_current_name(filename)
+
+        filters = {}
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("HTML Report"))
+        filter.add_mime_type("text/html")
+        filter.add_pattern("*.html")
+        filter.add_pattern("*.htm")
+        filters["html"] = filter
+        chooser.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("Tab Separated Values (TSV)"))
+        filter.add_mime_type("text/plain")
+        filter.add_pattern("*.tsv")
+        filter.add_pattern("*.txt")
+        filters["tsv"] = filter
+        chooser.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("XML"))
+        filter.add_mime_type("text/xml")
+        filter.add_pattern("*.xml")
+        filters["xml"] = filter
+        chooser.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name("All files")
+        filter.add_pattern("*")
+        chooser.add_filter(filter)
+        
+        
+        response = chooser.run()
+        if response == gtk.RESPONSE_OK:
+            format = "html"
+            if chooser.get_filter() == filters["tsv"]:
+                format = "tsv"
+            elif chooser.get_filter() == filters["xml"]:
+                format = "xml"
+
+            from hamster import reports
+            facts = storage.get_facts(self.start_date, self.end_date)
+            path = chooser.get_filename()
+            
+            reports.simple(facts,
+                           self.start_date,
+                           self.end_date,
+                           format,
+                           path)
+
+            if format in ("tsv", "xml"):
+                gtk.show_uri(gtk.gdk.Screen(),
+                             "file://" + os.path.split(path)[0], 0L)
+            else:
+                webbrowser.open_new("file://"+report_path)
+
+        chooser.destroy()
+        
+        # supported types: HTML, CSV, XML
+        #save_as.add
+        
+        
 
     def after_activity_update(self, widget, renames):
         self.do_graph()

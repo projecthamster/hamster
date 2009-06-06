@@ -22,8 +22,9 @@ from hamster import stuff, storage
 import os
 import datetime as dt
 import webbrowser
+from xml.dom.minidom import Document
 
-def simple(facts, start_date, end_date):
+def simple(facts, start_date, end_date, format, filename):
     dates_dict = stuff.dateDict(start_date, "start_")
     dates_dict.update(stuff.dateDict(end_date, "end_"))
     
@@ -39,9 +40,60 @@ def simple(facts, start_date, end_date):
         title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
     
 
-    report_path = os.path.join(os.path.expanduser("~"), "%s.html" % title)
-    report_path = stuff.locale_from_utf8(report_path)
-    report = open(report_path, "w")    
+    report_path = stuff.locale_from_utf8(filename)
+    report = open(report_path, "w")
+    
+    
+    if format == "tsv":
+        #comment of cvs file structure
+        report.write(_("#activity, start datetime ISO, end datetime ISO, duration in minutes, category, description\n"))
+        for fact in facts:
+            fact["description"] = fact["description"] or ""
+            fact["category"] = fact["category"] or _("Unsorted")
+            fact["start_time"] = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
+            if fact["end_time"]:
+                fact["end_time"] = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                fact["end_time"] = ""                
+            fact["delta"] = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
+
+            report.write("%(name)s\t%(start_time)s\t%(end_time)s\t%(delta)s\t%(category)s\t%(description)s\n" % fact)
+
+    elif format == "xml":
+        doc = Document()
+        activity_list = doc.createElement("activities")
+        
+        for fact in facts:
+            fact["description"] = fact["description"] or ""
+            fact["category"] = fact["category"] or _("Unsorted")
+            fact["start_time"] = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
+            if fact["end_time"]:
+                fact["end_time"] = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                fact["end_time"] = ""
+            fact["delta"] = str(fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60)
+
+            doc_fact = doc.createElement("activity")
+            doc_fact.setAttribute("name", fact["name"])
+            doc_fact.setAttribute("start_time", fact["start_time"])
+            doc_fact.setAttribute("end_time", fact["end_time"])
+            doc_fact.setAttribute("duration_minutes", fact["delta"])
+            doc_fact.setAttribute("category", fact["category"])
+            doc_fact.setAttribute("description", fact["description"])
+            
+            activity_list.appendChild(doc_fact)
+        
+        doc.appendChild(activity_list)        
+        report.write(doc.toxml())
+        
+    else: #default to HTML
+        write_html(report, title, facts)
+
+    report.close()
+    
+def write_html(report, title, facts):
+    """TODO bring template to external file or write to PDF"""
+    
     report.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -187,9 +239,4 @@ def simple(facts, start_date, end_date):
     report.write("</table>\n")
 
     report.write("</body>\n</html>")
-
-    
-    report.close()
-
-    webbrowser.open_new("file://"+report_path)
     
