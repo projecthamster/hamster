@@ -84,6 +84,9 @@ class ICalWriter(ReportWriter):
 
     
     def _write_fact(self, file, fact):
+        #for now we will skip ongoing facts
+        if not fact["end_time"]: return
+
         if fact["category"] == _("Unsorted"):
             fact["category"] = None
             
