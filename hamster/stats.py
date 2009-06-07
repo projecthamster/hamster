@@ -623,11 +623,11 @@ class StatsViewer(object):
                            format,
                            path)
 
-            if format in ("tsv", "xml"):
+            if format == ("html"):
+                webbrowser.open_new("file://%s" % path)
+            else:
                 gtk.show_uri(gtk.gdk.Screen(),
                              "file://%s" % os.path.split(path)[0], 0L)
-            else:
-                webbrowser.open_new("file://%s" % path)
 
         chooser.destroy()
         
