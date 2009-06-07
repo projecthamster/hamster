@@ -22,18 +22,138 @@ import pygtk
 pygtk.require('2.0')
 
 import os
-import gtk
+import gtk, gobject
 import pango
 
 from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster import charting
 
 from hamster.edit_activity import CustomFactController
+from hamster import reports, widgets
 import webbrowser
 
 import datetime as dt
 import calendar
 import time
+
+class ReportChooserDialog(gtk.Dialog):
+    __gsignals__ = {
+        # format, path, start_date, end_date
+        'report-chosen': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+                          (gobject.TYPE_STRING, gobject.TYPE_STRING,
+                           gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
+                           gobject.TYPE_PYOBJECT)),
+        'report-chooser-closed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+    def __init__(self):
+        gtk.Dialog.__init__(self)
+        ui = stuff.load_ui_file("stats.ui")
+        self.dialog = ui.get_object('save_report_dialog')
+
+        self.dialog.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
+        self.dialog.set_current_folder(os.path.expanduser("~"))
+
+        self.filters = {}
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("HTML Report"))
+        filter.add_mime_type("text/html")
+        filter.add_pattern("*.html")
+        filter.add_pattern("*.htm")
+        self.filters[filter] = "html"
+        self.dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("Tab Separated Values (TSV)"))
+        filter.add_mime_type("text/plain")
+        filter.add_pattern("*.tsv")
+        filter.add_pattern("*.txt")
+        self.filters[filter] = "tsv"
+        self.dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("XML"))
+        filter.add_mime_type("text/xml")
+        filter.add_pattern("*.xml")
+        self.filters[filter] = "xml"
+        self.dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("iCal"))
+        filter.add_mime_type("text/calendar")
+        filter.add_pattern("*.ics")
+        self.filters[filter] = "ical"
+        self.dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name("All files")
+        filter.add_pattern("*")
+        self.dialog.add_filter(filter)
+        
+        self.start_date = widgets.DateInput()
+        ui.get_object('from_date_box').add(self.start_date)
+        self.end_date = widgets.DateInput()
+        ui.get_object('to_date_box').add(self.end_date)
+
+        self.category_box = ui.get_object('category_box')
+
+        ui.get_object('save_button').connect("clicked", self.on_save_button_clicked)
+        ui.get_object('cancel_button').connect("clicked", self.on_cancel_button_clicked)
+        
+
+    def show(self, start_date, end_date):
+        #set suggested name to something readable, replace backslashes with dots
+        #so the name is valid in linux
+        filename = "Time track %s - %s" % (start_date.strftime("%x").replace("/", "."),
+                                           end_date.strftime("%x").replace("/", "."))
+        self.dialog.set_current_name(filename)
+        
+        self.start_date.set_date(start_date)
+        self.end_date.set_date(end_date)
+        
+        #add unsorted category
+        button_all = gtk.RadioButton(None, _("All").encode("utf-8"))
+        button_all.value = None
+        button_all.set_active(True)
+        self.category_box.pack_start(button_all)
+
+        categories = storage.get_category_list()
+        for category in categories:
+            button = gtk.RadioButton(button_all, category['name'].encode("utf-8"))
+            button.value = category['id']
+            self.category_box.pack_start(button)
+        
+
+        response = self.dialog.show_all()
+
+    def present(self):
+        self.dialog.present()
+
+    def on_save_button_clicked(self, widget):
+        path, format = None,  None
+
+        format = "html"
+        if self.dialog.get_filter() in self.filters:
+            format = self.filters[self.dialog.get_filter()]
+        path = self.dialog.get_filename()
+        
+        category = None
+        for button in self.category_box.get_children():
+            if button.get_active():
+                category = button.value
+        print category
+        
+        # format, path, start_date, end_date
+        self.emit("report-chosen", format, path,
+                           self.start_date.get_date().date(),
+                           self.end_date.get_date().date(),
+                           category)
+        self.dialog.destroy()
+        
+
+    def on_cancel_button_clicked(self, widget):
+        self.emit("report-chooser-closed")
+        self.dialog.destroy()
 
 class StatsViewer(object):
     def __init__(self, parent = None):
@@ -117,20 +237,8 @@ class StatsViewer(object):
 
         self._gui.connect_signals(self)
         self.fact_tree.grab_focus()
-        
-        """
-        # this will help when profiling!
-        import gobject
-        self.i = 0
-        def redraw():
-            self.do_graph()
-            self.start_date -= dt.timedelta(7)
-            self.end_date -= dt.timedelta(7)
-            self.i +=1
-            return self.i < 50
-            
-        gobject.timeout_add(400, redraw)
-        """
+
+        self.report_chooser = None
         self.do_graph()
 
     def more_on_left(self):
@@ -552,22 +660,20 @@ class StatsViewer(object):
         custom_fact = CustomFactController(self, selected_date)
         custom_fact.show()
         
-    def on_report_button_clicked(self, widget):
+    def init_report_dialog(self):
+        chooser = self.get_widget('save_report_dialog')
+        chooser.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
+        """
+        chooser.set
+        
         chooser = gtk.FileChooserDialog(title = _("Save report - Time Tracker"),
                                         parent = None,
-                                        action=gtk.FILE_CHOOSER_ACTION_SAVE,
                                         buttons=(gtk.STOCK_CANCEL,
                                                  gtk.RESPONSE_CANCEL,
                                                  gtk.STOCK_SAVE,
                                                  gtk.RESPONSE_OK))
-
+        """
         chooser.set_current_folder(os.path.expanduser("~"))
-
-        #set suggested name to something readable, replace backslashes with dots
-        #so the name is valid in linux
-        filename = "Time track %s - %s" % (self.start_date.strftime("%x").replace("/", "."),
-                                           self.end_date.strftime("%x").replace("/", "."))
-        chooser.set_current_name(filename)
 
         filters = {}
 
@@ -606,36 +712,36 @@ class StatsViewer(object):
         filter.add_pattern("*")
         chooser.add_filter(filter)
         
+    def on_report_chosen(self, widget, format, path, start_date, end_date,
+                                                                      category):
+        self.report_chooser = None
         
-        response = chooser.run()
-        if response == gtk.RESPONSE_OK:
-            format = "html"
-            if chooser.get_filter() in filters:
-                format = filters[chooser.get_filter()]
+        facts = storage.get_facts(start_date, end_date, category_id = category)
+        reports.simple(facts,
+                       self.start_date,
+                       self.end_date,
+                       format,
+                       path)
 
-            from hamster import reports
-            facts = storage.get_facts(self.start_date, self.end_date)
-            path = chooser.get_filename()
-            
-            reports.simple(facts,
-                           self.start_date,
-                           self.end_date,
-                           format,
-                           path)
+        if format == ("html"):
+            webbrowser.open_new("file://%s" % path)
+        else:
+            gtk.show_uri(gtk.gdk.Screen(),
+                         "file://%s" % os.path.split(path)[0], 0L)
 
-            if format == ("html"):
-                webbrowser.open_new("file://%s" % path)
-            else:
-                gtk.show_uri(gtk.gdk.Screen(),
-                             "file://%s" % os.path.split(path)[0], 0L)
-
-        chooser.destroy()
+    def on_report_chooser_closed(self, widget):
+        self.report_chooser = None
         
-        # supported types: HTML, CSV, XML
-        #save_as.add
+    def on_report_button_clicked(self, widget):
+        if not self.report_chooser:
+            self.report_chooser = ReportChooserDialog()
+            self.report_chooser.connect("report-chosen", self.on_report_chosen)
+            self.report_chooser.connect("report-chooser-closed", self.on_report_chooser_closed)
+            self.report_chooser.show(self.start_date, self.end_date)
+        else:
+            self.report_chooser.present()
         
         
-
     def after_activity_update(self, widget, renames):
         self.do_graph()
     
