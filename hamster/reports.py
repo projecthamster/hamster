@@ -21,92 +21,150 @@
 from hamster import stuff, storage
 import os
 import datetime as dt
-import webbrowser
 from xml.dom.minidom import Document
 import csv
 
-def simple(facts, start_date, end_date, format, filename):
-    dates_dict = stuff.dateDict(start_date, "start_")
-    dates_dict.update(stuff.dateDict(end_date, "end_"))
-    
-    
-    if start_date.year != end_date.year:
-        title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-    elif start_date.month != end_date.month:
-        title = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-    else:
-        title = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
-
-    if start_date == end_date:
-        title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
-    
-
-    report_path = stuff.locale_from_utf8(filename)
-    report = open(report_path, "w")
-    
+def simple(facts, start_date, end_date, format, path):
+    report_path = stuff.locale_from_utf8(path)
     
     if format == "tsv":
-        writer = csv.writer(report, dialect='excel-tab')
-        writer.writerow(["activity", "start time", "end time",
-                         "duration minutes", "category", "description"])
-        for fact in facts:
-            description = fact["description"] or ""
-            category = fact["category"] or _("Unsorted")
-            start_time = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
-            if fact["end_time"]:
-                end_time = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
-            else:
-                end_time = ""                
-            delta = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
-
-            writer.writerow([fact["name"], start_time, end_time,
-                            delta, category, description])
-
+        writer = TSVWriter(report_path)
     elif format == "xml":
-        doc = Document()
-        activity_list = doc.createElement("activities")
-        
-        for fact in facts:
-            fact["description"] = fact["description"] or ""
-            fact["category"] = fact["category"] or _("Unsorted")
-            fact["start_time"] = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
-            if fact["end_time"]:
-                fact["end_time"] = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
-            else:
-                fact["end_time"] = ""
-            fact["delta"] = str(fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60)
-
-            doc_fact = doc.createElement("activity")
-            doc_fact.setAttribute("name", fact["name"])
-            doc_fact.setAttribute("start_time", fact["start_time"])
-            doc_fact.setAttribute("end_time", fact["end_time"])
-            doc_fact.setAttribute("duration_minutes", fact["delta"])
-            doc_fact.setAttribute("category", fact["category"])
-            doc_fact.setAttribute("description", fact["description"])
-            
-            activity_list.appendChild(doc_fact)
-        
-        doc.appendChild(activity_list)        
-        report.write(doc.toxml())
-        
+        writer = XMLWriter(report_path)
+    elif format == "ical":
+        writer = ICalWriter(report_path)
     else: #default to HTML
-        write_html(report, title, facts)
+        writer = HTMLWriter(report_path, start_date, end_date)
 
-    report.close()
+    writer.write_report(facts)
+
+
+class ReportWriter(object):
+    #a tiny bit better than repeating the code all the time
+    def __init__(self, path, datetime_format = "%Y-%m-%d %H:%M:%S"):
+        self.file = open(path, "w")
+        self.datetime_format = datetime_format
+        
+    def write_report(self, facts):
+        try:
+            for fact in facts:
+                fact["name"]= fact["name"].encode('utf-8')
+                fact["description"] = (fact["description"] or u"").encode('utf-8')
+                fact["category"] = (fact["category"] or _("Unsorted")).encode('utf-8')
+                
+                if self.datetime_format:
+                    fact["start_time"] = fact["start_time"].strftime(self.datetime_format)
+                    
+                    if fact["end_time"]:
+                        fact["end_time"] = fact["end_time"].strftime(self.datetime_format)
+                    else:
+                        fact["end_time"] = ""                
+                fact["delta"] = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
     
-def write_html(report, title, facts):
-    """TODO bring template to external file or write to PDF"""
+                self._write_fact(self.file, fact)
     
-    report.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+            self._finish(self.file, facts)
+        finally:
+            self.file.close()
+    
+    def _start(self, file, facts):
+        raise NotImplementedError
+    
+    def _write_fact(self, file, fact):
+        raise NotImplementedError
+        
+    def _finish(self, file, facts):
+        raise NotImplementedError
+    
+class ICalWriter(ReportWriter):
+    """a lame ical writer, could not be bothered with finding a library"""
+    def __init__(self, path):
+        ReportWriter.__init__(self, path, datetime_format = "%Y%m%dT%H%M%SZ")
+        self.file.write("BEGIN:VCALENDAR\nVERSION:1.0\n")
+
+    
+    def _write_fact(self, file, fact):
+        if fact["category"] == _("Unsorted"):
+            fact["category"] = None
+            
+        self.file.write("""BEGIN:VEVENT
+CATEGORIES:%(category)s
+DTSTART:%(start_time)s
+DTEND:%(end_time)s
+SUMMARY:%(name)s
+DESCRIPTION:%(description)s
+END:VEVENT
+""" % fact)
+        
+    def _finish(self, file, facts):
+        self.file.write("END:VCALENDAR\n")
+
+class TSVWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+        self.csv_writer = csv.writer(self.file, dialect='excel-tab')
+        self.csv_writer.writerow(["activity", "start time", "end time",
+                                 "duration minutes", "category", "description"])
+    
+    def _write_fact(self, file, fact):
+        self.csv_writer.writerow([fact[key] for key in ["name", "start_time",
+                               "end_time", "delta", "category", "description"]])
+    def _finish(self, file, facts):
+        pass
+
+class XMLWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+        self.doc = Document()
+        self.activity_list = self.doc.createElement("activities")
+    
+    def _write_fact(self, file, fact):
+        activity = self.doc.createElement("activity")
+        activity.setAttribute("name", fact["name"])
+        activity.setAttribute("start_time", fact["start_time"])
+        activity.setAttribute("end_time", fact["end_time"])
+        activity.setAttribute("duration_minutes", str(fact["delta"]))
+        activity.setAttribute("category", fact["category"])
+        activity.setAttribute("description", fact["description"])
+        self.activity_list.appendChild(activity)
+        
+    def _finish(self, file, facts):
+        self.doc.appendChild(self.activity_list)        
+        file.write(self.doc.toxml())
+
+
+
+class HTMLWriter(ReportWriter):
+    def __init__(self, path, start_date, end_date):
+        ReportWriter.__init__(self, path, datetime_format = None)
+
+        dates_dict = stuff.dateDict(start_date, "start_")
+        dates_dict.update(stuff.dateDict(end_date, "end_"))
+        if start_date.year != end_date.year:
+            self.title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        elif start_date.month != end_date.month:
+            self.title = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        else:
+            self.title = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+    
+        if start_date == end_date:
+            self.title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
+
+        self.sum_time = {}
+        self.even_row = True
+
+        """TODO bring template to external file or write to PDF"""
+        
+        self.file.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="hamster-applet" />
-    <title>%s</title>
+    <title>%(title)s</title>
     <style type="text/css">
         body {
-            font-family: "Sans" ;
+            font-family: "Sans";
             font-size: 12px;
             padding: 12px;
             color: #303030;
@@ -139,46 +197,36 @@ def write_html(report, title, facts):
             text-align: left;
             padding: 3px 3px 3px 5px;
         }     
-        .row1 {
-        	background-color: #EAE8E3;
+        .row0 {
+                background-color: #EAE8E3;
         }
 
-        .row2 {
-        	background-color: #ffffff;
+        .row1 {
+                background-color: #ffffff;
         }   
 
     </style>
 </head>
-<body>""" % title)    
-  
+<body>
+<h1>%(title)s</h1>""" % {"title": self.title} + """
+<table>
+    <tr>
+        <th class="smallCell">""" + _("Date") + """</th>
+        <th class="largeCell">""" + _("Activity") + """</th>
+        <th class="smallCell">""" + _("Category") + """</th>
+        <th class="smallCell">""" + _("Start") + """</th>
+        <th class="smallCell">""" + _("End") + """</th>
+        <th class="smallCell">""" + _("Duration") + """</th>
+        <th class="largeCell">""" + _("Description") + """</th>
+    </tr>""")
     
-    report.write("<h1>%s</h1>" % title)
-    
-    report.write("""<table>
-        <tr>
-            <th class="smallCell">""" + _("Date") + """</th>
-            <th class="largeCell">""" + _("Activity") + """</th>
-            <th class="smallCell">""" + _("Category") + """</th>
-            <th class="smallCell">""" + _("Start") + """</th>
-            <th class="smallCell">""" + _("End") + """</th>
-            <th class="smallCell">""" + _("Duration") + """</th>
-            <th class="largeCell">""" + _("Description") + """</th>
-        </tr>""")
-    
-    sum_time = {}
-    rowcount = 1
-    
-    for fact in facts:
-        duration = None
+    def _write_fact(self, report, fact):
         end_time = fact["end_time"]
         
         # ongoing task in current day
         end_time_str = ""
         if end_time:
             end_time_str = end_time.strftime('%H:%M')
-
-        if fact["delta"]:
-            duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
 
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
@@ -187,7 +235,7 @@ def write_html(report, title, facts):
         description = fact["description"] or ""            
             
         # fact date column in HTML report
-        report.write("""<tr class="row%s">
+        report.write("""<tr class="row%d">
                             <td class="smallCell">%s</td>
                             <td class="largeCell">%s</td>
                             <td class="smallCell">%s</td>
@@ -196,50 +244,44 @@ def write_html(report, title, facts):
                             <td class="smallCell">%s</td>
                             <td class="largeCell">%s</td>
                         </tr>
-                       """ % (rowcount, _("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
-            fact["name"],
-            category, 
-            fact["start_time"].strftime('%H:%M'),
-            end_time_str,
-            stuff.format_duration(duration) or "",
-            description))
-            
-        if rowcount == 1:
-            rowcount = 2
-        else:
-            rowcount = 1
+                       """ % (int(self.even_row),
+                              _("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
+                              fact["name"],
+                              category, 
+                              fact["start_time"].strftime('%H:%M'),
+                              end_time_str,
+                              stuff.format_duration(fact["delta"]) or "",
+                              description))
+
+        self.even_row = not self.even_row            
 
 
         # save data for summary table
-        if duration:
+        if fact["delta"]:
             id_string = "<td class=\"smallCell\">%s</td><td class=\"largeCell\">%s</td>" % (fact["category"], fact["name"])
-            if id_string in sum_time:
-                sum_time[id_string] += duration
-            else:
-                sum_time[id_string] = duration
-     
-    report.write("</table>")
+            self.sum_time[id_string] = self.sum_time.get(id_string, 0) + fact["delta"]
+    
+    def _finish(self, report, facts):
+        report.write("</table>")
+    
+        # summary table
+        report.write("\n<h2>%s</h2>\n" % _("Totals"))
+        report.write("""<table>
+        <tr>
+            <th class="smallCell">""" + _("Category") + """</th>
+            <th class="largeCell">""" + _("Activity") + """</th>
+            <th class="smallCell">""" + _("Duration") + """</th>
+        </tr>\n""")
+        tot_time = 0
+        even_row = False
+        for key in sorted(self.sum_time.keys()):
+            report.write("    <tr class=\"row%d\">%s<td class=\"smallCell\">%s</td></tr>\n" % (int(even_row), key, stuff.format_duration(self.sum_time[key])))
+            tot_time += self.sum_time[key]
+          
+            even_row = not even_row
 
-    # summary table
-    report.write("\n<h2>%s</h2>\n" % _("Totals"))
-    report.write("""<table>
-    <tr>
-        <th class="smallCell">""" + _("Category") + """</th>
-        <th class="largeCell">""" + _("Activity") + """</th>
-        <th class="smallCell">""" + _("Duration") + """</th>
-    </tr>\n""")
-    tot_time = 0
-    rowcount = 1
-    for key in sorted(sum_time.keys()):
-        report.write("    <tr class=\"row%s\">%s<td class=\"smallCell\">%s</td></tr>\n" % (rowcount, key, stuff.format_duration(sum_time[key])))
-        tot_time += sum_time[key]
-      
-        if rowcount == 1:
-            rowcount = 2
-        else:
-            rowcount = 1       
-    report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">" + _("Total Time") + ":</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
-    report.write("</table>\n")
-
-    report.write("</body>\n</html>")
+        report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">" + _("Total Time") + ":</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
+        report.write("</table>\n")
+    
+        report.write("</body>\n</html>")
     

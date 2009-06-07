@@ -29,6 +29,7 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster import charting
 
 from hamster.edit_activity import CustomFactController
+import webbrowser
 
 import datetime as dt
 import calendar
@@ -575,7 +576,7 @@ class StatsViewer(object):
         filter.add_mime_type("text/html")
         filter.add_pattern("*.html")
         filter.add_pattern("*.htm")
-        filters["html"] = filter
+        filters[filter] = "html"
         chooser.add_filter(filter)
 
         filter = gtk.FileFilter()
@@ -583,14 +584,21 @@ class StatsViewer(object):
         filter.add_mime_type("text/plain")
         filter.add_pattern("*.tsv")
         filter.add_pattern("*.txt")
-        filters["tsv"] = filter
+        filters[filter] = "tsv"
         chooser.add_filter(filter)
 
         filter = gtk.FileFilter()
         filter.set_name(_("XML"))
         filter.add_mime_type("text/xml")
         filter.add_pattern("*.xml")
-        filters["xml"] = filter
+        filters[filter] = "xml"
+        chooser.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name(_("iCal"))
+        filter.add_mime_type("text/calendar")
+        filter.add_pattern("*.ics")
+        filters[filter] = "ical"
         chooser.add_filter(filter)
 
         filter = gtk.FileFilter()
@@ -602,10 +610,8 @@ class StatsViewer(object):
         response = chooser.run()
         if response == gtk.RESPONSE_OK:
             format = "html"
-            if chooser.get_filter() == filters["tsv"]:
-                format = "tsv"
-            elif chooser.get_filter() == filters["xml"]:
-                format = "xml"
+            if chooser.get_filter() in filters:
+                format = filters[chooser.get_filter()]
 
             from hamster import reports
             facts = storage.get_facts(self.start_date, self.end_date)
@@ -619,9 +625,9 @@ class StatsViewer(object):
 
             if format in ("tsv", "xml"):
                 gtk.show_uri(gtk.gdk.Screen(),
-                             "file://" + os.path.split(path)[0], 0L)
+                             "file://%s" % os.path.split(path)[0], 0L)
             else:
-                webbrowser.open_new("file://"+report_path)
+                webbrowser.open_new("file://%s" % path)
 
         chooser.destroy()
         
