@@ -23,6 +23,7 @@ import os
 import datetime as dt
 import webbrowser
 from xml.dom.minidom import Document
+import csv
 
 def simple(facts, start_date, end_date, format, filename):
     dates_dict = stuff.dateDict(start_date, "start_")
@@ -45,19 +46,21 @@ def simple(facts, start_date, end_date, format, filename):
     
     
     if format == "tsv":
-        #comment of cvs file structure
-        report.write(_("#activity\tstart datetime ISO\tend datetime ISO\tduration minutes\tcategory\tdescription\n"))
+        writer = csv.writer(report, dialect='excel-tab')
+        writer.writerow(["activity", "start time", "end time",
+                         "duration minutes", "category", "description"])
         for fact in facts:
-            fact["description"] = fact["description"] or ""
-            fact["category"] = fact["category"] or _("Unsorted")
-            fact["start_time"] = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
+            description = fact["description"] or ""
+            category = fact["category"] or _("Unsorted")
+            start_time = fact["start_time"].strftime("%Y-%m-%d %H:%M:%S")
             if fact["end_time"]:
-                fact["end_time"] = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
+                end_time = fact["end_time"].strftime("%Y-%m-%d %H:%M:%S")
             else:
-                fact["end_time"] = ""                
-            fact["delta"] = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
+                end_time = ""                
+            delta = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
 
-            report.write("%(name)s\t%(start_time)s\t%(end_time)s\t%(delta)s\t%(category)s\t%(description)s\n" % fact)
+            writer.writerow([fact["name"], start_time, end_time,
+                            delta, category, description])
 
     elif format == "xml":
         doc = Document()
