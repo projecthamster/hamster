@@ -47,8 +47,8 @@ class Storage(object):
         self.dispatch('day_updated', fact['start_time'])
         return result
 
-    def get_facts(self, date, end_date = None):
-        return self.__get_facts(date, end_date)
+    def get_facts(self, date, end_date = None, category_id = None):
+        return self.__get_facts(date, end_date, category_id)
 
     def get_popular_categories(self):
         return self.__get_popular_categories()

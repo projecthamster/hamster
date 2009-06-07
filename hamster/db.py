@@ -345,7 +345,7 @@ class Storage(hamster.storage.Storage):
         return self.__get_fact(fact_id)
 
 
-    def __get_facts(self, date, end_date = None):
+    def __get_facts(self, date, end_date = None, category_id = None):
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
@@ -357,8 +357,12 @@ class Storage(hamster.storage.Storage):
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
                     WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
-                 ORDER BY a.start_time
         """
+        
+        if category_id:
+            query += " and b.category_id = %d" % category_id
+
+        query += " ORDER BY a.start_time"
         end_date = end_date or date
 
         #FIXME: add preference to set that
