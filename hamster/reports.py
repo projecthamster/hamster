@@ -106,9 +106,11 @@ class TSVWriter(ReportWriter):
     def __init__(self, path):
         ReportWriter.__init__(self, path)
         self.csv_writer = csv.writer(self.file, dialect='excel-tab')
-        self.csv_writer.writerow(["activity", "start time", "end time",
-                                 "duration minutes", "category", "description"])
-    
+
+        headers = [_("activity"), _("start time"), _("end time"),
+                   _("duration minutes"), _("category"), _("description")]
+        self.csv_writer.writerow([h.encode('utf-8') for h in headers])
+
     def _write_fact(self, file, fact):
         self.csv_writer.writerow([fact[key] for key in ["name", "start_time",
                                "end_time", "delta", "category", "description"]])
