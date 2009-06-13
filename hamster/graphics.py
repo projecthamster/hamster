@@ -52,8 +52,7 @@ class Area(gtk.DrawingArea):
     def redraw_canvas(self):
         """Force graph redraw"""
         if self.window:    #this can get called before expose
-            alloc = self.get_allocation()
-            self.queue_draw_area(alloc.x, alloc.y, alloc.width, alloc.height)
+            self.queue_draw()
             self.window.process_updates(True)
 
 
