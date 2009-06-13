@@ -22,30 +22,14 @@
 horizontal bar charts. This library is not intended for scientific graphs.
 More like some visual clues to the user.
 
-DISCLAIMER: It is a bit of a minefield because it has been created and tweaked
-around hamster, so if you decide to use this lib in your own project, please do
-not be afraid to file bugs against it in hamster, and i'll see what i can do!
+The whole thing is a bit of minefield, but it can bring pretty decent results
+if you don't ask for much.
 
 For graph options see the Chart class and Chart.plot function
 
 Author: toms.baugis@gmail.com
 Feel free to contribute - more info at Project Hamster web page:
 http://projecthamster.wordpress.com/
-
-Example:
-    # create new chart object
-    chart = Chart(max_bar_width = 40) 
-    
-    eventBox = gtk.EventBox() # charts go into eventboxes, or windows
-    place = self.get_widget("totals_by_day") #just some placeholder
-
-    eventBox.add(chart);
-    place.add(eventBox)
-
-    #Let's imagine that we count how many apples we have gathered, by day
-    data = [["Mon", 20], ["Tue", 12], ["Wed", 80],
-            ["Thu", 60], ["Fri", 40], ["Sat", 0], ["Sun", 0]]
-    self.day_chart.plot(data)
 
 """
 
@@ -150,7 +134,7 @@ class Chart(graphics.Area):
     def __init__(self, **args):
         graphics.Area.__init__(self)
 
-        self.max_bar_width     = args.get("max_bar_width", 0)
+        self.max_bar_width     = args.get("max_bar_width", 500)
         self.legend_width      = args.get("legend_width", 0)
         self.animate           = args.get("animate", True)
 
@@ -329,9 +313,7 @@ class Chart(graphics.Area):
     def _render(self):
         # fill whole area 
         if self.background:
-            self.context.rectangle(0, 0, self.width, self.height)
-            self.context.set_source_rgb(*self.background)
-            self.context.fill()
+            self.fill_area(0, 0, self.width, self.height, self.background)
         
 
     def _update_targets(self):
@@ -414,7 +396,7 @@ class BarChart(Chart):
         bar_width = min(self.graph_width / float(len(self.keys)),
                                                              self.max_bar_width)
         gap = bar_width * 0.05
-
+        
         # flip hamster.graphics matrix so we don't think upside down
         self.set_value_range(y_max = 0, y_min = self.graph_height)
 
@@ -423,8 +405,6 @@ class BarChart(Chart):
         #make sure bars don't hit the ceiling
         if self.animate or self.before_drag_animate:
             max_bar_size = self.graph_height - 10
-
-
 
 
         prev_label_end = None
@@ -448,21 +428,29 @@ class BarChart(Chart):
             base_color = self.bar_base_color or (220, 220, 220)
             bar_x = self.graph_x + bar_width * i + gap
 
-            for j in range(len(self.integrators[i])):
-                factor = self.integrators[i][j].value
+            if self.stack_keys:
+                for j in range(len(self.integrators[i])):
+                    factor = self.integrators[i][j].value
+    
+                    if factor > 0:
+                        bar_size = max_bar_size * factor
+                        bar_start += bar_size
+                        
+                        self.draw_bar(bar_x,
+                                      self.graph_height - bar_start,
+                                      bar_width - (gap * 2),
+                                      bar_size,
+                                      [col - (j * 22) for col in base_color])
+            else:
+                factor = self.integrators[i].value
+                bar_size = max_bar_size * factor
+                bar_start = bar_size
 
-                if factor > 0:
-                    bar_size = max_bar_size * factor
-                    bar_start += bar_size
-                    
-                    self.draw_bar(bar_x,
-                                  self.graph_height - bar_start,
-                                  bar_width - (gap * 2),
-                                  bar_size,
-                                  [col - (j * 22) for col in base_color])
-
-
-
+                self.draw_bar(bar_x,
+                              self.graph_y + self.graph_height - bar_size,
+                              bar_width - (gap * 2),
+                              bar_size,
+                              [col for col in base_color])
 
         #fill with white background (necessary for those dragging cases)
         if self.background:
@@ -602,8 +590,7 @@ class HorizontalBarChart(Chart):
 
         
         bar_width = int(self.graph_height / float(rowcount))
-        if self.max_bar_width:
-            bar_width = min(bar_width, self.max_bar_width)
+        bar_width = min(bar_width, self.max_bar_width)
 
         
         max_bar_size = self.graph_width - 15
@@ -631,37 +618,55 @@ class HorizontalBarChart(Chart):
             context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
             context.show_layout(self.layout)
 
-            bar_start = 0
             base_color = self.bar_base_color or (220, 220, 220)
 
             gap = bar_width * 0.05
 
             bar_y = self.graph_y + (bar_width * i) + gap
 
+            if self.stack_keys:
+                bar_start = 0
+                for j in range(len(self.integrators[i])):
+                    factor = self.integrators[i][j].value
+                    if factor > 0:
+                        bar_size = max_bar_size * factor
+                        bar_height = bar_width - (gap * 2)
+                        
+                        self.draw_bar(self.graph_x + bar_start,
+                                      bar_y,
+                                      bar_size,
+                                      bar_height,
+                                      [col - (j * 22) for col in base_color])
+        
+                        bar_start += bar_size
+            else:
+                factor = self.integrators[i].value
+                bar_size = max_bar_size * factor
+                bar_start = bar_size
 
-            for j in range(len(self.integrators[i])):
-                factor = self.integrators[i][j].value
-                if factor > 0:
-                    bar_size = max_bar_size * factor
-                    bar_height = bar_width - (gap * 2)
-                    
-                    self.draw_bar(self.graph_x + bar_start,
-                                  bar_y,
-                                  bar_size,
-                                  bar_height,
-                                  [col - (j * 22) for col in base_color])
-    
-                    bar_start += bar_size
+                bar_height = bar_width - (gap * 2)
+                
+                self.draw_bar(self.graph_x,
+                              bar_y,
+                              bar_size,
+                              bar_height,
+                              [col for col in base_color])
+                
 
 
             # values on bars
+            if self.stack_keys:
+                total_value = sum(self.data[i])
+            else:
+                total_value = self.data[i]
+            
             set_color(context, dark[8])        
-            label = self.value_format % sum(self.data[i])
+            label = self.value_format % total_value
             self.layout.set_width(-1)
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
-            vertical_padding = (bar_width + label_h) / 2.0 - label_h
+            vertical_padding = (bar_width - (bar_width + label_h) / 2.0 ) / 2.0
             if  bar_start - vertical_padding < label_w:
                 label_x = self.graph_x + bar_start + vertical_padding
             else:
@@ -670,4 +675,122 @@ class HorizontalBarChart(Chart):
             context.move_to(label_x, self.graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
             context.show_layout(self.layout)
 
+        context.stroke()
+
+
+
+
+class HorizontalDayChart(Chart):
+    """Pretty much a horizontal bar chart, except for values it expects tuple
+    of start and end time, and the whole thing hangs in air"""
+    def plot_day(self, keys, data, start_time = None, end_time = None):
+        self.keys, self.data = keys, data
+        self.start_time, self.end_time = start_time, end_time
+        self.show()
+        self.redraw_canvas()
+    
+    def _render(self):
+        context = self.context
+        Chart._render(self)
+        rowcount, keys = len(self.keys), self.keys
+        
+        start_hour = 0
+        if self.start_time:
+            start_hour = self.start_time.hour * 60 + self.start_time.minute
+        end_hour = 24 * 60        
+        if self.end_time:
+            end_hour = self.end_time.hour * 60 + self.end_time.minute
+        
+        
+        # push graph to the right, so it doesn't overlap
+        legend_width = self.legend_width or self.longest_label(keys)
+
+        self.graph_x = legend_width
+        self.graph_x += 8 #add another 8 pixes of padding
+        
+        self.graph_width = self.width - self.graph_x
+        
+        #on the botttom leave some space for label
+        self.layout.set_text("1234567890:")
+        label_w, label_h = self.layout.get_pixel_size()
+        
+        self.graph_y, self.graph_height = 0, self.height - label_h - 4
+
+
+        if self.chart_background:
+            self.fill_area(self.graph_x, self.graph_y, self.graph_width, self.graph_height, self.chart_background)
+
+        if not self.data:  #if we have nothing, let's go home
+            return
+
+        
+        bar_width = int(self.graph_height / float(rowcount))
+        bar_width = min(bar_width, self.max_bar_width)
+
+        
+        max_bar_size = self.graph_width - 15
+        gap = bar_width * 0.05
+
+
+        self.layout.set_alignment(pango.ALIGN_RIGHT)
+        self.layout.set_ellipsize(pango.ELLIPSIZE_END)
+        
+        context.set_line_width(0)
+
+        # bars and labels
+        self.layout.set_width(legend_width * pango.SCALE)
+
+        factor = max_bar_size / float(end_hour - start_hour)
+
+
+        for i in range(rowcount):
+            set_color(context, dark[8])        
+            label = keys[i]
+            
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
+
+            context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
+            context.show_layout(self.layout)
+
+            base_color = self.bar_base_color or (220, 220, 220)
+
+            gap = bar_width * 0.05
+
+            bar_y = self.graph_y + (bar_width * i) + gap
+
+            
+            bar_height = bar_width - (gap * 2)
+            
+            bar_x = (self.data[i][0].minute  + self.data[i][0].hour * 60 - start_hour) * factor
+            bar_size = (self.data[i][1].minute  + self.data[i][1].hour * 60 - start_hour) * factor - bar_x
+            
+            self.draw_bar(self.graph_x + bar_x,
+                          bar_y,
+                          bar_size,
+                          bar_height,
+                          [col for col in base_color])
+
+        #white grid and scale values
+        self.layout.set_width(-1)
+
+        context.set_line_width(1)
+
+        for i in range(start_hour + (end_hour - start_hour) / 4, end_hour, (end_hour - start_hour) / 4):
+            x = (i - start_hour) * factor
+
+            self.layout.set_text(dt.time(i / 60, i % 60).strftime("%H:%M"))
+            label_w, label_h = self.layout.get_pixel_size()
+
+            context.move_to(self.graph_x + x - label_w / 2,
+                            bar_y + bar_height + 4)
+            set_color(context, medium[8])
+            context.show_layout(self.layout)
+
+            
+            set_color(context, (255, 255, 255))
+            self.context.move_to(self.graph_x + x, self.graph_y)
+            self.context.line_to(self.graph_x + x, bar_y + bar_height)
+
+                
         context.stroke()
