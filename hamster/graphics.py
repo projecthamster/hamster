@@ -138,6 +138,7 @@ class Area(gtk.DrawingArea):
         return x, y            
         
     def fill_area(self, x, y, w, h, color):
+        self.context.save()
         if color[0] > 1: color = [c / 256.0 for c in color]
 
         if len(color) == 3:
@@ -147,6 +148,7 @@ class Area(gtk.DrawingArea):
             
         self.context.rectangle(x, y, w, h)
         self.context.fill()
+        self.context.restore()
 
     def longest_label(self, labels):
         """returns width of the longest label"""
