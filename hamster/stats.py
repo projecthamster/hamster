@@ -29,7 +29,7 @@ from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
 from hamster import charting
 
 from hamster.edit_activity import CustomFactController
-from hamster import reports, widgets
+from hamster import reports, widgets, graphics
 import webbrowser
 
 from itertools import groupby
@@ -143,7 +143,6 @@ class ReportChooserDialog(gtk.Dialog):
         for button in self.category_box.get_children():
             if button.get_active():
                 category = button.value
-        print category
         
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path,
@@ -286,14 +285,12 @@ class StatsViewer(object):
                                        bars_beveled = False,
                                        animate = False,
                                        background = self.background,
-                                       max_bar_width = 35,
                                        show_labels = False)
         self.get_widget("explore_everything").add(self.chart_everything)
 
 
         self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
-                                                            animate = False,
                                                             background = self.background,
                                                             max_bar_width = 20,
                                                             legend_width = 70)
@@ -302,7 +299,6 @@ class StatsViewer(object):
 
         self.chart_weekday_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
-                                                            animate = False,
                                                             background = self.background,
                                                             max_bar_width = 20,
                                                             legend_width = 70)
@@ -322,11 +318,53 @@ class StatsViewer(object):
                                                                 legend_width = 70)
         self.get_widget("explore_category_starts_ends").add(self.chart_category_starts_ends)
 
-        self.stats(self.stat_facts)
-    
+
+        #ah, just want summary look just like all the other text on the page
+        class CairoText(graphics.Area):
+            def __init__(self, background = None, fontsize = 10):
+                graphics.Area.__init__(self)
+                self.background = background
+                self.text = ""
+                self.fontsize = fontsize
+                
+            def set_text(self, text):
+                self.text = text
+                self.redraw_canvas()
+                
+            def _render(self):
+                if self.background:
+                    self.fill_area(0, 0, self.width, self.height, self.background)
+
+                default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+                default_font.set_size(self.fontsize * pango.SCALE)
+                self.layout.set_font_description(default_font)
+                
+                #self.context.set_source_rgb(0,0,0)
+                self.layout.set_markup(self.text)
+
+                self.layout.set_width((self.width) * pango.SCALE)
+                self.context.move_to(0,0)
+                charting.set_color(self.context, charting.dark[8])
+                
+                self.context.show_layout(self.layout)
+
+
+        self.explore_summary = CairoText(self.background)
+        self.get_widget("explore_summary").add(self.explore_summary)
+        self.get_widget("explore_summary").show_all()
+
+    def on_pages_switch_page(self, notebook, page, pagenum):
+        if pagenum == 1:
+            year = None
+            for child in self.get_widget("year_box").get_children():
+                if child.get_active():
+                    year = child.year
+            
+            self.stats(year)
+        
+        
     def on_year_changed(self, button):
-        if self.bubbling:
-            return
+        if self.bubbling: return
         
         for child in button.parent.get_children():
             if child != button and child.get_active():
@@ -334,14 +372,32 @@ class StatsViewer(object):
                 child.set_active(False)
                 self.bubbling = False
         
+        self.stats(button.year)
+        
+    def stats(self, year = None):
         facts = self.stat_facts
-        if button.year:
-            facts = filter(lambda fact: fact["start_time"].year == button.year,
+        if year:
+            facts = filter(lambda fact: fact["start_time"].year == year,
                            facts)
-        
-        self.stats(facts)
-        
-    def stats(self, facts):
+
+        if not facts or (facts[-1]["start_time"] - facts[0]["start_time"]) < dt.timedelta(days=6):
+            self.get_widget("statistics_box").hide()
+            self.get_widget("explore_controls").hide()
+            label = self.get_widget("not_enough_records_label")
+
+            if not facts:
+                label.set_text(_("""There is no data to generate statistics yet.
+A week of usage would be nice!"""))
+            else:
+                label.set_text(_("Still collecting data - check back after a week has passed!"))
+
+            label.show()
+            return
+        else:
+            self.get_widget("statistics_box").show()
+            self.get_widget("explore_controls").show()
+            self.get_widget("not_enough_records_label").hide()
+
         # All dates in the scope
         just_totals = self._totals(facts,
                                    lambda fact: fact["start_time"].date(),
@@ -455,29 +511,85 @@ class StatsViewer(object):
         max_hour = max([max_weekday, max_category])
         max_hour = dt.time((max_hour.hour * 60 + max_hour.minute) / (3 * 60) * (3 * 60) / 60 + 3, 0) 
 
-
         self.chart_weekday_starts_ends.plot_day(weekday_keys, weekdays, min_hour, max_hour)
-
         self.chart_category_starts_ends.plot_day(category_keys, categories, min_hour, max_hour)
 
-        
-        """
-        cat_activities = self._totals(facts,
-                                  lambda fact: "%s-%s" % (fact["name"], fact["category"]),
-                                  lambda fact: fact['delta'].seconds / 60)
 
-        weekdays = self._totals(facts,
-                                  lambda fact: fact["start_time"].weekday,
-                                  lambda fact: fact['delta'].seconds / 60)
+        #now the factoids!
+        summary = ""
+
+        # first record        
+        if not year:
+            #date format for case when year has not been selected
+            first_date = _("%(first_b)s %(first_d)s, %(first_Y)s") % \
+                               stuff.dateDict(facts[0]["start_time"], "first_")
+        else:
+            #date format when year has been selected
+            first_date = _("%(first_b)s %(first_d)s") % \
+                               stuff.dateDict(facts[0]["start_time"], "first_")
+
+        summary += _("First activity was recorded on %s.") % \
+                                                     ("<b>%s</b>" % first_date)
         
-        dates = self._totals(facts,
-                                  lambda fact: fact["start_time"].day,
-                                  lambda fact: fact['delta'].seconds / 60)
+        # total time tracked
+        total_delta = dt.timedelta(days=0)
+        for fact in facts:
+            total_delta += fact["delta"]
         
-        months = self._totals(facts,
-                                  lambda fact: fact["start_time"].month,
-                                  lambda fact: fact['delta'].seconds / 60)
-        """
+        if total_delta.days > 1:
+            summary += " " + _("""Time tracked so far is %(human_days)s human days \
+(%(human_years)s years) or %(working_days)s working days \
+(%(working_years)s years).""") % \
+            ({"human_days": ("<b>%d</b>" % total_delta.days),
+              "human_years": ("<b>%.2f</b>" % (total_delta.days / 365.0)),
+              "working_days": ("<b>%d</b>" % (total_delta.days * 3)), # 8 should be pretty much an average working day
+              "working_years": ("<b>%.2f</b>" % (total_delta.days * 3 / 365.0))})
+        
+
+        # longest fact
+        max_fact = None
+        for fact in facts:
+            if not max_fact or fact["delta"] > max_fact["delta"]:
+                max_fact = fact
+
+        datedict = stuff.dateDict(max_fact["start_time"], "max_")
+        datedict["hours"] = "<b>%.1f</b>" % (max_fact["delta"].seconds / 60 / 60.0
+                                                  + max_fact["delta"].days * 24)
+
+        summary += "\n" + _("Longest continuous work happened on \
+%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hours.") % datedict
+
+        # total records (in selected scope)
+        summary += " " + _("There are %s records.") % ("<b>%d</b>" % len(facts))
+
+
+        early_start, early_end = dt.time(5,0), dt.time(9,0)
+        late_start, late_end = dt.time(20,0), dt.time(5,0)
+        
+        
+        fact_count = len(facts)
+        def percent(condition):
+            matches = [fact for fact in facts if condition(fact)]
+            return round(len(matches) / float(fact_count) * 100)
+        
+        
+        early_percent = percent(lambda fact: early_start < fact["start_time"].time() < early_end)
+        late_percent = percent(lambda fact: fact["start_time"].time() > late_start or fact["start_time"].time() < late_end)
+        short_percent = percent(lambda fact: fact["delta"] <= dt.timedelta(seconds = 60 * 15))
+
+        if fact_count < 100:
+            summary += "\n\n" + _("Hamster would like to observe you some more!")
+        elif early_percent >= 20:
+            summary += "\n\n" + _("With %s percent of all facts starting before \
+9am you seem to be an early bird." % ("<b>%d</b>" % early_percent))
+        elif late_percent >= 20:
+            summary += "\n\n" + _("With %s percent of all facts starting after \
+11pm you seem to be a night owl." % ("<b>%d</b>" % late_percent))
+        elif short_percent >= 20:
+            summary += "\n\n" + _("With %s percent of all tasks being shorter \
+than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
+
+        self.explore_summary.set_text(summary)
 
 
     
@@ -1003,8 +1115,13 @@ class StatsViewer(object):
         self.do_graph()
     
     def after_fact_update(self, event, date):
+        self.stat_facts = storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
-        self.do_graph()
+        
+        if self.get_widget("pages").get_current_page() == 0:
+            self.do_graph()
+        else:
+            self.stats()
         
     def on_close(self, widget, event):
         dispatcher.del_handler('activity_updated', self.after_activity_update)
