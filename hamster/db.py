@@ -390,8 +390,10 @@ class Storage(hamster.storage.Storage):
             # heuristics to assign tasks to proper days
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
-            else:
+            elif (today - fact["start_time"].date()) <= dt.timedelta(days=1):
                 fact_end_time = now
+            else:
+                fact_end_time = fact["start_time"].replace(hour=23, minute=59)
 
             fact_start_date = fact["start_time"].date() \
                 - dt.timedelta(1 if fact["start_time"].time() < split_time else 0)
@@ -417,7 +419,7 @@ class Storage(hamster.storage.Storage):
             if fact_date < date or fact_date > end_date:
                 # due to spanning we've jumped outside of given period
                 continue
-                                   
+
             f = dict(
                 id = fact["id"],
                 start_time = fact["start_time"],
