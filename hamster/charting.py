@@ -449,8 +449,7 @@ class BarChart(Chart):
                 self.draw_bar(bar_x,
                               self.graph_y + self.graph_height - bar_size,
                               bar_width - (gap * 2),
-                              bar_size,
-                              [col for col in base_color])
+                              bar_size, base_color)
 
         #fill with white background (necessary for those dragging cases)
         if self.background:
@@ -555,7 +554,7 @@ class HorizontalBarChart(Chart):
         
         # push graph to the right, so it doesn't overlap
         legend_width = self.legend_width or self.longest_label(keys)
-
+        
         self.graph_x = legend_width
         self.graph_x += 8 #add another 8 pixes of padding
         
@@ -606,6 +605,7 @@ class HorizontalBarChart(Chart):
 
         # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
+        
 
         for i in range(rowcount):
             self.layout.set_width(legend_width * pango.SCALE)
@@ -646,11 +646,8 @@ class HorizontalBarChart(Chart):
 
                 bar_height = bar_width - (gap * 2)
                 
-                self.draw_bar(self.graph_x,
-                              bar_y,
-                              bar_size,
-                              bar_height,
-                              [col for col in base_color])
+                self.draw_bar(self.graph_x, bar_y, bar_size, bar_height,
+                                                                     base_color)
                 
 
 
@@ -753,7 +750,7 @@ class HorizontalDayChart(Chart):
             context.move_to(0, (bar_width * i) + (bar_width - label_h) / 2)
             context.show_layout(self.layout)
 
-            base_color = self.bar_base_color or (220, 220, 220)
+            base_color = self.bar_base_color or [220, 220, 220]
 
             gap = bar_width * 0.05
 
@@ -769,7 +766,7 @@ class HorizontalDayChart(Chart):
                           bar_y,
                           bar_size,
                           bar_height,
-                          [col for col in base_color])
+                          base_color)
 
         #white grid and scale values
         self.layout.set_width(-1)
