@@ -137,7 +137,7 @@
                         <child>
                           <object class="GtkLabel" id="end_date_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">label</property>
+                            <property name="label">end_date_label</property>
                           </object>
                         </child>
                       </object>
