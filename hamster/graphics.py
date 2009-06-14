@@ -140,7 +140,11 @@ class Area(gtk.DrawingArea):
     def fill_area(self, x, y, w, h, color):
         if color[0] > 1: color = [c / 256.0 for c in color]
 
-        self.context.set_source_rgb(*color)
+        if len(color) == 3:
+            self.context.set_source_rgb(*color)
+        else:
+            self.context.set_source_rgba(*color)
+            
         self.context.rectangle(x, y, w, h)
         self.context.fill()
 
