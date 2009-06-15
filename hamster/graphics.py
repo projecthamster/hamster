@@ -48,6 +48,7 @@ class Area(gtk.DrawingArea):
         # use these to mark area where the "real" drawing is going on
         self.graph_x, self.graph_y = 0, 0
         self.graph_width, self.graph_height = None, None 
+        self.x_factor, self.y_factor = None, None
 
     def redraw_canvas(self):
         """Force graph redraw"""
@@ -76,7 +77,7 @@ class Area(gtk.DrawingArea):
                 self.value_boundaries[2] = y_min
             if y_max != None:
                 self.value_boundaries[3] = y_max 
-        self.x_factor, self.y_factor = None, None #set those to none to be recalculated on next call
+        self._get_factors()
 
     def _get_factors(self):
         if not self.x_factor:
