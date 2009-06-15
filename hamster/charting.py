@@ -152,82 +152,13 @@ class Chart(graphics.Area):
         self.labels_at_end     = args.get("labels_at_end", False)
         self.framerate         = args.get("framerate", 60)
 
-        # more data from left side function
-        self.more_on_left      = args.get("more_on_left", None)
-        self.less_on_left      = args.get("less_on_left", None)
-        self.min_key_count     = args.get("min_key_count", None)
-
-
-        if self.more_on_left:
-            self.drag_start, self.move_type = None, None
-            self.set_events(gtk.gdk.EXPOSURE_MASK
-                                     | gtk.gdk.LEAVE_NOTIFY_MASK
-                                     | gtk.gdk.BUTTON_PRESS_MASK
-                                     | gtk.gdk.BUTTON_RELEASE_MASK
-                                     | gtk.gdk.POINTER_MOTION_MASK
-                                     | gtk.gdk.POINTER_MOTION_HINT_MASK)
-            self.connect("button_release_event", self.on_mouse_release)
-            self.connect("motion_notify_event", self.on_mouse_move)
-            
-
         #and some defaults
         self.current_max = None
         self.integrators = []
         self.moving = False
-        self.drag_x = 0
-        self.before_drag_animate = None
             
 
 
-    def on_mouse_release(self, area, event):
-        #TODO - when mouse is released, reset graph_x to the current bar
-        if not self.drag_start:
-            return
-        self.drag_x = 0
-        self.drag_start, self.move_type = None, None
-        self.animate = self.before_drag_animate
-        self.redraw_canvas()
-
-
-    def on_mouse_move(self, area, event):
-        if event.is_hint:
-            x, y, state = event.window.get_pointer()
-        else:
-            x = event.x
-            y = event.y
-            state = event.state
-
-        mouse_down = state & gtk.gdk.BUTTON1_MASK
-        
-        if mouse_down and not self.drag_start:
-            self.before_drag_animate = self.animate
-            self.animate = False
-
-            self.drag_start = x
-            self.move_type = "left_side"
-            
-        if self.move_type == "left_side":
-            #the "give me more" gesture on left side
-            self.drag_x = x - self.drag_start
-            if self.drag_x < 0 and len(self.keys) <= self.min_key_count:
-                self.drag_x = 0
-
-            #we are going for more, if we have dragged out previous one!
-            if self.graph_x >= self.legend_width:
-                self.drag_x = 0
-                self.drag_start = x
-                self.more_on_left()
-                return
-    
-            if self.drag_x <= -self.legend_width and len(self.keys) > self.min_key_count:
-                self.drag_x = 0
-                self.drag_start = x
-                self.less_on_left()
-                return
-
-            self.redraw_canvas()
-        
-        
     def draw_bar(self, x, y, w, h, color = None):
         """ draws a simple bar"""
         base_color = color or self.bar_base_color or (220, 220, 220)
@@ -375,21 +306,6 @@ class BarChart(Chart):
             self.fill_area(self.graph_x, self.graph_y,
                            self.graph_width, self.graph_height,
                            self.chart_background)
-
-
-
-        if self.more_on_left:
-            #if there is more on left, clip the first one so we can preload it
-
-            bar_width = min(self.graph_width / float(len(self.keys) - 1),
-                                                                 self.max_bar_width)
-            gap = bar_width * 0.05
-    
-            z = (1 - 1.0 / len(self.keys))
-            z = z * z
-            
-            self.graph_x = legend_width  - bar_width + self.drag_x
-            self.graph_width = self.width - self.graph_x - 10
 
         self.context.stroke()
 
