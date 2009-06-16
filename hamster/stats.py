@@ -1172,15 +1172,13 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             activity_name += "@%s" % res.category_name
             
         if res.description:
-            activity_name += "@%s" % res.description
+            activity_name += ", %s" % res.description
 
-        # TODO - avoid future facts
+        activity_name = activity_name.decode("utf-8")
+
         # TODO - set cursor to the pasted entry when done
         # TODO - revisit parsing of selected date
-        # TODO - check if clipboard should be utf8 decoded
-        storage.add_fact(activity_name, start_time, end_time)
-
-        
+        added_fact = storage.add_fact(activity_name, start_time, end_time)
         
 
     """keyboard events"""
