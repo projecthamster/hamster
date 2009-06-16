@@ -310,7 +310,7 @@ class StatsViewer(object):
         self.stat_facts = None
 
         #id, caption, duration, date (invisible), description, category
-        self.fact_store = gtk.TreeStore(int, str, str, str, str, str) 
+        self.fact_store = gtk.TreeStore(int, str, str, str, str, str, gobject.TYPE_PYOBJECT) 
         self.setup_tree()
         
         self.background = (0.975,0.975,0.975)
@@ -847,7 +847,9 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                                     fact_date,
                                                     "",
                                                     current_date.strftime('%Y-%m-%d'),
-                                                    "", ""])
+                                                    "",
+                                                    "",
+                                                    None])
             by_day[self.start_date + dt.timedelta(i)] = {"duration": 0, "row_pointer": day_row}
 
                 
@@ -867,7 +869,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                     stuff.format_duration(duration),
                                     fact["start_time"].strftime('%Y-%m-%d'),
                                     fact["description"],
-                                    fact["category"]
+                                    fact["category"],
+                                    fact
                                     ])
 
             if duration:
@@ -1113,10 +1116,81 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
         storage.remove_fact(model[iter][0])
 
+    def copy_selected(self):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        fact = model[iter][6]
+        if not fact:
+            return #not a fact
+
+        fact_str = "%s-%s %s" % (fact["start_time"].strftime("%H:%M"),
+                               (fact["end_time"] or dt.datetime.now()).strftime("%H:%M"),
+                               fact["name"])
+
+        if fact["category"]:
+            fact_str += "@%s" % fact["category"]
+
+        if fact["description"]:
+            fact_str += ", %s" % fact["description"]
+
+        clipboard = gtk.Clipboard()
+        clipboard.set_text(fact_str)
+    
+    def check_clipboard(self):
+        clipboard = gtk.Clipboard()
+        clipboard.request_text(self.on_clipboard_text)
+    
+    def on_clipboard_text(self, clipboard, text, data):
+        # first check that we have a date selected
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        selected_date = self.view_date
+        if iter:
+            selected_date = model[iter][3].split("-")
+            selected_date = dt.date(int(selected_date[0]),
+                                    int(selected_date[1]),
+                                    int(selected_date[2]))
+        if not selected_date:
+            return
+        
+        res = stuff.parse_activity_input(text)
+
+        if res.start_time is None or res.end_time is None:
+            return
+        
+        start_time = res.start_time.replace(year = selected_date.year,
+                                            month = selected_date.month,
+                                            day = selected_date.day)
+        end_time = res.end_time.replace(year = selected_date.year,
+                                               month = selected_date.month,
+                                               day = selected_date.day)
+    
+        activity_name = res.activity_name
+        if res.category_name:
+            activity_name += "@%s" % res.category_name
+            
+        if res.description:
+            activity_name += "@%s" % res.description
+
+        # TODO - avoid future facts
+        # TODO - set cursor to the pasted entry when done
+        # TODO - revisit parsing of selected date
+        # TODO - check if clipboard should be utf8 decoded
+        storage.add_fact(activity_name, start_time, end_time)
+
+        
+        
+
     """keyboard events"""
-    def on_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Delete):
-        self.delete_selected()
+    def on_key_pressed(self, tree, event):
+        if (event.keyval == gtk.keysyms.Delete):
+            self.delete_selected()
+        elif event.keyval == gtk.keysyms.c and event.state & gtk.gdk.CONTROL_MASK:
+            self.copy_selected()
+        elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
+            self.check_clipboard()
     
     def on_fact_selection_changed(self, selection, model):
         """ enables and disables action buttons depending on selected item """
