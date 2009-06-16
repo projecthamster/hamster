@@ -20,7 +20,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import datetime
+import datetime as dt
 import os.path
 
 import pygtk
@@ -517,8 +517,8 @@ Now, start tracking!
                     idle_minutes = 0
                 else:
                     idle_minutes = idle.getIdleSec() / 60.0
-                current_time = datetime.datetime.now()
-                idle_from = current_time - datetime.timedelta(minutes = idle_minutes)
+                current_time = dt.datetime.now()
+                idle_from = current_time - dt.timedelta(minutes = idle_minutes)
                 storage.touch_fact(self.last_activity, end_time = idle_from)
             
 
@@ -532,7 +532,7 @@ Now, start tracking!
 
     def update_label(self):
         if self.last_activity and self.last_activity['end_time'] is None:
-            delta = datetime.datetime.now() - self.last_activity['start_time']
+            delta = dt.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'],
                                                 stuff.format_duration(duration, False))
@@ -550,7 +550,7 @@ Now, start tracking!
         if not self.notify_interval: #no interval means "never"
             return
         
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if self.last_activity:
             delta = now - self.last_activity['start_time']
             duration = delta.seconds /  60
@@ -575,12 +575,13 @@ Now, start tracking!
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-        today = datetime.date.today()
+        #today is 5.5 hours ago because our midnight shift happens 5:30am
+        today = (dt.datetime.now() - dt.timedelta(hours=5, minutes=30)).date()
 
         self.last_activity = None
         last_activity = storage.get_last_activity()
         if last_activity and last_activity["start_time"].date() >= \
-                                            today - datetime.timedelta(days=1):
+                                            today - dt.timedelta(days=1):
             self.last_activity = last_activity
 
 
