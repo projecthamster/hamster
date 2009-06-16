@@ -411,6 +411,8 @@ class CustomFactController:
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
 
+
+        self.activity_list.set_property("text-column", 2)
         self.activity_list.clear()
         activity_cell = gtk.CellRendererText()
         self.activity_list.pack_start(activity_cell, True)
@@ -419,7 +421,6 @@ class CustomFactController:
         self.activity_list.pack_start(category_cell, False)
         self.activity_list.add_attribute(category_cell, 'text', 1)
         
-        self.activity_list.set_property("text-column", 2)
         self.activity_list.child.connect('key-press-event', self.on_activity_list_key_pressed)
 
 
@@ -439,14 +440,6 @@ class CustomFactController:
         completion.pack_start(category_cell, False)
         completion.add_attribute(category_cell, 'text', 1)
 
-        def match_func(completion, key, iter):
-            model = completion.get_model()
-            text = model.get_value(iter, 2)
-            if text and text.startswith(key):
-                return True
-            return False
-
-        completion.set_match_func(match_func)
         completion.set_minimum_key_length(1)
         completion.set_inline_completion(True)
 
