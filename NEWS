@@ -1,4 +1,19 @@
 ===============
+Version 2.27.3
+===============
+  * A much better DBUS support (Felix Ontanon)
+  * Switch days at 5am because humans tend to work late. Overlapping activities
+    fall in day where the largest part of it is (Patryk Zawadski)
+  * Now you can enter negatives minutes to start an activity in past.
+    Example "-30 cookies" will start activity "cookies" 30 minutes before now
+  * TSV, XML and iCal export
+  * Ability to filter task by date and category
+  * Overview has been improved by adding some nifty statistics for your pleasure
+  
+  Updated translations:
+    * ta.po (Dr.T.Vasudevan)
+    
+===============
 Version 2.27.2
 ===============
   * Now a reminder is displayed every configured amount of time also when no
