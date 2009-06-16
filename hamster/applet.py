@@ -30,11 +30,9 @@ gtk.gdk.threads_init()
 
 import gnomeapplet
 import gobject
-import dbus
-import dbus.service
-import dbus.mainloop.glib
+import dbus, dbus.service, dbus.mainloop.glib
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR
+from hamster import dispatcher, storage
 import hamster.eds
 from hamster.configuration import GconfStore
 
@@ -59,14 +57,14 @@ except:
     PYNOTIFY = False
     
 class Notifier(object):
-    def __init__(self, app_name, icon, attach):
-        self._icon = icon
+    def __init__(self, attach):
+        self._icon = gtk.STOCK_DIALOG_QUESTION
         self._attach = attach
         # Title of reminder notification
         self.summary = _("Time Tracker")
       
         if not pynotify.is_initted():
-            pynotify.init(app_name)
+            pynotify.init('Hamster Applet')
 
     def msg(self, body, edit_cb, switch_cb):
         notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
@@ -75,8 +73,7 @@ class Notifier(object):
             #translators: this is edit activity action in the notifier bubble
             notify.add_action("edit", _("Edit"), edit_cb)
             #translators: this is switch activity action in the notifier bubble
-            notify.add_action("switch", _("Switch"), switch_cb)
-            
+            notify.add_action("switch", _("Switch"), switch_cb)            
         notify.show()
     
     def msg_low(self, message):
@@ -96,11 +93,24 @@ class PanelButton(gtk.ToggleButton):
 
         self.label.connect('style-set', self.on_label_style_set)
         self.connect('size_allocate', self.on_size_allocate)
+        self.connect('button_press_event', self.on_button_press)
 
         self.add(self.label)
         
         self.activity, self.duration = None, None
         self.prev_size = 0
+
+
+        # remove padding, so we fit on small panels (adapted from clock applet)
+        gtk.rc_parse_string ("""style "hamster-applet-button-style" {
+                GtkWidget::focus-line-width=0
+                GtkWidget::focus-padding=0
+            }
+                                     
+            widget "*.hamster-applet-button" style "hamster-applet-button-style"
+        """);
+        gtk.Widget.set_name (self, "hamster-applet-button");
+
 
     def set_active(self, is_active):
         self.set_property('active', is_active)
@@ -162,7 +172,6 @@ class PanelButton(gtk.ToggleButton):
     def on_label_style_set(self, widget, something):
         self.reformat_label()
 
-
     def on_size_allocate(self, widget, allocation):
         if not self.get_parent():
             return
@@ -188,39 +197,36 @@ class PanelButton(gtk.ToggleButton):
 
         self.prev_size = new_size
 
+    def on_button_press(self, widget, event):
+        # this allows dragging applet around panel and friends
+        if event.button != 1:
+            widget.stop_emission('button_press_event')
+        return False
+
 
 class HamsterApplet(object):
     def __init__(self, applet):
-        self.config = GconfStore.get_instance()
-        
         self.applet = applet
-        self.applet.set_applet_flags (gnomeapplet.EXPAND_MINOR);
-        
-        self.notify_interval = None
 
+        self.notify_interval = None
         self.preferences_editor = None
         self.applet.about = None
         self.open_fact_editors = []
 
+        self.config = GconfStore.get_instance()
+        
         self.button = PanelButton()
+        self.button.connect('toggled', self.on_toggle)
+        self.applet.add(self.button)
+
         
         # load window of activity switcher and todays view
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
 
-
-
-        # set up autocompletition
-        self.activities = gtk.ListStore(gobject.TYPE_STRING,
-                                        gobject.TYPE_STRING,
-                                        gobject.TYPE_STRING)
         
         # build the menu
-        self.set_dropdown()
-
-        self.refresh_menu()
-        
-        self.init_autocomplete()
+        self.init_dropdown()
 
         # init today's tree
         self.setup_activity_tree()
@@ -244,9 +250,6 @@ class HamsterApplet(object):
     
         # Load today's data, activities and set label
         self.last_activity = None
-
-
-
         self.load_day()
         self.update_label()
 
@@ -257,36 +260,11 @@ class HamsterApplet(object):
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
 
-        # remove padding, so we fit on small panels (adapted from clock applet)
-        gtk.rc_parse_string ("""style "hamster-applet-button-style" {
-                GtkWidget::focus-line-width=0
-                GtkWidget::focus-padding=0
-            }
-                                     
-            widget "*.hamster-applet-button" style "hamster-applet-button-style"
-        """);
-        gtk.Widget.set_name (self.button, "hamster-applet-button");
-
-        self.applet.add(self.button)
 
         dispatcher.add_handler('panel_visible', self.__show_toggle)
         dispatcher.add_handler('activity_updated', self.after_activity_update)
         dispatcher.add_handler('day_updated', self.after_fact_update)
 
-        self.applet.setup_menu_from_file (
-            SHARED_DATA_DIR, "Hamster_Applet.xml",
-            None, [
-            ("about", self.on_about),
-            ("overview", self.show_overview),
-            ("preferences", self.show_preferences),
-            ])
-
-        self.applet.show_all()
-        self.applet.set_background_widget(self.applet)
-
-        self.button.connect('toggled', self.on_toggle)
-
-        self.button.connect('button_press_event', self.on_button_press)
         self._gui.connect_signals(self)
 
         # init hotkey
@@ -302,43 +280,23 @@ class HamsterApplet(object):
         
         # init nagging timeout
         if PYNOTIFY:
-            self.notify = Notifier('HamsterApplet', gtk.STOCK_DIALOG_QUESTION, self.button)
+            self.notify = Notifier(self.button)
             dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
 
-    def give_more_info(self):
-        def on_response(self, widget):
-            self.destroy()
-        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
-        message_dialog.set_property("title", _("What to type in the activity box?"))
-        message_dialog.connect("response", on_response)
-        
-        more_info = _("""There is simple syntax that enables you to add details to your activities:
-        
-"@" symbol marks category. Example: "watering flowers@home" will start tracking activity "watering flowers" in category "home".
 
-Comma (",") marks beginning of description. Example: "watering flowers, begonias and forgetmenots" will start tracking activity "watering flowers" and add description "begonias and forgetmenots" to it.
-
-Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
-
-Now, start tracking!
-        """)
-        
-        message_dialog.set_markup(more_info)
-        message_dialog.show()
-        
-    def on_more_info_button_clicked(self, button):
-        self.give_more_info()
 
     def setup_activity_tree(self):
         self.treeview = self._gui.get_object('today')
-        self.treeview.set_tooltip_column(1)
-        
-        self.treeview.append_column(gtk.TreeViewColumn("Time", gtk.CellRendererText(), text=2))
+        # ID, Time, Name, Duration, Date, Description, Category
+        self.treeview.set_model(gtk.ListStore(int, str, str, str, str, str, str))
 
-        nameColumn = stuff.ActivityColumn(name=1, description=5, category=6)
-        self.treeview.append_column(nameColumn)
-
+        self.treeview.append_column(gtk.TreeViewColumn("Time",
+                                                       gtk.CellRendererText(),
+                                                       text=2))
+        self.treeview.append_column(stuff.ActivityColumn(name=1,
+                                                         description=5,
+                                                         category=6))
         
         duration_cell = gtk.CellRendererText()
         duration_cell.set_property("xalign", 1)
@@ -353,49 +311,67 @@ Now, start tracking!
         self.treeview.append_column(self.edit_column)
 
 
-    def on_idle_changed(self, state):
-        print "Idle state changed. Idle: ", state
-        # refresh when we are out of idle
-        # (like, instantly after computer has been turned on!
-        if state == 0:
-            self.refresh_hamster() 
-        
-    def set_dropdown(self):
+    def init_dropdown(self):
         # set up drop down menu
-        self.activity_list = self._gui.get_object('activity-list')
-        self.activity_list.child.connect('activate', self.on_activity_entered)
-        self.activity_list.child.connect('key-press-event', self.on_activity_list_key_pressed)
-        self.activity_list.child.connect('changed', self.on_activity_entry_changed)
+        self.activity_combo = self._gui.get_object('activity_combo')
+        self.activity_combo.child.connect('activate', self.on_activity_entered)
+        self.activity_combo.child.connect('key-press-event', self.on_activity_list_key_pressed)
+        self.activity_combo.child.connect('changed', self.on_activity_entry_changed)
 
-        self.activity_list.set_model(gtk.ListStore(gobject.TYPE_STRING,
+        self.activity_combo.set_model(gtk.ListStore(gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING,
                                                    gobject.TYPE_STRING))
+        self.activity_combo.set_text_column(2)
+        self.activity_combo.clear()
 
-        self.activity_list.clear()
+
         activity_cell = gtk.CellRendererText()
-        self.activity_list.pack_start(activity_cell, True)
-        self.activity_list.add_attribute(activity_cell, 'text', 0)
+        self.activity_combo.pack_start(activity_cell, True)
+        self.activity_combo.add_attribute(activity_cell, 'text', 0)
 
         category_cell = stuff.CategoryCell()  
-        self.activity_list.pack_start(category_cell, False)
-        self.activity_list.add_attribute(category_cell, 'text', 1)
+        self.activity_combo.pack_start(category_cell, False)
+        self.activity_combo.add_attribute(category_cell, 'text', 1)
         
-        self.activity_list.set_property("text-column", 2)
 
-
-    def init_autocomplete(self):
-        #fillable, activity_name, category
-        self.autocomplete_store = gtk.ListStore(gobject.TYPE_STRING,
-                                                gobject.TYPE_STRING,
-                                                gobject.TYPE_STRING)
+        #now set up completion
         self.completion = gtk.EntryCompletion()
-        self.completion.set_model(self.autocomplete_store)
+        #fillable, activity_name, category
+        self.completion.set_model(gtk.ListStore(gobject.TYPE_STRING,
+                                                gobject.TYPE_STRING,
+                                                gobject.TYPE_STRING))
         self.completion.set_minimum_key_length(1)
         self.completion.set_inline_completion(True)
         self.completion.set_popup_set_width(False)
         self.completion.set_text_column(0)
-        self.activity_list.child.set_completion(self.completion)
+        self.activity_combo.child.set_completion(self.completion)
         
+        self.refresh_dropdown()
+
+
+    def refresh_dropdown(self):        
+        self.all_activities = storage.get_autocomplete_activities()
+        self.all_categories = storage.get_category_list()
+        self.eds_tasks = hamster.eds.get_eds_tasks()
+
+        #add evolution tasks to dropdown, yay!
+        for activity in self.eds_tasks:
+            self.all_activities.append(activity)
+
+        #now populate the menu - contains only categorized entries
+        store = self.activity_combo.get_model()
+        store.clear()
+
+        categorized_activities = storage.get_sorted_activities()
+        for activity in categorized_activities:
+            activity_category = activity['name']
+            if activity['category']:
+                activity_category += "@%s" % activity['category']
+
+            store.append([activity['name'],
+                          activity['category'],
+                          activity_category])
+
 
     def on_match_selected(self, completion, model, iter):
         entry = completion.get_entry()
@@ -424,15 +400,16 @@ Now, start tracking!
         """parses input and generates autocomplete according to what has
         to be completed now"""
         #TODO turn this whole thing into a widget
-        self.autocomplete_store.clear()
+        store = self.completion.get_model()
+        store.clear()
         
-        input_text = self.activity_list.child.get_text()
+        input_text = self.activity_combo.child.get_text()
         
         if not input_text:
             return
         
         
-        entry = self.activity_list.child
+        entry = self.activity_combo.child
         parsed_activity = stuff.parse_activity_input(entry.get_text())
 
         if input_text.find("@") > 0:
@@ -440,13 +417,10 @@ Now, start tracking!
             for category in self.all_categories:
                 if category['name'].startswith(key):
                     fillable = input_text[:input_text.find("@") + 1] + category['name']
-                    self.autocomplete_store.append([fillable,
-                                                    category['name'],
-                                                    category['name']
-                                                   ])
-            if len(self.autocomplete_store) <= 1:
+                    store.append([fillable, category['name'], category['name']])
+            if len(store) <= 1:
                 #avoid popup on single result
-                self.autocomplete_store.clear()
+                store.clear()
         else:
             for activity in self.all_activities:
                 fillable = activity['name']
@@ -456,10 +430,7 @@ Now, start tracking!
                 if parsed_activity.start_time:
                     fillable = entry.get_text()[:entry.get_text().find(" ")+1] + fillable
     
-                self.autocomplete_store.append([fillable,
-                                                activity['name'],
-                                                activity['category']
-                                               ])
+                store.append([fillable, activity['name'], activity['category']])
 
                 
         activity = stuff.parse_activity_input(input_text)
@@ -494,16 +465,6 @@ Now, start tracking!
             self.completion.add_attribute(category_cell, 'text', 2)
         
 
-    def on_today_release_event(self, tree, event):
-        pointer = event.window.get_pointer() # x, y, flags
-        path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
-        
-        if path and path[1] == self.edit_column:
-            self._open_edit_activity()
-            return True
-        
-        return False
-        
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
@@ -535,9 +496,9 @@ Now, start tracking!
             delta = dt.datetime.now() - self.last_activity['start_time']
             duration = delta.seconds /  60
             label = "%s %s" % (self.last_activity['name'],
-                                                stuff.format_duration(duration, False))
+                               stuff.format_duration(duration, False))
             self.button.set_text(self.last_activity['name'],
-                                                stuff.format_duration(duration, False))
+                                 stuff.format_duration(duration, False))
             
             self._gui.get_object('stop_tracking').set_sensitive(1);
         else:
@@ -578,108 +539,45 @@ Now, start tracking!
         #today is 5.5 hours ago because our midnight shift happens 5:30am
         today = (dt.datetime.now() - dt.timedelta(hours=5, minutes=30)).date()
 
-        self.last_activity = None
-        last_activity = storage.get_last_activity()
-        if last_activity and last_activity["start_time"].date() >= \
-                                            today - dt.timedelta(days=1):
-            self.last_activity = last_activity
+        self.last_activity = storage.get_last_activity()
 
-
-        # ID, Time, Name, Duration, Date, Description, Category
-        fact_store = gtk.ListStore(int, str, str, str, str, str, str)
+        fact_store = self.treeview.get_model()
+        fact_store.clear()
         facts = storage.get_facts(today)
         
-        totals = {}
+        by_category = {}
         
         for fact in facts:
-            duration = None
-            
-            if fact["delta"]:
-                duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
-            
-            fact_category = fact['category']
-            
-            if fact_category not in totals:
-                totals[fact_category] = 0
+            duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
+            by_category[fact['category']] = \
+                          by_category.setdefault(fact['category'], 0) + duration
 
-            if duration:
-                totals[fact_category] += duration
-
-            current_duration = stuff.format_duration(duration)
-            
             fact_store.append([fact['id'],
-                                    stuff.escape_pango(fact['name']), 
-                                    fact["start_time"].strftime("%H:%M"), 
-                                    "%s" % current_duration,
-                                    fact["start_time"].strftime("%H:%M"),
-                                    stuff.escape_pango(fact["description"]),
-                                    stuff.escape_pango(fact["category"])])
-
-
-
-        self.treeview.set_model(fact_store)
+                               stuff.escape_pango(fact['name']), 
+                               fact["start_time"].strftime("%H:%M"), 
+                               "%s" % stuff.format_duration(duration),
+                               fact["start_time"].strftime("%H:%M"),
+                               stuff.escape_pango(fact["description"]),
+                               stuff.escape_pango(fact["category"])])
 
         
-        if len(facts) == 0:
+        if not facts:
             self._gui.get_object("todays_scroll").hide()
             self._gui.get_object("fact_totals").set_text(_("No records today"))
         else:
             self._gui.get_object("todays_scroll").show()
             
             total_strings = []
-            for total in totals:
+            for category in by_category:
                 # listing of today's categories and time spent in them
                 total_strings.append(_("%(category)s: %(duration)s") % \
-                        ({'category': total,
-                          'duration': _("%.1fh") % (totals[total] / 60.0)}))
+                        ({'category': category,
+                          'duration': _("%.1fh") %
+                                               (by_category[category] / 60.0)}))
 
             total_string = ", ".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
    
-
-    def refresh_menu(self):
-        #first populate the autocomplete - contains all entries in lowercase
-        self.activities.clear()
-        self.all_activities = all_activities = storage.get_autocomplete_activities()
-        self.all_categories = storage.get_category_list()
-        
-        
-        
-        for activity in all_activities:
-            activity_category = activity['name']
-            if activity['category']:
-                activity_category += "@%s" % activity['category']
-                
-            self.activities.append([activity['name'],
-                                    activity['category'],
-                                    activity_category])
-
-
-        #now populate the menu - contains only categorized entries
-        store = self.activity_list.get_model()
-        store.clear()
-
-        #populate fresh list from DB
-        categorized_activities = storage.get_sorted_activities()
-
-        for activity in categorized_activities:
-            activity_category = activity['name']
-            if activity['category']:
-                activity_category += "@%s" % activity['category']
-
-            item = store.append([activity['name'],
-                                 activity['category'],
-                                 activity_category])
-
-        # finally add TODO tasks from evolution to both lists
-        tasks = hamster.eds.get_eds_tasks()
-        for activity in tasks:
-            activity_category = "%s@%s" % (activity['name'], activity['category'])
-            self.activities.append([activity['name'],activity['category'],activity_category])
-            store.append([activity['name'], activity['category'], activity_category])
-
-        return True
-
 
     def delete_selected(self):
         selection = self.treeview.get_selection()
@@ -713,12 +611,12 @@ Now, start tracking!
             label = self.last_activity['name']
             if self.last_activity['category'] != _("Unsorted"):
                 label += "@%s" %  self.last_activity['category']
-            self.activity_list.child.set_text(label)
+            self.activity_combo.child.set_text(label)
 
-            self.activity_list.child.select_region(0, -1)
+            self.activity_combo.child.select_region(0, -1)
             self._gui.get_object("more_info_label").hide()
         else:
-            self.activity_list.child.set_text('')
+            self.activity_combo.child.set_text('')
             self._gui.get_object("more_info_label").show()
 
 
@@ -759,22 +657,40 @@ Now, start tracking!
         """show window only when gtk has become idle. otherwise we get
         mixed results. TODO - this looks like a hack though"""
         self.window.present()
-        self.activity_list.grab_focus()
+        self.activity_combo.grab_focus()
         
 
     """events"""
-    def on_button_press(self, widget, event):
-        if event.button != 1:
-            widget.stop_emission('button_press_event')
-        return False
+    def on_idle_changed(self, state):
+        print "Idle state changed. Idle: ", state
+        # refresh when we are out of idle
+        # (like, instantly after computer has been turned on!
+        if state == 0:
+            self.refresh_hamster() 
 
+    def on_today_release_event(self, tree, event):
+        # a hackish solution to make edit icon keyboard accessible
+        pointer = event.window.get_pointer() # x, y, flags
+        path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
+        
+        if path and path[1] == self.edit_column:
+            self._open_edit_activity()
+            return True
+        
+        return False
+        
     def on_toggle(self, widget):
         dispatcher.dispatch('panel_visible', self.button.get_active())
 
     def on_activity_list_key_pressed(self, entry, event):
-        #treating tab as keydown to be able to cycle through available values
+        #tab will trigger going through autocomplete values when there are any
         if event.keyval == gtk.keysyms.Tab:
             event.keyval = gtk.keysyms.Down
+        
+        #down will trigger showing dropdown instead of selecting first whatever
+        elif event.keyval == gtk.keysyms.Down and len(self.completion.get_model()) == 0:
+            self.activity_combo.popup()
+            return True
         
         return False
     
@@ -881,7 +797,7 @@ Now, start tracking!
     
     """signals"""
     def after_activity_update(self, widget, renames):
-        self.refresh_menu()
+        self.refresh_dropdown()
         self.load_day()
         self.update_label()
     
@@ -907,3 +823,27 @@ Now, start tracking!
             self.notify_interval = new_interval
         else:
             self.notify_interval = None
+
+        
+    def on_more_info_button_clicked(self, button):
+        def on_response(self, widget):
+            self.destroy()
+
+        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
+        message_dialog.set_property("title", _("What to type in the activity box?"))
+        message_dialog.connect("response", on_response)
+        
+        more_info = _("""There is simple syntax that enables you to add details to your activities:
+        
+"@" symbol marks category. Example: "watering flowers@home" will start tracking activity "watering flowers" in category "home".
+
+Comma (",") marks beginning of description. Example: "watering flowers, begonias and forgetmenots" will start tracking activity "watering flowers" and add description "begonias and forgetmenots" to it.
+
+Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
+
+Now, start tracking!
+        """)
+        
+        message_dialog.set_markup(more_info)
+        message_dialog.show()
+

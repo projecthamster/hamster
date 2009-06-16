@@ -25,22 +25,19 @@ import os.path
 import gettext, locale
 import gnome
 
-# Allow to use uninstalled
-def _check(path):
-    return os.path.exists(path) and os.path.isdir(path) \
-           and os.path.isfile(os.path.join(path, "AUTHORS"))
-
-name = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if _check(name):
-    print 'Running uninstalled hamster, modifying PYTHONPATH'
+# check from AUTHORS file and if one found - we are running from sources
+name = os.path.join(os.path.dirname(__file__), '..')
+if os.path.exists(os.path.join(name, 'AUTHORS')):
+    print 'Running from source folder, modifying PYTHONPATH'
     sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
     sys.path.insert(0, name)
 
 # Now the path is set, import our applet
-import hamster.defs
+import hamster
+from hamster import defs
 
 # Setup i18n
-locale_dir = os.path.abspath(os.path.join(hamster.defs.DATA_DIR, "locale"))
+locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
 
 for module in (gettext, locale):
     module.bindtextdomain('hamster-applet', locale_dir)
@@ -51,11 +48,22 @@ for module in (gettext, locale):
 
 
 hamster.__init_db()
-import hamster.applet
+from hamster.applet import HamsterApplet
 
 def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
-    hamster.applet.HamsterApplet(applet)
+    applet.set_applet_flags(gnomeapplet.EXPAND_MINOR)
+
+    hamster_applet = HamsterApplet(applet)
+
+    applet.setup_menu_from_file(hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
+                    None, [("about", hamster_applet.on_about),
+                           ("overview", hamster_applet.show_overview),
+                           ("preferences", hamster_applet.show_preferences)])
+
+    applet.show_all()
+    applet.set_background_widget(applet)
+
     return True
 
 def on_destroy(event):
@@ -109,7 +117,7 @@ if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")
 
     if standalone:
-        gnome.init(hamster.defs.PACKAGE, hamster.defs.VERSION)
+        gnome.init(defs.PACKAGE, defs.VERSION)
 
         app = gtk.Window(gtk.WINDOW_TOPLEVEL)
         app.set_title(_(u"Time Tracker"))
@@ -138,6 +146,6 @@ if __name__ == "__main__":
         gnomeapplet.bonobo_factory(
             "OAFIID:Hamster_Applet_Factory",
             gnomeapplet.Applet.__gtype__,
-            hamster.defs.PACKAGE,
-            hamster.defs.VERSION,
+            defs.PACKAGE,
+            defs.VERSION,
             applet_factory)
