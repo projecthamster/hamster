@@ -156,6 +156,152 @@ class ReportChooserDialog(gtk.Dialog):
         self.emit("report-chooser-closed")
         self.dialog.destroy()
 
+class TimeLine(graphics.Area):
+    MODE_YEAR = 0
+    MODE_MONTH = 1
+    MODE_WEEK = 1
+    MODE_DAY = 3
+    def __init__(self):
+        graphics.Area.__init__(self)
+        self.start_date, self.end_date = None, None
+        self.draw_mode = None
+        self.max_hours = None
+        
+    
+    def draw(self, facts):
+        import itertools
+        self.facts = {}
+        for date, date_facts in itertools.groupby(facts, lambda x: x["start_time"].date()):
+            date_facts = list(date_facts)
+            self.facts[date] = date_facts
+            self.max_hours = max(self.max_hours,
+                                 sum([fact["delta"].seconds / 60 / float(60) +
+                               fact["delta"].days * 24 for fact in date_facts]))
+        
+        start_date = facts[0]["start_time"].date()
+        end_date = facts[-1]["start_time"].date()
+
+        self.draw_mode = self.MODE_YEAR
+        self.start_date = start_date.replace(month=1, day=1)
+        self.end_date = end_date.replace(month=12, day=31)
+        
+
+        """
+        #TODO - for now we have only the year mode        
+        if start_date.year != end_date.year or start_date.month != end_date.month:
+            self.draw_mode = self.MODE_YEAR
+            self.start_date = start_date.replace(month=1, day=1)
+            self.end_date = end_date.replace(month=12, day=31)
+        elif start_date.strftime("%W") != end_date.strftime("%W"):
+            self.draw_mode = self.MODE_MONTH
+            self.start_date = start_date.replace(day=1)
+            self.end_date = end_date.replace(date =
+                                    calendar.monthrange(self.end_date.year,
+                                                        self.end_date.month)[1])
+        elif start_date != end_date:
+            self.draw_mode = self.MODE_WEEK
+        else:
+            self.draw_mode = self.MODE_DAY
+        """
+        
+        self.redraw_canvas()
+        
+        
+    def _render(self):
+        import calendar
+        
+        if self.draw_mode != self.MODE_YEAR:
+            return
+
+        self.fill_area(0, 0, self.width, self.height, (0.975,0.975,0.975))
+        charting.set_color(self.context, (100,100,100))
+
+        self.set_value_range(x_min = 1, x_max = (self.end_date - self.start_date).days)        
+        month_label_fits = True
+        for month in range(1, 13):
+            self.layout.set_text(calendar.month_abbr[month])
+            label_w, label_h = self.layout.get_pixel_size()
+            if label_w * 2 > self.x_factor * 30:
+                month_label_fits = False
+                break
+        
+        
+        ticker_date = self.start_date
+        
+        year_pos = 0
+        
+        for year in range(self.start_date.year, self.end_date.year + 1):
+            #due to how things overlay, we are putting labels on backwards, so that they don't overlap
+            
+            self.context.set_line_width(1)
+            for month in range(1, 13):
+                for day in range(1, calendar.monthrange(year, month)[1] + 1):
+                    ticker_pos = year_pos + ticker_date.timetuple().tm_yday
+                    
+                    #if ticker_date.weekday() in [0, 6]:
+                    #    self.fill_area(ticker_pos * self.x_factor + 1, 20, self.x_factor, self.height - 20, (240, 240, 240))
+                    #    self.context.stroke()
+                        
+    
+                    if self.x_factor > 5:
+                        self.move_to(ticker_pos, self.height - 20)
+                        self.line_to(ticker_pos, self.height)
+                   
+                        self.layout.set_text(ticker_date.strftime("%d"))
+                        label_w, label_h = self.layout.get_pixel_size()
+                        
+                        if label_w < self.x_factor / 1.2: #if label fits
+                            self.context.move_to(self.get_pixel(ticker_pos) + 2, self.height - 20)
+                            self.context.show_layout(self.layout)
+                    
+                        self.context.stroke()
+                        
+                    #now facts
+                    facts_today = self.facts.get(ticker_date, [])
+                    if facts_today:
+                        total_length = dt.timedelta()
+                        for fact in facts_today:
+                            total_length += fact["delta"]
+                        total_length = total_length.seconds / 60 / 60.0 + total_length.days * 24
+                        total_length = total_length / float(self.max_hours) * self.height - 16
+                        self.fill_area(ticker_pos * self.x_factor, self.height - total_length, self.x_factor, total_length, (190,190,190))
+
+
+                        
+
+                    ticker_date += dt.timedelta(1)
+                
+            
+                
+                if month_label_fits:
+                    #roll back a little
+                    month_pos = ticker_pos - calendar.monthrange(year, month)[1] + 1
+
+                    self.move_to(month_pos, 0)
+                    #self.line_to(month_pos, 20)
+                    
+                    self.layout.set_text(dt.date(year, month, 1).strftime("%b"))
+    
+                    self.move_to(month_pos, 0)
+                    self.context.show_layout(self.layout)
+
+
+    
+            
+    
+            self.layout.set_text("%d" % year)
+            label_w, label_h = self.layout.get_pixel_size()
+                        
+            self.move_to(year_pos + 2 / self.x_factor, month_label_fits * label_h * 1.2)
+    
+            self.context.show_layout(self.layout)
+            
+            self.context.stroke()
+
+            year_pos = ticker_pos #save current state for next year
+
+
+
 class StatsViewer(object):
     def __init__(self, parent = None):
         self.parent = parent# determine if app shut shut down on close
@@ -243,8 +389,6 @@ class StatsViewer(object):
         self.do_graph()
         self.init_stats()
 
-
-    
     def init_stats(self):
         self.get_widget("explore_frame").modify_bg(gtk.STATE_NORMAL,
                       gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
@@ -278,16 +422,9 @@ class StatsViewer(object):
 
         year_box.show_all()
 
-
-
-
-        self.chart_everything = charting.BarChart(value_format = "%.1f",
-                                       bars_beveled = False,
-                                       animate = False,
-                                       background = self.background,
-                                       show_labels = False)
-        self.get_widget("explore_everything").add(self.chart_everything)
-
+        self.timeline = TimeLine()
+        self.get_widget("explore_everything").add(self.timeline)
+        self.get_widget("explore_everything").show_all()
 
         self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
@@ -399,15 +536,7 @@ A week of usage would be nice!"""))
             self.get_widget("not_enough_records_label").hide()
 
         # All dates in the scope
-        just_totals = self._totals(facts,
-                                   lambda fact: fact["start_time"].date(),
-                                   lambda fact: fact["delta"].seconds / 60 / 60.0)
-        just_totals_keys = sorted(just_totals.keys())
-        
-        just_totals = [just_totals[key][0] for key in just_totals_keys]
-        just_totals_keys = [key.strftime("%d %m %Y") for key in just_totals_keys]
-
-        self.chart_everything.plot(just_totals_keys, just_totals)
+        self.timeline.draw(facts)
 
 
         # Totals by category
@@ -782,15 +911,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             duration = None
             start_date = fact['date']
             
-            if fact["end_time"]: # not set if just started
-                delta = fact["end_time"] - fact["start_time"]
-                duration = 24 * delta.days + delta.seconds / 60
-            elif start_date == dt.date.today():
-                delta = dt.datetime.now() - fact["start_time"]
-                duration = 24 * delta.days + delta.seconds / 60
+            duration = fact["delta"].days * 24 * 60 + fact["delta"].seconds / 60
 
-            activity_totals[fact['name']][fact['category']] += duration or 0
-            day_category_totals[start_date][fact['category']] += duration or 0
+            activity_totals[fact['name']][fact['category']] += duration
+            day_category_totals[start_date][fact['category']] += duration
 
 
         # convert dictionaries into lists so we don't have to care about keys anymore
@@ -869,7 +993,6 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         activity_totals, day_category_totals = self.get_totals(fact_list, all_days)
 
         
-        
         self.activity_chart.plot(activity_totals['keys'],
                                   activity_totals['values'],
                                   stack_keys = self.popular_categories)
@@ -880,7 +1003,6 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             day_keys = [day.strftime("%a") for day in all_days]
         else:
             day_keys = [_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_") for day in all_days]
-
 
         self.day_chart.plot(day_keys, day_category_totals['values'],
                              stack_keys = day_category_totals['keys'])
