@@ -286,6 +286,10 @@ class Storage(hamster.storage.Storage):
     def __add_fact(self, activity_name, start_time = None, end_time = None):
         activity = stuff.parse_activity_input(activity_name)
         start_time = activity.start_time or start_time or datetime.datetime.now()
+        
+        if start_time > datetime.datetime.now():
+            return None #no facts in future, please
+        
         start_time = start_time.replace(microsecond = 0)
         end_time = activity.end_time or end_time
         if end_time:
