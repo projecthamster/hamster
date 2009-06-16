@@ -247,12 +247,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow2">
+                      <object class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
-                        <property name="shadow_type">in</property>
+                        <property name="label_xalign">0</property>
                         <child>
                           <object class="GtkEventBox" id="graph_frame">
                             <property name="visible">True</property>
@@ -335,7 +332,7 @@
                                           </object>
                                         </child>
                                         <child type="label">
-                                          <object class="GtkLabel" id="label4">
+                                          <object class="GtkLabel" id="label5">
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="label" translatable="yes">Activity</property>
@@ -363,6 +360,9 @@
                               </object>
                             </child>
                           </object>
+                        </child>
+                        <child type="label_item">
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -447,17 +447,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow3">
+                  <object class="GtkFrame" id="frame2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="label_xalign">0</property>
                     <child>
                       <object class="GtkEventBox" id="explore_frame">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment3">
+                          <object class="GtkAlignment" id="alignment7">
                             <property name="visible">True</property>
                             <property name="top_padding">12</property>
                             <property name="bottom_padding">12</property>
@@ -636,6 +633,9 @@
                           </object>
                         </child>
                       </object>
+                    </child>
+                    <child type="label_item">
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
