@@ -226,15 +226,48 @@ class Storage(hamster.storage.Storage):
             """
             self.execute(query, (end_time, fact['id']))
 
+    def __squeeze_in(self, start_time):
+        # tries to put task in the given date
+        # if there are conflicts, we will only truncate the ongoing task
+        # and replace it's end part with our activity
+
+        # we are checking if our start time is in the middle of anything
+        # or maybe there is something after us - so we know to adjust end time
+        query = """
+                   SELECT a.*, b.name
+                     FROM facts a
+                LEFT JOIN activities b on b.id = a.activity_id
+                    WHERE ((start_time < ? and end_time > ?) or start_time > ?)
+                 ORDER BY start_time
+                    LIMIT 1
+                """
+        fact = self.fetchone(query, (start_time, start_time, start_time))
+
+        end_time = None        
+
+        if fact:
+            if fact["start_time"] < start_time and fact["end_time"]:
+                #we are in middle of a task
+                self.execute("UPDATE facts SET end_time=? WHERE id=?",
+                             (start_time, fact["id"]))
+                end_time = fact["end_time"]
+            else: #otherwise we have found a task that is after us
+                end_time = fact["start_time"]
+
+        # in case of missing end_time, treat is as ongoing task, but only
+        # if that's not too far in past
+        if not end_time and (dt.datetime.now() - start_time) <= dt.timedelta(days=1):
+            end_time = dt.datetime.now()
+
+        return end_time
+        
     def __solve_overlaps(self, start_time, end_time):
         """finds facts that happen in given interval and shifts them to
         make room for new fact"""
-        
-        # in case of missing end_time, treat is as ongoing task, but only
-        # if that's not too far in past
-        if not end_time and (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
-            end_time = dt.datetime.now()
-            
+
+        # this function is destructive - can't go with a wildcard
+        if not end_time or not start_time: #this function is destructive
+            return
         
         # activities that we are overlapping.
         # second OR clause is for elimination - |new fact--|---old-fact--|--new fact|
@@ -321,13 +354,14 @@ class Storage(hamster.storage.Storage):
                    and last_activity['activity_id'] == activity_id:
                     return last_activity
                 
+                #if duration is less than a minute - it must have been a mistake
                 if not activity.description \
                    and not last_activity["description"] \
                    and 60 >= (start_time - last_activity['start_time']).seconds >= 0:
                     self.__remove_fact(last_activity['id'])
                     start_time = last_activity['start_time']
                 else:
-                    #stop 
+                    #otherwise stop 
                     update = """
                                UPDATE facts
                                   SET end_time = ?
@@ -336,8 +370,11 @@ class Storage(hamster.storage.Storage):
                     self.execute(update, (start_time, last_activity["id"]))
 
 
-        #done with the current activity, now we can solve overlaps
-        self.__solve_overlaps(start_time, end_time)
+        # done with the current activity, now we can solve overlaps
+        if not end_time:
+            end_time = self.__squeeze_in(start_time)
+        else:
+            self.__solve_overlaps(start_time, end_time)
 
 
         # finally add the new entry
