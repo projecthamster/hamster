@@ -17,11 +17,52 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import gconf
-from hamster import dispatcher
+import gettext
+import os
+import defs
+from db import Storage
+from dispatcher import Dispatcher
 
-class GconfStore(object):
+class Singleton(object):
+     def __new__(cls, *args, **kwargs):
+         if '__instance' not in vars(cls):
+             cls.__instance = object.__new__(cls, *args, **kwargs)
+         return cls.__instance
+
+class RuntimeStore(Singleton):
+    """
+    Handles one-shot configuration that is not stored between sessions
+    """
+    database_file = ""
+    data_dir = ""
+    dispatcher = None
+    storage = None
+    trace_sql = False
+
+    def __init__(self):
+        print "Doing init!"
+
+        gettext.install("hamster-applet", unicode = True)
+
+        # Typically shared data dir is /usr/share/hamster-applet
+        if os.path.realpath(__file__).startswith('/home/'):
+            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'data'))
+        else:
+            data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+        self.data_dir = data_dir
+        self.dispatcher = Dispatcher()
+        self.storage = Storage(self.dispatcher)
+
+    def get_art_dir(self):
+        return os.path.join(self.data_dir, "art")
+
+    art_dir = property(get_art_dir, None)
+
+runtime = RuntimeStore()
+runtime.database_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+
+class GconfStore(Singleton):
     """
     Handles storing to and retrieving values from GConf 
     """
@@ -38,28 +79,18 @@ class GconfStore(object):
 
     __instance = None
         
-    @staticmethod
-    def get_instance():
-        if not GconfStore.__instance:
-            GconfStore.__instance = GconfStore()
-        return GconfStore.__instance
-        
     def __init__(self):
-        """
-        Do not use the constructor directly. Always use L{get_instance}
-        Because otherwise you will have lots of signals running arround
-        """
         super(GconfStore, self).__init__()
         self._client = gconf.client_get_default()
         self.__connect_notifications()
         
     def __connect_notifications(self):
         self._client.add_dir(self.GCONF_DIR, gconf.CLIENT_PRELOAD_RECURSIVE)
-        self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
-        self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
-        self._client.notify_add(self.GCONF_NOTIFY_ON_IDLE, lambda x, y, z, a: dispatcher.dispatch("gconf_notify_on_idle_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
+        self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
+        self._client.notify_add(self.GCONF_NOTIFY_ON_IDLE, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_on_idle_changed", z.value.get_bool()))
 
     
     def get_keybinding(self):
@@ -92,4 +123,4 @@ class GconfStore(object):
 
     def set_notify_on_idle(self, enabled):
         self._client.set_bool(self.GCONF_NOTIFY_ON_IDLE, enabled)
-        
+

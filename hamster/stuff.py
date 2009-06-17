@@ -31,9 +31,9 @@ import locale
 import os
 
 def load_ui_file(name):
-    from hamster import SHARED_DATA_DIR
+    from configuration import runtime
     ui = gtk.Builder()
-    ui.add_from_file(os.path.join(SHARED_DATA_DIR, name))
+    ui.add_from_file(os.path.join(runtime.data_dir, name))
     return ui 
 
 def zero_hour(date):

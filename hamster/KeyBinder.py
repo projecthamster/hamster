@@ -20,13 +20,12 @@
 
 
 import gtk, gconf
-import hamster, hamster.keybinder
-from hamster.configuration import GconfStore
-from hamster import dispatcher
+import keybinder
+from configuration import GconfStore, runtime
 
 class Keybinder(object):
     def __init__(self):
-        self.config = GconfStore.get_instance()
+        self.config = GconfStore()
         
         self.bound = False
         self.prevbinding = None
@@ -36,7 +35,7 @@ class Keybinder(object):
             # This is for uninstalled cases, the real default is in the schema
             self.key_combination = "<Super>H"
     
-        dispatcher.add_handler("gconf_keybinding_changed", self.on_keybinding_changed)
+        runtime.dispatcher.add_handler("gconf_keybinding_changed", self.on_keybinding_changed)
         
         self.bind()
       
@@ -46,7 +45,7 @@ class Keybinder(object):
         self.bind()
 
     def on_keybinding_activated(self):
-        dispatcher.dispatch('keybinding_activated')
+        runtime.dispatcher.dispatch('keybinding_activated')
    
     def get_key_combination(self):
         return self.key_combination
@@ -57,7 +56,7 @@ class Keybinder(object):
          
         try:
             print 'Binding shortcut %s to popup hamster' % self.key_combination
-            hamster.keybinder.tomboy_keybinder_bind(self.key_combination, self.on_keybinding_activated)
+            keybinder.tomboy_keybinder_bind(self.key_combination, self.on_keybinding_activated)
             self.bound = True
         except KeyError:
             # if the requested keybinding conflicts with an existing one, a KeyError will be thrown
@@ -68,7 +67,7 @@ class Keybinder(object):
     def unbind(self):
         try:
             print 'Unbinding shortcut %s to popup hamster' % self.prevbinding
-            hamster.keybinder.tomboy_keybinder_unbind(self.prevbinding)
+            keybinder.tomboy_keybinder_unbind(self.prevbinding)
             self.bound = False
         except KeyError:
             # if the requested keybinding is not bound, a KeyError will be thrown

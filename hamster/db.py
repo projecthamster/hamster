@@ -30,17 +30,53 @@ except ImportError:
     except ImportError:
         print "Error: Neither sqlite3 nor pysqlite2 found"
         raise
+
 import os, time
 import datetime
-import hamster
-import hamster.storage
-from hamster import stuff
+import storage
+import stuff
+from shutil import copy as copyfile
 import datetime as dt
-import copy
-        
-class Storage(hamster.storage.Storage):
-    # we are saving data under $HOME/.gnome2/hamster-applet/hamster.db
+import gettext
+
+DB_FILE = 'hamster.db'
+
+class Storage(storage.Storage):
     con = None # Connection will be created on demand
+
+    def __setup(self):
+        """
+        Delayed setup so we don't do everything at the same time
+        """
+        if self.__setup.im_func.complete:
+            return
+
+        from configuration import runtime
+
+        db_file = runtime.database_file
+        db_path, _ = os.path.split(os.path.realpath(db_file))
+
+        if not os.path.exists(db_path):
+            try:
+                os.makedirs(db_path, 0744)
+            except Exception, msg:
+                print 'Error:could not create user dir (%s): %s' % (db_path, msg)
+
+        data_dir = runtime.data_dir
+
+        #check if db is here
+        if not os.path.exists(db_file):
+            print "Database not found in %s - installing default from %s!" % (db_file, data_dir)
+            copyfile(os.path.join(data_dir, DB_FILE), db_file)
+
+            #change also permissions - sometimes they are 444
+            try:
+                os.chmod(db_file, 0664)
+            except Exception, msg:
+                print 'Error:could not change mode on %s!' % (db_file)
+        self.__setup.im_func.complete = True
+        self.run_fixtures()
+    __setup.complete = False
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
@@ -628,8 +664,10 @@ class Storage(hamster.storage.Storage):
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
+        from configuration import runtime
         if self.con is None:
-            self.con = sqlite.connect(hamster.HAMSTER_DB, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            db_file = runtime.database_file
+            self.con = sqlite.connect(db_file, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
             self.con.row_factory = sqlite.Row
 
         return self.con
@@ -637,10 +675,13 @@ class Storage(hamster.storage.Storage):
     connection = property(get_connection, None)
 
     def fetchall(self, query, params = None):
+        from configuration import runtime
+        self.__setup()
+
         con = self.connection
         cur = con.cursor()
 
-        if hamster.trace_sql:
+        if runtime.trace_sql:
             print query, params
 
         if params:
@@ -661,8 +702,13 @@ class Storage(hamster.storage.Storage):
             return None
 
     def execute(self, statement, params = ()):
-        """execute sql statement. optionally you can give multiple statements
-        to save on cursor creation and closure"""
+        """
+        execute sql statement. optionally you can give multiple statements
+        to save on cursor creation and closure
+        """
+        from configuration import runtime
+        self.__setup()
+
         con = self.connection
         cur = con.cursor()
         
@@ -672,7 +718,7 @@ class Storage(hamster.storage.Storage):
             
         if isinstance(statement, list):
             for i in range(len(statement)):
-                if hamster.trace_sql:
+                if runtime.trace_sql:
                     print statement[i], params[i]
          
                 res = cur.execute(statement[i], params[i])
@@ -881,7 +927,4 @@ class Storage(hamster.storage.Storage):
             nonwork_cat_id = self.__add_category(nonwork_category["name"])
             for entry in nonwork_category["entries"]:
                 self.__add_activity(entry, nonwork_cat_id)
-        
-        
-        
 

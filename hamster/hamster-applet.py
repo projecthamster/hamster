@@ -33,8 +33,8 @@ if os.path.exists(os.path.join(name, 'AUTHORS')):
     sys.path.insert(0, name)
 
 # Now the path is set, import our applet
-import hamster
 from hamster import defs
+from hamster.configuration import runtime
 
 # Setup i18n
 locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
@@ -47,7 +47,6 @@ for module in (gettext, locale):
         module.bind_textdomain_codeset('hamster-applet','UTF-8')
 
 
-hamster.__init_db()
 from hamster.applet import HamsterApplet
 
 def applet_factory(applet, iid):
@@ -56,11 +55,6 @@ def applet_factory(applet, iid):
 
     hamster_applet = HamsterApplet(applet)
 
-    applet.setup_menu_from_file(hamster.SHARED_DATA_DIR, "Hamster_Applet.xml",
-                    None, [("about", hamster_applet.on_about),
-                           ("overview", hamster_applet.show_overview),
-                           ("preferences", hamster_applet.show_preferences)])
-
     applet.show_all()
     applet.set_background_widget(applet)
 
@@ -68,12 +62,11 @@ def applet_factory(applet, iid):
 
 def on_destroy(event):
     from hamster.configuration import GconfStore
-    config = GconfStore.get_instance()
+    config = GconfStore()
     
     # handle config option to stop tracking on shutdown
     if config.get_stop_on_shutdown():
-        from hamster import storage
-        last_activity = storage.get_last_activity()
+        last_activity = runtime.storage.get_last_activity()
         if last_activity and last_activity['end_time'] is None:
             storage.touch_fact(last_activity)
         
@@ -106,7 +99,7 @@ if __name__ == "__main__":
             elif opt in ("-s", "--start"):
                 start_window = args
             elif opt in ("-t", "--trace-sql"):
-                hamster.trace_sql = True
+                runtime.trace_sql = True
                 
             
     except getopt.GetoptError:
@@ -131,13 +124,13 @@ if __name__ == "__main__":
 
     elif start_window:
         if start_window == "stats":
-            from hamster.stats import StatsViewer
+            from stats import StatsViewer
             stats_viewer = StatsViewer().show()
         elif start_window == "edit":
-            from hamster.edit_activity import CustomFactController
+            from edit_activity import CustomFactController
             CustomFactController().show()
         elif start_window == "prefs":
-            from hamster.preferences import PreferencesEditor
+            from preferences import PreferencesEditor
             PreferencesEditor().show()
             
         gtk.main()

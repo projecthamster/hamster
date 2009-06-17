@@ -25,9 +25,10 @@ import os
 import gtk
 import gobject
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster import graphics, widgets
-import hamster.eds
+import stuff
+import graphics, widgets
+import eds
+from configuration import runtime
 
 import time
 import datetime as dt
@@ -330,7 +331,7 @@ class CustomFactController:
 
         start_date, end_date = None, None
         if fact_id:
-            fact = storage.get_fact(fact_id)
+            fact = runtime.storage.get_fact(fact_id)
 
             label = fact['name']
             if fact['category'] != _("Unsorted"):
@@ -355,7 +356,7 @@ class CustomFactController:
         elif fact_date and fact_date != dt.date.today():
             # if there is previous activity with end time - attach to it
             # otherwise let's start at 8am
-            last_activity = storage.get_facts(fact_date)
+            last_activity = runtime.storage.get_facts(fact_date)
             if last_activity and last_activity[len(last_activity)-1]["end_time"]:
                 start_date = last_activity[len(last_activity)-1]["end_time"]
             else:
@@ -385,7 +386,7 @@ class CustomFactController:
 
         self.dayline = Dayline()
         self.dayline.on_time_changed = self.update_time
-        self.dayline.on_more_data = storage.get_facts
+        self.dayline.on_more_data = runtime.storage.get_facts
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
@@ -399,7 +400,7 @@ class CustomFactController:
 
         
     def draw_preview(self, date, highlight = None):
-        day_facts = storage.get_facts(date)
+        day_facts = runtime.storage.get_facts(date)
         self.dayline.draw(day_facts, highlight)
         
         
@@ -449,7 +450,7 @@ class CustomFactController:
     def refresh_menu(self):
         #first populate the autocomplete - contains all entries in lowercase
         self.activities.clear()
-        all_activities = storage.get_autocomplete_activities()
+        all_activities = runtime.storage.get_autocomplete_activities()
         for activity in all_activities:
             activity_category = activity['name']
             if activity['category']:
@@ -464,7 +465,7 @@ class CustomFactController:
         store.clear()
 
         #populate fresh list from DB
-        categorized_activities = storage.get_sorted_activities()
+        categorized_activities = runtime.storage.get_sorted_activities()
 
         for activity in categorized_activities:
             activity_category = activity['name']
@@ -475,7 +476,7 @@ class CustomFactController:
                                  activity_category])
 
         # finally add TODO tasks from evolution to both lists
-        tasks = hamster.eds.get_eds_tasks()
+        tasks = eds.get_eds_tasks()
         for activity in tasks:
             activity_category = "%s@%s" % (activity['name'], activity['category'])
             self.activities.append([activity['name'],activity['category'],activity_category])
@@ -549,14 +550,14 @@ class CustomFactController:
 
         # we don't do updates, we do insert/delete. So now it is time to delete
         if self.fact_id:
-            storage.remove_fact(self.fact_id)
+            runtime.storage.remove_fact(self.fact_id)
 
-        storage.add_fact(activity, start_time, end_time)
+        runtime.storage.add_fact(activity, start_time, end_time)
 
 
         # hide panel only on add - on update user will want to see changes
         if not self.fact_id: 
-            dispatcher.dispatch('panel_visible', False)
+            runtime.dispatcher.dispatch('panel_visible', False)
         
         self.close_window()
     

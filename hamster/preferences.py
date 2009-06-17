@@ -24,8 +24,8 @@ pygtk.require('2.0')
 import os
 import gtk
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster.configuration import GconfStore
+import dispatcher, storage, stuff
+from configuration import GconfStore
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -92,7 +92,7 @@ class PreferencesEditor:
     def __init__(self, parent = None):
         self.parent = parent
         self._gui = stuff.load_ui_file("preferences.ui")
-        self.config = GconfStore.get_instance()
+        self.config = GconfStore()
         self.window = self.get_widget('preferences_window')
 
 

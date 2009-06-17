@@ -19,11 +19,8 @@
 
 
 from os.path import join
-from hamster import SHARED_DATA_DIR
-from hamster.defs import VERSION
+from defs import VERSION
 import gtk
-import hamster
-
 
 def on_email(about, mail):
     gtk.show_uri(gtk.gdk.Screen(), "mailto:%s" % mail, 0L)

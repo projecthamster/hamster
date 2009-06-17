@@ -25,11 +25,12 @@ import os
 import gtk, gobject
 import pango
 
-from hamster import dispatcher, storage, SHARED_DATA_DIR, stuff
-from hamster import charting
+import stuff
+import charting
 
-from hamster.edit_activity import CustomFactController
-from hamster import reports, widgets, graphics
+from edit_activity import CustomFactController
+import reports, widgets, graphics
+from configuration import runtime
 import webbrowser
 
 from itertools import groupby
@@ -119,7 +120,7 @@ class ReportChooserDialog(gtk.Dialog):
         button_all.set_active(True)
         self.category_box.pack_start(button_all)
 
-        categories = storage.get_category_list()
+        categories = runtime.storage.get_category_list()
         for category in categories:
             button = gtk.RadioButton(button_all, category['name'].encode("utf-8"))
             button.value = category['id']
@@ -374,13 +375,13 @@ class StatsViewer(object):
         self.week_view.set_active(True)
 
 
-        dispatcher.add_handler('activity_updated', self.after_activity_update)
-        dispatcher.add_handler('day_updated', self.after_fact_update)
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
         selection = self.fact_tree.get_selection()
         selection.connect('changed', self.on_fact_selection_changed,
                           self.fact_store)
-        self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
+        self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
 
         self._gui.connect_signals(self)
         self.fact_tree.grab_focus()
@@ -394,7 +395,7 @@ class StatsViewer(object):
                       gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
 
         if not self.stat_facts:
-            self.stat_facts = storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
+            self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         
         by_year = self._totals(self.stat_facts,
                                lambda fact: fact["start_time"].year,
@@ -891,7 +892,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
     def get_totals(self, facts, all_days):
         # get list of used activities in interval
         activities = [act[0] for act in
-              storage.get_interval_activity_ids(self.start_date, self.end_date)]
+              runtime.storage.get_interval_activity_ids(self.start_date, self.end_date)]
 
         # fill in the activity totals blanks
         # don't want to add ability to be able to specify color per bar
@@ -977,7 +978,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         label2 = self.get_widget("dayview_caption")
         label2.set_markup("%s" % (dayview_caption))
         
-        fact_list = storage.get_facts(self.start_date, self.end_date)
+        fact_list = runtime.storage.get_facts(self.start_date, self.end_date)
 
         self.get_facts(fact_list)
         
@@ -1114,7 +1115,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             if path > 0:
                 selection.select_path(path)
 
-        storage.remove_fact(model[iter][0])
+        runtime.storage.remove_fact(model[iter][0])
 
     def copy_selected(self):
         selection = self.fact_tree.get_selection()
@@ -1178,7 +1179,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
         # TODO - set cursor to the pasted entry when done
         # TODO - revisit parsing of selected date
-        added_fact = storage.add_fact(activity_name, start_time, end_time)
+        added_fact = runtime.storage.add_fact(activity_name, start_time, end_time)
         
 
     """keyboard events"""
@@ -1279,7 +1280,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                                                       category):
         self.report_chooser = None
         
-        facts = storage.get_facts(start_date, end_date, category_id = category)
+        facts = runtime.storage.get_facts(start_date, end_date, category_id = category)
         reports.simple(facts,
                        self.start_date,
                        self.end_date,
@@ -1309,8 +1310,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.do_graph()
     
     def after_fact_update(self, event, date):
-        self.stat_facts = storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
-        self.popular_categories = [cat[0] for cat in storage.get_popular_categories()]
+        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
+        self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
         
         if self.get_widget("pages").get_current_page() == 0:
             self.do_graph()
@@ -1318,8 +1319,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             self.stats()
         
     def on_close(self, widget, event):
-        dispatcher.del_handler('activity_updated', self.after_activity_update)
-        dispatcher.del_handler('day_updated', self.after_fact_update)
+        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
         self.close_window()        
 
     def on_window_key_pressed(self, tree, event_key):

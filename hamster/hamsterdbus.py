@@ -23,7 +23,7 @@ import dbus.service
 import datetime
 from calendar import timegm
 
-from hamster import storage
+from configuration import runtime
 
 # DBus service parameters
 HAMSTER_URI = "org.gnome.Hamster"
@@ -85,7 +85,7 @@ class HamsterDbusController(dbus.service.Object):
         u start_time: Seconds since epoch (timestamp)
         u end_time: Seconds since epoch (timestamp)
         """
-        return HamsterDbusController.to_dbus_fact(storage.get_last_activity())
+        return HamsterDbusController.to_dbus_fact(runtime.storage.get_last_activity())
 
     @dbus.service.method(HAMSTER_URI, in_signature='i', out_signature='a{sv}')
     def GetFactById(self, fact_id):
@@ -100,7 +100,7 @@ class HamsterDbusController(dbus.service.Object):
         u start_time: Seconds since epoch (timestamp)
         u end_time: Seconds since epoch (timestamp)
         """
-        return HamsterDbusController.to_dbus_fact(storage.get_fact(fact_id))
+        return HamsterDbusController.to_dbus_fact(runtime.storage.get_fact(fact_id))
 
     @dbus.service.method(HAMSTER_URI, out_signature='a(ss)')
     def GetActivities(self):
@@ -110,7 +110,7 @@ class HamsterDbusController(dbus.service.Object):
         s category: Category name
         """
         activities = []
-        for act in storage.get_autocomplete_activities():
+        for act in runtime.storage.get_autocomplete_activities():
             activities.append((act[ACT_KEY] or '', act[CAT_KEY] or ''))
         return activities
 
@@ -121,7 +121,7 @@ class HamsterDbusController(dbus.service.Object):
         s category: Category name
         """
         categories = []
-        for i in storage.get_category_list():
+        for i in runtime.storage.get_category_list():
             categories.append(i[ACT_KEY] or '')
         return categories
 
@@ -145,7 +145,7 @@ class HamsterDbusController(dbus.service.Object):
         if end_time:
             end = datetime.datetime.utcfromtimestamp(end_time)
 
-        fact = storage.add_fact(activity, start, end)
+        fact = runtime.storage.add_fact(activity, start, end)
         return fact[FCT_KEY]
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
@@ -159,10 +159,10 @@ class HamsterDbusController(dbus.service.Object):
         category_id = None
 
         if category:
-            category_id = storage.get_category_by_name(category) \
-                    or storage.add_category(category)
+            category_id = runtime.storage.get_category_by_name(category) \
+                    or runtime.storage.add_category(category)
 
-        storage.add_activity(activity, category_id)
+        runtime.storage.add_activity(activity, category_id)
 
     @dbus.service.method(HAMSTER_URI, in_signature='s')
     def AddCategory(self, category):
@@ -170,15 +170,15 @@ class HamsterDbusController(dbus.service.Object):
         Parameters:
         s category: category name
         """
-        if category and not storage.get_category_by_name(category):
-            storage.add_category(category)
+        if category and not runtime.storage.get_category_by_name(category):
+            runtime.storage.add_category(category)
 
     @dbus.service.method(HAMSTER_URI)
     def StopTracking(self):
         """Stops the current fact tracking"""
-        last_activity = storage.get_last_activity()
+        last_activity = runtime.storage.get_last_activity()
         if last_activity:
-            storage.touch_fact(last_activity)
+            runtime.storage.touch_fact(last_activity)
 
     @dbus.service.method(HAMSTER_URI, in_signature='i')
     def RemoveFact(self, fact_id):
@@ -186,7 +186,7 @@ class HamsterDbusController(dbus.service.Object):
         Parameters:
         i id: Unique fact identifier
         """
-        storage.remove_fact(fact_id)
+        runtime.storage.remove_fact(fact_id)
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
     def RemoveActivity(self, activity, category):
@@ -195,11 +195,11 @@ class HamsterDbusController(dbus.service.Object):
         s activity: Activity name
         s category: Category name. Use '' for Unsorted activity
         """
-        category_id = storage.get_category_by_name(category)
-        activity_id = storage.get_activity_by_name(activity, category_id)
+        category_id = runtime.storage.get_category_by_name(category)
+        activity_id = runtime.storage.get_activity_by_name(activity, category_id)
 
         if activity_id:
-            storage.remove_activity(activity_id)
+            runtime.storage.remove_activity(activity_id)
 
     @dbus.service.method(HAMSTER_URI, in_signature='s')
     def RemoveCategory(self, category):
@@ -207,9 +207,9 @@ class HamsterDbusController(dbus.service.Object):
         Parameters:
         s category: Category name
         """
-        category_id = storage.get_category_by_name(category)
+        category_id = runtime.storage.get_category_by_name(category)
         if category_id:
-            storage.remove_category(category_id)
+            runtime.storage.remove_category(category_id)
 
     @dbus.service.signal(HAMSTER_URI, signature='i')
     def FactUpdated(self, fact_id):

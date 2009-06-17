@@ -32,19 +32,18 @@ import gnomeapplet
 import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 
-from hamster import dispatcher, storage
-import hamster.eds
-from hamster.configuration import GconfStore
+import eds
+from configuration import GconfStore, runtime
 
-from hamster import stuff
-from hamster.KeyBinder import *
-from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController
+import stuff
+from KeyBinder import *
+from hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
-from hamster.edit_activity import CustomFactController
-from hamster.stats import StatsViewer
-from hamster.about import show_about
-from hamster.preferences import PreferencesEditor
+from edit_activity import CustomFactController
+from stats import StatsViewer
+from about import show_about
+from preferences import PreferencesEditor
 
 import idle
 
@@ -213,7 +212,7 @@ class HamsterApplet(object):
         self.applet.about = None
         self.open_fact_editors = []
 
-        self.config = GconfStore.get_instance()
+        self.config = GconfStore()
         
         self.button = PanelButton()
         self.button.connect('toggled', self.on_toggle)
@@ -261,27 +260,27 @@ class HamsterApplet(object):
 
 
 
-        dispatcher.add_handler('panel_visible', self.__show_toggle)
-        dispatcher.add_handler('activity_updated', self.after_activity_update)
-        dispatcher.add_handler('day_updated', self.after_fact_update)
+        runtime.dispatcher.add_handler('panel_visible', self.__show_toggle)
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
         self._gui.connect_signals(self)
 
         # init hotkey
-        dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
+        runtime.dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
 
         # init idle check
-        dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
+        runtime.dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
         self.timeout_enabled = self.config.get_timeout_enabled()
 
-        dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
+        runtime.dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
         self.notify_on_idle = self.config.get_notify_on_idle()
         
         
         # init nagging timeout
         if PYNOTIFY:
             self.notify = Notifier(self.button)
-            dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
+            runtime.dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
 
 
@@ -350,9 +349,9 @@ class HamsterApplet(object):
 
 
     def refresh_dropdown(self):        
-        self.all_activities = storage.get_autocomplete_activities()
-        self.all_categories = storage.get_category_list()
-        self.eds_tasks = hamster.eds.get_eds_tasks()
+        self.all_activities = runtime.storage.get_autocomplete_activities()
+        self.all_categories = runtime.storage.get_category_list()
+        self.eds_tasks = eds.get_eds_tasks()
 
         #add evolution tasks to dropdown, yay!
         for activity in self.eds_tasks:
@@ -362,7 +361,7 @@ class HamsterApplet(object):
         store = self.activity_combo.get_model()
         store.clear()
 
-        categorized_activities = storage.get_sorted_activities()
+        categorized_activities = runtime.storage.get_sorted_activities()
         for activity in categorized_activities:
             activity_category = activity['name']
             if activity['category']:
@@ -480,7 +479,7 @@ class HamsterApplet(object):
                     idle_minutes = idle.getIdleSec() / 60.0
                 current_time = dt.datetime.now()
                 idle_from = current_time - dt.timedelta(minutes = idle_minutes)
-                storage.touch_fact(self.last_activity, end_time = idle_from)
+                runtime.storage.touch_fact(self.last_activity, end_time = idle_from)
             
 
             # if we have date change - let's finish previous task and start a new one
@@ -539,11 +538,11 @@ class HamsterApplet(object):
         #today is 5.5 hours ago because our midnight shift happens 5:30am
         today = (dt.datetime.now() - dt.timedelta(hours=5, minutes=30)).date()
 
-        self.last_activity = storage.get_last_activity()
+        self.last_activity = runtime.storage.get_last_activity()
 
         fact_store = self.treeview.get_model()
         fact_store.clear()
-        facts = storage.get_facts(today)
+        facts = runtime.storage.get_facts(today)
         
         by_category = {}
         
@@ -587,7 +586,7 @@ class HamsterApplet(object):
 
         (cur, col) = self.treeview.get_cursor()
 
-        storage.remove_fact(model[iter][0])
+        runtime.storage.remove_fact(model[iter][0])
         
         self.treeview.set_cursor(cur)
 
@@ -680,7 +679,7 @@ class HamsterApplet(object):
         return False
         
     def on_toggle(self, widget):
-        dispatcher.dispatch('panel_visible', self.button.get_active())
+        runtime.dispatcher.dispatch('panel_visible', self.button.get_active())
 
     def on_activity_list_key_pressed(self, entry, event):
         #tab will trigger going through autocomplete values when there are any
@@ -712,8 +711,8 @@ class HamsterApplet(object):
         if activity_name == "":
             return
         
-        storage.add_fact(activity_name)
-        dispatcher.dispatch('panel_visible', False)
+        runtime.storage.add_fact(activity_name)
+        runtime.dispatcher.dispatch('panel_visible', False)
 
     """listview events"""
     def on_todays_keys(self, tree, event):
@@ -749,27 +748,27 @@ class HamsterApplet(object):
                     description = description.decode('utf8', 'replace')
                     activity_name = "%s, %s" % (activity_name, description)
                     
-                storage.add_fact(activity_name)
-                dispatcher.dispatch('panel_visible', False)
+                runtime.storage.add_fact(activity_name)
+                runtime.dispatcher.dispatch('panel_visible', False)
         
         
     def on_windows_keys(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
-            dispatcher.dispatch('panel_visible', False)
+            runtime.dispatcher.dispatch('panel_visible', False)
             return True
         return False
         
     """button events"""
     def on_stop_tracking(self, button):
-        storage.touch_fact(self.last_activity)
+        runtime.storage.touch_fact(self.last_activity)
         self.last_activity = None
         self.update_label()
-        dispatcher.dispatch('panel_visible', False)
+        runtime.dispatcher.dispatch('panel_visible', False)
 
     def on_overview(self, menu_item):
-        dispatcher.dispatch('panel_visible', False)
+        runtime.dispatcher.dispatch('panel_visible', False)
         stats_viewer = StatsViewer(self)
         stats_viewer.show()
 
@@ -787,7 +786,7 @@ class HamsterApplet(object):
             show_about(self.applet)
 
     def show_preferences(self, menu_item, verb):
-        dispatcher.dispatch('panel_visible', False)
+        runtime.dispatcher.dispatch('panel_visible', False)
         
         if self.preferences_editor and self.preferences_editor.window:
             self.preferences_editor.window.present()

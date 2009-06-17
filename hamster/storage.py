@@ -24,7 +24,6 @@ import datetime
 class Storage(object):
     def __init__(self, parent):
         self.parent = parent
-        self.run_fixtures()
 
     def run_fixtures(self):
         pass
