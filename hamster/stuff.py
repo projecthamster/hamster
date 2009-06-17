@@ -211,25 +211,27 @@ def parse_activity_input(text):
     
     res = InputParseResult()
     
-    potential_time = text.split(" ")[0]
-    potential_end_time = None
-    if len(potential_time) > 1 and  potential_time.startswith("-"):
-        #if starts with minus, treat as minus delta minutes
-        res.start_time = dt.datetime.now() + dt.timedelta(minutes =
-                                                            int(potential_time))
-
-    else:
-        if potential_time.find("-") > 0:
-            potential_time, potential_end_time = potential_time.split("-", 2)
-            res.end_time = figure_time(potential_end_time)
-        
-        res.start_time = figure_time(potential_time)
+    input_parts = text.split(" ")
+    if len(input_parts) > 1: #look for time only if there is more
+        potential_time = text.split(" ")[0]
+        potential_end_time = None
+        if len(potential_time) > 1 and  potential_time.startswith("-"):
+            #if starts with minus, treat as minus delta minutes
+            res.start_time = dt.datetime.now() + dt.timedelta(minutes =
+                                                                int(potential_time))
     
-    #remove parts that worked
-    if potential_end_time and not res.end_time:
-        text = text[text.find("-"):]
-    elif res.start_time:
-        text = text[text.find(" ")+1:]
+        else:
+            if potential_time.find("-") > 0:
+                potential_time, potential_end_time = potential_time.split("-", 2)
+                res.end_time = figure_time(potential_end_time)
+                
+            res.start_time = figure_time(potential_time)
+        
+        #remove parts that worked
+        if res.start_time and potential_end_time and not res.end_time:
+            res.start_time = None #scramble
+        elif res.start_time:
+            text = text[text.find(" ")+1:]
     
     #see if we have description of activity somewhere here (delimited by comma)
     if text.find(",") > 0:
