@@ -290,11 +290,6 @@ class Storage(storage.Storage):
             else: #otherwise we have found a task that is after us
                 end_time = fact["start_time"]
 
-        # in case of missing end_time, treat is as ongoing task, but only
-        # if that's not too far in past
-        if not end_time and (dt.datetime.now() - start_time) <= dt.timedelta(days=1):
-            end_time = dt.datetime.now()
-
         return end_time
         
     def __solve_overlaps(self, start_time, end_time):
