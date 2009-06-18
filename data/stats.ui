@@ -279,7 +279,7 @@
                                             <property name="spacing">36</property>
                                             <child>
                                               <object class="GtkEventBox" id="totals_by_category">
-                                                <property name="width_request">50</property>
+                                                <property name="width_request">130</property>
                                                 <property name="visible">True</property>
                                                 <child>
                                                   <placeholder/>
