@@ -520,21 +520,6 @@ class Storage(storage.Storage):
         """
         return self.fetchall(query, (_("Unsorted"), ))
 
-    def __get_interval_activity_ids(self, date, end_date = None):
-        """returns activities used in the specified interval"""
-        query = """
-                   SELECT a.name, coalesce(b.name, ?) as category_name
-                     FROM activities a
-                LEFT JOIN categories b on b.id = a.category_id
-                    WHERE a.id in (SELECT activity_id from facts
-                                    WHERE (date(start_time) >= ? and date(start_time) <= ?)
-                                       OR (date(end_time) >= ? and date(end_time) <= ?))
-        """
-        end_date = end_date or date        
-
-        return self.fetchall(query, (_("Unsorted"), date, end_date, date, end_date))
-        
-    
     def __remove_fact(self, fact_id):
         query = """
                    DELETE FROM facts
