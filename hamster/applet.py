@@ -218,7 +218,14 @@ class HamsterApplet(object):
         self.button.connect('toggled', self.on_toggle)
         self.applet.add(self.button)
 
-        
+        self.applet.setup_menu_from_file (runtime.data_dir,
+                                          "Hamster_Applet.xml",
+                                          None,
+                                          [("about", self.on_about),
+                                          ("overview", self.show_overview),
+                                          ("preferences", self.show_preferences),
+                                          ])
+
         # load window of activity switcher and todays view
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
@@ -259,10 +266,10 @@ class HamsterApplet(object):
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
 
-
         runtime.dispatcher.add_handler('panel_visible', self.__show_toggle)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
+
 
         self._gui.connect_signals(self)
 
