@@ -25,7 +25,9 @@ import gtk
 import pango
 from pango import ELLIPSIZE_END
 
+from itertools import groupby
 import datetime as dt
+import time
 import re
 import locale
 import os
@@ -56,6 +58,24 @@ def locale_to_utf8(locale_str):
         retval = locale_str
     return retval
 
+def locale_first_weekday():
+    """figure if week starts on monday or sunday"""
+    first_weekday = 6 #by default settle on monday
+
+    try:
+        process = os.popen("locale first_weekday week-1stday")
+        week_offset, week_start = process.read().split('\n')[:2]
+        process.close()
+        week_start = dt.date(*time.strptime(week_start, "%Y%m%d")[:3])
+        week_offset = dt.timedelta(int(week_offset) - 1)
+        beginning = week_start + week_offset
+        first_weekday = int(beginning.strftime("%w"))
+    except:
+        print "WARNING - Failed to get first weekday from locale"
+        pass
+        
+    return first_weekday
+    
 class CategoryCell(gtk.CellRendererText):
     def __init__(self):
         gtk.CellRendererText.__init__(self)        
@@ -104,7 +124,17 @@ class ActivityColumn(gtk.TreeViewColumn):
         cell.set_property("ellipsize", pango.ELLIPSIZE_END)
         self.set_cell_data_func(cell, self.activity_painter)
 
+def duration_minutes(duration):
+    """returns minutes from duration, otherwise we keep bashing in same math"""
+    return duration.seconds / 60 + duration.days * 24 * 60
+    
 def format_duration(minutes, human = True):
+    """formats duration in a human readable format.
+    accepts either minutes or timedelta"""
+    
+    if isinstance(minutes, dt.timedelta):
+        minutes = duration_minutes(minutes)
+        
     if not minutes:
         if human:
             return ""
@@ -130,6 +160,21 @@ def format_duration(minutes, human = True):
     
     
     return formatted_duration
+
+def totals(iter, keyfunc, sumfunc):
+    """groups items by field described in keyfunc and counts totals using value
+       from sumfunc
+    """
+    data = sorted(iter, key=keyfunc)
+    res = {}
+
+    for k, group in groupby(data, keyfunc):
+        res[k] = sum([sumfunc(entry) for entry in group])
+
+    return res
+
+
+
 
 def dateDict(date, prefix):
     """converts date into dictionary, having prefix for all the keys"""
