@@ -25,7 +25,7 @@ import os
 import gtk
 
 import dispatcher, storage, stuff
-from configuration import GconfStore
+from configuration import GconfStore, runtime
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -46,7 +46,7 @@ class CategoryStore(gtk.ListStore):
         """ Loads activity list from database, ordered by
             activity_order """
 
-        category_list = storage.get_category_list()
+        category_list = runtime.storage.get_category_list()
 
         for category in category_list:
             self.append([category['id'],
@@ -70,7 +70,7 @@ class ActivityStore(gtk.ListStore):
         if category_id is None:
             return
         
-        activity_list = storage.get_activities(category_id)
+        activity_list = runtime.storage.get_activities(category_id)
 
         for activity in activity_list:
             self.append([activity['id'],
@@ -255,10 +255,10 @@ class PreferencesEditor:
             if (position == gtk.TREE_VIEW_DROP_BEFORE
                 or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
                 print "insert '%s' before '%s'" % (data, model[iter][3])
-                storage.move_activity(int(data), model[iter][3], insert_after = False)
+                runtime.storage.move_activity(int(data), model[iter][3], insert_after = False)
             else:
                 print "insert '%s' after '%s'" % (data, model[iter][3])
-                storage.move_activity(int(data), model[iter][3], insert_after = True)
+                runtime.storage.move_activity(int(data), model[iter][3], insert_after = True)
         else:
             print "append '%s'" % data
 
@@ -281,7 +281,7 @@ class PreferencesEditor:
         if drop_info:
             path, position = drop_info
             iter = model.get_iter(path)
-            changed = storage.change_category(int(data), model[iter][0])
+            changed = runtime.storage.change_category(int(data), model[iter][0])
             
             context.finish(changed, True, etime)
         else:
@@ -310,7 +310,7 @@ class PreferencesEditor:
             return False #ignoring unsorted category
 
         #look for dupes
-        categories = storage.get_category_list()
+        categories = runtime.storage.get_category_list()
         for category in categories:
             if category['name'].lower() == new_text.lower():
                 if id == -2: # that was a new category
@@ -319,10 +319,10 @@ class PreferencesEditor:
                 return False
 
         if id == -2: #new category
-            id = storage.add_category(new_text.decode("utf-8"))
+            id = runtime.storage.add_category(new_text.decode("utf-8"))
             model[path][0] = id
         else:
-            storage.update_category(id, new_text.decode("utf-8"))
+            runtime.storage.update_category(id, new_text.decode("utf-8"))
 
         model[path][1] = new_text
 
@@ -332,7 +332,7 @@ class PreferencesEditor:
         category_id = model[path][2]
         
         #look for dupes
-        activities = storage.get_activities(category_id)
+        activities = runtime.storage.get_activities(category_id)
         for activity in activities:
             if activity['name'].lower() == new_text.lower():
                 if id == -1: # that was a new category
@@ -342,9 +342,9 @@ class PreferencesEditor:
         
         
         if id == -1: #new activity -> add
-            model[path][0] = storage.add_activity(new_text.decode("utf-8"), category_id)
+            model[path][0] = runtime.storage.add_activity(new_text.decode("utf-8"), category_id)
         else: #existing activity -> update
-            storage.update_activity(id, new_text.decode("utf-8"), category_id)
+            runtime.storage.update_activity(id, new_text.decode("utf-8"), category_id)
         model[path][1] = new_text
         return True
         
@@ -491,7 +491,7 @@ class PreferencesEditor:
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
-        storage.remove_activity(model[iter][0])
+        runtime.storage.remove_activity(model[iter][0])
         self._del_selected_row(self.activity_tree)
 
 
@@ -530,7 +530,7 @@ class PreferencesEditor:
         (model, iter) = selection.get_selected()
         id = model[iter][0]
         if id != -1:
-            storage.remove_category(id)
+            runtime.storage.remove_category(id)
             self._del_selected_row(self.category_tree)
 
     def on_preferences_window_key_press(self, widget, event):
@@ -581,14 +581,14 @@ class PreferencesEditor:
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
-        storage.remove_activity(removable_id)
+        runtime.storage.remove_activity(removable_id)
 
     def on_activity_up_clicked(self, button):
         (model, iter) = self.selection.get_selected()
 
         #previous item
         prev_iter = get_prev(self.selection, model)
-        storage.swap_activities(model[iter][0], model[iter][3],
+        runtime.storage.swap_activities(model[iter][0], model[iter][3],
                                 model[prev_iter][0], model[prev_iter][3])
         model.move_before(iter, prev_iter)
 
@@ -598,7 +598,7 @@ class PreferencesEditor:
         (model, iter) = self.selection.get_selected()
 
         next_iter = model.iter_next(iter)
-        storage.swap_activities(model[iter][0], model[iter][3],
+        runtime.storage.swap_activities(model[iter][0], model[iter][3],
                                 model[next_iter][0], model[next_iter][3])
         self.activity_store.move_after(iter, next_iter)
 
