@@ -143,7 +143,7 @@ class Chart(graphics.Area):
         self.bar_base_color    = args.get("bar_base_color", None)
 
         self.grid_stride       = args.get("grid_stride", None)
-        self.bars_beveled      = args.get("bars_beveled", True)
+        self.bars_beveled      = args.get("bars_beveled", False)
         self.values_on_bars    = args.get("values_on_bars", False)
         self.value_format      = args.get("value_format", "%s")
         self.show_scale        = args.get("show_scale", False)
