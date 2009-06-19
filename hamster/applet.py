@@ -590,12 +590,11 @@ class HamsterApplet(object):
         (model, iter) = selection.get_selected()
 
         next_row = model.iter_next(iter)
-
         (cur, col) = self.treeview.get_cursor()
-
         runtime.storage.remove_fact(model[iter][0])
-        
-        self.treeview.set_cursor(cur)
+
+        if next_row:        
+            self.treeview.set_cursor(cur)
 
 
     def __update_fact(self):
