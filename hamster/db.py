@@ -303,9 +303,10 @@ class Storage(storage.Storage):
         # activities that we are overlapping.
         # second OR clause is for elimination - |new fact--|---old-fact--|--new fact|
         query = """
-                   SELECT a.*, b.name
+                   SELECT a.*, b.name, c.name as category
                      FROM facts a
                 LEFT JOIN activities b on b.id = a.activity_id
+                LEFT JOIN categories c on b.category_id = c.id
                     WHERE ((start_time < ? and end_time > ?)
                            OR (start_time < ? and end_time > ?))
                            
@@ -325,7 +326,12 @@ class Storage(storage.Storage):
                 self.execute("""UPDATE facts
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
-                self.__add_fact(fact["name"], end_time, fact["end_time"])
+                fact_name = fact["name"]
+                self.__add_fact(fact["name"],
+                                end_time,
+                                fact["end_time"],
+                                fact["category"],
+                                fact["description"])
 
             #eliminate
             elif fact["end_time"] and \
@@ -347,8 +353,15 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, activity_name, start_time = None, end_time = None):
+    def __add_fact(self, activity_name, start_time = None,
+                     end_time = None, category_name = None, description = None):
         activity = stuff.parse_activity_input(activity_name)
+        
+        if category_name:
+            activity.category_name = category_name
+        if description:
+            activity.description = description
+        
         start_time = activity.start_time or start_time or datetime.datetime.now()
         
         if start_time > datetime.datetime.now():
