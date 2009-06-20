@@ -609,10 +609,10 @@ class HorizontalDayChart(Chart):
         
         start_hour = 0
         if self.start_time:
-            start_hour = self.start_time.hour * 60 + self.start_time.minute
+            start_hour = self.start_time
         end_hour = 24 * 60        
         if self.end_time:
-            end_hour = self.end_time.hour * 60 + self.end_time.minute
+            end_hour = self.end_time
         
         
         # push graph to the right, so it doesn't overlap
@@ -675,24 +675,31 @@ class HorizontalDayChart(Chart):
             
             bar_height = bar_width - (gap * 2)
             
-            bar_x = (self.data[i][0].minute  + self.data[i][0].hour * 60 - start_hour) * factor
-            bar_size = (self.data[i][1].minute  + self.data[i][1].hour * 60 - start_hour) * factor - bar_x
+            if isinstance(self.data[i], list) == False:
+                self.data[i] = [self.data[i]]
             
-            self.draw_bar(self.graph_x + bar_x,
-                          bar_y,
-                          bar_size,
-                          bar_height,
-                          base_color)
+            for row in self.data[i]:
+                bar_x = (row[0]- start_hour) * factor
+                bar_size = (row[1] - start_hour) * factor - bar_x
+                
+                self.draw_bar(self.graph_x + bar_x,
+                              bar_y,
+                              bar_size,
+                              bar_height,
+                              base_color)
 
         #white grid and scale values
         self.layout.set_width(-1)
 
         context.set_line_width(1)
 
-        for i in range(start_hour + (end_hour - start_hour) / 4, end_hour, (end_hour - start_hour) / 4):
+        pace = ((end_hour - start_hour) / 3) / 60 * 60
+        for i in range(start_hour + 60, end_hour, pace):
             x = (i - start_hour) * factor
+            
+            minutes = i % (24 * 60)
 
-            self.layout.set_text(dt.time(i / 60, i % 60).strftime("%H:%M"))
+            self.layout.set_text(dt.time(minutes / 60, minutes % 60).strftime("%H:%M"))
             label_w, label_h = self.layout.get_pixel_size()
 
             context.move_to(self.graph_x + x - label_w / 2,
