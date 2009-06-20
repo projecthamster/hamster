@@ -532,84 +532,90 @@ A week of usage would be nice!"""))
         self.chart_weekday_totals.plot(weekday_keys, weekdays)
 
 
-
-        # now we will try to figure out average start and end times.
-        # first we need to group facts by date
-        # they are already sorted in db, so we can rely on that
+        split_minutes = 5 * 60 + 30 #the mystical hamster midnight
+        
+        # starts and ends by weekday
         by_weekday = {}
         for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
             date_facts = list(date_facts)
             weekday = (date_facts[0]["start_time"].weekday(),
                        date_facts[0]["start_time"].strftime("%a"))
-            by_weekday.setdefault(weekday, {"min": [], "max": []})
-
-            min_time = min([fact["start_time"].time() for fact in date_facts])
-            by_weekday[weekday]["min"].append(min_time.minute + min_time.hour * 60)
+            by_weekday.setdefault(weekday, [])
             
-            same_date_facts = [fact["end_time"].time() for fact in date_facts if fact["end_time"] and fact["start_time"].date() == fact["end_time"].date()]
-            if same_date_facts:
-                max_time = max(same_date_facts)
-                by_weekday[weekday]["max"].append(max_time.minute + max_time.hour * 60)
+            start_times, end_times = [], []
+            for fact in date_facts:
+                start_time = fact["start_time"].time()
+                start_time = start_time.hour * 60 + start_time.minute
+                if fact["end_time"]:
+                    end_time = fact["end_time"].time()
+                    end_time = end_time.hour * 60 + end_time.minute
+                
+                    if start_time < split_minutes:
+                        start_time += 24 * 60
+                    if end_time < start_time:
+                        end_time += 24 * 60
+                    
+                    start_times.append(start_time)
+                    end_times.append(end_time)
+            if start_times and end_times:            
+                by_weekday[weekday].append((min(start_times), max(end_times)))
+
 
         for day in by_weekday:
-            by_weekday[day]["min"] = int(sum(by_weekday[day]["min"]) / float(len(by_weekday[day]["min"])))
-            by_weekday[day]["min"] = dt.time(by_weekday[day]["min"] / 60, by_weekday[day]["min"] % 60)
-                                             
-            by_weekday[day]["max"] = int(sum(by_weekday[day]["max"]) / float(len(by_weekday[day]["max"])))
-            by_weekday[day]["max"] = dt.time(by_weekday[day]["max"] / 60, by_weekday[day]["max"] % 60)
+            by_weekday[day] = (sum([fact[0] for fact in by_weekday[day]]) / len(by_weekday[day]),
+                               sum([fact[1] for fact in by_weekday[day]]) / len(by_weekday[day]))
 
-        min_weekday = min([by_weekday[day]["min"] for day in by_weekday])
-        max_weekday = max([by_weekday[day]["max"] for day in by_weekday])
+        min_weekday = min([by_weekday[day][0] for day in by_weekday])
+        max_weekday = max([by_weekday[day][1] for day in by_weekday])
+
 
         weekday_keys = sorted(by_weekday.keys(), key = lambda x: x[0])
-        weekdays = [(by_weekday[key]["min"], by_weekday[key]["max"])
-                                                        for key in weekday_keys]
-        
+        weekdays = [by_weekday[key] for key in weekday_keys]
         weekday_keys = [key[1] for key in weekday_keys] # get rid of the weekday number as int
 
-
-        # and now try to figure out average min and max times per day per category
-
-        # now we will try to figure out average start and end times.
-        # first we need to group facts by date
-        # they are already sorted in db, so we can rely on that
+        
+        # starts and ends by category
         by_category = {}
         for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
             date_facts = sorted(list(date_facts), key = lambda x: x["category"])
             
             for category, category_facts in groupby(date_facts, lambda x: x["category"]):
                 category_facts = list(category_facts)
-                by_category.setdefault(category, {"min": [], "max": []})
+                by_category.setdefault(category, [])
+                
+                start_times, end_times = [], []
+                for fact in category_facts:
+                    start_time = fact["start_time"]
+                    start_time = start_time.hour * 60 + start_time.minute
+                    if fact["end_time"]:
+                        end_time = fact["end_time"].time()
+                        end_time = end_time.hour * 60 + end_time.minute
+                        
+                        if start_time < split_minutes:
+                            start_time += 24 * 60
+                        if end_time < start_time:
+                            end_time += 24 * 60
 
-                min_time = min([fact["start_time"].time() for fact in category_facts])
-                by_category[category]["min"].append(min_time.minute + min_time.hour * 60)
-            
-                same_date_facts = [fact["end_time"].time() for fact in category_facts if fact["end_time"] and fact["start_time"].date() == fact["end_time"].date()]
-                if same_date_facts:
-                    max_time = max(same_date_facts)
-                    by_category[category]["max"].append(max_time.minute + max_time.hour * 60)
+                        start_times.append(start_time)
+                        end_times.append(end_time)
 
-        for key in by_category:
-            by_category[key]["min"] = int(sum(by_category[key]["min"]) / float(len(by_category[key]["min"])))
-            by_category[key]["min"] = dt.time(by_category[key]["min"] / 60, by_category[key]["min"] % 60)
-                                             
-            by_category[key]["max"] = int(sum(by_category[key]["max"]) / float(len(by_category[key]["max"])))
-            by_category[key]["max"] = dt.time(by_category[key]["max"] / 60, by_category[key]["max"] % 60)
+                if start_times and end_times:            
+                    by_category[category].append((min(start_times), max(end_times)))
 
-        min_category = min([by_category[day]["min"] for day in by_category])
-        max_category = max([by_category[day]["max"] for day in by_category])
+        for cat in by_category:
+            by_category[cat] = (sum([fact[0] for fact in by_category[cat]]) / len(by_category[cat]),
+                                sum([fact[1] for fact in by_category[cat]]) / len(by_category[cat]))
 
+        min_category = min([by_category[day][0] for day in by_category])
+        max_category = max([by_category[day][1] for day in by_category])
 
         category_keys = sorted(by_category.keys(), key = lambda x: x[0])
-        categories = [(by_category[key]["min"], by_category[key]["max"])
-                                                        for key in category_keys]
+        categories = [by_category[key] for key in category_keys]
 
 
         #get starting and ending hours for graph and turn them into exact hours that divide by 3
-        min_hour = min([min_weekday, min_category])
-        min_hour = dt.time((min_hour.hour * 60 + min_hour.minute) / (3 * 60) * (3 * 60) / 60, 0)
-        max_hour = max([max_weekday, max_category])
-        max_hour = dt.time((max_hour.hour * 60 + max_hour.minute) / (3 * 60) * (3 * 60) / 60 + 3, 0) 
+        min_hour = min([min_weekday, min_category]) / 60 * 60
+        max_hour = max([max_weekday, max_category]) / 60 * 60
 
         self.chart_weekday_starts_ends.plot_day(weekday_keys, weekdays, min_hour, max_hour)
         self.chart_category_starts_ends.plot_day(category_keys, categories, min_hour, max_hour)
