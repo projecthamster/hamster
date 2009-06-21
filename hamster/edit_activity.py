@@ -63,7 +63,28 @@ class Dayline(graphics.Area):
         self.in_motion = False
         self.days = []
         
-    
+
+    def draw(self, day_facts, highlight = None):
+        """Draw chart with given data"""
+        self.facts = day_facts
+        if self.facts:
+            self.days.append(self.facts[0]["start_time"].date())
+        
+        start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
+        
+        if self.range_start:
+            self.range_start.target(start_time)
+            self.scroll_to_range_start()
+        else:
+            self.range_start = graphics.Integrator(start_time, damping = 0.35, attraction = 0.5)
+
+        self.highlight = highlight
+        
+        self.show()
+        
+        self.redraw_canvas()
+
+
     def on_button_release(self, area, event):
         if not self.drag_start:
             return
@@ -71,21 +92,23 @@ class Dayline(graphics.Area):
         self.drag_start, self.move_type = None, None
 
         if event.state & gtk.gdk.BUTTON1_MASK:
-            self.call_parent_time_changed()
+            self.__call_parent_time_changed()
 
     def set_in_progress(self, in_progress):
         self.in_progress = in_progress
 
-    def call_parent_time_changed(self):
+    def __call_parent_time_changed(self):
         #now calculate back from pixels into minutes
-        start_time = self.get_value_at_pos(x = self.highlight_start)
-        start_time = self.range_start.value + dt.timedelta(minutes = start_time) 
-                
-        end_time = self.get_value_at_pos(x = self.highlight_end) 
-        end_time = self.range_start.value + dt.timedelta(minutes = end_time)
+        start_time = self.highlight[0]
+        end_time = self.highlight[1]
+
         if self.on_time_changed:
             self.on_time_changed(start_time, end_time)
-        
+    
+    def get_time(self, pixels):
+        minutes = self.get_value_at_pos(x = pixels)
+        return self.range_start.value + dt.timedelta(minutes = minutes) 
+    
     def scroll_to_range_start(self):
         if not self.in_motion:
             self.in_motion = True
@@ -116,8 +139,6 @@ class Dayline(graphics.Area):
             return True
         else:
             self.in_motion = False
-            self.call_parent_time_changed()
-
             return False
 
 
@@ -165,35 +186,36 @@ class Dayline(graphics.Area):
             
             if mouse_down and self.drag_start:
                 start, end = 0, 0
-                if self.move_type == "start":
-                    if 0 <= x <= self.width:
-                        start = x
-                        end = self.highlight_end
-                elif self.move_type == "end":
-                    if 0 <= x <= self.width:
-                        start = self.highlight_start
-                        end = x
-                elif self.move_type == "move":
-                    width = self.highlight_end - self.highlight_start
-                    start = x - self.drag_start
-                    start = max(0, min(start, self.width))
-                    
-                    end = start + width
-                    if end > self.width:
-                        end = self.width
-                        start = end - width
+                if self.move_type and self.move_type != "scale_drag":
+                    if self.move_type == "start":
+                        if 0 <= x <= self.width:
+                            start = x
+                            end = self.highlight_end
+                    elif self.move_type == "end":
+                        if 0 <= x <= self.width:
+                            start = self.highlight_start
+                            end = x
+                    elif self.move_type == "move":
+                        width = self.highlight_end - self.highlight_start
+                        start = x - self.drag_start
+                        start = max(0, min(start, self.width))
+                        
+                        end = start + width
+                        if end > self.width:
+                            end = self.width
+                            start = end - width
+    
+                    if end - start > 1:
+                        self.highlight = (self.get_time(start), self.get_time(end))
+                        self.redraw_canvas()
 
-                if end - start > 1:
-                    self.highlight_start = start
-                    self.highlight_end = end
-                    self.redraw_canvas()
-
-                if self.move_type == "scale_drag":
+                    self.__call_parent_time_changed()
+                else:
                     self.range_start.target(self.drag_start_time +
                                             dt.timedelta(minutes = self.get_value_at_pos(x = self.drag_start) - self.get_value_at_pos(x = x)))
                     self.scroll_to_range_start()
 
-                self.call_parent_time_changed()
+
 
             if start_drag:
                 area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_SIDE))
@@ -202,26 +224,9 @@ class Dayline(graphics.Area):
             elif in_between:
                 area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
             else:
-                area.window.set_cursor(None)
+                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW))
                 
         
-    def draw(self, day_facts, highlight = None):
-        """Draw chart with given data"""
-        self.facts = day_facts
-        if self.facts:
-            self.days.append(self.facts[0]["start_time"].date())
-        
-        start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
-        
-        self.range_start = graphics.Integrator(start_time, damping = 0.5, attraction = 0.7)
-
-        self.highlight = highlight
-        
-        self.show()
-        
-        self.redraw_canvas()
-
-
     def _minutes_from_start(self, date):
             delta = (date - self.range_start.value)
             return delta.days * 24 * 60 + delta.seconds / 60
@@ -242,76 +247,103 @@ class Dayline(graphics.Area):
 
 
         graph_y = 4
-        graph_height = self.height - 25
+        graph_height = self.height - 10
         graph_y2 = graph_y + graph_height
 
         
         # graph area
         self.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
-        context.set_source_rgb(0.7, 0.7, 0.7)
-        context.rectangle(0, graph_y-1, self.width - 1, graph_height)
-        context.stroke()
     
-        #time scale
-
-        #scale labels
-        context.set_source_rgb(0, 0, 0)
-        for i in range(minutes):
-            label_time = (self.range_start.value + dt.timedelta(minutes=i))
-            if label_time.minute == 0 and label_time.hour % 2 == 0:
-                if label_time.hour == 0:
-                    context.set_source_rgb(0.8, 0.8, 0.8)
-                    self.move_to(i, graph_y)
-                    self.line_to(i, graph_y2)
-                    label_minutes = label_time.strftime("%b %d.")
-                else:
-                    label_minutes = label_time.strftime("%H:%M")
-
-                context.set_source_rgb(0, 0, 0)
-                self.layout.set_text(label_minutes)
-                label_w, label_h = self.layout.get_pixel_size()
-                
-                context.move_to(self.get_pixel(x_value=i) - label_w/2,
-                                graph_y2 + 6)                
-
-                context.show_layout(self.layout)
-        context.stroke()
-        
         #bars
-        context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
         for fact in self.facts:
             start_minutes = self._minutes_from_start(fact["start_time"])
             
             if fact["end_time"]:
                 end_minutes = self._minutes_from_start(fact["end_time"])
             else:
-                if fact["start_time"].date() == dt.date.today():
+                if fact["start_time"].date() > dt.date.today() - dt.timedelta(days=1):
                     end_minutes = self._minutes_from_start(dt.datetime.now())
             
-            if self.get_pixel(x_value = end_minutes) > 0 and \
-                self.get_pixel(x_value = start_minutes) < self.width:
-                    context.rectangle(self.get_pixel(x_value = start_minutes), graph_y,
-                                      self.get_pixel(x_value=end_minutes) - self.get_pixel(x_value=start_minutes), graph_height - 1)
-        context.fill()
+            if self.get_pixel(end_minutes) > 0 and \
+                self.get_pixel(start_minutes) < self.width:
+                    context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
+                    context.rectangle(self.get_pixel(start_minutes), graph_y,
+                                      self.get_pixel(end_minutes) - self.get_pixel(start_minutes), graph_height - 1)
+                    context.fill()
+                    context.stroke()
+
+                    context.set_source_rgba(0.86, 0.86, 0.86, 1)
+                    self.move_to(start_minutes, graph_y)
+                    self.line_to(start_minutes, graph_y2)
+                    self.move_to(end_minutes, graph_y)
+                    self.line_to(end_minutes, graph_y2)
+                    context.stroke()
+
         
         
+        #time scale
+        context.set_source_rgb(0, 0, 0)
+        self.layout.set_width(-1)
+        for i in range(minutes):
+            label_time = (self.range_start.value + dt.timedelta(minutes=i))
+            
+            if label_time.minute == 0:
+                context.set_source_rgb(0.8, 0.8, 0.8)
+                self.move_to(i, graph_y2 - 15)
+                self.line_to(i, graph_y2)
+                context.stroke()
+            elif label_time.minute % 15 == 0:
+                context.set_source_rgb(0.8, 0.8, 0.8)
+                self.move_to(i, graph_y2 - 5)
+                self.line_to(i, graph_y2)
+                context.stroke()
+                
+                
+                
+            if label_time.minute == 0 and label_time.hour % 2 == 0:
+                if label_time.hour == 0:
+                    context.set_source_rgb(0.8, 0.8, 0.8)
+                    self.move_to(i, graph_y)
+                    self.line_to(i, graph_y2)
+                    label_minutes = label_time.strftime("%b %d")
+                else:
+                    label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
 
-        if self.highlight:
-            self.highlight_start =self.get_pixel(x_value= self._minutes_from_start(self.highlight[0]))
-            self.highlight_end = self.get_pixel(x_value=self._minutes_from_start(self.highlight[1]))
-            self.highlight = None
+                context.set_source_rgb(0.4, 0.4, 0.4)
+                self.layout.set_markup(label_minutes)
+                label_w, label_h = self.layout.get_pixel_size()
+                
+                context.move_to(self.get_pixel(i) + 2, graph_y2 - label_h - 8)                
 
-
+                context.show_layout(self.layout)
+        context.stroke()
+        
         #highlight rectangle
-        if self.highlight_start != None:
-            rgb = colorsys.hls_to_rgb(.6, .7, .5)
-            context.set_source_rgba(rgb[0], rgb[1], rgb[2], 0.5)
+        if self.highlight:
+            self.highlight_start = self.get_pixel(self._minutes_from_start(self.highlight[0]))
+            self.highlight_end = self.get_pixel(self._minutes_from_start(self.highlight[1]))
 
-            context.rectangle(self.highlight_start, graph_y-3,
-                              self.highlight_end - self.highlight_start, graph_height + 4)
-            context.fill_preserve()
-            context.set_source_rgb(*rgb)
+        #TODO - make a proper range check here
+        if self.highlight_end > 0 and self.highlight_start < self.width:
+            rgb = colorsys.hls_to_rgb(.6, .7, .5)
+
+
+            self.fill_area(self.highlight_start, graph_y,
+                           self.highlight_end - self.highlight_start, graph_height,
+                           (rgb[0], rgb[1], rgb[2], 0.5))
             context.stroke()
+
+            context.set_source_rgb(*rgb)
+            self.context.move_to(self.highlight_start, graph_y)
+            self.context.line_to(self.highlight_start, graph_y + graph_height)
+            self.context.move_to(self.highlight_end, graph_y)
+            self.context.line_to(self.highlight_end, graph_y + graph_height)
+            context.stroke()
+
+        #and now put a frame around the whole thing
+        context.set_source_rgb(0.7, 0.7, 0.7)
+        context.rectangle(0, graph_y-1, self.width - 1, graph_height)
+        context.stroke()
         
         if self.move_type == "move" and (self.highlight_start == 0 or self.highlight_end == self.width):
             if self.highlight_start == 0:
@@ -369,7 +401,7 @@ class CustomFactController:
 
         self.start_date = widgets.DateInput(start_date)
         self.get_widget("start_date_placeholder").add(self.start_date)
-        self.start_date.connect("date-entered", self.validate_fields)
+        self.start_date.connect("date-entered", self.on_start_date_entered)
 
         self.start_time = widgets.TimeInput(start_date)
         self.get_widget("start_time_placeholder").add(self.start_time)
@@ -581,11 +613,16 @@ class CustomFactController:
     def on_activity_combo_changed(self, combo):
         self.validate_fields()
 
+    def on_start_date_entered(self, widget):
+        self.validate_fields()
+        self.start_time.grab_focus()
+
     def on_start_time_entered(self, widget):
         self.end_time.set_time(self.start_time.get_time() +
                                                      dt.timedelta(minutes = 30))
         self.end_time.set_start_time(self.start_time.get_time())
         self.validate_fields()
+        self.end_time.grab_focus()
         
     def on_end_time_entered(self, widget):
         self.validate_fields()
@@ -620,6 +657,7 @@ class CustomFactController:
             looks_good = True
 
         self.get_widget("save_button").set_sensitive(looks_good)
+        return looks_good
 
     def on_window_key_pressed(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape
