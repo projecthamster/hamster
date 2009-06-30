@@ -168,7 +168,6 @@ class Dayline(graphics.Area):
             if self.in_progress:
                 end_drag = False
                 in_between = False
-                scale = False
 
             if mouse_down and not self.drag_start:
                 self.drag_start = x
@@ -224,7 +223,7 @@ class Dayline(graphics.Area):
             elif in_between:
                 area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
             else:
-                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.SB_H_DOUBLE_ARROW))
+                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
                 
         
     def _minutes_from_start(self, date):
