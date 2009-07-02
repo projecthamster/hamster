@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-05-06 12:07+0000\n"
-"PO-Revision-Date: 2009-05-16 21:30+0300\n"
+"POT-Creation-Date: 2009-06-19 09:33+0000\n"
+"PO-Revision-Date: 2009-06-29 18:06+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -92,6 +92,9 @@ msgstr "_Tegevused"
 msgid "_Categories"
 msgstr "_Kategooriad"
 
+msgid "remind also when no activity is set"
+msgstr ""
+
 msgid "Activity:"
 msgstr "Tegevus:"
 
@@ -116,6 +119,13 @@ msgstr ""
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks."
 
+msgid "Remind also when no activity is set"
+msgstr ""
+
+msgid ""
+"Remind every notify_interval minutes also if no activity has been started."
+msgstr ""
+
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or bigger "
 "than 120 to disable reminder."
@@ -139,7 +149,7 @@ msgid "Stop tracking on idle"
 msgstr "Jõudeoleku korral jälgimise seiskamine"
 
 msgid ""
-"<span size=\"small\" >Type in activity and hit Enter to start tracking!</"
+"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
 "span>"
 msgstr ""
 
@@ -178,17 +188,26 @@ msgstr "_Nädal"
 msgid "<b>Overview</b>"
 msgstr "<b>Ülevaade</b>"
 
+msgid "<b>Starts and ends</b>"
+msgstr ""
+
+msgid "<b>Totals</b>"
+msgstr ""
+
 msgid "Activity"
 msgstr "Tegevus"
 
-msgid "Delete activity"
-msgstr "Tegevuse kustutamine"
+msgid "Categories:"
+msgstr "Kategooriad:"
 
-msgid "Newer activities"
-msgstr "Uuemad tegevused"
+msgid "Date interval:"
+msgstr ""
 
 msgid "No data for this interval"
 msgstr "Selle vahemiku kohta puuduvad andmed"
+
+msgid "Overview"
+msgstr "Ülevaade"
 
 msgid "Overview - Hamster"
 msgstr "Ülevaade - Hamster"
@@ -196,14 +215,20 @@ msgstr "Ülevaade - Hamster"
 msgid "Save as HTML"
 msgstr "Salvesta HTML-ina"
 
-msgid "Show month"
-msgstr "Näita kuud"
+msgid "Save report - Time Tracker"
+msgstr ""
 
-msgid "Show week"
-msgstr "Näita nädalat"
+msgid "Statistics"
+msgstr "Statistika"
+
+msgid "Today"
+msgstr "Täna"
 
 msgid "Week"
 msgstr "Nädal"
+
+msgid "Year:"
+msgstr "Aasta:"
 
 msgid "Copyright © 2007-2009 Toms Bauģis and others"
 msgstr "Autoriõigused © 2007-2009 Toms Baugis ja teised"
@@ -224,26 +249,6 @@ msgstr "Muuda"
 #. translators: this is switch activity action in the notifier bubble
 msgid "Switch"
 msgstr "Vaheta"
-
-msgid "What to type in the activity box?"
-msgstr ""
-
-msgid ""
-"There is simple syntax that enables you to add details to your activities:\n"
-"        \n"
-"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
-"tracking activity \"watering flowers\" in category \"home\".\n"
-"\n"
-"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking activity \"watering flowers"
-"\" and add description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
 
 msgid "Duration"
 msgstr "Kestus"
@@ -268,6 +273,26 @@ msgstr "%.1ft"
 #. try yesterday if there is nothing today
 msgid "Unsorted"
 msgstr "Sortimata"
+
+msgid "What to type in the activity box?"
+msgstr ""
+
+msgid ""
+"There is simple syntax that enables you to add details to your activities:\n"
+"        \n"
+"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
+"tracking activity \"watering flowers\" in category \"home\".\n"
+"\n"
+"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking activity \"watering flowers"
+"\" and add description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
 
 #. defaults
 msgid "Work"
@@ -321,6 +346,24 @@ msgstr "%(interval_minutes)d minuti järel"
 msgid "Never"
 msgstr "Mitte kunagi"
 
+msgid "activity"
+msgstr "tegevus"
+
+msgid "start time"
+msgstr "alustamise aeg"
+
+msgid "end time"
+msgstr "lõpetamise aeg"
+
+msgid "duration minutes"
+msgstr "kestus minutites"
+
+msgid "category"
+msgstr "kategooria"
+
+msgid "description"
+msgstr "kirjeldus"
+
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
@@ -363,7 +406,6 @@ msgstr "Lõpp"
 msgid "Description"
 msgstr "Kirjeldus"
 
-#. fact date column in HTML report
 #, python-format
 msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
@@ -375,21 +417,96 @@ msgstr "Kokku"
 msgid "Total Time"
 msgstr "Aega kokku"
 
+msgid "HTML Report"
+msgstr "HTML-raport"
+
+msgid "Tab Separated Values (TSV)"
+msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "iCal"
+msgstr "iCal"
+
+#. add unsorted category
+msgid "All"
+msgstr "Kõik"
+
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+
+msgid "Still collecting data - check back after a week has passed!"
+msgstr ""
+
+#. date format for case when year has not been selected
+#, python-format
+msgid "%(first_b)s %(first_d)s, %(first_Y)s"
+msgstr "%(first_d)s.%(first_b)s.%(first_Y)s"
+
+#. date format when year has been selected
+#, python-format
+msgid "%(first_b)s %(first_d)s"
+msgstr "%(first_d)s. %(first_b)s"
+
+#, python-format
+msgid "First activity was recorded on %s."
+msgstr ""
+
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s years) or %"
+"(working_days)s working days (%(working_years)s years)."
+msgstr ""
+
+#, python-format
+msgid ""
+"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
+"(hours)s hours."
+msgstr ""
+
+#. total records (in selected scope)
+#, python-format
+msgid "There are %s records."
+msgstr ""
+
+msgid "Hamster would like to observe you some more!"
+msgstr ""
+
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am you seem to be an early "
+"bird."
+msgstr ""
+
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr ""
+
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"busy bee."
+msgstr ""
+
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
 
-msgid "Month"
-msgstr "Kuu"
+msgid "Total"
+msgstr "Kokku"
 
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_d)s. %(m_b)s"
 
-msgid "Total"
-msgstr "Kokku"
+msgid "Month"
+msgstr "Kuu"
 
 #. duration in round hours
 #, python-format
@@ -405,3 +522,15 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
+
+#~ msgid "Delete activity"
+#~ msgstr "Tegevuse kustutamine"
+
+#~ msgid "Newer activities"
+#~ msgstr "Uuemad tegevused"
+
+#~ msgid "Show month"
+#~ msgstr "Näita kuud"
+
+#~ msgid "Show week"
+#~ msgstr "Näita nädalat"
