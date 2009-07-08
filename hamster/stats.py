@@ -34,6 +34,7 @@ from configuration import runtime
 import webbrowser
 
 from itertools import groupby
+from gettext import ngettext
 
 import datetime as dt
 import calendar
@@ -232,7 +233,7 @@ class TimeLine(graphics.Area):
         year_pos = 0
         
         for year in range(self.start_date.year, self.end_date.year + 1):
-            #due to how things overlay, we are putting labels on backwards, so that they don't overlap
+            #due to how things lay over, we are putting labels on backwards, so that they don't overlap
             
             self.context.set_line_width(1)
             for month in range(1, 13):
@@ -252,7 +253,8 @@ class TimeLine(graphics.Area):
                         label_w, label_h = self.layout.get_pixel_size()
                         
                         if label_w < self.x_factor / 1.2: #if label fits
-                            self.context.move_to(self.get_pixel(ticker_pos) + 2, self.height - 20)
+                            self.context.move_to(self.get_pixel(ticker_pos) + 2,
+                                                 self.height - 20)
                             self.context.show_layout(self.layout)
                     
                         self.context.stroke()
@@ -265,7 +267,10 @@ class TimeLine(graphics.Area):
                             total_length += fact["delta"]
                         total_length = total_length.seconds / 60 / 60.0 + total_length.days * 24
                         total_length = total_length / float(self.max_hours) * self.height - 16
-                        self.fill_area(ticker_pos * self.x_factor, self.height - total_length, self.x_factor, total_length, (190,190,190))
+                        self.fill_area(ticker_pos * self.x_factor,
+                                       self.height - total_length,
+                                       self.x_factor, total_length,
+                                       (190,190,190))
 
 
                         
@@ -643,13 +648,21 @@ A week of usage would be nice!"""))
             total_delta += fact["delta"]
         
         if total_delta.days > 1:
+            human_years_str = ngettext("%(num)s year",
+                                       "%(num)s years",
+                                       total_delta.days / 365) % {
+                              'num': "<b>%.2f</b>" % (total_delta.days / 365.0)}
+            working_years_str = ngettext("%(num)s year",
+                                         "%(num)s years",
+                                         total_delta.days * 3 / 365) % {
+                         'num': "<b>%.2f</b>" % (total_delta.days * 3 / 365.0) }
+            #FIXME: difficult string to properly pluralize
             summary += " " + _("""Time tracked so far is %(human_days)s human days \
-(%(human_years)s years) or %(working_days)s working days \
-(%(working_years)s years).""") % \
-            ({"human_days": ("<b>%d</b>" % total_delta.days),
-              "human_years": ("<b>%.2f</b>" % (total_delta.days / 365.0)),
+(%(human_years)s) or %(working_days)s working days (%(working_years)s).""") % {
+              "human_days": ("<b>%d</b>" % total_delta.days),
+              "human_years": human_years_str,
               "working_days": ("<b>%d</b>" % (total_delta.days * 3)), # 8 should be pretty much an average working day
-              "working_years": ("<b>%.2f</b>" % (total_delta.days * 3 / 365.0))})
+              "working_years": working_years_str }
         
 
         # longest fact
@@ -659,14 +672,19 @@ A week of usage would be nice!"""))
                 max_fact = fact
 
         datedict = stuff.dateDict(max_fact["start_time"], "max_")
-        datedict["hours"] = "<b>%.1f</b>" % (max_fact["delta"].seconds / 60 / 60.0
-                                                  + max_fact["delta"].days * 24)
+        num_hours = max_fact["delta"].seconds / 60 / 60.0 + max_fact["delta"].days * 24
+        datedict["hours"] = "<b>%.1f</b>" % (num_hours)
 
-        summary += "\n" + _("Longest continuous work happened on \
-%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hours.") % datedict
+        summary += "\n" + ngettext("Longest continuous work happened on \
+%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hour.",
+                                  "Longest continuous work happened on \
+%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hours.",
+                                  int(num_hours)) % datedict
 
         # total records (in selected scope)
-        summary += " " + _("There are %s records.") % ("<b>%d</b>" % len(facts))
+        summary += " " + ngettext("There are %s record.",
+                                  "There are %s records.",
+                                  len(facts)) % ("<b>%d</b>" % len(facts))
 
 
         early_start, early_end = dt.time(5,0), dt.time(9,0)
@@ -713,7 +731,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                 description = stuff.escape_pango(model.get_value(iter, 4))
                 category = stuff.escape_pango(model.get_value(iter, 5))
 
-                markup = stuff.format_activity(activity_name, category, description, pad_description = True)            
+                markup = stuff.format_activity(activity_name,
+                                               category,
+                                               description,
+                                               pad_description = True)            
                 cell.set_property('markup', markup)
 
         def duration_painter(column, cell, model, iter):
@@ -760,9 +781,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
     def fill_tree(self, facts):
         day_dict = {}
         for day, facts in groupby(facts, lambda fact: fact["date"]):
-            day_dict[day] = sorted(list(facts), key=lambda fact:fact["start_time"])
-        
-        
+            day_dict[day] = sorted(list(facts),
+                                   key=lambda fact: fact["start_time"])
         
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
@@ -775,13 +795,14 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             for fact in day_dict.get(current_date, []):
                 day_total += fact["delta"]
 
-            day_row = self.fact_store.append(None, [-1,
-                                                    fact_date,
-                                                    stuff.format_duration(day_total),
-                                                    current_date.strftime('%Y-%m-%d'),
-                                                    "",
-                                                    "",
-                                                    None])
+            day_row = self.fact_store.append(None,
+                                             [-1,
+                                              fact_date,
+                                              stuff.format_duration(day_total),
+                                              current_date.strftime('%Y-%m-%d'),
+                                              "",
+                                              "",
+                                              None])
 
             for fact in day_dict.get(current_date, []):
                 self.fact_store.append(day_row,
@@ -828,7 +849,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         if (self.end_date - self.start_date).days < 20:
             day_keys = [day.strftime("%a") for day in all_days]
         else:
-            day_keys = [_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_") for day in all_days]
+            day_keys = [_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")
+                                                            for day in all_days]
 
         self.day_chart.plot(day_keys, res, stack_keys = all_categories)
 
@@ -1200,7 +1222,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         if not self.report_chooser:
             self.report_chooser = ReportChooserDialog()
             self.report_chooser.connect("report-chosen", self.on_report_chosen)
-            self.report_chooser.connect("report-chooser-closed", self.on_report_chooser_closed)
+            self.report_chooser.connect("report-chooser-closed",
+                                        self.on_report_chooser_closed)
             self.report_chooser.show(self.start_date, self.end_date)
         else:
             self.report_chooser.present()
@@ -1219,7 +1242,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             self.stats()
         
     def on_close(self, widget, event):
-        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.del_handler('activity_updated',
+                                       self.after_activity_update)
         runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
         self.close_window()        
 
