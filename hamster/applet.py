@@ -295,7 +295,7 @@ class HamsterApplet(object):
     def setup_activity_tree(self):
         self.treeview = self._gui.get_object('today')
         # ID, Time, Name, Duration, Date, Description, Category
-        self.treeview.set_model(gtk.ListStore(int, str, str, str, str, str, str))
+        self.treeview.set_model(gtk.ListStore(int, str, str, str, str, str, str, gobject.TYPE_PYOBJECT))
 
         self.treeview.append_column(gtk.TreeViewColumn("Time",
                                                        gtk.CellRendererText(),
@@ -564,7 +564,8 @@ class HamsterApplet(object):
                                "%s" % stuff.format_duration(duration),
                                fact["start_time"].strftime("%H:%M"),
                                stuff.escape_pango(fact["description"]),
-                               stuff.escape_pango(fact["category"])])
+                               stuff.escape_pango(fact["category"]),
+                               fact])
 
         
         if not facts:
@@ -747,14 +748,17 @@ class HamsterApplet(object):
         else:
             selection = tree.get_selection()
             (model, iter) = selection.get_selected()
-            activity_name = model[iter][1].decode('utf8', 'replace')
-            if activity_name:
-                description = model[iter][5]
-                if description:
-                    description = description.decode('utf8', 'replace')
-                    activity_name = "%s, %s" % (activity_name, description)
+            
+            fact = model[iter][7]
+            if fact:
+                activity = fact['name']
+                if fact['category']:
+                    activity = '%s@%s' % (activity, fact['category'])
+
+                if fact['description']:
+                    activity = "%s, %s" % (activity, fact['description'])
                     
-                runtime.storage.add_fact(activity_name)
+                runtime.storage.add_fact(activity)
                 runtime.dispatcher.dispatch('panel_visible', False)
         
         
