@@ -79,7 +79,7 @@ class ReportWriter(object):
 class ICalWriter(ReportWriter):
     """a lame ical writer, could not be bothered with finding a library"""
     def __init__(self, path):
-        ReportWriter.__init__(self, path, datetime_format = "%Y%m%dT%H%M%SZ")
+        ReportWriter.__init__(self, path, datetime_format = "%Y%m%dT%H%M%S")
         self.file.write("BEGIN:VCALENDAR\nVERSION:1.0\n")
 
     
