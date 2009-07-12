@@ -447,8 +447,10 @@ class Storage(storage.Storage):
                     WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
         """
         
-        if category_id:
+        if category_id and isinstance(category_id, int):
             query += " and b.category_id = %d" % category_id
+        elif category_id and isinstance(category_id, list):
+            query += " and b.category_id IN (%s)" % (",".join([str(id) for id in category_id]))
 
         query += " ORDER BY a.start_time"
         end_date = end_date or date
