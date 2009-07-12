@@ -116,16 +116,31 @@ class ReportChooserDialog(gtk.Dialog):
         self.end_date.set_date(end_date)
         
         #add unsorted category
-        button_all = gtk.RadioButton(None, _("All").encode("utf-8"))
+        button_all = gtk.CheckButton(_("All").encode("utf-8"))
         button_all.value = None
         button_all.set_active(True)
-        self.category_box.pack_start(button_all)
+        
+        def on_category_all_clicked(checkbox):
+            active = checkbox.get_active()
+            for checkbox in self.category_box.get_children():
+                checkbox.set_active(active)
+        
+        button_all.connect("clicked", on_category_all_clicked)
+        self.category_box.attach(button_all, 0, 1, 0, 1)
 
         categories = runtime.storage.get_category_list()
+        col, row = 0, 0
         for category in categories:
-            button = gtk.RadioButton(button_all, category['name'].encode("utf-8"))
+            col +=1
+            if col % 4 == 0:
+                col = 0
+                row +=1
+
+            button = gtk.CheckButton(category['name'].encode("utf-8"))
             button.value = category['id']
-            self.category_box.pack_start(button)
+            button.set_active(True)
+            self.category_box.attach(button, col, col+1, row, row+1)
+
         
 
         response = self.dialog.show_all()
@@ -141,16 +156,16 @@ class ReportChooserDialog(gtk.Dialog):
             format = self.filters[self.dialog.get_filter()]
         path = self.dialog.get_filename()
         
-        category = None
+        categories = []
         for button in self.category_box.get_children():
-            if button.get_active():
-                category = button.value
+            if button.get_active() and button.value:
+                categories.append(button.value)
         
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path,
                            self.start_date.get_date().date(),
                            self.end_date.get_date().date(),
-                           category)
+                           categories)
         self.dialog.destroy()
         
 
@@ -1199,10 +1214,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         chooser.add_filter(filter)
         
     def on_report_chosen(self, widget, format, path, start_date, end_date,
-                                                                      category):
+                                                                    categories):
         self.report_chooser = None
         
-        facts = runtime.storage.get_facts(start_date, end_date, category_id = category)
+        facts = runtime.storage.get_facts(start_date, end_date, category_id = categories)
         reports.simple(facts,
                        self.start_date,
                        self.end_date,
