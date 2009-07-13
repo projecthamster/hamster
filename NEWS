@@ -1,4 +1,18 @@
 ===============
+Version 2.27.4
+===============
+  * Now it is possible to copy/paste activities in the overview
+  * mostly polishing and bug fixing the new stuff brought in in 2.27 cycle
+  
+  Updated translations:
+    * bn_IN (Runa Bhattacharjee)
+    * es (Jorge González)
+    * et (Ivar Smolin)
+    * fr (Claude Paroz)
+    * sv (Daniel Nylander)
+    * uk (Maxim V. Dziumanenko)
+
+===============
 Version 2.27.3
 ===============
   * A much better DBUS support (Felix Ontanon)
