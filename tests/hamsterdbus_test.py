@@ -23,6 +23,7 @@ class TestTracking(unittest.TestCase):
         self.addfact = self.hamster.get_dbus_method('AddFact')
         self.getfactbyid = self.hamster.get_dbus_method('GetFactById')
         self.removefact = self.hamster.get_dbus_method('RemoveFact')
+        self.getfacts = self.hamster.get_dbus_method('GetFacts')
         self.getcurrentfact = self.hamster.get_dbus_method('GetCurrentFact')
         self.addactivity = self.hamster.get_dbus_method('AddActivity')
         self.getactivities = self.hamster.get_dbus_method('GetActivities')
@@ -53,6 +54,14 @@ class TestTracking(unittest.TestCase):
         self.assertEqual(fact['end_time'], dbfact['end_time'], 
                 'expected same end_time')
 
+        facts = self.getfacts(dbfact['start_time'], dbfact['end_time'])
+        in_facts = False
+        for item in facts:
+            if item == dbfact:
+                in_facts = True
+        self.assertTrue(in_facts, 'expected fact between %i and %i' % \
+                (fact['start_time'], fact['end_time']))
+
         self.removeactivity(dbfact['name'], dbfact['category'])
         result = self.__findactivity(dbfact['name'], dbfact['category'])
         self.assertFalse(result, 'not expecting %s@%s in database' % \
@@ -65,16 +74,7 @@ class TestTracking(unittest.TestCase):
 
         self.removefact(fact_id)
         deletedfact = self.getfactbyid(fact_id)
-        self.assertEqual(deletedfact['name'], '', 
-                'expected no name on deleted fact')
-        self.assertEqual(deletedfact['category'], '', 
-                'expected no category on deleted fact')
-        self.assertEqual(deletedfact['description'], '',
-                'expected no description on deleted fact')
-        self.assertEqual(deletedfact['start_time'], 0,
-                'expected no start_time on deleted fact')
-        self.assertEqual(deletedfact['end_time'], 0, 
-                'expected no end_time on deleted fact')
+        self.assertFalse(deletedfact, 'expected no fact after deleted it')
 
     def test_getcurrent_stop(self):
         fact = self.__rndfactgenerator()
@@ -99,16 +99,7 @@ class TestTracking(unittest.TestCase):
 
         self.stoptracking()
         current = self.getcurrentfact()
-        self.assertEqual(current['name'], '', 
-                'expected no name on deleted fact')
-        self.assertEqual(current['category'], '', 
-                'expected no category on deleted fact')
-        self.assertEqual(current['description'], '',
-                'expected no description on deleted fact')
-        self.assertEqual(current['start_time'], 0,
-                'expected no start_time on deleted fact')
-        self.assertEqual(current['end_time'], 0, 
-                'expected no end_time on deleted fact')
+        self.assertFalse(current, 'expected no fact after stop tracking')
 
         self.removeactivity(fact['name'], fact['category'])
         result = self.__findactivity(fact['name'], fact['category'])
@@ -147,11 +138,12 @@ class TestTracking(unittest.TestCase):
         result = self.__findcategory(cat)
         self.assertFalse(result, 'not expecting %s in database' % cat)
 
-    def __rndfactgenerator(self):
-        fact = {'name':rndstr(), 'category':rndstr(), 
-                'description':rndstr(), 
-                'start_time':timegm(dt.datetime.now().timetuple()), 
-                'end_time':timegm((dt.datetime.now() + \
+    def __rndfactgenerator(self, name=None, category=None, description=None,
+            start_time=None, end_time=None):
+        fact = {'name':name or rndstr(), 'category':category or rndstr(), 
+                'description':description or rndstr(), 
+                'start_time':start_time or timegm(dt.datetime.now().timetuple()), 
+                'end_time':end_time or timegm((dt.datetime.now() + \
                         dt.timedelta(hours=1)).timetuple())}
         return fact
 

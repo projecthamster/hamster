@@ -55,22 +55,24 @@ class HamsterDbusController(dbus.service.Object):
         dbus supported data types
         """
 
+        if not fact:
+            return dbus.Dictionary({}, signature='sv')
+
         # Default fact values
         dbus_fact = {FCT_KEY: 0, ACT_KEY:'', CAT_KEY:'', DSC_KEY:'',
                 SRT_KEY:0, END_KEY:0}
 
-        if fact:
-            # Workaround for fill values
-            fact_keys = fact.keys()
+        # Workaround for fill values
+        fact_keys = fact.keys()
 
-            for key in (FCT_KEY, ACT_KEY, CAT_KEY, DSC_KEY):
-                if key in fact_keys and fact[key]: 
-                    dbus_fact[key] = fact[key]
-    
-            for key in (SRT_KEY, END_KEY):
-                if key in fact_keys and fact[key]:
-                    # Convert datetime to unix timestamp (seconds since epoch)
-                    dbus_fact[key] = timegm(fact[key].timetuple())
+        for key in (FCT_KEY, ACT_KEY, CAT_KEY, DSC_KEY):
+            if key in fact_keys and fact[key]:
+                dbus_fact[key] = fact[key]
+
+        for key in (SRT_KEY, END_KEY):
+            if key in fact_keys and fact[key]:
+                # Convert datetime to unix timestamp (seconds since epoch)
+                dbus_fact[key] = timegm(fact[key].timetuple())
 
         return dbus_fact
 
@@ -102,6 +104,37 @@ class HamsterDbusController(dbus.service.Object):
         """
         return HamsterDbusController.to_dbus_fact(runtime.storage.get_fact(fact_id))
 
+    @dbus.service.method(HAMSTER_URI, in_signature='uu', out_signature='aa{sv}')
+    def GetFacts(self, start_date, end_date):
+        """Gets facts between the day of start_date and the day of end_date.
+        Parameters:
+        u start_date: Seconds since epoch (timestamp). Use 0 for today
+        u end_date: Seconds since epoch (timestamp). Use 0 for today
+        Returns Array of fact where fact it's Dict of:
+        i id: Unique fact identifier
+        s name: Activity name
+        s category: Category name
+        s description: Description of the fact
+        u start_time: Seconds since epoch (timestamp)
+        u end_time: Seconds since epoch (timestamp)
+        """
+        #TODO: Assert start > end ?
+        if start_date:
+            start = datetime.datetime.utcfromtimestamp(start_date).date()
+        else:
+            start = datetime.date.today()
+
+        if end_date:
+            end = datetime.datetime.utcfromtimestamp(end_date).date()
+        else:
+            end = datetime.date.today()
+
+        facts = dbus.Array([], signature='a{sv}')
+        for fact in runtime.storage.get_facts(start, end):
+            facts.append(HamsterDbusController.to_dbus_fact(fact))
+
+        return facts
+
     @dbus.service.method(HAMSTER_URI, out_signature='a(ss)')
     def GetActivities(self):
         """Gets all defined activities with matching category
@@ -109,7 +142,7 @@ class HamsterDbusController(dbus.service.Object):
         s activity: Activity name
         s category: Category name
         """
-        activities = []
+        activities = dbus.Array([], signature='(ss)')
         for act in runtime.storage.get_autocomplete_activities():
             activities.append((act[ACT_KEY] or '', act[CAT_KEY] or ''))
         return activities
@@ -120,9 +153,9 @@ class HamsterDbusController(dbus.service.Object):
         Returns Array of:
         s category: Category name
         """
-        categories = []
-        for i in runtime.storage.get_category_list():
-            categories.append(i[ACT_KEY] or '')
+        categories = dbus.Array([], signature='s')
+        for cat in runtime.storage.get_category_list():
+            categories.append(cat[ACT_KEY] or '')
         return categories
 
     @dbus.service.method(HAMSTER_URI, in_signature='suu', out_signature='i')
@@ -135,7 +168,7 @@ class HamsterDbusController(dbus.service.Object):
                     on the fly.
         u start_time: Seconds since epoch (timestamp). Use 0 for 'now'
         u end_time: Seconds since epoch (timestamp). 
-                    Use 0 for i 'in progress task'
+                    Use 0 for 'in progress task'
         """
         #TODO: Assert start > end ?
         start, end = None, None
@@ -213,7 +246,7 @@ class HamsterDbusController(dbus.service.Object):
 
     @dbus.service.signal(HAMSTER_URI, signature='i')
     def FactUpdated(self, fact_id):
-        """Notice fact changes
+        """Notifies fact changes
         Parameters:
         i id: Unique fact identifier
         """
@@ -221,5 +254,5 @@ class HamsterDbusController(dbus.service.Object):
 
     @dbus.service.signal(HAMSTER_URI)
     def TrackingStopped(self):
-        """Notice the fact tracking has been stopped"""
+        """Notifies the fact tracking has been stopped"""
         self.current_fact_id = 0
