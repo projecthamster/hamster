@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-07-18 11:50+0000\n"
-"PO-Revision-Date: 2009-07-19 15:31+0200\n"
+"POT-Creation-Date: 2009-07-19 13:37+0000\n"
+"PO-Revision-Date: 2009-07-19 15:40+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -295,7 +295,7 @@ msgstr "Estadísticas"
 msgid "Today"
 msgstr "Hoy"
 
-#: ../data/stats.ui.h:16 ../hamster/stats.py:911
+#: ../data/stats.ui.h:16 ../hamster/stats.py:912
 msgid "Week"
 msgstr "Semana"
 
@@ -499,7 +499,7 @@ msgstr "descripción"
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:149 ../hamster/stats.py:898
+#: ../hamster/reports.py:149 ../hamster/stats.py:899
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -511,7 +511,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:151 ../hamster/stats.py:903
+#: ../hamster/reports.py:151 ../hamster/stats.py:904
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -520,7 +520,7 @@ msgstr ""
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:153 ../hamster/stats.py:908
+#: ../hamster/reports.py:153 ../hamster/stats.py:909
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Resumen de %(start_B)s, del %(start_d)s al %(end_d)s de %(end_Y)s"
@@ -560,28 +560,35 @@ msgstr "Totales"
 msgid "Total Time"
 msgstr "Tiempo total"
 
-#: ../hamster/stats.py:63 ../hamster/stats.py:1182
+#: ../hamster/stats.py:63 ../hamster/stats.py:1183
 msgid "HTML Report"
 msgstr "Informe HTML"
 
-#: ../hamster/stats.py:71 ../hamster/stats.py:1190
+#: ../hamster/stats.py:71 ../hamster/stats.py:1191
 msgid "Tab Separated Values (TSV)"
 msgstr "Valores separados por tabuladores (TSV)"
 
-#: ../hamster/stats.py:79 ../hamster/stats.py:1198
+#: ../hamster/stats.py:79 ../hamster/stats.py:1199
 msgid "XML"
 msgstr "XML"
 
-#: ../hamster/stats.py:86 ../hamster/stats.py:1205
+#: ../hamster/stats.py:86 ../hamster/stats.py:1206
 msgid "iCal"
 msgstr "iCal"
 
 #. add unsorted category
-#: ../hamster/stats.py:119 ../hamster/stats.py:432
-msgid "All"
-msgstr "Todas"
+#: ../hamster/stats.py:119
+#, python-format
+#| msgid "_Categories"
+msgid "All %(categories)s"
+msgstr "Todas las %(categories)s"
 
-#: ../hamster/stats.py:519
+#: ../hamster/stats.py:433
+#, python-format
+msgid "All %(years)s"
+msgstr "Todos los %(years)s"
+
+#: ../hamster/stats.py:520
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -589,30 +596,30 @@ msgstr ""
 "Aún no hay datos para generar estadísticas.\n"
 "Una semana de uso estaría bien."
 
-#: ../hamster/stats.py:522
+#: ../hamster/stats.py:523
 msgid "Still collecting data - check back after a week has passed!"
 msgstr ""
 "Aún se están recolectando datos; compruebe de nuevo cuando haya pasado una "
 "semana."
 
 #. date format for case when year has not been selected
-#: ../hamster/stats.py:650
+#: ../hamster/stats.py:651
 #, python-format
 msgid "%(first_b)s %(first_d)s, %(first_Y)s"
 msgstr "%(first_d)s %(first_b)s %(first_Y)s"
 
 #. date format when year has been selected
-#: ../hamster/stats.py:654
+#: ../hamster/stats.py:655
 #, python-format
 msgid "%(first_b)s %(first_d)s"
 msgstr "%(first_d)s %(first_b)s"
 
-#: ../hamster/stats.py:657
+#: ../hamster/stats.py:658
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "La primera actividad se registró en %s."
 
-#: ../hamster/stats.py:666 ../hamster/stats.py:670
+#: ../hamster/stats.py:667 ../hamster/stats.py:671
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -620,7 +627,7 @@ msgstr[0] "%(num)s año"
 msgstr[1] "%(num)s años"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:675
+#: ../hamster/stats.py:676
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -629,7 +636,7 @@ msgstr ""
 "El tiempo total gestionado hasta ahora es %(human_days)s días humanos (%"
 "(human_years)s) o %(working_days)s días de trabajo (%(working_years)s)."
 
-#: ../hamster/stats.py:693
+#: ../hamster/stats.py:694
 #, python-format
 msgid ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
@@ -645,18 +652,18 @@ msgstr[1] ""
 "duró %(hours)s horas."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:700
+#: ../hamster/stats.py:701
 #, python-format
 msgid "There are %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Existe %s registro."
 msgstr[1] "Existen %s registros."
 
-#: ../hamster/stats.py:720
+#: ../hamster/stats.py:721
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster debe seguir su actividad algo más."
 
-#: ../hamster/stats.py:722
+#: ../hamster/stats.py:723
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
@@ -665,7 +672,7 @@ msgstr ""
 "Con %s por ciento de todas las tareas iniciadas antes de las 9 de la mañana "
 "parece muy madrugador."
 
-#: ../hamster/stats.py:725
+#: ../hamster/stats.py:726
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
@@ -673,7 +680,7 @@ msgstr ""
 "Con %s por ciento de todas las tareas iniciadas antes de las 11 de la noche "
 "parece un búho."
 
-#: ../hamster/stats.py:728
+#: ../hamster/stats.py:729
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -684,21 +691,21 @@ msgstr ""
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:807
+#: ../hamster/stats.py:808
 #, python-format
 msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgstr "%(o_A)s, %(o_d)s de %(o_b)s"
 
-#: ../hamster/stats.py:848
+#: ../hamster/stats.py:849
 msgid "Total"
 msgstr "Total"
 
-#: ../hamster/stats.py:867
+#: ../hamster/stats.py:868
 #, python-format
 msgid "%(m_b)s %(m_d)s"
 msgstr "%(m_b)s %(m_d)s"
 
-#: ../hamster/stats.py:913
+#: ../hamster/stats.py:914
 msgid "Month"
 msgstr "Mes"
 
@@ -719,6 +726,9 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgid "All"
+#~ msgstr "Todas"
 
 #~ msgid "Move _Down"
 #~ msgstr "_Bajar"
