@@ -349,6 +349,7 @@ class HamsterApplet(object):
         self.completion.set_minimum_key_length(1)
         self.completion.set_inline_completion(True)
         self.completion.set_popup_set_width(False)
+        self.completion.set_popup_single_match(False)
         self.completion.set_text_column(0)
         self.activity_combo.child.set_completion(self.completion)
         
@@ -419,14 +420,12 @@ class HamsterApplet(object):
         parsed_activity = stuff.parse_activity_input(entry.get_text())
 
         if input_text.find("@") > 0:
-            key = input_text[input_text.find("@")+1:]
+            key = input_text[input_text.find("@")+1:].lower()
             for category in self.all_categories:
-                if category['name'].startswith(key):
-                    fillable = input_text[:input_text.find("@") + 1] + category['name']
-                    store.append([fillable, category['name'], category['name']])
-            if len(store) <= 1:
-                #avoid popup on single result
-                store.clear()
+                if key in category['name'].lower():
+                    fillable = (input_text[:input_text.find("@") + 1] + category['name']).lower()
+                    store.append([fillable, category['name'], fillable])
+
         else:
             for activity in self.all_activities:
                 fillable = activity['name']
