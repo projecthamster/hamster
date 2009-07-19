@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2009-07-18 11:50+0000\n"
-"PO-Revision-Date: 2009-07-19 14:33+0200\n"
+"PO-Revision-Date: 2009-07-19 15:31+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -161,6 +161,8 @@ msgstr "Recordar también cuando no hay actividades configuradas"
 msgid ""
 "Remind every notify_interval minutes also if no activity has been started."
 msgstr ""
+"Recordar también cada intervalo de notificación («notify_interval») minutos "
+"si no se ha iniciado ninguna actividad."
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid ""
@@ -385,6 +387,21 @@ msgid ""
 "Now, start tracking!\n"
 "        "
 msgstr ""
+"Existe una sintaxis simple que le permite añadir detalles a sus "
+"actividades:\n"
+"        \n"
+"El símbolo «@» marca la categoría. Ejemplo «regar las plantas@casa» iniciará "
+"el seguimiento de la actividad «regar plantas» en la categoría «casa».\n"
+"\n"
+"La coma («,») marca el inicio de la descripción. Ejemplo «regar las plantas, "
+"geranios y begonias» iniciará el seguimiento de la actividad «regar las "
+"plantas» y añadirá la descripción «geranios y begonias».\n"
+"\n"
+"Ambas se pueden combinar: |regar las plantas@casa, geranios y begonias» "
+"funcionará perfectamente.\n"
+"\n"
+"Ahora puede empezar a gestionar su tiempo.\n"
+"        "
 
 #. defaults
 #: ../hamster/db.py:726
@@ -599,8 +616,8 @@ msgstr "La primera actividad se registró en %s."
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s año"
+msgstr[1] "%(num)s años"
 
 #. FIXME: difficult string to properly pluralize
 #: ../hamster/stats.py:675
@@ -609,6 +626,8 @@ msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
 "(working_days)s working days (%(working_years)s)."
 msgstr ""
+"El tiempo total gestionado hasta ahora es %(human_days)s días humanos (%"
+"(human_years)s) o %(working_days)s días de trabajo (%(working_years)s)."
 
 #: ../hamster/stats.py:693
 #, python-format
@@ -619,11 +638,11 @@ msgid_plural ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hours."
 msgstr[0] ""
-"La actividad más larga fue el %(max_b)s %(max_d)s, %(max_Y)s y duró %(hours)"
-"s hora."
+"La actividad más larga se registró el %(max_b)s de %(max_d)s de %(max_Y)s y "
+"duró %(hours)s hora."
 msgstr[1] ""
-"La actividad más larga fue el %(max_b)s %(max_d)s, %(max_Y)s y duró %(hours)"
-"s horas."
+"La actividad más larga se registró el %(max_b)s de %(max_d)s de %(max_Y)s y "
+"duró %(hours)s horas."
 
 #. total records (in selected scope)
 #: ../hamster/stats.py:700
@@ -635,7 +654,7 @@ msgstr[1] "Existen %s registros."
 
 #: ../hamster/stats.py:720
 msgid "Hamster would like to observe you some more!"
-msgstr "Hamster debe observar su actividad algo más."
+msgstr "Hamster debe seguir su actividad algo más."
 
 #: ../hamster/stats.py:722
 #, python-format
@@ -643,12 +662,16 @@ msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
 msgstr ""
+"Con %s por ciento de todas las tareas iniciadas antes de las 9 de la mañana "
+"parece muy madrugador."
 
 #: ../hamster/stats.py:725
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr ""
+"Con %s por ciento de todas las tareas iniciadas antes de las 11 de la noche "
+"parece un búho."
 
 #: ../hamster/stats.py:728
 #, python-format
@@ -656,6 +679,8 @@ msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
 "busy bee."
 msgstr ""
+"Con %s por ciento de todas las tareas más cortas de 15 minutos parece una "
+"abeja obrera."
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
