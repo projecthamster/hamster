@@ -649,13 +649,13 @@ A week of usage would be nice!"""))
 
         # first record        
         if not year:
-            #date format for case when year has not been selected
-            first_date = _("%(first_b)s %(first_d)s, %(first_Y)s") % \
-                               stuff.dateDict(facts[0]["start_time"], "first_")
+            #date of first record for case when year has not been selected
+            first_date = C_("first record", "%(b)s %(d)s, %(Y)s") % \
+                               stuff.dateDict(facts[0]["start_time"])
         else:
-            #date format when year has been selected
-            first_date = _("%(first_b)s %(first_d)s") % \
-                               stuff.dateDict(facts[0]["start_time"], "first_")
+            #date of first record when year has been selected
+            first_date = C_("first record", "%(b)s %(d)s") % \
+                               stuff.dateDict(facts[0]["start_time"])
 
         summary += _("First activity was recorded on %s.") % \
                                                      ("<b>%s</b>" % first_date)
@@ -807,7 +807,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             
             # date format in overview window fact listing
             # prefix is "o_",letter after prefix is regular python format. you can use all of them
-            fact_date = _("%(o_A)s, %(o_b)s %(o_d)s") %  stuff.dateDict(current_date, "o_")
+            fact_date = C_("overview list", "%(A)s, %(b)s %(d)s") %  stuff.dateDict(current_date)
             
             day_total = dt.timedelta()
             for fact in day_dict.get(current_date, []):
@@ -867,7 +867,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         if (self.end_date - self.start_date).days < 20:
             day_keys = [day.strftime("%a") for day in all_days]
         else:
-            day_keys = [_("%(m_b)s %(m_d)s") %  stuff.dateDict(day, "m_")
+            day_keys = [C_("overview graph", "%(b)s %(d)s") %  stuff.dateDict(day)
                                                             for day in all_days]
 
         self.day_chart.plot(day_keys, res, stack_keys = all_categories)
