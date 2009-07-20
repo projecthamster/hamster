@@ -176,7 +176,7 @@ def totals(iter, keyfunc, sumfunc):
 
 
 
-def dateDict(date, prefix):
+def dateDict(date, prefix = ""):
     """converts date into dictionary, having prefix for all the keys"""
     res = {}
     
