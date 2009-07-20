@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2009-07-20 12:46+0000\n"
-"PO-Revision-Date: 2009-07-20 20:15+0200\n"
+"PO-Revision-Date: 2009-07-20 20:27+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -609,7 +609,7 @@ msgstr ""
 #| msgid "%(first_b)s %(first_d)s, %(first_Y)s"
 msgctxt "first record"
 msgid "%(b)s %(d)s, %(Y)s"
-msgstr "%(b)s de %(d)s de %(Y)s"
+msgstr "%(d)s de %(b)s de %(Y)s"
 
 #. date of first record when year has been selected
 #: ../hamster/stats.py:657
@@ -617,7 +617,7 @@ msgstr "%(b)s de %(d)s de %(Y)s"
 #| msgid "%(m_b)s %(m_d)s"
 msgctxt "first record"
 msgid "%(b)s %(d)s"
-msgstr "%(b)s de %(d)s"
+msgstr "%(d)s de %(b)s"
 
 #: ../hamster/stats.py:660
 #, python-format
@@ -712,7 +712,7 @@ msgstr "Total"
 #| msgid "%(m_b)s %(m_d)s"
 msgctxt "overview graph"
 msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgstr "%(d)s %(b)s"
 
 #: ../hamster/stats.py:916
 msgid "Month"
