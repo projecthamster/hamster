@@ -31,6 +31,7 @@ hamster_PYTHON = \
 	about.py \
 	hamsterdbus.py \
 	idle.py \
+        i18n.py \
 	__init__.py
 
 BUILT_SOURCES = \

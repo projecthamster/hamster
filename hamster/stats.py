@@ -39,6 +39,7 @@ from gettext import ngettext
 import datetime as dt
 import calendar
 import time
+from hamster.i18n import C_
 
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
@@ -116,8 +117,7 @@ class ReportChooserDialog(gtk.Dialog):
         self.end_date.set_date(end_date)
         
         #add unsorted category
-        button_all = gtk.CheckButton((_("All %(categories)s") %
-                                       dict(categories = '')).strip().encode("utf-8"))
+        button_all = gtk.CheckButton(C_("categories", "All").encode("utf-8"))
         button_all.value = None
         button_all.set_active(True)
         
@@ -430,7 +430,9 @@ class StatsViewer(object):
                 self.year = year
                 self.connect("clicked", on_clicked)
         
-        all_button = YearButton((_("All %(years)s") % dict(years = "")).strip().encode("utf-8"), None, self.on_year_changed)
+        all_button = YearButton(C_("years", "All").encode("utf-8"),
+                                None,
+                                self.on_year_changed)
         year_box.pack_start(all_button)
         self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
         all_button.set_active(True)
