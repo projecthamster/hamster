@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2009-07-20 12:46+0000\n"
-"PO-Revision-Date: 2009-07-20 20:27+0200\n"
+"PO-Revision-Date: 2009-07-20 20:39+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -622,7 +622,7 @@ msgstr "%(d)s de %(b)s"
 #: ../hamster/stats.py:660
 #, python-format
 msgid "First activity was recorded on %s."
-msgstr "La primera actividad se registró en %s."
+msgstr "La primera actividad se registró el %s."
 
 #: ../hamster/stats.py:669 ../hamster/stats.py:673
 #, python-format
@@ -650,10 +650,10 @@ msgid_plural ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hours."
 msgstr[0] ""
-"La actividad más larga se registró el %(max_b)s de %(max_d)s de %(max_Y)s y "
+"La actividad más larga se registró el %(max_d)s de %(max_b)s de %(max_Y)s y "
 "duró %(hours)s hora."
 msgstr[1] ""
-"La actividad más larga se registró el %(max_b)s de %(max_d)s de %(max_Y)s y "
+"La actividad más larga se registró el %(max_d)s de %(max_b)s de %(max_Y)s y "
 "duró %(hours)s horas."
 
 #. total records (in selected scope)
@@ -701,7 +701,7 @@ msgstr ""
 #| msgid "%(o_A)s, %(o_b)s %(o_d)s"
 msgctxt "overview list"
 msgid "%(A)s, %(b)s %(d)s"
-msgstr "%(A)s, %(b)s %(d)s"
+msgstr "%(A)s, %(d)s de %(b)s"
 
 #: ../hamster/stats.py:851
 msgid "Total"
