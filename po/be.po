@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-07-19 13:41+0000\n"
-"PO-Revision-Date: 2009-07-22 00:40+0300\n"
+"POT-Creation-Date: 2009-07-21 21:48+0000\n"
+"PO-Revision-Date: 2009-07-22 00:50+0300\n"
 "Last-Translator: Alexander Nyakhaychyk <nyakhaychyk@gmail.com>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgid "Hamster"
 msgstr "Hamster"
 
 #: ../data/applet.ui.h:6
-#: ../hamster/applet.py:573
+#: ../hamster/applet.py:572
 msgid "No records today"
 msgstr "Сёння няма запісаў"
 
@@ -288,7 +288,7 @@ msgid "Today"
 msgstr "Сёння"
 
 #: ../data/stats.ui.h:16
-#: ../hamster/stats.py:912
+#: ../hamster/stats.py:921
 msgid "Week"
 msgstr "Тыдзень"
 
@@ -328,30 +328,30 @@ msgstr "Пераключыць"
 msgid "Duration"
 msgstr "Працягласць"
 
-#: ../hamster/applet.py:511
-#: ../hamster/applet.py:532
+#: ../hamster/applet.py:510
+#: ../hamster/applet.py:531
 msgid "No activity"
 msgstr "Няма дзейнасці"
 
 #. activity reminder
-#: ../hamster/applet.py:527
+#: ../hamster/applet.py:526
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Праца над <b>%s</b>"
 
 #. listing of today's categories and time spent in them
-#: ../hamster/applet.py:580
+#: ../hamster/applet.py:579
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
-#: ../hamster/applet.py:582
+#: ../hamster/applet.py:581
 #, python-format
 msgid "%.1fh"
 msgstr "%.1fh"
 
 #. try yesterday if there is nothing today
-#: ../hamster/applet.py:618
+#: ../hamster/applet.py:617
 #: ../hamster/db.py:226
 #: ../hamster/db.py:243
 #: ../hamster/db.py:246
@@ -366,11 +366,11 @@ msgstr "%.1fh"
 msgid "Unsorted"
 msgstr "Неўпарадкавана"
 
-#: ../hamster/applet.py:842
+#: ../hamster/applet.py:841
 msgid "What to type in the activity box?"
 msgstr "Што ўводзіць у поле дзейнасці?"
 
-#: ../hamster/applet.py:845
+#: ../hamster/applet.py:844
 msgid ""
 "There is simple syntax that enables you to add details to your activities:\n"
 "        \n"
@@ -492,7 +492,7 @@ msgstr "апісанне"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:149
-#: ../hamster/stats.py:899
+#: ../hamster/stats.py:908
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Агляд за %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -501,7 +501,7 @@ msgstr "Агляд за %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:151
-#: ../hamster/stats.py:904
+#: ../hamster/stats.py:913
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Агляд за %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -510,7 +510,7 @@ msgstr "Агляд за %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #: ../hamster/reports.py:153
-#: ../hamster/stats.py:909
+#: ../hamster/stats.py:918
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Агляд за %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
@@ -550,38 +550,38 @@ msgstr "Усяго"
 msgid "Total Time"
 msgstr "Увесь час"
 
-#: ../hamster/stats.py:63
-#: ../hamster/stats.py:1183
+#: ../hamster/stats.py:64
+#: ../hamster/stats.py:1192
 msgid "HTML Report"
 msgstr "HTML-справаздача"
 
-#: ../hamster/stats.py:71
-#: ../hamster/stats.py:1191
+#: ../hamster/stats.py:72
+#: ../hamster/stats.py:1200
 msgid "Tab Separated Values (TSV)"
 msgstr "Значэнні, размежаваные сімвалам Tab (TSV)"
 
-#: ../hamster/stats.py:79
-#: ../hamster/stats.py:1199
+#: ../hamster/stats.py:80
+#: ../hamster/stats.py:1208
 msgid "XML"
 msgstr "XML"
 
-#: ../hamster/stats.py:86
-#: ../hamster/stats.py:1206
+#: ../hamster/stats.py:87
+#: ../hamster/stats.py:1215
 msgid "iCal"
 msgstr "iCal"
 
 #. add unsorted category
-#: ../hamster/stats.py:119
-#, python-format
-msgid "All %(categories)s"
-msgstr "Усе %(categories)s"
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "Усе"
 
 #: ../hamster/stats.py:433
-#, python-format
-msgid "All %(years)s"
-msgstr "Усе %(years)s"
+msgctxt "years"
+msgid "All"
+msgstr "Усе"
 
-#: ../hamster/stats.py:520
+#: ../hamster/stats.py:522
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -589,29 +589,33 @@ msgstr ""
 "Покуль няма даных для стварэння статыстыкі.\n"
 "Карыстайцеся праграмай цягам тыдня!"
 
-#: ../hamster/stats.py:523
+#: ../hamster/stats.py:525
 msgid "Still collecting data - check back after a week has passed!"
 msgstr "Усё яшчэ збіраем даныя: праверце праз тыдзень!"
 
-#. date format for case when year has not been selected
-#: ../hamster/stats.py:651
+#. date of first record for case when year has not been selected
+#: ../hamster/stats.py:653
 #, python-format
-msgid "%(first_b)s %(first_d)s, %(first_Y)s"
-msgstr "%(first_b)s %(first_d)s, %(first_Y)s"
+#| msgid "%(first_b)s %(first_d)s, %(first_Y)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s, %(Y)s"
+msgstr "%(b)s %(d)s, %(Y)s"
 
-#. date format when year has been selected
-#: ../hamster/stats.py:655
+#. date of first record when year has been selected
+#: ../hamster/stats.py:657
 #, python-format
-msgid "%(first_b)s %(first_d)s"
-msgstr "%(first_b)s %(first_d)s"
+#| msgid "%(m_b)s %(m_d)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:658
+#: ../hamster/stats.py:660
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Першая дзейнасць была запісана %s."
 
-#: ../hamster/stats.py:667
-#: ../hamster/stats.py:671
+#: ../hamster/stats.py:669
+#: ../hamster/stats.py:673
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -620,12 +624,12 @@ msgstr[1] "%(num)s гады"
 msgstr[2] "%(num)s гадоў"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:676
+#: ../hamster/stats.py:678
 #, python-format
 msgid "Time tracked so far is %(human_days)s human days (%(human_years)s) or %(working_days)s working days (%(working_years)s)."
 msgstr "Адсочана часу на %(human_days)s дзён (%(human_years)s) ці %(working_days)s працоўных дзён (%(working_years)s)."
 
-#: ../hamster/stats.py:694
+#: ../hamster/stats.py:696
 #, python-format
 msgid "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hour."
 msgid_plural "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hours."
@@ -634,7 +638,7 @@ msgstr[1] "Найдаўжэйшая бесперапынная праца был
 msgstr[2] "Найдаўжэйшая бесперапынная праца была %(max_b)s %(max_d)s, %(max_Y)s і цягнулася was %(hours)s гадзін."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:701
+#: ../hamster/stats.py:703
 #, python-format
 msgid "There are %s record."
 msgid_plural "There are %s records."
@@ -642,42 +646,46 @@ msgstr[0] "Усяго %s запіс."
 msgstr[1] "Усяго %s запісы."
 msgstr[2] "Усяго %s запісаў."
 
-#: ../hamster/stats.py:721
+#: ../hamster/stats.py:723
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster жадае сказаць вам нешта большае!"
 
-#: ../hamster/stats.py:723
+#: ../hamster/stats.py:725
 #, python-format
 msgid "With %s percent of all facts starting before 9am you seem to be an early bird."
 msgstr "З улікам %s адсотак усіх фактаў пачатку працы раней за 9 гадзіну раніцы, вы - жаўранак."
 
-#: ../hamster/stats.py:726
+#: ../hamster/stats.py:728
 #, python-format
 msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr "З улікам %s адсотак усіх фактаў пачатку пасля 11 гадзіны вечара, вы - сава."
 
-#: ../hamster/stats.py:729
+#: ../hamster/stats.py:731
 #, python-format
 msgid "With %s percent of all tasks being shorter than 15 minutes you seem to be a busy bee."
 msgstr "З улікам %s адсотак усіх задач, якія карацей за 15 хвілін, вы - занятая пчала."
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:808
+#: ../hamster/stats.py:817
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+#| msgid "%(o_A)s, %(o_b)s %(o_d)s"
+msgctxt "overview list"
+msgid "%(A)s, %(b)s %(d)s"
+msgstr "%(A)s, %(b)s %(d)s"
 
-#: ../hamster/stats.py:849
+#: ../hamster/stats.py:858
 msgid "Total"
 msgstr "Усяго"
 
-#: ../hamster/stats.py:868
+#: ../hamster/stats.py:877
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s"
+#| msgid "%(m_b)s %(m_d)s"
+msgctxt "overview graph"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:914
+#: ../hamster/stats.py:923
 msgid "Month"
 msgstr "Месяц"
 
@@ -698,4 +706,11 @@ msgstr "%d хв."
 #, python-format
 msgid "%dh %dmin"
 msgstr "%d г. %d хв."
+
+#~ msgid "All %(categories)s"
+#~ msgstr "Усе %(categories)s"
+#~ msgid "All %(years)s"
+#~ msgstr "Усе %(years)s"
+#~ msgid "%(first_b)s %(first_d)s"
+#~ msgstr "%(first_b)s %(first_d)s"
 
