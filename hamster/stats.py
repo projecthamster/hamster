@@ -796,6 +796,13 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         
         self.fact_tree.set_model(self.fact_store)
     
+    def on_graph_frame_size_allocate(self, widget, new_size):
+        w = min(new_size.width / 4, 200)
+        
+        self.activity_chart.legend_width = w
+        self.category_chart.legend_width = w
+        self.get_widget("totals_by_category").set_size_request(w + 40, -1)
+    
     def fill_tree(self, facts):
         day_dict = {}
         for day, facts in groupby(facts, lambda fact: fact["date"]):

@@ -13,6 +13,7 @@
     <property name="default_height">600</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
+    <signal name="size_allocate" handler="on_stats_window_size_allocate"/>
     <signal name="delete_event" handler="on_close"/>
     <child>
       <object class="GtkAlignment" id="alignment1">
@@ -253,6 +254,7 @@
                         <child>
                           <object class="GtkEventBox" id="graph_frame">
                             <property name="visible">True</property>
+                            <signal name="size_allocate" handler="on_graph_frame_size_allocate"/>
                             <child>
                               <object class="GtkVBox" id="vbox4">
                                 <property name="visible">True</property>
@@ -279,7 +281,6 @@
                                             <property name="spacing">36</property>
                                             <child>
                                               <object class="GtkEventBox" id="totals_by_category">
-                                                <property name="width_request">130</property>
                                                 <property name="visible">True</property>
                                                 <child>
                                                   <placeholder/>
