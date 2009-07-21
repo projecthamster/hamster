@@ -13,7 +13,6 @@
     <property name="default_height">600</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
-    <signal name="size_allocate" handler="on_stats_window_size_allocate"/>
     <signal name="delete_event" handler="on_close"/>
     <child>
       <object class="GtkAlignment" id="alignment1">
