@@ -257,7 +257,7 @@ def parse_activity_input(text):
     res = InputParseResult()
     
     input_parts = text.split(" ")
-    if len(input_parts) > 1: #look for time only if there is more
+    if len(input_parts) > 1 and re.match('^-?\d', input_parts[0]): #look for time only if there is more
         potential_time = text.split(" ")[0]
         potential_end_time = None
         if len(potential_time) > 1 and  potential_time.startswith("-"):
