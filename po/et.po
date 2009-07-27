@@ -11,13 +11,14 @@ msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-06-19 09:33+0000\n"
-"PO-Revision-Date: 2009-06-29 18:06+0300\n"
+"POT-Creation-Date: 2009-07-20 12:46+0000\n"
+"PO-Revision-Date: 2009-07-27 21:35+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Project Hamster - track your time"
 msgstr "Projektihamster - ajajälgija"
@@ -430,6 +431,11 @@ msgid "iCal"
 msgstr "iCal"
 
 #. add unsorted category
+msgctxt "categories"
+msgid "All"
+msgstr "Kõik"
+
+msgctxt "years"
 msgid "All"
 msgstr "Kõik"
 
@@ -437,40 +443,57 @@ msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
 msgstr ""
+"Statistika genereerimiseks pole veel piisavalt andmeid.\n"
+"Nädalapikkune kasutamine võib aga juba midagi andas!"
 
 msgid "Still collecting data - check back after a week has passed!"
 msgstr ""
 
-#. date format for case when year has not been selected
+#. date of first record for case when year has not been selected
 #, python-format
-msgid "%(first_b)s %(first_d)s, %(first_Y)s"
-msgstr "%(first_d)s.%(first_b)s.%(first_Y)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s, %(Y)s"
+msgstr "%(d)s.%(b)s.%(Y)s"
 
-#. date format when year has been selected
+#. date of first record when year has been selected
 #, python-format
-msgid "%(first_b)s %(first_d)s"
-msgstr "%(first_d)s. %(first_b)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(d)s. %(b)s"
 
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr ""
 
 #, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s aasta"
+msgstr[1] "%(num)s aastat"
+
+#. FIXME: difficult string to properly pluralize
+#, python-format
 msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s years) or %"
-"(working_days)s working days (%(working_years)s years)."
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
 msgstr ""
 
 #, python-format
 msgid ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
+"(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hours."
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
 #. total records (in selected scope)
 #, python-format
-msgid "There are %s records."
-msgstr ""
+msgid "There are %s record."
+msgid_plural "There are %s records."
+msgstr[0] "Siin on %s kirje."
+msgstr[1] "Siin on %s kirjet."
 
 msgid "Hamster would like to observe you some more!"
 msgstr ""
@@ -495,15 +518,17 @@ msgstr ""
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
+msgctxt "overview list"
+msgid "%(A)s, %(b)s %(d)s"
+msgstr "%(A)s, %(d)s. %(b)s"
 
 msgid "Total"
 msgstr "Kokku"
 
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_d)s. %(m_b)s"
+msgctxt "overview graph"
+msgid "%(b)s %(d)s"
+msgstr "%(d)s. %(b)s"
 
 msgid "Month"
 msgstr "Kuu"
@@ -522,6 +547,9 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
+
+#~ msgid "%(first_b)s %(first_d)s"
+#~ msgstr "%(first_d)s. %(first_b)s"
 
 #~ msgid "Delete activity"
 #~ msgstr "Tegevuse kustutamine"
