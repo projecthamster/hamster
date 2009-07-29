@@ -1,4 +1,17 @@
 ===============
+Version 2.27.5
+===============
+  * Better autocomplete
+  * More skeptic on parsing time
+  * Legend in overview is sized proportionally to screen size,
+    allowing larger labels
+  
+  Updated translations:
+    * be (Alexander Nyakhaychyk)
+    * es (Jorge González)
+    * pa (Amanpreet Singh Alam)
+
+===============
 Version 2.27.4
 ===============
   * Now it is possible to copy/paste activities in the overview
