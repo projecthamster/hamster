@@ -244,13 +244,9 @@ class HamsterApplet(object):
             self.dbusController = HamsterDbusController(bus_name = name)
 
             # Set up connection to the screensaver
-            self.dbusIdleListener = idle.DbusIdleListener()
+            self.dbusIdleListener = idle.DbusIdleListener(runtime.dispatcher)
+            runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
 
-            # let's also attach our listeners here
-            bus = dbus.SessionBus()
-            bus.add_signal_receiver(self.on_idle_changed,
-                                    dbus_interface="org.gnome.ScreenSaver",
-                                    signal_name="SessionIdleChanged")
         except dbus.DBusException, e:
             print "can't init dbus: %s" % e
     
@@ -473,25 +469,11 @@ class HamsterApplet(object):
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""        
-        # stop tracking task if computer is idle for X minutes
-        if self.timeout_enabled and self.last_activity and \
-           self.last_activity['end_time'] is None:
-            if self.dbusIdleListener.is_idle:
-                # Only subtract idle time from the running task when
-                # idleness is due to time out, not a screen lock.
-                if self.dbusIdleListener.is_screen_locked:
-                    idle_minutes = 0
-                else:
-                    idle_minutes = idle.getIdleSec() / 60.0
-                current_time = dt.datetime.now()
-                idle_from = current_time - dt.timedelta(minutes = idle_minutes)
-                runtime.storage.touch_fact(self.last_activity, end_time = idle_from)
-            
 
-            # if we have date change - let's finish previous task and start a new one
-            if self.button.get_active(): # otherwise if we the day view is visible - update day's durations
-                self.load_day()
-                    
+        #if we the day view is visible - update day's durations
+        if self.button.get_active(): 
+            self.load_day()
+
         self.update_label()
         self.check_user()
         return True
@@ -666,12 +648,6 @@ class HamsterApplet(object):
         
 
     """events"""
-    def on_idle_changed(self, state):
-        print "Idle state changed. Idle: ", state
-        # refresh when we are out of idle
-        # (like, instantly after computer has been turned on!
-        if state == 0:
-            self.refresh_hamster() 
 
     def on_today_release_event(self, tree, event):
         # a hackish solution to make edit icon keyboard accessible
@@ -813,6 +789,20 @@ class HamsterApplet(object):
         self.load_day()
         self.update_label()
         self.__update_fact()
+
+    def on_idle_changed(self, event, state):
+        # state values: 0 = active, 1 = idle
+
+        # refresh when we are out of idle
+        # (like, instantly after computer has been turned on!
+        if state == 0:
+            self.refresh_hamster()
+        elif self.timeout_enabled and self.last_activity and \
+             self.last_activity['end_time'] is None:
+            
+            runtime.storage.touch_fact(self.last_activity,
+                                       end_time = self.dbusIdleListener.getIdleFrom())
+
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):

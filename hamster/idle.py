@@ -20,44 +20,31 @@
 import dbus
 from dbus.lowlevel import Message
 import gconf
-
-def getIdleSec():
-    try:
-        bus = dbus.SessionBus()
-        gs = bus.get_object('org.gnome.ScreenSaver', '/org/gnome/ScreenSaver')
-        idle_time = gs.GetSessionIdleTime()
-    except:
-        return 0
-    
-    if idle_time > 0:
-        # if we are in idle - grab gconf setting how much is considered idle
-        client = gconf.client_get_default()
-        idle_delay = client.get_int("/apps/gnome-screensaver/idle_delay")
-        idle_time += idle_delay * 60 #delay is in minutes
-    
-    return idle_time
-
+import datetime as dt
+import gobject
 
 class DbusIdleListener(object):
     """
     Listen for idleness coming from org.gnome.ScreenSaver
 
-    Monitors org.gnome.ScreenSaver for idleness. There are two types
-    (that I know of), implicit (due to inactivity) and explicit (lock
-    screen), that need to be handled differently. An implicit idle
-    state should subtract the time-to-become-idle (as specified in the
-    gconf) from the last activity, but an explicit idle state should
-    not.
+    Monitors org.gnome.ScreenSaver for idleness. There are two types,
+    implicit (due to inactivity) and explicit (lock screen), that need to be
+    handled differently. An implicit idle state should subtract the
+    time-to-become-idle (as specified in the gconf) from the last activity,
+    but an explicit idle state should not.
 
-    The signals are inspected for the "SessionIdleChanged" and "Lock"
+    The signals are inspected for the "ActiveChanged" and "Lock"
     members coming from the org.gnome.ScreenSaver interface and the
-    is_idle, and is_screen_locked members are updated appropriately.
+    and is_screen_locked members are updated appropriately.
     """
-    def __init__(self):
+    def __init__(self, dispatcher):
         self.screensaver_uri = "org.gnome.ScreenSaver"
 
-        self.is_idle = False
-        self.is_screen_locked = False
+        self.dispatcher = dispatcher
+        self.screen_locked = False
+        self.idle_from = None
+        self.timeout_minutes = 0 # minutes after session is considered idle
+        self.idle_was_there = False # a workaround variable for pre 2.26
 
         try:
             self.bus = dbus.SessionBus()
@@ -72,55 +59,81 @@ class DbusIdleListener(object):
         # we would get anything on the screensaver interface, as well
         # as any method calls on *any* interface. Therefore the
         # bus_inspector needs to do some additional filtering.
-        self.bus.add_match_string_non_blocking(
-                "interface='" + self.screensaver_uri + "'")
-
+        self.bus.add_match_string_non_blocking("interface='%s'" %
+                                                           self.screensaver_uri)
         self.bus.add_message_filter(self.bus_inspector)
 
 
     def bus_inspector(self, bus, message):
         """
         Inspect the bus for screensaver messages of interest
-
-        Namely, we are watching for messages on the screensaver
-        interface.  If it's a signal type for SessionIdleChanged,
-        we set our internal is_idle state to that value (the signal
-        is a boolean).  If its a method call with type "Lock" then
-        the user requested to lock the screen so we set our internal
-        lock state to true.
-
-        When the SessionIdleChanged signal is false, it means we are
-        returning from the locked/idle state, so both is_idle and
-        is_screen_locked are reset to False.
         """
-        # We only care about stuff on this interface.  Yes we did filter
+
+        # We only care about stuff on this interface.  We did filter
         # for it above, but even so we still hear from ourselves
         # (hamster messages).
-        if not message.get_interface() == self.screensaver_uri:
+        if message.get_interface() != self.screensaver_uri:
             return True
 
-        # Signal type messages have a value of 4, and method_call type
-        # ones have a value of 1.  I'm not sure how important it is to
-        # verify that SessionIdleChanged on the screensaver interface
-        # is actually a "signal" and not some other type of message
-        # but I'll make sure just to be safe.  Same goes for the Lock
-        # member.
-        if message.get_member() == "SessionIdleChanged" and \
-           message.get_type() == 4:
+        member = message.get_member()
+
+        if member in ("SessionIdleChanged", "ActiveChanged"):
             if __debug__:
-                print "SessionIdleChanged ->", message.get_args_list()
+                print "%s ->" % member, message.get_args_list()
+
             idle_state = message.get_args_list()[0]
             if idle_state:
-                self.is_idle = True
+                self.idle_from = dt.datetime.now()
+                
+                # from gnome screensaver 2.24 to 2.28 they have switched
+                # configuration keys and signal types.
+                # luckily we can determine key by signal type
+                if member == "SessionIdleChanged":
+                    delay_key = "/apps/gnome-screensaver/idle_delay"
+                else:
+                    delay_key = "/desktop/gnome/session/idle_delay"
+
+                client = gconf.client_get_default()
+                self.timeout_minutes = client.get_int(delay_key)
+
             else:
-                self.is_idle = False
-                self.is_screen_locked = False
-        elif message.get_member() == "Lock" and \
-             message.get_type() == 1:
+                self.screen_locked = False
+                self.idle_from = None
+
+            if member == "ActiveChanged":
+                # ActiveChanged comes before SessionIdleChanged signal
+                # as a workaround for pre 2.26, we will wait a second - maybe
+                # SessionIdleChanged signal kicks in
+                def dispatch_active_changed(idle_state):
+                    if not self.idle_was_there:
+                        self.dispatcher.dispatch('active_changed', idle_state)
+                    self.idle_was_there = False
+
+                gobject.timeout_add_seconds(1, dispatch_active_changed, idle_state)
+
+            else:
+                # dispatch idle status change to interested parties
+                self.idle_was_there = True
+                self.dispatcher.dispatch('active_changed', idle_state)
+
+        elif member == "Lock":
+            # in case of lock, lock signal will be sent first, followed by
+            # ActiveChanged and SessionIdle signals
             if __debug__:
                 print "Screen Lock Requested"
-            self.is_screen_locked = True
+            self.screen_locked = True
         
         return True
+    
 
+    def getIdleFrom(self):
+        if not self.idle_from:
+            return dt.datetime.now()
+
+        if self.screen_locked:
+            return self.idle_from
+        else:
+            # Only subtract idle time from the running task when
+            # idleness is due to time out, not a screen lock.
+            return self.idle_from - dt.timedelta(minutes = self.timeout_minutes)
 
