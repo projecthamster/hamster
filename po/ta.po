@@ -14,15 +14,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamsterta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-09 17:18+0530\n"
-"PO-Revision-Date: 2009-06-15 14:32+0530\n"
+"POT-Creation-Date: 2009-07-29 13:24+0530\n"
+"PO-Revision-Date: 2009-07-29 13:28+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: American English <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\\n"
+"\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
 msgid "Project Hamster - track your time"
@@ -163,8 +164,7 @@ msgid "Remind also when no activity is set"
 msgstr " செயல் அமைக்காத போதும் நினைவுறுத்துக"
 
 #: ../data/hamster-applet.schemas.in.h:3
-msgid ""
-"Remind every notify_interval minutes also if no activity has been started."
+msgid "Remind every notify_interval minutes also if no activity has been started."
 msgstr " (_i)  செயல் அமைக்காத போதும் நினைவுறுத்த வேண்டிய இடைவெளியில் நினைவுறுத்துக"
 
 #: ../data/hamster-applet.schemas.in.h:4
@@ -202,10 +202,8 @@ msgstr ""
 "span>"
 
 #: ../data/applet.ui.h:2
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">மேலும் சொல்லுக</span>"
+msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr "<span size=\"small\" color=\"blue\" underline=\"single\">மேலும் சொல்லுக</span>"
 
 #: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
@@ -216,7 +214,7 @@ msgstr "முந்தைய செயல்பாட்டைச் சேர�
 msgid "Hamster"
 msgstr "ஹாம்ஸ்டர்"
 
-#: ../data/applet.ui.h:6 ../hamster/applet.py:573
+#: ../data/applet.ui.h:6 ../hamster/applet.py:572
 msgid "No records today"
 msgstr "இன்று பதிவுக் குறிப்புகள் எதுவும் இல்லை"
 
@@ -296,7 +294,7 @@ msgstr "புள்ளி விவரம்"
 msgid "Today"
 msgstr "இன்று"
 
-#: ../data/stats.ui.h:16 ../hamster/stats.py:896
+#: ../data/stats.ui.h:16 ../hamster/stats.py:921
 msgid "Week"
 msgstr "வாரம்"
 
@@ -337,41 +335,41 @@ msgstr "மாற்றி"
 msgid "Duration"
 msgstr "காலஅளவு"
 
-#: ../hamster/applet.py:511 ../hamster/applet.py:532
+#: ../hamster/applet.py:510 ../hamster/applet.py:531
 msgid "No activity"
 msgstr "செயல்பாடு இல்லை"
 
 #. activity reminder
-#: ../hamster/applet.py:527
+#: ../hamster/applet.py:526
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "வேலை செய்வது இதில்<b>%s</b>"
 
 #. listing of today's categories and time spent in them
-#: ../hamster/applet.py:580
+#: ../hamster/applet.py:579
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
-#: ../hamster/applet.py:582
+#: ../hamster/applet.py:581
 #, python-format
 msgid "%.1fh"
 msgstr "%.1fh"
 
 #. try yesterday if there is nothing today
-#: ../hamster/applet.py:618 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:246 ../hamster/db.py:461 ../hamster/db.py:534
+#: ../hamster/applet.py:617 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:246 ../hamster/db.py:463 ../hamster/db.py:536
 #: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
 #: ../hamster/reports.py:53 ../hamster/reports.py:90 ../hamster/reports.py:237
 #: ../hamster/stuff.py:94
 msgid "Unsorted"
 msgstr "இனம் பிரிக்கப்படாதவை"
 
-#: ../hamster/applet.py:842
+#: ../hamster/applet.py:841
 msgid "What to type in the activity box?"
 msgstr "செயல் பெட்டியில் என்ன உள்ளிட வேண்டும்?"
 
-#: ../hamster/applet.py:845
+#: ../hamster/applet.py:844
 msgid ""
 "There is simple syntax that enables you to add details to your activities:\n"
 "        \n"
@@ -404,39 +402,39 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:724
+#: ../hamster/db.py:726
 msgid "Work"
 msgstr "பணி"
 
-#: ../hamster/db.py:725
+#: ../hamster/db.py:727
 msgid "Reading news"
 msgstr "செய்திகள் வாசிப்பு"
 
-#: ../hamster/db.py:726
+#: ../hamster/db.py:728
 msgid "Checking stocks"
 msgstr "வணிகப் பங்குகள் சரிபார்த்தல்"
 
-#: ../hamster/db.py:727
+#: ../hamster/db.py:729
 msgid "Super secret project X"
 msgstr "மிக ரகசியத் திட்டம் எக்ஸ்"
 
-#: ../hamster/db.py:728
+#: ../hamster/db.py:730
 msgid "World domination"
 msgstr "உலக ஆதிக்கம்"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:732
 msgid "Day to day"
 msgstr "அன்றாடம்"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:733
 msgid "Lunch"
 msgstr "மதிய உணவு"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:734
 msgid "Watering flowers"
 msgstr "பூக்களுக்குத் தண்ணீர் பாய்ச்சுதல்"
 
-#: ../hamster/db.py:733
+#: ../hamster/db.py:735
 msgid "Doing handstands"
 msgstr "தலைகீழாய் நிற்றல்"
 
@@ -499,7 +497,7 @@ msgstr "விவரணம்"
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:149 ../hamster/stats.py:883
+#: ../hamster/reports.py:149 ../hamster/stats.py:908
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -511,7 +509,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:151 ../hamster/stats.py:888
+#: ../hamster/reports.py:151 ../hamster/stats.py:913
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "மேல்பார்வை  க்கு %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -519,7 +517,7 @@ msgstr "மேல்பார்வை  க்கு %(start_B)s %(start_d)s –
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:153 ../hamster/stats.py:893
+#: ../hamster/reports.py:153 ../hamster/stats.py:918
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "மேல்பார்வை க்கு %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
@@ -559,28 +557,34 @@ msgstr "மொத்தங்கள்"
 msgid "Total Time"
 msgstr "மொத்த நேரம்"
 
-#: ../hamster/stats.py:63 ../hamster/stats.py:1167
+#: ../hamster/stats.py:64 ../hamster/stats.py:1192
 msgid "HTML Report"
 msgstr "ஹெச்டிஎம்எல்(HTML) அறிக்கை"
 
-#: ../hamster/stats.py:71 ../hamster/stats.py:1175
+#: ../hamster/stats.py:72 ../hamster/stats.py:1200
 msgid "Tab Separated Values (TSV)"
 msgstr "தத்தல் பிரித்த மதிப்புகள் (TSV)"
 
-#: ../hamster/stats.py:79 ../hamster/stats.py:1183
+#: ../hamster/stats.py:80 ../hamster/stats.py:1208
 msgid "XML"
 msgstr "எக்ஸ்எம்எல்"
 
-#: ../hamster/stats.py:86 ../hamster/stats.py:1190
+#: ../hamster/stats.py:87 ../hamster/stats.py:1215
 msgid "iCal"
 msgstr "ஐகால்"
 
 #. add unsorted category
-#: ../hamster/stats.py:119 ../hamster/stats.py:417
+#: ../hamster/stats.py:120
+msgctxt "categories"
 msgid "All"
 msgstr "எல்லாம்"
 
-#: ../hamster/stats.py:504
+#: ../hamster/stats.py:433
+msgctxt "years"
+msgid "All"
+msgstr "எல்லாம்"
+
+#: ../hamster/stats.py:522
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -588,37 +592,36 @@ msgstr ""
 "புள்ளி விவரம் தர இன்னும் தரவு இல்லை.\n"
 "ஒரு வார பயன்பாடு நல்லா இருக்கும்!"
 
-#: ../hamster/stats.py:507
+#: ../hamster/stats.py:525
 msgid "Still collecting data - check back after a week has passed!"
 msgstr "இன்னும் தரவை சேமிக்கிறது. - இன்னும் ஒரு வாரம் கழித்து வாங்க!"
 
-#. date format for case when year has not been selected
-#: ../hamster/stats.py:635
-#, python-format
-msgid "%(first_b)s %(first_d)s, %(first_Y)s"
-msgstr "%(first_b)s %(first_d)s, %(first_Y)s"
+#. date of first record for case when year has not been selected
+#: ../hamster/stats.py:653, python-format
+msgctxt "first record"
+msgid "%(b)s %(d)s, %(Y)s"
+msgstr "%(b)s %(d)s, %(Y)s"
 
-#. date format when year has been selected
-#: ../hamster/stats.py:639
-#, python-format
-msgid "%(first_b)s %(first_d)s"
-msgstr "%(first_b)s %(first_d)s"
+#. date of first record when year has been selected
+#: ../hamster/stats.py:657, python-format
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:642
+#: ../hamster/stats.py:660
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr " %s இல் பதிவு செய்த முதல் செயல்பாடு"
 
-#: ../hamster/stats.py:651 ../hamster/stats.py:655
+#: ../hamster/stats.py:669 ../hamster/stats.py:673
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s வருடம்"
+msgstr[1] "%(num)s வருடங்கள்"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:660
-#, fuzzy, python-format
+#: ../hamster/stats.py:678, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
 "(working_days)s working days (%(working_years)s)."
@@ -626,8 +629,7 @@ msgstr ""
 "இது வரை தொடர்ந்த நேரம் %(human_days)s மனித நாட்கள் (%(human_years)s வருடங்கள்) "
 "அல்லது %(working_days)s வேலை நாட்கள் (%(working_years)s வருடங்கள்)."
 
-#: ../hamster/stats.py:678
-#, fuzzy, python-format
+#: ../hamster/stats.py:696, python-format
 msgid ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hour."
@@ -639,21 +641,20 @@ msgstr[0] ""
 "(hours)s மணி நேரம் எடுத்தது."
 msgstr[1] ""
 "அதிக பட்ச தொடர்ந்த வேலை நடந்தது எப்போதெனில் %(max_b)s %(max_d)s, %(max_Y)s. அது %"
-"(hours)s மணி நேரம் எடுத்தது."
+"(hours)s மணிகள் நேரம் எடுத்தது."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:685
-#, fuzzy, python-format
+#: ../hamster/stats.py:703, python-format
 msgid "There are %s record."
 msgid_plural "There are %s records."
 msgstr[0] "பதிவுக் குறிப்புகள்  %s உள்ளன"
 msgstr[1] "பதிவுக் குறிப்புகள்  %s உள்ளன"
 
-#: ../hamster/stats.py:705
+#: ../hamster/stats.py:723
 msgid "Hamster would like to observe you some more!"
 msgstr "ஹாம்ஸ்டர் உங்களை இன்னும் கவனிக்க விரும்புகிறது!"
 
-#: ../hamster/stats.py:707
+#: ../hamster/stats.py:725
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
@@ -661,13 +662,12 @@ msgid ""
 msgstr ""
 " %s சதவிகித உண்மைகள்  காலை 9 மணிக்கு முன் ஆரம்பிக்கின்றன. நீங்க ரொம்ப சுறுசுறுப்புதான்."
 
-#: ../hamster/stats.py:710
+#: ../hamster/stats.py:728
 #, python-format
-msgid ""
-"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr " %s சதவிகித உண்மைகள்  இரவு 11 மணிக்கு பின் ஆரம்பிக்கின்றன. நீங்க ஆந்தை போல."
 
-#: ../hamster/stats.py:713
+#: ../hamster/stats.py:731
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -676,21 +676,21 @@ msgstr " %s சதவிகித வேலைகள்  15 நிமிடங�
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:792
-#, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+#: ../hamster/stats.py:817, python-format
+msgctxt "overview list"
+msgid "%(A)s, %(b)s %(d)s"
+msgstr "%(A)s, %(b)s %(d)s"
 
-#: ../hamster/stats.py:833
+#: ../hamster/stats.py:858
 msgid "Total"
 msgstr "மொத்தம்"
 
-#: ../hamster/stats.py:852
-#, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s"
+#: ../hamster/stats.py:877, python-format
+msgctxt "overview graph"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:898
+#: ../hamster/stats.py:923
 msgid "Month"
 msgstr "மாதம்"
 
@@ -711,6 +711,9 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgid "%(first_b)s %(first_d)s"
+#~ msgstr "%(first_b)s %(first_d)s"
 
 #~ msgid "label"
 #~ msgstr "அடையாள சீட்டு"
