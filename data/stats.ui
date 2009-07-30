@@ -132,6 +132,21 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkRadioToolButton" id="day">
+                        <property name="visible">True</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes"> _Day</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">day_icon</property>
+                        <property name="active">True</property>
+                        <signal name="toggled" handler="on_day_toggled"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioToolButton" id="week">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -850,5 +865,9 @@
   <object class="GtkImage" id="month_icon">
     <property name="visible">True</property>
     <property name="pixbuf">art/stock_calendar-view-month.png</property>
+  </object>
+  <object class="GtkImage" id="day_icon">
+    <property name="visible">True</property>
+    <property name="pixbuf">art/stock_calendar-view-day.png</property>
   </object>
 </interface>

@@ -391,6 +391,8 @@ class StatsViewer(object):
         self.week_view = self.get_widget("week")
         self.month_view = self.get_widget("month")
         self.month_view.set_group(self.week_view)
+        self.day_view = self.get_widget("day")
+        self.day_view.set_group(self.week_view)
         
         #initiate the form in the week view
         self.week_view.set_active(True)
@@ -898,29 +900,36 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         
 
     def set_title(self):
-        dates_dict = stuff.dateDict(self.start_date, "start_")
-        dates_dict.update(stuff.dateDict(self.end_date, "end_"))
-        
-        if self.start_date.year != self.end_date.year:
-            # overview label if start and end years don't match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            overview_label = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        elif self.start_date.month != self.end_date.month:
-            # overview label if start and end month do not match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        if self.day_view.get_active():
+            overview_label = C_("single day overview",
+                                u"Overview for %(B)s %(d)s, %(Y)s") % \
+                                stuff.dateDict(self.view_date)
         else:
-            # overview label for interval in same month
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+            dates_dict = stuff.dateDict(self.start_date, "start_")
+            dates_dict.update(stuff.dateDict(self.end_date, "end_"))
+            
+            if self.start_date.year != self.end_date.year:
+                # overview label if start and end years don't match
+                # letter after prefixes (start_, end_) is the one of
+                # standard python date formatting ones- you can use all of them
+                overview_label = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            elif self.start_date.month != self.end_date.month:
+                # overview label if start and end month do not match
+                # letter after prefixes (start_, end_) is the one of
+                # standard python date formatting ones- you can use all of them
+                overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            else:
+                # overview label for interval in same month
+                # letter after prefixes (start_, end_) is the one of
+                # standard python date formatting ones- you can use all of them
+                overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
         if self.week_view.get_active():
             dayview_caption = _("Week")
-        else:
+        elif self.month_view.get_active():
             dayview_caption = _("Month")
+        else:
+            dayview_caption = _("Day")
         
         self.get_widget("overview_label").set_markup("<b>%s</b>" % overview_label)
         self.get_widget("dayview_caption").set_markup("%s" % (dayview_caption))
@@ -929,17 +938,22 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
     def do_graph(self):
         self.set_title()
         
-        facts = runtime.storage.get_facts(self.start_date, self.end_date)
+        if self.day_view.get_active():
+            facts = runtime.storage.get_facts(self.view_date)
+        else:
+            facts = runtime.storage.get_facts(self.start_date, self.end_date)
+
 
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
         self.fact_store.clear()
         
+        self.fill_tree(facts)
+
         if not facts:
             self.get_widget("graphs").hide()
             self.get_widget("no_data_label").show()
             return 
 
-        self.fill_tree(facts)
 
         self.get_widget("no_data_label").hide()
         self.get_widget("graphs").show()
@@ -974,29 +988,42 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.stats(button.year)
 
     def on_prev_clicked(self, button):
-        if self.week_view.get_active():
-            self.start_date -= dt.timedelta(7)
-            self.end_date -= dt.timedelta(7)
-        
-        elif self.month_view.get_active():
-            self.end_date = self.start_date - dt.timedelta(1)
-            first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
-            self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
+        if self.day_view.get_active():
+            self.view_date -= dt.timedelta(1)
+            if self.view_date < self.start_date:
+                self.start_date -= dt.timedelta(7)
+                self.end_date -= dt.timedelta(7)
+        else:
+            if self.week_view.get_active():
+                self.start_date -= dt.timedelta(7)
+                self.end_date -= dt.timedelta(7)
+            
+            elif self.month_view.get_active():
+                self.end_date = self.start_date - dt.timedelta(1)
+                first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
+                self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
 
-        self.view_date = self.start_date        
+            self.view_date = self.start_date
+
         self.do_graph()
 
     def on_next_clicked(self, button):
-        if self.week_view.get_active():
-            self.start_date += dt.timedelta(7)
-            self.end_date += dt.timedelta(7)
+        if self.day_view.get_active():
+            self.view_date += dt.timedelta(1)
+            if self.view_date > self.end_date:
+                self.start_date += dt.timedelta(7)
+                self.end_date += dt.timedelta(7)
+        else:
+            if self.week_view.get_active():
+                self.start_date += dt.timedelta(7)
+                self.end_date += dt.timedelta(7)        
+            elif self.month_view.get_active():
+                self.start_date = self.end_date + dt.timedelta(1)
+                first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
+                self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
         
-        elif self.month_view.get_active():
-            self.start_date = self.end_date + dt.timedelta(1)
-            first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
-            self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
-        
-        self.view_date = self.start_date
+            self.view_date = self.start_date
+
         self.do_graph()
     
     def on_home_clicked(self, button):
@@ -1014,8 +1041,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.do_graph()
         
     def on_day_toggled(self, button):
-        self.start_date = self.view_date
-        self.end_date = self.view_date
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+        self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
+
+        self.end_date = self.start_date + dt.timedelta(6)
         self.do_graph()
 
     def on_week_toggled(self, button):
