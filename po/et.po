@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-07-20 12:46+0000\n"
-"PO-Revision-Date: 2009-07-27 21:35+0300\n"
+"POT-Creation-Date: 2009-07-30 14:34+0000\n"
+"PO-Revision-Date: 2009-07-30 21:11+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -94,7 +94,7 @@ msgid "_Categories"
 msgstr "_Kategooriad"
 
 msgid "remind also when no activity is set"
-msgstr ""
+msgstr "meeldetuletused ka tegevuse puudumise korral"
 
 msgid "Activity:"
 msgstr "Tegevus:"
@@ -112,20 +112,22 @@ msgid "Time:"
 msgstr "Aeg:"
 
 msgid "in progress"
-msgstr ""
+msgstr "hetkel kestab edasi"
 
 msgid "to"
-msgstr ""
+msgstr "kuni"
 
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks."
 
 msgid "Remind also when no activity is set"
-msgstr ""
+msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
 
 msgid ""
 "Remind every notify_interval minutes also if no activity has been started."
 msgstr ""
+"Meeldetuletuste kuvamine võtmega notify_interval määratud minutite järel "
+"isegi juhul, kui tegevust pole alustatud."
 
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or bigger "
@@ -141,10 +143,10 @@ msgid "Show window"
 msgstr "Akna näitamine"
 
 msgid "Stop tracking current activity on shutdown"
-msgstr "Käesoleva tegevuse jälgimise seiskamine programmi seiskamisel"
+msgstr "Jooksva tegevuse jälgimise seiskamine programmi seiskamisel"
 
 msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Arvuti jõudeoleku korral käesoleva tegevuse jälgimise seiskamine"
+msgstr "Arvuti jõudeoleku korral jooksva tegevuse jälgimise seiskamine"
 
 msgid "Stop tracking on idle"
 msgstr "Jõudeoleku korral jälgimise seiskamine"
@@ -153,10 +155,13 @@ msgid ""
 "<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
 "span>"
 msgstr ""
+"<span size=\"small\" >Sisesta oma tegevus ja vajuta ajajälgimise "
+"alustamiseks Enterit!</span>"
 
 msgid ""
 "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
 msgstr ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Loe lisaks</span>"
 
 msgid "Ad_d Earlier Activity"
 msgstr "Lisa _varasem tegevus"
@@ -180,6 +185,9 @@ msgstr "_Lõpeta jälgimine"
 msgid "_Today"
 msgstr "_Täna"
 
+msgid " _Day"
+msgstr "_Päev"
+
 msgid " _Month"
 msgstr "_Kuu"
 
@@ -190,10 +198,10 @@ msgid "<b>Overview</b>"
 msgstr "<b>Ülevaade</b>"
 
 msgid "<b>Starts and ends</b>"
-msgstr ""
+msgstr "<b>Algus ja lõpp</b>"
 
 msgid "<b>Totals</b>"
-msgstr ""
+msgstr "<b>Kokku</b>"
 
 msgid "Activity"
 msgstr "Tegevus"
@@ -202,10 +210,10 @@ msgid "Categories:"
 msgstr "Kategooriad:"
 
 msgid "Date interval:"
-msgstr ""
+msgstr "Kuupäevade vahemik:"
 
 msgid "No data for this interval"
-msgstr "Selle vahemiku kohta puuduvad andmed"
+msgstr "Selle vahemiku kohta andmed puuduvad"
 
 msgid "Overview"
 msgstr "Ülevaade"
@@ -217,7 +225,7 @@ msgid "Save as HTML"
 msgstr "Salvesta HTML-ina"
 
 msgid "Save report - Time Tracker"
-msgstr ""
+msgstr "Ajajälgija raporti salvestamine"
 
 msgid "Statistics"
 msgstr "Statistika"
@@ -255,7 +263,7 @@ msgid "Duration"
 msgstr "Kestus"
 
 msgid "No activity"
-msgstr "Tegevust pole"
+msgstr "Tegevusetu"
 
 #. activity reminder
 #, python-format
@@ -276,7 +284,7 @@ msgid "Unsorted"
 msgstr "Sortimata"
 
 msgid "What to type in the activity box?"
-msgstr ""
+msgstr "Mida peaks tegevuse kasti sisestama?"
 
 msgid ""
 "There is simple syntax that enables you to add details to your activities:\n"
@@ -294,6 +302,20 @@ msgid ""
 "Now, start tracking!\n"
 "        "
 msgstr ""
+"Tegevuse kirjeldusele täpsustuste lisamine käib lihtsa süntaksi abil:\n"
+"\n"
+"Märk \"@\" tähistab kategooriat. Näiteks: \"lillede kastmine@kodu\" alustab "
+"tegevust \"lillede kastmine\", mis kuulub kategooriasse \"kodu\".\n"
+"\n"
+"Koma (\",\") märgib kirjelduse algust. Näiteks: \"lillede kastmine, "
+"karikakrad ja rukkililled\" alustab tegevust \"lillede kastmine\" ja lisab "
+"sellele kirjelduse \"karikakrad ja rukkililled\".\n"
+"\n"
+"Mõlemit erimärki võib omavahel kombineerida: \"lillede kastmine@kodu, "
+"karikakrad ja rukkililled\" toimib väga kenasti!\n"
+"\n"
+"Seega võib nüüd ajajälgimisega algust teha!\n"
+" "
 
 #. defaults
 msgid "Work"
@@ -312,7 +334,7 @@ msgid "World domination"
 msgstr "Võimuhaaramine"
 
 msgid "Day to day"
-msgstr "Päevast päeva"
+msgstr "Igapäevane"
 
 msgid "Lunch"
 msgstr "Lõunatamine"
@@ -324,7 +346,7 @@ msgid "Doing handstands"
 msgstr "Kätekõverduste tegemine"
 
 msgid "Update activity"
-msgstr "Tegevuse uuendamine"
+msgstr "Tegevuse andmete uuendamine"
 
 msgid "Name"
 msgstr "Nimi"
@@ -416,7 +438,7 @@ msgid "Totals"
 msgstr "Kokku"
 
 msgid "Total Time"
-msgstr "Aega kokku"
+msgstr "Kogukestus"
 
 msgid "HTML Report"
 msgstr "HTML-raport"
@@ -447,7 +469,7 @@ msgstr ""
 "Nädalapikkune kasutamine võib aga juba midagi andas!"
 
 msgid "Still collecting data - check back after a week has passed!"
-msgstr ""
+msgstr "Andmed on praegu kogumisel. Vaata järgmisel nädalal uuesti!"
 
 #. date of first record for case when year has not been selected
 #, python-format
@@ -463,7 +485,7 @@ msgstr "%(d)s. %(b)s"
 
 #, python-format
 msgid "First activity was recorded on %s."
-msgstr ""
+msgstr "Esimene tegevus registreeriti: %s."
 
 #, python-format
 msgid "%(num)s year"
@@ -486,7 +508,11 @@ msgid_plural ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hours."
 msgstr[0] ""
+"Pikim katkematu tegevus kestis %(hours)s tunni ja selle toimumise aeg oli %"
+"(max_d)s. %(max_b)s %(max_Y)s."
 msgstr[1] ""
+"Pikim katkematu tegevus kestis %(hours)s tundi ja selle toimumise aeg oli %"
+"(max_d)s. %(max_b)s %(max_Y)s."
 
 #. total records (in selected scope)
 #, python-format
@@ -496,24 +522,30 @@ msgstr[0] "Siin on %s kirje."
 msgstr[1] "Siin on %s kirjet."
 
 msgid "Hamster would like to observe you some more!"
-msgstr ""
+msgstr "Hamster võib enamatki öelda!"
 
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
 msgstr ""
+"%s protsenti kõigist tegevustest algavad enne kella üheksat hommikul. "
+"Tundub, et Sa oled varajane linnuke :)"
 
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr ""
+"%s protsenti kõigist tegevustest algavad õhtul pärast kella 23:00. Tundub, "
+"et Sa oled öökulli tüüpi tegutseja :)"
 
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
 "busy bee."
 msgstr ""
+"%s protsenti kõigist tegevustest on lühemad kui 15 minutit. Paistab, et Sa "
+"oled päris hõivatud töömesilane :)"
 
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
@@ -530,8 +562,16 @@ msgctxt "overview graph"
 msgid "%(b)s %(d)s"
 msgstr "%(d)s. %(b)s"
 
+#, python-format
+msgctxt "single day overview"
+msgid "Overview for %(B)s %(d)s, %(Y)s"
+msgstr "Päeva %(d)s. %(B)s %(Y)s ülevaade"
+
 msgid "Month"
 msgstr "Kuu"
+
+msgid "Day"
+msgstr "Päev"
 
 #. duration in round hours
 #, python-format
@@ -547,18 +587,3 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
-
-#~ msgid "%(first_b)s %(first_d)s"
-#~ msgstr "%(first_d)s. %(first_b)s"
-
-#~ msgid "Delete activity"
-#~ msgstr "Tegevuse kustutamine"
-
-#~ msgid "Newer activities"
-#~ msgstr "Uuemad tegevused"
-
-#~ msgid "Show month"
-#~ msgstr "Näita kuud"
-
-#~ msgid "Show week"
-#~ msgstr "Näita nädalat"
