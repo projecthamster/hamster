@@ -33,7 +33,7 @@
             <child>
               <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
-                <property name="top_padding">8</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkHPaned" id="hpaned1">
@@ -53,6 +53,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Categories</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">category_list</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -75,7 +76,7 @@
                                 <property name="headers_visible">False</property>
                                 <property name="enable_search">False</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="category_list_atk">
+                                  <object class="AtkObject" id="category_list-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Category list</property>
                                   </object>
                                 </child>
@@ -100,7 +101,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="add_category_atk">
+                                  <object class="AtkObject" id="category_add-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Add category</property>
                                   </object>
                                 </child>
@@ -123,7 +124,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="remove_category_atk">
+                                  <object class="AtkObject" id="category_remove-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Remove category</property>
                                   </object>
                                 </child>
@@ -146,7 +147,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="edit_category_atk">
+                                  <object class="AtkObject" id="category_edit-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Edit category</property>
                                   </object>
                                 </child>
@@ -191,6 +192,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Activities</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">activity_list</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -218,7 +220,7 @@
                                     <property name="enable_search">False</property>
                                     <property name="enable_tree_lines">True</property>
                                     <child internal-child="accessible">
-                                      <object class="AtkObject" id="activity_list_atk">
+                                      <object class="AtkObject" id="activity_list-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes">Activity list</property>
                                       </object>
                                     </child>
@@ -245,7 +247,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="add_activity_atk">
+                                  <object class="AtkObject" id="activity_add-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Add activity</property>
                                   </object>
                                 </child>
@@ -268,7 +270,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="remove_activity_atk">
+                                  <object class="AtkObject" id="activity_remove-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Remove activity</property>
                                   </object>
                                 </child>
@@ -291,7 +293,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="edit_activity_atk">
+                                  <object class="AtkObject" id="activity_edit-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Edit activity</property>
                                   </object>
                                 </child>
@@ -314,7 +316,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="move_activity_up_atk">
+                                  <object class="AtkObject" id="activity_up-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Move activity up</property>
                                   </object>
                                 </child>
@@ -337,7 +339,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="move_activity_down_atk">
+                                  <object class="AtkObject" id="activity_down-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Move activity down</property>
                                   </object>
                                 </child>
@@ -393,7 +395,7 @@
             <child>
               <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
-                <property name="top_padding">8</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkVBox" id="vbox7">
@@ -405,6 +407,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_shutdown_track_toggled"/>
                       </object>
@@ -419,6 +422,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_idle_track_toggled"/>
                       </object>
@@ -467,6 +471,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_notify_on_idle_toggled"/>
                                       </object>
@@ -485,6 +490,8 @@
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Remind of current activity every:</property>
                             <property name="use_markup">True</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">notify_interval</property>
                           </object>
                         </child>
                       </object>
