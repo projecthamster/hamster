@@ -661,7 +661,7 @@ class HamsterApplet(object):
         return False
         
     def on_toggle(self, widget):
-        runtime.dispatcher.dispatch('panel_visible', self.button.get_active())
+        self.__show_toggle(None, self.button.get_active())
 
     def on_activity_list_key_pressed(self, entry, event):
         #tab will trigger going through autocomplete values when there are any
