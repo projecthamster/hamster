@@ -47,7 +47,13 @@ class HamsterDbusController(dbus.service.Object):
         for the hamster-applet and performs the necesary conversion
         between dbus types and hamster-applet data types
         """
-        dbus.service.Object.__init__(self, bus_name, HAMSTER_PATH)
+        try:
+            dbus.service.Object.__init__(self, bus_name, HAMSTER_PATH)
+        except KeyError:
+            # KeyError is thrown when the dbus interface is taken
+            # that is there is other hamster running somewhere
+            print "D-Bus interface registration failed - other hamster running somewhere"
+            pass
 
     @staticmethod
     def to_dbus_fact(fact):
