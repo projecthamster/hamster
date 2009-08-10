@@ -1,4 +1,21 @@
 ===============
+Version 2.27.90
+===============
+  * Fixes to idle detection (now works with gnome screensaver 2.27+)
+  * return of the day view
+  * UI layout fixes to match HIG
+  * now it is possible to add more than one applet to panel without crashing
+
+  Updated translations:
+    * ee (Ivar Smolin)
+    * gl (Antón Méixome)
+    * es (Jorge González)
+    * hu (Gabor Kelemen)
+    * zh_HK (Chao-Hsiung Liao)
+    * sv (Daniel Nylander)
+    
+
+===============
 Version 2.27.5
 ===============
   * Better autocomplete
