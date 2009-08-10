@@ -1,4 +1,4 @@
-# translation of hamster-applet-HEAD-po-gl.po to Galician
+# translation of hamster-applet.master.po to Galician
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -8,10 +8,10 @@
 # Antón Méixome <meixome@mancomun.org>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet-HEAD-po-gl\n"
+"Project-Id-Version: hamster-applet.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-06 19:14+0200\n"
-"PO-Revision-Date: 2009-06-26 13:47+0200\n"
+"POT-Creation-Date: 2009-08-10 16:58+0200\n"
+"PO-Revision-Date: 2009-08-07 14:54+0200\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@mancomun.org>\n"
 "MIME-Version: 1.0\n"
@@ -242,7 +242,7 @@ msgstr "_Hoxe"
 
 #: ../data/stats.ui.h:1
 msgid " _Day"
-msgstr ""
+msgstr "_Día"
 
 #: ../data/stats.ui.h:2
 msgid " _Month"
@@ -327,8 +327,9 @@ msgstr "Acerca do Seguidor de tempo"
 #: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr ""
-"Ignacio Casal Quinteiro <nacho.resa@gmail.com>, Francisco Diéguez Souto "
-"<fran.dieguez@glug.es>"
+"Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
+"Francisco Diéguez Souto <fran.dieguez@glug.es>\n"
+"Antón Méixome <meixome@mancomun.org>"
 
 #. translators: this is edit activity action in the notifier bubble
 #: ../hamster/applet.py:73
@@ -588,16 +589,14 @@ msgstr "iCal"
 
 #. add unsorted category
 #: ../hamster/stats.py:120
-#, fuzzy
 msgctxt "categories"
 msgid "All"
-msgstr "Todo"
+msgstr "Todas"
 
 #: ../hamster/stats.py:435
-#, fuzzy
 msgctxt "years"
 msgid "All"
-msgstr "Todo"
+msgstr "Todos"
 
 #: ../hamster/stats.py:524
 msgid ""
@@ -613,17 +612,17 @@ msgstr "Aínda recollendo datos - volva verificar despois de pasar unha semana."
 
 #. date of first record for case when year has not been selected
 #: ../hamster/stats.py:655
-#, fuzzy, python-format
+#, python-format
 msgctxt "first record"
 msgid "%(b)s %(d)s, %(Y)s"
-msgstr "%(first_b)s %(first_d)s, %(first_Y)s"
+msgstr "%(b)s %(d)s, %(Y)s"
 
 #. date of first record when year has been selected
 #: ../hamster/stats.py:659
-#, fuzzy, python-format
+#, python-format
 msgctxt "first record"
 msgid "%(b)s %(d)s"
-msgstr "%(m_b)s %(m_d)s"
+msgstr "%(b)s %(d)s"
 
 #: ../hamster/stats.py:662
 #, python-format
@@ -634,12 +633,12 @@ msgstr "A primeira actividade foi gravada en %s."
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s ano"
+msgstr[1] "%(num)s anos"
 
 #. FIXME: difficult string to properly pluralize
 #: ../hamster/stats.py:680
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
 "(working_days)s working days (%(working_years)s)."
@@ -648,7 +647,7 @@ msgstr ""
 "ou %(working_days)s días laborábeis (%(working_years)s anos)."
 
 #: ../hamster/stats.py:698
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
 "(hours)s hour."
@@ -657,17 +656,17 @@ msgid_plural ""
 "(hours)s hours."
 msgstr[0] ""
 "O traballo continuo máis longo foi %(max_b)s %(max_d)s, %(max_Y)s e durou %"
-"(hours)s horas."
+"(hours)s hora."
 msgstr[1] ""
 "O traballo continuo máis longo foi %(max_b)s %(max_d)s, %(max_Y)s e durou %"
 "(hours)s horas."
 
 #. total records (in selected scope)
 #: ../hamster/stats.py:705
-#, fuzzy, python-format
+#, python-format
 msgid "There are %s record."
 msgid_plural "There are %s records."
-msgstr[0] "Hai %s rexistros."
+msgstr[0] "Hai %s rexistro."
 msgstr[1] "Hai %s rexistros."
 
 #: ../hamster/stats.py:725
@@ -703,26 +702,26 @@ msgstr ""
 #. date format in overview window fact listing
 #. prefix is "o_",letter after prefix is regular python format. you can use all of them
 #: ../hamster/stats.py:819
-#, fuzzy, python-format
+#, python-format
 msgctxt "overview list"
 msgid "%(A)s, %(b)s %(d)s"
-msgstr "%(o_A)s, %(o_d)s de %(o_b)s"
+msgstr "%(A)s, %(b)s %(d)s"
 
 #: ../hamster/stats.py:860
 msgid "Total"
 msgstr "Total"
 
 #: ../hamster/stats.py:879
-#, fuzzy, python-format
+#, python-format
 msgctxt "overview graph"
 msgid "%(b)s %(d)s"
-msgstr "%(m_b)s %(m_d)s"
+msgstr "%(b)s %(d)s"
 
 #: ../hamster/stats.py:905
-#, fuzzy, python-format
+#, python-format
 msgctxt "single day overview"
 msgid "Overview for %(B)s %(d)s, %(Y)s"
-msgstr "Resumo do %(start_d)s de %(start_B)s de %(start_Y)s"
+msgstr "Resumo de %(B)s %(d)s, %(Y)s"
 
 #: ../hamster/stats.py:930
 msgid "Month"
@@ -730,7 +729,7 @@ msgstr "Mes"
 
 #: ../hamster/stats.py:932
 msgid "Day"
-msgstr ""
+msgstr "Día"
 
 #. duration in round hours
 #: ../hamster/stuff.py:151
@@ -749,7 +748,3 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
-
-#~| msgid "%(m_b)s %(m_d)s"
-#~ msgid "%(first_b)s %(first_d)s"
-#~ msgstr "%(first_b)s %(first_d)s"
