@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from stuff import format_duration, figure_time
+from stuff import format_duration
 import gtk
 import datetime as dt
 import calendar
@@ -35,6 +35,7 @@ class DateInput(gtk.Entry):
         gtk.Entry.__init__(self)
         
         self.set_width_chars(12) #12 is enough for 12-oct-2009, which is verbose
+        self.date = date
         if date:
             self.set_date(date)
 
@@ -61,17 +62,20 @@ class DateInput(gtk.Entry):
 
     def set_date(self, date):
         """sets date to specified, using default format"""
-        self.set_text(self._format_date(date))
+        self.date = date
+        self.set_text(self._format_date(self.date))
 
     def get_date(self):
         """sets date to specified, using default format"""
-        return self._figure_date(self.get_text())
+        self.date = self._figure_date(self.get_text())
+        self.set_text(self._format_date(self.date))
+        return self.date
 
     def _figure_date(self, date_str):
         try:
             return dt.datetime.strptime(date_str, "%x")
         except:
-            return None
+            return self.date
 
     def _format_date(self, date):
         if not date:
@@ -101,9 +105,8 @@ class DateInput(gtk.Entry):
         
         cal_date = calendar.get_date()
 
-        date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
-        
-        self.set_text(self._format_date(date))
+        self.date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
+        self.set_text(self._format_date(self.date))
 
         self.popup.hide()
         if self.news:
@@ -182,6 +185,7 @@ class TimeInput(gtk.Entry):
         self.news = False
 
         self.set_width_chars(7) #7 is like 11:24pm
+        self.time = time
         if time:
             self.set_time(time)
 
@@ -219,14 +223,41 @@ class TimeInput(gtk.Entry):
         self.start_time = start_time
 
     def set_time(self, time):
+        self.time = time
         self.set_text(self._format_time(time))
         
     def _on_text_changed(self, widget):
         self.news = True
         
+    def figure_time(self, str_time):
+        if not str_time:
+            return self.time
+        
+        # strip everything non-numeric and consider hours to be first number
+        # and minutes - second number
+        numbers = re.split("\D", str_time)
+        numbers = filter(lambda x: x!="", numbers)
+        
+        hours, minutes = None, None
+        
+        if len(numbers) == 1 and len(numbers[0]) == 4:
+            hours, minutes = int(numbers[0][:2]), int(numbers[0][2:])
+        else:
+            if len(numbers) >= 1:
+                hours = int(numbers[0])
+            if len(numbers) >= 2:
+                minutes = int(numbers[1])
+            
+        if (hours is None or minutes is None) or hours > 24 or minutes > 60:
+            return self.time #no can do
+    
+        return dt.datetime.now().replace(hour = hours, minute = minutes,
+                                         second = 0, microsecond = 0)
+
+
     def _select_time(self, time_text):
         #convert forth and back so we have text formated as we want
-        time = figure_time(time_text)
+        time = self.figure_time(time_text)
         time_text = self._format_time(time) 
         
         self.set_text(time_text)
@@ -237,7 +268,9 @@ class TimeInput(gtk.Entry):
             self.news = False
     
     def get_time(self):
-        return figure_time(self.get_text())
+        self.time = self.figure_time(self.get_text())
+        self.set_text(self._format_time(self.time))
+        return self.time
 
     def _format_time(self, time):
         if time is None:
@@ -258,7 +291,7 @@ class TimeInput(gtk.Entry):
         
 
     def show_popup(self):
-        focus_time = figure_time(self.get_text())
+        focus_time = self.figure_time(self.get_text())
         
         hours = gtk.ListStore(gobject.TYPE_STRING)
         
