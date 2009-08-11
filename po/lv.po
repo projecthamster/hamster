@@ -125,7 +125,7 @@ msgstr "Nodarbe:"
 
 #: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
-msgstr "_Pievienot Agrāku Notikumu"
+msgstr "Pievienot Agrāku Notikumu"
 
 #: ../data/edit_activity.ui.h:3
 msgid "Description:"
