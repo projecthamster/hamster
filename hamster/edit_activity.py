@@ -531,7 +531,9 @@ class CustomFactController:
             end_date = start_date
             if end_time < start_time:
                 end_date = start_date + dt.timedelta(days=1)
-            self.set_end_date_label(end_date)
+
+            if end_date:
+                self.set_end_date_label(end_date)
             time, date = end_time, end_date
         else:
             time, date = start_time, start_date
@@ -617,9 +619,12 @@ class CustomFactController:
         self.start_time.grab_focus()
 
     def on_start_time_entered(self, widget):
-        self.end_time.set_time(self.start_time.get_time() +
-                                                     dt.timedelta(minutes = 30))
-        self.end_time.set_start_time(self.start_time.get_time())
+        start_time = self.start_time.get_time()
+        if not start_time:
+            return
+
+        self.end_time.set_time(start_time + dt.timedelta(minutes = 30))
+        self.end_time.set_start_time(start_time)
         self.validate_fields()
         self.end_time.grab_focus()
         
@@ -637,18 +642,19 @@ class CustomFactController:
         if self.get_widget("in_progress").get_active():
             end_time = dt.datetime.now()
 
-        # if we are too far, just roll back for one day
-        if ((end_time - start_time).days > 0): 
-            end_time -= dt.timedelta(days=1)
-            self.update_time(start_time, end_time)
-
-        if start_time:
-            self.draw_preview(start_time.date(), [start_time, end_time])
-
-        # if end time is not in proper distance, do the brutal +30 minutes reset
-        if (end_time < start_time or (end_time - start_time).days > 0):
-            end_time = start_time + dt.timedelta(minutes = 30)
-            self.update_time(start_time, end_time)
+        if start_time and end_time:
+            # if we are too far, just roll back for one day
+            if ((end_time - start_time).days > 0): 
+                end_time -= dt.timedelta(days=1)
+                self.update_time(start_time, end_time)
+    
+            if start_time and end_time:
+                self.draw_preview(start_time.date(), [start_time, end_time])
+    
+            # if end time is not in proper distance, do the brutal +30 minutes reset
+            if (end_time < start_time or (end_time - start_time).days > 0):
+                end_time = start_time + dt.timedelta(minutes = 30)
+                self.update_time(start_time, end_time)
 
         looks_good = False
         if activity_text != "" and start_time and end_time and \
