@@ -647,14 +647,16 @@ class CustomFactController:
             if ((end_time - start_time).days > 0): 
                 end_time -= dt.timedelta(days=1)
                 self.update_time(start_time, end_time)
-    
-            if start_time and end_time:
-                self.draw_preview(start_time.date(), [start_time, end_time])
-    
+
             # if end time is not in proper distance, do the brutal +30 minutes reset
             if (end_time < start_time or (end_time - start_time).days > 0):
                 end_time = start_time + dt.timedelta(minutes = 30)
                 self.update_time(start_time, end_time)
+    
+            self.draw_preview(start_time.date(), [start_time, end_time])    
+        else:
+            self.draw_preview(dt.datetime.today().date(), [dt.datetime.now(),
+                                                           dt.datetime.now()])
 
         looks_good = False
         if activity_text != "" and start_time and end_time and \
