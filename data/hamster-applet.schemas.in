@@ -47,7 +47,7 @@
                 <short>Remind of current task every x minutes</short>
                 <long>
                     Remind of current task every specified amount of minutes.
-                    Set to 0 or bigger than 120 to disable reminder.
+                    Set to 0 or greater than 120 to disable reminder.
                 </long>
             </locale>
         </schema>
