@@ -261,8 +261,11 @@ class HTMLWriter(ReportWriter):
                             <td class="largeCell">%s</td>
                         </tr>
                        """ % (int(self.even_row),
-                              C_("date column for each row in HTML report",
-                                 "%(b)s %(d)s, %(Y)s") % stuff.dateDict(fact["start_time"]),
+                              fact["start_time"].strftime(
+                                # date column format for each row in HTML report
+                                # Using python datetime formatting syntax. See:
+                                # http://docs.python.org/library/time.html#time.strftime
+                                C_("html report","%b %d, %Y")),
                               fact["name"],
                               category, 
                               fact["start_time"].strftime('%H:%M'),

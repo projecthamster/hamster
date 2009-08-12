@@ -651,13 +651,15 @@ A week of usage would be nice!"""))
 
         # first record        
         if not year:
-            #date of first record for case when year has not been selected
-            first_date = C_("first record", "%(b)s %(d)s, %(Y)s") % \
-                               stuff.dateDict(facts[0]["start_time"])
+            # date format for the first record if the year has not been selected
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            first_date = facts[0]["start_time"].strftime(C_("first record", "%b %d, %Y"))
         else:
-            #date of first record when year has been selected
-            first_date = C_("first record", "%(b)s %(d)s") % \
-                               stuff.dateDict(facts[0]["start_time"])
+            # date of first record when year has been selected
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            first_date = facts[0]["start_time"].strftime(C_("first record", "%(b)s %(d)s"))
 
         summary += _("First activity was recorded on %s.") % \
                                                      ("<b>%s</b>" % first_date)
@@ -691,15 +693,21 @@ A week of usage would be nice!"""))
             if not max_fact or fact["delta"] > max_fact["delta"]:
                 max_fact = fact
 
-        datedict = stuff.dateDict(max_fact["start_time"], "max_")
+        longest_date = max_fact["start_time"].strftime(
+            # How the date of the longest activity should be displayed in statistics
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            C_("date of the longest activity", "%b %d, %Y"))
+        
         num_hours = max_fact["delta"].seconds / 60 / 60.0 + max_fact["delta"].days * 24
-        datedict["hours"] = "<b>%.1f</b>" % (num_hours)
-
+        hours = "<b>%.1f</b>" % (num_hours)
+        
         summary += "\n" + ngettext("Longest continuous work happened on \
-%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hour.",
+%(date)s and was %(hours)s hour.",
                                   "Longest continuous work happened on \
-%(max_b)s %(max_d)s, %(max_Y)s and was %(hours)s hours.",
-                                  int(num_hours)) % datedict
+%(date)s and was %(hours)s hours.",
+                                  int(num_hours)) % {"date": longest_date,
+                                                     "hours": hours}
 
         # total records (in selected scope)
         summary += " " + ngettext("There is %s record.",
@@ -814,9 +822,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         for i in range((self.end_date - self.start_date).days  + 1):
             current_date = self.start_date + dt.timedelta(i)
             
-            # date format in overview window fact listing
-            # prefix is "o_",letter after prefix is regular python format. you can use all of them
-            fact_date = C_("overview list", "%(A)s, %(b)s %(d)s") %  stuff.dateDict(current_date)
+            # Date format for the label in overview window fact listing
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            fact_date = current_date.strftime(C_("overview list", "%A, %b %d"))
             
             day_total = dt.timedelta()
             for fact in day_dict.get(current_date, []):
@@ -876,7 +885,10 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         if (self.end_date - self.start_date).days < 20:
             day_keys = [day.strftime("%a") for day in all_days]
         else:
-            day_keys = [C_("overview graph", "%(b)s %(d)s") %  stuff.dateDict(day)
+            # date format used in the overview graph when month view is selected
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            day_keys = [day.strftime(C_("overview graph", "%b %d"))
                                                             for day in all_days]
 
         self.day_chart.plot(day_keys, res, stack_keys = all_categories)
@@ -901,9 +913,14 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
     def set_title(self):
         if self.day_view.get_active():
-            overview_label = C_("single day overview",
-                                u"Overview for %(B)s %(d)s, %(Y)s") % \
-                                stuff.dateDict(self.view_date)
+            # date format for overview label when only single day is visible
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            start_date_str = self.view_date.strftime("single day overview",
+                                                     "%B %d, %Y")
+            # Overview label if looking on single day
+            overview_label = _(u"Overview for %(date)s") % \
+                                                      ({"date": start_date_str})
         else:
             dates_dict = stuff.dateDict(self.start_date, "start_")
             dates_dict.update(stuff.dateDict(self.end_date, "end_"))
@@ -912,16 +929,19 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                 # overview label if start and end years don't match
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
+                # see http://docs.python.org/library/time.html#time.strftime
                 overview_label = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
             elif self.start_date.month != self.end_date.month:
                 # overview label if start and end month do not match
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
+                # see http://docs.python.org/library/time.html#time.strftime
                 overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
             else:
                 # overview label for interval in same month
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
+                # see http://docs.python.org/library/time.html#time.strftime
                 overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
         if self.week_view.get_active():
