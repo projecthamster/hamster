@@ -23,6 +23,7 @@ import os
 import datetime as dt
 from xml.dom.minidom import Document
 import csv
+from hamster.i18n import C_
 
 def simple(facts, start_date, end_date, format, path):
     report_path = stuff.locale_from_utf8(path)
@@ -107,8 +108,18 @@ class TSVWriter(ReportWriter):
         ReportWriter.__init__(self, path)
         self.csv_writer = csv.writer(self.file, dialect='excel-tab')
 
-        headers = [_("activity"), _("start time"), _("end time"),
-                   _("duration minutes"), _("category"), _("description")]
+        headers = [# column title in the TSV export format
+                   _("activity"),
+                   # column title in the TSV export format
+                   _("start time"),
+                   # column title in the TSV export format
+                   _("end time"),
+                   # column title in the TSV export format
+                   _("duration minutes"),
+                   # column title in the TSV export format
+                   _("category"),
+                   # column title in the TSV export format
+                   _("description")]
         self.csv_writer.writerow([h.encode('utf-8') for h in headers])
 
     def _write_fact(self, file, fact):
@@ -250,7 +261,8 @@ class HTMLWriter(ReportWriter):
                             <td class="largeCell">%s</td>
                         </tr>
                        """ % (int(self.even_row),
-                              _("%(report_b)s %(report_d)s, %(report_Y)s") % stuff.dateDict(fact["start_time"], "report_"),
+                              C_("date column for each row in HTML report",
+                                 "%(b)s %(d)s, %(Y)s") % stuff.dateDict(fact["start_time"]),
                               fact["name"],
                               category, 
                               fact["start_time"].strftime('%H:%M'),
