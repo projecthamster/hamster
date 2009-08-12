@@ -11,17 +11,17 @@ msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-07-30 14:34+0000\n"
-"PO-Revision-Date: 2009-08-01 10:06+0300\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
+"POT-Creation-Date: 2009-08-12 15:11+0000\n"
+"PO-Revision-Date: 2009-08-12 22:10+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Project Hamster - track your time"
-msgstr "Projektihamster - ajajälgija"
+msgid "Project Hamster — track your time"
+msgstr "Projektihamster — ajajälgija"
 
 #. Title of reminder notification
 msgid "Time Tracker"
@@ -53,6 +53,9 @@ msgstr "Tegevuse lisamine"
 
 msgid "Add category"
 msgstr "Kategooria lisamine"
+
+msgid "Also remind when no activity is set"
+msgstr "Meeldetuletused ka tegevuse puudumise korral"
 
 msgid "Category list"
 msgstr "Kategooriate nimekiri"
@@ -93,9 +96,6 @@ msgstr "_Tegevused"
 msgid "_Categories"
 msgstr "_Kategooriad"
 
-msgid "remind also when no activity is set"
-msgstr "meeldetuletused ka tegevuse puudumise korral"
-
 msgid "Activity:"
 msgstr "Tegevus:"
 
@@ -117,21 +117,18 @@ msgstr "hetkel kestab edasi"
 msgid "to"
 msgstr "kuni"
 
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Meeldetuletuste kuvamine ka võtmega notify_interval määratud minutite järel "
+"isegi juhul, kui tegevust pole alustatud."
+
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks."
 
-msgid "Remind also when no activity is set"
-msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
-
 msgid ""
-"Remind every notify_interval minutes also if no activity has been started."
-msgstr ""
-"Meeldetuletuste kuvamine võtmega notify_interval määratud minutite järel "
-"isegi juhul, kui tegevust pole alustatud."
-
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
 msgstr ""
 "Jooksva tegevuse kohta antakse teada kindlaksmääratud hulga minutite järel. "
 "Väärtuse 0 või 120-st suurema väärtuse korral on meeldetuletaja keelatud."
@@ -145,7 +142,7 @@ msgstr "Akna näitamine"
 msgid "Stop tracking current activity on shutdown"
 msgstr "Jooksva tegevuse jälgimise seiskamine programmi seiskamisel"
 
-msgid "Stop tracking current activity, when computer becomes idle"
+msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Arvuti jõudeoleku korral jooksva tegevuse jälgimise seiskamine"
 
 msgid "Stop tracking on idle"
@@ -224,7 +221,7 @@ msgstr "Ülevaade - Hamster"
 msgid "Save as HTML"
 msgstr "Salvesta HTML-ina"
 
-msgid "Save report - Time Tracker"
+msgid "Save report – Time Tracker"
 msgstr "Ajajälgija raporti salvestamine"
 
 msgid "Statistics"
@@ -239,8 +236,8 @@ msgstr "Nädal"
 msgid "Year:"
 msgstr "Aasta:"
 
-msgid "Copyright © 2007-2009 Toms Bauģis and others"
-msgstr "Autoriõigused © 2007-2009 Toms Baugis ja teised"
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Autoriõigused © 2007-2009 Toms Bauģis ja teised"
 
 msgid "Project Hamster Website"
 msgstr "Projektihamstri veebisait"
@@ -270,31 +267,32 @@ msgstr "Tegevusetu"
 msgid "Working on <b>%s</b>"
 msgstr "Jooksev tegevus: <b>%s</b>"
 
-#. listing of today's categories and time spent in them
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
+#. duration in main drop-down per category in hours
 #, python-format
-msgid "%.1fh"
-msgstr "%.1ft"
+msgid "%sh"
+msgstr "%st"
 
-#. try yesterday if there is nothing today
+#. unsorted category
 msgid "Unsorted"
 msgstr "Sortimata"
 
-msgid "What to type in the activity box?"
+msgid "What should be typed in the activity box?"
 msgstr "Mida peaks tegevuse kasti sisestama?"
 
 msgid ""
-"There is simple syntax that enables you to add details to your activities:\n"
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
 "        \n"
-"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
-"tracking activity \"watering flowers\" in category \"home\".\n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
 "\n"
-"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking activity \"watering flowers"
-"\" and add description \"begonias and forgetmenots\" to it.\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
 "\n"
 "Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
 "will work just fine!\n"
@@ -333,7 +331,7 @@ msgstr "Eriti salajane projekt X"
 msgid "World domination"
 msgstr "Võimuhaaramine"
 
-msgid "Day to day"
+msgid "Day-to-day"
 msgstr "Igapäevane"
 
 msgid "Lunch"
@@ -369,27 +367,34 @@ msgstr "%(interval_minutes)d minuti järel"
 msgid "Never"
 msgstr "Mitte kunagi"
 
+#. column title in the TSV export format
 msgid "activity"
 msgstr "tegevus"
 
+#. column title in the TSV export format
 msgid "start time"
 msgstr "alustamise aeg"
 
+#. column title in the TSV export format
 msgid "end time"
 msgstr "lõpetamise aeg"
 
+#. column title in the TSV export format
 msgid "duration minutes"
 msgstr "kestus minutites"
 
+#. column title in the TSV export format
 msgid "category"
 msgstr "kategooria"
 
+#. column title in the TSV export format
 msgid "description"
 msgstr "kirjeldus"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -401,6 +406,7 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -409,6 +415,7 @@ msgstr ""
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
@@ -429,9 +436,12 @@ msgstr "Lõpp"
 msgid "Description"
 msgstr "Kirjeldus"
 
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%d. %b.%Y"
 
 #. summary table
 msgid "Totals"
@@ -443,7 +453,7 @@ msgstr "Kogukestus"
 msgid "HTML Report"
 msgstr "HTML-raport"
 
-msgid "Tab Separated Values (TSV)"
+msgid "Tab-Separated Values (TSV)"
 msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
 
 msgid "XML"
@@ -468,16 +478,19 @@ msgstr ""
 "Statistika genereerimiseks pole veel piisavalt andmeid.\n"
 "Nädalapikkune kasutamine võib aga juba midagi andas!"
 
-msgid "Still collecting data - check back after a week has passed!"
-msgstr "Andmed on praegu kogumisel. Vaata järgmisel nädalal uuesti!"
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "Andmed on praegu kogumisel, vaata järgmisel nädalal uuesti!"
 
-#. date of first record for case when year has not been selected
-#, python-format
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
 msgctxt "first record"
-msgid "%(b)s %(d)s, %(Y)s"
-msgstr "%(d)s.%(b)s.%(Y)s"
+msgid "%b %d, %Y"
+msgstr "%d.%b.%Y"
 
 #. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgctxt "first record"
 msgid "%(b)s %(d)s"
@@ -487,7 +500,7 @@ msgstr "%(d)s. %(b)s"
 msgid "First activity was recorded on %s."
 msgstr "Esimene tegevus registreeriti: %s."
 
-# Seda kasutatakse lauses "Time tracked so far..." 
+# Seda kasutatakse lauses "Time tracked so far..."
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -503,23 +516,27 @@ msgstr ""
 "Praeguseks on registreeritud %(human_days)s inimpäeva (%(human_years)s) ehk %"
 "(working_days)s tööpäeva (%(working_years)s)."
 
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%d.%b.%Y"
+
 #, python-format
-msgid ""
-"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
-"(hours)s hour."
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
-"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
-"(hours)s hours."
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] ""
-"Pikim katkematu tegevus kestis %(hours)s tunni ja selle toimumise aeg oli %"
-"(max_d)s. %(max_b)s %(max_Y)s."
+"Pikim katkematu töö kestis %(hours)s tunni ja selle toimumise aeg oli %(date)"
+"s."
 msgstr[1] ""
-"Pikim katkematu tegevus kestis %(hours)s tundi ja selle toimumise aeg oli %"
-"(max_d)s. %(max_b)s %(max_Y)s."
+"Pikim katkematu töö kestis %(hours)s tundi ja selle toimumise aeg oli %(date)"
+"s."
 
 #. total records (in selected scope)
 #, python-format
-msgid "There are %s record."
+msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Siin on %s kirje."
 msgstr[1] "Siin on %s kirjet."
@@ -550,31 +567,36 @@ msgstr ""
 "%s protsenti kõigist tegevustest on lühemad kui 15 minutit. Paistab, et Sa "
 "oled päris hõivatud töömesilane :)"
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#, python-format
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
 msgctxt "overview list"
-msgid "%(A)s, %(b)s %(d)s"
-msgstr "%(A)s, %(d)s. %(b)s"
+msgid "%A, %b %d"
+msgstr "%A, %d. %b"
 
 msgid "Total"
 msgstr "Kokku"
 
-#, python-format
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
 msgctxt "overview graph"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s. %(b)s"
+msgid "%b %d"
+msgstr "%d. %b"
 
+#. Overview label if looking on single day
 #, python-format
-msgctxt "single day overview"
-msgid "Overview for %(B)s %(d)s, %(Y)s"
-msgstr "Päeva %(d)s. %(B)s %(Y)s ülevaade"
+msgid "Overview for %(date)s"
+msgstr "Päeva %(date)s ülevaade"
 
 msgid "Month"
 msgstr "Kuu"
 
 msgid "Day"
 msgstr "Päev"
+
+msgid "Tab Separated Values (TSV)"
+msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
 
 #. duration in round hours
 #, python-format
@@ -590,3 +612,12 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
+
+#~ msgid "Remind also when no activity is set"
+#~ msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
+
+#~ msgid "%.1fh"
+#~ msgstr "%.1ft"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
