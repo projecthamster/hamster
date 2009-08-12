@@ -558,10 +558,12 @@ class HamsterApplet(object):
             total_strings = []
             for category in by_category:
                 # listing of today's categories and time spent in them
+                duration = "%.1f" % (by_category[category] / 60.0)
                 total_strings.append(_("%(category)s: %(duration)s") % \
                         ({'category': category,
-                          'duration': _("%.1fh") %
-                                               (by_category[category] / 60.0)}))
+                          #duration in main drop-down per category in hours
+                          'duration': _("%sh") % duration 
+                          }))
 
             total_string = ", ".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
@@ -828,14 +830,14 @@ class HamsterApplet(object):
             self.destroy()
 
         message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
-        message_dialog.set_property("title", _("What to type in the activity box?"))
+        message_dialog.set_property("title", _("What should be typed in the activity box?"))
         message_dialog.connect("response", on_response)
         
-        more_info = _("""There is simple syntax that enables you to add details to your activities:
+        more_info = _("""There is a simple syntax that enables you to add details to your activities:
         
-"@" symbol marks category. Example: "watering flowers@home" will start tracking activity "watering flowers" in category "home".
+"@" symbol marks a category. Example: "watering flowers@home" will start tracking the activity "watering flowers" in the category "home".
 
-Comma (",") marks beginning of description. Example: "watering flowers, begonias and forgetmenots" will start tracking activity "watering flowers" and add description "begonias and forgetmenots" to it.
+Commas (",") mark beginning of a description. Example: "watering flowers, begonias and forgetmenots" will start tracking the activity "watering flowers" and add the description "begonias and forgetmenots" to it.
 
 Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
 

@@ -243,8 +243,10 @@ class Storage(storage.Storage):
         last = self.fetchone(query, (_("Unsorted"), dt.date.today()))
         if not last:
             #try yesterday if there is nothing today
-            last = self.fetchone(query, (_("Unsorted"),
-                                         dt.date.today() - dt.timedelta(days=1)))
+            last = self.fetchone(query,
+                                 (# unsorted category
+                                  _("Unsorted"),
+                                  dt.date.today() - dt.timedelta(days=1)))
 
         if last and last["end_time"]: #will consider as last only if it is going on
            last = None
@@ -729,7 +731,7 @@ class Storage(storage.Storage):
                                      _("Super secret project X"),
                                      _("World domination")]}
         
-        nonwork_category = {"name": _("Day to day"),
+        nonwork_category = {"name": _("Day-to-day"),
                             "entries": [_("Lunch"),
                                         _("Watering flowers"),
                                         _("Doing handstands")]}

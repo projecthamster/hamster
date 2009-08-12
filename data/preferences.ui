@@ -467,7 +467,7 @@
                                     <property name="left_padding">4</property>
                                     <child>
                                       <object class="GtkCheckButton" id="notify_on_idle">
-                                        <property name="label" translatable="yes">remind also when no activity is set</property>
+                                        <property name="label" translatable="yes">Also remind when no activity is set</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>

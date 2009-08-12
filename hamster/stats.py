@@ -69,7 +69,7 @@ class ReportChooserDialog(gtk.Dialog):
         self.dialog.add_filter(filter)
 
         filter = gtk.FileFilter()
-        filter.set_name(_("Tab Separated Values (TSV)"))
+        filter.set_name(_("Tab-Separated Values (TSV)"))
         filter.add_mime_type("text/plain")
         filter.add_pattern("*.tsv")
         filter.add_pattern("*.txt")
@@ -524,7 +524,7 @@ class StatsViewer(object):
                 label.set_text(_("""There is no data to generate statistics yet.
 A week of usage would be nice!"""))
             else:
-                label.set_text(_("Still collecting data - check back after a week has passed!"))
+                label.set_text(_("Still collecting data — check back after a week has passed!"))
 
             label.show()
             return
@@ -702,7 +702,7 @@ A week of usage would be nice!"""))
                                   int(num_hours)) % datedict
 
         # total records (in selected scope)
-        summary += " " + ngettext("There are %s record.",
+        summary += " " + ngettext("There is %s record.",
                                   "There are %s records.",
                                   len(facts)) % ("<b>%d</b>" % len(facts))
 

@@ -37,8 +37,8 @@ def show_about(parent):
         "program-name" : _("Time Tracker"),
         "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
         "version" : VERSION,
-        "comments" : _("Project Hamster - track your time"),
-        "copyright" : _(u"Copyright © 2007-2009 Toms Bauģis and others"),
+        "comments" : _("Project Hamster — track your time"),
+        "copyright" : _(u"Copyright © 2007–2009 Toms Bauģis and others"),
         "website" : "http://live.gnome.org/ProjectHamster",
         "website-label" : _("Project Hamster Website"),
         "title": _("About Time Tracker"),

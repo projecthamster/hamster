@@ -20,7 +20,7 @@
             <locale name="C">
                 <short>Stop tracking on idle</short>
                 <long>
-                    Stop tracking current activity, when computer becomes idle
+                    Stop tracking current activity when computer becomes idle
                 </long>
             </locale>
         </schema>
@@ -58,9 +58,9 @@
             <type>bool</type>
             <default>false</default>
             <locale name="C">
-                <short>Remind also when no activity is set</short>
+                <short>Also remind when no activity is set</short>
                 <long>
-                    Remind every notify_interval minutes also if no activity
+                    Also remind every notify_interval minutes if no activity
                     has been started.
                 </long>
             </locale>
