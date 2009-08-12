@@ -1246,7 +1246,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         chooser.add_filter(filter)
 
         filter = gtk.FileFilter()
-        filter.set_name(_("Tab Separated Values (TSV)"))
+        filter.set_name(_("Tab-Separated Values (TSV)"))
         filter.add_mime_type("text/plain")
         filter.add_pattern("*.tsv")
         filter.add_pattern("*.txt")

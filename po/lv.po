@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-12 18:04+0300\n"
+"POT-Creation-Date: 2009-08-12 22:19+0300\n"
 "PO-Revision-Date: 2008-03-30 00:51+0000\n"
 "Last-Translator: Toms Bauģis <toms.baugis@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -571,7 +571,7 @@ msgstr "Laiks pavisam"
 msgid "HTML Report"
 msgstr "HTML Atskaite"
 
-#: ../hamster/stats.py:72
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
 msgid "Tab-Separated Values (TSV)"
 msgstr "Ar tabulatoru atdalītas vērtības (TSV)"
 
@@ -610,7 +610,6 @@ msgstr "Vēljoprojām tiek vākti dati — pienāciet kad nedēļa būs pagājus
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:657
-#, fuzzy
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -742,10 +741,6 @@ msgstr "Mēnesis"
 #: ../hamster/stats.py:952
 msgid "Day"
 msgstr "Diena"
-
-#: ../hamster/stats.py:1249
-msgid "Tab Separated Values (TSV)"
-msgstr "Ar tabulatoru atdalītas vērtības (TSV)"
 
 #. duration in round hours
 #: ../hamster/stuff.py:151
