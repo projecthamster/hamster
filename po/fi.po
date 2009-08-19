@@ -2,27 +2,28 @@
 # Copyright (C) 2008 Timo Jyrinki.
 # This file is distributed under the same license as the hamster-applet package.
 # Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
+# Tommi Vainikainen <thv@iki.fi>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-16 21:15+0300\n"
-"PO-Revision-Date: 2009-02-16 21:20+0300\n"
-"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
+"POT-Creation-Date: 2009-08-20 01:20+0300\n"
+"PO-Revision-Date: 2009-08-20 01:15+0300\n"
+"Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
-msgid "Project Hamster - track your time"
-msgstr "Hamsteriprojekti - hallitse aikaasi"
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Project Hamster — track your time"
+msgstr "Hamsteriprojekti - seuraa aikaasi"
 
-#. Title of reminder baloon
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/applet.py:65
+#. Title of reminder notification
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
+#: ../hamster/about.py:38 ../hamster/applet.py:63
 msgid "Time Tracker"
 msgstr "Ajankäytön seuranta"
 
@@ -38,262 +39,283 @@ msgstr "_Yleiskuva"
 msgid "_Preferences"
 msgstr "_Asetukset"
 
-#: ../data/preferences.glade.h:1
+#: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
 msgstr "<b>Toimet</b>"
 
-#: ../data/preferences.glade.h:2
+#: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
 msgstr "<b>Yleinen pikanäppäin</b>"
 
-#: ../data/preferences.glade.h:3
+#: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
 msgstr "<b>Seuranta</b>"
 
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "Siirrä _alas"
+#: ../data/preferences.ui.h:4
+msgid "Activity list"
+msgstr "Toimiluettelo"
 
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "Siirrä _ylös"
+#: ../data/preferences.ui.h:5
+msgid "Add activity"
+msgstr "Lisää toimi"
 
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "U_usi luokka"
+#: ../data/preferences.ui.h:6
+msgid "Add category"
+msgstr "Lisää luokka"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind when no activity is set"
+msgstr "Muistuta myös kun toimea ei ole asetettu"
+
+#: ../data/preferences.ui.h:8
+msgid "Category list"
+msgstr "Luokkaluettelo"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit activity"
+msgstr "Muokkaa toimea"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit category"
+msgstr "Muokkaa luokkaa"
+
+#: ../data/preferences.ui.h:11
+msgid "Move activity down"
+msgstr "Siirrä toimi alemmas"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity up"
+msgstr "Siirrä toimi ylemmäs"
+
+#: ../data/preferences.ui.h:13
 msgid "Remind of current activity every:"
 msgstr "Muistuta ajankotaisista tapahtumista joka:"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:14
+msgid "Remove activity"
+msgstr "Poista toimi"
+
+#: ../data/preferences.ui.h:15
+msgid "Remove category"
+msgstr "Poista luokka"
+
+#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "Pysäytä seuranta sammutettaessa"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
 msgstr "Pysäytä seuranta, kun tietokone on jouten"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
 msgstr "Ajankäytön seurannan asetukset"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.ui.h:19
 msgid "_Activities"
 msgstr "T_oimet"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.ui.h:20
 msgid "_Categories"
 msgstr "_Luokat"
 
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "_Uusi toimi"
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Toimi:"
 
-#: ../data/edit_activity.glade.h:1
-msgid "<b>Activity</b>"
-msgstr "<b>Toimi</b>"
-
-#: ../data/edit_activity.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b>Päiväys ja aika</b>"
-
-#: ../data/edit_activity.glade.h:3
+#: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
 msgstr "Lisää aikaisempi toimi"
 
-#: ../data/edit_activity.glade.h:4
+#: ../data/edit_activity.ui.h:3
 msgid "Description:"
 msgstr "Kuvaus:"
 
-#: ../data/edit_activity.glade.h:5
-msgid "Name:"
-msgstr "Nimi:"
+#: ../data/edit_activity.ui.h:4
+msgid "Preview:"
+msgstr "Esikatselu:"
 
-#: ../data/edit_activity.glade.h:6
-msgid "hours"
-msgstr "tuntia"
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Aika:"
 
-#: ../data/edit_activity.glade.h:7
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"käynnissä...\n"
-"kunnes\n"
-"kesto"
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "meneillään"
 
-#: ../data/edit_activity.glade.h:10
-msgid "minutes"
-msgstr "minuuttia"
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+msgid "to"
+msgstr "–"
 
 #: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Muistuta myös joka notify_interval minuutin välein jos mitään toimea ei ole "
+"aloitettu."
+
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Pikanäppäin ajankäytön seurantaikkunan näyttämiseksi."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-applet.schemas.in.h:4
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
 msgstr ""
-"Muistuta ajankohtaisista tapahtumista annetun minuuttimäärän välein. Aseta "
-"arvoksi 0 tai suurempi kuin 120, jos et halua muistutuksia."
+"Muistuta nykyisestä tehtävästä annetun minuuttimäärän välein. Aseta arvoksi "
+"0 tai suurempi kuin 120, jos et halua muistutuksia."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Muistuta ajankohtaisista tapahtumista x minuutin välein"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "Näytä ikkuna"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "Pysäytä nykyisen toimen seuranta sammutettaessa"
 
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking current activity, when computer becomes idle"
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Pysäytä nykyisen toimen seuranta, kun tietokone on jouten"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "Pysäytä seuranta joutenollessa"
 
-#: ../data/menu.glade.h:1
+#: ../data/applet.ui.h:1
+msgid ""
+"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
+"span>"
+msgstr ""
+"<span size=\"small\" >Kirjoita toimi ja paina Enter aloittaaksesi seurannan!"
+"</span>"
+
+#: ../data/applet.ui.h:2
+msgid ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Kerro lisää</span>"
+
+#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "Li_sää aikaisempi toimi"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
+#: ../data/applet.ui.h:5
 msgid "Hamster"
 msgstr "Hamsteri"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:458
+#: ../data/applet.ui.h:6 ../hamster/applet.py:554
 msgid "No records today"
 msgstr "Ei kirjauksia tältä päivältä"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:7
 msgid "Show _Overview"
 msgstr "Näytä _yleiskuva"
 
-#: ../data/menu.glade.h:6
+#: ../data/applet.ui.h:8
 msgid "_Activity:"
 msgstr "T_oimi:"
 
-#: ../data/menu.glade.h:7
+#: ../data/applet.ui.h:9
 msgid "_Stop Tracking"
 msgstr "Py_säytä seuranta"
 
-#: ../data/menu.glade.h:8
+#: ../data/applet.ui.h:10
 msgid "_Today"
 msgstr "_Tänään"
 
-#: ../data/stats.glade.h:1
+#: ../data/stats.ui.h:1
+msgid " _Day"
+msgstr " _Päivä"
+
+#: ../data/stats.ui.h:2
 msgid " _Month"
 msgstr " _Kuukausi"
 
-#: ../data/stats.glade.h:2
+#: ../data/stats.ui.h:3
 msgid " _Week"
 msgstr " _Viikko"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.ui.h:4
 msgid "<b>Overview</b>"
 msgstr "<b>Yleiskuva</b>"
 
-#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:177
+#: ../data/stats.ui.h:5
+msgid "<b>Starts and ends</b>"
+msgstr "<b>Alku ja loppu</b>"
+
+#: ../data/stats.ui.h:6
+msgid "<b>Totals</b>"
+msgstr "<b>Yhteensä</b>"
+
+#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
 msgid "Activity"
 msgstr "Toimi"
 
-#: ../data/stats.glade.h:5
-msgid "Add activity"
-msgstr "Lisää toimi"
+#: ../data/stats.ui.h:8
+msgid "Categories:"
+msgstr "Luokat:"
 
-#: ../data/stats.glade.h:6
-msgid "Delete activity"
-msgstr "Poista toimi"
+#: ../data/stats.ui.h:9
+msgid "Date interval:"
+msgstr "Päivämäärien väli:"
 
-#: ../data/stats.glade.h:7
-msgid "Edit activity"
-msgstr "Muokkaa toimea"
-
-#: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Luo raportti"
-
-#: ../data/stats.glade.h:9
-msgid "Newer activities"
-msgstr "Uudemmat toimet"
-
-#: ../data/stats.glade.h:10
+#: ../data/stats.ui.h:10
 msgid "No data for this interval"
 msgstr "Tältä väliltä ei ole tietoja"
 
-#: ../data/stats.glade.h:11
+#: ../data/stats.ui.h:11
+msgid "Overview"
+msgstr "Yleiskuva"
+
+#: ../data/stats.ui.h:12
 msgid "Overview - Hamster"
 msgstr "Yleiskuva - Hamsteri"
 
-#: ../data/stats.glade.h:12
-msgid "Show month"
-msgstr "Näytä kuukausi"
+#: ../data/stats.ui.h:13
+msgid "Save as HTML"
+msgstr "Tallenna HTML-muodossa"
 
-#: ../data/stats.glade.h:13
-msgid "Show week"
-msgstr "Näytä viikko"
+#: ../data/stats.ui.h:14
+msgid "Save report – Time Tracker"
+msgstr "Tallenna raportti – Ajankäytön seuranta"
 
-#: ../data/stats.glade.h:14 ../hamster/stats.py:336
+#: ../data/stats.ui.h:15
+msgid "Statistics"
+msgstr "Tilastot"
+
+#: ../data/stats.ui.h:16
+msgid "Today"
+msgstr "Tänään"
+
+#: ../data/stats.ui.h:17 ../hamster/stats.py:948
 msgid "Week"
 msgstr "Viikko"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Tekijänoikeudet © 2007-2008 Toms Baugis ja muita"
+#: ../data/stats.ui.h:18
+msgid "Year:"
+msgstr "Vuosi:"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Hamsterin WWW-sivut"
+#: ../hamster/about.py:41
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Tekijänoikeudet © 2007-2009 Toms Bauģis ja muita"
+
+#: ../hamster/about.py:43
+msgid "Project Hamster Website"
+msgstr "Hamsteriprojektin WWW-sivut"
+
+#: ../hamster/about.py:44
+msgid "About Time Tracker"
+msgstr "Tietoja ajankäytön seurannasta"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Timo Jyrinki <timo.jyrinki@iki.fi>, 2008."
-
-#: ../hamster/preferences.py:56 ../hamster/db.py:343 ../hamster/db.py:355
-#: ../hamster/db.py:369 ../hamster/reports.py:133
-msgid "Unsorted"
-msgstr "Lajittelematon"
-
-#: ../hamster/preferences.py:103 ../hamster/applet.py:221
-#: ../hamster/stats.py:48
-msgid "Name"
-msgstr "Nimi"
-
-#: ../hamster/preferences.py:123 ../hamster/reports.py:106
-#: ../hamster/reports.py:176
-msgid "Category"
-msgstr "Luokka"
-
-#: ../hamster/preferences.py:510
-msgid "New category"
-msgstr "Uusi luokka"
-
-#: ../hamster/preferences.py:523
-msgid "New activity"
-msgstr "Uusi toimi"
-
-#. notify interval slider value label
-#: ../hamster/preferences.py:568
-#, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minuutti"
-
-#. notify interval slider value label
-#: ../hamster/preferences.py:571
-msgid "Never"
-msgstr "Ei koskaan"
-
-#: ../hamster/edit_activity.py:82
-msgid "Update activity"
-msgstr "Päivitä toimea"
 
 #. translators: this is edit activity action in the notifier bubble
 #: ../hamster/applet.py:73
@@ -305,66 +327,182 @@ msgstr "Muokkaa"
 msgid "Switch"
 msgstr "Vaihda"
 
-#: ../hamster/applet.py:423 ../hamster/applet.py:524
+#: ../hamster/applet.py:305 ../hamster/reports.py:235
+#: ../hamster/reports.py:293
+msgid "Duration"
+msgstr "Kesto"
+
+#: ../hamster/applet.py:492 ../hamster/applet.py:513
 msgid "No activity"
 msgstr "Ei toimea"
 
 #. activity reminder
-#: ../hamster/applet.py:437
+#: ../hamster/applet.py:508
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Työn alla: <b>%s</b>"
 
-#: ../hamster/applet.py:465
+#: ../hamster/applet.py:562
 #, python-format
-msgid "%(category)s: %(duration)s, "
-msgstr "%(category)s: %(duration)s, "
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../hamster/applet.py:565
+#, python-format
+msgid "%sh"
+msgstr "%s h"
+
+#. unsorted category
+#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
+#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
+#: ../hamster/stuff.py:94
+msgid "Unsorted"
+msgstr "Lajittelematon"
+
+#: ../hamster/applet.py:833
+msgid "What should be typed in the activity box?"
+msgstr "Mitä kannattaisi kirjoittaa toimilaatikkoon?"
+
+#: ../hamster/applet.py:836
+msgid ""
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
+"        \n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
+"\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+"Yksinkertainen syntaksi auttaa sinua lisäämään yksityiskohtia toimiisi:\n"
+"        \n"
+"Symboli ”@” viittaa luokkaan. Esimerkki: ”\"kukkien kastelua@kotona”\" "
+"aloittaa seuraamaan ”kukkien kastelua” luokassa ”kotona”.\n"
+"\n"
+"Pilkut (”,”) merkitsee kuvauksen alkua. Esimerkki: ”kukkien kastelua, ruusut "
+"ja liljat” aloittaa seuraamaan ”kukkien kastelua” ja lisää kuvauksen ”ruusut "
+"ja liljat” siihen.\n"
+"\n"
+"Molemmat voi yhdistää: ”kukkien kastelua@kotona, ruusut ja liljat” toimii "
+"mainiosti!\n"
+"\n"
+"Nyt, aloitapa seuranta!\n"
+"        "
 
 #. defaults
-#: ../hamster/db.py:540
+#: ../hamster/db.py:728
 msgid "Work"
 msgstr "Työ"
 
-#: ../hamster/db.py:541
+#: ../hamster/db.py:729
 msgid "Reading news"
 msgstr "Uutisten luku"
 
-#: ../hamster/db.py:542
+#: ../hamster/db.py:730
 msgid "Checking stocks"
 msgstr "Osakekurssien tarkistus"
 
-#: ../hamster/db.py:543
+#: ../hamster/db.py:731
 msgid "Super secret project X"
 msgstr "Tosi salainen projekti X"
 
-#: ../hamster/db.py:544
+#: ../hamster/db.py:732
 msgid "World domination"
 msgstr "Maailman valloitus"
 
-#: ../hamster/db.py:546
-msgid "Day to day"
+#: ../hamster/db.py:734
+msgid "Day-to-day"
 msgstr "Päivittäiset"
 
-#: ../hamster/db.py:547
+#: ../hamster/db.py:735
 msgid "Lunch"
 msgstr "Lounas"
 
-#: ../hamster/db.py:548
+#: ../hamster/db.py:736
 msgid "Watering flowers"
 msgstr "Kukkien kastelu"
 
-#: ../hamster/db.py:549
+#: ../hamster/db.py:737
 msgid "Doing handstands"
 msgstr "Käsilläseisonta"
 
-#: ../hamster/db.py:732 ../hamster/db.py:736
-msgid "name"
-msgstr "nimi"
+#: ../hamster/edit_activity.py:385
+msgid "Update activity"
+msgstr "Päivitä toimea"
+
+#: ../hamster/preferences.py:104
+msgid "Name"
+msgstr "Nimi"
+
+#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/reports.py:291
+msgid "Category"
+msgstr "Luokka"
+
+#: ../hamster/preferences.py:559
+msgid "New category"
+msgstr "Uusi luokka"
+
+#: ../hamster/preferences.py:572
+msgid "New activity"
+msgstr "Uusi toimi"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:632
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d minuutti"
+
+#. notify interval slider value label
+#: ../hamster/preferences.py:635
+msgid "Never"
+msgstr "Ei koskaan"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:112
+msgid "activity"
+msgstr "toimi"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:114
+msgid "start time"
+msgstr "aloitusaika"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:116
+msgid "end time"
+msgstr "päättymisaika"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:118
+msgid "duration minutes"
+msgstr "kesto minuutteina"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:120
+msgid "category"
+msgstr "luokka"
+
+#. column title in the TSV export format
+#: ../hamster/reports.py:122
+msgid "description"
+msgstr "kuvaus"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:323
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:160 ../hamster/stats.py:933
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -376,7 +514,8 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:328
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -385,78 +524,279 @@ msgstr ""
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:333
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Yleiskuva ajalle %(start_B)sn %(start_d)s. – %(end_d)s., %(end_Y)s"
 
-#: ../hamster/reports.py:39
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Yleiskuva päiväykselle %(start_d)s. %(start_B)sta %(start_Y)s"
 
-#: ../hamster/reports.py:104
+#: ../hamster/reports.py:230
 msgid "Date"
 msgstr "Päiväys"
 
-#: ../hamster/reports.py:107
+#: ../hamster/reports.py:233
 msgid "Start"
 msgstr "Alku"
 
-#: ../hamster/reports.py:108
+#: ../hamster/reports.py:234
 msgid "End"
 msgstr "Loppu"
 
-#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:56
-msgid "Duration"
-msgstr "Kesto"
-
-#: ../hamster/reports.py:110
+#: ../hamster/reports.py:236
 msgid "Description"
 msgstr "Kuvaus"
 
-#. fact date column in HTML report
-#: ../hamster/reports.py:148
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_d)s. %(report_b)s, %(report_Y)s"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%-d.%-m.%Y"
 
 #. summary table
-#: ../hamster/reports.py:173
+#: ../hamster/reports.py:288
 msgid "Totals"
 msgstr "Yhteenveto"
 
-#: ../hamster/reports.py:190
+#: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "Kokonaisaika"
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:205
+#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+msgid "HTML Report"
+msgstr "HTML-raportti"
+
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+msgid "Tab-Separated Values (TSV)"
+msgstr "Sarkainerotellut arvot (TSV)"
+
+#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+msgid "iCal"
+msgstr "iCal"
+
+#. add unsorted category
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "Kaikki"
+
+#: ../hamster/stats.py:435
+msgctxt "years"
+msgid "All"
+msgstr "Kaikki"
+
+#: ../hamster/stats.py:524
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"Tilastojen tuottamiseen ei ole vielä dataa.\n"
+"Viikon käyttäminen olisi kiva!"
+
+#: ../hamster/stats.py:527
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "Kerätään edelleen dataa — tarkista uudelleen kun viikko on kulunut!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%-d.%-m.%Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:338
-msgid "Month"
-msgstr "Kuukausi"
-
-#: ../hamster/stats.py:377
+#: ../hamster/stats.py:664
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_d)s. %(m_b)s"
+msgid "First activity was recorded on %s."
+msgstr "Ensimmäinen toimi kirjattiin %s."
 
-#: ../hamster/stats.py:384
+#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s vuosi"
+msgstr[1] "%(num)s vuotta"
+
+#. FIXME: difficult string to properly pluralize
+#: ../hamster/stats.py:682
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
+msgstr ""
+"Tähän mennessä on aikaa on seurattu %(human_days)s päivää (%(human_years)s) "
+"tai %(working_days)s työpäivää (%(working_years)s)."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%-d.%-m.%Y"
+
+#: ../hamster/stats.py:705
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+"Pisin yhtäjaksoisnen työskentely tapahtui %(date)s ja kesti %(hours)s tunnin."
+msgstr[1] ""
+"Pisin yhtäjaksoisnen työskentely tapahtui %(date)s ja kesti %(hours)s tuntia."
+
+#. total records (in selected scope)
+#: ../hamster/stats.py:713
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "Tallessa on %s merkintä."
+msgstr[1] "Tallessa on %s merkintää."
+
+#: ../hamster/stats.py:733
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamsteri haluaisi tarkkailla sinua vielä vähän!"
+
+#: ../hamster/stats.py:735
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am you seem to be an early "
+"bird."
+msgstr ""
+"Koska %s prosenttia kaikista alkaa ennen aamu yhdeksää, näytät olevan "
+"aikainen lintu."
+
+#: ../hamster/stats.py:738
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr ""
+"Koska %s prosenttia kaikista alkaa kello 11 jälkeen, näytät olevan yökukkuja."
+
+#: ../hamster/stats.py:741
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"busy bee."
+msgstr ""
+"Koska %s prosenttia kaikista tehtävistä kestää alle 15 minuuttia, näytät "
+"olevan ahkera mehiläinen."
+
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%Ana %-d. %Bta"
+
+#: ../hamster/stats.py:869
 msgid "Total"
 msgstr "Yhteensä"
 
-#: ../hamster/stats.py:392
-#, python-format
-msgid "%(category)s: %(duration).1f, "
-msgstr "%(category)s: %(duration).1f, "
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%-d.%-m."
 
-#~ msgid " _Day"
-#~ msgstr " _Päivä"
+#. Overview label if looking on single day
+#: ../hamster/stats.py:922
+#, python-format
+msgid "Overview for %(date)s"
+msgstr "Yleiskuva päiväykselle %(date)s"
+
+#: ../hamster/stats.py:950
+msgid "Month"
+msgstr "Kuukausi"
+
+#: ../hamster/stats.py:952
+msgid "Day"
+msgstr "Päivä"
+
+#. duration in round hours
+#: ../hamster/stuff.py:151
+#, python-format
+msgid "%dh"
+msgstr "%d h"
+
+#. duration less than hour
+#: ../hamster/stuff.py:154
+#, python-format
+msgid "%dmin"
+msgstr "%d min"
+
+#. x hours, y minutes
+#: ../hamster/stuff.py:157
+#, python-format
+msgid "%dh %dmin"
+msgstr "%d h %d min"
+
+#~ msgid "Move _Down"
+#~ msgstr "Siirrä _alas"
+
+#~ msgid "Move _Up"
+#~ msgstr "Siirrä _ylös"
+
+#~ msgid "N_ew Category"
+#~ msgstr "U_usi luokka"
+
+#~ msgid "_New Activity"
+#~ msgstr "_Uusi toimi"
+
+#~ msgid "<b>Activity</b>"
+#~ msgstr "<b>Toimi</b>"
+
+#~ msgid "hours"
+#~ msgstr "tuntia"
+
+#~ msgid "Delete activity"
+#~ msgstr "Poista toimi"
+
+#~ msgid "Generate Report"
+#~ msgstr "Luo raportti"
+
+#~ msgid "Newer activities"
+#~ msgstr "Uudemmat toimet"
+
+#~ msgid "Show month"
+#~ msgstr "Näytä kuukausi"
+
+#~ msgid "Show week"
+#~ msgstr "Näytä viikko"
+
+#~ msgid "name"
+#~ msgstr "nimi"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_d)s. %(report_b)s, %(report_Y)s"
+
+#~ msgid "%(o_A)s, %(o_b)s %(o_d)s"
+#~ msgstr "%(o_A)s, %(o_d)s. %(o_b)s"
+
+#~ msgid "%(category)s: %(duration).1f, "
+#~ msgstr "%(category)s: %(duration).1f, "
 
 #~ msgid "<b>Category</b>"
 #~ msgstr "<b>Luokka</b>"
@@ -470,17 +810,11 @@ msgstr "%(category)s: %(duration).1f, "
 #~ msgid "Show day"
 #~ msgstr "Näytä päivä"
 
-#~ msgid "Today"
-#~ msgstr "Tänään"
-
 #~ msgid "Stop Tracking"
 #~ msgstr "Py_säytä seuranta"
 
 #~ msgid "Other"
 #~ msgstr "Muu"
-
-#~ msgid "Day"
-#~ msgstr "Päivä"
 
 #~ msgid "Time tracking for masses"
 #~ msgstr "Ajankäytön seuranta kaikille"
@@ -491,23 +825,11 @@ msgstr "%(category)s: %(duration).1f, "
 #~ msgid "%B %d. %Y"
 #~ msgstr "%-d. %Bta %Y"
 
-#~ msgid "%B %d"
-#~ msgstr "%Bn %-d."
-
-#~ msgid "%d, %Y"
-#~ msgstr "%-d., %Y"
-
-#~ msgid "Overview for %s"
-#~ msgstr "Yleiskuva päiväykselle %s"
-
 #~ msgid "Overview for %s - %s"
 #~ msgstr "Yleiskuva ajalle %s - %s"
 
 #~ msgid "%d.%m.%y"
 #~ msgstr "%-d.%-m.%y"
-
-#~ msgid "%A, %b %d."
-#~ msgstr "%A %-d. %Bta"
 
 #~ msgid "%d. %b"
 #~ msgstr "%-d. %b"
