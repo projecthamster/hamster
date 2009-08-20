@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-10 23:33+0200\n"
-"PO-Revision-Date: 2009-08-10 23:33+0200\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-08-17 11:19+0000\n"
+"PO-Revision-Date: 2009-08-17 18:51+0100\n"
+"Last-Translator: Adrian Guniš <andygun696@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,8 +20,8 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
-msgid "Project Hamster - track your time"
-msgstr "Projekt Hamster - sledujte svůj čas"
+msgid "Project Hamster — track your time"
+msgstr "Projekt Hamster — sledujte svůj čas"
 
 #. Title of reminder notification
 #: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
@@ -64,61 +65,61 @@ msgstr "Přidat činnost"
 msgid "Add category"
 msgstr "Přidat kategorii"
 
-#: ../data/preferences.ui.h:7
+#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind when no activity is set"
+msgstr "Připomenout, i když není nastavena žádná činnost"
+
+#: ../data/preferences.ui.h:8
 msgid "Category list"
 msgstr "Seznam kategorií"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:9
 msgid "Edit activity"
 msgstr "Upravit činnost"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:10
 msgid "Edit category"
 msgstr "Upravit kategorii"
 
-#: ../data/preferences.ui.h:10
+#: ../data/preferences.ui.h:11
 msgid "Move activity down"
 msgstr "Přesunout činnost dolů"
 
-#: ../data/preferences.ui.h:11
+#: ../data/preferences.ui.h:12
 msgid "Move activity up"
 msgstr "Přesunout činnost nahoru"
 
-#: ../data/preferences.ui.h:12
+#: ../data/preferences.ui.h:13
 msgid "Remind of current activity every:"
 msgstr "Připomenout aktuální činnost každých:"
 
-#: ../data/preferences.ui.h:13
+#: ../data/preferences.ui.h:14
 msgid "Remove activity"
 msgstr "Odstranit činnost"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:15
 msgid "Remove category"
 msgstr "Odstranit kategorii"
 
-#: ../data/preferences.ui.h:15 ../data/hamster-applet.schemas.in.h:10
+#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "Zastavit sledování při vypnutí počítače"
 
-#: ../data/preferences.ui.h:16
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
 msgstr "Zastavit sledování při nečinnosti počítače"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
 msgstr "Předvolby měřiče času"
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:19
 msgid "_Activities"
 msgstr "Č_innosti"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:20
 msgid "_Categories"
 msgstr "_Kategorie"
-
-#: ../data/preferences.ui.h:20
-msgid "remind also when no activity is set"
-msgstr "připomenout, i když není nastavena žádná činnost"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -149,24 +150,20 @@ msgid "to"
 msgstr "až"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Klávesová zkratka pro zobrazení okna Měřiče času."
-
-#: ../data/hamster-applet.schemas.in.h:2
-msgid "Remind also when no activity is set"
-msgstr "Připomenout, i když není nastavena žádná činnost"
-
-#: ../data/hamster-applet.schemas.in.h:3
 msgid ""
-"Remind every notify_interval minutes also if no activity has been started."
+"Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Připomenout vždy po nastavené době upozorňování (min.), i když nebyla "
 "spuštěna žádná činnost."
 
+#: ../data/hamster-applet.schemas.in.h:3
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Klávesová zkratka pro zobrazení okna Měřiče času."
+
 #: ../data/hamster-applet.schemas.in.h:4
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
 msgstr ""
 "Připomenout aktuální úlohu vždy po nastaveném času (min). Nastavte na 0 nebo "
 "větší než 120 pro zakázání upozorňování."
@@ -184,7 +181,7 @@ msgid "Stop tracking current activity on shutdown"
 msgstr "Zastavit sledování aktuální činnosti při vypnutí počítače"
 
 #: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity, when computer becomes idle"
+msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Zastavit sledování aktuální činnosti při nečinnosti počítače"
 
 #: ../data/hamster-applet.schemas.in.h:9
@@ -259,7 +256,7 @@ msgstr "<b>Začátky a konce</b>"
 msgid "<b>Totals</b>"
 msgstr "<b>Celkem</b>"
 
-#: ../data/stats.ui.h:7 ../hamster/reports.py:220 ../hamster/reports.py:277
+#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
 msgid "Activity"
 msgstr "Činnost"
 
@@ -288,7 +285,7 @@ msgid "Save as HTML"
 msgstr "Uložit jako HTML"
 
 #: ../data/stats.ui.h:14
-msgid "Save report - Time Tracker"
+msgid "Save report – Time Tracker"
 msgstr "Uložit zprávu - Měřič času"
 
 #: ../data/stats.ui.h:15
@@ -299,7 +296,7 @@ msgstr "Statistiky"
 msgid "Today"
 msgstr "Dnes"
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:928
+#: ../data/stats.ui.h:17 ../hamster/stats.py:948
 msgid "Week"
 msgstr "Týden"
 
@@ -308,7 +305,7 @@ msgid "Year:"
 msgstr "Rok:"
 
 #: ../hamster/about.py:41
-msgid "Copyright © 2007-2009 Toms Bauģis and others"
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
 msgstr "Copyright © 2007-2009 Toms Bauģis a další"
 
 #: ../hamster/about.py:43
@@ -333,8 +330,8 @@ msgstr "Upravit"
 msgid "Switch"
 msgstr "Přepnout"
 
-#: ../hamster/applet.py:305 ../hamster/reports.py:224
-#: ../hamster/reports.py:278
+#: ../hamster/applet.py:305 ../hamster/reports.py:235
+#: ../hamster/reports.py:293
 msgid "Duration"
 msgstr "Trvání"
 
@@ -348,40 +345,41 @@ msgstr "Žádná činnost"
 msgid "Working on <b>%s</b>"
 msgstr "Pracuje se na <b>%s</b>"
 
-#. listing of today's categories and time spent in them
-#: ../hamster/applet.py:561
+#: ../hamster/applet.py:562
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
-#: ../hamster/applet.py:563
+#. duration in main drop-down per category in hours
+#: ../hamster/applet.py:565
 #, python-format
-msgid "%.1fh"
-msgstr "%.1fh"
+msgid "%sh"
+msgstr "%sh"
 
-#. try yesterday if there is nothing today
-#: ../hamster/applet.py:599 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:246 ../hamster/db.py:463 ../hamster/db.py:536
+#. unsorted category
+#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
 #: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
-#: ../hamster/reports.py:53 ../hamster/reports.py:90 ../hamster/reports.py:237
+#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
 msgid "Unsorted"
 msgstr "Bez kategorie"
 
-#: ../hamster/applet.py:831
-msgid "What to type in the activity box?"
-msgstr "Co napsat do pole s činností?"
+#: ../hamster/applet.py:833
+msgid "What should be typed in the activity box?"
+msgstr "Co by mělo být napsáno do pole s činností?"
 
-#: ../hamster/applet.py:834
+#: ../hamster/applet.py:836
 msgid ""
-"There is simple syntax that enables you to add details to your activities:\n"
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
 "        \n"
-"\"@\" symbol marks category. Example: \"watering flowers@home\" will start "
-"tracking activity \"watering flowers\" in category \"home\".\n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
 "\n"
-"Comma (\",\") marks beginning of description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking activity \"watering flowers"
-"\" and add description \"begonias and forgetmenots\" to it.\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
 "\n"
 "Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
 "will work just fine!\n"
@@ -406,39 +404,39 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:726
+#: ../hamster/db.py:728
 msgid "Work"
 msgstr "Práce"
 
-#: ../hamster/db.py:727
+#: ../hamster/db.py:729
 msgid "Reading news"
 msgstr "Čtení novinek"
 
-#: ../hamster/db.py:728
+#: ../hamster/db.py:730
 msgid "Checking stocks"
 msgstr "Kontrolování zásob"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:731
 msgid "Super secret project X"
 msgstr "Supertajný projekt X"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:732
 msgid "World domination"
 msgstr "Hra World domination"
 
-#: ../hamster/db.py:732
-msgid "Day to day"
+#: ../hamster/db.py:734
+msgid "Day-to-day"
 msgstr "Každý den"
 
-#: ../hamster/db.py:733
+#: ../hamster/db.py:735
 msgid "Lunch"
 msgstr "Oběd"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:736
 msgid "Watering flowers"
 msgstr "Zalévání květin"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:737
 msgid "Doing handstands"
 msgstr "Cvičení"
 
@@ -450,8 +448,8 @@ msgstr "Aktualizace činnosti"
 msgid "Name"
 msgstr "Název"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:221
-#: ../hamster/reports.py:276
+#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/reports.py:291
 msgid "Category"
 msgstr "Kategorie"
 
@@ -474,34 +472,41 @@ msgstr "%(interval_minutes)d minut"
 msgid "Never"
 msgstr "Nikdy"
 
-#: ../hamster/reports.py:110
+#. column title in the TSV export format
+#: ../hamster/reports.py:112
 msgid "activity"
 msgstr "činnost"
 
-#: ../hamster/reports.py:110
+#. column title in the TSV export format
+#: ../hamster/reports.py:114
 msgid "start time"
 msgstr "čas zahájení"
 
-#: ../hamster/reports.py:110
+#. column title in the TSV export format
+#: ../hamster/reports.py:116
 msgid "end time"
 msgstr "čas ukončení"
 
-#: ../hamster/reports.py:111
+#. column title in the TSV export format
+#: ../hamster/reports.py:118
 msgid "duration minutes"
 msgstr "doba trvání v minutách"
 
-#: ../hamster/reports.py:111
+#. column title in the TSV export format
+#: ../hamster/reports.py:120
 msgid "category"
 msgstr "kategorie"
 
-#: ../hamster/reports.py:111
+#. column title in the TSV export format
+#: ../hamster/reports.py:122
 msgid "description"
 msgstr "popis"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:149 ../hamster/stats.py:915
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:160 ../hamster/stats.py:933
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -513,7 +518,8 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:151 ../hamster/stats.py:920
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Přehled za %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s"
@@ -521,59 +527,63 @@ msgstr "Přehled za %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s"
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:153 ../hamster/stats.py:925
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Přehled za %(start_d)s. - %(end_d)s. %(start_B)s %(end_Y)s"
 
-#: ../hamster/reports.py:156
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Přehled za %(start_d)s. %(start_B)s %(start_Y)s"
 
-#: ../hamster/reports.py:219
+#: ../hamster/reports.py:230
 msgid "Date"
 msgstr "Datum"
 
-#: ../hamster/reports.py:222
+#: ../hamster/reports.py:233
 msgid "Start"
 msgstr "Začátek"
 
-#: ../hamster/reports.py:223
+#: ../hamster/reports.py:234
 msgid "End"
 msgstr "Konec"
 
-#: ../hamster/reports.py:225
+#: ../hamster/reports.py:236
 msgid "Description"
 msgstr "Popis"
 
-#: ../hamster/reports.py:253
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_d)s. %(report_b)s %(report_Y)s"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%d. %b %Y"
 
 #. summary table
-#: ../hamster/reports.py:273
+#: ../hamster/reports.py:288
 msgid "Totals"
 msgstr "Celkem"
 
-#: ../hamster/reports.py:288
+#: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "Celkový čas"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1221
+#: ../hamster/stats.py:64 ../hamster/stats.py:1241
 msgid "HTML Report"
 msgstr "Zpráva ve formátu HTML"
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1229
-msgid "Tab Separated Values (TSV)"
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+msgid "Tab-Separated Values (TSV)"
 msgstr "Hodnoty oddělené tabulátory (TSV)"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1237
+#: ../hamster/stats.py:80 ../hamster/stats.py:1257
 msgid "XML"
 msgstr "XML"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1244
+#: ../hamster/stats.py:87 ../hamster/stats.py:1264
 msgid "iCal"
 msgstr "iCal"
 
@@ -597,29 +607,32 @@ msgstr ""
 "To je vhodné po týdnu používání!"
 
 #: ../hamster/stats.py:527
-msgid "Still collecting data - check back after a week has passed!"
-msgstr "Ještě se sbírají data - prohlédněte znovu za týden!"
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "Ještě se sbírají data — prohlédněte znovu za týden!"
 
-#. date of first record for case when year has not been selected
-#: ../hamster/stats.py:655
-#, python-format
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
 msgctxt "first record"
-msgid "%(b)s %(d)s, %(Y)s"
-msgstr "%(d)s. %(b)s %(Y)s"
+msgid "%b %d, %Y"
+msgstr "%d. %b %Y"
 
 #. date of first record when year has been selected
-#: ../hamster/stats.py:659
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
 #, python-format
 msgctxt "first record"
 msgid "%(b)s %(d)s"
 msgstr "%(d)s. %(b)s"
 
-#: ../hamster/stats.py:662
+#: ../hamster/stats.py:664
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "První činnost byla zaznamenána %s."
 
-#: ../hamster/stats.py:671 ../hamster/stats.py:675
+#: ../hamster/stats.py:673 ../hamster/stats.py:677
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -628,7 +641,7 @@ msgstr[1] "%(num)s roky"
 msgstr[2] "%(num)s let"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:680
+#: ../hamster/stats.py:682
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -637,38 +650,39 @@ msgstr ""
 "Dosud sledovaný čas čítá %(human_days)s kalendářních dnů (%(human_years)s) "
 "nebo %(working_days)s pracovních dnů (%(working_years)s)."
 
-#: ../hamster/stats.py:698
-#, python-format
-msgid ""
-"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
-"(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and was %"
-"(hours)s hours."
-msgstr[0] ""
-"Nejdelší souvislá práce proběhla %(max_d)s. %(max_b)s %(max_Y)s a trvala %"
-"(hours)s hodinu."
-msgstr[1] ""
-"Nejdelší souvislá práce proběhla %(max_d)s. %(max_b)s %(max_Y)s a trvala %"
-"(hours)s hodiny."
-msgstr[2] ""
-"Nejdelší souvislá práce proběhla %(max_d)s. %(max_b)s %(max_Y)s a trvala %"
-"(hours)s hodin."
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%d. %b %Y"
 
-#. total records (in selected scope)
 #: ../hamster/stats.py:705
 #, python-format
-msgid "There are %s record."
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+"Nejdelší souvislá práce proběhla %(date)s a trvala %(hours)s hodinu."
+msgstr[1] ""
+"Nejdelší souvislá práce proběhla %(date)s a trvala %(hours)s hodiny."
+msgstr[2] "Nejdelší souvislá práce proběhla %(date)s a trvala %(hours)s hodin."
+
+#. total records (in selected scope)
+#: ../hamster/stats.py:713
+#, python-format
+msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "K dispozici je %s záznam."
 msgstr[1] "K dispozici jsou %s záznamy."
 msgstr[2] "K dispozici je %s záznamů."
 
-#: ../hamster/stats.py:725
+#: ../hamster/stats.py:733
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster by vás rád sledoval o trochu víc!"
 
-#: ../hamster/stats.py:727
+#: ../hamster/stats.py:735
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
@@ -677,13 +691,13 @@ msgstr ""
 "S %s procenty všech dat spuštěných před 9 hodinou se zdá, že jste ranní "
 "ptáče."
 
-#: ../hamster/stats.py:730
+#: ../hamster/stats.py:738
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr "S %s procenty všech dat spuštěných po 23. hodině se zdá, že jste sova."
 
-#: ../hamster/stats.py:733
+#: ../hamster/stats.py:741
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -691,36 +705,37 @@ msgid ""
 msgstr ""
 "S %s procenty všech dat kratších než 15 minut se zdá, že jste pilná včela."
 
-# Formátování?
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:819
-#, python-format
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
 msgctxt "overview list"
-msgid "%(A)s, %(b)s %(d)s"
-msgstr "%(A)s, %(d)s. %(b)s"
+msgid "%A, %b %d"
+msgstr "%A, %d. %b"
 
-#: ../hamster/stats.py:860
+#: ../hamster/stats.py:869
 msgid "Total"
 msgstr "Celkem"
 
-#: ../hamster/stats.py:879
-#, python-format
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
 msgctxt "overview graph"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s. %(b)s"
+msgid "%b %d"
+msgstr "%d. %b"
 
-#: ../hamster/stats.py:905
+#. Overview label if looking on single day
+#: ../hamster/stats.py:922
 #, python-format
-msgctxt "single day overview"
-msgid "Overview for %(B)s %(d)s, %(Y)s"
-msgstr "Přehled za %(d)s. %(B)s %(Y)s"
+msgid "Overview for %(date)s"
+msgstr "Přehled za %(date)s"
 
-#: ../hamster/stats.py:930
+#: ../hamster/stats.py:950
 msgid "Month"
 msgstr "Měsíc"
 
-#: ../hamster/stats.py:932
+#: ../hamster/stats.py:952
 msgid "Day"
 msgstr "Den"
 
@@ -741,3 +756,13 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgid "Remind also when no activity is set"
+#~ msgstr "Připomenout, i když není nastavena žádná činnost"
+
+#~ msgid "%.1fh"
+#~ msgstr "%.1fh"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_d)s. %(report_b)s %(report_Y)s"
+
