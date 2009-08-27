@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 16:28+0200\n"
-"PO-Revision-Date: 2009-08-27 17:09+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-08-27 15:02+0000\n"
+"PO-Revision-Date: 2009-08-27 21:44+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -188,14 +188,14 @@ msgid ""
 "<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
 "span>"
 msgstr ""
-"<span size=\"small\" >Idatzi edozein jardueretan eta sakatu Sartu tekla jarraipena "
-"hasteko.</span>"
+"<span size=\"small\" >Idatzi edozein jardueretan eta sakatu Sartu tekla "
+"jarraipena hasteko.</span>"
 
 #: ../data/applet.ui.h:2
 msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
 msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Esan ezaizkidazu gauza "
-"gehiago</span>"
+"<span size=\"small\" color=\"blue\" underline=\"single\">Esan ezaizkidazu "
+"gauza gehiago</span>"
 
 #: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
@@ -383,15 +383,16 @@ msgid ""
 msgstr ""
 "Sintaxy bakuna dago zure jarduerei xehetasunak gehitzea eskaintzeko:\n"
 "        \n"
-"\"@\" ikurrak kategoria bat markatzen du. Adibidez, \"loreak ureztatu@etxea\" "
-"\"etxea\" kategoriako \"loreak ureztatu\" jardueraren jarraipena hasiko luke.\n"
+"\"@\" ikurrak kategoria bat markatzen du. Adibidez, \"loreak ureztatu@etxea"
+"\" \"etxea\" kategoriako \"loreak ureztatu\" jardueraren jarraipena hasiko "
+"luke.\n"
 "\n"
-"Komak (\",\") azalpen baten hasiera markatzen du. Adibidez, \"loreak ureztatu, larrosak eta begoniak\" \"loreak ureztatu\" jarraipena hasiko luke, eta honi "
-"\"larrosak eta begoniak\" azalpena gehitu.\n"
+"Komak (\",\") azalpen baten hasiera markatzen du. Adibidez, \"loreak "
+"ureztatu, larrosak eta begoniak\" \"loreak ureztatu\" jarraipena hasiko "
+"luke, eta honi \"larrosak eta begoniak\" azalpena gehitu.\n"
 "\n"
 "Biak konbina daitezke: \"loreak ureztatu@etxea, larrosak eta begoniak\" "
-"zoragarria!"
-"\n"
+"zoragarria!\n"
 "Orain, hasi jarraipenarekin!\n"
 "        "
 
@@ -546,6 +547,14 @@ msgstr "Amaitu"
 msgid "Description"
 msgstr "Azalpena"
 
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%Y/%m/%d"
+
 #. summary table
 #: ../hamster/reports.py:288
 msgid "Totals"
@@ -571,6 +580,17 @@ msgstr "XML"
 msgid "iCal"
 msgstr "iCal"
 
+#. add unsorted category
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "Denak"
+
+#: ../hamster/stats.py:435
+msgctxt "years"
+msgid "All"
+msgstr "Denak"
+
 #: ../hamster/stats.py:524
 msgid ""
 "There is no data to generate statistics yet.\n"
@@ -582,6 +602,23 @@ msgstr ""
 #: ../hamster/stats.py:527
 msgid "Still collecting data — check back after a week has passed!"
 msgstr "Oraindik datuak biltzen - begiratu berriro aste bat igarotakoan."
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%Y/%m/%d"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
+#, python-format
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s/%(d)s"
 
 #: ../hamster/stats.py:664
 #, python-format
@@ -602,8 +639,16 @@ msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
 "(working_days)s working days (%(working_years)s)."
 msgstr ""
-"Jarraitutako denbora  %(human_days)s egun arrunt (%(human_years)s) edo "
-"%(working_days)s laneko egun (%(working_years)s) da."
+"Jarraitutako denbora  %(human_days)s egun arrunt (%(human_years)s) edo %"
+"(working_days)s laneko egun (%(working_years)s) da."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%Y/%m/%d"
 
 #: ../hamster/stats.py:705
 #, python-format
@@ -629,16 +674,12 @@ msgstr "Hamster-ek gehiago aztertzea nahi zaitu."
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
-msgstr ""
-"9 am aurretik hasitako egitate guztien %s ehunekoarekin, "
-"mendizalea dirudizu."
+msgstr "9 am aurretik hasitako egitate guztien %s ehunekoarekin, mendizalea dirudizu."
 
 #: ../hamster/stats.py:738
 #, python-format
 msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
-msgstr ""
-"11 pm ondoren hasitako egitate guztien %s ehunekoarekin, "
-"gautxoria dirudizu."
+msgstr "11 pm ondoren hasitako egitate guztien %s ehunekoarekin, gautxoria dirudizu."
 
 #: ../hamster/stats.py:741
 #, python-format
@@ -649,9 +690,25 @@ msgstr ""
 "15 minutu baino laburragoak izan diren zeregin guztien %s ehunekoarekin, "
 "lanpetutako erla dirudizu."
 
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
 #: ../hamster/stats.py:869
 msgid "Total"
 msgstr "Guztira"
+
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%b %d"
 
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
