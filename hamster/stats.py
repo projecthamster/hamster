@@ -916,8 +916,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             # date format for overview label when only single day is visible
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
-            start_date_str = self.view_date.strftime("single day overview",
-                                                     "%B %d, %Y")
+            start_date_str = self.view_date.strftime(C_("single day overview",
+                                                        "%B %d, %Y"))
             # Overview label if looking on single day
             overview_label = _(u"Overview for %(date)s") % \
                                                       ({"date": start_date_str})
