@@ -41,15 +41,13 @@ class RuntimeStore(Singleton):
     trace_sql = False
 
     def __init__(self):
-        print "Doing init!"
-
         gettext.install("hamster-applet", unicode = True)
 
         # Typically shared data dir is /usr/share/hamster-applet
-        if os.path.realpath(__file__).startswith('/home/'):
-            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'data'))
-        else:
+        if os.path.realpath(__file__).startswith(defs.PYTHONDIR):
             data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+        else:
+            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'data'))
         self.data_dir = data_dir
         self.dispatcher = Dispatcher()
         self.storage = Storage(self.dispatcher)
