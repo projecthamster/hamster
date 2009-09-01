@@ -4,16 +4,17 @@
 # Copyright (C) 2008, 2009 The GNOME Project.
 # This file is distributed under the same license as the hamster-applet package.
 #
-# Ivar Smolin <okul@linux.ee>, 2008, 2009.
+# Ivar Smolin <okul linux ee>, 2008, 2009.
+# Mattias Põldaru <mahfiaz gmail com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-12 15:11+0000\n"
-"PO-Revision-Date: 2009-08-12 22:10+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2009-08-31 12:51+0000\n"
+"PO-Revision-Date: 2009-09-01 09:13+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -246,7 +247,9 @@ msgid "About Time Tracker"
 msgstr "Ajajälgijast lähemalt"
 
 msgid "translator-credits"
-msgstr "Ivar Smolin <okul@linux.ee>, 2008, 2009."
+msgstr ""
+"Ivar Smolin <okul@linux.ee>, 2008, 2009.\n"
+"Mattias Põldaru <mahfiaz gmail com>, 2009."
 
 #. translators: this is edit activity action in the notifier bubble
 msgid "Edit"
@@ -584,6 +587,10 @@ msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%d. %b"
 
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%d. %B, %Y"
+
 #. Overview label if looking on single day
 #, python-format
 msgid "Overview for %(date)s"
@@ -594,9 +601,6 @@ msgstr "Kuu"
 
 msgid "Day"
 msgstr "Päev"
-
-msgid "Tab Separated Values (TSV)"
-msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
 
 #. duration in round hours
 #, python-format
@@ -613,11 +617,11 @@ msgstr "%dmin"
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
 
+#~ msgid "Tab Separated Values (TSV)"
+#~ msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
+
 #~ msgid "Remind also when no activity is set"
 #~ msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
-
-#~ msgid "%.1fh"
-#~ msgstr "%.1ft"
 
 #~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
 #~ msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
