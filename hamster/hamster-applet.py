@@ -124,13 +124,13 @@ if __name__ == "__main__":
 
     elif start_window:
         if start_window == "stats":
-            from stats import StatsViewer
+            from hamster.stats import StatsViewer
             stats_viewer = StatsViewer().show()
         elif start_window == "edit":
-            from edit_activity import CustomFactController
+            from hamster.edit_activity import CustomFactController
             CustomFactController().show()
         elif start_window == "prefs":
-            from preferences import PreferencesEditor
+            from hamster.preferences import PreferencesEditor
             PreferencesEditor().show()
             
         gtk.main()
