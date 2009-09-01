@@ -39,7 +39,7 @@ def show_about(parent):
         "version" : VERSION,
         "comments" : _("Project Hamster — track your time"),
         "copyright" : _(u"Copyright © 2007–2009 Toms Bauģis and others"),
-        "website" : "http://live.gnome.org/ProjectHamster",
+        "website" : "http://projecthamster.wordpress.com/",
         "website-label" : _("Project Hamster Website"),
         "title": _("About Time Tracker"),
         "wrap-license": True
