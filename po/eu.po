@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-27 15:02+0000\n"
-"PO-Revision-Date: 2009-08-27 21:44+0200\n"
+"POT-Creation-Date: 2009-08-31 12:51+0000\n"
+"PO-Revision-Date: 2009-09-02 18:47+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -709,6 +709,13 @@ msgstr "Guztira"
 msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%b %d"
+
+#: ../hamster/stats.py:920
+#| msgctxt "html report"
+#| msgid "%b %d, %Y"
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%Y %B %d"
 
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
