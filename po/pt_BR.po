@@ -6,16 +6,16 @@
 # Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2008.
 # Vladimir Melo <vmelo@gnome.org>, 2009.
 # Djavan Fagundes <dnoway@gmail.com>, 2009.
+# Fábio Nogueira <fnogueira@gnome.org>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-13 14:57+0000\n"
-"PO-Revision-Date: 2009-08-15 10:26-0300\n"
-"Last-Translator: Djavan Fagundes <dnoway@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-02 12:15-0400\n"
+"PO-Revision-Date: 2009-09-01 16:56-0300\n"
+"Last-Translator: Fábio Nogueira <fnogueira@gnome.org>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +29,7 @@ msgstr "Projeto Hamster — gerencie seu tempo"
 #: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
 #: ../hamster/about.py:38 ../hamster/applet.py:63
 msgid "Time Tracker"
-msgstr "Gestor de Tempo"
+msgstr "Gestor de tempo"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -114,7 +114,7 @@ msgstr "Parar de registrar quando o computador estiver ocioso"
 
 #: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
-msgstr "Preferências do Gestor de Tempo"
+msgstr "Preferências do Gestor de tempo"
 
 #: ../data/preferences.ui.h:19
 msgid "_Activities"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Atalho de teclado para mostrar a janela do Gestor de Tempo."
+msgstr "Atalho de teclado para mostrar a janela do Gestor de tempo."
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid ""
@@ -291,7 +291,7 @@ msgstr "Salvar como HTML"
 
 #: ../data/stats.ui.h:14
 msgid "Save report – Time Tracker"
-msgstr "Salvar relatório – Gestor de Tempo"
+msgstr "Salvar relatório – Gestor de tempo"
 
 #: ../data/stats.ui.h:15
 msgid "Statistics"
@@ -319,7 +319,7 @@ msgstr "Site do projeto Hamster"
 
 #: ../hamster/about.py:44
 msgid "About Time Tracker"
-msgstr "Sobre o Gestor de Tempo"
+msgstr "Sobre o Gestor de tempo"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
@@ -328,7 +328,8 @@ msgstr ""
 "Henrique P. Machado <zehrique@gmail.com>\n"
 "Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Vladimir Melo <vmelo@gnome.org>\n"
-"Djavan Fagundes <dnoway@gmail.com>"
+"Djavan Fagundes <dnoway@gmail.com>\n"
+"Fábio Nogueira <fnogueira@gnome.org>"
 
 #. translators: this is edit activity action in the notifier bubble
 #: ../hamster/applet.py:73
@@ -404,11 +405,11 @@ msgstr ""
 "registrar a atividade \"regando flores\" na categoria \"casa\".\n"
 "\n"
 "A vírgula (\",\") marca o começo da descrição. Exemplo: \"regando flores, "
-"begônias e florais da califórnia\" começará a registrar \"regando flores\" e "
-"adiciona a descrição \"begônias e florais da califórnia\" ao registro.\n"
+"begônias e florais da Califórnia\" começará a registrar \"regando flores\" e "
+"adiciona a descrição \"begônias e florais da Califórnia\" ao registro.\n"
 "\n"
 "Ambas podem ser combinadas: \"regando flores@casa, begônias e florais da "
-"califórnia\" funcionará corretamente!\n"
+"Califórnia\" funcionará corretamente!\n"
 "\n"
 "Agora, comece a registrar!\n"
 "        "
@@ -735,6 +736,11 @@ msgstr "Total"
 msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%d de %b"
+
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%d de %B de %Y"
 
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
