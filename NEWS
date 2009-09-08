@@ -1,4 +1,34 @@
 ===============
+Version 2.27.92
+===============
+ Updated translations:
+  * ar (Khaled Hosny)
+  * be (Alexander Nyakhaychyk)
+  * bg (Alexander Shopov)
+  * bn (Maruf Ovee)
+  * bn_IN (Runa Bhattacharjee)
+  * cs (Adrian Guniš)
+  * en_GB (Philip Withnall)
+  * es (Jorge González)
+  * et (Mattias Põldaru)
+  * eu (Iñaki Larrañaga Murgoitio)
+  * fi (Tommi Vainikainen)
+  * fr (Claude Paroz)
+  * gl (Antón Méixome)
+  * gu (Sweta Kothari)
+  * kn (Shankar Prasad)
+  * nb (Kjartan Maraas)
+  * or (Manoj Kumar Giri)
+  * pl (Tomasz Dominikowski)
+  * pt (Duarte Loreto)
+  * pt_BR (Fábio Nogueira)
+  * sv (Daniel Nylander)
+  * ta (I. Felix)
+  * te (Krishna Babu K)
+  * zh_HK (Chao-Hsiung Liao)
+ 
+ 
+===============
 Version 2.27.90
 ===============
   * Fixes to idle detection (now works with gnome screensaver 2.27+)
