@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-25 07:32+0300\n"
-"PO-Revision-Date: 2009-08-25 07:32+0300\n"
+"POT-Creation-Date: 2009-09-08 08:02+0300\n"
+"PO-Revision-Date: 2009-09-08 08:02+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -724,6 +724,11 @@ msgstr "Общо"
 msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%d %b"
+
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%d.%b.%Y"
 
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
