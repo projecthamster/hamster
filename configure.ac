@@ -54,8 +54,8 @@ AC_SUBST(DATADIR)
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_SUBST(LIBDIR)
 
-AS_AC_EXPAND(PYTHONDIR, $pythondir)
-AC_SUBST(PYTHONDIR)
+AS_AC_EXPAND(PYEXECDIR, $pyexecdir)
+AC_SUBST(PYEXECDIR)
 		
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
