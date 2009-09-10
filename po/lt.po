@@ -8,24 +8,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-06 11:02+0200\n"
-"PO-Revision-Date: 2009-03-06 11:01+0200\n"
-"Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
+"POT-Creation-Date: 2009-09-10 14:40+0300\n"
+"PO-Revision-Date: 2009-09-10 14:40+0300\n"
+"Last-Translator: Gintautas Miliauskas <gintautas@miliauskas.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
-msgid "Project Hamster - track your time"
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Project Hamster — track your time"
 msgstr "Hamster projektas – sekite savo laiką"
 
-#. Title of reminder baloon
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/about.py:41 ../hamster/applet.py:67
+#. Title of reminder notification
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
+#: ../hamster/about.py:38 ../hamster/applet.py:63
 msgid "Time Tracker"
 msgstr "Laiko apskaita"
 
@@ -41,369 +41,469 @@ msgstr "_Apžvalga"
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
-#: ../data/preferences.glade.h:1
+#: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
 msgstr "<b>Užsiėmimai</b>"
 
-#: ../data/preferences.glade.h:2
+#: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
 msgstr "<b>Globalus greitasis klavišas</b>"
 
-#: ../data/preferences.glade.h:3
+#: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
 msgstr "<b>Sekimas</b>"
 
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "_Žemyn"
+#: ../data/preferences.ui.h:4
+msgid "Activity list"
+msgstr "Užsiėmimų sąrašas"
 
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "_Aukštyn"
+#: ../data/preferences.ui.h:5
+msgid "Add activity"
+msgstr "Pridėti užsiėmimą"
 
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "_Nauja kategorija"
+#: ../data/preferences.ui.h:6
+msgid "Add category"
+msgstr "Pridėti kategoriją"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind when no activity is set"
+msgstr "Taip pat pranešti, kai nenustatyta veikla"
+
+#: ../data/preferences.ui.h:8
+msgid "Category list"
+msgstr "Kategorijų sąrašas"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit activity"
+msgstr "Keisti užsiėmimą"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit category"
+msgstr "Redaguoti kategoriją"
+
+#: ../data/preferences.ui.h:11
+msgid "Move activity down"
+msgstr "Perkelti užsiėmimą žemyn"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity up"
+msgstr "Perkelti užsiėmimą aukštyn"
+
+#: ../data/preferences.ui.h:13
 msgid "Remind of current activity every:"
 msgstr "Pranešti apie esamą veiklą kas:"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:14
+msgid "Remove activity"
+msgstr "Naikinti užsiėmimą"
+
+#: ../data/preferences.ui.h:15
+msgid "Remove category"
+msgstr "Naikinti kategoriją"
+
+#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "Sustabdyti sekimą išjungus"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
 msgstr "Sustabdyti sekimą, kai kompiuteris nenaudojamas"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
 msgstr "Laiko apskaitos nustatymai"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.ui.h:19
 msgid "_Activities"
 msgstr "_Užsiėmimai"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.ui.h:20
 msgid "_Categories"
 msgstr "_Kategorijos"
 
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "_Naujas užsiėmimas"
-
-#: ../data/edit_activity.glade.h:1
-msgid "20/01/08"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:2
-msgid "20/01/09"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:3
-msgid "3:30pm"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:4
-#, fuzzy
+#: ../data/edit_activity.ui.h:1
 msgid "Activity:"
-msgstr "_Užsiėmimas:"
+msgstr "Užsiėmimas:"
 
-#: ../data/edit_activity.glade.h:5
+#: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
 msgstr "Pridėti ankstesnį užsiėmimą"
 
-#: ../data/edit_activity.glade.h:6
+#: ../data/edit_activity.ui.h:3
 msgid "Description:"
 msgstr "Aprašymas:"
 
-#: ../data/edit_activity.glade.h:7
+#: ../data/edit_activity.ui.h:4
 msgid "Preview:"
-msgstr ""
+msgstr "Peržiūra:"
 
-#: ../data/edit_activity.glade.h:8
-#, fuzzy
+#: ../data/edit_activity.ui.h:5
 msgid "Time:"
-msgstr "Pavadinimas:"
+msgstr "Laikas:"
 
-#: ../data/edit_activity.glade.h:9
-msgid "gtk-cancel"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:10
-msgid "gtk-save"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:11
-#, fuzzy
+#: ../data/edit_activity.ui.h:6
 msgid "in progress"
-msgstr ""
-"dirbama...\n"
-"iki\n"
-" "
+msgstr "vykdoma"
 
-#: ../data/edit_activity.glade.h:12
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
 msgid "to"
-msgstr ""
+msgstr " iki "
 
 #: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr "Pranešti kas notify_interval minučių, jei joks užsiėmimas nepradėtas."
+
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Greitasis klavišas, parodantis laiko apskaitos langą."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-applet.schemas.in.h:4
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
 msgstr ""
 "Pranešti apie esamą veiklą kas nurodytą minučių skaičių. Nustatykite į 0 "
 "arba daugiau negu 120, jei norite išjungti pranešimus."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Pranešti apie esamą veiklą kas x minučių"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "Rodyti langą"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "Sustabdyti esamo užsiėmimo sekimą išjungus"
 
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking current activity, when computer becomes idle"
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Sustabdyti esamo užsiėmimo sekimą, kai kompiuteris nenaudojamas"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "Sustabdyti sekimą, kai kompiuteris nenaudojamas"
 
-#: ../data/menu.glade.h:1
+#: ../data/applet.ui.h:1
+msgid ""
+"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
+"span>"
+msgstr ""
+"<span size=\"small\" >Surinkite užsiėmimą, spauskite Enter ir pradėkite "
+"skaičiuoti laiką!</span>"
+
+#: ../data/applet.ui.h:2
+msgid ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Papasakok daugiau</"
+"span>"
+
+#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "_Pridėti ankstesnį užsiėmimą"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
+#: ../data/applet.ui.h:5
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:494
+#: ../data/applet.ui.h:6 ../hamster/applet.py:554
 msgid "No records today"
 msgstr "Šiandienos įrašų nėra"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:7
 msgid "Show _Overview"
 msgstr "Rodyti _apžvalgą"
 
-#: ../data/menu.glade.h:6
+#: ../data/applet.ui.h:8
 msgid "_Activity:"
 msgstr "_Užsiėmimas:"
 
-#: ../data/menu.glade.h:7
+#: ../data/applet.ui.h:9
 msgid "_Stop Tracking"
 msgstr "_Sustabdyti sekimą"
 
-#: ../data/menu.glade.h:8
+#: ../data/applet.ui.h:10
 msgid "_Today"
 msgstr "_Šiandien"
 
-#: ../data/stats.glade.h:1
+#: ../data/stats.ui.h:1
+msgid " _Day"
+msgstr "_Diena"
+
+#: ../data/stats.ui.h:2
 msgid " _Month"
 msgstr "_Mėnuo"
 
-#: ../data/stats.glade.h:2
+#: ../data/stats.ui.h:3
 msgid " _Week"
 msgstr "_Savaitė"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.ui.h:4
 msgid "<b>Overview</b>"
 msgstr "<b>Apžvalga</b>"
 
-#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+#: ../data/stats.ui.h:5
+msgid "<b>Starts and ends</b>"
+msgstr "<b>Pradžios ir pabaigos</b>"
+
+#: ../data/stats.ui.h:6
+msgid "<b>Totals</b>"
+msgstr "<b>Viso</b>"
+
+#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
 msgid "Activity"
 msgstr "Užsiėmimas"
 
-#: ../data/stats.glade.h:5
-msgid "Add activity"
-msgstr "Pridėti užsiėmimą"
+#: ../data/stats.ui.h:8
+msgid "Categories:"
+msgstr "Kategorijos:"
 
-#: ../data/stats.glade.h:6
-msgid "Delete activity"
-msgstr "Ištrinti užsiėmimą"
+#: ../data/stats.ui.h:9
+msgid "Date interval:"
+msgstr "Datų intervalas:"
 
-#: ../data/stats.glade.h:7
-msgid "Edit activity"
-msgstr "Keisti užsiėmimą"
-
-#: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Sudaryti ataskaitą"
-
-#: ../data/stats.glade.h:9
-msgid "Newer activities"
-msgstr "Naujesni užsiėmimai"
-
-#: ../data/stats.glade.h:10
+#: ../data/stats.ui.h:10
 msgid "No data for this interval"
-msgstr ""
+msgstr "Nėra duomenų šiam intervalui"
 
-#: ../data/stats.glade.h:11
+#: ../data/stats.ui.h:11
+msgid "Overview"
+msgstr "Apžvalga"
+
+#: ../data/stats.ui.h:12
 msgid "Overview - Hamster"
 msgstr "Apžvalga – Hamster"
 
-#: ../data/stats.glade.h:12
-msgid "Show month"
-msgstr "Rodyti mėnesį"
+#: ../data/stats.ui.h:13
+msgid "Save as HTML"
+msgstr "Išsaugoti kaip HTML"
 
-#: ../data/stats.glade.h:13
-msgid "Show week"
-msgstr "Rodyti savaitę"
+#: ../data/stats.ui.h:14
+msgid "Save report – Time Tracker"
+msgstr "Įrašyti ataskaitą – laiko sekimas"
 
-#: ../data/stats.glade.h:14 ../hamster/stats.py:364
+#: ../data/stats.ui.h:15
+msgid "Statistics"
+msgstr "Statistika"
+
+#: ../data/stats.ui.h:16
+msgid "Today"
+msgstr "Šiandien"
+
+#: ../data/stats.ui.h:17 ../hamster/stats.py:948
 msgid "Week"
 msgstr "Savaitė"
 
-#: ../hamster/about.py:44
-#, fuzzy
-msgid "Copyright © 2007-2009 Toms Bauģis and others"
-msgstr "Autorinės teisės © 2007-2008 Toms Baugis ir kiti"
+#: ../data/stats.ui.h:18
+msgid "Year:"
+msgstr "Metai:"
 
-#: ../hamster/about.py:46
-#, fuzzy
+#: ../hamster/about.py:41
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Autorinės teisės © 2007-2009 Toms Bauģis ir kiti"
+
+#: ../hamster/about.py:43
 msgid "Project Hamster Website"
-msgstr "Hamster svetainė"
+msgstr "Hamster projekto svetainė"
 
-#: ../hamster/about.py:47
-#, fuzzy
+#: ../hamster/about.py:44
 msgid "About Time Tracker"
-msgstr "Laiko apskaita"
+msgstr "Apie Laiko apskaitą"
 
-#: ../hamster/about.py:57
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "Gintautas Miliauskas <gintas@akl.lt>"
 
-#. try yesterday if there is nothing today
-#: ../hamster/preferences.py:56 ../hamster/edit_activity.py:338
-#: ../hamster/applet.py:600 ../hamster/db.py:188 ../hamster/db.py:205
-#: ../hamster/db.py:208 ../hamster/db.py:356 ../hamster/db.py:458
-#: ../hamster/db.py:472 ../hamster/reports.py:129 ../hamster/stuff.py:67
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "Redaguoti"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "Perjungti"
+
+#: ../hamster/applet.py:305 ../hamster/reports.py:235
+#: ../hamster/reports.py:293
+msgid "Duration"
+msgstr "Trukmė"
+
+#: ../hamster/applet.py:492 ../hamster/applet.py:513
+msgid "No activity"
+msgstr "Užsiėmimo nėra"
+
+#. activity reminder
+#: ../hamster/applet.py:508
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "Dirbama prie <b>%s</b>"
+
+#: ../hamster/applet.py:562
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../hamster/applet.py:565
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#. unsorted category
+#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
+#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
+#: ../hamster/stuff.py:94
 msgid "Unsorted"
 msgstr "Nerikiuota"
+
+#: ../hamster/applet.py:833
+msgid "What should be typed in the activity box?"
+msgstr "Ką rašyti į užsiėmimų langelį?"
+
+#: ../hamster/applet.py:836
+msgid ""
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
+"        \n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
+"\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+"Yra paprasta sintaksė, kuri leidžia detalizuoti savo užsiėmimus:\n"
+"        \n"
+"„@“ simbolis pažymi kategoriją. Pavyzdys: „gėlių laistymas@namuose“ pradės "
+"sekti užsiėmimą „gėlių laistymas“ kategorijoje „namuose“.\n"
+"\n"
+"Kablelis („,“) pažymi aprašymo pradžią. Pavyzdys: „gėlių laistymas, "
+"begonijos ir neužmirštuolės“ pradės sekti užsiėmimą „gėlių laistymas“ ir "
+"pridės jo aprašymą „begonijos ir neužmirštuolės“.\n"
+"\n"
+"Abu galima naudoti kartu: „gėlių laistymas@namuose, begonijos ir "
+"neužmirštuolės“ taip pat veiks!\n"
+"\n"
+"Dabar pradėkite sekti!\n"
+"        "
+
+#. defaults
+#: ../hamster/db.py:728
+msgid "Work"
+msgstr "Darbas"
+
+#: ../hamster/db.py:729
+msgid "Reading news"
+msgstr "Naujienų skaitymas"
+
+#: ../hamster/db.py:730
+msgid "Checking stocks"
+msgstr "Akcijų tikrinimas"
+
+#: ../hamster/db.py:731
+msgid "Super secret project X"
+msgstr "Ypač slaptas projektas X"
+
+#: ../hamster/db.py:732
+msgid "World domination"
+msgstr "Pasaulio užkariavimas"
+
+#: ../hamster/db.py:734
+msgid "Day-to-day"
+msgstr "Kasdieniai"
+
+#: ../hamster/db.py:735
+msgid "Lunch"
+msgstr "Pietūs"
+
+#: ../hamster/db.py:736
+msgid "Watering flowers"
+msgstr "Gėlių laistymas"
+
+#: ../hamster/db.py:737
+msgid "Doing handstands"
+msgstr "Stovėjimas ant rankų"
+
+#: ../hamster/edit_activity.py:385
+msgid "Update activity"
+msgstr "Atnaujinti užsiėmimą"
 
 #: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:106
-#: ../hamster/reports.py:172
+#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/reports.py:291
 msgid "Category"
 msgstr "Kategorija"
 
-#: ../hamster/preferences.py:511
+#: ../hamster/preferences.py:559
 msgid "New category"
 msgstr "Nauja kategorija"
 
-#: ../hamster/preferences.py:524
+#: ../hamster/preferences.py:572
 msgid "New activity"
 msgstr "Naujas užsiėmimas"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:579
+#: ../hamster/preferences.py:632
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minučių"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:582
+#: ../hamster/preferences.py:635
 msgid "Never"
 msgstr "Niekada"
 
-#: ../hamster/edit_activity.py:353
-msgid "Update activity"
-msgstr "Atnaujinti užsiėmimą"
+#. column title in the TSV export format
+#: ../hamster/reports.py:112
+msgid "activity"
+msgstr "užsiėmimas"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Edit"
-msgstr "Redaguoti"
+#. column title in the TSV export format
+#: ../hamster/reports.py:114
+msgid "start time"
+msgstr "pradžios laikas"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:77
-msgid "Switch"
-msgstr "Perjungti"
+#. column title in the TSV export format
+#: ../hamster/reports.py:116
+msgid "end time"
+msgstr "pabaigos laikas"
 
-#: ../hamster/applet.py:296 ../hamster/reports.py:109
-#: ../hamster/reports.py:174
-msgid "Duration"
-msgstr "Trukmė"
+#. column title in the TSV export format
+#: ../hamster/reports.py:118
+msgid "duration minutes"
+msgstr "trukmė minutėmis"
 
-#: ../hamster/applet.py:420 ../hamster/applet.py:567
-msgid "No activity"
-msgstr "Užsiėmimo nėra"
+#. column title in the TSV export format
+#: ../hamster/reports.py:120
+msgid "category"
+msgstr "kategorija"
 
-#. activity reminder
-#: ../hamster/applet.py:434
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "Dirbama prie <b>%s</b>"
-
-#. listing of today's categories and time spent in them
-#: ../hamster/applet.py:501
-#, fuzzy, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s, "
-
-#: ../hamster/applet.py:503
-#, python-format
-msgid "%.1fh"
-msgstr ""
-
-#. defaults
-#: ../hamster/db.py:646
-msgid "Work"
-msgstr "Darbas"
-
-#: ../hamster/db.py:647
-msgid "Reading news"
-msgstr "Naujienų skaitymas"
-
-#: ../hamster/db.py:648
-msgid "Checking stocks"
-msgstr "Akcijų tikrinimas"
-
-#: ../hamster/db.py:649
-msgid "Super secret project X"
-msgstr "Ypač slaptas projektas X"
-
-#: ../hamster/db.py:650
-msgid "World domination"
-msgstr "Pasaulio užkariavimas"
-
-#: ../hamster/db.py:652
-msgid "Day to day"
-msgstr "Diena iš dienos"
-
-#: ../hamster/db.py:653
-msgid "Lunch"
-msgstr "Pietūs"
-
-#: ../hamster/db.py:654
-msgid "Watering flowers"
-msgstr "Gėlių laistymas"
-
-#: ../hamster/db.py:655
-msgid "Doing handstands"
-msgstr "Stovėjimas ant rankų"
-
-#: ../hamster/db.py:838 ../hamster/db.py:842
-msgid "name"
-msgstr "pavadinimas"
+#. column title in the TSV export format
+#: ../hamster/reports.py:122
+msgid "description"
+msgstr "aprašymas"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:351
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:160 ../hamster/stats.py:933
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -415,7 +515,8 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:356
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s apžvalga"
@@ -423,105 +524,296 @@ msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s apžvalga"
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:361
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s apžvalga"
 
-#: ../hamster/reports.py:39
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "%(start_Y)s %(start_B)s %(start_d)s apžvalga"
 
-#: ../hamster/reports.py:104
+#: ../hamster/reports.py:230
 msgid "Date"
 msgstr "Data"
 
-#: ../hamster/reports.py:107
+#: ../hamster/reports.py:233
 msgid "Start"
 msgstr "Pradžia"
 
-#: ../hamster/reports.py:108
+#: ../hamster/reports.py:234
 msgid "End"
 msgstr "Pabaiga"
 
-#: ../hamster/reports.py:110
+#: ../hamster/reports.py:236
 msgid "Description"
 msgstr "Aprašymas"
 
-#. fact date column in HTML report
-#: ../hamster/reports.py:144
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%b %d, %Y"
 
 #. summary table
-#: ../hamster/reports.py:169
+#: ../hamster/reports.py:288
 msgid "Totals"
 msgstr "Iš viso"
 
-#: ../hamster/reports.py:186
+#: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "Viso laiko"
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:237
+#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+msgid "HTML Report"
+msgstr "HTML ataskaita"
+
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+msgid "Tab-Separated Values (TSV)"
+msgstr "Tabuliatoriumi atskirtos reikšmės (TSV)"
+
+#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+msgid "iCal"
+msgstr "iCal"
+
+#. add unsorted category
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "Visi"
+
+#: ../hamster/stats.py:435
+msgctxt "years"
+msgid "All"
+msgstr "Visi"
+
+#: ../hamster/stats.py:524
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"Nėra duomenų statistikai generuoti.\n"
+"Savaitė naudojimo duomenų labai praverstų!"
+
+#: ../hamster/stats.py:527
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "Vis dar renkami duomenys — pažiūrėkite vėl po savaitės!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%b %d, %Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:366
-msgid "Month"
-msgstr "Mėnuo"
-
-#: ../hamster/stats.py:403
+#: ../hamster/stats.py:664
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s"
+msgid "First activity was recorded on %s."
+msgstr "Pirmasis užsiėmimas užregistruotas %s."
 
-#: ../hamster/stats.py:410
-#, fuzzy
+#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s metai"
+msgstr[1] "%(num)s metai"
+msgstr[2] "%(num)s metų"
+
+#. FIXME: difficult string to properly pluralize
+#: ../hamster/stats.py:682
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
+msgstr ""
+"Suskaičiuota %(human_days)s žmogaus dienų (%(human_years)s) arba %"
+"(working_days)s darbo dienų (%(working_years)s)."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%b %d, %Y"
+
+#: ../hamster/stats.py:705
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+"Ilgiausias tęstinis darbas buvo %(date)s ir truko %(hours)s valandą."
+msgstr[1] ""
+"Ilgiausias tęstinis darbas buvo %(date)s ir truko %(hours)s valandas."
+msgstr[2] ""
+"Ilgiausias tęstinis darbas buvo %(date)s ir truko %(hours)s valandų."
+
+#. total records (in selected scope)
+#: ../hamster/stats.py:713
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "Yra %s įrašas."
+msgstr[1] "Yra %s įrašai."
+msgstr[2] "Yra %s įrašų."
+
+#: ../hamster/stats.py:733
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamster norėtų jus stebėti ilgiau"
+
+#: ../hamster/stats.py:735
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am you seem to be an early "
+"bird."
+msgstr ""
+"%s procentų užsiėmimų pradėta prieš devynias ryto; atrodo, kad esate vyturys."
+
+#: ../hamster/stats.py:738
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr ""
+"%s procentų užsiėmimų pradėta po vienuoliktos vakaro; atrodo, kad esate "
+"pelėda."
+
+#: ../hamster/stats.py:741
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"busy bee."
+msgstr ""
+"%s procentų užsiėmimų truko mažiau negu 15 minučių; atrodo, esate "
+"devyndarbis."
+
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
+#: ../hamster/stats.py:869
 msgid "Total"
 msgstr "Iš viso"
 
-#: ../hamster/stats.py:419
-#, fuzzy, python-format
-msgid "%(category)s: %(duration).1f, "
-msgstr "%(category)s: %(duration)s, "
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%b %d"
+
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%B %d, %Y"
+
+#. Overview label if looking on single day
+#: ../hamster/stats.py:922
+#, python-format
+msgid "Overview for %(date)s"
+msgstr "Apžvalga %(date)s"
+
+#: ../hamster/stats.py:950
+msgid "Month"
+msgstr "Mėnuo"
+
+#: ../hamster/stats.py:952
+msgid "Day"
+msgstr "Diena"
 
 #. duration in round hours
-#: ../hamster/stuff.py:111
+#: ../hamster/stuff.py:151
 #, python-format
 msgid "%dh"
-msgstr ""
+msgstr "%dh"
 
 #. duration less than hour
-#: ../hamster/stuff.py:114
+#: ../hamster/stuff.py:154
 #, python-format
 msgid "%dmin"
-msgstr ""
+msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:117
+#: ../hamster/stuff.py:157
 #, python-format
 msgid "%dh %dmin"
-msgstr ""
+msgstr "%dh %dmin"
+
+#~| msgid "Remind of current activity every:"
+#~ msgid "Remind also when no activity is set"
+#~ msgstr "Taip pat pranešti, kai veikla nenustatyta"
+
+#~ msgid "Delete activity"
+#~ msgstr "Ištrinti užsiėmimą"
+
+#~ msgid "Newer activities"
+#~ msgstr "Naujesni užsiėmimai"
+
+#~ msgid "Show month"
+#~ msgstr "Rodyti mėnesį"
+
+#~ msgid "Show week"
+#~ msgstr "Rodyti savaitę"
+
+#~ msgid "%.1fh"
+#~ msgstr "%.1fh"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#~ msgid "%(o_A)s, %(o_b)s %(o_d)s"
+#~ msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#~ msgid "Move _Down"
+#~ msgstr "_Žemyn"
+
+#~ msgid "Move _Up"
+#~ msgstr "_Aukštyn"
+
+#~ msgid "N_ew Category"
+#~ msgstr "_Nauja kategorija"
+
+#~ msgid "_New Activity"
+#~ msgstr "_Naujas užsiėmimas"
+
+#~ msgid "Generate Report"
+#~ msgstr "Sudaryti ataskaitą"
+
+#~ msgid "name"
+#~ msgstr "pavadinimas"
+
+#, fuzzy
+#~ msgid "%(category)s: %(duration).1f, "
+#~ msgstr "%(category)s: %(duration)s, "
 
 #~ msgid "<b>Activity</b>"
 #~ msgstr "<b>Užsiėmimas</b>"
 
-#~ msgid "<b>Date and Time</b>"
-#~ msgstr "<b>Data ir laikas</b>"
-
 #~ msgid "hours"
 #~ msgstr "valandos"
-
-#~ msgid "minutes"
-#~ msgstr "minutės"
-
-#~ msgid " _Day"
-#~ msgstr "_Diena"
 
 #~ msgid "<b>Category</b>"
 #~ msgstr "<b>Kategorija</b>"
@@ -538,38 +830,17 @@ msgstr ""
 #~ msgid "Other"
 #~ msgstr "Kita"
 
-#~ msgid "Day"
-#~ msgstr "Diena"
-
 #~ msgid "Time tracking for masses"
 #~ msgstr "Laiko apskaita visiems"
 
-#~ msgid "Today"
-#~ msgstr "Šiandien"
-
 #~ msgid "Time tracking for masses."
 #~ msgstr "Laiko apskaita visiems."
-
-#~ msgid "%B %d. %Y"
-#~ msgstr "%Y %B %d"
-
-#~ msgid "%B %d"
-#~ msgstr "%B %d"
-
-#~ msgid "%d, %Y"
-#~ msgstr "%d, %Y"
-
-#~ msgid "Overview for %s"
-#~ msgstr "Apžvalga %s"
 
 #~ msgid "Overview for %s - %s"
 #~ msgstr "Apžvalga %s – %s"
 
 #~ msgid "%d.%m.%y"
 #~ msgstr "%Y-%m-%d"
-
-#~ msgid "%A, %b %d."
-#~ msgstr "%A, %b %d"
 
 #~ msgid "%d. %b"
 #~ msgstr "%b %d"
