@@ -168,7 +168,7 @@ msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
 msgstr ""
-"ਖਾਸ ਦਿੱਤੇ ਮਿੰਟਾਂ ਦੇ ਬਾਅਦ ਮੌਜੂਦਾ ਟਾਸਕ ਚੇਤੇ ਕਰਵਾਉ। ਰੀਮਾਈਡਰ ਬੰਦ ਕਰਨ ਲਈ 0 ਜਾਂ 120 ਤੋਂ \ਵੱਧ ਸੈੱਟ ਕਰੋ।"
+"ਖਾਸ ਦਿੱਤੇ ਮਿੰਟਾਂ ਦੇ ਬਾਅਦ ਮੌਜੂਦਾ ਟਾਸਕ ਚੇਤੇ ਕਰਵਾਉ। ਰੀਮਾਈਡਰ ਬੰਦ ਕਰਨ ਲਈ 0 ਜਾਂ 120 ਤੋਂ ਵੱਧ ਸੈੱਟ ਕਰੋ।"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
