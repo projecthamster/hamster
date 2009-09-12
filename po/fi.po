@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 01:20+0300\n"
-"PO-Revision-Date: 2009-08-20 01:15+0300\n"
+"POT-Creation-Date: 2009-09-12 21:42+0300\n"
+"PO-Revision-Date: 2009-09-12 21:42+0300\n"
 "Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -721,6 +721,11 @@ msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%-d.%-m."
 
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%-d. %Bta %Y"
+
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
 #, python-format
@@ -821,9 +826,6 @@ msgstr "%d h %d min"
 
 #~ msgid "Time tracking for masses."
 #~ msgstr "Ajankäytön seuranta kaikille vipeltäjille."
-
-#~ msgid "%B %d. %Y"
-#~ msgstr "%-d. %Bta %Y"
 
 #~ msgid "Overview for %s - %s"
 #~ msgstr "Yleiskuva ajalle %s - %s"
