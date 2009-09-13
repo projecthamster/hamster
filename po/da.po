@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster Applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-12 03:25+0200\n"
-"PO-Revision-Date: 2009-09-12 02:06+0200\n"
+"POT-Creation-Date: 2009-09-13 03:38+0200\n"
+"PO-Revision-Date: 2009-09-12 17:51+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -730,7 +730,6 @@ msgid "%b %d"
 msgstr "%d. %b"
 
 #: ../hamster/stats.py:920
-#, fuzzy
 msgctxt "single day overview"
 msgid "%B %d, %Y"
 msgstr "%d. %B %Y"
