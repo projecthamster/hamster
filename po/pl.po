@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-31 14:55+0200\n"
-"PO-Revision-Date: 2009-08-31 14:56+0100\n"
+"POT-Creation-Date: 2009-09-15 17:54+0200\n"
+"PO-Revision-Date: 2009-09-15 18:28+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgstr "Dodaje kategorię"
 #: ../data/preferences.ui.h:7
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Also remind when no activity is set"
-msgstr "Przypominaj również, gdy nie ustawiono żadnej czynności"
+msgstr "Przypominanie również, gdy nie ustawiono żadnej czynności"
 
 #: ../data/preferences.ui.h:8
 msgid "Category list"
@@ -289,7 +289,7 @@ msgstr "Zapisz jako HTML"
 
 #: ../data/stats.ui.h:14
 msgid "Save report – Time Tracker"
-msgstr "Zapisz sprawozdanie — Śledzenie Czasu"
+msgstr "Zapisywanie sprawozdania — zarządzanie czasem"
 
 #: ../data/stats.ui.h:15
 msgid "Statistics"
@@ -329,7 +329,7 @@ msgstr ""
 #. translators: this is edit activity action in the notifier bubble
 #: ../hamster/applet.py:73
 msgid "Edit"
-msgstr "Modyfikuj"
+msgstr "Zmodyfikuj"
 
 #. translators: this is switch activity action in the notifier bubble
 #: ../hamster/applet.py:75
@@ -356,7 +356,7 @@ msgstr "Wykonywana czynność: <b>%s</b>"
 #: ../hamster/applet.py:562
 #, python-format
 msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s, "
+msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
 #: ../hamster/applet.py:565
