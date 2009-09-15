@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-09-09 12:30+0530\n"
+"POT-Creation-Date: 2009-09-09 07:01+0000\n"
+"PO-Revision-Date: 2009-09-15 11:47+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,6 @@ msgstr ""
 "\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
-#| msgid "Project Hamster - track your time"
 msgid "Project Hamster — track your time"
 msgstr "પ્રોજેક્ટ Hamster — તમારો સમય ટ્રેક કરો"
 
@@ -159,7 +158,6 @@ msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "સમય શોધનાર વિન્ડો બતાવવા માટે કિબોર્ડ શોર્ટકટ."
 
 #: ../data/hamster-applet.schemas.in.h:4
-#, fuzzy
 #| msgid ""
 #| "Remind of current task every specified amount of minutes. Set to 0 or "
 #| "bigger than 120 to disable reminder."
@@ -183,7 +181,6 @@ msgid "Stop tracking current activity on shutdown"
 msgstr "બંધ કરી રહ્યા હોય ત્યારે હાલની પ્રવૃત્તિ શોધવાનું બંધ કરો"
 
 #: ../data/hamster-applet.schemas.in.h:8
-#, fuzzy
 #| msgid "Stop tracking current activity, when computer becomes idle"
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "જ્યારે કમ્પ્યુટર નિષ્ક્રિય બનેલ હોય ત્યારે, હાલની પ્રવૃત્તિ શોધવાનું બંધ કરો"
@@ -197,8 +194,8 @@ msgid ""
 "<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
 "span>"
 msgstr ""
-"<span size=\"small\" >પ્રવૃત્તિ અને ફટકામાં ટાઇપ કરો શોધવાનું શરૂ કરવા માટે દાખલ કરો!</"
-"span>"
+"<span size=\"small\" >પ્રવૃત્તિ અને ફટકામાં ટાઇપ કરો શોધવાનું શરૂ કરવા માટે દાખલ કરો!"
+"</span>"
 
 #: ../data/applet.ui.h:2
 msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
@@ -388,6 +385,20 @@ msgid ""
 "Now, start tracking!\n"
 "        "
 msgstr ""
+"આ એક સરળ વાક્ય રચના છે કે જે તમારી પ્રવૃત્તિઓની વિગતોને ઉમેરવા માટે સક્રિય કરે છે:\n"
+"        \n"
+"\"@\" સંકેત વર્ગ ને ચિહ્વિત કરે છે. ઉદાહરણ: \"watering flowers@home\" એ વર્ગ \"home\" "
+"માં પ્રવૃત્તિ \"watering flowers\" ને ટ્રેક કરવા માટે શરૂ થશે.\n"
+"\n"
+"અલ્પવિરામ (\",\") કોઇ વર્ણનની શરૂઆતમાં ચિહ્નિત થાય છે. ઉદાહરણ: \"watering flowers, "
+"begonias and forgetmenots\" એ પ્રવૃત્તિ \"watering flowers\" ને ટ્રે કરવા માટે શરૂ થશે "
+"અને તેમાં વર્ણન \"begonias and forgetmenots\" ને ઉમેરો.\n"
+"\n"
+"બંનેને જોડી શકાય છે: \"watering flowers@home, begonias and forgetmenots\" "
+"એ ફક્ત સારી રીતે કામ કરશે!\n"
+"\n"
+"હવે, ટ્રેક કરવાનું શરૂ કરો!\n"
+"        "
 
 #. defaults
 #: ../hamster/db.py:728
@@ -411,7 +422,6 @@ msgid "World domination"
 msgstr "દુનિયામાં વર્ચસ્વ"
 
 #: ../hamster/db.py:734
-#| msgid "Day to day"
 msgid "Day-to-day"
 msgstr "રોજ-બ-રોજ"
 
@@ -633,6 +643,8 @@ msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
 "(working_days)s working days (%(working_years)s)."
 msgstr ""
+"અત્યાર સુધીનો ટ્રેક કરેલો %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s) સમય."
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
@@ -666,19 +678,19 @@ msgstr "Hamster ને તમને થોડુ વધારે ધ્યાન
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
-msgstr ""
+msgstr "બધી તથ્યો %s પ્રતિશત 9am પહેલાં શરૂ થાય તો તે જલ્દી આવ્યા હોય તેવુ મનાશે."
 
 #: ../hamster/stats.py:738
 #, python-format
 msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
-msgstr ""
+msgstr "બધા તથ્યો %s પ્રતિશત 11pm પછી શરૂ થાય તો તમે નિશાચર માનવામાં આવશે."
 
 #: ../hamster/stats.py:741
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
 "busy bee."
-msgstr ""
+msgstr "બધા કાર્યો %s પ્રતિશત 15 મિનિટો કરતા ટૂંકા હોય તો તમે વ્યસ્ત છો તેવું માનવામાં આવશે."
 
 #. Date format for the label in overview window fact listing
 #. Using python datetime formatting syntax. See:
