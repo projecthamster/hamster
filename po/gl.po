@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-17 13:18+0200\n"
-"PO-Revision-Date: 2009-08-17 09:54+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2009-08-31 12:51+0000\n"
+"PO-Revision-Date: 2009-09-16 11:41+0200\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@mancomun.org>\n"
 "MIME-Version: 1.0\n"
@@ -154,8 +154,7 @@ msgid "to"
 msgstr "para"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
+msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "Lembra cada notify_interval en minutos se non hai actividade iniciada."
 
 #: ../data/hamster-applet.schemas.in.h:3
@@ -184,8 +183,7 @@ msgstr "Deter a actividade actual ao apagar"
 
 #: ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking current activity when computer becomes idle"
-msgstr ""
-"Deter o seguimento da actividade actual cando o computador esté inactivo"
+msgstr "Deter o seguimento da actividade actual cando o computador esté inactivo"
 
 #: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
@@ -200,10 +198,8 @@ msgstr ""
 "seguimento</span>"
 
 #: ../data/applet.ui.h:2
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Dígame máis</span>"
+msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr "<span size=\"small\" color=\"blue\" underline=\"single\">Dígame máis</span>"
 
 #: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
@@ -669,12 +665,9 @@ msgstr "%(b)s %(d)s, %(Y)s"
 #: ../hamster/stats.py:705
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] ""
-"O traballo continuo máis longo foi o %(date)s e durou %(hours)s hora."
-msgstr[1] ""
-"O traballo continuo máis longo foi o %(date)s e durou %(hours)s horas."
+msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] "O traballo continuo máis longo foi o %(date)s e durou %(hours)s hora."
+msgstr[1] "O traballo continuo máis longo foi o %(date)s e durou %(hours)s horas."
 
 #. total records (in selected scope)
 #: ../hamster/stats.py:713
@@ -699,8 +692,7 @@ msgstr ""
 
 #: ../hamster/stats.py:738
 #, python-format
-msgid ""
-"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr ""
 "Co %s por cento de feitos que comezan despois das 11 p. m., vostede parece "
 "ser un moucho nocturno."
@@ -734,6 +726,13 @@ msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%b %d"
 
+#: ../hamster/stats.py:920
+#| msgctxt "html report"
+#| msgid "%b %d, %Y"
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%b %d, %Y"
+
 #. Overview label if looking on single day
 #: ../hamster/stats.py:922
 #, python-format
@@ -765,3 +764,4 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
