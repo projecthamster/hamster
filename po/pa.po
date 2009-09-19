@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-09-11 07:34+0530\n"
+"POT-Creation-Date: 2009-09-11 02:10+0000\n"
+"PO-Revision-Date: 2009-09-19 21:24+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
-#| msgid "Project Hamster - track your time"
 msgid "Project Hamster — track your time"
 msgstr "ਪਰੋਜੈਕਟ ਹਮਸਟਰ - ਆਪਣਾ ਸਮਾਂ ਟਰੈਕ ਕਰੋ"
 
@@ -66,7 +65,6 @@ msgid "Add category"
 msgstr "ਕੈਟਾਗਰੀ ਸ਼ਾਮਲ"
 
 #: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
-#| msgid "remind also when no activity is set"
 msgid "Also remind when no activity is set"
 msgstr "ਜਦੋਂ ਕੋਈ ਸਰਗਰਮੀ ਸੈੱਟ ਨਾ ਹੋਵੇ ਤਾਂ ਵੀ ਚੇਤੇ ਕਰਵਾਓ"
 
@@ -151,8 +149,6 @@ msgid "to"
 msgstr "ਤੱਕ"
 
 #: ../data/hamster-applet.schemas.in.h:1
-#| msgid ""
-#| "Remind every notify_interval minutes also if no activity has been started."
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ਜੇ ਕੋਈ ਸਰਗਰਮੀ ਸ਼ੁਰੂ ਨਾ ਹੋਵੇ ਤਾਂ ਹਰੇਕ ਸੂਚਨਾ ਅੰਤਰਾਲ ਮਿੰਟ ਦੇ ਬਾਅਦ ਚੇਤੇ ਕਰਵਾਉ(_i)"
 
@@ -161,14 +157,12 @@ msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "ਟਾਈਮ ਟਰੈਕਰ ਵਿੰਡੋ ਵੇਖਣ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
 
 #: ../data/hamster-applet.schemas.in.h:4
-#| msgid ""
-#| "Remind of current task every specified amount of minutes. Set to 0 or "
-#| "bigger than 120 to disable reminder."
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
 msgstr ""
-"ਖਾਸ ਦਿੱਤੇ ਮਿੰਟਾਂ ਦੇ ਬਾਅਦ ਮੌਜੂਦਾ ਟਾਸਕ ਚੇਤੇ ਕਰਵਾਉ। ਰੀਮਾਈਡਰ ਬੰਦ ਕਰਨ ਲਈ 0 ਜਾਂ 120 ਤੋਂ ਵੱਧ ਸੈੱਟ ਕਰੋ।"
+"ਖਾਸ ਦਿੱਤੇ ਮਿੰਟਾਂ ਦੇ ਬਾਅਦ ਮੌਜੂਦਾ ਟਾਸਕ ਚੇਤੇ ਕਰਵਾਉ। ਰੀਮਾਈਡਰ ਬੰਦ ਕਰਨ ਲਈ 0 ਜਾਂ 120 ਤੋਂ ਵੱਧ ਸੈੱਟ "
+"ਕਰੋ।"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
@@ -183,7 +177,6 @@ msgid "Stop tracking current activity on shutdown"
 msgstr "ਬੰਦ ਕਰਨ ਉੱਤੇ ਮੌਜੂਦਾ ਸਰਗਰਮੀ ਲਈ ਟਰੈਕਿੰਗ ਬੰਦ ਕਰੋ"
 
 #: ../data/hamster-applet.schemas.in.h:8
-#| msgid "Stop tracking current activity, when computer becomes idle"
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "ਜਦੋਂ ਕੰਪਿਊਟਰ ਵੇਹਲਾ ਹੋਵੇ ਤਾਂ ਮੌਜੂਦਾ ਸਰਗਰਮੀ ਲਈ ਟਰੈਕਿੰਗ ਰੋਕੋ"
 
@@ -283,7 +276,6 @@ msgid "Save as HTML"
 msgstr "HTML ਵਾਂਗ ਸੰਭਾਲੋ"
 
 #: ../data/stats.ui.h:14
-#| msgid "Save report - Time Tracker"
 msgid "Save report – Time Tracker"
 msgstr "ਰਿਪੋਰਟ ਸੰਭਾਲੋ - ਟਾਈਮ ਟਰੈਕਰ"
 
@@ -304,7 +296,6 @@ msgid "Year:"
 msgstr "ਸਾਲ:"
 
 #: ../hamster/about.py:41
-#| msgid "Copyright © 2007-2009 Toms Bauģis and others"
 msgid "Copyright © 2007–2009 Toms Bauģis and others"
 msgstr "ਕਾਪੀਰਾਈਟ © ੨੦੦੭-੨੦੦੯ Toms Baugis ਅਤੇ ਹੋਰ"
 
@@ -354,8 +345,8 @@ msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565, python-format
-#| msgid "%dh"
+#: ../hamster/applet.py:565
+#, python-format
 msgid "%sh"
 msgstr "%sh"
 
@@ -369,7 +360,6 @@ msgid "Unsorted"
 msgstr "ਬਿਨਾਂ-ਲੜੀਬੱਧ"
 
 #: ../hamster/applet.py:833
-#| msgid "What to type in the activity box?"
 msgid "What should be typed in the activity box?"
 msgstr "ਸਰਗਰਮੀ ਬਾਕਸ ਵਿੱਚ ਕੀ ਲਿਖਣਾ ਹੈ?"
 
@@ -391,6 +381,21 @@ msgid ""
 "Now, start tracking!\n"
 "        "
 msgstr ""
+"ਇੱਕ ਸੰਟੈਕਸ ਉਦਾਹਰਨ ਹੈ, ਜੋ ਕਿ ਤੁਹਾਨੂੰ ਤੁਹਾਡੀਆਂ ਸਰਗਰਮੀਆਂ ਲਈ ਵੇਰਵਾ ਸ਼ਾਮਲ "
+"ਕਰਨ ਲਈ ਸਹਾਇਕ ਹੈ:\n"
+"        \n"
+"\"@\" ਨਿਸ਼ਾਨ ਕੈਟਾਗਰੀ ਨਿਸ਼ਾਨਬੱਧ ਕਰਦਾ ਹੈ। ਜਿਵੇਂ ਕਿ \"@ਘਰ ਫੁੱਲਾਂ ਨੂੰ ਪਾਣੀ ਦੇਣਾ\" ਨਾਲ "
+"\"ਘਰ\" ਕੈਟਾਗਰੀ ਵਿੱਚ \"ਫੁੱਲਾਂ ਨੂੰ ਪਾਣੀ ਦੇਣਾ\" ਸਰਗਰਮੀ ਟਰੈਕ ਕੀਤੀ ਜਾਵੇਗੀ।\n"
+"\n"
+"ਕੌਮਾ (\",\" ਵੇਰਵਾ ਸ਼ੁਰੂ ਕਰਨ ਦਾ ਨਿਸ਼ਾਨ ਹੈ। ਜਿਵੇਂ ਕਿ: \"ਫੁੱਲਾਂ ਨੂੰ ਪਾਣੀ ਦੇਣਾ, ਬੋਗਵੀਲੀਆ ਅਤੇ ਗੁਲਾਬ "
+"ਨੂੰ\" ਨਾਲ "
+"\"ਫੁੱਲਾਂ ਨੂੰ ਪਾਣੀ ਦੇਣਾ\" ਸਰਗਰਮੀ ਸ਼ੁਰੂ ਹੋਵੇਗੀ ਅਤੇ \"ਬੋਗਵੀਲੀਆ ਅਤੇ ਗੁਲਾਬ\" ਇਸ ਲਈ ਵੇਰਵਾ ਹੋਵੇਗਾ।\n"
+"\n"
+"ਦੋਵਾਂ ਨੂੰ ਇੱਕਠਾ ਜੋੜਿਆ ਵੀ ਜਾ ਸਕਦਾ ਹੈ: \"@ਘਰ ਫੁੱਲਾਂ ਨੂੰ ਪਾਣੀ ਦੇਣਾ, ਬੋਗਵੀਲੀਆ ਅਤੇ ਗੁਲਾਬ\" ਠੀਕ ਤਰ੍ਹਾਂ "
+"ਕੰਮ ਕਰਨਗੇ!\n"
+"\n"
+"ਹੁਣ ਟਰੈਕਿੰਗ ਸ਼ੁਰੂ ਕਰੋ!\n"
+"        "
 
 #. defaults
 #: ../hamster/db.py:728
@@ -414,7 +419,6 @@ msgid "World domination"
 msgstr "ਸੰਸਾਰ ਤਾਕਤ"
 
 #: ../hamster/db.py:734
-#| msgid "Day to day"
 msgid "Day-to-day"
 msgstr "ਦਿਨ ਤੋਂ ਦਿਨ"
 
@@ -548,8 +552,6 @@ msgstr "ਵੇਰਵਾ"
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/reports.py:268
-#| msgctxt "first record"
-#| msgid "%(b)s %(d)s, %(Y)s"
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
@@ -568,7 +570,6 @@ msgid "HTML Report"
 msgstr "HTML ਰਿਪੋਰਟ"
 
 #: ../hamster/stats.py:72 ../hamster/stats.py:1249
-#| msgid "Tab Separated Values (TSV)"
 msgid "Tab-Separated Values (TSV)"
 msgstr "ਟੈਬ ਨਾਲ ਵੱਖ ਮੁੱਲ (TSV)"
 
@@ -600,7 +601,6 @@ msgstr ""
 "ਇੱਕ ਹਫ਼ਤਾ ਇਸ ਵਾਸਤੇ ਕਾਫ਼ੀ ਹੈ!"
 
 #: ../hamster/stats.py:527
-#| msgid "Still collecting data - check back after a week has passed!"
 msgid "Still collecting data — check back after a week has passed!"
 msgstr "ਹਾਲੇ ਵੀ ਡਾਟਾ ਲਿਆ ਜਾ ਰਿਹਾ ਹੈ - ਹਫ਼ਤੇ ਦੇ ਬਾਅਦ ਚੈੱਕ ਕਰੋ!"
 
@@ -608,8 +608,6 @@ msgstr "ਹਾਲੇ ਵੀ ਡਾਟਾ ਲਿਆ ਜਾ ਰਿਹਾ ਹੈ - 
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:657
-#| msgctxt "first record"
-#| msgid "%(b)s %(d)s, %(Y)s"
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
@@ -649,30 +647,20 @@ msgstr ""
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:700
-#| msgctxt "first record"
-#| msgid "%(b)s %(d)s, %(Y)s"
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
 
-#: ../hamster/stats.py:705, python-format
-#| msgid ""
-#| "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and "
-#| "was %(hours)s hour."
-#| msgid_plural ""
-#| "Longest continuous work happened on %(max_b)s %(max_d)s, %(max_Y)s and "
-#| "was %(hours)s hours."
+#: ../hamster/stats.py:705
+#, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] ""
-"ਸਭ ਤੋਂ ਲੰਮਾ ਲਗਾਤਾਰ ਕੰਮ %(date)s ਨੂੰ ਹੋਇਆ ਅਤੇ %(hours)s ਘੰਟਾ ਲੰਮਾ "
-"ਹੈ।"
+msgstr[0] "ਸਭ ਤੋਂ ਲੰਮਾ ਲਗਾਤਾਰ ਕੰਮ %(date)s ਨੂੰ ਹੋਇਆ ਅਤੇ %(hours)s ਘੰਟਾ ਲੰਮਾ ਹੈ।"
 msgstr[1] "ਸਭ ਤੋਂ ਲੰਮਾ ਲਗਾਤਾਰ ਕੰਮ %(date)s ਨੂੰ ਹੋਇਆ ਅਤੇ %(hours)s ਘੰਟੇ ਚੱਲਿਆ।"
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713, python-format
-#| msgid "There are %s record."
-#| msgid_plural "There are %s records."
+#: ../hamster/stats.py:713
+#, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "%s ਰਿਕਾਰਡ ਹੈ"
@@ -706,8 +694,6 @@ msgstr "ਸਭ ਟਾਸਕਾਂ ਵਿੱਚੋਂ %s ਫੀਸਦੀ 15 ਮ�
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:828
-#| msgctxt "overview list"
-#| msgid "%(A)s, %(b)s %(d)s"
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %d %b"
@@ -720,8 +706,6 @@ msgstr "ਕੁੱਲ"
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:891
-#| msgctxt "overview graph"
-#| msgid "%(b)s %(d)s"
 msgctxt "overview graph"
 msgid "%b %d"
 msgstr "%d %b"
@@ -732,8 +716,8 @@ msgid "%B %d, %Y"
 msgstr "%d %B %Y"
 
 #. Overview label if looking on single day
-#: ../hamster/stats.py:922, python-format
-#| msgid "Overview - Hamster"
+#: ../hamster/stats.py:922
+#, python-format
 msgid "Overview for %(date)s"
 msgstr "%(date)s ਲਈ ਸੰਖੇਪ"
 
