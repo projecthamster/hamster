@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-29 16:05+0900\n"
-"PO-Revision-Date: 2009-01-29 16:09+0900\n"
+"POT-Creation-Date: 2009-09-20 08:50+0900\n"
+"PO-Revision-Date: 2009-09-20 09:25+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
-msgid "Project Hamster - track your time"
-msgstr "프로젝트 햄스터 - 시간 추적"
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Project Hamster — track your time"
+msgstr "프로젝트 햄스터 — 시간 추적"
 
-#. Title of reminder baloon
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/applet.py:59
+#. Title of reminder notification
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
+#: ../hamster/about.py:38 ../hamster/applet.py:63
 msgid "Time Tracker"
 msgstr "시간 추적"
 
@@ -40,341 +40,461 @@ msgstr "개요(_O)"
 msgid "_Preferences"
 msgstr "기본 설정(_P)"
 
-#: ../data/preferences.glade.h:1
+#: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
 msgstr "<b>활동</b>"
 
-#: ../data/preferences.glade.h:2
+#: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
 msgstr "<b>전체 단축키</b>"
 
-#: ../data/preferences.glade.h:3
+#: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
 msgstr "<b>추적</b>"
 
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "아래로 이동(_D)"
+#: ../data/preferences.ui.h:4
+msgid "Activity list"
+msgstr "활동 목록"
 
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "위로 이동(_U)"
+#: ../data/preferences.ui.h:5
+msgid "Add activity"
+msgstr "활동 추가"
 
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "새 분류(_E)"
+#: ../data/preferences.ui.h:6
+msgid "Add category"
+msgstr "분류 추가"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind when no activity is set"
+msgstr "활동을 설정하지 않은 경우에도 알리기"
+
+#: ../data/preferences.ui.h:8
+msgid "Category list"
+msgstr "분류 목록"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit activity"
+msgstr "활동 편집"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit category"
+msgstr "분류 편집"
+
+#: ../data/preferences.ui.h:11
+msgid "Move activity down"
+msgstr "활동 아래로 이동"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity up"
+msgstr "활동 위로 이동"
+
+#: ../data/preferences.ui.h:13
 msgid "Remind of current activity every:"
 msgstr "현재 활동을 알려주는 시간 주기:"
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:14
+msgid "Remove activity"
+msgstr "활동 제거"
+
+#: ../data/preferences.ui.h:15
+msgid "Remove category"
+msgstr "분류 제거"
+
+#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "컴퓨터를 끄면 추적 중지"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
 msgstr "컴퓨터가 절전 상태이면 추적 중지"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
 msgstr "시간 추적 기본 설정"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.ui.h:19
 msgid "_Activities"
 msgstr "활동(_A)"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.ui.h:20
 msgid "_Categories"
 msgstr "분류(_C)"
 
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "새 활동(_N)"
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "활동:"
 
-#: ../data/edit_activity.glade.h:1 ../data/stats.glade.h:4
-msgid "<b>Activity</b>"
-msgstr "<b>활동</b>"
-
-#: ../data/edit_activity.glade.h:2
-msgid "<b>Date and Time</b>"
-msgstr "<b>날짜 및 시각</b>"
-
-#: ../data/edit_activity.glade.h:3
+#: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
 msgstr "이전 활동 더하기"
 
-#: ../data/edit_activity.glade.h:4
+#: ../data/edit_activity.ui.h:3
 msgid "Description:"
 msgstr "설명:"
 
-#: ../data/edit_activity.glade.h:5
-msgid "Name:"
-msgstr "이름:"
+#: ../data/edit_activity.ui.h:4
+msgid "Preview:"
+msgstr "미리 보기:"
 
-#: ../data/edit_activity.glade.h:6
-msgid "hours"
-msgstr "시간"
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "시간:"
 
-#: ../data/edit_activity.glade.h:7
-msgid ""
-"in progress...\n"
-"until\n"
-"for"
-msgstr ""
-"진행 중...\n"
-"마감\n"
-"기간"
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "진행 중"
 
-#: ../data/edit_activity.glade.h:10
-msgid "minutes"
-msgstr "분"
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+msgid "to"
+msgstr "-"
 
 #: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr "활동이 시작하지 않았을 때에도 매 notify_interval 분마다 알립니다."
+
+#: ../data/hamster-applet.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "시간 추적 창을 표시할 키보드 바로 가기 키."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-applet.schemas.in.h:4
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
-msgstr "현재 활동을 지정한 분마다 알립니다. 0으로 설정하거나 120보다 큰 값으로 설정하면 알리지 않습니다."
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"현재 활동을 지정한 분마다 알립니다. 0으로 설정하거나 120보다 큰 값으로 설정하"
+"면 알리지 않습니다."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "현재 활동을 매 몇분마다 알립니다"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "창 표시"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "컴퓨터를 끄면 현재 활동의 추적을 중지합니다"
 
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking current activity, when computer becomes idle"
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking current activity when computer becomes idle"
 msgstr "컴퓨터가 절전 상태가 되면 현재 활동의 추적을 중지합니다"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "절전 상태에 추적 중지"
 
-#: ../data/menu.glade.h:1
+#: ../data/applet.ui.h:1
+msgid ""
+"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
+"span>"
+msgstr "<span size=\"small\" >활동을 입력하고 Enter를 눌러 추적을 시작하십시오!</span>"
+
+#: ../data/applet.ui.h:2
+msgid ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr "<span size=\"small\" color=\"blue\" underline=\"single\">더 알고 싶습니다</span>"
+
+#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "이전 활동 더하기(_D)"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
+#: ../data/applet.ui.h:5
 msgid "Hamster"
 msgstr "햄스터"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:451
+#: ../data/applet.ui.h:6 ../hamster/applet.py:554
 msgid "No records today"
 msgstr "오늘의 기록 없음"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:7
 msgid "Show _Overview"
 msgstr "개요 표시(_O)"
 
-#: ../data/menu.glade.h:6
+#: ../data/applet.ui.h:8
 msgid "_Activity:"
 msgstr "활동(_A):"
 
-#: ../data/menu.glade.h:7
+#: ../data/applet.ui.h:9
 msgid "_Stop Tracking"
 msgstr "추적 중지(_S)"
 
-#: ../data/menu.glade.h:8
+#: ../data/applet.ui.h:10
 msgid "_Today"
 msgstr "오늘(_T)"
 
-#: ../data/stats.glade.h:1
+#: ../data/stats.ui.h:1
 msgid " _Day"
 msgstr "일(_D)"
 
-#: ../data/stats.glade.h:2
+#: ../data/stats.ui.h:2
 msgid " _Month"
 msgstr "달(_M)"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.ui.h:3
 msgid " _Week"
 msgstr "주(_W)"
 
-#: ../data/stats.glade.h:5
-msgid "<b>Category</b>"
-msgstr "<b>분류</b>"
-
-#: ../data/stats.glade.h:6
+#: ../data/stats.ui.h:4
 msgid "<b>Overview</b>"
 msgstr "<b>개요</b>"
 
-#: ../data/stats.glade.h:7
-msgid "<b>Week</b>"
-msgstr "<b>주</b>"
+#: ../data/stats.ui.h:5
+msgid "<b>Starts and ends</b>"
+msgstr "<b>시작 및 끝</b>"
 
-#: ../data/stats.glade.h:8
-msgid "Add activity"
-msgstr "활동 추가"
+#: ../data/stats.ui.h:6
+msgid "<b>Totals</b>"
+msgstr "<b>전체</b>"
 
-#: ../data/stats.glade.h:9
-msgid "Delete activity"
-msgstr "활동 삭제"
+#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
+msgid "Activity"
+msgstr "활동"
 
-#: ../data/stats.glade.h:10
-msgid "Earlier activities"
-msgstr "이전 활동"
+#: ../data/stats.ui.h:8
+msgid "Categories:"
+msgstr "분류:"
 
-#: ../data/stats.glade.h:11
-msgid "Edit activity"
-msgstr "활동 편집"
+#: ../data/stats.ui.h:9
+msgid "Date interval:"
+msgstr "날짜 간격:"
 
-#: ../data/stats.glade.h:12
-msgid "Generate Report"
-msgstr "보고서 만들기"
+#: ../data/stats.ui.h:10
+msgid "No data for this interval"
+msgstr "이 기간에 데이터가 없습니다"
 
-#: ../data/stats.glade.h:13
-msgid "Newer activities"
-msgstr "더 최근의 활동"
+#: ../data/stats.ui.h:11
+msgid "Overview"
+msgstr "개요"
 
-#: ../data/stats.glade.h:14
+#: ../data/stats.ui.h:12
 msgid "Overview - Hamster"
 msgstr "개요 - 햄스터"
 
-#: ../data/stats.glade.h:15
-msgid "Show day"
-msgstr "일 표시"
+#: ../data/stats.ui.h:13
+msgid "Save as HTML"
+msgstr "HTML로 저장"
 
-#: ../data/stats.glade.h:16
-msgid "Show month"
-msgstr "달 표시"
+#: ../data/stats.ui.h:14
+msgid "Save report – Time Tracker"
+msgstr "보고서 저장 – 시간 추적"
 
-#: ../data/stats.glade.h:17
-msgid "Show week"
-msgstr "주 표시"
+#: ../data/stats.ui.h:15
+msgid "Statistics"
+msgstr "통계"
 
-#: ../data/stats.glade.h:18
+#: ../data/stats.ui.h:16
 msgid "Today"
 msgstr "오늘"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Copyright © 2007-2008 Toms Baugis and others"
+#: ../data/stats.ui.h:17 ../hamster/stats.py:948
+msgid "Week"
+msgstr "주"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "햄스터 홈페이지"
+#: ../data/stats.ui.h:18
+msgid "Year:"
+msgstr "년:"
+
+#: ../hamster/about.py:41
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Copyright © 2007–2009 Toms Bauģis and others"
+
+#: ../hamster/about.py:43
+msgid "Project Hamster Website"
+msgstr "프로젝트 햄스터 홈페이지"
+
+#: ../hamster/about.py:44
+msgid "About Time Tracker"
+msgstr "시간 추적 정보"
 
 #: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr "류창우 <cwryu@debian.org>"
 
-#: ../hamster/preferences.py:56 ../hamster/db.py:333 ../hamster/reports.py:133
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "편집"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "활동 전환"
+
+#: ../hamster/applet.py:305 ../hamster/reports.py:235
+#: ../hamster/reports.py:293
+msgid "Duration"
+msgstr "기간"
+
+#: ../hamster/applet.py:492 ../hamster/applet.py:513
+msgid "No activity"
+msgstr "활동 없음"
+
+#. activity reminder
+#: ../hamster/applet.py:508
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "<b>%s</b> 작업 중"
+
+#: ../hamster/applet.py:562
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../hamster/applet.py:565
+#, python-format
+msgid "%sh"
+msgstr "%s시간"
+
+#. unsorted category
+#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
+#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
+#: ../hamster/stuff.py:94
 msgid "Unsorted"
 msgstr "분류 없음"
 
-#: ../hamster/preferences.py:103 ../hamster/applet.py:213
-#: ../hamster/stats.py:47
+#: ../hamster/applet.py:833
+msgid "What should be typed in the activity box?"
+msgstr "활동 창에 입력해야 할 사항은?"
+
+#: ../hamster/applet.py:836
+msgid ""
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
+"        \n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
+"\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+"활동에 대해 자세히 지정하는 간단한 규칙 작성법이 있습니다.\n"
+"\n"
+"\"@\" 기호는 분류를 나타냅니다. 예를 들어: \"꽃에 물 주기@집\" 이렇게 쓰면 \"꽃에 물 주기\" 활동을 \"집\" 분류에서 추적을 시작합니다.\n"
+"\n"
+"쉼표 (\",\") 기호는 설명을 시작합니다. 예를 들어: \"꽃에 물 주기, 베고니아 및 물망초\" 이렇게 쓰면 \"꽃에 물 주기\" 활동에 추적을 시작하고 \"베고니아 및 물망초\" 설명을 붙입니다.\n"
+"\n"
+"둘을 결합할 수 있습니다: \"꽃에 물 주기@집, 베고니아 및 물망초\" 식으로 쓰면 동작합니다!\n"
+"\n"
+"그럼 추적을 시작하십시오!\n"
+"        "
+
+#. defaults
+#: ../hamster/db.py:728
+msgid "Work"
+msgstr "업무"
+
+#: ../hamster/db.py:729
+msgid "Reading news"
+msgstr "뉴스 읽기"
+
+#: ../hamster/db.py:730
+msgid "Checking stocks"
+msgstr "주식 시세 확인"
+
+#: ../hamster/db.py:731
+msgid "Super secret project X"
+msgstr "초 극비 프로젝트 엑스"
+
+#: ../hamster/db.py:732
+msgid "World domination"
+msgstr "세계 정복"
+
+#: ../hamster/db.py:734
+msgid "Day-to-day"
+msgstr "일일 작업"
+
+#: ../hamster/db.py:735
+msgid "Lunch"
+msgstr "점심"
+
+#: ../hamster/db.py:736
+msgid "Watering flowers"
+msgstr "꽃에 물 주기"
+
+#: ../hamster/db.py:737
+msgid "Doing handstands"
+msgstr "물구나무서기"
+
+#: ../hamster/edit_activity.py:385
+msgid "Update activity"
+msgstr "활동 업데이트"
+
+#: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "이름"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:106
-#: ../hamster/reports.py:176
+#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/reports.py:291
 msgid "Category"
 msgstr "분류"
 
-#: ../hamster/preferences.py:494
+#: ../hamster/preferences.py:559
 msgid "New category"
 msgstr "새 분류"
 
-#: ../hamster/preferences.py:507
+#: ../hamster/preferences.py:572
 msgid "New activity"
 msgstr "새 활동"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:552
+#: ../hamster/preferences.py:632
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d분"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:555
+#: ../hamster/preferences.py:635
 msgid "Never"
 msgstr "하지 않음"
 
-#: ../hamster/edit_activity.py:80
-msgid "Update activity"
-msgstr "활동 업데이트"
+#. column title in the TSV export format
+#: ../hamster/reports.py:112
+msgid "activity"
+msgstr "활동"
 
-#: ../hamster/applet.py:66
-msgid "Switch Task"
-msgstr "작업 전환"
+#. column title in the TSV export format
+#: ../hamster/reports.py:114
+msgid "start time"
+msgstr "시작 시간"
 
-#: ../hamster/applet.py:67
-msgid "Stop Tracking"
-msgstr "추적 중지"
+#. column title in the TSV export format
+#: ../hamster/reports.py:116
+msgid "end time"
+msgstr "끝 시간"
 
-#: ../hamster/applet.py:417 ../hamster/applet.py:517
-msgid "No activity"
-msgstr "활동 없음"
+#. column title in the TSV export format
+#: ../hamster/reports.py:118
+msgid "duration minutes"
+msgstr "기간 (분)"
 
-#. activity reminder
-#: ../hamster/applet.py:431
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "<b>%s</b> 작업 중"
+#. column title in the TSV export format
+#: ../hamster/reports.py:120
+msgid "category"
+msgstr "분류"
 
-#: ../hamster/applet.py:458
-#, python-format
-msgid "%(category)s: %(duration)s, "
-msgstr "%(category)s: %(duration)s, "
-
-#. defaults
-#: ../hamster/db.py:503
-msgid "Work"
-msgstr "업무"
-
-#: ../hamster/db.py:504
-msgid "Reading news"
-msgstr "뉴스 읽기"
-
-#: ../hamster/db.py:505
-msgid "Checking stocks"
-msgstr "주식 시세 확인"
-
-#: ../hamster/db.py:506
-msgid "Super secret project X"
-msgstr "초 극비 프로젝트 엑스"
-
-#: ../hamster/db.py:507
-msgid "World domination"
-msgstr "세계 정복"
-
-#: ../hamster/db.py:509
-msgid "Day to day"
-msgstr "일일 작업"
-
-#: ../hamster/db.py:510
-msgid "Lunch"
-msgstr "점심"
-
-#: ../hamster/db.py:511
-msgid "Watering flowers"
-msgstr "꽃에 물 주기"
-
-#: ../hamster/db.py:512
-msgid "Doing handstands"
-msgstr "물구나무서기"
-
-# FIXME: incorrectly extracted msgid
-#: ../hamster/db.py:695 ../hamster/db.py:699
-msgid "name"
-msgstr "name"
+#. column title in the TSV export format
+#: ../hamster/reports.py:122
+msgid "description"
+msgstr "설명"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:296
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:160 ../hamster/stats.py:933
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -386,7 +506,8 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:301
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "개요, %(end_Y)s년 %(start_B)s %(start_d)s일 – %(end_B)s %(end_d)s일"
@@ -394,117 +515,224 @@ msgstr "개요, %(end_Y)s년 %(start_B)s %(start_d)s일 – %(end_B)s %(end_d)s�
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:306
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "개요, %(end_Y)s년 %(start_B)s %(start_d)s일 – %(end_d)s일"
 
-#. overview label for single day
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:39 ../hamster/stats.py:312
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "개요, %(start_Y)s년 %(start_B)s %(start_d)s일."
 
-#: ../hamster/reports.py:104
+#: ../hamster/reports.py:230
 msgid "Date"
 msgstr "날짜"
 
-#: ../hamster/reports.py:105 ../hamster/reports.py:177
-msgid "Activity"
-msgstr "활동"
-
-#: ../hamster/reports.py:107
+#: ../hamster/reports.py:233
 msgid "Start"
 msgstr "시작"
 
-#: ../hamster/reports.py:108
+#: ../hamster/reports.py:234
 msgid "End"
 msgstr "끝"
 
-#: ../hamster/reports.py:109 ../hamster/reports.py:178 ../hamster/stats.py:55
-msgid "Duration"
-msgstr "기간"
-
-#: ../hamster/reports.py:110
+#: ../hamster/reports.py:236
 msgid "Description"
 msgstr "설명"
 
-#. fact date column in HTML report
-#: ../hamster/reports.py:148
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_Y)s년 %(report_b)s %(report_d)s일"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%Y년 %b %d일"
 
 #. summary table
-#: ../hamster/reports.py:173
+#: ../hamster/reports.py:288
 msgid "Totals"
 msgstr "전체"
 
-#: ../hamster/reports.py:190
+#: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "전체 시간"
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:190
+#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+msgid "HTML Report"
+msgstr "HTML 보고서"
+
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+msgid "Tab-Separated Values (TSV)"
+msgstr "TSV (탭으로 구분한 값 목록)"
+
+#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+msgid "iCal"
+msgstr "iCal"
+
+#. add unsorted category
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "전체"
+
+#: ../hamster/stats.py:435
+msgctxt "years"
+msgid "All"
+msgstr "전체"
+
+#: ../hamster/stats.py:524
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"아직 통계를 만들 데이터가 없습니다.\n"
+"일주일이면 됩니다."
+
+#: ../hamster/stats.py:527
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "아직 데이터를 수집하는 중입니다 — 일주일이 지난 뒤에 다시 보십시오!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%Y년 %b %d일"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_b)s %(o_d)s일 %(o_A)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s일"
 
-#. date format in month chart in overview window (click on "month" to see it)
-#. prefix is "m_", letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:244
+#: ../hamster/stats.py:664
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s일"
+msgid "First activity was recorded on %s."
+msgstr "처음 활동이 %s에 기록되었습니다."
 
-#: ../hamster/stats.py:268
-msgid "Other"
-msgstr "기타"
+#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s년"
 
-#: ../hamster/stats.py:313
-msgid "Day"
-msgstr "일"
+#. FIXME: difficult string to properly pluralize
+#: ../hamster/stats.py:682
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
+msgstr "지금까지 추적한 시간은 전체 %(human_days)s일 (%(human_years)s) 혹은 업무일 %(working_days)s일 (%(working_years)s) 입니다."
 
-#: ../hamster/stats.py:315
-msgid "Week"
-msgstr "주"
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%Y년 %b %d일"
 
-#: ../hamster/stats.py:317
+#: ../hamster/stats.py:705
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] "가장 길게 연속으로 일한 때는 %(date)s이고, 일한 시간은 %(hours)s 시간입니다."
+
+#. total records (in selected scope)
+#: ../hamster/stats.py:713
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "%s개 기록이 있습니다."
+
+#: ../hamster/stats.py:733
+msgid "Hamster would like to observe you some more!"
+msgstr "햄스터에 데이터가 더 필요합니다!"
+
+#: ../hamster/stats.py:735
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am you seem to be an early "
+"bird."
+msgstr "오전 9시 전에 시작한 사건이 %s 퍼센트이므로 일찍 일어나는 새입니다."
+
+#: ../hamster/stats.py:738
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr "오후 11시 후에 시작한 사건이 %s 퍼센트이므로 올빼미족입니다."
+
+#: ../hamster/stats.py:741
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"busy bee."
+msgstr "15분 안에 끝난 작업이 %s 퍼센트이므로 바쁜 꿀벌입니다."
+
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%b %d일 %A"
+
+#: ../hamster/stats.py:869
+msgid "Total"
+msgstr "전체"
+
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%b %d일"
+
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%Y년 %B %d일"
+
+#. Overview label if looking on single day
+#: ../hamster/stats.py:922
+#, python-format
+msgid "Overview for %(date)s"
+msgstr "%(date)s 개요"
+
+#: ../hamster/stats.py:950
 msgid "Month"
 msgstr "달"
 
-#~ msgid "Time tracking for masses"
-#~ msgstr "널리 사용하는 시간 추적"
+#: ../hamster/stats.py:952
+msgid "Day"
+msgstr "일"
 
-#~ msgid "Time tracking for masses."
-#~ msgstr "널리 사용하는 시간 추적."
+#. duration in round hours
+#: ../hamster/stuff.py:151
+#, python-format
+msgid "%dh"
+msgstr "%d시간"
 
-#~ msgid "%B %d. %Y"
-#~ msgstr "%Y년 %B %d일."
+#. duration less than hour
+#: ../hamster/stuff.py:154
+#, python-format
+msgid "%dmin"
+msgstr "%d분"
 
-#~ msgid "%B %d"
-#~ msgstr "%B %d일"
-
-#~ msgid "%d, %Y"
-#~ msgstr "%Y년 %d일"
-
-#~ msgid "Overview for %s"
-#~ msgstr "%s에 대한 개요"
-
-#~ msgid "Overview for %s - %s"
-#~ msgstr "%s에 대한 개요 - %s"
-
-#~ msgid "%d.%m.%y"
-#~ msgstr "%y.%m.%d"
-
-#~ msgid "%A, %b %d."
-#~ msgstr "%b %d일 %A."
-
-#~ msgid "%d. %b"
-#~ msgstr "%b %d일."
-
-#~ msgid "%B %d."
-#~ msgstr "%B %d일."
+#. x hours, y minutes
+#: ../hamster/stuff.py:157
+#, python-format
+msgid "%dh %dmin"
+msgstr "%d시간 %d분"
