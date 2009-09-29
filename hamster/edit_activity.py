@@ -262,6 +262,8 @@ class Dayline(graphics.Area):
             else:
                 if fact["start_time"].date() > dt.date.today() - dt.timedelta(days=1):
                     end_minutes = self._minutes_from_start(dt.datetime.now())
+                else:
+                    end_minutes = start_minutes
             
             if self.get_pixel(end_minutes) > 0 and \
                 self.get_pixel(start_minutes) < self.width:

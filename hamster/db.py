@@ -271,21 +271,26 @@ class Storage(storage.Storage):
 
         # we are checking if our start time is in the middle of anything
         # or maybe there is something after us - so we know to adjust end time
+        # in the latter case go only few days ahead. everything else is madness, heh
         query = """
                    SELECT a.*, b.name
                      FROM facts a
                 LEFT JOIN activities b on b.id = a.activity_id
-                    WHERE ((start_time < ? and end_time > ?) or start_time > ?)
+                    WHERE ((start_time < ? and end_time > ?)
+                           OR (start_time > ? and start_time < ?))
                  ORDER BY start_time
                     LIMIT 1
                 """
-        fact = self.fetchone(query, (start_time, start_time, start_time))
+        fact = self.fetchone(query, (start_time,
+                                     start_time,
+                                     start_time,
+                                     start_time + dt.timedelta(days=2)))
 
         end_time = None        
 
         if fact:
-            if fact["start_time"] < start_time and fact["end_time"]:
-                #we are in middle of a task
+            if fact["end_time"] and start_time > fact["start_time"]:
+                #we are in middle of a fact - truncate it to our start
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
                 end_time = fact["end_time"]
