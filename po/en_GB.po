@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-12 20:16+0100\n"
-"PO-Revision-Date: 2009-09-08 14:20+0100\n"
+"POT-Creation-Date: 2009-10-07 15:06+0100\n"
+"PO-Revision-Date: 2009-10-07 15:14+0100\n"
 "Last-Translator: Bruce Cowan <bcowan@fastmail.co.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -356,8 +356,8 @@ msgstr "%sh"
 
 #. unsorted category
 #: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
 #: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
 msgid "Unsorted"
@@ -402,43 +402,43 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:733
 msgid "Work"
 msgstr "Work"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:734
 msgid "Reading news"
 msgstr "Reading news"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:735
 msgid "Checking stocks"
 msgstr "Checking stocks"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:736
 msgid "Super secret project X"
 msgstr "Super secret project X"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:737
 msgid "World domination"
 msgstr "World domination"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:739
 msgid "Day-to-day"
 msgstr "Day-to-day"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:740
 msgid "Lunch"
 msgstr "Lunch"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:741
 msgid "Watering flowers"
 msgstr "Watering flowers"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:742
 msgid "Doing handstands"
 msgstr "Doing handstands"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:387
 msgid "Update activity"
 msgstr "Update activity"
 
@@ -510,7 +510,7 @@ msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
 "(end_Y)s"
 msgstr ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"Overview for %(start_d)s %(start_B)s, %(start_Y)s – %(end_d)s %(end_B)s, %"
 "(end_Y)s"
 
 #. overview label if start and end month do not match
@@ -520,7 +520,7 @@ msgstr ""
 #: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Overview for %(start_d)s %(start_B)s – %(end_d)s %(end_B)s, %(end_Y)s"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
@@ -529,12 +529,12 @@ msgstr "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 #: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Overview for %(start_d)s %(start_B)s – %(end_d)s, %(end_Y)s"
 
 #: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Overview for %(start_d)s %(start_B)s, %(start_Y)s"
 
 #: ../hamster/reports.py:230
 msgid "Date"
@@ -623,7 +623,7 @@ msgstr "%d %b, %Y"
 #, python-format
 msgctxt "first record"
 msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgstr "%(d)s %(b)s"
 
 #: ../hamster/stats.py:664
 #, python-format
