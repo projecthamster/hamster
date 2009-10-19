@@ -6,28 +6,32 @@
 # 甘露(Gan Lu) <rhythm.gan@gmail.com>, 2009.
 #
 #
+# Ray Wang <raywang@gnome.org>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-03-21 05:57+0000\n"
-"PO-Revision-Date: 2009-03-21 20:09+0800\n"
-"Last-Translator: Ray Wang <wanglei1123@gmail.com>\n"
-"Language-Team: Chinese/Simplified <i18n-translation@lists.linux.net.cn>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-19 10:01+0800\n"
+"PO-Revision-Date: 2009-10-04 20:06+0800\n"
+"Last-Translator: Ray Wang <raywang@gnome.org>\n"
+"Language-Team: Chinese (Simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: utf-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:43
-msgid "Project Hamster - track your time"
-msgstr "Hamster 项目 - 追踪你的时间"
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+msgid "Project Hamster — track your time"
+msgstr "Hamster 项目 - 跟踪你的时间"
 
-#. Title of reminder baloon
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/about.py:41 ../hamster/applet.py:67
+#. Title of reminder notification
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
+#: ../hamster/about.py:38 ../hamster/applet.py:63
 msgid "Time Tracker"
-msgstr "时间追踪器"
+msgstr "时间跟踪器"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -41,356 +45,465 @@ msgstr "概要(_O)"
 msgid "_Preferences"
 msgstr "首选项(_P)"
 
-#: ../data/preferences.glade.h:1
+#: ../data/preferences.ui.h:1
 msgid "<b>Activities</b>"
 msgstr "<b>活动</b>"
 
-#: ../data/preferences.glade.h:2
+#: ../data/preferences.ui.h:2
 msgid "<b>Global Hotkey</b>"
 msgstr "<b>全局热键</b>"
 
-#: ../data/preferences.glade.h:3
+#: ../data/preferences.ui.h:3
 msgid "<b>Tracking</b>"
-msgstr "<b>追踪</b>"
+msgstr "<b>跟踪</b>"
 
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "下移(_D)"
+#: ../data/preferences.ui.h:4
+msgid "Activity list"
+msgstr "活动列表"
 
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "上移(_U)"
+#: ../data/preferences.ui.h:5
+msgid "Add activity"
+msgstr "添加活动"
 
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "新建类别(_E)"
+#: ../data/preferences.ui.h:6
+msgid "Add category"
+msgstr "添加类别"
 
-#: ../data/preferences.glade.h:7
+#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind when no activity is set"
+msgstr "没有任何活动时仍然提醒"
+
+#: ../data/preferences.ui.h:8
+msgid "Category list"
+msgstr "类别列表"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit activity"
+msgstr "编辑活动"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit category"
+msgstr "编辑类别"
+
+#: ../data/preferences.ui.h:11
+msgid "Move activity down"
+msgstr "下移活动"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity up"
+msgstr "上移活动"
+
+#: ../data/preferences.ui.h:13
 msgid "Remind of current activity every:"
 msgstr "提醒当前活动每："
 
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
+#: ../data/preferences.ui.h:14
+msgid "Remove activity"
+msgstr "删除活动"
+
+#: ../data/preferences.ui.h:15
+msgid "Remove category"
+msgstr "删除类别"
+
+#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on shutdown"
-msgstr "关机时停止追踪"
+msgstr "关机时停止跟踪"
 
-#: ../data/preferences.glade.h:9
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
-msgstr "当计算机处于空闲时停止追踪"
+msgstr "当计算机处于空闲时停止跟踪"
 
-#: ../data/preferences.glade.h:10
+#: ../data/preferences.ui.h:18
 msgid "Time Tracker Preferences"
-msgstr "时间追踪器首选项"
+msgstr "时间跟踪器首选项"
 
-#: ../data/preferences.glade.h:11
+#: ../data/preferences.ui.h:19
 msgid "_Activities"
 msgstr "活动(_A)"
 
-#: ../data/preferences.glade.h:12
+#: ../data/preferences.ui.h:20
 msgid "_Categories"
 msgstr "类别(_C)"
 
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "新建活动(_N)"
-
-#: ../data/edit_activity.glade.h:1
-msgid "20/01/08"
-msgstr "20/01/08"
-
-#: ../data/edit_activity.glade.h:2
-msgid "20/01/09"
-msgstr "20/01/09"
-
-#: ../data/edit_activity.glade.h:3
-msgid "3:30pm"
-msgstr "3:30pm"
-
-#: ../data/edit_activity.glade.h:4
+#: ../data/edit_activity.ui.h:1
 msgid "Activity:"
 msgstr "活动："
 
-#: ../data/edit_activity.glade.h:5
+#: ../data/edit_activity.ui.h:2
 msgid "Add Earlier Activity"
 msgstr "添加较早的活动"
 
-#: ../data/edit_activity.glade.h:6
+#: ../data/edit_activity.ui.h:3
 msgid "Description:"
 msgstr "描述："
 
-#: ../data/edit_activity.glade.h:7
+#: ../data/edit_activity.ui.h:4
 msgid "Preview:"
 msgstr "预览："
 
-#: ../data/edit_activity.glade.h:8
+#: ../data/edit_activity.ui.h:5
 msgid "Time:"
 msgstr "时间："
 
-#: ../data/edit_activity.glade.h:9
-msgid "gtk-cancel"
-msgstr "gtk-cancel"
-
-#: ../data/edit_activity.glade.h:10
-msgid "gtk-save"
-msgstr "gtk-save"
-
-#: ../data/edit_activity.glade.h:11
+#: ../data/edit_activity.ui.h:6
 msgid "in progress"
 msgstr "正在进行中"
 
-#: ../data/edit_activity.glade.h:12
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
 msgid "to"
 msgstr "到"
 
 #: ../data/hamster-applet.schemas.in.h:1
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "用于显示时间追踪窗口的快捷键。"
-
-#: ../data/hamster-applet.schemas.in.h:2
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
-msgstr "每隔几分钟提醒一次当前任务。设定为 0 或大于 120 代表禁止提醒。"
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr "如果没有活动开始，仍然每隔设定的提醒间隔时间进行提醒。"
 
 #: ../data/hamster-applet.schemas.in.h:3
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "用于显示时间跟踪窗口的快捷键。"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr "每隔几分钟提醒一次当前任务。设定为 0 或大于 120 代表禁止提醒。"
+
+#: ../data/hamster-applet.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "每隔几分钟提醒一次当前任务"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Show window"
 msgstr "显示窗口"
 
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Stop tracking current activity on shutdown"
-msgstr "关机时停止追踪当前活动"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "当计算机处于空闲时停止时间追踪当前活动"
-
 #: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking on idle"
-msgstr "空闲时停止追踪"
+msgid "Stop tracking current activity on shutdown"
+msgstr "关机时停止跟踪当前活动"
 
-#: ../data/menu.glade.h:1
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "当计算机处于空闲时停止跟踪当前活动"
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid "Stop tracking on idle"
+msgstr "空闲时停止跟踪"
+
+#: ../data/applet.ui.h:1
+msgid ""
+"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
+"span>"
+msgstr "<span size=\"small\" >输入一个活动，并按回车键开始跟踪！</span>"
+
+#: ../data/applet.ui.h:2
+msgid ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
+msgstr ""
+"<span size=\"small\" color=\"blue\" underline=\"single\">告诉我更多</span>"
+
+#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "添加较早的活动(_D)"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
+#: ../data/applet.ui.h:5
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/menu.glade.h:4 ../hamster/applet.py:494
+#: ../data/applet.ui.h:6 ../hamster/applet.py:554
 msgid "No records today"
 msgstr "今天没有记录"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:7
 msgid "Show _Overview"
 msgstr "显示概要(_O)"
 
-#: ../data/menu.glade.h:6
+#: ../data/applet.ui.h:8
 msgid "_Activity:"
 msgstr "活动(_A)："
 
-#: ../data/menu.glade.h:7
+#: ../data/applet.ui.h:9
 msgid "_Stop Tracking"
-msgstr "停止追踪(_S)"
+msgstr "停止跟踪(_S)"
 
-#: ../data/menu.glade.h:8
+#: ../data/applet.ui.h:10
 msgid "_Today"
 msgstr "今天(_T)"
 
-#: ../data/stats.glade.h:1
+#: ../data/stats.ui.h:1
+msgid " _Day"
+msgstr "天(_D)"
+
+#: ../data/stats.ui.h:2
 msgid " _Month"
 msgstr "月(_M)"
 
-#: ../data/stats.glade.h:2
+#: ../data/stats.ui.h:3
 msgid " _Week"
 msgstr "周(_W)"
 
-#: ../data/stats.glade.h:3
+#: ../data/stats.ui.h:4
 msgid "<b>Overview</b>"
 msgstr "<b>概要</b>"
 
-#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+#: ../data/stats.ui.h:5
+msgid "<b>Starts and ends</b>"
+msgstr "<b>开始和结束</b>"
+
+#: ../data/stats.ui.h:6
+msgid "<b>Totals</b>"
+msgstr "<b>合计</b>"
+
+#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
 msgid "Activity"
 msgstr "活动"
 
-#: ../data/stats.glade.h:5
-msgid "Add activity"
-msgstr "添加活动"
+#: ../data/stats.ui.h:8
+msgid "Categories:"
+msgstr "类别："
 
-#: ../data/stats.glade.h:6
-msgid "Delete activity"
-msgstr "删除活动"
+#: ../data/stats.ui.h:9
+msgid "Date interval:"
+msgstr "日期间隔："
 
-#: ../data/stats.glade.h:7
-msgid "Edit activity"
-msgstr "编辑活动"
-
-#: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "生成报告"
-
-#: ../data/stats.glade.h:9
-msgid "Newer activities"
-msgstr "新活动"
-
-#: ../data/stats.glade.h:10
+#: ../data/stats.ui.h:10
 msgid "No data for this interval"
 msgstr "没有针对这个时间间隔的数据"
 
-#: ../data/stats.glade.h:11
+#: ../data/stats.ui.h:11
+msgid "Overview"
+msgstr "概要"
+
+#: ../data/stats.ui.h:12
 msgid "Overview - Hamster"
 msgstr "概要 - Hamster"
 
-#: ../data/stats.glade.h:12
-msgid "Show month"
-msgstr "显示月"
+#: ../data/stats.ui.h:13
+msgid "Save as HTML"
+msgstr "另存为HTML"
 
-#: ../data/stats.glade.h:13
-msgid "Show week"
-msgstr "显示周"
+#: ../data/stats.ui.h:14
+msgid "Save report – Time Tracker"
+msgstr "保存报告 - 时间跟踪器"
 
-#: ../data/stats.glade.h:14 ../hamster/stats.py:364
+#: ../data/stats.ui.h:15
+msgid "Statistics"
+msgstr "统计"
+
+#: ../data/stats.ui.h:16
+msgid "Today"
+msgstr "今天"
+
+#: ../data/stats.ui.h:17 ../hamster/stats.py:948
 msgid "Week"
 msgstr "周"
 
-#: ../hamster/about.py:44
-msgid "Copyright © 2007-2009 Toms Bauģis and others"
+#: ../data/stats.ui.h:18
+msgid "Year:"
+msgstr "年份："
+
+#: ../hamster/about.py:41
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
 msgstr "版权 © 2007-2009 Toms Bauģis 和其他人"
 
-#: ../hamster/about.py:46
+#: ../hamster/about.py:43
 msgid "Project Hamster Website"
 msgstr "Hamster 项目网站"
 
-#: ../hamster/about.py:47
+#: ../hamster/about.py:44
 msgid "About Time Tracker"
-msgstr "关于时间追踪器"
+msgstr "关于时间跟踪器"
 
-#: ../hamster/about.py:57
+#: ../hamster/about.py:54
 msgid "translator-credits"
 msgstr ""
 "Ray Wang <wanglei1123@gmail.com>, 2008\n"
 "Funda Wang <fundawang@gmail.com>, 2008"
 
-#. try yesterday if there is nothing today
-#: ../hamster/preferences.py:56 ../hamster/edit_activity.py:338
-#: ../hamster/applet.py:600 ../hamster/db.py:188 ../hamster/db.py:205
-#: ../hamster/db.py:208 ../hamster/db.py:356 ../hamster/db.py:460
-#: ../hamster/db.py:474 ../hamster/reports.py:129 ../hamster/stuff.py:67
+#. translators: this is edit activity action in the notifier bubble
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "编辑"
+
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:75
+msgid "Switch"
+msgstr "切换"
+
+#: ../hamster/applet.py:305 ../hamster/reports.py:235
+#: ../hamster/reports.py:293
+msgid "Duration"
+msgstr "持续时间"
+
+#: ../hamster/applet.py:492 ../hamster/applet.py:513
+msgid "No activity"
+msgstr "没有活动"
+
+#. activity reminder
+#: ../hamster/applet.py:508
+#, python-format
+msgid "Working on <b>%s</b>"
+msgstr "工作在 <b>%s</b>？"
+
+#: ../hamster/applet.py:562
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s：%(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../hamster/applet.py:565
+#, python-format
+msgid "%sh"
+msgstr "%s小时"
+
+#. unsorted category
+#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
+#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
+#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
+#: ../hamster/stuff.py:94
 msgid "Unsorted"
 msgstr "未分类"
+
+#: ../hamster/applet.py:833
+msgid "What should be typed in the activity box?"
+msgstr "在活动输入栏中应该输入什么？"
+
+#: ../hamster/applet.py:836
+msgid ""
+"There is a simple syntax that enables you to add details to your "
+"activities:\n"
+"        \n"
+"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
+"tracking the activity \"watering flowers\" in the category \"home\".\n"
+"\n"
+"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
+"begonias and forgetmenots\" will start tracking the activity \"watering "
+"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
+"\n"
+"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+"will work just fine!\n"
+"\n"
+"Now, start tracking!\n"
+"        "
+msgstr ""
+"这允许您使用简单的句法来添加详细信息到您的活动中：\n"
+"        \"@\"·表示类。例如：\"watering·flowers@home\"·将开始在“home”类中跟踪 "
+"\"watering·flowers\" 活动。\n"
+"\n"
+"逗号·(\",\")·表示描述的开始。例如：\"watering·flowers,"
+"·begonias·and·forgetmenots\"·将开始跟踪 \"watering·flowers\" 活动并且添加描"
+"述 \"begonias·and·forgetmenots\"·到其中去。\n"
+"\n"
+"二者可以合并成：\"watering·flowers@home,·begonias·and·forgetmenots\"·将正常工"
+"作！\n"
+"\n"
+"现在开始跟踪！\n"
+"        "
+
+#. defaults
+#: ../hamster/db.py:733
+msgid "Work"
+msgstr "工作"
+
+#: ../hamster/db.py:734
+msgid "Reading news"
+msgstr "阅读新闻"
+
+#: ../hamster/db.py:735
+msgid "Checking stocks"
+msgstr "查看股票"
+
+#: ../hamster/db.py:736
+msgid "Super secret project X"
+msgstr "进行绝密项目"
+
+#: ../hamster/db.py:737
+msgid "World domination"
+msgstr "征服世界"
+
+#: ../hamster/db.py:739
+msgid "Day-to-day"
+msgstr "日常的"
+
+#: ../hamster/db.py:740
+msgid "Lunch"
+msgstr "午饭"
+
+#: ../hamster/db.py:741
+msgid "Watering flowers"
+msgstr "浇花"
+
+#: ../hamster/db.py:742
+msgid "Doing handstands"
+msgstr "玩倒立"
+
+#: ../hamster/edit_activity.py:387
+msgid "Update activity"
+msgstr "更新活动"
 
 #: ../hamster/preferences.py:104
 msgid "Name"
 msgstr "名称"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:106
-#: ../hamster/reports.py:172
+#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/reports.py:291
 msgid "Category"
 msgstr "类别"
 
-#: ../hamster/preferences.py:511
+#: ../hamster/preferences.py:559
 msgid "New category"
 msgstr "新建类别"
 
-#: ../hamster/preferences.py:524
+#: ../hamster/preferences.py:572
 msgid "New activity"
 msgstr "新建活动"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:579
+#: ../hamster/preferences.py:632
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d 分"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:582
+#: ../hamster/preferences.py:635
 msgid "Never"
 msgstr "从不"
 
-#: ../hamster/edit_activity.py:353
-msgid "Update activity"
-msgstr "更新活动"
+#. column title in the TSV export format
+#: ../hamster/reports.py:112
+msgid "activity"
+msgstr "活动"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Edit"
-msgstr "编辑"
+#. column title in the TSV export format
+#: ../hamster/reports.py:114
+msgid "start time"
+msgstr "开始时间"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:77
-msgid "Switch"
-msgstr "切换"
+#. column title in the TSV export format
+#: ../hamster/reports.py:116
+msgid "end time"
+msgstr "结束时间"
 
-#: ../hamster/applet.py:296 ../hamster/reports.py:109
-#: ../hamster/reports.py:174
-msgid "Duration"
+#. column title in the TSV export format
+#: ../hamster/reports.py:118
+msgid "duration minutes"
 msgstr "持续时间"
 
-#: ../hamster/applet.py:420 ../hamster/applet.py:567
-msgid "No activity"
-msgstr "没有活动"
+#. column title in the TSV export format
+#: ../hamster/reports.py:120
+msgid "category"
+msgstr "类别"
 
-#. activity reminder
-#: ../hamster/applet.py:434
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "工作在 <b>%s</b>？"
-
-#. listing of today's categories and time spent in them
-#: ../hamster/applet.py:501
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s：%(duration)s"
-
-#: ../hamster/applet.py:503
-#, python-format
-msgid "%.1fh"
-msgstr "%.1fh"
-
-#. defaults
-#: ../hamster/db.py:648
-msgid "Work"
-msgstr "工作"
-
-#: ../hamster/db.py:649
-msgid "Reading news"
-msgstr "阅读新闻"
-
-#: ../hamster/db.py:650
-msgid "Checking stocks"
-msgstr "查看股票"
-
-#: ../hamster/db.py:651
-msgid "Super secret project X"
-msgstr "进行绝密项目"
-
-#: ../hamster/db.py:652
-msgid "World domination"
-msgstr "征服世界"
-
-#: ../hamster/db.py:654
-msgid "Day to day"
-msgstr "日常"
-
-#: ../hamster/db.py:655
-msgid "Lunch"
-msgstr "午饭"
-
-#: ../hamster/db.py:656
-msgid "Watering flowers"
-msgstr "浇花"
-
-#: ../hamster/db.py:657
-msgid "Doing handstands"
-msgstr "玩倒立"
+#. column title in the TSV export format
+#: ../hamster/reports.py:122
+msgid "description"
+msgstr "描述"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:351
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:160 ../hamster/stats.py:933
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -401,7 +514,8 @@ msgstr ""
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:356
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:162 ../hamster/stats.py:939
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "概要：%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -409,136 +523,283 @@ msgstr "概要：%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:361
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:164 ../hamster/stats.py:945
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "概要：%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 
-#: ../hamster/reports.py:39
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "概要：%(start_B)s %(start_d)s, %(start_Y)s"
 
-#: ../hamster/reports.py:104
+#: ../hamster/reports.py:230
 msgid "Date"
 msgstr "日期"
 
-#: ../hamster/reports.py:107
+#: ../hamster/reports.py:233
 msgid "Start"
 msgstr "开始"
 
-#: ../hamster/reports.py:108
+#: ../hamster/reports.py:234
 msgid "End"
 msgstr "结束"
 
-#: ../hamster/reports.py:110
+#: ../hamster/reports.py:236
 msgid "Description"
 msgstr "描述"
 
-#. fact date column in HTML report
-#: ../hamster/reports.py:144
-#, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/reports.py:268
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%Y年%m月%d日"
 
 #. summary table
-#: ../hamster/reports.py:169
+#: ../hamster/reports.py:288
 msgid "Totals"
 msgstr "合计"
 
-#: ../hamster/reports.py:186
+#: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "合计时间"
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:237
+#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+msgid "HTML Report"
+msgstr "HTML报告"
+
+#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+msgid "Tab-Separated Values (TSV)"
+msgstr "制表符分隔值 (TSV)"
+
+#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+msgid "iCal"
+msgstr "iCal"
+
+#. add unsorted category
+#: ../hamster/stats.py:120
+msgctxt "categories"
+msgid "All"
+msgstr "所有"
+
+#: ../hamster/stats.py:435
+msgctxt "years"
+msgid "All"
+msgstr "所有"
+
+#: ../hamster/stats.py:524
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"目前还没有用于产生统计的数据。\n"
+"一周的使用将会很好！"
+
+#: ../hamster/stats.py:527
+msgid "Still collecting data — check back after a week has passed!"
+msgstr "继续收集数据 —  一个星期过后再来检查！"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:657
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%Y年%m月%d日"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:662
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+msgctxt "first record"
+msgid "%(b)s %(d)s"
+msgstr "%(b)s %(d)s"
 
-#: ../hamster/stats.py:366
-msgid "Month"
-msgstr "月"
-
-#: ../hamster/stats.py:405
+#: ../hamster/stats.py:664
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s"
+msgid "First activity was recorded on %s."
+msgstr "第一次的活动记录在%s。"
 
-#: ../hamster/stats.py:418
+#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s年"
+
+#. FIXME: difficult string to properly pluralize
+#: ../hamster/stats.py:682
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
+msgstr ""
+"时间目前跟踪了 %(human_days)s 自然日 (%(human_years)s) 或 %(working_days)s 工"
+"作日 (%(working_years)s)."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:700
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%Y年%m月%d日"
+
+#: ../hamster/stats.py:705
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] "最长持续的工作持续了 %(hours)s 小时，发生于 %(date)s。"
+
+#. total records (in selected scope)
+#: ../hamster/stats.py:713
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "有 %s 个记录。"
+
+#: ../hamster/stats.py:733
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamster 想观察你多一些！"
+
+#: ../hamster/stats.py:735
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am you seem to be an early "
+"bird."
+msgstr "有 %s%% 的工作开始于早上9点之前，你看起来是个早起的鸟儿。"
+
+#: ../hamster/stats.py:738
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr "有 %s%% 的工作开始于晚上11点之后，你看起来是个夜猫子。"
+
+#: ../hamster/stats.py:741
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"busy bee."
+msgstr "有 %s%% 的工作在15分钟之内，你看起来是个繁忙的蜜蜂。"
+
+#. Date format for the label in overview window fact listing
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:828
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%m月%d日，%A"
+
+#: ../hamster/stats.py:869
 msgid "Total"
 msgstr "合计"
 
-#: ../hamster/stats.py:427
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:891
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%m月%d日"
+
+#: ../hamster/stats.py:920
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%Y年%月%d日"
+
+#. Overview label if looking on single day
+#: ../hamster/stats.py:922
 #, python-format
-msgid "%(category)s: %(duration).1f, "
-msgstr "%(category)s：%(duration).1f，"
+msgid "Overview for %(date)s"
+msgstr "概要：%(date)s"
+
+#: ../hamster/stats.py:950
+msgid "Month"
+msgstr "月"
+
+#: ../hamster/stats.py:952
+msgid "Day"
+msgstr "天"
 
 #. duration in round hours
-#: ../hamster/stuff.py:114
+#: ../hamster/stuff.py:151
 #, python-format
 msgid "%dh"
 msgstr "%d 时"
 
 #. duration less than hour
-#: ../hamster/stuff.py:117
+#: ../hamster/stuff.py:154
 #, python-format
 msgid "%dmin"
 msgstr "%d 分"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:120
+#: ../hamster/stuff.py:157
 #, python-format
 msgid "%dh %dmin"
 msgstr "%d 时·%d 分"
 
+#~ msgid "Move _Down"
+#~ msgstr "下移(_D)"
+
+#~ msgid "Move _Up"
+#~ msgstr "上移(_U)"
+
+#~ msgid "N_ew Category"
+#~ msgstr "新建类别(_E)"
+
+#~ msgid "_New Activity"
+#~ msgstr "新建活动(_N)"
+
+#~ msgid "20/01/08"
+#~ msgstr "20/01/08"
+
+#~ msgid "20/01/09"
+#~ msgstr "20/01/09"
+
+#~ msgid "3:30pm"
+#~ msgstr "3:30pm"
+
+#~ msgid "gtk-cancel"
+#~ msgstr "gtk-cancel"
+
+#~ msgid "gtk-save"
+#~ msgstr "gtk-save"
+
+#~ msgid "Delete activity"
+#~ msgstr "删除活动"
+
+#~ msgid "Generate Report"
+#~ msgstr "生成报告"
+
+#~ msgid "Newer activities"
+#~ msgstr "新活动"
+
+#~ msgid "Show month"
+#~ msgstr "显示月"
+
+#~ msgid "Show week"
+#~ msgstr "显示周"
+
+#~ msgid "%.1fh"
+#~ msgstr "%.1fh"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#~ msgid "%(o_A)s, %(o_b)s %(o_d)s"
+#~ msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#~ msgid "%(category)s: %(duration).1f, "
+#~ msgstr "%(category)s：%(duration).1f，"
+
 #~ msgid "<b>Activity</b>"
 #~ msgstr "<b>活动</b>"
-
-#~ msgid "<b>Date and Time</b>"
-#~ msgstr "<b>日期和时间</b>"
-
-#, fuzzy
-#~| msgid "Name"
-#~ msgid "Name:"
-#~ msgstr "名称"
-
-#~ msgid "hours"
-#~ msgstr "小时"
-
-#~ msgid "minutes"
-#~ msgstr "分"
-
-#~ msgid " _Day"
-#~ msgstr "天(_D)"
-
-#~ msgid "<b>Category</b>"
-#~ msgstr "<b>类别</b>"
-
-#~ msgid "<b>Week</b>"
-#~ msgstr "<b>周</b>"
-
-#~ msgid "Earlier activities"
-#~ msgstr "较早的活动"
-
-#~ msgid "Show day"
-#~ msgstr "显示天"
-
-#~ msgid "name"
-#~ msgstr "名称"
-
-#~ msgid "Other"
-#~ msgstr "其他"
-
-#~ msgid "Day"
-#~ msgstr "天"
-
-#~ msgid "Today"
-#~ msgstr "今天"
-
-#~ msgid "Stop Tracking"
-#~ msgstr "停止追踪"
-
-#~ msgid "Summary of Activities"
-#~ msgstr "活动摘要"
