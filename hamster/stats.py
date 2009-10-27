@@ -1278,8 +1278,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         
         facts = runtime.storage.get_facts(start_date, end_date, category_id = categories)
         reports.simple(facts,
-                       self.start_date,
-                       self.end_date,
+                       start_date,
+                       end_date,
                        format,
                        path)
 
