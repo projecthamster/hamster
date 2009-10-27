@@ -1063,15 +1063,22 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
     def on_day_toggled(self, button):
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
         self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-
         self.end_date = self.start_date + dt.timedelta(6)
+        
+        self.get_widget("prev").set_tooltip_text(_("Previous day"))
+        self.get_widget("next").set_tooltip_text(_("Next day"))
+        self.get_widget("home").set_tooltip_text(_("Today"))
+        
         self.do_graph()
 
     def on_week_toggled(self, button):
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
         self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-
         self.end_date = self.start_date + dt.timedelta(6)
+
+        self.get_widget("prev").set_tooltip_text(_("Previous week"))
+        self.get_widget("next").set_tooltip_text(_("Next week"))
+        self.get_widget("home").set_tooltip_text(_("This week"))
         self.do_graph()
 
         
@@ -1080,6 +1087,9 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
         self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
 
+        self.get_widget("prev").set_tooltip_text(_("Previous month"))
+        self.get_widget("next").set_tooltip_text(_("Next month"))
+        self.get_widget("home").set_tooltip_text(_("This month"))
         self.do_graph()
         
     def on_remove_clicked(self, button):

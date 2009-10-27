@@ -31,11 +31,12 @@
               <object class="GtkToolbar" id="toolbar3">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="toolbar_style">both-horiz</property>
                 <child>
                   <object class="GtkToolButton" id="prev">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Previous week</property>
+                    <property name="label" translatable="yes">Previous</property>
                     <property name="stock_id">gtk-go-back</property>
                     <signal name="clicked" handler="on_prev_clicked"/>
                   </object>
@@ -48,6 +49,7 @@
                   <object class="GtkToolButton" id="home">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">This week</property>
                     <property name="label" translatable="yes">Today</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-home</property>
@@ -62,6 +64,8 @@
                   <object class="GtkToolButton" id="next">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Next week</property>
+                    <property name="label" translatable="yes">Next</property>
                     <property name="stock_id">gtk-go-forward</property>
                     <signal name="clicked" handler="on_next_clicked"/>
                   </object>
@@ -84,6 +88,8 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Remove activity</property>
+                    <property name="label" translatable="yes">Add</property>
                     <property name="stock_id">gtk-remove</property>
                     <signal name="clicked" handler="on_remove_clicked"/>
                   </object>
@@ -96,6 +102,8 @@
                   <object class="GtkToolButton" id="add">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Add activity</property>
+                    <property name="label" translatable="yes">Remove</property>
                     <property name="stock_id">gtk-add</property>
                     <signal name="clicked" handler="on_add_clicked"/>
                   </object>
@@ -108,6 +116,8 @@
                   <object class="GtkToolButton" id="edit">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
+                    <property name="tooltip_text" translatable="yes">Edit activity</property>
+                    <property name="label" translatable="yes">Edit</property>
                     <property name="stock_id">gtk-edit</property>
                     <signal name="clicked" handler="on_edit_clicked"/>
                   </object>
@@ -128,6 +138,7 @@
                 <child>
                   <object class="GtkRadioToolButton" id="day">
                     <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">Show single day</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes"> _Day</property>
                     <property name="use_underline">True</property>
@@ -144,6 +155,7 @@
                   <object class="GtkRadioToolButton" id="week">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show week</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes"> _Week</property>
                     <property name="use_underline">True</property>
@@ -160,6 +172,7 @@
                   <object class="GtkRadioToolButton" id="month">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show month</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes"> _Month</property>
                     <property name="use_underline">True</property>
@@ -184,7 +197,9 @@
                 <child>
                   <object class="GtkToolButton" id="report_button">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Save as HTML</property>
+                    <property name="tooltip_text" translatable="yes">Save report</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Save Report</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-save</property>
                     <signal name="clicked" handler="on_report_button_clicked"/>
@@ -673,7 +688,7 @@
   </object>
   <object class="GtkFileChooserDialog" id="save_report_dialog">
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Save report – Time Tracker</property>
+    <property name="title" translatable="yes">Save report &#x2013; Time Tracker</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">normal</property>
@@ -862,6 +877,7 @@
   </object>
   <object class="GtkImage" id="month_icon">
     <property name="visible">True</property>
+    <property name="tooltip_text" translatable="yes">Show month</property>
     <property name="pixbuf">art/stock_calendar-view-month.png</property>
   </object>
 </interface>
