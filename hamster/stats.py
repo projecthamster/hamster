@@ -1068,6 +1068,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.get_widget("prev").set_tooltip_text(_("Previous day"))
         self.get_widget("next").set_tooltip_text(_("Next day"))
         self.get_widget("home").set_tooltip_text(_("Today"))
+        self.get_widget("home").set_label(_("Today"))
         
         self.do_graph()
 
@@ -1079,6 +1080,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.get_widget("prev").set_tooltip_text(_("Previous week"))
         self.get_widget("next").set_tooltip_text(_("Next week"))
         self.get_widget("home").set_tooltip_text(_("This week"))
+        self.get_widget("home").set_label(_("This Week"))
         self.do_graph()
 
         
@@ -1090,6 +1092,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.get_widget("prev").set_tooltip_text(_("Previous month"))
         self.get_widget("next").set_tooltip_text(_("Next month"))
         self.get_widget("home").set_tooltip_text(_("This month"))
+        self.get_widget("home").set_label(_("This Month"))
         self.do_graph()
         
     def on_remove_clicked(self, button):
