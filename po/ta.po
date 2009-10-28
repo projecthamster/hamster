@@ -13,16 +13,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master.ta\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-09-17 14:27+0530\n"
-"Last-Translator: I. Felix <ifelix@redhat.com>\n"
-"Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-28 05:20+0530\n"
+"PO-Revision-Date: 2009-10-28 05:38+0530\n"
+"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
+"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -65,7 +66,7 @@ msgstr "<b>தேடல்</b>"
 msgid "Activity list"
 msgstr "செயல்பாடு பட்டியல்"
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:5 ../data/stats.ui.h:9
 msgid "Add activity"
 msgstr "செயல்பாட்டைச் சேர்க்கவும்"
 
@@ -81,7 +82,7 @@ msgstr "செயல் அமைக்காத போதும் நினை
 msgid "Category list"
 msgstr "வகை பட்டியல்"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:9 ../data/stats.ui.h:13
 msgid "Edit activity"
 msgstr "செயல்பாட்டைத் திருத்தி அமைக்கவும்"
 
@@ -101,7 +102,7 @@ msgstr "செயலை மேலே நகர்த்து "
 msgid "Remind of current activity every:"
 msgstr "தற்போதைய செயலை நினைவுறுத்த இடைவெளி:"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:14 ../data/stats.ui.h:22
 msgid "Remove activity"
 msgstr "செயலை நீக்கு"
 
@@ -153,7 +154,7 @@ msgstr "நேரம்:"
 msgid "in progress"
 msgstr "முன்னேற்றத்தில் உள்ளது"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:34
 msgid "to"
 msgstr "வரை"
 
@@ -263,46 +264,95 @@ msgid "Activity"
 msgstr "செயல்பாடு"
 
 #: ../data/stats.ui.h:8
+msgid "Add"
+msgstr "சேர்க்க"
+
+#: ../data/stats.ui.h:10
 msgid "Categories:"
 msgstr "வகைகள்:"
 
-#: ../data/stats.ui.h:9
+#: ../data/stats.ui.h:11
 msgid "Date interval:"
 msgstr "இடைவெளி தேதி:"
 
-#: ../data/stats.ui.h:10
+#. translators: this is edit activity action in the notifier bubble
+#: ../data/stats.ui.h:12 ../hamster/applet.py:73
+msgid "Edit"
+msgstr "திருத்து"
+
+#: ../data/stats.ui.h:14
+msgid "Next"
+msgstr "அடுத்த"
+
+#: ../data/stats.ui.h:15 ../hamster/stats.py:1081
+msgid "Next week"
+msgstr "அடுத்த வாரம்"
+
+#: ../data/stats.ui.h:16
 msgid "No data for this interval"
 msgstr "இந்த இடைவெளிக்கு தரவு ஏதும் இல்லை."
 
-#: ../data/stats.ui.h:11
+#: ../data/stats.ui.h:17
 msgid "Overview"
 msgstr "கண்ணோட்டம்"
 
-#: ../data/stats.ui.h:12
+#: ../data/stats.ui.h:18
 msgid "Overview - Hamster"
 msgstr "கண்ணோட்டம் - ஹாம்ஸ்டர்"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "ஹெச்டிஎம்எல்(HTML) ஆக சேமி "
+#: ../data/stats.ui.h:19
+msgid "Previous"
+msgstr "முந்தைய"
 
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "நேரத் தடம் தேடல் - அறிக்கையை சேமி"
+#: ../data/stats.ui.h:20 ../hamster/stats.py:1080
+msgid "Previous week"
+msgstr "முந்தைய வாரம்"
 
-#: ../data/stats.ui.h:15
+#: ../data/stats.ui.h:21
+msgid "Remove"
+msgstr "நீக்கு"
+
+#: ../data/stats.ui.h:23
+msgid "Save Report"
+msgstr "அறிக்கையை சேமி"
+
+#: ../data/stats.ui.h:24
+msgid "Save report"
+msgstr "அறிக்கையை சேமி"
+
+#: ../data/stats.ui.h:25
+msgid "Save report &#x2013; Time Tracker"
+msgstr "&#x2013 அறிக்கையை சேமி; நேரத் தடம் தேடல்"
+
+#: ../data/stats.ui.h:26
+msgid "Show month"
+msgstr "மாதத்தை காட்டு"
+
+#: ../data/stats.ui.h:27
+msgid "Show single day"
+msgstr "ஒரு நாளை காட்டு"
+
+#: ../data/stats.ui.h:28
+msgid "Show week"
+msgstr "வாரத்தை காட்டு"
+
+#: ../data/stats.ui.h:29
 msgid "Statistics"
 msgstr "புள்ளி விவரம்"
 
-#: ../data/stats.ui.h:16
-msgid "Today"
-msgstr "இன்று"
+#: ../data/stats.ui.h:30 ../hamster/stats.py:1083
+msgid "This Week"
+msgstr "இந்த வாரம் "
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
+#: ../data/stats.ui.h:31 ../hamster/stats.py:1082
+msgid "This week"
+msgstr "இந்த வாரம் "
+
+#: ../data/stats.ui.h:32 ../hamster/stats.py:948
 msgid "Week"
 msgstr "வாரம்"
 
-#: ../data/stats.ui.h:18
+#: ../data/stats.ui.h:33
 msgid "Year:"
 msgstr "வருடம்:"
 
@@ -323,11 +373,6 @@ msgid "translator-credits"
 msgstr ""
 "I. Felix <ifelix@redhat.com>. Dr. T. Vasudevan <agnihot3@gmail.com> shakthi "
 "kannan, <shakthimaan@gmail.com> 2008-2009"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "திருத்து"
 
 #. translators: this is switch activity action in the notifier bubble
 #: ../hamster/applet.py:75
@@ -362,8 +407,8 @@ msgstr "%sh"
 
 #. unsorted category
 #: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
 #: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
 msgid "Unsorted"
@@ -407,43 +452,43 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:733
 msgid "Work"
 msgstr "பணி"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:734
 msgid "Reading news"
 msgstr "செய்திகள் வாசிப்பு"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:735
 msgid "Checking stocks"
 msgstr "வணிகப் பங்குகள் சரிபார்த்தல்"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:736
 msgid "Super secret project X"
 msgstr "மிக ரகசியத் திட்டம் எக்ஸ்"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:737
 msgid "World domination"
 msgstr "உலக ஆதிக்கம்"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:739
 msgid "Day-to-day"
 msgstr "அன்றாடம்"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:740
 msgid "Lunch"
 msgstr "மதிய உணவு"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:741
 msgid "Watering flowers"
 msgstr "பூக்களுக்குத் தண்ணீர் பாய்ச்சுதல்"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:742
 msgid "Doing handstands"
 msgstr "தலைகீழாய் நிற்றல்"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:387
 msgid "Update activity"
 msgstr "செயல்பாட்டை நிகழ்நிலைப்படுத்தவும்"
 
@@ -574,19 +619,19 @@ msgstr "மொத்தங்கள்"
 msgid "Total Time"
 msgstr "மொத்த நேரம்"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+#: ../hamster/stats.py:64 ../hamster/stats.py:1254
 msgid "HTML Report"
 msgstr "ஹெச்டிஎம்எல்(HTML) அறிக்கை"
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+#: ../hamster/stats.py:72 ../hamster/stats.py:1262
 msgid "Tab-Separated Values (TSV)"
 msgstr "தத்தல்-பிரித்த மதிப்புகள் (TSV)"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+#: ../hamster/stats.py:80 ../hamster/stats.py:1270
 msgid "XML"
 msgstr "எக்ஸ்எம்எல்"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+#: ../hamster/stats.py:87 ../hamster/stats.py:1277
 msgid "iCal"
 msgstr "ஐகால்"
 
@@ -684,7 +729,8 @@ msgstr "ஹாம்ஸ்டர் உங்களை இன்னும் க
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
-msgstr " %s சதவிகித உண்மைகள்  காலை 9 மணிக்கு முன் ஆரம்பிக்கின்றன. நீங்க ரொம்ப சுறுசுறுப்புதான்."
+msgstr ""
+" %s சதவிகித உண்மைகள்  காலை 9 மணிக்கு முன் ஆரம்பிக்கின்றன. நீங்க ரொம்ப சுறுசுறுப்புதான்."
 
 #: ../hamster/stats.py:738
 #, python-format
@@ -719,8 +765,6 @@ msgid "%b %d"
 msgstr "%b %d"
 
 #: ../hamster/stats.py:920
-#| msgctxt "html report"
-#| msgid "%b %d, %Y"
 msgctxt "single day overview"
 msgid "%B %d, %Y"
 msgstr "%B %d, %Y"
@@ -738,6 +782,34 @@ msgstr "மாதம்"
 #: ../hamster/stats.py:952
 msgid "Day"
 msgstr "நாள்"
+
+#: ../hamster/stats.py:1068
+msgid "Previous day"
+msgstr "முந்தைய நாள்"
+
+#: ../hamster/stats.py:1069
+msgid "Next day"
+msgstr "அடுத்த நாள்"
+
+#: ../hamster/stats.py:1070 ../hamster/stats.py:1071
+msgid "Today"
+msgstr "இன்று"
+
+#: ../hamster/stats.py:1092
+msgid "Previous month"
+msgstr "முந்தைய மாதம்"
+
+#: ../hamster/stats.py:1093
+msgid "Next month"
+msgstr "அடுத்த மாதம்"
+
+#: ../hamster/stats.py:1094
+msgid "This month"
+msgstr "இந்த மாதம் "
+
+#: ../hamster/stats.py:1095
+msgid "This Month"
+msgstr "இந்த மாதம் "
 
 #. duration in round hours
 #: ../hamster/stuff.py:151
@@ -757,3 +829,5 @@ msgstr "%dmin"
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
 
+#~ msgid "Save as HTML"
+#~ msgstr "ஹெச்டிஎம்எல்(HTML) ஆக சேமி "
