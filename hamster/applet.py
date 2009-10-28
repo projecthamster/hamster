@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import logging
 import datetime as dt
 import os.path
 
@@ -248,7 +248,7 @@ class HamsterApplet(object):
             runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
 
         except dbus.DBusException, e:
-            print "can't init dbus: %s" % e
+            logging.error("Can't init dbus: %s" % e)
     
         # Load today's data, activities and set label
         self.last_activity = None

@@ -24,30 +24,8 @@ import getopt, sys
 import os.path
 import gettext, locale
 import gnome
+import logging
 
-# check from AUTHORS file and if one found - we are running from sources
-name = os.path.join(os.path.dirname(__file__), '..')
-if os.path.exists(os.path.join(name, 'AUTHORS')):
-    print 'Running from source folder, modifying PYTHONPATH'
-    sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
-    sys.path.insert(0, name)
-
-# Now the path is set, import our applet
-from hamster import defs
-from hamster.configuration import runtime
-
-# Setup i18n
-locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
-
-for module in (gettext, locale):
-    module.bindtextdomain('hamster-applet', locale_dir)
-    module.textdomain('hamster-applet')
-
-    if hasattr(module, 'bind_textdomain_codeset'):
-        module.bind_textdomain_codeset('hamster-applet','UTF-8')
-
-
-from hamster.applet import HamsterApplet
 
 def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
@@ -83,7 +61,7 @@ OPTIONS:
     -s, --start     [stats|edit|prefs] Which window to launch on startup.
                     Use "stats" for overview window, "edit" to add new activity
                     and "prefs" to launch preferences
-    -t  --trace-sql print out sql statements in terminal
+    -d  --debug     set log level to debug
     """)
 
 if __name__ == "__main__":
@@ -91,20 +69,50 @@ if __name__ == "__main__":
     start_window = None
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ws:t", ["window", "start=", "trace-sql"])
+        opts, args = getopt.getopt(sys.argv[1:], "ws:d", ["window", "start=", "debug"])
+        if opts:
+            logging.basicConfig(level=logging.INFO) # set lower log level as we run the thing from console
+    
 
         for opt, args in opts:
             if opt in ("-w", "--window"):
                 standalone = True
             elif opt in ("-s", "--start"):
                 start_window = args
-            elif opt in ("-t", "--trace-sql"):
-                runtime.trace_sql = True
-                
+            elif opt in ("-d", "--debug"):
+                logging.getLogger().setLevel(logging.DEBUG)
             
     except getopt.GetoptError:
         usage()
-        print "Starting nevertheless, because applet dies otherwise (TODO)"
+        log.info("Starting nevertheless, because applet dies otherwise (TODO)")
+
+
+
+    # check from AUTHORS file and if one found - we are running from sources
+    name = os.path.join(os.path.dirname(__file__), '..')
+    if os.path.exists(os.path.join(name, 'AUTHORS')):
+        logging.info("Running from source folder, modifying PYTHONPATH")
+        sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
+        sys.path.insert(0, name)
+    
+    # Now the path is set, import our applet
+    from hamster import defs
+    from hamster.configuration import runtime
+    
+    # Setup i18n
+    locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
+    
+    for module in (gettext, locale):
+        module.bindtextdomain('hamster-applet', locale_dir)
+        module.textdomain('hamster-applet')
+    
+        if hasattr(module, 'bind_textdomain_codeset'):
+            module.bind_textdomain_codeset('hamster-applet','UTF-8')
+    
+    
+    from hamster.applet import HamsterApplet
+
+
 
 
     gtk.window_set_default_icon_name("hamster-applet")

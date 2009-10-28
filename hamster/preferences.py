@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import logging
 import pygtk
 pygtk.require('2.0')
 
@@ -254,13 +254,13 @@ class PreferencesEditor:
             iter = model.get_iter(path)
             if (position == gtk.TREE_VIEW_DROP_BEFORE
                 or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
-                print "insert '%s' before '%s'" % (data, model[iter][3])
+                logging.debug("insert '%s' before '%s'" % (data, model[iter][3]))
                 runtime.storage.move_activity(int(data), model[iter][3], insert_after = False)
             else:
-                print "insert '%s' after '%s'" % (data, model[iter][3])
+                logging.debug("insert '%s' after '%s'" % (data, model[iter][3]))
                 runtime.storage.move_activity(int(data), model[iter][3], insert_after = True)
         else:
-            print "append '%s'" % data
+            logging.debug("append '%s'" % data)
 
         if context.action == gtk.gdk.ACTION_MOVE:
             context.finish(True, True, etime)

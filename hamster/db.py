@@ -20,15 +20,16 @@
 
 
 """separate file for database operations"""
+import logging
 
 try:
     import sqlite3 as sqlite
 except ImportError:
     try:
-        print "Using sqlite2"
+        logging.warn("Using sqlite2")
         from pysqlite2 import dbapi2 as sqlite
     except ImportError:
-        print "Error: Neither sqlite3 nor pysqlite2 found"
+        logging.error("Neither sqlite3 nor pysqlite2 found")
         raise
 
 import os, time
@@ -60,20 +61,20 @@ class Storage(storage.Storage):
             try:
                 os.makedirs(db_path, 0744)
             except Exception, msg:
-                print 'Error:could not create user dir (%s): %s' % (db_path, msg)
+                logging.error("could not create user dir (%s): %s" % (db_path, msg))
 
         data_dir = runtime.data_dir
 
         #check if db is here
         if not os.path.exists(db_file):
-            print "Database not found in %s - installing default from %s!" % (db_file, data_dir)
+            logging.info("Database not found in %s - installing default from %s!" % (db_file, data_dir))
             copyfile(os.path.join(data_dir, DB_FILE), db_file)
 
             #change also permissions - sometimes they are 444
             try:
                 os.chmod(db_file, 0664)
             except Exception, msg:
-                print 'Error:could not change mode on %s!' % (db_file)
+                logging.error("Could not change mode on %s!" % (db_file))
         self.__setup.im_func.complete = True
         self.run_fixtures()
     __setup.complete = False
@@ -329,7 +330,7 @@ class Storage(storage.Storage):
             if fact["start_time"] < start_time < fact["end_time"] and \
                fact["start_time"] < end_time < fact["end_time"]:
                 
-                print "splitting %s" % fact["name"]
+                logging.info("splitting %s" % fact["name"])
                 self.execute("""UPDATE facts
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
@@ -344,18 +345,18 @@ class Storage(storage.Storage):
             elif fact["end_time"] and \
                  start_time < fact["start_time"] < end_time and \
                  start_time < fact["end_time"] < end_time:
-                print "eliminating %s" % fact["name"]
+                logging.info("eliminating %s" % fact["name"])
                 self.__remove_fact(fact["id"])
             
             # overlap start
             elif start_time < fact["start_time"] < end_time:
-                print "Overlapping start of %s" % fact["name"]
+                logging.info("Overlapping start of %s" % fact["name"])
                 self.execute("UPDATE facts SET start_time=? WHERE id=?",
                              (end_time, fact["id"]))
             
             # overlap end
             elif start_time < fact["end_time"] < end_time:
-                print "Overlapping end of %s" % fact["name"]
+                logging.info("Overlapping end of %s" % fact["name"])
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
 
@@ -683,8 +684,7 @@ class Storage(storage.Storage):
         con = self.connection
         cur = con.cursor()
 
-        if runtime.trace_sql:
-            print query, params
+        logging.debug("%s %s" % (query, params))
 
         if params:
             cur.execute(query, params)
@@ -720,8 +720,7 @@ class Storage(storage.Storage):
             
         if isinstance(statement, list):
             for i in range(len(statement)):
-                if runtime.trace_sql:
-                    print statement[i], params[i]
+                logging.debug("%s %s" % (statement[i], params[i]))
          
                 res = cur.execute(statement[i], params[i])
 

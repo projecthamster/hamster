@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import dbus
 from dbus.lowlevel import Message
 import gconf
@@ -78,8 +79,7 @@ class DbusIdleListener(object):
         member = message.get_member()
 
         if member in ("SessionIdleChanged", "ActiveChanged"):
-            if __debug__:
-                print "%s ->" % member, message.get_args_list()
+            logging.debug("%s -> %s" % (member, message.get_args_list()))
 
             idle_state = message.get_args_list()[0]
             if idle_state:
@@ -119,8 +119,7 @@ class DbusIdleListener(object):
         elif member == "Lock":
             # in case of lock, lock signal will be sent first, followed by
             # ActiveChanged and SessionIdle signals
-            if __debug__:
-                print "Screen Lock Requested"
+            logging.debug("Screen Lock Requested")
             self.screen_locked = True
         
         return True

@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 
 EDS_AVAILABLE = False
 try:
@@ -48,5 +49,5 @@ def get_eds_tasks():
                         tasks.append({'name': task.get_summary(), 'category' : category})
         return tasks
     except Exception, e: # TODO's are not priority - print warning and go home
-        print e 
+        logging.warn(e)
         return []

@@ -38,7 +38,6 @@ class RuntimeStore(Singleton):
     data_dir = ""
     dispatcher = None
     storage = None
-    trace_sql = False
 
     def __init__(self):
         gettext.install("hamster-applet", unicode = True)

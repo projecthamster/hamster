@@ -21,6 +21,7 @@
 # some widgets that repeat all over the place
 # cells, columns, trees and other
 
+import logging
 import gtk
 import pango
 from pango import ELLIPSIZE_END
@@ -71,8 +72,7 @@ def locale_first_weekday():
         beginning = week_start + week_offset
         first_weekday = int(beginning.strftime("%w"))
     except:
-        print "WARNING - Failed to get first weekday from locale"
-        pass
+        logging.warn("WARNING - Failed to get first weekday from locale")
         
     return first_weekday
     

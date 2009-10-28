@@ -16,7 +16,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-
+import logging
 
 class Dispatcher(object):
     def __init__(self):
@@ -38,4 +38,4 @@ class Dispatcher(object):
             for handler in self.handlers[event]:
                 handler(event, data)
         else:
-            print 'Missing handler for event %s' % event
+            logging.info('Missing handler for event %s' % event)

@@ -42,6 +42,7 @@ from sys import maxint
 import datetime as dt
 import time
 import graphics
+import logging
 
 # Tango colors
 light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
@@ -269,7 +270,7 @@ class Chart(graphics.Area):
         retarget(self.integrators, self.data)
     
     def draw(self):
-        print "OMG OMG, not implemented!!!"
+        logging.error("OMG OMG, not implemented!!!")
 
 
 class BarChart(Chart):
