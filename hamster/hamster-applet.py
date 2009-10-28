@@ -20,12 +20,12 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import gtk, gnomeapplet
-import getopt, sys
+import sys
+from optparse import OptionParser
 import os.path
 import gettext, locale
 import gnome
 import logging
-
 
 def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
@@ -51,102 +51,95 @@ def on_destroy(event):
     if gtk.main_level():
         gtk.main_quit()
 
-def usage():
-    print _(u"""Time tracker: Usage
-$ hamster-applet [OPTIONS]
-
-OPTIONS:
-    -w, --window    Launch the applet in a standalone window for test purposes
-                    (default=no).
-    -s, --start     [stats|edit|prefs] Which window to launch on startup.
-                    Use "stats" for overview window, "edit" to add new activity
-                    and "prefs" to launch preferences
-    -d  --debug     set log level to debug
-    """)
-
 if __name__ == "__main__":
-    standalone = False
-    start_window = None
+    parser = OptionParser(usage = "hamster-applet [OPTIONS]")
+    parser.add_option("-w", "--window",
+                      action="store_true",
+                      dest="standalone",
+                      default=False,
+                      help="Launch the applet in a standalone window")
+    parser.add_option("-s",
+                      "--start",
+                      dest="start_window",
+                      help="[stats|edit|prefs] Which window to launch on startup.")
+    parser.add_option("-d", "--debug",
+                      action="store_true",
+                      dest="debug",
+                      default=False,
+                      help="set log level to debug")
+    
+    #these two come from bonobo
+    parser.add_option("--oaf-activate-iid")
+    parser.add_option("--oaf-ior-fd")
+
+    (options, args) = parser.parse_args()
+
+    # in console set logging lower, in panel write log to file
+    log_format = "%(asctime)s %(levelname)s: %(message)s"
+    if options.standalone:
+        logging.basicConfig(level=logging.INFO, format = log_format)
+    else: #otherwise write to the sessions file
+        logging.basicConfig(filename = os.path.join(os.path.expanduser("~"),
+                                                    '.xsession-errors'),
+                            format = log_format)
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ws:d", ["window", "start=", "debug"])
-        if opts:
-            logging.basicConfig(level=logging.INFO) # set lower log level as we run the thing from console
+        # by AUTHORS file determine if we run from sources or installed
+        name = os.path.join(os.path.dirname(__file__), '..')
+        if os.path.exists(os.path.join(name, 'AUTHORS')):
+            logging.info("Running from source folder, modifying PYTHONPATH")
+            sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
+            sys.path.insert(0, name)
+        
+        # Now the path is set, import our applet
+        from hamster import defs
+        from hamster.configuration import runtime
+        
+        # Setup i18n
+        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))        
+        for module in (gettext, locale):
+            module.bindtextdomain('hamster-applet', locale_dir)
+            module.textdomain('hamster-applet')
+        
+            if hasattr(module, 'bind_textdomain_codeset'):
+                module.bind_textdomain_codeset('hamster-applet','UTF-8')
+        
+        from hamster.applet import HamsterApplet    
+        gtk.window_set_default_icon_name("hamster-applet")
     
+        if options.start_window or options.standalone:
+            if options.start_window == "stats":
+                from hamster.stats import StatsViewer
+                stats_viewer = StatsViewer().show()
 
-        for opt, args in opts:
-            if opt in ("-w", "--window"):
-                standalone = True
-            elif opt in ("-s", "--start"):
-                start_window = args
-            elif opt in ("-d", "--debug"):
-                logging.getLogger().setLevel(logging.DEBUG)
+            elif options.start_window == "edit":
+                from hamster.edit_activity import CustomFactController
+                CustomFactController().show()
+
+            elif options.start_window == "prefs":
+                from hamster.preferences import PreferencesEditor
+                PreferencesEditor().show()
+
+            else: #default to main applet
+                gnome.init(defs.PACKAGE, defs.VERSION)
+        
+                app = gtk.Window(gtk.WINDOW_TOPLEVEL)
+                app.set_title(_(u"Time Tracker"))
             
-    except getopt.GetoptError:
-        usage()
-        log.info("Starting nevertheless, because applet dies otherwise (TODO)")
+                applet = gnomeapplet.Applet()
+                applet_factory(applet, None)
+                applet.reparent(app)
+                app.show_all()
 
-
-
-    # check from AUTHORS file and if one found - we are running from sources
-    name = os.path.join(os.path.dirname(__file__), '..')
-    if os.path.exists(os.path.join(name, 'AUTHORS')):
-        logging.info("Running from source folder, modifying PYTHONPATH")
-        sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
-        sys.path.insert(0, name)
-    
-    # Now the path is set, import our applet
-    from hamster import defs
-    from hamster.configuration import runtime
-    
-    # Setup i18n
-    locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
-    
-    for module in (gettext, locale):
-        module.bindtextdomain('hamster-applet', locale_dir)
-        module.textdomain('hamster-applet')
-    
-        if hasattr(module, 'bind_textdomain_codeset'):
-            module.bind_textdomain_codeset('hamster-applet','UTF-8')
-    
-    
-    from hamster.applet import HamsterApplet
-
-
-
-
-    gtk.window_set_default_icon_name("hamster-applet")
-
-    if standalone:
-        gnome.init(defs.PACKAGE, defs.VERSION)
-
-        app = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        app.set_title(_(u"Time Tracker"))
-    
-        applet = gnomeapplet.Applet()
-        applet_factory(applet, None)
-        applet.reparent(app)
-        app.show_all()
-
-        gtk.main()
-
-    elif start_window:
-        if start_window == "stats":
-            from hamster.stats import StatsViewer
-            stats_viewer = StatsViewer().show()
-        elif start_window == "edit":
-            from hamster.edit_activity import CustomFactController
-            CustomFactController().show()
-        elif start_window == "prefs":
-            from hamster.preferences import PreferencesEditor
-            PreferencesEditor().show()
-            
-        gtk.main()
-
-    else:
-        gnomeapplet.bonobo_factory(
-            "OAFIID:Hamster_Applet_Factory",
-            gnomeapplet.Applet.__gtype__,
-            defs.PACKAGE,
-            defs.VERSION,
-            applet_factory)
+            gtk.main()    
+        else:
+            gnomeapplet.bonobo_factory(
+                "OAFIID:Hamster_Applet_Factory",
+                gnomeapplet.Applet.__gtype__,
+                defs.PACKAGE,
+                defs.VERSION,
+                applet_factory)
+    except:
+        # make sure the error appears somewhere
+        import traceback
+        logging.error(traceback.format_exc())
