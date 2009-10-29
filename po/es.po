@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-08-31 20:37+0200\n"
+"POT-Creation-Date: 2009-10-27 22:10+0000\n"
+"PO-Revision-Date: 2009-10-29 18:51+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
@@ -57,7 +57,7 @@ msgstr "<b>Registro</b>"
 msgid "Activity list"
 msgstr "Lista de actividad"
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:5 ../data/stats.ui.h:9
 msgid "Add activity"
 msgstr "Añadir una actividad"
 
@@ -73,7 +73,7 @@ msgstr "Recordar también cuando no hay actividades configuradas"
 msgid "Category list"
 msgstr "Lista de categorías"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:9 ../data/stats.ui.h:13
 msgid "Edit activity"
 msgstr "Editar actividad"
 
@@ -93,7 +93,7 @@ msgstr "Mover actividad arriba"
 msgid "Remind of current activity every:"
 msgstr "Recordar la actividad actual cada:"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:14 ../data/stats.ui.h:22
 msgid "Remove activity"
 msgstr "Quitar actividad"
 
@@ -145,7 +145,7 @@ msgstr "Fecha/hora:"
 msgid "in progress"
 msgstr "en progreso"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:34
 msgid "to"
 msgstr "hasta"
 
@@ -260,46 +260,102 @@ msgid "Activity"
 msgstr "Actividad"
 
 #: ../data/stats.ui.h:8
+msgid "Add"
+msgstr "Añadir"
+
+#: ../data/stats.ui.h:10
 msgid "Categories:"
 msgstr "Categorías:"
 
-#: ../data/stats.ui.h:9
+#: ../data/stats.ui.h:11
 msgid "Date interval:"
 msgstr "Intervalo de fechas:"
 
-#: ../data/stats.ui.h:10
+#. translators: this is edit activity action in the notifier bubble
+#: ../data/stats.ui.h:12 ../hamster/applet.py:73
+msgid "Edit"
+msgstr "Editar"
+
+#: ../data/stats.ui.h:14
+msgid "Next"
+msgstr "Siguiente"
+
+#: ../data/stats.ui.h:15 ../hamster/stats.py:1081
+msgid "Next week"
+msgstr "Siguiente semana"
+
+#: ../data/stats.ui.h:16
 msgid "No data for this interval"
 msgstr "No hay datos para este intervalo"
 
-#: ../data/stats.ui.h:11
+#: ../data/stats.ui.h:17
 msgid "Overview"
 msgstr "Resumen"
 
-#: ../data/stats.ui.h:12
+#: ../data/stats.ui.h:18
 msgid "Overview - Hamster"
 msgstr "Resumen - Hamster"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "Guardar como HTML"
+#: ../data/stats.ui.h:19
+#| msgid "Preview:"
+msgid "Previous"
+msgstr "Anterior"
 
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "Guardar informe - Gestor de tiempo"
+#: ../data/stats.ui.h:20 ../hamster/stats.py:1080
+msgid "Previous week"
+msgstr "Semana anterior"
 
-#: ../data/stats.ui.h:15
+#: ../data/stats.ui.h:21
+msgid "Remove"
+msgstr "Quitar"
+
+#: ../data/stats.ui.h:23
+#| msgid "Generate Report"
+msgid "Save Report"
+msgstr "Guardar informe"
+
+#: ../data/stats.ui.h:24
+#| msgid "Generate Report"
+msgid "Save report"
+msgstr "Guardar informe"
+
+#: ../data/stats.ui.h:25
+#| msgid "Save report – Time Tracker"
+msgid "Save report &#x2013; Time Tracker"
+msgstr "Guardar informe &#x2013; Gestor de tiempo"
+
+#: ../data/stats.ui.h:26
+msgid "Show month"
+msgstr "Mostrar un mes"
+
+#: ../data/stats.ui.h:27
+#| msgid "Show day"
+msgid "Show single day"
+msgstr "Mostrar un solo día"
+
+#: ../data/stats.ui.h:28
+msgid "Show week"
+msgstr "Mostrar una semana"
+
+#: ../data/stats.ui.h:29
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#: ../data/stats.ui.h:16
-msgid "Today"
-msgstr "Hoy"
+#: ../data/stats.ui.h:30 ../hamster/stats.py:1083
+#| msgid " _Week"
+msgid "This Week"
+msgstr "Esta semana"
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
+#: ../data/stats.ui.h:31 ../hamster/stats.py:1082
+#| msgid "Show week"
+msgid "This week"
+msgstr "Esta semana"
+
+#: ../data/stats.ui.h:32 ../hamster/stats.py:948
 msgid "Week"
 msgstr "Semana"
 
-#: ../data/stats.ui.h:18
+#: ../data/stats.ui.h:33
 msgid "Year:"
 msgstr "Año:"
 
@@ -320,11 +376,6 @@ msgid "translator-credits"
 msgstr ""
 "Juanje Ojeda <jojeda@emergya.es> \n"
 "David Prieto <frandavid100@gmail.com>"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Editar"
 
 #. translators: this is switch activity action in the notifier bubble
 #: ../hamster/applet.py:75
@@ -359,8 +410,8 @@ msgstr "%sh"
 
 #. unsorted category
 #: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
+#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
 #: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
 msgid "Unsorted"
@@ -405,43 +456,43 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:733
 msgid "Work"
 msgstr "Trabajo"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:734
 msgid "Reading news"
 msgstr "Leer las noticias"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:735
 msgid "Checking stocks"
 msgstr "Comprobar las existencias"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:736
 msgid "Super secret project X"
 msgstr "Proyecto súper secreto X"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:737
 msgid "World domination"
 msgstr "Dominar el Mundo"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:739
 msgid "Day-to-day"
 msgstr "Día a día"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:740
 msgid "Lunch"
 msgstr "Almorzar"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:741
 msgid "Watering flowers"
 msgstr "Regar las plantas"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:742
 msgid "Doing handstands"
 msgstr "Hacer flexiones"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:387
 msgid "Update activity"
 msgstr "Actualizar actividad"
 
@@ -573,19 +624,19 @@ msgstr "Totales"
 msgid "Total Time"
 msgstr "Tiempo total"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
+#: ../hamster/stats.py:64 ../hamster/stats.py:1254
 msgid "HTML Report"
 msgstr "Informe HTML"
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
+#: ../hamster/stats.py:72 ../hamster/stats.py:1262
 msgid "Tab-Separated Values (TSV)"
 msgstr "Valores separados por tabuladores (TSV)"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
+#: ../hamster/stats.py:80 ../hamster/stats.py:1270
 msgid "XML"
 msgstr "XML"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
+#: ../hamster/stats.py:87 ../hamster/stats.py:1277
 msgid "iCal"
 msgstr "iCal"
 
@@ -730,8 +781,6 @@ msgid "%b %d"
 msgstr "%d %b"
 
 #: ../hamster/stats.py:920
-#| msgctxt "html report"
-#| msgid "%b %d, %Y"
 msgctxt "single day overview"
 msgid "%B %d, %Y"
 msgstr "%d de %B de %Y"
@@ -750,6 +799,37 @@ msgstr "Mes"
 msgid "Day"
 msgstr "Día"
 
+#: ../hamster/stats.py:1068
+msgid "Previous day"
+msgstr "Día anterior"
+
+#: ../hamster/stats.py:1069
+msgid "Next day"
+msgstr "Siguiente día"
+
+#: ../hamster/stats.py:1070 ../hamster/stats.py:1071
+msgid "Today"
+msgstr "Hoy"
+
+#: ../hamster/stats.py:1092
+msgid "Previous month"
+msgstr "Mes anterior"
+
+#: ../hamster/stats.py:1093
+#| msgid "Show month"
+msgid "Next month"
+msgstr "Siguiente mes"
+
+#: ../hamster/stats.py:1094
+#| msgid "Show month"
+msgid "This month"
+msgstr "Este mes"
+
+#: ../hamster/stats.py:1095
+#| msgid " _Month"
+msgid "This Month"
+msgstr "Este mes"
+
 #. duration in round hours
 #: ../hamster/stuff.py:151
 #, python-format
@@ -767,6 +847,9 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgid "Save as HTML"
+#~ msgstr "Guardar como HTML"
 
 #~ msgid "Remind also when no activity is set"
 #~ msgstr "Recordar también cuando no hay actividades configuradas"
@@ -817,20 +900,8 @@ msgstr "%dh %dmin"
 #~ msgid "Earlier activities"
 #~ msgstr "Actividades anteriores"
 
-#~ msgid "Generate Report"
-#~ msgstr "Generar un informe"
-
 #~ msgid "Newer activities"
 #~ msgstr "Actividades posteriores"
-
-#~ msgid "Show day"
-#~ msgstr "Mostrar un día"
-
-#~ msgid "Show month"
-#~ msgstr "Mostrar un mes"
-
-#~ msgid "Show week"
-#~ msgstr "Mostrar una semana"
 
 #~ msgid "name"
 #~ msgstr "nombre"
