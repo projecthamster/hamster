@@ -659,7 +659,7 @@ A week of usage would be nice!"""))
             # date of first record when year has been selected
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
-            first_date = facts[0]["start_time"].strftime(C_("first record", "%(b)s %(d)s"))
+            first_date = facts[0]["start_time"].strftime(C_("first record", "%b %d"))
 
         summary += _("First activity was recorded on %s.") % \
                                                      ("<b>%s</b>" % first_date)
