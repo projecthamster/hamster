@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 00:13+0200\n"
-"PO-Revision-Date: 2009-09-01 00:13+0100\n"
+"POT-Creation-Date: 2009-10-30 18:24+0100\n"
+"PO-Revision-Date: 2009-10-30 18:26+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -59,6 +59,7 @@ msgid "Activity list"
 msgstr "Aktivitetslista"
 
 #: ../data/preferences.ui.h:5
+#: ../data/stats.ui.h:9
 msgid "Add activity"
 msgstr "Lägg till aktivitet"
 
@@ -76,6 +77,7 @@ msgid "Category list"
 msgstr "Kategorilista"
 
 #: ../data/preferences.ui.h:9
+#: ../data/stats.ui.h:13
 msgid "Edit activity"
 msgstr "Redigera aktivitet"
 
@@ -96,6 +98,7 @@ msgid "Remind of current activity every:"
 msgstr "Påminn om aktuell aktivitet var:"
 
 #: ../data/preferences.ui.h:14
+#: ../data/stats.ui.h:22
 msgid "Remove activity"
 msgstr "Ta bort aktivitet"
 
@@ -149,7 +152,7 @@ msgid "in progress"
 msgstr "pågående"
 
 #: ../data/edit_activity.ui.h:7
-#: ../data/stats.ui.h:19
+#: ../data/stats.ui.h:34
 msgid "to"
 msgstr "till"
 
@@ -254,47 +257,101 @@ msgid "Activity"
 msgstr "Aktivitet"
 
 #: ../data/stats.ui.h:8
+msgid "Add"
+msgstr "Lägg till"
+
+#: ../data/stats.ui.h:10
 msgid "Categories:"
 msgstr "Kategorier:"
 
-#: ../data/stats.ui.h:9
+#: ../data/stats.ui.h:11
 msgid "Date interval:"
 msgstr "Datumintervall:"
 
-#: ../data/stats.ui.h:10
+#. translators: this is edit activity action in the notifier bubble
+#: ../data/stats.ui.h:12
+#: ../hamster/applet.py:73
+msgid "Edit"
+msgstr "Redigera"
+
+#: ../data/stats.ui.h:14
+msgid "Next"
+msgstr "Nästa"
+
+#: ../data/stats.ui.h:15
+#: ../hamster/stats.py:1081
+msgid "Next week"
+msgstr "Nästa vecka"
+
+#: ../data/stats.ui.h:16
 msgid "No data for this interval"
 msgstr "Inget data för detta intervall"
 
-#: ../data/stats.ui.h:11
+#: ../data/stats.ui.h:17
 msgid "Overview"
 msgstr "Översikt"
 
-#: ../data/stats.ui.h:12
+#: ../data/stats.ui.h:18
 msgid "Overview - Hamster"
 msgstr "Översikt - Hamster"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "Spara som HTML"
+#: ../data/stats.ui.h:19
+msgid "Previous"
+msgstr "Föregående"
 
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "Spara rapport - Tidmätare"
+#: ../data/stats.ui.h:20
+#: ../hamster/stats.py:1080
+msgid "Previous week"
+msgstr "Föregående vecka"
 
-#: ../data/stats.ui.h:15
+#: ../data/stats.ui.h:21
+msgid "Remove"
+msgstr "Ta bort"
+
+#: ../data/stats.ui.h:23
+msgid "Save Report"
+msgstr "Spara rapport"
+
+#: ../data/stats.ui.h:24
+msgid "Save report"
+msgstr "Spara rapport"
+
+#: ../data/stats.ui.h:25
+msgid "Save report &#x2013; Time Tracker"
+msgstr "Spara rapport &#x2013; Tidmätare"
+
+#: ../data/stats.ui.h:26
+msgid "Show month"
+msgstr "Visa månad"
+
+#: ../data/stats.ui.h:27
+msgid "Show single day"
+msgstr "Visa enstaka dag"
+
+#: ../data/stats.ui.h:28
+msgid "Show week"
+msgstr "Visa vecka"
+
+#: ../data/stats.ui.h:29
 msgid "Statistics"
 msgstr "Statistik"
 
-#: ../data/stats.ui.h:16
-msgid "Today"
-msgstr "Idag"
+#: ../data/stats.ui.h:30
+#: ../hamster/stats.py:1083
+msgid "This Week"
+msgstr "Denna vecka"
 
-#: ../data/stats.ui.h:17
+#: ../data/stats.ui.h:31
+#: ../hamster/stats.py:1082
+msgid "This week"
+msgstr "Denna vecka"
+
+#: ../data/stats.ui.h:32
 #: ../hamster/stats.py:948
 msgid "Week"
 msgstr "Vecka"
 
-#: ../data/stats.ui.h:18
+#: ../data/stats.ui.h:33
 msgid "Year:"
 msgstr "År:"
 
@@ -318,11 +375,6 @@ msgstr ""
 "\n"
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Redigera"
 
 #. translators: this is switch activity action in the notifier bubble
 #: ../hamster/applet.py:75
@@ -359,12 +411,12 @@ msgstr "%sh"
 
 #. unsorted category
 #: ../hamster/applet.py:601
-#: ../hamster/db.py:226
-#: ../hamster/db.py:243
-#: ../hamster/db.py:248
-#: ../hamster/db.py:465
-#: ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368
+#: ../hamster/db.py:227
+#: ../hamster/db.py:244
+#: ../hamster/db.py:249
+#: ../hamster/db.py:471
+#: ../hamster/db.py:544
+#: ../hamster/edit_activity.py:370
 #: ../hamster/preferences.py:56
 #: ../hamster/reports.py:54
 #: ../hamster/reports.py:91
@@ -402,43 +454,43 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:732
 msgid "Work"
 msgstr "Arbete"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:733
 msgid "Reading news"
 msgstr "Läser nyheter"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:734
 msgid "Checking stocks"
 msgstr "Kontrollerar aktier"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:735
 msgid "Super secret project X"
 msgstr "Superhemligt projekt X"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:736
 msgid "World domination"
 msgstr "Världsherravälde"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:738
 msgid "Day-to-day"
 msgstr "Dag för dag"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:739
 msgid "Lunch"
 msgstr "Lunch"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:740
 msgid "Watering flowers"
 msgstr "Vattna blommorna"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:741
 msgid "Doing handstands"
 msgstr "Stå på händerna"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:387
 msgid "Update activity"
 msgstr "Uppdatera aktivitet"
 
@@ -570,22 +622,22 @@ msgid "Total Time"
 msgstr "Total tid"
 
 #: ../hamster/stats.py:64
-#: ../hamster/stats.py:1241
+#: ../hamster/stats.py:1254
 msgid "HTML Report"
 msgstr "HTML-rapport"
 
 #: ../hamster/stats.py:72
-#: ../hamster/stats.py:1249
+#: ../hamster/stats.py:1262
 msgid "Tab-Separated Values (TSV)"
 msgstr "Tabulatorseparerade värden (TSV)"
 
 #: ../hamster/stats.py:80
-#: ../hamster/stats.py:1257
+#: ../hamster/stats.py:1270
 msgid "XML"
 msgstr "XML"
 
 #: ../hamster/stats.py:87
-#: ../hamster/stats.py:1264
+#: ../hamster/stats.py:1277
 msgid "iCal"
 msgstr "iCal"
 
@@ -624,10 +676,9 @@ msgstr "%d %b, %Y"
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:662
-#, python-format
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s %(b)s"
+msgid "%b %d"
+msgstr "%d %b"
 
 #: ../hamster/stats.py:664
 #, python-format
@@ -729,6 +780,35 @@ msgstr "Månad"
 msgid "Day"
 msgstr "Dag"
 
+#: ../hamster/stats.py:1068
+msgid "Previous day"
+msgstr "Föregående dag"
+
+#: ../hamster/stats.py:1069
+msgid "Next day"
+msgstr "Nästa dag"
+
+#: ../hamster/stats.py:1070
+#: ../hamster/stats.py:1071
+msgid "Today"
+msgstr "Idag"
+
+#: ../hamster/stats.py:1092
+msgid "Previous month"
+msgstr "Föregående månad"
+
+#: ../hamster/stats.py:1093
+msgid "Next month"
+msgstr "Nästa månad"
+
+#: ../hamster/stats.py:1094
+msgid "This month"
+msgstr "Denna månad"
+
+#: ../hamster/stats.py:1095
+msgid "This Month"
+msgstr "Denna månad"
+
 #. duration in round hours
 #: ../hamster/stuff.py:151
 #, python-format
@@ -747,6 +827,11 @@ msgstr "%dmin"
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
 
+#~ msgid "Save as HTML"
+#~ msgstr "Spara som HTML"
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(d)s %(b)s"
 #~ msgid "Remind also when no activity is set"
 #~ msgstr "Påminn även när ingen aktivitet är inställd"
 #~ msgid "%.1fh"
@@ -783,16 +868,8 @@ msgstr "%dh %dmin"
 #~ msgstr "Ta bort aktivitet"
 #~ msgid "Earlier activities"
 #~ msgstr "Tidigare aktiviteter"
-#~ msgid "Generate Report"
-#~ msgstr "Generera rapport"
 #~ msgid "Newer activities"
 #~ msgstr "Nyare aktiviteter"
-#~ msgid "Show day"
-#~ msgstr "Visa dag"
-#~ msgid "Show month"
-#~ msgstr "Visa månad"
-#~ msgid "Show week"
-#~ msgstr "Visa vecka"
 #~ msgid "name"
 #~ msgstr "namn"
 #~ msgid "Other"
@@ -819,12 +896,8 @@ msgstr "%dh %dmin"
 #~ msgstr "Lägg till en äldre händelse"
 #~ msgid "Ad_d Older Fact"
 #~ msgstr "Läg_g till äldre händelse"
-#~ msgid "Add"
-#~ msgstr "Lägg till"
 #~ msgid "Edit Activities"
 #~ msgstr "Redigera aktiviteter"
-#~ msgid "Remove"
-#~ msgstr "Ta bort"
 #~ msgid "Add custom fact - Hamster"
 #~ msgstr "Lägg till anpassad händelse - Hamster"
 #~ msgid "Nedarbi"
