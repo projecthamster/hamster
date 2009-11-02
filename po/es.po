@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-10-27 22:10+0000\n"
-"PO-Revision-Date: 2009-10-29 18:51+0100\n"
+"POT-Creation-Date: 2009-10-30 17:26+0000\n"
+"PO-Revision-Date: 2009-11-02 01:22+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -297,7 +297,6 @@ msgid "Overview - Hamster"
 msgstr "Resumen - Hamster"
 
 #: ../data/stats.ui.h:19
-#| msgid "Preview:"
 msgid "Previous"
 msgstr "Anterior"
 
@@ -310,17 +309,14 @@ msgid "Remove"
 msgstr "Quitar"
 
 #: ../data/stats.ui.h:23
-#| msgid "Generate Report"
 msgid "Save Report"
 msgstr "Guardar informe"
 
 #: ../data/stats.ui.h:24
-#| msgid "Generate Report"
 msgid "Save report"
 msgstr "Guardar informe"
 
 #: ../data/stats.ui.h:25
-#| msgid "Save report – Time Tracker"
 msgid "Save report &#x2013; Time Tracker"
 msgstr "Guardar informe &#x2013; Gestor de tiempo"
 
@@ -329,7 +325,6 @@ msgid "Show month"
 msgstr "Mostrar un mes"
 
 #: ../data/stats.ui.h:27
-#| msgid "Show day"
 msgid "Show single day"
 msgstr "Mostrar un solo día"
 
@@ -342,12 +337,10 @@ msgid "Statistics"
 msgstr "Estadísticas"
 
 #: ../data/stats.ui.h:30 ../hamster/stats.py:1083
-#| msgid " _Week"
 msgid "This Week"
 msgstr "Esta semana"
 
 #: ../data/stats.ui.h:31 ../hamster/stats.py:1082
-#| msgid "Show week"
 msgid "This week"
 msgstr "Esta semana"
 
@@ -409,8 +402,8 @@ msgid "%sh"
 msgstr "%sh"
 
 #. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/applet.py:601 ../hamster/db.py:227 ../hamster/db.py:244
+#: ../hamster/db.py:249 ../hamster/db.py:471 ../hamster/db.py:544
 #: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
 #: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
@@ -456,39 +449,39 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:733
+#: ../hamster/db.py:732
 msgid "Work"
 msgstr "Trabajo"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:733
 msgid "Reading news"
 msgstr "Leer las noticias"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:734
 msgid "Checking stocks"
 msgstr "Comprobar las existencias"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:735
 msgid "Super secret project X"
 msgstr "Proyecto súper secreto X"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:736
 msgid "World domination"
 msgstr "Dominar el Mundo"
 
-#: ../hamster/db.py:739
+#: ../hamster/db.py:738
 msgid "Day-to-day"
 msgstr "Día a día"
 
-#: ../hamster/db.py:740
+#: ../hamster/db.py:739
 msgid "Lunch"
 msgstr "Almorzar"
 
-#: ../hamster/db.py:741
+#: ../hamster/db.py:740
 msgid "Watering flowers"
 msgstr "Regar las plantas"
 
-#: ../hamster/db.py:742
+#: ../hamster/db.py:741
 msgid "Doing handstands"
 msgstr "Hacer flexiones"
 
@@ -677,10 +670,11 @@ msgstr "%d de %b de %Y"
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:662
-#, python-format
+#| msgctxt "overview graph"
+#| msgid "%b %d"
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s de %(b)s"
+msgid "%b %d"
+msgstr "%d %b"
 
 #: ../hamster/stats.py:664
 #, python-format
@@ -816,17 +810,14 @@ msgid "Previous month"
 msgstr "Mes anterior"
 
 #: ../hamster/stats.py:1093
-#| msgid "Show month"
 msgid "Next month"
 msgstr "Siguiente mes"
 
 #: ../hamster/stats.py:1094
-#| msgid "Show month"
 msgid "This month"
 msgstr "Este mes"
 
 #: ../hamster/stats.py:1095
-#| msgid " _Month"
 msgid "This Month"
 msgstr "Este mes"
 
@@ -847,6 +838,10 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(d)s de %(b)s"
 
 #~ msgid "Save as HTML"
 #~ msgstr "Guardar como HTML"
