@@ -10,18 +10,19 @@
 # I. Felix <ifelix@redhat.com>, 2008, 2009.
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
 # Dr.T.Vasudevan <agnihot3@gmail.com>, 2009.
+# Dr,T,Vasudevan <agnihot3@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-28 05:20+0530\n"
-"PO-Revision-Date: 2009-10-28 05:38+0530\n"
-"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
+"POT-Creation-Date: 2009-11-03 13:21+0530\n"
+"PO-Revision-Date: 2009-11-03 13:22+0530\n"
+"Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\\n"
 "\n"
 "\n"
@@ -406,8 +407,8 @@ msgid "%sh"
 msgstr "%sh"
 
 #. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
+#: ../hamster/applet.py:601 ../hamster/db.py:227 ../hamster/db.py:244
+#: ../hamster/db.py:249 ../hamster/db.py:471 ../hamster/db.py:544
 #: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
 #: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
 #: ../hamster/stuff.py:94
@@ -452,39 +453,39 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:733
+#: ../hamster/db.py:732
 msgid "Work"
 msgstr "பணி"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:733
 msgid "Reading news"
 msgstr "செய்திகள் வாசிப்பு"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:734
 msgid "Checking stocks"
 msgstr "வணிகப் பங்குகள் சரிபார்த்தல்"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:735
 msgid "Super secret project X"
 msgstr "மிக ரகசியத் திட்டம் எக்ஸ்"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:736
 msgid "World domination"
 msgstr "உலக ஆதிக்கம்"
 
-#: ../hamster/db.py:739
+#: ../hamster/db.py:738
 msgid "Day-to-day"
 msgstr "அன்றாடம்"
 
-#: ../hamster/db.py:740
+#: ../hamster/db.py:739
 msgid "Lunch"
 msgstr "மதிய உணவு"
 
-#: ../hamster/db.py:741
+#: ../hamster/db.py:740
 msgid "Watering flowers"
 msgstr "பூக்களுக்குத் தண்ணீர் பாய்ச்சுதல்"
 
-#: ../hamster/db.py:742
+#: ../hamster/db.py:741
 msgid "Doing handstands"
 msgstr "தலைகீழாய் நிற்றல்"
 
@@ -670,10 +671,9 @@ msgstr "%b %d, %Y"
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../hamster/stats.py:662
-#, python-format
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgid "%b %d"
+msgstr "%b %d"
 
 #: ../hamster/stats.py:664
 #, python-format
@@ -828,6 +828,10 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(b)s %(d)s"
 
 #~ msgid "Save as HTML"
 #~ msgstr "ஹெச்டிஎம்எல்(HTML) ஆக சேமி "
