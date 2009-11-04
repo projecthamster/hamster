@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import dbus
 import dbus.service
 import datetime
@@ -27,16 +28,7 @@ from configuration import runtime
 
 # DBus service parameters
 HAMSTER_URI = "org.gnome.Hamster"
-HAMSTER_PATH = "/org/gnome/Hamster"
 
-# Data-keys used in hamster to refer 
-# facts, categories and activities
-FCT_KEY = 'id'
-ACT_KEY = 'name'
-CAT_KEY = 'category'
-DSC_KEY = 'description'
-SRT_KEY = 'start_time'
-END_KEY = 'end_time'
 
 class HamsterDbusController(dbus.service.Object):
     # Non-initialized current fact id
@@ -48,39 +40,34 @@ class HamsterDbusController(dbus.service.Object):
         between dbus types and hamster-applet data types
         """
         try:
-            dbus.service.Object.__init__(self, bus_name, HAMSTER_PATH)
+            dbus.service.Object.__init__(self, bus_name, "/org/gnome/Hamster")
         except KeyError:
             # KeyError is thrown when the dbus interface is taken
             # that is there is other hamster running somewhere
-            print "D-Bus interface registration failed - other hamster running somewhere"
-            pass
+            logging.warn("D-Bus interface registration failed - other hamster running somewhere")
 
     @staticmethod
     def to_dbus_fact(fact):
         """Perform the conversion between fact database query and 
         dbus supported data types
         """
-
         if not fact:
             return dbus.Dictionary({}, signature='sv')
 
-        # Default fact values
-        dbus_fact = {FCT_KEY: 0, ACT_KEY:'', CAT_KEY:'', DSC_KEY:'',
-                SRT_KEY:0, END_KEY:0}
-
-        # Workaround for fill values
-        fact_keys = fact.keys()
-
-        for key in (FCT_KEY, ACT_KEY, CAT_KEY, DSC_KEY):
-            if key in fact_keys and fact[key]:
-                dbus_fact[key] = fact[key]
-
-        for key in (SRT_KEY, END_KEY):
-            if key in fact_keys and fact[key]:
-                # Convert datetime to unix timestamp (seconds since epoch)
-                dbus_fact[key] = timegm(fact[key].timetuple())
-
-        return dbus_fact
+        fact = dict(fact)
+        for key in fact.keys():
+            fact[key] = fact[key] or 0
+            
+            # make sure we return correct type where strings are expected
+            if not fact[key] and key in ('name', 'category', 'description'):
+                fact[key] = ''
+                
+            # convert times to gmtime
+            if isinstance(fact[key], datetime.datetime):
+                fact[key] = timegm(fact[key].timetuple())
+                
+        return fact
+    
 
     @dbus.service.method(HAMSTER_URI, out_signature='a{sv}')
     def GetCurrentFact(self):
@@ -150,7 +137,7 @@ class HamsterDbusController(dbus.service.Object):
         """
         activities = dbus.Array([], signature='(ss)')
         for act in runtime.storage.get_autocomplete_activities():
-            activities.append((act[ACT_KEY] or '', act[CAT_KEY] or ''))
+            activities.append((act['name'] or '', act['category'] or ''))
         return activities
 
     @dbus.service.method(HAMSTER_URI, out_signature='as')
@@ -161,7 +148,7 @@ class HamsterDbusController(dbus.service.Object):
         """
         categories = dbus.Array([], signature='s')
         for cat in runtime.storage.get_category_list():
-            categories.append(cat[ACT_KEY] or '')
+            categories.append(cat['name'] or '')
         return categories
 
     @dbus.service.method(HAMSTER_URI, in_signature='suu', out_signature='i')
@@ -185,7 +172,7 @@ class HamsterDbusController(dbus.service.Object):
             end = datetime.datetime.utcfromtimestamp(end_time)
 
         fact = runtime.storage.add_fact(activity, start, end)
-        return fact[FCT_KEY]
+        return fact['id']
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
     def AddActivity(self, activity, category):
