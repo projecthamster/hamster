@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster applet\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-10-29 21:30+0000\n"
-"PO-Revision-Date: 2009-10-30 11:48+0100\n"
+"POT-Creation-Date: 2009-11-03 12:42+0000\n"
+"PO-Revision-Date: 2009-11-04 08:38+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -282,7 +282,7 @@ msgstr "Naslednji"
 #: ../data/stats.ui.h:15
 #: ../hamster/stats.py:1081
 msgid "Next week"
-msgstr ""
+msgstr "Naslednji teden"
 
 #: ../data/stats.ui.h:16
 msgid "No data for this interval"
@@ -303,7 +303,7 @@ msgstr "Predhodni"
 #: ../data/stats.ui.h:20
 #: ../hamster/stats.py:1080
 msgid "Previous week"
-msgstr ""
+msgstr "Predhodni teden"
 
 #: ../data/stats.ui.h:21
 msgid "Remove"
@@ -318,9 +318,8 @@ msgid "Save report"
 msgstr "Shrani poročilo"
 
 #: ../data/stats.ui.h:25
-#, fuzzy
 msgid "Save report &#x2013; Time Tracker"
-msgstr "Shrani poročilo - Sledenje nalogam"
+msgstr "Shrani poročilo &#x2013; sledenje nalogam"
 
 #: ../data/stats.ui.h:26
 msgid "Show month"
@@ -785,11 +784,11 @@ msgstr "Dan"
 
 #: ../hamster/stats.py:1068
 msgid "Previous day"
-msgstr ""
+msgstr "Predhodni dan"
 
 #: ../hamster/stats.py:1069
 msgid "Next day"
-msgstr ""
+msgstr "Naslednji dan"
 
 #: ../hamster/stats.py:1070
 #: ../hamster/stats.py:1071
