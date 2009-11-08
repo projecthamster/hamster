@@ -23,6 +23,7 @@ import os
 import defs
 from db import Storage
 from dispatcher import Dispatcher
+from xdg.BaseDirectory import xdg_data_home
 
 class Singleton(object):
      def __new__(cls, *args, **kwargs):
@@ -57,7 +58,23 @@ class RuntimeStore(Singleton):
     art_dir = property(get_art_dir, None)
 
 runtime = RuntimeStore()
-runtime.database_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+
+old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+new_db_file = os.path.join(xdg_data_home, "hamster-applet", "hamster.db")
+
+if os.path.exists(old_db_file):
+    db_path, _ = os.path.split(os.path.realpath(new_db_file))
+    if not os.path.exists(db_path):
+        try:
+            os.makedirs(db_path, 0744)
+        except Exception, msg:
+            logging.error("could not create user dir (%s): %s" % (db_path, msg))
+    if os.path.exists(new_db_file):
+        logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
+    else:
+        os.rename(old_db_file, new_db_file)
+
+runtime.database_file = new_db_file
 
 class GconfStore(Singleton):
     """
