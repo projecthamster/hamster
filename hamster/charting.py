@@ -41,6 +41,7 @@ import math
 from sys import maxint
 import datetime as dt
 import time
+import colorsys
 import graphics
 import logging
 
@@ -57,20 +58,6 @@ dark = [(196, 160, 0), (206, 92, 0),    (143, 89, 2),
         (78, 154, 6),  (32, 74, 135),   (92, 53, 102), 
         (164, 0, 0),   (186, 189, 182), (46, 52, 54)]
 
-
-def set_color(context, color, g = None, b = None):
-    if g and b:
-        r,g,b = color / 255.0, g / 255.0, b / 255.0
-    else:
-        r,g,b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
-    context.set_source_rgb(r, g, b)
-    
-
-def set_color_gdk(context, color):
-    # set_color_gdk(context, self.style.fg[gtk.STATE_NORMAL]);
-    r,g,b = color.red / 65536.0, color.green / 65536.0, color.blue / 65536.0
-    context.set_source_rgb(r, g, b)
-    
 def size_list(set, target_set):
     """turns set lenghts into target set - trim it, stretches it, but
        keeps values for cases when lengths match
@@ -157,25 +144,25 @@ class Chart(graphics.Area):
         self.current_max = None
         self.integrators = []
         self.moving = False
-            
-
+        
+    def get_bar_color(self, index):
+        # returns color darkened by it's index
+        # the approach reduces contrast by each step because we tend to differ         
+        base_color = self.bar_base_color or (220, 220, 220)
+        
+        base_hls = colorsys.rgb_to_hls(*base_color)
+        
+        step = (base_hls[1] - 30) / 10 #will go from base down to 20 and max 22 steps
+        
+        return colorsys.hls_to_rgb(base_hls[0],
+                                   base_hls[1] - step * index,
+                                   base_hls[2])
+        
 
     def draw_bar(self, x, y, w, h, color = None):
         """ draws a simple bar"""
         base_color = color or self.bar_base_color or (220, 220, 220)
-
-        if self.bars_beveled:
-            self.fill_area(x, y, w, h,
-                            [b - 30 for b in base_color])
-
-            if w > 2 and h > 2:
-                self.fill_area(x + 1, y + 1, w - 2, h - 2,
-                                [b + 20 for b in base_color])
-    
-            if w > 3 and h > 3:
-                self.fill_area(x + 2, y + 2, w - 4, h - 4, base_color)
-        else:
-            self.fill_area(x, y, w, h, base_color)
+        self.fill_area(x, y, w, h, base_color)
 
 
     def plot(self, keys, data, stack_keys = None):
@@ -328,7 +315,7 @@ class BarChart(Chart):
         self.layout.set_width(-1)
 
         for i in range(len(self.keys)):
-            set_color(context, dark[8]);
+            self.set_color(graphics.Colors.aluminium[5]);
             self.layout.set_text(self.keys[i])
             label_w, label_h = self.layout.get_pixel_size()
 
@@ -357,7 +344,7 @@ class BarChart(Chart):
                                       self.graph_height - bar_start,
                                       bar_width - (gap * 2),
                                       bar_size,
-                                      [col - (j * 22) for col in base_color])
+                                      self.get_bar_color(j))
             else:
                 factor = self.integrators[i].value
                 bar_size = max_bar_size * factor
@@ -390,10 +377,10 @@ class BarChart(Chart):
                     label_w, label_h = self.layout.get_pixel_size()
                     context.move_to(legend_width - label_w - 8,
                                     self.get_pixel(y_value=y) - label_h / 2)
-                    set_color(context, medium[8])
+                    self.set_color(graphics.Colors.aluminium[4])
                     context.show_layout(self.layout)
 
-                set_color(context, (255, 255, 255))
+                self.set_color((255, 255, 255))
                 self.context.move_to(legend_width, self.get_pixel(y_value=y))
                 self.context.line_to(self.width, self.get_pixel(y_value=y))
 
@@ -405,7 +392,7 @@ class BarChart(Chart):
             context.set_antialias(cairo.ANTIALIAS_DEFAULT)
 
             #put series keys
-            set_color(context, dark[8]);
+            self.set_color(graphics.Colors.aluminium[5]);
             
             y = self.graph_height
             label_y = None
@@ -481,24 +468,6 @@ class HorizontalBarChart(Chart):
 
         if self.chart_background:
             self.fill_area(self.graph_x, self.graph_y, self.graph_width, self.graph_height, self.chart_background)
-        
-
-        # stripes for the case i decided that they are not annoying
-        """
-        for i in range(0, int(self.current_max.value), 10):
-            x = self.graph_x + (self.graph_width * (i / float(self.current_max.value)))
-            w = (self.graph_width * (5 / float(self.current_max.value)))
-
-            context.set_source_rgb(0.93, 0.93, 0.93)
-            context.rectangle(x + w, self.graph_y, w, self.graph_height)
-            context.fill()
-            context.stroke()
-            
-            context.set_source_rgb(0.70, 0.70, 0.70)
-            context.move_to(x, self.graph_y + self.graph_height - 2)
-
-            context.show_text(str(i))
-        """
 
     
         if not self.data:  #if we have nothing, let's go home
@@ -524,10 +493,9 @@ class HorizontalBarChart(Chart):
         self.layout.set_width(legend_width * pango.SCALE)
         
 
-        for i in range(rowcount):
+        for i, label in enumerate(keys):
             self.layout.set_width(legend_width * pango.SCALE)
-            set_color(context, dark[8])        
-            label = keys[i]
+            self.set_color(graphics.Colors.aluminium[5])        
             
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
@@ -541,20 +509,21 @@ class HorizontalBarChart(Chart):
 
             bar_y = self.graph_y + (bar_width * i) + gap
 
+            last_color = (255,255,255)
+
             if self.stack_keys:
                 bar_start = 0
-                for j in range(len(self.integrators[i])):
-                    factor = self.integrators[i][j].value
-                    if factor > 0:
-                        bar_size = max_bar_size * factor
+                for j, factor in enumerate(self.integrators[i]):
+                    if factor.value > 0:
+                        bar_size = max_bar_size * factor.value
                         bar_height = bar_width - (gap * 2)
                         
+                        last_color = self.get_bar_color(j)
                         self.draw_bar(self.graph_x + bar_start,
                                       bar_y,
                                       bar_size,
                                       bar_height,
-                                      [col - (j * 22) for col in base_color])
-        
+                                      last_color)
                         bar_start += bar_size
             else:
                 factor = self.integrators[i].value
@@ -565,8 +534,6 @@ class HorizontalBarChart(Chart):
                 
                 self.draw_bar(self.graph_x, bar_y, bar_size, bar_height,
                                                                      base_color)
-                
-
 
             # values on bars
             if self.stack_keys:
@@ -574,16 +541,23 @@ class HorizontalBarChart(Chart):
             else:
                 total_value = self.data[i]
             
-            set_color(context, dark[8])        
-            label = self.value_format % total_value
             self.layout.set_width(-1)
-            self.layout.set_text(label)
+            self.layout.set_text(self.value_format % total_value)
             label_w, label_h = self.layout.get_pixel_size()
 
             vertical_padding = (bar_width - (bar_width + label_h) / 2.0 ) / 2.0
             if  bar_start - vertical_padding < label_w:
                 label_x = self.graph_x + bar_start + vertical_padding
+                self.set_color(graphics.Colors.aluminium[5])        
             else:
+                # we are in the bar so make sure that the font color is distinguishable
+                # this is a hamster fix
+                # TODO - drop the library bit, we will never be adopted
+                if colorsys.rgb_to_hls(*last_color)[1] < 150:
+                    self.set_color(graphics.Colors.almost_white)
+                else:
+                    self.set_color(graphics.Colors.aluminium[5])        
+                    
                 label_x = self.graph_x + bar_start - label_w - vertical_padding
             
             context.move_to(label_x, self.graph_y + (bar_width * i) + (bar_width - label_h) / 2.0)
@@ -657,9 +631,8 @@ class HorizontalDayChart(Chart):
         factor = max_bar_size / float(end_hour - start_hour)
 
 
-        for i in range(rowcount):
-            set_color(context, dark[8])        
-            label = keys[i]
+        for i, label in enumerate(keys):
+            self.set_color(graphics.Colors.aluminium[5])        
             
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
@@ -705,11 +678,11 @@ class HorizontalDayChart(Chart):
 
             context.move_to(self.graph_x + x - label_w / 2,
                             bar_y + bar_height + 4)
-            set_color(context, medium[8])
+            self.set_color(graphics.Colors.aluminium[4])
             context.show_layout(self.layout)
 
             
-            set_color(context, (255, 255, 255))
+            self.set_color((255, 255, 255))
             self.context.move_to(self.graph_x + x, self.graph_y)
             self.context.line_to(self.graph_x + x, bar_y + bar_height)
 
