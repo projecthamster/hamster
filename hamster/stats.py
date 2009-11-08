@@ -232,7 +232,7 @@ class TimeLine(graphics.Area):
             return
 
         self.fill_area(0, 0, self.width, self.height, (0.975,0.975,0.975))
-        charting.set_color(self.context, (100,100,100))
+        self.set_color((100,100,100))
 
         self.set_value_range(x_min = 1, x_max = (self.end_date - self.start_date).days)        
         month_label_fits = True
@@ -326,7 +326,7 @@ class TimeLine(graphics.Area):
 
 class StatsViewer(object):
     def __init__(self, parent = None):
-        self.parent = parent# determine if app shut shut down on close
+        self.parent = parent# determine if app should shut down on close
         self._gui = stuff.load_ui_file("stats.ui")
         self.window = self.get_widget('stats_window')
         self.stat_facts = None
@@ -337,14 +337,14 @@ class StatsViewer(object):
         
         
         #graphs
-        self.background = (0.975,0.975,0.975)
+        self.background = (0.975, 0.975, 0.975)
         self.get_widget("graph_frame").modify_bg(gtk.STATE_NORMAL,
                       gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
         self.get_widget("explore_frame").modify_bg(gtk.STATE_NORMAL,
                       gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
 
 
-        x_offset = 90 # let's nicely align all graphs
+        x_offset = 90 # align all graphs to the left edge
         
         self.category_chart = charting.BarChart(background = self.background,
                                              bar_base_color = (238,221,221),
@@ -501,7 +501,7 @@ class StatsViewer(object):
 
                 self.layout.set_width((self.width) * pango.SCALE)
                 self.context.move_to(0,0)
-                charting.set_color(self.context, charting.dark[8])
+                self.set_color(charting.graphics.Colors.aluminium[5])
                 
                 self.context.show_layout(self.layout)
 
