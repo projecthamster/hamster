@@ -24,6 +24,7 @@ import defs
 from db import Storage
 from dispatcher import Dispatcher
 from xdg.BaseDirectory import xdg_data_home
+import logging
 
 class Singleton(object):
      def __new__(cls, *args, **kwargs):
