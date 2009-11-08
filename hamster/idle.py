@@ -122,7 +122,7 @@ class DbusIdleListener(object):
             logging.debug("Screen Lock Requested")
             self.screen_locked = True
         
-        return True
+        return
     
 
     def getIdleFrom(self):
