@@ -2,7 +2,11 @@ import time, datetime as dt
 import gtk, gobject
 
 import pango, cairo
-import colorsys
+
+class Colors(object):
+    aluminium = [(238, 238, 236), (211, 215, 207), (186, 189, 182),
+                 (136, 138, 133), (85, 87, 83), (46, 52, 54)]
+    almost_white = (250, 250, 250)
 
 class Area(gtk.DrawingArea):
     """Abstraction on top of DrawingArea to work specifically with cairo"""
@@ -63,12 +67,20 @@ class Area(gtk.DrawingArea):
         self.mouse_regions = [] #regions of drawing that respond to hovering/clicking
         self.__prev_mouse_regions = None
 
+    def set_color(self, color, opacity = None):
+        if color[0] > 1 or color[1] > 0 or color[2] > 0:
+            color = [c / 255.0 for c in color]
+
+        if opacity:
+            self.context.set_source_rgba(color[0], color[1], color[2], opacity)
+        elif len(color) == 3:
+            self.context.set_source_rgb(*color)
+        else:
+            self.context.set_source_rgba(*color)
+
+
     def register_mouse_region(self, x1, y1, x2, y2, region_name):
         self.mouse_regions.append((x1, y1, x2, y2, region_name))
-
-    def hls(self, color):
-        # converts hls to rgb
-        return colorsys.hls_to_rgb(*color)
 
     def redraw_canvas(self):
         """Force graph redraw"""
@@ -79,7 +91,6 @@ class Area(gtk.DrawingArea):
 
     def _render(self):
         raise NotImplementedError
-
 
     def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):
         """sets up our internal conversion matrix, because cairo one will
