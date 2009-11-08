@@ -159,8 +159,11 @@ class ReportChooserDialog(gtk.Dialog):
         
         categories = []
         for button in self.category_box.get_children():
-            if button.get_active() and button.value:
+            if button.get_active():
                 categories.append(button.value)
+        
+        if None in categories:
+            categories = None # nothing is everything
         
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path,
