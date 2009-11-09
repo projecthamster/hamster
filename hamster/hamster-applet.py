@@ -76,8 +76,12 @@ if __name__ == "__main__":
 
     # in console set logging lower, in panel write log to file
     log_format = "%(asctime)s %(levelname)s: %(message)s"
-    if options.standalone:
-        logging.basicConfig(level=logging.INFO, format = log_format)
+    if options.standalone or options.start_window:
+        log_level = logging.INFO
+        if options.debug:
+            log_level = logging.DEBUG
+
+        logging.basicConfig(level = log_level, format = log_format)
     else: #otherwise write to the sessions file
         logging.basicConfig(filename = os.path.join(os.path.expanduser("~"),
                                                     '.xsession-errors'),
