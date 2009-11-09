@@ -258,6 +258,7 @@ class Storage(storage.Storage):
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
             self.__remove_fact(fact['id'])
         else:
+            end_time = end_time.replace(microsecond = 0)
             query = """
                        UPDATE facts
                           SET end_time = ?
@@ -471,22 +472,15 @@ class Storage(storage.Storage):
         facts = self.fetchall(query, (_("Unsorted"), datetime_from, datetime_to))
         res = []
 
-        today = dt.date.today()
-        yesterday = dt.date.today() - dt.timedelta(days = 1)
-        now = dt.datetime.now()
-        
-        # fetch last activity here - we will be looking it up for comparisons
-        last_activity = None
-        if date >= today >= end_date or abs(date - today).days < 2 \
-                                   or abs(end_date - today).days < 2:
-            last_activity = self.__get_last_activity()
-
         for fact in facts:
             # heuristics to assign tasks to proper days
+
+            # if fact has no end time, set the last minute of the day,
+            # or current time if fact has happened in last 24 hours
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
-            elif (today - fact["start_time"].date()) <= dt.timedelta(days=1):
-                fact_end_time = now
+            elif (dt.date.today() - fact["start_time"].date()) <= dt.timedelta(days=1):
+                fact_end_time = dt.datetime.now().replace(microsecond = 0)
             else:
                 fact_end_time = fact["start_time"].replace(hour=23, minute=59)
 
