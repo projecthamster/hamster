@@ -378,23 +378,34 @@ class CustomFactController:
             buf.set_text(fact["description"] or "")
             self.get_widget('description').set_buffer(buf)
 
-            if not end_date:
-                self.get_widget("in_progress").set_active(True)
-                if (dt.datetime.now() - start_date).days == 0:
-                    end_date = dt.datetime.now()
-
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
-        elif fact_date and fact_date != dt.date.today():
+        else:
             # if there is previous activity with end time - attach to it
-            # otherwise let's start at 8am
+            # otherwise let's start at 8am (unless it is today - in that case
+            # we will assume that the user wants to start from this moment)
+            fact_date = fact_date or dt.date.today()
+
             last_activity = runtime.storage.get_facts(fact_date)
             if last_activity and last_activity[len(last_activity)-1]["end_time"]:
                 start_date = last_activity[len(last_activity)-1]["end_time"]
+
+                if fact_date != dt.date.today():
+                    end_date = start_date + dt.timedelta(minutes=30)
             else:
-                start_date = dt.datetime(fact_date.year, fact_date.month,
-                                         fact_date.day, 8)
+                if fact_date == dt.date.today():
+                    start_date = dt.datetime.now()
+                else:
+                    start_date = dt.datetime(fact_date.year, fact_date.month,
+                                             fact_date.day, 8)
+
+
+        if not end_date:
+            self.get_widget("in_progress").set_active(True)
+            if (dt.datetime.now() - start_date).days == 0:
+                end_date = dt.datetime.now()
+
 
         start_date = start_date or dt.datetime.now()
         end_date = end_date or start_date + dt.timedelta(minutes = 30)
