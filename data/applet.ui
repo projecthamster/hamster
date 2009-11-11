@@ -10,7 +10,7 @@
     <property name="window_position">mouse</property>
     <property name="destroy_with_parent">True</property>
     <property name="icon_name">hamster-applet</property>
-    <property name="type_hint">dropdown-menu</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="decorated">False</property>
