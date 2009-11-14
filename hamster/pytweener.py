@@ -8,141 +8,13 @@
 # Python version by Ben Harling 2009 
 import math
 
-class Easing:
-    class Back:
-        @staticmethod
-        def easeIn(t, b, c, d, s = 1.70158):
-            t= t/d
-            return c * (t) * t * ((s+1) * t - s) + b
-
-        @staticmethod
-        def easeOut (t, b, c, d, s = 1.70158):
-            t = t/d-1
-            return c*((t)*t*((s+1)*t + s) + 1) + b;
-
-        @staticmethod
-        def easeInOut (t, b, c, d, s = 1.70158):
-            t = t / d*0.5
-            s = s * 1.525
-            
-            if ((t) < 1):
-                return c*0.5*(t*t*(((s)+1)*t - s)) + b
-            
-            t = t - 2
-            return c / 2 * ((t) * t * (((s)+1) * t + s) + 2) + b
-
-    class Bounce:
-        @staticmethod
-        def easeOut (t, b, c, d):
-            t = t / d
-            if t < 1 / 2.75:
-                return c * (7.5625 * t * t) + b
-                
-            elif t < 2 / 2.75:
-                t = t - 1.5 / 2.75
-                return c * (7.5625 * (t)*t + 0.75) + b
-
-            elif t < 2.5 / 2.75:
-                t = t - 2.25/2.75
-                return c * (7.5625 * (t)*t + .9375) + b
-            else:
-                t = t - 2.625 / 2.75
-                return c*(7.5625*(t)*t + 0.984375) + b
-
-        @staticmethod
-        def easeIn (t, b, c, d):
-            return c - Easing.Bounce.easeOut(d-t, 0, c, d) + b
-
-        @staticmethod
-        def easeInOut (t, b, c, d):
-            if t < d * 0.5:
-                return Easing.Bounce.easeIn (t*2, 0, c, d) * .5 + b
-            else:
-                return Easing.Bounce.easeOut (t*2-d, 0, c, d) * .5 + c*.5 + b
-
-
-def OUT_EXPO(t, b, c, d ):
-    return b+c if (t==d) else c * (-2**(-10 * t/d) + 1) + b;
-
-def LINEAR(t, b, c, d):
-    return c*t/d + b
-
-def IN_QUAD(t, b, c, d):
-    t/=d
-    return c*(t)*t + b
-
-def OUT_QUAD(t, b, c, d):
-    t/=d
-    return -c *(t)*(t-2) + b
-
-def IN_OUT_QUAD(t, b, c, d ):
-    t/=d/2
-    if ((t) < 1): return c/2*t*t + b
-    t-=1
-    return -c/2 * ((t)*(t-2) - 1) + b
-
-def OUT_IN_QUAD(t, b, c, d ):
-    if (t < d/2): 
-        return self.OUT_QUAD (t*2, b, c/2, d)
-    return self.IN_QUAD((t*2)-d, b+c/2, c/2)
-
-def IN_CUBIC(t, b, c, d):
-    t/=d
-    return c*(t)*t*t + b
-
-def OUT_CUBIC(t, b, c, d):
-    t=t/d-1
-    return c*((t)*t*t + 1) + b
-
-def IN_OUT_CUBIC(t, b, c, d):
-    t/=d/2
-    if ((t) < 1):
-         return c/2*t*t*t + b
-    t-=2
-    return c/2*((t)*t*t + 2) + b
-
-def OUT_IN_CUBIC(t, b, c, d ):
-    if (t < d/2): return self.OUT_CUBIC (t*2, b, c/2, d)
-    return self.IN_CUBIC((t*2)-d, b+c/2, c/2, d)
-
-def IN_QUART(t, b, c, d):
-    t/=d
-    return c*(t)*t*t*t + b
-
-def OUT_QUART(t, b, c, d):
-    t=t/d-1
-    return -c * ((t)*t*t*t - 1) + b
-
-def IN_OUT_QUART(t, b, c, d):
-    t/=d/2
-    if (t < 1): 
-        return c/2*t*t*t*t + b
-    t-=2
-    return -c/2 * ((t)*t*t*t - 2) + b
-
-def OUT_ELASTIC(t, b, c, d): # Not working :(
-    if (t==0): 
-        return b
-    t/=d
-    if t==1:
-        return b+c
-    p = period = d*.3
-    a = amplitude = 1.0
-    if a < abs(c):
-        a = c
-        s = p/4
-    else:
-        s = p/(2*math.pi) * math.asin (c/a)
-
-    return (a*math.pow(2,-10*t) * math.sin( (t*d-s)*(2*math.PI)/p ) + c + b)
- 
 class Tweener:
     def __init__(self, duration = None, tween = None):
         """Tweener
         This class manages all active tweens, and provides a factory for
         creating and spawning tween motions."""
         self.currentTweens = []
-        self.defaultTweenType = tween or IN_OUT_QUAD
+        self.defaultTweenType = tween or Easing.Cubic.easeInOut
         self.defaultDuration = duration or 1.0
  
     def hasTweens(self):
@@ -298,7 +170,6 @@ class Tween(object):
                 newProp = [ k, prop, tweenable]
                 self.tProps.append( newProp )  
  
-        #print dir(self)
  
     def pause( self, numSeconds=-1 ):
         """Pause this tween
@@ -371,13 +242,11 @@ class Tween(object):
                 return ret
         return ret
  
- 
- 
- 
     def Remove(self):
         """Disables and removes this tween
             without calling the complete function"""
         self.complete = True
+
  
 class Tweenable:
     def __init__(self, start, change):
@@ -386,11 +255,347 @@ class Tweenable:
             these are normally only created by Tweens"""
         self.startValue = start
         self.change = change
- 
- 
- 
- 
- 
+
+
+"""Robert Penner's easing classes ported over from actionscript by Toms Baugis (at gmail com).
+There certainly is room for improvement, but wanted to keep the readability to some extent.
+
+================================================================================
+ Easing Equations
+ (c) 2003 Robert Penner, all rights reserved. 
+ This work is subject to the terms in
+ http://www.robertpenner.com/easing_terms_of_use.html.
+================================================================================
+
+TERMS OF USE - EASING EQUATIONS
+
+Open source under the BSD License.
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    * Neither the name of the author nor the names of contributors may be used
+      to endorse or promote products derived from this software without specific
+      prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+class Easing:
+    class Back:
+        @staticmethod
+        def easeIn(t, b, c, d, s = 1.70158):
+            t = t / d
+            return c * t**2 * ((s+1) * t - s) + b
+
+        @staticmethod
+        def easeOut (t, b, c, d, s = 1.70158):
+            t = t / d - 1
+            return c * (t**2 * ((s + 1) * t + s) + 1) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d, s = 1.70158):
+            t = t / (d * 0.5)
+            s = s * 1.525
+            
+            if t < 1:
+                return c * 0.5 * (t**2 * ((s + 1) * t - s)) + b
+
+            t = t - 2
+            return c / 2 * (t**2 * ((s + 1) * t + s) + 2) + b
+
+    class Bounce:
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d
+            if t < 1 / 2.75:
+                return c * (7.5625 * t**2) + b
+            elif t < 2 / 2.75:
+                t = t - 1.5 / 2.75
+                return c * (7.5625 * t**2 + 0.75) + b
+            elif t < 2.5 / 2.75:
+                t = t - 2.25 / 2.75
+                return c * (7.5625 * t**2 + .9375) + b
+            else:
+                t = t - 2.625 / 2.75
+                return c * (7.5625 * t**2 + 0.984375) + b
+
+        @staticmethod
+        def easeIn (t, b, c, d):
+            return c - Easing.Bounce.easeOut(d-t, 0, c, d) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            if t < d * 0.5:
+                return Easing.Bounce.easeIn (t * 2, 0, c, d) * .5 + b
+
+            return Easing.Bounce.easeOut (t * 2 -d, 0, c, d) * .5 + c*.5 + b
+
+
+        
+    class Circ:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            t = t / d
+            return -c * (math.sqrt(1 - t**2) - 1) + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d - 1
+            return c * math.sqrt(1 - t**2) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            t = t / (d * 0.5)
+            if t < 1:
+                return -c * 0.5 * (math.sqrt(1 - t**2) - 1) + b
+            
+            t = t - 2
+            return c*0.5 * (math.sqrt(1 - t**2) + 1) + b
+
+
+    class Cubic:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            t = t / d
+            return c * t**3 + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d - 1
+            return c * (t**3 + 1) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            t = t / (d * 0.5)
+            if t < 1:
+                return c * 0.5 * t**3 + b
+            
+            t = t - 2
+            return c * 0.5 * (t**3 + 2) + b
+
+
+    class Elastic:
+        @staticmethod
+        def easeIn (t, b, c, d, a = 0, p = 0):
+            if t==0: return b
+
+            t = t / d            
+            if t == 1: return b+c
+            
+            if not p: p = d * .3;
+
+            if not a or a < abs(c):
+                a = c
+                s = p / 4
+            else:
+                s = p / (2 * math.pi) * math.asin(c / a)
+            
+            t = t - 1            
+            return - (a * math.pow(2, 10 * t) * math.sin((t*d-s) * (2 * math.pi) / p)) + b
+
+
+        @staticmethod
+        def easeOut (t, b, c, d, a = 0, p = 0):
+            if t == 0: return b
+            
+            t = t / d
+            if (t == 1): return b + c
+            
+            if not p: p = d * .3;
+
+            if not a or a < abs(c):
+                a = c
+                s = p / 4
+            else:
+                s = p / (2 * math.pi) * math.asin(c / a)
+                
+            return a * math.pow(2,-10 * t) * math.sin((t * d - s) * (2 * math.pi) / p) + c + b
+
+
+        @staticmethod
+        def easeInOut (t, b, c, d, a = 0, p = 0):
+            if t == 0: return b
+            
+            t = t / (d * 0.5)
+            if t == 2: return b + c
+            
+            if not p: p = d * (.3 * 1.5)
+
+            if not a or a < abs(c):
+                a = c
+                s = p / 4
+            else:
+                s = p / (2 * math.pi) * math.asin(c / a)
+                
+            if (t < 1):
+                t = t - 1
+                return -.5 * (a * math.pow(2, 10 * t) * math.sin((t * d - s) * (2 * math.pi) / p)) + b
+                
+            t = t - 1
+            return a * math.pow(2, -10 * t) * math.sin((t * d - s) * (2 * math.pi) / p) * .5 + c + b
+
+
+    class Expo:
+        @staticmethod
+        def easeIn(t, b, c, d):
+            if t == 0:
+                return b
+            else:
+                return c * math.pow(2, 10 * (t / d - 1)) + b - c * 0.001
+
+        @staticmethod
+        def easeOut(t, b, c, d):
+            if t == d:
+                return b + c
+            else:
+                return c * (-math.pow(2, -10 * t / d) + 1) + b
+
+        @staticmethod
+        def easeInOut(t, b, c, d):
+            if t==0:
+                return b
+            elif t==d:
+                return b+c
+
+            t = t / (d * 0.5)
+            
+            if t < 1:
+                return c * 0.5 * math.pow(2, 10 * (t - 1)) + b
+            
+            return c * 0.5 * (-math.pow(2, -10 * (t - 1)) + 2) + b
+
+
+    class Linear:
+        @staticmethod
+        def easeNone(t, b, c, d):
+            return c * t / d + b
+
+        @staticmethod
+        def easeIn(t, b, c, d):
+            return c * t / d + b
+
+        @staticmethod
+        def easeOut(t, b, c, d):
+            return c * t / d + b
+
+        @staticmethod
+        def easeInOut(t, b, c, d):
+            return c * t / d + b
+
+
+    class Quad:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            t = t / d
+            return c * t**2 + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d
+            return -c * t * (t-2) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            t = t / (d * 0.5)
+            if t < 1:
+                return c * 0.5 * t**2 + b
+            
+            t = t - 1
+            return -c * 0.5 * (t * (t - 2) - 1) + b
+
+
+    class Quart:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            t = t / d
+            return c * t**4 + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d - 1
+            return -c * (t**4 - 1) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            t = t / (d * 0.5)
+            if t < 1:
+                return c * 0.5 * t**4 + b
+            
+            t = t - 2
+            return -c * 0.5 * (t**4 - 2) + b
+
+    
+    class Quint:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            t = t / d
+            return c * t**5 + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            t = t / d - 1
+            return c * (t**5 + 1) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            t = t / (d * 0.5)
+            if t < 1:
+                return c * 0.5 * t**5 + b
+            
+            t = t - 2
+            return c * 0.5 * (t**5 + 2) + b
+
+    class Sine:
+        @staticmethod
+        def easeIn (t, b, c, d):
+            return -c * math.cos(t / d * (math.pi / 2)) + c + b
+
+        @staticmethod
+        def easeOut (t, b, c, d):
+            return c * math.sin(t / d * (math.pi / 2)) + b
+
+        @staticmethod
+        def easeInOut (t, b, c, d):
+            return -c * 0.5 * (math.cos(math.pi * t / d) - 1) + b
+
+
+    class Strong:
+        @staticmethod
+        def easeIn(t, b, c, d):
+            return c * (t/d)**5 + b
+
+        @staticmethod
+        def easeOut(t, b, c, d):
+            return c * ((t / d - 1)**5 + 1) + b
+
+        @staticmethod
+        def easeInOut(t, b, c, d):
+            t = t / (d * 0.5)
+            
+            if t < 1:
+                return c * 0.5 * t**5 + b
+            
+            t = t - 2
+            return c * 0.5 * (t**5 + 2) + b
+
+
+
 class TweenTestObject:
     def __init__(self):
         self.pos = 20
