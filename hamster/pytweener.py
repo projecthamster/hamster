@@ -9,7 +9,7 @@
 import math
 
 class Tweener:
-    def __init__(self, duration = None, tween = None):
+    def __init__(self, duration = 0.5, tween = None):
         """Tweener
         This class manages all active tweens, and provides a factory for
         creating and spawning tween motions."""
@@ -69,12 +69,12 @@ class Tweener:
             self.currentTweens.append( tw )
         return tw
  
-    def removeTween( tweenObj ):
-        if self.currentTweens.contains( tweenObj ):
+    def removeTween(self, tweenObj):
+        if tweenObj in self.currentTweens:
             tweenObj.complete = True
             #self.currentTweens.remove( tweenObj )
  
-    def getTweensAffectingObject( self, obj ):
+    def getTweensAffectingObject(self, obj):
         """Get a list of all tweens acting on the specified object
         Useful for manipulating tweens on the fly"""
         tweens = []
@@ -83,7 +83,7 @@ class Tweener:
                 tweens.append(t)
         return tweens
  
-    def removeTweeningFrom( self, obj ):
+    def removeTweeningFrom(self, obj):
         """Stop tweening an object, without completing the motion
         or firing the completeFunction"""
         for t in self.currentTweens:
