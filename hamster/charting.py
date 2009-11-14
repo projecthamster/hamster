@@ -42,21 +42,10 @@ from sys import maxint
 import datetime as dt
 import time
 import colorsys
-import graphics
 import logging
 
-# Tango colors
-light = [(252, 233, 79), (252, 175, 62),  (233, 185, 110),
-         (138, 226, 52), (114, 159, 207), (173, 127, 168), 
-         (239, 41,  41), (238, 238, 236), (136, 138, 133)]
+import graphics, pytweener
 
-medium = [(237, 212, 0),  (245, 121, 0),   (193, 125, 17),
-          (115, 210, 22), (52,  101, 164), (117, 80,  123), 
-          (204, 0,   0),  (211, 215, 207), (85, 87, 83)]
-
-dark = [(196, 160, 0), (206, 92, 0),    (143, 89, 2),
-        (78, 154, 6),  (32, 74, 135),   (92, 53, 102), 
-        (164, 0, 0),   (186, 189, 182), (46, 52, 54)]
 
 def size_list(set, target_set):
     """turns set lenghts into target set - trim it, stretches it, but
@@ -88,6 +77,15 @@ def get_limits(set, stack_subfactors = True):
 
     return min_value, max_value
     
+
+class Bar(object):
+    def __init__(self, value, size = 0):
+        self.value = value
+        self.size = size
+    
+    def __repr__(self):
+        return str((self.value, self.size))
+        
 
 class Chart(graphics.Area):
     """Chart constructor. Optional arguments:
@@ -122,6 +120,7 @@ class Chart(graphics.Area):
     def __init__(self, **args):
         graphics.Area.__init__(self)
 
+        # options
         self.max_bar_width     = args.get("max_bar_width", 500)
         self.legend_width      = args.get("legend_width", 0)
         self.animate           = args.get("animate", True)
@@ -140,14 +139,17 @@ class Chart(graphics.Area):
         self.labels_at_end     = args.get("labels_at_end", False)
         self.framerate         = args.get("framerate", 60)
 
-        #and some defaults
-        self.current_max = None
-        self.integrators = []
+        # other stuff
+        self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
+        self.last_frame_time = None
         self.moving = False
+        
+        self.bars = []
+        
         
     def get_bar_color(self, index):
         # returns color darkened by it's index
-        # the approach reduces contrast by each step because we tend to differ         
+        # the approach reduces contrast by each step
         base_color = self.bar_base_color or (220, 220, 220)
         
         base_hls = colorsys.rgb_to_hls(*base_color)
@@ -178,26 +180,14 @@ class Chart(graphics.Area):
 
         min, self.max_value = get_limits(data)
 
-        if not self.current_max:
-            self.current_max = graphics.Integrator(0)
-        self.current_max.target(self.max_value)
-        
         self._update_targets()
-        
+
         if self.animate:
+            self.last_frame_time = dt.datetime.now()
             if not self.moving: #if we are moving, then there is a timeout somewhere already
                 gobject.timeout_add(1000 / self.framerate, self._interpolate)
         else:
-            def finish_all(integrators):
-                for i in range(len(integrators)):
-                    if isinstance(integrators[i], list):
-                        finish_all(integrators[i])
-                    else:
-                        integrators[i].finish()
-    
-            finish_all(self.integrators)
-            self.current_max.finish()
-
+            self.tweener.update(self.tweener.defaultDuration) # set to end frame
 
             self.redraw_canvas()
 
@@ -206,28 +196,18 @@ class Chart(graphics.Area):
         """Internal function to do the math, going from previous set to the
            new one, and redraw graph"""
         #this can get called before expose    
+        self.moving = self.tweener.hasTweens()
+
         if not self.window:
             self.redraw_canvas()
             return False
 
-        #ok, now we are good!
-        self.current_max.update()
-
-
-        def update_all(integrators):
-            still_moving = False
-            for z in range(len(integrators)):
-                if isinstance(integrators[z], list):
-                    still_moving = update_all(integrators[z]) or still_moving
-                else:
-                    still_moving = integrators[z].update() > 0.0001 or still_moving
-            return still_moving
-
-        self.moving = update_all(self.integrators)
-
+        time_since_start = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
+        self.tweener.update(time_since_start)
         self.redraw_canvas()
-        
-        return self.moving #return if there is still work to do
+        self.last_frame_time = dt.datetime.now()
+
+        return self.moving
 
     def _render(self):
         # fill whole area 
@@ -239,22 +219,25 @@ class Chart(graphics.Area):
         # calculates new factors and then updates existing set
         max_value = float(self.max_value) or 1 # avoid division by zero
         
-        self.integrators = size_list(self.integrators, self.data)
+        self.bars = size_list(self.bars, self.data)
 
         #need function to go recursive
-        def retarget(integrators, new_values):
+        def retarget(bars, new_values):
             for i in range(len(new_values)):
                 if isinstance(new_values[i], list):
-                    integrators[i] = retarget(integrators[i], new_values[i])
+                    bars[i] = retarget(bars[i], new_values[i])
                 else:
-                    if isinstance(integrators[i], graphics.Integrator) == False:
-                        integrators[i] = graphics.Integrator(0)
+                    if isinstance(bars[i], Bar) == False:
+                        bars[i] = Bar(new_values[i], 0)
+                    else:
+                        for tween in self.tweener.getTweensAffectingObject(bars[i]):
+                            self.tweener.removeTween(tween)
 
-                    integrators[i].target(new_values[i] / max_value)
+                    self.tweener.addTween(bars[i], size = new_values[i] / max_value)
             
-            return integrators
+            return bars
     
-        retarget(self.integrators, self.data)
+        retarget(self.bars, self.data)
     
     def draw(self):
         logging.error("OMG OMG, not implemented!!!")
@@ -333,11 +316,9 @@ class BarChart(Chart):
             bar_x = self.graph_x + bar_width * i + gap
 
             if self.stack_keys:
-                for j in range(len(self.integrators[i])):
-                    factor = self.integrators[i][j].value
-    
-                    if factor > 0:
-                        bar_size = max_bar_size * factor
+                for j, bar in enumerate(self.bars[i]):
+                    if bar.size > 0:
+                        bar_size = max_bar_size * bar.size
                         bar_start += bar_size
                         
                         self.draw_bar(bar_x,
@@ -346,8 +327,7 @@ class BarChart(Chart):
                                       bar_size,
                                       self.get_bar_color(j))
             else:
-                factor = self.integrators[i].value
-                bar_size = max_bar_size * factor
+                bar_size = max_bar_size * self.bars[i].size
                 bar_start = bar_size
 
                 self.draw_bar(bar_x,
@@ -399,9 +379,9 @@ class BarChart(Chart):
 
             # if labels are at end, then we need show them for the last bar! 
             if self.labels_at_end:
-                factors = self.integrators[0]
+                factors = self.bars[0]
             else:
-                factors = self.integrators[-1]
+                factors = self.bars[-1]
 
             self.layout.set_ellipsize(pango.ELLIPSIZE_END)
             self.layout.set_width(self.graph_x * pango.SCALE)
@@ -411,7 +391,7 @@ class BarChart(Chart):
                 self.layout.set_alignment(pango.ALIGN_RIGHT)
     
             for j in range(len(factors)):
-                factor = factors[j].value
+                factor = factors[j].size
                 bar_size = factor * max_bar_size
                 
                 if round(bar_size) > 0:
@@ -513,9 +493,9 @@ class HorizontalBarChart(Chart):
 
             if self.stack_keys:
                 bar_start = 0
-                for j, factor in enumerate(self.integrators[i]):
-                    if factor.value > 0:
-                        bar_size = max_bar_size * factor.value
+                for j, bar in enumerate(self.bars[i]):
+                    if bar.size > 0:
+                        bar_size = max_bar_size * bar.size
                         bar_height = bar_width - (gap * 2)
                         
                         last_color = self.get_bar_color(j)
@@ -526,8 +506,7 @@ class HorizontalBarChart(Chart):
                                       last_color)
                         bar_start += bar_size
             else:
-                factor = self.integrators[i].value
-                bar_size = max_bar_size * factor
+                bar_size = max_bar_size * self.bars[i].size
                 bar_start = bar_size
 
                 bar_height = bar_width - (gap * 2)
