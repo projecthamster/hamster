@@ -296,6 +296,7 @@ class HamsterApplet(object):
         self.treeview.append_column(gtk.TreeViewColumn("Time",
                                                        gtk.CellRendererText(),
                                                        text=2))
+
         self.treeview.append_column(stuff.ActivityColumn(name=1,
                                                          description=5,
                                                          category=6))
@@ -303,7 +304,6 @@ class HamsterApplet(object):
         duration_cell = gtk.CellRendererText()
         duration_cell.set_property("xalign", 1)
         timeColumn = gtk.TreeViewColumn(_("Duration"), duration_cell, text=3)
-        
         self.treeview.append_column(timeColumn)
 
         edit_cell = gtk.CellRendererPixbuf()
@@ -539,11 +539,17 @@ class HamsterApplet(object):
             by_category[fact['category']] = \
                           by_category.setdefault(fact['category'], 0) + duration
 
+            if fact["end_time"]:
+                fact_time = "%s - %s " % (fact["start_time"].strftime("%H:%M"),
+                                       fact["end_time"].strftime("%H:%M"))
+            else:
+                fact_time = fact["start_time"].strftime("%H:%M ")
+
             fact_store.append([fact['id'],
                                stuff.escape_pango(fact['name']), 
-                               fact["start_time"].strftime("%H:%M"), 
+                               fact_time, 
                                "%s" % stuff.format_duration(duration),
-                               fact["start_time"].strftime("%H:%M"),
+                               "",
                                stuff.escape_pango(fact["description"]),
                                stuff.escape_pango(fact["category"]),
                                fact])
