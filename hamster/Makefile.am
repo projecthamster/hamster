@@ -32,6 +32,7 @@ hamster_PYTHON = \
 	hamsterdbus.py \
 	idle.py \
         i18n.py \
+        pytweener.py \
 	__init__.py
 
 BUILT_SOURCES = \
