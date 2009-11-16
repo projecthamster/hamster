@@ -52,7 +52,7 @@ class Storage(storage.Storage):
         if self.__setup.im_func.complete:
             return
 
-        from configuration import runtime
+        from configuration import runtime, GconfStore
 
         db_file = runtime.database_file
         db_path, _ = os.path.split(os.path.realpath(db_file))
@@ -77,7 +77,17 @@ class Storage(storage.Storage):
                 logging.error("Could not change mode on %s!" % (db_file))
         self.__setup.im_func.complete = True
         self.run_fixtures()
+
+        self.config = GconfStore()
+
+        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.__on_day_start_changed)
+        self.day_start = self.config.get_day_start()
+
+
     __setup.complete = False
+    
+    def __on_day_start_changed(self, event, new_minutes):
+        self.day_start = self.config.get_day_start()
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
@@ -465,7 +475,7 @@ class Storage(storage.Storage):
         end_date = end_date or date
 
         #FIXME: add preference to set that
-        split_time = dt.time(5, 30)
+        split_time = self.day_start
         datetime_from = dt.datetime.combine(date, split_time)
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
         

@@ -25,6 +25,11 @@ import os
 import gtk
 
 import dispatcher, storage, stuff
+
+import datetime as dt
+import widgets
+
+
 from configuration import GconfStore, runtime
 
 def get_prev(selection, model):
@@ -138,6 +143,11 @@ class PreferencesEditor:
         selection = self.category_tree.get_selection()
         selection.connect('changed', self.category_changed_cb, self.category_store)
 
+        self.day_start = widgets.TimeInput(dt.time(5,30))
+        self.get_widget("day_start_placeholder").add(self.day_start)
+        self.day_start.connect("time-entered", self.on_day_start_changed)
+
+
         self.load_config()
 
         self._gui.connect_signals(self)
@@ -180,6 +190,8 @@ class PreferencesEditor:
         self.get_widget("notify_interval").set_value(self.config.get_notify_interval())
         self.get_widget("keybinding").set_text(self.config.get_keybinding())
         self.get_widget("notify_on_idle").set_active(self.config.get_notify_on_idle())
+
+        self.day_start.set_time(self.config.get_day_start())
 
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
@@ -643,6 +655,13 @@ class PreferencesEditor:
     
     def on_keybinding_changed(self, textbox):
         self.config.set_keybinding(textbox.get_text())
+
+    def on_day_start_changed(self, widget):
+        day_start = self.day_start.get_time()
+        if not day_start:
+            return
+
+        self.config.set_day_start(day_start)
 
     def on_preferences_window_destroy(self, window):
         self.window = None

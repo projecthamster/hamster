@@ -30,7 +30,7 @@ import charting
 
 from edit_activity import CustomFactController
 import reports, widgets, graphics
-from configuration import runtime
+from configuration import runtime, GconfStore
 import webbrowser
 
 from itertools import groupby
@@ -416,10 +416,17 @@ class StatsViewer(object):
         self.get_widget("explore_everything").add(self.timeline)
         self.get_widget("explore_everything").show_all()
 
+        
+        self.config = GconfStore()
+        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
         self.report_chooser = None
         self.do_graph()
         self.init_stats()
+
+        
+    def on_day_start_changed(self, event, new_minutes):
+        self.do_graph()
 
     def init_stats(self):
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())

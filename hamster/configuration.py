@@ -25,6 +25,7 @@ from db import Storage
 from dispatcher import Dispatcher
 from xdg.BaseDirectory import xdg_data_home
 import logging
+import datetime as dt
 
 class Singleton(object):
      def __new__(cls, *args, **kwargs):
@@ -91,6 +92,7 @@ class GconfStore(Singleton):
     GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"  
     GCONF_NOTIFY_INTERVAL = GCONF_DIR + "/notify_interval" 
     GCONF_NOTIFY_ON_IDLE = GCONF_DIR + "/notify_on_idle"
+    GCONF_DAY_START = GCONF_DIR + "/day_start"
 
     __instance = None
         
@@ -106,6 +108,7 @@ class GconfStore(Singleton):
         self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
         self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
         self._client.notify_add(self.GCONF_NOTIFY_ON_IDLE, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_on_idle_changed", z.value.get_bool()))
+        self._client.notify_add(self.GCONF_DAY_START, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_on_day_start_changed", z.value.get_int()))
 
     
     def get_keybinding(self):
@@ -123,6 +126,10 @@ class GconfStore(Singleton):
     def get_notify_on_idle(self):
     	return self._client.get_bool(self.GCONF_NOTIFY_ON_IDLE) or False
 
+    def get_day_start(self):
+        minutes = self._client.get_int(self.GCONF_DAY_START) or 5*60 + 30
+        return dt.time(minutes / 60, minutes % 60)
+
     #------------------------    
     def set_keybinding(self, binding):
         self._client.set_string(self.GCONF_KEYBINDING, binding)
@@ -138,4 +145,7 @@ class GconfStore(Singleton):
 
     def set_notify_on_idle(self, enabled):
         self._client.set_bool(self.GCONF_NOTIFY_ON_IDLE, enabled)
+
+    def set_day_start(self, time):
+    	return self._client.set_int(self.GCONF_DAY_START, time.hour * 60 + time.minute)
 

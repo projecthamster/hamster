@@ -250,6 +250,8 @@ class HamsterApplet(object):
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
     
+        self.day_start = self.config.get_day_start()
+
         # Load today's data, activities and set label
         self.last_activity = None
         self.load_day()
@@ -279,6 +281,7 @@ class HamsterApplet(object):
         runtime.dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
         self.notify_on_idle = self.config.get_notify_on_idle()
         
+        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
         
         # init nagging timeout
         if PYNOTIFY:
@@ -524,7 +527,8 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
         #today is 5.5 hours ago because our midnight shift happens 5:30am
-        today = (dt.datetime.now() - dt.timedelta(hours=5, minutes=30)).date()
+        today = (dt.datetime.now() - dt.timedelta(hours = self.day_start.hour,
+                                                  minutes = self.day_start.minute)).date()
 
         self.last_activity = runtime.storage.get_last_activity()
 
@@ -811,6 +815,9 @@ class HamsterApplet(object):
             runtime.storage.touch_fact(self.last_activity,
                                        end_time = self.dbusIdleListener.getIdleFrom())
 
+    def on_day_start_changed(self, event, new_minutes):
+        self.day_start = self.config.get_day_start()
+        self.load_day()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):

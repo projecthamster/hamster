@@ -65,5 +65,22 @@
                 </long>
             </locale>
         </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/general/day_start</key>
+            <applyto>/apps/hamster-applet/general/day_start</applyto>
+            <owner>hamster-applet</owner>
+            <type>int</type>
+            <default>330</default>
+            <locale name="C">
+                <short>Time at witch to consider beginning of new day</short>
+                <long>
+                    Activities will be counted as to belong to yesterday if
+                    the current time is less than the specified day start and
+                    today, if it is over the time.
+                    Activities that span two days, will tip over to the side
+                    where the largest part of the activity is.
+                </long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>
