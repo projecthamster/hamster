@@ -286,9 +286,11 @@ class TimeLine(graphics.Area):
                             total_length += fact["delta"]
                         total_length = total_length.seconds / 60 / 60.0 + total_length.days * 24
                         total_length = total_length / float(self.max_hours) * self.height - 16
-                        self.fill_area(ticker_pos * self.x_factor,
-                                       self.height - total_length,
-                                       self.x_factor, total_length,
+
+                        self.fill_area(round(ticker_pos * self.x_factor),
+                                       round(self.height - total_length),
+                                       round(self.x_factor),
+                                       round(total_length),
                                        (190,190,190))
 
 

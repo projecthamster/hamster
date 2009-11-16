@@ -268,8 +268,11 @@ class Dayline(graphics.Area):
             if self.get_pixel(end_minutes) > 0 and \
                 self.get_pixel(start_minutes) < self.width:
                     context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
-                    context.rectangle(self.get_pixel(start_minutes), graph_y,
-                                      self.get_pixel(end_minutes) - self.get_pixel(start_minutes), graph_height - 1)
+
+                    context.rectangle(round(self.get_pixel(start_minutes)),
+                                      graph_y,
+                                      round(self.get_pixel(end_minutes) - self.get_pixel(start_minutes)),
+                                      graph_height - 1)
                     context.fill()
                     context.stroke()
 
