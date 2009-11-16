@@ -230,11 +230,11 @@ class Chart(graphics.Area):
                     if isinstance(bars[i], Bar) == False:
                         bars[i] = Bar(new_values[i], 0)
                     else:
+                        bars[i].value = new_values[i]
                         for tween in self.tweener.getTweensAffectingObject(bars[i]):
                             self.tweener.removeTween(tween)
 
-                    self.tweener.addTween(bars[i], size = new_values[i] / max_value)
-            
+                    self.tweener.addTween(bars[i], size = bars[i].value / float(max_value))
             return bars
     
         retarget(self.bars, self.data)
@@ -487,16 +487,17 @@ class HorizontalBarChart(Chart):
 
             gap = bar_width * 0.05
 
-            bar_y = self.graph_y + (bar_width * i) + gap
+            bar_y = round(self.graph_y + (bar_width * i) + gap)
 
             last_color = (255,255,255)
 
             if self.stack_keys:
                 bar_start = 0
+
                 for j, bar in enumerate(self.bars[i]):
                     if bar.size > 0:
-                        bar_size = max_bar_size * bar.size
-                        bar_height = bar_width - (gap * 2)
+                        bar_size = round(max_bar_size * bar.size)
+                        bar_height = round(bar_width - (gap * 2))
                         
                         last_color = self.get_bar_color(j)
                         self.draw_bar(self.graph_x + bar_start,
@@ -506,11 +507,10 @@ class HorizontalBarChart(Chart):
                                       last_color)
                         bar_start += bar_size
             else:
-                bar_size = max_bar_size * self.bars[i].size
+                bar_size = round(max_bar_size * self.bars[i].size)
                 bar_start = bar_size
 
                 bar_height = bar_width - (gap * 2)
-                
                 self.draw_bar(self.graph_x, bar_y, bar_size, bar_height,
                                                                      base_color)
 
@@ -623,17 +623,17 @@ class HorizontalDayChart(Chart):
 
             gap = bar_width * 0.05
 
-            bar_y = self.graph_y + (bar_width * i) + gap
+            bar_y = round(self.graph_y + (bar_width * i) + gap)
 
             
-            bar_height = bar_width - (gap * 2)
+            bar_height = round(bar_width - (gap * 2))
             
             if isinstance(self.data[i], list) == False:
                 self.data[i] = [self.data[i]]
             
             for row in self.data[i]:
-                bar_x = (row[0]- start_hour) * factor
-                bar_size = (row[1] - start_hour) * factor - bar_x
+                bar_x = round((row[0]- start_hour) * factor)
+                bar_size = round((row[1] - start_hour) * factor - bar_x)
                 
                 self.draw_bar(self.graph_x + bar_x,
                               bar_y,
