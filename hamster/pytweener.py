@@ -92,11 +92,16 @@ class Tweener:
  
  
     def update(self, timeSinceLastFrame):
+        removable = []
         for t in self.currentTweens:
-            if not t.complete:
-                t.update( timeSinceLastFrame )
-            else:
-                self.currentTweens.remove(t)
+            t.update(timeSinceLastFrame)
+
+            if t.complete:
+                removable.append(t)
+                
+        for t in removable:
+            self.currentTweens.remove(t)
+            
  
 class Tween(object):
     def __init__(self, obj, tduration, tweenType, completeFunction, updateFunction, delay, **kwargs):
@@ -187,6 +192,10 @@ class Tween(object):
         """Update this tween with the time since the last frame
             if there is an update function, it is always called
             whether the tween is running or paused"""
+            
+        if self.complete:
+            return
+        
         if self.paused:
             if self.delay > 0:
                 self.delay = max( 0, self.delay - ptime )
@@ -199,11 +208,11 @@ class Tween(object):
  
         self.delta = min(self.delta + ptime, self.duration)
  
-        if not self.complete:
-            for propName, prop, tweenable in self.tProps:
-                self.target.__dict__[prop] = self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration )
-            for funcName, func, tweenable in self.tFuncs:
-                func( self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration ) )
+
+        for propName, prop, tweenable in self.tProps:
+            self.target.__dict__[prop] = self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration )
+        for funcName, func, tweenable in self.tFuncs:
+            func( self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration ) )
  
  
         if self.delta == self.duration:
