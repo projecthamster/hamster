@@ -917,15 +917,22 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                      lambda fact: (fact["name"],
                                                    fact["category"]),
                                      lambda fact: stuff.duration_minutes(fact["delta"]))
-        by_duration = sorted(activity_sums.items(),
-                             key = lambda x: x[1],
+        
+        #now join activities with same name
+        activities = {}
+        for key in activity_sums.keys():
+            activities.setdefault(key[0], [0.0] * len(all_categories))
+            activities[key[0]][all_categories.index(key[1])] = activity_sums[key] / 60.0
+            
+        by_duration = sorted(activities.items(),
+                             key = lambda x: sum(x[1]),
                              reverse = True)
-        by_duration_keys = [entry[0][0] for entry in by_duration]
+        by_duration_keys = [entry[0] for entry in by_duration]
+        
+        by_duration = [entry[1] for entry in by_duration]
 
-        category_sums = [[entry[1] / 60.0 * (entry[0][1] == cat)
-                            for cat in all_categories] for entry in by_duration]
         self.activity_chart.plot(by_duration_keys,
-                                 category_sums,
+                                 by_duration,
                                  stack_keys = all_categories)
         
 
