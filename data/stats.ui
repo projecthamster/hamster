@@ -689,7 +689,6 @@
   <object class="GtkFileChooserDialog" id="save_report_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Save report &#x2013; Time Tracker</property>
-    <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
