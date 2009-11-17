@@ -109,7 +109,7 @@ class ReportChooserDialog(gtk.Dialog):
     def show(self, start_date, end_date):
         #set suggested name to something readable, replace backslashes with dots
         #so the name is valid in linux
-        filename = "Time track %s - %s" % (start_date.strftime("%x").replace("/", "."),
+        filename = "Time track %s - %s." % (start_date.strftime("%x").replace("/", "."),
                                            end_date.strftime("%x").replace("/", "."))
         self.dialog.set_current_name(filename)
         
@@ -156,6 +156,12 @@ class ReportChooserDialog(gtk.Dialog):
         if self.dialog.get_filter() in self.filters:
             format = self.filters[self.dialog.get_filter()]
         path = self.dialog.get_filename()
+        
+        # append correct extension if it is missing
+        # TODO - proper way would be to change extension on filter change
+        # only pointer in web is http://www.mail-archive.com/pygtk@daa.com.au/msg08740.html
+        if path.endswith(".%s" % format) == False:
+            path = "%s.%s" % (path.rstrip("."), format)
         
         categories = []
         for button in self.category_box.get_children():
