@@ -1,4 +1,35 @@
 ===============
+Version 2.29.2
+===============
+  * fixed bug 599343 - the charts are now back again (for those who had lost them)
+  * hamster midnight is now a preference
+  * when in panel, printing uncaugt errors to .xsession-errors
+  * when looking for ongoing task, don't look into the future
+    (causes some mad durations and is generally impractical)
+  * new dbus method getCurrentActivity that returns just the name and category
+  * fixed problems with hamster interfering with screensaver hibernation code
+  * database MOVED to the xdg home (~/.local)
+  * in reports inlude also activities without category
+  * set start time to the end of the last activity if adding previous activity
+    for today
+  * fixes to the dropdown in compiz (not spanning over virtual desktops anymore)
+  * in dropdown added end time and dropped the stripes (too much noise already)
+  
+ Updated translations:
+  * ca (Gil Forcada)
+  * en_GB (Bruce Cowan)
+  * es (Jorge González)
+  * et (Mattias Põldaru)
+  * it (Milo Casagrande)
+  * pl (Tomasz Dominikowski)
+  * ro (Mișu Moldovan)
+  * sl (Matej Urbančič)
+  * sv (Daniel Nylander)
+  * ta (Dr.T.Vasudevan )
+  * zh_CN (Ray Wang)
+
+
+===============
 Version 2.28.0
 ===============
  Updated translations:
