@@ -180,7 +180,7 @@ class HTMLWriter(ReportWriter):
     <title>%(title)s</title>
     <style type="text/css">
         body {
-            font-family: "Sans";
+            font-family: "sans-serif";
             font-size: 12px;
             padding: 12px;
             color: #303030;
