@@ -21,7 +21,6 @@
 
 import logging
 import datetime as dt
-import os.path
 
 import pygtk
 pygtk.require("2.0")
