@@ -29,6 +29,226 @@ import gtk
 from configuration import GconfStore, runtime
 import stuff, widgets
 
+import gobject
+
+class ActivityEntry(gtk.Entry):
+    __gsignals__ = {
+        'value-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
+
+    def __init__(self):
+        gtk.Entry.__init__(self)
+        self.news = False
+        self.activities = None
+        self.categories = None
+        self.filter = None
+        self.max_results = 10 # limit popup size to 10 results
+        
+        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup.set_decorated(False)
+        self.popup.set_has_frame(False)
+        
+        box = gtk.ScrolledWindow()
+        box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+
+        self.tree = gtk.TreeView()
+        self.tree.set_headers_visible(False)
+        self.tree.set_hover_selection(True)
+
+        bgcolor = gtk.Style().bg[gtk.STATE_NORMAL].to_string()
+        time_cell = gtk.CellRendererPixbuf()
+        time_cell.set_property("icon-name", "appointment-new")
+        time_cell.set_property("cell-background", bgcolor)
+        
+        self.time_icon_column = gtk.TreeViewColumn("",
+                                              time_cell)
+        self.tree.append_column(self.time_icon_column)
+        
+        time_cell = gtk.CellRendererText()
+        time_cell.set_property("scale", 0.8)
+        time_cell.set_property("cell-background", bgcolor)
+
+        self.time_column = gtk.TreeViewColumn("Time",
+                                              time_cell,
+                                              text = 3)
+        self.tree.append_column(self.time_column)
+
+
+        self.activity_column = gtk.TreeViewColumn("Activity",
+                                                  gtk.CellRendererText(),
+                                                  text=1)
+        self.activity_column.set_expand(True)
+        self.tree.append_column(self.activity_column)
+        
+        self.category_column = gtk.TreeViewColumn("Category",
+                                                  stuff.CategoryCell(),
+                                                  text=2)
+        self.tree.append_column(self.category_column)
+
+
+
+        self.tree.connect("button-press-event", self._on_tree_button_press_event)
+
+        box.add(self.tree)
+        self.popup.add(box)
+        
+        self.connect("button-press-event", self._on_button_press_event)
+        self.connect("key-press-event", self._on_key_press_event)
+        self.connect("key-release-event", self._on_key_release_event)
+        self.connect("focus-in-event", self._on_focus_in_event)
+        self.connect("focus-out-event", self._on_focus_out_event)
+        self.connect("changed", self._on_text_changed)
+        self.show()
+
+    def populate_suggestions(self):
+        self.activities = self.activities or runtime.storage.get_autocomplete_activities()
+        self.categories = self.categories or runtime.storage.get_category_list()
+
+        print self.filter, self.get_text()
+
+        if self.filter == self.get_text():
+            return #same thing, no need to repopulate
+        
+        self.filter = self.get_text()
+        
+        store = self.tree.get_model()
+        if not store:
+            store = gtk.ListStore(str, str, str, str)
+            self.tree.set_model(store)            
+        store.clear()
+        
+        for activity in self.activities:
+            if self.filter == "" or activity['name'].startswith(self.filter): #self.filter in activity['name']:
+                fillable = activity['name']
+                if activity['category']:
+                    fillable += "@%s" % activity['category']
+                    
+    
+                store.append([fillable, activity['name'], activity['category'], '12:12'])
+
+
+    def show_popup(self):
+        result_count = self.tree.get_model().iter_n_children(None)
+        if result_count == 0:
+            self.popup.hide()
+            return
+        
+        #move popup under the widget
+        alloc = self.get_allocation()
+        w = alloc.width
+
+        window = self.get_parent_window()
+        x, y= window.get_origin()
+        
+        #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
+        self.tree.parent.set_size_request(w,(alloc.height-6) * min([result_count, self.max_results]))
+        self.popup.resize(w, (alloc.height-6) * min([result_count, self.max_results]))
+
+        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
+        self.popup.show_all()
+        
+    def complete_inline(self):
+        model = self.tree.get_model()
+        if not self.filter or model.iter_n_children(None) == 0:
+            return
+
+        prefix_length = 0
+        first_label = model[0][0]
+        for i in range(len(self.filter), len(first_label)):
+            letter_matching = all([row[0][i]==first_label[i] for row in model])
+                
+            if not letter_matching:
+                break
+            
+            prefix_length +=1
+        
+        if prefix_length:
+            prefix = first_label[len(self.filter):len(self.filter)+prefix_length]
+            self.set_text("%s%s" % (self.filter, prefix))
+            self.select_region(len(self.filter), len(self.filter) + prefix_length)
+
+
+
+    def _on_text_changed(self, widget):
+        self.news = True
+        
+
+    def _on_focus_in_event(self, entry, event):
+        self.populate_suggestions()
+        self.show_popup()
+
+    def _on_focus_out_event(self, event, something):
+        self.popup.hide()
+        if self.news:
+            self.emit("value-entered")
+            self.news = False
+
+    def _on_key_release_event(self, entry, event):
+        if event.keyval not in (gtk.keysyms.Up, gtk.keysyms.Down, gtk.keysyms.Escape):
+            self.populate_suggestions()
+            self.show_popup()
+            
+            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+                self.complete_inline()
+
+        
+
+
+    def _on_key_press_event(self, entry, event):
+
+        if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+            cursor = self.tree.get_cursor()
+    
+            if not cursor or not cursor[0]:
+                self.tree.set_cursor(0)
+                return True
+            
+            i = cursor[0][0]
+
+            if event.keyval == gtk.keysyms.Up:
+                i-=1
+            elif event.keyval == gtk.keysyms.Down:
+                i+=1
+
+            # keep it in the sane borders
+            i = min(max(i, 0), len(self.tree.get_model()) - 1)
+            
+            self.tree.set_cursor(i)
+            self.tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+            
+
+        elif (event.keyval == gtk.keysyms.Return or
+              event.keyval == gtk.keysyms.KP_Enter):
+            
+            if self.popup.get_property("visible"):
+                self._on_selected()
+            else:
+                self._on_selected()
+        elif (event.keyval == gtk.keysyms.Escape):
+            self.popup.hide()
+        else:
+            return False
+        
+        return True
+        
+        
+    def _on_button_press_event(self, button, event):
+        self.popup.show()
+
+    def _on_tree_button_press_event(self, tree, event):
+        model, iter = tree.get_selection().get_selected()
+        value = model.get_value(iter, 0)
+        self.set_text(value)
+        self._on_selected()
+
+    def _on_selected(self):
+        if self.news:
+            self.emit("value-entered")
+            self.news = False
+            self.set_position(len(self.get_text()))
+        
+
 class MainWindow(object):
     def __init__(self):
         self._gui = stuff.load_ui_file("hamster.ui")
@@ -53,7 +273,11 @@ class MainWindow(object):
         self.get_widget("todays_activities_ebox").modify_bg(gtk.STATE_NORMAL,
                                                                  gtk.gdk.Color(65536.0,65536.0,65536.0))
         
-        self.new_name = widgets.HintEntry(_("Time and Name"), self.get_widget("new_name"))
+        self.new_name = ActivityEntry() #widgets.HintEntry(_("Time and Name"), self.get_widget("new_name"))
+        parent = self.get_widget("new_name").parent
+        parent.remove(self.get_widget("new_name"))
+        parent.add(self.new_name)
+        
         self.new_description = widgets.HintEntry(_("Tags or Description"), self.get_widget("new_description"))
         
 
