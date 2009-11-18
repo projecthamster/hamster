@@ -21,38 +21,20 @@
               <object class="GtkHBox" id="current_activity_box">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkTable" id="table1">
+                  <object class="GtkVBox" id="vbox6">
                     <property name="visible">True</property>
-                    <property name="n_rows">2</property>
-                    <property name="n_columns">2</property>
-                    <property name="column_spacing">16</property>
-                    <property name="row_spacing">4</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="last_activity_name">
+                      <object class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Hamster</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                          <attribute name="size" value="15000"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox2">
-                        <property name="visible">True</property>
-                        <property name="spacing">4</property>
                         <child>
-                          <object class="GtkLabel" id="last_activity_duration">
+                          <object class="GtkLabel" id="last_activity_name">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">1h 23m</property>
+                            <property name="label">Just an activity</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
+                              <attribute name="size" value="15000"/>
                             </attributes>
                           </object>
                           <packing>
@@ -60,37 +42,15 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox1">
-                        <property name="visible">True</property>
-                        <property name="spacing">4</property>
                         <child>
                           <object class="GtkLabel" id="last_activity_category">
                             <property name="visible">True</property>
-                            <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">&lt;small&gt;&lt;i&gt;Hacking&lt;/i&gt;&lt;/small&gt;</property>
-                            <property name="use_markup">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="last_activity_description">
-                            <property name="visible">True</property>
-                            <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">&lt;small&gt;shing, chang, chong&lt;/small&gt;</property>
-                            <property name="use_markup">True</property>
-                            <property name="wrap">True</property>
+                            <property name="label"> - Work</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                              <attribute name="size" value="15000"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="position">1</property>
@@ -98,10 +58,34 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="last_activity_duration">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label">1h 23m</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="last_activity_description">
+                        <property name="visible">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label">&lt;small&gt;one, two, three&lt;/small&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -110,21 +94,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHButtonBox" id="hbuttonbox1">
+                  <object class="GtkAlignment" id="alignment5">
                     <property name="visible">True</property>
-                    <property name="spacing">4</property>
+                    <property name="yalign">0</property>
+                    <property name="yscale">0</property>
                     <child>
-                      <object class="GtkButton" id="button2">
-                        <property name="label" translatable="yes">Stop</property>
+                      <object class="GtkHButtonBox" id="hbuttonbox1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkButton" id="button2">
+                            <property name="label" translatable="yes">Stop tracking</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -188,6 +179,7 @@
                             <property name="label" translatable="yes">Switch</property>
                             <property name="width_request">80</property>
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                           </object>
@@ -505,8 +497,9 @@
                                             <child>
                                               <object class="GtkLabel" id="label18">
                                                 <property name="visible">True</property>
+                                                <property name="xalign">0</property>
                                                 <property name="yalign">0</property>
-                                                <property name="label" translatable="yes">13:15 - 14:20</property>
+                                                <property name="label" translatable="yes">13:15</property>
                                               </object>
                                               <packing>
                                                 <property name="top_attach">2</property>
