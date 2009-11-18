@@ -26,6 +26,7 @@ import os.path
 import gettext, locale
 import gnome
 import logging
+import gobject
 
 def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
@@ -112,6 +113,7 @@ if __name__ == "__main__":
         gtk.window_set_default_icon_name("hamster-applet")
     
         if options.start_window or options.standalone:
+            gobject.set_application_name("hamster-applet")
             if options.start_window == "stats":
                 from hamster.stats import StatsViewer
                 stats_viewer = StatsViewer().show()
