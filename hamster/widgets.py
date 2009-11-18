@@ -42,7 +42,9 @@ class HintEntry(gtk.Entry):
             parent = original_entry.parent
             parent.remove(original_entry)
     
-            self.set_name(original_entry.name)
+            if original_entry.name:
+                self.set_name(original_entry.name)
+                
             parent.add(self)
 
 
