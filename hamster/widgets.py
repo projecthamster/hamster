@@ -24,6 +24,57 @@ import calendar
 import gobject
 import re
 
+import pango
+
+
+class HintEntry(gtk.Entry):
+    """a gtk.Entry that displays greyed out hint in the box, while not focused"""
+    def __init__(self, hint, original_entry = None):
+        gtk.Entry.__init__(self)
+
+        self.hint = hint        
+        self._set_hint()
+        
+        self.connect('focus-in-event', self.on_focus_in)
+        self.connect('focus-out-event', self.on_focus_out)
+
+        if original_entry:        
+            parent = original_entry.parent
+            parent.remove(original_entry)
+    
+            self.set_name(original_entry.name)
+            parent.add(self)
+
+
+        self.show()
+
+    def _set_hint(self):
+        if self.get_text(): # don't mess with user entered text
+            return 
+
+        self.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color("gray"))
+        hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        hint_font.set_style(pango.STYLE_ITALIC)
+        self.modify_font(hint_font)
+        
+        self.set_text(self.hint)
+        
+    def _set_normal(self):
+        self.modify_text(gtk.STATE_NORMAL, gtk.Style().fg[gtk.STATE_NORMAL])
+        hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self.modify_font(hint_font)
+
+        if self.get_text() == self.hint:
+            self.set_text("")
+
+    def on_focus_in(self, widget, event):
+        self._set_normal()
+
+    def on_focus_out(self, widget, event):
+        self._set_hint()
+
+
+
 class DateInput(gtk.Entry):
     """ a text entry widget with calendar popup"""
     __gsignals__ = {
