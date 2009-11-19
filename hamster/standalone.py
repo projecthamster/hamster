@@ -322,11 +322,13 @@ class MainWindow(object):
                                                                  gtk.gdk.Color(65536.0,65536.0,65536.0))
         
         self.new_name = ActivityEntry() #widgets.HintEntry(_("Time and Name"), self.get_widget("new_name"))
+        widgets.add_hint(self.new_name, _("Time and Name"))
         parent = self.get_widget("new_name").parent
         parent.remove(self.get_widget("new_name"))
         parent.add(self.new_name)
         
-        self.new_description = widgets.HintEntry(_("Tags or Description"), self.get_widget("new_description"))
+        self.new_description = self.get_widget("new_description")
+        widgets.add_hint(self.new_description, _("Tags or Description"))
         
 
     def set_last_activity(self):
