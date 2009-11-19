@@ -100,39 +100,77 @@ class ActivityEntry(gtk.Entry):
         self.connect("focus-out-event", self._on_focus_out_event)
         self.connect("changed", self._on_text_changed)
         self.show()
+        self.populate_suggestions()
 
     def populate_suggestions(self):
         self.activities = self.activities or runtime.storage.get_autocomplete_activities()
         self.categories = self.categories or runtime.storage.get_category_list()
 
-        print self.filter, self.get_text()
+        if self.get_selection_bounds():
+            cursor = self.get_selection_bounds()[0]
+        else:
+            cursor = self.get_position()
+            
 
-        if self.filter == self.get_text():
+        if self.filter == self.get_text()[:cursor]:
             return #same thing, no need to repopulate
         
-        self.filter = self.get_text()
+        self.filter = self.get_text()[:cursor]
+        
+        input_activity = stuff.parse_activity_input(self.filter)
+        
+        time = ''
+        if input_activity.start_time:
+            time = input_activity.start_time.strftime("%H:%M")
+            if input_activity.end_time:
+                time += "-%s" % input_activity.end_time.strftime("%H:%M")
+        
         
         store = self.tree.get_model()
         if not store:
             store = gtk.ListStore(str, str, str, str)
             self.tree.set_model(store)            
         store.clear()
+
+        if self.filter.find("@") > 0:
+            key = self.filter[self.filter.find("@")+1:].lower()
+            for category in self.categories:
+                if key in category['name'].lower():
+                    fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
+                    store.append([fillable, category['name'], fillable, time])
+        else:
+            for activity in self.activities:
+                if input_activity.activity_name == "" or activity['name'].startswith(input_activity.activity_name): #self.filter in activity['name']:
+                    fillable = activity['name']
+                    if activity['category']:
+                        fillable += "@%s" % activity['category']
+
+                    if time:
+                        fillable = "%s %s" % (time, fillable)
         
-        for activity in self.activities:
-            if self.filter == "" or activity['name'].startswith(self.filter): #self.filter in activity['name']:
-                fillable = activity['name']
-                if activity['category']:
-                    fillable += "@%s" % activity['category']
-                    
-    
-                store.append([fillable, activity['name'], activity['category'], '12:12'])
+                    store.append([fillable, activity['name'], activity['category'], time])
 
 
     def show_popup(self):
         result_count = self.tree.get_model().iter_n_children(None)
-        if result_count == 0:
+        if result_count <= 1:
             self.popup.hide()
             return
+
+
+        activity = stuff.parse_activity_input(self.filter)        
+        time = ''
+        if activity.start_time:
+            time = activity.start_time.strftime("%H:%M")
+            if activity.end_time:
+                time += "-%s" % activity.end_time.strftime("%H:%M")
+
+        self.time_icon_column.set_visible(activity.start_time != None and self.filter.find("@") == -1)
+        self.time_column.set_visible(activity.start_time != None and self.filter.find("@") == -1)
+        
+
+        self.category_column.set_visible(self.filter.find("@") == -1)
+        
         
         #move popup under the widget
         alloc = self.get_allocation()
@@ -150,13 +188,20 @@ class ActivityEntry(gtk.Entry):
         
     def complete_inline(self):
         model = self.tree.get_model()
-        if not self.filter or model.iter_n_children(None) == 0:
+        activity = stuff.parse_activity_input(self.filter)
+        subject = self.get_text()
+        
+        if not subject or model.iter_n_children(None) == 0:
             return
-
+        
         prefix_length = 0
-        first_label = model[0][0]
-        for i in range(len(self.filter), len(first_label)):
-            letter_matching = all([row[0][i]==first_label[i] for row in model])
+        
+        labels = [row[0] for row in model]
+        shortest = min([len(label) for label in labels])
+        first = labels[0] #since we are looking for common prefix, we don't care which label we use for comparisons
+        
+        for i in range(len(subject), shortest):
+            letter_matching = all([label[i]==first[i] for label in labels])
                 
             if not letter_matching:
                 break
@@ -164,7 +209,7 @@ class ActivityEntry(gtk.Entry):
             prefix_length +=1
         
         if prefix_length:
-            prefix = first_label[len(self.filter):len(self.filter)+prefix_length]
+            prefix = first[len(subject):len(subject)+prefix_length]
             self.set_text("%s%s" % (self.filter, prefix))
             self.select_region(len(self.filter), len(self.filter) + prefix_length)
 
@@ -185,7 +230,21 @@ class ActivityEntry(gtk.Entry):
             self.news = False
 
     def _on_key_release_event(self, entry, event):
-        if event.keyval not in (gtk.keysyms.Up, gtk.keysyms.Down, gtk.keysyms.Escape):
+        if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
+            if self.popup.get_property("visible"):
+                if self.tree.get_cursor()[0]:
+                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
+
+                self._on_selected()
+                
+                self.popup.hide()
+            else:
+                self._on_selected()
+        elif (event.keyval == gtk.keysyms.Escape):
+            self.popup.hide()
+        elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+            return False
+        else:
             self.populate_suggestions()
             self.show_popup()
             
@@ -216,21 +275,10 @@ class ActivityEntry(gtk.Entry):
             
             self.tree.set_cursor(i)
             self.tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
-            
-
-        elif (event.keyval == gtk.keysyms.Return or
-              event.keyval == gtk.keysyms.KP_Enter):
-            
-            if self.popup.get_property("visible"):
-                self._on_selected()
-            else:
-                self._on_selected()
-        elif (event.keyval == gtk.keysyms.Escape):
-            self.popup.hide()
+            return True
         else:
             return False
         
-        return True
         
         
     def _on_button_press_event(self, button, event):
