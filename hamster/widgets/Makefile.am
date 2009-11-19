@@ -6,7 +6,7 @@ hamster_PYTHON = \
 	dateinput.py \
 	dayline.py \
 	timeline.py \
-	reportchooserdialog.py \
+	reportchooserdialog.py
 
 clean-local:
 	rm -rf *.pyc *.pyo
