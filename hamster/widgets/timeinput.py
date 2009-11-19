@@ -45,6 +45,7 @@ class TimeInput(gtk.Entry):
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
+        time_box.set_shadow_type(gtk.SHADOW_IN)
 
         self.time_tree = gtk.TreeView()
         self.time_tree.set_headers_visible(False)
