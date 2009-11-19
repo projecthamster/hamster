@@ -25,6 +25,11 @@ from activityentry import ActivityEntry
 from dateinput import DateInput
 from timeinput import TimeInput
 
+from timeline import TimeLine
+from dayline import DayLine
+
+from reportchooserdialog import ReportChooserDialog
+
 # handy wrappers
 def add_hint(entry, hint):
     entry.hint = hint        
