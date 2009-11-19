@@ -1,4 +1,4 @@
-hamsterdir = $(pyexecdir)/hamster/tools
+hamsterdir = $(pyexecdir)/hamster/widgets
 hamster_PYTHON = \
 	__init__.py \
 	activityentry.py \

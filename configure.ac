@@ -169,7 +169,7 @@ data/art/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT(
-hamster/tools/Makefile
+hamster/widgets/Makefile
 )
 
 echo

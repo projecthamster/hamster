@@ -20,6 +20,12 @@
 import datetime as dt
 import gtk, pango
 
+# import our children
+from activityentry import ActivityEntry
+from dateinput import DateInput
+from timeinput import TimeInput
+
+# handy wrappers
 def add_hint(entry, hint):
     entry.hint = hint        
     

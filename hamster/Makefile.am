@@ -1,4 +1,4 @@
-SUBDIRS = keybinder tools
+SUBDIRS = keybinder widgets
 ACLOCAL_AMFLAGS = -I m4
 
 CPPFLAGS = \

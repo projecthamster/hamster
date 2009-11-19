@@ -27,9 +27,7 @@ import gtk
 #gtk.gdk.threads_init()
 
 from configuration import GconfStore, runtime
-import tools, stuff
-from tools.activityentry import ActivityEntry
-
+import widgets, stuff
 
 import gobject
 
@@ -59,14 +57,14 @@ class MainWindow(object):
         self.get_widget("todays_activities_ebox").modify_bg(gtk.STATE_NORMAL,
                                                                  gtk.gdk.Color(65536.0,65536.0,65536.0))
         
-        self.new_name = ActivityEntry()
-        tools.add_hint(self.new_name, _("Time and Name"))
+        self.new_name = widgets.ActivityEntry()
+        widgets.add_hint(self.new_name, _("Time and Name"))
         parent = self.get_widget("new_name").parent
         parent.remove(self.get_widget("new_name"))
         parent.add(self.new_name)
         
         self.new_description = self.get_widget("new_description")
-        tools.add_hint(self.new_description, _("Tags or Description"))
+        widgets.add_hint(self.new_description, _("Tags or Description"))
         
 
     def set_last_activity(self):

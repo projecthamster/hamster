@@ -31,8 +31,7 @@ import charting
 from edit_activity import CustomFactController
 import reports, graphics
 
-import tools
-from tools.dateinput import DateInput
+import widgets
 
 from configuration import runtime, GconfStore
 import webbrowser
@@ -99,9 +98,9 @@ class ReportChooserDialog(gtk.Dialog):
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
         
-        self.start_date = DateInput()
+        self.start_date = widgets.DateInput()
         ui.get_object('from_date_box').add(self.start_date)
-        self.end_date = DateInput()
+        self.end_date = widgets.DateInput()
         ui.get_object('to_date_box').add(self.end_date)
 
         self.category_box = ui.get_object('category_box')

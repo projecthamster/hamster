@@ -28,8 +28,7 @@ import gobject
 import stuff
 import graphics
 
-from tools.dateinput import DateInput
-from tools.timeinput import TimeInput
+import widgets
 
 import eds
 from configuration import runtime
@@ -418,15 +417,15 @@ class CustomFactController:
         end_date = end_date or start_date + dt.timedelta(minutes = 30)
 
 
-        self.start_date = DateInput(start_date)
+        self.start_date = widgets.DateInput(start_date)
         self.get_widget("start_date_placeholder").add(self.start_date)
         self.start_date.connect("date-entered", self.on_start_date_entered)
 
-        self.start_time = TimeInput(start_date)
+        self.start_time = widgets.TimeInput(start_date)
         self.get_widget("start_time_placeholder").add(self.start_time)
         self.start_time.connect("time-entered", self.on_start_time_entered)
         
-        self.end_time = TimeInput(end_date, start_date)
+        self.end_time = widgets.TimeInput(end_date, start_date)
         self.get_widget("end_time_placeholder").add(self.end_time)
         self.end_time.connect("time-entered", self.on_end_time_entered)
         self.set_end_date_label(end_date)
