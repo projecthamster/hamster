@@ -33,6 +33,44 @@ import re
 import locale
 import os
 
+def format_duration(minutes, human = True):
+    """formats duration in a human readable format.
+    accepts either minutes or timedelta"""
+    
+    if isinstance(minutes, dt.timedelta):
+        minutes = duration_minutes(minutes)
+        
+    if not minutes:
+        if human:
+            return ""
+        else:
+            return "00:00"
+    
+    hours = minutes / 60
+    minutes = minutes % 60
+    formatted_duration = ""
+    
+    if human:
+        if minutes % 60 == 0:
+            # duration in round hours
+            formatted_duration += _("%dh") % (hours)
+        elif hours == 0:
+            # duration less than hour
+            formatted_duration += _("%dmin") % (minutes % 60.0)
+        else:
+            # x hours, y minutes
+            formatted_duration += _("%dh %dmin") % (hours, minutes % 60)
+    else:
+        formatted_duration += "%02d:%02d" % (hours, minutes)
+    
+    
+    return formatted_duration
+
+def duration_minutes(duration):
+    """returns minutes from duration, otherwise we keep bashing in same math"""
+    return duration.seconds / 60 + duration.days * 24 * 60
+
+
 def load_ui_file(name):
     from configuration import runtime
     ui = gtk.Builder()

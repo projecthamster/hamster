@@ -856,7 +856,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             day_row = self.fact_store.append(None,
                                              [-1,
                                               fact_date,
-                                              tools.format_duration(day_total),
+                                              stuff.format_duration(day_total),
                                               current_date.strftime('%Y-%m-%d'),
                                               "",
                                               "",
@@ -867,7 +867,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                        [fact["id"],
                                         fact["start_time"].strftime('%H:%M') + " " +
                                         fact["name"],
-                                        tools.format_duration(fact["delta"]),
+                                        stuff.format_duration(fact["delta"]),
                                         fact["start_time"].strftime('%Y-%m-%d'),
                                         fact["description"],
                                         fact["category"],

@@ -20,7 +20,7 @@
 from hamster import tools
 from hamster.configuration import GconfStore, runtime
 
-from stuff import format_duration
+from hamster.stuff import format_duration
 import gtk
 import datetime as dt
 import calendar
