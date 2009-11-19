@@ -29,7 +29,11 @@ import stuff
 import charting
 
 from edit_activity import CustomFactController
-import reports, widgets, graphics
+import reports, graphics
+
+import tools
+from tools.dateinput import DateInput
+
 from configuration import runtime, GconfStore
 import webbrowser
 
@@ -95,9 +99,9 @@ class ReportChooserDialog(gtk.Dialog):
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
         
-        self.start_date = widgets.DateInput()
+        self.start_date = DateInput()
         ui.get_object('from_date_box').add(self.start_date)
-        self.end_date = widgets.DateInput()
+        self.end_date = DateInput()
         ui.get_object('to_date_box').add(self.end_date)
 
         self.category_box = ui.get_object('category_box')
@@ -852,7 +856,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
             day_row = self.fact_store.append(None,
                                              [-1,
                                               fact_date,
-                                              stuff.format_duration(day_total),
+                                              tools.format_duration(day_total),
                                               current_date.strftime('%Y-%m-%d'),
                                               "",
                                               "",
@@ -863,7 +867,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                                        [fact["id"],
                                         fact["start_time"].strftime('%H:%M') + " " +
                                         fact["name"],
-                                        stuff.format_duration(fact["delta"]),
+                                        tools.format_duration(fact["delta"]),
                                         fact["start_time"].strftime('%Y-%m-%d'),
                                         fact["description"],
                                         fact["category"],

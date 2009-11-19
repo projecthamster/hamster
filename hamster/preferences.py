@@ -27,7 +27,7 @@ import gtk
 import dispatcher, storage, stuff
 
 import datetime as dt
-import widgets
+from tools.timeinput import TimeInput
 
 
 from configuration import GconfStore, runtime
@@ -143,7 +143,7 @@ class PreferencesEditor:
         selection = self.category_tree.get_selection()
         selection.connect('changed', self.category_changed_cb, self.category_store)
 
-        self.day_start = widgets.TimeInput(dt.time(5,30))
+        self.day_start = TimeInput(dt.time(5,30))
         self.get_widget("day_start_placeholder").add(self.day_start)
         self.day_start.connect("time-entered", self.on_day_start_changed)
 
