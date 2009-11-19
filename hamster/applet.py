@@ -339,10 +339,21 @@ class HamsterApplet(object):
                                  stuff.format_duration(duration, False))
             
             self._gui.get_object('stop_tracking').set_sensitive(1);
+
+            label = self.last_activity['name']
+            if self.last_activity['category'] != _("Unsorted"):
+                label += "@%s" %  self.last_activity['category']
+            self.new_name.set_text(label)
+
+            self.new_name.select_region(0, -1)
+            self._gui.get_object("more_info_label").hide()
         else:
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
             self._gui.get_object('stop_tracking').set_sensitive(0);
+
+            self.new_name.set_text('')
+            self._gui.get_object("more_info_label").show()
         
         
     def check_user(self):
@@ -453,19 +464,6 @@ class HamsterApplet(object):
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
-
-        if self.last_activity and self.last_activity["end_time"] is None:
-            label = self.last_activity['name']
-            if self.last_activity['category'] != _("Unsorted"):
-                label += "@%s" %  self.last_activity['category']
-            self.new_name.set_text(label)
-
-            self.new_name.select_region(0, -1)
-            self._gui.get_object("more_info_label").hide()
-        else:
-            self.new_name.set_text('')
-            self._gui.get_object("more_info_label").show()
-
 
         if not is_active:
             self.window.hide()
