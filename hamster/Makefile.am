@@ -20,8 +20,7 @@ hamster_PYTHON = \
 	stats.py \
 	reports.py \
 	charting.py \
-        widgets.py \
-        graphics.py \
+    graphics.py \
 	configuration.py \
 	KeyBinder.py \
 	preferences.py \
@@ -31,8 +30,8 @@ hamster_PYTHON = \
 	about.py \
 	hamsterdbus.py \
 	idle.py \
-        i18n.py \
-        pytweener.py \
+    i18n.py \
+    pytweener.py \
 	__init__.py
 
 BUILT_SOURCES = \
