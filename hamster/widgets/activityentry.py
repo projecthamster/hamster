@@ -91,7 +91,6 @@ class ActivityEntry(gtk.Entry):
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
-        self.connect("focus-out-event", self._on_focus_out_event)
         self.connect("changed", self._on_text_changed)
         self.show()
         self.populate_suggestions()
@@ -218,12 +217,6 @@ class ActivityEntry(gtk.Entry):
     def _on_button_press_event(self, button, event):
         self.populate_suggestions()
         self.show_popup()
-
-    def _on_focus_out_event(self, event, something):
-        self.hide_popup()
-        if self.news:
-            self.emit("value-entered")
-            self.news = False
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
