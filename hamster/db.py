@@ -78,16 +78,9 @@ class Storage(storage.Storage):
         self.__setup.im_func.complete = True
         self.run_fixtures()
 
-        self.config = GconfStore()
-
-        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.__on_day_start_changed)
-        self.day_start = self.config.get_day_start()
 
 
     __setup.complete = False
-    
-    def __on_day_start_changed(self, event, new_minutes):
-        self.day_start = self.config.get_day_start()
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
@@ -474,8 +467,10 @@ class Storage(storage.Storage):
         query += " ORDER BY a.start_time"
         end_date = end_date or date
 
-        #FIXME: add preference to set that
-        split_time = self.day_start
+        from configuration import GconfStore
+        day_start = GconfStore().get_day_start()
+        
+        split_time = day_start
         datetime_from = dt.datetime.combine(date, split_time)
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
         
