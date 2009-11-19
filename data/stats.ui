@@ -84,6 +84,20 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkToolButton" id="add">
+                    <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Add activity</property>
+                    <property name="label" translatable="yes">Remove</property>
+                    <property name="stock_id">gtk-add</property>
+                    <signal name="clicked" handler="on_add_clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkToolButton" id="remove">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
@@ -92,20 +106,6 @@
                     <property name="label" translatable="yes">Add</property>
                     <property name="stock_id">gtk-remove</property>
                     <signal name="clicked" handler="on_remove_clicked"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="add">
-                    <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Add activity</property>
-                    <property name="label" translatable="yes">Remove</property>
-                    <property name="stock_id">gtk-add</property>
-                    <signal name="clicked" handler="on_add_clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
