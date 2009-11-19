@@ -147,7 +147,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x2022;</property>
-                            <property name="text" translatable="yes">Time and activity</property>
                           </object>
                         </child>
                       </object>
@@ -164,7 +163,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x2022;</property>
-                            <property name="text" translatable="yes">Tags or description</property>
                           </object>
                         </child>
                       </object>
