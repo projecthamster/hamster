@@ -168,7 +168,9 @@ data/Makefile
 data/art/Makefile
 po/Makefile.in
 ])
-AC_OUTPUT
+AC_OUTPUT(
+hamster/tools/Makefile
+)
 
 echo
 echo $PACKAGE v$VERSION
