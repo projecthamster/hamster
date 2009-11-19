@@ -43,7 +43,7 @@ from edit_activity import CustomFactController
 from stats import StatsViewer
 from about import show_about
 from preferences import PreferencesEditor
-
+import widgets
 import idle
 
 import pango
@@ -229,10 +229,12 @@ class HamsterApplet(object):
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
 
+        self.new_name = widgets.ActivityEntry()
+        widgets.add_hint(self.new_name, _("Time and Name"))
+        self._gui.get_object("activity_name_box").add(self.new_name)
+        self.new_name.connect("value-entered", self.on_activity_entered)
         
-        # build the menu
-        self.init_dropdown()
-
+        
         # init today's tree
         self.setup_activity_tree()
 
@@ -314,159 +316,6 @@ class HamsterApplet(object):
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.treeview.append_column(self.edit_column)
 
-
-    def init_dropdown(self):
-        # set up drop down menu
-        self.activity_combo = self._gui.get_object('activity_combo')
-        self.activity_combo.child.connect('activate', self.on_activity_entered)
-        self.activity_combo.child.connect('key-press-event', self.on_activity_list_key_pressed)
-        self.activity_combo.child.connect('changed', self.on_activity_entry_changed)
-
-        self.activity_combo.set_model(gtk.ListStore(gobject.TYPE_STRING,
-                                                   gobject.TYPE_STRING,
-                                                   gobject.TYPE_STRING))
-        self.activity_combo.set_text_column(2)
-        self.activity_combo.clear()
-
-
-        activity_cell = gtk.CellRendererText()
-        self.activity_combo.pack_start(activity_cell, True)
-        self.activity_combo.add_attribute(activity_cell, 'text', 0)
-
-        category_cell = stuff.CategoryCell()  
-        self.activity_combo.pack_start(category_cell, False)
-        self.activity_combo.add_attribute(category_cell, 'text', 1)
-        
-
-        #now set up completion
-        self.completion = gtk.EntryCompletion()
-        #fillable, activity_name, category
-        self.completion.set_model(gtk.ListStore(gobject.TYPE_STRING,
-                                                gobject.TYPE_STRING,
-                                                gobject.TYPE_STRING))
-        self.completion.set_minimum_key_length(1)
-        self.completion.set_inline_completion(True)
-        self.completion.set_popup_set_width(False)
-        self.completion.set_popup_single_match(False)
-        self.completion.set_text_column(0)
-        self.activity_combo.child.set_completion(self.completion)
-        
-        self.refresh_dropdown()
-
-
-    def refresh_dropdown(self):        
-        self.all_activities = runtime.storage.get_autocomplete_activities()
-        self.all_categories = runtime.storage.get_category_list()
-        self.eds_tasks = eds.get_eds_tasks()
-
-        #add evolution tasks to dropdown, yay!
-        for activity in self.eds_tasks:
-            self.all_activities.append(activity)
-
-        #now populate the menu - contains only categorized entries
-        store = self.activity_combo.get_model()
-        store.clear()
-
-        categorized_activities = runtime.storage.get_sorted_activities()
-        for activity in categorized_activities:
-            activity_category = activity['name']
-            if activity['category']:
-                activity_category += "@%s" % activity['category']
-
-            store.append([activity['name'],
-                          activity['category'],
-                          activity_category])
-
-
-    def on_match_selected(self, completion, model, iter):
-        entry = completion.get_entry()
-        activity = stuff.parse_activity_input(entry.get_text())
-        
-        fillable = model.get_value(iter, 0)
-        
-        res = ""
-        
-        if activity.start_time:
-            res += "%s" % activity.start_time.strftime("%H:%M")
-            if activity.end_time:
-                res += "-%s" % activity.start_time.strftime("%H:%M")
-        
-            res += " "
-            #strip time
-            fillable = fillable[fillable.find(" ")+1:]
-        
-        res += fillable
-        
-        entry.set_text(res)
-        entry.set_position(len(res))
-        return True
-    
-    def redo_autocomplete(self):
-        """parses input and generates autocomplete according to what has
-        to be completed now"""
-        #TODO turn this whole thing into a widget
-        store = self.completion.get_model()
-        store.clear()
-        
-        input_text = self.activity_combo.child.get_text()
-        
-        if not input_text:
-            return
-        
-        
-        entry = self.activity_combo.child
-        parsed_activity = stuff.parse_activity_input(entry.get_text())
-
-        if input_text.find("@") > 0:
-            key = input_text[input_text.find("@")+1:].lower()
-            for category in self.all_categories:
-                if key in category['name'].lower():
-                    fillable = (input_text[:input_text.find("@") + 1] + category['name']).lower()
-                    store.append([fillable, category['name'], fillable])
-
-        else:
-            for activity in self.all_activities:
-                fillable = activity['name']
-                if activity['category']:
-                    fillable += "@%s" % activity['category']
-                    
-                if parsed_activity.start_time:
-                    fillable = entry.get_text()[:entry.get_text().find(" ")+1] + fillable
-    
-                store.append([fillable, activity['name'], activity['category']])
-
-                
-        activity = stuff.parse_activity_input(input_text)
-        self.completion.clear()
-        if activity.start_time:
-            bgcolor = gtk.Style().bg[gtk.STATE_NORMAL].to_string()
-            time_cell = gtk.CellRendererPixbuf()
-            time_cell.set_property("icon-name", "appointment-new")
-            time_cell.set_property("cell-background", bgcolor)
-            
-            self.completion.pack_start(time_cell, False)
-
-            time_cell = gtk.CellRendererText()
-            time = activity.start_time.strftime("%H:%M")
-            if activity.end_time:
-                time += "-%s" % activity.end_time.strftime("%H:%M")
-                
-            time_cell.set_property("text", time)
-            time_cell.set_property("scale", 0.8)
-            time_cell.set_property("cell-background", bgcolor)
-            self.completion.pack_start(time_cell, False)
-
-        activity_cell = gtk.CellRendererText()
-        self.completion.pack_start(activity_cell, True)
-        self.completion.add_attribute(activity_cell, 'text', 1)
-        #self.completion.set_property("text-column", 2)
-
-        if input_text.find("@") == -1:
-            #no need for category cell when we populate categories
-            category_cell = stuff.CategoryCell()  
-            self.completion.pack_start(category_cell, False)
-            self.completion.add_attribute(category_cell, 'text', 2)
-        
 
     """UI functions"""
     def refresh_hamster(self):
@@ -609,12 +458,12 @@ class HamsterApplet(object):
             label = self.last_activity['name']
             if self.last_activity['category'] != _("Unsorted"):
                 label += "@%s" %  self.last_activity['category']
-            self.activity_combo.child.set_text(label)
+            self.new_name.set_text(label)
 
-            self.activity_combo.child.select_region(0, -1)
+            self.new_name.select_region(0, -1)
             self._gui.get_object("more_info_label").hide()
         else:
-            self.activity_combo.child.set_text('')
+            self.new_name.set_text('')
             self._gui.get_object("more_info_label").show()
 
 
@@ -655,7 +504,7 @@ class HamsterApplet(object):
         """show window only when gtk has become idle. otherwise we get
         mixed results. TODO - this looks like a hack though"""
         self.window.present()
-        self.activity_combo.grab_focus()
+        self.new_name.grab_focus()
         
 
     """events"""
@@ -674,32 +523,9 @@ class HamsterApplet(object):
     def on_toggle(self, widget):
         self.__show_toggle(None, self.button.get_active())
 
-    def on_activity_list_key_pressed(self, entry, event):
-        #tab will trigger going through autocomplete values when there are any
-        if event.keyval == gtk.keysyms.Tab:
-            event.keyval = gtk.keysyms.Down
-        
-        #down will trigger showing dropdown instead of selecting first whatever
-        elif event.keyval == gtk.keysyms.Down and len(self.completion.get_model()) == 0:
-            self.activity_combo.popup()
-            return True
-        
-        return False
-    
-    def on_activity_entry_changed(self, entry):
-        self.redo_autocomplete()
-        return False
-        
-    def on_activity_switched(self, component):
-        # do stuff only if user has selected something
-        # for other cases activity_edited will be triggered
-        if component.get_active_iter():
-            component.child.activate() # forward
-        return True
-
     def on_activity_entered(self, component):
         """fires, when user writes activity by hand"""
-        activity_name = component.get_text().decode('utf8', 'replace')
+        activity_name = self.new_name.get_text().decode('utf8', 'replace')
         
         if activity_name == "":
             return
@@ -752,8 +578,9 @@ class HamsterApplet(object):
         if (event_key.keyval == gtk.keysyms.Escape
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
-            runtime.dispatcher.dispatch('panel_visible', False)
-            return True
+            if self.new_name.popup.get_property("visible") == False:
+                runtime.dispatcher.dispatch('panel_visible', False)
+                return True
         return False
         
     """button events"""
