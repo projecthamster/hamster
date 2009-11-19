@@ -46,8 +46,6 @@ class ActivityEntry(gtk.Entry):
         self.max_results = 10 # limit popup size to 10 results
         
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
-        self.popup.set_decorated(False)
-        self.popup.set_has_frame(False)
         
         box = gtk.ScrolledWindow()
         box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
@@ -157,7 +155,6 @@ class ActivityEntry(gtk.Entry):
             self.popup.hide()
             return
 
-
         activity = stuff.parse_activity_input(self.filter)        
         time = ''
         if activity.start_time:
@@ -174,16 +171,17 @@ class ActivityEntry(gtk.Entry):
         
         #move popup under the widget
         alloc = self.get_allocation()
-        w = alloc.width
+        x, y = self.get_parent_window().get_origin()
 
-        window = self.get_parent_window()
-        x, y= window.get_origin()
+        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
+
+        w = alloc.width
         
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
         self.tree.parent.set_size_request(w,(alloc.height-6) * min([result_count, self.max_results]))
         self.popup.resize(w, (alloc.height-6) * min([result_count, self.max_results]))
 
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
+        
         self.popup.show_all()
         
     def complete_inline(self):
@@ -218,6 +216,10 @@ class ActivityEntry(gtk.Entry):
     def _on_text_changed(self, widget):
         self.news = True
         
+
+    def _on_button_press_event(self, button, event):
+        self.populate_suggestions()
+        self.show_popup()
 
     def _on_focus_in_event(self, entry, event):
         self.populate_suggestions()
@@ -279,15 +281,11 @@ class ActivityEntry(gtk.Entry):
         else:
             return False
         
-        
-        
-    def _on_button_press_event(self, button, event):
-        self.popup.show()
-
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
         self.set_text(value)
+        self.popup.hide()
         self._on_selected()
 
     def _on_selected(self):
