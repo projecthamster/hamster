@@ -26,7 +26,6 @@ import gtk
 import gobject
 
 import stuff
-import graphics
 
 import widgets
 
