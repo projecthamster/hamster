@@ -204,8 +204,8 @@ class ActivityEntry(gtk.Entry):
                     if activity['category']:
                         fillable += "@%s" % activity['category']
 
-                    if time:
-                        fillable = "%s %s" % (time, fillable)
+                    if time: #as we also support deltas, for the time we will grab anything up to first space
+                        fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
         
                     store.append([fillable, activity['name'], activity['category'], time])
 
