@@ -18,6 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
+import gtk, pango
 
 def add_hint(entry, hint):
     entry.hint = hint        

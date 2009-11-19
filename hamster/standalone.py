@@ -27,10 +27,8 @@ import gtk
 #gtk.gdk.threads_init()
 
 from configuration import GconfStore, runtime
-import tools
+import tools, stuff
 from tools.activityentry import ActivityEntry
-
-import stuff
 
 
 import gobject
