@@ -204,13 +204,15 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Activity:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">activity_combo</property>
               </object>
             </child>
             <child>
-              <object class="GtkComboBoxEntry" id="activity_combo">
+              <object class="GtkAlignment" id="activity_box">
+                <property name="width_request">300</property>
                 <property name="visible">True</property>
-                <signal name="changed" handler="on_activity_combo_changed"/>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
