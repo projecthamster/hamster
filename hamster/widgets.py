@@ -27,30 +27,10 @@ import re
 import pango
 
 
-class HintEntry(gtk.Entry):
-    """a gtk.Entry that displays greyed out hint in the box, while not focused"""
-    def __init__(self, hint, original_entry = None):
-        gtk.Entry.__init__(self)
-
-        self.hint = hint        
-        self._set_hint()
-        
-        self.connect('focus-in-event', self.on_focus_in)
-        self.connect('focus-out-event', self.on_focus_out)
-
-        if original_entry:        
-            parent = original_entry.parent
-            parent.remove(original_entry)
+def add_hint(entry, hint):
+    entry.hint = hint        
     
-            if original_entry.name:
-                self.set_name(original_entry.name)
-                
-            parent.add(self)
-
-
-        self.show()
-
-    def _set_hint(self):
+    def _set_hint(self, widget, event):
         if self.get_text(): # don't mess with user entered text
             return 
 
@@ -61,7 +41,7 @@ class HintEntry(gtk.Entry):
         
         self.set_text(self.hint)
         
-    def _set_normal(self):
+    def _set_normal(self, widget, event):
         self.modify_text(gtk.STATE_NORMAL, gtk.Style().fg[gtk.STATE_NORMAL])
         hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
         self.modify_font(hint_font)
@@ -69,12 +49,17 @@ class HintEntry(gtk.Entry):
         if self.get_text() == self.hint:
             self.set_text("")
 
-    def on_focus_in(self, widget, event):
-        self._set_normal()
+    import types
+    instancemethod = types.MethodType
 
-    def on_focus_out(self, widget, event):
-        self._set_hint()
+    entry._set_hint = instancemethod(_set_hint, entry, gtk.Entry)
+    entry._set_normal = instancemethod(_set_normal, entry, gtk.Entry)
+    
+    entry.connect('focus-in-event', entry._set_normal)
+    entry.connect('focus-out-event', entry._set_hint)
 
+    entry._set_hint(entry, None)
+    
 
 
 class DateInput(gtk.Entry):
