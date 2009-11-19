@@ -217,7 +217,7 @@ def escape_pango(text):
     return text
 
 def figure_time(str_time):
-    if not str_time:
+    if not str_time or not str_time.strip():
         return None
     
     # strip everything non-numeric and consider hours to be first number
