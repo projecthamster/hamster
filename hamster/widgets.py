@@ -124,9 +124,6 @@ class DateInput(gtk.Entry):
     def _on_text_changed(self, widget):
         self.news = True
         
-    def _on_button_press_event(self, button, event):
-        self.popup.show()
-
     def __on_day_selected_double_click(self, calendar):
         self.prev_cal_day = None
         self._on_day_selected(calendar) #forward
@@ -152,13 +149,13 @@ class DateInput(gtk.Entry):
             self.news = False
         
     
-    def _on_focus_in_event(self, entry, event):
-        window = entry.get_parent_window()
+    def show_popup(self):
+        window = self.get_parent_window()
         x, y= window.get_origin()
 
-        alloc = entry.get_allocation()
+        alloc = self.get_allocation()
         
-        date = self._figure_date(entry.get_text())
+        date = self._figure_date(self.get_text())
         if date:
             self.prev_cal_day = date.day #avoid 
             self.date_calendar.select_month(date.month-1, date.year)
@@ -166,6 +163,13 @@ class DateInput(gtk.Entry):
         
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
         self.popup.show_all()
+    
+    def _on_focus_in_event(self, entry, event):
+        self.show_popup()
+
+    def _on_button_press_event(self, button, event):
+        self.show_popup()
+
 
     def _on_focus_out_event(self, event, something):
         self.popup.hide()
@@ -321,6 +325,9 @@ class TimeInput(gtk.Entry):
     def _on_focus_in_event(self, entry, event):
         self.show_popup()
 
+    def _on_button_press_event(self, button, event):
+        self.show_popup()
+
     def _on_focus_out_event(self, event, something):
         self.popup.hide()
         if self.news:
@@ -427,10 +434,6 @@ class TimeInput(gtk.Entry):
         self.time_tree.set_cursor(i)
         self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
         return True
-        
-        
-    def _on_button_press_event(self, button, event):
-        self.popup.show()
 
 
     
