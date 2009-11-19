@@ -91,6 +91,7 @@ class ActivityEntry(gtk.Entry):
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
+        self.connect("focus-out-event", self._on_focus_out_event)
         self.connect("changed", self._on_text_changed)
         self.show()
         self.populate_suggestions()
@@ -209,6 +210,8 @@ class ActivityEntry(gtk.Entry):
         
                     store.append([fillable, activity['name'], activity['category'], time])
 
+    def _on_focus_out_event(self, widget, event):
+        self.hide_popup()
 
     def _on_text_changed(self, widget):
         self.news = True
