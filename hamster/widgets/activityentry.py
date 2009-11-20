@@ -161,19 +161,23 @@ class ActivityEntry(gtk.Entry):
             self.set_text("%s%s" % (self.filter, prefix))
             self.select_region(len(self.filter), len(self.filter) + prefix_length)
 
+    def refresh_activities(self):
+        # scratch activities and categories so that they get repopulated on demand
+        self.activities = None
+        self.categories = None
 
     def populate_suggestions(self):
-        self.activities = self.activities or runtime.storage.get_autocomplete_activities()
-        self.categories = self.categories or runtime.storage.get_category_list()
-
         if self.get_selection_bounds():
             cursor = self.get_selection_bounds()[0]
         else:
             cursor = self.get_position()
             
-
-        if self.filter == self.get_text()[:cursor]:
+        if self.activities and self.categories and self.filter == self.get_text()[:cursor]:
             return #same thing, no need to repopulate
+
+        self.activities = self.activities or runtime.storage.get_autocomplete_activities()
+        self.categories = self.categories or runtime.storage.get_category_list()
+
         
         self.filter = self.get_text()[:cursor]
         
