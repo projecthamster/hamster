@@ -311,16 +311,17 @@ class DayLine(graphics.Area):
         
         #highlight rectangle
         if self.highlight:
-            self.highlight_start = self.get_pixel(self._minutes_from_start(self.highlight[0]))
-            self.highlight_end = self.get_pixel(self._minutes_from_start(self.highlight[1]))
+            self.highlight_start = round(self.get_pixel(self._minutes_from_start(self.highlight[0])))
+            self.highlight_end = round(self.get_pixel(self._minutes_from_start(self.highlight[1])))
 
         #TODO - make a proper range check here
         if self.highlight_end > 0 and self.highlight_start < self.width:
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
 
-
-            self.fill_area(self.highlight_start, graph_y,
-                           self.highlight_end - self.highlight_start, graph_height,
+            self.fill_area(self.highlight_start,
+                           graph_y,
+                           self.highlight_end - self.highlight_start,
+                           graph_height,
                            (rgb[0], rgb[1], rgb[2], 0.5))
             context.stroke()
 
