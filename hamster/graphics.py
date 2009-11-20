@@ -33,7 +33,7 @@ class Area(gtk.DrawingArea):
 
         self.layout = self.context.create_layout()
         default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(8 * pango.SCALE)
+        default_font.set_size(self.font_size * pango.SCALE)
         self.layout.set_font_description(default_font)
         alloc = self.get_allocation()  #x, y, width, height
         self.width, self.height = alloc.width, alloc.height
@@ -60,6 +60,10 @@ class Area(gtk.DrawingArea):
         self.height = None
         self.value_boundaries = None #x_min, x_max, y_min, y_max
         
+        self.x_factor, self.y_factor = None, None
+        
+        self.font_size = 8
+
         # use these to mark area where the "real" drawing is going on
         self.graph_x, self.graph_y = 0, 0
         self.graph_width, self.graph_height = None, None
@@ -67,6 +71,13 @@ class Area(gtk.DrawingArea):
         self.mouse_regions = [] #regions of drawing that respond to hovering/clicking
         self.__prev_mouse_regions = None
 
+    def set_text(self, text):
+        # sets text and returns width and height of the layout
+        self.layout.set_text(text)
+        w, h = self.layout.get_pixel_size()
+        return w, h
+        
+        
     def set_color(self, color, opacity = None):
         if color[0] > 1 or color[1] > 0 or color[2] > 0:
             color = [c / 255.0 for c in color]
@@ -114,12 +125,12 @@ class Area(gtk.DrawingArea):
     def _get_factors(self):
         if not self.x_factor:
             self.x_factor = 1
-            if self.value_boundaries[0] != None and self.value_boundaries[1] != None:
+            if self.value_boundaries and self.value_boundaries[0] != None and self.value_boundaries[1] != None:
                 self.x_factor = float(self.graph_width or self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
                 
         if not self.y_factor:            
             self.y_factor = 1
-            if self.value_boundaries[2] != None and self.value_boundaries[3] != None:
+            if self.value_boundaries and self.value_boundaries[2] != None and self.value_boundaries[3] != None:
                 self.y_factor = float(self.graph_height or self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
 
         return self.x_factor, self.y_factor        
@@ -137,7 +148,7 @@ class Area(gtk.DrawingArea):
         x_factor, y_factor = self._get_factors()
 
         if x_value != None:
-            if self.value_boundaries[0] != None:
+            if self.value_boundaries and self.value_boundaries[0] != None:
                 if self.value_boundaries[1] > self.value_boundaries[0]:
                     x_value = self.value_boundaries[0] + x_value * x_factor
                 else: #case when min is larger than max (flipped)
@@ -146,7 +157,7 @@ class Area(gtk.DrawingArea):
                 return x_value + self.graph_x
 
         if y_value != None:
-            if self.value_boundaries[2] != None:
+            if self.value_boundaries and self.value_boundaries[2] != None:
                 if self.value_boundaries[3] > self.value_boundaries[2]:
                     y_value = self.value_boundaries[2] + y_value * y_factor
                 else: #case when min is larger than max (flipped)
@@ -232,8 +243,13 @@ class Area(gtk.DrawingArea):
         for region in self.mouse_regions:
             if region[0] < x < region[2] and region[1] < y < region[3]:
                 mouse_regions.append(region[4])
+        
+        if mouse_regions:
+            area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
+        else:
+            area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
 
-        if mouse_regions or self.__prev_mouse_regions:
+        if mouse_regions != self.__prev_mouse_regions:
             self.emit("mouse-over", mouse_regions)
 
         self.__prev_mouse_regions = mouse_regions
