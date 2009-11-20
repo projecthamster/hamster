@@ -223,9 +223,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkLabel" id="label9">
+                      <object class="GtkAlignment" id="tag_box">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">label</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                     </child>
                     <child type="tab">

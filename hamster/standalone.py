@@ -31,6 +31,113 @@ import widgets, stuff
 
 import gobject
 
+import graphics
+import pango, cairo
+
+from math import pi
+
+class TagEntry(graphics.Area):
+    def __init__(self):
+        graphics.Area.__init__(self)
+        self.font_size = 10
+        self.connect("mouse-over", self.on_tag_hover)
+        self.connect("button-release", self.on_tag_click)
+        self.hover_tag = None
+        self.selected_tags = []
+
+    def on_tag_hover(self, widget, regions):
+        if regions:
+            self.hover_tag = regions[0]
+        else:
+            self.hover_tag = None
+        
+        self.redraw_canvas()
+    
+    def on_tag_click(self, widget, regions):
+        tag = regions[0]
+        if tag in self.selected_tags:
+            self.selected_tags.remove(tag)
+        else:
+            self.selected_tags.append(tag)
+
+        self.redraw_canvas()
+        
+    def draw(self):
+        """Draw chart with given data"""
+        self.show()        
+        self.redraw_canvas()
+
+    def tag_size(self, label):
+        text_w, text_h = self.set_text(label)
+        w = text_w + 18 # padding (we have some diagonals to draw)
+        h = text_h + 4
+        return w, h
+        
+        
+    def draw_tag(self, label, x, y, color):
+        self.context.set_line_width(1)
+
+        tag_x = x + 0.5
+        tag_y = y + 0.5
+
+        w, h = self.tag_size(label)
+                
+        self.move_to(x, y + 6)
+        self.line_to(x + 6, y)
+        self.line_to(x + w, y)
+        self.line_to(x + w, y + h)
+        self.line_to(x + 6, y + h)
+        self.line_to(x, y + h - 6)
+        self.line_to(x, y + 6)
+        self.set_color(color)
+        self.context.fill_preserve()
+        self.set_color((200, 200, 200))
+        self.context.stroke()
+
+        self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
+        self.context.arc(x + 6, y + h / 2 + 1, 2, 0, 2 * pi)
+        self.set_color((255, 255, 255))
+        self.context.fill_preserve()
+        self.set_color((200, 200, 200))
+        self.context.stroke()
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+
+        self.set_color((0, 0, 0))
+
+        #self.layout.set_width((self.width) * pango.SCALE)
+        self.context.move_to(x + 12,y + 2)
+        
+        self.context.show_layout(self.layout)
+        
+    
+    def _render(self):
+        self.fill_area(0, 0, self.width, self.height, (255,255,255))
+        
+        tags = ["peh", "poh", "and so on", "etc", "true magic",
+                "and so we go", "on and on", "until you drop",  "somewhere",
+                "and forget", "what we", "were", "actually doing"]
+        
+        cur_x, cur_y = 5, 5
+        for tag in tags:
+            w, h = self.tag_size(tag)
+            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                cur_x = 5
+                cur_y += h + 6
+            
+            if tag in self.selected_tags:
+                color = (242, 229, 97)
+            elif tag == self.hover_tag:
+                color = (252, 248, 204)
+            else:
+                color = (241, 234, 170)
+            
+            self.draw_tag(tag, cur_x, cur_y, color)
+            self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
+
+            cur_x += w + 8 #some padding too, please
+
+        
+
         
 
 class MainWindow(object):
@@ -40,14 +147,18 @@ class MainWindow(object):
 
         self.style_widgets()
         
-        self.get_widget("tabs").set_current_page(1)
+        self.get_widget("tabs").set_current_page(0)
 
         self.set_last_activity()
         self.load_today()
         
         gtk.link_button_set_uri_hook(self.magic)
         
+        self.tag_box = TagEntry()
+        self.get_widget("tag_box").add(self.tag_box)
+        
         self._gui.connect_signals(self)
+        
 
     def magic(self, button, uri):
         print uri, button
