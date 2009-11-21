@@ -395,8 +395,14 @@ class HamsterApplet(object):
         fact_store.clear()
         facts = runtime.storage.get_facts(today)
         
+        if len(facts) > 10:
+            self._gui.get_object("todays_scroll").set_size_request(-1, 250)
+            self._gui.get_object("todays_scroll").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+        else:
+            self._gui.get_object("todays_scroll").set_size_request(-1, -1)
+            self._gui.get_object("todays_scroll").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+            
         by_category = {}
-        
         for fact in facts:
             duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
             by_category[fact['category']] = \
