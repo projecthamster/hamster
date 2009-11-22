@@ -298,7 +298,13 @@ class Storage(storage.Storage):
                 #we are in middle of a fact - truncate it to our start
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
-                end_time = fact["end_time"]
+                
+                # hamster is second-aware, but the edit dialog naturally is not
+                # so when an ongoing task is being edited, the seconds get truncated
+                # and the start time will be before previous task's end time.
+                # so set our end time only if it is not about seconds
+                if fact["end_time"].replace(second = 0) > start_time:
+                    end_time = fact["end_time"]
             else: #otherwise we have found a task that is after us
                 end_time = fact["start_time"]
 
