@@ -139,15 +139,11 @@
                     <property name="visible">True</property>
                     <property name="spacing">4</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment1">
+                      <object class="GtkAlignment" id="new_name_box">
                         <property name="width_request">300</property>
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkEntry" id="new_name">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">&#x2022;</property>
-                          </object>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -156,14 +152,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="alignment4">
+                      <object class="GtkAlignment" id="new_tags_box">
+                        <property name="width_request">300</property>
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkEntry" id="new_description">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="invisible_char">&#x2022;</property>
-                          </object>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
