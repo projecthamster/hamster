@@ -39,7 +39,6 @@ class CustomFactController:
         
         #TODO - should somehow hint that time is not welcome here
         self.new_name = widgets.ActivityEntry()
-        self.new_name.connect("changed", self.on_new_name_changed)
         self.get_widget("activity_box").add(self.new_name)
         
         if fact_id:
@@ -93,15 +92,12 @@ class CustomFactController:
 
         self.start_date = widgets.DateInput(start_date)
         self.get_widget("start_date_placeholder").add(self.start_date)
-        self.start_date.connect("date-entered", self.on_start_date_entered)
 
         self.start_time = widgets.TimeInput(start_date)
         self.get_widget("start_time_placeholder").add(self.start_time)
-        self.start_time.connect("time-entered", self.on_start_time_entered)
         
         self.end_time = widgets.TimeInput(end_date, start_date)
         self.get_widget("end_time_placeholder").add(self.end_time)
-        self.end_time.connect("time-entered", self.on_end_time_entered)
         self.set_end_date_label(end_date)
 
 
@@ -111,6 +107,11 @@ class CustomFactController:
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
+
+        self.start_date.connect("date-entered", self.on_start_date_entered)
+        self.start_time.connect("time-entered", self.on_start_time_entered)
+        self.new_name.connect("changed", self.on_new_name_changed)
+        self.end_time.connect("time-entered", self.on_end_time_entered)
         self._gui.connect_signals(self)
 
     def update_time(self, start_time, end_time):
