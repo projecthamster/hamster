@@ -28,6 +28,9 @@ from timeinput import TimeInput
 from timeline import TimeLine
 from dayline import DayLine
 
+from tags import TagBox
+from tags import TagsEntry
+
 from reportchooserdialog import ReportChooserDialog
 
 # handy wrappers
