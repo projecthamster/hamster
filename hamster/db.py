@@ -747,7 +747,7 @@ class Storage(storage.Storage):
         
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 5
+        current_version = 6
 
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
@@ -912,13 +912,25 @@ class Storage(storage.Storage):
         if version < 5:
             self.execute("ALTER TABLE facts add column description varchar2")
 
+        if version < 6:
+            # facts table could use an index
+            self.execute("CREATE INDEX idx_facts_start_end ON facts(start_time, end_time)")
+            self.execute("CREATE INDEX idx_facts_start_end_activity ON facts(start_time, end_time, activity_id)")
+
+            # adding tags
+            self.execute("""CREATE TABLE tags (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                               name TEXT NOT NULL,
+                                               autocomplete BOOL DEFAULT true)""")
+            self.execute("CREATE INDEX idx_tags_name ON tags(name)")
+
+            self.execute("CREATE TABLE fact_tags(fact_id integer, tag_id integer)")
+            self.execute("CREATE INDEX idx_fact_tags_fact ON fact_tags(fact_id)")
+            self.execute("CREATE INDEX idx_fact_tags_tag ON fact_tags(tag_id)")
 
         # at the happy end, update version number 
         if version < current_version:
             #lock down current version
             self.execute("UPDATE version SET version = %d" % current_version) 
-        
-
         
         """we start with an empty database and then populate with default
            values. This way defaults can be localized!"""
