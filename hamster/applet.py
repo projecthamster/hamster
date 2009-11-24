@@ -366,7 +366,7 @@ class HamsterApplet(object):
                 self.get_widget("last_activity_category") \
                     .set_text(" - %s" % activity['category'])
 
-            self.get_widget("last_activity_description").set_text(activity['description'])
+            self.get_widget("last_activity_description").set_text(activity['description'] or "")
         else:
             self.get_widget("switch_activity").hide()
             self.get_widget("start_tracking").show()
