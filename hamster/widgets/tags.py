@@ -23,6 +23,8 @@ from math import pi
 
 from hamster import graphics
 
+from hamster.configuration import runtime
+
 class TagsEntry(gtk.Entry):
     __gsignals__ = {
         'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
@@ -164,7 +166,7 @@ class TagsEntry(gtk.Entry):
 
         text = self.get_text()
 
-        return text[text.rfind(",", 0, cursor)+1:cursor].strip()
+        return text[text.rfind(",", 0, cursor)+1:max(text.find(",", cursor+1)+1, len(text))].strip()
 
 
     def replace_tag(self, old_tag, new_tag):
@@ -185,8 +187,11 @@ class TagsEntry(gtk.Entry):
         if event.keyval == gtk.keysyms.Tab:
             if self.popup.get_property("visible"):
                 #we have to replace
-                self.replace_tag(self.get_cursor_tag(), self.filter_tags[0])
-                return True
+                if self.get_text() and self.get_cursor_tag() != self.filter_tags[0]:
+                    self.replace_tag(self.get_cursor_tag(), self.filter_tags[0])
+                    return True
+                else:
+                    return False
             else:
                 return False
 
