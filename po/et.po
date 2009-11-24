@@ -9,12 +9,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet HEAD\n"
+"Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-09-30 08:55+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2009-11-19 12:08+0000\n"
+"PO-Revision-Date: 2009-11-23 21:29+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,6 +39,9 @@ msgstr "_Eelistused"
 
 msgid "<b>Activities</b>"
 msgstr "<b>Tegevused</b>"
+
+msgid "<b>Day\t</b>"
+msgstr "<b>Päev\t</b>"
 
 msgid "<b>Global Hotkey</b>"
 msgstr "<b>Globaalne kiirklahv</b>"
@@ -72,6 +75,9 @@ msgstr "Tegevuse liigutamine allapoole"
 
 msgid "Move activity up"
 msgstr "Tegevuse liigutamine ülespoole"
+
+msgid "New day starts at"
+msgstr "Uus päev algab"
 
 msgid "Remind of current activity every:"
 msgstr "Jooksvast tegevusest antakse teada iga:"
@@ -119,6 +125,17 @@ msgid "to"
 msgstr "kuni"
 
 msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+"Kui praegune aeg on enne päeva algusajaks määratud aega, siis kuvatakse "
+"tegevused eelmisesse päeva kuuluvatena. Kui päeva alguseks määratud aeg on "
+"möödunud, siis aga tänasesse päeva kuuluvatena. Kahte päeva kuuluvad "
+"tegevused ulatuvad üle serva, kuhu tegevuse suurim osa jääb."
+
+msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Meeldetuletuste kuvamine ka võtmega notify_interval määratud minutite järel "
@@ -148,6 +165,9 @@ msgstr "Arvuti jõudeoleku korral jooksva tegevuse jälgimise seiskamine"
 
 msgid "Stop tracking on idle"
 msgstr "Jõudeoleku korral jälgimise seiskamine"
+
+msgid "Time at witch to consider beginning of new day"
+msgstr "Uue päeva alustamiseks sobilik kellaaeg"
 
 msgid ""
 "<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
@@ -204,11 +224,24 @@ msgstr "<b>Kokku</b>"
 msgid "Activity"
 msgstr "Tegevus"
 
+msgid "Add"
+msgstr "Lisa"
+
 msgid "Categories:"
 msgstr "Kategooriad:"
 
 msgid "Date interval:"
 msgstr "Kuupäevade vahemik:"
+
+#. translators: this is edit activity action in the notifier bubble
+msgid "Edit"
+msgstr "Muuda"
+
+msgid "Next"
+msgstr "Järgmine"
+
+msgid "Next week"
+msgstr "Järgmine nädal"
 
 msgid "No data for this interval"
 msgstr "Selle vahemiku kohta andmed puuduvad"
@@ -219,17 +252,41 @@ msgstr "Ülevaade"
 msgid "Overview - Hamster"
 msgstr "Ülevaade - Hamster"
 
-msgid "Save as HTML"
-msgstr "Salvesta HTML-ina"
+msgid "Previous"
+msgstr "Eelmine"
+
+msgid "Previous week"
+msgstr "Eelmine nädal"
+
+msgid "Remove"
+msgstr "Eemalda"
+
+msgid "Save Report"
+msgstr "Raporti salvestamine"
+
+msgid "Save report"
+msgstr "Salvesta raport"
 
 msgid "Save report – Time Tracker"
 msgstr "Ajajälgija raporti salvestamine"
 
+msgid "Show month"
+msgstr "Näita kuud"
+
+msgid "Show single day"
+msgstr "Näita ühte päeva"
+
+msgid "Show week"
+msgstr "Näita nädalat"
+
 msgid "Statistics"
 msgstr "Statistika"
 
-msgid "Today"
-msgstr "Täna"
+msgid "This Week"
+msgstr "See nädal"
+
+msgid "This week"
+msgstr "See nädal"
 
 msgid "Week"
 msgstr "Nädal"
@@ -248,12 +305,8 @@ msgstr "Ajajälgijast lähemalt"
 
 msgid "translator-credits"
 msgstr ""
-"Ivar Smolin <okul@linux.ee>, 2008, 2009.\n"
+"Ivar Smolin <okul linux ee>, 2008, 2009.\n"
 "Mattias Põldaru <mahfiaz gmail com>, 2009."
-
-#. translators: this is edit activity action in the notifier bubble
-msgid "Edit"
-msgstr "Muuda"
 
 #. translators: this is switch activity action in the notifier bubble
 msgid "Switch"
@@ -494,10 +547,9 @@ msgstr "%d.%b.%Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#, python-format
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s. %(b)s"
+msgid "%b %d"
+msgstr "%d. %b"
 
 #, python-format
 msgid "First activity was recorded on %s."
@@ -602,6 +654,27 @@ msgstr "Kuu"
 msgid "Day"
 msgstr "Päev"
 
+msgid "Previous day"
+msgstr "Eelmine päev"
+
+msgid "Next day"
+msgstr "Järgmine päev"
+
+msgid "Today"
+msgstr "Täna"
+
+msgid "Previous month"
+msgstr "Eelmine kuu"
+
+msgid "Next month"
+msgstr "Järgmine kuu"
+
+msgid "This month"
+msgstr "See kuu"
+
+msgid "This Month"
+msgstr "See kuu"
+
 #. duration in round hours
 #, python-format
 msgid "%dh"
@@ -616,9 +689,6 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
-
-#~ msgid "Tab Separated Values (TSV)"
-#~ msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
 
 #~ msgid "Remind also when no activity is set"
 #~ msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
