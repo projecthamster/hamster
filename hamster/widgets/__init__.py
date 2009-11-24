@@ -62,17 +62,23 @@ def add_hint(entry, hint):
 
         if self.real_get_text() == self.hint:
             self.set_text("")
+            
+    def _on_changed(self, widget):
+        if self.real_get_text() == "" and self.is_focus() == False:
+            self._set_hint(widget, None)
 
     import types
     instancemethod = types.MethodType
 
     entry._set_hint = instancemethod(_set_hint, entry, gtk.Entry)
     entry._set_normal = instancemethod(_set_normal, entry, gtk.Entry)
+    entry._on_changed = instancemethod(_on_changed, entry, gtk.Entry)
     entry.real_get_text = entry.get_text
     entry.get_text = instancemethod(override_get_text, entry, gtk.Entry)
     
     entry.connect('focus-in-event', entry._set_normal)
     entry.connect('focus-out-event', entry._set_hint)
+    entry.connect('changed', entry._on_changed)
 
     entry._set_hint(entry, None)
 
