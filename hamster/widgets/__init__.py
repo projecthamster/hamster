@@ -37,6 +37,13 @@ from reportchooserdialog import ReportChooserDialog
 def add_hint(entry, hint):
     entry.hint = hint        
     
+    def override_get_text(self):
+        #override get text so it does not return true when hint is in!
+        if self.real_get_text() == self.hint:
+            return ""
+        else:
+            return self.real_get_text()
+        
     def _set_hint(self, widget, event):
         if self.get_text(): # don't mess with user entered text
             return 
@@ -53,7 +60,7 @@ def add_hint(entry, hint):
         hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
         self.modify_font(hint_font)
 
-        if self.get_text() == self.hint:
+        if self.real_get_text() == self.hint:
             self.set_text("")
 
     import types
@@ -61,6 +68,8 @@ def add_hint(entry, hint):
 
     entry._set_hint = instancemethod(_set_hint, entry, gtk.Entry)
     entry._set_normal = instancemethod(_set_normal, entry, gtk.Entry)
+    entry.real_get_text = entry.get_text
+    entry.get_text = instancemethod(override_get_text, entry, gtk.Entry)
     
     entry.connect('focus-in-event', entry._set_normal)
     entry.connect('focus-out-event', entry._set_hint)
