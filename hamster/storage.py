@@ -36,7 +36,11 @@ class Storage(object):
         return self.__get_tags(autocomplete)
         
     def get_tag_ids(self, tags):
-        self.__get_tag_ids(tags)        
+        tags, new_added = self.__get_tag_ids(tags)
+        if new_added:
+            self.dispatch('new_tags_added', ())
+        return tags
+
 
 
     def get_fact(self, id):

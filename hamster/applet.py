@@ -235,7 +235,6 @@ class HamsterApplet(object):
         self.new_name.connect("changed", self.on_activity_text_changed)
 
         self.new_tags = widgets.TagsEntry()
-        self.new_tags.set_entries([tag["name"] for tag in runtime.storage.get_tags(autocomplete = True)])
         widgets.add_hint(self.new_tags, _("Tags or Description"))
         self.get_widget("new_tags_box").add(self.new_tags)
         

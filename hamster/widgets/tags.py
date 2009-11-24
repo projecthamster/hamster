@@ -32,7 +32,7 @@ class TagsEntry(gtk.Entry):
 
     def __init__(self):
         gtk.Entry.__init__(self)
-        self.tags = []
+        self.tags = None
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
         
@@ -56,12 +56,14 @@ class TagsEntry(gtk.Entry):
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
+
+        runtime.dispatcher.add_handler('new_tags_added', self.refresh_tags)
         self.show()
         self.populate_suggestions()
 
-    def set_entries(self, tags):
-        self.tags = tags
-        
+    def refresh_tags(self, event, data):
+        self.tags = None
+
     def get_tags(self):
         # splits the string by comma and filters out blanks
         return [tag.strip() for tag in self.get_text().split(",") if tag.strip()]
@@ -115,6 +117,8 @@ class TagsEntry(gtk.Entry):
         self.categories = None
 
     def populate_suggestions(self):
+        self.tags = self.tags or [tag["name"] for tag in runtime.storage.get_tags(autocomplete = True)]
+
         cursor_tag = self.get_cursor_tag()
             
         self.filter = cursor_tag
@@ -183,7 +187,6 @@ class TagsEntry(gtk.Entry):
         self.set_position(cursor + len(new_tag)-len(old_tag)) # put the cursor back
 
     def _on_key_press_event(self, entry, event):
-
         if event.keyval == gtk.keysyms.Tab:
             if self.popup.get_property("visible"):
                 #we have to replace

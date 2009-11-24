@@ -107,11 +107,9 @@ class Storage(storage.Storage):
 
             self.execute([statement] * len(add), [(tag,) for tag in add])
 
-            return self.__get_tag_ids(list(add)) # all done, recurse
+            return self.__get_tag_ids(tags)[0], True # all done, recurse
         else:
-            return db_tags
-
-        print db_tags
+            return db_tags, False
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
@@ -419,12 +417,11 @@ class Storage(storage.Storage):
         
         # TODO - untangle descriptions - allow just one place where to enter them
         activity.description = ", ".join(descriptions) # somebody will file bug on "why tags can't be seven words"
-        tags = self.__get_tag_ids(tags) #this will create any missing tags too
+        tags = self.get_tag_ids(tags) #this will create any missing tags too
         
         if category_name:
             activity.category_name = category_name
         if description:
-            print "over ride %s" % description
             activity.description = description #override
         
         start_time = activity.start_time or start_time or datetime.datetime.now()
