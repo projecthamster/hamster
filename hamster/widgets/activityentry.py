@@ -17,15 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from hamster.configuration import GconfStore, runtime
+import gtk, gobject
+import datetime as dt
+
+from hamster.configuration import runtime
 
 from hamster import stuff
 from hamster.stuff import format_duration
-import gtk
-import datetime as dt
-import calendar
-import gobject
-import re
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {
@@ -93,6 +91,9 @@ class ActivityEntry(gtk.Entry):
         self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
         self.connect("changed", self._on_text_changed)
+
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+
         self.show()
         self.populate_suggestions()
 
@@ -214,6 +215,9 @@ class ActivityEntry(gtk.Entry):
         
                     store.append([fillable, activity['name'], activity['category'], time])
 
+    def after_activity_update(self):
+        self.refresh_activities()
+        
     def _on_focus_out_event(self, widget, event):
         self.hide_popup()
 
@@ -284,7 +288,7 @@ class ActivityEntry(gtk.Entry):
         value = model.get_value(iter, 0)
         self.set_text(value)
         self.hide_popup()
-        self._on_selected()
+        self.set_position(len(self.get_text()))
 
     def _on_selected(self):
         if self.news:
