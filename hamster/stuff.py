@@ -280,11 +280,6 @@ def parse_activity_input(text):
         elif res.start_time:
             text = text[text.find(" ")+1:]
     
-    #see if we have description of activity somewhere here (delimited by comma)
-    if text.find(",") > 0:
-        text, res.description = text.split(",", 1)
-        res.description = res.description.strip()
-
     if text.find("@") > 0:
         text, res.category_name = text.split("@", 1)
         res.category_name = res.category_name.strip()
