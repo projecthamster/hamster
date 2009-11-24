@@ -46,13 +46,12 @@ class MainWindow(object):
         self.new_name = widgets.ActivityEntry()
         widgets.add_hint(self.new_name, _("Time and Name"))
         self.get_widget("new_name_box").add(self.new_name)
+        self.new_name.connect("changed", self.on_activity_text_changed)
+
+
 
         self.new_tags = widgets.TagsEntry()
-        
-        self.new_tags.set_entries(["peh", "poh", "and so on", "etc", "true magic",
-                                   "and so we go", "on and on", "until you drop",
-                                   "somewhere", "and forget", "what we", "were",
-                                   "actually doing"])
+        self.new_tags.set_entries([tag["name"] for tag in runtime.storage.get_tags(autocomplete = True)])
         
         widgets.add_hint(self.new_tags, _("Tags or Description"))
         self.get_widget("new_tags_box").add(self.new_tags)
@@ -66,8 +65,12 @@ class MainWindow(object):
         
         self.tag_box = widgets.TagBox()
         self.get_widget("tag_box").add(self.tag_box)
+
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
         
         self._gui.connect_signals(self)
+        
         
 
     def magic(self, button, uri):
@@ -76,24 +79,31 @@ class MainWindow(object):
 
     def set_last_activity(self):
         activity = runtime.storage.get_last_activity()
+        self.get_widget("stop_tracking").set_sensitive(activity != None)
+        
+        
         if activity:
+            self.get_widget("switch_activity").show()
+            self.get_widget("start_tracking").hide()
+            
             delta = dt.datetime.now() - activity['start_time']
             duration = delta.seconds /  60
             
-            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration))
+            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
             self.get_widget("last_activity_name").set_text(activity['name'])
             if activity['category'] != _("Unsorted"):
                 self.get_widget("last_activity_category") \
                     .set_text(" - %s" % activity['category'])
-                self.get_widget("last_activity_category").show()
-            else:
-                self.get_widget("last_activity_category").hide()
 
-            if activity['description']:
-                self.get_widget("last_activity_description").set_text(activity['description'])
-                self.get_widget("last_activity_description").show()
-            else:
-                self.get_widget("last_activity_description").hide()
+            self.get_widget("last_activity_description").set_text(activity['description'])
+        else:
+            self.get_widget("switch_activity").hide()
+            self.get_widget("start_tracking").show()
+
+            self.get_widget("last_activity_name").set_text(_("No activity"))
+            self.get_widget("last_activity_duration").set_text("")
+            self.get_widget("last_activity_category").set_text("")
+            
 
     def load_today(self):
         todays_facts = runtime.storage.get_facts(dt.date.today())
@@ -147,10 +157,26 @@ class MainWindow(object):
 
 
 
-        
+    def on_activity_text_changed(self, widget):
+        self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
-        self.get_widget("new_entry_box").show()
+        runtime.storage.add_fact(self.new_name.get_text().encode("utf-8"), self.new_tags.get_text())
+        self.new_name.set_text("")
+        self.new_tags.set_text("")
+
+    def on_stop_tracking_clicked(self, widget):
+        runtime.storage.touch_fact(runtime.storage.get_last_activity())
+
+    def after_activity_update(self, widget, stuff):
+        print "activity updated"
+        self.set_last_activity()
+        self.load_today()
+
+    def after_fact_update(self, widget, stuff):
+        print "fact updated"
+        self.set_last_activity()
+        self.load_today()
 
     def show(self):
         self.window.show_all()

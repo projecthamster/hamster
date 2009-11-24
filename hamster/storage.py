@@ -30,12 +30,22 @@ class Storage(object):
 
     def dispatch(self, event, data):
         self.parent.dispatch(event, data)
+        
+
+    def get_tags(self, autocomplete = None):
+        return self.__get_tags(autocomplete)
+        
+    def get_tag_ids(self, tags):
+        self.__get_tag_ids(tags)        
+
 
     def get_fact(self, id):
         return self.__get_fact(id)
 
-    def add_fact(self, activity_name, start_time = None,  end_time = None):
-        result = self.__add_fact(activity_name, start_time, end_time)
+    def add_fact(self, activity_name, tags, start_time = None, end_time = None,
+                                      category_name = None, description = None):
+
+        result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description)
         if result:
             self.dispatch('day_updated', result['start_time'])
         return result

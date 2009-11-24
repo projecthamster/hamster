@@ -126,8 +126,8 @@ class PanelButton(gtk.ToggleButton):
             else:
                 label = "%s %s" % (self.activity, self.duration)
         
-        label = stuff.escape_pango(label)
-        label = '<span gravity=\"south\">' + label + '</span>'
+        label = '<span gravity="south">%s</span>' % stuff.escape_pango(label)
+        self.label.set_markup("") #clear - seems to fix the warning
         self.label.set_markup(label)
 
     def get_pos(self):
@@ -231,9 +231,13 @@ class HamsterApplet(object):
 
         self.new_name = widgets.ActivityEntry()
         widgets.add_hint(self.new_name, _("Time and Name"))
-        self._gui.get_object("activity_name_box").add(self.new_name)
-        self.new_name.connect("value-entered", self.on_activity_entered)
-        
+        self.get_widget("new_name_box").add(self.new_name)
+        self.new_name.connect("changed", self.on_activity_text_changed)
+
+        self.new_tags = widgets.TagsEntry()
+        self.new_tags.set_entries([tag["name"] for tag in runtime.storage.get_tags(autocomplete = True)])
+        widgets.add_hint(self.new_tags, _("Tags or Description"))
+        self.get_widget("new_tags_box").add(self.new_tags)
         
         # init today's tree
         self.setup_activity_tree()
@@ -337,25 +341,40 @@ class HamsterApplet(object):
                                stuff.format_duration(duration, False))
             self.button.set_text(self.last_activity['name'],
                                  stuff.format_duration(duration, False))
-            
-            self._gui.get_object('stop_tracking').set_sensitive(1);
-
-            label = self.last_activity['name']
-            if self.last_activity['category'] != _("Unsorted"):
-                label += "@%s" %  self.last_activity['category']
-            self.new_name.set_text(label)
-
-            self.new_name.select_region(0, -1)
-            self._gui.get_object("more_info_label").hide()
         else:
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
-            self._gui.get_object('stop_tracking').set_sensitive(0);
+            
+        self.set_last_activity()
 
-            self.new_name.set_text('')
-            self._gui.get_object("more_info_label").show()
+        
+    def set_last_activity(self):
+        activity = runtime.storage.get_last_activity()
+        self.get_widget("stop_tracking").set_sensitive(activity != None)
         
         
+        if activity:
+            self.get_widget("switch_activity").show()
+            self.get_widget("start_tracking").hide()
+            
+            delta = dt.datetime.now() - activity['start_time']
+            duration = delta.seconds /  60
+            
+            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
+            self.get_widget("last_activity_name").set_text(activity['name'])
+            if activity['category'] != _("Unsorted"):
+                self.get_widget("last_activity_category") \
+                    .set_text(" - %s" % activity['category'])
+
+            self.get_widget("last_activity_description").set_text(activity['description'])
+        else:
+            self.get_widget("switch_activity").hide()
+            self.get_widget("start_tracking").show()
+
+            self.get_widget("last_activity_name").set_text(_("No activity"))
+            self.get_widget("last_activity_duration").set_text("")
+            self.get_widget("last_activity_category").set_text("")
+         
     def check_user(self):
         if not self.notify_interval: #no interval means "never"
             return
@@ -588,12 +607,6 @@ class HamsterApplet(object):
         return False
         
     """button events"""
-    def on_stop_tracking(self, button):
-        runtime.storage.touch_fact(self.last_activity)
-        self.last_activity = None
-        self.update_label()
-        runtime.dispatcher.dispatch('panel_visible', False)
-
     def on_overview(self, menu_item):
         runtime.dispatcher.dispatch('panel_visible', False)
         stats_viewer = StatsViewer(self)
@@ -690,3 +703,22 @@ Now, start tracking!
         message_dialog.set_markup(more_info)
         message_dialog.show()
 
+    def on_activity_text_changed(self, widget):
+        self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
+
+    def on_switch_activity_clicked(self, widget):
+        runtime.storage.add_fact(self.new_name.get_text().encode("utf-8"), self.new_tags.get_text())
+        self.new_name.set_text("")
+        self.new_tags.set_text("")
+        runtime.dispatcher.dispatch('panel_visible', False)
+
+    def on_stop_tracking_clicked(self, widget):
+        runtime.storage.touch_fact(runtime.storage.get_last_activity())
+        self.last_activity = None
+        runtime.dispatcher.dispatch('panel_visible', False)
+
+    def show(self):
+        self.window.show_all()
+        
+    def get_widget(self, name):
+        return self._gui.get_object(name)

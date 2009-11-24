@@ -103,11 +103,12 @@
                         <property name="visible">True</property>
                         <property name="spacing">4</property>
                         <child>
-                          <object class="GtkButton" id="button2">
+                          <object class="GtkButton" id="stop_tracking">
                             <property name="label" translatable="yes">Stop tracking</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_stop_tracking_clicked"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -167,18 +168,32 @@
                       <object class="GtkHButtonBox" id="hbuttonbox2">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton" id="button1">
+                          <object class="GtkButton" id="switch_activity">
                             <property name="label" translatable="yes">Switch</property>
                             <property name="width_request">80</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_switch_activity_clicked"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="start_tracking">
+                            <property name="label" translatable="yes">Start Tracking</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_switch_activity_clicked"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>

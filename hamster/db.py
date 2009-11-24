@@ -81,6 +81,37 @@ class Storage(storage.Storage):
 
 
     __setup.complete = False
+    
+    #tags, here we come!
+    def __get_tags(self, autocomplete = None):
+        query = "select * from tags"
+        if autocomplete:
+            query += " where autocomplete='true'"
+        
+        return self.fetchall(query)
+        
+    def __get_tag_ids(self, tags):
+        """look up tags by their name. create if not found"""
+        
+        # filter descriptions out, just in case they have wandered in here
+        tags = [tag for tag in tags if tag.startswith("!") == False and len(tag.split(" ")) < 3]
+        
+        db_tags = self.fetchall("select * from tags where name in (%s)"
+                                            % ",".join(["?"] * len(tags)), tags) # bit of magic here - using sqlites bind variables
+        
+        found_tags = [tag["name"] for tag in db_tags]
+        
+        add = set(tags) - set(found_tags)
+        if add:
+            statement = "insert into tags(name) values(?)"
+
+            self.execute([statement] * len(add), [(tag,) for tag in add])
+
+            return self.__get_tag_ids(list(add)) # all done, recurse
+        else:
+            return db_tags
+
+        print db_tags
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
@@ -315,7 +346,7 @@ class Storage(storage.Storage):
         make room for new fact"""
 
         # this function is destructive - can't go with a wildcard
-        if not end_time or not start_time: #this function is destructive
+        if not end_time or not start_time:
             return
         
         # activities that we are overlapping.
@@ -345,11 +376,17 @@ class Storage(storage.Storage):
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
                 fact_name = fact["name"]
-                self.__add_fact(fact["name"],
-                                end_time,
-                                fact["end_time"],
-                                fact["category"],
-                                fact["description"])
+                new_fact = self.__add_fact(fact["name"],
+                                           "", # will create tags in the next step
+                                           end_time,
+                                           fact["end_time"],
+                                           fact["category"],
+                                           fact["description"])
+                tag_update = """INSERT INTO fact_tags(fact_id, tag_id)
+                                     SELECT ?, tag_id
+                                       FROM fact_tags
+                                      WHERE fact_id = ?"""
+                self.execute(tag_update, (new_fact["id"], fact["id"])) #clone tags
 
             #eliminate
             elif fact["end_time"] and \
@@ -371,14 +408,24 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, activity_name, start_time = None,
+    def __add_fact(self, activity_name, tags, start_time = None,
                      end_time = None, category_name = None, description = None):
+        
         activity = stuff.parse_activity_input(activity_name)
+        
+        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
+        descriptions = [tag for tag in tags if len(tag.split(" ")) > 2 or tag.startswith("!")]  #extract description
+        tags = list(set(tags) - set(descriptions)) #remove any found descriptions from tag list
+        
+        # TODO - untangle descriptions - allow just one place where to enter them
+        activity.description = ", ".join(descriptions) # somebody will file bug on "why tags can't be seven words"
+        tags = self.__get_tag_ids(tags) #this will create any missing tags too
         
         if category_name:
             activity.category_name = category_name
         if description:
-            activity.description = description
+            print "over ride %s" % description
+            activity.description = description #override
         
         start_time = activity.start_time or start_time or datetime.datetime.now()
         
@@ -412,12 +459,12 @@ class Storage(storage.Storage):
 
             if last_activity and last_activity['start_time'] < start_time:
                 #if this is the same, ongoing activity, then there is no need to create another one
-                if not activity.description \
+                if not tags and not activity.description \
                    and last_activity['activity_id'] == activity_id:
                     return last_activity
                 
                 #if duration is less than a minute - it must have been a mistake
-                if not activity.description \
+                if not tags and not activity.description \
                    and not last_activity["description"] \
                    and 60 >= (start_time - last_activity['start_time']).seconds >= 0:
                     self.__remove_fact(last_activity['id'])
@@ -447,6 +494,11 @@ class Storage(storage.Storage):
         self.execute(insert, (activity_id, start_time, end_time, activity.description))
 
         fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
+        
+        #now link tags
+        insert = ["insert into fact_tags(fact_id, tag_id) values(?, ?)"] * len(tags)
+        params = [(fact_id, tag["id"]) for tag in tags]
+        self.execute(insert, params)
         
         return self.__get_fact(fact_id)
 
