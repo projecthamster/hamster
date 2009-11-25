@@ -311,7 +311,12 @@ class HamsterApplet(object):
         self.treeview.append_column(stuff.ActivityColumn(name=1,
                                                          description=5,
                                                          category=6))
+
+
+        tag_cell = widgets.TagCellRenderer()
+        self.treeview.append_column(gtk.TreeViewColumn(_("Tags"), tag_cell, data=7))
         
+
         duration_cell = gtk.CellRendererText()
         duration_cell.set_property("xalign", 1)
         timeColumn = gtk.TreeViewColumn(_("Duration"), duration_cell, text=3)
@@ -603,10 +608,11 @@ class HamsterApplet(object):
                 if fact['category']:
                     activity = '%s@%s' % (activity, fact['category'])
 
-                if fact['description']:
-                    activity = "%s, %s" % (activity, fact['description'])
+                tags = fact["tags"]
+                if fact["description"]:
+                    tags.append(fact["description"])
                     
-                runtime.storage.add_fact(activity)
+                runtime.storage.add_fact(activity, ", ".join(tags))
                 runtime.dispatcher.dispatch('panel_visible', False)
         
         
