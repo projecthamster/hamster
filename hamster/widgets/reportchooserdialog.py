@@ -24,6 +24,12 @@ pygtk.require('2.0')
 import os
 import gtk, gobject
 
+from hamster import stuff
+from hamster.i18n import C_
+from hamster.configuration import runtime
+
+from dateinput import DateInput
+
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
         # format, path, start_date, end_date
@@ -78,9 +84,9 @@ class ReportChooserDialog(gtk.Dialog):
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
         
-        self.start_date = widgets.DateInput()
+        self.start_date = DateInput()
         ui.get_object('from_date_box').add(self.start_date)
-        self.end_date = widgets.DateInput()
+        self.end_date = DateInput()
         ui.get_object('to_date_box').add(self.end_date)
 
         self.category_box = ui.get_object('category_box')
