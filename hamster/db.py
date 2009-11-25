@@ -40,6 +40,8 @@ from shutil import copy as copyfile
 import datetime as dt
 import gettext
 
+import itertools
+
 DB_FILE = 'hamster.db'
 
 class Storage(storage.Storage):
@@ -245,18 +247,35 @@ class Storage(storage.Storage):
         return None
 
     def __get_fact(self, id):
-        query = """SELECT a.id AS id,
+        query = """
+                   SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
                           a.description as description,
                           b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id
+                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
+                          e.name as tags
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
-                LEFT JOIN categories c on b.category_id = c.id
+                LEFT JOIN categories c ON b.category_id = c.id
+                LEFT JOIN fact_tags d ON d.fact_id = a.id
+                LEFT JOIN tags e ON e.id = d.tag_id
                     WHERE a.id = ? 
         """
-        return self.fetchone(query, (_("Unsorted"), id))
+
+        return self.__group_tags(self.fetchall(query, (_("Unsorted"), id)))[0]
+
+    def __group_tags(self, facts):
+        """put the fact back together and move all the unique tags to an array"""
+        if not facts: return facts  #be it None or whatever
+        
+        grouped_facts = []
+        for fact_id, fact_tags in itertools.groupby(facts, lambda f: f["id"]):
+            fact_tags = list(fact_tags)
+            grouped_fact = dict(fact_tags[0]) #first is as good as the last one
+            grouped_fact["tags"] = [ft["tags"] for ft in fact_tags if ft["tags"]]
+            grouped_facts.append(grouped_fact)
+        return grouped_facts
 
     def __get_last_activity(self):
         query = """
@@ -265,26 +284,32 @@ class Storage(storage.Storage):
                           a.end_time AS end_time,
                           a.description as description,
                           b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id
+                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
+                          e.name as tags
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
-                LEFT JOIN categories c on b.category_id = c.id
+                LEFT JOIN categories c ON b.category_id = c.id
+                LEFT JOIN fact_tags d ON d.fact_id = a.id
+                LEFT JOIN tags e ON e.id = d.tag_id
                     WHERE date(a.start_time) = ?
                  ORDER BY a.start_time desc
-                    LIMIT 1
+                    LIMIT 20
         """
-        last = self.fetchone(query, (_("Unsorted"), dt.date.today()))
+        last = self.fetchall(query, (_("Unsorted"), dt.date.today()))        
         if not last:
             #try yesterday if there is nothing today
-            last = self.fetchone(query,
+            last = self.fetchall(query,
                                  (# unsorted category
                                   _("Unsorted"),
                                   dt.date.today() - dt.timedelta(days=1)))
+
+        last = self.__group_tags(last)[0]
 
         if last and last["end_time"]: #will consider as last only if it is going on
            last = None
         
         return last
+
     def __touch_fact(self, fact, end_time):
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
@@ -507,10 +532,13 @@ class Storage(storage.Storage):
                           a.end_time AS end_time,
                           a.description as description,
                           b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id
+                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
+                          e.name as tags
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
+                LEFT JOIN fact_tags d ON d.fact_id = a.id
+                LEFT JOIN tags e ON e.id = d.tag_id
                     WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
         """
         
@@ -530,8 +558,11 @@ class Storage(storage.Storage):
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
         
         facts = self.fetchall(query, (_("Unsorted"), datetime_from, datetime_to))
+        
+        #first let's put all tags in an array
+        facts = self.__group_tags(facts)
+        
         res = []
-
         for fact in facts:
             # heuristics to assign tasks to proper days
 
@@ -569,19 +600,9 @@ class Storage(storage.Storage):
                 # due to spanning we've jumped outside of given period
                 continue
 
-            f = dict(
-                id = fact["id"],
-                start_time = fact["start_time"],
-                date = fact_date,
-                delta = fact_end_time - fact["start_time"],
-                end_time = fact["end_time"],
-                description = fact["description"],
-                name = fact["name"],
-                activity_id = fact["activity_id"],
-                category = fact["category"],
-                category_id = fact["category_id"]
-            )
-            res.append(f)
+            fact["date"] = fact_date,
+            fact["delta"] = fact_end_time - fact["start_time"]
+            res.append(fact)
 
         return res
 
@@ -598,11 +619,9 @@ class Storage(storage.Storage):
         return self.fetchall(query, (_("Unsorted"), ))
 
     def __remove_fact(self, fact_id):
-        query = """
-                   DELETE FROM facts
-                         WHERE id = ?
-        """
-        self.execute(query, (fact_id,))
+        statements = ["DELETE FROM fact_tags where fact_id = ?",
+                      "DELETE FROM facts where id = ?"]
+        self.execute(statements, [(fact_id,)] * 2)
 
     def __get_activities(self, category_id = None):
         """returns list of activities, if category is specified, order by name
