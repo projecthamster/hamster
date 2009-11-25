@@ -534,6 +534,8 @@ class HamsterApplet(object):
         self.window.unstick()
         self.window.stick() #show on all desktops
 
+        self.new_name.set_text("");
+        self.new_tags.set_text("");
         gobject.idle_add(self._delayed_display)  
         
     def _delayed_display(self):
