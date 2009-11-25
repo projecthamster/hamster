@@ -103,11 +103,12 @@ class TagsEntry(gtk.Entry):
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
 
         w = alloc.width
-        
 
+        height = self.tag_box.count_height(w)
+        
+        self.scroll_box.set_size_request(w, height)
+        self.popup.resize(w, height)
         self.popup.show_all()
-        self.scroll_box.set_size_request(w, self.tag_box.count_height())
-        self.popup.resize(w, self.tag_box.count_height())
 
         
     def complete_inline(self):
@@ -252,22 +253,225 @@ class TagBox(graphics.Area):
         w = text_w + 16 # padding (we have some diagonals to draw)
         h = text_h + 2
         return w, h
-    
-    def draw_tag(self, label, x, y, color):
-        self.context.set_line_width(1)
 
+    def count_height(self, width):
+        # tells you how much height in this width is needed to show all tags
+
+        if not self.tags:
+            return None
+
+        pixmap = gtk.gdk.Pixmap(None, width, 500, 24)
+        context = pixmap.cairo_create()
+
+        if not self.layout:
+            self.layout = context.create_layout()
+            default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+            default_font.set_size(pango.SCALE * 10)
+            self.layout.set_font_description(default_font)
+
+        cur_x, cur_y = 4, 4
+        for tag in self.tags:
+            w, h = self.tag_size(tag)
+            if cur_x + w >= width - 5:  #if we don't fit, we wrap
+                cur_x = 5
+                cur_y += h + 6
+            
+            cur_x += w + 8 #some padding too, please
+        return cur_y + h + 6
+    
+    def _render(self):
+        cur_x, cur_y = 4, 4
+        for tag in self.tags:
+            w, h = self.tag_size(tag)
+            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                cur_x = 5
+                cur_y += h + 6
+            
+            if tag in self.selected_tags:
+                color = (242, 229, 97)
+            elif tag == self.hover_tag:
+                color = (252, 248, 204)
+            else:
+                color = (241, 234, 170)
+        
+            Tag(self.context,
+                self.layout,
+                True,
+                tag,
+                color,
+                gtk.gdk.Rectangle(cur_x, cur_y, self.width - cur_x, self.height - cur_y))    
+            
+            if self.interactive:
+                self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
+
+            cur_x += w + 6 #some padding too, please
+
+
+# snatch from winedoors. Carl Lattimer is my hero as always
+# wish he could write tutorials
+class TagCellRenderer(gtk.GenericCellRenderer):
+    __gproperties__ = {
+        "data": (gobject.TYPE_PYOBJECT, "Data", "Data", gobject.PARAM_READWRITE), 
+    }
+   
+    def __init__(self):
+        self.__gobject_init__()
+        self.height = 25
+        self.width = 200
+        #self.set_fixed_size(self.width, self.height)
+        self.data = None
+        
+    def do_set_property (self, pspec, value):
+        setattr (self, pspec.name, value)
+        
+    def do_get_property (self, pspec):
+        return getattr (self, pspec.name)
+                
+
+    def tag_size(self, label):
+        text_w, text_h = self.set_text(label)
+        w = text_w + 16 # padding (we have some diagonals to draw)
+        h = text_h + 2
+        return w, h
+
+    def set_text(self, text):
+        # sets text and returns width and height of the layout
+        self.layout.set_text(text)
+        w, h = self.layout.get_pixel_size()
+        return w, h
+
+    def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
+        if not self.data: return
+        context = window.cairo_create()
+
+        tags = self.data["tags"]
+
+        x, y, width, h = cell_area
+
+        context.translate(x, y)
+        
+        self.layout = context.create_layout()
+        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font.set_size(pango.SCALE * 10)
+        self.layout.set_font_description(default_font)
+        
+        cur_x, cur_y = 4, 2
+        for tag in tags:
+            w, h = self.tag_size(tag)
+            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                cur_x = 5
+                cur_y += h + 6
+            
+            Tag(context,
+                self.layout,
+                True,
+                tag,
+                None,
+                gtk.gdk.Rectangle(cur_x, cur_y, self.width - cur_x, self.height - cur_y))    
+            
+
+            cur_x += w + 6 #some padding too, please
+
+            self.height = cur_y
+
+        """
+        Tile (cairo, True,
+              title, 
+              icon,
+              description,
+              votes, rating, tile_status, buttons, 
+              cell_area,
+              opacity)#, animation )
+        """
+
+    def on_get_size (self, widget, cell_area = None):
+
+        if not self.width or not self.data["tags"]:
+            height = 30
+        else:
+            pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
+            context = pixmap.cairo_create()
+            self.layout = context.create_layout()
+            default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+            default_font.set_size(pango.SCALE * 10)
+            self.layout.set_font_description(default_font)
+
+            cur_x, cur_y = 4, 2
+            for tag in self.data["tags"]:
+                w, h = self.tag_size(tag)
+                if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                    cur_x = 5
+                    cur_y += h + 6
+                
+                cur_x += w + 8 #some padding too, please
+            
+            height = cur_y + h + 4
+        
+        return (0, 0, self.width, height)
+    
+
+class Tag(object):
+    def __init__(self, context, layout, render_now = False, label = None, color = None, rect = None):
+        self.font_size = 10
+        
+        if not context:
+            render_now = False
+        else:
+            self.context = context
+            self.layout = layout
+
+        self.x, self.y, self.width, self.height = rect.x, rect.y, rect.width, rect.height
+        
+        if not render_now:
+            return
+        
+        self.label = label
+        self.color = color or (241, 234, 170)
+
+        self.context.save()
+        self.draw_tag()
+        self.context.restore()
+
+    def set_color(self, color, opacity = None):
+        if color[0] > 1 or color[1] > 0 or color[2] > 0:
+            color = [c / 255.0 for c in color]
+
+        if opacity:
+            self.context.set_source_rgba(color[0], color[1], color[2], opacity)
+        elif len(color) == 3:
+            self.context.set_source_rgb(*color)
+        else:
+            self.context.set_source_rgba(*color)
+
+    def set_text(self, text):
+        # sets text and returns width and height of the layout
+        self.layout.set_text(text)
+        w, h = self.layout.get_pixel_size()
+        return w, h
+
+    def tag_size(self, label):
+        text_w, text_h = self.set_text(label)
+        w = text_w + 16 # padding (we have some diagonals to draw)
+        h = text_h + 2
+        return w, h
+
+    def draw_tag(self):
+        self.context.set_line_width(1)
+        self.context.set_antialias(cairo.ANTIALIAS_NONE)
+
+        label, x, y, color = self.label, self.x, self.y, self.color
         tag_x = x + 0.5
         tag_y = y + 0.5
 
         w, h = self.tag_size(label)
                 
-        self.move_to(x, y + 6)
-        self.line_to(x + 6, y)
-        self.line_to(x + w, y)
-        self.line_to(x + w, y + h)
-        self.line_to(x + 6, y + h)
-        self.line_to(x, y + h - 6)
-        self.line_to(x, y + 6)
+        self.context.move_to(x, y + 6)
+        self.context.line_to(x + 6, y)
+        self.context.line_to(x + w, y)
+        self.context.line_to(x + w, y + h)
+        self.context.line_to(x + 6, y + h)
+        self.context.line_to(x, y + h - 6)
+        self.context.line_to(x, y + 6)
         self.set_color(color)
         self.context.fill_preserve()
         self.set_color((200, 200, 200))
@@ -287,48 +491,5 @@ class TagBox(graphics.Area):
         self.context.move_to(x + 12,y + 1)
         
         self.context.show_layout(self.layout)
-        
 
-    def count_height(self):
-        if not self.width:
-            return 120
-        
-        # tells you how much height in this width is needed to show all tags
-        if not self.tags:
-            return None
-        
-        cur_x, cur_y = 4, 4
-        for tag in self.tags:
-            w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
-                cur_x = 5
-                cur_y += h + 6
-            
-            cur_x += w + 8 #some padding too, please
-        
-        cur_y = cur_y + h + 6
-        
-        return cur_y
 
-    
-    def _render(self):
-        cur_x, cur_y = 4, 4
-        for tag in self.tags:
-            w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
-                cur_x = 5
-                cur_y += h + 6
-            
-            if tag in self.selected_tags:
-                color = (242, 229, 97)
-            elif tag == self.hover_tag:
-                color = (252, 248, 204)
-            else:
-                color = (241, 234, 170)
-            
-            self.draw_tag(tag, cur_x, cur_y, color)
-            
-            if self.interactive:
-                self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
-
-            cur_x += w + 6 #some padding too, please
