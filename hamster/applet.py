@@ -237,6 +237,10 @@ class HamsterApplet(object):
         self.new_tags = widgets.TagsEntry()
         widgets.add_hint(self.new_tags, _("Tags or Description"))
         self.get_widget("new_tags_box").add(self.new_tags)
+
+        self.tag_box = widgets.TagBox(interactive = False)
+        self.get_widget("tag_box").add(self.tag_box)
+
         
         # init today's tree
         self.setup_activity_tree()
@@ -350,6 +354,7 @@ class HamsterApplet(object):
     def set_last_activity(self):
         activity = runtime.storage.get_last_activity()
         self.get_widget("stop_tracking").set_sensitive(activity != None)
+        self.get_widget("edit_current_activity").set_sensitive(activity != None)
         
         
         if activity:
@@ -366,6 +371,8 @@ class HamsterApplet(object):
                     .set_text(" - %s" % activity['category'])
 
             self.get_widget("last_activity_description").set_text(activity['description'] or "")
+
+            self.tag_box.draw(activity["tags"])
         else:
             self.get_widget("switch_activity").hide()
             self.get_widget("start_tracking").show()
@@ -574,7 +581,12 @@ class HamsterApplet(object):
         fact_id = model[iter][0]
             
         custom_fact = CustomFactController(self, None, fact_id)
-        custom_fact.show()        
+        custom_fact.show()
+        
+    def on_edit_current_activity_clicked(self, widget):
+        if self.last_activity:
+            custom_fact = CustomFactController(self, None, self.last_activity["id"])
+            custom_fact.show()
     
     def on_today_row_activated(self, tree, path, column):
         if column == self.edit_column:
@@ -600,7 +612,8 @@ class HamsterApplet(object):
         if (event_key.keyval == gtk.keysyms.Escape
           or (event_key.keyval == gtk.keysyms.w 
               and event_key.state & gtk.gdk.CONTROL_MASK)):
-            if self.new_name.popup.get_property("visible") == False:
+            if self.new_name.popup.get_property("visible") == False \
+               and self.new_tags.popup.get_property("visible") == False:
                 runtime.dispatcher.dispatch('panel_visible', False)
                 return True
         return False
