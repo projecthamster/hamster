@@ -41,6 +41,9 @@ class CustomFactController:
         self.new_name = widgets.ActivityEntry()
         self.get_widget("activity_box").add(self.new_name)
         
+        self.new_tags = widgets.TagsEntry()
+        self.get_widget("tags_box").add(self.new_tags)
+        
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
 
@@ -50,13 +53,14 @@ class CustomFactController:
                 
             self.new_name.set_text(label)
             
+            if fact['description']:
+                fact['tags'].append(fact['description'])  #same edit field
+            self.new_tags.set_text(", ".join(fact['tags']))
+            
+            
             start_date = fact["start_time"]
             end_date = fact["end_time"]
             
-            buf = gtk.TextBuffer()
-            buf.set_text(fact["description"] or "")
-            self.get_widget('description').set_buffer(buf)
-
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
@@ -153,36 +157,13 @@ class CustomFactController:
         else:
             return None
     
-    def figure_description(self):
-        activity = self.new_name.get_text().decode("utf-8")
-
-        # juggle with description - break into parts and then put together
-        buf = self.get_widget('description').get_buffer()
-        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
-                         .decode("utf-8")
-        description = description.strip()
-        
-        # user might also type description in the activity name - strip it here
-        # and remember value
-        inline_description = None
-        if activity.find(",") != -1:
-            activity, inline_description  = activity.split(",", 1)
-            inline_description = inline_description.strip()
-        
-        # description field is prior to inline description
-        return description or inline_description
-        
     def on_save_button_clicked(self, button):
         activity = self.new_name.get_text().decode("utf-8")
         
         if not activity:
             return False
 
-        description = self.figure_description()
-
-        if description:
-            activity = "%s, %s" % (activity, description)
-
+        tags = self.new_tags.get_text()
         
         start_time = self._get_datetime("start")
 
@@ -195,7 +176,7 @@ class CustomFactController:
         if self.fact_id:
             runtime.storage.remove_fact(self.fact_id)
 
-        runtime.storage.add_fact(activity, start_time, end_time)
+        runtime.storage.add_fact(activity, tags, start_time, end_time)
 
 
         # hide panel only on add - on update user will want to see changes
@@ -283,7 +264,9 @@ class CustomFactController:
             
             if self.start_date.popup.get_property("visible") or \
                self.start_time.popup.get_property("visible") or \
-               self.end_time.popup.get_property("visible"):
+               self.end_time.popup.get_property("visible") or \
+               self.new_name.popup.get_property("visible") or \
+               self.new_tags.popup.get_property("visible"):
                 return False
 
             self.close_window()            
