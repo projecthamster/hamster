@@ -53,7 +53,21 @@
                             </attributes>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="tag_box">
+                            <property name="visible">True</property>
+                            <property name="left_padding">4</property>
+                            <property name="right_padding">4</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
@@ -231,11 +245,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkAlignment" id="tag_box">
+                      <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="label" translatable="yes">label</property>
                       </object>
                     </child>
                     <child type="tab">

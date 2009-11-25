@@ -48,22 +48,20 @@ class MainWindow(object):
         self.get_widget("new_name_box").add(self.new_name)
         self.new_name.connect("changed", self.on_activity_text_changed)
 
-
-
         self.new_tags = widgets.TagsEntry()
-        
         widgets.add_hint(self.new_tags, _("Tags or Description"))
         self.get_widget("new_tags_box").add(self.new_tags)
+
+        self.tag_box = widgets.TagBox(interactive = False)
+        self.get_widget("tag_box").add(self.tag_box)
         
-        self.get_widget("tabs").set_current_page(0)
+        self.get_widget("tabs").set_current_page(1)
 
         self.set_last_activity()
         self.load_today()
         
         gtk.link_button_set_uri_hook(self.magic)
         
-        self.tag_box = widgets.TagBox()
-        self.get_widget("tag_box").add(self.tag_box)
 
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
@@ -95,6 +93,8 @@ class MainWindow(object):
                     .set_text(" - %s" % activity['category'])
 
             self.get_widget("last_activity_description").set_text(activity['description'])
+            
+            self.tag_box.draw(activity["tags"])
         else:
             self.get_widget("switch_activity").hide()
             self.get_widget("start_tracking").show()
@@ -133,16 +133,23 @@ class MainWindow(object):
 
             add_cell(fact_time, 0, rownum)
 
-            name_tags = gtk.VBox()
+            name_tags = gtk.HBox()
             name_label = gtk.Label(fact['name'])
             name_label.set_alignment(0, 0)
             name_tags.pack_start(name_label)
 
-            description_label = gtk.Label(fact['category'])
-            description_label.set_alignment(0, 0)
-            name_tags.pack_start(description_label)
+            tags = widgets.TagBox()
+            tags.set_size_request(-1, 27)
+            tags.draw(fact["tags"])
+            tags.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(65536.0,65536.0,65536.0))
+
+            name_tags.pack_start(tags)
+            
+            name_tags.pack_start(tags)
 
             add_cell(name_tags, 1, rownum, (gtk.EXPAND | gtk.FILL), ())
+            
+            
 
             add_cell(stuff.format_duration(duration), 2, rownum, gtk.FILL, ())
 
