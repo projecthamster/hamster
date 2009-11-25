@@ -380,6 +380,8 @@ class HamsterApplet(object):
             self.get_widget("last_activity_name").set_text(_("No activity"))
             self.get_widget("last_activity_duration").set_text("")
             self.get_widget("last_activity_category").set_text("")
+            self.tag_box.draw([])
+            self.get_widget("last_activity_description").set_text("")
          
     def check_user(self):
         if not self.notify_interval: #no interval means "never"
