@@ -46,12 +46,13 @@ class TagsEntry(gtk.Entry):
         self.tag_box = TagBox()
         self.tag_box.connect("tag-selected", self.on_tag_selected)
         self.tag_box.connect("tag-unselected", self.on_tag_unselected)
+        self.tag_box.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(65536.0,65536.0,65536.0))
 
         
         viewport.add(self.tag_box)
         self.scroll_box.add(viewport)
         self.popup.add(self.scroll_box)
-        
+
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
@@ -71,17 +72,18 @@ class TagsEntry(gtk.Entry):
     def on_tag_selected(self, tag_box, tag):
         tags = self.get_tags()
         tags.append(tag)
+        
+        self.tag_box.selected_tags = tags
 
         self.set_text(", ".join(tags))
         self.set_position(len(self.get_text()))
 
     def on_tag_unselected(self, tag_box, tag):
         tags = self.get_tags()
-        print tags
         while tag in tags: #it could be that dear user is mocking us and entering same tag over and over again
             tags.remove(tag)
             
-        print tags
+        self.tag_box.selected_tags = tags
 
         self.set_text(", ".join(tags))
         self.set_position(len(self.get_text()))
@@ -207,14 +209,18 @@ class TagBox(graphics.Area):
         'tag-unselected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
     }
 
-    def __init__(self):
-        graphics.Area.__init__(self)
-        self.font_size = 10
-        self.connect("mouse-over", self.on_tag_hover)
-        self.connect("button-release", self.on_tag_click)
+    def __init__(self, interactive = True):
+        self.interactive = interactive
         self.hover_tag = None
         self.tags = []
         self.selected_tags = []
+        graphics.Area.__init__(self)
+        
+        self.font_size = 10 #override default font size
+
+        if self.interactive:
+            self.connect("mouse-over", self.on_tag_hover)
+            self.connect("button-release", self.on_tag_click)
 
     def on_tag_hover(self, widget, regions):
         if regions:
@@ -227,10 +233,10 @@ class TagBox(graphics.Area):
     def on_tag_click(self, widget, regions):
         tag = regions[0]
         if tag in self.selected_tags:
-            self.selected_tags.remove(tag)
+            #self.selected_tags.remove(tag)
             self.emit("tag-unselected", tag)
         else:
-            self.selected_tags.append(tag)
+            #self.selected_tags.append(tag)
             self.emit("tag-selected", tag)
 
         self.redraw_canvas()
@@ -243,8 +249,8 @@ class TagBox(graphics.Area):
 
     def tag_size(self, label):
         text_w, text_h = self.set_text(label)
-        w = text_w + 18 # padding (we have some diagonals to draw)
-        h = text_h + 4
+        w = text_w + 16 # padding (we have some diagonals to draw)
+        h = text_h + 2
         return w, h
     
     def draw_tag(self, label, x, y, color):
@@ -278,7 +284,7 @@ class TagBox(graphics.Area):
         self.set_color((0, 0, 0))
 
         #self.layout.set_width((self.width) * pango.SCALE)
-        self.context.move_to(x + 12,y + 2)
+        self.context.move_to(x + 12,y + 1)
         
         self.context.show_layout(self.layout)
         
@@ -306,8 +312,6 @@ class TagBox(graphics.Area):
 
     
     def _render(self):
-        self.fill_area(0, 0, self.width, self.height, (255,255,255))
-
         cur_x, cur_y = 4, 4
         for tag in self.tags:
             w, h = self.tag_size(tag)
@@ -323,6 +327,8 @@ class TagBox(graphics.Area):
                 color = (241, 234, 170)
             
             self.draw_tag(tag, cur_x, cur_y, color)
-            self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
+            
+            if self.interactive:
+                self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
 
-            cur_x += w + 8 #some padding too, please
+            cur_x += w + 6 #some padding too, please
