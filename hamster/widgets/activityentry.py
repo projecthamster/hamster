@@ -215,7 +215,7 @@ class ActivityEntry(gtk.Entry):
         
                     store.append([fillable, activity['name'], activity['category'], time])
 
-    def after_activity_update(self):
+    def after_activity_update(self, widget, event):
         self.refresh_activities()
         
     def _on_focus_out_event(self, widget, event):
