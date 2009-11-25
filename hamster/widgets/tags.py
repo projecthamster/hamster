@@ -315,11 +315,13 @@ class TagCellRenderer(gtk.GenericCellRenderer):
     }
    
     def __init__(self):
-        self.__gobject_init__()
+        gtk.GenericCellRenderer.__init__(self)
         self.height = 25
         self.width = 200
-        #self.set_fixed_size(self.width, self.height)
         self.data = None
+        
+        self.font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self.font.set_size(pango.SCALE * 10)
         
     def do_set_property (self, pspec, value):
         setattr (self, pspec.name, value)
@@ -350,10 +352,9 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
         context.translate(x, y)
         
-        self.layout = context.create_layout()
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(pango.SCALE * 10)
-        self.layout.set_font_description(default_font)
+        if not self.layout:
+            self.layout = context.create_layout()
+        self.layout.set_font_description(self.font)
         
         cur_x, cur_y = 4, 2
         for tag in tags:
@@ -459,37 +460,39 @@ class Tag(object):
         self.context.set_line_width(1)
         self.context.set_antialias(cairo.ANTIALIAS_NONE)
 
+        self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         label, x, y, color = self.label, self.x, self.y, self.color
-        tag_x = x + 0.5
-        tag_y = y + 0.5
+        if x - round(x) != 0.5: x += 0.5
+        if y - round(y) != 0.5: y += 0.5
 
-        w, h = self.tag_size(label)
-                
-        self.context.move_to(x, y + 6)
-        self.context.line_to(x + 6, y)
+        w, h = self.tag_size(label)            
+        corner = h / 3
+        
+        self.context.move_to(x, y + corner)
+        self.context.line_to(x + corner, y)
         self.context.line_to(x + w, y)
         self.context.line_to(x + w, y + h)
-        self.context.line_to(x + 6, y + h)
-        self.context.line_to(x, y + h - 6)
-        self.context.line_to(x, y + 6)
+        self.context.line_to(x + corner, y + h)
+        self.context.line_to(x, y + h - corner)
+        self.context.line_to(x, y + corner)
+        
         self.set_color(color)
         self.context.fill_preserve()
-        self.set_color((200, 200, 200))
+        self.set_color((180, 180, 180))
         self.context.stroke()
 
-        self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         self.context.arc(x + 6, y + h / 2 + 1, 2, 0, 2 * pi)
         self.set_color((255, 255, 255))
         self.context.fill_preserve()
-        self.set_color((200, 200, 200))
+        self.set_color((180, 180, 180))
         self.context.stroke()
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
 
         self.set_color((0, 0, 0))
 
         #self.layout.set_width((self.width) * pango.SCALE)
-        self.context.move_to(x + 12,y + 1)
+        self.context.move_to(x + 12,y)
         
+        self.set_color((30, 30, 30))
         self.context.show_layout(self.layout)
 
 
