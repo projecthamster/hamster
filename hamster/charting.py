@@ -324,24 +324,24 @@ class BarChart(Chart):
                         bar_size = round(max_bar_size * bar.size)
                         bar_start += bar_size
                         
-                        color = self.stack_key_colors.get(self.stack_keys[j],
-                                                          self.get_bar_color(j))
+                        last_color = self.stack_key_colors.get(self.stack_keys[j],
+                                                               self.get_bar_color(j))
                         self.draw_bar(bar_x,
                                       self.graph_height - bar_start,
                                       round(bar_width - (gap * 2)),
                                       bar_size,
-                                      color)
+                                      last_color)
             else:
                 bar_size = round(max_bar_size * self.bars[i].size)
                 bar_start = bar_size
 
-                color = self.key_colors.get(self.keys[i],
+                last_color = self.key_colors.get(self.keys[i],
                                                   base_color)
                 self.draw_bar(bar_x,
                               self.graph_y + self.graph_height - bar_size,
                               round(bar_width - (gap * 2)),
                               bar_size,
-                              color)
+                              last_color)
 
 
             if self.values_on_bars:  # it's either stack labels or values at the end for now
@@ -361,6 +361,13 @@ class BarChart(Chart):
                     label_y = self.graph_y + self.graph_height - bar_start - label_h + 5
                 
                 context.move_to(self.graph_x + (bar_width * i) + (bar_width - label_w) / 2.0, label_y)
+
+                # we are in the bar so make sure that the font color is distinguishable
+                if colorsys.rgb_to_hls(*self.rgb(last_color))[1] < 150:
+                    self.set_color(graphics.Colors.almost_white)
+                else:
+                    self.set_color(graphics.Colors.aluminium[5])        
+
                 context.show_layout(self.layout)
     
                 # values on bars
