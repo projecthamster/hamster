@@ -336,6 +336,33 @@ class BarChart(Chart):
                               bar_size,
                               base_color)
 
+
+            if self.values_on_bars:  # it's either stack labels or values at the end for now
+                if self.stack_keys:
+                    total_value = sum(self.data[i])
+                else:
+                    total_value = self.data[i]
+                
+                self.layout.set_width(-1)
+                self.layout.set_text(self.value_format % total_value)
+                label_w, label_h = self.layout.get_pixel_size()
+    
+
+                if bar_start > label_h + 2:
+                    label_y = self.graph_y + self.graph_height - bar_start + 5
+                else:
+                    label_y = self.graph_y + self.graph_height - bar_start - label_h + 5
+                
+                context.move_to(self.graph_x + (bar_width * i) + (bar_width - label_w) / 2.0, label_y)
+                context.show_layout(self.layout)
+    
+                # values on bars
+                if self.stack_keys:
+                    total_value = sum(self.data[i])
+                else:
+                    total_value = self.data[i]
+
+
         #fill with white background (necessary for those dragging cases)
         if self.background:
             self.fill_area(0, 0, legend_width, self.height, self.background)
@@ -383,6 +410,9 @@ class BarChart(Chart):
                 factors = self.bars[0]
             else:
                 factors = self.bars[-1]
+            
+            if isinstance(factors, Bar):
+                factors = [factors]
 
             self.layout.set_ellipsize(pango.ELLIPSIZE_END)
             self.layout.set_width(self.graph_x * pango.SCALE)
@@ -395,9 +425,9 @@ class BarChart(Chart):
                 factor = factors[j].size
                 bar_size = factor * max_bar_size
                 
-                if round(bar_size) > 0:
+                if round(bar_size) > 0 and self.stack_keys:
                     label = "%s" % self.stack_keys[j]
-                    
+
                     
                     self.layout.set_text(label)
                     label_w, label_h = self.layout.get_pixel_size()
