@@ -100,7 +100,6 @@ class Chart(graphics.Area):
         self.background        = Tripplet-tuple of background color in RGB
         self.chart_background  = Tripplet-tuple of chart background color in RGB
         self.bar_base_color    = Tripplet-tuple of bar color in RGB
-        self.bars_beveled      = Should bars be beveled. 
 
         self.show_scale        = Should we show scale values. See grid_stride!
         self.grid_stride       = Step of grid. If expressed in normalized range
@@ -130,7 +129,6 @@ class Chart(graphics.Area):
         self.bar_base_color    = args.get("bar_base_color", None)
 
         self.grid_stride       = args.get("grid_stride", None)
-        self.bars_beveled      = args.get("bars_beveled", False)
         self.values_on_bars    = args.get("values_on_bars", False)
         self.value_format      = args.get("value_format", "%s")
         self.show_scale        = args.get("show_scale", False)
@@ -145,6 +143,11 @@ class Chart(graphics.Area):
         self.moving = False
         
         self.bars = []
+        self.keys = []
+        self.stack_keys = []
+        
+        self.key_colors = {} # key:color dictionary. if key's missing will grab basecolor
+        self.stack_key_colors = {} # key:color dictionary. if key's missing will grab basecolor
         
         
     def get_bar_color(self, index):
@@ -321,20 +324,24 @@ class BarChart(Chart):
                         bar_size = round(max_bar_size * bar.size)
                         bar_start += bar_size
                         
+                        color = self.stack_key_colors.get(self.stack_keys[j],
+                                                          self.get_bar_color(j))
                         self.draw_bar(bar_x,
                                       self.graph_height - bar_start,
                                       round(bar_width - (gap * 2)),
                                       bar_size,
-                                      self.get_bar_color(j))
+                                      color)
             else:
                 bar_size = round(max_bar_size * self.bars[i].size)
                 bar_start = bar_size
 
+                color = self.key_colors.get(self.keys[i],
+                                                  base_color)
                 self.draw_bar(bar_x,
                               self.graph_y + self.graph_height - bar_size,
                               round(bar_width - (gap * 2)),
                               bar_size,
-                              base_color)
+                              color)
 
 
             if self.values_on_bars:  # it's either stack labels or values at the end for now
@@ -530,7 +537,8 @@ class HorizontalBarChart(Chart):
                         bar_size = round(max_bar_size * bar.size)
                         bar_height = round(bar_width - (gap * 2))
                         
-                        last_color = self.get_bar_color(j)
+                        last_color = self.stack_key_colors.get(self.stack_keys[j],
+                                                               self.get_bar_color(j))
                         self.draw_bar(self.graph_x + bar_start,
                                       bar_y,
                                       bar_size,
@@ -542,8 +550,12 @@ class HorizontalBarChart(Chart):
                 bar_start = bar_size
 
                 bar_height = round(bar_width - (gap * 2))
+
+                last_color = self.key_colors.get(self.keys[i],
+                                                 base_color)
+
                 self.draw_bar(self.graph_x, bar_y, bar_size, bar_height,
-                                                                     base_color)
+                                                                     last_color)
 
             # values on bars
             if self.stack_keys:
@@ -561,9 +573,7 @@ class HorizontalBarChart(Chart):
                 self.set_color(graphics.Colors.aluminium[5])        
             else:
                 # we are in the bar so make sure that the font color is distinguishable
-                # this is a hamster fix
-                # TODO - drop the library bit, we will never be adopted
-                if colorsys.rgb_to_hls(*last_color)[1] < 150:
+                if colorsys.rgb_to_hls(*self.rgb(last_color))[1] < 150:
                     self.set_color(graphics.Colors.almost_white)
                 else:
                     self.set_color(graphics.Colors.aluminium[5])        
