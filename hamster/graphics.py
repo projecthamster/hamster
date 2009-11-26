@@ -77,10 +77,18 @@ class Area(gtk.DrawingArea):
         w, h = self.layout.get_pixel_size()
         return w, h
         
-        
-    def set_color(self, color, opacity = None):
+    def normalize_rgb(self, color):
+        #if any of values is over 1 - that means color has been entered in 0-255 range and we should normalize it
         if color[0] > 1 or color[1] > 0 or color[2] > 0:
             color = [c / 255.0 for c in color]
+        return color
+    
+    def rgb(self, color):
+        #return color that has each component in 0..255 range
+        return [c*255 for c in self.normalize_rgb(color)]
+        
+    def set_color(self, color, opacity = None):
+        color = self.normalize_rgb(color)
 
         if opacity:
             self.context.set_source_rgba(color[0], color[1], color[2], opacity)
