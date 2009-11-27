@@ -29,92 +29,9 @@ import colorsys
 
 
 class DayLine(graphics.Area):
-    #TODO remove these obsolete functions with in-house transformations
-    def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):
-        """sets up our internal conversion matrix, because cairo one will
-        scale also fonts and we need something in between!"""
-        
-        #store given params, we might redo the math later
-        if not self.value_boundaries:
-            self.value_boundaries = [x_min, x_max, y_min, y_max]
-        else:
-            if x_min != None:
-                self.value_boundaries[0] = x_min
-            if x_max != None:
-                self.value_boundaries[1] = x_max
-            if y_min != None:
-                self.value_boundaries[2] = y_min
-            if y_max != None:
-                self.value_boundaries[3] = y_max 
-        self.x_factor, self.y_factor = None, None
-        self._get_factors()
-
-
-    def move_to(self, x, y):
-        """our copy of moveto that takes into account our transformations"""
-        self.context.move_to(*self.get_pixel(x, y))
-
-    def line_to(self, x, y):
-        self.context.line_to(*self.get_pixel(x, y))
-
-    def _get_factors(self):
-        if not self.x_factor:
-            self.x_factor = 1
-            if self.value_boundaries and self.value_boundaries[0] != None and self.value_boundaries[1] != None:
-                self.x_factor = float(self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
-                
-        if not self.y_factor:            
-            self.y_factor = 1
-            if self.value_boundaries and self.value_boundaries[2] != None and self.value_boundaries[3] != None:
-                self.y_factor = float(self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
-
-        return self.x_factor, self.y_factor        
-
-
-    def get_pixel(self, x_value = None, y_value = None):
-        """returns screen pixel position for value x and y. Useful to
-        get and then pad something
-
-        x = min1 + (max1 - min1) * (x / abs(max2-min2))  
-            => min1 + const1 * x / const2
-            => const3 = const1 / const2
-            => min + x * const3
-        """
-        x_factor, y_factor = self._get_factors()
-
-        if x_value != None:
-            if self.value_boundaries and self.value_boundaries[0] != None:
-                if self.value_boundaries[1] > self.value_boundaries[0]:
-                    x_value = self.value_boundaries[0] + x_value * x_factor
-                else: #case when min is larger than max (flipped)
-                    x_value = self.value_boundaries[1] - x_value * x_factor
-            if y_value is None:
-                return x_value + self.graph_x
-
-        if y_value != None:
-            if self.value_boundaries and self.value_boundaries[2] != None:
-                if self.value_boundaries[3] > self.value_boundaries[2]:
-                    y_value = self.value_boundaries[2] + y_value * y_factor
-                else: #case when min is larger than max (flipped)
-                    y_value = self.value_boundaries[2] - y_value * y_factor
-            if x_value is None:
-                return y_value + self.graph_y
-            
-        return x_value + self.graph_x, y_value + self.graph_y
-
-    def get_value_at_pos(self, x = None, y = None):
+    def get_value_at_pos(self, x):
         """returns mapped value at the coordinates x,y"""
-        x_factor, y_factor = self._get_factors()
-        
-        if x != None:
-            x = (x - self.graph_x)  / x_factor
-            if y is None:
-                return x
-        if y != None:
-            y = (y - self.graph_x) / y_factor
-            if x is None:
-                return y
-        return x, y            
+        return x / float(self.width / self.view_minutes)
     
     
     #normal stuff
@@ -140,9 +57,9 @@ class DayLine(graphics.Area):
         self.in_motion = False
         self.days = []
 
+        self.view_minutes = float(12 * 60) #how many minutes are we going to show
+
         # TODO - get rid of these
-        self.value_boundaries = None #x_min, x_max, y_min, y_max
-        self.x_factor, self.y_factor = None, None        
         # use these to mark area where the "real" drawing is going on
         self.graph_x, self.graph_y = 0, 0
 
@@ -155,7 +72,7 @@ class DayLine(graphics.Area):
         start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
         
         if self.range_start:
-            self.range_start.target(start_time)
+            self.range_start.value = start_time
             self.scroll_to_range_start()
         else:
             self.range_start = Integrator(start_time, damping = 0.35, attraction = 0.5)
@@ -235,7 +152,6 @@ class DayLine(graphics.Area):
 
         mouse_down = state & gtk.gdk.BUTTON1_MASK
             
-        #print x, self.highlight_start, self.highlight_end
         if self.highlight_start != None:
             start_drag = 10 > (self.highlight_start - x) > -1
 
@@ -293,7 +209,7 @@ class DayLine(graphics.Area):
                     self.__call_parent_time_changed()
                 else:
                     self.range_start.target(self.drag_start_time +
-                                            dt.timedelta(minutes = self.get_value_at_pos(x = self.drag_start) - self.get_value_at_pos(x = x)))
+                                            dt.timedelta(minutes = self.get_value_at_pos(self.drag_start) - self.get_value_at_pos(x)))
                     self.scroll_to_range_start()
 
 
@@ -321,10 +237,10 @@ class DayLine(graphics.Area):
         #we will buffer 4 hours to both sides so partial labels also appear
         range_end = self.range_start.value + dt.timedelta(hours = 12 + 2 * 4)        
         self.graph_x = -self.width / 3 #so x moves one third out of screen
-        self.set_value_range(x_min = 0, x_max = 12 * 60)
+        
+        pixels_in_minute = self.width / self.view_minutes
 
         minutes = self._minutes_from_start(range_end)
-
 
 
         graph_y = 4
@@ -347,22 +263,22 @@ class DayLine(graphics.Area):
                 else:
                     end_minutes = start_minutes
             
-            if self.get_pixel(end_minutes) > 0 and \
-                self.get_pixel(start_minutes) < self.width:
+            if end_minutes * pixels_in_minute > 0 and \
+                start_minutes * pixels_in_minute < self.width:
                     context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
 
-                    context.rectangle(round(self.get_pixel(start_minutes)),
+                    context.rectangle(round(start_minutes * pixels_in_minute),
                                       graph_y,
-                                      round(self.get_pixel(end_minutes) - self.get_pixel(start_minutes)),
+                                      round(end_minutes * pixels_in_minute - start_minutes * pixels_in_minute),
                                       graph_height - 1)
                     context.fill()
                     context.stroke()
 
                     context.set_source_rgba(0.86, 0.86, 0.86, 1)
-                    self.move_to(start_minutes, graph_y)
-                    self.line_to(start_minutes, graph_y2)
-                    self.move_to(end_minutes, graph_y)
-                    self.line_to(end_minutes, graph_y2)
+                    self.context.move_to(start_minutes * pixels_in_minute, graph_y)
+                    self.context.line_to(start_minutes * pixels_in_minute, graph_y2)
+                    self.context.move_to(end_minutes * pixels_in_minute, graph_y)
+                    self.context.line_to(end_minutes * pixels_in_minute, graph_y2)
                     context.stroke()
 
         
@@ -375,13 +291,13 @@ class DayLine(graphics.Area):
             
             if label_time.minute == 0:
                 context.set_source_rgb(0.8, 0.8, 0.8)
-                self.move_to(i, graph_y2 - 15)
-                self.line_to(i, graph_y2)
+                self.context.move_to(i * pixels_in_minute, graph_y2 - 15)
+                self.context.line_to(i * pixels_in_minute, graph_y2)
                 context.stroke()
             elif label_time.minute % 15 == 0:
                 context.set_source_rgb(0.8, 0.8, 0.8)
-                self.move_to(i, graph_y2 - 5)
-                self.line_to(i, graph_y2)
+                self.context.move_to(i * pixels_in_minute, graph_y2 - 5)
+                self.context.line_to(i * pixels_in_minute, graph_y2)
                 context.stroke()
                 
                 
@@ -389,8 +305,8 @@ class DayLine(graphics.Area):
             if label_time.minute == 0 and label_time.hour % 2 == 0:
                 if label_time.hour == 0:
                     context.set_source_rgb(0.8, 0.8, 0.8)
-                    self.move_to(i, graph_y)
-                    self.line_to(i, graph_y2)
+                    self.context.move_to(i * pixels_in_minute, graph_y)
+                    self.context.line_to(i * pixels_in_minute, graph_y2)
                     label_minutes = label_time.strftime("%b %d")
                 else:
                     label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
@@ -399,15 +315,15 @@ class DayLine(graphics.Area):
                 self.layout.set_markup(label_minutes)
                 label_w, label_h = self.layout.get_pixel_size()
                 
-                context.move_to(self.get_pixel(i) + 2, graph_y2 - label_h - 8)                
+                context.move_to(i * pixels_in_minute + 2, graph_y2 - label_h - 8)                
 
                 context.show_layout(self.layout)
         context.stroke()
         
         #highlight rectangle
         if self.highlight:
-            self.highlight_start = round(self.get_pixel(self._minutes_from_start(self.highlight[0])))
-            self.highlight_end = round(self.get_pixel(self._minutes_from_start(self.highlight[1])))
+            self.highlight_start = round(self._minutes_from_start(self.highlight[0]) * pixels_in_minute)
+            self.highlight_end = round(self._minutes_from_start(self.highlight[1]) * pixels_in_minute)
 
         #TODO - make a proper range check here
         if self.highlight_end > 0 and self.highlight_start < self.width:
@@ -434,9 +350,9 @@ class DayLine(graphics.Area):
         
         if self.move_type == "move" and (self.highlight_start == 0 or self.highlight_end == self.width):
             if self.highlight_start == 0:
-                self.range_start.target(self.range_start.value - dt.timedelta(minutes=30))
+                self.range_start.value = self.range_start.value - dt.timedelta(minutes=30)
             if self.highlight_end == self.width:
-                self.range_start.target(self.range_start.value + dt.timedelta(minutes=30))
+                self.range_start.value = self.range_start.value + dt.timedelta(minutes=30)
             self.scroll_to_range_start()
 
 

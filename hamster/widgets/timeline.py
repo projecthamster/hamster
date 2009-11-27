@@ -21,6 +21,8 @@ from hamster import graphics
 import datetime as dt
 
 class TimeLine(graphics.Area):
+    """this widget is kind of half finished"""
+    
     MODE_YEAR = 0
     MODE_MONTH = 1
     MODE_WEEK = 1
@@ -31,99 +33,7 @@ class TimeLine(graphics.Area):
         self.draw_mode = None
         self.max_hours = None
 
-        # TODO - get rid of these
-        self.value_boundaries = None #x_min, x_max, y_min, y_max
-        self.x_factor, self.y_factor = None, None        
-
         
-    #TODO remove these obsolete functions with in-house transformations
-    def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):
-        """sets up our internal conversion matrix, because cairo one will
-        scale also fonts and we need something in between!"""
-        
-        #store given params, we might redo the math later
-        if not self.value_boundaries:
-            self.value_boundaries = [x_min, x_max, y_min, y_max]
-        else:
-            if x_min != None:
-                self.value_boundaries[0] = x_min
-            if x_max != None:
-                self.value_boundaries[1] = x_max
-            if y_min != None:
-                self.value_boundaries[2] = y_min
-            if y_max != None:
-                self.value_boundaries[3] = y_max 
-        self.x_factor, self.y_factor = None, None
-        self._get_factors()
-
-
-    def move_to(self, x, y):
-        """our copy of moveto that takes into account our transformations"""
-        self.context.move_to(*self.get_pixel(x, y))
-
-    def line_to(self, x, y):
-        self.context.line_to(*self.get_pixel(x, y))
-
-    def _get_factors(self):
-        if not self.x_factor:
-            self.x_factor = 1
-            if self.value_boundaries and self.value_boundaries[0] != None and self.value_boundaries[1] != None:
-                self.x_factor = float(self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
-                
-        if not self.y_factor:            
-            self.y_factor = 1
-            if self.value_boundaries and self.value_boundaries[2] != None and self.value_boundaries[3] != None:
-                self.y_factor = float(self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
-
-        return self.x_factor, self.y_factor        
-
-
-    def get_pixel(self, x_value = None, y_value = None):
-        """returns screen pixel position for value x and y. Useful to
-        get and then pad something
-
-        x = min1 + (max1 - min1) * (x / abs(max2-min2))  
-            => min1 + const1 * x / const2
-            => const3 = const1 / const2
-            => min + x * const3
-        """
-        x_factor, y_factor = self._get_factors()
-
-        if x_value != None:
-            if self.value_boundaries and self.value_boundaries[0] != None:
-                if self.value_boundaries[1] > self.value_boundaries[0]:
-                    x_value = self.value_boundaries[0] + x_value * x_factor
-                else: #case when min is larger than max (flipped)
-                    x_value = self.value_boundaries[1] - x_value * x_factor
-            if y_value is None:
-                return x_value
-
-        if y_value != None:
-            if self.value_boundaries and self.value_boundaries[2] != None:
-                if self.value_boundaries[3] > self.value_boundaries[2]:
-                    y_value = self.value_boundaries[2] + y_value * y_factor
-                else: #case when min is larger than max (flipped)
-                    y_value = self.value_boundaries[2] - y_value * y_factor
-            if x_value is None:
-                return y_value + self.graph_y
-            
-        return x_value, y_value
-
-    def get_value_at_pos(self, x = None, y = None):
-        """returns mapped value at the coordinates x,y"""
-        x_factor, y_factor = self._get_factors()
-        
-        if x != None:
-            x = x  / x_factor
-            if y is None:
-                return x
-        if y != None:
-            y = y / y_factor
-            if x is None:
-                return y
-        return x, y            
-
-
     # Normal stuff    
     def draw(self, facts):
         import itertools
@@ -173,12 +83,15 @@ class TimeLine(graphics.Area):
         self.fill_area(0, 0, self.width, self.height, (0.975,0.975,0.975))
         self.set_color((100,100,100))
 
-        self.set_value_range(x_min = 1, x_max = (self.end_date - self.start_date).days)        
+        
+        days = (self.end_date - self.start_date).days
+        pixels_in_day = self.width / float(days)
+
         month_label_fits = True
         for month in range(1, 13):
             self.layout.set_text(calendar.month_abbr[month])
             label_w, label_h = self.layout.get_pixel_size()
-            if label_w * 2 > self.x_factor * 30:
+            if label_w * 2 > pixels_in_day * 30:
                 month_label_fits = False
                 break
         
@@ -193,23 +106,19 @@ class TimeLine(graphics.Area):
             self.context.set_line_width(1)
             for month in range(1, 13):
                 for day in range(1, calendar.monthrange(year, month)[1] + 1):
-                    ticker_pos = year_pos + ticker_date.timetuple().tm_yday
+                    ticker_pos = (year_pos + ticker_date.timetuple().tm_yday * pixels_in_day)
                     
-                    #if ticker_date.weekday() in [0, 6]:
-                    #    self.fill_area(ticker_pos * self.x_factor + 1, 20, self.x_factor, self.height - 20, (240, 240, 240))
-                    #    self.context.stroke()
                         
     
-                    if self.x_factor > 5:
-                        self.move_to(ticker_pos, self.height - 20)
-                        self.line_to(ticker_pos, self.height)
+                    if pixels_in_day > 5:
+                        self.context.move_to(ticker_pos, self.height - 20)
+                        self.context.line_to(ticker_pos, self.height)
                    
                         self.layout.set_text(ticker_date.strftime("%d"))
                         label_w, label_h = self.layout.get_pixel_size()
                         
-                        if label_w < self.x_factor / 1.2: #if label fits
-                            self.context.move_to(self.get_pixel(ticker_pos) + 2,
-                                                 self.height - 20)
+                        if label_w < pixels_in_day / 1.2: #if label fits
+                            self.context.move_to(ticker_pos + 2, self.height - 20)
                             self.context.show_layout(self.layout)
                     
                         self.context.stroke()
@@ -223,9 +132,9 @@ class TimeLine(graphics.Area):
                         total_length = total_length.seconds / 60 / 60.0 + total_length.days * 24
                         total_length = total_length / float(self.max_hours) * self.height - 16
 
-                        self.fill_area(round(ticker_pos * self.x_factor),
+                        self.fill_area(round(ticker_pos),
                                        round(self.height - total_length),
-                                       round(self.x_factor),
+                                       round(pixels_in_day),
                                        round(total_length),
                                        (190,190,190))
 
@@ -238,14 +147,10 @@ class TimeLine(graphics.Area):
                 
                 if month_label_fits:
                     #roll back a little
-                    month_pos = ticker_pos - calendar.monthrange(year, month)[1] + 1
+                    month_pos = ticker_pos - (calendar.monthrange(year, month)[1] + 1) * pixels_in_day
 
-                    self.move_to(month_pos, 0)
-                    #self.line_to(month_pos, 20)
-                    
+                    self.context.move_to(month_pos, 0)
                     self.layout.set_text(dt.date(year, month, 1).strftime("%b"))
-    
-                    self.move_to(month_pos, 0)
                     self.context.show_layout(self.layout)
 
 
@@ -255,7 +160,7 @@ class TimeLine(graphics.Area):
             self.layout.set_text("%d" % year)
             label_w, label_h = self.layout.get_pixel_size()
                         
-            self.move_to(year_pos + 2 / self.x_factor, month_label_fits * label_h * 1.2)
+            self.context.move_to(year_pos + 2, month_label_fits * label_h * 1.2)
     
             self.context.show_layout(self.layout)
             
