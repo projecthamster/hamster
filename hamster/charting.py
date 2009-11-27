@@ -238,9 +238,12 @@ class Chart(graphics.Area):
 
 class BarChart(Chart):
     def on_expose(self):
-        context = self.context
         Chart.on_expose(self)
-        
+
+        if not self.data:
+            return
+
+        context = self.context        
         # determine graph dimensions
         if self.show_stack_labels:
             legend_width = self.legend_width or self.longest_label(self.keys)
@@ -464,8 +467,12 @@ class BarChart(Chart):
 
 class HorizontalBarChart(Chart):
     def on_expose(self):
-        context = self.context
         Chart.on_expose(self)
+
+        if not self.data:
+            return
+
+        context = self.context
         rowcount, keys = len(self.keys), self.keys
         
         # push graph to the right, so it doesn't overlap
