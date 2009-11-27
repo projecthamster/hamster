@@ -600,7 +600,7 @@ class Storage(storage.Storage):
                 # due to spanning we've jumped outside of given period
                 continue
 
-            fact["date"] = fact_date,
+            fact["date"] = fact_date
             fact["delta"] = fact_end_time - fact["start_time"]
             res.append(fact)
 
