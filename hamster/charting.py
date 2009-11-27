@@ -292,10 +292,10 @@ class BarChart(Chart):
             self.layout.set_text(self.keys[i])
             label_w, label_h = self.layout.get_pixel_size()
 
-            intended_x = (bar_width * i) + (bar_width - label_w) / 2.0
+            intended_x = (bar_width * i) + (bar_width - label_w) / 2.0 + self.graph_x
             
             if not prev_label_end or intended_x > prev_label_end:
-                self.context.move_to(intended_x, self.graph_height - 4)
+                self.context.move_to(intended_x, self.graph_height + 4)
                 context.show_layout(self.layout)
             
                 prev_label_end = intended_x + label_w + 3
@@ -385,13 +385,13 @@ class BarChart(Chart):
                     self.layout.set_text(self.value_format % i)
                     label_w, label_h = self.layout.get_pixel_size()
                     context.move_to(legend_width - label_w - 8,
-                                    self.get_pixel(y_value=y) - label_h / 2)
+                                    y - label_h / 2)
                     self.set_color(graphics.Colors.aluminium[4])
                     context.show_layout(self.layout)
 
                 self.set_color((255, 255, 255))
-                self.context.move_to(legend_width, self.get_pixel(y_value=y))
-                self.context.line_to(self.width, self.get_pixel(y_value=y))
+                self.context.move_to(legend_width, y)
+                self.context.line_to(self.width, y)
 
 
         #stack keys
