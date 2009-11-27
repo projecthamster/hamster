@@ -54,6 +54,8 @@ class DayLine(graphics.Area):
         self.in_progress = False
 
         self.range_start = None
+        self.range_start_int = None #same date just expressed as integer so we can interpolate it  (a temporar hack)
+        
         self.in_motion = False
         self.days = []
 
@@ -71,11 +73,15 @@ class DayLine(graphics.Area):
         
         start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
         
+        start_time_int = int(time.mktime(start_time.timetuple()))
+        
         if self.range_start:
-            self.range_start.value = start_time
+            self.range_start = start_time
             self.scroll_to_range_start()
         else:
-            self.range_start = Integrator(start_time, damping = 0.35, attraction = 0.5)
+            self.range_start = start_time
+            self.range_start_int = start_time_int
+
 
         self.highlight = highlight
         
@@ -106,61 +112,32 @@ class DayLine(graphics.Area):
     
     def get_time(self, pixels):
         minutes = self.get_value_at_pos(x = pixels)
-        return self.range_start.value + dt.timedelta(minutes = minutes) 
+        return dt.datetime.fromtimestamp(self.range_start_int) + dt.timedelta(minutes = minutes) 
     
-    def scroll_to_range_start(self):
-        if not self.in_motion:
-            self.in_motion = True
-            gobject.timeout_add(1000 / 30, self.animate_scale)
-        
-        
-    def animate_scale(self):
-        moving = self.range_start.update() > 5
-        
-        
-        # check if maybe we are approaching day boundaries and should ask for
-        # more data!
-        if self.on_more_data:
-            now = self.range_start.value
-            date_plus = (now + dt.timedelta(hours = 12 + 2*4 + 1)).date()
-            date_minus = (now - dt.timedelta(hours=1)).date()
-
-            if date_minus != now.date() and date_minus not in self.days:
-                self.facts += self.on_more_data(date_minus)
-                self.days.append(date_minus)
-            elif date_plus != now.date() and date_plus not in self.days:
-                self.facts += self.on_more_data(date_plus)
-                self.days.append(date_plus)
-        
-        
-        self.redraw_canvas()
-        if moving:
-            return True
-        else:
-            self.in_motion = False
-            return False
-
 
         
     def draw_cursor(self, area, event):
         if event.is_hint:
             x, y, state = event.window.get_pointer()
         else:
-            x = event.x
-            y = event.y
+            x = event.x + self.graph_x
+            y = event.y + self.graph_y
             state = event.state
 
         mouse_down = state & gtk.gdk.BUTTON1_MASK
+        
+        highlight_start = self.highlight_start + self.graph_x
+        highlight_end = self.highlight_end + self.graph_x
             
-        if self.highlight_start != None:
-            start_drag = 10 > (self.highlight_start - x) > -1
+        if highlight_start != None:
+            start_drag = 10 > (highlight_start - x) > -1
 
-            end_drag = 10 > (x - self.highlight_end) > -1
+            end_drag = 10 > (x - highlight_end) > -1
 
             if start_drag and end_drag:
-                start_drag = abs(x - self.highlight_start) < abs(x - self.highlight_end)
+                start_drag = abs(x - highlight_start) < abs(x - highlight_end)
 
-            in_between = self.highlight_start <= x <= self.highlight_end
+            in_between = highlight_start <= x <= highlight_end
             scale = True
 
             if self.in_progress:
@@ -175,10 +152,10 @@ class DayLine(graphics.Area):
                     self.move_type = "end"
                 elif in_between:
                     self.move_type = "move"
-                    self.drag_start = x - self.highlight_start
+                    self.drag_start = x - self.highlight_start + self.graph_x
                 elif scale:
                     self.move_type = "scale_drag"
-                    self.drag_start_time = self.range_start.value
+                    self.drag_start_time = dt.datetime.fromtimestamp(self.range_start_int)
 
             
             if mouse_down and self.drag_start:
@@ -186,21 +163,17 @@ class DayLine(graphics.Area):
                 if self.move_type and self.move_type != "scale_drag":
                     if self.move_type == "start":
                         if 0 <= x <= self.width:
-                            start = x
+                            start = x - self.graph_x
                             end = self.highlight_end
                     elif self.move_type == "end":
                         if 0 <= x <= self.width:
                             start = self.highlight_start
-                            end = x
+                            end = x - self.graph_x
                     elif self.move_type == "move":
                         width = self.highlight_end - self.highlight_start
-                        start = x - self.drag_start
-                        start = max(0, min(start, self.width))
+                        start = x - self.drag_start + self.graph_x
                         
                         end = start + width
-                        if end > self.width:
-                            end = self.width
-                            start = end - width
     
                     if end - start > 1:
                         self.highlight = (self.get_time(start), self.get_time(end))
@@ -208,10 +181,8 @@ class DayLine(graphics.Area):
 
                     self.__call_parent_time_changed()
                 else:
-                    self.range_start.target(self.drag_start_time +
-                                            dt.timedelta(minutes = self.get_value_at_pos(self.drag_start) - self.get_value_at_pos(x)))
+                    self.range_start = self.drag_start_time + dt.timedelta(minutes = self.get_value_at_pos(self.drag_start) - self.get_value_at_pos(x))
                     self.scroll_to_range_start()
-
 
 
             if start_drag:
@@ -225,17 +196,38 @@ class DayLine(graphics.Area):
                 
         
     def _minutes_from_start(self, date):
-            delta = (date - self.range_start.value)
+            delta = (date - dt.datetime.fromtimestamp(self.range_start_int))
             return delta.days * 24 * 60 + delta.seconds / 60
-            
+
+    def scroll_to_range_start(self):
+        self.tweener.removeTweeningFrom(self)
+        self.animate(self, {"range_start_int": int(time.mktime(self.range_start.timetuple())),
+                            "tweenType": graphics.Easing.Expo.easeOut,
+                            "tweenTime": 0.4})
+        
     def on_expose(self):
+        # check if maybe we are approaching day boundaries and should ask for
+        # more data!
+        now = dt.datetime.fromtimestamp(self.range_start_int)
+        if self.on_more_data:
+            date_plus = (now + dt.timedelta(hours = 12 + 2*4 + 1)).date()
+            date_minus = (now - dt.timedelta(hours=1)).date()
+
+            if date_minus != now.date() and date_minus not in self.days:
+                self.facts += self.on_more_data(date_minus)
+                self.days.append(date_minus)
+            elif date_plus != now.date() and date_plus not in self.days:
+                self.facts += self.on_more_data(date_plus)
+                self.days.append(date_plus)
+
+
         context = self.context
         #TODO - use system colors and fonts
  
         context.set_line_width(1)
 
         #we will buffer 4 hours to both sides so partial labels also appear
-        range_end = self.range_start.value + dt.timedelta(hours = 12 + 2 * 4)        
+        range_end = now + dt.timedelta(hours = 12 + 2 * 4)        
         self.graph_x = -self.width / 3 #so x moves one third out of screen
         
         pixels_in_minute = self.width / self.view_minutes
@@ -250,6 +242,9 @@ class DayLine(graphics.Area):
         
         # graph area
         self.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
+
+        context.save()
+        context.translate(self.graph_x, self.graph_y)
     
         #bars
         for fact in self.facts:
@@ -264,7 +259,7 @@ class DayLine(graphics.Area):
                     end_minutes = start_minutes
             
             if end_minutes * pixels_in_minute > 0 and \
-                start_minutes * pixels_in_minute < self.width:
+                start_minutes * pixels_in_minute + self.graph_x < self.width:
                     context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
 
                     context.rectangle(round(start_minutes * pixels_in_minute),
@@ -287,7 +282,7 @@ class DayLine(graphics.Area):
         context.set_source_rgb(0, 0, 0)
         self.layout.set_width(-1)
         for i in range(minutes):
-            label_time = (self.range_start.value + dt.timedelta(minutes=i))
+            label_time = (now + dt.timedelta(minutes=i))
             
             if label_time.minute == 0:
                 context.set_source_rgb(0.8, 0.8, 0.8)
@@ -326,7 +321,7 @@ class DayLine(graphics.Area):
             self.highlight_end = round(self._minutes_from_start(self.highlight[1]) * pixels_in_minute)
 
         #TODO - make a proper range check here
-        if self.highlight_end > 0 and self.highlight_start < self.width:
+        if self.highlight_end + self.graph_x > 0 and self.highlight_start + self.graph_x < self.width:
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
 
             self.fill_area(self.highlight_start,
@@ -343,75 +338,17 @@ class DayLine(graphics.Area):
             self.context.line_to(self.highlight_end, graph_y + graph_height)
             context.stroke()
 
+        context.restore()            
+
         #and now put a frame around the whole thing
         context.set_source_rgb(0.7, 0.7, 0.7)
         context.rectangle(0, graph_y-1, self.width - 1, graph_height)
         context.stroke()
         
-        if self.move_type == "move" and (self.highlight_start == 0 or self.highlight_end == self.width):
-            if self.highlight_start == 0:
-                self.range_start.value = self.range_start.value - dt.timedelta(minutes=30)
-            if self.highlight_end == self.width:
-                self.range_start.value = self.range_start.value + dt.timedelta(minutes=30)
-            self.scroll_to_range_start()
-
-
-
-# TODO - should remove this and replace with standard tweening instead!
-class Integrator(object):
-    """an iterator, inspired by "visualizing data" book to simplify animation"""
-    def __init__(self, start_value, damping = 0.5, attraction = 0.2):
-        #if we got datetime, convert it to unix time, so we operate with numbers again
-        self.current_value = start_value
-        if isinstance(start_value, dt.datetime):
-            self.current_value = int(time.mktime(start_value.timetuple()))
+        if self.move_type == "move" and (self.highlight_start + self.graph_x <= 0 or self.highlight_end + self.graph_x >= self.width):
+            if self.highlight_start + self.graph_x <= 0:
+                self.range_start = self.range_start - dt.timedelta(minutes=30)
+            if self.highlight_end + self.graph_x >= self.width:
+                self.range_start = self.range_start + dt.timedelta(minutes=30)
             
-        self.value_type = type(start_value)
-
-        self.target_value = start_value
-        self.current_frame = 0
-
-        self.targeting = False
-        self.vel, self.accel, self.force = 0, 0, 0
-        self.mass = 1
-        self.damping = damping
-        self.attraction = attraction
-
-    def __repr__(self):
-        current, target = self.current_value, self.target_value
-        if self.value_type == dt.datetime:
-            current = dt.datetime.fromtimestamp(current)
-            target = dt.datetime.fromtimestamp(target)
-        return "<Integrator %s, %s>" % (current, target)
-        
-    def target(self, value):
-        """target next value"""
-        self.targeting = True
-        self.target_value = value
-        if isinstance(value, dt.datetime):
-            self.target_value = int(time.mktime(value.timetuple()))
-        
-    def update(self):
-        """goes from current to target value
-        if there is any action needed. returns velocity, which is synonym from
-        delta. Use it to determine when animation is done (experiment to find
-        value that fits you!"""
-
-        if self.targeting:
-            self.force += self.attraction * (self.target_value - self.current_value)
-
-        self.accel = self.force / self.mass
-        self.vel = (self.vel + self.accel) * self.damping
-        self.current_value += self.vel    
-        self.force = 0
-        return abs(self.vel)
-
-    def finish(self):
-        self.current_value = self.target_value
-    
-    @property
-    def value(self):
-        if self.value_type == dt.datetime:
-            return dt.datetime.fromtimestamp(self.current_value)
-        else:
-            return self.current_value
+            self.scroll_to_range_start()
