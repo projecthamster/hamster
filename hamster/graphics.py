@@ -54,7 +54,7 @@ class Area(gtk.DrawingArea):
         self.__prev_mouse_regions = None
         
         self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
-        self.framerate = 30 #thirty seems to be good enough to avoid flicker
+        self.framerate = 60
         self.last_frame_time = None
         self.__animating = False
 
@@ -82,10 +82,8 @@ class Area(gtk.DrawingArea):
         self.tweener.update(time_since_start)
 
         self.queue_draw()
-        self.window.process_updates(True)
 
         self.last_frame_time = dt.datetime.now()
-
         return self.__animating
 
 
@@ -145,9 +143,8 @@ class Area(gtk.DrawingArea):
 
     """ exposure events """
     def do_configure_event(self, event):
-        (self.__width, self.__height) = self.window.get_size()
-        self.queue_draw()
-                    
+        (self.width, self.height) = self.window.get_size()
+
     def do_expose_event(self, event):
         self.width, self.height = self.window.get_size()
         self.context = self.window.cairo_create()
