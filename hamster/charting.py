@@ -241,6 +241,17 @@ class Chart(graphics.Area):
             return bars
     
         retarget(self.bars, self.data)
+
+
+    def longest_label(self, labels):
+        """returns width of the longest label"""
+        max_extent = 0
+        for label in labels:
+            self.layout.set_text(label)
+            label_w, label_h = self.layout.get_pixel_size()
+            max_extent = max(label_w + 5, max_extent)
+        
+        return max_extent
     
     def draw(self):
         logging.error("OMG OMG, not implemented!!!")
@@ -287,9 +298,6 @@ class BarChart(Chart):
                                                              self.max_bar_width)
         gap = bar_width * 0.05
         
-        # flip hamster.graphics matrix so we don't think upside down
-        self.set_value_range(y_max = 0, y_min = self.graph_height)
-
         # bars and keys
         max_bar_size = self.graph_height
         #make sure bars don't hit the ceiling
@@ -308,7 +316,7 @@ class BarChart(Chart):
             intended_x = (bar_width * i) + (bar_width - label_w) / 2.0
             
             if not prev_label_end or intended_x > prev_label_end:
-                self.move_to(intended_x, -4)
+                self.context.move_to(intended_x, self.graph_height - 4)
                 context.show_layout(self.layout)
             
                 prev_label_end = intended_x + label_w + 3
@@ -363,7 +371,7 @@ class BarChart(Chart):
                 context.move_to(self.graph_x + (bar_width * i) + (bar_width - label_w) / 2.0, label_y)
 
                 # we are in the bar so make sure that the font color is distinguishable
-                if colorsys.rgb_to_hls(*self.rgb(last_color))[1] < 150:
+                if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
                     self.set_color(graphics.Colors.almost_white)
                 else:
                     self.set_color(graphics.Colors.aluminium[5])        
@@ -580,7 +588,7 @@ class HorizontalBarChart(Chart):
                 self.set_color(graphics.Colors.aluminium[5])        
             else:
                 # we are in the bar so make sure that the font color is distinguishable
-                if colorsys.rgb_to_hls(*self.rgb(last_color))[1] < 150:
+                if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
                     self.set_color(graphics.Colors.almost_white)
                 else:
                     self.set_color(graphics.Colors.aluminium[5])        
