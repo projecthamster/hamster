@@ -54,7 +54,7 @@ class Area(gtk.DrawingArea):
         self.__prev_mouse_regions = None
         
         self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
-        self.framerate = 60
+        self.framerate = 30 #thirty seems to be good enough to avoid flicker
         self.last_frame_time = None
         self.__animating = False
 
@@ -217,3 +217,71 @@ class Area(gtk.DrawingArea):
             self.emit("button-release", mouse_regions)
 
  
+
+
+""" simple example """
+class SimpleAnimation(Area):
+    def __init__(self):
+        Area.__init__(self)
+        self.rect_x, self.rect_y = 10.5, 10.5
+        self.rect_width, self.rect_height = 50, 50
+        
+    def on_expose(self):
+        # on expose is called when we are ready to draw
+        
+        # fill_area is just a shortcut function
+        # feel free to use self.context. move_to, line_to and others
+        self.fill_area(self.rect_x,
+                            self.rect_y,
+                            self.rect_width,
+                            self.rect_height, (168, 186, 136))
+
+class BasicWindow:
+    # close the window and quit
+    def delete_event(self, widget, event, data=None):
+        gtk.main_quit()
+        return False
+
+    def __init__(self):
+        # Create a new window
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+    
+        self.window.set_title("Graphics Module")
+        self.window.set_size_request(500, 500)
+        self.window.connect("delete_event", self.delete_event)
+    
+        self.graphic = SimpleAnimation()
+        
+        box = gtk.VBox()
+        box.pack_start(self.graphic)
+        
+        button = gtk.Button("Hello")
+        button.connect("clicked", self.on_go_clicked)
+
+        box.add_with_properties(button, "expand", False)
+    
+        self.window.add(box)
+        self.window.show_all()
+
+
+    def on_go_clicked(self, widget):
+        import random
+        
+        # set x and y to random position within the drawing area
+        x = round(min(random.random() * self.graphic.width,
+                      self.graphic.width - self.graphic.rect_width))
+        y = round(min(random.random() * self.graphic.height,
+                      self.graphic.height - self.graphic.rect_height))
+        
+        # here we call the animate function with parameters we would like to change
+        # the easing functions outside graphics module can be accessed via
+        # graphics.Easing
+        self.graphic.animate(self.graphic,
+                             dict(rect_x = x, rect_y = y),
+                             duration = 0.8,
+                             easing = Easing.Elastic.easeOut)
+
+if __name__ == "__main__":
+   example = BasicWindow()
+   gtk.main()
+    
