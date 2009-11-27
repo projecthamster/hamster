@@ -3,6 +3,9 @@ import gtk, gobject
 
 import pango, cairo
 
+import pytweener
+from pytweener import Easing
+
 class Colors(object):
     aluminium = [(238, 238, 236), (211, 215, 207), (186, 189, 182),
                  (136, 138, 133), (85, 87, 83), (46, 52, 54)]
@@ -43,25 +46,58 @@ class Area(gtk.DrawingArea):
         self.connect("motion_notify_event", self.__on_mouse_move)
         self.connect("leave_notify_event", self.__on_mouse_out)
 
-
-        self.context = None
-        self.layout = None
-        self.width = None
-        self.height = None
-        self.value_boundaries = None #x_min, x_max, y_min, y_max
-        
-        self.x_factor, self.y_factor = None, None
-        
         self.font_size = 8
-
-        # use these to mark area where the "real" drawing is going on
-        self.graph_x, self.graph_y = 0, 0
-        self.graph_width, self.graph_height = None, None
-        
         self.mouse_regions = [] #regions of drawing that respond to hovering/clicking
+
+        self.context, self.layout = None, None
+        self.width, self.height = None, None
         self.__prev_mouse_regions = None
+        
+        self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
+        self.framerate = 60
+        self.last_frame_time = None
+        self.__animating = False
+
+    def on_expose(self):
+        """ on_expose event is where you hook in all your drawing
+            canvas has been initialized for you """
+        raise NotImplementedError
+
+    def redraw_canvas(self):
+        """Redraw canvas. Triggers also to do all animations"""
+        if not self.__animating: #if we are moving, then there is a timeout somewhere already
+            self.__animating = True
+            self.last_frame_time = dt.datetime.now()
+            gobject.timeout_add(1000 / self.framerate, self.__interpolate)
+            
+    """ animation bits """
+    def __interpolate(self):
+        self.__animating = self.tweener.hasTweens()
+
+        if not self.window: #will wait until window comes
+            return self.__animating
+        
+        
+        time_since_start = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
+        self.tweener.update(time_since_start)
+
+        self.queue_draw()
+        self.window.process_updates(True)
+
+        self.last_frame_time = dt.datetime.now()
+
+        return self.__animating
 
 
+    def animate(self, object, params = {}, duration = None, easing = None, callback = None):
+        if duration: params["tweenTime"] = duration  # if none will fallback to tweener's default
+        if easing: params["tweenType"] = easing    # if none will fallback to tweener's default
+        if callback: params["onCompleteFunction"] = callback
+        self.tweener.addTween(object, **params)
+        self.redraw_canvas()
+    
+
+    """ drawing on canvas bits """
     def __rectangle(self, x, y, w, h, color, opacity = 0):
         if color[0] > 1: color = [c / 256.0 for c in color]
 
@@ -107,17 +143,6 @@ class Area(gtk.DrawingArea):
     def register_mouse_region(self, x1, y1, x2, y2, region_name):
         self.mouse_regions.append((x1, y1, x2, y2, region_name))
 
-    def redraw_canvas(self):
-        """Force graph redraw"""
-        if self.window:    #this can get called before expose
-            self.queue_draw()
-            self.window.process_updates(True)
-
-
-    def _render(self):
-        raise NotImplementedError
-
-
     """ exposure events """
     def do_configure_event(self, event):
         (self.__width, self.__height) = self.window.get_size()
@@ -141,7 +166,7 @@ class Area(gtk.DrawingArea):
         self.width, self.height = alloc.width, alloc.height
         
         self.mouse_regions = [] #reset since these can move in each redraw
-        self._render()
+        self.on_expose()
 
 
     """ mouse events """

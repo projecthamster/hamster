@@ -34,7 +34,6 @@ http://projecthamster.wordpress.com/
 """
 
 import gtk
-import gobject
 import cairo, pango
 import copy
 import math
@@ -44,7 +43,7 @@ import time
 import colorsys
 import logging
 
-import graphics, pytweener
+import graphics
 
 
 def size_list(set, target_set):
@@ -122,7 +121,7 @@ class Chart(graphics.Area):
         # options
         self.max_bar_width     = args.get("max_bar_width", 500)
         self.legend_width      = args.get("legend_width", 0)
-        self.animate           = args.get("animate", True)
+        self.animation           = args.get("animate", True)
 
         self.background        = args.get("background", None)
         self.chart_background  = args.get("chart_background", None)
@@ -138,16 +137,17 @@ class Chart(graphics.Area):
         self.framerate         = args.get("framerate", 60)
 
         # other stuff
-        self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
-        self.last_frame_time = None
-        self.moving = False
-        
         self.bars = []
         self.keys = []
         self.stack_keys = []
         
         self.key_colors = {} # key:color dictionary. if key's missing will grab basecolor
         self.stack_key_colors = {} # key:color dictionary. if key's missing will grab basecolor
+        
+
+        # use these to mark area where the "real" drawing is going on
+        self.graph_x, self.graph_y = 0, 0
+        self.graph_width, self.graph_height = None, None
         
         
     def get_bar_color(self, index):
@@ -185,34 +185,13 @@ class Chart(graphics.Area):
 
         self._update_targets()
 
-        if self.animate:
-            self.last_frame_time = dt.datetime.now()
-            if not self.moving: #if we are moving, then there is a timeout somewhere already
-                gobject.timeout_add(1000 / self.framerate, self._interpolate)
-        else:
-            self.tweener.update(self.tweener.defaultDuration) # set to end frame
+        if not self.animation:
+            self.tweener.finish()
 
-            self.redraw_canvas()
-
-
-    def _interpolate(self):
-        """Internal function to do the math, going from previous set to the
-           new one, and redraw graph"""
-        #this can get called before expose    
-        self.moving = self.tweener.hasTweens()
-
-        if not self.window:
-            self.redraw_canvas()
-            return False
-
-        time_since_start = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
-        self.tweener.update(time_since_start)
         self.redraw_canvas()
-        self.last_frame_time = dt.datetime.now()
 
-        return self.moving
 
-    def _render(self):
+    def on_expose(self):
         # fill whole area 
         if self.background:
             self.fill_area(0, 0, self.width, self.height, self.background)
@@ -258,9 +237,9 @@ class Chart(graphics.Area):
 
 
 class BarChart(Chart):
-    def _render(self):
+    def on_expose(self):
         context = self.context
-        Chart._render(self)
+        Chart.on_expose(self)
         
         # determine graph dimensions
         if self.show_stack_labels:
@@ -484,9 +463,9 @@ class BarChart(Chart):
 
 
 class HorizontalBarChart(Chart):
-    def _render(self):
+    def on_expose(self):
         context = self.context
-        Chart._render(self)
+        Chart.on_expose(self)
         rowcount, keys = len(self.keys), self.keys
         
         # push graph to the right, so it doesn't overlap
@@ -612,9 +591,9 @@ class HorizontalDayChart(Chart):
         self.show()
         self.redraw_canvas()
     
-    def _render(self):
+    def on_expose(self):
         context = self.context
-        Chart._render(self)
+        Chart.on_expose(self)
         rowcount, keys = len(self.keys), self.keys
         
         start_hour = 0
