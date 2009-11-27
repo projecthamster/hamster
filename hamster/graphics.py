@@ -54,7 +54,7 @@ class Area(gtk.DrawingArea):
         self.__prev_mouse_regions = None
         
         self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
-        self.framerate = 60
+        self.framerate = 80
         self.last_frame_time = None
         self.__animating = False
 
