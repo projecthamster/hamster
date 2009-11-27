@@ -590,8 +590,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         #the single "totals" (by category) bar
         category_sums = stuff.totals(facts, lambda fact: fact["category"],
                       lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
-        category_totals = [category_sums.get(cat, 0)
-                                                      for cat in all_categories]
+        category_totals = [category_sums.get(cat, 0) for cat in all_categories]
         category_keys = ["%s %.1f" % (cat, category_sums.get(cat, 0.0))
                                                       for cat in all_categories]
         self.category_chart.plot([_("Total")],
@@ -600,14 +599,15 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         
         # day / category chart
         all_days = [self.start_date + dt.timedelta(i)
-                    for i in range((self.end_date - self.start_date).days  + 1)]        
-
+                    for i in range((self.end_date - self.start_date).days  + 1)]
+        
         by_date_cat = stuff.totals(facts,
-                                   lambda fact: (fact["date"],
-                                                 fact["category"]),
+                                   lambda fact: (fact["date"], fact["category"]),
                                    lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
+
         res = [[by_date_cat.get((day, cat), 0)
                                  for cat in all_categories] for day in all_days]
+
 
         #show days or dates depending on scale
         if (self.end_date - self.start_date).days < 20:
