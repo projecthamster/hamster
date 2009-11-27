@@ -247,7 +247,7 @@ class BasicWindow:
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
     
         self.window.set_title("Graphics Module")
-        self.window.set_size_request(500, 500)
+        self.window.set_size_request(300, 300)
         self.window.connect("delete_event", self.delete_event)
     
         self.graphic = SimpleAnimation()
