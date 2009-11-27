@@ -30,6 +30,11 @@ class TimeLine(graphics.Area):
         self.start_date, self.end_date = None, None
         self.draw_mode = None
         self.max_hours = None
+
+        # TODO - get rid of these
+        self.value_boundaries = None #x_min, x_max, y_min, y_max
+        self.x_factor, self.y_factor = None, None        
+
         
     #TODO remove these obsolete functions with in-house transformations
     def set_value_range(self, x_min = None, x_max = None, y_min = None, y_max = None):
@@ -63,12 +68,12 @@ class TimeLine(graphics.Area):
         if not self.x_factor:
             self.x_factor = 1
             if self.value_boundaries and self.value_boundaries[0] != None and self.value_boundaries[1] != None:
-                self.x_factor = float(self.graph_width or self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
+                self.x_factor = float(self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
                 
         if not self.y_factor:            
             self.y_factor = 1
             if self.value_boundaries and self.value_boundaries[2] != None and self.value_boundaries[3] != None:
-                self.y_factor = float(self.graph_height or self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
+                self.y_factor = float(self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
 
         return self.x_factor, self.y_factor        
 
@@ -91,7 +96,7 @@ class TimeLine(graphics.Area):
                 else: #case when min is larger than max (flipped)
                     x_value = self.value_boundaries[1] - x_value * x_factor
             if y_value is None:
-                return x_value + self.graph_x
+                return x_value
 
         if y_value != None:
             if self.value_boundaries and self.value_boundaries[2] != None:
@@ -102,18 +107,18 @@ class TimeLine(graphics.Area):
             if x_value is None:
                 return y_value + self.graph_y
             
-        return x_value + self.graph_x, y_value + self.graph_y
+        return x_value, y_value
 
     def get_value_at_pos(self, x = None, y = None):
         """returns mapped value at the coordinates x,y"""
         x_factor, y_factor = self._get_factors()
         
         if x != None:
-            x = (x - self.graph_x)  / x_factor
+            x = x  / x_factor
             if y is None:
                 return x
         if y != None:
-            y = (y - self.graph_x) / y_factor
+            y = y / y_factor
             if x is None:
                 return y
         return x, y            
@@ -159,7 +164,7 @@ class TimeLine(graphics.Area):
         self.redraw_canvas()
         
         
-    def _render(self):
+    def on_expose(self):
         import calendar
         
         if self.draw_mode != self.MODE_YEAR:

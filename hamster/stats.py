@@ -216,7 +216,7 @@ class StatsViewer(object):
                 self.text = text
                 self.redraw_canvas()
                 
-            def _render(self):
+            def on_expose(self):
                 if self.background:
                     self.fill_area(0, 0, self.width, self.height, self.background)
 

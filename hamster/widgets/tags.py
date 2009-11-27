@@ -279,7 +279,7 @@ class TagBox(graphics.Area):
             cur_x += w + 8 #some padding too, please
         return cur_y + h + 6
     
-    def _render(self):
+    def on_expose(self):
         cur_x, cur_y = 4, 4
         for tag in self.tags:
             w, h = self.tag_size(tag)

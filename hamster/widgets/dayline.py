@@ -61,12 +61,12 @@ class DayLine(graphics.Area):
         if not self.x_factor:
             self.x_factor = 1
             if self.value_boundaries and self.value_boundaries[0] != None and self.value_boundaries[1] != None:
-                self.x_factor = float(self.graph_width or self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
+                self.x_factor = float(self.width) / abs(self.value_boundaries[1] - self.value_boundaries[0])
                 
         if not self.y_factor:            
             self.y_factor = 1
             if self.value_boundaries and self.value_boundaries[2] != None and self.value_boundaries[3] != None:
-                self.y_factor = float(self.graph_height or self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
+                self.y_factor = float(self.height) / abs(self.value_boundaries[3] - self.value_boundaries[2])
 
         return self.x_factor, self.y_factor        
 
@@ -139,7 +139,12 @@ class DayLine(graphics.Area):
         self.range_start = None
         self.in_motion = False
         self.days = []
-        
+
+        # TODO - get rid of these
+        self.value_boundaries = None #x_min, x_max, y_min, y_max
+        self.x_factor, self.y_factor = None, None        
+        # use these to mark area where the "real" drawing is going on
+        self.graph_x, self.graph_y = 0, 0
 
     def draw(self, day_facts, highlight = None):
         """Draw chart with given data"""
@@ -307,7 +312,7 @@ class DayLine(graphics.Area):
             delta = (date - self.range_start.value)
             return delta.days * 24 * 60 + delta.seconds / 60
             
-    def _render(self):
+    def on_expose(self):
         context = self.context
         #TODO - use system colors and fonts
  
