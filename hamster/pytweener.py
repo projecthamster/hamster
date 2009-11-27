@@ -90,6 +90,11 @@ class Tweener:
             if t.target is obj:
                 t.complete = True
  
+    def finish(self):
+        #go to last frame for all tweens
+        for t in self.currentTweens:
+            t.update(t.duration)
+        self.currentTweens = []
  
     def update(self, timeSinceLastFrame):
         removable = []
