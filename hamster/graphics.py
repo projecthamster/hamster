@@ -220,7 +220,7 @@ class Area(gtk.DrawingArea):
 
 
 """ simple example """
-class SimpleAnimation(Area):
+class SampleArea(Area):
     def __init__(self):
         Area.__init__(self)
         self.rect_x, self.rect_y = 10.5, 10.5
@@ -250,7 +250,7 @@ class BasicWindow:
         self.window.set_size_request(300, 300)
         self.window.connect("delete_event", self.delete_event)
     
-        self.graphic = SimpleAnimation()
+        self.graphic = SampleArea()
         
         box = gtk.VBox()
         box.pack_start(self.graphic)
