@@ -228,10 +228,10 @@ class SampleArea(Area):
         
         # fill_area is just a shortcut function
         # feel free to use self.context. move_to, line_to and others
-        self.fill_area(self.rect_x,
-                            self.rect_y,
-                            self.rect_width,
-                            self.rect_height, (168, 186, 136))
+        self.fill_area(round(self.rect_x),
+                       round(self.rect_y),
+                       self.rect_width,
+                       self.rect_height, (168, 186, 136))
 
 class BasicWindow:
     # close the window and quit
