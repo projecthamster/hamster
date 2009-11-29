@@ -149,8 +149,6 @@ class Area(gtk.DrawingArea):
         self.width, self.height = self.window.get_size()
         self.context = self.window.cairo_create()
 
-
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
         self.context.rectangle(event.area.x, event.area.y,
                                event.area.width, event.area.height)
         self.context.clip()
