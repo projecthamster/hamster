@@ -22,7 +22,6 @@ class Colors(object):
         else:
             # otherwise we assume we have color components in 0..255 range
             if color[0] > 1 or color[1] > 1 or color[2] > 1:
-                print color[0], color[1], color[2]
                 color = [c / 255.0 for c in color]
 
         return color
