@@ -12,18 +12,24 @@ class Colors(object):
     almost_white = (250, 250, 250)
 
     @staticmethod
-    def normalize_rgb(color):
-        # turns your average rgb into values with components in range 0..1
-        # if none of the componets are over 1 - will return what it got
-        if color[0] > 1 or color[1] > 0 or color[2] > 0:
-            color = [c / 255.0 for c in color]
+    def color(color):
+        #parse color into rgb values
+        if isinstance(color, str) or isinstance(color, unicode):
+            color = gtk.gdk.Color(color)
+
+        if isinstance(color, gtk.gdk.Color):
+            color = [color.red / 65535.0, color.green / 65535.0, color.blue / 65535.0]
+        else:
+            # otherwise we assume we have color components in 0..255 range
+            if color[0] > 1 or color[1] > 1 or color[2] > 1:
+                print color[0], color[1], color[2]
+                color = [c / 255.0 for c in color]
+
         return color
     
     @staticmethod
     def rgb(color):
-        #return color that has each component in 0..255 range
-        return [c*255 for c in Colors.normalize_rgb(color)]
-        
+        return [c * 255 for c in Colors.color(color)]
 
 class Area(gtk.DrawingArea):
     """Abstraction on top of DrawingArea to work specifically with cairo"""
@@ -97,15 +103,7 @@ class Area(gtk.DrawingArea):
 
     """ drawing on canvas bits """
     def __rectangle(self, x, y, w, h, color, opacity = 0):
-        if color[0] > 1: color = [c / 256.0 for c in color]
-
-        if opacity:
-            self.context.set_source_rgba(color[0], color[1], color[2], opacity)
-        elif len(color) == 3:
-            self.context.set_source_rgb(*color)
-        else:
-            self.context.set_source_rgba(*color)
-            
+        self.set_color(color, opacity)
         self.context.rectangle(x, y, w, h)
     
     def fill_area(self, x, y, w, h, color, opacity = 0):
@@ -128,7 +126,7 @@ class Area(gtk.DrawingArea):
         return self.layout.get_pixel_size()
         
     def set_color(self, color, opacity = None):
-        color = Colors.normalize_rgb(color)
+        color = Colors.color(color) #parse whatever we have there into a normalized triplet
 
         if opacity:
             self.context.set_source_rgba(color[0], color[1], color[2], opacity)
@@ -226,8 +224,8 @@ class SampleArea(Area):
         
         # fill_area is just a shortcut function
         # feel free to use self.context. move_to, line_to and others
-        self.fill_area(round(self.rect_x),
-                       round(self.rect_y),
+        self.fill_area(self.rect_x,
+                       self.rect_y,
                        self.rect_width,
                        self.rect_height, (168, 186, 136))
 
