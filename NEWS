@@ -1,4 +1,20 @@
 ===============
+Version 2.29.3
+===============
+  * partial tag support (adding to a fact and editing autocomplete list,
+    no reports yet)
+  * fixed glitches when editing ongoing task
+  * improved save report dialog
+  * better autocomplete for the entries
+  
+ Updated translations
+  * en@shaw (Thomas Thurman)
+  * es (Jorge González)
+  * et (Ivar Smolin)
+  * sl (Matej Urbančič)
+  * zh_CN (Ray Wang)
+  
+===============
 Version 2.29.2
 ===============
   * fixed bug 599343 - the charts are now back again (for those who had lost them)
