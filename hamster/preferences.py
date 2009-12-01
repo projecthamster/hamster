@@ -149,8 +149,6 @@ class PreferencesEditor:
 
         self.load_config()
 
-        self._gui.connect_signals(self)
-
         # Allow enable drag and drop of rows including row move
         self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
                                                 self.TARGETS,
@@ -182,6 +180,7 @@ class PreferencesEditor:
         except:
             self.get_widget("notification_preference_frame").hide()
 
+        self._gui.connect_signals(self)
 
     def load_config(self):
         self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())
@@ -191,8 +190,22 @@ class PreferencesEditor:
         self.get_widget("notify_on_idle").set_active(self.config.get_notify_on_idle())
 
         self.day_start.set_time(self.config.get_day_start())
+        
+        self.tags = [tag["name"] for tag in runtime.storage.get_tags(autocomplete=True)]
+        self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
+            
 
+    def on_autocomplete_tags_view_focus_out_event(self, view, event):
+        buf = self.get_widget("autocomplete_tags")
+        updated_tags = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0) \
+                          .decode("utf-8")
 
+        if updated_tags == self.tags:
+            return
+        
+        runtime.storage.update_autocomplete_tags(updated_tags)
+        
+        
     def drag_data_get_data(self, treeview, context, selection, target_id,
                            etime):
         treeselection = treeview.get_selection()

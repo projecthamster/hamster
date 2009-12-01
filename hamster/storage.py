@@ -41,7 +41,10 @@ class Storage(object):
             self.dispatch('new_tags_added', ())
         return tags
 
-
+    def update_autocomplete_tags(self, tags):
+        changes = self.__update_autocomplete_tags(tags)
+        if changes:
+            self.dispatch('new_tags_added', ())
 
     def get_fact(self, id):
         return self.__get_fact(id)
