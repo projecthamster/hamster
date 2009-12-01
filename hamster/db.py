@@ -90,6 +90,7 @@ class Storage(storage.Storage):
         if autocomplete:
             query += " where autocomplete='true'"
         
+        query += " order by name"
         return self.fetchall(query)
         
     def __get_tag_ids(self, tags):
@@ -101,6 +102,15 @@ class Storage(storage.Storage):
         db_tags = self.fetchall("select * from tags where name in (%s)"
                                             % ",".join(["?"] * len(tags)), tags) # bit of magic here - using sqlites bind variables
         
+        changes = False
+        
+        # check if any of tags needs ressurection
+        set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] == "false"]
+        if set_complete:
+            changes = True
+            self.execute("update tags set autocomplete='true' where id in (%s)" % ", ".join(set_complete))
+        
+        
         found_tags = [tag["name"] for tag in db_tags]
         
         add = set(tags) - set(found_tags)
@@ -111,7 +121,35 @@ class Storage(storage.Storage):
 
             return self.__get_tag_ids(tags)[0], True # all done, recurse
         else:
-            return db_tags, False
+            return db_tags, changes
+
+    def __update_autocomplete_tags(self, tags):
+        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
+
+        #first we will create new ones
+        tags, changes = self.__get_tag_ids(tags)
+        tags = [tag["id"] for tag in tags]
+        
+        #now we will find which ones are gone from the list
+        query = """
+                    SELECT b.id as id, count(a.fact_id) as occurences
+                      FROM tags b
+                 LEFT JOIN fact_tags a on a.tag_id = b.id
+                     WHERE b.id not in (%s)
+                  GROUP BY b.id
+                """ % ",".join(["?"] * len(tags)) # bit of magic here - using sqlites bind variables
+
+        gone = self.fetchall(query, tags)
+
+        to_delete = [str(tag["id"]) for tag in gone if tag["occurences"] == 0]
+        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0]
+
+        if to_delete:
+            self.execute("delete from tags where id in (%s)" % ", ".join(to_delete))
+
+        if to_uncomplete:        
+            self.execute("update tags set autocomplete='false' where id in (%s)" % ", ".join(to_uncomplete))
+
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
