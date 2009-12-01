@@ -15,4 +15,3 @@ hamster/preferences.py
 hamster/reports.py
 hamster/stats.py
 hamster/stuff.py
-hamster/widgets.py
