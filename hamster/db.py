@@ -340,8 +340,8 @@ class Storage(storage.Storage):
                                  (# unsorted category
                                   _("Unsorted"),
                                   dt.date.today() - dt.timedelta(days=1)))
-
-        last = self.__group_tags(last)[0]
+        if last:
+            last = self.__group_tags(last)[0]
 
         if last and last["end_time"]: #will consider as last only if it is going on
            last = None
