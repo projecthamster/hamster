@@ -215,18 +215,30 @@ class Area(gtk.DrawingArea):
 class SampleArea(Area):
     def __init__(self):
         Area.__init__(self)
-        self.rect_x, self.rect_y = 10.5, 10.5
+        self.rect_x, self.rect_y = 100, -100
         self.rect_width, self.rect_height = 50, 50
+
+        self.text_y = -100
+        
         
     def on_expose(self):
         # on expose is called when we are ready to draw
         
         # fill_area is just a shortcut function
         # feel free to use self.context. move_to, line_to and others
+        self.font_size = 32
+        self.layout.set_text("Hello, World!")
+        
         self.fill_area(self.rect_x,
                        self.rect_y,
                        self.rect_width,
                        self.rect_height, (168, 186, 136))
+
+        self.context.move_to((self.width - self.layout.get_pixel_size()[0]) / 2,
+                             self.text_y)
+        
+        self.context.show_layout(self.layout)
+        
 
 class BasicWindow:
     # close the window and quit
@@ -254,6 +266,12 @@ class BasicWindow:
     
         self.window.add(box)
         self.window.show_all()
+        
+        # drop the hello on init
+        self.graphic.animate(self.graphic,
+                            dict(text_y = 120),
+                            duration = 0.7,
+                            easing = Easing.Bounce.easeOut)
 
 
     def on_go_clicked(self, widget):
@@ -272,6 +290,7 @@ class BasicWindow:
                              dict(rect_x = x, rect_y = y),
                              duration = 0.8,
                              easing = Easing.Elastic.easeOut)
+
 
 if __name__ == "__main__":
    example = BasicWindow()
