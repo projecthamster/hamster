@@ -2,12 +2,13 @@ hamsterdir = $(pyexecdir)/hamster/widgets
 hamster_PYTHON = \
 	__init__.py \
 	activityentry.py \
-	timeinput.py \
 	dateinput.py \
 	dayline.py \
-	timeline.py \
+	facttree.py \
 	reportchooserdialog.py \
-	tags.py
+	tags.py \
+	timeinput.py \
+	timeline.py
 
 clean-local:
 	rm -rf *.pyc *.pyo
