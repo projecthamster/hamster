@@ -142,27 +142,6 @@ def format_activity(name, category, description, pad_description = False):
     return text
     
 
-class ActivityColumn(gtk.TreeViewColumn):
-    def activity_painter(self, column, cell, model, iter):
-        activity_name = model.get_value(iter, self.name)
-        description = model.get_value(iter, self.description)
-        category = model.get_value(iter, self.category)
-        
-        markup = format_activity(activity_name, category, description)            
-        cell.set_property('markup', markup)
-        return
-        
-    def __init__(self, name, description, category = None):
-        gtk.TreeViewColumn.__init__(self)
-        
-        self.name, self.description, self.category = name, description, category
-        self.set_expand(True)
-        cell = gtk.CellRendererText()
-        self.pack_start(cell, True)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        self.set_cell_data_func(cell, self.activity_painter)
-
-
 def totals(iter, keyfunc, sumfunc):
     """groups items by field described in keyfunc and counts totals using value
        from sumfunc
