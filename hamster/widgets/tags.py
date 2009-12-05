@@ -320,9 +320,19 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         self.width = 200
         self.data = None
         
-        self.font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        self.font.set_size(pango.SCALE * 10)
+        self._font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self._font_size = 10
+    
+    @property
+    def font_size(self):
+        return self._font_size
+
+    @font_size.setter
+    def font_size(self, val):
+        self._font_size = val
+        self._font.set_size(pango.SCALE * self._font_size)
         
+    
     def do_set_property (self, pspec, value):
         setattr (self, pspec.name, value)
         
@@ -354,7 +364,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         
         if not self.layout:
             self.layout = context.create_layout()
-        self.layout.set_font_description(self.font)
+        self.layout.set_font_description(self._font)
         
         cur_x, cur_y = 4, 2
         for tag in tags:
@@ -387,7 +397,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
     def on_get_size (self, widget, cell_area = None):
 
-        if not self.width or not self.data["tags"]:
+        if not self.width or not self.data or not self.data["tags"]:
             height = 30
         else:
             pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
