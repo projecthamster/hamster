@@ -355,6 +355,9 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
     def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
         if not self.data: return
+
+        self.width = cell_area.width
+        
         context = window.cairo_create()
 
         if isinstance(self.data, dict):
@@ -421,21 +424,22 @@ class TagCellRenderer(gtk.GenericCellRenderer):
                 max_width = max(max_width, self.tag_size(tag)[0])
 
             self.width = max(self.width, max_width)
-            
-            
 
             cur_x, cur_y = 4, 2
             for tag in tags:
                 w, h = self.tag_size(tag)
-                if cur_x > 0 and cur_x + w >= self.width - 8:  #if we don't fit, we wrap
+                if cur_x > 4 and cur_x + w >= self.width - 8:  #if we don't fit, we wrap
                     cur_x = 4
                     cur_y += h + 6
                 
                 cur_x += w + 8 #some padding too, please
             
             height = cur_y + h + 4
+
+            self.height = height # this should actually trigger whole tree redraw if heights don't match
+            
         
-        return (0, 0, self.width, height)
+        return (0, 0, self.width, self.height)
     
 
 class Tag(object):
