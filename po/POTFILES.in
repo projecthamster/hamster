@@ -7,6 +7,9 @@ data/Hamster_Applet.xml
 data/hamster-applet.schemas.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/stats.ui
+[type: gettext/glade]data/stats_overview.ui
+[type: gettext/glade]data/stats_reports.ui
+[type: gettext/glade]data/stats_stats.ui
 hamster/about.py
 hamster/applet.py
 hamster/db.py
@@ -14,5 +17,8 @@ hamster/edit_activity.py
 hamster/preferences.py
 hamster/reports.py
 hamster/stats.py
+hamster/stats_overview.py
+hamster/stats_reports.py
+hamster/stats_stats.py
 hamster/stuff.py
 hamster/widgets/reportchooserdialog.py

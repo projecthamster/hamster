@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="reports_window">
+    <child>
+      <object class="GtkVBox" id="reports_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkToolbar" id="toolbar1">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <child>
+              <object class="GtkToolButton" id="reports_prev">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Previous</property>
+                <property name="stock_id">gtk-go-back</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="reports_home">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">This Week</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-home</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="reports_next">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Next</property>
+                <property name="stock_id">gtk-go-forward</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton2">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioToolButton" id="reports_day_view">
+                <property name="visible">True</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Day</property>
+                <property name="use_underline">True</property>
+                <property name="icon_widget">day_icon1</property>
+                <property name="active">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioToolButton" id="reports_week_view">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Week</property>
+                <property name="use_underline">True</property>
+                <property name="icon_widget">week_icon1</property>
+                <property name="active">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioToolButton" id="reports_month_view">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes"> _Month</property>
+                <property name="use_underline">True</property>
+                <property name="icon_widget">month_icon1</property>
+                <property name="active">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="&lt;separator&gt;1">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="report_button">
+                <property name="visible">True</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes">Save Report</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-save</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVBox" id="vbox6">
+            <property name="visible">True</property>
+            <property name="border_width">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="overview_label">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Overview&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+                <property name="single_line_mode">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHPaned" id="hpaned1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="position">300</property>
+                <property name="position_set">True</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="width_request">300</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="facts">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="enable_search">False</property>
+                        <signal name="key_press_event" handler="on_key_pressed"/>
+                        <signal name="row_activated" handler="on_facts_row_activated"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame1">
+                    <property name="visible">True</property>
+                    <property name="label_xalign">0</property>
+                    <child>
+                      <object class="GtkEventBox" id="graph_frame">
+                        <property name="visible">True</property>
+                        <signal name="size_allocate" handler="on_graph_frame_size_allocate"/>
+                        <child>
+                          <object class="GtkVBox" id="vbox4">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkVBox" id="graphs">
+                                <property name="width_request">390</property>
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="border_width">4</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">24</property>
+                                <property name="homogeneous">True</property>
+                                <child>
+                                  <object class="GtkFrame" id="fram1">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <object class="GtkHBox" id="week_box">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">9</property>
+                                        <property name="spacing">36</property>
+                                        <child>
+                                          <object class="GtkEventBox" id="totals_by_category">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEventBox" id="totals_by_day">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="dayview_caption">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">Week</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame" id="frame39">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <object class="GtkEventBox" id="totals_by_activity">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">12</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="label5">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">Activity</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="no_data_label">
+                                <property name="no_show_all">True</property>
+                                <property name="label" translatable="yes">No data for this interval</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label_item">
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">300</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkImage" id="day_icon1">
+    <property name="visible">True</property>
+    <property name="pixbuf">art/stock_calendar-view-day.png</property>
+  </object>
+  <object class="GtkImage" id="week_icon1">
+    <property name="visible">True</property>
+    <property name="pixbuf">art/stock_calendar-view-week.png</property>
+  </object>
+  <object class="GtkImage" id="month_icon1">
+    <property name="visible">True</property>
+    <property name="tooltip_text" translatable="yes">Show month</property>
+    <property name="pixbuf">art/stock_calendar-view-month.png</property>
+  </object>
+</interface>
