@@ -12,11 +12,12 @@
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
-              <object class="GtkToolButton" id="reports_prev">
+              <object class="GtkToolButton" id="prev">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Previous</property>
                 <property name="stock_id">gtk-go-back</property>
+                <signal name="clicked" handler="on_prev_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -24,12 +25,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="reports_home">
+              <object class="GtkToolButton" id="home">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">This Week</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-home</property>
+                <signal name="clicked" handler="on_home_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -37,11 +39,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="reports_next">
+              <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Next</property>
                 <property name="stock_id">gtk-go-forward</property>
+                <signal name="clicked" handler="on_next_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -58,13 +61,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioToolButton" id="reports_day_view">
+              <object class="GtkRadioToolButton" id="day">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes"> _Day</property>
                 <property name="use_underline">True</property>
                 <property name="icon_widget">day_icon1</property>
                 <property name="active">True</property>
+                <signal name="toggled" handler="on_day_toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -72,7 +76,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioToolButton" id="reports_week_view">
+              <object class="GtkRadioToolButton" id="week">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is_important">True</property>
@@ -80,6 +84,7 @@
                 <property name="use_underline">True</property>
                 <property name="icon_widget">week_icon1</property>
                 <property name="active">True</property>
+                <signal name="toggled" handler="on_week_toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -87,7 +92,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioToolButton" id="reports_month_view">
+              <object class="GtkRadioToolButton" id="month">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is_important">True</property>
@@ -95,6 +100,7 @@
                 <property name="use_underline">True</property>
                 <property name="icon_widget">month_icon1</property>
                 <property name="active">True</property>
+                <signal name="toggled" handler="on_month_toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -117,6 +123,7 @@
                 <property name="label" translatable="yes">Save Report</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save</property>
+                <signal name="clicked" handler="on_report_button_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

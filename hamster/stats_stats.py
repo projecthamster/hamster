@@ -63,6 +63,8 @@ class StatsBox(gtk.VBox):
         self.get_widget("explore_everything").add(self.timeline)
         self.get_widget("explore_everything").show_all()
 
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
         self.init_stats()
 
@@ -405,6 +407,17 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
                 self.bubbling = False
         
         self.stats(button.year)
+
+
+    def after_fact_update(self, event, date):
+        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
+        self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
+        
+        if self.get_widget("pages").get_current_page() == 0:
+            self.do_graph()
+        else:
+            self.stats()
+        
 
 
     def get_widget(self, name):

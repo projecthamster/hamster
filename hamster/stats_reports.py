@@ -45,103 +45,6 @@ import time
 from hamster.i18n import C_
 
 
-def parent_painter(column, cell, model, iter):
-    cell_text = "%s (&#215;%s)" % (stuff.escape_pango(model.get_value(iter, 0)), model.get_value(iter, 3))
-    
-    if model.iter_parent(iter) is None:
-        if model.get_path(iter) == (0,):
-            text = '<span weight="heavy">%s</span>' % cell_text
-        else:
-            text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
-            
-        cell.set_property('markup', text)
-
-    else:
-        cell.set_property('markup', cell_text)
-
-def duration_painter(column, cell, model, iter):
-    cell.set_property('xalign', 1)
-
-
-    text = model.get_value(iter, 2)
-    if model.iter_parent(iter) is None:
-        if model.get_path(iter) == (0,):
-            text = '<span weight="heavy">%s</span>' % text
-        else:
-            text = '<span weight="heavy" rise="-20000">%s</span>' % text
-    cell.set_property('markup', text)
-
-class TotalsTree(gtk.TreeView):
-    def __init__(self):
-        gtk.TreeView.__init__(self)
-        
-        self.set_headers_visible(False)
-        self.set_show_expanders(True)
-
-        # group name / activity name, tags, duration, occurences
-        self.set_model(gtk.TreeStore(str, gobject.TYPE_PYOBJECT, str, str))
-
-        # name
-        nameColumn = gtk.TreeViewColumn()
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_cell_data_func(nameCell, parent_painter)
-        self.append_column(nameColumn)
-
-        tag_cell = widgets.TagCellRenderer()
-        tag_cell.font_size = 8;
-        tagColumn = gtk.TreeViewColumn("", tag_cell, data=1)
-        tagColumn.set_expand(True)
-        self.append_column(tagColumn)
-
-        # duration
-        timeColumn = gtk.TreeViewColumn()
-        timeCell = gtk.CellRendererText()
-        timeColumn.pack_end(timeCell, True)
-        timeColumn.set_cell_data_func(timeCell, duration_painter)
-        self.append_column(timeColumn)
-
-
-        self.show()
-    
-    def clear(self):
-        self.model.clear()
-        
-    @property
-    def model(self):
-        return self.get_model()
-        
-    def add_total(self, total, parent = None):
-        duration = 24 * 60 * total[3].days + total[3].seconds / 60
-
-
-        self.model.append(parent, [total[1],
-                                   total[2],
-                                   stuff.format_duration(duration),
-                                   str(total[4])])
-
-    def add_group(self, group_label, totals):
-        total_duration = sum([total[3].seconds for total in totals]) / 60.0
-        total_occurences = sum([total[4] for total in totals])
-
-        
-        # adds group of facts with the given label
-        group_row = self.model.append(None,
-                                    [group_label,
-                                     None,
-                                     stuff.format_duration(total_duration),
-                                     str(total_occurences)])
-        
-        for total in totals:
-            self.add_total(total, group_row)
-
-        self.expand_all()
-
-
-        
-
 class ReportsBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
@@ -162,36 +65,6 @@ class ReportsBox(gtk.VBox):
         
         self.totals_tree = TotalsTree()
         self.get_widget("totals_tree_box").add(self.totals_tree)
-        
-        
-        
-        facts = runtime.storage.get_facts(self.start_date, self.end_date)
-
-
-        #first group by category, activity and tags
-        #sort before grouping
-        facts = sorted(facts, key = lambda fact:(fact["category"], fact["name"], fact["tags"]))
-
-        totals = []
-        for group, facts in groupby(facts, lambda fact:(fact["category"], fact["name"], fact["tags"])):
-            facts = list(facts)
-            total_duration = dt.timedelta()
-            for fact in facts:
-                total_duration += fact["delta"]
-            
-            group = list(group)
-            group.extend([total_duration, len(facts)])
-            totals.append(group)
-
-        # second iteration - group the interim result by category
-        for category, totals in groupby(totals, lambda total:total[0]):
-            self.totals_tree.add_group(category, list(totals))
-
-
-        return
-
-        self.fact_store = gtk.TreeStore(int, str, str, str, str, str, gobject.TYPE_PYOBJECT) 
-        self.setup_tree()
         
         
         #graphs
@@ -233,10 +106,10 @@ class ReportsBox(gtk.VBox):
 
         
         
-        self.week_view = self.get_widget("reports_week_view")
-        self.month_view = self.get_widget("reports_month_view")
+        self.week_view = self.get_widget("week")
+        self.month_view = self.get_widget("month")
         self.month_view.set_group(self.week_view)
-        self.day_view = self.get_widget("reports_day_view")
+        self.day_view = self.get_widget("day")
         self.day_view.set_group(self.week_view)
         
         #initiate the form in the week view
@@ -246,84 +119,47 @@ class ReportsBox(gtk.VBox):
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
-        selection = self.fact_tree.get_selection()
-        selection.connect('changed', self.on_fact_selection_changed,
-                          self.fact_store)
+
         self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
 
         self._gui.connect_signals(self)
-        self.fact_tree.grab_focus()
+        self.totals_tree.grab_focus()
 
         
         self.config = GconfStore()
         runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
         self.report_chooser = None
+        self.fill_totals_tree()
         self.do_graph()
 
-    def setup_tree(self):
-        def parent_painter(column, cell, model, iter):
-            cell_text = model.get_value(iter, 1)
-            if model.iter_parent(iter) is None:
-                if model.get_path(iter) == (0,):
-                    text = '<span weight="heavy">%s</span>' % cell_text
-                else:
-                    text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
-                    
-                cell.set_property('markup', text)
-    
-            else:
-                activity_name = stuff.escape_pango(cell_text)
-                description = stuff.escape_pango(model.get_value(iter, 4))
-                category = stuff.escape_pango(model.get_value(iter, 5))
-
-                markup = stuff.format_activity(activity_name,
-                                               category,
-                                               description,
-                                               pad_description = True)            
-                cell.set_property('markup', markup)
-
-        def duration_painter(column, cell, model, iter):
-            cell.set_property('xalign', 1)
-            cell.set_property('yalign', 0)
-    
-
-            text = model.get_value(iter, 2)
-            if model.iter_parent(iter) is None:
-                if model.get_path(iter) == (0,):
-                    text = '<span weight="heavy">%s</span>' % text
-                else:
-                    text = '<span weight="heavy" rise="-20000">%s</span>' % text
-            cell.set_property('markup', text)
-    
-
-        self.fact_tree = self.get_widget("facts")
-        self.fact_tree.set_headers_visible(False)
-        self.fact_tree.set_tooltip_column(1)
-        self.fact_tree.set_property("show-expanders", False)
-
-        # name
-        nameColumn = gtk.TreeViewColumn()
-        nameColumn.set_expand(True)
-        nameCell = gtk.CellRendererText()
-        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        nameColumn.pack_start(nameCell, True)
-        nameColumn.set_cell_data_func(nameCell, parent_painter)
-        self.fact_tree.append_column(nameColumn)
-
-        # duration
-        timeColumn = gtk.TreeViewColumn()
-        timeCell = gtk.CellRendererText()
-        timeColumn.pack_end(timeCell, True)
-        timeColumn.set_cell_data_func(timeCell, duration_painter)
 
 
+    def fill_totals_tree(self, facts = None):        
+        facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
 
 
-        self.fact_tree.append_column(timeColumn)
-        
-        self.fact_tree.set_model(self.fact_store)
-    
+        #first group by category, activity and tags
+        #sort before grouping
+        facts = sorted(facts, key = lambda fact:(fact["category"], fact["name"], fact["tags"]))
+
+        totals = []
+        for group, facts in groupby(facts, lambda fact:(fact["category"], fact["name"], fact["tags"])):
+            facts = list(facts)
+            total_duration = dt.timedelta()
+            for fact in facts:
+                total_duration += fact["delta"]
+            
+            group = list(group)
+            group.extend([total_duration, len(facts)])
+            totals.append(group)
+
+        self.totals_tree.clear()
+        # second iteration - group the interim result by category
+        for category, totals in groupby(totals, lambda total:total[0]):
+            self.totals_tree.add_group(category, list(totals))
+
+
     def on_graph_frame_size_allocate(self, widget, new_size):
         w = min(new_size.width / 4, 200)
         
@@ -331,48 +167,7 @@ class ReportsBox(gtk.VBox):
         self.category_chart.legend_width = w
         self.get_widget("totals_by_category").set_size_request(w + 40, -1)
     
-    def fill_tree(self, facts):
-        day_dict = {}
-        for day, facts in groupby(facts, lambda fact: fact["date"]):
-            day_dict[day] = sorted(list(facts),
-                                   key=lambda fact: fact["start_time"])
-        
-        for i in range((self.end_date - self.start_date).days  + 1):
-            current_date = self.start_date + dt.timedelta(i)
-            
-            # Date format for the label in overview window fact listing
-            # Using python datetime formatting syntax. See:
-            # http://docs.python.org/library/time.html#time.strftime
-            fact_date = current_date.strftime(C_("overview list", "%A, %b %d"))
-            
-            day_total = dt.timedelta()
-            for fact in day_dict.get(current_date, []):
-                day_total += fact["delta"]
 
-            day_row = self.fact_store.append(None,
-                                             [-1,
-                                              fact_date,
-                                              stuff.format_duration(day_total),
-                                              current_date.strftime('%Y-%m-%d'),
-                                              "",
-                                              "",
-                                              None])
-
-            for fact in day_dict.get(current_date, []):
-                self.fact_store.append(day_row,
-                                       [fact["id"],
-                                        fact["start_time"].strftime('%H:%M') + " " +
-                                        fact["name"],
-                                        stuff.format_duration(fact["delta"]),
-                                        fact["start_time"].strftime('%Y-%m-%d'),
-                                        fact["description"],
-                                        fact["category"],
-                                        fact
-                                        ])
-
-        self.fact_tree.expand_all()
-
-        
     def do_charts(self, facts):
         all_categories = self.popular_categories
         
@@ -490,9 +285,8 @@ class ReportsBox(gtk.VBox):
 
 
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
-        self.fact_store.clear()
-        
-        self.fill_tree(facts)
+
+        self.fill_totals_tree(facts)
 
         if not facts:
             self.get_widget("graphs").hide()
@@ -519,46 +313,9 @@ class ReportsBox(gtk.VBox):
         self.do_graph()
     
     def after_fact_update(self, event, date):
-        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
-        
-        if self.get_widget("pages").get_current_page() == 0:
-            self.do_graph()
-        else:
-            self.stats()
-        
-    def on_fact_selection_changed(self, selection, model):
-        """ enables and disables action buttons depending on selected item """
-        (model, iter) = selection.get_selected()
+        self.do_graph()
 
-        id = -1
-        if iter:
-            id = model[iter][0]
-
-        self.get_widget('remove').set_sensitive(id != -1)
-        self.get_widget('edit').set_sensitive(id != -1)
-
-        return True
-
-    def on_facts_row_activated(self, tree, path, column):
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
-        
-    def on_add_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        selected_date = self.view_date
-        if iter:
-            selected_date = model[iter][3].split("-")
-            selected_date = dt.date(int(selected_date[0]),
-                                    int(selected_date[1]),
-                                    int(selected_date[2]))
-
-        custom_fact = CustomFactController(self, selected_date)
-        custom_fact.show()
 
     def on_prev_clicked(self, button):
         if self.day_view.get_active():
@@ -734,6 +491,112 @@ class ReportsBox(gtk.VBox):
         
     def on_day_start_changed(self, event, new_minutes):
         self.do_graph()
+
+
+
+def parent_painter(column, cell, model, iter):
+    count = int(model.get_value(iter, 3))
+    
+    if count > 1:
+        cell_text = "%s (&#215;%s)" % (stuff.escape_pango(model.get_value(iter, 0)), count)
+    else:
+        cell_text = "%s" % stuff.escape_pango(model.get_value(iter, 0))
+        
+    
+    if model.iter_parent(iter) is None:
+        if model.get_path(iter) == (0,):
+            text = '<span weight="heavy">%s</span>' % cell_text
+        else:
+            text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
+            
+        cell.set_property('markup', text)
+
+    else:
+        cell.set_property('markup', cell_text)
+
+def duration_painter(column, cell, model, iter):
+    cell.set_property('xalign', 1)
+
+
+    text = model.get_value(iter, 2)
+    if model.iter_parent(iter) is None:
+        if model.get_path(iter) == (0,):
+            text = '<span weight="heavy">%s</span>' % text
+        else:
+            text = '<span weight="heavy" rise="-20000">%s</span>' % text
+    cell.set_property('markup', text)
+
+class TotalsTree(gtk.TreeView):
+    def __init__(self):
+        gtk.TreeView.__init__(self)
+        
+        self.set_headers_visible(False)
+        self.set_show_expanders(True)
+
+        # group name / activity name, tags, duration, occurences
+        self.set_model(gtk.TreeStore(str, gobject.TYPE_PYOBJECT, str, str))
+        
+        # name
+        nameColumn = gtk.TreeViewColumn()
+        nameColumn.set_expand(True)
+        nameCell = gtk.CellRendererText()
+        #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        nameColumn.pack_start(nameCell, True)
+        nameColumn.set_cell_data_func(nameCell, parent_painter)
+        self.append_column(nameColumn)
+
+        tag_cell = widgets.TagCellRenderer()
+        tag_cell.font_size = 8;
+        tagColumn = gtk.TreeViewColumn("", tag_cell, data=1)
+        tagColumn.set_expand(True)
+
+        self.append_column(tagColumn)
+
+        # duration
+        timeColumn = gtk.TreeViewColumn()
+        timeCell = gtk.CellRendererText()
+        timeColumn.pack_end(timeCell, True)
+        timeColumn.set_cell_data_func(timeCell, duration_painter)
+        self.append_column(timeColumn)
+
+
+        self.show()
+    
+    def clear(self):
+        self.model.clear()
+        
+    @property
+    def model(self):
+        return self.get_model()
+        
+    def add_total(self, total, parent = None):
+        duration = 24 * 60 * total[3].days + total[3].seconds / 60
+
+
+        self.model.append(parent, [total[1],
+                                   total[2],
+                                   stuff.format_duration(duration),
+                                   str(total[4])])
+
+    def add_group(self, group_label, totals):
+        total_duration = sum([total[3].seconds for total in totals]) / 60.0
+        total_occurences = sum([total[4] for total in totals])
+
+        
+        # adds group of facts with the given label
+        group_row = self.model.append(None,
+                                    [group_label,
+                                     None,
+                                     stuff.format_duration(total_duration),
+                                     str(total_occurences)])
+        
+        for total in totals:
+            self.add_total(total, group_row)
+
+        self.expand_all()
+
+
+        
 
 
 
