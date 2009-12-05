@@ -139,6 +139,7 @@ class Chart(graphics.Area):
         # other stuff
         self.bars = []
         self.keys = []
+        self.data = None
         self.stack_keys = []
         
         self.key_colors = {} # key:color dictionary. if key's missing will grab basecolor
@@ -592,6 +593,10 @@ class HorizontalBarChart(Chart):
 class HorizontalDayChart(Chart):
     """Pretty much a horizontal bar chart, except for values it expects tuple
     of start and end time, and the whole thing hangs in air"""
+    def __init__(self, *args, **kwargs):
+        Chart.__init__(self, *args, **kwargs)
+        self.start_time, self.end_time = None, None
+    
     def plot_day(self, keys, data, start_time = None, end_time = None):
         self.keys, self.data = keys, data
         self.start_time, self.end_time = start_time, end_time
@@ -600,6 +605,7 @@ class HorizontalDayChart(Chart):
     
     def on_expose(self):
         context = self.context
+        
         Chart.on_expose(self)
         rowcount, keys = len(self.keys), self.keys
         
@@ -633,6 +639,8 @@ class HorizontalDayChart(Chart):
             return
 
         
+        self.context.translate(0.5, 0.5)
+
         bar_width = int(self.graph_height / float(rowcount))
         bar_width = min(bar_width, self.max_bar_width)
 
@@ -644,13 +652,10 @@ class HorizontalDayChart(Chart):
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
         
-        context.set_line_width(0)
-
         # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
 
         factor = max_bar_size / float(end_hour - start_hour)
-
 
         for i, label in enumerate(keys):
             self.set_color(graphics.Colors.aluminium[5])        
@@ -665,7 +670,7 @@ class HorizontalDayChart(Chart):
 
             gap = bar_width * 0.05
 
-            bar_y = round(self.graph_y + (bar_width * i) + gap)
+            bar_y = self.graph_y + round((bar_width * i) + gap)
 
             
             bar_height = round(bar_width - (gap * 2))
@@ -677,8 +682,8 @@ class HorizontalDayChart(Chart):
                 bar_x = round((row[0]- start_hour) * factor)
                 bar_size = round((row[1] - start_hour) * factor - bar_x)
                 
-                self.draw_bar(self.graph_x + bar_x,
-                              bar_y,
+                self.draw_bar(self.graph_x + bar_x + 0.5,
+                              bar_y + 0.5,
                               bar_size,
                               bar_height,
                               base_color)
@@ -690,7 +695,7 @@ class HorizontalDayChart(Chart):
 
         pace = ((end_hour - start_hour) / 3) / 60 * 60
         for i in range(start_hour + 60, end_hour, pace):
-            x = (i - start_hour) * factor
+            x = round((i - start_hour) * factor)
             
             minutes = i % (24 * 60)
 
