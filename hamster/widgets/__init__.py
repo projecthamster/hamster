@@ -35,6 +35,8 @@ from tags import TagCellRenderer
 
 from reportchooserdialog import ReportChooserDialog
 
+from facttree import FactTree
+
 # handy wrappers
 def add_hint(entry, hint):
     entry.hint = hint        
