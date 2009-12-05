@@ -45,6 +45,102 @@ import time
 from hamster.i18n import C_
 
 
+def parent_painter(column, cell, model, iter):
+    cell_text = "%s (&#215;%s)" % (stuff.escape_pango(model.get_value(iter, 0)), model.get_value(iter, 3))
+    
+    if model.iter_parent(iter) is None:
+        if model.get_path(iter) == (0,):
+            text = '<span weight="heavy">%s</span>' % cell_text
+        else:
+            text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
+            
+        cell.set_property('markup', text)
+
+    else:
+        cell.set_property('markup', cell_text)
+
+def duration_painter(column, cell, model, iter):
+    cell.set_property('xalign', 1)
+
+
+    text = model.get_value(iter, 2)
+    if model.iter_parent(iter) is None:
+        if model.get_path(iter) == (0,):
+            text = '<span weight="heavy">%s</span>' % text
+        else:
+            text = '<span weight="heavy" rise="-20000">%s</span>' % text
+    cell.set_property('markup', text)
+
+class TotalsTree(gtk.TreeView):
+    def __init__(self):
+        gtk.TreeView.__init__(self)
+        
+        self.set_headers_visible(False)
+        self.set_show_expanders(True)
+
+        # group name / activity name, tags, duration, occurences
+        self.set_model(gtk.TreeStore(str, gobject.TYPE_PYOBJECT, str, str))
+
+        # name
+        nameColumn = gtk.TreeViewColumn()
+        nameColumn.set_expand(True)
+        nameCell = gtk.CellRendererText()
+        #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        nameColumn.pack_start(nameCell, True)
+        nameColumn.set_cell_data_func(nameCell, parent_painter)
+        self.append_column(nameColumn)
+
+        tag_cell = widgets.TagCellRenderer()
+        tag_cell.font_size = 8;
+        tagColumn = gtk.TreeViewColumn("", tag_cell, data=1)
+        tagColumn.set_expand(True)
+        self.append_column(tagColumn)
+
+        # duration
+        timeColumn = gtk.TreeViewColumn()
+        timeCell = gtk.CellRendererText()
+        timeColumn.pack_end(timeCell, True)
+        timeColumn.set_cell_data_func(timeCell, duration_painter)
+        self.append_column(timeColumn)
+
+
+        self.show()
+    
+    def clear(self):
+        self.model.clear()
+        
+    @property
+    def model(self):
+        return self.get_model()
+        
+    def add_total(self, total, parent = None):
+        duration = 24 * 60 * total[3].days + total[3].seconds / 60
+
+
+        self.model.append(parent, [total[1],
+                                   total[2],
+                                   stuff.format_duration(duration),
+                                   str(total[4])])
+
+    def add_group(self, group_label, totals):
+        total_duration = sum([total[3].seconds for total in totals]) / 60.0
+        total_occurences = sum([total[4] for total in totals])
+
+        
+        # adds group of facts with the given label
+        group_row = self.model.append(None,
+                                    [group_label,
+                                     None,
+                                     stuff.format_duration(total_duration),
+                                     str(total_occurences)])
+        
+        for total in totals:
+            self.add_total(total, group_row)
+
+        self.expand_all()
+
+
+        
 
 class ReportsBox(gtk.VBox):
     def __init__(self):
@@ -63,7 +159,36 @@ class ReportsBox(gtk.VBox):
         
         self.end_date = self.start_date + dt.timedelta(6)
 
+        
+        self.totals_tree = TotalsTree()
+        self.get_widget("totals_tree_box").add(self.totals_tree)
+        
+        
+        
+        facts = runtime.storage.get_facts(self.start_date, self.end_date)
 
+
+        #first group by category, activity and tags
+        #sort before grouping
+        facts = sorted(facts, key = lambda fact:(fact["category"], fact["name"], fact["tags"]))
+
+        totals = []
+        for group, facts in groupby(facts, lambda fact:(fact["category"], fact["name"], fact["tags"])):
+            facts = list(facts)
+            total_duration = dt.timedelta()
+            for fact in facts:
+                total_duration += fact["delta"]
+            
+            group = list(group)
+            group.extend([total_duration, len(facts)])
+            totals.append(group)
+
+        # second iteration - group the interim result by category
+        for category, totals in groupby(totals, lambda total:total[0]):
+            self.totals_tree.add_group(category, list(totals))
+
+
+        return
 
         self.fact_store = gtk.TreeStore(int, str, str, str, str, str, gobject.TYPE_PYOBJECT) 
         self.setup_tree()
@@ -609,4 +734,16 @@ class ReportsBox(gtk.VBox):
         
     def on_day_start_changed(self, event, new_minutes):
         self.do_graph()
+
+
+
+if __name__ == "__main__":
+    gtk.window_set_default_icon_name("hamster-applet")    
+    window = gtk.Window()
+    window.set_title("Hamster - reports")
+    window.set_size_request(800, 600)
+    window.add(ReportsBox())
+
+    window.show_all()    
+    gtk.main()    
 

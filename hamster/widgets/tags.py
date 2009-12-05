@@ -21,9 +21,9 @@ import gtk, gobject
 import pango, cairo
 from math import pi
 
-from hamster import graphics
+from .hamster import graphics
 
-from hamster.configuration import runtime
+from .hamster.configuration import runtime
 
 class TagsEntry(gtk.Entry):
     __gsignals__ = {
@@ -317,11 +317,12 @@ class TagCellRenderer(gtk.GenericCellRenderer):
     def __init__(self):
         gtk.GenericCellRenderer.__init__(self)
         self.height = 25
-        self.width = 200
+        self.width = 80 #that's like, two tags or something
         self.data = None
         
         self._font = pango.FontDescription(gtk.Style().font_desc.to_string())
         self._font_size = 10
+        self.layout = None
     
     @property
     def font_size(self):
@@ -356,7 +357,10 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         if not self.data: return
         context = window.cairo_create()
 
-        tags = self.data["tags"]
+        if isinstance(self.data, dict):
+            tags = self.data["tags"]
+        else:
+            tags = self.data
 
         x, y, width, h = cell_area
 
@@ -396,8 +400,12 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         """
 
     def on_get_size (self, widget, cell_area = None):
+        if isinstance(self.data, dict):
+            tags = self.data["tags"]
+        else:
+            tags = self.data
 
-        if not self.width or not self.data or not self.data["tags"]:
+        if not self.width or not tags:
             height = 30
         else:
             pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
@@ -407,11 +415,20 @@ class TagCellRenderer(gtk.GenericCellRenderer):
             default_font.set_size(pango.SCALE * 10)
             self.layout.set_font_description(default_font)
 
+            #make sure we fit in
+            max_width = 0
+            for tag in tags:
+                max_width = max(max_width, self.tag_size(tag)[0])
+
+            self.width = max(self.width, max_width)
+            
+            
+
             cur_x, cur_y = 4, 2
-            for tag in self.data["tags"]:
+            for tag in tags:
                 w, h = self.tag_size(tag)
-                if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
-                    cur_x = 5
+                if cur_x > 0 and cur_x + w >= self.width - 8:  #if we don't fit, we wrap
+                    cur_x = 4
                     cur_y += h + 6
                 
                 cur_x += w + 8 #some padding too, please

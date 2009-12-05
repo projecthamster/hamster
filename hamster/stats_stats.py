@@ -414,3 +414,14 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
 
 
+if __name__ == "__main__":
+    gtk.window_set_default_icon_name("hamster-applet")
+    
+    window = gtk.Window()
+    window.set_title("Hamster - statistics")
+    window.set_size_request(800, 600)
+    
+    window.add(StatsBox())
+
+    window.show_all()    
+    gtk.main()    
