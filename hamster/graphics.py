@@ -106,18 +106,14 @@ class Area(gtk.DrawingArea):
         self.context.rectangle(x, y, w, h)
     
     def fill_area(self, x, y, w, h, color, opacity = 0):
-        self.context.save()
         self.__rectangle(x, y, w, h, color, opacity)
         self.context.fill()
-        self.context.restore()
         
     def fill_rectangle(self, x, y, w, h, color, opacity = 0):
-        self.context.save()
         self.__rectangle(x, y, w, h, color, opacity)
         self.context.fill_preserve()
         self.set_color(color)
         self.context.stroke()
-        self.context.restore()
 
     def set_text(self, text):
         # sets text and returns width and height of the layout
