@@ -20,33 +20,11 @@
 import gtk, gobject
 import datetime as dt
 
-from hamster.configuration import runtime
-
-from hamster import stuff
-from hamster.stuff import format_duration, format_activity
+from .hamster import stuff
+from .hamster.stuff import format_duration, format_activity
 from tags import TagCellRenderer
 
 import pango
-
-class ActivityColumn(gtk.TreeViewColumn):
-    def __init__(self, name, description, category = None):
-        gtk.TreeViewColumn.__init__(self)
-        
-        self.name, self.description, self.category = name, description, category
-        self.set_expand(True)
-        cell = gtk.CellRendererText()
-        self.pack_start(cell, True)
-        cell.set_property("ellipsize", pango.ELLIPSIZE_END)
-        self.set_cell_data_func(cell, self.activity_painter)
-
-    def activity_painter(self, column, cell, model, iter):
-        activity_name = model.get_value(iter, self.name)
-        description = model.get_value(iter, self.description)
-        category = model.get_value(iter, self.category)
-        
-        markup = format_activity(activity_name, category, description)            
-        cell.set_property('markup', markup)
-        return
 
 def parent_painter(column, cell, model, iter):
     cell_text = model.get_value(iter, 1)
@@ -94,11 +72,6 @@ def action_painter(column, cell, model, iter):
 
 
 class FactTree(gtk.TreeView):
-    __gsignals__ = {
-        'value-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
-
     def __init__(self):
         gtk.TreeView.__init__(self)
         
@@ -113,14 +86,16 @@ class FactTree(gtk.TreeView):
         nameColumn = gtk.TreeViewColumn()
         nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
-        nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
+        #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)
         nameColumn.set_cell_data_func(nameCell, parent_painter)
         self.append_column(nameColumn)
 
         tag_cell = TagCellRenderer()
         tag_cell.font_size = 8;
-        self.append_column(gtk.TreeViewColumn("", tag_cell, data=6))
+        tagColumn = gtk.TreeViewColumn("", tag_cell, data=6)
+        tagColumn.set_expand(True)
+        self.append_column(tagColumn)
         
 
         # duration
@@ -136,9 +111,6 @@ class FactTree(gtk.TreeView):
         self.edit_column.set_cell_data_func(edit_cell, action_painter)
         self.append_column(self.edit_column)
 
-
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('fact_updated', self.after_activity_update)
 
         self.show()
     
@@ -184,6 +156,3 @@ class FactTree(gtk.TreeView):
 
         self.expand_all()
 
-
-    def after_activity_update(self, event, whatnot):
-        print "catch me!"

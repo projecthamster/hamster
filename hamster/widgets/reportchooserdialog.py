@@ -24,9 +24,9 @@ pygtk.require('2.0')
 import os
 import gtk, gobject
 
-from hamster import stuff
-from hamster.i18n import C_
-from hamster.configuration import runtime
+from .hamster import stuff
+from .hamster.i18n import C_
+from .hamster.configuration import runtime
 
 from dateinput import DateInput
 

@@ -20,8 +20,8 @@
 import gtk
 import gobject
 
-from hamster import stuff
-from hamster import graphics
+from .hamster import stuff
+from .hamster import graphics
 
 import time
 import datetime as dt
