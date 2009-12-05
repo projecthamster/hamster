@@ -135,7 +135,7 @@ def format_activity(name, category, description, pad_description = False):
     if description:
         text+= "\n"
         if pad_description:
-            text += "          "
+            text += " " * 23
 
         text += """<span style="italic" size="small">%s</span>""" % description
         
