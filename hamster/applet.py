@@ -241,9 +241,9 @@ class HamsterApplet(object):
         self.tag_box = widgets.TagBox(interactive = False)
         self.get_widget("tag_box").add(self.tag_box)
 
+        self.treeview = widgets.FactTree()
         
-        # init today's tree
-        self.setup_activity_tree()
+        self.get_widget("today_box").add(self.treeview)
 
         # DBus Setup
         try:
@@ -296,37 +296,6 @@ class HamsterApplet(object):
             self.notify = Notifier(self.button)
             runtime.dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
             self.on_notify_interval_changed(None, self.config.get_notify_interval())
-
-
-
-    def setup_activity_tree(self):
-        self.treeview = self._gui.get_object('today')
-        # ID, Time, Name, Duration, Date, Description, Category
-        self.treeview.set_model(gtk.ListStore(int, str, str, str, str, str, str, gobject.TYPE_PYOBJECT))
-
-        self.treeview.append_column(gtk.TreeViewColumn("Time",
-                                                       gtk.CellRendererText(),
-                                                       text=2))
-
-        self.treeview.append_column(stuff.ActivityColumn(name=1,
-                                                         description=5,
-                                                         category=6))
-
-
-        tag_cell = widgets.TagCellRenderer()
-        self.treeview.append_column(gtk.TreeViewColumn(_("Tags"), tag_cell, data=7))
-        
-
-        duration_cell = gtk.CellRendererText()
-        duration_cell.set_property("xalign", 1)
-        timeColumn = gtk.TreeViewColumn(_("Duration"), duration_cell, text=3)
-        self.treeview.append_column(timeColumn)
-
-        edit_cell = gtk.CellRendererPixbuf()
-        edit_cell.set_property("stock_id", "gtk-edit")
-        edit_cell.set_property("mode", gtk.CELL_RENDERER_MODE_ACTIVATABLE)
-        self.edit_column = gtk.TreeViewColumn("", edit_cell)
-        self.treeview.append_column(self.edit_column)
 
 
     """UI functions"""
@@ -423,44 +392,30 @@ class HamsterApplet(object):
 
         self.last_activity = runtime.storage.get_last_activity()
 
-        fact_store = self.treeview.get_model()
-        fact_store.clear()
+        self.treeview.clear()
+
         facts = runtime.storage.get_facts(today)
         
         if len(facts) > 10:
-            self._gui.get_object("todays_scroll").set_size_request(-1, 250)
-            self._gui.get_object("todays_scroll").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+            self._gui.get_object("today_box").set_size_request(-1, 250)
+            self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         else:
-            self._gui.get_object("todays_scroll").set_size_request(-1, -1)
-            self._gui.get_object("todays_scroll").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
+            self._gui.get_object("today_box").set_size_request(-1, -1)
+            self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
             
         by_category = {}
         for fact in facts:
             duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
             by_category[fact['category']] = \
                           by_category.setdefault(fact['category'], 0) + duration
-
-            if fact["end_time"]:
-                fact_time = "%s - %s " % (fact["start_time"].strftime("%H:%M"),
-                                       fact["end_time"].strftime("%H:%M"))
-            else:
-                fact_time = fact["start_time"].strftime("%H:%M ")
-
-            fact_store.append([fact['id'],
-                               stuff.escape_pango(fact['name']), 
-                               fact_time, 
-                               "%s" % stuff.format_duration(duration),
-                               "",
-                               stuff.escape_pango(fact["description"]),
-                               stuff.escape_pango(fact["category"]),
-                               fact])
+            self.treeview.add_fact(fact)
 
         
         if not facts:
-            self._gui.get_object("todays_scroll").hide()
+            self._gui.get_object("today_box").hide()
             self._gui.get_object("fact_totals").set_text(_("No records today"))
         else:
-            self._gui.get_object("todays_scroll").show()
+            self._gui.get_object("today_box").show()
             
             total_strings = []
             for category in by_category:
