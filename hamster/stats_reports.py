@@ -155,9 +155,47 @@ class ReportsBox(gtk.VBox):
             totals.append(group)
 
         self.totals_tree.clear()
+        
         # second iteration - group the interim result by category
+        i = 0
         for category, totals in groupby(totals, lambda total:total[0]):
-            self.totals_tree.add_group(category, list(totals))
+            i+=1
+            totals = list(totals)
+
+
+            category_duration = sum([stuff.duration_minutes(total[3]) for total in totals])
+            category_occurences = sum([total[4] for total in totals])
+    
+            
+            # adds group of facts with the given label
+            category_row = self.totals_tree.model.append(None,
+                                                         [category,
+                                                          None,
+                                                          stuff.format_duration(category_duration),
+                                                          str(category_occurences)])
+
+            #now group by activity too
+            for group, totals in groupby(totals, lambda total:(total[0], total[1])):
+                totals = list(totals)
+    
+                if len(totals) > 1:
+                    activity_duration = sum([stuff.duration_minutes(total[3]) for total in totals])
+                    activity_occurences = sum([total[4] for total in totals])
+                    
+            
+                    # adds group of facts with the given label
+                    activity_row = self.totals_tree.model.append(category_row,
+                                                                 [group[1],
+                                                                  None,
+                                                                  stuff.format_duration(activity_duration),
+                                                                  str(activity_occurences)])
+                    
+                    for total in totals:
+                        self.totals_tree.add_total(total, activity_row)
+                else:
+                    self.totals_tree.add_total(totals[0], category_row)
+            
+            self.totals_tree.expand_row((i-1,), False)
 
 
     def on_graph_frame_size_allocate(self, widget, new_size):
@@ -239,7 +277,7 @@ class ReportsBox(gtk.VBox):
             start_date_str = self.view_date.strftime(C_("single day overview",
                                                         "%B %d, %Y"))
             # Overview label if looking on single day
-            overview_label = _(u"Overview for %(date)s") % \
+            overview_label = _(u"Totals for %(date)s") % \
                                                       ({"date": start_date_str})
         else:
             dates_dict = stuff.dateDict(self.start_date, "start_")
@@ -250,19 +288,19 @@ class ReportsBox(gtk.VBox):
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
                 # see http://docs.python.org/library/time.html#time.strftime
-                overview_label = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+                overview_label = _(u"Totals for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
             elif self.start_date.month != self.end_date.month:
                 # overview label if start and end month do not match
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
                 # see http://docs.python.org/library/time.html#time.strftime
-                overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+                overview_label = _(u"Totals for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
             else:
                 # overview label for interval in same month
                 # letter after prefixes (start_, end_) is the one of
                 # standard python date formatting ones- you can use all of them
                 # see http://docs.python.org/library/time.html#time.strftime
-                overview_label = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+                overview_label = _(u"Totals for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
         if self.week_view.get_active():
             dayview_caption = _("Week")
@@ -570,7 +608,7 @@ class TotalsTree(gtk.TreeView):
         return self.get_model()
         
     def add_total(self, total, parent = None):
-        duration = 24 * 60 * total[3].days + total[3].seconds / 60
+        duration = stuff.duration_minutes(total[3])
 
 
         self.model.append(parent, [total[1],
@@ -579,7 +617,7 @@ class TotalsTree(gtk.TreeView):
                                    str(total[4])])
 
     def add_group(self, group_label, totals):
-        total_duration = sum([total[3].seconds for total in totals]) / 60.0
+        total_duration = sum([stuff.duration_minutes(total[3]) for total in totals])
         total_occurences = sum([total[4] for total in totals])
 
         

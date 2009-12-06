@@ -122,7 +122,7 @@ class FactTree(gtk.TreeView):
         return self.get_model()
         
     def add_fact(self, fact, parent = None):
-        duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
+        duration = stuff.duration_minutes(fact["delta"]) / 60
 
         if fact["end_time"]:
             fact_time = "%s - %s " % (fact["start_time"].strftime("%H:%M"),
@@ -139,7 +139,7 @@ class FactTree(gtk.TreeView):
                                    fact])
 
     def add_group(self, group_label, facts):
-        total = sum([fact["delta"].seconds for fact in facts]) / 60.0
+        total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
         
         # adds group of facts with the given label
         group_row = self.model.append(None,
