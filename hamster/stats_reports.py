@@ -576,7 +576,6 @@ class TotalsTree(gtk.TreeView):
         
         # name
         nameColumn = gtk.TreeViewColumn()
-        nameColumn.set_expand(True)
         nameCell = gtk.CellRendererText()
         #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)

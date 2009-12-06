@@ -410,6 +410,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
         if not self.width or not tags:
             height = 30
+            min_width = 80
         else:
             pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
             context = pixmap.cairo_create()
@@ -419,11 +420,10 @@ class TagCellRenderer(gtk.GenericCellRenderer):
             self.layout.set_font_description(default_font)
 
             #make sure we fit in
-            max_width = 0
+            min_width = 0
             for tag in tags:
-                max_width = max(max_width, self.tag_size(tag)[0])
+                min_width = max(min_width, self.tag_size(tag)[0])
 
-            self.width = max(self.width, max_width)
 
             cur_x, cur_y = 4, 2
             for tag in tags:
@@ -433,13 +433,14 @@ class TagCellRenderer(gtk.GenericCellRenderer):
                     cur_y += h + 6
                 
                 cur_x += w + 8 #some padding too, please
+
             
             height = cur_y + h + 4
 
             self.height = height # this should actually trigger whole tree redraw if heights don't match
             
         
-        return (0, 0, self.width, self.height)
+        return (0, 0, min_width, self.height)
     
 
 class Tag(object):

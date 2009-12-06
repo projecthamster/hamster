@@ -6,6 +6,9 @@
   <object class="GtkWindow" id="tabs_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Overview - Hamster</property>
+    <property name="window_position">center</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
     <child>
       <object class="GtkNotebook" id="window_tabs">
         <property name="visible">True</property>
