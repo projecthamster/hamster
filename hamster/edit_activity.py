@@ -163,7 +163,7 @@ class CustomFactController:
         if not activity:
             return False
 
-        tags = self.new_tags.get_text()
+        tags = self.new_tags.get_text().decode('utf8', 'replace')
         
         start_time = self._get_datetime("start")
 
@@ -226,7 +226,7 @@ class CustomFactController:
         self.get_widget("end_date_label").set_text(some_date.strftime("%x"))
     
     def validate_fields(self, widget = None):
-        activity_text = self.new_name.get_text()
+        activity_text = self.new_name.get_text().decode('utf8', 'replace')
         start_time = self._get_datetime("start")
 
         end_time = self._get_datetime("end")

@@ -167,7 +167,8 @@ class MainWindow(object):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
-        runtime.storage.add_fact(self.new_name.get_text().encode("utf-8"), self.new_tags.get_text())
+        runtime.storage.add_fact(self.new_name.get_text().decode('utf8', 'replace'),
+                                 self.new_tags.get_text().decode('utf8', 'replace'))
         self.new_name.set_text("")
         self.new_tags.set_text("")
 

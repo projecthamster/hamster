@@ -666,7 +666,7 @@ class PreferencesEditor:
         self.get_widget("notify_on_idle").set_sensitive(value <= 120)
     
     def on_keybinding_changed(self, textbox):
-        self.config.set_keybinding(textbox.get_text())
+        self.config.set_keybinding(textbox.get_text().decode('utf8', 'replace'))
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.get_time()

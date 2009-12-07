@@ -173,14 +173,14 @@ class ActivityEntry(gtk.Entry):
         else:
             cursor = self.get_position()
             
-        if self.activities and self.categories and self.filter == self.get_text()[:cursor]:
+        if self.activities and self.categories and self.filter == self.get_text().decode('utf8', 'replace')[:cursor]:
             return #same thing, no need to repopulate
 
         self.activities = self.activities or runtime.storage.get_autocomplete_activities()
         self.categories = self.categories or runtime.storage.get_category_list()
 
         
-        self.filter = self.get_text()[:cursor]
+        self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
         
         input_activity = stuff.parse_activity_input(self.filter)
         
@@ -198,14 +198,15 @@ class ActivityEntry(gtk.Entry):
         store.clear()
 
         if self.filter.find("@") > 0:
-            key = self.filter[self.filter.find("@")+1:].lower()
+            key = self.filter[self.filter.find("@")+1:].decode('utf8', 'replace').lower()
             for category in self.categories:
-                if key in category['name'].lower():
+                if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
                     store.append([fillable, category['name'], fillable, time])
         else:
+            key = input_activity.activity_name.decode('utf8', 'replace').lower()
             for activity in self.activities:
-                if input_activity.activity_name == "" or activity['name'].startswith(input_activity.activity_name): #self.filter in activity['name']:
+                if input_activity.activity_name == "" or activity['name'].decode('utf8', 'replace').lower().startswith(key):
                     fillable = activity['name']
                     if activity['category']:
                         fillable += "@%s" % activity['category']

@@ -516,16 +516,6 @@ class HamsterApplet(object):
     def on_toggle(self, widget):
         self.__show_toggle(None, self.button.get_active())
 
-    def on_activity_entered(self, component):
-        """fires, when user writes activity by hand"""
-        activity_name = self.new_name.get_text().decode('utf8', 'replace')
-        
-        if activity_name == "":
-            return
-        
-        runtime.storage.add_fact(activity_name)
-        runtime.dispatcher.dispatch('panel_visible', False)
-
     """listview events"""
     def on_todays_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):
@@ -684,7 +674,8 @@ Now, start tracking!
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
-        runtime.storage.add_fact(self.new_name.get_text().encode("utf-8"), self.new_tags.get_text())
+        runtime.storage.add_fact(self.new_name.get_text().decode("utf8", "replace"),
+                                 self.new_tags.get_text().decode("utf8", "replace"))
         self.new_name.set_text("")
         self.new_tags.set_text("")
         runtime.dispatcher.dispatch('panel_visible', False)
