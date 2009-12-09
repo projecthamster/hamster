@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-11-19 12:08+0000\n"
-"PO-Revision-Date: 2009-11-23 21:29+0200\n"
+"POT-Creation-Date: 2009-12-07 22:31+0000\n"
+"PO-Revision-Date: 2009-12-09 08:22+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -37,17 +37,8 @@ msgstr "Üle_vaade"
 msgid "_Preferences"
 msgstr "_Eelistused"
 
-msgid "<b>Activities</b>"
-msgstr "<b>Tegevused</b>"
-
-msgid "<b>Day\t</b>"
-msgstr "<b>Päev\t</b>"
-
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Globaalne kiirklahv</b>"
-
-msgid "<b>Tracking</b>"
-msgstr "<b>Jälgimine</b>"
+msgid "Activities"
+msgstr "Tegevused"
 
 msgid "Activity list"
 msgstr "Tegevuste nimekiri"
@@ -61,6 +52,9 @@ msgstr "Kategooria lisamine"
 msgid "Also remind when no activity is set"
 msgstr "Meeldetuletused ka tegevuse puudumise korral"
 
+msgid "Categories and Tags"
+msgstr "Kategooriad ja sildid"
+
 msgid "Category list"
 msgstr "Kategooriate nimekiri"
 
@@ -69,6 +63,12 @@ msgstr "Tegevuse muutmine"
 
 msgid "Edit category"
 msgstr "Kategooria muutmine"
+
+msgid "General"
+msgstr "Üldine"
+
+msgid "Global Hotkey"
+msgstr "Globaalne kiirklahv"
 
 msgid "Move activity down"
 msgstr "Tegevuse liigutamine allapoole"
@@ -94,8 +94,14 @@ msgstr "Seiskamisel lõpetatakse jälgimine"
 msgid "Stop tracking when computer becomes idle"
 msgstr "Arvuti jõudeoleku korral tegevuste jälgimine peatatakse"
 
+msgid "Tags that should appear in autocomplete"
+msgstr ""
+
 msgid "Time Tracker Preferences"
 msgstr "Ajajälgija eelistused"
+
+msgid "Tracking"
+msgstr "Jälgimine"
 
 msgid "_Activities"
 msgstr "_Tegevused"
@@ -109,11 +115,11 @@ msgstr "Tegevus:"
 msgid "Add Earlier Activity"
 msgstr "Varasema tegevuse lisamine"
 
-msgid "Description:"
-msgstr "Kirjeldus:"
-
 msgid "Preview:"
 msgstr "Eelvaade:"
+
+msgid "Tags:"
+msgstr "Sildid:"
 
 msgid "Time:"
 msgstr "Aeg:"
@@ -169,18 +175,6 @@ msgstr "Jõudeoleku korral jälgimise seiskamine"
 msgid "Time at witch to consider beginning of new day"
 msgstr "Uue päeva alustamiseks sobilik kellaaeg"
 
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >Sisesta oma tegevus ja vajuta ajajälgimise "
-"alustamiseks enterit!</span>"
-
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Loe lisaks</span>"
-
 msgid "Ad_d Earlier Activity"
 msgstr "Lisa _varasem tegevus"
 
@@ -194,14 +188,49 @@ msgstr "Tänase kohta pole ühtegi kirjet"
 msgid "Show _Overview"
 msgstr "_Näita ülevaadet"
 
-msgid "_Activity:"
-msgstr "_Tegevus:"
+msgid "Start Tracking"
+msgstr "Lõpeta jälgimine"
 
-msgid "_Stop Tracking"
-msgstr "_Lõpeta jälgimine"
+msgid "Stop tracking"
+msgstr "Lõpeta jälgimine"
+
+#. translators: this is switch activity action in the notifier bubble
+msgid "Switch"
+msgstr "Vaheta"
 
 msgid "_Today"
 msgstr "_Täna"
+
+msgid "Overview"
+msgstr "Ülevaade"
+
+msgid "Overview - Hamster"
+msgstr "Ülevaade - Hamster"
+
+msgid "Reports"
+msgstr "Raportid"
+
+msgid "Statistics"
+msgstr "Statistika"
+
+msgid "Add"
+msgstr "Lisa"
+
+#. translators: this is edit activity action in the notifier bubble
+msgid "Edit"
+msgstr "Muuda"
+
+msgid "Next"
+msgstr "Järgmine"
+
+msgid "Previous"
+msgstr "Eelmine"
+
+msgid "Remove"
+msgstr "Eemalda"
+
+msgid "This Week"
+msgstr "See nädal"
 
 msgid " _Day"
 msgstr "_Päev"
@@ -215,17 +244,8 @@ msgstr "_Nädal"
 msgid "<b>Overview</b>"
 msgstr "<b>Ülevaade</b>"
 
-msgid "<b>Starts and ends</b>"
-msgstr "<b>Algus ja lõpp</b>"
-
-msgid "<b>Totals</b>"
-msgstr "<b>Kokku</b>"
-
 msgid "Activity"
 msgstr "Tegevus"
-
-msgid "Add"
-msgstr "Lisa"
 
 msgid "Categories:"
 msgstr "Kategooriad:"
@@ -233,63 +253,26 @@ msgstr "Kategooriad:"
 msgid "Date interval:"
 msgstr "Kuupäevade vahemik:"
 
-#. translators: this is edit activity action in the notifier bubble
-msgid "Edit"
-msgstr "Muuda"
-
-msgid "Next"
-msgstr "Järgmine"
-
-msgid "Next week"
-msgstr "Järgmine nädal"
-
 msgid "No data for this interval"
 msgstr "Selle vahemiku kohta andmed puuduvad"
-
-msgid "Overview"
-msgstr "Ülevaade"
-
-msgid "Overview - Hamster"
-msgstr "Ülevaade - Hamster"
-
-msgid "Previous"
-msgstr "Eelmine"
-
-msgid "Previous week"
-msgstr "Eelmine nädal"
-
-msgid "Remove"
-msgstr "Eemalda"
 
 msgid "Save Report"
 msgstr "Raporti salvestamine"
 
-msgid "Save report"
-msgstr "Salvesta raport"
-
-msgid "Save report – Time Tracker"
-msgstr "Ajajälgija raporti salvestamine"
+msgid "Save report &#x2013; Time Tracker"
+msgstr "Ajajälgija &#x2013; raporti salvestamine"
 
 msgid "Show month"
 msgstr "Näita kuud"
 
-msgid "Show single day"
-msgstr "Näita ühte päeva"
-
-msgid "Show week"
-msgstr "Näita nädalat"
-
-msgid "Statistics"
-msgstr "Statistika"
-
-msgid "This Week"
-msgstr "See nädal"
-
-msgid "This week"
-msgstr "See nädal"
-
 msgid "Week"
 msgstr "Nädal"
+
+msgid "<b>Starts and ends</b>"
+msgstr "<b>Algus ja lõpp</b>"
+
+msgid "<b>Totals</b>"
+msgstr "<b>Kokku</b>"
 
 msgid "Year:"
 msgstr "Aasta:"
@@ -308,15 +291,21 @@ msgstr ""
 "Ivar Smolin <okul linux ee>, 2008, 2009.\n"
 "Mattias Põldaru <mahfiaz gmail com>, 2009."
 
-#. translators: this is switch activity action in the notifier bubble
-msgid "Switch"
-msgstr "Vaheta"
+msgid "Time and Name"
+msgstr "Aeg ja nimi"
 
-msgid "Duration"
-msgstr "Kestus"
+msgid "Tags or Description"
+msgstr "Sildid või kirjeldus"
 
 msgid "No activity"
 msgstr "Tegevusetu"
+
+msgid "Just started"
+msgstr "Värskelt alustatud"
+
+#. unsorted category
+msgid "Unsorted"
+msgstr "Sortimata"
 
 #. activity reminder
 #, python-format
@@ -331,10 +320,6 @@ msgstr "%(category)s: %(duration)s"
 #, python-format
 msgid "%sh"
 msgstr "%st"
-
-#. unsorted category
-msgid "Unsorted"
-msgstr "Sortimata"
 
 msgid "What should be typed in the activity box?"
 msgstr "Mida peaks tegevuse kasti sisestama?"
@@ -447,10 +432,6 @@ msgstr "kategooria"
 msgid "description"
 msgstr "kirjeldus"
 
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -459,19 +440,11 @@ msgstr ""
 "Perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)"
 "s ülevaade"
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 "Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s ülevaade"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
@@ -488,6 +461,9 @@ msgstr "Algus"
 
 msgid "End"
 msgstr "Lõpp"
+
+msgid "Duration"
+msgstr "Kestus"
 
 msgid "Description"
 msgstr "Kirjeldus"
@@ -506,6 +482,101 @@ msgstr "Kokku"
 msgid "Total Time"
 msgstr "Kogukestus"
 
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %d. %b"
+
+msgid "Total"
+msgstr "Kokku"
+
+#. date format used in the overview graph when month view is selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+msgctxt "overview graph"
+msgid "%b %d"
+msgstr "%d. %b"
+
+msgctxt "single day overview"
+msgid "%B %d, %Y"
+msgstr "%d. %B, %Y"
+
+#. Overview label if looking on single day
+#, fuzzy, python-format
+#| msgid "Overview for %(date)s"
+msgid "Totals for %(date)s"
+msgstr "Päeva %(date)s ülevaade"
+
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+#| "(end_Y)s"
+msgid ""
+"Totals for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
+msgstr ""
+"Perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)"
+"s ülevaade"
+
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid "Totals for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s ülevaade"
+
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, fuzzy, python-format
+#| msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgid "Totals for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
+
+msgid "Month"
+msgstr "Kuu"
+
+msgid "Day"
+msgstr "Päev"
+
+msgid "Previous day"
+msgstr "Eelmine päev"
+
+msgid "Next day"
+msgstr "Järgmine päev"
+
+msgid "Today"
+msgstr "Täna"
+
+msgid "Previous week"
+msgstr "Eelmine nädal"
+
+msgid "Next week"
+msgstr "Järgmine nädal"
+
+msgid "This week"
+msgstr "See nädal"
+
+msgid "Previous month"
+msgstr "Eelmine kuu"
+
+msgid "Next month"
+msgstr "Järgmine kuu"
+
+msgid "This month"
+msgstr "See kuu"
+
+msgid "This Month"
+msgstr "See kuu"
+
 msgid "HTML Report"
 msgstr "HTML-raport"
 
@@ -517,11 +588,6 @@ msgstr "XML"
 
 msgid "iCal"
 msgstr "iCal"
-
-#. add unsorted category
-msgctxt "categories"
-msgid "All"
-msgstr "Kõik"
 
 msgctxt "years"
 msgid "All"
@@ -622,59 +688,6 @@ msgstr ""
 "%s protsenti kõigist tegevustest on lühemad kui 15 minutit. Paistab, et Sa "
 "oled päris hõivatud töömesilane :)"
 
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %d. %b"
-
-msgid "Total"
-msgstr "Kokku"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%d. %b"
-
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%d. %B, %Y"
-
-#. Overview label if looking on single day
-#, python-format
-msgid "Overview for %(date)s"
-msgstr "Päeva %(date)s ülevaade"
-
-msgid "Month"
-msgstr "Kuu"
-
-msgid "Day"
-msgstr "Päev"
-
-msgid "Previous day"
-msgstr "Eelmine päev"
-
-msgid "Next day"
-msgstr "Järgmine päev"
-
-msgid "Today"
-msgstr "Täna"
-
-msgid "Previous month"
-msgstr "Eelmine kuu"
-
-msgid "Next month"
-msgstr "Järgmine kuu"
-
-msgid "This month"
-msgstr "See kuu"
-
-msgid "This Month"
-msgstr "See kuu"
-
 #. duration in round hours
 #, python-format
 msgid "%dh"
@@ -689,6 +702,48 @@ msgstr "%dmin"
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
+
+#. add unsorted category
+msgctxt "categories"
+msgid "All"
+msgstr "Kõik"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>Tegevused</b>"
+
+#~ msgid "<b>Day\t</b>"
+#~ msgstr "<b>Päev\t</b>"
+
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>Jälgimine</b>"
+
+#~ msgid "Description:"
+#~ msgstr "Kirjeldus:"
+
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >Sisesta oma tegevus ja vajuta ajajälgimise "
+#~ "alustamiseks enterit!</span>"
+
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Loe lisaks</span>"
+
+#~ msgid "_Activity:"
+#~ msgstr "_Tegevus:"
+
+#~ msgid "Save report"
+#~ msgstr "Salvesta raport"
+
+#~ msgid "Show single day"
+#~ msgstr "Näita ühte päeva"
+
+#~ msgid "Show week"
+#~ msgstr "Näita nädalat"
 
 #~ msgid "Remind also when no activity is set"
 #~ msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
