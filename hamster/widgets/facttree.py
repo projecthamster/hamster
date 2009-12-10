@@ -72,6 +72,11 @@ def action_painter(column, cell, model, iter):
 
 
 class FactTree(gtk.TreeView):
+    __gsignals__ = {
+        "edit-clicked": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        "double-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
+    }
+    
     def __init__(self):
         gtk.TreeView.__init__(self)
         
@@ -110,6 +115,9 @@ class FactTree(gtk.TreeView):
         self.edit_column.set_cell_data_func(edit_cell, action_painter)
         self.append_column(self.edit_column)
 
+        self.connect("row-activated", self._on_row_activated)
+        self.connect("button-release-event", self._on_button_release_event)
+        self.connect("key-press-event", self._on_key_pressed)
 
         self.show()
     
@@ -154,4 +162,37 @@ class FactTree(gtk.TreeView):
             self.add_fact(fact, group_row)
 
         self.expand_all()
+        
+    def get_selected_fact(self):
+        selection = self.get_selection()
+        (model, iter) = selection.get_selected()
+        return model[iter][6]
 
+
+    def _on_button_release_event(self, tree, event):
+        # a hackish solution to make edit icon keyboard accessible
+        pointer = event.window.get_pointer() # x, y, flags
+        path = self.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
+        
+        if path and path[1] == self.edit_column:
+            self.emit("edit-clicked", self.get_selected_fact())
+            return True
+        
+        return False
+
+    def _on_row_activated(self, tree, path, column):
+        if column == self.edit_column:
+            self.emit_stop_by_name ('row-activated')
+            self.emit("edit-clicked", self.get_selected_fact())
+            return True
+
+
+    def _on_key_pressed(self, tree, event):
+        # capture ctrl+e and pretend that user click on edit
+        if (event.keyval == gtk.keysyms.e  \
+              and event.state & gtk.gdk.CONTROL_MASK):
+            self.emit("edit-clicked", self.get_selected_fact())
+            return True
+            
+        return False
+            
