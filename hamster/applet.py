@@ -242,6 +242,9 @@ class HamsterApplet(object):
         self.get_widget("tag_box").add(self.tag_box)
 
         self.treeview = widgets.FactTree()
+        self.treeview.connect("key-press-event", self.on_todays_keys)
+        self.treeview.connect("edit-clicked", self._open_edit_activity)
+        self.treeview.connect("row-activated", self.on_today_row_activated)
         
         self.get_widget("today_box").add(self.treeview)
 
@@ -502,16 +505,6 @@ class HamsterApplet(object):
 
     """events"""
 
-    def on_today_release_event(self, tree, event):
-        # a hackish solution to make edit icon keyboard accessible
-        pointer = event.window.get_pointer() # x, y, flags
-        path = tree.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
-        
-        if path and path[1] == self.edit_column:
-            self._open_edit_activity()
-            return True
-        
-        return False
         
     def on_toggle(self, widget):
         self.__show_toggle(None, self.button.get_active())
@@ -521,20 +514,12 @@ class HamsterApplet(object):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
             return True
-        elif (event.keyval == gtk.keysyms.e  \
-              and event.state & gtk.gdk.CONTROL_MASK):
-            self._open_edit_activity()
-            return True
             
         return False
     
-    def _open_edit_activity(self):
+    def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
-        selection = self.treeview.get_selection()
-        (model, iter) = selection.get_selected()
-        fact_id = model[iter][0]
-            
-        custom_fact = CustomFactController(self, None, fact_id)
+        custom_fact = CustomFactController(self, None, fact["id"])
         custom_fact.show()
         
     def on_edit_current_activity_clicked(self, widget):
@@ -543,24 +528,21 @@ class HamsterApplet(object):
             custom_fact.show()
     
     def on_today_row_activated(self, tree, path, column):
-        if column == self.edit_column:
-            self._open_edit_activity()
-        else:
-            selection = tree.get_selection()
-            (model, iter) = selection.get_selected()
-            
-            fact = model[iter][7]
-            if fact:
-                activity = fact['name']
-                if fact['category']:
-                    activity = '%s@%s' % (activity, fact['category'])
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+        
+        fact = model[iter][6]
+        if fact:
+            activity = fact['name']
+            if fact['category']:
+                activity = '%s@%s' % (activity, fact['category'])
 
-                tags = fact["tags"]
-                if fact["description"]:
-                    tags.append(fact["description"])
-                    
-                runtime.storage.add_fact(activity, ", ".join(tags))
-                runtime.dispatcher.dispatch('panel_visible', False)
+            tags = fact["tags"]
+            if fact["description"]:
+                tags.append(fact["description"])
+                
+            runtime.storage.add_fact(activity, ", ".join(tags))
+            runtime.dispatcher.dispatch('panel_visible', False)
         
         
     def on_windows_keys(self, tree, event_key):

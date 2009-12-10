@@ -68,6 +68,8 @@ class OverviewBox(gtk.VBox):
         self.fill_facts_tree()
         self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
+        self.fact_tree.connect("key-press-event", self.on_facts_keys)
+        self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
 
         self._gui.connect_signals(self)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
@@ -151,6 +153,13 @@ class OverviewBox(gtk.VBox):
 
     def on_remove_clicked(self, button):
         self.delete_selected()
+
+    def on_facts_keys(self, tree, event):
+        if (event.keyval == gtk.keysyms.Delete):
+            self.delete_selected()
+            return True
+        
+        return False
 
     def on_edit_clicked(self, button):
         selection = self.fact_tree.get_selection()
