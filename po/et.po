@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2009-12-07 22:31+0000\n"
-"PO-Revision-Date: 2009-12-09 08:22+0200\n"
+"PO-Revision-Date: 2009-12-11 09:09+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgid "Stop tracking when computer becomes idle"
 msgstr "Arvuti jõudeoleku korral tegevuste jälgimine peatatakse"
 
 msgid "Tags that should appear in autocomplete"
-msgstr ""
+msgstr "Automaatlõpetuses kasutatavad sildid"
 
 msgid "Time Tracker Preferences"
 msgstr "Ajajälgija eelistused"
@@ -501,45 +501,38 @@ msgid "%B %d, %Y"
 msgstr "%d. %B, %Y"
 
 #. Overview label if looking on single day
-#, fuzzy, python-format
-#| msgid "Overview for %(date)s"
+#, python-format
 msgid "Totals for %(date)s"
-msgstr "Päeva %(date)s ülevaade"
+msgstr "Päeva %(date)s kokkuvõte"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#, fuzzy, python-format
-#| msgid ""
-#| "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-#| "(end_Y)s"
+#, python-format
 msgid ""
 "Totals for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
 "(end_Y)s"
 msgstr ""
 "Perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)"
-"s ülevaade"
+"s kokkuvõte"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#, fuzzy, python-format
-#| msgid ""
-#| "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+#, python-format
 msgid "Totals for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s ülevaade"
+"Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s kokkuvõte"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#, fuzzy, python-format
-#| msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+#, python-format
 msgid "Totals for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
+msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s kokkuvõte"
 
 msgid "Month"
 msgstr "Kuu"
@@ -707,46 +700,3 @@ msgstr "%dt %dmin"
 msgctxt "categories"
 msgid "All"
 msgstr "Kõik"
-
-#~ msgid "<b>Activities</b>"
-#~ msgstr "<b>Tegevused</b>"
-
-#~ msgid "<b>Day\t</b>"
-#~ msgstr "<b>Päev\t</b>"
-
-#~ msgid "<b>Tracking</b>"
-#~ msgstr "<b>Jälgimine</b>"
-
-#~ msgid "Description:"
-#~ msgstr "Kirjeldus:"
-
-#~ msgid ""
-#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
-#~ "</span>"
-#~ msgstr ""
-#~ "<span size=\"small\" >Sisesta oma tegevus ja vajuta ajajälgimise "
-#~ "alustamiseks enterit!</span>"
-
-#~ msgid ""
-#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Loe lisaks</span>"
-
-#~ msgid "_Activity:"
-#~ msgstr "_Tegevus:"
-
-#~ msgid "Save report"
-#~ msgstr "Salvesta raport"
-
-#~ msgid "Show single day"
-#~ msgstr "Näita ühte päeva"
-
-#~ msgid "Show week"
-#~ msgstr "Näita nädalat"
-
-#~ msgid "Remind also when no activity is set"
-#~ msgstr "Teadaandmine ka juhul, kui tegevust pole määratud"
-
-#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-#~ msgstr "%(report_d)s.%(report_b)s.%(report_Y)s"
