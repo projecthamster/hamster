@@ -331,7 +331,6 @@ class HamsterApplet(object):
     def set_last_activity(self):
         activity = runtime.storage.get_last_activity()
         self.get_widget("stop_tracking").set_sensitive(activity != None)
-        self.get_widget("edit_current_activity").set_sensitive(activity != None)
         
         
         if activity:
@@ -522,11 +521,6 @@ class HamsterApplet(object):
         custom_fact = CustomFactController(self, None, fact["id"])
         custom_fact.show()
         
-    def on_edit_current_activity_clicked(self, widget):
-        if self.last_activity:
-            custom_fact = CustomFactController(self, None, self.last_activity["id"])
-            custom_fact.show()
-    
     def on_today_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
