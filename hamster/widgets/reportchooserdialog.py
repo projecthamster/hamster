@@ -41,7 +41,7 @@ class ReportChooserDialog(gtk.Dialog):
     }
     def __init__(self):
         gtk.Dialog.__init__(self)
-        ui = stuff.load_ui_file("stats.ui")
+        ui = stuff.load_ui_file("stats_reports.ui")
         self.dialog = ui.get_object('save_report_dialog')
 
         self.dialog.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
