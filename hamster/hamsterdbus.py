@@ -142,17 +142,15 @@ class HamsterDbusController(dbus.service.Object):
 
     @dbus.service.method(HAMSTER_URI, out_signature='ss')
     def GetCurrentActivity(self):
-	"""Returns the Activity currently being used, or blanks if Hamster is not tracking currently
-	s activity: Activity name
-	s category: Category name
-	"""
-	last_activity = runtime.storage.get_last_activity()
-	if last_activity:
-		return (last_activity['name'] or '', last_activity['category'] or '')
-	else:
-		return ('', '')
-	
-	
+        """Returns the Activity currently being used, or blanks if Hamster is not tracking currently
+        s activity: Activity name
+        s category: Category name
+        """
+        last_activity = runtime.storage.get_last_activity()
+        if last_activity:
+            return (last_activity['name'] or '', last_activity['category'] or '')
+        else:
+            return ('', '')
 
     @dbus.service.method(HAMSTER_URI, out_signature='as')
     def GetCategories(self):
@@ -185,7 +183,7 @@ class HamsterDbusController(dbus.service.Object):
         if end_time:
             end = datetime.datetime.utcfromtimestamp(end_time)
 
-        fact = runtime.storage.add_fact(activity, start, end)
+        fact = runtime.storage.add_fact(activity, "", start, end)
         return fact['id']
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
