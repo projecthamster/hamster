@@ -96,7 +96,7 @@ class FactTree(gtk.TreeView):
         self.append_column(nameColumn)
 
         tag_cell = TagCellRenderer()
-        tag_cell.font_size = 8;
+        tag_cell.set_font_size(8);
         tagColumn = gtk.TreeViewColumn("", tag_cell, data=6)
         tagColumn.set_expand(True)
         self.append_column(tagColumn)

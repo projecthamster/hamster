@@ -324,12 +324,10 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         self._font_size = 10
         self.layout = None
     
-    @property
     def font_size(self):
         return self._font_size
 
-    @font_size.setter
-    def font_size(self, val):
+    def set_font_size(self, val):
         self._font_size = val
         self._font.set_size(pango.SCALE * self._font_size)
         

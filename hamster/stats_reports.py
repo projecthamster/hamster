@@ -583,7 +583,7 @@ class TotalsTree(gtk.TreeView):
         self.append_column(nameColumn)
 
         tag_cell = widgets.TagCellRenderer()
-        tag_cell.font_size = 8;
+        tag_cell.set_font_size(8);
         tagColumn = gtk.TreeViewColumn("", tag_cell, data=1)
         tagColumn.set_expand(True)
 
