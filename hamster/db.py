@@ -310,7 +310,16 @@ class Storage(storage.Storage):
         grouped_facts = []
         for fact_id, fact_tags in itertools.groupby(facts, lambda f: f["id"]):
             fact_tags = list(fact_tags)
-            grouped_fact = dict(fact_tags[0]) #first is as good as the last one
+            
+            # first one is as good as the last one
+            grouped_fact = fact_tags[0]
+
+            # we need dict so we can modify it (sqlite.Row is read only)
+            # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
+            keys = ["id", "start_time", "end_time", "description", "name",
+                    "activity_id", "category", "category_id", "tags"]
+            grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
+            
             grouped_fact["tags"] = [ft["tags"] for ft in fact_tags if ft["tags"]]
             grouped_facts.append(grouped_fact)
         return grouped_facts
