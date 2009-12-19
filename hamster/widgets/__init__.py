@@ -26,6 +26,8 @@ from dateinput import DateInput
 from timeinput import TimeInput
 
 from timeline import TimeLine
+from newtimeline import NewTimeLine
+
 from dayline import DayLine
 
 from tags import Tag

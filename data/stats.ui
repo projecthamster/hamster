@@ -269,14 +269,12 @@
             <property name="left_padding">12</property>
             <property name="right_padding">12</property>
             <child>
-              <object class="GtkLabel" id="overview_label">
+              <object class="GtkAlignment" id="by_day_box">
+                <property name="height_request">50</property>
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">21.12.2009 - 28.12.2009</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="size" value="15000"/>
-                </attributes>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
           </object>

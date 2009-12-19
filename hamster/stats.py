@@ -89,49 +89,28 @@ class StatsViewer(object):
         self.end_date_input.connect("date-entered", self.on_end_date_entered)
         self.get_widget("range_end_box").add(self.end_date_input)
 
+        self.timeline = widgets.NewTimeLine()
+        self.get_widget("by_day_box").add(self.timeline)
+
         self._gui.connect_signals(self)
         self.window.show_all()
 
 
         self.search()
 
-    def set_title(self):
-        dates_dict = stuff.dateDict(self.start_date, "start_")
-        dates_dict.update(stuff.dateDict(self.end_date, "end_"))
-        
-        if self.start_date.year != self.end_date.year:
-            # overview label if start and end years don't match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            overview_label = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        elif self.start_date.month != self.end_date.month:
-            # overview label if start and end month do not match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            overview_label = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        else:
-            # overview label for interval in same month
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            overview_label = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
-
-        
-        self.get_widget("overview_label").set_markup("<b>%s</b>" % overview_label)
-
-
     def search(self):
-        self.set_title()
         self.start_date_input.set_date(self.start_date)
         self.end_date_input.set_date(self.end_date)
         
         facts = runtime.storage.get_facts(self.start_date, self.end_date)
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
+
+        self.timeline.draw(facts, self.start_date, self.end_date)
         
         self.overview.search(self.start_date, self.end_date, facts)
         self.reports.search(self.start_date, self.end_date, facts)
+
+                
         
         
     def on_report_button_clicked(self, widget):
