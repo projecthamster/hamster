@@ -267,8 +267,6 @@ class ReportsBox(gtk.VBox):
     def do_graph(self, facts = None):
         facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
 
-        self.get_widget("report_button").set_sensitive(len(facts) > 0)
-
         self.fill_totals_tree(facts)
 
         if not facts:

@@ -128,12 +128,14 @@ class StatsViewer(object):
         self.end_date_input.set_date(self.end_date)
         
         facts = runtime.storage.get_facts(self.start_date, self.end_date)
+        self.get_widget("report_button").set_sensitive(len(facts) > 0)
         
         self.overview.search(self.start_date, self.end_date, facts)
         self.reports.search(self.start_date, self.end_date, facts)
         
         
-
+    def on_report_button_clicked(self, widget):
+        self.reports.on_report_button_clicked(widget) #forward for now
 
 
     def on_range_combo_changed(self, combo):
