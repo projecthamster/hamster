@@ -77,6 +77,7 @@ class OverviewBox(gtk.VBox):
 
     def fill_facts_tree(self, facts):
         facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
+        self.fact_tree.detach_model()
         
         self.fact_tree.clear()
         
@@ -94,6 +95,7 @@ class OverviewBox(gtk.VBox):
 
             self.fact_tree.add_group(fact_date, facts)
 
+        self.fact_tree.attach_model()
 
     def search(self, start_date, end_date, facts):
         self.start_date = start_date

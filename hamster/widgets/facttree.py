@@ -83,8 +83,9 @@ class FactTree(gtk.TreeView):
         self.set_headers_visible(False)
         self.set_show_expanders(False)
 
+        self.store_model = gtk.TreeStore(int, str, str, str, str, str, gobject.TYPE_PYOBJECT)
         #id, caption, duration, date (invisible), description, category
-        self.set_model(gtk.TreeStore(int, str, str, str, str, str, gobject.TYPE_PYOBJECT))
+        self.set_model(self.store_model)
 
 
         # name
@@ -122,11 +123,7 @@ class FactTree(gtk.TreeView):
         self.show()
     
     def clear(self):
-        self.model.clear()
-        
-    @property
-    def model(self):
-        return self.get_model()
+        self.store_model.clear()
         
     def add_fact(self, fact, parent = None):
         duration = stuff.duration_minutes(fact["delta"]) / 60
@@ -137,7 +134,7 @@ class FactTree(gtk.TreeView):
         else:
             fact_time = fact["start_time"].strftime("%H:%M ")
 
-        self.model.append(parent, [fact["id"],
+        self.store_model.append(parent, [fact["id"],
                                    "%s %s" % (fact_time, fact["name"]),
                                    stuff.format_duration(fact["delta"]),
                                    fact["start_time"].strftime('%Y-%m-%d'),
@@ -149,7 +146,7 @@ class FactTree(gtk.TreeView):
         total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
         
         # adds group of facts with the given label
-        group_row = self.model.append(None,
+        group_row = self.store_model.append(None,
                                     [-1,
                                      group_label,
                                      stuff.format_duration(total),
@@ -161,6 +158,13 @@ class FactTree(gtk.TreeView):
         for fact in facts:
             self.add_fact(fact, group_row)
 
+        self.expand_all()
+
+    def detach_model(self):
+        self.set_model()
+
+    def attach_model(self):
+        self.set_model(self.store_model)
         self.expand_all()
         
     def get_selected_fact(self):
