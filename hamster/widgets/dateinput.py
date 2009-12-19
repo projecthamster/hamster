@@ -45,6 +45,7 @@ class DateInput(gtk.Entry):
         calendar_box = gtk.HBox()
 
         self.date_calendar = gtk.Calendar()
+        self.date_calendar.mark_day(dt.datetime.today().day)
         self.date_calendar.connect("day-selected", self._on_day_selected)
         self.date_calendar.connect("day-selected-double-click",
                                    self.__on_day_selected_double_click)
