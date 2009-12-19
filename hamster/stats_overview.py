@@ -65,7 +65,7 @@ class OverviewBox(gtk.VBox):
 
         self.fact_tree = widgets.FactTree()
         self.get_widget("overview_facts_box").add(self.fact_tree)
-        self.fill_facts_tree()
+        #self.fill_facts_tree()
         self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
@@ -75,8 +75,8 @@ class OverviewBox(gtk.VBox):
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
 
-    def fill_facts_tree(self):
-        facts = runtime.storage.get_facts(self.start_date, self.end_date)
+    def fill_facts_tree(self, facts):
+        facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
         
         self.fact_tree.clear()
         
@@ -95,29 +95,14 @@ class OverviewBox(gtk.VBox):
             self.fact_tree.add_group(fact_date, facts)
 
 
+    def search(self, start_date, end_date, facts):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.fill_facts_tree(facts)
+
     """ events """
     def after_activity_update(self, widget, renames):
         self.fill_facts_tree()
-
-    def on_prev_clicked(self, button):
-        self.start_date -= dt.timedelta(7)
-        self.end_date -= dt.timedelta(7)
-        self.fill_facts_tree()
-
-    def on_next_clicked(self, button):
-        self.start_date += dt.timedelta(7)
-        self.end_date += dt.timedelta(7)        
-        self.fill_facts_tree()
-    
-    def on_home_clicked(self, button):
-        self.view_date = dt.date.today()
-
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-        self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-        self.end_date = self.start_date + dt.timedelta(6)
-        
-        self.fill_facts_tree()
-
 
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
