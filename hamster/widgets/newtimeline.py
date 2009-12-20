@@ -20,6 +20,9 @@
 import gtk, pango
 
 from .hamster import graphics, stuff
+
+from .hamster.configuration import GconfStore
+
 import datetime as dt
 from bisect import bisect, bisect_left
 
@@ -33,10 +36,20 @@ class NewTimeLine(graphics.Area):
         self.title = ""
 
         
-    def draw(self, facts, start_date = None, end_date = None):
+    def draw(self, facts, start_date, end_date):
         self.facts = facts    
-        self.start_date = min([dt.datetime.combine(start_date, dt.time(0,0)), facts[0]["start_time"]])
-        self.end_date = max([dt.datetime.combine(end_date, dt.time(0,0)), facts[-1]["start_time"] + facts[-1]["delta"]])
+
+        self.set_title(start_date, end_date) # we will forget about all our magic manipulations for the title
+
+
+        day_start = GconfStore().get_day_start()
+
+        start_date = dt.datetime.combine(start_date, day_start.replace(minute=0))
+        end_date = dt.datetime.combine(end_date, day_start.replace(minute=0)) + dt.timedelta(days = 1)
+
+
+        self.start_date = min([start_date, facts[0]["start_time"]])
+        self.end_date = max([end_date, facts[-1]["start_time"] + facts[-1]["delta"]])
         
         if self.start_date > self.end_date:
             self.start_date, self.end_date = self.end_date, self.start_date
@@ -44,20 +57,26 @@ class NewTimeLine(graphics.Area):
         if self.end_date.time == dt.time(0,0):
             self.end_date += dt.timedelta(days=1)
 
-        self.set_title()
         self.redraw_canvas()
 
-    def set_title(self):
-        dates_dict = stuff.dateDict(self.start_date, "start_")
-        dates_dict.update(stuff.dateDict(self.end_date, "end_"))
+    def set_title(self, start_date, end_date):
+        dates_dict = stuff.dateDict(start_date, "start_")
+        dates_dict.update(stuff.dateDict(end_date, "end_"))
         
-        if self.start_date.year != self.end_date.year:
+        if start_date == end_date:
+            # date format for overview label when only single day is visible
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            start_date_str = start_date.strftime(_("%B %d, %Y"))
+            # Overview label if looking on single day
+            self.title = start_date_str
+        elif start_date.year != end_date.year:
             # overview label if start and end years don't match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
             # see http://docs.python.org/library/time.html#time.strftime
             self.title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        elif self.start_date.month != self.end_date.month:
+        elif start_date.month != end_date.month:
             # overview label if start and end month do not match
             # letter after prefixes (start_, end_) is the one of
             # standard python date formatting ones- you can use all of them
@@ -111,12 +130,15 @@ class NewTimeLine(graphics.Area):
                 step_time += time_step
 
 
+        max_hour = max(hours)
+        hours = [hour / max_hour for hour in hours]
+
         per_interval = dict(zip(distribution, hours))
         
         x = 1
         current_time = self.start_date
         while current_time <= self.end_date:
-            bar_size = self.height * per_interval[current_time] * 0.9
+            bar_size = round(self.height * per_interval[current_time] * 0.9)
             
             self.fill_area(round(x), self.height - bar_size, round(bar_width * 0.9), bar_size, "#eeeeee")
             current_time += time_step
@@ -126,20 +148,19 @@ class NewTimeLine(graphics.Area):
         step_format = "%H:%M"
         if time_step < dt.timedelta(seconds = 60 * 60):
             step_format = "%H:%M"
-        elif time_step <= dt.timedelta(seconds = 60 * 60 * 24):
+        elif time_step < dt.timedelta(days = 1):
             step_format = "%H:%M"
-        elif time_step <= dt.timedelta(seconds = 60 * 60 * 24 * 7):
-            step_format = "%d"
+        elif time_step <= dt.timedelta(days = 7):
+            step_format = "%a %d"
 
         x = 1
         i = 1
         current_time = self.start_date
         while current_time <= self.end_date:
-            if i % 3 == 0:
-                self.set_color("#aaaaaa")
-                self.context.move_to(x, 30)
-                self.layout.set_text(current_time.strftime(step_format))
-                self.context.show_layout(self.layout)
+            self.set_color("#aaaaaa")
+            self.context.move_to(x, 30)
+            self.layout.set_text(current_time.strftime(step_format))
+            self.context.show_layout(self.layout)
 
             current_time += time_step
             x += bar_width
@@ -159,15 +180,14 @@ class NewTimeLine(graphics.Area):
 
 
     def figure_time_fraction(self):
-        bar_width = 30 # preferred bar width
+        bar_width = 70 # preferred bar width
         bar_count = self.width / float(bar_width)
         
         minutes = stuff.duration_minutes(self.end_date - self.start_date)
         minutes_in_unit = int(minutes / bar_count)
 
         # now let's find closest human understandable fraction of time that we will be actually using
-        fractions = [1, 5, 15, 30, # minutes
-                     60, 60 * 2, 60 * 3, 60 * 4, 60 * 8, 60 * 12, # hours (1, 2, 3, 4, 8, 12)
+        fractions = [60, # minutes
                      60 * 24, # days
                      60 * 24 * 7, 60 * 24 * 14, # weeks (1,2)
                      60 * 24 * 30, 60 * 24 * 30 * 3, 60 * 24 * 30 * 4, # months (1, 3, 4)
