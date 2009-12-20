@@ -26,7 +26,7 @@ from .hamster.configuration import GconfStore
 import datetime as dt
 import calendar
 
-from bisect import bisect, bisect_left
+from bisect import bisect
 
 class NewTimeLine(graphics.Area):
     """this widget is kind of half finished"""
@@ -39,7 +39,7 @@ class NewTimeLine(graphics.Area):
         self.day_start = GconfStore().get_day_start()
         self.minor_tick = None
         
-        self.tick_totals = {}
+        self.tick_totals = []
 
         
     def draw(self, facts, start_date, end_date):
@@ -116,9 +116,8 @@ class NewTimeLine(graphics.Area):
         graph_width = self.width - graph_x - 2
         
         total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
-        tick_minutes = stuff.duration_minutes(self.minor_tick)
-        
-        bar_width = graph_width / (total_minutes / float(tick_minutes))
+
+        bar_width = float(graph_width) / len(self.tick_totals)
         
         # the bars        
         x = graph_x
@@ -179,7 +178,7 @@ class NewTimeLine(graphics.Area):
         elif self.minor_tick == dt.timedelta(days = 1): # day
             step_format = "%a\n%d"
         else:        
-            step_format = "%H:%M"
+            step_format = "%H<small><sup>%M</sup></small>"
 
 
         x = graph_x
@@ -187,7 +186,8 @@ class NewTimeLine(graphics.Area):
         current_time = self.start_time
         for current_time, total in self.tick_totals:
             self.set_color("#aaaaaa")
-            self.layout.set_text(current_time.strftime(step_format))
+
+            self.layout.set_markup(current_time.strftime(step_format))
             w, h = self.layout.get_pixel_size()
             
             
@@ -206,7 +206,7 @@ class NewTimeLine(graphics.Area):
         font.set_weight(pango.WEIGHT_BOLD)
         self.layout.set_font_description(font)
 
-        self.layout.set_text(self.title)
+        self.layout.set_markup(self.title)
 
         self.context.show_layout(self.layout)
 
@@ -218,7 +218,7 @@ class NewTimeLine(graphics.Area):
         current_time = self.start_time
 
         minor_tick = self.minor_tick
-        while current_time < self.end_time:
+        while current_time <= self.end_time:
             # if minor tick is month, the starting date will have been
             # already adjusted to the first
             # now we have to make sure to move month by month
@@ -231,7 +231,7 @@ class NewTimeLine(graphics.Area):
         hours = [0] * len(fractions)
         
         tick_minutes = float(stuff.duration_minutes(self.minor_tick))
-
+        
         for fact in self.facts:
             if self.minor_tick < dt.timedelta(1):
                 end_time = fact["start_time"] + fact["delta"] # the thing about ongoing task - it has no end time
@@ -239,7 +239,7 @@ class NewTimeLine(graphics.Area):
                 # find in which fraction the fact starts and
                 # add duration up to the border of tick to that fraction
                 # then move cursor to the start of next fraction
-                first_index = bisect_left(fractions, fact["start_time"]) - 1
+                first_index = bisect(fractions, fact["start_time"]) - 1
                 step_time = fractions[first_index]
                 first_end = min(end_time, step_time + self.minor_tick)
                 first_tick = stuff.duration_minutes(first_end - fact["start_time"]) / tick_minutes
@@ -249,14 +249,14 @@ class NewTimeLine(graphics.Area):
     
                 # now go through ticks until we reach end of the time
                 while step_time < end_time:
-                    index = bisect_left(fractions, step_time)
+                    index = bisect(fractions, step_time) - 1
                     interval = min([1, stuff.duration_minutes(end_time - step_time) / tick_minutes])
                     hours[index] += interval
                     
                     step_time += self.minor_tick
             else:
-                hours[bisect_left(fractions, dt.datetime.combine(fact["date"], dt.time()))] += stuff.duration_minutes(fact["delta"])
-
+                hour_index = bisect(fractions, dt.datetime.combine(fact["date"], dt.time())) - 1
+                hours[hour_index] += stuff.duration_minutes(fact["delta"])
 
         # now normalize
         max_hour = max(hours)
