@@ -75,7 +75,7 @@ class OverviewBox(gtk.VBox):
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
 
-    def fill_facts_tree(self, facts):
+    def fill_facts_tree(self, facts = None):
         facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
         self.fact_tree.detach_model()
         
