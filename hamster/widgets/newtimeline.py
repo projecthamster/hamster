@@ -21,7 +21,7 @@ import gtk, pango
 
 from .hamster import graphics, stuff
 import datetime as dt
-from bisect import bisect
+from bisect import bisect, bisect_left
 
 class NewTimeLine(graphics.Area):
     """this widget is kind of half finished"""
@@ -35,11 +35,14 @@ class NewTimeLine(graphics.Area):
         
     def draw(self, facts, start_date = None, end_date = None):
         self.facts = facts    
-        self.start_date = start_date or facts[0]["date"]
-        self.end_date = end_date or facts[-1]["date"]
+        self.start_date = min([dt.datetime.combine(start_date, dt.time(0,0)), facts[0]["start_time"]])
+        self.end_date = max([dt.datetime.combine(end_date, dt.time(0,0)), facts[-1]["start_time"] + facts[-1]["delta"]])
         
         if self.start_date > self.end_date:
             self.start_date, self.end_date = self.end_date, self.start_date
+
+        if self.end_date.time == dt.time(0,0):
+            self.end_date += dt.timedelta(days=1)
 
         self.set_title()
         self.redraw_canvas()
@@ -72,19 +75,57 @@ class NewTimeLine(graphics.Area):
         self.fill_area(0, 0, self.width, self.height, "#fafafa")
         bar_width, time_step = self.figure_time_fraction()
         
-        self.context.translate(0.5, 0.5)        
+        self.context.translate(0.5, 0.5) #move half a pixel to get sharp lines
+
+
+        #go through facts and make array of time used by our fraction
+        distribution = []  # TODO - think of a better name for a variable
+        
+        current_time = self.start_date
+        while current_time <= self.end_date:
+            distribution.append(current_time)
+            current_time += time_step
+        
+        hours = [0] * len(distribution)
+        
+        step_minutes = float(stuff.duration_minutes(time_step))
+
+        for fact in self.facts:
+            
+            first_index = bisect_left(distribution, fact["start_time"]) - 1
+            
+            step_time = distribution[first_index]
+            first_end = min(fact["start_time"] + fact["delta"], step_time + time_step)
+
+            interval = stuff.duration_minutes(first_end - fact["start_time"]) / step_minutes
+            
+            hours[first_index] += interval
+
+            step_time = step_time + time_step
+            while step_time < fact["start_time"] + fact["delta"]:
+                index = bisect_left(distribution, step_time)
+                
+                interval = min([1, stuff.duration_minutes(fact["start_time"] + fact["delta"] - step_time) / step_minutes])
+                hours[index] += interval
+                
+                step_time += time_step
+
+
+        per_interval = dict(zip(distribution, hours))
+        
         x = 1
-        current_time = dt.datetime.combine(self.start_date, dt.time())
-        while current_time <= dt.datetime.combine(self.end_date, dt.time(23, 59)):
-            self.fill_area(x, 3, round(bar_width * 0.8), self.height-6, "#eeeeee")
+        current_time = self.start_date
+        while current_time <= self.end_date:
+            bar_size = self.height * per_interval[current_time] * 0.9
+            
+            self.fill_area(round(x), self.height - bar_size, round(bar_width * 0.9), bar_size, "#eeeeee")
             current_time += time_step
             x += bar_width
 
-
         print time_step
         step_format = "%H:%M"
-        if time_step <= dt.timedelta(seconds = 60 * 60):
-            step_format = "%M"
+        if time_step < dt.timedelta(seconds = 60 * 60):
+            step_format = "%H:%M"
         elif time_step <= dt.timedelta(seconds = 60 * 60 * 24):
             step_format = "%H:%M"
         elif time_step <= dt.timedelta(seconds = 60 * 60 * 24 * 7):
@@ -92,11 +133,11 @@ class NewTimeLine(graphics.Area):
 
         x = 1
         i = 1
-        current_time = dt.datetime.combine(self.start_date, dt.time())
-        while current_time <= dt.datetime.combine(self.end_date, dt.time(23, 59)):
+        current_time = self.start_date
+        while current_time <= self.end_date:
             if i % 3 == 0:
                 self.set_color("#aaaaaa")
-                self.context.move_to(x, 10)
+                self.context.move_to(x, 30)
                 self.layout.set_text(current_time.strftime(step_format))
                 self.context.show_layout(self.layout)
 
@@ -118,10 +159,10 @@ class NewTimeLine(graphics.Area):
 
 
     def figure_time_fraction(self):
-        bar_width = 10 # 10px wide bar looks about right
+        bar_width = 30 # preferred bar width
         bar_count = self.width / float(bar_width)
         
-        minutes = stuff.duration_minutes((self.end_date - self.start_date) + dt.timedelta(days=1))
+        minutes = stuff.duration_minutes(self.end_date - self.start_date)
         minutes_in_unit = int(minutes / bar_count)
 
         # now let's find closest human understandable fraction of time that we will be actually using
@@ -140,7 +181,7 @@ class NewTimeLine(graphics.Area):
         step_minutes = fractions[human_step]
         
         bar_count = minutes / step_minutes
-        bar_width = round(self.width / float(bar_count))
+        bar_width = self.width / float(bar_count)
         
         time_step = dt.timedelta(days = step_minutes / (60 * 24),
                                  seconds = (step_minutes % (60 * 24)) * 60)
