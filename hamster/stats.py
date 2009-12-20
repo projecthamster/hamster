@@ -99,6 +99,9 @@ class StatsViewer(object):
         self.search()
 
     def search(self):
+        if self.start_date > self.end_date: # make sure the end is always after beginning
+            self.start_date, self.end_date = self.end_date, self.start_date
+        
         self.start_date_input.set_date(self.start_date)
         self.end_date_input.set_date(self.end_date)
         
