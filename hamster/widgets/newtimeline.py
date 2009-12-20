@@ -98,8 +98,6 @@ class NewTimeLine(graphics.Area):
         else: # show per hour
             self.minor_tick = dt.timedelta(seconds = 60 * 60)
 
-        print self.start_time, self.end_time
-        
         self.count_hours()
         
         self.redraw_canvas()
@@ -259,7 +257,7 @@ class NewTimeLine(graphics.Area):
             else:
                 hours[bisect_left(fractions, dt.datetime.combine(fact["date"], dt.time()))] += stuff.duration_minutes(fact["delta"])
 
-        print hours
+
         # now normalize
         max_hour = max(hours)
         hours = [hour / float(max_hour or 1) for hour in hours]
