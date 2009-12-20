@@ -5,6 +5,7 @@ hamster_PYTHON = \
 	dateinput.py \
 	dayline.py \
 	facttree.py \
+	newtimeline.py
 	reportchooserdialog.py \
 	tags.py \
 	timeinput.py \
