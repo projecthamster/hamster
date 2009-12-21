@@ -174,9 +174,9 @@ class CustomFactController:
 
         # we don't do updates, we do insert/delete. So now it is time to delete
         if self.fact_id:
-            runtime.storage.remove_fact(self.fact_id)
-
-        runtime.storage.add_fact(activity, tags, start_time, end_time)
+            runtime.storage.update_fact(self.fact_id, activity, tags, start_time, end_time)
+        else:
+            runtime.storage.add_fact(activity, tags, start_time, end_time)
 
 
         # hide panel only on add - on update user will want to see changes

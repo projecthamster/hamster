@@ -75,6 +75,16 @@ class Storage(object):
             self.__remove_fact(fact_id)
             self.dispatch('day_updated', fact['start_time'])
 
+    def update_fact(self, fact_id, activity_name, tags, start_time, end_time):
+        fact = self.get_fact(fact_id)
+        if fact:
+            self.__remove_fact(fact_id)
+        
+        result = self.__add_fact(activity_name, tags, start_time, end_time)
+        if result:
+            self.dispatch('day_updated', result['start_time'])
+        return result
+
     def get_activities(self, category_id = None):
         return self.__get_activities(category_id = category_id)
     
