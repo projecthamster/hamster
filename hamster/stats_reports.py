@@ -104,11 +104,7 @@ class ReportsBox(gtk.VBox):
                                                    animate = False)
         self.get_widget("totals_by_activity").add(self.activity_chart);
 
-        
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
-
-
+        # TODO - this is horribly expensive. cache it in db!
         self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
 
         self._gui.connect_signals(self)
@@ -284,17 +280,6 @@ class ReportsBox(gtk.VBox):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-
-
-
-    def after_activity_update(self, widget, renames):
-        self.do_graph()
-    
-    def after_fact_update(self, event, date):
-        self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
-        self.do_graph()
-
-
     def init_report_dialog(self):
         chooser = self.get_widget('save_report_dialog')
         chooser.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
@@ -384,6 +369,9 @@ class ReportsBox(gtk.VBox):
 
 
 def parent_painter(column, cell, model, iter):
+    if not model.get_value(iter, 3):
+        return
+    
     count = int(model.get_value(iter, 3))
     
     if count > 1:
