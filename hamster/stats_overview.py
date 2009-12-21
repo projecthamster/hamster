@@ -66,7 +66,6 @@ class OverviewBox(gtk.VBox):
         self.fact_tree = widgets.FactTree()
         self.get_widget("overview_facts_box").add(self.fact_tree)
         #self.fill_facts_tree()
-        self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
         self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
@@ -106,57 +105,18 @@ class OverviewBox(gtk.VBox):
     def after_activity_update(self, widget, renames):
         self.fill_facts_tree()
 
-    def on_fact_selection_changed(self, tree):
-        """ enables and disables action buttons depending on selected item """
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        id = -1
-        if iter:
-            id = model[iter][0]
-
-        #self.get_widget('remove').set_sensitive(id != -1)
-        #self.get_widget('edit').set_sensitive(id != -1)
-
-        return True
-
     def on_facts_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
         custom_fact = CustomFactController(self, None, model[iter][0])
         custom_fact.show()
         
-
-    def on_add_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        selected_date = self.view_date
-        if iter:
-            selected_date = model[iter][6]["date"]
-
-        custom_fact = CustomFactController(self, selected_date)
-        custom_fact.show()
-
-    def on_remove_clicked(self, button):
-        self.delete_selected()
-
     def on_facts_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
             return True
         
         return False
-
-    def on_edit_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        if model[iter][0] == -1:
-            return #not a fact
-
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
 
     def delete_selected(self):
         selection = self.fact_tree.get_selection()
@@ -256,16 +216,3 @@ class OverviewBox(gtk.VBox):
         return self._gui.get_object(name)
 
 
-
-
-if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-applet")
-    
-    window = gtk.Window()
-    window.set_title("Hamster - overview")
-    window.set_size_request(800, 600)
-    
-    window.add(OverviewBox())
-
-    window.show_all()    
-    gtk.main()    

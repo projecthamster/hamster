@@ -164,6 +164,7 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Add</property>
                 <property name="stock_id">gtk-add</property>
+                <signal name="clicked" handler="on_add_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -177,6 +178,7 @@
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Remove</property>
                 <property name="stock_id">gtk-remove</property>
+                <signal name="clicked" handler="on_remove_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -189,6 +191,7 @@
                 <property name="sensitive">False</property>
                 <property name="label" translatable="yes">Edit</property>
                 <property name="stock_id">gtk-edit</property>
+                <signal name="clicked" handler="on_edit_clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

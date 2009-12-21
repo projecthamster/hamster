@@ -39,6 +39,7 @@ import datetime as dt
 import calendar
 
 from hamster.i18n import C_
+from edit_activity import CustomFactController
 
 
 class StatsViewer(object):
@@ -62,6 +63,8 @@ class StatsViewer(object):
         
         self.overview = OverviewBox()
         self.get_widget("overview_tab").add(self.overview)
+        self.fact_tree = self.overview.fact_tree # TODO - this is upside down, should maybe get the overview tab over here
+        self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
 
         self.reports = ReportsBox()
         self.get_widget("reports_tab").add(self.reports)
@@ -93,9 +96,29 @@ class StatsViewer(object):
         self.get_widget("by_day_box").add(self.timeline)
 
         self._gui.connect_signals(self)
+        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
+
+
         self.window.show_all()
+        self.search()
 
+    def on_fact_selection_changed(self, tree):
+        """ enables and disables action buttons depending on selected item """
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
 
+        id = -1
+        if iter:
+            id = model[iter][0]
+
+        self.get_widget('remove').set_sensitive(id != -1)
+        self.get_widget('edit').set_sensitive(id != -1)
+
+        return True
+
+    def after_activity_update(self, widget, renames):
+        print widget, renames
         self.search()
 
     def search(self):
@@ -112,8 +135,6 @@ class StatsViewer(object):
         
         self.overview.search(self.start_date, self.end_date, facts)
         self.reports.search(self.start_date, self.end_date, facts)
-
-                
         
         
     def on_report_button_clicked(self, widget):
@@ -126,22 +147,23 @@ class StatsViewer(object):
         self.get_widget("preset_range").hide()
         self.get_widget("range_box").hide()
         
-        if idx == 0: # week
-            self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-            self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-            self.end_date = self.start_date + dt.timedelta(6)
-            self.get_widget("preset_range").show()
-
-        elif idx == 1: #month
-            self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
-            first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
-            self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
-            self.get_widget("preset_range").show()
-
-        elif idx == 2:
+        if idx == 2: # date range
             self.get_widget("range_box").show()
-            
-        self.search()
+        else:
+            if idx == 0: # week
+                self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+                self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
+                self.end_date = self.start_date + dt.timedelta(6)
+                self.get_widget("preset_range").show()
+    
+            elif idx == 1: #month
+                self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
+                first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
+                self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
+                self.get_widget("preset_range").show()
+    
+                
+            self.search()
         
     def on_start_date_entered(self, input):
         self.start_date = input.get_date().date()
@@ -199,19 +221,43 @@ class StatsViewer(object):
         return self._gui.get_object(name)
 
     def on_window_tabs_switch_page(self, notebook, page, pagenum):
-        if pagenum == 2:
-            year = None
-            for child in self.stats.get_widget("year_box").get_children():
-                if child.get_active():
-                    year = child.year
-            
-            self.stats.stats(year)
+        if pagenum == 0:
+            self.on_fact_selection_changed(self.fact_tree)
         elif pagenum == 1:
+            self.get_widget('remove').set_sensitive(False)
+            self.get_widget('edit').set_sensitive(False)
             self.reports.do_graph()
 
+
+    def on_add_clicked(self, button):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        selected_date = self.view_date
+        if iter and model[iter][6]: # TODO - here we should check if heading maybe specifies a date
+            selected_date = model[iter][6]["date"]
+
+        custom_fact = CustomFactController(self, selected_date)
+        custom_fact.show()
+
+    def on_remove_clicked(self, button):
+        self.delete_selected()
+
+    def on_edit_clicked(self, button):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        if model[iter][0] == -1:
+            return #not a fact
+
+        custom_fact = CustomFactController(self, None, model[iter][0])
+        custom_fact.show()
+
+
+
+
     def on_close(self, widget, event):
-        runtime.dispatcher.del_handler('activity_updated',
-                                       self.after_activity_update)
+        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
         self.close_window()        
 
