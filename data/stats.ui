@@ -270,7 +270,7 @@
             <property name="right_padding">12</property>
             <child>
               <object class="GtkAlignment" id="by_day_box">
-                <property name="height_request">50</property>
+                <property name="height_request">80</property>
                 <property name="visible">True</property>
                 <child>
                   <placeholder/>
