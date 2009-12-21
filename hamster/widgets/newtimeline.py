@@ -28,6 +28,11 @@ import calendar
 
 from bisect import bisect
 
+HOUR = dt.timedelta(seconds = 60*60)
+DAY = dt.timedelta(1)
+WEEK = dt.timedelta(7)
+MONTH = dt.timedelta(30)
+
 class NewTimeLine(graphics.Area):
     """this widget is kind of half finished"""
     
@@ -37,6 +42,8 @@ class NewTimeLine(graphics.Area):
         self.facts = []
         self.title = ""
         self.day_start = GconfStore().get_day_start()
+        self.first_weekday = stuff.locale_first_weekday()
+        
         self.minor_tick = None
         
         self.tick_totals = []
@@ -81,18 +88,18 @@ class NewTimeLine(graphics.Area):
         
 
         # determine fraction and do addittional start time move
-        if days > 180: # six month -> show per month
+        if days > 125: # about 4 month -> show per month
             self.minor_tick = dt.timedelta(days = 30) #this is approximate and will be replaced by exact days in month
             # make sure we start on first day of month
             self.start_time = self.start_time - dt.timedelta(self.start_time.day - 1)
 
         elif days > 40: # bit more than month -> show per week
-            self.minor_tick = dt.timedelta(days = 7)
+            self.minor_tick = WEEK
             # make sure we start week on first day
             #set to monday
             self.start_time = self.start_time - dt.timedelta(self.start_time.weekday() + 1)
             # look if we need to start on sunday or monday
-            self.start_time = self.start_time + dt.timedelta(stuff.locale_first_weekday())
+            self.start_time = self.start_time + dt.timedelta(self.first_weekday)
         elif days > 2: # more than two days -> show per day
             self.minor_tick = dt.timedelta(days = 1)
         else: # show per hour
@@ -111,25 +118,31 @@ class NewTimeLine(graphics.Area):
         self.rectangle(0, 0, self.width, self.height, "#666666")
         self.context.stroke()
         
-        self.height = self.height - 1
+        self.height = self.height - 2
         graph_x = 2
         graph_width = self.width - graph_x - 2
         
         total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
 
         bar_width = float(graph_width) / len(self.tick_totals)
-        
-        # the bars        
-        x = graph_x
-        for current_time, total in self.tick_totals:
-            bar_size = round(self.height * total * 0.9)
-            
-            self.fill_area(round(x) + 1, self.height - bar_size, round(bar_width) - 2, bar_size, "#eeeeee")
-            x += bar_width
 
+
+        # calculate position of each bar
+        # essentially we care more about the exact 1px gap between bars than about the bar width
+        # so after each iteration, we adjust the bar width
+        x = graph_x
+        exes = {}
+        adapted_bar_width = bar_width
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
+            x = round(x + adapted_bar_width)
+            adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
+        
 
 
         # major ticks
+        all_times = [tick[0] for tick in self.tick_totals]
+
         if self.end_time - self.start_time < dt.timedelta(days=3):  # about the same day
             major_step = dt.timedelta(seconds = 60 * 60)
         else:
@@ -144,6 +157,14 @@ class NewTimeLine(graphics.Area):
             self.set_color(color)
             self.context.line_to(round(x) + 0.5, self.height)
             self.context.stroke()
+            
+        def somewhere_in_middle(time, color):
+            # draws line somewhere in middle of the minor tick
+            left_index = exes.keys()[bisect(exes.keys(), time) - 1]
+            #should yield something between 0 and 1
+            adjustment = stuff.duration_minutes(time - left_index) / float(stuff.duration_minutes(self.minor_tick))
+            x, width = exes[left_index]
+            line(x + round(width * adjustment) - 1, color)
         
         while current_time < self.end_time:
             current_time += major_step
@@ -152,53 +173,72 @@ class NewTimeLine(graphics.Area):
             if current_time >= self.end_time: # TODO - fix the loop so we don't have to break
                 break
             
-            if major_step < dt.timedelta(days=1):  # about the same day
+            if major_step < DAY:  # about the same day
                 if current_time.time() == dt.time(0,0): # midnight
-                    line(x, "#999999")
+                    line(exes[current_time][0] - 1, "#aaaaaa")
             else:
-                if self.minor_tick == dt.timedelta(days=1):  # week change
+                if self.minor_tick == DAY:  # week change
                     if current_time.weekday() == 0:
-                        line(x, "#cccccc")
+                        line(exes[current_time][0] - 1, "#cccccc")
     
-                if self.minor_tick <= dt.timedelta(days=7):  # month change
+                if self.minor_tick <= WEEK:  # month change
                     if current_time.day == 1:
-                        line(x, "#333333")
+                        if current_time in exes:
+                            line(exes[current_time][0] - 1, "#999999")
+                        else: #if we are somewhere in middle then it gets a bit more complicated
+                            somewhere_in_middle(current_time, "#999999")
         
                 # year change    
                 if current_time.timetuple().tm_yday == 1: # year change
-                    line(x, "#00ff00")
+                    if current_time in exes:
+                        line(exes[current_time][0] - 1, "#00ff00")
+                    else: #if we are somewhere in middle - then just draw it
+                        somewhere_in_middle(current_time, "#00ff00")
 
 
-        #minor ticks
+
+        # the bars        
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            bar_size = max(round(self.height * total * 0.9), 1)
+            x, bar_width = exes[current_time]
+
+            self.fill_area(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, "#eeeeee")
+
+
+
+        #minor tick format
         if self.minor_tick >= dt.timedelta(days = 28): # month
             step_format = "%b"
 
-        elif self.minor_tick == dt.timedelta(days = 7): # week
+        elif self.minor_tick == WEEK: # week
             step_format = "%b %d"
-        elif self.minor_tick == dt.timedelta(days = 1): # day
-            step_format = "%a\n%d"
+        elif self.minor_tick == DAY: # day
+            if (self.end_time - self.start_time) > dt.timedelta(10):
+                step_format = "%b %d"
+            else:
+                step_format = "%a"
         else:        
             step_format = "%H<small><sup>%M</sup></small>"
 
 
-        x = graph_x
-        next_free = -1
-        current_time = self.start_time
-        for current_time, total in self.tick_totals:
-            self.set_color("#aaaaaa")
+        # ticks. we loop once again to avoid next bar overlapping previous text
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            if (self.end_time - self.start_time) > dt.timedelta(10) \
+               and self.minor_tick == DAY and current_time.weekday() != 0:
+                continue
+            
+            x, bar_width = exes[current_time]
 
+            self.set_color("#aaaaaa")
+            self.layout.set_width(int((self.width - x) * pango.SCALE))
             self.layout.set_markup(current_time.strftime(step_format))
             w, h = self.layout.get_pixel_size()
             
-            
-            if x > next_free:
-                self.context.move_to(x + 2, self.height - h - 2)
-                self.context.show_layout(self.layout)
-                next_free = x + 2 + w
-
-            x += bar_width
+            self.context.move_to(x + 2, self.height - h - 2)
+            self.context.show_layout(self.layout)
 
         
+        self.layout.set_width(-1)
         self.set_color("#aaaaaa")
         self.context.move_to(1, 1)
         font = pango.FontDescription(gtk.Style().font_desc.to_string())
