@@ -75,7 +75,9 @@ class OverviewBox(gtk.VBox):
         runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
 
     def fill_facts_tree(self, facts = None):
-        facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
+        if facts is None:
+            facts = runtime.storage.get_facts(self.start_date, self.end_date)
+
         self.fact_tree.detach_model()
         
         self.fact_tree.clear()
@@ -102,6 +104,16 @@ class OverviewBox(gtk.VBox):
         self.fill_facts_tree(facts)
 
     """ events """
+    def on_edit_clicked(self, button):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        if model[iter][0] == -1:
+            return #not a fact
+
+        custom_fact = CustomFactController(self, None, model[iter][0])
+        custom_fact.show()
+
     def after_activity_update(self, widget, renames):
         self.fill_facts_tree()
 

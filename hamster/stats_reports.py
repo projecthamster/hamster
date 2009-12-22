@@ -120,6 +120,7 @@ class ReportsBox(gtk.VBox):
 
 
     def search(self, start_date, end_date, facts):
+        self.facts = facts
         self.start_date = start_date
         self.end_date = end_date
         self.fill_totals_tree(facts)
@@ -128,8 +129,8 @@ class ReportsBox(gtk.VBox):
 
 
     def fill_totals_tree(self, facts = None):        
-        facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
-
+        if facts is None:
+            facts = runtime.storage.get_facts(self.start_date, self.end_date)
 
         #first group by category, activity and tags
         #sort before grouping
@@ -261,7 +262,8 @@ class ReportsBox(gtk.VBox):
                                  stack_keys = all_categories)
         
     def do_graph(self, facts = None):
-        facts = facts or runtime.storage.get_facts(self.start_date, self.end_date)
+        if facts is None:
+            facts = runtime.storage.get_facts(self.start_date, self.end_date)
 
         self.fill_totals_tree(facts)
 
@@ -336,7 +338,7 @@ class ReportsBox(gtk.VBox):
                                                                     categories):
         self.report_chooser = None
         
-        facts = runtime.storage.get_facts(start_date, end_date, category_id = categories)
+        facts = runtime.storage.get_facts(start_date, end_date)
         reports.simple(facts,
                        start_date,
                        end_date,
