@@ -34,9 +34,7 @@ class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
         # format, path, start_date, end_date
         'report-chosen': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-                          (gobject.TYPE_STRING, gobject.TYPE_STRING,
-                           gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT,
-                           gobject.TYPE_PYOBJECT)),
+                          (gobject.TYPE_STRING, gobject.TYPE_STRING)),
         'report-chooser-closed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
     def __init__(self):
@@ -84,13 +82,6 @@ class ReportChooserDialog(gtk.Dialog):
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
         
-        self.start_date = DateInput()
-        ui.get_object('from_date_box').add(self.start_date)
-        self.end_date = DateInput()
-        ui.get_object('to_date_box').add(self.end_date)
-
-        self.category_box = ui.get_object('category_box')
-
         ui.get_object('save_button').connect("clicked", self.on_save_button_clicked)
         ui.get_object('cancel_button').connect("clicked", self.on_cancel_button_clicked)
         
@@ -102,37 +93,6 @@ class ReportChooserDialog(gtk.Dialog):
                                            end_date.strftime("%x").replace("/", "."))
         self.dialog.set_current_name(filename)
         
-        self.start_date.set_date(start_date)
-        self.end_date.set_date(end_date)
-        
-        #add unsorted category
-        button_all = gtk.CheckButton(C_("categories", "All").encode("utf-8"))
-        button_all.value = None
-        button_all.set_active(True)
-        
-        def on_category_all_clicked(checkbox):
-            active = checkbox.get_active()
-            for checkbox in self.category_box.get_children():
-                checkbox.set_active(active)
-        
-        button_all.connect("clicked", on_category_all_clicked)
-        self.category_box.attach(button_all, 0, 1, 0, 1)
-
-        categories = runtime.storage.get_category_list()
-        col, row = 0, 0
-        for category in categories:
-            col +=1
-            if col % 4 == 0:
-                col = 0
-                row +=1
-
-            button = gtk.CheckButton(category['name'].encode("utf-8"))
-            button.value = category['id']
-            button.set_active(True)
-            self.category_box.attach(button, col, col+1, row, row+1)
-
-        
-
         response = self.dialog.show_all()
 
     def present(self):
@@ -153,18 +113,9 @@ class ReportChooserDialog(gtk.Dialog):
             path = "%s.%s" % (path.rstrip("."), format)
         
         categories = []
-        for button in self.category_box.get_children():
-            if button.get_active():
-                categories.append(button.value)
-        
-        if None in categories:
-            categories = None # nothing is everything
-        
+
         # format, path, start_date, end_date
-        self.emit("report-chosen", format, path,
-                           self.start_date.get_date().date(),
-                           self.end_date.get_date().date(),
-                           categories)
+        self.emit("report-chosen", format, path)
         self.dialog.destroy()
         
 

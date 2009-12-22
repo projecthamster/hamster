@@ -334,16 +334,9 @@ class ReportsBox(gtk.VBox):
         filter.add_pattern("*")
         chooser.add_filter(filter)
         
-    def on_report_chosen(self, widget, format, path, start_date, end_date,
-                                                                    categories):
+    def on_report_chosen(self, widget, format, path):
         self.report_chooser = None
-        
-        facts = runtime.storage.get_facts(start_date, end_date)
-        reports.simple(facts,
-                       start_date,
-                       end_date,
-                       format,
-                       path)
+        reports.simple(self.facts, self.start_date, self.end_date, format, path)
 
         if format == ("html"):
             webbrowser.open_new("file://%s" % path)
