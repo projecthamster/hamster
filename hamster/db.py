@@ -317,7 +317,7 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "activity_id", "category", "category_id", "tags"]
+                    "category", "tags"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
             
             grouped_fact["tags"] = [ft["tags"] for ft in fact_tags if ft["tags"]]
@@ -572,14 +572,14 @@ class Storage(storage.Storage):
         return self.__get_fact(fact_id)
 
 
-    def __get_facts(self, date, end_date = None, category_id = None):
+    def __get_facts(self, date, end_date = None, search_terms = ""):
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
                           a.end_time AS end_time,
                           a.description as description,
-                          b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
+                          b.name AS name,
+                          coalesce(c.name, ?) as category,
                           e.name as tags
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
@@ -588,12 +588,35 @@ class Storage(storage.Storage):
                 LEFT JOIN tags e ON e.id = d.tag_id
                     WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
         """
-        
-        if category_id and isinstance(category_id, int):
-            query += " and b.category_id = %d" % category_id
-        elif category_id and isinstance(category_id, list):
-            query += " and b.category_id IN (%s)" % (",".join([str(id) for id in category_id]))
 
+        # let's see what we can do with search terms
+        # we will be looking in activity names, descriptions, categories and tags
+        # comma will be treated as OR
+        # space will be treated as AND or possible join
+        
+
+        # split by comma and then by space and remove all extra spaces
+        or_bits = [[term.strip().lower().replace("'", "''") #striping removing case sensitivity and escaping quotes in term
+                          for term in terms.strip().split(" ") if term.strip()]
+                          for terms in search_terms.split(",") if terms.strip()]
+        
+        if or_bits:
+            search_query = "1<>1 "
+            
+            for and_bits in or_bits:
+                and_query = "1=1 "
+                for and_bit in and_bits:
+                    and_query += """and (lower(a.description) like '%%%(term)s%%'
+                                     or lower(b.name) = '%(term)s'
+                                     or lower(c.name) = '%(term)s'
+                                     or lower(e.name) = '%(term)s' )""" % dict(term = and_bit)
+                
+                search_query = "%s or (%s) " % (search_query, and_query)
+    
+            query = "%s and (%s)" % (query, search_query)
+        
+
+        
         query += " ORDER BY a.start_time"
         end_date = end_date or date
 
@@ -604,7 +627,9 @@ class Storage(storage.Storage):
         datetime_from = dt.datetime.combine(date, split_time)
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
         
-        facts = self.fetchall(query, (_("Unsorted"), datetime_from, datetime_to))
+        facts = self.fetchall(query, (_("Unsorted"),
+                                      datetime_from,
+                                      datetime_to))
         
         #first let's put all tags in an array
         facts = self.__group_tags(facts)

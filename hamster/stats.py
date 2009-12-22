@@ -128,14 +128,18 @@ class StatsViewer(object):
         self.start_date_input.set_date(self.start_date)
         self.end_date_input.set_date(self.end_date)
         
-        facts = runtime.storage.get_facts(self.start_date, self.end_date)
+        search_terms = self.get_widget("search").get_text().decode("utf8", "replace")
+        facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
+
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
 
         self.timeline.draw(facts, self.start_date, self.end_date)
         
         self.overview.search(self.start_date, self.end_date, facts)
         self.reports.search(self.start_date, self.end_date, facts)
-        
+
+    def on_search_activate(self, widget):
+        self.search()
         
     def on_report_button_clicked(self, widget):
         self.reports.on_report_button_clicked(widget) #forward for now
@@ -226,7 +230,7 @@ class StatsViewer(object):
         elif pagenum == 1:
             self.get_widget('remove').set_sensitive(False)
             self.get_widget('edit').set_sensitive(False)
-            self.reports.do_graph()
+            self.reports.do_graph(self.facts)
 
 
     def on_add_clicked(self, button):
