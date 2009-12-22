@@ -1,4 +1,17 @@
 ===============
+Version 2.29.4
+===============
+  * overview window overhaul(still in progress)
+  * more progress on tag front (now showing in lists)
+  
+  Updated translations
+   * es (Jorge González)
+   * et (Ivar Smolin)
+   * he (Yair Hershkovitz)
+   * sl (Matej Urbančič)
+   * zh_CN (Funda Wang)
+
+===============
 Version 2.29.3
 ===============
   * partial tag support (adding to a fact and editing autocomplete list,
