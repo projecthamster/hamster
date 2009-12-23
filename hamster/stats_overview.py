@@ -23,17 +23,14 @@ pygtk.require('2.0')
 
 import os
 import gtk, gobject
-import pango
 
 import stuff
-import charting
 
 from edit_activity import CustomFactController
-import reports, graphics
 
 import widgets
 
-from configuration import runtime, GconfStore
+from configuration import runtime
 import webbrowser
 
 from itertools import groupby
@@ -52,34 +49,26 @@ class OverviewBox(gtk.VBox):
         self._gui = stuff.load_ui_file("stats_overview.ui")
         self.get_widget("overview_box").reparent(self) #mine!
 
-
-        self.view_date = dt.date.today()
-        #set to monday
-        self.start_date = self.view_date - \
-                                      dt.timedelta(self.view_date.weekday() + 1)
-        # look if we need to start on sunday or monday
-        self.start_date = self.start_date + \
-                                      dt.timedelta(stuff.locale_first_weekday())
+        self.start_date, self.end_date = None, None
+        self.facts = []
         
-        self.end_date = self.start_date + dt.timedelta(6)
-
         self.fact_tree = widgets.FactTree()
         self.get_widget("overview_facts_box").add(self.fact_tree)
-        #self.fill_facts_tree()
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
         self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
-
         self._gui.connect_signals(self)
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
 
-    def fill_facts_tree(self, facts = None):
-        if facts is None:
-            facts = runtime.storage.get_facts(self.start_date, self.end_date)
 
+    def search(self, start_date, end_date, facts):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.facts = facts
+        self.fill_facts_tree()
+
+
+    def fill_facts_tree(self):
         self.fact_tree.detach_model()
-        
         self.fact_tree.clear()
         
         #create list of all required dates
@@ -87,48 +76,16 @@ class OverviewBox(gtk.VBox):
                     for i in range((self.end_date - self.start_date).days  + 1)]
         
         #update with facts for the day
-        for date, facts in groupby(facts, lambda fact: fact["date"]):
+        for date, facts in groupby(self.facts, lambda fact: fact["date"]):
             dates[dates.index((date, []))] = (date, list(facts))
 
         # push them in tree
         for date, facts in dates:
             fact_date = date.strftime(C_("overview list", "%A, %b %d"))
-
             self.fact_tree.add_group(fact_date, facts)
 
         self.fact_tree.attach_model()
 
-    def search(self, start_date, end_date, facts):
-        self.start_date = start_date
-        self.end_date = end_date
-        self.fill_facts_tree(facts)
-
-    """ events """
-    def on_edit_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        if model[iter][0] == -1:
-            return #not a fact
-
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
-
-    def after_activity_update(self, widget, renames):
-        self.fill_facts_tree()
-
-    def on_facts_row_activated(self, tree, path, column):
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
-        
-    def on_facts_keys(self, tree, event):
-        if (event.keyval == gtk.keysyms.Delete):
-            self.delete_selected()
-            return True
-        
-        return False
 
     def delete_selected(self):
         selection = self.fact_tree.get_selection()
@@ -168,7 +125,32 @@ class OverviewBox(gtk.VBox):
 
         clipboard = gtk.Clipboard()
         clipboard.set_text(fact_str)
-    
+
+
+    """ events """
+    def on_edit_clicked(self, button):
+        selection = self.fact_tree.get_selection()
+        (model, iter) = selection.get_selected()
+
+        if model[iter][0] == -1:
+            return #not a fact
+
+        custom_fact = CustomFactController(self, None, model[iter][0])
+        custom_fact.show()
+
+    def on_facts_row_activated(self, tree, path, column):
+        selection = tree.get_selection()
+        (model, iter) = selection.get_selected()
+        custom_fact = CustomFactController(self, None, model[iter][0])
+        custom_fact.show()
+        
+    def on_facts_keys(self, tree, event):
+        if (event.keyval == gtk.keysyms.Delete):
+            self.delete_selected()
+            return True
+        
+        return False
+
     def check_clipboard(self):
         clipboard = gtk.Clipboard()
         clipboard.request_text(self.on_clipboard_text)
@@ -228,3 +210,20 @@ class OverviewBox(gtk.VBox):
         return self._gui.get_object(name)
 
 
+if __name__ == "__main__":
+    gtk.window_set_default_icon_name("hamster-applet")    
+    window = gtk.Window()
+    window.set_title("Hamster - reports")
+    window.set_size_request(800, 600)
+    overview = OverviewBox()
+    window.add(overview)
+    window.connect("delete_event", lambda *args: gtk.main_quit())
+    window.show_all()
+    
+    start_date = dt.date.today() - dt.timedelta(days=30)    
+    end_date = dt.date.today()
+    facts = runtime.storage.get_facts(start_date, end_date)
+    overview.search(start_date, end_date, facts)
+    
+
+    gtk.main()    

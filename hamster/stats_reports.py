@@ -17,31 +17,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime as dt
+import calendar
+import time
+import webbrowser
+from itertools import groupby
 
 import pygtk
 pygtk.require('2.0')
 
-import os
-import gtk, gobject
-import pango
-
-import stuff
-import charting
-
-from edit_activity import CustomFactController
-import reports, graphics
-
-import widgets
-
-from configuration import runtime, GconfStore
-import webbrowser
-
-from itertools import groupby
 from gettext import ngettext
 
-import datetime as dt
-import calendar
-import time
+import os
+import gtk, gobject
+
+import stuff, widgets
+import charting, reports
+from configuration import runtime, GconfStore
+
 from hamster.i18n import C_
 
 
@@ -51,17 +44,7 @@ class ReportsBox(gtk.VBox):
         self._gui = stuff.load_ui_file("stats_reports.ui")
         self.get_widget("reports_box").reparent(self) #mine!
 
-        self.view_date = dt.date.today()
-        
-        #set to monday
-        self.start_date = self.view_date - \
-                                      dt.timedelta(self.view_date.weekday() + 1)
-        # look if we need to start on sunday or monday
-        self.start_date = self.start_date + \
-                                      dt.timedelta(stuff.locale_first_weekday())
-        
-        self.end_date = self.start_date + dt.timedelta(6)
-
+        self.start_date, self.end_date = None, None
         
         self.totals_tree = TotalsTree()
         self.get_widget("totals_tree_box").add(self.totals_tree)
@@ -104,37 +87,40 @@ class ReportsBox(gtk.VBox):
                                                    animate = False)
         self.get_widget("totals_by_activity").add(self.activity_chart);
 
-        # TODO - this is horribly expensive. cache it in db!
+        # TODO - this looks expensive. cache it in db!
         self.popular_categories = [cat[0] for cat in runtime.storage.get_popular_categories()]
 
         self._gui.connect_signals(self)
-        self.totals_tree.grab_focus()
-
         
         self.config = GconfStore()
         runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
         self.report_chooser = None
-        #self.fill_totals_tree()
-        #self.do_graph()
 
 
     def search(self, start_date, end_date, facts):
         self.facts = facts
         self.start_date = start_date
         self.end_date = end_date
-        self.fill_totals_tree(facts)
-        self.do_graph(facts)
+        self.do_graph()
+
+    def do_graph(self):
+        self.fill_totals_tree()
+
+        if not self.facts:
+            self.get_widget("graphs").hide()
+            self.get_widget("no_data_label").show()
+            return 
+
+        self.get_widget("no_data_label").hide()
+        self.get_widget("graphs").show()
+        self.do_charts(self.facts)
 
 
-
-    def fill_totals_tree(self, facts = None):        
-        if facts is None:
-            facts = runtime.storage.get_facts(self.start_date, self.end_date)
-
+    def fill_totals_tree(self):
         #first group by category, activity and tags
         #sort before grouping
-        facts = sorted(facts, key = lambda fact:(fact["category"], fact["name"], fact["tags"]))
+        facts = sorted(self.facts, key = lambda fact:(fact["category"], fact["name"], fact["tags"]))
 
         totals = []
         for group, facts in groupby(facts, lambda fact:(fact["category"], fact["name"], fact["tags"])):
@@ -190,14 +176,6 @@ class ReportsBox(gtk.VBox):
             
             self.totals_tree.expand_row((i-1,), False)
 
-
-    def on_graph_frame_size_allocate(self, widget, new_size):
-        w = min(new_size.width / 4, 200)
-        
-        self.activity_chart.legend_width = w
-        self.category_chart.legend_width = w
-        self.get_widget("totals_by_category").set_size_request(w + 40, -1)
-    
 
     def do_charts(self, facts):
         all_categories = self.popular_categories
@@ -261,22 +239,15 @@ class ReportsBox(gtk.VBox):
                                  by_duration,
                                  stack_keys = all_categories)
         
-    def do_graph(self, facts = None):
-        if facts is None:
-            facts = runtime.storage.get_facts(self.start_date, self.end_date)
-
-        self.fill_totals_tree(facts)
-
-        if not facts:
-            self.get_widget("graphs").hide()
-            self.get_widget("no_data_label").show()
-            return 
-
-
-        self.get_widget("no_data_label").hide()
-        self.get_widget("graphs").show()
-        self.do_charts(facts)
             
+    def on_graph_frame_size_allocate(self, widget, new_size):
+        w = min(new_size.width / 4, 200)
+        
+        self.activity_chart.legend_width = w
+        self.category_chart.legend_width = w
+        self.get_widget("totals_by_category").set_size_request(w + 40, -1)
+    
+
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -362,42 +333,6 @@ class ReportsBox(gtk.VBox):
         self.do_graph()
 
 
-
-def parent_painter(column, cell, model, iter):
-    if not model.get_value(iter, 3):
-        return
-    
-    count = int(model.get_value(iter, 3))
-    
-    if count > 1:
-        cell_text = "%s (&#215;%s)" % (stuff.escape_pango(model.get_value(iter, 0)), count)
-    else:
-        cell_text = "%s" % stuff.escape_pango(model.get_value(iter, 0))
-        
-    
-    if model.iter_parent(iter) is None:
-        if model.get_path(iter) == (0,):
-            text = '<span weight="heavy">%s</span>' % cell_text
-        else:
-            text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
-            
-        cell.set_property('markup', text)
-
-    else:
-        cell.set_property('markup', cell_text)
-
-def duration_painter(column, cell, model, iter):
-    cell.set_property('xalign', 1)
-
-
-    text = model.get_value(iter, 2)
-    if model.iter_parent(iter) is None:
-        if model.get_path(iter) == (0,):
-            text = '<span weight="heavy">%s</span>' % text
-        else:
-            text = '<span weight="heavy" rise="-20000">%s</span>' % text
-    cell.set_property('markup', text)
-
 class TotalsTree(gtk.TreeView):
     def __init__(self):
         gtk.TreeView.__init__(self)
@@ -411,9 +346,8 @@ class TotalsTree(gtk.TreeView):
         # name
         nameColumn = gtk.TreeViewColumn()
         nameCell = gtk.CellRendererText()
-        #nameCell.set_property("ellipsize", pango.ELLIPSIZE_END)
         nameColumn.pack_start(nameCell, True)
-        nameColumn.set_cell_data_func(nameCell, parent_painter)
+        nameColumn.set_cell_data_func(nameCell, self.parent_painter)
         self.append_column(nameColumn)
 
         tag_cell = widgets.TagCellRenderer()
@@ -427,7 +361,7 @@ class TotalsTree(gtk.TreeView):
         timeColumn = gtk.TreeViewColumn()
         timeCell = gtk.CellRendererText()
         timeColumn.pack_end(timeCell, True)
-        timeColumn.set_cell_data_func(timeCell, duration_painter)
+        timeColumn.set_cell_data_func(timeCell, self.duration_painter)
         self.append_column(timeColumn)
 
 
@@ -466,9 +400,40 @@ class TotalsTree(gtk.TreeView):
 
         self.expand_all()
 
-
+    @staticmethod
+    def parent_painter(column, cell, model, iter):
+        if not model.get_value(iter, 3):
+            return
         
-
+        count = int(model.get_value(iter, 3))
+        
+        if count > 1:
+            cell_text = "%s (&#215;%s)" % (stuff.escape_pango(model.get_value(iter, 0)), count)
+        else:
+            cell_text = "%s" % stuff.escape_pango(model.get_value(iter, 0))
+            
+        
+        if model.iter_parent(iter) is None:
+            if model.get_path(iter) == (0,):
+                text = '<span weight="heavy">%s</span>' % cell_text
+            else:
+                text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
+                
+            cell.set_property('markup', text)
+    
+        else:
+            cell.set_property('markup', cell_text)
+    
+    @staticmethod
+    def duration_painter(column, cell, model, iter):
+        cell.set_property('xalign', 1)
+        text = model.get_value(iter, 2)
+        if model.iter_parent(iter) is None:
+            if model.get_path(iter) == (0,):
+                text = '<span weight="heavy">%s</span>' % text
+            else:
+                text = '<span weight="heavy" rise="-20000">%s</span>' % text
+        cell.set_property('markup', text)
 
 
 if __name__ == "__main__":
@@ -476,8 +441,16 @@ if __name__ == "__main__":
     window = gtk.Window()
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)
-    window.add(ReportsBox())
+    reports = ReportsBox()
+    window.add(reports)
+    window.connect("delete_event", lambda *args: gtk.main_quit())
+    window.show_all()
 
-    window.show_all()    
+    start_date = dt.date.today() - dt.timedelta(days=30)    
+    end_date = dt.date.today()
+    facts = runtime.storage.get_facts(start_date, end_date)
+    reports.search(start_date, end_date, facts)
+    
+
     gtk.main()    
 
