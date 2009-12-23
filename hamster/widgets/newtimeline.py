@@ -121,9 +121,11 @@ class NewTimeLine(graphics.Area):
         self.height = self.height - 2
         graph_x = 2
         graph_width = self.width - graph_x - 2
+
+        if not self.facts:
+            return
         
         total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
-
         bar_width = float(graph_width) / len(self.tick_totals)
 
 
