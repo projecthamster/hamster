@@ -186,7 +186,7 @@ A week of usage would be nice!"""))
             self.get_widget("not_enough_records_label").hide()
 
         # All dates in the scope
-        self.timeline.draw(facts)
+        self.timeline.draw(facts, facts[0]["date"], facts[-1]["date"])
 
 
         # Totals by category

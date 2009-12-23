@@ -17,156 +17,325 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from .hamster import graphics
+import gtk, pango
+
+from .hamster import graphics, stuff
+
+from .hamster.configuration import GconfStore
+
 import datetime as dt
+import calendar
+
+from bisect import bisect
+
+HOUR = dt.timedelta(seconds = 60*60)
+DAY = dt.timedelta(1)
+WEEK = dt.timedelta(7)
+MONTH = dt.timedelta(30)
 
 class TimeLine(graphics.Area):
     """this widget is kind of half finished"""
     
-    MODE_YEAR = 0
-    MODE_MONTH = 1
-    MODE_WEEK = 1
-    MODE_DAY = 3
     def __init__(self):
         graphics.Area.__init__(self)
-        self.start_date, self.end_date = None, None
-        self.draw_mode = None
-        self.max_hours = None
+        self.start_time, self.end_time = None, None
+        self.facts = []
+        self.title = ""
+        self.day_start = GconfStore().get_day_start()
+        self.first_weekday = stuff.locale_first_weekday()
+        
+        self.minor_tick = None
+        
+        self.tick_totals = []
 
         
-    # Normal stuff    
-    def draw(self, facts):
-        import itertools
-        self.facts = {}
-        for date, date_facts in itertools.groupby(facts, lambda x: x["start_time"].date()):
-            date_facts = list(date_facts)
-            self.facts[date] = date_facts
-            self.max_hours = max(self.max_hours,
-                                 sum([fact["delta"].seconds / 60 / float(60) +
-                               fact["delta"].days * 24 for fact in date_facts]))
+    def draw(self, facts, start_date, end_date):
+        self.facts = facts
         
-        start_date = facts[0]["start_time"].date()
-        end_date = facts[-1]["start_time"].date()
+        if start_date > end_date:
+            start_date, end_date = end_date, start_date
 
-        self.draw_mode = self.MODE_YEAR
-        self.start_date = start_date.replace(month=1, day=1)
-        self.end_date = end_date.replace(month=12, day=31)
-        
+        self.set_title(start_date, end_date) # we will forget about all our magic manipulations for the title
 
-        """
-        #TODO - for now we have only the year mode        
-        if start_date.year != end_date.year or start_date.month != end_date.month:
-            self.draw_mode = self.MODE_YEAR
-            self.start_date = start_date.replace(month=1, day=1)
-            self.end_date = end_date.replace(month=12, day=31)
-        elif start_date.strftime("%W") != end_date.strftime("%W"):
-            self.draw_mode = self.MODE_MONTH
-            self.start_date = start_date.replace(day=1)
-            self.end_date = end_date.replace(date =
-                                    calendar.monthrange(self.end_date.year,
-                                                        self.end_date.month)[1])
-        elif start_date != end_date:
-            self.draw_mode = self.MODE_WEEK
+        # for hourly representation we will operate in minutes since and until the day start
+        if end_date - start_date < dt.timedelta(days=2):
+            start_time = dt.datetime.combine(start_date, self.day_start.replace(minute=0))
+            end_time = dt.datetime.combine(end_date, self.day_start.replace(minute=0)) + dt.timedelta(days = 1)
+
+            fact_start_time, fact_end_time = start_time, end_time
+            if facts:
+                fact_start_time = facts[0]["start_time"]
+                fact_end_time = facts[-1]["start_time"] + facts[-1]["delta"]
+    
+            self.start_time = min([start_time, fact_start_time])
+            self.end_time = max([end_time, fact_end_time])
+
         else:
-            self.draw_mode = self.MODE_DAY
-        """
+            start_time = dt.datetime.combine(start_date, dt.time())
+            end_time = dt.datetime.combine(end_date, dt.time(23, 59))
+
+            fact_start_time, fact_end_time = start_time, end_time
+            if facts:
+                fact_start_time = dt.datetime.combine(facts[0]["date"], dt.time())
+                fact_end_time = dt.datetime.combine(facts[-1]["date"], dt.time())
+    
+            self.start_time = min([start_time, fact_start_time])
+            self.end_time = max([end_time, fact_end_time])
+
+
+
+        days = (self.end_time - self.start_time).days
+        
+
+        # determine fraction and do addittional start time move
+        if days > 125: # about 4 month -> show per month
+            self.minor_tick = dt.timedelta(days = 30) #this is approximate and will be replaced by exact days in month
+            # make sure we start on first day of month
+            self.start_time = self.start_time - dt.timedelta(self.start_time.day - 1)
+
+        elif days > 40: # bit more than month -> show per week
+            self.minor_tick = WEEK
+            # make sure we start week on first day
+            #set to monday
+            self.start_time = self.start_time - dt.timedelta(self.start_time.weekday() + 1)
+            # look if we need to start on sunday or monday
+            self.start_time = self.start_time + dt.timedelta(self.first_weekday)
+        elif days > 2: # more than two days -> show per day
+            self.minor_tick = dt.timedelta(days = 1)
+        else: # show per hour
+            self.minor_tick = dt.timedelta(seconds = 60 * 60)
+
+        self.count_hours()
         
         self.redraw_canvas()
-        
-        
+
+
     def on_expose(self):
-        import calendar
+        self.context.set_line_width(1)
+
+        self.fill_area(0, 0, self.width, self.height, "#fafafa")
+        self.context.stroke()
+        self.rectangle(0, 0, self.width, self.height, "#666666")
+        self.context.stroke()
         
-        if self.draw_mode != self.MODE_YEAR:
+        self.height = self.height - 2
+        graph_x = 2
+        graph_width = self.width - graph_x - 2
+
+        if not self.facts:
             return
-
-        self.fill_area(0, 0, self.width, self.height, (0.975,0.975,0.975))
-        self.set_color((100,100,100))
-
         
-        days = (self.end_date - self.start_date).days
-        pixels_in_day = self.width / float(days)
+        total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
+        bar_width = float(graph_width) / len(self.tick_totals)
 
-        month_label_fits = True
-        for month in range(1, 13):
-            self.layout.set_text(calendar.month_abbr[month])
-            label_w, label_h = self.layout.get_pixel_size()
-            if label_w * 2 > pixels_in_day * 30:
-                month_label_fits = False
-                break
+
+        # calculate position of each bar
+        # essentially we care more about the exact 1px gap between bars than about the bar width
+        # so after each iteration, we adjust the bar width
+        x = graph_x
+        exes = {}
+        adapted_bar_width = bar_width
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
+            x = round(x + adapted_bar_width)
+            adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
         
+
+
+        # major ticks
+        all_times = [tick[0] for tick in self.tick_totals]
+
+        if self.end_time - self.start_time < dt.timedelta(days=3):  # about the same day
+            major_step = dt.timedelta(seconds = 60 * 60)
+        else:
+            major_step = dt.timedelta(days=1)
         
-        ticker_date = self.start_date
+        x = graph_x
+        major_tick_step = graph_width / (total_minutes / float(stuff.duration_minutes(major_step)))
+        current_time = self.start_time
         
-        year_pos = 0
-        
-        for year in range(self.start_date.year, self.end_date.year + 1):
-            #due to how things lay over, we are putting labels on backwards, so that they don't overlap
-            
-            self.context.set_line_width(1)
-            for month in range(1, 13):
-                for day in range(1, calendar.monthrange(year, month)[1] + 1):
-                    ticker_pos = (year_pos + ticker_date.timetuple().tm_yday * pixels_in_day)
-                    
-                        
-    
-                    if pixels_in_day > 5:
-                        self.context.move_to(ticker_pos, self.height - 20)
-                        self.context.line_to(ticker_pos, self.height)
-                   
-                        self.layout.set_text(ticker_date.strftime("%d"))
-                        label_w, label_h = self.layout.get_pixel_size()
-                        
-                        if label_w < pixels_in_day / 1.2: #if label fits
-                            self.context.move_to(ticker_pos + 2, self.height - 20)
-                            self.context.show_layout(self.layout)
-                    
-                        self.context.stroke()
-                        
-                    #now facts
-                    facts_today = self.facts.get(ticker_date, [])
-                    if facts_today:
-                        total_length = dt.timedelta()
-                        for fact in facts_today:
-                            total_length += fact["delta"]
-                        total_length = total_length.seconds / 60 / 60.0 + total_length.days * 24
-                        total_length = total_length / float(self.max_hours) * self.height - 16
-
-                        self.fill_area(round(ticker_pos),
-                                       round(self.height - total_length),
-                                       round(pixels_in_day),
-                                       round(total_length),
-                                       (190,190,190))
-
-
-                        
-
-                    ticker_date += dt.timedelta(1)
-                
-            
-                
-                if month_label_fits:
-                    #roll back a little
-                    month_pos = ticker_pos - (calendar.monthrange(year, month)[1] + 1) * pixels_in_day
-
-                    self.context.move_to(month_pos, 0)
-                    self.layout.set_text(dt.date(year, month, 1).strftime("%b"))
-                    self.context.show_layout(self.layout)
-
-
-    
-            
-    
-            self.layout.set_text("%d" % year)
-            label_w, label_h = self.layout.get_pixel_size()
-                        
-            self.context.move_to(year_pos + 2, month_label_fits * label_h * 1.2)
-    
-            self.context.show_layout(self.layout)
-            
+        def line(x, color):
+            self.context.move_to(round(x) + 0.5, 0)
+            self.set_color(color)
+            self.context.line_to(round(x) + 0.5, self.height)
             self.context.stroke()
+            
+        def somewhere_in_middle(time, color):
+            # draws line somewhere in middle of the minor tick
+            left_index = exes.keys()[bisect(exes.keys(), time) - 1]
+            #should yield something between 0 and 1
+            adjustment = stuff.duration_minutes(time - left_index) / float(stuff.duration_minutes(self.minor_tick))
+            x, width = exes[left_index]
+            line(x + round(width * adjustment) - 1, color)
+        
+        while current_time < self.end_time:
+            current_time += major_step
+            x += major_tick_step
+            
+            if current_time >= self.end_time: # TODO - fix the loop so we don't have to break
+                break
+            
+            if major_step < DAY:  # about the same day
+                if current_time.time() == dt.time(0,0): # midnight
+                    line(exes[current_time][0] - 1, "#aaaaaa")
+            else:
+                if self.minor_tick == DAY:  # week change
+                    if current_time.weekday() == 0:
+                        line(exes[current_time][0] - 1, "#cccccc")
+    
+                if self.minor_tick <= WEEK:  # month change
+                    if current_time.day == 1:
+                        if current_time in exes:
+                            line(exes[current_time][0] - 1, "#999999")
+                        else: #if we are somewhere in middle then it gets a bit more complicated
+                            somewhere_in_middle(current_time, "#999999")
+        
+                # year change    
+                if current_time.timetuple().tm_yday == 1: # year change
+                    if current_time in exes:
+                        line(exes[current_time][0] - 1, "#00ff00")
+                    else: #if we are somewhere in middle - then just draw it
+                        somewhere_in_middle(current_time, "#00ff00")
 
-            year_pos = ticker_pos #save current state for next year
+
+
+        # the bars        
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            bar_size = max(round(self.height * total * 0.9), 1)
+            x, bar_width = exes[current_time]
+
+            self.fill_area(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, "#eeeeee")
+
+
+
+        #minor tick format
+        if self.minor_tick >= dt.timedelta(days = 28): # month
+            step_format = "%b"
+
+        elif self.minor_tick == WEEK: # week
+            step_format = "%b %d"
+        elif self.minor_tick == DAY: # day
+            if (self.end_time - self.start_time) > dt.timedelta(10):
+                step_format = "%b %d"
+            else:
+                step_format = "%a"
+        else:        
+            step_format = "%H<small><sup>%M</sup></small>"
+
+
+        # ticks. we loop once again to avoid next bar overlapping previous text
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            if (self.end_time - self.start_time) > dt.timedelta(10) \
+               and self.minor_tick == DAY and current_time.weekday() != 0:
+                continue
+            
+            x, bar_width = exes[current_time]
+
+            self.set_color("#aaaaaa")
+            self.layout.set_width(int((self.width - x) * pango.SCALE))
+            self.layout.set_markup(current_time.strftime(step_format))
+            w, h = self.layout.get_pixel_size()
+            
+            self.context.move_to(x + 2, self.height - h - 2)
+            self.context.show_layout(self.layout)
+
+        
+        self.layout.set_width(-1)
+        self.set_color("#aaaaaa")
+        self.context.move_to(1, 1)
+        font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        font.set_size(14 * pango.SCALE)
+        font.set_weight(pango.WEIGHT_BOLD)
+        self.layout.set_font_description(font)
+
+        self.layout.set_markup(self.title)
+
+        self.context.show_layout(self.layout)
+
+
+    def count_hours(self):
+        #go through facts and make array of time used by our fraction
+        fractions = []
+        
+        current_time = self.start_time
+
+        minor_tick = self.minor_tick
+        while current_time <= self.end_time:
+            # if minor tick is month, the starting date will have been
+            # already adjusted to the first
+            # now we have to make sure to move month by month
+            if self.minor_tick >= dt.timedelta(days=28): 
+                minor_tick = dt.timedelta(calendar.monthrange(current_time.year, current_time.month)[1]) # days in month
+            
+            fractions.append(current_time)
+            current_time += minor_tick
+        
+        hours = [0] * len(fractions)
+        
+        tick_minutes = float(stuff.duration_minutes(self.minor_tick))
+        
+        for fact in self.facts:
+            if self.minor_tick < dt.timedelta(1):
+                end_time = fact["start_time"] + fact["delta"] # the thing about ongoing task - it has no end time
+                
+                # find in which fraction the fact starts and
+                # add duration up to the border of tick to that fraction
+                # then move cursor to the start of next fraction
+                first_index = bisect(fractions, fact["start_time"]) - 1
+                step_time = fractions[first_index]
+                first_end = min(end_time, step_time + self.minor_tick)
+                first_tick = stuff.duration_minutes(first_end - fact["start_time"]) / tick_minutes
+                
+                hours[first_index] += first_tick
+                step_time = step_time + self.minor_tick
+    
+                # now go through ticks until we reach end of the time
+                while step_time < end_time:
+                    index = bisect(fractions, step_time) - 1
+                    interval = min([1, stuff.duration_minutes(end_time - step_time) / tick_minutes])
+                    hours[index] += interval
+                    
+                    step_time += self.minor_tick
+            else:
+                hour_index = bisect(fractions, dt.datetime.combine(fact["date"], dt.time())) - 1
+                hours[hour_index] += stuff.duration_minutes(fact["delta"])
+
+        # now normalize
+        max_hour = max(hours)
+        hours = [hour / float(max_hour or 1) for hour in hours]
+
+        self.tick_totals = zip(fractions, hours)
+
+
+    def set_title(self, start_date, end_date):
+        dates_dict = stuff.dateDict(start_date, "start_")
+        dates_dict.update(stuff.dateDict(end_date, "end_"))
+        
+        if start_date == end_date:
+            # date format for overview label when only single day is visible
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            start_date_str = start_date.strftime(_("%B %d, %Y"))
+            # Overview label if looking on single day
+            self.title = start_date_str
+        elif start_date.year != end_date.year:
+            # overview label if start and end years don't match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        elif start_date.month != end_date.month:
+            # overview label if start and end month do not match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        else:
+            # overview label for interval in same month
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
 
 

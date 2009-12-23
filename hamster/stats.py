@@ -92,7 +92,7 @@ class StatsViewer(object):
         self.end_date_input.connect("date-entered", self.on_end_date_entered)
         self.get_widget("range_end_box").add(self.end_date_input)
 
-        self.timeline = widgets.NewTimeLine()
+        self.timeline = widgets.TimeLine()
         self.get_widget("by_day_box").add(self.timeline)
 
         self._gui.connect_signals(self)
@@ -134,9 +134,14 @@ class StatsViewer(object):
         self.get_widget("report_button").set_sensitive(len(facts) > 0)
 
         self.timeline.draw(facts, self.start_date, self.end_date)
-        
-        self.overview.search(self.start_date, self.end_date, facts)
-        self.reports.search(self.start_date, self.end_date, facts)
+
+
+        if self.get_widget("window_tabs").get_current_page() == 0:
+            self.overview.search(self.start_date, self.end_date, facts)
+            self.reports.search(self.start_date, self.end_date, facts)
+        else:
+            self.reports.search(self.start_date, self.end_date, facts)
+            self.overview.search(self.start_date, self.end_date, facts)
 
     def on_search_activate(self, widget):
         self.search()
@@ -230,7 +235,6 @@ class StatsViewer(object):
         elif pagenum == 1:
             self.get_widget('remove').set_sensitive(False)
             self.get_widget('edit').set_sensitive(False)
-            self.reports.do_graph(self.facts)
 
 
     def on_add_clicked(self, button):
