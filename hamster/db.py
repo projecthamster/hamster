@@ -56,7 +56,7 @@ class Storage(storage.Storage):
 
         from configuration import runtime, GconfStore
 
-        db_file = runtime.database_file
+        db_file = runtime.database_path
         db_path, _ = os.path.split(os.path.realpath(db_file))
 
         if not os.path.exists(db_path):
@@ -814,7 +814,7 @@ class Storage(storage.Storage):
     def get_connection(self):
         from configuration import runtime
         if self.con is None:
-            db_file = runtime.database_file
+            db_file = runtime.database_path
             self.con = sqlite.connect(db_file, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
             self.con.row_factory = sqlite.Row
 
@@ -871,6 +871,8 @@ class Storage(storage.Storage):
 
         con.commit()
         cur.close()
+        
+        runtime.register_modification()
         
     def run_fixtures(self):
         # defaults

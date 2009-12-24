@@ -30,7 +30,11 @@ class Storage(object):
 
     def dispatch(self, event, data):
         self.parent.dispatch(event, data)
-        
+
+    def dispatch_overwrite(self):        
+        self.dispatch('new_tags_added', ())
+        self.dispatch('day_updated', ())
+        self.dispatch('activity_updated', ())
 
     def get_tags(self, autocomplete = None):
         return self.__get_tags(autocomplete)
