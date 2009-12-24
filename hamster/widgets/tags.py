@@ -316,8 +316,8 @@ class TagCellRenderer(gtk.GenericCellRenderer):
    
     def __init__(self):
         gtk.GenericCellRenderer.__init__(self)
-        self.height = 25
-        self.width = 80 #that's like, two tags or something
+        self.height = 0
+        self.width = None #that's like, two tags or something
         self.data = None
         
         self._font = pango.FontDescription(gtk.Style().font_desc.to_string())
@@ -390,53 +390,42 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
             self.height = cur_y
 
-        """
-        Tile (cairo, True,
-              title, 
-              icon,
-              description,
-              votes, rating, tile_status, buttons, 
-              cell_area,
-              opacity)#, animation )
-        """
-
     def on_get_size (self, widget, cell_area = None):
+        # TODO - we are replicating rendering code - should reuse it instead
         if isinstance(self.data, dict):
             tags = self.data["tags"]
         else:
             tags = self.data
 
         if not self.width or not tags:
-            height = 30
+            height = 0
             min_width = 80
         else:
             pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
             context = pixmap.cairo_create()
             self.layout = context.create_layout()
             default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-            default_font.set_size(pango.SCALE * 10)
+            default_font.set_size(pango.SCALE * self.font_size())
             self.layout.set_font_description(default_font)
 
             #make sure we fit in
             min_width = 0
             for tag in tags:
-                min_width = max(min_width, self.tag_size(tag)[0])
+                min_width = max(min_width, self.tag_size(tag)[0]) + 6
 
 
             cur_x, cur_y = 4, 2
             for tag in tags:
                 w, h = self.tag_size(tag)
-                if cur_x > 4 and cur_x + w >= self.width - 8:  #if we don't fit, we wrap
-                    cur_x = 4
+                if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                    cur_x = 5
                     cur_y += h + 6
                 
-                cur_x += w + 8 #some padding too, please
+                cur_x += w + 6 #some padding too, please
 
-            
-            height = cur_y + h + 4
-
-            self.height = height # this should actually trigger whole tree redraw if heights don't match
-            
+            cur_y += h + 3
+    
+            self.height = cur_y # this should actually trigger whole tree redraw if heights don't match
         
         return (0, 0, min_width, self.height)
     
