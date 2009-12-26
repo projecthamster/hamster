@@ -22,28 +22,23 @@ import pygtk
 pygtk.require('2.0')
 
 import os
+import datetime as dt
+import calendar
+
 import gtk, gobject
 import pango
 
 import stuff
-
-from configuration import runtime, GconfStore
-
-from stats_overview import OverviewBox
-from stats_reports import ReportsBox
-from stats_stats import StatsBox
-
-import widgets
-import charting
-import datetime as dt
-import calendar
-
 from hamster.i18n import C_
-from edit_activity import CustomFactController
-
+from configuration import runtime
 
 class StatsViewer(object):
     def __init__(self, parent = None):
+        import widgets
+        from stats_overview import OverviewBox
+        from stats_reports import ReportsBox
+        from stats_stats import StatsBox
+
         self.parent = parent# determine if app should shut down on close
         self._gui = stuff.load_ui_file("stats.ui")
 
@@ -245,8 +240,8 @@ class StatsViewer(object):
         if iter and model[iter][6]: # TODO - here we should check if heading maybe specifies a date
             selected_date = model[iter][6]["date"]
 
-        custom_fact = CustomFactController(self, selected_date)
-        custom_fact.show()
+        from configuration import dialogs
+        dialogs.edit.show(fact_date = selected_date)
 
     def on_remove_clicked(self, button):
         self.delete_selected()
@@ -258,10 +253,8 @@ class StatsViewer(object):
         if model[iter][0] == -1:
             return #not a fact
 
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
-
-
+        from configuration import dialogs
+        dialogs.edit.show(fact_id = model[iter][0])
 
 
     def on_close(self, widget, event):

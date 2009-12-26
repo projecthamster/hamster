@@ -99,7 +99,7 @@ if __name__ == "__main__":
         
         # Now the path is set, import our applet
         from hamster import defs
-        from hamster.configuration import runtime
+        from hamster.configuration import runtime, dialogs
         
         # Setup i18n
         locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))        
@@ -115,16 +115,13 @@ if __name__ == "__main__":
         if options.start_window or options.standalone:
             gobject.set_application_name("hamster-applet")
             if options.start_window == "stats":
-                from hamster.stats import StatsViewer
-                stats_viewer = StatsViewer().show()
+                dialogs.stats.show()
 
             elif options.start_window == "edit":
-                from hamster.edit_activity import CustomFactController
-                CustomFactController().show()
+                dialogs.edit.show()
 
             elif options.start_window == "prefs":
-                from hamster.preferences import PreferencesEditor
-                PreferencesEditor().show()
+                dialogs.prefs.show()
 
             else: #default to main applet
                 gnome.init(defs.PACKAGE, defs.VERSION)

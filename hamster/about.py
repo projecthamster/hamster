@@ -31,39 +31,35 @@ def on_url(about, link):
 gtk.about_dialog_set_email_hook(on_email)
 gtk.about_dialog_set_url_hook(on_url)
 
-def show_about(parent):
-    about = gtk.AboutDialog()
-    infos = {
-        "program-name" : _("Time Tracker"),
-        "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
-        "version" : VERSION,
-        "comments" : _("Project Hamster — track your time"),
-        "copyright" : _(u"Copyright © 2007–2009 Toms Bauģis and others"),
-        "website" : "http://projecthamster.wordpress.com/",
-        "website-label" : _("Project Hamster Website"),
-        "title": _("About Time Tracker"),
-        "wrap-license": True
-    }
+class About(object):
+    def __init__(self, parent = None):
+        about = gtk.AboutDialog()
+        self.window = about
+        infos = {
+            "program-name" : _("Time Tracker"),
+            "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
+            "version" : VERSION,
+            "comments" : _("Project Hamster — track your time"),
+            "copyright" : _(u"Copyright © 2007–2009 Toms Bauģis and others"),
+            "website" : "http://projecthamster.wordpress.com/",
+            "website-label" : _("Project Hamster Website"),
+            "title": _("About Time Tracker"),
+            "wrap-license": True
+        }
+        
+        about.set_authors(["Toms Bauģis <toms.baugis@gmail.com>",
+                           "Patryk Zawadzki <patrys@pld-linux.org>",
+                           "Pēteris Caune <cuu508@gmail.com>",
+                           "Juanje Ojeda <jojeda@emergya.es>"])
+        about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
+        
+        about.set_translator_credits(_("translator-credits"))
     
-    about.set_authors(["Toms Bauģis <toms.baugis@gmail.com>",
-                       "Patryk Zawadzki <patrys@pld-linux.org>",
-                       "Pēteris Caune <cuu508@gmail.com>",
-                       "Juanje Ojeda <jojeda@emergya.es>"])
-    about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
+        for prop, val in infos.items():
+            about.set_property(prop, val)
     
-    about.set_translator_credits(_("translator-credits"))
-
-    for prop, val in infos.items():
-        about.set_property(prop, val)
-
-    about.set_logo_icon_name("hamster-applet")
-    
-    def on_destroy():
-        parent.about = None
-
-    about.connect("response", lambda self, *args: self.destroy())
-    about.connect("destroy", lambda self, *args: on_destroy())
-    about.set_screen(parent.get_screen())
-    about.show_all()
-    parent.about = about
+        about.set_logo_icon_name("hamster-applet")
+        
+        about.connect("response", lambda self, *args: self.destroy())
+        about.show_all()
 

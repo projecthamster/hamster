@@ -21,16 +21,16 @@ import gtk
 import time
 import datetime as dt
 
-import stuff, widgets
-from configuration import runtime
-
-
 """ TODO:
      * hook into notifications and refresh our days if some evil neighbour edit
        fact window has dared to edit facts
 """
+from configuration import runtime
+
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
+        import stuff, widgets
+
         self._gui = stuff.load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
 
@@ -117,6 +117,8 @@ class CustomFactController:
         self.new_name.connect("changed", self.on_new_name_changed)
         self.end_time.connect("time-entered", self.on_end_time_entered)
         self._gui.connect_signals(self)
+        
+        self.window.show_all()
 
     def update_time(self, start_time, end_time):
         self.start_time.set_time(start_time)
@@ -275,9 +277,6 @@ class CustomFactController:
         self.close_window()        
 
     def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            self.window.destroy()
-            return False
-        
+        self.window.destroy()
+        return False
+

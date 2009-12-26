@@ -32,17 +32,13 @@ import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 
 import eds
-from configuration import GconfStore, runtime
+from configuration import GconfStore, runtime, dialogs
 
 import stuff
 from KeyBinder import *
 from hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
-from edit_activity import CustomFactController
-from stats import StatsViewer
-from about import show_about
-from preferences import PreferencesEditor
 import widgets
 import idle
 
@@ -378,8 +374,7 @@ class HamsterApplet(object):
                 self.notify.msg_low(_(u"No activity"))
 
     def edit_cb(self, n, action):
-        custom_fact = CustomFactController(self, None, self.last_activity['id'])
-        custom_fact.show()
+        dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
 
     def switch_cb(self, n, action):
         self.__show_toggle(None, not self.button.get_active())	
@@ -518,8 +513,7 @@ class HamsterApplet(object):
     
     def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
-        custom_fact = CustomFactController(self, None, fact["id"])
-        custom_fact.show()
+        dialogs.edit.show(self.applet, fact_id = fact["id"])
         
     def on_today_row_activated(self, tree, path, column):
         selection = tree.get_selection()
@@ -552,30 +546,21 @@ class HamsterApplet(object):
     """button events"""
     def on_overview(self, menu_item):
         runtime.dispatcher.dispatch('panel_visible', False)
-        stats_viewer = StatsViewer(self)
-        stats_viewer.show()
+        dialogs.stats.show(self.applet)
 
     def show_overview(self, menu_item, verb):
         return self.on_overview(menu_item)
 
     def on_custom_fact(self, menu_item):
-        custom_fact = CustomFactController(self)
-        custom_fact.show()
+        dialogs.edit.show(self.applet)
 
     def on_about (self, component, verb):
-        if self.applet.about:
-            self.applet.about.present()
-        else:
-            show_about(self.applet)
+        dialogs.about.show()
 
     def show_preferences(self, menu_item, verb):
         runtime.dispatcher.dispatch('panel_visible', False)
-        
-        if self.preferences_editor and self.preferences_editor.window:
-            self.preferences_editor.window.present()
-        else:
-            self.preferences_editor = PreferencesEditor(self)
-            self.preferences_editor.show()
+        dialogs.prefs.show(self.applet)
+
     
     """signals"""
     def after_activity_update(self, widget, renames):

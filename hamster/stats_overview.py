@@ -26,11 +26,9 @@ import gtk, gobject
 
 import stuff
 
-from edit_activity import CustomFactController
-
 import widgets
 
-from configuration import runtime
+from configuration import runtime, dialogs
 import webbrowser
 
 from itertools import groupby
@@ -135,14 +133,12 @@ class OverviewBox(gtk.VBox):
         if model[iter][0] == -1:
             return #not a fact
 
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
+        dialogs.edit.show(self, fact_id = model[iter][0])
 
     def on_facts_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        custom_fact = CustomFactController(self, None, model[iter][0])
-        custom_fact.show()
+        custom_fact = dialogs.edit.show(self.window, fact_id = model[iter][0])
         
     def on_facts_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):

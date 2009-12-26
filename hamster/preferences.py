@@ -24,12 +24,7 @@ pygtk.require('2.0')
 import os
 import gtk
 
-import dispatcher, storage, stuff
-
 import datetime as dt
-import widgets
-
-from configuration import GconfStore, runtime
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -86,6 +81,8 @@ class ActivityStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
+from configuration import runtime
+
 class PreferencesEditor:
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
@@ -94,6 +91,10 @@ class PreferencesEditor:
     
     
     def __init__(self, parent = None):
+        import widgets
+        import dispatcher, storage, stuff
+        from configuration import GconfStore
+
         self.parent = parent
         self._gui = stuff.load_ui_file("preferences.ui")
         self.config = GconfStore()
@@ -181,6 +182,7 @@ class PreferencesEditor:
             self.get_widget("notification_preference_frame").hide()
 
         self._gui.connect_signals(self)
+        self.window.show_all()
 
     def load_config(self):
         self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())

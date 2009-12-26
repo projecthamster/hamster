@@ -109,6 +109,51 @@ class RuntimeStore(Singleton):
 runtime = RuntimeStore()
 
 
+class OneWindow(object):
+    def __init__(self, dialog_class):
+        self.dialogs = {}
+        self.dialog_class = dialog_class
+    
+    def on_dialog_destroy(self, params):
+        del self.dialogs[params]
+        #self.dialogs[params] = None
+
+    def show(self, parent = None, **kwargs):
+        params = str(sorted(kwargs.items())) #this is not too safe but will work for most cases
+        
+        if params in self.dialogs:
+            self.dialogs[params].window.present()
+        else:
+            if parent:
+                dialog = self.dialog_class(parent, **kwargs)
+                dialog.window.set_transient_for(parent.get_toplevel())
+            else:
+                dialog = self.dialog_class(**kwargs)
+            
+            # to make things simple, we hope that the target has defined self.window
+            dialog.window.connect("destroy",
+                                  lambda window, params: self.on_dialog_destroy(params),
+                                  params)
+            
+            self.dialogs[params] = dialog
+
+class Dialogs(Singleton):
+    """makes sure that we have single instance open for windows where it makes
+       sense"""
+    def __init__(self):
+        from edit_activity import CustomFactController
+        self.edit = OneWindow(CustomFactController)
+
+        from stats import StatsViewer
+        self.stats = OneWindow(StatsViewer)
+
+        from about import About
+        self.about = OneWindow(About)
+
+        from preferences import PreferencesEditor
+        self.prefs = OneWindow(PreferencesEditor)
+
+dialogs = Dialogs()    
 
 class GconfStore(Singleton):
     """
