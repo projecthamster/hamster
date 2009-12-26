@@ -321,40 +321,7 @@ class HamsterApplet(object):
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
             
-        self.set_last_activity()
 
-        
-    def set_last_activity(self):
-        activity = runtime.storage.get_last_activity()
-        self.get_widget("stop_tracking").set_sensitive(activity != None)
-        
-        
-        if activity:
-            self.get_widget("switch_activity").show()
-            self.get_widget("start_tracking").hide()
-            
-            delta = dt.datetime.now() - activity['start_time']
-            duration = delta.seconds /  60
-            
-            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
-            self.get_widget("last_activity_name").set_text(activity['name'])
-            if activity['category'] != _("Unsorted"):
-                self.get_widget("last_activity_category") \
-                    .set_text(" - %s" % activity['category'])
-
-            self.get_widget("last_activity_description").set_text(activity['description'] or "")
-
-            self.tag_box.draw(activity["tags"])
-        else:
-            self.get_widget("switch_activity").hide()
-            self.get_widget("start_tracking").show()
-
-            self.get_widget("last_activity_name").set_text(_("No activity"))
-            self.get_widget("last_activity_duration").set_text("")
-            self.get_widget("last_activity_category").set_text("")
-            self.tag_box.draw([])
-            self.get_widget("last_activity_description").set_text("")
-         
     def check_user(self):
         if not self.notify_interval: #no interval means "never"
             return
@@ -383,15 +350,17 @@ class HamsterApplet(object):
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-        #today is 5.5 hours ago because our midnight shift happens 5:30am
+
         today = (dt.datetime.now() - dt.timedelta(hours = self.day_start.hour,
                                                   minutes = self.day_start.minute)).date()
-
-        self.last_activity = runtime.storage.get_last_activity()
 
         self.treeview.clear()
 
         facts = runtime.storage.get_facts(today)
+        if facts and facts[-1]["end_time"] == None:
+            self.last_activity = facts[-1]
+        else:
+            self.last_activity = None
         
         if len(facts) > 10:
             self._gui.get_object("today_box").set_size_request(-1, 250)
@@ -426,7 +395,40 @@ class HamsterApplet(object):
 
             total_string = ", ".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
-   
+            
+        self.set_last_activity()
+
+    def set_last_activity(self):
+        activity = self.last_activity
+        #sets all the labels and everything as necessary
+        self.get_widget("stop_tracking").set_sensitive(activity != None)
+        
+        
+        if activity:
+            self.get_widget("switch_activity").show()
+            self.get_widget("start_tracking").hide()
+            
+            delta = dt.datetime.now() - activity['start_time']
+            duration = delta.seconds /  60
+            
+            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
+            self.get_widget("last_activity_name").set_text(activity['name'])
+            if activity['category'] != _("Unsorted"):
+                self.get_widget("last_activity_category") \
+                    .set_text(" - %s" % activity['category'])
+
+            self.get_widget("last_activity_description").set_text(activity['description'] or "")
+
+            self.tag_box.draw(activity["tags"])
+        else:
+            self.get_widget("switch_activity").hide()
+            self.get_widget("start_tracking").show()
+
+            self.get_widget("last_activity_name").set_text(_("No activity"))
+            self.get_widget("last_activity_duration").set_text("")
+            self.get_widget("last_activity_category").set_text("")
+            self.tag_box.draw([])
+            self.get_widget("last_activity_description").set_text("")
 
     def delete_selected(self):
         selection = self.treeview.get_selection()
@@ -498,12 +500,10 @@ class HamsterApplet(object):
         
 
     """events"""
-
-        
     def on_toggle(self, widget):
         self.__show_toggle(None, self.button.get_active())
 
-    """listview events"""
+
     def on_todays_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
@@ -577,7 +577,7 @@ class HamsterApplet(object):
         # state values: 0 = active, 1 = idle
 
         # refresh when we are out of idle
-        # (like, instantly after computer has been turned on!
+        # for example, instantly after coming back from suspend
         if state == 0:
             self.refresh_hamster()
         elif self.timeout_enabled and self.last_activity and \
@@ -589,17 +589,16 @@ class HamsterApplet(object):
     def on_day_start_changed(self, event, new_minutes):
         self.day_start = self.config.get_day_start()
         self.load_day()
+        self.update_label()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
         
     def on_timeout_enabled_changed(self, event, enabled):
-        # if enabled, set to value, otherwise set to zero, which means disable
         self.timeout_enabled = enabled
 
     def on_notify_on_idle_changed(self, event, enabled):
-        # if enabled, set to value, otherwise set to zero, which means disable
         self.notify_on_idle = enabled
 
     def on_notify_interval_changed(self, event, new_interval):
@@ -607,29 +606,6 @@ class HamsterApplet(object):
             self.notify_interval = new_interval
         else:
             self.notify_interval = None
-
-        
-    def on_more_info_button_clicked(self, button):
-        def on_response(self, widget):
-            self.destroy()
-
-        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
-        message_dialog.set_property("title", _("What should be typed in the activity box?"))
-        message_dialog.connect("response", on_response)
-        
-        more_info = _("""There is a simple syntax that enables you to add details to your activities:
-        
-"@" symbol marks a category. Example: "watering flowers@home" will start tracking the activity "watering flowers" in the category "home".
-
-Commas (",") mark beginning of a description. Example: "watering flowers, begonias and forgetmenots" will start tracking the activity "watering flowers" and add the description "begonias and forgetmenots" to it.
-
-Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
-
-Now, start tracking!
-        """)
-        
-        message_dialog.set_markup(more_info)
-        message_dialog.show()
 
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
@@ -642,7 +618,7 @@ Now, start tracking!
         runtime.dispatcher.dispatch('panel_visible', False)
 
     def on_stop_tracking_clicked(self, widget):
-        runtime.storage.touch_fact(runtime.storage.get_last_activity())
+        runtime.storage.touch_fact(self.last_activity)
         self.last_activity = None
         runtime.dispatcher.dispatch('panel_visible', False)
 
