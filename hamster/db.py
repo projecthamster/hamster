@@ -370,7 +370,7 @@ class Storage(storage.Storage):
         fact = self.fetchone(query, (start_time,
                                      start_time,
                                      start_time,
-                                     start_time + dt.timedelta(days=2)))
+                                     start_time + dt.timedelta(seconds = 60 * 60 * 12)))
 
         end_time = None        
 
@@ -635,7 +635,7 @@ class Storage(storage.Storage):
             elif (dt.date.today() - fact["start_time"].date()) <= dt.timedelta(days=1):
                 fact_end_time = dt.datetime.now().replace(microsecond = 0)
             else:
-                fact_end_time = fact["start_time"].replace(hour=23, minute=59)
+                fact_end_time = fact["start_time"]
 
             fact_start_date = fact["start_time"].date() \
                 - dt.timedelta(1 if fact["start_time"].time() < split_time else 0)
