@@ -17,33 +17,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import pygtk
 pygtk.require('2.0')
 
 import os
-import gtk, gobject
-import pango
-
-import stuff
-import charting
-
-from edit_activity import CustomFactController
-import reports, graphics
-
-import widgets
-
-from configuration import runtime, GconfStore
-import webbrowser
-
+import time
+import datetime as dt
+import calendar
 from itertools import groupby
 from gettext import ngettext
 
-import datetime as dt
-import calendar
-import time
-from hamster.i18n import C_
+import gtk, gobject
+import pango
 
+import stuff, charting, graphics, widgets
+from configuration import runtime
+
+from hamster.i18n import C_
 
 
 class StatsBox(gtk.VBox):
