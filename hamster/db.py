@@ -294,13 +294,14 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tags
+                          e.name as tag
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
                 LEFT JOIN fact_tags d ON d.fact_id = a.id
                 LEFT JOIN tags e ON e.id = d.tag_id
-                    WHERE a.id = ? 
+                    WHERE a.id = ?
+                 ORDER BY e.name
         """
 
         return self.__group_tags(self.fetchall(query, (_("Unsorted"), id)))[0]
@@ -319,10 +320,10 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "category", "tags"]
+                    "activity_id", "category", "tag"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
             
-            grouped_fact["tags"] = [ft["tags"] for ft in fact_tags if ft["tags"]]
+            grouped_fact["tags"] = [ft["tag"] for ft in fact_tags if ft["tag"]]
             grouped_facts.append(grouped_fact)
         return grouped_facts
 
@@ -505,29 +506,31 @@ class Storage(storage.Storage):
 
 
         # if we are working on +/- current day - check the last_activity
+        
         if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
-            last_activity = self.__get_last_activity()
+            previous = self.__get_last_activity()
 
-            if last_activity and last_activity['start_time'] < start_time:
-                #if this is the same, ongoing activity, then there is no need to create another one
-                if not tags and not activity.description \
-                   and last_activity['activity_id'] == activity_id:
-                    return last_activity
+            if previous and previous['start_time'] < start_time:
+                # check if maybe that is the same one, in that case no need to restart
+                if previous["activity_id"] == activity_id \
+                   and previous["tags"] == sorted([tag["name"] for tag in tags]) \
+                   and previous["description"] == (description or ""):
+                    return previous
                 
-                #if duration is less than a minute - it must have been a mistake
-                if not tags and not activity.description \
-                   and not last_activity["description"] \
-                   and 60 >= (start_time - last_activity['start_time']).seconds >= 0:
-                    self.__remove_fact(last_activity['id'])
-                    start_time = last_activity['start_time']
+                # otherwise, if not tags nor description is added (extra data
+                # see if maybe it is too short to qualify as an activity
+                if not previous["tags"] and not previous["description"] \
+                    and 60 >= (start_time - previous['start_time']).seconds >= 0:
+                    self.__remove_fact(previous['id'])
+                    start_time = previous['start_time']
                 else:
-                    #otherwise stop 
+                    # otherwise stop 
                     update = """
                                UPDATE facts
                                   SET end_time = ?
                                 WHERE id = ?
                     """
-                    self.execute(update, (start_time, last_activity["id"]))
+                    self.execute(update, (start_time, previous["id"]))
 
 
         # done with the current activity, now we can solve overlaps
@@ -560,9 +563,9 @@ class Storage(storage.Storage):
                           a.start_time AS start_time,
                           a.end_time AS end_time,
                           a.description as description,
-                          b.name AS name,
+                          b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tags
+                          e.name as tag
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -609,7 +612,7 @@ class Storage(storage.Storage):
         
 
         
-        query += " ORDER BY a.start_time"
+        query += " ORDER BY a.start_time, e.name"
         end_date = end_date or date
 
         from configuration import GconfStore
