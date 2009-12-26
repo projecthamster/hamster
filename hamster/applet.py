@@ -230,6 +230,7 @@ class HamsterApplet(object):
         self.window = self._gui.get_object('hamster-window')
 
         self.new_name = widgets.ActivityEntry()
+        self.new_name.connect("value-entered", self.on_switch_activity_clicked)
         widgets.add_hint(self.new_name, _("Time and Name"))
         self.get_widget("new_name_box").add(self.new_name)
         self.new_name.connect("changed", self.on_activity_text_changed)
