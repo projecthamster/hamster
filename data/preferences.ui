@@ -144,7 +144,6 @@
                                       <object class="GtkLabel" id="label1">
                                         <property name="visible">True</property>
                                         <property name="label" translatable="yes">Remind of current activity every:</property>
-                                        <property name="use_markup">True</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                     </child>
@@ -669,7 +668,6 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Tags that should appear in autocomplete</property>
-                            <property name="use_markup">True</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>

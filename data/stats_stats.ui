@@ -121,8 +121,10 @@
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="ypad">8</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Starts and ends&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
+                                            <property name="label" translatable="yes">Starts and ends</property>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="position">0</property>
@@ -132,8 +134,10 @@
                                           <object class="GtkLabel" id="label8">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Totals&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
+                                            <property name="label" translatable="yes">Totals</property>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                            </attributes>
                                           </object>
                                           <packing>
                                             <property name="position">1</property>
