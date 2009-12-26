@@ -216,7 +216,6 @@ class CustomFactController:
         if not start_time:
             return
 
-        self.end_time.set_time(start_time + dt.timedelta(minutes = 30))
         self.end_time.set_start_time(start_time)
         self.validate_fields()
         self.end_time.grab_focus()
@@ -232,19 +231,11 @@ class CustomFactController:
         start_time = self._get_datetime("start")
 
         end_time = self._get_datetime("end")
-        if self.get_widget("in_progress").get_active():
-            end_time = dt.datetime.now()
 
         if start_time and end_time:
-            # if we are too far, just roll back for one day
-            if ((end_time - start_time).days > 0): 
-                end_time -= dt.timedelta(days=1)
-                self.update_time(start_time, end_time)
+            # make sure we are within 24 hours of start time
+            end_time -= dt.timedelta(days=(end_time - start_time).days)
 
-            # if end time is not in proper distance, do the brutal +30 minutes reset
-            if (end_time < start_time or (end_time - start_time).days > 0):
-                end_time = start_time + dt.timedelta(minutes = 30)
-                self.update_time(start_time, end_time)
     
             self.draw_preview(start_time.date(), [start_time, end_time])    
         else:
