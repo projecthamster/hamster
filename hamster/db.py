@@ -599,17 +599,27 @@ class Storage(storage.Storage):
         or_bits = [[term.strip().lower().replace("'", "''") #striping removing case sensitivity and escaping quotes in term
                           for term in terms.strip().split(" ") if term.strip()]
                           for terms in search_terms.split(",") if terms.strip()]
+
+        def all_fields(term):
+            return """(lower(a.description) like '%%%(term)s%%'
+                       or lower(b.name) = '%(term)s'
+                       or lower(c.name) = '%(term)s'
+                       or lower(e.name) = '%(term)s' )""" % dict(term = term)
         
         if or_bits:
-            search_query = "1<>1 "
+            search_query = "1<>1 " # will be building OR chain, so start with a false
             
             for and_bits in or_bits:
-                and_query = "1=1 "
-                for and_bit in and_bits:
-                    and_query += """and (lower(a.description) like '%%%(term)s%%'
-                                     or lower(b.name) = '%(term)s'
-                                     or lower(c.name) = '%(term)s'
-                                     or lower(e.name) = '%(term)s' )""" % dict(term = and_bit)
+                if len(and_bits) == 1:
+                    and_query = all_fields(and_bits[0])
+                else:
+                    and_query = "1=1 "  # will be building AND chain, so start with a true
+                    # if we have more than one word, go for "(a and b) or ab"
+                    # to match two word tags
+                    for bit1, bit2 in zip(and_bits, and_bits[1:]):
+                        and_query += "and (%s and %s) or %s" % (all_fields(bit1),
+                                                                all_fields(bit2),
+                                                                all_fields("%s %s" % (bit1, bit2)))
                 
                 search_query = "%s or (%s) " % (search_query, and_query)
     
