@@ -325,37 +325,17 @@ class Storage(storage.Storage):
         return grouped_facts
 
     def __get_last_activity(self):
-        query = """
-                   SELECT a.id AS id,
-                          a.start_time AS start_time,
-                          a.end_time AS end_time,
-                          a.description as description,
-                          b.name AS name, b.id as activity_id,
-                          coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tags
-                     FROM facts a
-                LEFT JOIN activities b ON a.activity_id = b.id
-                LEFT JOIN categories c ON b.category_id = c.id
-                LEFT JOIN fact_tags d ON d.fact_id = a.id
-                LEFT JOIN tags e ON e.id = d.tag_id
-                    WHERE date(a.start_time) = ?
-                 ORDER BY a.start_time desc
-                    LIMIT 20
-        """
-        last = self.fetchall(query, (_("Unsorted"), dt.date.today()))        
-        if not last:
-            #try yesterday if there is nothing today
-            last = self.fetchall(query,
-                                 (# unsorted category
-                                  _("Unsorted"),
-                                  dt.date.today() - dt.timedelta(days=1)))
-        if last:
-            last = self.__group_tags(last)[0]
+        from configuration import GconfStore
+        day_start = GconfStore().get_day_start()
 
-        if last and last["end_time"]: #will consider as last only if it is going on
-           last = None
+        today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
+                                                  minutes = day_start.minute)).date()
+        facts = self.__get_facts(today)
         
-        return last
+        last_activity = None
+        if facts and facts[-1]["end_time"] == None:
+            last_activity = facts[-1]
+        return last_activity
 
     def __touch_fact(self, fact, end_time):
         # tasks under one minute do not count
