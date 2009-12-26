@@ -110,6 +110,10 @@ class PanelButton(gtk.ToggleButton):
         self.set_property('active', is_active)
 
     def set_text(self, activity, duration):
+        activity = stuff.escape_pango(activity)
+        if len(activity) > 25:  #ellipsize at some random length
+            activity = "%s%s" % (activity[:25], "&#8230;")
+
         self.activity = activity
         self.duration = duration
         self.reformat_label()
@@ -122,7 +126,7 @@ class PanelButton(gtk.ToggleButton):
             else:
                 label = "%s %s" % (self.activity, self.duration)
         
-        label = '<span gravity="south">%s</span>' % stuff.escape_pango(label)
+        label = '<span gravity="south">%s</span>' % label
         self.label.set_markup("") #clear - seems to fix the warning
         self.label.set_markup(label)
 
