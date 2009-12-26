@@ -236,8 +236,6 @@ class ActivityEntry(gtk.Entry):
                 if self.tree.get_cursor()[0]:
                     self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
 
-                self._on_selected()
-                
                 self.hide_popup()
             else:
                 self._on_selected()
