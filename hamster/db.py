@@ -46,13 +46,15 @@ DB_FILE = 'hamster.db'
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
-
     def __setup(self):
         """
         Delayed setup so we don't do everything at the same time
         """
         if self.__setup.im_func.complete:
             return
+
+        self.__con = None
+        self.__cur = None
 
         from configuration import runtime, GconfStore
 
@@ -717,18 +719,6 @@ class Storage(storage.Storage):
             
         return activities
 
-    def __get_sorted_activities(self):
-        """returns list of acitivities that have categories"""
-        query = """
-                   SELECT a.*, b.name as category, b.category_order
-                     FROM activities a
-                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                    WHERE a.category_id > -1
-                      AND a.deleted is null
-                 ORDER BY category_order, activity_order
-        """
-        return self.fetchall(query)
-        
     def __get_autocomplete_activities(self):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""
@@ -846,8 +836,8 @@ class Storage(storage.Storage):
         from configuration import runtime
         self.__setup()
 
-        con = self.connection
-        cur = con.cursor()
+        con = self.__con or self.connection
+        cur = self.__cur or con.cursor()
         
         if isinstance(statement, list) == False: #we kind of think that we will get list of instructions
             statement = [statement]
@@ -859,9 +849,22 @@ class Storage(storage.Storage):
          
                 res = cur.execute(statement[i], params[i])
 
-        con.commit()
-        cur.close()
+        if not self.__con:
+            con.commit()
+            cur.close()
+            runtime.register_modification()
         
+        
+    def start_transaction(self):
+        # will give some hints to execute not to close or commit anything
+        self.__con = self.connection
+        self.__cur = self.__con.cursor()
+    
+    def end_transaction(self):
+        self.__con.commit()
+        self.__cur.close()
+        self.__con = None
+        from configuration import runtime
         runtime.register_modification()
         
     def run_fixtures(self):

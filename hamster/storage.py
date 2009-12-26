@@ -56,7 +56,10 @@ class Storage(object):
     def add_fact(self, activity_name, tags, start_time = None, end_time = None,
                                       category_name = None, description = None):
 
+        self.start_transaction()
         result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description)
+        self.end_transaction()
+
         if result:
             self.dispatch('day_updated', result['start_time'])
         return result
@@ -80,11 +83,17 @@ class Storage(object):
             self.dispatch('day_updated', fact['start_time'])
 
     def update_fact(self, fact_id, activity_name, tags, start_time, end_time):
+        now = datetime.datetime.now()
+        self.start_transaction()
+        
         fact = self.get_fact(fact_id)
         if fact:
             self.__remove_fact(fact_id)
         
         result = self.__add_fact(activity_name, tags, start_time, end_time)
+
+        self.end_transaction()
+        
         if result:
             self.dispatch('day_updated', result['start_time'])
         return result
@@ -92,9 +101,6 @@ class Storage(object):
     def get_activities(self, category_id = None):
         return self.__get_activities(category_id = category_id)
     
-    def get_sorted_activities(self):
-        return self.__get_sorted_activities()
-        
     def get_autocomplete_activities(self):
         return self.__get_autocomplete_activities()
     
