@@ -24,13 +24,14 @@ pygtk.require('2.0')
 import os
 import datetime as dt
 import calendar
+import webbrowser
 
 import gtk, gobject
 import pango
 
 import stuff
 from hamster.i18n import C_
-from configuration import runtime
+from configuration import runtime, colors
 
 class StatsViewer(object):
     def __init__(self, parent = None):
@@ -41,6 +42,9 @@ class StatsViewer(object):
 
         self.parent = parent# determine if app should shut down on close
         self._gui = stuff.load_ui_file("stats.ui")
+        self.report_chooser = None
+        
+        self.facts = None
 
         self.window = self.get_widget("tabs_window")
 
@@ -113,7 +117,6 @@ class StatsViewer(object):
         return True
 
     def after_activity_update(self, widget, renames):
-        print widget, renames
         self.search()
 
     def search(self):
@@ -124,25 +127,49 @@ class StatsViewer(object):
         self.end_date_input.set_date(self.end_date)
         
         search_terms = self.get_widget("search").get_text().decode("utf8", "replace")
-        facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
+        self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
-        self.get_widget("report_button").set_sensitive(len(facts) > 0)
+        self.get_widget("report_button").set_sensitive(len(self.facts) > 0)
 
-        self.timeline.draw(facts, self.start_date, self.end_date)
+        self.timeline.draw(self.facts, self.start_date, self.end_date)
 
 
         if self.get_widget("window_tabs").get_current_page() == 0:
-            self.overview.search(self.start_date, self.end_date, facts)
-            self.reports.search(self.start_date, self.end_date, facts)
+            self.overview.search(self.start_date, self.end_date, self.facts)
+            self.reports.search(self.start_date, self.end_date, self.facts)
         else:
-            self.reports.search(self.start_date, self.end_date, facts)
-            self.overview.search(self.start_date, self.end_date, facts)
+            self.reports.search(self.start_date, self.end_date, self.facts)
+            self.overview.search(self.start_date, self.end_date, self.facts)
 
     def on_search_activate(self, widget):
         self.search()
         
     def on_report_button_clicked(self, widget):
-        self.reports.on_report_button_clicked(widget) #forward for now
+        import widgets # TODO - should fix the import thing that was caused by using runtime.dialogs
+        import reports
+
+        def on_report_chosen(widget, format, path):
+            self.report_chooser = None
+            reports.simple(self.facts, self.start_date, self.end_date, format, path)
+    
+            if format == ("html"):
+                webbrowser.open_new("file://%s" % path)
+            else:
+                gtk.show_uri(gtk.gdk.Screen(),
+                             "file://%s" % os.path.split(path)[0], 0L)
+    
+        def on_report_chooser_closed(widget):
+            self.report_chooser = None
+            
+        if not self.report_chooser:
+            self.report_chooser = widgets.ReportChooserDialog()
+            self.report_chooser.connect("report-chosen", on_report_chosen)
+            self.report_chooser.connect("report-chooser-closed",
+                                        on_report_chooser_closed)
+            self.report_chooser.show(self.start_date, self.end_date)
+        else:
+            self.report_chooser.present()
+
 
 
     def on_range_combo_changed(self, combo):
