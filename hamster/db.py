@@ -871,6 +871,8 @@ class Storage(storage.Storage):
         runtime.register_modification()
         
     def run_fixtures(self):
+        self.start_transaction()
+        
         # defaults
         work_category = {"name": _("Work"),
                          "entries": [_("Reading news"),
@@ -1084,3 +1086,5 @@ class Storage(storage.Storage):
             for entry in nonwork_category["entries"]:
                 self.__add_activity(entry, nonwork_cat_id)
 
+
+        self.end_transaction()
