@@ -24,12 +24,6 @@ pygtk.require('2.0')
 import os
 import gtk, gobject
 
-from .hamster import stuff
-from .hamster.i18n import C_
-from .hamster.configuration import runtime
-
-from dateinput import DateInput
-
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
         # format, path, start_date, end_date
@@ -39,8 +33,14 @@ class ReportChooserDialog(gtk.Dialog):
     }
     def __init__(self):
         gtk.Dialog.__init__(self)
-        ui = stuff.load_ui_file("stats_reports.ui")
-        self.dialog = ui.get_object('save_report_dialog')
+        
+
+        self.dialog = gtk.FileChooserDialog(title = _("Save report - Time Tracker"),
+                                            parent = None,
+                                            buttons=(gtk.STOCK_CANCEL,
+                                                     gtk.RESPONSE_CANCEL,
+                                                     gtk.STOCK_SAVE,
+                                                     gtk.RESPONSE_OK))
 
         self.dialog.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
         self.dialog.set_current_folder(os.path.expanduser("~"))
@@ -82,9 +82,6 @@ class ReportChooserDialog(gtk.Dialog):
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
         
-        ui.get_object('save_button').connect("clicked", self.on_save_button_clicked)
-        ui.get_object('cancel_button').connect("clicked", self.on_cancel_button_clicked)
-        
 
     def show(self, start_date, end_date):
         #set suggested name to something readable, replace backslashes with dots
@@ -93,12 +90,19 @@ class ReportChooserDialog(gtk.Dialog):
                                            end_date.strftime("%x").replace("/", "."))
         self.dialog.set_current_name(filename)
         
-        response = self.dialog.show_all()
+        response = self.dialog.run()
+        
+        if response != gtk.RESPONSE_OK:
+            self.emit("report-chooser-closed")
+            self.dialog.destroy()
+        else:
+            self.on_save_button_clicked()
+        
 
     def present(self):
         self.dialog.present()
 
-    def on_save_button_clicked(self, widget):
+    def on_save_button_clicked(self):
         path, format = None,  None
 
         format = "html"
@@ -116,9 +120,4 @@ class ReportChooserDialog(gtk.Dialog):
 
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path)
-        self.dialog.destroy()
-        
-
-    def on_cancel_button_clicked(self, widget):
-        self.emit("report-chooser-closed")
         self.dialog.destroy()
