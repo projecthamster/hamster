@@ -411,9 +411,9 @@ class BarChart(Chart):
 
             # if labels are at end, then we need show them for the last bar! 
             if self.labels_at_end:
-                factors = self.bars[0]
-            else:
                 factors = self.bars[-1]
+            else:
+                factors = self.bars[0]
             
             if isinstance(factors, Bar):
                 factors = [factors]
@@ -763,7 +763,6 @@ class BasicWindow:
 
     def on_color_set(self, button, stack_idx):
         self.stack_colors[stack_idx] = button.get_color().to_string()
-        print self.stack_colors[stack_idx], stack_idx
         self.plot()
 
 
