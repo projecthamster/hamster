@@ -319,9 +319,14 @@ class BarChart(Chart):
             base_color = self.bar_base_color or (220, 220, 220)
             
             if self.stack_keys:
+                remaining_fractions, remaining_pixels = 1, max_bar_size
+                
                 for j, stack_bar in enumerate(bar):
                     if stack_bar.size > 0:
-                        bar_size = round(max_bar_size * stack_bar.size)
+                        bar_size = round(remaining_pixels * (stack_bar.size / remaining_fractions))
+                        remaining_fractions -= stack_bar.size
+                        remaining_pixels -= bar_size
+
                         bar_start += bar_size
                         
                         last_color = self.stack_key_colors.get(self.stack_keys[j],
@@ -528,10 +533,14 @@ class HorizontalBarChart(Chart):
             if self.stack_keys:
                 bar_start = 0
 
-                for j, bar in enumerate(self.bars[i]):
-                    if bar.size > 0:
-                        bar_size = round(max_bar_size * bar.size)
-                        
+                remaining_fractions, remaining_pixels = 1, max_bar_size
+                
+                for j, stack_bar in enumerate(self.bars[i]):
+                    if stack_bar.size > 0:
+                        bar_size = round(remaining_pixels * (stack_bar.size / remaining_fractions))
+                        remaining_fractions -= stack_bar.size
+                        remaining_pixels -= bar_size
+
                         last_color = self.stack_key_colors.get(self.stack_keys[j],
                                                                self.get_bar_color(j))
                         self.draw_bar(self.graph_x + bar_start,
@@ -709,3 +718,38 @@ class HorizontalDayChart(Chart):
 
                 
         context.stroke()
+
+
+""" sample usage """
+class BasicWindow:
+    def __init__(self):
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window.set_title("Hamster Charting")
+        window.set_size_request(400, 300)
+        window.connect("delete_event", lambda *args: gtk.main_quit())
+    
+        self.stacked = BarChart(background = "#fafafa",
+                                bar_base_color = (220, 220, 220),
+                                legend_width = 20,
+                                show_stack_labels = True)
+        
+        box = gtk.VBox()
+        box.pack_start(self.stacked)
+        
+
+        window.add(box)
+        window.show_all()
+        self.plot()
+
+    def plot(self):
+        import random
+        series = ["One", "Two", "Three", "Four", "Five", "Six", "Seven"]
+        stacks = ["x", "y", "z", "a", "b", "c", "d"]
+        
+        data = [[random.randint(0, 10) for j in range(len(stacks))] for i in range(len(series))]
+        
+        self.stacked.plot(series, data, stacks)
+
+if __name__ == "__main__":
+   example = BasicWindow()
+   gtk.main()
