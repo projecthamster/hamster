@@ -31,7 +31,7 @@ import pango
 
 import stuff
 from hamster.i18n import C_
-from configuration import runtime, colors
+from configuration import runtime
 
 class StatsViewer(object):
     def __init__(self, parent = None):
