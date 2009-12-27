@@ -329,8 +329,7 @@ class BarChart(Chart):
 
                         bar_start += bar_size
                         
-                        last_color = self.stack_key_colors.get(self.stack_keys[j],
-                                                               self.get_bar_color(j))
+                        last_color = self.stack_key_colors.get(self.stack_keys[j]) or self.get_bar_color(j)
                         self.draw_bar(exes[key][0],
                                       self.graph_height - bar_start,
                                       exes[key][1],
@@ -340,8 +339,7 @@ class BarChart(Chart):
                 bar_size = round(max_bar_size * bar.size)
                 bar_start = bar_size
 
-                last_color = self.key_colors.get(key,
-                                                  base_color)
+                last_color = self.key_colors.get(key) or base_color
                 self.draw_bar(exes[key][0],
                               self.graph_y + self.graph_height - bar_size,
                               exes[key][1],
@@ -541,8 +539,7 @@ class HorizontalBarChart(Chart):
                         remaining_fractions -= stack_bar.size
                         remaining_pixels -= bar_size
 
-                        last_color = self.stack_key_colors.get(self.stack_keys[j],
-                                                               self.get_bar_color(j))
+                        last_color = self.stack_key_colors.get(self.stack_keys[j]) or self.get_bar_color(j)
                         self.draw_bar(self.graph_x + bar_start,
                                       positions[label][0],
                                       bar_size,
@@ -553,8 +550,7 @@ class HorizontalBarChart(Chart):
                 bar_size = round(max_bar_size * self.bars[i].size)
                 bar_start = bar_size
 
-                last_color = self.key_colors.get(self.keys[i],
-                                                 base_color)
+                last_color = self.key_colors.get(self.keys[i]) or base_color
 
                 self.draw_bar(self.graph_x,
                               positions[label][0],
@@ -735,20 +731,41 @@ class BasicWindow:
         
         box = gtk.VBox()
         box.pack_start(self.stacked)
-        
 
+
+        self.series = ["One", "Two", "Three", "Four", "Five", "Six", "Seven"]
+        self.stacks = ["x", "y", "z", "a", "b", "c", "d"]
+        self.stack_colors = dict([(stack, None) for stack in self.stacks])
+
+        import random
+        self.data = [[random.randint(0, 10) for j in range(len(self.stacks))] for i in range(len(self.series))]
+        
+        color_buttons = gtk.HBox()
+        color_buttons.set_spacing(4)
+
+        for stack in self.stacks:
+            button = gtk.ColorButton()
+            button.connect("color-set", self.on_color_set, stack)
+            color_buttons.pack_start(button)
+
+        box.pack_start(color_buttons, False)
+        
         window.add(box)
         window.show_all()
+
+        self.plot()
+        
+        
+    def plot(self):
+        self.stacked.stack_key_colors = self.stack_colors
+        self.stacked.plot(self.series, self.data, self.stacks)
+
+
+    def on_color_set(self, button, stack_idx):
+        self.stack_colors[stack_idx] = button.get_color().to_string()
+        print self.stack_colors[stack_idx], stack_idx
         self.plot()
 
-    def plot(self):
-        import random
-        series = ["One", "Two", "Three", "Four", "Five", "Six", "Seven"]
-        stacks = ["x", "y", "z", "a", "b", "c", "d"]
-        
-        data = [[random.randint(0, 10) for j in range(len(stacks))] for i in range(len(series))]
-        
-        self.stacked.plot(series, data, stacks)
 
 if __name__ == "__main__":
    example = BasicWindow()
