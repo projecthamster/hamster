@@ -44,18 +44,22 @@ from hamster.i18n import C_
 class OverviewBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
-        self._gui = stuff.load_ui_file("stats_overview.ui")
-        self.get_widget("overview_box").reparent(self) #mine!
-
+        self.set_border_width(12)
+        
+        scroll = gtk.ScrolledWindow()
+        scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scroll.set_shadow_type(gtk.SHADOW_IN)
+        
         self.start_date, self.end_date = None, None
         self.facts = []
         
         self.fact_tree = widgets.FactTree()
-        self.get_widget("overview_facts_box").add(self.fact_tree)
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
         self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
-        self._gui.connect_signals(self)
+        
+        scroll.add(self.fact_tree)
+        self.add(scroll)
 
 
     def search(self, start_date, end_date, facts):
@@ -144,6 +148,15 @@ class OverviewBox(gtk.VBox):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
             return True
+        elif (event.keyval == gtk.keysyms.Insert):
+            dialogs.edit.show()
+            return True
+        elif event.keyval == gtk.keysyms.c and event.state & gtk.gdk.CONTROL_MASK:
+            self.copy_selected()
+            return True
+        elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
+            self.check_clipboard()
+            return True
         
         return False
 
@@ -190,21 +203,6 @@ class OverviewBox(gtk.VBox):
         # TODO - revisit parsing of selected date
         added_fact = runtime.storage.add_fact(activity_name, start_time, end_time)
         
-
-    """keyboard events"""
-    def on_key_pressed(self, tree, event):
-        if (event.keyval == gtk.keysyms.Delete):
-            self.delete_selected()
-        elif event.keyval == gtk.keysyms.c and event.state & gtk.gdk.CONTROL_MASK:
-            self.copy_selected()
-        elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
-            self.check_clipboard()
-    
-
-    def get_widget(self, name):
-        """ skip one variable (huh) """
-        return self._gui.get_object(name)
-
 
 if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")    
