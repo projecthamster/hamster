@@ -219,8 +219,8 @@ class SampleArea(Area):
         self.font_size = 32
         self.layout.set_text("Hello, World!")
         
-        self.fill_area(self.rect_x,
-                       self.rect_y,
+        self.fill_area(round(self.rect_x),
+                       round(self.rect_y),
                        self.rect_width,
                        self.rect_height, (168, 186, 136))
 
@@ -231,18 +231,11 @@ class SampleArea(Area):
         
 
 class BasicWindow:
-    # close the window and quit
-    def delete_event(self, widget, event, data=None):
-        gtk.main_quit()
-        return False
-
     def __init__(self):
-        # Create a new window
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    
-        self.window.set_title("Graphics Module")
-        self.window.set_size_request(300, 300)
-        self.window.connect("delete_event", self.delete_event)
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window.set_title("Graphics Module")
+        window.set_size_request(300, 300)
+        window.connect("delete_event", lambda *args: gtk.main_quit())
     
         self.graphic = SampleArea()
         
@@ -254,8 +247,8 @@ class BasicWindow:
 
         box.add_with_properties(button, "expand", False)
     
-        self.window.add(box)
-        self.window.show_all()
+        window.add(box)
+        window.show_all()
         
         # drop the hello on init
         self.graphic.animate(self.graphic,
