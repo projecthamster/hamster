@@ -415,7 +415,9 @@ if __name__ == "__main__":
     window.set_title("Hamster - statistics")
     window.set_size_request(800, 600)
     
-    window.add(StatsBox())
+    stats_box = StatsBox() 
+    window.add(stats_box)
 
     window.show_all()    
+    stats_box.stats()
     gtk.main()    
