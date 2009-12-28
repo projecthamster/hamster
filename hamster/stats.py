@@ -31,15 +31,14 @@ import pango
 
 import stuff
 from hamster.i18n import C_
-from configuration import runtime
+from configuration import runtime, GconfStore, dialogs
+import widgets, reports
+
+from stats_overview import OverviewBox
+from stats_reports import ReportsBox
 
 class StatsViewer(object):
     def __init__(self, parent = None):
-        import widgets
-        from stats_overview import OverviewBox
-        from stats_reports import ReportsBox
-        from stats_stats import StatsBox
-
         self.parent = parent# determine if app should shut down on close
         self._gui = stuff.load_ui_file("stats.ui")
         self.report_chooser = None
@@ -48,14 +47,21 @@ class StatsViewer(object):
 
         self.window = self.get_widget("tabs_window")
 
+        self.config = GconfStore()
+        self.day_start = self.config.get_day_start()
 
-        self.view_date = dt.date.today()
+        self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
+                                                        minutes = self.day_start.minute)).date()
+
         #set to monday
-        self.start_date = self.view_date - \
-                                      dt.timedelta(self.view_date.weekday() + 1)
+        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+        
         # look if we need to start on sunday or monday
-        self.start_date = self.start_date + \
-                                      dt.timedelta(stuff.locale_first_weekday())
+        self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
+        
+        # see if we have not gotten carried away too much in all these calculations
+        if (self.view_date - self.start_date) == dt.timedelta(7):
+            self.start_date += dt.timedelta(7)
         
         self.end_date = self.start_date + dt.timedelta(6)
 
@@ -145,9 +151,6 @@ class StatsViewer(object):
         self.search()
         
     def on_report_button_clicked(self, widget):
-        import widgets # TODO - should fix the import thing that was caused by using runtime.dialogs
-        import reports
-
         def on_report_chosen(widget, format, path):
             self.report_chooser = None
             reports.simple(self.facts, self.start_date, self.end_date, format, path)
@@ -234,7 +237,8 @@ class StatsViewer(object):
 
 
     def on_home_clicked(self, button):
-        self.view_date = dt.date.today()
+        self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
+                                                        minutes = self.day_start.minute)).date()
         if self._chosen_range() == 0: # week
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
             self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
@@ -267,7 +271,6 @@ class StatsViewer(object):
         if iter and model[iter][6]: # TODO - here we should check if heading maybe specifies a date
             selected_date = model[iter][6]["date"]
 
-        from configuration import dialogs
         dialogs.edit.show(fact_date = selected_date)
 
     def on_remove_clicked(self, button):
@@ -280,7 +283,6 @@ class StatsViewer(object):
         if model[iter][0] == -1:
             return #not a fact
 
-        from configuration import dialogs
         dialogs.edit.show(fact_id = model[iter][0])
 
 
