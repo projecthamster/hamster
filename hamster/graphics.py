@@ -1,3 +1,22 @@
+# - coding: utf-8 -
+
+# Copyright (C) 2008-2009 Toms Bauģis <toms.baugis at gmail.com>
+
+# This file is part of Project Hamster.
+
+# Project Hamster is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Project Hamster is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
+import math
 import time, datetime as dt
 import gtk, gobject
 
@@ -101,8 +120,47 @@ class Area(gtk.DrawingArea):
     
 
     """ drawing on canvas bits """
-    def rectangle(self, x, y, w, h, color, opacity = 0):
-        self.set_color(color, opacity)
+    def draw_rect(self, x, y, w, h, corner_radius = 0):
+        if corner_radius <=0:
+            self.context.rectangle(x, y, w, h)
+            return
+
+        # make sure that w + h are larger than 2 * corner_radius
+        corner_radius = min(corner_radius, min(w, h) / 2)
+
+        x2, y2 = x + w, y + h
+
+        half_corner = corner_radius / 2
+        
+        self.context.move_to(x + corner_radius, y);
+        self.context.line_to(x2 - corner_radius, y);
+        # top-right
+        self.context.curve_to(x2 - half_corner, y,
+                              x2, y + half_corner,
+                              x2, y + corner_radius)
+
+        self.context.line_to(x2, y2 - corner_radius);
+        # bottom-right
+        self.context.curve_to(x2, y2 - half_corner,
+                              x2 - half_corner, y+h,
+                              x2 - corner_radius,y+h)
+
+        self.context.line_to(x + corner_radius, y2);
+        # bottom-left
+        self.context.curve_to(x + half_corner, y2,
+                              x, y2 - half_corner,
+                              x,y2 - corner_radius)
+
+        self.context.line_to(x, y + corner_radius);
+        # top-left
+        self.context.curve_to(x, y + half_corner,
+                              x + half_corner, y,
+                              x + corner_radius,y)
+
+
+    def rectangle(self, x, y, w, h, color = None, opacity = 0):
+        if color:
+            self.set_color(color, opacity)
         self.context.rectangle(x, y, w, h)
     
     def fill_area(self, x, y, w, h, color, opacity = 0):
@@ -206,7 +264,7 @@ class SampleArea(Area):
     def __init__(self):
         Area.__init__(self)
         self.rect_x, self.rect_y = 100, -100
-        self.rect_width, self.rect_height = 50, 50
+        self.rect_width, self.rect_height = 90, 90
 
         self.text_y = -100
         
@@ -219,14 +277,19 @@ class SampleArea(Area):
         self.font_size = 32
         self.layout.set_text("Hello, World!")
         
-        self.fill_area(round(self.rect_x),
+        self.draw_rect(round(self.rect_x),
                        round(self.rect_y),
                        self.rect_width,
-                       self.rect_height, (168, 186, 136))
+                       self.rect_height,
+                       10)
+        
+        self.set_color("#ff00ff")
+        self.context.fill()
 
         self.context.move_to((self.width - self.layout.get_pixel_size()[0]) / 2,
                              self.text_y)
         
+        self.set_color("#333")
         self.context.show_layout(self.layout)
         
 
