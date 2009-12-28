@@ -110,9 +110,9 @@ runtime = RuntimeStore()
 
 
 class OneWindow(object):
-    def __init__(self, dialog_class):
+    def __init__(self, get_dialog_class):
         self.dialogs = {}
-        self.dialog_class = dialog_class
+        self.get_dialog_class = get_dialog_class
     
     def on_dialog_destroy(self, params):
         del self.dialogs[params]
@@ -125,10 +125,10 @@ class OneWindow(object):
             self.dialogs[params].window.present()
         else:
             if parent:
-                dialog = self.dialog_class(parent, **kwargs)
+                dialog = self.get_dialog_class()(parent, **kwargs)
                 dialog.window.set_transient_for(parent.get_toplevel())
             else:
-                dialog = self.dialog_class(**kwargs)
+                dialog = self.get_dialog_class()(**kwargs)
             
             # to make things simple, we hope that the target has defined self.window
             dialog.window.connect("destroy",
@@ -141,17 +141,25 @@ class Dialogs(Singleton):
     """makes sure that we have single instance open for windows where it makes
        sense"""
     def __init__(self):
-        from edit_activity import CustomFactController
-        self.edit = OneWindow(CustomFactController)
+        def get_edit_class():
+            from edit_activity import CustomFactController
+            return CustomFactController
+        self.edit = OneWindow(get_edit_class)
 
-        from stats import StatsViewer
-        self.stats = OneWindow(StatsViewer)
+        def get_stats_class():
+            from stats import StatsViewer
+            return StatsViewer
+        self.stats = OneWindow(get_stats_class)
 
-        from about import About
-        self.about = OneWindow(About)
+        def get_about_class():
+            from about import About
+            return About
+        self.about = OneWindow(get_about_class)
 
-        from preferences import PreferencesEditor
-        self.prefs = OneWindow(PreferencesEditor)
+        def get_prefs_class():
+            from preferences import PreferencesEditor
+            return PreferencesEditor
+        self.prefs = OneWindow(get_prefs_class)
 
 dialogs = Dialogs()    
 
