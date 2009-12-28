@@ -81,7 +81,9 @@ class ActivityStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime
+from configuration import runtime, GconfStore
+import widgets
+import dispatcher, storage, stuff
 
 class PreferencesEditor:
     TARGETS = [
@@ -91,10 +93,6 @@ class PreferencesEditor:
     
     
     def __init__(self, parent = None):
-        import widgets
-        import dispatcher, storage, stuff
-        from configuration import GconfStore
-
         self.parent = parent
         self._gui = stuff.load_ui_file("preferences.ui")
         self.config = GconfStore()

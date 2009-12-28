@@ -26,10 +26,10 @@ import datetime as dt
        fact window has dared to edit facts
 """
 from configuration import runtime
+import stuff, widgets
 
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        import stuff, widgets
 
         self._gui = stuff.load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
