@@ -97,9 +97,12 @@ class TimeLine(graphics.Area):
             self.minor_tick = WEEK
             # make sure we start week on first day
             #set to monday
-            self.start_time = self.start_time - dt.timedelta(self.start_time.weekday() + 1)
+            start_time = self.start_time - dt.timedelta(self.start_time.weekday() + 1)
             # look if we need to start on sunday or monday
-            self.start_time = self.start_time + dt.timedelta(self.first_weekday)
+            start_time = start_time + dt.timedelta(self.first_weekday)
+            if self.start_time - start_time == dt.timedelta(days=7):
+                start_time += dt.timedelta(days=7)
+            self.start_time = start_time
         elif days > 2: # more than two days -> show per day
             self.minor_tick = dt.timedelta(days = 1)
         else: # show per hour
@@ -168,6 +171,9 @@ class TimeLine(graphics.Area):
             x, width = exes[left_index]
             line(x + round(width * adjustment) - 1, color)
         
+        def first_weekday(date):
+            return (date.weekday() + 1 - self.first_weekday) % 7 == 0
+        
         while current_time < self.end_time:
             current_time += major_step
             x += major_tick_step
@@ -180,7 +186,7 @@ class TimeLine(graphics.Area):
                     line(exes[current_time][0] - 1, "#aaaaaa")
             else:
                 if self.minor_tick == DAY:  # week change
-                    if current_time.weekday() == 0:
+                    if first_weekday(current_time):
                         line(exes[current_time][0] - 1, "#cccccc")
     
                 if self.minor_tick <= WEEK:  # month change
@@ -226,7 +232,7 @@ class TimeLine(graphics.Area):
         # ticks. we loop once again to avoid next bar overlapping previous text
         for i, (current_time, total) in enumerate(self.tick_totals):
             if (self.end_time - self.start_time) > dt.timedelta(10) \
-               and self.minor_tick == DAY and current_time.weekday() != 0:
+               and self.minor_tick == DAY and first_weekday(current_time) == False:
                 continue
             
             x, bar_width = exes[current_time]
