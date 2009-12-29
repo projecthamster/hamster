@@ -7,7 +7,6 @@ data/Hamster_Applet.xml
 data/hamster-applet.schemas.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/stats.ui
-[type: gettext/glade]data/stats_overview.ui
 [type: gettext/glade]data/stats_reports.ui
 [type: gettext/glade]data/stats_stats.ui
 hamster/about.py

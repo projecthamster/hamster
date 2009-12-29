@@ -48,6 +48,6 @@ def get_eds_tasks():
                     if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
                         tasks.append({'name': task.get_summary(), 'category' : category})
         return tasks
-    except Exception, e: # TODO's are not priority - print warning and go home
+    except Exception, e:
         logging.warn(e)
         return []

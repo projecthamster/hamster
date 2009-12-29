@@ -112,8 +112,8 @@ class Area(gtk.DrawingArea):
 
 
     def animate(self, object, params = {}, duration = None, easing = None, callback = None):
-        if duration: params["tweenTime"] = duration  # if none will fallback to tweener's default
-        if easing: params["tweenType"] = easing    # if none will fallback to tweener's default
+        if duration: params["tweenTime"] = duration  # if none will fallback to tweener default
+        if easing: params["tweenType"] = easing    # if none will fallback to tweener default
         if callback: params["onCompleteFunction"] = callback
         self.tweener.addTween(object, **params)
         self.redraw_canvas()

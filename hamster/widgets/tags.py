@@ -272,7 +272,7 @@ class TagBox(graphics.Area):
         cur_x, cur_y = 4, 4
         for tag in self.tags:
             w, h = self.tag_size(tag)
-            if cur_x + w >= width - 5:  #if we don't fit, we wrap
+            if cur_x + w >= width - 5:  #if we do not fit, we wrap
                 cur_x = 5
                 cur_y += h + 6
             
@@ -283,7 +283,7 @@ class TagBox(graphics.Area):
         cur_x, cur_y = 4, 4
         for tag in self.tags:
             w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+            if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
                 cur_x = 5
                 cur_y += h + 6
             
@@ -317,7 +317,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
     def __init__(self):
         gtk.GenericCellRenderer.__init__(self)
         self.height = 0
-        self.width = None #that's like, two tags or something
+        self.width = None
         self.data = None
         
         self._font = pango.FontDescription(gtk.Style().font_desc.to_string())
@@ -374,7 +374,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
         cur_x, cur_y = 4, 2
         for tag in tags:
             w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+            if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
                 cur_x = 5
                 cur_y += h + 6
             
@@ -417,7 +417,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
             cur_x, cur_y = 4, 2
             for tag in tags:
                 w, h = self.tag_size(tag)
-                if cur_x + w >= self.width - 5:  #if we don't fit, we wrap
+                if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
                     cur_x = 5
                     cur_y += h + 6
                 
@@ -425,7 +425,7 @@ class TagCellRenderer(gtk.GenericCellRenderer):
 
             cur_y += h + 3
     
-            self.height = cur_y # this should actually trigger whole tree redraw if heights don't match
+            self.height = cur_y # TODO - this should actually trigger whole tree redraw if heights do not match
         
         return (0, 0, min_width, self.height)
     

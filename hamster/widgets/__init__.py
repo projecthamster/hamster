@@ -50,7 +50,7 @@ def add_hint(entry, hint):
             return self.real_get_text()
         
     def _set_hint(self, widget, event):
-        if self.get_text(): # don't mess with user entered text
+        if self.get_text(): # do not mess with user entered text
             return 
 
         self.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color("gray"))

@@ -177,7 +177,7 @@ class Chart(graphics.Area):
 
         self.show()
 
-        if not data: #if there is no data, let's just draw blank
+        if not data: #if there is no data, just draw blank
             self.redraw_canvas()
             return
 
@@ -347,7 +347,7 @@ class BarChart(Chart):
                               last_color)
 
 
-            if self.values_on_bars:  # it's either stack labels or values at the end for now
+            if self.values_on_bars:  # it is either stack labels or values at the end for now
                 if self.stack_keys:
                     total_value = sum(data[i])
                 else:
@@ -488,7 +488,7 @@ class HorizontalBarChart(Chart):
             self.fill_area(self.graph_x, self.graph_y, self.graph_width, self.graph_height, self.chart_background)
 
     
-        if not self.data:  #if we have nothing, let's go home
+        if not self.data:  # go home if we have nothing
             return
 
         positions = {}

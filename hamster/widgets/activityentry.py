@@ -147,7 +147,7 @@ class ActivityEntry(gtk.Entry):
         
         labels = [row[0] for row in model]
         shortest = min([len(label) for label in labels])
-        first = labels[0] #since we are looking for common prefix, we don't care which label we use for comparisons
+        first = labels[0] #since we are looking for common prefix, we do not care which label we use for comparisons
         
         for i in range(len(subject), shortest):
             letter_matching = all([label[i]==first[i] for label in labels])

@@ -178,7 +178,7 @@ class TimeLine(graphics.Area):
             current_time += major_step
             x += major_tick_step
             
-            if current_time >= self.end_time: # TODO - fix the loop so we don't have to break
+            if current_time >= self.end_time: # TODO - fix the loop so we do not have to break
                 break
             
             if major_step < DAY:  # about the same day
