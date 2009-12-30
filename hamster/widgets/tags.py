@@ -21,9 +21,9 @@ import gtk, gobject
 import pango, cairo
 from math import pi
 
-from .hamster import graphics
+from .. import graphics
 
-from .hamster.configuration import runtime
+from ..configuration import runtime
 
 class TagsEntry(gtk.Entry):
     __gsignals__ = {

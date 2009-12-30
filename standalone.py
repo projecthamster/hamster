@@ -26,18 +26,19 @@ pygtk.require("2.0")
 import gtk
 #gtk.gdk.threads_init()
 
-from configuration import GconfStore, runtime
-import widgets, stuff
+from hamster.configuration import GconfStore, runtime
+from hamster import widgets, stuff
 
 import gobject
 
-import graphics
+from hamster import graphics
 import pango, cairo
 
 class MainWindow(object):
     def __init__(self):
         self._gui = stuff.load_ui_file("hamster.ui")
         self.window = self._gui.get_object('main-window')
+	self.gtk_main_quit = gtk.main_quit
 
         #TODO - replace with the tree background color (can't get it atm!)
         self.get_widget("todays_activities_ebox").modify_bg(gtk.STATE_NORMAL,
@@ -71,7 +72,7 @@ class MainWindow(object):
         
 
     def magic(self, button, uri):
-        print uri, button
+        logging.debug('%s, %s' % (uri, button))
         
 
     def set_last_activity(self):
@@ -176,12 +177,12 @@ class MainWindow(object):
         runtime.storage.touch_fact(runtime.storage.get_last_activity())
 
     def after_activity_update(self, widget, stuff):
-        print "activity updated"
+        logging.debug("activity updated")
         self.set_last_activity()
         self.load_today()
 
     def after_fact_update(self, widget, stuff):
-        print "fact updated"
+        logging.debug("fact updated")
         self.set_last_activity()
         self.load_today()
 
@@ -190,8 +191,6 @@ class MainWindow(object):
         
     def get_widget(self, name):
         return self._gui.get_object(name)
-        
-    
 
 if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")

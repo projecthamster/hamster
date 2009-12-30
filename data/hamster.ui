@@ -8,6 +8,7 @@
     <property name="window_position">center</property>
     <property name="default_width">700</property>
     <property name="default_height">500</property>
+    <signal name="destroy" handler="gtk_main_quit"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
