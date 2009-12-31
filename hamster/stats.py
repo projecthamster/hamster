@@ -46,6 +46,7 @@ class FramedTimeline(widgets.TimeLine):
     def draw(self, facts, start_date, end_date):
         self.start_date = start_date
         self.end_date = end_date
+        self.set_title(start_date, end_date)
         widgets.TimeLine.draw(self, facts, start_date, end_date)
 
     def on_expose(self):
