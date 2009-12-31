@@ -719,8 +719,8 @@ class HorizontalDayChart(Chart):
                 bar_x = round((row[0]- start_hour) * factor)
                 bar_size = round((row[1] - start_hour) * factor - bar_x)
                 
-                self.draw_bar(self.graph_x + bar_x + 0.5,
-                              positions[label][0] + 0.5,
+                self.draw_bar(round(self.graph_x + bar_x),
+                              positions[label][0],
                               bar_size,
                               positions[label][1],
                               base_color)
@@ -747,8 +747,8 @@ class HorizontalDayChart(Chart):
 
             
             self.set_color((255, 255, 255))
-            self.context.move_to(self.graph_x + x, self.graph_y)
-            self.context.line_to(self.graph_x + x,
+            self.context.move_to(round(self.graph_x + x) + 0.5, self.graph_y)
+            self.context.line_to(round(self.graph_x + x) + 0.5,
                                  last_position[0] + last_position[1])
 
                 
