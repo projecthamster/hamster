@@ -54,8 +54,6 @@ class TimeLine(graphics.Area):
         if start_date > end_date:
             start_date, end_date = end_date, start_date
 
-        self.set_title(start_date, end_date) # we will forget about all our magic manipulations for the title
-
         # for hourly representation we will operate in minutes since and until the day start
         if end_date - start_date < dt.timedelta(days=2):
             start_time = dt.datetime.combine(start_date, self.day_start.replace(minute=0))
