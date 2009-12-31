@@ -211,7 +211,7 @@ class ReportsBox(gtk.VBox):
             self.category_chart.plot(*self.category_sums)
         else:
             self.get_widget("totals_by_category").set_size_request(280, 10)
-            self.category_chart.plot(([],[]))
+            self.category_chart.plot([],[])
 
         self.get_widget("totals_by_activity").set_size_request(10,10)
         self.get_widget("totals_by_activity").set_size_request(280, len(self.activity_sums[0]) * 20)
@@ -223,7 +223,7 @@ class ReportsBox(gtk.VBox):
             self.tag_chart.plot(*self.tag_sums)
         else:
             self.get_widget("totals_by_tag").set_size_request(280, 10)
-            self.tag_chart.plot(([],[]))
+            self.tag_chart.plot([],[])
 
 
     def get_widget(self, name):
