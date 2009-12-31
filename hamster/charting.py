@@ -33,7 +33,7 @@ http://projecthamster.wordpress.com/
 
 """
 
-import gtk
+import gtk, gobject
 import cairo, pango
 import copy
 import math
@@ -115,6 +115,9 @@ class Chart(graphics.Area):
         self.labels_at_end     = If stack bars are displayed, this allows to
                                  show them at right end of graph.
     """
+    __gsignals__ = {
+        "bar-clicked": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+    }
     def __init__(self, **args):
         graphics.Area.__init__(self)
 
@@ -136,6 +139,8 @@ class Chart(graphics.Area):
         self.labels_at_end     = args.get("labels_at_end", False)
         self.framerate         = args.get("framerate", 60)
 
+        self.interactive       = args.get("interactive", False) # if the bars are clickable
+
         # other stuff
         self.bars = []
         self.keys = []
@@ -150,7 +155,28 @@ class Chart(graphics.Area):
         self.graph_x, self.graph_y = 0, 0
         self.graph_width, self.graph_height = None, None
         
+        self.mouse_bar = None
+        if self.interactive:
+            self.connect("mouse-over", self.on_mouse_over)
+            self.connect("button-release", self.on_clicked)
+            
+        self.bars_selected = []
         
+    
+    def on_mouse_over(self, area, region):
+        if region:
+            self.mouse_bar = int(region[0])
+        else:
+            self.mouse_bar = None
+            
+        self.redraw_canvas()
+        
+    def on_clicked(self, area, bar):
+        self.emit("bar-clicked", self.mouse_bar)
+    
+    def select_bar(self, index):
+        pass
+
     def get_bar_color(self, index):
         # returns color darkened by it's index
         # the approach reduces contrast by each step
@@ -509,25 +535,32 @@ class HorizontalBarChart(Chart):
         
 
         
-        context.set_line_width(0)
+        context.set_line_width(1)
 
         # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
         
 
         for i, label in enumerate(keys):
+            if self.interactive:
+                self.register_mouse_region(0,
+                                           positions[label][0],
+                                           self.width,
+                                           positions[label][0] + positions[label][1],
+                                           str(i))
+
             self.layout.set_width(legend_width * pango.SCALE)
-            self.set_color(graphics.Colors.aluminium[5])        
-            
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
-
+            
+            self.set_color(graphics.Colors.aluminium[5])        
             context.move_to(0, positions[label][0] + (positions[label][1] - label_h) / 2)
             context.show_layout(self.layout)
 
             base_color = self.bar_base_color or (220, 220, 220)
 
             last_color = (255,255,255)
+
             if self.stack_keys:
                 bar_start = 0
 
@@ -550,7 +583,12 @@ class HorizontalBarChart(Chart):
                 bar_size = round(max_bar_size * self.bars[i].size)
                 bar_start = bar_size
 
-                last_color = self.key_colors.get(self.keys[i]) or base_color
+                if i in self.bars_selected:
+                    last_color = self.get_style().bg[gtk.STATE_SELECTED].to_string()
+                elif i == self.mouse_bar:
+                    last_color = self.get_style().bg[gtk.STATE_PRELIGHT].to_string()
+                else:
+                    last_color = self.key_colors.get(self.keys[i]) or base_color
 
                 self.draw_bar(self.graph_x,
                               positions[label][0],
@@ -573,11 +611,14 @@ class HorizontalBarChart(Chart):
                 label_x = self.graph_x + bar_start + vertical_padding
                 self.set_color(graphics.Colors.aluminium[5])        
             else:
-                # we are in the bar so make sure that the font color is distinguishable
-                if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
-                    self.set_color(graphics.Colors.almost_white)
+                if i in self.bars_selected:
+                    self.set_color(self.get_style().fg[gtk.STATE_SELECTED].to_string())
                 else:
-                    self.set_color(graphics.Colors.aluminium[5])        
+                    # we are in the bar so make sure that the font color is distinguishable
+                    if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
+                        self.set_color(graphics.Colors.almost_white)
+                    else:
+                        self.set_color(graphics.Colors.aluminium[5])        
                     
                 label_x = self.graph_x + bar_start - label_w - vertical_padding
             
@@ -638,8 +679,6 @@ class HorizontalDayChart(Chart):
             return
 
         
-        self.context.translate(0.5, 0.5)
-
         positions = {}
         y = 0
         bar_width = min(self.graph_height / float(len(self.keys)), self.max_bar_width)

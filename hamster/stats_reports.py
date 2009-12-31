@@ -58,21 +58,33 @@ class ReportsBox(gtk.VBox):
                                                           max_bar_width = 20,
                                                           legend_width = x_offset,
                                                           value_format = "%.1f",
-                                                          animate = False)
+                                                          interactive = True)
+        self.category_chart.connect("bar-clicked", self.on_category_clicked)
+        self.selected_categories = []
+        self.category_sums = None
+        
         self.get_widget("totals_by_category").add(self.category_chart);
         
         self.activity_chart = charting.HorizontalBarChart(background = self.background,
                                                           max_bar_width = 20,
                                                           legend_width = x_offset,
                                                           value_format = "%.1f",
-                                                          animate = False)
+                                                          interactive = True)
+        self.activity_chart.connect("bar-clicked", self.on_activity_clicked)
+        self.selected_activities = []
+        self.activity_sums = None
+
         self.get_widget("totals_by_activity").add(self.activity_chart);
 
         self.tag_chart = charting.HorizontalBarChart(background = self.background,
                                                           max_bar_width = 20,
                                                           legend_width = x_offset,
                                                           value_format = "%.1f",
-                                                          animate = False)
+                                                          interactive = True)
+        self.tag_chart.connect("bar-clicked", self.on_tag_clicked)
+        self.selected_tags = []
+        self.tag_sums = None
+
         self.get_widget("totals_by_tag").add(self.tag_chart);
 
 
@@ -83,13 +95,47 @@ class ReportsBox(gtk.VBox):
 
         self.report_chooser = None
 
+
+    def on_category_clicked(self, widget, idx):
+        if idx in self.category_chart.bars_selected:
+            self.category_chart.bars_selected.remove(idx)
+            self.selected_categories.remove(self.category_sums[0][idx])
+        else:
+            self.category_chart.bars_selected.append(idx)
+            self.selected_categories.append(self.category_sums[0][idx])
+        self.do_charts()
+
+    def on_activity_clicked(self, widget, idx):
+        if idx in self.activity_chart.bars_selected:
+            self.activity_chart.bars_selected.remove(idx)
+            self.selected_activities.remove(self.activity_sums[0][idx])
+        else:
+            self.activity_chart.bars_selected.append(idx)
+            self.selected_activities.append(self.activity_sums[0][idx])
+        self.do_charts()
+
+    def on_tag_clicked(self, widget, idx):
+        if idx in self.tag_chart.bars_selected:
+            self.tag_chart.bars_selected.remove(idx)
+            self.selected_tags.remove(self.tag_sums[0][idx])
+        else:
+            self.tag_chart.bars_selected.append(idx)
+            self.selected_tags.append(self.tag_sums[0][idx])
+        self.do_charts()
+
+
     def on_reports_box_expose_event(self, box, someth):
         self.do_charts()
 
     def search(self, start_date, end_date, facts):
         self.facts = facts
+        self.category_sums, self.activity_sums, self.tag_sums = [], [], []
+        self.selected_categories, self.selected_activities, self.selected_tags = [], [], []
+        self.category_chart.bars_selected, self.activity_chart.bars_selected, self.tag_chart.bars_selected = [], [], []
+        
         self.start_date = start_date
         self.end_date = end_date
+
         self.do_graph()
 
     def do_graph(self):
@@ -105,46 +151,80 @@ class ReportsBox(gtk.VBox):
     def do_charts(self):
         if not self.facts:
             return
+
+        import copy
+        facts = copy.deepcopy(self.facts)
         
-        #totals by category
-        category_sums = stuff.totals(self.facts,
+        for fact in facts:
+            if self.selected_categories and fact["category"] not in self.selected_categories:
+                fact["delta"] = dt.timedelta()
+            if self.selected_activities and fact["name"] not in self.selected_activities:
+                fact["delta"] = dt.timedelta()
+            if self.selected_tags and len(set(self.selected_tags) - set(fact["tags"])) > 0:
+                fact["delta"] = dt.timedelta()
+
+
+
+        # category totals
+        category_sums = stuff.totals(facts,
                                      lambda fact: (fact["category"]),
                                      lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
         if category_sums:
-            category_sums = sorted(category_sums.items(), key=lambda x:x[1], reverse = True)
-            keys, values = zip(*category_sums)
-            self.get_widget("totals_by_category").set_size_request(280, len(keys) * 20)
-            self.category_chart.plot(keys, values)
-        else:
-            self.category_chart.plot([], [])
-        
+            if self.category_sums:
+                category_sums = [(key, category_sums[key]) for key in self.category_sums[0]]
+            else:
+                category_sums = sorted(category_sums.items(), key=lambda x:x[1], reverse = True)
+            self.category_sums = zip(*category_sums)
 
-        #totals by activity
-        activity_sums = stuff.totals(self.facts,
+        # activity totals
+        activity_sums = stuff.totals(facts,
                                      lambda fact: (fact["name"]),
                                      lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
-        activity_sums = sorted(activity_sums.items(), key=lambda x:x[1], reverse = True)
-        keys, values = zip(*activity_sums)
-        self.get_widget("totals_by_activity").set_size_request(10,10)
-        self.get_widget("totals_by_activity").set_size_request(280, len(keys) * 20)
-        self.activity_chart.plot(keys, values)
+        if self.activity_sums:
+            activity_sums = [(key, activity_sums[key]) for key in self.activity_sums[0]]
+        else:
+            activity_sums = sorted(activity_sums.items(), key=lambda x:x[1], reverse = True)
+
+        self.activity_sums = zip(*activity_sums)
 
 
+        # tag totals
         tag_sums = {}
-        for fact in self.facts:
+        for fact in facts:
             for tag in fact["tags"]:
                 tag_sums.setdefault(tag, 0)
                 tag_sums[tag] += stuff.duration_minutes(fact["delta"]) / 60.0
 
         if tag_sums:        
-            tag_sums = sorted(tag_sums.items(), key=lambda x:x[1], reverse = True)
-            keys, values = zip(*tag_sums)
-            self.get_widget("totals_by_tag").set_size_request(10,10)
-            self.get_widget("totals_by_tag").set_size_request(280, len(keys) * 20)
-            self.tag_chart.plot(keys, values)
+            if self.tag_sums:
+                tag_sums = [(key, tag_sums[key]) for key in self.tag_sums[0]]
+            else:
+                tag_sums = sorted(tag_sums.items(), key=lambda x:x[1], reverse = True)
+            self.tag_sums = zip(*tag_sums)
+
+
+
+
+        self.get_widget("totals_by_category").set_size_request(10,10)
+        if self.category_sums:
+            self.get_widget("totals_by_category").set_size_request(280, len(self.category_sums[0]) * 20)
+            self.category_chart.plot(*self.category_sums)
         else:
-            self.tag_chart.plot([], [])
-        
+            self.get_widget("totals_by_category").set_size_request(280, 10)
+            self.category_chart.plot(([],[]))
+
+        self.get_widget("totals_by_activity").set_size_request(10,10)
+        self.get_widget("totals_by_activity").set_size_request(280, len(self.activity_sums[0]) * 20)
+        self.activity_chart.plot(*self.activity_sums)
+
+        self.get_widget("totals_by_tag").set_size_request(10,10)
+        if self.tag_sums:
+            self.get_widget("totals_by_tag").set_size_request(280, len(self.tag_sums[0]) * 20)
+            self.tag_chart.plot(*self.tag_sums)
+        else:
+            self.get_widget("totals_by_tag").set_size_request(280, 10)
+            self.tag_chart.plot(([],[]))
+
 
     def get_widget(self, name):
         """ skip one variable (huh) """
