@@ -37,6 +37,68 @@ import widgets, reports
 from stats_overview import OverviewBox
 from stats_reports import ReportsBox
 
+
+class FramedTimeline(widgets.TimeLine):
+    def __init__(self):
+        widgets.TimeLine.__init__(self)
+    
+
+    def draw(self, facts, start_date, end_date):
+        self.start_date = start_date
+        self.end_date = end_date
+        widgets.TimeLine.draw(self, facts, start_date, end_date)
+
+    def on_expose(self):
+        widgets.TimeLine.on_expose(self)
+
+        self.rectangle(0.5, 0.5, self.width - 1, self.height + 1, "#999")
+        self.context.stroke()
+
+        self.layout.set_width(-1)
+        self.set_color("#aaaaaa")
+        self.context.move_to(4, 4)
+        font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        font.set_size(14 * pango.SCALE)
+        font.set_weight(pango.WEIGHT_BOLD)
+        self.layout.set_font_description(font)
+
+        self.layout.set_markup(self.title)
+        self.context.show_layout(self.layout)
+
+
+
+    def set_title(self, start_date, end_date):
+        dates_dict = stuff.dateDict(start_date, "start_")
+        dates_dict.update(stuff.dateDict(end_date, "end_"))
+        
+        if start_date == end_date:
+            # date format for overview label when only single day is visible
+            # Using python datetime formatting syntax. See:
+            # http://docs.python.org/library/time.html#time.strftime
+            start_date_str = start_date.strftime(_("%B %d, %Y"))
+            # Overview label if looking on single day
+            self.title = start_date_str
+        elif start_date.year != end_date.year:
+            # overview label if start and end years don't match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        elif start_date.month != end_date.month:
+            # overview label if start and end month do not match
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        else:
+            # overview label for interval in same month
+            # letter after prefixes (start_, end_) is the one of
+            # standard python date formatting ones- you can use all of them
+            # see http://docs.python.org/library/time.html#time.strftime
+            self.title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+
+
+
 class StatsViewer(object):
     def __init__(self, parent = None):
         self.parent = parent# determine if app should shut down on close
@@ -97,7 +159,7 @@ class StatsViewer(object):
         self.end_date_input.connect("date-entered", self.on_end_date_entered)
         self.get_widget("range_end_box").add(self.end_date_input)
 
-        self.timeline = widgets.TimeLine()
+        self.timeline = FramedTimeline()
         self.get_widget("by_day_box").add(self.timeline)
 
         self._gui.connect_signals(self)

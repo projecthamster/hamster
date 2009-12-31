@@ -40,7 +40,6 @@ class TimeLine(graphics.Area):
         graphics.Area.__init__(self)
         self.start_time, self.end_time = None, None
         self.facts = []
-        self.title = ""
         self.day_start = GconfStore().get_day_start()
         self.first_weekday = stuff.locale_first_weekday()
         
@@ -117,8 +116,6 @@ class TimeLine(graphics.Area):
         self.context.set_line_width(1)
 
         self.fill_area(0, 0, self.width, self.height, "#fafafa")
-        self.context.stroke()
-        self.rectangle(0, 0, self.width, self.height, "#666666")
         self.context.stroke()
         
         self.height = self.height - 2
@@ -246,19 +243,6 @@ class TimeLine(graphics.Area):
             self.context.show_layout(self.layout)
 
         
-        self.layout.set_width(-1)
-        self.set_color("#aaaaaa")
-        self.context.move_to(1, 1)
-        font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        font.set_size(14 * pango.SCALE)
-        font.set_weight(pango.WEIGHT_BOLD)
-        self.layout.set_font_description(font)
-
-        self.layout.set_markup(self.title)
-
-        self.context.show_layout(self.layout)
-
-
     def count_hours(self):
         #go through facts and make array of time used by our fraction
         fractions = []
@@ -312,36 +296,6 @@ class TimeLine(graphics.Area):
 
         self.tick_totals = zip(fractions, hours)
 
-
-    def set_title(self, start_date, end_date):
-        dates_dict = stuff.dateDict(start_date, "start_")
-        dates_dict.update(stuff.dateDict(end_date, "end_"))
-        
-        if start_date == end_date:
-            # date format for overview label when only single day is visible
-            # Using python datetime formatting syntax. See:
-            # http://docs.python.org/library/time.html#time.strftime
-            start_date_str = start_date.strftime(_("%B %d, %Y"))
-            # Overview label if looking on single day
-            self.title = start_date_str
-        elif start_date.year != end_date.year:
-            # overview label if start and end years don't match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            self.title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        elif start_date.month != end_date.month:
-            # overview label if start and end month do not match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            self.title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        else:
-            # overview label for interval in same month
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            self.title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
 
 
