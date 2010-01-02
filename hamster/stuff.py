@@ -72,7 +72,7 @@ def duration_minutes(duration):
 
 
 def load_ui_file(name):
-    from .configuration import runtime
+    from configuration import runtime
     ui = gtk.Builder()
     ui.add_from_file(os.path.join(runtime.data_dir, name))
     return ui 
