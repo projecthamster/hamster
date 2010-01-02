@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-12-07 22:31+0000\n"
-"PO-Revision-Date: 2009-12-11 09:09+0200\n"
+"POT-Creation-Date: 2009-12-29 16:21+0000\n"
+"PO-Revision-Date: 2009-12-30 14:13+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -201,18 +201,6 @@ msgstr "Vaheta"
 msgid "_Today"
 msgstr "_Täna"
 
-msgid "Overview"
-msgstr "Ülevaade"
-
-msgid "Overview - Hamster"
-msgstr "Ülevaade - Hamster"
-
-msgid "Reports"
-msgstr "Raportid"
-
-msgid "Statistics"
-msgstr "Statistika"
-
 msgid "Add"
 msgstr "Lisa"
 
@@ -220,59 +208,30 @@ msgstr "Lisa"
 msgid "Edit"
 msgstr "Muuda"
 
-msgid "Next"
-msgstr "Järgmine"
-
-msgid "Previous"
-msgstr "Eelmine"
+msgid "Overview - Hamster"
+msgstr "Ülevaade - Hamster"
 
 msgid "Remove"
 msgstr "Eemalda"
 
-msgid "This Week"
-msgstr "See nädal"
+msgid "Save Report"
+msgstr "Raporti salvestamine"
 
-msgid " _Day"
-msgstr "_Päev"
+#. summary table
+msgid "Totals"
+msgstr "Kokku"
 
-msgid " _Month"
-msgstr "_Kuu"
-
-msgid " _Week"
-msgstr "_Nädal"
-
-msgid "<b>Overview</b>"
-msgstr "<b>Ülevaade</b>"
-
-msgid "Activity"
-msgstr "Tegevus"
-
-msgid "Categories:"
-msgstr "Kategooriad:"
-
-msgid "Date interval:"
-msgstr "Kuupäevade vahemik:"
+msgid "Categories"
+msgstr "Kategooriad"
 
 msgid "No data for this interval"
 msgstr "Selle vahemiku kohta andmed puuduvad"
 
-msgid "Save Report"
-msgstr "Raporti salvestamine"
+msgid "Tags"
+msgstr "Sildid"
 
-msgid "Save report &#x2013; Time Tracker"
-msgstr "Ajajälgija &#x2013; raporti salvestamine"
-
-msgid "Show month"
-msgstr "Näita kuud"
-
-msgid "Week"
-msgstr "Nädal"
-
-msgid "<b>Starts and ends</b>"
-msgstr "<b>Algus ja lõpp</b>"
-
-msgid "<b>Totals</b>"
-msgstr "<b>Kokku</b>"
+msgid "Starts and ends"
+msgstr "Algus ja lõpp"
 
 msgid "Year:"
 msgstr "Aasta:"
@@ -300,13 +259,6 @@ msgstr "Sildid või kirjeldus"
 msgid "No activity"
 msgstr "Tegevusetu"
 
-msgid "Just started"
-msgstr "Värskelt alustatud"
-
-#. unsorted category
-msgid "Unsorted"
-msgstr "Sortimata"
-
 #. activity reminder
 #, python-format
 msgid "Working on <b>%s</b>"
@@ -321,40 +273,11 @@ msgstr "%(category)s: %(duration)s"
 msgid "%sh"
 msgstr "%st"
 
-msgid "What should be typed in the activity box?"
-msgstr "Mida peaks tegevuse kasti sisestama?"
+msgid "Just started"
+msgstr "Värskelt alustatud"
 
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"Tegevuse kirjeldusele täpsustuste lisamine käib lihtsa süntaksi abil:\n"
-"\n"
-"Märk \"@\" tähistab kategooriat. Näiteks: \"lillede kastmine@kodu\" alustab "
-"tegevust \"lillede kastmine\", mis kuulub kategooriasse \"kodu\".\n"
-"\n"
-"Koma (\",\") märgib kirjelduse algust. Näiteks: \"lillede kastmine, "
-"karikakrad ja rukkililled\" alustab tegevust \"lillede kastmine\" ja lisab "
-"sellele kirjelduse \"karikakrad ja rukkililled\".\n"
-"\n"
-"Mõlemit erimärki võib omavahel kombineerida: \"lillede kastmine@kodu, "
-"karikakrad ja rukkililled\" toimib väga kenasti!\n"
-"\n"
-"Seega võib nüüd ajajälgimisega algust teha!\n"
-" "
+msgid "Unsorted"
+msgstr "Sortimata"
 
 #. defaults
 msgid "Work"
@@ -456,6 +379,9 @@ msgstr "Päeva %(start_d)s. %(start_B)s %(start_Y)s ülevaade"
 msgid "Date"
 msgstr "Kuupäev"
 
+msgid "Activity"
+msgstr "Tegevus"
+
 msgid "Start"
 msgstr "Algus"
 
@@ -475,112 +401,21 @@ msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d. %b.%Y"
 
-#. summary table
-msgid "Totals"
-msgstr "Kokku"
-
 msgid "Total Time"
 msgstr "Kogukestus"
 
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %d. %b"
-
-msgid "Total"
-msgstr "Kokku"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%d. %b"
-
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%d. %B, %Y"
-
-#. Overview label if looking on single day
-#, python-format
-msgid "Totals for %(date)s"
-msgstr "Päeva %(date)s kokkuvõte"
-
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#, python-format
-msgid ""
-"Totals for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
-msgstr ""
-"Perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)"
-"s kokkuvõte"
-
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#, python-format
-msgid "Totals for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
-"Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s kokkuvõte"
-
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#, python-format
-msgid "Totals for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s kokkuvõte"
+msgid "Week"
+msgstr "Nädal"
 
 msgid "Month"
 msgstr "Kuu"
 
-msgid "Day"
-msgstr "Päev"
+msgid "Date Range"
+msgstr "Kuupäevade vahemik"
 
-msgid "Previous day"
-msgstr "Eelmine päev"
-
-msgid "Next day"
-msgstr "Järgmine päev"
-
-msgid "Today"
-msgstr "Täna"
-
-msgid "Previous week"
-msgstr "Eelmine nädal"
-
-msgid "Next week"
-msgstr "Järgmine nädal"
-
-msgid "This week"
-msgstr "See nädal"
-
-msgid "Previous month"
-msgstr "Eelmine kuu"
-
-msgid "Next month"
-msgstr "Järgmine kuu"
-
-msgid "This month"
-msgstr "See kuu"
-
-msgid "This Month"
-msgstr "See kuu"
-
-msgid "HTML Report"
-msgstr "HTML-raport"
-
-msgid "Tab-Separated Values (TSV)"
-msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
-
-msgid "XML"
-msgstr "XML"
-
-msgid "iCal"
-msgstr "iCal"
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %d. %b"
 
 msgctxt "years"
 msgid "All"
@@ -696,7 +531,47 @@ msgstr "%dmin"
 msgid "%dh %dmin"
 msgstr "%dt %dmin"
 
-#. add unsorted category
-msgctxt "categories"
-msgid "All"
-msgstr "Kõik"
+msgid "Save report - Time Tracker"
+msgstr "Ajajälgija - raporti salvestamine"
+
+msgid "HTML Report"
+msgstr "HTML-raport"
+
+msgid "Tab-Separated Values (TSV)"
+msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "iCal"
+msgstr "iCal"
+
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+msgid "%B %d, %Y"
+msgstr "%d. %B, %Y"
+
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)s"
+
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s"
+
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s-%(end_d)s %(start_B)s %(end_Y)s"
