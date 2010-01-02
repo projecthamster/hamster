@@ -146,8 +146,13 @@ class Dialogs(Singleton):
             return CustomFactController
         self.edit = OneWindow(get_edit_class)
 
-        def get_stats_class():
+        def get_overview_class():
             from stats import StatsViewer
+            return StatsViewer
+        self.overview = OneWindow(get_overview_class)
+
+        def get_stats_class():
+            from stats_stats import StatsViewer
             return StatsViewer
         self.stats = OneWindow(get_stats_class)
 

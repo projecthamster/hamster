@@ -551,7 +551,7 @@ class HamsterApplet(object):
     """button events"""
     def on_overview(self, menu_item):
         runtime.dispatcher.dispatch('panel_visible', False)
-        dialogs.stats.show(self.applet)
+        dialogs.overview.show(self.applet)
 
     def show_overview(self, menu_item, verb):
         return self.on_overview(menu_item)

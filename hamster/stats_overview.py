@@ -44,7 +44,7 @@ from hamster.i18n import C_
 class OverviewBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
-        self.set_border_width(12)
+        self.set_border_width(6)
         
         scroll = gtk.ScrolledWindow()
         scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
@@ -142,7 +142,7 @@ class OverviewBox(gtk.VBox):
     def on_facts_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        custom_fact = dialogs.edit.show(self.window, fact_id = model[iter][0])
+        custom_fact = dialogs.edit.show(self, fact_id = model[iter][0])
         
     def on_facts_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):

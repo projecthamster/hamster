@@ -36,12 +36,14 @@ from configuration import runtime
 from hamster.i18n import C_
 
 
-class StatsBox(gtk.VBox):
-    def __init__(self):
-        gtk.VBox.__init__(self)
-        
+class StatsViewer(object):
+    def __init__(self, parent = None):
         self._gui = stuff.load_ui_file("stats_stats.ui")
-        self.get_widget("stats_box").reparent(self) #mine!
+        self.report_chooser = None
+        self.window = self.get_widget("stats_window")
+
+        self.parent = parent# determine if app should shut down on close
+
         
         self.background = (0.975, 0.975, 0.975)
         self.get_widget("explore_frame").modify_bg(gtk.STATE_NORMAL,
@@ -57,6 +59,8 @@ class StatsBox(gtk.VBox):
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
         self.init_stats()
+        self.window.show_all()
+        self.stats()
 
 
 
@@ -159,14 +163,14 @@ class StatsBox(gtk.VBox):
 
         if not facts or (facts[-1]["start_time"] - facts[0]["start_time"]) < dt.timedelta(days=6):
             self.get_widget("statistics_box").hide()
-            self.get_widget("explore_controls").hide()
+            #self.get_widget("explore_controls").hide()
             label = self.get_widget("not_enough_records_label")
 
             if not facts:
                 label.set_text(_("""There is no data to generate statistics yet.
 A week of usage would be nice!"""))
             else:
-                label.set_text(_("Still collecting data — check back after a week has passed!"))
+                label.set_text(_("Collecting data — check back after a week has passed!"))
 
             label.show()
             return
@@ -408,16 +412,14 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         return self._gui.get_object(name)
 
 
-if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-applet")
-    
-    window = gtk.Window()
-    window.set_title("Hamster - statistics")
-    window.set_size_request(800, 600)
-    
-    stats_box = StatsBox() 
-    window.add(stats_box)
+    def close_window(self):
+        if not self.parent:
+            gtk.main_quit()
+        else:
+            self.window.destroy()
+            return False
+        
 
-    window.show_all()    
-    stats_box.stats()
+if __name__ == "__main__":
+    stats_viewer = StatsViewer() 
     gtk.main()    

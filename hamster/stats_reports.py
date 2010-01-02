@@ -33,7 +33,7 @@ import gtk, gobject
 
 import stuff, widgets
 import charting, reports
-from configuration import runtime, GconfStore
+from configuration import runtime, GconfStore, dialogs
 
 from hamster.i18n import C_
 
@@ -232,6 +232,9 @@ class ReportsBox(gtk.VBox):
 
     def on_day_start_changed(self, event, new_minutes):
         self.do_graph()
+    
+    def on_statistics_button_clicked(self, button):
+        dialogs.stats.show(self)
 
 
 

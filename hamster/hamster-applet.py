@@ -114,7 +114,10 @@ if __name__ == "__main__":
     
         if options.start_window or options.standalone:
             gobject.set_application_name("hamster-applet")
-            if options.start_window == "stats":
+            if options.start_window.startswith("over"):
+                dialogs.overview.show()
+
+            elif options.start_window == "stats":
                 dialogs.stats.show()
 
             elif options.start_window == "edit":
