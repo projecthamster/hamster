@@ -99,7 +99,7 @@ class Storage(storage.Storage):
         """look up tags by their name. create if not found"""
         
         # filter descriptions out, just in case they have wandered in here
-        tags = [tag for tag in tags if tag.startswith("!") == False and len(tag.split(" ")) < 3]
+        tags = [tag.lower() for tag in tags if tag.startswith("!") == False and len(tag.split(" ")) < 3]
         
         db_tags = self.fetchall("select * from tags where name in (%s)"
                                             % ",".join(["?"] * len(tags)), tags) # bit of magic here - using sqlites bind variables

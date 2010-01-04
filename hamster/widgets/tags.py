@@ -129,7 +129,7 @@ class TagsEntry(gtk.Entry):
         entered_tags = self.get_tags()
         self.tag_box.selected_tags = entered_tags
         
-        self.filter_tags = [tag for tag in self.tags if tag.startswith(self.filter)]
+        self.filter_tags = [tag for tag in self.tags if (tag or "").lower().startswith((self.filter or "").lower())]
         
         self.tag_box.draw(self.filter_tags)
         
