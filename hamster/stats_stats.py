@@ -67,30 +67,33 @@ class StatsViewer(object):
     def init_stats(self):
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         
-        by_year = stuff.totals(self.stat_facts,
-                               lambda fact: fact["start_time"].year,
-                               lambda fact: 1)
-        
-        year_box = self.get_widget("year_box")
-        class YearButton(gtk.ToggleButton):
-            def __init__(self, label, year, on_clicked):
-                gtk.ToggleButton.__init__(self, label)
-                self.year = year
-                self.connect("clicked", on_clicked)
-        
-        all_button = YearButton(C_("years", "All").encode("utf-8"),
-                                None,
-                                self.on_year_changed)
-        year_box.pack_start(all_button)
-        self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
-        all_button.set_active(True)
-        self.bubbling = False # TODO figure out how to properly work with togglebuttons as radiobuttons
-
-        years = sorted(by_year.keys())
-        for year in years:
-            year_box.pack_start(YearButton(str(year), year, self.on_year_changed))
-
-        year_box.show_all()
+        if not self.stat_facts or self.stat_facts[-1]["start_time"].year == self.stat_facts[0]["start_time"].year:
+            self.get_widget("explore_controls").hide()
+        else:
+            by_year = stuff.totals(self.stat_facts,
+                                   lambda fact: fact["start_time"].year,
+                                   lambda fact: 1)
+            
+            year_box = self.get_widget("year_box")
+            class YearButton(gtk.ToggleButton):
+                def __init__(self, label, year, on_clicked):
+                    gtk.ToggleButton.__init__(self, label)
+                    self.year = year
+                    self.connect("clicked", on_clicked)
+            
+            all_button = YearButton(C_("years", "All").encode("utf-8"),
+                                    None,
+                                    self.on_year_changed)
+            year_box.pack_start(all_button)
+            self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
+            all_button.set_active(True)
+            self.bubbling = False # TODO figure out how to properly work with togglebuttons as radiobuttons
+    
+            years = sorted(by_year.keys())
+            for year in years:
+                year_box.pack_start(YearButton(str(year), year, self.on_year_changed))
+    
+            year_box.show_all()
 
         self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
