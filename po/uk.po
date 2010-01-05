@@ -1,15 +1,15 @@
 # Ukrainian translation of hamster-applet.
 # Copyright (C) Free Software Foundation, Inc.
 # This file is distributed under the same license as the hamster-applet package.
-# Maxim Dziumanenko <dziumanenko@gmail.com>, 2009.
+# Maxim Dziumanenko <dziumanenko@gmail.com>, 2009-2010
 #
 # wanderlust <wanderlust@ukr.net>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-17 18:50+0300\n"
-"PO-Revision-Date: 2009-09-17 11:50+0300\n"
+"POT-Creation-Date: 2010-01-05 13:58+0200\n"
+"PO-Revision-Date: 2010-01-05 11:50+0300\n"
 "Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>,\n"
 "Language-Team: ukrainian <Ukrainian <uk@li.org>>\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Проект Hamster - слідкуй за своїм часом"
 
 #. Title of reminder notification
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
-#: ../hamster/about.py:38 ../hamster/applet.py:63
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:39
+#: ../hamster/about.py:40 ../hamster/applet.py:58
 msgid "Time Tracker"
 msgstr "Облік часу"
 
@@ -40,83 +40,100 @@ msgstr "_Огляд"
 msgid "_Preferences"
 msgstr "П_араметри"
 
-#: ../data/preferences.ui.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>Діяльність</b>"
+#: ../data/preferences.ui.h:1 ../data/stats.ui.h:1
+#: ../data/stats_reports.ui.h:1
+msgid "Activities"
+msgstr "Дії"
 
 #: ../data/preferences.ui.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Глобальні комбінації клавіш</b>"
-
-#: ../data/preferences.ui.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>Облік</b>"
-
-#: ../data/preferences.ui.h:4
 msgid "Activity list"
 msgstr "Список дій"
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:3
 msgid "Add activity"
 msgstr "Додати діяльність"
 
-#: ../data/preferences.ui.h:6
+#: ../data/preferences.ui.h:4
 msgid "Add category"
 msgstr "Додати категорію"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+#: ../data/preferences.ui.h:5 ../data/hamster-applet.schemas.in.h:3
 msgid "Also remind when no activity is set"
 msgstr "Також нагадати коли не встановлено діяльність"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:6
+msgid "Categories and Tags"
+msgstr "Категорії та ярлики"
+
+#: ../data/preferences.ui.h:7
 msgid "Category list"
 msgstr "Список категорій"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:8
 msgid "Edit activity"
 msgstr "Редагувати діяльність"
 
-#: ../data/preferences.ui.h:10
+#: ../data/preferences.ui.h:9
 msgid "Edit category"
 msgstr "Змінити категорію"
 
+#: ../data/preferences.ui.h:10
+msgid "General"
+msgstr "Загальні"
+
 #: ../data/preferences.ui.h:11
+msgid "Global Hotkey"
+msgstr "Глобальні комбінації клавіш<"
+
+#: ../data/preferences.ui.h:12
 msgid "Move activity down"
 msgstr "Перемістити дію вниз"
 
-#: ../data/preferences.ui.h:12
+#: ../data/preferences.ui.h:13
 msgid "Move activity up"
 msgstr "Перемістити дію вгору"
 
-#: ../data/preferences.ui.h:13
+#: ../data/preferences.ui.h:14
+msgid "New day starts at"
+msgstr "Новий день починається о"
+
+#: ../data/preferences.ui.h:15
 msgid "Remind of current activity every:"
 msgstr "Нагадувати про кожну дію кожні:"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:16
 msgid "Remove activity"
 msgstr "Видалити дію"
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:17
 msgid "Remove category"
 msgstr "Видалити категорію"
 
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
+#: ../data/preferences.ui.h:18 ../data/hamster-applet.schemas.in.h:11
 msgid "Stop tracking on shutdown"
 msgstr "Припиняти стеження при вимиканні комп'ютера"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:19
 msgid "Stop tracking when computer becomes idle"
 msgstr "Припиняти стеження при бездіяльності комп'ютера"
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "Ярлики які з'являються при автодоповненні"
+
+#: ../data/preferences.ui.h:21
 msgid "Time Tracker Preferences"
 msgstr "Параметри аплету стеження за часом"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:22
+msgid "Tracking"
+msgstr "Облік"
+
+#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "_Дії"
 
-#: ../data/preferences.ui.h:20
+#: ../data/preferences.ui.h:24
 msgid "_Categories"
 msgstr "_Категорії"
 
@@ -129,12 +146,12 @@ msgid "Add Earlier Activity"
 msgstr "Додати іншу діяльність"
 
 #: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Опис:"
-
-#: ../data/edit_activity.ui.h:4
 msgid "Preview:"
 msgstr "Попередній перегляд:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Ярлики:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
@@ -144,20 +161,32 @@ msgstr "Час:"
 msgid "in progress"
 msgstr "у процесі"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:8
 msgid "to"
 msgstr "до"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr "Нагадувати з інтервалом notify_interval у хвилинах, якщо дію не було розпочато."
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+"Дії будуть записані на вчорашній день, якщо поточний час менший за вказаний у полі початок дня, і будуть записані на сьогодні, якщо час більший за початок дня. "
+"Дії, що охоплюють два дні, приписуються до дня, у якому зроблено більшу частину дії."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Нагадувати з інтервалом notify_interval у хвилинах, якщо дію не було "
+"розпочато."
+
+#: ../data/hamster-applet.schemas.in.h:4
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "Комбінація клавіш для показу вікна аплету стеження за часом."
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-applet.schemas.in.h:5
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -165,305 +194,240 @@ msgstr ""
 "Вмикає нагадування про поточну задачу періодично через вказане число хвилин. "
 "Значення 0 або більше 120 вимикає нагадування"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-applet.schemas.in.h:6
 msgid "Remind of current task every x minutes"
 msgstr "Періодично нагадувати про поточну задачу через вказане число хвилин"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-applet.schemas.in.h:7
 msgid "Show window"
 msgstr "Показати вікно"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-applet.schemas.in.h:8
 msgid "Stop tracking current activity on shutdown"
 msgstr "Припинити стеження за поточною дією при вимиканні комп'ютера"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-applet.schemas.in.h:9
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Припинити стеження за поточною дією при бездіяльності комп'ютера"
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-applet.schemas.in.h:10
 msgid "Stop tracking on idle"
 msgstr "Припинити стеження при бездіяльності"
 
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Time at witch to consider beginning of new day"
+msgstr "Час, коли починається новий день"
+
 #: ../data/applet.ui.h:1
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >Введіть активність та натисніть Enter, щоб розпочати "
-"стеження!</span>"
-
-#: ../data/applet.ui.h:2
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Докладніше</span>"
-
-#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "Д_обдати іншу діяльність"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/applet.ui.h:5
+#: ../data/applet.ui.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/applet.ui.h:6 ../hamster/applet.py:554
+#: ../data/applet.ui.h:4 ../hamster/applet.py:387
 msgid "No records today"
 msgstr "Немає записів за сьогодні"
 
-#: ../data/applet.ui.h:7
+#: ../data/applet.ui.h:5
 msgid "Show _Overview"
 msgstr "Показати _огляд"
 
-#: ../data/applet.ui.h:8
-msgid "_Activity:"
-msgstr "_Активність:"
+#: ../data/applet.ui.h:6
+msgid "Start Tracking"
+msgstr "Почати облік"
 
-#: ../data/applet.ui.h:9
-msgid "_Stop Tracking"
-msgstr "Припинити _облік"
-
-#: ../data/applet.ui.h:10
-msgid "_Today"
-msgstr "_Сьогодні"
-
-#: ../data/stats.ui.h:1
-msgid " _Day"
-msgstr "_День"
-
-#: ../data/stats.ui.h:2
-msgid " _Month"
-msgstr "_Місяць"
-
-#: ../data/stats.ui.h:3
-msgid " _Week"
-msgstr " _Тиждень"
-
-#: ../data/stats.ui.h:4
-msgid "<b>Overview</b>"
-msgstr "<b>Огляд</b>"
-
-#: ../data/stats.ui.h:5
-msgid "<b>Starts and ends</b>"
-msgstr "<b>Початок та завершення</b>"
-
-#: ../data/stats.ui.h:6
-msgid "<b>Totals</b>"
-msgstr "<b>Підсумки</b>"
-
-#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
-msgid "Activity"
-msgstr "Діяльність"
-
-#: ../data/stats.ui.h:8
-msgid "Categories:"
-msgstr "_Категорії:"
-
-#: ../data/stats.ui.h:9
-msgid "Date interval:"
-msgstr "Проміжок часу:"
-
-#: ../data/stats.ui.h:10
-msgid "No data for this interval"
-msgstr "Дані за цей інтервал недоступні"
-
-#: ../data/stats.ui.h:11
-msgid "Overview"
-msgstr "_Огляд"
-
-#: ../data/stats.ui.h:12
-msgid "Overview - Hamster"
-msgstr "Огляд — Hamster"
-
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "Зберегти у форматі HTML"
-
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "Зберегти звіт - Time Tracker"
-
-#: ../data/stats.ui.h:15
-msgid "Statistics"
-msgstr "Статистика"
-
-#: ../data/stats.ui.h:16
-msgid "Today"
-msgstr "_Сьогодні"
-
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
-msgid "Week"
-msgstr "Тиждень"
-
-#: ../data/stats.ui.h:18
-msgid "Year:"
-msgstr "Рік:"
-
-#: ../hamster/about.py:41
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "Авторське право © 2007-2009 Toms Baugis та інші"
-
-#: ../hamster/about.py:43
-msgid "Project Hamster Website"
-msgstr "Веб-сайт аплету обліку часу"
-
-#: ../hamster/about.py:44
-msgid "About Time Tracker"
-msgstr "Про аплет"
-
-#: ../hamster/about.py:54
-msgid "translator-credits"
-msgstr "Максим Дзюманенко <dziumanenko@gmail.com>"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Правка"
+#: ../data/applet.ui.h:7
+msgid "Stop tracking"
+msgstr "Припинити облік"
 
 #. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
+#: ../data/applet.ui.h:8 ../hamster/applet.py:70
 msgid "Switch"
 msgstr "Перемикнутися"
 
-#: ../hamster/applet.py:305 ../hamster/reports.py:235
-#: ../hamster/reports.py:293
-msgid "Duration"
-msgstr "Тривалість"
+#: ../data/applet.ui.h:9
+msgid "_Today"
+msgstr "_Сьогодні"
 
-#: ../hamster/applet.py:492 ../hamster/applet.py:513
+#: ../data/stats.ui.h:2
+msgid "Add"
+msgstr "Додати"
+
+#. translators: this is edit activity action in the notifier bubble
+#: ../data/stats.ui.h:3 ../hamster/applet.py:68
+msgid "Edit"
+msgstr "Правка"
+
+#: ../data/stats.ui.h:4
+msgid "Overview - Hamster"
+msgstr "Огляд — Hamster"
+
+#: ../data/stats.ui.h:5
+msgid "Remove"
+msgstr "Видалити"
+
+#: ../data/stats.ui.h:6
+msgid "Save Report"
+msgstr "Зберегти звіт"
+
+#. summary table
+#: ../data/stats.ui.h:7 ../data/stats_stats.ui.h:3 ../hamster/reports.py:288
+msgid "Totals"
+msgstr "Всього"
+
+#: ../data/stats_reports.ui.h:2
+msgid "Categories"
+msgstr "Категорії"
+
+#: ../data/stats_reports.ui.h:3
+msgid "No data for this interval"
+msgstr "Дані за цей інтервал недоступні"
+
+#: ../data/stats_reports.ui.h:4
+msgid "Show Statistics"
+msgstr "Показати статистику"
+
+#: ../data/stats_reports.ui.h:5
+msgid "Tags"
+msgstr "Ярликів"
+
+#: ../data/stats_stats.ui.h:1
+msgid "Starts and ends"
+msgstr "Початок та завершення"
+
+#: ../data/stats_stats.ui.h:2
+msgid "Statistics"
+msgstr "Статистика"
+
+#: ../data/stats_stats.ui.h:4
+msgid "Year:"
+msgstr "Рік:"
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Авторське право © 2007-2009 Toms Baugis та інші"
+
+#: ../hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "Веб-сайт аплету обліку часу"
+
+#: ../hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "Про аплет"
+
+#: ../hamster/about.py:56
+msgid "translator-credits"
+msgstr "Максим Дзюманенко <dziumanenko@gmail.com>"
+
+#: ../hamster/applet.py:234
+msgid "Time and Name"
+msgstr "Час та назва"
+
+#: ../hamster/applet.py:239
+msgid "Tags or Description"
+msgstr "Ярлики та опис"
+
+#: ../hamster/applet.py:326 ../hamster/applet.py:346 ../hamster/applet.py:432
 msgid "No activity"
 msgstr "Немає дій"
 
 #. activity reminder
-#: ../hamster/applet.py:508
+#: ../hamster/applet.py:341
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Поточна задача: <b>%s</b>"
 
-#: ../hamster/applet.py:562
+#: ../hamster/applet.py:395
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565
+#: ../hamster/applet.py:398
 #, python-format
 msgid "%sh"
 msgstr "%sг"
 
-#. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
-#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
-#: ../hamster/stuff.py:94
+#: ../hamster/applet.py:419
+msgid "Just started"
+msgstr "Щойно розпочато"
+
+#: ../hamster/applet.py:421 ../hamster/db.py:307 ../hamster/db.py:625
+#: ../hamster/db.py:686 ../hamster/edit_activity.py:51
+#: ../hamster/preferences.py:55 ../hamster/reports.py:54
+#: ../hamster/reports.py:91 ../hamster/reports.py:248 ../hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Без сортування"
 
-#: ../hamster/applet.py:833
-msgid "What should be typed in the activity box?"
-msgstr "Що вводити у полі діяльності?"
-
-#: ../hamster/applet.py:836
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"Є простий синтаксис, що дозволяє додавати подробиці до ваших дій:\n"
-"        \n"
-"«@» - символ означає категорію. Приклад: «полити квіти@дім» "
-"призведе до стеження за активністю «полити квіти» у категорії «дім».\n"
-"\n"
-"Кома («,») означає початок опису. Наприклад: «полити квіти, бегонії та "
-"кактуси» почне стеження за дією «полити квіти» та додасть опис «бегонії "
-"та кактуси» до неї.\n"
-"\n"
-"Символи можна об'єднувати: «полити квіти@дім, бегонії та кактуси» також "
-"буде працювати!\n"
-"\n"
-"Тож, починайте стеження за часом!\n"
-"        "
-
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:877
 msgid "Work"
 msgstr "Робота"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:878
 msgid "Reading news"
 msgstr "Читання новин"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:879
 msgid "Checking stocks"
 msgstr "Перевірка курсу цінних паперів"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:880
 msgid "Super secret project X"
 msgstr "Супертаємний проект Х"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:881
 msgid "World domination"
 msgstr "Світове панування"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:883
 msgid "Day-to-day"
 msgstr "Щоденна рутина"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:884
 msgid "Lunch"
 msgstr "Обід"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:885
 msgid "Watering flowers"
 msgstr "Полити квіти"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:886
 msgid "Doing handstands"
 msgstr "Стояння на голові"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:65
 msgid "Update activity"
 msgstr "Оновити діяльність"
 
-#: ../hamster/preferences.py:104
+#: ../hamster/preferences.py:107
 msgid "Name"
 msgstr "Назва"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/preferences.py:127 ../hamster/reports.py:232
 #: ../hamster/reports.py:291
 msgid "Category"
 msgstr "Категорія"
 
-#: ../hamster/preferences.py:559
+#: ../hamster/preferences.py:583
 msgid "New category"
 msgstr "Створити категорію"
 
-#: ../hamster/preferences.py:572
+#: ../hamster/preferences.py:596
 msgid "New activity"
 msgstr "Створити дію"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:632
+#: ../hamster/preferences.py:656
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "Хвилини: %(interval_minutes)d"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:635
+#: ../hamster/preferences.py:659
 msgid "Never"
 msgstr "Ніколи"
 
@@ -497,11 +461,7 @@ msgstr "категорія"
 msgid "description"
 msgstr "опис"
 
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:160 ../hamster/stats.py:933
+#: ../hamster/reports.py:160
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -510,20 +470,12 @@ msgstr ""
 "Огляд за %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)"
 "s"
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:162 ../hamster/stats.py:939
+#: ../hamster/reports.py:162
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Огляд за %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:164 ../hamster/stats.py:945
+#: ../hamster/reports.py:164
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Огляд за %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
@@ -537,6 +489,10 @@ msgstr "Огляд за %(start_B)s %(start_d)s, %(start_Y)s"
 msgid "Date"
 msgstr "Дата"
 
+#: ../hamster/reports.py:231 ../hamster/reports.py:292
+msgid "Activity"
+msgstr "Діяльність"
+
 #: ../hamster/reports.py:233
 msgid "Start"
 msgstr "Початок"
@@ -544,6 +500,10 @@ msgstr "Початок"
 #: ../hamster/reports.py:234
 msgid "End"
 msgstr "Кінець"
+
+#: ../hamster/reports.py:235 ../hamster/reports.py:293
+msgid "Duration"
+msgstr "Тривалість"
 
 #: ../hamster/reports.py:236
 msgid "Description"
@@ -557,43 +517,67 @@ msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
 
-#. summary table
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "Всього"
-
 #: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "Загальний час"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
-msgid "HTML Report"
-msgstr "Звіт у форматі HTML"
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:79
+msgid "%B %d, %Y"
+msgstr "%d %B %Y"
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
-msgid "Tab-Separated Values (TSV)"
-msgstr "Значення розділені табуляцією (TSV)"
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:87
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
-msgid "XML"
-msgstr "XML"
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:93
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
-msgid "iCal"
-msgstr "iCal"
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:99
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
 
-#. add unsorted category
-#: ../hamster/stats.py:120
-msgctxt "categories"
-msgid "All"
-msgstr "Всі"
+#: ../hamster/stats.py:141
+msgid "Week"
+msgstr "Тиждень"
 
-#: ../hamster/stats.py:435
+#: ../hamster/stats.py:142
+msgid "Month"
+msgstr "Місяць"
+
+#: ../hamster/stats.py:143
+msgid "Date Range"
+msgstr "Діапазон дат"
+
+#: ../hamster/stats_overview.py:86
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %d %b"
+
+#: ../hamster/stats_stats.py:84
 msgctxt "years"
 msgid "All"
 msgstr "Всі"
 
-#: ../hamster/stats.py:524
+#: ../hamster/stats_stats.py:173
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -601,14 +585,14 @@ msgstr ""
 "Відсутні дані для генерування статистики.\n"
 "Було б добре мати дані хоча б за тиждень!"
 
-#: ../hamster/stats.py:527
-msgid "Still collecting data — check back after a week has passed!"
-msgstr "Досі триває збір даних - перевірте наступного тижня!"
+#: ../hamster/stats_stats.py:176
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Триває збір даних - перевірте наступного тижня!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:657
+#: ../hamster/stats_stats.py:306
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
@@ -616,18 +600,17 @@ msgstr "%d %b %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:662
-#, python-format
+#: ../hamster/stats_stats.py:311
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(d)s %(b)s"
+msgid "%b %d"
+msgstr "%d %b"
 
-#: ../hamster/stats.py:664
+#: ../hamster/stats_stats.py:313
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Запис про першу діяльність датується %s."
 
-#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#: ../hamster/stats_stats.py:322 ../hamster/stats_stats.py:326
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -636,7 +619,7 @@ msgstr[1] "%(num)s рік"
 msgstr[2] "%(num)s рік"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:682
+#: ../hamster/stats_stats.py:331
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -649,12 +632,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:700
+#: ../hamster/stats_stats.py:349
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
 
-#: ../hamster/stats.py:705
+#: ../hamster/stats_stats.py:354
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -667,7 +650,7 @@ msgstr[2] ""
 "Найдовший безперервний тиждень був %(date)s і тривав %(hours)s годин."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713
+#: ../hamster/stats_stats.py:362
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
@@ -675,11 +658,11 @@ msgstr[0] "Існує %s запис."
 msgstr[1] "Існує %s записи."
 msgstr[2] "Існує %s записів."
 
-#: ../hamster/stats.py:733
+#: ../hamster/stats_stats.py:382
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster хотів би слідкувати за Вами більше!"
 
-#: ../hamster/stats.py:735
+#: ../hamster/stats_stats.py:384
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
@@ -688,7 +671,7 @@ msgstr ""
 "На основі аналізу %s відсотків всіх подій, які трапилися до 9 ранку, Вас "
 "можна назвати жайворонком."
 
-#: ../hamster/stats.py:738
+#: ../hamster/stats_stats.py:387
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
@@ -696,7 +679,7 @@ msgstr ""
 "На основі аналізу %s відсотків всіх подій, які трапилися після 11 вечора, "
 "Вас можна назвати совою."
 
-#: ../hamster/stats.py:741
+#: ../hamster/stats_stats.py:390
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -705,61 +688,149 @@ msgstr ""
 "На основі аналізу %s відсотків всіх подій, які тривали менше 15 хвилин, Вас "
 "можна назвати трудоголіком."
 
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:828
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %d %b"
-
-#: ../hamster/stats.py:869
-msgid "Total"
-msgstr "Загалом"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:891
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%d %b"
-
-#: ../hamster/stats.py:920
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%d %B %Y"
-
-#. Overview label if looking on single day
-#: ../hamster/stats.py:922
-#, python-format
-msgid "Overview for %(date)s"
-msgstr "Огляд %(date)s"
-
-#: ../hamster/stats.py:950
-msgid "Month"
-msgstr "Місяць"
-
-#: ../hamster/stats.py:952
-msgid "Day"
-msgstr "День"
-
 #. duration in round hours
-#: ../hamster/stuff.py:151
+#: ../hamster/stuff.py:56
 #, python-format
 msgid "%dh"
 msgstr "%dг"
 
 #. duration less than hour
-#: ../hamster/stuff.py:154
+#: ../hamster/stuff.py:59
 #, python-format
 msgid "%dmin"
 msgstr "%dхв"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:157
+#: ../hamster/stuff.py:62
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dг %dхв"
 
+#: ../hamster/widgets/reportchooserdialog.py:38
+msgid "Save report - Time Tracker"
+msgstr "Зберегти звіт - Time Tracker"
 
+#: ../hamster/widgets/reportchooserdialog.py:51
+msgid "HTML Report"
+msgstr "Звіт у форматі HTML"
+
+#: ../hamster/widgets/reportchooserdialog.py:59
+msgid "Tab-Separated Values (TSV)"
+msgstr "Значення розділені табуляцією (TSV)"
+
+#: ../hamster/widgets/reportchooserdialog.py:67
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/widgets/reportchooserdialog.py:74
+msgid "iCal"
+msgstr "iCal"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>Діяльність</b>"
+
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>Облік</b>"
+
+#~ msgid "Description:"
+#~ msgstr "Опис:"
+
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >Введіть активність та натисніть Enter, щоб "
+#~ "розпочати стеження!</span>"
+
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Докладніше</span>"
+
+#~ msgid "_Activity:"
+#~ msgstr "_Активність:"
+
+#~ msgid " _Day"
+#~ msgstr "_День"
+
+#~ msgid " _Month"
+#~ msgstr "_Місяць"
+
+#~ msgid " _Week"
+#~ msgstr " _Тиждень"
+
+#~ msgid "<b>Overview</b>"
+#~ msgstr "<b>Огляд</b>"
+
+#~ msgid "<b>Totals</b>"
+#~ msgstr "<b>Підсумки</b>"
+
+#~ msgid "Categories:"
+#~ msgstr "_Категорії:"
+
+#~ msgid "Date interval:"
+#~ msgstr "Проміжок часу:"
+
+#~ msgid "Overview"
+#~ msgstr "_Огляд"
+
+#~ msgid "Save as HTML"
+#~ msgstr "Зберегти у форматі HTML"
+
+#~ msgid "Today"
+#~ msgstr "_Сьогодні"
+
+#~ msgid "What should be typed in the activity box?"
+#~ msgstr "Що вводити у полі діяльності?"
+
+#~ msgid ""
+#~ "There is a simple syntax that enables you to add details to your "
+#~ "activities:\n"
+#~ "        \n"
+#~ "\"@\" symbol marks a category. Example: \"watering flowers@home\" will "
+#~ "start tracking the activity \"watering flowers\" in the category \"home"
+#~ "\".\n"
+#~ "\n"
+#~ "Commas (\",\") mark beginning of a description. Example: \"watering "
+#~ "flowers, begonias and forgetmenots\" will start tracking the activity "
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
+#~ "\" to it.\n"
+#~ "\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
+#~ "\" will work just fine!\n"
+#~ "\n"
+#~ "Now, start tracking!\n"
+#~ "        "
+#~ msgstr ""
+#~ "Є простий синтаксис, що дозволяє додавати подробиці до ваших дій:\n"
+#~ "        \n"
+#~ "«@» - символ означає категорію. Приклад: «полити квіти@дім» призведе до "
+#~ "стеження за активністю «полити квіти» у категорії «дім».\n"
+#~ "\n"
+#~ "Кома («,») означає початок опису. Наприклад: «полити квіти, бегонії та "
+#~ "кактуси» почне стеження за дією «полити квіти» та додасть опис «бегонії та "
+#~ "кактуси» до неї.\n"
+#~ "\n"
+#~ "Символи можна об'єднувати: «полити квіти@дім, бегонії та кактуси» також "
+#~ "буде працювати!\n"
+#~ "\n"
+#~ "Тож, починайте стеження за часом!\n"
+#~ "        "
+
+#~ msgctxt "categories"
+#~ msgid "All"
+#~ msgstr "Всі"
+
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(d)s %(b)s"
+
+#~ msgid "Total"
+#~ msgstr "Загалом"
+
+#~ msgid "Overview for %(date)s"
+#~ msgstr "Огляд %(date)s"
+
+#~ msgid "Day"
+#~ msgstr "День"
