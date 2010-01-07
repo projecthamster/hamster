@@ -5,7 +5,8 @@
 # Heavily based on caurina Tweener: http://code.google.com/p/tweener/
 #
 # Released under M.I.T License - see above url
-# Python version by Ben Harling 2009 
+# Python version by Ben Harling 2009
+# Performance optimizations by Toms Baugis 2010
 import math
 
 class Tweener:
@@ -13,7 +14,7 @@ class Tweener:
         """Tweener
         This class manages all active tweens, and provides a factory for
         creating and spawning tween motions."""
-        self.currentTweens = []
+        self.currentTweens = {}
         self.defaultTweenType = tween or Easing.Cubic.easeInOut
         self.defaultDuration = duration or 1.0
  
@@ -66,46 +67,46 @@ class Tweener:
  
         tw = Tween( obj, t_time, t_type, t_completeFunc, t_updateFunc, t_delay, **kwargs )
         if tw:    
-            self.currentTweens.append( tw )
+            tweenlist = self.currentTweens.setdefault(obj, [])
+            tweenlist.append(tw)
         return tw
  
     def removeTween(self, tweenObj):
-        if tweenObj in self.currentTweens:
-            tweenObj.complete = True
-            #self.currentTweens.remove( tweenObj )
+        tweenObj.complete = True
  
     def getTweensAffectingObject(self, obj):
         """Get a list of all tweens acting on the specified object
         Useful for manipulating tweens on the fly"""
-        tweens = []
-        for t in self.currentTweens:
-            if t.target is obj:
-                tweens.append(t)
-        return tweens
+        return self.currentTweens.get(obj, [])
  
-    def removeTweeningFrom(self, obj):
+    def killTweensOf(self, obj):
         """Stop tweening an object, without completing the motion
         or firing the completeFunction"""
-        for t in self.currentTweens:
-            if t.target is obj:
-                t.complete = True
+
+        for tween in self.currentTweens.get(obj, []):
+            tween.complete = True
+
  
     def finish(self):
         #go to last frame for all tweens
-        for t in self.currentTweens:
-            t.update(t.duration)
-        self.currentTweens = []
+        for obj in self.currentTweens:
+            for t in self.currentTweens[obj]:
+                t.update(t.duration)
+        self.currentTweens = {}
  
     def update(self, timeSinceLastFrame):
-        removable = []
-        for t in self.currentTweens:
-            t.update(timeSinceLastFrame)
+        for obj in self.currentTweens.keys():
+            # updating tweens from last to first and deleting while at it
+            # in order to not confuse the index
+            # TODO - should use generator instead?
+            for i, t in reversed(list(enumerate(self.currentTweens[obj]))):
+                t.update(timeSinceLastFrame)
+                if t.complete:
+                    del self.currentTweens[obj][i]
 
-            if t.complete:
-                removable.append(t)
-                
-        for t in removable:
-            self.currentTweens.remove(t)
+            if not self.currentTweens[obj]:
+                del self.currentTweens[obj]
+            
             
  
 class Tween(object):
@@ -140,7 +141,7 @@ class Tween(object):
  
         for k, v in self.tweenables.items():
  
-        # check that its compatible
+            # check that its compatible
             if not hasattr( self.target, k):
                 print "TWEEN ERROR: " + str(self.target) + " has no function " + k
                 self.complete = True
@@ -153,11 +154,8 @@ class Tween(object):
             try:
                 startVal = self.target.__dict__[k]
                 prop = k
-                propName = k
- 
             except:
                 func = getattr( self.target, k)
-                funcName = k
  
             if func:
                 try:
@@ -169,15 +167,14 @@ class Tween(object):
                     # dataTypes match :)
                     startVal = newVal * 0
                 tweenable = Tweenable( startVal, newVal - startVal)    
-                newFunc = [ k, func, tweenable]
+                newFunc = [func, tweenable]
  
-                #setattr(self, funcName, newFunc[2])
                 self.tFuncs.append( newFunc )
  
  
             if prop:
                 tweenable = Tweenable( startVal, newVal - startVal)    
-                newProp = [ k, prop, tweenable]
+                newProp = [prop, tweenable]
                 self.tProps.append( newProp )  
  
  
@@ -214,9 +211,9 @@ class Tween(object):
         self.delta = min(self.delta + ptime, self.duration)
  
 
-        for propName, prop, tweenable in self.tProps:
+        for prop, tweenable in self.tProps:
             self.target.__dict__[prop] = self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration )
-        for funcName, func, tweenable in self.tFuncs:
+        for func, tweenable in self.tFuncs:
             func( self.tween( self.delta, tweenable.startValue, tweenable.change, self.duration ) )
  
  
