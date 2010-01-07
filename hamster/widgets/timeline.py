@@ -205,7 +205,7 @@ class TimeLine(graphics.Area):
             bar_size = max(round(self.height * total * 0.9), 1)
             x, bar_width = exes[current_time]
 
-            self.fill_area(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, "#eeeeee")
+            self.fill_area(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, "#E4E4E4")
 
 
 
