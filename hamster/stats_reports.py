@@ -168,18 +168,27 @@ class ReportsBox(gtk.VBox):
         # category totals
         category_sums = stuff.totals(facts,
                                      lambda fact: (fact["category"]),
-                                     lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
+                                     lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
+        for sum in category_sums:
+            category_sums[sum] = category_sums[sum] / 60 / 60.0
+
         if category_sums:
             if self.category_sums:
                 category_sums = [(key, category_sums[key]) for key in self.category_sums[0]]
             else:
                 category_sums = sorted(category_sums.items(), key=lambda x:x[1], reverse = True)
+
             self.category_sums = zip(*category_sums)
+
+
 
         # activity totals
         activity_sums = stuff.totals(facts,
                                      lambda fact: (fact["name"]),
-                                     lambda fact: stuff.duration_minutes(fact["delta"]) / 60.0)
+                                     lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
+        for sum in activity_sums:
+            activity_sums[sum] = activity_sums[sum] / 60 / 60.0
+
         if self.activity_sums:
             activity_sums = [(key, activity_sums[key]) for key in self.activity_sums[0]]
         else:
@@ -193,7 +202,10 @@ class ReportsBox(gtk.VBox):
         for fact in facts:
             for tag in fact["tags"]:
                 tag_sums.setdefault(tag, 0)
-                tag_sums[tag] += stuff.duration_minutes(fact["delta"]) / 60.0
+                tag_sums[tag] += fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60
+
+        for sum in tag_sums:
+            tag_sums[sum] = tag_sums[sum] / 60 / 60.0
 
         if tag_sums:        
             if self.tag_sums:
