@@ -337,7 +337,7 @@ class StatsViewer(object):
         dialogs.edit.show(fact_date = selected_date)
 
     def on_remove_clicked(self, button):
-        self.delete_selected()
+        self.overview.delete_selected()
 
     def on_edit_clicked(self, button):
         selection = self.fact_tree.get_selection()
