@@ -24,12 +24,12 @@ class TestIteratorFunctions(unittest.TestCase):
         # target is reached
         integrator = graphics.Integrator(0)
         integrator.target(10)
-        
+
         while integrator.update():
             pass
         self.assertEquals(round(integrator.value, 0), 10)
 
-    
+
 class TestSizeListFunctions(unittest.TestCase):
     def test_values_stay(self):
         # on shrinkage, values are kept

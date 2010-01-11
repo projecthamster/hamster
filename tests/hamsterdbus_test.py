@@ -10,7 +10,7 @@ from hamster.hamsterdbus import HAMSTER_PATH, HAMSTER_URI
 
 def rndstr(length=10):
     result = ''
-    for i in range(1,10): 
+    for i in range(1,10):
         result += choice(letters)
 
     return result
@@ -39,19 +39,19 @@ class TestTracking(unittest.TestCase):
         activity = fact['name'] + '@' + fact['category'] + ',' + \
                 fact['description']
         fact_id = self.addfact(activity, fact['start_time'], fact['end_time'])
-        self.failUnless(type(fact_id) == dbus.Int32 and fact_id != 0, 
+        self.failUnless(type(fact_id) == dbus.Int32 and fact_id != 0,
             'expected non-zero dbus.Int32 as return value')
 
         dbfact = self.getfactbyid(fact_id)
-        self.assertEqual(fact['name'], dbfact['name'], 
+        self.assertEqual(fact['name'], dbfact['name'],
                 'expected same activity name')
-        self.assertEqual(fact['category'], dbfact['category'], 
+        self.assertEqual(fact['category'], dbfact['category'],
                 'expected same category name')
-        self.assertEqual(fact['description'], dbfact['description'], 
+        self.assertEqual(fact['description'], dbfact['description'],
                 'expected same description name')
-        self.assertEqual(fact['start_time'], dbfact['start_time'], 
+        self.assertEqual(fact['start_time'], dbfact['start_time'],
                 'expected same start_time')
-        self.assertEqual(fact['end_time'], dbfact['end_time'], 
+        self.assertEqual(fact['end_time'], dbfact['end_time'],
                 'expected same end_time')
 
         facts = self.getfacts(dbfact['start_time'], dbfact['end_time'])
@@ -82,19 +82,19 @@ class TestTracking(unittest.TestCase):
         activity = fact['name'] + '@' + fact['category'] + ',' + \
                 fact['description']
         fact_id = self.addfact(activity, fact['start_time'], 0)
-        self.failUnless(type(fact_id) == dbus.Int32 and fact_id != 0, 
+        self.failUnless(type(fact_id) == dbus.Int32 and fact_id != 0,
             'expected non-zero dbus.Int32 as return value')
 
         current = self.getcurrentfact()
-        self.assertEqual(fact['name'], current['name'], 
+        self.assertEqual(fact['name'], current['name'],
                 'expected same activity name')
-        self.assertEqual(fact['category'], current['category'], 
+        self.assertEqual(fact['category'], current['category'],
                 'expected same category name')
-        self.assertEqual(fact['description'], current['description'], 
+        self.assertEqual(fact['description'], current['description'],
                 'expected same description name')
-        self.assertEqual(fact['start_time'], current['start_time'], 
+        self.assertEqual(fact['start_time'], current['start_time'],
                 'expected same start_time')
-        self.assertEqual(0, current['end_time'], 
+        self.assertEqual(0, current['end_time'],
                 'expected same end_time')
 
         self.stoptracking()
@@ -140,9 +140,9 @@ class TestTracking(unittest.TestCase):
 
     def __rndfactgenerator(self, name=None, category=None, description=None,
             start_time=None, end_time=None):
-        fact = {'name':name or rndstr(), 'category':category or rndstr(), 
-                'description':description or rndstr(), 
-                'start_time':start_time or timegm(dt.datetime.now().timetuple()), 
+        fact = {'name':name or rndstr(), 'category':category or rndstr(),
+                'description':description or rndstr(),
+                'start_time':start_time or timegm(dt.datetime.now().timetuple()),
                 'end_time':end_time or timegm((dt.datetime.now() + \
                         dt.timedelta(hours=1)).timetuple())}
         return fact

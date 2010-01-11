@@ -62,9 +62,9 @@ class ReportsBox(gtk.VBox):
         self.category_chart.connect("bar-clicked", self.on_category_clicked)
         self.selected_categories = []
         self.category_sums = None
-        
+
         self.get_widget("totals_by_category").add(self.category_chart);
-        
+
         self.activity_chart = charting.HorizontalBarChart(background = self.background,
                                                           max_bar_width = 20,
                                                           legend_width = x_offset,
@@ -89,7 +89,7 @@ class ReportsBox(gtk.VBox):
 
 
         self._gui.connect_signals(self)
-        
+
         self.config = GconfStore()
         runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
@@ -132,7 +132,7 @@ class ReportsBox(gtk.VBox):
         self.category_sums, self.activity_sums, self.tag_sums = [], [], []
         self.selected_categories, self.selected_activities, self.selected_tags = [], [], []
         self.category_chart.bars_selected, self.activity_chart.bars_selected, self.tag_chart.bars_selected = [], [], []
-        
+
         self.start_date = start_date
         self.end_date = end_date
 
@@ -154,7 +154,7 @@ class ReportsBox(gtk.VBox):
 
         import copy
         facts = copy.deepcopy(self.facts)
-        
+
         for fact in facts:
             if self.selected_categories and fact["category"] not in self.selected_categories:
                 fact["delta"] = dt.timedelta()
@@ -207,7 +207,7 @@ class ReportsBox(gtk.VBox):
         for sum in tag_sums:
             tag_sums[sum] = tag_sums[sum] / 60 / 60.0
 
-        if tag_sums:        
+        if tag_sums:
             if self.tag_sums:
                 tag_sums = [(key, tag_sums[key]) for key in self.tag_sums[0]]
             else:
@@ -244,14 +244,14 @@ class ReportsBox(gtk.VBox):
 
     def on_day_start_changed(self, event, new_minutes):
         self.do_graph()
-    
+
     def on_statistics_button_clicked(self, button):
         dialogs.stats.show(self)
 
 
 
 if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-applet")    
+    gtk.window_set_default_icon_name("hamster-applet")
     window = gtk.Window()
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)
@@ -260,11 +260,11 @@ if __name__ == "__main__":
     window.connect("delete_event", lambda *args: gtk.main_quit())
     window.show_all()
 
-    start_date = dt.date.today() - dt.timedelta(days=30)    
+    start_date = dt.date.today() - dt.timedelta(days=30)
     end_date = dt.date.today()
     facts = runtime.storage.get_facts(start_date, end_date)
     reports.search(start_date, end_date, facts)
-    
 
-    gtk.main()    
+
+    gtk.main()
 

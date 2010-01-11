@@ -46,20 +46,20 @@ class About(object):
             "title": _("About Time Tracker"),
             "wrap-license": True
         }
-        
+
         about.set_authors(["Toms Bauģis <toms.baugis@gmail.com>",
                            "Patryk Zawadzki <patrys@pld-linux.org>",
                            "Pēteris Caune <cuu508@gmail.com>",
                            "Juanje Ojeda <jojeda@emergya.es>"])
         about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
-        
+
         about.set_translator_credits(_("translator-credits"))
-    
+
         for prop, val in infos.items():
             about.set_property(prop, val)
-    
+
         about.set_logo_icon_name("hamster-applet")
-        
+
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()
 

@@ -45,19 +45,19 @@ class OverviewBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
         self.set_border_width(6)
-        
+
         scroll = gtk.ScrolledWindow()
         scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
         scroll.set_shadow_type(gtk.SHADOW_IN)
-        
+
         self.start_date, self.end_date = None, None
         self.facts = []
-        
+
         self.fact_tree = widgets.FactTree()
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
         self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
-        
+
         scroll.add(self.fact_tree)
         self.add(scroll)
 
@@ -72,11 +72,11 @@ class OverviewBox(gtk.VBox):
     def fill_facts_tree(self):
         self.fact_tree.detach_model()
         self.fact_tree.clear()
-        
+
         #create list of all required dates
         dates = [(self.start_date + dt.timedelta(i), [])
                     for i in range((self.end_date - self.start_date).days  + 1)]
-        
+
         #update with facts for the day
         for date, facts in groupby(self.facts, lambda fact: fact["date"]):
             dates[dates.index((date, []))] = (date, list(facts))
@@ -143,7 +143,7 @@ class OverviewBox(gtk.VBox):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
         custom_fact = dialogs.edit.show(self, fact_id = model[iter][0])
-        
+
     def on_facts_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
@@ -157,13 +157,13 @@ class OverviewBox(gtk.VBox):
         elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
             self.check_clipboard()
             return True
-        
+
         return False
 
     def check_clipboard(self):
         clipboard = gtk.Clipboard()
         clipboard.request_text(self.on_clipboard_text)
-    
+
     def on_clipboard_text(self, clipboard, text, data):
         # first check that we have a date selected
         selection = self.fact_tree.get_selection()
@@ -177,23 +177,23 @@ class OverviewBox(gtk.VBox):
                                     int(selected_date[2]))
         if not selected_date:
             return
-        
+
         res = stuff.parse_activity_input(text)
 
         if res.start_time is None or res.end_time is None:
             return
-        
+
         start_time = res.start_time.replace(year = selected_date.year,
                                             month = selected_date.month,
                                             day = selected_date.day)
         end_time = res.end_time.replace(year = selected_date.year,
                                                month = selected_date.month,
                                                day = selected_date.day)
-    
+
         activity_name = res.activity_name
         if res.category_name:
             activity_name += "@%s" % res.category_name
-            
+
         if res.description:
             activity_name += ", %s" % res.description
 
@@ -202,10 +202,10 @@ class OverviewBox(gtk.VBox):
         # TODO - set cursor to the pasted entry when done
         # TODO - revisit parsing of selected date
         added_fact = runtime.storage.add_fact(activity_name, start_time, end_time)
-        
+
 
 if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-applet")    
+    gtk.window_set_default_icon_name("hamster-applet")
     window = gtk.Window()
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)
@@ -213,11 +213,11 @@ if __name__ == "__main__":
     window.add(overview)
     window.connect("delete_event", lambda *args: gtk.main_quit())
     window.show_all()
-    
-    start_date = dt.date.today() - dt.timedelta(days=30)    
+
+    start_date = dt.date.today() - dt.timedelta(days=30)
     end_date = dt.date.today()
     facts = runtime.storage.get_facts(start_date, end_date)
     overview.search(start_date, end_date, facts)
-    
 
-    gtk.main()    
+
+    gtk.main()

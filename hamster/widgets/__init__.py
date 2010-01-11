@@ -40,26 +40,26 @@ from facttree import FactTree
 
 # handy wrappers
 def add_hint(entry, hint):
-    entry.hint = hint        
-    
+    entry.hint = hint
+
     def override_get_text(self):
         #override get text so it does not return true when hint is in!
         if self.real_get_text() == self.hint:
             return ""
         else:
             return self.real_get_text()
-        
+
     def _set_hint(self, widget, event):
         if self.get_text(): # do not mess with user entered text
-            return 
+            return
 
         self.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color("gray"))
         hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
         hint_font.set_style(pango.STYLE_ITALIC)
         self.modify_font(hint_font)
-        
+
         self.set_text(self.hint)
-        
+
     def _set_normal(self, widget, event):
         self.modify_text(gtk.STATE_NORMAL, gtk.Style().fg[gtk.STATE_NORMAL])
         hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
@@ -67,7 +67,7 @@ def add_hint(entry, hint):
 
         if self.real_get_text() == self.hint:
             self.set_text("")
-            
+
     def _on_changed(self, widget):
         if self.real_get_text() == "" and self.is_focus() == False:
             self._set_hint(widget, None)
@@ -80,7 +80,7 @@ def add_hint(entry, hint):
     entry._on_changed = instancemethod(_on_changed, entry, gtk.Entry)
     entry.real_get_text = entry.get_text
     entry.get_text = instancemethod(override_get_text, entry, gtk.Entry)
-    
+
     entry.connect('focus-in-event', entry._set_normal)
     entry.connect('focus-out-event', entry._set_hint)
     entry.connect('changed', entry._on_changed)

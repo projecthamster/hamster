@@ -36,31 +36,31 @@ class CustomFactController:
 
         self.parent, self.fact_id = parent, fact_id
         start_date, end_date = None, None
-        
+
         #TODO - should somehow hint that time is not welcome here
         self.new_name = widgets.ActivityEntry()
         self.get_widget("activity_box").add(self.new_name)
-        
+
         self.new_tags = widgets.TagsEntry()
         self.get_widget("tags_box").add(self.new_tags)
-        
+
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
 
             label = fact['name']
             if fact['category'] != _("Unsorted"):
                 label += "@%s" %  fact['category']
-                
+
             self.new_name.set_text(label)
-            
+
             if fact['description']:
                 fact['tags'].append(fact['description'])  #same edit field
             self.new_tags.set_text(", ".join(fact['tags']))
-            
-            
+
+
             start_date = fact["start_time"]
             end_date = fact["end_time"]
-            
+
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
 
@@ -99,7 +99,7 @@ class CustomFactController:
 
         self.start_time = widgets.TimeInput(start_date)
         self.get_widget("start_time_placeholder").add(self.start_time)
-        
+
         self.end_time = widgets.TimeInput(end_date, start_date)
         self.get_widget("end_time_placeholder").add(self.end_time)
         self.set_end_date_label(end_date)
@@ -117,7 +117,7 @@ class CustomFactController:
         self.new_name.connect("changed", self.on_new_name_changed)
         self.end_time.connect("time-entered", self.on_end_time_entered)
         self._gui.connect_signals(self)
-        
+
         self.window.show_all()
 
     def update_time(self, start_time, end_time):
@@ -126,7 +126,7 @@ class CustomFactController:
         self.end_time.set_time(end_time)
         self.set_end_date_label(end_time)
 
-        
+
     def draw_preview(self, date, highlight = None):
         day_facts = runtime.storage.get_facts(date)
         self.dayline.draw(day_facts, highlight)
@@ -153,20 +153,20 @@ class CustomFactController:
             time, date = end_time, end_date
         else:
             time, date = start_time, start_date
-        
+
         if time and date:
             return dt.datetime.combine(date, time.time())
         else:
             return None
-    
+
     def on_save_button_clicked(self, button):
         activity = self.new_name.get_text().decode("utf-8")
-        
+
         if not activity:
             return False
 
         tags = self.new_tags.get_text().decode('utf8', 'replace')
-        
+
         start_time = self._get_datetime("start")
 
         if self.get_widget("in_progress").get_active():
@@ -182,17 +182,17 @@ class CustomFactController:
 
 
         # hide panel only on add - on update user will want to see changes
-        if not self.fact_id: 
+        if not self.fact_id:
             runtime.dispatcher.dispatch('panel_visible', False)
-        
+
         self.close_window()
-    
+
     def on_activity_list_key_pressed(self, entry, event):
         #treating tab as keydown to be able to cycle through available values
         if event.keyval == gtk.keysyms.Tab:
             event.keyval = gtk.keysyms.Down
         return False
-        
+
     def on_in_progress_toggled(self, check):
         sensitive = not check.get_active()
         self.end_time.set_sensitive(sensitive)
@@ -203,7 +203,7 @@ class CustomFactController:
 
     def on_cancel_clicked(self, button):
         self.close_window()
-        
+
     def on_new_name_changed(self, combo):
         self.validate_fields()
 
@@ -219,13 +219,13 @@ class CustomFactController:
         self.end_time.set_start_time(start_time)
         self.validate_fields()
         self.end_time.grab_focus()
-        
+
     def on_end_time_entered(self, widget):
         self.validate_fields()
-    
+
     def set_end_date_label(self, some_date):
         self.get_widget("end_date_label").set_text(some_date.strftime("%x"))
-    
+
     def validate_fields(self, widget = None):
         activity_text = self.new_name.get_text().decode('utf8', 'replace')
         start_time = self._get_datetime("start")
@@ -236,8 +236,8 @@ class CustomFactController:
             # make sure we are within 24 hours of start time
             end_time -= dt.timedelta(days=(end_time - start_time).days)
 
-    
-            self.draw_preview(start_time.date(), [start_time, end_time])    
+
+            self.draw_preview(start_time.date(), [start_time, end_time])
         else:
             self.draw_preview(dt.datetime.today().date(), [dt.datetime.now(),
                                                            dt.datetime.now()])
@@ -252,9 +252,9 @@ class CustomFactController:
 
     def on_window_key_pressed(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w 
+          or (event_key.keyval == gtk.keysyms.w
               and event_key.state & gtk.gdk.CONTROL_MASK)):
-            
+
             if self.start_date.popup.get_property("visible") or \
                self.start_time.popup.get_property("visible") or \
                self.end_time.popup.get_property("visible") or \
@@ -262,10 +262,10 @@ class CustomFactController:
                self.new_tags.popup.get_property("visible"):
                 return False
 
-            self.close_window()            
+            self.close_window()
 
     def on_close(self, widget, event):
-        self.close_window()        
+        self.close_window()
 
     def close_window(self):
         self.window.destroy()

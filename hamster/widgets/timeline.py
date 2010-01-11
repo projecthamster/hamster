@@ -35,24 +35,24 @@ MONTH = dt.timedelta(30)
 
 class TimeLine(graphics.Area):
     """this widget is kind of half finished"""
-    
+
     def __init__(self):
         graphics.Area.__init__(self)
         self.start_time, self.end_time = None, None
         self.facts = []
         self.day_start = GconfStore().get_day_start()
         self.first_weekday = stuff.locale_first_weekday()
-        
+
         self.minor_tick = None
-        
+
         self.tick_totals = []
-        
+
         self.bar_color = "#ccc"
 
-        
+
     def draw(self, facts, start_date, end_date):
         self.facts = facts
-        
+
         if start_date > end_date:
             start_date, end_date = end_date, start_date
 
@@ -65,7 +65,7 @@ class TimeLine(graphics.Area):
             if facts:
                 fact_start_time = facts[0]["start_time"]
                 fact_end_time = facts[-1]["start_time"] + facts[-1]["delta"]
-    
+
             self.start_time = min([start_time, fact_start_time])
             self.end_time = max([end_time, fact_end_time])
 
@@ -77,14 +77,14 @@ class TimeLine(graphics.Area):
             if facts:
                 fact_start_time = dt.datetime.combine(facts[0]["date"], dt.time())
                 fact_end_time = dt.datetime.combine(facts[-1]["date"], dt.time())
-    
+
             self.start_time = min([start_time, fact_start_time])
             self.end_time = max([end_time, fact_end_time])
 
 
 
         days = (self.end_time - self.start_time).days
-        
+
 
         # determine fraction and do addittional start time move
         if days > 125: # about 4 month -> show per month
@@ -108,7 +108,7 @@ class TimeLine(graphics.Area):
             self.minor_tick = dt.timedelta(seconds = 60 * 60)
 
         self.count_hours()
-        
+
         self.redraw_canvas()
 
 
@@ -119,7 +119,7 @@ class TimeLine(graphics.Area):
         graph_x = 2
         graph_width = self.width - graph_x - 2
 
-        
+
         total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
         bar_width = float(graph_width) / len(self.tick_totals)
 
@@ -131,16 +131,16 @@ class TimeLine(graphics.Area):
             major_step = dt.timedelta(seconds = 60 * 60)
         else:
             major_step = dt.timedelta(days=1)
-        
+
         x = graph_x
         major_tick_step = graph_width / (total_minutes / float(stuff.duration_minutes(major_step)))
         current_time = self.start_time
-        
+
 
         def first_weekday(date):
             return (date.weekday() + 1 - self.first_weekday) % 7 == 0
 
-        
+
         # calculate position of each bar
         # essentially we care more about the exact 1px gap between bars than about the bar width
         # so after each iteration, we adjust the bar width
@@ -148,7 +148,7 @@ class TimeLine(graphics.Area):
         exes = {}
         adapted_bar_width = bar_width
         for i, (current_time, total) in enumerate(self.tick_totals):
-            
+
             # move the x bit further when ticks kick in
             if (major_step < DAY and current_time.time() == dt.time(0,0)) \
                or (self.minor_tick == DAY and first_weekday(current_time)) \
@@ -159,7 +159,7 @@ class TimeLine(graphics.Area):
             exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
             x = round(x + adapted_bar_width)
             adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
-        
+
 
 
 
@@ -168,7 +168,7 @@ class TimeLine(graphics.Area):
             self.set_color(color)
             self.context.line_to(round(x) + 0.5, self.height)
             self.context.stroke()
-            
+
         def somewhere_in_middle(time, color):
             # draws line somewhere in middle of the minor tick
             left_index = exes.keys()[bisect(exes.keys(), time) - 1]
@@ -176,17 +176,17 @@ class TimeLine(graphics.Area):
             adjustment = stuff.duration_minutes(time - left_index) / float(stuff.duration_minutes(self.minor_tick))
             x, width = exes[left_index]
             line(x + round(width * adjustment) - 1, color)
-        
-        
+
+
         # mark tick lines
         current_time = self.start_time
         while current_time < self.end_time:
             current_time += major_step
             x += major_tick_step
-            
+
             if current_time >= self.end_time: # TODO - fix the loop so we do not have to break
                 break
-            
+
             if major_step < DAY:  # about the same day
                 if current_time.time() == dt.time(0,0): # midnight
                     line(exes[current_time][0] - 2, "#bbb")
@@ -194,15 +194,15 @@ class TimeLine(graphics.Area):
                 if self.minor_tick == DAY:  # week change
                     if first_weekday(current_time):
                         line(exes[current_time][0] - 2, "#bbb")
-    
+
                 if self.minor_tick <= WEEK:  # month change
                     if current_time.day == 1:
                         if current_time in exes:
                             line(exes[current_time][0] - 2, "#bbb")
                         else: #if we are somewhere in middle then it gets a bit more complicated
                             somewhere_in_middle(current_time, "#bbb")
-        
-                # year change    
+
+                # year change
                 if current_time.timetuple().tm_yday == 1: # year change
                     if current_time in exes:
                         line(exes[current_time][0] - 2, "#f00")
@@ -210,7 +210,7 @@ class TimeLine(graphics.Area):
                         somewhere_in_middle(current_time, "#f00")
 
 
-        # the bars        
+        # the bars
         for i, (current_time, total) in enumerate(self.tick_totals):
             bar_size = max(round(self.height * total * 0.9), 1)
             x, bar_width = exes[current_time]
@@ -232,7 +232,7 @@ class TimeLine(graphics.Area):
                 step_format = "%b %d"
             else:
                 step_format = "%a"
-        else:        
+        else:
             step_format = "%H<small><sup>%M</sup></small>"
 
 
@@ -241,22 +241,22 @@ class TimeLine(graphics.Area):
             if (self.end_time - self.start_time) > dt.timedelta(10) \
                and self.minor_tick == DAY and first_weekday(current_time) == False:
                 continue
-            
+
             x, bar_width = exes[current_time]
 
             self.set_color("#666")
             self.layout.set_width(int((self.width - x) * pango.SCALE))
             self.layout.set_markup(current_time.strftime(step_format))
             w, h = self.layout.get_pixel_size()
-            
+
             self.context.move_to(x + 2, self.height - h - 2)
             self.context.show_layout(self.layout)
 
-        
+
     def count_hours(self):
         #go through facts and make array of time used by our fraction
         fractions = []
-        
+
         current_time = self.start_time
 
         minor_tick = self.minor_tick
@@ -264,20 +264,20 @@ class TimeLine(graphics.Area):
             # if minor tick is month, the starting date will have been
             # already adjusted to the first
             # now we have to make sure to move month by month
-            if self.minor_tick >= dt.timedelta(days=28): 
+            if self.minor_tick >= dt.timedelta(days=28):
                 minor_tick = dt.timedelta(calendar.monthrange(current_time.year, current_time.month)[1]) # days in month
-            
+
             fractions.append(current_time)
             current_time += minor_tick
-        
+
         hours = [0] * len(fractions)
-        
+
         tick_minutes = float(stuff.duration_minutes(self.minor_tick))
-        
+
         for fact in self.facts:
             if self.minor_tick < dt.timedelta(1):
                 end_time = fact["start_time"] + fact["delta"] # the thing about ongoing task - it has no end time
-                
+
                 # find in which fraction the fact starts and
                 # add duration up to the border of tick to that fraction
                 # then move cursor to the start of next fraction
@@ -285,16 +285,16 @@ class TimeLine(graphics.Area):
                 step_time = fractions[first_index]
                 first_end = min(end_time, step_time + self.minor_tick)
                 first_tick = stuff.duration_minutes(first_end - fact["start_time"]) / tick_minutes
-                
+
                 hours[first_index] += first_tick
                 step_time = step_time + self.minor_tick
-    
+
                 # now go through ticks until we reach end of the time
                 while step_time < end_time:
                     index = bisect(fractions, step_time) - 1
                     interval = min([1, stuff.duration_minutes(end_time - step_time) / tick_minutes])
                     hours[index] += interval
-                    
+
                     step_time += self.minor_tick
             else:
                 hour_index = bisect(fractions, dt.datetime.combine(fact["date"], dt.time())) - 1

@@ -33,7 +33,7 @@ class DateInput(gtk.Entry):
 
     def __init__(self, date = None):
         gtk.Entry.__init__(self)
-        
+
         self.set_width_chars(12) #12 is enough for 12-oct-2009, which is verbose
         self.date = date
         if date:
@@ -86,21 +86,21 @@ class DateInput(gtk.Entry):
 
     def _on_text_changed(self, widget):
         self.news = True
-        
+
     def __on_day_selected_double_click(self, calendar):
         self.prev_cal_day = None
         self._on_day_selected(calendar) #forward
-        
+
     def _on_cal_button_press_event(self, calendar, event):
         self.prev_cal_day = calendar.get_date()[2]
 
     def _on_day_selected(self, calendar):
         if self.popup.get_property("visible") == False:
             return
-        
+
         if self.prev_cal_day == calendar.get_date()[2]:
             return
-        
+
         cal_date = calendar.get_date()
 
         self.date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
@@ -110,23 +110,23 @@ class DateInput(gtk.Entry):
         if self.news:
             self.emit("date-entered")
             self.news = False
-        
-    
+
+
     def show_popup(self):
         window = self.get_parent_window()
         x, y= window.get_origin()
 
         alloc = self.get_allocation()
-        
+
         date = self._figure_date(self.get_text())
         if date:
-            self.prev_cal_day = date.day #avoid 
+            self.prev_cal_day = date.day #avoid
             self.date_calendar.select_month(date.month-1, date.year)
             self.date_calendar.select_day(date.day)
-        
+
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
         self.popup.show_all()
-    
+
     def _on_focus_in_event(self, entry, event):
         self.show_popup()
 
@@ -139,7 +139,7 @@ class DateInput(gtk.Entry):
         if self.news:
             self.emit("date-entered")
             self.news = False
-    
+
     def _on_key_press_event(self, entry, event):
         if self.popup.get_property("visible"):
             cal_date = self.date_calendar.get_date()
@@ -165,13 +165,13 @@ class DateInput(gtk.Entry):
         else:
             self.popup.hide()
             return False
-        
+
         if enter_pressed:
             self.prev_cal_day = "borken"
         else:
             #prev_cal_day is our only way of checking that date is right
-            self.prev_cal_day = date.day 
-        
+            self.prev_cal_day = date.day
+
         self.date_calendar.select_month(date.month, date.year)
         self.date_calendar.select_day(date.day)
         return True

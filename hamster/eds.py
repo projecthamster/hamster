@@ -31,7 +31,7 @@ except:
 def get_eds_tasks():
     if EDS_AVAILABLE == False:
         return []
-    
+
     try:
         sources = ecal.list_task_sources()
         tasks = []

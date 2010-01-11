@@ -26,19 +26,19 @@ from configuration import GconfStore, runtime
 class Keybinder(object):
     def __init__(self):
         self.config = GconfStore()
-        
+
         self.bound = False
         self.prevbinding = None
-        
+
         self.key_combination = self.config.get_keybinding()
         if self.key_combination is None:
             # This is for uninstalled cases, the real default is in the schema
             self.key_combination = "<Super>H"
-    
+
         runtime.dispatcher.add_handler("gconf_keybinding_changed", self.on_keybinding_changed)
-        
+
         self.bind()
-      
+
     def on_keybinding_changed(self, event, new_binding = None):
         self.prevbinding = self.key_combination
         self.key_combination = new_binding
@@ -46,14 +46,14 @@ class Keybinder(object):
 
     def on_keybinding_activated(self):
         runtime.dispatcher.dispatch('keybinding_activated')
-   
+
     def get_key_combination(self):
         return self.key_combination
-   
+
     def bind(self):
         if self.bound:
             self.unbind()
-         
+
         try:
             print 'Binding shortcut %s to popup hamster' % self.key_combination
             keybinder.tomboy_keybinder_bind(self.key_combination, self.on_keybinding_activated)
@@ -61,9 +61,9 @@ class Keybinder(object):
         except KeyError:
             # if the requested keybinding conflicts with an existing one, a KeyError will be thrown
             self.bound = False
-        
+
         #self.emit('changed', self.bound)  TODO - revert to previous hotkey
-               
+
     def unbind(self):
         try:
             print 'Unbinding shortcut %s to popup hamster' % self.prevbinding

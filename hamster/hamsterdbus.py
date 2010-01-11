@@ -48,7 +48,7 @@ class HamsterDbusController(dbus.service.Object):
 
     @staticmethod
     def to_dbus_fact(fact):
-        """Perform the conversion between fact database query and 
+        """Perform the conversion between fact database query and
         dbus supported data types
         """
         if not fact:
@@ -57,17 +57,17 @@ class HamsterDbusController(dbus.service.Object):
         fact = dict(fact)
         for key in fact.keys():
             fact[key] = fact[key] or 0
-            
+
             # make sure we return correct type where strings are expected
             if not fact[key] and key in ('name', 'category', 'description'):
                 fact[key] = ''
-                
+
             # convert times to gmtime
             if isinstance(fact[key], datetime.datetime):
                 fact[key] = timegm(fact[key].timetuple())
-                
+
         return fact
-    
+
 
     @dbus.service.method(HAMSTER_URI, out_signature='a{sv}')
     def GetCurrentFact(self):
@@ -169,10 +169,10 @@ class HamsterDbusController(dbus.service.Object):
         Parameters:
         s activity: Activity name with optional category and/or description
                     in the form 'activity_name[@category_name][,description]'
-                    Activity and matching category will be refered or created 
+                    Activity and matching category will be refered or created
                     on the fly.
         u start_time: Seconds since epoch (timestamp). Use 0 for 'now'
-        u end_time: Seconds since epoch (timestamp). 
+        u end_time: Seconds since epoch (timestamp).
                     Use 0 for 'in progress task'
         """
         #TODO: Assert start > end ?

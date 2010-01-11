@@ -44,7 +44,7 @@ class Colors(object):
                 color = [c / 255.0 for c in color]
 
         return color
-    
+
     @staticmethod
     def rgb(color):
         return [c * 255 for c in Colors.color(color)]
@@ -80,12 +80,12 @@ class Area(gtk.DrawingArea):
         self.context, self.layout = None, None
         self.width, self.height = None, None
         self.__prev_mouse_regions = None
-        
+
         self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
         self.framerate = 80
         self.last_frame_time = None
         self.__animating = False
-        
+
         self.mouse_drag = (None, None)
 
     def on_expose(self):
@@ -99,15 +99,15 @@ class Area(gtk.DrawingArea):
             self.__animating = True
             self.last_frame_time = dt.datetime.now()
             gobject.timeout_add(1000 / self.framerate, self.__interpolate)
-            
+
     """ animation bits """
     def __interpolate(self):
         self.__animating = self.tweener.hasTweens()
 
         if not self.window: #will wait until window comes
             return self.__animating
-        
-        
+
+
         time_since_start = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
         self.tweener.update(time_since_start)
 
@@ -122,10 +122,10 @@ class Area(gtk.DrawingArea):
         if easing: params["tweenType"] = easing    # if none will fallback to tweener default
         if callback: params["onCompleteFunction"] = callback
         self.tweener.addTween(object, **params)
-        
+
         if instant:
             self.redraw_canvas()
-    
+
 
     """ drawing on canvas bits """
     def draw_rect(self, x, y, w, h, corner_radius = 0):
@@ -139,7 +139,7 @@ class Area(gtk.DrawingArea):
         x2, y2 = x + w, y + h
 
         half_corner = corner_radius / 2
-        
+
         self.context.move_to(x + corner_radius, y);
         self.context.line_to(x2 - corner_radius, y);
         # top-right
@@ -170,7 +170,7 @@ class Area(gtk.DrawingArea):
         if color:
             self.set_color(color, opacity)
         self.context.rectangle(x, y, w, h)
-    
+
     def fill_area(self, x, y, w, h, color, opacity = 0):
         self.rectangle(x, y, w, h, color, opacity)
         self.context.fill()
@@ -179,7 +179,7 @@ class Area(gtk.DrawingArea):
         # sets text and returns width and height of the layout
         self.layout.set_text(text)
         return self.layout.get_pixel_size()
-        
+
     def set_color(self, color, opacity = None):
         color = Colors.color(color) #parse whatever we have there into a normalized triplet
 
@@ -212,7 +212,7 @@ class Area(gtk.DrawingArea):
         self.layout.set_font_description(default_font)
         alloc = self.get_allocation()  #x, y, width, height
         self.width, self.height = alloc.width, alloc.height
-        
+
         self.mouse_regions = [] #reset since these can move in each redraw
         self.on_expose()
 
@@ -225,7 +225,7 @@ class Area(gtk.DrawingArea):
             x = event.x
             y = event.y
             state = event.state
-        
+
         self.emit("mouse-move", (x, y), state)
 
         if not self.mouse_regions:
@@ -235,7 +235,7 @@ class Area(gtk.DrawingArea):
         for region in self.mouse_regions:
             if region[0] < x < region[2] and region[1] < y < region[3]:
                 mouse_regions.append(region[4])
-        
+
         if mouse_regions:
             area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
         else:
@@ -272,7 +272,7 @@ class Area(gtk.DrawingArea):
         x = event.x
         y = event.y
         state = event.state
-        
+
         drag_distance = 5
         if self.mouse_drag and (self.mouse_drag[0] - x) ** 2 + (self.mouse_drag[1] - y) ** 2 < drag_distance ** 2:
             #if the drag is less than the drag distance, then we have a click
@@ -281,7 +281,7 @@ class Area(gtk.DrawingArea):
 
         if not self.mouse_regions:
             return
-        
+
         mouse_regions = []
         for region in self.mouse_regions:
             if region[0] < x < region[2] and region[1] < y < region[3]:
@@ -299,31 +299,31 @@ class SampleArea(Area):
         self.rect_width, self.rect_height = 90, 90
 
         self.text_y = -100
-        
-        
+
+
     def on_expose(self):
         # on expose is called when we are ready to draw
-        
+
         # fill_area is just a shortcut function
         # feel free to use self.context. move_to, line_to and others
         self.font_size = 32
         self.layout.set_text("Hello, World!")
-        
+
         self.draw_rect(round(self.rect_x),
                        round(self.rect_y),
                        self.rect_width,
                        self.rect_height,
                        10)
-        
+
         self.set_color("#ff00ff")
         self.context.fill()
 
         self.context.move_to((self.width - self.layout.get_pixel_size()[0]) / 2,
                              self.text_y)
-        
+
         self.set_color("#333")
         self.context.show_layout(self.layout)
-        
+
 
 class BasicWindow:
     def __init__(self):
@@ -331,20 +331,20 @@ class BasicWindow:
         window.set_title("Graphics Module")
         window.set_size_request(300, 300)
         window.connect("delete_event", lambda *args: gtk.main_quit())
-    
+
         self.graphic = SampleArea()
-        
+
         box = gtk.VBox()
         box.pack_start(self.graphic)
-        
+
         button = gtk.Button("Hello")
         button.connect("clicked", self.on_go_clicked)
 
         box.add_with_properties(button, "expand", False)
-    
+
         window.add(box)
         window.show_all()
-        
+
         # drop the hello on init
         self.graphic.animate(self.graphic,
                             dict(text_y = 120),
@@ -354,13 +354,13 @@ class BasicWindow:
 
     def on_go_clicked(self, widget):
         import random
-        
+
         # set x and y to random position within the drawing area
         x = round(min(random.random() * self.graphic.width,
                       self.graphic.width - self.graphic.rect_width))
         y = round(min(random.random() * self.graphic.height,
                       self.graphic.height - self.graphic.rect_height))
-        
+
         # here we call the animate function with parameters we would like to change
         # the easing functions outside graphics module can be accessed via
         # graphics.Easing
@@ -373,4 +373,3 @@ class BasicWindow:
 if __name__ == "__main__":
    example = BasicWindow()
    gtk.main()
-    

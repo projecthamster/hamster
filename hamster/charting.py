@@ -75,16 +75,16 @@ def get_limits(set, stack_subfactors = True):
                 min_value = max(row, min_value)
 
     return min_value, max_value
-    
+
 
 class Bar(object):
     def __init__(self, value, size = 0):
         self.value = value
         self.size = size
-    
+
     def __repr__(self):
         return str((self.value, self.size))
-        
+
 
 class Chart(graphics.Area):
     """Chart constructor. Optional arguments:
@@ -146,34 +146,34 @@ class Chart(graphics.Area):
         self.keys = []
         self.data = None
         self.stack_keys = []
-        
+
         self.key_colors = {} # key:color dictionary. if key's missing will grab basecolor
         self.stack_key_colors = {} # key:color dictionary. if key's missing will grab basecolor
-        
+
 
         # use these to mark area where the "real" drawing is going on
         self.graph_x, self.graph_y = 0, 0
         self.graph_width, self.graph_height = None, None
-        
+
         self.mouse_bar = None
         if self.interactive:
             self.connect("mouse-over", self.on_mouse_over)
             self.connect("button-release", self.on_clicked)
-            
+
         self.bars_selected = []
-        
-    
+
+
     def on_mouse_over(self, area, region):
         if region:
             self.mouse_bar = int(region[0])
         else:
             self.mouse_bar = None
-            
+
         self.redraw_canvas()
-        
+
     def on_clicked(self, area, bar):
         self.emit("bar-clicked", self.mouse_bar)
-    
+
     def select_bar(self, index):
         pass
 
@@ -181,15 +181,15 @@ class Chart(graphics.Area):
         # returns color darkened by it's index
         # the approach reduces contrast by each step
         base_color = self.bar_base_color or (220, 220, 220)
-        
+
         base_hls = colorsys.rgb_to_hls(*base_color)
-        
+
         step = (base_hls[1] - 30) / 10 #will go from base down to 20 and max 22 steps
-        
+
         return colorsys.hls_to_rgb(base_hls[0],
                                    base_hls[1] - step * index,
                                    base_hls[2])
-        
+
 
     def draw_bar(self, x, y, w, h, color = None):
         """ draws a simple bar"""
@@ -219,15 +219,15 @@ class Chart(graphics.Area):
 
 
     def on_expose(self):
-        # fill whole area 
+        # fill whole area
         if self.background:
             self.fill_area(0, 0, self.width, self.height, self.background)
-        
+
 
     def _update_targets(self):
         # calculates new factors and then updates existing set
         max_value = float(self.max_value) or 1 # avoid division by zero
-        
+
         self.bars = size_list(self.bars, self.data)
 
         #need function to go recursive
@@ -244,7 +244,7 @@ class Chart(graphics.Area):
 
                     self.tweener.addTween(bars[i], size = bars[i].value / float(max_value))
             return bars
-    
+
         retarget(self.bars, self.data)
 
 
@@ -255,9 +255,9 @@ class Chart(graphics.Area):
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
             max_extent = max(label_w + 5, max_extent)
-        
+
         return max_extent
-    
+
     def draw(self):
         logging.error("OMG OMG, not implemented!!!")
 
@@ -269,7 +269,7 @@ class BarChart(Chart):
         if not self.data:
             return
 
-        context = self.context        
+        context = self.context
         context.set_line_width(1)
 
 
@@ -281,7 +281,7 @@ class BarChart(Chart):
                 grid_stride = int(self.max_value * self.grid_stride)
             else:
                 grid_stride = int(self.grid_stride)
-            
+
             scale_labels = [self.value_format % i
                   for i in range(grid_stride, int(self.max_value), grid_stride)]
             self.legend_width = legend_width = self.legend_width or self.longest_label(scale_labels)
@@ -320,7 +320,7 @@ class BarChart(Chart):
         bar_width = min(self.graph_width / float(len(self.keys)), self.max_bar_width)
         for i, key in enumerate(self.keys):
             exes[key] = (x + self.graph_x, round(bar_width - 1))
-            
+
             x = x + round(bar_width)
             bar_width = min(self.max_bar_width,
                             (self.graph_width - x) / float(max(1, len(self.keys) - i - 1)))
@@ -332,20 +332,20 @@ class BarChart(Chart):
             label_w, label_h = self.layout.get_pixel_size()
 
             intended_x = exes[key][0] + (exes[key][1] - label_w) / 2
-            
+
             if not prev_label_end or intended_x > prev_label_end:
                 self.context.move_to(intended_x, self.graph_height + 4)
                 context.show_layout(self.layout)
-            
+
                 prev_label_end = intended_x + label_w + 3
-                
+
 
             bar_start = 0
             base_color = self.bar_base_color or (220, 220, 220)
-            
+
             if self.stack_keys:
                 remaining_fractions, remaining_pixels = 1, max_bar_size
-                
+
                 for j, stack_bar in enumerate(bar):
                     if stack_bar.size > 0:
                         bar_size = round(remaining_pixels * (stack_bar.size / remaining_fractions))
@@ -353,7 +353,7 @@ class BarChart(Chart):
                         remaining_pixels -= bar_size
 
                         bar_start += bar_size
-                        
+
                         last_color = self.stack_key_colors.get(self.stack_keys[j]) or self.get_bar_color(j)
                         self.draw_bar(exes[key][0],
                                       self.graph_height - bar_start,
@@ -377,17 +377,17 @@ class BarChart(Chart):
                     total_value = sum(data[i])
                 else:
                     total_value = data[i]
-                
+
                 self.layout.set_width(-1)
                 self.layout.set_text(self.value_format % total_value)
                 label_w, label_h = self.layout.get_pixel_size()
-    
+
 
                 if bar_start > label_h + 2:
                     label_y = self.graph_y + self.graph_height - bar_start + 5
                 else:
                     label_y = self.graph_y + self.graph_height - bar_start - label_h + 5
-                
+
                 context.move_to(self.exes[key][0] + (self.exes[key][1] - label_w) / 2.0,
                                 label_y)
 
@@ -395,7 +395,7 @@ class BarChart(Chart):
                 if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
                     self.set_color(graphics.Colors.almost_white)
                 else:
-                    self.set_color(graphics.Colors.aluminium[5])        
+                    self.set_color(graphics.Colors.aluminium[5])
 
                 context.show_layout(self.layout)
 
@@ -408,7 +408,7 @@ class BarChart(Chart):
                 grid_stride = int(self.max_value * self.grid_stride)
             else:
                 grid_stride = int(self.grid_stride)
-            
+
             context.set_line_width(1)
             for i in range(grid_stride, int(self.max_value), grid_stride):
                 y = round(max_bar_size * (i / self.max_value)) + 0.5
@@ -430,16 +430,16 @@ class BarChart(Chart):
         if self.show_stack_labels:
             #put series keys
             self.set_color(graphics.Colors.aluminium[5]);
-            
+
             y = self.graph_height
             label_y = None
 
-            # if labels are at end, then we need show them for the last bar! 
+            # if labels are at end, then we need show them for the last bar!
             if self.labels_at_end:
                 factors = self.bars[-1]
             else:
                 factors = self.bars[0]
-            
+
             if isinstance(factors, Bar):
                 factors = [factors]
 
@@ -449,28 +449,28 @@ class BarChart(Chart):
                 self.layout.set_alignment(pango.ALIGN_LEFT)
             else:
                 self.layout.set_alignment(pango.ALIGN_RIGHT)
-    
+
             for j in range(len(factors)):
                 factor = factors[j].size
                 bar_size = factor * max_bar_size
-                
+
                 if round(bar_size) > 0 and self.stack_keys:
                     label = "%s" % self.stack_keys[j]
 
-                    
+
                     self.layout.set_text(label)
                     label_w, label_h = self.layout.get_pixel_size()
-                    
+
                     y -= bar_size
                     intended_position = round(y + (bar_size - label_h) / 2)
-                    
+
                     if label_y:
                         label_y = min(intended_position, label_y - label_h)
                     else:
                         label_y = intended_position
-                    
+
                     if self.labels_at_end:
-                        label_x = self.graph_x + self.graph_width 
+                        label_x = self.graph_x + self.graph_width
                         line_x1 = self.graph_x + self.graph_width - 1
                         line_x2 = self.graph_x + self.graph_width - 6
                     else:
@@ -498,13 +498,13 @@ class HorizontalBarChart(Chart):
 
         context = self.context
         rowcount, keys = len(self.keys), self.keys
-        
+
         # push graph to the right, so it doesn't overlap
         legend_width = self.legend_width or self.longest_label(keys)
-        
+
         self.graph_x = legend_width
         self.graph_x += 8 #add another 8 pixes of padding
-        
+
         self.graph_width = self.width - self.graph_x
         self.graph_y, self.graph_height = 0, self.height
 
@@ -512,7 +512,7 @@ class HorizontalBarChart(Chart):
         if self.chart_background:
             self.fill_area(self.graph_x, self.graph_y, self.graph_width, self.graph_height, self.chart_background)
 
-    
+
         if not self.data:  # go home if we have nothing
             return
 
@@ -521,7 +521,7 @@ class HorizontalBarChart(Chart):
         bar_width = min(self.graph_height / float(len(self.keys)), self.max_bar_width)
         for i, key in enumerate(self.keys):
             positions[key] = (y + self.graph_y, round(bar_width - 1))
-            
+
             y = y + round(bar_width)
             bar_width = min(self.max_bar_width,
                             (self.graph_height - y) / float(max(1, len(self.keys) - i - 1)))
@@ -531,14 +531,14 @@ class HorizontalBarChart(Chart):
 
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
-        
 
-        
+
+
         context.set_line_width(1)
 
         # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
-        
+
 
         for i, label in enumerate(keys):
             if self.interactive:
@@ -551,8 +551,8 @@ class HorizontalBarChart(Chart):
             self.layout.set_width(legend_width * pango.SCALE)
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
-            
-            self.set_color(graphics.Colors.aluminium[5])        
+
+            self.set_color(graphics.Colors.aluminium[5])
             context.move_to(0, positions[label][0] + (positions[label][1] - label_h) / 2)
             context.show_layout(self.layout)
 
@@ -564,7 +564,7 @@ class HorizontalBarChart(Chart):
                 bar_start = 0
 
                 remaining_fractions, remaining_pixels = 1, max_bar_size
-                
+
                 for j, stack_bar in enumerate(self.bars[i]):
                     if stack_bar.size > 0:
                         bar_size = round(remaining_pixels * (stack_bar.size / remaining_fractions))
@@ -600,7 +600,7 @@ class HorizontalBarChart(Chart):
                 total_value = sum(self.data[i])
             else:
                 total_value = self.data[i]
-            
+
             self.layout.set_width(-1)
             self.layout.set_text(self.value_format % total_value)
             label_w, label_h = self.layout.get_pixel_size()
@@ -608,7 +608,7 @@ class HorizontalBarChart(Chart):
             vertical_padding = max((positions[label][1] - label_h) / 2.0, 1)
             if  bar_start - vertical_padding < label_w:
                 label_x = self.graph_x + bar_start + vertical_padding
-                self.set_color(graphics.Colors.aluminium[5])        
+                self.set_color(graphics.Colors.aluminium[5])
             else:
                 if i in self.bars_selected:
                     self.set_color(self.get_style().fg[gtk.STATE_SELECTED].to_string())
@@ -617,10 +617,10 @@ class HorizontalBarChart(Chart):
                     if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
                         self.set_color(graphics.Colors.almost_white)
                     else:
-                        self.set_color(graphics.Colors.aluminium[5])        
-                    
+                        self.set_color(graphics.Colors.aluminium[5])
+
                 label_x = self.graph_x + bar_start - label_w - vertical_padding
-            
+
             context.move_to(label_x, positions[label][0] + (positions[label][1] - label_h) / 2.0)
             context.show_layout(self.layout)
 
@@ -635,39 +635,39 @@ class HorizontalDayChart(Chart):
     def __init__(self, *args, **kwargs):
         Chart.__init__(self, *args, **kwargs)
         self.start_time, self.end_time = None, None
-    
+
     def plot_day(self, keys, data, start_time = None, end_time = None):
         self.keys, self.data = keys, data
         self.start_time, self.end_time = start_time, end_time
         self.show()
         self.redraw_canvas()
-    
+
     def on_expose(self):
         context = self.context
-        
+
         Chart.on_expose(self)
         rowcount, keys = len(self.keys), self.keys
-        
+
         start_hour = 0
         if self.start_time:
             start_hour = self.start_time
-        end_hour = 24 * 60        
+        end_hour = 24 * 60
         if self.end_time:
             end_hour = self.end_time
-        
-        
+
+
         # push graph to the right, so it doesn't overlap
         legend_width = self.legend_width or self.longest_label(keys)
 
         self.graph_x = legend_width
         self.graph_x += 8 #add another 8 pixes of padding
-        
+
         self.graph_width = self.width - self.graph_x
-        
+
         #on the botttom leave some space for label
         self.layout.set_text("1234567890:")
         label_w, label_h = self.layout.get_pixel_size()
-        
+
         self.graph_y, self.graph_height = 0, self.height - label_h - 4
 
 
@@ -677,32 +677,32 @@ class HorizontalDayChart(Chart):
         if not self.data:  #if we have nothing, let's go home
             return
 
-        
+
         positions = {}
         y = 0
         bar_width = min(self.graph_height / float(len(self.keys)), self.max_bar_width)
         for i, key in enumerate(self.keys):
             positions[key] = (y + self.graph_y, round(bar_width - 1))
-            
+
             y = y + round(bar_width)
             bar_width = min(self.max_bar_width,
                             (self.graph_height - y) / float(max(1, len(self.keys) - i - 1)))
 
 
-        
+
         max_bar_size = self.graph_width - 15
 
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
-        
+
         # bars and labels
         self.layout.set_width(legend_width * pango.SCALE)
 
         factor = max_bar_size / float(end_hour - start_hour)
 
         for i, label in enumerate(keys):
-            self.set_color(graphics.Colors.aluminium[5])        
-            
+            self.set_color(graphics.Colors.aluminium[5])
+
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
@@ -713,11 +713,11 @@ class HorizontalDayChart(Chart):
 
             if isinstance(self.data[i], list) == False:
                 self.data[i] = [self.data[i]]
-            
+
             for row in self.data[i]:
                 bar_x = round((row[0]- start_hour) * factor)
                 bar_size = round((row[1] - start_hour) * factor - bar_x)
-                
+
                 self.draw_bar(round(self.graph_x + bar_x),
                               positions[label][0],
                               bar_size,
@@ -733,7 +733,7 @@ class HorizontalDayChart(Chart):
         last_position = positions[keys[-1]]
         for i in range(start_hour + 60, end_hour, pace):
             x = round((i - start_hour) * factor)
-            
+
             minutes = i % (24 * 60)
 
             self.layout.set_markup(dt.time(minutes / 60, minutes % 60).strftime("%H<small><sup>%M</sup></small>"))
@@ -744,13 +744,13 @@ class HorizontalDayChart(Chart):
             self.set_color(graphics.Colors.aluminium[4])
             context.show_layout(self.layout)
 
-            
+
             self.set_color((255, 255, 255))
             self.context.move_to(round(self.graph_x + x) + 0.5, self.graph_y)
             self.context.line_to(round(self.graph_x + x) + 0.5,
                                  last_position[0] + last_position[1])
 
-                
+
         context.stroke()
 
 
@@ -761,12 +761,12 @@ class BasicWindow:
         window.set_title("Hamster Charting")
         window.set_size_request(400, 300)
         window.connect("delete_event", lambda *args: gtk.main_quit())
-    
+
         self.stacked = BarChart(background = "#fafafa",
                                 bar_base_color = (220, 220, 220),
                                 legend_width = 20,
                                 show_stack_labels = True)
-        
+
         box = gtk.VBox()
         box.pack_start(self.stacked)
 
@@ -777,7 +777,7 @@ class BasicWindow:
 
         import random
         self.data = [[random.randint(0, 10) for j in range(len(self.stacks))] for i in range(len(self.series))]
-        
+
         color_buttons = gtk.HBox()
         color_buttons.set_spacing(4)
 
@@ -787,13 +787,13 @@ class BasicWindow:
             color_buttons.pack_start(button)
 
         box.pack_start(color_buttons, False)
-        
+
         window.add(box)
         window.show_all()
 
         self.plot()
-        
-        
+
+
     def plot(self):
         self.stacked.stack_key_colors = self.stack_colors
         self.stacked.plot(self.series, self.data, self.stacks)

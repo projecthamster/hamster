@@ -33,7 +33,7 @@ class ReportChooserDialog(gtk.Dialog):
     }
     def __init__(self):
         gtk.Dialog.__init__(self)
-        
+
 
         self.dialog = gtk.FileChooserDialog(title = _("Save report - Time Tracker"),
                                             parent = None,
@@ -81,7 +81,7 @@ class ReportChooserDialog(gtk.Dialog):
         filter.set_name("All files")
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
-        
+
 
     def show(self, start_date, end_date):
         #set suggested name to something readable, replace backslashes with dots
@@ -89,15 +89,15 @@ class ReportChooserDialog(gtk.Dialog):
         filename = "Time track %s - %s." % (start_date.strftime("%x").replace("/", "."),
                                            end_date.strftime("%x").replace("/", "."))
         self.dialog.set_current_name(filename)
-        
+
         response = self.dialog.run()
-        
+
         if response != gtk.RESPONSE_OK:
             self.emit("report-chooser-closed")
             self.dialog.destroy()
         else:
             self.on_save_button_clicked()
-        
+
 
     def present(self):
         self.dialog.present()
@@ -109,13 +109,13 @@ class ReportChooserDialog(gtk.Dialog):
         if self.dialog.get_filter() in self.filters:
             format = self.filters[self.dialog.get_filter()]
         path = self.dialog.get_filename()
-        
+
         # append correct extension if it is missing
         # TODO - proper way would be to change extension on filter change
         # only pointer in web is http://www.mail-archive.com/pygtk@daa.com.au/msg08740.html
         if path.endswith(".%s" % format) == False:
             path = "%s.%s" % (path.rstrip("."), format)
-        
+
         categories = []
 
         # format, path, start_date, end_date

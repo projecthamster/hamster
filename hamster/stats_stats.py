@@ -39,7 +39,7 @@ class TimelineBackground(widgets.TimeLine):
     def __init__(self):
         widgets.TimeLine.__init__(self)
         self.bar_color = (220, 220, 220)
-    
+
     def on_expose(self):
         self.fill_area(0, 0, self.width, self.height, (0.975, 0.975, 0.975))
         widgets.TimeLine.on_expose(self)
@@ -53,7 +53,7 @@ class StatsViewer(object):
 
         self.parent = parent# determine if app should shut down on close
 
-        
+
         self.background = (0.975, 0.975, 0.975)
         self.get_widget("explore_frame").modify_bg(gtk.STATE_NORMAL,
                       gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
@@ -75,21 +75,21 @@ class StatsViewer(object):
 
     def init_stats(self):
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
-        
+
         if not self.stat_facts or self.stat_facts[-1]["start_time"].year == self.stat_facts[0]["start_time"].year:
             self.get_widget("explore_controls").hide()
         else:
             by_year = stuff.totals(self.stat_facts,
                                    lambda fact: fact["start_time"].year,
                                    lambda fact: 1)
-            
+
             year_box = self.get_widget("year_box")
             class YearButton(gtk.ToggleButton):
                 def __init__(self, label, year, on_clicked):
                     gtk.ToggleButton.__init__(self, label)
                     self.year = year
                     self.connect("clicked", on_clicked)
-            
+
             all_button = YearButton(C_("years", "All").encode("utf-8"),
                                     None,
                                     self.on_year_changed)
@@ -97,11 +97,11 @@ class StatsViewer(object):
             self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
             all_button.set_active(True)
             self.bubbling = False # TODO figure out how to properly work with togglebuttons as radiobuttons
-    
+
             years = sorted(by_year.keys())
             for year in years:
                 year_box.pack_start(YearButton(str(year), year, self.on_year_changed))
-    
+
             year_box.show_all()
 
         self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
@@ -125,7 +125,7 @@ class StatsViewer(object):
                                                                 max_bar_width = 20,
                                                                 legend_width = 70)
         self.get_widget("explore_weekday_starts_ends").add(self.chart_weekday_starts_ends)
-        
+
         self.chart_category_starts_ends = charting.HorizontalDayChart(bars_beveled = False,
                                                                 animate = False,
                                                                 background = self.background,
@@ -141,11 +141,11 @@ class StatsViewer(object):
                 self.background = background
                 self.text = ""
                 self.fontsize = fontsize
-                
+
             def set_text(self, text):
                 self.text = text
                 self.redraw_canvas()
-                
+
             def on_expose(self):
                 if self.background:
                     self.fill_area(0, 0, self.width, self.height, self.background)
@@ -153,14 +153,14 @@ class StatsViewer(object):
                 default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
                 default_font.set_size(self.fontsize * pango.SCALE)
                 self.layout.set_font_description(default_font)
-                
+
                 #self.context.set_source_rgb(0,0,0)
                 self.layout.set_markup(self.text)
 
                 self.layout.set_width((self.width) * pango.SCALE)
                 self.context.move_to(0,0)
                 self.set_color(charting.graphics.Colors.aluminium[5])
-                
+
                 self.context.show_layout(self.layout)
 
         self.explore_summary = CairoText(self.background)
@@ -202,21 +202,21 @@ A week of usage would be nice!"""))
         category_keys = sorted(categories.keys())
         categories = [categories[key] for key in category_keys]
         self.chart_category_totals.plot(category_keys, categories)
-        
+
         # Totals by weekday
         weekdays = stuff.totals(facts,
                                 lambda fact: (fact["start_time"].weekday(),
                                               fact["start_time"].strftime("%a")),
                                 lambda fact: fact['delta'].seconds / 60 / 60.0)
-        
-        weekday_keys = sorted(weekdays.keys(), key = lambda x: x[0]) #sort 
+
+        weekday_keys = sorted(weekdays.keys(), key = lambda x: x[0]) #sort
         weekdays = [weekdays[key] for key in weekday_keys] #get values in the order
         weekday_keys = [key[1] for key in weekday_keys] #now remove the weekday and keep just the abbreviated one
         self.chart_weekday_totals.plot(weekday_keys, weekdays)
 
 
         split_minutes = 5 * 60 + 30 #the mystical hamster midnight
-        
+
         # starts and ends by weekday
         by_weekday = {}
         for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
@@ -224,7 +224,7 @@ A week of usage would be nice!"""))
             weekday = (date_facts[0]["start_time"].weekday(),
                        date_facts[0]["start_time"].strftime("%a"))
             by_weekday.setdefault(weekday, [])
-            
+
             start_times, end_times = [], []
             for fact in date_facts:
                 start_time = fact["start_time"].time()
@@ -232,15 +232,15 @@ A week of usage would be nice!"""))
                 if fact["end_time"]:
                     end_time = fact["end_time"].time()
                     end_time = end_time.hour * 60 + end_time.minute
-                
+
                     if start_time < split_minutes:
                         start_time += 24 * 60
                     if end_time < start_time:
                         end_time += 24 * 60
-                    
+
                     start_times.append(start_time)
                     end_times.append(end_time)
-            if start_times and end_times:            
+            if start_times and end_times:
                 by_weekday[weekday].append((min(start_times), max(end_times)))
 
 
@@ -256,16 +256,16 @@ A week of usage would be nice!"""))
         weekdays = [by_weekday[key] for key in weekday_keys]
         weekday_keys = [key[1] for key in weekday_keys] # get rid of the weekday number as int
 
-        
+
         # starts and ends by category
         by_category = {}
         for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
             date_facts = sorted(list(date_facts), key = lambda x: x["category"])
-            
+
             for category, category_facts in groupby(date_facts, lambda x: x["category"]):
                 category_facts = list(category_facts)
                 by_category.setdefault(category, [])
-                
+
                 start_times, end_times = [], []
                 for fact in category_facts:
                     start_time = fact["start_time"]
@@ -273,7 +273,7 @@ A week of usage would be nice!"""))
                     if fact["end_time"]:
                         end_time = fact["end_time"].time()
                         end_time = end_time.hour * 60 + end_time.minute
-                        
+
                         if start_time < split_minutes:
                             start_time += 24 * 60
                         if end_time < start_time:
@@ -282,7 +282,7 @@ A week of usage would be nice!"""))
                         start_times.append(start_time)
                         end_times.append(end_time)
 
-                if start_times and end_times:            
+                if start_times and end_times:
                     by_category[category].append((min(start_times), max(end_times)))
 
         for cat in by_category:
@@ -307,7 +307,7 @@ A week of usage would be nice!"""))
         #now the factoids!
         summary = ""
 
-        # first record        
+        # first record
         if not year:
             # date format for the first record if the year has not been selected
             # Using python datetime formatting syntax. See:
@@ -321,12 +321,12 @@ A week of usage would be nice!"""))
 
         summary += _("First activity was recorded on %s.") % \
                                                      ("<b>%s</b>" % first_date)
-        
+
         # total time tracked
         total_delta = dt.timedelta(days=0)
         for fact in facts:
             total_delta += fact["delta"]
-        
+
         if total_delta.days > 1:
             human_years_str = ngettext("%(num)s year",
                                        "%(num)s years",
@@ -343,7 +343,7 @@ A week of usage would be nice!"""))
               "human_years": human_years_str,
               "working_days": ("<b>%d</b>" % (total_delta.days * 3)), # 8 should be pretty much an average working day
               "working_years": working_years_str }
-        
+
 
         # longest fact
         max_fact = None
@@ -356,10 +356,10 @@ A week of usage would be nice!"""))
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
             C_("date of the longest activity", "%b %d, %Y"))
-        
+
         num_hours = max_fact["delta"].seconds / 60 / 60.0 + max_fact["delta"].days * 24
         hours = "<b>%.1f</b>" % (num_hours)
-        
+
         summary += "\n" + ngettext("Longest continuous work happened on \
 %(date)s and was %(hours)s hour.",
                                   "Longest continuous work happened on \
@@ -375,14 +375,14 @@ A week of usage would be nice!"""))
 
         early_start, early_end = dt.time(5,0), dt.time(9,0)
         late_start, late_end = dt.time(20,0), dt.time(5,0)
-        
-        
+
+
         fact_count = len(facts)
         def percent(condition):
             matches = [fact for fact in facts if condition(fact)]
             return round(len(matches) / float(fact_count) * 100)
-        
-        
+
+
         early_percent = percent(lambda fact: early_start < fact["start_time"].time() < early_end)
         late_percent = percent(lambda fact: fact["start_time"].time() > late_start or fact["start_time"].time() < late_end)
         short_percent = percent(lambda fact: fact["delta"] <= dt.timedelta(seconds = 60 * 15))
@@ -402,16 +402,16 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.explore_summary.set_text(summary)
 
 
-        
+
     def on_year_changed(self, button):
         if self.bubbling: return
-        
+
         for child in button.parent.get_children():
             if child != button and child.get_active():
                 self.bubbling = True
                 child.set_active(False)
                 self.bubbling = False
-        
+
         self.stats(button.year)
 
 
@@ -430,8 +430,8 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         else:
             self.window.destroy()
             return False
-        
+
 
 if __name__ == "__main__":
-    stats_viewer = StatsViewer() 
-    gtk.main()    
+    stats_viewer = StatsViewer()
+    gtk.main()

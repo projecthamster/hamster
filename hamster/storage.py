@@ -31,14 +31,14 @@ class Storage(object):
     def dispatch(self, event, data):
         self.parent.dispatch(event, data)
 
-    def dispatch_overwrite(self):        
+    def dispatch_overwrite(self):
         self.dispatch('new_tags_added', ())
         self.dispatch('day_updated', ())
         self.dispatch('activity_updated', ())
 
     def get_tags(self, autocomplete = None):
         return self.__get_tags(autocomplete)
-        
+
     def get_tag_ids(self, tags):
         tags, new_added = self.__get_tag_ids(tags)
         if new_added:
@@ -85,25 +85,25 @@ class Storage(object):
     def update_fact(self, fact_id, activity_name, tags, start_time, end_time):
         now = datetime.datetime.now()
         self.start_transaction()
-        
+
         fact = self.get_fact(fact_id)
         if fact:
             self.__remove_fact(fact_id)
-        
+
         result = self.__add_fact(activity_name, tags, start_time, end_time)
 
         self.end_transaction()
-        
+
         if result:
             self.dispatch('day_updated', result['start_time'])
         return result
 
     def get_activities(self, category_id = None):
         return self.__get_activities(category_id = category_id)
-    
+
     def get_autocomplete_activities(self):
         return self.__get_autocomplete_activities()
-    
+
     def get_last_activity(self):
         return self.__get_last_activity()
 
@@ -111,7 +111,7 @@ class Storage(object):
         result = self.__remove_activity(id)
         self.dispatch('activity_updated', ())
         return result
-    
+
     def remove_category(self, id):
         self.__remove_category(id)
         self.dispatch('activity_updated', ())
@@ -134,7 +134,7 @@ class Storage(object):
     def update_activity(self, id, name, category_id):
         self.__update_activity(id, name, category_id)
         self.dispatch('activity_updated', ())
-    
+
     def add_activity(self, name, category_id = -1):
         new_id = self.__add_activity(name, category_id)
         self.dispatch('activity_updated', ())

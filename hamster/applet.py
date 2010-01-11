@@ -49,14 +49,14 @@ try:
     PYNOTIFY = True
 except:
     PYNOTIFY = False
-    
+
 class Notifier(object):
     def __init__(self, attach):
         self._icon = gtk.STOCK_DIALOG_QUESTION
         self._attach = attach
         # Title of reminder notification
         self.summary = _("Time Tracker")
-      
+
         if not pynotify.is_initted():
             pynotify.init('Hamster Applet')
 
@@ -67,9 +67,9 @@ class Notifier(object):
             #translators: this is edit activity action in the notifier bubble
             notify.add_action("edit", _("Edit"), edit_cb)
             #translators: this is switch activity action in the notifier bubble
-            notify.add_action("switch", _("Switch"), switch_cb)            
+            notify.add_action("switch", _("Switch"), switch_cb)
         notify.show()
-    
+
     def msg_low(self, message):
         notify = pynotify.Notification(self.summary, message, self._icon, self._attach)
         notify.set_urgency(pynotify.URGENCY_LOW)
@@ -81,7 +81,7 @@ class PanelButton(gtk.ToggleButton):
         gtk.ToggleButton.__init__(self)
         self.set_relief(gtk.RELIEF_NONE)
         self.set_border_width(0)
-        
+
         self.label = gtk.Label()
         self.label.set_justify(gtk.JUSTIFY_CENTER)
 
@@ -90,7 +90,7 @@ class PanelButton(gtk.ToggleButton):
         self.connect('button_press_event', self.on_button_press)
 
         self.add(self.label)
-        
+
         self.activity, self.duration = None, None
         self.prev_size = 0
 
@@ -100,7 +100,7 @@ class PanelButton(gtk.ToggleButton):
                 GtkWidget::focus-line-width=0
                 GtkWidget::focus-padding=0
             }
-                                     
+
             widget "*.hamster-applet-button" style "hamster-applet-button-style"
         """);
         gtk.Widget.set_name (self, "hamster-applet-button");
@@ -117,7 +117,7 @@ class PanelButton(gtk.ToggleButton):
         self.activity = activity
         self.duration = duration
         self.reformat_label()
-        
+
     def reformat_label(self):
         label = self.activity
         if self.duration:
@@ -125,7 +125,7 @@ class PanelButton(gtk.ToggleButton):
                 label = "%s\n%s" % (self.activity, self.duration)
             else:
                 label = "%s %s" % (self.activity, self.duration)
-        
+
         label = '<span gravity="south">%s</span>' % label
         self.label.set_markup("") #clear - seems to fix the warning
         self.label.set_markup(label)
@@ -139,7 +139,7 @@ class PanelButton(gtk.ToggleButton):
             return False
 
         popup_dir = self.get_parent().get_orient()
- 
+
         orient_vertical = popup_dir in [gnomeapplet.ORIENT_LEFT] or \
                           popup_dir in [gnomeapplet.ORIENT_RIGHT]
 
@@ -164,7 +164,7 @@ class PanelButton(gtk.ToggleButton):
             available_size = self.get_allocation().width
         else:
             available_size = self.get_allocation().height
-        
+
         return required_size <= available_size
 
     def on_label_style_set(self, widget, something):
@@ -175,7 +175,7 @@ class PanelButton(gtk.ToggleButton):
             return
 
         self.popup_dir = self.get_parent().get_orient()
-        
+
         orient_vertical = True
         new_size = allocation.width
         if self.popup_dir in [gnomeapplet.ORIENT_LEFT]:
@@ -186,7 +186,7 @@ class PanelButton(gtk.ToggleButton):
             new_angle = 0
             orient_vertical = False
             new_size = allocation.height
-        
+
         if new_angle != self.label.get_angle():
             self.label.set_angle(new_angle)
 
@@ -212,7 +212,7 @@ class HamsterApplet(object):
         self.open_fact_editors = []
 
         self.config = GconfStore()
-        
+
         self.button = PanelButton()
         self.button.connect('toggled', self.on_toggle)
         self.applet.add(self.button)
@@ -246,7 +246,7 @@ class HamsterApplet(object):
         self.treeview.connect("key-press-event", self.on_todays_keys)
         self.treeview.connect("edit-clicked", self._open_edit_activity)
         self.treeview.connect("row-activated", self.on_today_row_activated)
-        
+
         self.get_widget("today_box").add(self.treeview)
 
         # DBus Setup
@@ -261,7 +261,7 @@ class HamsterApplet(object):
 
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
-    
+
         self.day_start = self.config.get_day_start()
 
         # Load today's data, activities and set label
@@ -292,9 +292,9 @@ class HamsterApplet(object):
 
         runtime.dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
         self.notify_on_idle = self.config.get_notify_on_idle()
-        
+
         runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
-        
+
         # init nagging timeout
         if PYNOTIFY:
             self.notify = Notifier(self.button)
@@ -304,10 +304,10 @@ class HamsterApplet(object):
 
     """UI functions"""
     def refresh_hamster(self):
-        """refresh hamster every x secs - load today, check last activity etc."""        
+        """refresh hamster every x secs - load today, check last activity etc."""
 
         #if we the day view is visible - update day's durations
-        if self.button.get_active(): 
+        if self.button.get_active():
             self.load_day()
 
         self.update_label()
@@ -325,12 +325,12 @@ class HamsterApplet(object):
         else:
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
-            
+
 
     def check_user(self):
         if not self.notify_interval: #no interval means "never"
             return
-        
+
         now = dt.datetime.now()
         if self.last_activity:
             delta = now - self.last_activity['start_time']
@@ -349,7 +349,7 @@ class HamsterApplet(object):
         dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
 
     def switch_cb(self, n, action):
-        self.__show_toggle(None, not self.button.get_active())	
+        self.__show_toggle(None, not self.button.get_active())
 
 
     def load_day(self):
@@ -366,14 +366,14 @@ class HamsterApplet(object):
             self.last_activity = facts[-1]
         else:
             self.last_activity = None
-        
+
         if len(facts) > 10:
             self._gui.get_object("today_box").set_size_request(-1, 250)
             self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         else:
             self._gui.get_object("today_box").set_size_request(-1, -1)
             self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
-            
+
         by_category = {}
         for fact in facts:
             duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
@@ -381,13 +381,13 @@ class HamsterApplet(object):
                           by_category.setdefault(fact['category'], 0) + duration
             self.treeview.add_fact(fact)
 
-        
+
         if not facts:
             self._gui.get_object("today_box").hide()
             self._gui.get_object("fact_totals").set_text(_("No records today"))
         else:
             self._gui.get_object("today_box").show()
-            
+
             total_strings = []
             for category in by_category:
                 # listing of today's categories and time spent in them
@@ -395,27 +395,27 @@ class HamsterApplet(object):
                 total_strings.append(_("%(category)s: %(duration)s") % \
                         ({'category': category,
                           #duration in main drop-down per category in hours
-                          'duration': _("%sh") % duration 
+                          'duration': _("%sh") % duration
                           }))
 
             total_string = ", ".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
-            
+
         self.set_last_activity()
 
     def set_last_activity(self):
         activity = self.last_activity
         #sets all the labels and everything as necessary
         self.get_widget("stop_tracking").set_sensitive(activity != None)
-        
-        
+
+
         if activity:
             self.get_widget("switch_activity").show()
             self.get_widget("start_tracking").hide()
-            
+
             delta = dt.datetime.now() - activity['start_time']
             duration = delta.seconds /  60
-            
+
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
             self.get_widget("last_activity_name").set_text(activity['name'])
             if activity['category'] != _("Unsorted"):
@@ -443,21 +443,21 @@ class HamsterApplet(object):
         (cur, col) = self.treeview.get_cursor()
         runtime.storage.remove_fact(model[iter][0])
 
-        if next_row:        
+        if next_row:
             self.treeview.set_cursor(cur)
 
 
     def __update_fact(self):
         """dbus controller current fact updating"""
         last_activity_id = 0
-        
+
         if not self.last_activity:
             self.dbusController.TrackingStopped()
         else:
             last_activity_id = self.last_activity['id']
 
         self.dbusController.FactUpdated(last_activity_id)
-            
+
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
@@ -471,7 +471,7 @@ class HamsterApplet(object):
 
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
-        
+
         x, y = self.button.get_pos()
 
         self.popup_dir = self.applet.get_orient()
@@ -495,14 +495,14 @@ class HamsterApplet(object):
 
         self.new_name.set_text("");
         self.new_tags.set_text("");
-        gobject.idle_add(self._delayed_display)  
-        
+        gobject.idle_add(self._delayed_display)
+
     def _delayed_display(self):
         """show window only when gtk has become idle. otherwise we get
         mixed results. TODO - this looks like a hack though"""
         self.window.present()
         self.new_name.grab_focus()
-        
+
 
     """events"""
     def on_toggle(self, widget):
@@ -513,17 +513,17 @@ class HamsterApplet(object):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
             return True
-            
+
         return False
-    
+
     def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
         dialogs.edit.show(self.applet, fact_id = fact["id"])
-        
+
     def on_today_row_activated(self, tree, path, column):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        
+
         fact = model[iter][6]
         if fact:
             activity = fact['name']
@@ -533,21 +533,21 @@ class HamsterApplet(object):
             tags = fact["tags"]
             if fact["description"]:
                 tags.append(fact["description"])
-                
+
             runtime.storage.add_fact(activity, ", ".join(tags))
             runtime.dispatcher.dispatch('panel_visible', False)
-        
-        
+
+
     def on_windows_keys(self, tree, event_key):
         if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w 
+          or (event_key.keyval == gtk.keysyms.w
               and event_key.state & gtk.gdk.CONTROL_MASK)):
             if self.new_name.popup.get_property("visible") == False \
                and self.new_tags.popup.get_property("visible") == False:
                 runtime.dispatcher.dispatch('panel_visible', False)
                 return True
         return False
-        
+
     """button events"""
     def on_overview(self, menu_item):
         runtime.dispatcher.dispatch('panel_visible', False)
@@ -566,13 +566,13 @@ class HamsterApplet(object):
         runtime.dispatcher.dispatch('panel_visible', False)
         dialogs.prefs.show(self.applet)
 
-    
+
     """signals"""
     def after_activity_update(self, widget, renames):
         self.new_name.refresh_activities()
         self.load_day()
         self.update_label()
-    
+
     def after_fact_update(self, event, date):
         self.load_day()
         self.update_label()
@@ -587,7 +587,7 @@ class HamsterApplet(object):
             self.refresh_hamster()
         elif self.timeout_enabled and self.last_activity and \
              self.last_activity['end_time'] is None:
-            
+
             runtime.storage.touch_fact(self.last_activity,
                                        end_time = self.dbusIdleListener.getIdleFrom())
 
@@ -599,7 +599,7 @@ class HamsterApplet(object):
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
-        
+
     def on_timeout_enabled_changed(self, event, enabled):
         self.timeout_enabled = enabled
 
@@ -629,6 +629,6 @@ class HamsterApplet(object):
 
     def show(self):
         self.window.show_all()
-        
+
     def get_widget(self, name):
         return self._gui.get_object(name)

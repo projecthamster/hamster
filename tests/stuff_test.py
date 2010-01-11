@@ -20,7 +20,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEquals(activity.activity_name, "with start time")
         self.assertEquals(activity.start_time.strftime("%H:%M"), "12:35")
 
-        #rest must be empty        
+        #rest must be empty
         assert activity.category_name is None \
                and activity.end_time is None and activity.category_name is None\
                and activity.description is None
@@ -32,7 +32,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEquals(activity.start_time.strftime("%H:%M"), "12:35")
         self.assertEquals(activity.end_time.strftime("%H:%M"), "14:25")
 
-        #rest must be empty        
+        #rest must be empty
         assert activity.category_name is None \
                and activity.category_name is None\
                and activity.description is None

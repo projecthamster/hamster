@@ -28,13 +28,13 @@ import pango
 
 def parent_painter(column, cell, model, iter):
     cell_text = model.get_value(iter, 1)
-    
+
     if model.get_value(iter, 6) is None:
         if model.get_path(iter) == (0,):
             text = '<span weight="heavy">%s</span>' % cell_text
         else:
             text = '<span weight="heavy" rise="-20000">%s</span>' % cell_text
-            
+
         cell.set_property('markup', text)
 
     else:
@@ -45,7 +45,7 @@ def parent_painter(column, cell, model, iter):
         markup = stuff.format_activity(activity_name,
                                        category,
                                        description,
-                                       pad_description = True)            
+                                       pad_description = True)
         cell.set_property('markup', markup)
 
 def duration_painter(column, cell, model, iter):
@@ -76,10 +76,10 @@ class FactTree(gtk.TreeView):
         "edit-clicked": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "double-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
     }
-    
+
     def __init__(self):
         gtk.TreeView.__init__(self)
-        
+
         self.set_headers_visible(False)
         self.set_show_expanders(False)
 
@@ -101,7 +101,7 @@ class FactTree(gtk.TreeView):
         tagColumn = gtk.TreeViewColumn("", tag_cell, data=6)
         tagColumn.set_expand(True)
         self.append_column(tagColumn)
-        
+
 
         # duration
         timeColumn = gtk.TreeViewColumn()
@@ -121,10 +121,10 @@ class FactTree(gtk.TreeView):
         self.connect("key-press-event", self._on_key_pressed)
 
         self.show()
-    
+
     def clear(self):
         self.store_model.clear()
-        
+
     def add_fact(self, fact, parent = None):
         duration = stuff.duration_minutes(fact["delta"]) / 60
 
@@ -144,7 +144,7 @@ class FactTree(gtk.TreeView):
 
     def add_group(self, group_label, facts):
         total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
-        
+
         # adds group of facts with the given label
         group_row = self.store_model.append(None,
                                     [-1,
@@ -154,7 +154,7 @@ class FactTree(gtk.TreeView):
                                      "",
                                      "",
                                      None])
-        
+
         for fact in facts:
             self.add_fact(fact, group_row)
 
@@ -166,7 +166,7 @@ class FactTree(gtk.TreeView):
     def attach_model(self):
         self.set_model(self.store_model)
         self.expand_all()
-        
+
     def get_selected_fact(self):
         selection = self.get_selection()
         (model, iter) = selection.get_selected()
@@ -177,11 +177,11 @@ class FactTree(gtk.TreeView):
         # a hackish solution to make edit icon keyboard accessible
         pointer = event.window.get_pointer() # x, y, flags
         path = self.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
-        
+
         if path and path[1] == self.edit_column:
             self.emit("edit-clicked", self.get_selected_fact())
             return True
-        
+
         return False
 
     def _on_row_activated(self, tree, path, column):
@@ -197,6 +197,5 @@ class FactTree(gtk.TreeView):
               and event.state & gtk.gdk.CONTROL_MASK):
             self.emit("edit-clicked", self.get_selected_fact())
             return True
-            
+
         return False
-            

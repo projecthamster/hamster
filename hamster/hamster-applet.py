@@ -32,7 +32,7 @@ def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
     applet.set_applet_flags(gnomeapplet.EXPAND_MINOR)
 
-    from hamster.applet import HamsterApplet    
+    from hamster.applet import HamsterApplet
     hamster_applet = HamsterApplet(applet)
 
     applet.show_all()
@@ -43,13 +43,13 @@ def applet_factory(applet, iid):
 def on_destroy(event):
     from hamster.configuration import GconfStore, runtime
     config = GconfStore()
-    
+
     # handle config option to stop tracking on shutdown
     if config.get_stop_on_shutdown():
         last_activity = runtime.storage.get_last_activity()
         if last_activity and last_activity['end_time'] is None:
             runtime.storage.touch_fact(last_activity)
-        
+
     if gtk.main_level():
         gtk.main_quit()
 
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                       dest="debug",
                       default=False,
                       help="set log level to debug")
-    
+
     #these two come from bonobo
     parser.add_option("--oaf-activate-iid")
     parser.add_option("--oaf-ior-fd")
@@ -96,22 +96,22 @@ if __name__ == "__main__":
             logging.info("Running from source folder, modifying PYTHONPATH")
             sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
             sys.path.insert(0, name)
-        
+
         # Now the path is set, import our applet
         from hamster import defs
         from hamster.configuration import runtime, dialogs
-        
+
         # Setup i18n
-        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))        
+        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
         for module in (gettext, locale):
             module.bindtextdomain('hamster-applet', locale_dir)
             module.textdomain('hamster-applet')
-        
+
             if hasattr(module, 'bind_textdomain_codeset'):
                 module.bind_textdomain_codeset('hamster-applet','UTF-8')
-        
+
         gtk.window_set_default_icon_name("hamster-applet")
-    
+
         if options.start_window or options.standalone:
             gobject.set_application_name("hamster-applet")
             if (options.start_window or "").startswith("over"):
@@ -127,16 +127,16 @@ if __name__ == "__main__":
 
             else: #default to main applet
                 gnome.init(defs.PACKAGE, defs.VERSION)
-        
+
                 app = gtk.Window(gtk.WINDOW_TOPLEVEL)
                 app.set_title(_(u"Time Tracker"))
-            
+
                 applet = gnomeapplet.Applet()
                 applet_factory(applet, None)
                 applet.reparent(app)
                 app.show_all()
 
-            gtk.main()    
+            gtk.main()
         else:
             gnomeapplet.bonobo_factory(
                 "OAFIID:Hamster_Applet_Factory",

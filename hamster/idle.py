@@ -84,7 +84,7 @@ class DbusIdleListener(object):
             idle_state = message.get_args_list()[0]
             if idle_state:
                 self.idle_from = dt.datetime.now()
-                
+
                 # from gnome screensaver 2.24 to 2.28 they have switched
                 # configuration keys and signal types.
                 # luckily we can determine key by signal type
@@ -121,9 +121,9 @@ class DbusIdleListener(object):
             # ActiveChanged and SessionIdle signals
             logging.debug("Screen Lock Requested")
             self.screen_locked = True
-        
+
         return
-    
+
 
     def getIdleFrom(self):
         if not self.idle_from:

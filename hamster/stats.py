@@ -43,7 +43,7 @@ class StatsViewer(object):
         self.parent = parent# determine if app should shut down on close
         self._gui = stuff.load_ui_file("stats.ui")
         self.report_chooser = None
-        
+
         self.facts = None
 
         self.window = self.get_widget("tabs_window")
@@ -56,17 +56,17 @@ class StatsViewer(object):
 
         #set to monday
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-        
+
         # look if we need to start on sunday or monday
         self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-        
+
         # see if we have not gotten carried away too much in all these calculations
         if (self.view_date - self.start_date) == dt.timedelta(7):
             self.start_date += dt.timedelta(7)
-        
+
         self.end_date = self.start_date + dt.timedelta(6)
 
-        
+
         self.overview = OverviewBox()
         self.get_widget("overview_tab").add(self.overview)
         self.fact_tree = self.overview.fact_tree # TODO - this is upside down, should maybe get the overview tab over here
@@ -74,7 +74,7 @@ class StatsViewer(object):
 
         self.reports = ReportsBox()
         self.get_widget("reports_tab").add(self.reports)
-        
+
         self.range_combo = gtk.combo_box_new_text()
         self.range_combo.append_text(_("Week"))
         self.range_combo.append_text(_("Month"))
@@ -84,9 +84,9 @@ class StatsViewer(object):
         self.range_combo.append_text("All")
         self.range_combo.set_active(0)
         self.range_combo.connect("changed", self.on_range_combo_changed)
-        
-        
-        
+
+
+
         self.get_widget("range_pick").add(self.range_combo)
 
 
@@ -113,10 +113,10 @@ class StatsViewer(object):
     def search(self):
         if self.start_date > self.end_date: # make sure the end is always after beginning
             self.start_date, self.end_date = self.end_date, self.start_date
-        
+
         self.start_date_input.set_date(self.start_date)
         self.end_date_input.set_date(self.end_date)
-        
+
         search_terms = self.get_widget("search").get_text().decode("utf8", "replace")
         self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
@@ -138,7 +138,7 @@ class StatsViewer(object):
         start_date, end_date = self.start_date, self.end_date
         dates_dict = stuff.dateDict(start_date, "start_")
         dates_dict.update(stuff.dateDict(end_date, "end_"))
-        
+
         if start_date == end_date:
             # date format for overview label when only single day is visible
             # Using python datetime formatting syntax. See:
@@ -187,21 +187,21 @@ class StatsViewer(object):
 
     def on_search_activate(self, widget):
         self.search()
-        
+
     def on_report_button_clicked(self, widget):
         def on_report_chosen(widget, format, path):
             self.report_chooser = None
             reports.simple(self.facts, self.start_date, self.end_date, format, path)
-    
+
             if format == ("html"):
                 webbrowser.open_new("file://%s" % path)
             else:
                 gtk.show_uri(gtk.gdk.Screen(),
                              "file://%s" % os.path.split(path)[0], 0L)
-    
+
         def on_report_chooser_closed(widget):
             self.report_chooser = None
-            
+
         if not self.report_chooser:
             self.report_chooser = widgets.ReportChooserDialog()
             self.report_chooser.connect("report-chosen", on_report_chosen)
@@ -218,7 +218,7 @@ class StatsViewer(object):
 
         self.get_widget("preset_range").hide()
         self.get_widget("range_box").hide()
-        
+
         if idx == 2: # date range
             self.get_widget("range_box").show()
         else:
@@ -227,16 +227,16 @@ class StatsViewer(object):
                 self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
                 self.end_date = self.start_date + dt.timedelta(6)
                 self.get_widget("preset_range").show()
-    
+
             elif idx == 1: #month
                 self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
                 first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
                 self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
                 self.get_widget("preset_range").show()
-    
-                
+
+
             self.search()
-        
+
     def on_start_date_entered(self, input):
         self.start_date = input.get_date().date()
         self.view_date = self.start_date
@@ -247,12 +247,12 @@ class StatsViewer(object):
         self.search()
 
     def _chosen_range(self):
-        return self.range_combo.get_active() 
+        return self.range_combo.get_active()
 
     def on_prev_clicked(self, button):
         if self._chosen_range() == 0:  # week
             self.start_date -= dt.timedelta(7)
-            self.end_date -= dt.timedelta(7)        
+            self.end_date -= dt.timedelta(7)
         elif self._chosen_range() == 1: # month
             self.end_date = self.start_date - dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
@@ -264,12 +264,12 @@ class StatsViewer(object):
     def on_next_clicked(self, button):
         if self._chosen_range() == 0:  # week
             self.start_date += dt.timedelta(7)
-            self.end_date += dt.timedelta(7)        
+            self.end_date += dt.timedelta(7)
         elif self._chosen_range() == 1: # month
             self.start_date = self.end_date + dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
-    
+
         self.view_date = self.start_date
         self.search()
 
@@ -281,14 +281,14 @@ class StatsViewer(object):
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
             self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
             self.end_date = self.start_date + dt.timedelta(6)
-        
+
         elif self._chosen_range() == 1: # month
             self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
             first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
-        
+
         self.search()
-        
+
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
@@ -327,22 +327,22 @@ class StatsViewer(object):
     def on_close(self, widget, event):
         runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
-        self.close_window()        
+        self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
       if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w 
+          or (event_key.keyval == gtk.keysyms.w
               and event_key.state & gtk.gdk.CONTROL_MASK)):
         self.close_window()
-    
-    
+
+
     def close_window(self):
         if not self.parent:
             gtk.main_quit()
         else:
             self.window.destroy()
             return False
-        
+
     def show(self):
         self.window.show()
 
