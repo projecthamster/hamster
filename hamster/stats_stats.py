@@ -35,6 +35,15 @@ from configuration import runtime
 
 from hamster.i18n import C_
 
+class TimelineBackground(widgets.TimeLine):
+    def __init__(self):
+        widgets.TimeLine.__init__(self)
+        self.bar_color = (220, 220, 220)
+    
+    def on_expose(self):
+        self.fill_area(0, 0, self.width, self.height, (0.975, 0.975, 0.975))
+        widgets.TimeLine.on_expose(self)
+
 
 class StatsViewer(object):
     def __init__(self, parent = None):
@@ -51,7 +60,7 @@ class StatsViewer(object):
 
         self.stat_facts = None
 
-        self.timeline = widgets.TimeLine()
+        self.timeline = TimelineBackground()
         self.get_widget("explore_everything").add(self.timeline)
         self.get_widget("explore_everything").show_all()
 

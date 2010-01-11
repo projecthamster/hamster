@@ -46,6 +46,8 @@ class TimeLine(graphics.Area):
         self.minor_tick = None
         
         self.tick_totals = []
+        
+        self.bar_color = "#ccc"
 
         
     def draw(self, facts, start_date, end_date):
@@ -113,31 +115,13 @@ class TimeLine(graphics.Area):
     def on_expose(self):
         self.context.set_line_width(1)
 
-        self.fill_area(0, 0, self.width, self.height, "#fafafa")
-        self.context.stroke()
-        
         self.height = self.height - 2
         graph_x = 2
         graph_width = self.width - graph_x - 2
 
-        if not self.facts:
-            return
         
         total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
         bar_width = float(graph_width) / len(self.tick_totals)
-
-
-        # calculate position of each bar
-        # essentially we care more about the exact 1px gap between bars than about the bar width
-        # so after each iteration, we adjust the bar width
-        x = graph_x
-        exes = {}
-        adapted_bar_width = bar_width
-        for i, (current_time, total) in enumerate(self.tick_totals):
-            exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
-            x = round(x + adapted_bar_width)
-            adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
-        
 
 
         # major ticks
@@ -152,6 +136,33 @@ class TimeLine(graphics.Area):
         major_tick_step = graph_width / (total_minutes / float(stuff.duration_minutes(major_step)))
         current_time = self.start_time
         
+
+        def first_weekday(date):
+            return (date.weekday() + 1 - self.first_weekday) % 7 == 0
+
+        
+        # calculate position of each bar
+        # essentially we care more about the exact 1px gap between bars than about the bar width
+        # so after each iteration, we adjust the bar width
+        x = graph_x
+        exes = {}
+        adapted_bar_width = bar_width
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            
+            # move the x bit further when ticks kick in
+            if (major_step < DAY and current_time.time() == dt.time(0,0)) \
+               or (self.minor_tick == DAY and first_weekday(current_time)) \
+               or (self.minor_tick <= WEEK and current_time.day == 1) \
+               or (current_time.timetuple().tm_yday == 1):
+                x+=2
+
+            exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
+            x = round(x + adapted_bar_width)
+            adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
+        
+
+
+
         def line(x, color):
             self.context.move_to(round(x) + 0.5, 0)
             self.set_color(color)
@@ -166,9 +177,9 @@ class TimeLine(graphics.Area):
             x, width = exes[left_index]
             line(x + round(width * adjustment) - 1, color)
         
-        def first_weekday(date):
-            return (date.weekday() + 1 - self.first_weekday) % 7 == 0
         
+        # mark tick lines
+        current_time = self.start_time
         while current_time < self.end_time:
             current_time += major_step
             x += major_tick_step
@@ -178,26 +189,25 @@ class TimeLine(graphics.Area):
             
             if major_step < DAY:  # about the same day
                 if current_time.time() == dt.time(0,0): # midnight
-                    line(exes[current_time][0] - 1, "#aaaaaa")
+                    line(exes[current_time][0] - 2, "#bbb")
             else:
                 if self.minor_tick == DAY:  # week change
                     if first_weekday(current_time):
-                        line(exes[current_time][0] - 1, "#cccccc")
+                        line(exes[current_time][0] - 2, "#bbb")
     
                 if self.minor_tick <= WEEK:  # month change
                     if current_time.day == 1:
                         if current_time in exes:
-                            line(exes[current_time][0] - 1, "#999999")
+                            line(exes[current_time][0] - 2, "#bbb")
                         else: #if we are somewhere in middle then it gets a bit more complicated
-                            somewhere_in_middle(current_time, "#999999")
+                            somewhere_in_middle(current_time, "#bbb")
         
                 # year change    
                 if current_time.timetuple().tm_yday == 1: # year change
                     if current_time in exes:
-                        line(exes[current_time][0] - 1, "#00ff00")
+                        line(exes[current_time][0] - 2, "#f00")
                     else: #if we are somewhere in middle - then just draw it
-                        somewhere_in_middle(current_time, "#00ff00")
-
+                        somewhere_in_middle(current_time, "#f00")
 
 
         # the bars        
@@ -205,8 +215,10 @@ class TimeLine(graphics.Area):
             bar_size = max(round(self.height * total * 0.9), 1)
             x, bar_width = exes[current_time]
 
-            self.fill_area(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, "#E4E4E4")
-
+            self.set_color(self.bar_color)
+            self.context.rectangle(x, self.height - min(bar_size, 2), min(bar_width - 1, self.width - x - 2), min(bar_size, 2))
+            self.draw_rect(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, 3)
+            self.context.fill()
 
 
         #minor tick format
@@ -224,7 +236,7 @@ class TimeLine(graphics.Area):
             step_format = "%H<small><sup>%M</sup></small>"
 
 
-        # ticks. we loop once again to avoid next bar overlapping previous text
+        # tick labels. we loop once again to avoid next bar overlapping previous text
         for i, (current_time, total) in enumerate(self.tick_totals):
             if (self.end_time - self.start_time) > dt.timedelta(10) \
                and self.minor_tick == DAY and first_weekday(current_time) == False:
@@ -232,7 +244,7 @@ class TimeLine(graphics.Area):
             
             x, bar_width = exes[current_time]
 
-            self.set_color("#aaaaaa")
+            self.set_color("#666")
             self.layout.set_width(int((self.width - x) * pango.SCALE))
             self.layout.set_markup(current_time.strftime(step_format))
             w, h = self.layout.get_pixel_size()
