@@ -240,8 +240,7 @@ class Chart(graphics.Area):
                         bars[i] = Bar(new_values[i], 0)
                     else:
                         bars[i].value = new_values[i]
-                        for tween in self.tweener.getTweensAffectingObject(bars[i]):
-                            self.tweener.removeTween(tween)
+                        self.tweener.killTweensOf(bars[i])
 
                     self.tweener.addTween(bars[i], size = bars[i].value / float(max_value))
             return bars

@@ -200,7 +200,7 @@ class DayLine(graphics.Area):
             return delta.days * 24 * 60 + delta.seconds / 60
 
     def scroll_to_range_start(self):
-        self.tweener.removeTweeningFrom(self)
+        self.tweener.killTweensOf(self)
         self.animate(self, {"range_start_int": int(time.mktime(self.range_start.timetuple())),
                             "tweenType": graphics.Easing.Expo.easeOut,
                             "tweenTime": 0.4})
