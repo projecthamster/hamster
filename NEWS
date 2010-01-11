@@ -1,4 +1,24 @@
 ===============
+Version 2.29.5
+===============
+  * searching
+  * simplified save report dialog, thanks to the what you see is what you report
+    revamp
+  * overview/stats replaced with activities / totals and stats accessible from
+    totals
+  * interactive graphs to drill down in totals
+  * miscellaneous performance improvements
+  * pixel-perfect graphs
+  
+  
+  Updated translations
+   * es (Jorge González)
+   * et (Ivar Smolin)
+   * sl (Matej Urbančič)
+   * sv (Daniel Nylander)
+   * uk (Maxim V. Dziumanenko)
+
+===============
 Version 2.29.4
 ===============
   * overview window overhaul(still in progress)
