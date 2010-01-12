@@ -276,6 +276,7 @@
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
                 <child>
                   <object class="GtkLabel" id="range_title">
                     <property name="visible">True</property>

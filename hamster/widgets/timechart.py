@@ -213,7 +213,7 @@ class TimeChart(graphics.Area):
 
         # the bars
         for i, (current_time, total) in enumerate(self.tick_totals):
-            bar_size = max(round(self.height * total * 0.9), 1)
+            bar_size = max(round(self.height * total * 0.8), 1)
             x, bar_width = exes[current_time]
 
             self.set_color(self.bar_color)
@@ -250,7 +250,7 @@ class TimeChart(graphics.Area):
             self.layout.set_markup(current_time.strftime(step_format))
             w, h = self.layout.get_pixel_size()
 
-            self.context.move_to(x + 2, self.height - h - 2)
+            self.context.move_to(x + 2, 0)
             self.context.show_layout(self.layout)
 
 
