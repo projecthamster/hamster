@@ -334,6 +334,7 @@ class StatsViewer(object):
     def on_close(self, widget, event):
         runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
+        runtime.dispatcher.del_handler('conf_changed', self.on_conf_change)
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
