@@ -21,7 +21,7 @@ import gtk, pango
 
 from .hamster import graphics, stuff
 
-from .hamster.configuration import GconfStore
+from .hamster.configuration import conf
 
 import datetime as dt
 import calendar
@@ -40,7 +40,8 @@ class TimeChart(graphics.Area):
         graphics.Area.__init__(self)
         self.start_time, self.end_time = None, None
         self.facts = []
-        self.day_start = GconfStore().get_day_start()
+        self.day_start = conf.get("day_start_minutes")
+        self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
         self.first_weekday = stuff.locale_first_weekday()
 
         self.minor_tick = None

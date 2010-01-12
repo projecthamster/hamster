@@ -31,7 +31,7 @@ import pango
 
 import stuff
 from hamster.i18n import C_
-from configuration import runtime, GconfStore, dialogs
+from configuration import runtime, conf, dialogs
 import widgets, reports
 
 from stats_overview import OverviewBox
@@ -48,8 +48,8 @@ class StatsViewer(object):
 
         self.window = self.get_widget("tabs_window")
 
-        self.config = GconfStore()
-        self.day_start = self.config.get_day_start()
+        self.day_start = conf.get("day_start_minutes")
+        self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
 
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
                                                         minutes = self.day_start.minute)).date()
@@ -104,6 +104,7 @@ class StatsViewer(object):
         self._gui.connect_signals(self)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
+        runtime.dispatcher.add_handler('conf_changed', self.on_conf_change)
 
 
         self.window.show_all()
@@ -168,6 +169,12 @@ class StatsViewer(object):
         self.get_widget("range_title").set_text(self.title)
 
 
+    def on_conf_change(self, event, data):
+        key, value = data
+        if key == "day_start_minutes":
+            self.day_start = dt.time(value / 60, value % 60)
+            self.search()
+    
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
         selection = tree.get_selection()

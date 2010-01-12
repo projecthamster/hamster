@@ -4,7 +4,6 @@ data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
 [type: gettext/glade]data/preferences.ui
 [type: gettext/glade]data/edit_activity.ui
-data/hamster-applet.schemas.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/stats.ui
 [type: gettext/glade]data/stats_reports.ui

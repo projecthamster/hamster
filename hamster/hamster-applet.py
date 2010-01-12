@@ -41,11 +41,10 @@ def applet_factory(applet, iid):
     return True
 
 def on_destroy(event):
-    from hamster.configuration import GconfStore, runtime
-    config = GconfStore()
+    from hamster.configuration import runtime, conf
 
     # handle config option to stop tracking on shutdown
-    if config.get_stop_on_shutdown():
+    if conf.get("stop_on_shutdown"):
         last_activity = runtime.storage.get_last_activity()
         if last_activity and last_activity['end_time'] is None:
             runtime.storage.touch_fact(last_activity)

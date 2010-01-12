@@ -81,7 +81,7 @@ class ActivityStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime, GconfStore
+from configuration import runtime, conf
 import widgets
 import dispatcher, storage, stuff
 
@@ -95,7 +95,6 @@ class PreferencesEditor:
     def __init__(self, parent = None):
         self.parent = parent
         self._gui = stuff.load_ui_file("preferences.ui")
-        self.config = GconfStore()
         self.window = self.get_widget('preferences_window')
 
 
@@ -173,6 +172,7 @@ class PreferencesEditor:
         self.prev_selected_activity = None
         self.prev_selected_category = None
 
+        
         # disable notification thing if pynotify is not available
         try:
             import pynotify
@@ -182,14 +182,16 @@ class PreferencesEditor:
         self._gui.connect_signals(self)
         self.window.show_all()
 
-    def load_config(self):
-        self.get_widget("shutdown_track").set_active(self.config.get_stop_on_shutdown())
-        self.get_widget("idle_track").set_active(self.config.get_timeout_enabled())
-        self.get_widget("notify_interval").set_value(self.config.get_notify_interval())
-        self.get_widget("keybinding").set_text(self.config.get_keybinding())
-        self.get_widget("notify_on_idle").set_active(self.config.get_notify_on_idle())
+    def load_config(self, *args):
+        self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
+        self.get_widget("idle_track").set_active(conf.get("enable_timeout"))
+        self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
+        self.get_widget("keybinding").set_text(conf.get("keybinding"))
+        self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
 
-        self.day_start.set_time(self.config.get_day_start())
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
+        self.day_start.set_time(day_start)
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
@@ -642,13 +644,13 @@ class PreferencesEditor:
             return False
 
     def on_shutdown_track_toggled(self, checkbox):
-        self.config.set_stop_on_shutdown(checkbox.get_active())
+        conf.set("stop_on_shutdown", checkbox.get_active())
 
     def on_idle_track_toggled(self, checkbox):
-        self.config.set_timeout_enabled(checkbox.get_active())
+        conf.set("enable_timeout", checkbox.get_active())
 
     def on_notify_on_idle_toggled(self, checkbox):
-        self.config.set_notify_on_idle(checkbox.get_active())
+        conf.set("notify_on_idle", checkbox.get_active())
 
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
@@ -662,18 +664,20 @@ class PreferencesEditor:
 
     def on_notify_interval_value_changed(self, scale):
         value = int(scale.get_value())
-        self.config.set_notify_interval(value)
+        conf.set("notify_interval", value)
         self.get_widget("notify_on_idle").set_sensitive(value <= 120)
 
     def on_keybinding_changed(self, textbox):
-        self.config.set_keybinding(textbox.get_text().decode('utf8', 'replace'))
+        conf.set("keybinding", textbox.get_text().decode('utf8', 'replace'))
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.get_time()
         if not day_start:
             return
+        
+        day_start = day_start.hour * 60 + day_start.minute
 
-        self.config.set_day_start(day_start)
+        conf.set("day_start_minutes", day_start)
 
     def on_preferences_window_destroy(self, window):
         self.window = None

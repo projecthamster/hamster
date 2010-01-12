@@ -17,6 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+gconf part of this code copied from Gimmie (c) Alex Gravely via Conduit (c) John Stowers, 2006
+License: GPLv2
+"""
+
 import gconf
 import gettext
 import os
@@ -27,6 +32,9 @@ from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
 import gio
+
+import logging
+log = logging.getLogger("configuration")
 
 class Singleton(object):
      def __new__(cls, *args, **kwargs):
@@ -44,6 +52,7 @@ class RuntimeStore(Singleton):
     data_dir = ""
     dispatcher = None
     storage = None
+    conf = None
 
 
     def __init__(self):
@@ -57,6 +66,7 @@ class RuntimeStore(Singleton):
         self.data_dir = data_dir
         self.dispatcher = Dispatcher()
         self.storage = Storage(self.dispatcher)
+        
 
         # figure out the correct database file
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
@@ -168,74 +178,144 @@ class Dialogs(Singleton):
 
 dialogs = Dialogs()
 
-class GconfStore(Singleton):
+
+
+
+
+class GConfStore(Singleton):
     """
-    Handles storing to and retrieving values from GConf
+    Settings implementation which stores settings in GConf
+    Snatched from the conduit project (http://live.gnome.org/Conduit)
     """
-
-    # GConf directory for deskbar in window mode and shared settings
-    GCONF_DIR = "/apps/hamster-applet/general"
-
-    # GConf key for global keybinding
-    GCONF_KEYBINDING = GCONF_DIR + "/keybinding"
-    GCONF_ENABLE_TIMEOUT = GCONF_DIR + "/enable_timeout"
-    GCONF_STOP_ON_SHUTDOWN = GCONF_DIR + "/stop_on_shutdown"
-    GCONF_NOTIFY_INTERVAL = GCONF_DIR + "/notify_interval"
-    GCONF_NOTIFY_ON_IDLE = GCONF_DIR + "/notify_on_idle"
-    GCONF_DAY_START = GCONF_DIR + "/day_start"
-
-    __instance = None
-
+    GCONF_DIR = "/apps/hamster-applet/"
+    VALID_KEY_TYPES = (bool, str, int, list, tuple)
+    DEFAULTS = {
+        'enable_timeout'            :   False,          # Should hamster stop tracking on idle
+        'stop_on_shutdown'          :   False,          # Should hamster stop tracking on shutdown
+        'notify_on_idle'            :   False,          # Remind also if no activity is set
+        'notify_interval'           :   27,             # Remind of current activity every X minutes
+        'day_start_minutes'         :   5 * 60 + 30,    # At what time does the day start (5:30AM)
+        'keybinding'                :   "<Super>H",     # Key binding to summon hamster
+        'overview_window_box'       :   [],             # X, Y, W, H
+        'overview_window_maximized' :   False,          # Is overview window maximized
+    }
+    
     def __init__(self):
-        super(GconfStore, self).__init__()
         self._client = gconf.client_get_default()
-        self.__connect_notifications()
+        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)  
+        self._notifications = []
 
-    def __connect_notifications(self):
-        self._client.add_dir(self.GCONF_DIR, gconf.CLIENT_PRELOAD_RECURSIVE)
-        self._client.notify_add(self.GCONF_KEYBINDING, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_keybinding_changed", z.value.get_string()))
-        self._client.notify_add(self.GCONF_ENABLE_TIMEOUT, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_timeout_enabled_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_STOP_ON_SHUTDOWN, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_stop_on_shutdown_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_NOTIFY_INTERVAL, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_interval_changed", z.value.get_int()))
-        self._client.notify_add(self.GCONF_NOTIFY_ON_IDLE, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_notify_on_idle_changed", z.value.get_bool()))
-        self._client.notify_add(self.GCONF_DAY_START, lambda x, y, z, a: runtime.dispatcher.dispatch("gconf_on_day_start_changed", z.value.get_int()))
+    def _fix_key(self, key):
+        """
+        Appends the GCONF_PREFIX to the key if needed
+        
+        @param key: The key to check
+        @type key: C{string}
+        @returns: The fixed key
+        @rtype: C{string}
+        """
+        if not key.startswith(self.GCONF_DIR):
+            return self.GCONF_DIR + key
+        else:
+            return key
+            
+    def _key_changed(self, client, cnxn_id, entry, data=None):
+        """
+        Callback when a gconf key changes
+        """
+        key = self._fix_key(entry.key)[len(self.GCONF_DIR):]
+        value = self._get_value(entry.value, self.DEFAULTS[key])
+
+        runtime.dispatcher.dispatch("conf_changed", (key, value))
 
 
-    def get_keybinding(self):
-        return self._client.get_string(self.GCONF_KEYBINDING) or ""
+    def _get_value(self, value, default):
+        """calls appropriate gconf function by the default value"""
+        vtype = type(default)
 
-    def get_timeout_enabled(self):
-        return self._client.get_bool(self.GCONF_ENABLE_TIMEOUT) or False
+        if vtype is bool:
+            return value.get_bool()
+        elif vtype is str:
+            return value.get_string()
+        elif vtype is int:
+            return value.get_int()
+        elif vtype in (list, tuple):
+            l = []
+            for i in value.get_list():
+                l.append(i.get_string())
+            return l
+        
+        return None
+        
+    def get(self, key, default=None):
+        """
+        Returns the value of the key or the default value if the key is 
+        not yet in gconf
+        """
+        
+        #function arguments override defaults
+        if default is None:
+            default = self.DEFAULTS.get(key, None)
+        vtype = type(default)
+        
+        #we now have a valid key and type
+        if default is None:
+            log.warn("Unknown key: %s, must specify default value" % key)
+            return None
 
-    def get_stop_on_shutdown(self):
-        return self._client.get_bool(self.GCONF_STOP_ON_SHUTDOWN) or False
+        if vtype not in self.VALID_KEY_TYPES:
+            log.warn("Invalid key type: %s" % vtype)
+            return None
 
-    def get_notify_interval(self):
-    	return self._client.get_int(self.GCONF_NOTIFY_INTERVAL) or 27
+        #for gconf refer to the full key path
+        key = self._fix_key(key)
 
-    def get_notify_on_idle(self):
-    	return self._client.get_bool(self.GCONF_NOTIFY_ON_IDLE) or False
+        if key not in self._notifications:
+            self._client.notify_add(key, self._key_changed)
+            self._notifications.append(key)
+        
+        value = self._client.get(key)
+        if value is None:
+            self.set(key, default)
+            return default
 
-    def get_day_start(self):
-        minutes = self._client.get_int(self.GCONF_DAY_START) or 5*60 + 30
-        return dt.time(minutes / 60, minutes % 60)
+        value = self._get_value(value, default)
+        if value is not None:
+            return value
+            
+        log.warn("Unknown gconf key: %s" % key)
+        return None
 
-    #------------------------
-    def set_keybinding(self, binding):
-        self._client.set_string(self.GCONF_KEYBINDING, binding)
+    def set(self, key, value):
+        """
+        Sets the key value in gconf and connects adds a signal 
+        which is fired if the key changes
+        """
+        log.debug("Settings %s -> %s" % (key, value))
+        if key in self.DEFAULTS:
+            vtype = type(self.DEFAULTS[key])
+        else:
+            vtype = type(value)
 
-    def set_timeout_enabled(self, enabled):
-        self._client.set_bool(self.GCONF_ENABLE_TIMEOUT, enabled)
+        if vtype not in self.VALID_KEY_TYPES:
+            log.warn("Invalid key type: %s" % vtype)
+            return False
 
-    def set_stop_on_shutdown(self, enabled):
-        self._client.set_bool(self.GCONF_STOP_ON_SHUTDOWN, enabled)
+        #for gconf refer to the full key path
+        key = self._fix_key(key)
 
-    def set_notify_interval(self, interval):
-    	return self._client.set_int(self.GCONF_NOTIFY_INTERVAL, interval)
+        if vtype is bool:
+            self._client.set_bool(key, value)
+        elif vtype is str:
+            self._client.set_string(key, value)
+        elif vtype is int:
+            self._client.set_int(key, value)
+        elif vtype in (list, tuple):
+            #Save every value as a string
+            strvalues = [str(i) for i in value]
+            self._client.set_list(key, gconf.VALUE_STRING, strvalues)
 
-    def set_notify_on_idle(self, enabled):
-        self._client.set_bool(self.GCONF_NOTIFY_ON_IDLE, enabled)
+        return True
 
-    def set_day_start(self, time):
-    	return self._client.set_int(self.GCONF_DAY_START, time.hour * 60 + time.minute)
 
+conf = GConfStore()

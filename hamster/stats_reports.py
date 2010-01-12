@@ -33,7 +33,7 @@ import gtk, gobject
 
 import stuff, widgets
 import charting, reports
-from configuration import runtime, GconfStore, dialogs
+from configuration import runtime, dialogs
 
 from hamster.i18n import C_
 
@@ -89,9 +89,6 @@ class ReportsBox(gtk.VBox):
 
 
         self._gui.connect_signals(self)
-
-        self.config = GconfStore()
-        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
         self.report_chooser = None
 
@@ -241,9 +238,6 @@ class ReportsBox(gtk.VBox):
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
-
-    def on_day_start_changed(self, event, new_minutes):
-        self.do_graph()
 
     def on_statistics_button_clicked(self, button):
         dialogs.stats.show(self)

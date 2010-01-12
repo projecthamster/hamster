@@ -21,27 +21,25 @@
 
 import gtk, gconf
 import keybinder
-from configuration import GconfStore, runtime
+from configuration import runtime, conf
 
 class Keybinder(object):
     def __init__(self):
-        self.config = GconfStore()
-
         self.bound = False
         self.prevbinding = None
 
-        self.key_combination = self.config.get_keybinding()
-        if self.key_combination is None:
-            # This is for uninstalled cases, the real default is in the schema
-            self.key_combination = "<Super>H"
-
-        runtime.dispatcher.add_handler("gconf_keybinding_changed", self.on_keybinding_changed)
+        self.key_combination = conf.get("keybinding")
+        runtime.dispatcher.add_handler("conf_changed", self.on_conf_changed)
 
         self.bind()
 
-    def on_keybinding_changed(self, event, new_binding = None):
+    def on_conf_changed(self, event, data):
+        key, value = data
+        if key != "keybinding":
+            return
+        
         self.prevbinding = self.key_combination
-        self.key_combination = new_binding
+        self.key_combination = value
         self.bind()
 
     def on_keybinding_activated(self):
@@ -73,10 +71,6 @@ class Keybinder(object):
             # if the requested keybinding is not bound, a KeyError will be thrown
             pass
 
-if gtk.pygtk_version < (2,8,0):
-    gobject.type_register(Keybinder)
 
 keybinder = Keybinder()
 
-def get_hamster_keybinder():
-    return keybinder

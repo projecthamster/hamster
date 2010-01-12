@@ -32,7 +32,7 @@ import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 
 import eds
-from configuration import GconfStore, runtime, dialogs
+from configuration import conf, runtime, dialogs
 
 import stuff
 from KeyBinder import *
@@ -211,8 +211,6 @@ class HamsterApplet(object):
         self.applet.about = None
         self.open_fact_editors = []
 
-        self.config = GconfStore()
-
         self.button = PanelButton()
         self.button.connect('toggled', self.on_toggle)
         self.applet.add(self.button)
@@ -262,7 +260,8 @@ class HamsterApplet(object):
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
 
-        self.day_start = self.config.get_day_start()
+        self.day_start = conf.get("day_start_minutes")
+        self.day_start = dt.time(self.day_start / 60, self.day_start % 60) # it comes in as minutes
 
         # Load today's data, activities and set label
         self.last_activity = None
@@ -287,19 +286,14 @@ class HamsterApplet(object):
         runtime.dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
 
         # init idle check
-        runtime.dispatcher.add_handler('gconf_timeout_enabled_changed', self.on_timeout_enabled_changed)
-        self.timeout_enabled = self.config.get_timeout_enabled()
+        self.timeout_enabled = conf.get("enable_timeout")
+        self.notify_on_idle = conf.get("notify_on_idle")
 
-        runtime.dispatcher.add_handler('gconf_notify_on_idle_changed', self.on_notify_on_idle_changed)
-        self.notify_on_idle = self.config.get_notify_on_idle()
-
-        runtime.dispatcher.add_handler('gconf_on_day_start_changed', self.on_day_start_changed)
 
         # init nagging timeout
         if PYNOTIFY:
             self.notify = Notifier(self.button)
-            runtime.dispatcher.add_handler('gconf_notify_interval_changed', self.on_notify_interval_changed)
-            self.on_notify_interval_changed(None, self.config.get_notify_interval())
+            self.on_conf_changed(None, ("notify_interval", conf.get("notify_interval")))
 
 
     """UI functions"""
@@ -591,27 +585,28 @@ class HamsterApplet(object):
             runtime.storage.touch_fact(self.last_activity,
                                        end_time = self.dbusIdleListener.getIdleFrom())
 
-    def on_day_start_changed(self, event, new_minutes):
-        self.day_start = self.config.get_day_start()
-        self.load_day()
-        self.update_label()
-
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
 
-    def on_timeout_enabled_changed(self, event, enabled):
-        self.timeout_enabled = enabled
 
-    def on_notify_on_idle_changed(self, event, enabled):
-        self.notify_on_idle = enabled
-
-    def on_notify_interval_changed(self, event, new_interval):
-        if PYNOTIFY and 0 < new_interval < 121:
-            self.notify_interval = new_interval
-        else:
-            self.notify_interval = None
-
+    def on_conf_changed(self, event, data):
+        key, value = data
+        
+        if key == "enable_timeout":
+            self.timeout_enabled = value
+        elif key == "notify_on_idle":
+            self.notify_on_idle = value
+        elif key == "notify_interval":
+            if PYNOTIFY and 0 < value < 121:
+                self.notify_interval = value
+            else:
+                self.notify_interval = None
+        elif key == "day_start_minutes":
+            self.day_start = dt.time(value / 60, value % 60)
+            self.load_day()
+            self.update_label()
+            
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 

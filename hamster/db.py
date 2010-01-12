@@ -56,7 +56,7 @@ class Storage(storage.Storage):
         self.__con = None
         self.__cur = None
 
-        from configuration import runtime, GconfStore
+        from configuration import runtime
 
         db_file = runtime.database_path
         db_path, _ = os.path.split(os.path.realpath(db_file))
@@ -328,8 +328,9 @@ class Storage(storage.Storage):
         return grouped_facts
 
     def __get_last_activity(self):
-        from configuration import GconfStore
-        day_start = GconfStore().get_day_start()
+        from configuration import conf
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
 
         today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
                                                   minutes = day_start.minute)).date()
@@ -615,8 +616,9 @@ class Storage(storage.Storage):
         query += " ORDER BY a.start_time, e.name"
         end_date = end_date or date
 
-        from configuration import GconfStore
-        day_start = GconfStore().get_day_start()
+        from configuration import conf
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
 
         split_time = day_start
         datetime_from = dt.datetime.combine(date, split_time)
