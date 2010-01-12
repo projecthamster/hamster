@@ -288,6 +288,7 @@ class HamsterApplet(object):
         # init idle check
         self.timeout_enabled = conf.get("enable_timeout")
         self.notify_on_idle = conf.get("notify_on_idle")
+        runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
 
 
         # init nagging timeout
