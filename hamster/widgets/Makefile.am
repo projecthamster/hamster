@@ -8,7 +8,7 @@ hamster_PYTHON = \
 	reportchooserdialog.py \
 	tags.py \
 	timeinput.py \
-	timeline.py
+	timechart.py
 
 clean-local:
 	rm -rf *.pyc *.pyo

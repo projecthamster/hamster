@@ -98,8 +98,8 @@ class StatsViewer(object):
         self.end_date_input.connect("date-entered", self.on_end_date_entered)
         self.get_widget("range_end_box").add(self.end_date_input)
 
-        self.timeline = widgets.TimeLine()
-        self.get_widget("by_day_box").add(self.timeline)
+        self.timechart = widgets.TimeChart()
+        self.get_widget("by_day_box").add(self.timechart)
 
         self._gui.connect_signals(self)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
@@ -124,7 +124,7 @@ class StatsViewer(object):
 
         self.set_title()
 
-        self.timeline.draw(self.facts, self.start_date, self.end_date)
+        self.timechart.draw(self.facts, self.start_date, self.end_date)
 
 
         if self.get_widget("window_tabs").get_current_page() == 0:

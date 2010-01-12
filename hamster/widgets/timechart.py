@@ -33,7 +33,7 @@ DAY = dt.timedelta(1)
 WEEK = dt.timedelta(7)
 MONTH = dt.timedelta(30)
 
-class TimeLine(graphics.Area):
+class TimeChart(graphics.Area):
     """this widget is kind of half finished"""
 
     def __init__(self):

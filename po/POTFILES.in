@@ -21,4 +21,4 @@ hamster/stats_reports.py
 hamster/stats_stats.py
 hamster/stuff.py
 hamster/widgets/reportchooserdialog.py
-hamster/widgets/timeline.py
+hamster/widgets/timechart.py

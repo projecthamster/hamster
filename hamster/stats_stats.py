@@ -35,14 +35,14 @@ from configuration import runtime
 
 from hamster.i18n import C_
 
-class TimelineBackground(widgets.TimeLine):
+class TimeChartWithBackground(widgets.TimeChart):
     def __init__(self):
-        widgets.TimeLine.__init__(self)
+        widgets.TimeChart.__init__(self)
         self.bar_color = (220, 220, 220)
 
     def on_expose(self):
         self.fill_area(0, 0, self.width, self.height, (0.975, 0.975, 0.975))
-        widgets.TimeLine.on_expose(self)
+        widgets.TimeChart.on_expose(self)
 
 
 class StatsViewer(object):
@@ -60,8 +60,8 @@ class StatsViewer(object):
 
         self.stat_facts = None
 
-        self.timeline = TimelineBackground()
-        self.get_widget("explore_everything").add(self.timeline)
+        self.timechart = TimeChartWithBackground()
+        self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
         runtime.dispatcher.add_handler('activity_updated', self.after_fact_update)
@@ -192,7 +192,7 @@ A week of usage would be nice!"""))
             self.get_widget("not_enough_records_label").hide()
 
         # All dates in the scope
-        self.timeline.draw(facts, facts[0]["date"], facts[-1]["date"])
+        self.timechart.draw(facts, facts[0]["date"], facts[-1]["date"])
 
 
         # Totals by category

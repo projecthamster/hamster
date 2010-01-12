@@ -25,7 +25,7 @@ from activityentry import ActivityEntry
 from dateinput import DateInput
 from timeinput import TimeInput
 
-from timeline import TimeLine
+from timechart import TimeChart
 
 from dayline import DayLine
 
