@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008, 2009.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
-"PO-Revision-Date: 2009-09-02 18:47+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-13 19:22+0100\n"
+"PO-Revision-Date: 2010-01-13 19:28+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,13 +17,13 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Hamster proiektua - zure denboraren jarraipena"
 
 #. Title of reminder notification
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
-#: ../hamster/about.py:38 ../hamster/applet.py:63
+#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:39
+#: ../hamster/about.py:40 ../hamster/applet.py:58
 msgid "Time Tracker"
 msgstr "Denboraren jarraipena"
 
@@ -39,83 +39,100 @@ msgstr "_Aurkezpen orokorra"
 msgid "_Preferences"
 msgstr "_Hobespenak"
 
-#: ../data/preferences.ui.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>Jarduerak</b>"
+#: ../data/preferences.ui.h:1 ../data/stats.ui.h:1
+#: ../data/stats_reports.ui.h:1
+msgid "Activities"
+msgstr "Jarduerak"
 
 #: ../data/preferences.ui.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Laster-tekla globalak</b>"
-
-#: ../data/preferences.ui.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>Jarraipena</b>"
-
-#: ../data/preferences.ui.h:4
 msgid "Activity list"
 msgstr "Jardueren zerrenda"
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:3
 msgid "Add activity"
 msgstr "Gehitu jarduera"
 
-#: ../data/preferences.ui.h:6
+#: ../data/preferences.ui.h:4
 msgid "Add category"
 msgstr "Gehitu kategoria"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+#: ../data/preferences.ui.h:5
 msgid "Also remind when no activity is set"
 msgstr "Gogorarazi baita ere jarduerarik ez denean ezarri"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:6
+msgid "Categories and Tags"
+msgstr "Kategoriak eta etiketak"
+
+#: ../data/preferences.ui.h:7
 msgid "Category list"
 msgstr "Kategorien zerrenda"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:8
 msgid "Edit activity"
 msgstr "Editatu jarduera"
 
-#: ../data/preferences.ui.h:10
+#: ../data/preferences.ui.h:9
 msgid "Edit category"
 msgstr "Editatu kategoria"
 
+#: ../data/preferences.ui.h:10
+msgid "General"
+msgstr "Orokorra"
+
 #: ../data/preferences.ui.h:11
+msgid "Global Hotkey"
+msgstr "Laster-tekla globalak"
+
+#: ../data/preferences.ui.h:12
 msgid "Move activity down"
 msgstr "Eraman jarduera behera"
 
-#: ../data/preferences.ui.h:12
+#: ../data/preferences.ui.h:13
 msgid "Move activity up"
 msgstr "Eraman jarduera gora"
 
-#: ../data/preferences.ui.h:13
+#: ../data/preferences.ui.h:14
+msgid "New day starts at"
+msgstr "Egun berriaren hasiera"
+
+#: ../data/preferences.ui.h:15
 msgid "Remind of current activity every:"
 msgstr "Gogoratu uneko jarduera:"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:16
 msgid "Remove activity"
 msgstr "Kendu jarduera"
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:17
 msgid "Remove category"
 msgstr "Kendu kategoria"
 
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
+#: ../data/preferences.ui.h:18
 msgid "Stop tracking on shutdown"
 msgstr "Gelditu jarraipena itzaltzean"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:19
 msgid "Stop tracking when computer becomes idle"
 msgstr "Gelditu jarraipena ordenagailua inaktibo jartzean"
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "Auto-osaketan agertu beharko luketen etiketak"
+
+#: ../data/preferences.ui.h:21
 msgid "Time Tracker Preferences"
 msgstr "Denboraren jarraipenaren hobespenak"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:22
+msgid "Tracking"
+msgstr "Jarraipena"
+
+#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "_Jarduerak"
 
-#: ../data/preferences.ui.h:20
+#: ../data/preferences.ui.h:24
 msgid "_Categories"
 msgstr "_Kategoriak"
 
@@ -128,12 +145,12 @@ msgid "Add Earlier Activity"
 msgstr "Gehitu aurreko jarduera"
 
 #: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Azalpena:"
-
-#: ../data/edit_activity.ui.h:4
 msgid "Preview:"
 msgstr "Aurrebista:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Etiketak:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
@@ -143,325 +160,220 @@ msgstr "Denbora:"
 msgid "in progress"
 msgstr "lanean"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:8
 msgid "to"
 msgstr " - "
 
-#: ../data/hamster-applet.schemas.in.h:1
-msgid "Also remind every notify_interval minutes if no activity has been started."
-msgstr "Gogorarazi baita ere notify_interval minuturo jarduerarik ez bada hasi."
-
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Laster-tekla denboraren jarraipenaren leihoa erakusteko."
-
-#: ../data/hamster-applet.schemas.in.h:4
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"Gogoratu uneko zeregina zehaztutako minutu kopururo. Ezarri 0 edo 120 baino "
-"balio altuagoa gogorarazlea desgaitzeko."
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Remind of current task every x minutes"
-msgstr "Gogoratu uneko zeregina x minuturo"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Show window"
-msgstr "Erakutsi leihoa"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking current activity on shutdown"
-msgstr "Gelditu uneko jardueraren jarraipena itzaltzean"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "Gelditu uneko jardueraren jarraipena, ordenagailua inaktibo jartzean"
-
-#: ../data/hamster-applet.schemas.in.h:9
-msgid "Stop tracking on idle"
-msgstr "Gelditu jarraipena inaktibo jartzean"
-
 #: ../data/applet.ui.h:1
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >Idatzi edozein jardueretan eta sakatu Sartu tekla "
-"jarraipena hasteko.</span>"
-
-#: ../data/applet.ui.h:2
-msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Esan ezaizkidazu "
-"gauza gehiago</span>"
-
-#: ../data/applet.ui.h:3
 msgid "Ad_d Earlier Activity"
 msgstr "Gehitu _aurreko jarduera"
 
 #. This title appears only when debugging from console. Leave it as is.
-#: ../data/applet.ui.h:5
+#: ../data/applet.ui.h:3
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/applet.ui.h:6 ../hamster/applet.py:554
+#: ../data/applet.ui.h:4 ../hamster/applet.py:382
 msgid "No records today"
 msgstr "Gaur ez dago erregistrorik"
 
-#: ../data/applet.ui.h:7
+#: ../data/applet.ui.h:5
 msgid "Show _Overview"
 msgstr "Erakutsi _aurkezpen orokorra"
 
-#: ../data/applet.ui.h:8
-msgid "_Activity:"
-msgstr "_Jarduera:"
+#: ../data/applet.ui.h:6
+msgid "Start Tracking"
+msgstr "Hasi jarraipena"
 
-#: ../data/applet.ui.h:9
-msgid "_Stop Tracking"
-msgstr "_Gelditu jarraipena"
-
-#: ../data/applet.ui.h:10
-msgid "_Today"
-msgstr "_Gaur"
-
-#: ../data/stats.ui.h:1
-msgid " _Day"
-msgstr " _Eguna"
-
-#: ../data/stats.ui.h:2
-msgid " _Month"
-msgstr " _Hilabetea"
-
-#: ../data/stats.ui.h:3
-msgid " _Week"
-msgstr " _Astea"
-
-#: ../data/stats.ui.h:4
-msgid "<b>Overview</b>"
-msgstr "<b>Aurkezpen orokorra</b>"
-
-#: ../data/stats.ui.h:5
-msgid "<b>Starts and ends</b>"
-msgstr "<b>Hasierak eta amaierak</b>"
-
-#: ../data/stats.ui.h:6
-msgid "<b>Totals</b>"
-msgstr "<b>Guztira</b>"
-
-#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
-msgid "Activity"
-msgstr "Jarduera"
-
-#: ../data/stats.ui.h:8
-msgid "Categories:"
-msgstr "Kategoriak:"
-
-#: ../data/stats.ui.h:9
-msgid "Date interval:"
-msgstr "Dataren barrutia:"
-
-#: ../data/stats.ui.h:10
-msgid "No data for this interval"
-msgstr "Ez dago datarik barruti honentzako"
-
-#: ../data/stats.ui.h:11
-msgid "Overview"
-msgstr "Aurkezpen orokorra"
-
-#: ../data/stats.ui.h:12
-msgid "Overview - Hamster"
-msgstr "Aurkezpen orokorra - Hamster"
-
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "Gorde HTML gisa"
-
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "Gorde txostena - Denboraren jarraipena"
-
-#: ../data/stats.ui.h:15
-msgid "Statistics"
-msgstr "Estatistikak"
-
-#: ../data/stats.ui.h:16
-msgid "Today"
-msgstr "Gaur"
-
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
-msgid "Week"
-msgstr "Astea"
-
-#: ../data/stats.ui.h:18
-msgid "Year:"
-msgstr "Urtea:"
-
-#: ../hamster/about.py:41
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "Copyright-a © 2007-2009 Toms Baugis eta beste batzuk"
-
-#: ../hamster/about.py:43
-msgid "Project Hamster Website"
-msgstr "Hamster proiektuaren webgunea"
-
-#: ../hamster/about.py:44
-msgid "About Time Tracker"
-msgstr "Denboraren jarraipenari buruz"
-
-#: ../hamster/about.py:54
-msgid "translator-credits"
-msgstr "Iñaki Larrañaga Murgoitio  <dooteo@euskalgnu.org>"
-
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Editatu"
+#: ../data/applet.ui.h:7
+msgid "Stop tracking"
+msgstr "Gelditu jarraipena"
 
 #. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
+#: ../data/applet.ui.h:8 ../hamster/applet.py:70
 msgid "Switch"
 msgstr "Aldatu"
 
-#: ../hamster/applet.py:305 ../hamster/reports.py:235
-#: ../hamster/reports.py:293
-msgid "Duration"
-msgstr "Iraupena"
+#: ../data/applet.ui.h:9
+msgid "_Today"
+msgstr "_Gaur"
 
-#: ../hamster/applet.py:492 ../hamster/applet.py:513
+#: ../data/stats.ui.h:2
+msgid "Add"
+msgstr "Gehitu"
+
+#. translators: this is edit activity action in the notifier bubble
+#: ../data/stats.ui.h:3 ../hamster/applet.py:68
+msgid "Edit"
+msgstr "Editatu"
+
+#: ../data/stats.ui.h:4
+msgid "Overview - Hamster"
+msgstr "Aurkezpen orokorra - Hamster"
+
+#: ../data/stats.ui.h:5
+msgid "Remove"
+msgstr "Kendu"
+
+#: ../data/stats.ui.h:6
+msgid "Save Report"
+msgstr "Gorde txostena"
+
+#. summary table
+#: ../data/stats.ui.h:7 ../data/stats_stats.ui.h:3 ../hamster/reports.py:288
+msgid "Totals"
+msgstr "Guztira"
+
+#: ../data/stats_reports.ui.h:2
+msgid "Categories"
+msgstr "Kategoriak"
+
+#: ../data/stats_reports.ui.h:3
+msgid "No data for this interval"
+msgstr "Ez dago datarik barruti honentzako"
+
+#: ../data/stats_reports.ui.h:4
+msgid "Show Statistics"
+msgstr "Erakutsi estatistikak"
+
+#: ../data/stats_reports.ui.h:5
+msgid "Tags"
+msgstr "Etiketak"
+
+#: ../data/stats_stats.ui.h:1
+msgid "Starts and ends"
+msgstr "Hasierak eta amaierak"
+
+#: ../data/stats_stats.ui.h:2
+msgid "Statistics"
+msgstr "Estatistikak"
+
+#: ../data/stats_stats.ui.h:4
+msgid "Year:"
+msgstr "Urtea:"
+
+#: ../hamster/about.py:43
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "Copyright-a © 2007-2009 Toms Baugis eta beste batzuk"
+
+#: ../hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "Hamster proiektuaren webgunea"
+
+#: ../hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "Denboraren jarraipenari buruz"
+
+#: ../hamster/about.py:56
+msgid "translator-credits"
+msgstr "Iñaki Larrañaga Murgoitio  <dooteo@euskalgnu.org>"
+
+#: ../hamster/applet.py:232
+msgid "Time and Name"
+msgstr "Denbora eta izena"
+
+#: ../hamster/applet.py:237
+msgid "Tags or Description"
+msgstr "Etiketak edo azalpena"
+
+#: ../hamster/applet.py:321 ../hamster/applet.py:341 ../hamster/applet.py:427
 msgid "No activity"
 msgstr "Jarduerarik ez"
 
 #. activity reminder
-#: ../hamster/applet.py:508
+#: ../hamster/applet.py:336
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "<b>%s</b>(e)n lanean"
 
-#: ../hamster/applet.py:562
+#: ../hamster/applet.py:390
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565
+#: ../hamster/applet.py:393
 #, python-format
 msgid "%sh"
 msgstr "%so"
 
-#. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
-#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
-#: ../hamster/stuff.py:94
+#: ../hamster/applet.py:414
+msgid "Just started"
+msgstr "Hasi berria"
+
+#: ../hamster/applet.py:416 ../hamster/db.py:307 ../hamster/db.py:627
+#: ../hamster/db.py:688 ../hamster/edit_activity.py:51
+#: ../hamster/preferences.py:55 ../hamster/reports.py:54
+#: ../hamster/reports.py:91 ../hamster/reports.py:248 ../hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Ordenatu gabe"
 
-#: ../hamster/applet.py:833
-msgid "What should be typed in the activity box?"
-msgstr "Zer idatzi beharko zatekeen jardueraren eremuan?"
-
-#: ../hamster/applet.py:836
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"Sintaxy bakuna dago zure jarduerei xehetasunak gehitzea eskaintzeko:\n"
-"        \n"
-"\"@\" ikurrak kategoria bat markatzen du. Adibidez, \"loreak ureztatu@etxea"
-"\" \"etxea\" kategoriako \"loreak ureztatu\" jardueraren jarraipena hasiko "
-"luke.\n"
-"\n"
-"Komak (\",\") azalpen baten hasiera markatzen du. Adibidez, \"loreak "
-"ureztatu, larrosak eta begoniak\" \"loreak ureztatu\" jarraipena hasiko "
-"luke, eta honi \"larrosak eta begoniak\" azalpena gehitu.\n"
-"\n"
-"Biak konbina daitezke: \"loreak ureztatu@etxea, larrosak eta begoniak\" "
-"zoragarria!\n"
-"Orain, hasi jarraipenarekin!\n"
-"        "
-
 #. defaults
-#: ../hamster/db.py:728
+#: ../hamster/db.py:879
 msgid "Work"
 msgstr "Lana"
 
-#: ../hamster/db.py:729
+#: ../hamster/db.py:880
 msgid "Reading news"
 msgstr "Berriak irakurtzea"
 
-#: ../hamster/db.py:730
+#: ../hamster/db.py:881
 msgid "Checking stocks"
 msgstr "Burtsa-baloreak begiratzea"
 
-#: ../hamster/db.py:731
+#: ../hamster/db.py:882
 msgid "Super secret project X"
 msgstr "X proiektu supersekretua"
 
-#: ../hamster/db.py:732
+#: ../hamster/db.py:883
 msgid "World domination"
 msgstr "Munduaz jabetzea"
 
-#: ../hamster/db.py:734
+#: ../hamster/db.py:885
 msgid "Day-to-day"
 msgstr "Egunez egun"
 
-#: ../hamster/db.py:735
+#: ../hamster/db.py:886
 msgid "Lunch"
 msgstr "Bazkaria"
 
-#: ../hamster/db.py:736
+#: ../hamster/db.py:887
 msgid "Watering flowers"
 msgstr "Uretako loreak"
 
-#: ../hamster/db.py:737
+#: ../hamster/db.py:888
 msgid "Doing handstands"
 msgstr "Beroketak egitea"
 
-#: ../hamster/edit_activity.py:385
+#: ../hamster/edit_activity.py:65
 msgid "Update activity"
 msgstr "Eguneratu jarduera"
 
-#: ../hamster/preferences.py:104
+#: ../hamster/preferences.py:106
 msgid "Name"
 msgstr "Izena"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:232
+#: ../hamster/preferences.py:126 ../hamster/reports.py:232
 #: ../hamster/reports.py:291
 msgid "Category"
 msgstr "Kategoria"
 
-#: ../hamster/preferences.py:559
+#: ../hamster/preferences.py:585
 msgid "New category"
 msgstr "Kategoria berria"
 
-#: ../hamster/preferences.py:572
+#: ../hamster/preferences.py:598
 msgid "New activity"
 msgstr "Jarduera berria"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:632
+#: ../hamster/preferences.py:658
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minuturo"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:635
+#: ../hamster/preferences.py:661
 msgid "Never"
 msgstr "Inoiz ez"
 
@@ -495,11 +407,7 @@ msgstr "kategoria"
 msgid "description"
 msgstr "azalpena"
 
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:160 ../hamster/stats.py:933
+#: ../hamster/reports.py:160
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -508,20 +416,12 @@ msgstr ""
 "Aurkezpen orokorra: %(start_Y)s/%(start_B)s/%(start_d)s – %(end_Y)s/%(end_B)"
 "s/%(end_d)s"
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:162 ../hamster/stats.py:939
+#: ../hamster/reports.py:162
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Aurkezpen orokorra: %(start_d)s/%(start_B)s – %(end_Y)s/%(end_B)s/%(end_d)s"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:164 ../hamster/stats.py:945
+#: ../hamster/reports.py:164
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Aurkezpen orokorra: %(start_B)s/%(start_d)s – %(end_d)s, %(end_Y)s"
@@ -535,6 +435,10 @@ msgstr "Aurkezpen orokorra: %(start_Y)s/%(start_B)s/%(start_d)s"
 msgid "Date"
 msgstr "Data"
 
+#: ../hamster/reports.py:231 ../hamster/reports.py:292
+msgid "Activity"
+msgstr "Jarduera"
+
 #: ../hamster/reports.py:233
 msgid "Start"
 msgstr "Hasi"
@@ -543,55 +447,65 @@ msgstr "Hasi"
 msgid "End"
 msgstr "Amaitu"
 
+#: ../hamster/reports.py:235 ../hamster/reports.py:293
+msgid "Duration"
+msgstr "Iraupena"
+
 #: ../hamster/reports.py:236
 msgid "Description"
 msgstr "Azalpena"
-
-#. date column format for each row in HTML report
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:268
-msgctxt "html report"
-msgid "%b %d, %Y"
-msgstr "%Y/%m/%d"
-
-#. summary table
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "Guztira"
 
 #: ../hamster/reports.py:303
 msgid "Total Time"
 msgstr "Osoko denbora"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
-msgid "HTML Report"
-msgstr "HTML txostena"
+#: ../hamster/stats.py:79
+msgid "Week"
+msgstr "Astea"
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
-msgid "Tab-Separated Values (TSV)"
-msgstr "Tabulatzailez bereiztutako balioak (TSV)"
+#: ../hamster/stats.py:80
+msgid "Month"
+msgstr "Hilabetea"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
-msgid "XML"
-msgstr "XML"
+#: ../hamster/stats.py:81
+msgid "Date Range"
+msgstr "Dataren barrutia"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
-msgid "iCal"
-msgstr "iCal"
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:147
+msgid "%B %d, %Y"
+msgstr "%Y %B %d"
 
-#. add unsorted category
-#: ../hamster/stats.py:120
-msgctxt "categories"
-msgid "All"
-msgstr "Denak"
+#. overview label if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:155
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_Y)s/%(start_B)s/%(start_d)s – %(end_Y)s/%(end_B)s/%(end_d)s"
 
-#: ../hamster/stats.py:435
-msgctxt "years"
-msgid "All"
-msgstr "Denak"
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:161
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s/%(start_d)s – %(end_Y)s/%(end_B)s/%(end_d)s"
 
-#: ../hamster/stats.py:524
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../hamster/stats.py:167
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s/%(start_d)s – %(end_Y)s/%(end_d)s"
+
+#: ../hamster/stats_stats.py:182
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -599,33 +513,16 @@ msgstr ""
 "Ez dago daturik oraindik estatistikak sortzeko.\n"
 "Astebeteko erabilpena ongi legoke!"
 
-#: ../hamster/stats.py:527
-msgid "Still collecting data — check back after a week has passed!"
-msgstr "Oraindik datuak biltzen - begiratu berriro aste bat igarotakoan."
+#: ../hamster/stats_stats.py:185
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Datuak biltzen - begiratu berriro aste bat igarotakoan."
 
-#. date format for the first record if the year has not been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:657
-msgctxt "first record"
-msgid "%b %d, %Y"
-msgstr "%Y/%m/%d"
-
-#. date of first record when year has been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:662
-#, python-format
-msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(b)s/%(d)s"
-
-#: ../hamster/stats.py:664
+#: ../hamster/stats_stats.py:322
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Lehenbiziko jardueraren erregistroa: %s."
 
-#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#: ../hamster/stats_stats.py:331 ../hamster/stats_stats.py:335
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -633,7 +530,7 @@ msgstr[0] "urte %(num)s"
 msgstr[1] "%(num)s urte"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:682
+#: ../hamster/stats_stats.py:340
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -642,15 +539,7 @@ msgstr ""
 "Jarraitutako denbora  %(human_days)s egun arrunt (%(human_years)s) edo %"
 "(working_days)s laneko egun (%(working_years)s) da."
 
-#. How the date of the longest activity should be displayed in statistics
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:700
-msgctxt "date of the longest activity"
-msgid "%b %d, %Y"
-msgstr "%Y/%m/%d"
-
-#: ../hamster/stats.py:705
+#: ../hamster/stats_stats.py:363
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
@@ -658,30 +547,30 @@ msgstr[0] "Jarraiako lan luzeena %(date)s eta %(hours)s ordukoa izan da."
 msgstr[1] "Jarraiako lan luzeena %(date)s eta %(hours)s ordutakoa izan dira"
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713
+#: ../hamster/stats_stats.py:371
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Erregistro %s dago."
 msgstr[1] "%s erregistro daude."
 
-#: ../hamster/stats.py:733
+#: ../hamster/stats_stats.py:391
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster-ek gehiago aztertzea nahi zaitu."
 
-#: ../hamster/stats.py:735
+#: ../hamster/stats_stats.py:393
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
 msgstr "9 am aurretik hasitako egitate guztien %s ehunekoarekin, mendizalea dirudizu."
 
-#: ../hamster/stats.py:738
+#: ../hamster/stats_stats.py:396
 #, python-format
 msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr "11 pm ondoren hasitako egitate guztien %s ehunekoarekin, gautxoria dirudizu."
 
-#: ../hamster/stats.py:741
+#: ../hamster/stats_stats.py:399
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -690,62 +579,41 @@ msgstr ""
 "15 minutu baino laburragoak izan diren zeregin guztien %s ehunekoarekin, "
 "lanpetutako erla dirudizu."
 
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:828
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %b %d"
-
-#: ../hamster/stats.py:869
-msgid "Total"
-msgstr "Guztira"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:891
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%b %d"
-
-#: ../hamster/stats.py:920
-#| msgctxt "html report"
-#| msgid "%b %d, %Y"
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%Y %B %d"
-
-#. Overview label if looking on single day
-#: ../hamster/stats.py:922
-#, python-format
-msgid "Overview for %(date)s"
-msgstr "Aurkezpen orokorra: %(date)s"
-
-#: ../hamster/stats.py:950
-msgid "Month"
-msgstr "Hilabetea"
-
-#: ../hamster/stats.py:952
-msgid "Day"
-msgstr "Eguna"
-
 #. duration in round hours
-#: ../hamster/stuff.py:151
+#: ../hamster/stuff.py:56
 #, python-format
 msgid "%dh"
 msgstr "%do"
 
 #. duration less than hour
-#: ../hamster/stuff.py:154
+#: ../hamster/stuff.py:59
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:157
+#: ../hamster/stuff.py:62
 #, python-format
 msgid "%dh %dmin"
 msgstr "%do %dmin"
+
+#: ../hamster/widgets/reportchooserdialog.py:38
+msgid "Save report - Time Tracker"
+msgstr "Gorde txostena - Denboraren jarraipena"
+
+#: ../hamster/widgets/reportchooserdialog.py:51
+msgid "HTML Report"
+msgstr "HTML txostena"
+
+#: ../hamster/widgets/reportchooserdialog.py:59
+msgid "Tab-Separated Values (TSV)"
+msgstr "Tabulatzailez bereiztutako balioak (TSV)"
+
+#: ../hamster/widgets/reportchooserdialog.py:67
+msgid "XML"
+msgstr "XML"
+
+#: ../hamster/widgets/reportchooserdialog.py:74
+msgid "iCal"
+msgstr "iCal"
 
