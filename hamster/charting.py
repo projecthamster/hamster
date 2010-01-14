@@ -355,10 +355,10 @@ class BarChart(Chart):
             if not base_color: #yay, we can be theme friendly!
                 bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
                 if self.colors.is_light(bg_color):
-                    base_color = self.colors.darker(bg_color,  40)
+                    base_color = self.colors.darker(bg_color,  30)
                 else:
-                    base_color = self.colors.darker(bg_color,  -40)
-                    tick_color = self.colors.darker(bg_color,  -60)
+                    base_color = self.colors.darker(bg_color,  -30)
+                    tick_color = self.colors.darker(bg_color,  -50)
 
             if self.stack_keys:
                 remaining_fractions, remaining_pixels = 1, max_bar_size
@@ -567,10 +567,10 @@ class HorizontalBarChart(Chart):
         if not base_color: #yay, we can be theme friendly!
             bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
             if self.colors.is_light(bg_color):
-                base_color = self.colors.darker(bg_color,  40)
+                base_color = self.colors.darker(bg_color,  30)
             else:
-                base_color = self.colors.darker(bg_color,  -40)
-                tick_color = self.colors.darker(bg_color,  -60)
+                base_color = self.colors.darker(bg_color,  -30)
+                tick_color = self.colors.darker(bg_color,  -50)
         last_color = base_color
 
 
@@ -757,10 +757,10 @@ class HorizontalDayChart(Chart):
         if not base_color: #yay, we can be theme friendly!
             bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
             if self.colors.is_light(bg_color):
-                base_color = self.colors.darker(bg_color,  40)
+                base_color = self.colors.darker(bg_color,  30)
             else:
-                base_color = self.colors.darker(bg_color,  -40)
-                tick_color = self.colors.darker(bg_color,  -60)
+                base_color = self.colors.darker(bg_color,  -30)
+                tick_color = self.colors.darker(bg_color,  -50)
 
         for i, label in enumerate(keys):
             self.set_color(label_color)

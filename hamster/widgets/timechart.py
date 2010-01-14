@@ -115,18 +115,18 @@ class TimeChart(graphics.Area):
         # figure out colors
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
         if self.colors.is_light(bg_color):
-            bar_color = self.colors.darker(bg_color,  40)
-            tick_color = self.colors.darker(bg_color,  60)
+            bar_color = self.colors.darker(bg_color,  30)
+            tick_color = self.colors.darker(bg_color,  50)
         else:
-            bar_color = self.colors.darker(bg_color,  -40)
-            tick_color = self.colors.darker(bg_color,  -60)
+            bar_color = self.colors.darker(bg_color,  -30)
+            tick_color = self.colors.darker(bg_color,  -50)
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
         if self.colors.is_light(fg_color):
-            label_color = self.colors.darker(fg_color,  80)
+            label_color = self.colors.darker(fg_color,  70)
         else:
-            label_color = self.colors.darker(fg_color,  -80)
+            label_color = self.colors.darker(fg_color,  -70)
 
 
 
