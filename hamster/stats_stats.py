@@ -35,16 +35,6 @@ from configuration import runtime
 
 from hamster.i18n import C_
 
-class TimeChartWithBackground(widgets.TimeChart):
-    def __init__(self):
-        widgets.TimeChart.__init__(self)
-        self.bar_color = (220, 220, 220)
-
-    def on_expose(self):
-        self.fill_area(0, 0, self.width, self.height, (0.975, 0.975, 0.975))
-        widgets.TimeChart.on_expose(self)
-
-
 class StatsViewer(object):
     def __init__(self, parent = None):
         self._gui = stuff.load_ui_file("stats_stats.ui")
@@ -53,14 +43,9 @@ class StatsViewer(object):
 
         self.parent = parent# determine if app should shut down on close
 
-
-        self.background = (0.975, 0.975, 0.975)
-        self.get_widget("explore_frame").modify_bg(gtk.STATE_NORMAL,
-                      gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
-
         self.stat_facts = None
 
-        self.timechart = TimeChartWithBackground()
+        self.timechart = widgets.TimeChart()
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
@@ -106,7 +91,6 @@ class StatsViewer(object):
 
         self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
-                                                            background = self.background,
                                                             max_bar_width = 20,
                                                             legend_width = 70)
         self.get_widget("explore_category_totals").add(self.chart_category_totals)
@@ -114,31 +98,29 @@ class StatsViewer(object):
 
         self.chart_weekday_totals = charting.HorizontalBarChart(value_format = "%.1f",
                                                             bars_beveled = False,
-                                                            background = self.background,
                                                             max_bar_width = 20,
                                                             legend_width = 70)
         self.get_widget("explore_weekday_totals").add(self.chart_weekday_totals)
 
         self.chart_weekday_starts_ends = charting.HorizontalDayChart(bars_beveled = False,
                                                                 animate = False,
-                                                                background = self.background,
                                                                 max_bar_width = 20,
                                                                 legend_width = 70)
         self.get_widget("explore_weekday_starts_ends").add(self.chart_weekday_starts_ends)
 
         self.chart_category_starts_ends = charting.HorizontalDayChart(bars_beveled = False,
                                                                 animate = False,
-                                                                background = self.background,
                                                                 max_bar_width = 20,
                                                                 legend_width = 70)
         self.get_widget("explore_category_starts_ends").add(self.chart_category_starts_ends)
 
 
+
+
         #ah, just want summary look just like all the other text on the page
         class CairoText(graphics.Area):
-            def __init__(self, background = None, fontsize = 10):
+            def __init__(self, fontsize = 10):
                 graphics.Area.__init__(self)
-                self.background = background
                 self.text = ""
                 self.fontsize = fontsize
 
@@ -147,8 +129,12 @@ class StatsViewer(object):
                 self.redraw_canvas()
 
             def on_expose(self):
-                if self.background:
-                    self.fill_area(0, 0, self.width, self.height, self.background)
+                # now for the text - we want reduced contrast for relaxed visuals
+                fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+                if self.colors.is_light(fg_color):
+                    label_color = self.colors.darker(fg_color,  80)
+                else:
+                    label_color = self.colors.darker(fg_color,  -80)
 
                 default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
                 default_font.set_size(self.fontsize * pango.SCALE)
@@ -159,11 +145,11 @@ class StatsViewer(object):
 
                 self.layout.set_width((self.width) * pango.SCALE)
                 self.context.move_to(0,0)
-                self.set_color(charting.graphics.Colors.aluminium[5])
+                self.set_color(label_color)
 
                 self.context.show_layout(self.layout)
 
-        self.explore_summary = CairoText(self.background)
+        self.explore_summary = CairoText()
         self.get_widget("explore_summary").add(self.explore_summary)
         self.get_widget("explore_summary").show_all()
 

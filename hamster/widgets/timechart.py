@@ -47,9 +47,7 @@ class TimeChart(graphics.Area):
         self.minor_tick = None
 
         self.tick_totals = []
-
-        self.bar_color = "#ccc"
-
+        
 
     def draw(self, facts, start_date, end_date):
         self.facts = facts
@@ -114,6 +112,24 @@ class TimeChart(graphics.Area):
 
 
     def on_expose(self):
+        # figure out colors
+        bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        if self.colors.is_light(bg_color):
+            bar_color = self.colors.darker(bg_color,  40)
+            tick_color = self.colors.darker(bg_color,  60)
+        else:
+            bar_color = self.colors.darker(bg_color,  -40)
+            tick_color = self.colors.darker(bg_color,  -60)
+
+        # now for the text - we want reduced contrast for relaxed visuals
+        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        if self.colors.is_light(fg_color):
+            label_color = self.colors.darker(fg_color,  80)
+        else:
+            label_color = self.colors.darker(fg_color,  -80)
+
+
+
         self.context.set_line_width(1)
 
         # major ticks
@@ -177,13 +193,13 @@ class TimeChart(graphics.Area):
         current_time = self.start_time + major_step
         while current_time < self.end_time:
             if current_time in ticks:
-                line(exes[current_time][0] - 2, "#bbb")
+                line(exes[current_time][0] - 2, tick_color)
             else:
                 if self.minor_tick <= WEEK and current_time.day == 1:  # month change
-                    somewhere_in_middle(current_time, "#bbb")
+                    somewhere_in_middle(current_time, tick_color)
                 # year change
                 elif current_time.timetuple().tm_yday == 1: # year change
-                    somewhere_in_middle(current_time, "#f00")
+                    somewhere_in_middle(current_time, tick_color)
 
             current_time += major_step
             
@@ -194,7 +210,7 @@ class TimeChart(graphics.Area):
             bar_size = max(round(self.height * total * 0.8), 1)
             x, bar_width = exes[current_time]
 
-            self.set_color(self.bar_color)
+            self.set_color(bar_color)
             
             # rounded corners
             self.draw_rect(x, self.height - bar_size, bar_width - 1, bar_size, 3)
@@ -229,7 +245,7 @@ class TimeChart(graphics.Area):
 
             x, bar_width = exes[current_time]
 
-            self.set_color("#666")
+            self.set_color(label_color)
             self.layout.set_width(int((self.width - x) * pango.SCALE))
             self.layout.set_markup(current_time.strftime(step_format))
             self.context.move_to(x + 2, 0)

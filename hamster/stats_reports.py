@@ -47,15 +47,10 @@ class ReportsBox(gtk.VBox):
         self.start_date, self.end_date = None, None
 
         #graphs
-        self.background = (0.975, 0.975, 0.975)
-        self.get_widget("reports_box").modify_bg(gtk.STATE_NORMAL,
-                      gtk.gdk.Color(*[int(b*65536.0) for b in self.background]))
-
         x_offset = 100 # align all graphs to the left edge
 
 
-        self.category_chart = charting.HorizontalBarChart(background = self.background,
-                                                          max_bar_width = 20,
+        self.category_chart = charting.HorizontalBarChart(max_bar_width = 20,
                                                           legend_width = x_offset,
                                                           value_format = "%.1f",
                                                           interactive = True)
@@ -65,8 +60,7 @@ class ReportsBox(gtk.VBox):
 
         self.get_widget("totals_by_category").add(self.category_chart);
 
-        self.activity_chart = charting.HorizontalBarChart(background = self.background,
-                                                          max_bar_width = 20,
+        self.activity_chart = charting.HorizontalBarChart(max_bar_width = 20,
                                                           legend_width = x_offset,
                                                           value_format = "%.1f",
                                                           interactive = True)
@@ -76,11 +70,10 @@ class ReportsBox(gtk.VBox):
 
         self.get_widget("totals_by_activity").add(self.activity_chart);
 
-        self.tag_chart = charting.HorizontalBarChart(background = self.background,
-                                                          max_bar_width = 20,
-                                                          legend_width = x_offset,
-                                                          value_format = "%.1f",
-                                                          interactive = True)
+        self.tag_chart = charting.HorizontalBarChart(max_bar_width = 20,
+                                                     legend_width = x_offset,
+                                                     value_format = "%.1f",
+                                                     interactive = True)
         self.tag_chart.connect("bar-clicked", self.on_tag_clicked)
         self.selected_tags = []
         self.tag_sums = None

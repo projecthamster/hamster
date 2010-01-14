@@ -326,8 +326,16 @@ class BarChart(Chart):
                             (self.graph_width - x) / float(max(1, len(self.keys) - i - 1)))
 
 
+        # now for the text - we want reduced contrast for relaxed visuals
+        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        if self.colors.is_light(fg_color):
+            label_color = self.colors.darker(fg_color,  80)
+        else:
+            label_color = self.colors.darker(fg_color,  -80)
+
+
         for key, bar, data in zip(self.keys, self.bars, self.data):
-            self.set_color(graphics.Colors.aluminium[5]);
+            self.set_color(label_color);
             self.layout.set_text(key)
             label_w, label_h = self.layout.get_pixel_size()
 
@@ -341,7 +349,16 @@ class BarChart(Chart):
 
 
             bar_start = 0
-            base_color = self.bar_base_color or (220, 220, 220)
+
+            # determine bar color
+            base_color = self.bar_base_color
+            if not base_color: #yay, we can be theme friendly!
+                bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+                if self.colors.is_light(bg_color):
+                    base_color = self.colors.darker(bg_color,  40)
+                else:
+                    base_color = self.colors.darker(bg_color,  -40)
+                    tick_color = self.colors.darker(bg_color,  -60)
 
             if self.stack_keys:
                 remaining_fractions, remaining_pixels = 1, max_bar_size
@@ -392,15 +409,20 @@ class BarChart(Chart):
                                 label_y)
 
                 # we are in the bar so make sure that the font color is distinguishable
-                if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
-                    self.set_color(graphics.Colors.almost_white)
+                if self.colors.is_light(last_color):
+                    self.set_color(label_color)
                 else:
-                    self.set_color(graphics.Colors.aluminium[5])
+                    self.set_color(self.colors.almost_white)
 
                 context.show_layout(self.layout)
 
 
         #white grid and scale values
+        if self.background:
+            grid_color = self.background
+        else:
+            grid_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+            
         self.layout.set_width(-1)
         if self.grid_stride and self.max_value:
             # if grid stride is less than 1 then we consider it to be percentage
@@ -418,10 +440,10 @@ class BarChart(Chart):
                     label_w, label_h = self.layout.get_pixel_size()
                     context.move_to(legend_width - label_w - 8,
                                     y - label_h / 2)
-                    self.set_color(graphics.Colors.aluminium[4])
+                    self.set_color(self.colors.aluminium[4])
                     context.show_layout(self.layout)
 
-                self.set_color("#ffffff")
+                self.set_color(grid_color)
                 self.context.move_to(legend_width, y)
                 self.context.line_to(self.width, y)
 
@@ -429,7 +451,7 @@ class BarChart(Chart):
         #stack keys
         if self.show_stack_labels:
             #put series keys
-            self.set_color(graphics.Colors.aluminium[5]);
+            self.set_color(label_color);
 
             y = self.graph_height
             label_y = None
@@ -540,6 +562,26 @@ class HorizontalBarChart(Chart):
         self.layout.set_width(legend_width * pango.SCALE)
 
 
+        # determine bar color
+        base_color = self.bar_base_color
+        if not base_color: #yay, we can be theme friendly!
+            bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+            if self.colors.is_light(bg_color):
+                base_color = self.colors.darker(bg_color,  40)
+            else:
+                base_color = self.colors.darker(bg_color,  -40)
+                tick_color = self.colors.darker(bg_color,  -60)
+        last_color = base_color
+
+
+        # now for the text - we want reduced contrast for relaxed visuals
+        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        if self.colors.is_light(fg_color):
+            label_color = self.colors.darker(fg_color,  80)
+        else:
+            label_color = self.colors.darker(fg_color,  -80)
+
+
         for i, label in enumerate(keys):
             if self.interactive:
                 self.register_mouse_region(0,
@@ -552,13 +594,10 @@ class HorizontalBarChart(Chart):
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
-            self.set_color(graphics.Colors.aluminium[5])
+            self.set_color(label_color)
             context.move_to(0, positions[label][0] + (positions[label][1] - label_h) / 2)
             context.show_layout(self.layout)
 
-            base_color = self.bar_base_color or (220, 220, 220)
-
-            last_color = (255,255,255)
 
             if self.stack_keys:
                 bar_start = 0
@@ -585,7 +624,7 @@ class HorizontalBarChart(Chart):
                 if i in self.bars_selected:
                     last_color = self.get_style().bg[gtk.STATE_SELECTED].to_string()
                 elif i == self.mouse_bar:
-                    last_color = self.get_style().bg[gtk.STATE_PRELIGHT].to_string()
+                    last_color = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
                 else:
                     last_color = self.key_colors.get(self.keys[i]) or base_color
 
@@ -595,7 +634,11 @@ class HorizontalBarChart(Chart):
                               positions[label][1],
                               last_color)
 
-            # values on bars
+
+
+
+
+            # value labels
             if self.stack_keys:
                 total_value = sum(self.data[i])
             else:
@@ -608,16 +651,16 @@ class HorizontalBarChart(Chart):
             vertical_padding = max((positions[label][1] - label_h) / 2.0, 1)
             if  bar_start - vertical_padding < label_w:
                 label_x = self.graph_x + bar_start + vertical_padding
-                self.set_color(graphics.Colors.aluminium[5])
+                self.set_color(label_color)
             else:
                 if i in self.bars_selected:
                     self.set_color(self.get_style().fg[gtk.STATE_SELECTED].to_string())
                 else:
                     # we are in the bar so make sure that the font color is distinguishable
-                    if colorsys.rgb_to_hls(*graphics.Colors.rgb(last_color))[1] < 150:
-                        self.set_color(graphics.Colors.almost_white)
+                    if self.colors.is_light(last_color):
+                        self.set_color(label_color)
                     else:
-                        self.set_color(graphics.Colors.aluminium[5])
+                        self.set_color(self.colors.almost_white)
 
                 label_x = self.graph_x + bar_start - label_w - vertical_padding
 
@@ -692,6 +735,15 @@ class HorizontalDayChart(Chart):
 
         max_bar_size = self.graph_width - 15
 
+
+        # now for the text - we want reduced contrast for relaxed visuals
+        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        if self.colors.is_light(fg_color):
+            label_color = self.colors.darker(fg_color,  80)
+        else:
+            label_color = self.colors.darker(fg_color,  -80)
+
+
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
 
@@ -700,16 +752,24 @@ class HorizontalDayChart(Chart):
 
         factor = max_bar_size / float(end_hour - start_hour)
 
+        # determine bar color
+        base_color = self.bar_base_color
+        if not base_color: #yay, we can be theme friendly!
+            bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+            if self.colors.is_light(bg_color):
+                base_color = self.colors.darker(bg_color,  40)
+            else:
+                base_color = self.colors.darker(bg_color,  -40)
+                tick_color = self.colors.darker(bg_color,  -60)
+
         for i, label in enumerate(keys):
-            self.set_color(graphics.Colors.aluminium[5])
+            self.set_color(label_color)
 
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
 
             context.move_to(0, positions[label][0] + (positions[label][1] - label_h) / 2)
             context.show_layout(self.layout)
-
-            base_color = self.bar_base_color or [220, 220, 220]
 
             if isinstance(self.data[i], list) == False:
                 self.data[i] = [self.data[i]]
@@ -731,6 +791,13 @@ class HorizontalDayChart(Chart):
 
         pace = ((end_hour - start_hour) / 3) / 60 * 60
         last_position = positions[keys[-1]]
+        
+        
+        if self.background:
+            grid_color = self.background
+        else:
+            grid_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        
         for i in range(start_hour + 60, end_hour, pace):
             x = round((i - start_hour) * factor)
 
@@ -741,11 +808,11 @@ class HorizontalDayChart(Chart):
 
             context.move_to(self.graph_x + x - label_w / 2,
                             last_position[0] + last_position[1] + 4)
-            self.set_color(graphics.Colors.aluminium[4])
+            self.set_color(self.colors.aluminium[4])
             context.show_layout(self.layout)
 
 
-            self.set_color((255, 255, 255))
+            self.set_color(grid_color)
             self.context.move_to(round(self.graph_x + x) + 0.5, self.graph_y)
             self.context.line_to(round(self.graph_x + x) + 0.5,
                                  last_position[0] + last_position[1])
