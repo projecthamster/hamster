@@ -24,14 +24,16 @@ import pango, cairo
 
 import pytweener
 from pytweener import Easing
+import colorsys
 
 class Colors(object):
     aluminium = [(238, 238, 236), (211, 215, 207), (186, 189, 182),
                  (136, 138, 133), (85, 87, 83), (46, 52, 54)]
     almost_white = (250, 250, 250)
 
-    @staticmethod
-    def color(color):
+    def parse(self, color):
+        assert color is not None
+        
         #parse color into rgb values
         if isinstance(color, str) or isinstance(color, unicode):
             color = gtk.gdk.Color(color)
@@ -45,9 +47,18 @@ class Colors(object):
 
         return color
 
-    @staticmethod
-    def rgb(color):
-        return [c * 255 for c in Colors.color(color)]
+    def rgb(self, color):
+        return [c * 255 for c in self.parse(color)]
+        
+    def is_light(self, color):
+        # tells you if color is dark or light, so you can up or down the scale for improved contrast
+        return colorsys.rgb_to_hls(*self.rgb(color))[1] > 150
+
+    def darker(self, color, step):
+        # returns color darker by step (where step is in range 0..255)
+        hls = colorsys.rgb_to_hls(*self.rgb(color))
+        return colorsys.hls_to_rgb(hls[0], hls[1] - step, hls[2])
+        
 
 class Area(gtk.DrawingArea):
     """Abstraction on top of DrawingArea to work specifically with cairo"""
@@ -58,7 +69,7 @@ class Area(gtk.DrawingArea):
         "button-press": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "button-release": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "mouse-move": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
-        "mouse-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        "mouse-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
     }
 
     def __init__(self):
@@ -87,6 +98,8 @@ class Area(gtk.DrawingArea):
         self.__animating = False
 
         self.mouse_drag = (None, None)
+        
+        self.colors = Colors() # handier this way
 
     def on_expose(self):
         """ on_expose event is where you hook in all your drawing
@@ -181,7 +194,7 @@ class Area(gtk.DrawingArea):
         return self.layout.get_pixel_size()
 
     def set_color(self, color, opacity = None):
-        color = Colors.color(color) #parse whatever we have there into a normalized triplet
+        color = self.colors.parse(color) #parse whatever we have there into a normalized triplet
 
         if opacity:
             self.context.set_source_rgba(color[0], color[1], color[2], opacity)
@@ -273,13 +286,15 @@ class Area(gtk.DrawingArea):
         y = event.y
         state = event.state
 
+        click = False
         drag_distance = 5
         if self.mouse_drag and (self.mouse_drag[0] - x) ** 2 + (self.mouse_drag[1] - y) ** 2 < drag_distance ** 2:
             #if the drag is less than the drag distance, then we have a click
-            self.emit("mouse-click", (x,y))
+            click =  True
         self.mouse_drag = None
 
         if not self.mouse_regions:
+            self.emit("mouse-click", (x,y), [])
             return
 
         mouse_regions = []
@@ -289,6 +304,9 @@ class Area(gtk.DrawingArea):
 
         if mouse_regions:
             self.emit("button-release", mouse_regions)
+
+        self.emit("mouse-click", (x,y), mouse_regions)
+
 
 
 """ simple example """
