@@ -138,10 +138,11 @@
                                 <property name="spacing">4</property>
                                 <child>
                                   <object class="GtkButton" id="stop_tracking">
-                                    <property name="label" translatable="yes">Stop tracking</property>
+                                    <property name="label" translatable="yes">St_op tracking</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_stop_tracking_clicked"/>
                                   </object>
                                   <packing>
@@ -203,12 +204,13 @@
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkButton" id="switch_activity">
-                                    <property name="label" translatable="yes">Switch</property>
+                                    <property name="label" translatable="yes">S_witch</property>
                                     <property name="width_request">80</property>
                                     <property name="visible">True</property>
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_switch_activity_clicked"/>
                                   </object>
                                   <packing>
@@ -219,9 +221,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="start_tracking">
-                                    <property name="label" translatable="yes">Start Tracking</property>
+                                    <property name="label" translatable="yes">Start _Tracking</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_switch_activity_clicked"/>
                                   </object>
                                   <packing>
@@ -246,6 +249,7 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -319,6 +323,8 @@
                             <signal name="clicked" handler="on_custom_fact"/>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -333,6 +339,8 @@
                             <signal name="clicked" handler="on_overview"/>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -344,6 +352,7 @@
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
