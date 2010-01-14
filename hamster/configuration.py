@@ -162,8 +162,8 @@ class Dialogs(Singleton):
         self.overview = OneWindow(get_overview_class)
 
         def get_stats_class():
-            from stats_stats import StatsViewer
-            return StatsViewer
+            from stats_stats import StatsViewer2
+            return StatsViewer2
         self.stats = OneWindow(get_stats_class)
 
         def get_about_class():

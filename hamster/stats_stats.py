@@ -35,7 +35,7 @@ from configuration import runtime
 
 from hamster.i18n import C_
 
-class StatsViewer(object):
+class StatsViewer2(object):
     def __init__(self, parent = None):
         self._gui = stuff.load_ui_file("stats_stats.ui")
         self.report_chooser = None
@@ -53,6 +53,8 @@ class StatsViewer(object):
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
 
         self.init_stats()
+
+        self.window.set_position(gtk.WIN_POS_CENTER)
         self.window.show_all()
         self.stats()
 
@@ -419,5 +421,5 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
 
 if __name__ == "__main__":
-    stats_viewer = StatsViewer()
+    stats_viewer = StatsViewer2()
     gtk.main()
