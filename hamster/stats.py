@@ -115,6 +115,8 @@ class StatsViewer(object):
                 self.window.move(x, y)
                 self.window.move(x, y)
                 self.window.resize(w, h)
+            else:
+                self.window.set_position(gtk.WIN_POS_CENTER)
 
         self.window.show_all()
         self.search()
