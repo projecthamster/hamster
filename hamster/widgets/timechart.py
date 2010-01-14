@@ -116,51 +116,45 @@ class TimeChart(graphics.Area):
     def on_expose(self):
         self.context.set_line_width(1)
 
-        self.height = self.height - 2
-        graph_x = 2
-        graph_width = self.width - graph_x - 2
-
-
-        total_minutes = stuff.duration_minutes(self.end_time - self.start_time)
-        bar_width = float(graph_width) / len(self.tick_totals)
-
-
         # major ticks
-        all_times = [tick[0] for tick in self.tick_totals]
-
         if self.end_time - self.start_time < dt.timedelta(days=3):  # about the same day
             major_step = dt.timedelta(seconds = 60 * 60)
         else:
             major_step = dt.timedelta(days=1)
 
-        x = graph_x
-        major_tick_step = graph_width / (total_minutes / float(stuff.duration_minutes(major_step)))
-        current_time = self.start_time
-
 
         def first_weekday(date):
             return (date.weekday() + 1 - self.first_weekday) % 7 == 0
 
-
-        # calculate position of each bar
-        # essentially we care more about the exact 1px gap between bars than about the bar width
-        # so after each iteration, we adjust the bar width
-        x = graph_x
-        exes = {}
-        adapted_bar_width = bar_width
+        # count ticks so we can correctly calculate the average bar width
+        ticks = []
         for i, (current_time, total) in enumerate(self.tick_totals):
-
             # move the x bit further when ticks kick in
             if (major_step < DAY and current_time.time() == dt.time(0,0)) \
                or (self.minor_tick == DAY and first_weekday(current_time)) \
                or (self.minor_tick <= WEEK and current_time.day == 1) \
                or (current_time.timetuple().tm_yday == 1):
-                x+=2
+                ticks.append(current_time)
 
-            exes[current_time] = (x, round(adapted_bar_width)) #saving those as getting pixel precision is not an exact science
-            x = round(x + adapted_bar_width)
-            adapted_bar_width = (self.width - x) / float(max(len(self.tick_totals) - i - 1, 1))
 
+        # calculate position of each bar
+        # essentially we care more about the exact 1px gap between bars than about the bar width
+        # so after each iteration, we adjust the bar width
+        exes = {}
+
+        x = 0
+        bar_width = (float(self.width) - len(ticks) * 2)  / len(self.tick_totals)
+        remaining_ticks = len(ticks)
+        for i, (current_time, total) in enumerate(self.tick_totals):
+            # move the x bit further when ticks kick in
+            if current_time in ticks:
+                x += 2
+                remaining_ticks -= 1
+
+            exes[current_time] = (x, int(bar_width)) #saving those as getting pixel precision is not an exact science
+
+            x = int(x + bar_width)
+            bar_width = (self.width - x - remaining_ticks * 2) / float(max(len(self.tick_totals) - i - 1, 1))
 
 
 
@@ -180,49 +174,38 @@ class TimeChart(graphics.Area):
 
 
         # mark tick lines
-        current_time = self.start_time
+        current_time = self.start_time + major_step
         while current_time < self.end_time:
-            current_time += major_step
-            x += major_tick_step
-
-            if current_time >= self.end_time: # TODO - fix the loop so we do not have to break
-                break
-
-            if major_step < DAY:  # about the same day
-                if current_time.time() == dt.time(0,0): # midnight
-                    line(exes[current_time][0] - 2, "#bbb")
+            if current_time in ticks:
+                line(exes[current_time][0] - 2, "#bbb")
             else:
-                if self.minor_tick == DAY:  # week change
-                    if first_weekday(current_time):
-                        line(exes[current_time][0] - 2, "#bbb")
-
-                if self.minor_tick <= WEEK:  # month change
-                    if current_time.day == 1:
-                        if current_time in exes:
-                            line(exes[current_time][0] - 2, "#bbb")
-                        else: #if we are somewhere in middle then it gets a bit more complicated
-                            somewhere_in_middle(current_time, "#bbb")
-
+                if self.minor_tick <= WEEK and current_time.day == 1:  # month change
+                    somewhere_in_middle(current_time, "#bbb")
                 # year change
-                if current_time.timetuple().tm_yday == 1: # year change
-                    if current_time in exes:
-                        line(exes[current_time][0] - 2, "#f00")
-                    else: #if we are somewhere in middle - then just draw it
-                        somewhere_in_middle(current_time, "#f00")
+                elif current_time.timetuple().tm_yday == 1: # year change
+                    somewhere_in_middle(current_time, "#f00")
+
+            current_time += major_step
+            
 
 
         # the bars
-        for i, (current_time, total) in enumerate(self.tick_totals):
+        for current_time, total in self.tick_totals:
             bar_size = max(round(self.height * total * 0.8), 1)
             x, bar_width = exes[current_time]
 
             self.set_color(self.bar_color)
-            self.context.rectangle(x, self.height - min(bar_size, 2), min(bar_width - 1, self.width - x - 2), min(bar_size, 2))
-            self.draw_rect(x, self.height - bar_size, min(bar_width - 1, self.width - x - 2), bar_size, 3)
+            
+            # rounded corners
+            self.draw_rect(x, self.height - bar_size, bar_width - 1, bar_size, 3)
+
+            # straighten out bottom rounded corners
+            self.context.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2)) 
+            
             self.context.fill()
 
 
-        #minor tick format
+        # tick label format
         if self.minor_tick >= dt.timedelta(days = 28): # month
             step_format = "%b"
 
@@ -237,8 +220,9 @@ class TimeChart(graphics.Area):
             step_format = "%H<small><sup>%M</sup></small>"
 
 
-        # tick labels. we loop once again to avoid next bar overlapping previous text
-        for i, (current_time, total) in enumerate(self.tick_totals):
+        # tick labels
+        for current_time, total in self.tick_totals:
+            # if we are on the day level, show label only on week start
             if (self.end_time - self.start_time) > dt.timedelta(10) \
                and self.minor_tick == DAY and first_weekday(current_time) == False:
                 continue
@@ -248,8 +232,6 @@ class TimeChart(graphics.Area):
             self.set_color("#666")
             self.layout.set_width(int((self.width - x) * pango.SCALE))
             self.layout.set_markup(current_time.strftime(step_format))
-            w, h = self.layout.get_pixel_size()
-
             self.context.move_to(x + 2, 0)
             self.context.show_layout(self.layout)
 
