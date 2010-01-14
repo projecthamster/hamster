@@ -8,7 +8,6 @@
         <property name="visible">True</property>
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
         <child>
           <object class="GtkAlignment" id="alignment4">
             <property name="visible">True</property>
@@ -63,7 +62,7 @@
                           <object class="GtkHBox" id="charts">
                             <property name="visible">True</property>
                             <property name="border_width">12</property>
-                            <property name="spacing">12</property>
+                            <property name="spacing">24</property>
                             <child>
                               <object class="GtkVBox" id="vbox2">
                                 <property name="visible">True</property>
