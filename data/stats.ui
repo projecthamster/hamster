@@ -8,6 +8,7 @@
     <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <signal name="delete_event" handler="on_tabs_window_deleted"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

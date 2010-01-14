@@ -106,6 +106,15 @@ class StatsViewer(object):
         runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('conf_changed', self.on_conf_change)
 
+        if conf.get("overview_window_maximized"):
+            self.window.maximize()
+        else:
+            window_box = conf.get("overview_window_box")
+            if window_box:
+                x,y,w,h = (int(i) for i in window_box)
+                self.window.move(x, y)
+                self.window.move(x, y)
+                self.window.resize(w, h)
 
         self.window.show_all()
         self.search()
@@ -330,11 +339,7 @@ class StatsViewer(object):
 
         dialogs.edit.show(fact_id = model[iter][0])
 
-
-    def on_close(self, widget, event):
-        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
-        runtime.dispatcher.del_handler('conf_changed', self.on_conf_change)
+    def on_tabs_window_deleted(self, widget, event):
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
@@ -343,8 +348,22 @@ class StatsViewer(object):
               and event_key.state & gtk.gdk.CONTROL_MASK)):
         self.close_window()
 
-
     def close_window(self):
+        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
+        runtime.dispatcher.del_handler('day_updated', self.after_activity_update)
+        runtime.dispatcher.del_handler('conf_changed', self.on_conf_change)
+
+        # properly saving window state and position
+        maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
+        conf.set("overview_window_maximized", maximized)
+        
+        # make sure to remember dimensions only when in normal state
+        if maximized == False and not self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_ICONIFIED:
+            x, y = self.window.get_position()
+            w, h = self.window.get_size()
+            conf.set("overview_window_box", [x, y, w, h])
+            
+
         if not self.parent:
             gtk.main_quit()
         else:
