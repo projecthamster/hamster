@@ -36,13 +36,12 @@ class ReportChooserDialog(gtk.Dialog):
 
 
         self.dialog = gtk.FileChooserDialog(title = _("Save report - Time Tracker"),
-                                            parent = None,
+                                            parent = self,
+                                            action = gtk.FILE_CHOOSER_ACTION_SAVE,
                                             buttons=(gtk.STOCK_CANCEL,
                                                      gtk.RESPONSE_CANCEL,
                                                      gtk.STOCK_SAVE,
                                                      gtk.RESPONSE_OK))
-
-        self.dialog.set_action(gtk.FILE_CHOOSER_ACTION_SAVE)
         self.dialog.set_current_folder(os.path.expanduser("~"))
 
         self.filters = {}
@@ -86,8 +85,8 @@ class ReportChooserDialog(gtk.Dialog):
     def show(self, start_date, end_date):
         #set suggested name to something readable, replace backslashes with dots
         #so the name is valid in linux
-        filename = "Time track %s - %s." % (start_date.strftime("%x").replace("/", "."),
-                                           end_date.strftime("%x").replace("/", "."))
+        filename = "Time track %s - %s.html" % (start_date.strftime("%x").replace("/", "."),
+                                                  end_date.strftime("%x").replace("/", "."))
         self.dialog.set_current_name(filename)
 
         response = self.dialog.run()
