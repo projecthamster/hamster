@@ -24,8 +24,10 @@ import datetime as dt
 from xml.dom.minidom import Document
 import csv
 from hamster.i18n import C_
+import copy
 
 def simple(facts, start_date, end_date, format, path):
+    facts = copy.deepcopy(facts) # don't want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
 
     if format == "tsv":
@@ -61,6 +63,7 @@ class ReportWriter(object):
                     else:
                         fact["end_time"] = ""
                 fact["delta"] = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
+                fact["tags"] = ", ".join(fact["tags"])
 
                 self._write_fact(self.file, fact)
 
@@ -119,12 +122,15 @@ class TSVWriter(ReportWriter):
                    # column title in the TSV export format
                    _("category"),
                    # column title in the TSV export format
-                   _("description")]
+                   _("description"),
+                   # column title in the TSV export format
+                   _("tags")]
         self.csv_writer.writerow([h.encode('utf-8') for h in headers])
 
     def _write_fact(self, file, fact):
         self.csv_writer.writerow([fact[key] for key in ["name", "start_time",
-                               "end_time", "delta", "category", "description"]])
+                               "end_time", "delta", "category", "description",
+                               "tags"]])
     def _finish(self, file, facts):
         pass
 
@@ -142,6 +148,7 @@ class XMLWriter(ReportWriter):
         activity.setAttribute("duration_minutes", str(fact["delta"]))
         activity.setAttribute("category", fact["category"])
         activity.setAttribute("description", fact["description"])
+        activity.setAttribute("tags", fact["tags"])
         self.activity_list.appendChild(activity)
 
     def _finish(self, file, facts):
@@ -194,27 +201,14 @@ class HTMLWriter(ReportWriter):
             margin-top: 2em;
             border-bottom: 2px solid #303030;
         }
-        table {
-            width:800px;
-        }
-        th {
-            font-size: 14px;
-            text-align: center;
-            padding-bottom: 6px;
-        }
-
-        .smallCell {
-            text-align: center;
-            width: 100px;
-            padding: 3px;
-        }
-
-        .largeCell {
+        th, td {
             text-align: left;
-            padding: 3px 3px 3px 5px;
+            padding: 3px;
+            padding-right: 24px;
         }
+
         .row0 {
-                background-color: #EAE8E3;
+                background-color: #eee;
         }
 
         .row1 {
@@ -227,13 +221,14 @@ class HTMLWriter(ReportWriter):
 <h1>%(title)s</h1>""" % {"title": self.title} + """
 <table>
     <tr>
-        <th class="smallCell">""" + _("Date") + """</th>
-        <th class="largeCell">""" + _("Activity") + """</th>
-        <th class="smallCell">""" + _("Category") + """</th>
-        <th class="smallCell">""" + _("Start") + """</th>
-        <th class="smallCell">""" + _("End") + """</th>
-        <th class="smallCell">""" + _("Duration") + """</th>
-        <th class="largeCell">""" + _("Description") + """</th>
+        <th>""" + _("Date") + """</th>
+        <th>""" + _("Activity") + """</th>
+        <th>""" + _("Category") + """</th>
+        <th>""" + _("Tags") + """</th>
+        <th>""" + _("Start") + """</th>
+        <th>""" + _("End") + """</th>
+        <th>""" + _("Duration") + """</th>
+        <th>""" + _("Description") + """</th>
     </tr>""")
 
     def _write_fact(self, report, fact):
@@ -252,22 +247,24 @@ class HTMLWriter(ReportWriter):
 
         # fact date column in HTML report
         report.write("""<tr class="row%d">
-                            <td class="smallCell">%s</td>
-                            <td class="largeCell">%s</td>
-                            <td class="smallCell">%s</td>
-                            <td class="smallCell">%s</td>
-                            <td class="smallCell">%s</td>
-                            <td class="smallCell">%s</td>
-                            <td class="largeCell">%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>%s</td>
                         </tr>
                        """ % (int(self.even_row),
                               fact["start_time"].strftime(
                                 # date column format for each row in HTML report
                                 # Using python datetime formatting syntax. See:
                                 # http://docs.python.org/library/time.html#time.strftime
-                                C_("html report","%b %d, %Y")),
+                              C_("html report","%b %d, %Y")),
                               fact["name"],
                               category,
+                              fact["tags"],
                               fact["start_time"].strftime('%H:%M'),
                               end_time_str,
                               stuff.format_duration(fact["delta"]) or "",
@@ -288,9 +285,9 @@ class HTMLWriter(ReportWriter):
         report.write("\n<h2>%s</h2>\n" % _("Totals"))
         report.write("""<table>
         <tr>
-            <th class="smallCell">""" + _("Category") + """</th>
-            <th class="largeCell">""" + _("Activity") + """</th>
-            <th class="smallCell">""" + _("Duration") + """</th>
+            <th>""" + _("Category") + """</th>
+            <th>""" + _("Activity") + """</th>
+            <th>""" + _("Duration") + """</th>
         </tr>\n""")
         tot_time = 0
         even_row = False
