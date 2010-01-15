@@ -122,16 +122,21 @@ class ActivityEntry(gtk.Entry):
 
         #move popup under the widget
         alloc = self.get_allocation()
-        x, y = self.get_parent_window().get_origin()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-
-        w = alloc.width
 
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
-        self.tree.parent.set_size_request(w,(alloc.height-6) * min([result_count, self.max_results]))
-        self.popup.resize(w, (alloc.height-6) * min([result_count, self.max_results]))
+        popup_height = (alloc.height-6) * min([result_count, self.max_results])
+        self.tree.parent.set_size_request(alloc.width, popup_height)
+        self.popup.resize(alloc.width, popup_height)
 
+        x, y = self.get_parent_window().get_origin()
+        y = y + alloc.y
+
+        if y + alloc.height + popup_height < self.get_screen().get_height():
+            y = y + alloc.height
+        else:
+            y = y - popup_height
+            
+        self.popup.move(x + alloc.x, y)
 
         self.popup.show_all()
 
