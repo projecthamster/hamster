@@ -354,6 +354,7 @@ class HamsterApplet(object):
         today = (dt.datetime.now() - dt.timedelta(hours = self.day_start.hour,
                                                   minutes = self.day_start.minute)).date()
 
+        self.treeview.detach_model()
         self.treeview.clear()
 
         facts = runtime.storage.get_facts(today)
@@ -376,6 +377,7 @@ class HamsterApplet(object):
                           by_category.setdefault(fact['category'], 0) + duration
             self.treeview.add_fact(fact)
 
+        self.treeview.attach_model()
 
         if not facts:
             self._gui.get_object("today_box").hide()

@@ -56,7 +56,7 @@ class OverviewBox(gtk.VBox):
         self.fact_tree = widgets.FactTree()
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
-        self.fact_tree.connect("edit_clicked", lambda tree, fact: self.on_edit_clicked(fact))
+        self.fact_tree.connect("edit-clicked", lambda tree, fact: self.on_edit_clicked(fact))
 
         scroll.add(self.fact_tree)
         self.add(scroll)
@@ -70,6 +70,7 @@ class OverviewBox(gtk.VBox):
 
 
     def fill_facts_tree(self):
+        # remember any selection - will try to match by        
         self.fact_tree.detach_model()
         self.fact_tree.clear()
 
@@ -84,7 +85,7 @@ class OverviewBox(gtk.VBox):
         # push them in tree
         for date, facts in dates:
             fact_date = date.strftime(C_("overview list", "%A, %b %d"))
-            self.fact_tree.add_group(fact_date, facts)
+            self.fact_tree.add_group(fact_date, date, facts)
 
         self.fact_tree.attach_model()
 
@@ -130,19 +131,18 @@ class OverviewBox(gtk.VBox):
 
 
     """ events """
-    def on_edit_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        if model[iter][0] == -1:
-            return #not a fact
-
-        dialogs.edit.show(self, fact_id = model[iter][0])
+    def on_edit_clicked(self, fact):
+        self.launch_edit(fact)
 
     def on_facts_row_activated(self, tree, path, column):
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
-        custom_fact = dialogs.edit.show(self, fact_id = model[iter][0])
+        self.launch_edit(tree.get_selected_fact())
+            
+    def launch_edit(self, fact_or_date):
+        if isinstance(fact_or_date, dt.date):
+            dialogs.edit.show(self, fact_date = fact_or_date)
+        else:
+            dialogs.edit.show(self, fact_id = fact_or_date["id"])
+
 
     def on_facts_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):

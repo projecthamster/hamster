@@ -188,15 +188,11 @@ class StatsViewer(object):
     
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
+        fact = tree.get_selected_fact()
+        real_fact = fact is not None and isinstance(fact, dict)
 
-        id = -1
-        if iter:
-            id = model[iter][0]
-
-        self.get_widget('remove').set_sensitive(id != -1)
-        self.get_widget('edit').set_sensitive(id != -1)
+        self.get_widget('remove').set_sensitive(real_fact)
+        self.get_widget('edit').set_sensitive(real_fact)
 
         return True
 
@@ -320,26 +316,25 @@ class StatsViewer(object):
 
 
     def on_add_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        selected_date = self.view_date
-        if iter and model[iter][6]: # TODO - here we should check if heading maybe specifies a date
-            selected_date = model[iter][6]["date"]
-
+        fact = self.fact_tree.get_selected_fact()
+        if not fact:
+            return
+        
+        if isinstance(fact, dt.date):
+            selected_date = fact
+        else:
+            selected_date = fact["date"]
+        
         dialogs.edit.show(fact_date = selected_date)
 
     def on_remove_clicked(self, button):
         self.overview.delete_selected()
 
     def on_edit_clicked(self, button):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-
-        if model[iter][0] == -1:
-            return #not a fact
-
-        dialogs.edit.show(fact_id = model[iter][0])
+        fact = self.fact_tree.get_selected_fact()
+        if not fact or isinstance(fact, date):
+            return
+        dialogs.edit.show(fact_id = fact["id"])
 
     def on_tabs_window_deleted(self, widget, event):
         self.close_window()
