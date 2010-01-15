@@ -433,16 +433,8 @@ class HamsterApplet(object):
             self.get_widget("last_activity_description").set_text("")
 
     def delete_selected(self):
-        selection = self.treeview.get_selection()
-        (model, iter) = selection.get_selected()
-
-        next_row = model.iter_next(iter)
-        (cur, col) = self.treeview.get_cursor()
-        runtime.storage.remove_fact(model[iter][0])
-
-        if next_row:
-            self.treeview.set_cursor(cur)
-
+        fact = self.treeview.get_selected_fact()
+        runtime.storage.remove_fact(fact["id"])
 
     def __update_fact(self):
         """dbus controller current fact updating"""
