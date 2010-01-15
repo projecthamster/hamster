@@ -157,13 +157,13 @@ class Dialogs(Singleton):
         self.edit = OneWindow(get_edit_class)
 
         def get_overview_class():
-            from stats import StatsViewer
-            return StatsViewer
+            from overview import Overview
+            return Overview
         self.overview = OneWindow(get_overview_class)
 
         def get_stats_class():
-            from stats_stats import StatsViewer2
-            return StatsViewer2
+            from stats import Stats
+            return Stats
         self.stats = OneWindow(get_stats_class)
 
         def get_about_class():

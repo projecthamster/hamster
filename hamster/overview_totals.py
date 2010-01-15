@@ -38,7 +38,7 @@ from configuration import runtime, dialogs
 from hamster.i18n import C_
 
 
-class ReportsBox(gtk.VBox):
+class TotalsBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
         self._gui = stuff.load_ui_file("stats_reports.ui")
