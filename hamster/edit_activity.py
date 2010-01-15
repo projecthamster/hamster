@@ -71,8 +71,8 @@ class CustomFactController:
             fact_date = fact_date or dt.date.today()
 
             last_activity = runtime.storage.get_facts(fact_date)
-            if last_activity and last_activity[len(last_activity)-1]["end_time"]:
-                start_date = last_activity[len(last_activity)-1]["end_time"]
+            if last_activity and last_activity[-1]["end_time"]:
+                start_date = last_activity[-1]["end_time"]
 
                 if fact_date != dt.date.today():
                     end_date = start_date + dt.timedelta(minutes=30)
