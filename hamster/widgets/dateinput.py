@@ -121,7 +121,7 @@ class DateInput(gtk.Entry):
         date = self._figure_date(self.get_text())
         if date:
             self.prev_cal_day = date.day #avoid
-            self.date_calendar.select_month(date.month-1, date.year)
+            self.date_calendar.select_month(date.month - 1, date.year)
             self.date_calendar.select_day(date.day)
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
@@ -143,7 +143,7 @@ class DateInput(gtk.Entry):
     def _on_key_press_event(self, entry, event):
         if self.popup.get_property("visible"):
             cal_date = self.date_calendar.get_date()
-            date = dt.date(cal_date[0], cal_date[1], cal_date[2])
+            date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
         else:
             date = self._figure_date(entry.get_text())
             if not date:
@@ -172,6 +172,6 @@ class DateInput(gtk.Entry):
             #prev_cal_day is our only way of checking that date is right
             self.prev_cal_day = date.day
 
-        self.date_calendar.select_month(date.month, date.year)
+        self.date_calendar.select_month(date.month - 1, date.year)
         self.date_calendar.select_day(date.day)
         return True
