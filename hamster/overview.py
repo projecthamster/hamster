@@ -41,7 +41,7 @@ from overview_totals import TotalsBox
 class Overview(object):
     def __init__(self, parent = None):
         self.parent = parent# determine if app should shut down on close
-        self._gui = stuff.load_ui_file("stats.ui")
+        self._gui = stuff.load_ui_file("overview.ui")
         self.report_chooser = None
 
         self.facts = None

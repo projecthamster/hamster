@@ -37,7 +37,7 @@ from hamster.i18n import C_
 
 class Stats(object):
     def __init__(self, parent = None):
-        self._gui = stuff.load_ui_file("stats_stats.ui")
+        self._gui = stuff.load_ui_file("stats.ui")
         self.report_chooser = None
         self.window = self.get_widget("stats_window")
 

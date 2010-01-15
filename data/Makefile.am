@@ -16,8 +16,8 @@ resources_DATA = \
 	Hamster_Applet.xml \
 	preferences.ui \
 	stats.ui \
-	stats_reports.ui \
-	stats_stats.ui \
+	overview.ui \
+	overview_totals.ui \
 	edit_activity.ui \
         applet.ui \
 	hamster.db

@@ -41,7 +41,7 @@ from hamster.i18n import C_
 class TotalsBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
-        self._gui = stuff.load_ui_file("stats_reports.ui")
+        self._gui = stuff.load_ui_file("overview_totals.ui")
         self.get_widget("reports_vbox").reparent(self) #mine!
 
         self.start_date, self.end_date = None, None

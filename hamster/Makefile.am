@@ -18,9 +18,9 @@ hamster_PYTHON = \
 	db.py \
 	eds.py \
 	stats.py \
-	stats_overview.py \
-	stats_reports.py \
-	stats_stats.py \
+        overview.py \
+        overview_totals.py \
+        overview_activities.py \
 	reports.py \
 	charting.py \
         graphics.py \
