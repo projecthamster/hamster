@@ -27,7 +27,7 @@ from hamster.i18n import C_
 import copy
 
 def simple(facts, start_date, end_date, format, path):
-    facts = copy.deepcopy(facts) # don't want to do anything bad to the input
+    facts = copy.deepcopy(facts) # dont want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
 
     if format == "tsv":
