@@ -439,7 +439,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 tag_w, tag_h = Tag.tag_size(tag, layout)
 
                 if i > 0 and cur_x + tag_w >= tag_cell_end:
-                    print "wrapping at", tag, cur_x, tag_w, tag_cell_end
                     cur_x = tag_cell_start
                     cur_y += tag_h + 4
                 cur_x += tag_w + 4
@@ -464,8 +463,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 x = cell_start
                 y = max(duration_h, y + tag_h) + 4
                 width = cell_width
-
-            print "post", x,  y
 
             layout.set_width(width * pango.SCALE)
             label_w, label_h = layout.get_pixel_size()
