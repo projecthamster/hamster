@@ -229,12 +229,13 @@ class HamsterApplet(object):
 
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
-        widgets.add_hint(self.new_name, _("Time and Name"))
+        widgets.add_hint(self.new_name, _("Activity"))
         self.get_widget("new_name_box").add(self.new_name)
         self.new_name.connect("changed", self.on_activity_text_changed)
 
         self.new_tags = widgets.TagsEntry()
-        widgets.add_hint(self.new_tags, _("Tags or Description"))
+        self.new_tags.connect("tags_selected", self.on_switch_activity_clicked)
+        widgets.add_hint(self.new_tags, _("Tags"))
         self.get_widget("new_tags_box").add(self.new_tags)
 
         self.tag_box = widgets.TagBox(interactive = False)
@@ -413,7 +414,13 @@ class HamsterApplet(object):
             delta = dt.datetime.now() - activity['start_time']
             duration = delta.seconds /  60
 
+            self._gui.get_object("more_info_button").hide()
+            self.get_widget("last_activity_duration").show()
+            self.get_widget("last_activity_description").show()
+            self.get_widget("last_activity_category").show()
+
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
+
             self.get_widget("last_activity_name").set_text(activity['name'])
             if activity['category'] != _("Unsorted"):
                 self.get_widget("last_activity_category") \
@@ -427,10 +434,14 @@ class HamsterApplet(object):
             self.get_widget("start_tracking").show()
 
             self.get_widget("last_activity_name").set_text(_("No activity"))
-            self.get_widget("last_activity_duration").set_text("")
-            self.get_widget("last_activity_category").set_text("")
+
+            self.get_widget("last_activity_duration").hide()
+            self._gui.get_object("more_info_button").show()
+
+            self.get_widget("last_activity_category").hide()
             self.tag_box.draw([])
-            self.get_widget("last_activity_description").set_text("")
+            self.get_widget("last_activity_description").hide()
+
 
     def delete_selected(self):
         fact = self.treeview.get_selected_fact()
@@ -510,10 +521,8 @@ class HamsterApplet(object):
         dialogs.edit.show(self.applet, fact_id = fact["id"])
 
     def on_today_row_activated(self, tree, path, column):
-        selection = tree.get_selection()
-        (model, iter) = selection.get_selected()
+        fact = tree.get_selected_fact()
 
-        fact = model[iter][6]
         if fact:
             activity = fact['name']
             if fact['category']:
@@ -587,7 +596,7 @@ class HamsterApplet(object):
 
     def on_conf_changed(self, event, data):
         key, value = data
-        
+
         if key == "enable_timeout":
             self.timeout_enabled = value
         elif key == "notify_on_idle":
@@ -601,7 +610,7 @@ class HamsterApplet(object):
             self.day_start = dt.time(value / 60, value % 60)
             self.load_day()
             self.update_label()
-            
+
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
@@ -627,3 +636,27 @@ class HamsterApplet(object):
 
     def get_widget(self, name):
         return self._gui.get_object(name)
+
+    def on_more_info_button_clicked(self, button):
+        def on_response(self, widget):
+            self.destroy()
+
+        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
+        message_dialog.set_property("title", _("What should be typed in the activity box?"))
+        message_dialog.connect("response", on_response)
+
+        more_info = _("""There is a simple syntax that enables you to add details to your activities:
+
+"@" symbol marks a category. Example: "watering flowers@home" will start tracking the activity "watering flowers" in the category "home".
+
+Commas (",") mark beginning of a description. Example: "watering flowers, begonias and forgetmenots" will start tracking the activity "watering flowers" and add the description "begonias and forgetmenots" to it.
+
+Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
+
+In the tag field, separate tags with a comma. You can use Tab button to autocomplete first tag displayed in the dropdown, as well as click on the tags using mouse.
+Now, start tracking!
+        """)
+
+        message_dialog.set_markup(more_info)
+        message_dialog.show()
+        return False

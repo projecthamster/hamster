@@ -53,13 +53,15 @@ class CustomFactController:
 
             self.new_name.set_text(label)
 
-            if fact['description']:
-                fact['tags'].append(fact['description'])  #same edit field
             self.new_tags.set_text(", ".join(fact['tags']))
 
 
             start_date = fact["start_time"]
             end_date = fact["end_time"]
+
+            buf = gtk.TextBuffer()
+            buf.set_text(fact["description"] or "")
+            self.get_widget('description').set_buffer(buf)
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
@@ -138,6 +140,17 @@ class CustomFactController:
     def show(self):
         self.window.show()
 
+
+    def figure_description(self):
+        activity = self.new_name.get_text().decode("utf-8")
+
+        # juggle with description - break into parts and then put together
+        buf = self.get_widget('description').get_buffer()
+        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
+                         .decode("utf-8")
+        return description.strip()
+
+
     def _get_datetime(self, prefix):
         start_time = self.start_time.get_time()
         start_date = self.start_date.get_date()
@@ -165,6 +178,17 @@ class CustomFactController:
         if not activity:
             return False
 
+
+        # user might also type description in the activity name - strip it here
+        # and remember value
+        inline_description = None
+        if activity.find(",") != -1:
+            activity, inline_description  = activity.split(",", 1)
+            inline_description = inline_description.strip()
+
+        # explicit takes precedence
+        description = self.figure_description() or inline_description
+
         tags = self.new_tags.get_text().decode('utf8', 'replace')
 
         start_time = self._get_datetime("start")
@@ -174,11 +198,10 @@ class CustomFactController:
         else:
             end_time = self._get_datetime("end")
 
-        # we don't do updates, we do insert/delete. So now it is time to delete
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, activity, tags, start_time, end_time)
+            runtime.storage.update_fact(self.fact_id, activity, tags, start_time, end_time, description)
         else:
-            runtime.storage.add_fact(activity, tags, start_time, end_time)
+            runtime.storage.add_fact(activity, tags, start_time, end_time, description = description)
 
 
         # hide panel only on add - on update user will want to see changes
@@ -270,4 +293,3 @@ class CustomFactController:
     def close_window(self):
         self.window.destroy()
         return False
-

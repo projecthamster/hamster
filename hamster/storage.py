@@ -82,7 +82,7 @@ class Storage(object):
             self.__remove_fact(fact_id)
             self.dispatch('day_updated', fact['start_time'])
 
-    def update_fact(self, fact_id, activity_name, tags, start_time, end_time):
+    def update_fact(self, fact_id, activity_name, tags, start_time, end_time, description = None):
         now = datetime.datetime.now()
         self.start_transaction()
 
@@ -90,7 +90,7 @@ class Storage(object):
         if fact:
             self.__remove_fact(fact_id)
 
-        result = self.__add_fact(activity_name, tags, start_time, end_time)
+        result = self.__add_fact(activity_name, tags, start_time, end_time, description = description)
 
         self.end_transaction()
 

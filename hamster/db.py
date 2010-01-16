@@ -98,9 +98,6 @@ class Storage(storage.Storage):
     def __get_tag_ids(self, tags):
         """look up tags by their name. create if not found"""
 
-        # filter descriptions out, just in case they have wandered in here
-        tags = [tag.lower() for tag in tags if tag.startswith("!") == False and len(tag.split(" ")) < 3]
-
         db_tags = self.fetchall("select * from tags where name in (%s)"
                                             % ",".join(["?"] * len(tags)), tags) # bit of magic here - using sqlites bind variables
 
@@ -468,11 +465,10 @@ class Storage(storage.Storage):
         activity = stuff.parse_activity_input(activity_name)
 
         tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
-        descriptions = [tag for tag in tags if len(tag.split(" ")) > 2 or tag.startswith("!")]  #extract description
-        tags = list(set(tags) - set(descriptions)) #remove any found descriptions from tag list
 
-        # TODO - untangle descriptions - allow just one place where to enter them
-        activity.description = ", ".join(descriptions) # somebody will file bug on "why tags can't be seven words"
+        # explicitly stated takes precedence
+        activity.description = description or activity.description
+
         tags = self.get_tag_ids(tags) #this will create any missing tags too
 
         if category_name:
