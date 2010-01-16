@@ -172,7 +172,7 @@ class PreferencesEditor:
         self.prev_selected_activity = None
         self.prev_selected_category = None
 
-        
+
         # disable notification thing if pynotify is not available
         try:
             import pynotify
@@ -201,9 +201,10 @@ class PreferencesEditor:
         buf = self.get_widget("autocomplete_tags")
         updated_tags = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0) \
                           .decode("utf-8")
-
         if updated_tags == self.tags:
             return
+
+        self.tags = updated_tags
 
         runtime.storage.update_autocomplete_tags(updated_tags)
 
@@ -674,11 +675,10 @@ class PreferencesEditor:
         day_start = self.day_start.get_time()
         if not day_start:
             return
-        
+
         day_start = day_start.hour * 60 + day_start.minute
 
         conf.set("day_start_minutes", day_start)
 
     def on_preferences_window_destroy(self, window):
         self.window = None
-
