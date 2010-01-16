@@ -116,7 +116,7 @@
                                 <property name="label">it's like in case if you need a description, i'll be here</property>
                                 <property name="wrap">True</property>
                                 <attributes>
-                                  <attribute name="size" value="8000"/>
+                                  <attribute name="size" value="10000"/>
                                 </attributes>
                               </object>
                               <packing>
