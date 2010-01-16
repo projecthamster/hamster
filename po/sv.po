@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-10 11:59+0100\n"
-"PO-Revision-Date: 2010-01-10 12:04+0100\n"
+"POT-Creation-Date: 2010-01-16 13:46+0100\n"
+"PO-Revision-Date: 2010-01-16 13:46+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,8 @@ msgid "_Preferences"
 msgstr "_Inställningar"
 
 #: ../data/preferences.ui.h:1
-#: ../data/stats.ui.h:1
-#: ../data/stats_reports.ui.h:1
+#: ../data/overview.ui.h:1
+#: ../data/overview_totals.ui.h:1
 msgid "Activities"
 msgstr "Aktiviteter"
 
@@ -61,7 +61,6 @@ msgid "Add category"
 msgstr "Lägg till kategori"
 
 #: ../data/preferences.ui.h:5
-#: ../data/hamster-applet.schemas.in.h:3
 msgid "Also remind when no activity is set"
 msgstr "Påminn även när ingen aktivitet är inställd"
 
@@ -114,7 +113,6 @@ msgid "Remove category"
 msgstr "Ta bort kategori"
 
 #: ../data/preferences.ui.h:18
-#: ../data/hamster-applet.schemas.in.h:11
 msgid "Stop tracking on shutdown"
 msgstr "Stoppa tidmätning vid avstängning"
 
@@ -167,49 +165,9 @@ msgid "in progress"
 msgstr "pågående"
 
 #: ../data/edit_activity.ui.h:7
-#: ../data/stats.ui.h:8
+#: ../data/overview.ui.h:8
 msgid "to"
 msgstr "till"
-
-#: ../data/hamster-applet.schemas.in.h:1
-msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
-msgstr "Aktiviteter kommer att räknas som gårdagens om den aktuella tiden är mindre än den angivna dagens start och idag, om den går över tiden. Aktiviteter som spänner över två dagar kommer att tippa över till den sida där den största delen av aktiviteten är."
-
-#: ../data/hamster-applet.schemas.in.h:2
-msgid "Also remind every notify_interval minutes if no activity has been started."
-msgstr "Påminn även varje notify_interval minuter om ingen aktivitet har startats."
-
-#: ../data/hamster-applet.schemas.in.h:4
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Tangentbordsgenväg för visning av Tidmätare-fönstret."
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
-msgstr "Påminn om aktuell uppgift varje angivet antal minuter. Ställ in till 0 eller större än 120 för att inaktivera påminnelser."
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Remind of current task every x minutes"
-msgstr "Påminn om aktuell uppgift var x minuter"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Show window"
-msgstr "Visa fönster"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity on shutdown"
-msgstr "Stoppa tidmätning av aktuell aktivitet vid avstängning"
-
-#: ../data/hamster-applet.schemas.in.h:9
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "Stoppa tidmätning av aktuell aktivitet när datorn blir overksam"
-
-#: ../data/hamster-applet.schemas.in.h:10
-msgid "Stop tracking on idle"
-msgstr "Stoppa tidmätning vid inaktivitet"
-
-#: ../data/hamster-applet.schemas.in.h:12
-msgid "Time at witch to consider beginning of new day"
-msgstr "Klockslag när en ny dag anses börja"
 
 #: ../data/applet.ui.h:1
 msgid "Ad_d Earlier Activity"
@@ -221,88 +179,87 @@ msgid "Hamster"
 msgstr "Hamster"
 
 #: ../data/applet.ui.h:4
-#: ../hamster/applet.py:387
+#: ../hamster/applet.py:384
 msgid "No records today"
 msgstr "Inga poster idag"
 
 #: ../data/applet.ui.h:5
+msgid "S_witch"
+msgstr "Vä_xla"
+
+#: ../data/applet.ui.h:6
 msgid "Show _Overview"
 msgstr "Visa _översikt"
 
-#: ../data/applet.ui.h:6
-msgid "Start Tracking"
-msgstr "Starta tidmätning"
-
 #: ../data/applet.ui.h:7
-msgid "Stop tracking"
-msgstr "Stoppa tidmätning"
+msgid "St_op tracking"
+msgstr "St_oppa tidmätning"
 
-#. translators: this is switch activity action in the notifier bubble
 #: ../data/applet.ui.h:8
-#: ../hamster/applet.py:70
-msgid "Switch"
-msgstr "Växla"
+msgid "Start _Tracking"
+msgstr "Starta _tidmätning"
 
 #: ../data/applet.ui.h:9
 msgid "_Today"
 msgstr "_Idag"
 
+#: ../data/stats.ui.h:1
+msgid "Starts and ends"
+msgstr "Startar och slutar"
+
 #: ../data/stats.ui.h:2
+msgid "Statistics"
+msgstr "Statistik"
+
+#. summary table
+#: ../data/stats.ui.h:3
+#: ../data/overview.ui.h:7
+#: ../hamster/reports.py:285
+msgid "Totals"
+msgstr "Totalt"
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "År:"
+
+#: ../data/overview.ui.h:2
 msgid "Add"
 msgstr "Lägg till"
 
 #. translators: this is edit activity action in the notifier bubble
-#: ../data/stats.ui.h:3
+#: ../data/overview.ui.h:3
 #: ../hamster/applet.py:68
 msgid "Edit"
 msgstr "Redigera"
 
-#: ../data/stats.ui.h:4
+#: ../data/overview.ui.h:4
 msgid "Overview - Hamster"
 msgstr "Översikt - Hamster"
 
-#: ../data/stats.ui.h:5
+#: ../data/overview.ui.h:5
 msgid "Remove"
 msgstr "Ta bort"
 
-#: ../data/stats.ui.h:6
+#: ../data/overview.ui.h:6
 msgid "Save Report"
 msgstr "Spara rapport"
 
-#. summary table
-#: ../data/stats.ui.h:7
-#: ../data/stats_stats.ui.h:3
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "Totalt"
-
-#: ../data/stats_reports.ui.h:2
+#: ../data/overview_totals.ui.h:2
 msgid "Categories"
 msgstr "Kategorier"
 
-#: ../data/stats_reports.ui.h:3
+#: ../data/overview_totals.ui.h:3
 msgid "No data for this interval"
 msgstr "Inget data för detta intervall"
 
-#: ../data/stats_reports.ui.h:4
+#: ../data/overview_totals.ui.h:4
 msgid "Show Statistics"
 msgstr "Visa statistik"
 
-#: ../data/stats_reports.ui.h:5
+#: ../data/overview_totals.ui.h:5
+#: ../hamster/reports.py:227
 msgid "Tags"
 msgstr "Taggar"
-
-#: ../data/stats_stats.ui.h:1
-msgid "Starts and ends"
-msgstr "Startar och slutar"
-
-#: ../data/stats_stats.ui.h:2
-msgid "Statistics"
-msgstr "Statistik"
-
-#: ../data/stats_stats.ui.h:4
-msgid "Year:"
-msgstr "År:"
 
 #: ../hamster/about.py:43
 msgid "Copyright © 2007–2009 Toms Bauģis and others"
@@ -325,88 +282,93 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>"
 
-#: ../hamster/applet.py:234
+#. translators: this is switch activity action in the notifier bubble
+#: ../hamster/applet.py:70
+msgid "Switch"
+msgstr "Växla"
+
+#: ../hamster/applet.py:232
 msgid "Time and Name"
 msgstr "Tid och namn"
 
-#: ../hamster/applet.py:239
+#: ../hamster/applet.py:237
 msgid "Tags or Description"
 msgstr "Taggar eller beskrivning"
 
-#: ../hamster/applet.py:326
-#: ../hamster/applet.py:346
-#: ../hamster/applet.py:432
+#: ../hamster/applet.py:321
+#: ../hamster/applet.py:341
+#: ../hamster/applet.py:429
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
 #. activity reminder
-#: ../hamster/applet.py:341
+#: ../hamster/applet.py:336
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Arbetar på <b>%s</b>"
 
-#: ../hamster/applet.py:395
+#: ../hamster/applet.py:392
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:398
+#: ../hamster/applet.py:395
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#: ../hamster/applet.py:419
+#: ../hamster/applet.py:416
 msgid "Just started"
 msgstr "Precis startad"
 
-#: ../hamster/applet.py:421
+#: ../hamster/applet.py:418
 #: ../hamster/db.py:307
-#: ../hamster/db.py:625
-#: ../hamster/db.py:686
+#: ../hamster/db.py:629
+#: ../hamster/db.py:690
 #: ../hamster/edit_activity.py:51
 #: ../hamster/preferences.py:55
-#: ../hamster/reports.py:54
-#: ../hamster/reports.py:91
-#: ../hamster/reports.py:248
+#: ../hamster/reports.py:56
+#: ../hamster/reports.py:94
+#: ../hamster/reports.py:243
 #: ../hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Osorterat"
 
 #. defaults
-#: ../hamster/db.py:877
+#: ../hamster/db.py:881
 msgid "Work"
 msgstr "Arbete"
 
-#: ../hamster/db.py:878
+#: ../hamster/db.py:882
 msgid "Reading news"
 msgstr "Läser nyheter"
 
-#: ../hamster/db.py:879
+#: ../hamster/db.py:883
 msgid "Checking stocks"
 msgstr "Kontrollerar aktier"
 
-#: ../hamster/db.py:880
+#: ../hamster/db.py:884
 msgid "Super secret project X"
 msgstr "Superhemligt projekt X"
 
-#: ../hamster/db.py:881
+#: ../hamster/db.py:885
 msgid "World domination"
 msgstr "Världsherravälde"
 
-#: ../hamster/db.py:883
+#: ../hamster/db.py:887
 msgid "Day-to-day"
 msgstr "Dag för dag"
 
-#: ../hamster/db.py:884
+#: ../hamster/db.py:888
 msgid "Lunch"
 msgstr "Lunch"
 
-#: ../hamster/db.py:885
+#: ../hamster/db.py:889
 msgid "Watering flowers"
 msgstr "Vattna blommorna"
 
-#: ../hamster/db.py:886
+#: ../hamster/db.py:890
 msgid "Doing handstands"
 msgstr "Stå på händerna"
 
@@ -414,127 +376,144 @@ msgstr "Stå på händerna"
 msgid "Update activity"
 msgstr "Uppdatera aktivitet"
 
-#: ../hamster/preferences.py:107
+#: ../hamster/preferences.py:106
 msgid "Name"
 msgstr "Namn"
 
-#: ../hamster/preferences.py:127
-#: ../hamster/reports.py:232
-#: ../hamster/reports.py:291
+#: ../hamster/preferences.py:126
+#: ../hamster/reports.py:226
+#: ../hamster/reports.py:288
 msgid "Category"
 msgstr "Kategori"
 
-#: ../hamster/preferences.py:583
+#: ../hamster/preferences.py:585
 msgid "New category"
 msgstr "Ny kategori"
 
-#: ../hamster/preferences.py:596
+#: ../hamster/preferences.py:598
 msgid "New activity"
 msgstr "Ny aktivitet"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:656
+#: ../hamster/preferences.py:658
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minuter"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:659
+#: ../hamster/preferences.py:661
 msgid "Never"
 msgstr "Aldrig"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:112
+#: ../hamster/reports.py:115
 msgid "activity"
 msgstr "aktivitet"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:114
+#: ../hamster/reports.py:117
 msgid "start time"
 msgstr "starttid"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:116
+#: ../hamster/reports.py:119
 msgid "end time"
 msgstr "sluttid"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:118
+#: ../hamster/reports.py:121
 msgid "duration minutes"
 msgstr "längd i minuter"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:120
+#: ../hamster/reports.py:123
 msgid "category"
 msgstr "kategori"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:122
+#: ../hamster/reports.py:125
 msgid "description"
 msgstr "beskrivning"
 
-#: ../hamster/reports.py:160
+#. column title in the TSV export format
+#: ../hamster/reports.py:127
+msgid "tags"
+msgstr "taggar"
+
+#: ../hamster/reports.py:167
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
 
-#: ../hamster/reports.py:162
+#: ../hamster/reports.py:169
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
 
-#: ../hamster/reports.py:164
+#: ../hamster/reports.py:171
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Översikt för %(start_d)s - %(end_d)s %(start_B)s %(end_Y)s"
 
-#: ../hamster/reports.py:167
+#: ../hamster/reports.py:174
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Översikt för %(start_d)s %(start_B)s %(start_Y)s"
 
-#: ../hamster/reports.py:230
+#: ../hamster/reports.py:224
 msgid "Date"
 msgstr "Datum"
 
-#: ../hamster/reports.py:231
-#: ../hamster/reports.py:292
+#: ../hamster/reports.py:225
+#: ../hamster/reports.py:289
 msgid "Activity"
 msgstr "Aktivitet"
 
-#: ../hamster/reports.py:233
+#: ../hamster/reports.py:228
 msgid "Start"
 msgstr "Start"
 
-#: ../hamster/reports.py:234
+#: ../hamster/reports.py:229
 msgid "End"
 msgstr "Slut"
 
-#: ../hamster/reports.py:235
-#: ../hamster/reports.py:293
+#: ../hamster/reports.py:230
+#: ../hamster/reports.py:290
 msgid "Duration"
 msgstr "Längd"
 
-#: ../hamster/reports.py:236
+#: ../hamster/reports.py:231
 msgid "Description"
 msgstr "Beskrivning"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:268
+#: ../hamster/reports.py:264
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d %b, %Y"
 
-#: ../hamster/reports.py:303
+#: ../hamster/reports.py:300
 msgid "Total Time"
 msgstr "Total tid"
+
+#: ../hamster/overview.py:79
+msgid "Week"
+msgstr "Vecka"
+
+#: ../hamster/overview.py:80
+msgid "Month"
+msgstr "Månad"
+
+#: ../hamster/overview.py:81
+msgid "Date Range"
+msgstr "Datumintervall"
 
 #. date format for overview label when only single day is visible
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:79
+#: ../hamster/overview.py:158
 msgid "%B %d, %Y"
 msgstr "%d %B, %Y"
 
@@ -542,7 +521,7 @@ msgstr "%d %B, %Y"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:87
+#: ../hamster/overview.py:166
 #, python-format
 msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s %(start_B)s, %(start_Y)s – %(end_d)s %(end_B)s, %(end_Y)s"
@@ -551,7 +530,7 @@ msgstr "%(start_d)s %(start_B)s, %(start_Y)s – %(end_d)s %(end_B)s, %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:93
+#: ../hamster/overview.py:172
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s, %(end_Y)s"
@@ -560,34 +539,22 @@ msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s, %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:99
+#: ../hamster/overview.py:178
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s %(start_B)s – %(end_d)s, %(end_Y)s"
 
-#: ../hamster/stats.py:141
-msgid "Week"
-msgstr "Vecka"
-
-#: ../hamster/stats.py:142
-msgid "Month"
-msgstr "Månad"
-
-#: ../hamster/stats.py:143
-msgid "Date Range"
-msgstr "Datumintervall"
-
-#: ../hamster/stats_overview.py:86
+#: ../hamster/overview_activities.py:87
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %d %b"
 
-#: ../hamster/stats_stats.py:84
+#: ../hamster/stats.py:80
 msgctxt "years"
 msgid "All"
 msgstr "Alla"
 
-#: ../hamster/stats_stats.py:173
+#: ../hamster/stats.py:170
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -595,14 +562,14 @@ msgstr ""
 "Det finns ingen data för att generera statistik än.\n"
 "En veckas användning hade varit trevligt!"
 
-#: ../hamster/stats_stats.py:176
+#: ../hamster/stats.py:173
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Samlar in data — kontrollera igen efter en vecka!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats_stats.py:306
+#: ../hamster/stats.py:303
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%d %b, %Y"
@@ -610,18 +577,18 @@ msgstr "%d %b, %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats_stats.py:311
+#: ../hamster/stats.py:308
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%d %b"
 
-#: ../hamster/stats_stats.py:313
+#: ../hamster/stats.py:310
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Första aktiviteten registrerades den %s."
 
-#: ../hamster/stats_stats.py:322
-#: ../hamster/stats_stats.py:326
+#: ../hamster/stats.py:319
+#: ../hamster/stats.py:323
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -629,7 +596,7 @@ msgstr[0] "%(num)s år"
 msgstr[1] "%(num)s år"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats_stats.py:331
+#: ../hamster/stats.py:328
 #, python-format
 msgid "Time tracked so far is %(human_days)s human days (%(human_years)s) or %(working_days)s working days (%(working_years)s)."
 msgstr "Tidmätningen än så länge är %(human_days)s dagar (%(human_years)s år) eller %(working_days)s arbetsdagar (%(working_years)s)."
@@ -637,12 +604,12 @@ msgstr "Tidmätningen än så länge är %(human_days)s dagar (%(human_years)s �
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats_stats.py:349
+#: ../hamster/stats.py:346
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%d %b, %Y"
 
-#: ../hamster/stats_stats.py:354
+#: ../hamster/stats.py:351
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
@@ -650,28 +617,28 @@ msgstr[0] "Längsta oavbrutna arbete skedde den %(date)s och var %(hours)s timme
 msgstr[1] "Längsta oavbrutna arbete skedde den %(date)s och var %(hours)s timmar."
 
 #. total records (in selected scope)
-#: ../hamster/stats_stats.py:362
+#: ../hamster/stats.py:359
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Det finns %s post."
 msgstr[1] "Det finns %s poster."
 
-#: ../hamster/stats_stats.py:382
+#: ../hamster/stats.py:379
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster vill observera dig mer!"
 
-#: ../hamster/stats_stats.py:384
+#: ../hamster/stats.py:381
 #, python-format
 msgid "With %s percent of all facts starting before 9am you seem to be an early bird."
 msgstr "Eftersom %s procent av alla fakta börjar före klockan 09.00 så verkar det som du är morgonpigg."
 
-#: ../hamster/stats_stats.py:387
+#: ../hamster/stats.py:384
 #, python-format
 msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
 msgstr "Eftersom %s procent av alla fakta börjar efter 23.00 så verkar det som om du är en nattuggla."
 
-#: ../hamster/stats_stats.py:390
+#: ../hamster/stats.py:387
 #, python-format
 msgid "With %s percent of all tasks being shorter than 15 minutes you seem to be a busy bee."
 msgstr "Eftersom %s procent av alla uppgifter är kortare än 15 minuter så verkar det som om du är en arbetsmyra."
@@ -698,22 +665,56 @@ msgstr "%dh %dmin"
 msgid "Save report - Time Tracker"
 msgstr "Spara rapport - Tidmätare"
 
-#: ../hamster/widgets/reportchooserdialog.py:51
+#: ../hamster/widgets/reportchooserdialog.py:50
 msgid "HTML Report"
 msgstr "HTML-rapport"
 
-#: ../hamster/widgets/reportchooserdialog.py:59
+#: ../hamster/widgets/reportchooserdialog.py:58
 msgid "Tab-Separated Values (TSV)"
 msgstr "Tabulatorseparerade värden (TSV)"
 
-#: ../hamster/widgets/reportchooserdialog.py:67
+#: ../hamster/widgets/reportchooserdialog.py:66
 msgid "XML"
 msgstr "XML"
 
-#: ../hamster/widgets/reportchooserdialog.py:74
+#: ../hamster/widgets/reportchooserdialog.py:73
 msgid "iCal"
 msgstr "iCal"
 
+#~ msgid ""
+#~ "Activities will be counted as to belong to yesterday if the current time "
+#~ "is less than the specified day start and today, if it is over the time. "
+#~ "Activities that span two days, will tip over to the side where the "
+#~ "largest part of the activity is."
+#~ msgstr ""
+#~ "Aktiviteter kommer att räknas som gårdagens om den aktuella tiden är "
+#~ "mindre än den angivna dagens start och idag, om den går över tiden. "
+#~ "Aktiviteter som spänner över två dagar kommer att tippa över till den "
+#~ "sida där den största delen av aktiviteten är."
+#~ msgid ""
+#~ "Also remind every notify_interval minutes if no activity has been started."
+#~ msgstr ""
+#~ "Påminn även varje notify_interval minuter om ingen aktivitet har startats."
+#~ msgid "Keyboard shortcut for showing the Time Tracker window."
+#~ msgstr "Tangentbordsgenväg för visning av Tidmätare-fönstret."
+#~ msgid ""
+#~ "Remind of current task every specified amount of minutes. Set to 0 or "
+#~ "greater than 120 to disable reminder."
+#~ msgstr ""
+#~ "Påminn om aktuell uppgift varje angivet antal minuter. Ställ in till 0 "
+#~ "eller större än 120 för att inaktivera påminnelser."
+#~ msgid "Remind of current task every x minutes"
+#~ msgstr "Påminn om aktuell uppgift var x minuter"
+#~ msgid "Show window"
+#~ msgstr "Visa fönster"
+#~ msgid "Stop tracking current activity on shutdown"
+#~ msgstr "Stoppa tidmätning av aktuell aktivitet vid avstängning"
+#~ msgid "Stop tracking current activity when computer becomes idle"
+#~ msgstr "Stoppa tidmätning av aktuell aktivitet när datorn blir overksam"
+#~ msgid "Stop tracking on idle"
+#~ msgstr "Stoppa tidmätning vid inaktivitet"
+#~ msgid "Time at witch to consider beginning of new day"
+#~ msgstr "Klockslag när en ny dag anses börja"
 #~ msgid "<b>Activities</b>"
 #~ msgstr "<b>Aktiviteter</b>"
 #~ msgid "<b>Tracking</b>"
