@@ -524,15 +524,10 @@ class HamsterApplet(object):
         fact = tree.get_selected_fact()
 
         if fact:
-            activity = fact['name']
-            if fact['category']:
-                activity = '%s@%s' % (activity, fact['category'])
-
-            tags = fact["tags"]
-            if fact["description"]:
-                tags.append(fact["description"])
-
-            runtime.storage.add_fact(activity, ", ".join(tags))
+            runtime.storage.add_fact(fact["name"],
+                                     ", ".join(fact["tags"]),
+                                     category_name = fact["category"],
+                                     description = fact["description"])
             runtime.dispatcher.dispatch('panel_visible', False)
 
 
