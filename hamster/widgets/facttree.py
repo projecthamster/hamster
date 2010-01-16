@@ -427,9 +427,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         required_height = duration_h
 
+        cur_x, cur_y = act_cat_offset, 0
         if fact["tags"]:
             layout.set_font_description(self.tag_font)
-            cur_x, cur_y = act_cat_offset, 0
             for i, tag in enumerate(fact["tags"]):
                 tag_w, tag_h = Tag.tag_size(tag, layout)
                 
@@ -438,8 +438,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                     cur_y += tag_h + 4
                 
                 cur_x += tag_w + 4
-            
-            required_height = cur_y + tag_h + 4
+
+            cur_y += tag_h + 4
 
         layout.set_font_description(self.label_font)
 
@@ -450,15 +450,14 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             x, y = cur_x, cur_y + 4
             if cur_x + label_w > box_w:
                 x = 0
-                y = label_h + 4
             
             layout.set_width((box_w - x) * pango.SCALE)
             label_w, label_h = layout.get_pixel_size()
 
 
-            required_height = y + label_h
+            cur_y = cur_y + label_h
 
-        required_height = required_height + 6
+        required_height = cur_y + 6
         return (0, 0, 0, required_height)
 
 
