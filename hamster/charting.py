@@ -593,9 +593,15 @@ class HorizontalBarChart(Chart):
             self.layout.set_width(legend_width * pango.SCALE)
             self.layout.set_text(label)
             label_w, label_h = self.layout.get_pixel_size()
+            label_y = positions[label][0] + (positions[label][1] - label_h) / 2
 
-            self.set_color(label_color)
-            context.move_to(0, positions[label][0] + (positions[label][1] - label_h) / 2)
+            if i == self.mouse_bar:
+                self.set_color(self.get_style().fg[gtk.STATE_PRELIGHT])
+            else:
+                self.set_color(label_color)
+
+
+            context.move_to(0, label_y)
             context.show_layout(self.layout)
 
 
@@ -635,9 +641,6 @@ class HorizontalBarChart(Chart):
                               last_color)
 
 
-
-
-
             # value labels
             if self.stack_keys:
                 total_value = sum(self.data[i])
@@ -649,10 +652,25 @@ class HorizontalBarChart(Chart):
             label_w, label_h = self.layout.get_pixel_size()
 
             vertical_padding = max((positions[label][1] - label_h) / 2.0, 1)
+
+            label_y = positions[label][0] + (positions[label][1] - label_h) / 2.0
             if  bar_start - vertical_padding < label_w:
                 label_x = self.graph_x + bar_start + vertical_padding
-                self.set_color(label_color)
+
+                # avoid zero selected bars without any hints
+                if not self.stack_keys and i in self.bars_selected and self.bars[i].value == 0:
+                    self.set_color(self.get_style().bg[gtk.STATE_SELECTED])
+                    self.draw_rect(label_x - 2,
+                                   label_y - 2,
+                                   label_w + 4,
+                                   label_h + 4, 4)
+                    self.context.fill()
+                    self.set_color(self.get_style().fg[gtk.STATE_SELECTED])
+                else:
+                    self.set_color(label_color)
             else:
+                label_x = self.graph_x + bar_start - label_w - vertical_padding
+
                 if i in self.bars_selected:
                     self.set_color(self.get_style().fg[gtk.STATE_SELECTED].to_string())
                 else:
@@ -662,9 +680,8 @@ class HorizontalBarChart(Chart):
                     else:
                         self.set_color(self.colors.almost_white)
 
-                label_x = self.graph_x + bar_start - label_w - vertical_padding
 
-            context.move_to(label_x, positions[label][0] + (positions[label][1] - label_h) / 2.0)
+            context.move_to(label_x, label_y)
             context.show_layout(self.layout)
 
         context.stroke()
