@@ -126,8 +126,10 @@ class DayLine(graphics.Area):
 
         mouse_down = state & gtk.gdk.BUTTON1_MASK
 
-        highlight_start = self.highlight_start + self.graph_x
-        highlight_end = self.highlight_end + self.graph_x
+        highlight_start, highlight_end = None, None
+        if self.highlight_start:
+            highlight_start = self.highlight_start + self.graph_x
+            highlight_end = self.highlight_end + self.graph_x
 
         if highlight_start != None:
             start_drag = 10 > (highlight_start - x) > -1
