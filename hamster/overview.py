@@ -323,9 +323,8 @@ class Overview(object):
     def on_add_clicked(self, button):
         fact = self.fact_tree.get_selected_fact()
         if not fact:
-            return
-        
-        if isinstance(fact, dt.date):
+            selected_date = self.start_date
+        elif isinstance(fact, dt.date):
             selected_date = fact
         else:
             selected_date = fact["date"]
