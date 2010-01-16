@@ -307,133 +307,8 @@ class TagBox(graphics.Area):
             cur_x += w + 6 #some padding too, please
 
 
-# snatch from winedoors. Carl Lattimer is my hero as always
-# wish he could write tutorials
-class TagCellRenderer(gtk.GenericCellRenderer):
-    __gproperties__ = {
-        "data": (gobject.TYPE_PYOBJECT, "Data", "Data", gobject.PARAM_READWRITE),
-    }
-
-    def __init__(self):
-        gtk.GenericCellRenderer.__init__(self)
-        self.height = 0
-        self.width = None
-        self.data = None
-
-        self._font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        self._font_size = 10
-        self.layout = None
-
-    def font_size(self):
-        return self._font_size
-
-    def set_font_size(self, val):
-        self._font_size = val
-        self._font.set_size(pango.SCALE * self._font_size)
-
-
-    def do_set_property (self, pspec, value):
-        setattr (self, pspec.name, value)
-
-    def do_get_property (self, pspec):
-        return getattr (self, pspec.name)
-
-
-    def tag_size(self, label):
-        text_w, text_h = self.set_text(label)
-        w = text_w + 16 # padding (we have some diagonals to draw)
-        h = text_h + 2
-        return w, h
-
-    def set_text(self, text):
-        # sets text and returns width and height of the layout
-        self.layout.set_text(text)
-        w, h = self.layout.get_pixel_size()
-        return w, h
-
-    def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
-        if not self.data: return
-
-        self.width = cell_area.width
-
-        context = window.cairo_create()
-
-        if isinstance(self.data, dict):
-            tags = self.data["tags"]
-        else:
-            tags = self.data
-
-        x, y, width, h = cell_area
-
-        context.translate(x, y)
-
-        if not self.layout:
-            self.layout = context.create_layout()
-        self.layout.set_font_description(self._font)
-
-        cur_x, cur_y = 4, 2
-        for tag in tags:
-            w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
-                cur_x = 5
-                cur_y += h + 6
-
-            Tag(context,
-                self.layout,
-                True,
-                tag,
-                None,
-                gtk.gdk.Rectangle(cur_x, cur_y, self.width - cur_x, self.height - cur_y))
-
-
-            cur_x += w + 6 #some padding too, please
-
-            self.height = cur_y
-
-    def on_get_size (self, widget, cell_area = None):
-        # TODO - we are replicating rendering code - should reuse it instead
-        if isinstance(self.data, dict):
-            tags = self.data["tags"]
-        else:
-            tags = self.data
-
-        if not self.width or not tags:
-            height = 0
-            min_width = 80
-        else:
-            pixmap = gtk.gdk.Pixmap(None, self.width, 500, 24)
-            context = pixmap.cairo_create()
-            self.layout = context.create_layout()
-            default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-            default_font.set_size(pango.SCALE * self.font_size())
-            self.layout.set_font_description(default_font)
-
-            #make sure we fit in
-            min_width = 0
-            for tag in tags:
-                min_width = max(min_width, self.tag_size(tag)[0]) + 6
-
-
-            cur_x, cur_y = 4, 2
-            for tag in tags:
-                w, h = self.tag_size(tag)
-                if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
-                    cur_x = 5
-                    cur_y += h + 6
-
-                cur_x += w + 6 #some padding too, please
-
-            cur_y += h + 3
-
-            self.height = cur_y # TODO - this should actually trigger whole tree redraw if heights do not match
-
-        return (0, 0, min_width, self.height)
-
-
 class Tag(object):
     def __init__(self, context, layout, render_now = False, label = None, color = None, rect = None):
-        self.font_size = 10
-
         if not context:
             render_now = False
         else:
@@ -469,22 +344,21 @@ class Tag(object):
         w, h = self.layout.get_pixel_size()
         return w, h
 
-    def tag_size(self, label):
-        text_w, text_h = self.set_text(label)
+    @staticmethod
+    def tag_size(label, layout):
+        layout.set_text(label)
+        text_w, text_h = layout.get_pixel_size()
         w = text_w + 16 # padding (we have some diagonals to draw)
         h = text_h + 2
         return w, h
 
     def draw_tag(self):
         self.context.set_line_width(1)
-        self.context.set_antialias(cairo.ANTIALIAS_NONE)
-
-        self.context.set_antialias(cairo.ANTIALIAS_DEFAULT)
         label, x, y, color = self.label, self.x, self.y, self.color
         if x - round(x) != 0.5: x += 0.5
         if y - round(y) != 0.5: y += 0.5
 
-        w, h = self.tag_size(label)
+        w, h = self.tag_size(label, self.layout)
         corner = h / 3
 
         self.context.move_to(x, y + corner)

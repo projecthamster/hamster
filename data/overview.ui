@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">Overview - Hamster</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <signal name="configure_event" handler="on_tabs_window_configure_event"/>
     <signal name="delete_event" handler="on_tabs_window_deleted"/>
     <child>
       <object class="GtkVBox" id="vbox1">

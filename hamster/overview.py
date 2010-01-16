@@ -251,6 +251,11 @@ class Overview(object):
 
             self.search()
 
+    def on_tabs_window_configure_event(self, window, event):
+        # this is required so that the rows would grow on resize
+        self.fact_tree.fix_row_heights()
+
+
     def on_start_date_entered(self, input):
         self.start_date = input.get_date().date()
         self.view_date = self.start_date
@@ -332,7 +337,7 @@ class Overview(object):
 
     def on_edit_clicked(self, button):
         fact = self.fact_tree.get_selected_fact()
-        if not fact or isinstance(fact, date):
+        if not fact or isinstance(fact, dt.date):
             return
         dialogs.edit.show(fact_id = fact["id"])
 

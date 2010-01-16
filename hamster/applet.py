@@ -617,6 +617,11 @@ class HamsterApplet(object):
         self.last_activity = None
         runtime.dispatcher.dispatch('panel_visible', False)
 
+    def on_window_configure_event(self, window, event):
+        # this is required so that the rows would grow on resize
+        self.treeview.fix_row_heights()
+
+
     def show(self):
         self.window.show_all()
 
