@@ -24,7 +24,7 @@ EXTRA_DIST = \
 
 _keybinder.c: _keybinder.defs _keybinder.override
 .defs.c:
-	(cd $(srcdir) \
+	$(AM_V_GEN)(cd $(srcdir) \
 	 && $(PYGTK_CODEGEN) \
 	    --override $*.override \
 	    --register $(PYGTK_DEFSDIR)/gtk-types.defs \

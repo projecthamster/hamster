@@ -38,7 +38,7 @@ hamsterbindir = $(libdir)/hamster-applet
 @INTLTOOL_SERVER_RULE@
 
 $(server_in_files): $(server_in_files:.server.in=.server.in.in)
-	sed -e "s|\@LIBEXECDIR\@|$(hamsterbindir)|" $< > $@
+	$(AM_V_GEN)sed -e "s|\@LIBEXECDIR\@|$(hamsterbindir)|" $< > $@
 
 DISTCLEANFILES = \
 	$(server_DATA) \

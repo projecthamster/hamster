@@ -5,7 +5,7 @@ CPPFLAGS = \
 	$(PYTHON_INCLUDES) 
 
 hamster-applet: hamster-applet.py
-	sed -e "s|\@PYTHONDIR\@|$(pyexecdir)|" $< > $@
+	$(AM_V_GEN)sed -e "s|\@PYTHONDIR\@|$(pyexecdir)|" $< > $@
 
 hamsterbindir = $(libdir)/hamster-applet
 hamsterbin_SCRIPTS = hamster-applet
