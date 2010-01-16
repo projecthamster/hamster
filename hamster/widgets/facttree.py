@@ -80,15 +80,21 @@ class FactTree(gtk.TreeView):
         self.connect("key-press-event", self._on_key_pressed)
         self.connect("configure-event", lambda *args: self.columns_autosize())
 
-
         self.show()
         
         self.longest_activity_category = 0 # we will need this for the cell renderer
-        
-        
+        self.longest_interval = 0 # we will need this for the cell renderer
+        self.longest_duration = 0 # we will need this for the cell renderer
         self.stored_selection = None
 
         self.box = None
+
+
+        pixmap = gtk.gdk.Pixmap(None, 10, 10, 24)
+        _test_context = pixmap.cairo_create()
+        self._test_layout = _test_context.create_layout()
+        font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self._test_layout.set_font_description(font)
         
         
     def fix_row_heights(self):
@@ -100,12 +106,31 @@ class FactTree(gtk.TreeView):
     def clear(self):
         self.store_model.clear()
         self.longest_activity_category = 0
+        self.longest_interval = 0
+        self.longest_duration = 0
+
+    def update_longest_dimensions(self, fact):
+        interval = "%s -" % fact["start_time"].strftime("%H:%M")
+        if fact["end_time"]:
+            interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
+        self._test_layout.set_markup(interval)
+        w, h = self._test_layout.get_pixel_size()
+        self.longest_interval = max(self.longest_interval, w + 20)
+
+        
+        self._test_layout.set_markup("%s - <small>%s</small> " % (fact["name"], fact["category"]))
+        w, h = self._test_layout.get_pixel_size()
+        self.longest_activity_category = max(self.longest_activity_category, w + 10)
+
+        self._test_layout.set_markup(" %s" % stuff.format_duration(fact["delta"]))
+        w, h = self._test_layout.get_pixel_size()
+        self.longest_duration = max(self.longest_duration, w + 10)
+
 
     def add_fact(self, fact, parent = None):
-        self.longest_activity_category = max(self.longest_activity_category,
-                                             len(fact["name"]) + len(fact["category"]))
-
+        self.update_longest_dimensions(fact)
         self.store_model.append(parent, [fact, None])
+
 
     def add_group(self, group_label, group_date, facts):
         total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
@@ -129,13 +154,18 @@ class FactTree(gtk.TreeView):
         
         self.set_model()
 
+
     def attach_model(self):
+        # attach model is also where we calculate the bounding box widths
+
+
         self.set_model(self.store_model)
         self.expand_all()
         
         if self.stored_selection:
             selection = self.get_selection()
             selection.select_path(self.stored_selection[0])
+
 
     def get_selected_fact(self):
         selection = self.get_selection()
@@ -198,7 +228,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         self.tag_font = pango.FontDescription(default_font)
         self.tag_font.set_size(pango.SCALE * 8)
 
-        self.layout = None
+        self.layout, self.tag_layout = None, None
         
         self.col_padding = 10
         self.row_padding = 4
@@ -233,6 +263,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         if not self.layout:
             self.layout = context.create_layout()
             self.layout.set_font_description(self.label_font)
+
+            self.tag_layout = context.create_layout()
+            self.tag_layout.set_font_description(self.tag_font)
 
 
         if "id" in self.data:
@@ -301,12 +334,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             
             """ activity, category, tags, description in middle """
             # we want our columns look aligned, so we will do fixed offset from
-            # both sides, in letter length
-            self.layout.set_markup("8")
-            letter_w, letter_h = self.layout.get_pixel_size()
-            
-            box_x = letter_w * 14
-            box_w = width - letter_w * 15 - max(letter_w * 10, duration_w)
+            # both sides, in letter length            
+            box_x = widget.longest_interval + self.col_padding
+            box_w = width - (widget.longest_interval - self.col_padding) - widget.longest_duration
 
             context.translate(box_x, 2)
 
@@ -320,29 +350,29 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             if not selected:
                 self.set_color(context, widget.get_style().text[gtk.STATE_INSENSITIVE])
-            self.layout.set_markup(" - %s" % fact["category"])
+            self.layout.set_markup(" - <small>%s</small>" % fact["category"])
             label_w, label_h = self.layout.get_pixel_size()
             context.show_layout(self.layout)
             
-            act_cat_offset = (widget.longest_activity_category + 4) * letter_w
+            act_cat_offset = widget.longest_activity_category
             context.move_to(act_cat_offset, 0)
             context.set_source_rgb(0,0,0)
             
-            self.layout.set_font_description(self.tag_font)
             cur_x, cur_y = act_cat_offset, 0
-            for i, tag in enumerate(fact["tags"]):
-                tag_w, tag_h = Tag.tag_size(tag, self.layout)
-                
-                if i > 0 and cur_x + tag_w >= box_w:
-                    cur_x = act_cat_offset
-                    cur_y += tag_h + 4
-                
-                Tag(context, self.layout, True, tag, None,
-                    gtk.gdk.Rectangle(cur_x, cur_y, box_w - cur_x, height - cur_y))
-                
-                cur_x += tag_w + 4
+            if fact["tags"]:
+                for i, tag in enumerate(fact["tags"]):
+                    tag_w, tag_h = Tag.tag_size(tag, self.tag_layout)
+                    
+                    if i > 0 and cur_x + tag_w >= box_w:
+                        cur_x = act_cat_offset
+                        cur_y += tag_h + 4
+                    
+                    Tag(context, self.tag_layout, True, tag, None,
+                        gtk.gdk.Rectangle(cur_x, cur_y, box_w - cur_x, height - cur_y))
+                    
+                    cur_x += tag_w + 4
+                cur_y += tag_h + 4
 
-            self.layout.set_font_description(self.label_font)
 
             if fact["description"]:
                 self.layout.set_markup("<small>%s</small>" % fact["description"])
@@ -351,7 +381,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 x, y = cur_x, cur_y + 4
                 if cur_x + label_w > box_w:
                     x = 0
-                    y = label_h + 4
                 
                 context.move_to(x, y)
                 self.layout.set_width((box_w - x) * pango.SCALE)
@@ -391,15 +420,12 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         """ activity, category, tags, description in middle """
         # we want our columns look aligned, so we will do fixed offset from
         # both sides, in letter length
-        layout.set_markup("8")
-        letter_w, letter_h = layout.get_pixel_size()
-        
-        box_x = letter_w * 14
-        box_w = width - letter_w * 15 - max(letter_w * 14, duration_w)
+        box_x = widget.longest_interval + self.col_padding
+        box_w = width - (widget.longest_interval + self.col_padding) - widget.longest_duration
 
-        act_cat_offset = (widget.longest_activity_category + 4) * letter_w
+        act_cat_offset = widget.longest_activity_category
 
-        required_height = letter_h
+        required_height = duration_h
 
         if fact["tags"]:
             layout.set_font_description(self.tag_font)
