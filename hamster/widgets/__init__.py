@@ -32,7 +32,6 @@ from dayline import DayLine
 from tags import Tag
 from tags import TagBox
 from tags import TagsEntry
-from tags import TagCellRenderer
 
 from reportchooserdialog import ReportChooserDialog
 
