@@ -283,9 +283,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                
             
             """ start time and end time at beginning of column """
-            interval = fact["start_time"].strftime("%H:%M")
+            interval = fact["start_time"].strftime("%H:%M -")
             if fact["end_time"]:
-                interval = "%s - %s" % (interval, fact["end_time"].strftime("%H:%M"))
+                interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
             
             self.set_color(context, text_color)
 
@@ -345,7 +345,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             self.layout.set_font_description(self.label_font)
 
             if fact["description"]:
-                self.layout.set_markup("<small><i>%s</i></small>" % fact["description"])
+                self.layout.set_markup("<small>%s</small>" % fact["description"])
                 label_w, label_h = self.layout.get_pixel_size()
                 
                 x, y = cur_x, cur_y + 4
