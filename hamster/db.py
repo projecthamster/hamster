@@ -131,7 +131,7 @@ class Storage(storage.Storage):
 
         #now we will find which ones are gone from the list
         query = """
-                    SELECT b.id as id, count(a.fact_id) as occurences
+                    SELECT b.id as id, b.autocomplete, count(a.fact_id) as occurences
                       FROM tags b
                  LEFT JOIN fact_tags a on a.tag_id = b.id
                      WHERE b.id not in (%s)
@@ -141,7 +141,7 @@ class Storage(storage.Storage):
         gone = self.fetchall(query, tags)
 
         to_delete = [str(tag["id"]) for tag in gone if tag["occurences"] == 0]
-        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0]
+        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0 and tag["autocomplete"] == "true"]
 
         if to_delete:
             self.execute("delete from tags where id in (%s)" % ", ".join(to_delete))
@@ -149,6 +149,7 @@ class Storage(storage.Storage):
         if to_uncomplete:
             self.execute("update tags set autocomplete='false' where id in (%s)" % ", ".join(to_uncomplete))
 
+        return changes or len(to_delete + to_uncomplete) > 0
 
     def __get_category_list(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
