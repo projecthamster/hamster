@@ -490,6 +490,8 @@ class Storage(storage.Storage):
         if end_time:
             end_time = end_time.replace(microsecond = 0)
 
+        if not start_time or not activity.activity_name:  # sanity check
+            return
 
         # now check if maybe there is also a category
         category_id = None
