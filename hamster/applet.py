@@ -590,6 +590,14 @@ class HamsterApplet(object):
         if new in self.workspace_activities and self.workspace_activities[new]:
             activity = self.workspace_activities[new]
 
+            # check if maybe there is no need to switch, as field match:
+            if self.last_activity and \
+               self.last_activity['name'] == activity['name'] and \
+               self.last_activity['category'] == activity['category'] and \
+               self.last_activity['tags'] == activity['tags']:
+                return
+
+            # ok, switch
             runtime.storage.add_fact(activity['name'],
                                      ", ".join(activity['tags']),
                                      category_name = activity['category'],
