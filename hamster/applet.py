@@ -44,37 +44,14 @@ import idle
 
 import pango
 
+import wnck
+
 try:
     import pynotify
     PYNOTIFY = True
+    pynotify.init('Hamster Applet')
 except:
     PYNOTIFY = False
-
-class Notifier(object):
-    def __init__(self, attach):
-        self._icon = gtk.STOCK_DIALOG_QUESTION
-        self._attach = attach
-        # Title of reminder notification
-        self.summary = _("Time Tracker")
-
-        if not pynotify.is_initted():
-            pynotify.init('Hamster Applet')
-
-    def msg(self, body, edit_cb, switch_cb):
-        notify = pynotify.Notification(self.summary, body, self._icon, self._attach)
-
-        if "actions" in pynotify.get_server_caps():
-            #translators: this is edit activity action in the notifier bubble
-            notify.add_action("edit", _("Edit"), edit_cb)
-            #translators: this is switch activity action in the notifier bubble
-            notify.add_action("switch", _("Switch"), switch_cb)
-        notify.show()
-
-    def msg_low(self, message):
-        notify = pynotify.Notification(self.summary, message, self._icon, self._attach)
-        notify.set_urgency(pynotify.URGENCY_LOW)
-        notify.show()
-
 
 class PanelButton(gtk.ToggleButton):
     def __init__(self):
@@ -206,11 +183,6 @@ class HamsterApplet(object):
     def __init__(self, applet):
         self.applet = applet
 
-        self.notify_interval = None
-        self.preferences_editor = None
-        self.applet.about = None
-        self.open_fact_editors = []
-
         self.button = PanelButton()
         self.button.connect('toggled', self.on_toggle)
         self.applet.add(self.button)
@@ -261,8 +233,14 @@ class HamsterApplet(object):
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
 
+        # configuration
+        self.timeout_enabled = conf.get("enable_timeout")
+        self.notify_on_idle = conf.get("notify_on_idle")
+        self.notify_interval = conf.get("notify_interval")
         self.day_start = conf.get("day_start_minutes")
         self.day_start = dt.time(self.day_start / 60, self.day_start % 60) # it comes in as minutes
+
+        runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
         self.last_activity = None
@@ -275,27 +253,12 @@ class HamsterApplet(object):
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
-
         runtime.dispatcher.add_handler('panel_visible', self.__show_toggle)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
-
-
-        self._gui.connect_signals(self)
-
-        # init hotkey
         runtime.dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
 
-        # init idle check
-        self.timeout_enabled = conf.get("enable_timeout")
-        self.notify_on_idle = conf.get("notify_on_idle")
-        runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
-
-
-        # init nagging timeout
-        if PYNOTIFY:
-            self.notify = Notifier(self.button)
-            self.on_conf_changed(None, ("notify_interval", conf.get("notify_interval")))
+        self._gui.connect_signals(self)
 
 
     """UI functions"""
@@ -324,22 +287,34 @@ class HamsterApplet(object):
 
 
     def check_user(self):
-        if not self.notify_interval: #no interval means "never"
+        if not PYNOTIFY: #no interval means "never"
+            return
+
+        if self.notify_interval <= 0 or self.notify_interval >= 121:
             return
 
         now = dt.datetime.now()
+        message = None
         if self.last_activity:
             delta = now - self.last_activity['start_time']
             duration = delta.seconds /  60
 
             if duration and duration % self.notify_interval == 0:
-                # activity reminder
-                msg = _(u"Working on <b>%s</b>") % self.last_activity['name']
-                self.notify.msg(msg, self.edit_cb, self.switch_cb)
+                message = _(u"Working on <b>%s</b>") % self.last_activity['name']
+
         elif self.notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour *60) % self.notify_interval == 0:
-                self.notify.msg_low(_(u"No activity"))
+                message = _(u"No activity")
+
+
+        if message:
+            notification = pynotify.Notification(_("Time Tracker"),
+                                                 message,
+                                                 "hamster-applet")
+            notification.set_urgency(pynotify.URGENCY_LOW)
+            notification.show()
+
 
     def edit_cb(self, n, action):
         dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
@@ -597,10 +572,7 @@ class HamsterApplet(object):
         elif key == "notify_on_idle":
             self.notify_on_idle = value
         elif key == "notify_interval":
-            if PYNOTIFY and 0 < value < 121:
-                self.notify_interval = value
-            else:
-                self.notify_interval = None
+            self.notify_interval = value
         elif key == "day_start_minutes":
             self.day_start = dt.time(value / 60, value % 60)
             self.load_day()
