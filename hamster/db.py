@@ -517,9 +517,9 @@ class Storage(storage.Storage):
                    and previous["description"] == (description or ""):
                     return previous
 
-                # otherwise, if not tags nor description is added (extra data
+                # otherwise, if no description is added
                 # see if maybe it is too short to qualify as an activity
-                if not previous["tags"] and not previous["description"] \
+                if not previous["description"] \
                     and 60 >= (start_time - previous['start_time']).seconds >= 0:
                     self.__remove_fact(previous['id'])
                     start_time = previous['start_time']
