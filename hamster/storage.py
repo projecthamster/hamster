@@ -156,5 +156,5 @@ class Storage(object):
     def get_category_by_name(self, category):
         return self.__get_category_by_name(category)
 
-    def get_activity_by_name(self, activity, category_id):
-        return self.__get_activity_by_name(activity, category_id)
+    def get_activity_by_name(self, activity, category_id = None, ressurect = True):
+        return self.__get_activity_by_name(activity, category_id, ressurect)
