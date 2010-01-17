@@ -239,6 +239,7 @@ class HamsterApplet(object):
         self.notify_interval = conf.get("notify_interval")
         self.day_start = conf.get("day_start_minutes")
         self.day_start = dt.time(self.day_start / 60, self.day_start % 60) # it comes in as minutes
+        self.workspace_tracking = conf.get("workspace_tracking")
 
         runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
 
@@ -258,7 +259,28 @@ class HamsterApplet(object):
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
         runtime.dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
 
+        self.screen = None
+        if self.workspace_tracking:
+            gobject.timeout_add(50, self.init_workspace_tracking)
+
+
         self._gui.connect_signals(self)
+
+
+    def init_workspace_tracking(self):
+        """call this using timeout_add, because it takes a little while until
+           wnck is ready (flushing events will cause hang when performed while
+           mainloop is running)"""
+        if not self.screen:
+            self.screen = wnck.screen_get_default()
+
+        active_workspace = self.screen.get_active_workspace()
+        if not active_workspace:
+            return True # come back again
+
+        self.screen.workspace_handler = self.screen.connect("active-workspace-changed", self.on_workspace_changed)
+        self.workspace_activities = {}
+        return False # done
 
 
     """UI functions"""
@@ -559,6 +581,31 @@ class HamsterApplet(object):
             runtime.storage.touch_fact(self.last_activity,
                                        end_time = self.dbusIdleListener.getIdleFrom())
 
+    def on_workspace_changed(self, screen, previous_workspace):
+        if not self.workspace_tracking or self.workspace_tracking not in (1,2):
+            return # default to not doing anything
+
+        # rely on workspace numbers as names change
+        prev = previous_workspace.get_number()
+        new = screen.get_active_workspace().get_number()
+
+        # on switch, update our mapping between spaces and activities
+        self.workspace_activities[prev] = self.last_activity
+
+        # if the new workspace is in our dict, switch to the specified activity
+        if new in self.workspace_activities and self.workspace_activities[new]:
+            activity = self.workspace_activities[new]
+
+            runtime.storage.add_fact(activity['name'],
+                                     ", ".join(activity['tags']),
+                                     category_name = activity['category'],
+                                     description = activity['description'])
+
+            if PYNOTIFY:
+                pynotify.Notification(_("Changed activity"),
+                                      _("Switched to '%s'") % activity['name'],
+                                      "hamster-applet").show()
+
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
         self.__show_toggle(None, not self.button.get_active())
@@ -577,6 +624,15 @@ class HamsterApplet(object):
             self.day_start = dt.time(value / 60, value % 60)
             self.load_day()
             self.update_label()
+        elif key == "workspace_tracking":
+            self.workspace_tracking = value
+            if self.workspace_tracking and not self.screen:
+                gobject.timeout_add(50, self.init_workspace_tracking)
+            elif not self.workspace_tracking:
+                if self.screen:
+                    self.screen.disconnect(self.screen.workspace_handler)
+                    self.screen = None
+
 
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
