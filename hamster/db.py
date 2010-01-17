@@ -229,7 +229,7 @@ class Storage(storage.Storage):
 
 
 
-    def __get_activity_by_name(self, name, category_id = None):
+    def __get_activity_by_name(self, name, category_id = None, ressurect = True):
         """get most recent, preferably not deleted activity by it's name"""
 
         if category_id:
@@ -255,7 +255,9 @@ class Storage(storage.Storage):
         if res:
             # if the activity was marked as deleted, ressurect on first call
             # and put in the unsorted category
-            if res['deleted']:
+            if res['deleted'] and not ressurect:
+                return None
+            elif res['deleted']:
                 update = """
                             UPDATE activities
                                SET deleted = null, category_id = -1
