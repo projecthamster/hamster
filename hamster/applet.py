@@ -579,38 +579,68 @@ class HamsterApplet(object):
             # ignored
             return
 
-        if not self.workspace_tracking or self.workspace_tracking not in (1,2):
+        if not self.workspace_tracking:
             return # default to not doing anything
+
+        current_workspace = screen.get_active_workspace()
 
         # rely on workspace numbers as names change
         prev = previous_workspace.get_number()
-        new = screen.get_active_workspace().get_number()
+        new = current_workspace.get_number()
 
         # on switch, update our mapping between spaces and activities
         self.workspace_activities[prev] = self.last_activity
 
-        # if the new workspace is in our dict, switch to the specified activity
-        if new in self.workspace_activities and self.workspace_activities[new]:
-            activity = self.workspace_activities[new]
 
-            # check if maybe there is no need to switch, as field match:
-            if self.last_activity and \
-               self.last_activity['name'] == activity['name'] and \
-               self.last_activity['category'] == activity['category'] and \
-               self.last_activity['tags'] == activity['tags']:
-                return
+        activity = None
+        if "name" in self.workspace_tracking:
+            # first try to look up activity by desktop name
 
-            # ok, switch
-            runtime.storage.add_fact(activity['name'],
-                                     ", ".join(activity['tags']),
-                                     category_name = activity['category'],
-                                     description = activity['description'])
+            parsed_activity = stuff.parse_activity_input(current_workspace.get_name())
+            if parsed_activity:
+                category_id = None
+                if parsed_activity.category_name:
+                    category_id = runtime.storage.get_category_by_name(parsed_activity.category_name)
 
-            if self.notification:
-                self.notification.update(_("Changed activity"),
-                                         _("Switched to '%s'") % activity['name'],
-                                         "hamster-applet")
-                self.notification.show()
+                activity_id = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
+                                                                   category_id,
+                                                                   ressurect = False)
+                if activity_id:
+                    # we need dict below
+                    activity = dict(name = parsed_activity.activity_name,
+                                    category = parsed_activity.category_name,
+                                    description = parsed_activity.description,
+                                    tags = parsed_activity.tags)
+
+
+        if not activity and "memory" in self.workspace_tracking:
+            # now see if maybe we have any memory of the new workspace
+            # (as in - user was here and tracking Y)
+            # if the new workspace is in our dict, switch to the specified activity
+            if new in self.workspace_activities and self.workspace_activities[new]:
+                activity = self.workspace_activities[new]
+
+        if not activity:
+            return
+
+        # check if maybe there is no need to switch, as field match:
+        if self.last_activity and \
+           self.last_activity['name'].lower() == activity['name'].lower() and \
+           self.last_activity['category'].lower() == activity['category'].lower() and \
+           ", ".join(self.last_activity['tags']).lower() == ", ".join(activity['tags']).lower():
+            return
+
+        # ok, switch
+        runtime.storage.add_fact(activity['name'],
+                                 ", ".join(activity['tags']),
+                                 category_name = activity['category'],
+                                 description = activity['description'])
+
+        if self.notification:
+            self.notification.update(_("Changed activity"),
+                                     _("Switched to '%s'") % activity['name'],
+                                     "hamster-applet")
+            self.notification.show()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
