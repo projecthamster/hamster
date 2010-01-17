@@ -261,27 +261,15 @@ class HamsterApplet(object):
 
         self.screen = None
         if self.workspace_tracking:
-            gobject.timeout_add(50, self.init_workspace_tracking)
-
+            self.init_workspace_tracking()
 
         self._gui.connect_signals(self)
 
 
     def init_workspace_tracking(self):
-        """call this using timeout_add, because it takes a little while until
-           wnck is ready (flushing events will cause hang when performed while
-           mainloop is running)"""
-        if not self.screen:
-            self.screen = wnck.screen_get_default()
-
-        active_workspace = self.screen.get_active_workspace()
-        if not active_workspace:
-            return True # come back again
-
+        self.screen = wnck.screen_get_default()
         self.screen.workspace_handler = self.screen.connect("active-workspace-changed", self.on_workspace_changed)
         self.workspace_activities = {}
-        return False # done
-
 
     """UI functions"""
     def refresh_hamster(self):
@@ -582,6 +570,12 @@ class HamsterApplet(object):
                                        end_time = self.dbusIdleListener.getIdleFrom())
 
     def on_workspace_changed(self, screen, previous_workspace):
+        if not previous_workspace:
+            # wnck has a slight hiccup on init and after that calls
+            # workspace changed event with blank previous state that should be
+            # ignored
+            return
+
         if not self.workspace_tracking or self.workspace_tracking not in (1,2):
             return # default to not doing anything
 
@@ -627,7 +621,7 @@ class HamsterApplet(object):
         elif key == "workspace_tracking":
             self.workspace_tracking = value
             if self.workspace_tracking and not self.screen:
-                gobject.timeout_add(50, self.init_workspace_tracking)
+                self.init_workspace_tracking()
             elif not self.workspace_tracking:
                 if self.screen:
                     self.screen.disconnect(self.screen.workspace_handler)
