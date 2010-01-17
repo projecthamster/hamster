@@ -263,6 +263,12 @@ class HamsterApplet(object):
         if self.workspace_tracking:
             self.init_workspace_tracking()
 
+        self.notification = None
+        if PYNOTIFY:
+            self.notification = pynotify.Notification("Oh hi",
+                                                      "Greetings from hamster!")
+            self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
+
         self._gui.connect_signals(self)
 
 
@@ -297,7 +303,7 @@ class HamsterApplet(object):
 
 
     def check_user(self):
-        if not PYNOTIFY: #no interval means "never"
+        if not self.notification:
             return
 
         if self.notify_interval <= 0 or self.notify_interval >= 121:
@@ -319,10 +325,7 @@ class HamsterApplet(object):
 
 
         if message:
-            notification = pynotify.Notification(_("Time Tracker"),
-                                                 message,
-                                                 "hamster-applet")
-            notification.set_urgency(pynotify.URGENCY_LOW)
+            self.notification.update(_("Time Tracker"), message, "hamster-applet")
             notification.show()
 
 
@@ -603,10 +606,11 @@ class HamsterApplet(object):
                                      category_name = activity['category'],
                                      description = activity['description'])
 
-            if PYNOTIFY:
-                pynotify.Notification(_("Changed activity"),
-                                      _("Switched to '%s'") % activity['name'],
-                                      "hamster-applet").show()
+            if self.notification:
+                self.notification.update(_("Changed activity"),
+                                         _("Switched to '%s'") % activity['name'],
+                                         "hamster-applet")
+                self.notification.show()
 
     """global shortcuts"""
     def on_keybinding_activated(self, event, data):
