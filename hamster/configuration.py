@@ -66,7 +66,7 @@ class RuntimeStore(Singleton):
         self.data_dir = data_dir
         self.dispatcher = Dispatcher()
         self.storage = Storage(self.dispatcher)
-        
+
 
         # figure out the correct database file
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
@@ -198,17 +198,18 @@ class GConfStore(Singleton):
         'keybinding'                :   "<Super>H",     # Key binding to summon hamster
         'overview_window_box'       :   [],             # X, Y, W, H
         'overview_window_maximized' :   False,          # Is overview window maximized
+        'workspace_tracking'        :   0,              # Should hamster switch activities on workspace change 0,1,2
     }
-    
+
     def __init__(self):
         self._client = gconf.client_get_default()
-        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)  
+        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
         self._notifications = []
 
     def _fix_key(self, key):
         """
         Appends the GCONF_PREFIX to the key if needed
-        
+
         @param key: The key to check
         @type key: C{string}
         @returns: The fixed key
@@ -218,7 +219,7 @@ class GConfStore(Singleton):
             return self.GCONF_DIR + key
         else:
             return key
-            
+
     def _key_changed(self, client, cnxn_id, entry, data=None):
         """
         Callback when a gconf key changes
@@ -244,20 +245,20 @@ class GConfStore(Singleton):
             for i in value.get_list():
                 l.append(i.get_string())
             return l
-        
+
         return None
-        
+
     def get(self, key, default=None):
         """
-        Returns the value of the key or the default value if the key is 
+        Returns the value of the key or the default value if the key is
         not yet in gconf
         """
-        
+
         #function arguments override defaults
         if default is None:
             default = self.DEFAULTS.get(key, None)
         vtype = type(default)
-        
+
         #we now have a valid key and type
         if default is None:
             log.warn("Unknown key: %s, must specify default value" % key)
@@ -273,7 +274,7 @@ class GConfStore(Singleton):
         if key not in self._notifications:
             self._client.notify_add(key, self._key_changed)
             self._notifications.append(key)
-        
+
         value = self._client.get(key)
         if value is None:
             self.set(key, default)
@@ -282,13 +283,13 @@ class GConfStore(Singleton):
         value = self._get_value(value, default)
         if value is not None:
             return value
-            
+
         log.warn("Unknown gconf key: %s" % key)
         return None
 
     def set(self, key, value):
         """
-        Sets the key value in gconf and connects adds a signal 
+        Sets the key value in gconf and connects adds a signal
         which is fired if the key changes
         """
         log.debug("Settings %s -> %s" % (key, value))
