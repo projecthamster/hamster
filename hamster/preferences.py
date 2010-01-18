@@ -188,6 +188,8 @@ class PreferencesEditor:
         self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
         self.get_widget("keybinding").set_text(conf.get("keybinding"))
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
+        self.get_widget("workspace_tracking_name").set_active("name" in conf.get("workspace_tracking"))
+        self.get_widget("workspace_tracking_memory").set_active("memory" in conf.get("workspace_tracking"))
 
         day_start = conf.get("day_start_minutes")
         day_start = dt.time(day_start / 60, day_start % 60)
@@ -643,6 +645,16 @@ class PreferencesEditor:
         else:
             self.window.destroy()
             return False
+
+    def on_workspace_tracking_toggled(self, checkbox):
+        workspace_tracking = []
+        if self.get_widget("workspace_tracking_name").get_active():
+            workspace_tracking.append("name")
+
+        if self.get_widget("workspace_tracking_memory").get_active():
+            workspace_tracking.append("memory")
+
+        conf.set("workspace_tracking", workspace_tracking)
 
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
