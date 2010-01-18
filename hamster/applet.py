@@ -289,14 +289,15 @@ class HamsterApplet(object):
     """UI functions"""
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""
+        try:
+            #if we the day view is visible - update day's durations
+            if self.button.get_active():
+                self.load_day()
 
-        #if we the day view is visible - update day's durations
-        if self.button.get_active():
-            self.load_day()
-
-        self.update_label()
-        self.check_user()
-        return True
+            self.update_label()
+            self.check_user()
+        finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
+            return True
 
     def update_label(self):
         if self.last_activity and self.last_activity['end_time'] is None:
