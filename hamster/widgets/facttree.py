@@ -70,6 +70,7 @@ class FactTree(gtk.TreeView):
         self.append_column(fact_column)
 
         edit_cell = gtk.CellRendererPixbuf()
+        edit_cell.set_property("ypad", 2)
         edit_cell.set_property("mode", gtk.CELL_RENDERER_MODE_ACTIVATABLE)
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.edit_column.set_cell_data_func(edit_cell, action_painter)
