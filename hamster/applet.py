@@ -335,7 +335,7 @@ class HamsterApplet(object):
 
         if message:
             self.notification.update(_("Time Tracker"), message, "hamster-applet")
-            notification.show()
+            self.notification.show()
 
 
     def edit_cb(self, n, action):
