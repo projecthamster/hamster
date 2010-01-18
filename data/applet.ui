@@ -14,7 +14,7 @@
     <property name="skip_pager_hint">True</property>
     <property name="decorated">False</property>
     <signal name="key_press_event" handler="on_windows_keys"/>
-    <signal name="configure_event" handler="on_window_configure_event"/>
+    <signal name="size_request" handler="on_window_size_request"/>
     <child>
       <object class="GtkEventBox" id="hamster-box">
         <property name="visible">True</property>

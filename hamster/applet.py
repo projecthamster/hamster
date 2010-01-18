@@ -277,6 +277,8 @@ class HamsterApplet(object):
 
         self._gui.connect_signals(self)
 
+        self.prev_size = None
+
 
     def init_workspace_tracking(self):
         if not WNCK: # can't track if we don't have the trackable
@@ -467,6 +469,20 @@ class HamsterApplet(object):
         self.load_day() # reload day each time before showing to avoid outdated last activity
         self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
 
+        self.position_popup()
+
+
+        # doing unstick / stick here, because sometimes while switching
+        # between workplaces window still manages to dissappear
+        self.window.unstick()
+        self.window.stick() #show on all desktops
+
+        self.new_name.set_text("");
+        self.new_tags.set_text("");
+        gobject.idle_add(self._delayed_display)
+
+
+    def position_popup(self):
         label_geom = self.button.get_allocation()
         window_geom = self.window.get_allocation()
 
@@ -483,17 +499,6 @@ class HamsterApplet(object):
             x = x - window_geom.width
 
         self.window.move(x, y)
-
-
-
-        # doing unstick / stick here, because sometimes while switching
-        # between workplaces window still manages to dissappear
-        self.window.unstick()
-        self.window.stick() #show on all desktops
-
-        self.new_name.set_text("");
-        self.new_tags.set_text("");
-        gobject.idle_add(self._delayed_display)
 
     def _delayed_display(self):
         """show window only when gtk has become idle. otherwise we get
@@ -695,10 +700,12 @@ class HamsterApplet(object):
         self.last_activity = None
         runtime.dispatcher.dispatch('panel_visible', False)
 
-    def on_window_configure_event(self, window, event):
-        # this is required so that the rows would grow on resize
-        self.treeview.fix_row_heights()
-
+    def on_window_size_request(self, window, event):
+        box = self.window.get_allocation()
+        if self.prev_size and self.prev_size != (box.width, box.height):
+            self.treeview.fix_row_heights()
+            self.position_popup()
+        self.prev_size = (box.width, box.height)
 
     def show(self):
         self.window.show_all()
