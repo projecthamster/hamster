@@ -207,8 +207,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFrame" id="frame4">
+                      <object class="GtkFrame" id="workspace_frame">
                         <property name="visible">True</property>
+                        <property name="no_show_all">True</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>
                         <child>

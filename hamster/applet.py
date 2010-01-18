@@ -44,13 +44,19 @@ import idle
 
 import pango
 
-import wnck
+try:
+    import wnck
+    WNCK = True
+except:
+    logging.warning("Could not import wnck - workspace tracking will be disabled")
+    WNCK = False
 
 try:
     import pynotify
     PYNOTIFY = True
     pynotify.init('Hamster Applet')
 except:
+    logging.warning("Could not import pynotify - notifications will be disabled")
     PYNOTIFY = False
 
 class PanelButton(gtk.ToggleButton):
@@ -273,6 +279,9 @@ class HamsterApplet(object):
 
 
     def init_workspace_tracking(self):
+        if not WNCK: # can't track if we don't have the trackable
+            return
+
         self.screen = wnck.screen_get_default()
         self.screen.workspace_handler = self.screen.connect("active-workspace-changed", self.on_workspace_changed)
         self.workspace_activities = {}

@@ -179,6 +179,13 @@ class PreferencesEditor:
         except:
             self.get_widget("notification_preference_frame").hide()
 
+
+        # disable workspace tracking if wnck is not there
+        try:
+            import wnck
+        except:
+            self.get_widget("workspace_frame").hide()
+
         self._gui.connect_signals(self)
         self.window.show_all()
 
