@@ -291,7 +291,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             self.set_color(context, text_color)
 
-            self.layout.set_markup("<b>%s</b>" % parent["label"])
+            self.layout.set_markup("<b>%s</b>" % stuff.escape_pango(parent["label"]))
             if self.data["first"]:
                 y = 5
             else:
@@ -411,11 +411,11 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         cell_width = cell_width - widget.longest_interval - widget.longest_duration
 
 
-        layout.set_markup(fact["name"])
+        layout.set_markup(stuff.escape_pango(fact["name"]))
         label_w, label_h = layout.get_pixel_size()
 
-        labels["activity"] = (fact["name"], cell_start, 2, -1)
-        labels["category"] = (" - <small>%s</small>" % fact["category"],
+        labels["activity"] = (stuff.escape_pango(fact["name"]), cell_start, 2, -1)
+        labels["category"] = (" - <small>%s</small>" % stuff.escape_pango(fact["category"]),
                               cell_start + label_w, 2, -1)
 
 
@@ -446,7 +446,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         # see if we can fit in single line
         # if not, put description under activity
         if fact["description"]:
-            description = "<small>%s</small>" % fact["description"]
+            description = "<small>%s</small>" % stuff.escape_pango(fact["description"])
             layout.set_markup(description)
             label_w, label_h = layout.get_pixel_size()
 
