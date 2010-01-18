@@ -26,7 +26,7 @@ pygtk.require("2.0")
 import gtk
 #gtk.gdk.threads_init()
 
-from hamster.configuration import GconfStore, runtime
+from hamster.configuration import GConfStore, runtime
 from hamster import widgets, stuff
 
 import gobject
@@ -38,12 +38,12 @@ class MainWindow(object):
     def __init__(self):
         self._gui = stuff.load_ui_file("hamster.ui")
         self.window = self._gui.get_object('main-window')
-	self.gtk_main_quit = gtk.main_quit
+        self.gtk_main_quit = gtk.main_quit
 
         #TODO - replace with the tree background color (can't get it atm!)
         self.get_widget("todays_activities_ebox").modify_bg(gtk.STATE_NORMAL,
-                                                                 gtk.gdk.Color(65536.0,65536.0,65536.0))
-        
+                gtk.gdk.Color(65536.0,65536.0,65536.0))
+
         self.new_name = widgets.ActivityEntry()
         widgets.add_hint(self.new_name, _("Time and Name"))
         self.get_widget("new_name_box").add(self.new_name)
