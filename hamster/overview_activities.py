@@ -70,7 +70,7 @@ class OverviewBox(gtk.VBox):
 
 
     def fill_facts_tree(self):
-        # remember any selection - will try to match by        
+        # remember any selection - will try to match by
         self.fact_tree.detach_model()
         self.fact_tree.clear()
 
@@ -91,22 +91,11 @@ class OverviewBox(gtk.VBox):
 
 
     def delete_selected(self):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
+        fact = self.fact_tree.get_selected_fact()
+        if not fact or isinstance(fact, dt.date):
+            return
 
-        if model[iter][0] == -1:
-            return #not a fact
-
-        next_row = model.iter_next(iter)
-
-        if next_row:
-            selection.select_iter(next_row)
-        else:
-            path = model.get_path(iter)[0] - 1
-            if path > 0:
-                selection.select_path(path)
-
-        runtime.storage.remove_fact(model[iter][0])
+        runtime.storage.remove_fact(fact['id'])
 
     def copy_selected(self):
         selection = self.fact_tree.get_selection()
@@ -136,7 +125,7 @@ class OverviewBox(gtk.VBox):
 
     def on_facts_row_activated(self, tree, path, column):
         self.launch_edit(tree.get_selected_fact())
-            
+
     def launch_edit(self, fact_or_date):
         if isinstance(fact_or_date, dt.date):
             dialogs.edit.show(self, fact_date = fact_or_date)
