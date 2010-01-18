@@ -315,37 +315,36 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 text_color = self.selected_color
                 selected = True
 
-            labels = self.labels[fact["id"]]
+            def show_label(label, x, y, w):
+                self.layout.set_markup(label)
+                context.move_to(x, y)
+                if w:
+                    self.layout.set_width(w)
+                context.show_layout(self.layout)
 
-            """ start time and end time at beginning of column """
-
-            self.layout.set_markup(labels["interval"]["label"])
-            context.move_to(labels["interval"]["box"][0], labels["interval"]["box"][1])
-            context.show_layout(self.layout)
-
-            """ duration at the end """
-            self.layout.set_markup(labels["delta"]["label"])
-            context.move_to(labels["delta"]["box"][0], labels["delta"]["box"][1])
-            context.show_layout(self.layout)
-
-
-            """ activity, category, tags, description in middle """
             self.set_color(context, text_color)
-            self.layout.set_markup(labels["activity"]["label"])
-            context.move_to(labels["activity"]["box"][0], labels["activity"]["box"][1])
+
+            labels = self.labels[fact["id"]]
+            show_label(*labels["interval"])
+
+            # for the right-aligned delta with have reserved space for scrollbar
+            # but about it's existance we find only on expose, so we realign
+            self.layout.set_markup(labels["delta"][0])
+            w, h = self.layout.get_pixel_size()
+            context.move_to(width - w, labels["delta"][2])
             context.show_layout(self.layout)
+
+            show_label(*labels["activity"])
 
             if fact["category"]:
                 if not selected:
                     self.set_color(context, widget.get_style().text[gtk.STATE_INSENSITIVE])
 
-                self.layout.set_markup(labels["category"]["label"])
-                context.move_to(labels["category"]["box"][0], labels["category"]["box"][1])
-                context.show_layout(self.layout)
+                show_label(*labels["category"])
 
 
             if fact["tags"]:
-                start_x, start_y, cell_end = labels["tags"]["box"]
+                start_x, start_y, cell_end = labels["tags"][1:]
                 cur_x, cur_y = start_x, start_y
 
                 for i, tag in enumerate(fact["tags"]):
@@ -362,14 +361,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
 
             if fact["description"]:
-                x, y, w = labels["description"]["box"]
-
                 self.set_color(context, text_color)
-                self.layout.set_markup(labels["description"]["label"])
-                self.layout.set_width(w * pango.SCALE)
-                context.move_to(x, y)
-                context.show_layout(self.layout)
-                self.layout.set_width(-1)
+                show_label(*labels["description"])
 
 
 
@@ -401,13 +394,13 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         interval = fact["start_time"].strftime("%H:%M -")
         if fact["end_time"]:
             interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
-        labels["interval"] = {"label": interval, "box": (self.col_padding, 2, -1)}
+        labels["interval"] = (interval, self.col_padding, 2, -1)
 
         """ duration at the end """
         delta = stuff.format_duration(fact["delta"])
         layout.set_markup(delta)
         duration_w, duration_h = layout.get_pixel_size()
-        labels["delta"] = {"label": delta, "box": (width - duration_w - 30, 2, -1)}
+        labels["delta"] = (delta, cell_width - duration_w, 2, -1)
 
 
         """ activity, category, tags, description in middle """
@@ -421,10 +414,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         layout.set_markup(fact["name"])
         label_w, label_h = layout.get_pixel_size()
 
-        labels["activity"] = {"label": fact["name"],
-                              "box": (cell_start, 2, -1)}
-        labels["category"] = {"label": " - <small>%s</small>" % fact["category"],
-                              "box": (cell_start + label_w, 2, -1)}
+        labels["activity"] = (fact["name"], cell_start, 2, -1)
+        labels["category"] = (" - <small>%s</small>" % fact["category"],
+                              cell_start + label_w, 2, -1)
 
 
         tag_cell_start = cell_start + widget.longest_activity_category
@@ -443,8 +435,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                     cur_y += tag_h + 4
                 cur_x += tag_w + 4
 
-            labels["tags"] = {"label": None,
-                              "box": (tag_cell_start, 2, tag_cell_end)}
+            labels["tags"] = (None, tag_cell_start, 2, tag_cell_end)
 
             layout.set_font_description(self.label_font)
 
@@ -467,7 +458,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             layout.set_width(width * pango.SCALE)
             label_w, label_h = layout.get_pixel_size()
 
-            labels["description"] = {"label": description, "box": (x, y, width)}
+            labels["description"] = (description, x, y, width * pango.SCALE)
 
             cur_y = y + label_h + 4
         else:
@@ -478,7 +469,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return (0, 0, 0, cur_y)
 
 
-    def on_get_size (self, widget, cell_area = None):
+    def on_get_size (self, widget, cell_area):
         if "id" in self.data: # fact
             return self.get_fact_size(widget)
         else:
