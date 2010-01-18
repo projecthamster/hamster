@@ -422,8 +422,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         tag_cell_start = cell_start + widget.longest_activity_category
         tag_cell_end = cell_start + cell_width
 
-        cur_x, cur_y = tag_cell_start, 2
+        cell_height = label_h + 2
 
+        cur_x, cur_y = tag_cell_start, 2
         if fact["tags"]:
             layout.set_font_description(self.tag_font)
 
@@ -434,6 +435,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                     cur_x = tag_cell_start
                     cur_y += tag_h + 4
                 cur_x += tag_w + 4
+
+            cell_height = max(cell_height, cur_y + tag_h + 3)
 
             labels["tags"] = (None, tag_cell_start, 2, tag_cell_end)
 
@@ -452,7 +455,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             if x + label_w > width:
                 x = cell_start
-                y = max(duration_h, y + tag_h) + 4
+                y = cell_height
                 width = cell_width
 
             layout.set_width(width * pango.SCALE)
@@ -460,13 +463,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             labels["description"] = (description, x, y, width * pango.SCALE)
 
-            cur_y = y + label_h + 4
-        else:
-            cur_y += label_h + 4
-
+            cell_height += label_h + 2
 
         self.labels[fact["id"]] = labels
-        return (0, 0, 0, cur_y)
+        return (0, 0, 0, cell_height)
 
 
     def on_get_size (self, widget, cell_area):
