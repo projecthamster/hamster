@@ -45,18 +45,16 @@ import pango
 
 try:
     import wnck
-    WNCK = True
 except:
     logging.warning("Could not import wnck - workspace tracking will be disabled")
-    WNCK = False
+    wnck = None
 
 try:
     import pynotify
-    PYNOTIFY = True
     pynotify.init('Hamster Applet')
 except:
     logging.warning("Could not import pynotify - notifications will be disabled")
-    PYNOTIFY = False
+    pynotify = None
 
 class PanelButton(gtk.ToggleButton):
     def __init__(self):
@@ -269,7 +267,7 @@ class HamsterApplet(object):
             self.init_workspace_tracking()
 
         self.notification = None
-        if PYNOTIFY:
+        if pynotify:
             self.notification = pynotify.Notification("Oh hi",
                                                       "Greetings from hamster!")
             self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
@@ -280,7 +278,7 @@ class HamsterApplet(object):
 
 
     def init_workspace_tracking(self):
-        if not WNCK: # can't track if we don't have the trackable
+        if not wnck: # can't track if we don't have the trackable
             return
 
         self.screen = wnck.screen_get_default()
