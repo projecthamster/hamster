@@ -198,7 +198,8 @@ class GConfStore(Singleton):
         'keybinding'                :   "<Super>H",     # Key binding to summon hamster
         'overview_window_box'       :   [],             # X, Y, W, H
         'overview_window_maximized' :   False,          # Is overview window maximized
-        'workspace_tracking'        :   [],              # Should hamster switch activities on workspace change 0,1,2
+        'workspace_tracking'        :   [],             # Should hamster switch activities on workspace change 0,1,2
+        'workspace_mapping'         :   [],             # Mapping between workspace numbers and activities
     }
 
     def __init__(self):

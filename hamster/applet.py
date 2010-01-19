@@ -607,8 +607,12 @@ class HamsterApplet(object):
         activity = None
         if "name" in self.workspace_tracking:
             # first try to look up activity by desktop name
+            mapping = conf.get("workspace_mapping")
 
-            parsed_activity = stuff.parse_activity_input(current_workspace.get_name())
+            parsed_activity = None
+            if new < len(mapping):
+                parsed_activity = stuff.parse_activity_input(mapping[new])
+
             if parsed_activity:
                 category_id = None
                 if parsed_activity.category_name:

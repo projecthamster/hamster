@@ -192,7 +192,7 @@ class PreferencesEditor:
         self.wActivityColumn.set_expand(True)
         self.wActivityCell = gtk.CellRendererText()
         self.wActivityCell.set_property('editable', True)
-#        self.wActivityCell.connect('edited', self.category_edited_cb, self.category_store)
+        self.wActivityCell.connect('edited', self.on_workspace_activity_edited)
 
         self.wNameColumn.pack_start(self.wNameCell, True)
         self.wNameColumn.set_attributes(self.wNameCell)
@@ -231,11 +231,12 @@ class PreferencesEditor:
         cell.set_property('text', str(name))
 
     def on_workspace_created(self, screen, workspace, user_data=None):
-        self.workspace_store.append([
-            workspace.get_number(),
-            workspace,
-            u'Not implemented'
-        ])
+        workspace_number = workspace.get_number()
+        activity = ""
+        if workspace_number < len(self.workspace_mapping):
+            activity = self.workspace_mapping[workspace_number]
+
+        self.workspace_store.append([workspace_number, workspace, activity])
 
     def on_workspace_deleted(self, screen, workspace, user_data=None):
         row = self.workspace_store.get_iter_first()
@@ -246,6 +247,15 @@ class PreferencesEditor:
                     break
             else:
                 row = self.workspace_store.iter_next(row)
+
+    def on_workspace_activity_edited(self, cell, path, value):
+        index = int(path)
+        while index >= len(self.workspace_mapping):
+            self.workspace_mapping.append("")
+
+        self.workspace_mapping[index] = value
+        conf.set("workspace_mapping", self.workspace_mapping)
+        self.workspace_store[path][2] = value
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
@@ -262,6 +272,9 @@ class PreferencesEditor:
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
+
+        self.workspace_mapping = conf.get("workspace_mapping")
+        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -713,6 +726,7 @@ class PreferencesEditor:
 
     def on_workspace_tracking_toggled(self, checkbox):
         workspace_tracking = []
+        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
         if self.get_widget("workspace_tracking_name").get_active():
             workspace_tracking.append("name")
 
