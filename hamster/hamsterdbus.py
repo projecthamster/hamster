@@ -227,17 +227,17 @@ class HamsterDbusController(dbus.service.Object):
         runtime.storage.remove_fact(fact_id)
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
-    def RemoveActivity(self, activity, category):
+    def RemoveActivity(self, activity_name, category):
         """Removes an activity
         Parameters:
         s activity: Activity name
         s category: Category name. Use '' for Unsorted activity
         """
         category_id = runtime.storage.get_category_by_name(category)
-        activity_id = runtime.storage.get_activity_by_name(activity, category_id)
+        activity = runtime.storage.get_activity_by_name(activity_name, category_id)
 
-        if activity_id:
-            runtime.storage.remove_activity(activity_id)
+        if activity:
+            runtime.storage.remove_activity(activity['id'])
 
     @dbus.service.method(HAMSTER_URI, in_signature='s')
     def RemoveCategory(self, category):

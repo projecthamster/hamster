@@ -157,12 +157,12 @@ class Storage(storage.Storage):
     def __change_category(self, id, category_id):
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
-        existing_id = self.__get_activity_by_name(activity['name'], category_id)
+        existing_activity = self.__get_activity_by_name(activity['name'], category_id)
 
-        if id == existing_id: # we are already there, go home
+        if id == existing_activity['id']: # we are already there, go home
             return False
 
-        if existing_id: #ooh, we have something here!
+        if existing_activity: #ooh, we have something here!
             # first move all facts that belong to movable activity to the new one
             update = """
                        UPDATE facts
@@ -170,7 +170,7 @@ class Storage(storage.Storage):
                         WHERE activity_id = ?
             """
 
-            self.execute(update, (existing_id, id))
+            self.execute(update, (existing_activity['id'], id))
 
             # and now get rid of our friend
             self.__remove_activity(id)
@@ -234,23 +234,26 @@ class Storage(storage.Storage):
 
         if category_id:
             query = """
-                       SELECT id, deleted from activities
-                        WHERE lower(name) = lower(?)
+                       SELECT a.id, a.name, a.deleted, coalesce(b.name, ?) as category
+                         FROM activities a
+                    LEFT JOIN categories b ON category_id = b.id
+                        WHERE lower(a.name) = lower(?)
                           AND category_id = ?
-                     ORDER BY deleted, id desc
+                     ORDER BY a.deleted, a.id desc
                         LIMIT 1
             """
 
-            res = self.fetchone(query, (name, category_id))
+            res = self.fetchone(query, (_("Unsorted"), name, category_id))
         else:
             query = """
-                       SELECT id, deleted from activities
-                        WHERE lower(name) = lower(?)
-                     ORDER BY deleted, id desc
+                       SELECT a.id, a.name, a.deleted, coalesce(b.name, ?) as category
+                         FROM activities a
+                    LEFT JOIN categories b ON category_id = b.id
+                        WHERE lower(a.name) = lower(?)
+                     ORDER BY a.deleted, a.id desc
                         LIMIT 1
             """
-
-            res = self.fetchone(query, (name, ))
+            res = self.fetchone(query, (_("Unsorted"), name, ))
 
         if res:
             # if the activity was marked as deleted, ressurect on first call
@@ -265,7 +268,7 @@ class Storage(storage.Storage):
                         """
                 self.execute(update, (res['id'], ))
 
-            return res['id']
+            return res
 
         return None
 
@@ -505,6 +508,8 @@ class Storage(storage.Storage):
         if not activity_id:
             activity_id = self.__add_activity(activity.activity_name,
                                               category_id)
+        else:
+            activity_id = activity_id['id']
 
 
         # if we are working on +/- current day - check the last_activity
@@ -771,9 +776,9 @@ class Storage(storage.Storage):
 
     def __add_activity(self, name, category_id = None):
         # first check that we don't have anything like that yet
-        activity_id = self.__get_activity_by_name(name, category_id)
-        if activity_id:
-            return activity_id
+        activity = self.__get_activity_by_name(name, category_id)
+        if activity:
+            return activity['id']
 
         #now do the create bit
         category_id = category_id or -1

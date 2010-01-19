@@ -618,13 +618,13 @@ class HamsterApplet(object):
                 if parsed_activity.category_name:
                     category_id = runtime.storage.get_category_by_name(parsed_activity.category_name)
 
-                activity_id = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
-                                                                   category_id,
-                                                                   ressurect = False)
-                if activity_id:
+                activity = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
+                                                                category_id,
+                                                                ressurect = False)
+                if activity:
                     # we need dict below
-                    activity = dict(name = parsed_activity.activity_name,
-                                    category = parsed_activity.category_name,
+                    activity = dict(name = activity['name'],
+                                    category = activity['category'],
                                     description = parsed_activity.description,
                                     tags = parsed_activity.tags)
 
