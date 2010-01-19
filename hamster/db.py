@@ -331,14 +331,7 @@ class Storage(storage.Storage):
         return grouped_facts
 
     def __get_last_activity(self):
-        from configuration import conf
-        day_start = conf.get("day_start_minutes")
-        day_start = dt.time(day_start / 60, day_start % 60)
-
-        today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
-                                                  minutes = day_start.minute)).date()
-        facts = self.__get_facts(today)
-
+        facts = self.__get_todays_facts()
         last_activity = None
         if facts and facts[-1]["end_time"] == None:
             last_activity = facts[-1]
@@ -513,9 +506,14 @@ class Storage(storage.Storage):
 
 
         # if we are working on +/- current day - check the last_activity
-
         if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
-            previous = self.__get_last_activity()
+
+            # pull in previous facts
+            facts = self.__get_todays_facts()
+
+            previous = None
+            if facts and facts[-1]["end_time"] == None:
+                previous = facts[-1]
 
             if previous and previous['start_time'] < start_time:
                 # check if maybe that is the same one, in that case no need to restart
@@ -529,7 +527,23 @@ class Storage(storage.Storage):
                 if not previous["description"] \
                     and 60 >= (start_time - previous['start_time']).seconds >= 0:
                     self.__remove_fact(previous['id'])
-                    start_time = previous['start_time']
+
+                    # now that we removed the previous one, see if maybe the one
+                    # before that is actually same as the one we want to start
+                    # (glueing)
+                    if len(facts) > 1 and 60 >= (start_time - facts[-2]['end_time']).seconds >= 0:
+                        before = facts[-2]
+                        if before["activity_id"] == activity_id \
+                           and before["tags"] == sorted([tag["name"] for tag in tags]):
+                            # essentially same activity - resume it and return
+                            update = """
+                                       UPDATE facts
+                                          SET end_time = null
+                                        WHERE id = ?
+                            """
+                            self.execute(update, (before["id"],))
+
+                            return before
                 else:
                     # otherwise stop
                     update = """
@@ -562,6 +576,14 @@ class Storage(storage.Storage):
         self.execute(insert, params)
 
         return self.__get_fact(fact_id)
+
+    def __get_todays_facts(self):
+        from configuration import conf
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
+        today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
+                                                  minutes = day_start.minute)).date()
+        return self.__get_facts(today)
 
 
     def __get_facts(self, date, end_date = None, search_terms = ""):

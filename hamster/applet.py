@@ -240,8 +240,6 @@ class HamsterApplet(object):
         self.timeout_enabled = conf.get("enable_timeout")
         self.notify_on_idle = conf.get("notify_on_idle")
         self.notify_interval = conf.get("notify_interval")
-        self.day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(self.day_start / 60, self.day_start % 60) # it comes in as minutes
         self.workspace_tracking = conf.get("workspace_tracking")
 
         runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
@@ -349,13 +347,10 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        today = (dt.datetime.now() - dt.timedelta(hours = self.day_start.hour,
-                                                  minutes = self.day_start.minute)).date()
-
         self.treeview.detach_model()
         self.treeview.clear()
 
-        facts = runtime.storage.get_facts(today)
+        facts = runtime.storage.get_todays_facts()
         if facts and facts[-1]["end_time"] == None:
             self.last_activity = facts[-1]
         else:
@@ -673,7 +668,6 @@ class HamsterApplet(object):
         elif key == "notify_interval":
             self.notify_interval = value
         elif key == "day_start_minutes":
-            self.day_start = dt.time(value / 60, value % 60)
             self.load_day()
             self.update_label()
         elif key == "workspace_tracking":
