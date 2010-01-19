@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-01-18 11:02+0000\n"
-"PO-Revision-Date: 2010-01-18 19:09+0100\n"
+"POT-Creation-Date: 2010-01-19 15:39+0000\n"
+"PO-Revision-Date: 2010-01-19 18:59+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgid "Project Hamster — track your time"
 msgstr "Proyecto Hamster: gestione su tiempo"
 
 #: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:39
-#: ../hamster/about.py:40 ../hamster/applet.py:328
+#: ../hamster/about.py:40 ../hamster/applet.py:335
 msgid "Time Tracker"
 msgstr "Gestor de tiempo"
 
@@ -114,18 +114,17 @@ msgid "Resume the last activity when returning to a workspace"
 msgstr "Resumir la última actividad al volver a un área de trabajo"
 
 #: ../data/preferences.ui.h:19
+#| msgid "Resume the last activity when returning to a workspace"
+msgid "Start new activity when switching workspaces:"
+msgstr "Iniciar una nueva actividad al cambiar entre áreas de trabajo:"
+
+#: ../data/preferences.ui.h:20
 msgid "Stop tracking on shutdown"
 msgstr "Detener el registro al apagar"
 
-#: ../data/preferences.ui.h:20
+#: ../data/preferences.ui.h:21
 msgid "Stop tracking when computer becomes idle"
 msgstr "Detener el registro cuando el ordenador esté inactivo"
-
-#: ../data/preferences.ui.h:21
-msgid "Switch activities if workspace name matches an earlier activity"
-msgstr ""
-"Cambiar actividades si el nombre del área de trabajo coincide con una "
-"actividad anterior"
 
 #: ../data/preferences.ui.h:22
 msgid "Tags that should appear in autocomplete"
@@ -192,7 +191,7 @@ msgstr "_Añadir una actividad anterior"
 msgid "Hamster"
 msgstr "Hamster"
 
-#: ../data/applet.ui.h:4 ../hamster/applet.py:373
+#: ../data/applet.ui.h:4 ../hamster/applet.py:377
 msgid "No records today"
 msgstr "Hoy no hay registros"
 
@@ -269,7 +268,7 @@ msgstr "No hay datos para este intervalo"
 msgid "Show Statistics"
 msgstr "Mostrar estadísticas"
 
-#: ../data/overview_totals.ui.h:5 ../hamster/applet.py:210
+#: ../data/overview_totals.ui.h:5 ../hamster/applet.py:213
 #: ../hamster/reports.py:227
 msgid "Tags"
 msgstr "Etiquetas"
@@ -292,57 +291,57 @@ msgstr ""
 "Juanje Ojeda <jojeda@emergya.es> \n"
 "David Prieto <frandavid100@gmail.com>"
 
-#: ../hamster/applet.py:204 ../hamster/reports.py:225
-#: ../hamster/reports.py:289
+#: ../hamster/applet.py:207 ../hamster/preferences.py:196
+#: ../hamster/reports.py:225 ../hamster/reports.py:289
 msgid "Activity"
 msgstr "Actividad"
 
-#: ../hamster/applet.py:301 ../hamster/applet.py:324 ../hamster/applet.py:424
+#: ../hamster/applet.py:308 ../hamster/applet.py:331 ../hamster/applet.py:428
 msgid "No activity"
 msgstr "Sin actividad"
 
-#: ../hamster/applet.py:319
+#: ../hamster/applet.py:326
 #, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Trabajando en <b>%s</b>"
 
-#: ../hamster/applet.py:381
+#: ../hamster/applet.py:385
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:384
+#: ../hamster/applet.py:388
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#: ../hamster/applet.py:410
+#: ../hamster/applet.py:414
 msgid "Just started"
 msgstr "Acaba de empezar"
 
-#: ../hamster/applet.py:413 ../hamster/db.py:307 ../hamster/db.py:628
-#: ../hamster/db.py:689 ../hamster/edit_activity.py:51
-#: ../hamster/preferences.py:55 ../hamster/reports.py:56
-#: ../hamster/reports.py:94 ../hamster/reports.py:243 ../hamster/stuff.py:132
+#: ../hamster/applet.py:417 ../hamster/db.py:246 ../hamster/db.py:256
+#: ../hamster/db.py:310 ../hamster/db.py:655 ../hamster/db.py:716
+#: ../hamster/edit_activity.py:51 ../hamster/preferences.py:61
+#: ../hamster/reports.py:56 ../hamster/reports.py:94 ../hamster/reports.py:243
+#: ../hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Sin clasificar"
 
-#: ../hamster/applet.py:640
-#| msgid "Add activity"
+#: ../hamster/applet.py:651
 msgid "Changed activity"
 msgstr "Actividad cambiada"
 
-#: ../hamster/applet.py:641
+#: ../hamster/applet.py:652
 #, python-format
 msgid "Switched to '%s'"
 msgstr "Se cambió a «%s»"
 
-#: ../hamster/applet.py:704
+#: ../hamster/applet.py:716
 msgid "What should be typed in the activity box?"
 msgstr "¿Qué escribir en la caja de actividad?"
 
-#: ../hamster/applet.py:707
+#: ../hamster/applet.py:719
 msgid ""
 "There is a simple syntax that enables you to add details to your "
 "activities:\n"
@@ -383,39 +382,39 @@ msgstr ""
 "        "
 
 #. defaults
-#: ../hamster/db.py:880
+#: ../hamster/db.py:907
 msgid "Work"
 msgstr "Trabajo"
 
-#: ../hamster/db.py:881
+#: ../hamster/db.py:908
 msgid "Reading news"
 msgstr "Leer las noticias"
 
-#: ../hamster/db.py:882
+#: ../hamster/db.py:909
 msgid "Checking stocks"
 msgstr "Comprobar las existencias"
 
-#: ../hamster/db.py:883
+#: ../hamster/db.py:910
 msgid "Super secret project X"
 msgstr "Proyecto súper secreto X"
 
-#: ../hamster/db.py:884
+#: ../hamster/db.py:911
 msgid "World domination"
 msgstr "Dominar el Mundo"
 
-#: ../hamster/db.py:886
+#: ../hamster/db.py:913
 msgid "Day-to-day"
 msgstr "Día a día"
 
-#: ../hamster/db.py:887
+#: ../hamster/db.py:914
 msgid "Lunch"
 msgstr "Almorzar"
 
-#: ../hamster/db.py:888
+#: ../hamster/db.py:915
 msgid "Watering flowers"
 msgstr "Regar las plantas"
 
-#: ../hamster/db.py:889
+#: ../hamster/db.py:916
 msgid "Doing handstands"
 msgstr "Hacer flexiones"
 
@@ -423,31 +422,31 @@ msgstr "Hacer flexiones"
 msgid "Update activity"
 msgstr "Actualizar actividad"
 
-#: ../hamster/preferences.py:106
+#: ../hamster/preferences.py:117 ../hamster/preferences.py:192
 msgid "Name"
 msgstr "Nombre"
 
-#: ../hamster/preferences.py:126 ../hamster/reports.py:226
+#: ../hamster/preferences.py:137 ../hamster/reports.py:226
 #: ../hamster/reports.py:288
 msgid "Category"
 msgstr "Categoría"
 
-#: ../hamster/preferences.py:588
+#: ../hamster/preferences.py:673
 msgid "New category"
 msgstr "Categoría nueva"
 
-#: ../hamster/preferences.py:601
+#: ../hamster/preferences.py:686
 msgid "New activity"
 msgstr "Actividad nueva"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:671
+#: ../hamster/preferences.py:757
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d minutos"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:674
+#: ../hamster/preferences.py:760
 msgid "Never"
 msgstr "Nunca"
 
@@ -744,6 +743,11 @@ msgstr "XML"
 #: ../hamster/widgets/reportchooserdialog.py:73
 msgid "iCal"
 msgstr "iCal"
+
+#~ msgid "Switch activities if workspace name matches an earlier activity"
+#~ msgstr ""
+#~ "Cambiar actividades si el nombre del área de trabajo coincide con una "
+#~ "actividad anterior"
 
 #~ msgid "Switch"
 #~ msgstr "Cambiar"
