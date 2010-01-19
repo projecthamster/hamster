@@ -697,8 +697,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment11">
+              <object class="GtkAlignment" id="workspace_tab">
                 <property name="visible">True</property>
+                <property name="no_show_all">True</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">8</property>
                 <property name="left_padding">4</property>

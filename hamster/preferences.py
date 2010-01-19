@@ -27,6 +27,11 @@ import gtk
 
 import datetime as dt
 
+try:
+    import wnck
+except:
+    wnck = None
+
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
 
@@ -214,17 +219,16 @@ class PreferencesEditor:
 
 
         # disable workspace tracking if wnck is not there
-        try:
-            import wnck
-        except:
-            self.get_widget("workspace_frame").hide()
+        if wnck:
+            self.screen = wnck.screen_get_default()
+            for workspace in self.screen.get_workspaces():
+                self.on_workspace_created(self.screen, workspace)
 
-        self.screen = wnck.screen_get_default()
-        for workspace in self.screen.get_workspaces():
-            self.on_workspace_created(self.screen, workspace)
+            self.screen.workspace_add_handler = self.screen.connect("workspace-created", self.on_workspace_created)
+            self.screen.workspace_del_handler = self.screen.connect("workspace-destroyed", self.on_workspace_deleted)
+        else:
+            self.get_widget("workspace_tab").hide()
 
-        self.screen.workspace_add_handler = self.screen.connect("workspace-created", self.on_workspace_created)
-        self.screen.workspace_del_handler = self.screen.connect("workspace-destroyed", self.on_workspace_deleted)
 
         self._gui.connect_signals(self)
         self.window.show_all()
