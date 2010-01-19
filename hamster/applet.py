@@ -684,6 +684,9 @@ class HamsterApplet(object):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
+        if not self.new_name.get_text():
+            return False
+
         runtime.storage.add_fact(self.new_name.get_text().decode("utf8", "replace"),
                                  self.new_tags.get_text().decode("utf8", "replace"))
         self.new_name.set_text("")
