@@ -25,7 +25,6 @@ import datetime as dt
 import pygtk
 pygtk.require("2.0")
 import gtk
-gtk.gdk.threads_init()
 
 import gnomeapplet
 import gobject

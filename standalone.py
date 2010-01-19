@@ -24,7 +24,6 @@ import datetime as dt
 import pygtk
 pygtk.require("2.0")
 import gtk
-#gtk.gdk.threads_init()
 
 from hamster.configuration import GConfStore, runtime
 from hamster import widgets, stuff
@@ -193,6 +192,8 @@ class MainWindow(object):
         return self._gui.get_object(name)
 
 if __name__ == "__main__":
+    gtk.gdk.threads_init()
+
     gtk.window_set_default_icon_name("hamster-applet")
     MainWindow().show()
     

@@ -53,6 +53,8 @@ def on_destroy(event):
         gtk.main_quit()
 
 if __name__ == "__main__":
+    gtk.gdk.threads_init()
+
     parser = OptionParser(usage = "hamster-applet [OPTIONS]")
     parser.add_option("-w", "--window",
                       action="store_true",
