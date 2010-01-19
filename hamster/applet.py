@@ -642,7 +642,7 @@ class HamsterApplet(object):
         # check if maybe there is no need to switch, as field match:
         if self.last_activity and \
            self.last_activity['name'].lower() == activity['name'].lower() and \
-           self.last_activity['category'].lower() == activity['category'].lower() and \
+           (self.last_activity['category'] or "").lower() == (activity['category'] or "").lower() and \
            ", ".join(self.last_activity['tags']).lower() == ", ".join(activity['tags']).lower():
             return
 
