@@ -145,10 +145,12 @@ class TagsEntry(gtk.Entry):
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
             if self.popup.get_property("visible"):
-                self.hide_popup()
+                if self.get_text():
+                    self.hide_popup()
                 return True
             else:
-                self.emit("tags-selected")
+                if self.get_text():
+                    self.emit("tags-selected")
                 return False
         elif (event.keyval == gtk.keysyms.Escape):
             if self.popup.get_property("visible"):
@@ -387,5 +389,3 @@ class Tag(object):
 
         self.set_color((30, 30, 30))
         self.context.show_layout(self.layout)
-
-

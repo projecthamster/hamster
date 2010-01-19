@@ -135,7 +135,7 @@ class ActivityEntry(gtk.Entry):
             y = y + alloc.height
         else:
             y = y - popup_height
-            
+
         self.popup.move(x + alloc.x, y)
 
         self.popup.show_all()
@@ -230,7 +230,6 @@ class ActivityEntry(gtk.Entry):
     def _on_text_changed(self, widget):
         self.news = True
 
-
     def _on_button_press_event(self, button, event):
         self.populate_suggestions()
         self.show_popup()
@@ -240,10 +239,11 @@ class ActivityEntry(gtk.Entry):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
                     self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
-
                 self.hide_popup()
+                self.set_position(len(self.get_text()))
             else:
                 self._on_selected()
+
         elif (event.keyval == gtk.keysyms.Escape):
             if self.popup.get_property("visible"):
                 self.hide_popup()
@@ -295,7 +295,8 @@ class ActivityEntry(gtk.Entry):
         self.set_position(len(self.get_text()))
 
     def _on_selected(self):
-        if self.news:
-            self.emit("value-entered")
-            self.news = False
+        if self.news and self.get_text():
             self.set_position(len(self.get_text()))
+            self.emit("value-entered")
+
+        self.news = False
