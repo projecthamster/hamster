@@ -220,6 +220,9 @@ class PreferencesEditor:
             self.get_widget("workspace_frame").hide()
 
         self.screen = wnck.screen_get_default()
+        for workspace in self.screen.get_workspaces():
+            self.on_workspace_created(self.screen, workspace)
+
         self.screen.workspace_add_handler = self.screen.connect("workspace-created", self.on_workspace_created)
         self.screen.workspace_del_handler = self.screen.connect("workspace-destroyed", self.on_workspace_deleted)
 
