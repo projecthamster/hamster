@@ -22,6 +22,7 @@ import pygtk
 pygtk.require('2.0')
 
 import os
+import gobject
 import gtk
 
 import datetime as dt
@@ -78,6 +79,11 @@ class ActivityStore(gtk.ListStore):
                          activity['activity_order']])
 
 
+class WorkspaceStore(gtk.ListStore):
+    def __init__(self):
+        #id, name, color_code, order
+        gtk.ListStore.__init__(self, int, gobject.TYPE_PYOBJECT, str)
+
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
@@ -108,7 +114,7 @@ class PreferencesEditor:
         self.activityCell = gtk.CellRendererText()
         self.activityCell.connect('edited', self.activity_name_edited_cb, self.activity_store)
         self.activityColumn.pack_start(self.activityCell, True)
-        self.activityColumn.set_attributes(self.activityCell, text = 1)
+        self.activityColumn.set_attributes(self.activityCell, text=1)
         self.activityColumn.set_sort_column_id(1)
         self.activity_tree.append_column(self.activityColumn)
 
@@ -129,7 +135,7 @@ class PreferencesEditor:
         self.categoryCell.connect('edited', self.category_edited_cb, self.category_store)
 
         self.categoryColumn.pack_start(self.categoryCell, True)
-        self.categoryColumn.set_attributes(self.categoryCell, text = 1)
+        self.categoryColumn.set_attributes(self.categoryCell, text=1)
         self.categoryColumn.set_sort_column_id(1)
         self.categoryColumn.set_cell_data_func(self.categoryCell, self.unsorted_painter)
         self.category_tree.append_column(self.categoryColumn)
@@ -173,6 +179,33 @@ class PreferencesEditor:
         self.prev_selected_category = None
 
 
+        # create and fill workspace tree
+        self.workspace_tree = self.get_widget('workspace_list')
+#        self.get_widget("workspaces_label").set_mnemonic_widget(self.workspace_tree)
+        self.workspace_store = WorkspaceStore()
+
+        self.wNameColumn = gtk.TreeViewColumn(_("Name"))
+        self.wNameColumn.set_expand(True)
+        self.wNameCell = gtk.CellRendererText()
+        self.wNameCell.set_property('editable', False)
+        self.wActivityColumn = gtk.TreeViewColumn(_("Activity"))
+        self.wActivityColumn.set_expand(True)
+        self.wActivityCell = gtk.CellRendererText()
+        self.wActivityCell.set_property('editable', True)
+#        self.wActivityCell.connect('edited', self.category_edited_cb, self.category_store)
+
+        self.wNameColumn.pack_start(self.wNameCell, True)
+        self.wNameColumn.set_attributes(self.wNameCell)
+        self.wNameColumn.set_sort_column_id(1)
+        self.wNameColumn.set_cell_data_func(self.wNameCell, self.workspace_name_celldata)
+        self.workspace_tree.append_column(self.wNameColumn)
+        self.wActivityColumn.pack_start(self.wActivityCell, True)
+        self.wActivityColumn.set_attributes(self.wActivityCell, text=2)
+        self.wActivityColumn.set_sort_column_id(1)
+        self.workspace_tree.append_column(self.wActivityColumn)
+
+        self.workspace_tree.set_model(self.workspace_store)
+
         # disable notification thing if pynotify is not available
         try:
             import pynotify
@@ -186,8 +219,33 @@ class PreferencesEditor:
         except:
             self.get_widget("workspace_frame").hide()
 
+        self.screen = wnck.screen_get_default()
+        self.screen.workspace_add_handler = self.screen.connect("workspace-created", self.on_workspace_created)
+        self.screen.workspace_del_handler = self.screen.connect("workspace-destroyed", self.on_workspace_deleted)
+
         self._gui.connect_signals(self)
         self.window.show_all()
+
+    def workspace_name_celldata(self, column, cell, model, iter, user_data=None):
+        name = model.get_value(iter, 1).get_name()
+        cell.set_property('text', str(name))
+
+    def on_workspace_created(self, screen, workspace, user_data=None):
+        self.workspace_store.append([
+            workspace.get_number(),
+            workspace,
+            u'Not implemented'
+        ])
+
+    def on_workspace_deleted(self, screen, workspace, user_data=None):
+        row = self.workspace_store.get_iter_first()
+        while row:
+            if self.workspace_store.get_value(row, 1) == workspace:
+                if not self.workspace_store.remove(row):
+                    # row is now invalid, stop iteration
+                    break
+            else:
+                row = self.workspace_store.iter_next(row)
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
