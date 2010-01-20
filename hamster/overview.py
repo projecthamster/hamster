@@ -99,6 +99,8 @@ class Overview(object):
         self.get_widget("range_end_box").add(self.end_date_input)
 
         self.timechart = widgets.TimeChart()
+        self.timechart.day_start = self.day_start
+
         self.get_widget("by_day_box").add(self.timechart)
 
         self._gui.connect_signals(self)
@@ -184,8 +186,9 @@ class Overview(object):
         key, value = data
         if key == "day_start_minutes":
             self.day_start = dt.time(value / 60, value % 60)
+            self.timechart.day_start = self.day_start
             self.search()
-    
+
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
         fact = tree.get_selected_fact()
@@ -328,7 +331,7 @@ class Overview(object):
             selected_date = fact
         else:
             selected_date = fact["date"]
-        
+
         dialogs.edit.show(fact_date = selected_date)
 
     def on_remove_clicked(self, button):
@@ -357,13 +360,13 @@ class Overview(object):
         # properly saving window state and position
         maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
         conf.set("overview_window_maximized", maximized)
-        
+
         # make sure to remember dimensions only when in normal state
         if maximized == False and not self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_ICONIFIED:
             x, y = self.window.get_position()
             w, h = self.window.get_size()
             conf.set("overview_window_box", [x, y, w, h])
-            
+
 
         if not self.parent:
             gtk.main_quit()
@@ -373,4 +376,3 @@ class Overview(object):
 
     def show(self):
         self.window.show()
-

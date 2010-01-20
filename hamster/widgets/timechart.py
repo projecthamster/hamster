@@ -21,8 +21,6 @@ import gtk, pango
 
 from .hamster import graphics, stuff
 
-from .hamster.configuration import conf
-
 import datetime as dt
 import calendar
 
@@ -40,14 +38,14 @@ class TimeChart(graphics.Area):
         graphics.Area.__init__(self)
         self.start_time, self.end_time = None, None
         self.facts = []
-        self.day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
+
+        self.day_start = dt.time() # ability to start day at another hour
         self.first_weekday = stuff.locale_first_weekday()
 
         self.minor_tick = None
 
         self.tick_totals = []
-        
+
 
     def draw(self, facts, start_date, end_date):
         self.facts = facts
@@ -202,7 +200,7 @@ class TimeChart(graphics.Area):
                     somewhere_in_middle(current_time, tick_color)
 
             current_time += major_step
-            
+
 
 
         # the bars
@@ -211,13 +209,13 @@ class TimeChart(graphics.Area):
             x, bar_width = exes[current_time]
 
             self.set_color(bar_color)
-            
+
             # rounded corners
             self.draw_rect(x, self.height - bar_size, bar_width - 1, bar_size, 3)
 
             # straighten out bottom rounded corners
-            self.context.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2)) 
-            
+            self.context.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2))
+
             self.context.fill()
 
 
@@ -304,7 +302,3 @@ class TimeChart(graphics.Area):
         hours = [hour / float(max_hour or 1) for hour in hours]
 
         self.tick_totals = zip(fractions, hours)
-
-
-
-

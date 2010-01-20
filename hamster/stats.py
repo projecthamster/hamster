@@ -31,7 +31,7 @@ import gtk, gobject
 import pango
 
 import stuff, charting, graphics, widgets
-from configuration import runtime
+from configuration import runtime, conf
 
 from hamster.i18n import C_
 
@@ -45,7 +45,11 @@ class Stats(object):
 
         self.stat_facts = None
 
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
         self.timechart = widgets.TimeChart()
+        self.timechart.day_start = day_start
+
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
