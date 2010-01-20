@@ -17,19 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import os  # for locale
 import gtk, pango
 
-from .hamster import graphics, stuff
+from .hamster import graphics
 
-import datetime as dt
+import time, datetime as dt
 import calendar
 
 from bisect import bisect
 
-HOUR = dt.timedelta(seconds = 60*60)
 DAY = dt.timedelta(1)
 WEEK = dt.timedelta(7)
-MONTH = dt.timedelta(30)
 
 class TimeChart(graphics.Area):
     """this widget is kind of half finished"""
@@ -40,7 +39,7 @@ class TimeChart(graphics.Area):
         self.durations = []
 
         self.day_start = dt.time() # ability to start day at another hour
-        self.first_weekday = stuff.locale_first_weekday()
+        self.first_weekday = self.locale_first_weekday()
 
         self.minor_tick = None
 
@@ -96,11 +95,11 @@ class TimeChart(graphics.Area):
             start_time = self.start_time - dt.timedelta(self.start_time.weekday() + 1)
             # look if we need to start on sunday or monday
             start_time = start_time + dt.timedelta(self.first_weekday)
-            if self.start_time - start_time == dt.timedelta(days=7):
-                start_time += dt.timedelta(days=7)
+            if self.start_time - start_time == WEEK:
+                start_time += WEEK
             self.start_time = start_time
         elif days > 2: # more than two days -> show per day
-            self.minor_tick = dt.timedelta(days = 1)
+            self.minor_tick = DAY
         else: # show per hour
             self.minor_tick = dt.timedelta(seconds = 60 * 60)
 
@@ -110,6 +109,9 @@ class TimeChart(graphics.Area):
 
 
     def on_expose(self):
+        if not self.start_time or not self.end_time:
+            return
+
         # figure out colors
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
         if self.colors.is_light(bg_color):
@@ -182,7 +184,7 @@ class TimeChart(graphics.Area):
             # draws line somewhere in middle of the minor tick
             left_index = exes.keys()[bisect(exes.keys(), time) - 1]
             #should yield something between 0 and 1
-            adjustment = stuff.duration_minutes(time - left_index) / float(stuff.duration_minutes(self.minor_tick))
+            adjustment = self.duration_minutes(time - left_index) / float(self.duration_minutes(self.minor_tick))
             x, width = exes[left_index]
             line(x + round(width * adjustment) - 1, color)
 
@@ -269,38 +271,70 @@ class TimeChart(graphics.Area):
 
         hours = [0] * len(fractions)
 
-        tick_minutes = float(stuff.duration_minutes(self.minor_tick))
+        tick_minutes = float(self.duration_minutes(self.minor_tick))
 
         for start_time, duration in self.durations:
-            if self.minor_tick < dt.timedelta(1):
-                end_time = start_time + duration
+            if isinstance(duration, dt.timedelta):
+                if self.minor_tick < dt.timedelta(1):
+                    end_time = start_time + duration
 
-                # find in which fraction the fact starts and
-                # add duration up to the border of tick to that fraction
-                # then move cursor to the start of next fraction
-                first_index = bisect(fractions, start_time) - 1
-                step_time = fractions[first_index]
-                first_end = min(end_time, step_time + self.minor_tick)
-                first_tick = stuff.duration_minutes(first_end - start_time) / tick_minutes
+                    # find in which fraction the fact starts and
+                    # add duration up to the border of tick to that fraction
+                    # then move cursor to the start of next fraction
+                    first_index = bisect(fractions, start_time) - 1
+                    step_time = fractions[first_index]
+                    first_end = min(end_time, step_time + self.minor_tick)
+                    first_tick = self.duration_minutes(first_end - start_time) / tick_minutes
 
-                hours[first_index] += first_tick
-                step_time = step_time + self.minor_tick
+                    hours[first_index] += first_tick
+                    step_time = step_time + self.minor_tick
 
-                # now go through ticks until we reach end of the time
-                while step_time < end_time:
-                    index = bisect(fractions, step_time) - 1
-                    interval = min([1, stuff.duration_minutes(end_time - step_time) / tick_minutes])
-                    hours[index] += interval
+                    # now go through ticks until we reach end of the time
+                    while step_time < end_time:
+                        index = bisect(fractions, step_time) - 1
+                        interval = min([1, self.duration_minutes(end_time - step_time) / tick_minutes])
+                        hours[index] += interval
 
-                    step_time += self.minor_tick
+                        step_time += self.minor_tick
+                else:
+
+                    duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
+                    hour_index = bisect(fractions, dt.datetime.combine(duration_date, dt.time())) - 1
+                    hours[hour_index] += self.duration_minutes(duration)
             else:
+                if isinstance(start_time, dt.datetime):
+                    duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
+                else:
+                    duration_date = start_time
 
-                duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
                 hour_index = bisect(fractions, dt.datetime.combine(duration_date, dt.time())) - 1
-                hours[hour_index] += stuff.duration_minutes(duration)
+                hours[hour_index] += duration
+
 
         # now normalize
         max_hour = max(hours)
         hours = [hour / float(max_hour or 1) for hour in hours]
 
         self.tick_totals = zip(fractions, hours)
+
+
+    def duration_minutes(self, duration):
+        """returns minutes from duration, otherwise we keep bashing in same math"""
+        return duration.seconds / 60 + duration.days * 24 * 60
+
+    def locale_first_weekday(self):
+        """figure if week starts on monday or sunday"""
+        first_weekday = 6 #by default settle on monday
+
+        try:
+            process = os.popen("locale first_weekday week-1stday")
+            week_offset, week_start = process.read().split('\n')[:2]
+            process.close()
+            week_start = dt.date(*time.strptime(week_start, "%Y%m%d")[:3])
+            week_offset = dt.timedelta(int(week_offset) - 1)
+            beginning = week_start + week_offset
+            first_weekday = int(beginning.strftime("%w"))
+        except:
+            print("WARNING - Failed to get first weekday from locale")
+
+        return first_weekday
