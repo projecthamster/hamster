@@ -184,7 +184,8 @@ A week of usage would be nice!"""))
             self.get_widget("not_enough_records_label").hide()
 
         # All dates in the scope
-        self.timechart.draw(facts, facts[0]["date"], facts[-1]["date"])
+        durations = [(fact["start_time"], fact["delta"]) for fact in facts]
+        self.timechart.draw(durations, facts[0]["date"], facts[-1]["date"])
 
 
         # Totals by category

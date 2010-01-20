@@ -37,7 +37,7 @@ class TimeChart(graphics.Area):
     def __init__(self):
         graphics.Area.__init__(self)
         self.start_time, self.end_time = None, None
-        self.facts = []
+        self.durations = []
 
         self.day_start = dt.time() # ability to start day at another hour
         self.first_weekday = stuff.locale_first_weekday()
@@ -47,8 +47,8 @@ class TimeChart(graphics.Area):
         self.tick_totals = []
 
 
-    def draw(self, facts, start_date, end_date):
-        self.facts = facts
+    def draw(self, durations, start_date, end_date):
+        self.durations = durations
 
         if start_date > end_date:
             start_date, end_date = end_date, start_date
@@ -58,25 +58,25 @@ class TimeChart(graphics.Area):
             start_time = dt.datetime.combine(start_date, self.day_start.replace(minute=0))
             end_time = dt.datetime.combine(end_date, self.day_start.replace(minute=0)) + dt.timedelta(days = 1)
 
-            fact_start_time, fact_end_time = start_time, end_time
-            if facts:
-                fact_start_time = facts[0]["start_time"]
-                fact_end_time = facts[-1]["start_time"] + facts[-1]["delta"]
+            durations_start_time, durations_end_time = start_time, end_time
+            if durations:
+                durations_start_time = durations[0][0]
+                durations_end_time = durations[-1][0] + durations[-1][1]
 
-            self.start_time = min([start_time, fact_start_time])
-            self.end_time = max([end_time, fact_end_time])
+            self.start_time = min([start_time, durations_start_time])
+            self.end_time = max([end_time, durations_end_time])
 
         else:
             start_time = dt.datetime.combine(start_date, dt.time())
             end_time = dt.datetime.combine(end_date, dt.time(23, 59))
 
-            fact_start_time, fact_end_time = start_time, end_time
-            if facts:
-                fact_start_time = dt.datetime.combine(facts[0]["date"], dt.time())
-                fact_end_time = dt.datetime.combine(facts[-1]["date"], dt.time())
+            durations_start_time, durations_end_time = start_time, end_time
+            if durations:
+                durations_start_time = dt.datetime.combine(durations[0][0], dt.time())
+                durations_end_time = dt.datetime.combine(durations[-1][0], dt.time())
 
-            self.start_time = min([start_time, fact_start_time])
-            self.end_time = max([end_time, fact_end_time])
+            self.start_time = min([start_time, durations_start_time])
+            self.end_time = max([end_time, durations_end_time])
 
 
 
@@ -271,17 +271,17 @@ class TimeChart(graphics.Area):
 
         tick_minutes = float(stuff.duration_minutes(self.minor_tick))
 
-        for fact in self.facts:
+        for start_time, duration in self.durations:
             if self.minor_tick < dt.timedelta(1):
-                end_time = fact["start_time"] + fact["delta"] # the thing about ongoing task - it has no end time
+                end_time = start_time + duration
 
                 # find in which fraction the fact starts and
                 # add duration up to the border of tick to that fraction
                 # then move cursor to the start of next fraction
-                first_index = bisect(fractions, fact["start_time"]) - 1
+                first_index = bisect(fractions, start_time) - 1
                 step_time = fractions[first_index]
                 first_end = min(end_time, step_time + self.minor_tick)
-                first_tick = stuff.duration_minutes(first_end - fact["start_time"]) / tick_minutes
+                first_tick = stuff.duration_minutes(first_end - start_time) / tick_minutes
 
                 hours[first_index] += first_tick
                 step_time = step_time + self.minor_tick
@@ -294,8 +294,10 @@ class TimeChart(graphics.Area):
 
                     step_time += self.minor_tick
             else:
-                hour_index = bisect(fractions, dt.datetime.combine(fact["date"], dt.time())) - 1
-                hours[hour_index] += stuff.duration_minutes(fact["delta"])
+
+                duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
+                hour_index = bisect(fractions, dt.datetime.combine(duration_date, dt.time())) - 1
+                hours[hour_index] += stuff.duration_minutes(duration)
 
         # now normalize
         max_hour = max(hours)

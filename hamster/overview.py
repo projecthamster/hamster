@@ -138,7 +138,8 @@ class Overview(object):
 
         self.set_title()
 
-        self.timechart.draw(self.facts, self.start_date, self.end_date)
+        durations = [(fact["start_time"], fact["delta"]) for fact in self.facts]
+        self.timechart.draw(durations, self.start_date, self.end_date)
 
 
         if self.get_widget("window_tabs").get_current_page() == 0:
