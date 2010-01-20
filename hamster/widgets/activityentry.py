@@ -168,8 +168,7 @@ class ActivityEntry(gtk.Entry):
             self.select_region(len(self.filter), len(self.filter) + prefix_length)
 
     def refresh_activities(self):
-        # scratch activities and categories so that they get repopulated on demand
-        self.activities = None
+        # scratch category cache so it gets repopulated on demand
         self.categories = None
 
     def populate_suggestions(self):
@@ -181,11 +180,11 @@ class ActivityEntry(gtk.Entry):
         if self.activities and self.categories and self.filter == self.get_text().decode('utf8', 'replace')[:cursor]:
             return #same thing, no need to repopulate
 
-        self.activities = self.activities or runtime.storage.get_autocomplete_activities()
-        self.categories = self.categories or runtime.storage.get_category_list()
-
-
         self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
+
+        # do not cache as ordering and available options change over time
+        self.activities = runtime.storage.get_autocomplete_activities(self.filter)
+        self.categories = self.categories or runtime.storage.get_category_list()
 
         input_activity = stuff.parse_activity_input(self.filter)
 
@@ -211,15 +210,14 @@ class ActivityEntry(gtk.Entry):
         else:
             key = input_activity.activity_name.decode('utf8', 'replace').lower()
             for activity in self.activities:
-                if input_activity.activity_name == "" or activity['name'].decode('utf8', 'replace').lower().startswith(key):
-                    fillable = activity['name']
-                    if activity['category']:
-                        fillable += "@%s" % activity['category']
+                fillable = activity['name']
+                if activity['category']:
+                    fillable += "@%s" % activity['category']
 
-                    if time: #as we also support deltas, for the time we will grab anything up to first space
-                        fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
+                if time: #as we also support deltas, for the time we will grab anything up to first space
+                    fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
 
-                    store.append([fillable, activity['name'], activity['category'], time])
+                store.append([fillable, activity['name'], activity['category'], time])
 
     def after_activity_update(self, widget, event):
         self.refresh_activities()

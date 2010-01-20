@@ -745,25 +745,30 @@ class Storage(storage.Storage):
                        SELECT a.*, b.name as category
                          FROM activities a
                     LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                        WHERE deleted is null
+                        WHERE deleted IS NULL
                      ORDER BY lower(a.name)
             """
             activities = self.fetchall(query)
 
         return activities
 
-    def __get_autocomplete_activities(self):
+    def __get_autocomplete_activities(self, search):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""
 
         query = """
-                   SELECT lower(a.name) as name, b.name as category
+                   SELECT lower(a.name) AS name, b.name AS category
                      FROM activities a
-                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                    WHERE deleted is null
-                 ORDER BY lower(a.name)
+                LEFT JOIN categories b ON coalesce(b.id, -1) = a.category_id
+                LEFT JOIN facts f ON a.id = f.activity_id
+                    WHERE deleted IS NULL
+                      AND a.name LIKE ? ESCAPE '\\'
+                 GROUP BY a.id
+                 ORDER BY min(f.start_time) DESC, lower(a.name)
+                    LIMIT 50
         """
-        activities = self.fetchall(query)
+        search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
+        activities = self.fetchall(query, (u'%s%%' % search, ))
 
         return activities
 
