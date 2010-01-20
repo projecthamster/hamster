@@ -59,7 +59,7 @@ class FactTree(gtk.TreeView):
         self.set_show_expanders(False)
 
         # fact (None for parent), duration, parent data (if any)
-        self.store_model = gtk.TreeStore(gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
+        self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
         self.set_model(self.store_model)
 
 
@@ -86,7 +86,7 @@ class FactTree(gtk.TreeView):
         self.longest_activity_category = 0 # we will need this for the cell renderer
         self.longest_interval = 0 # we will need this for the cell renderer
         self.longest_duration = 0 # we will need this for the cell renderer
-        self.stored_selection = None
+        self.stored_selection = []
 
         self.box = None
 
@@ -128,30 +128,80 @@ class FactTree(gtk.TreeView):
         self.longest_duration = max(self.longest_duration, w)
 
 
-    def add_fact(self, fact, parent = None):
+    def add_fact(self, fact):
         self.update_longest_dimensions(fact)
-        self.store_model.append(parent, [fact, None])
+        self.store_model.append([fact, None])
 
 
     def add_group(self, group_label, group_date, facts):
         total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
 
         # adds group of facts with the given label
-        group_row = self.store_model.append(None, [None,
-                                                   dict(date = group_date,
-                                                        label = group_label,
-                                                        duration = total)])
+        self.store_model.append([None, dict(date = group_date,
+                                            label = group_label,
+                                            duration = total)])
 
         for fact in facts:
-            self.add_fact(fact, group_row)
+            self.add_fact(fact)
 
         self.expand_all()
+
+
+    def _get_current_row_values(self):
+        selection = self.get_selection()
+        (model, iter) = selection.get_selected()
+
+        cur_val, prev_val, next_val = None, None, None
+        prev_ref, current_ref, next_ref = None, None, None
+        if iter:
+
+            current_ref =  model.get_path(iter)
+
+            prev, next = None, None
+
+            next = model.iter_next(iter)
+
+
+
+
+            path = model.get_path(iter)
+            position = path[-1]
+            if position > 0:
+                prev_path = list(path)[:-1]
+                prev_path.append(position - 1)
+                prev = model.get_iter(tuple(prev_path))
+
+
+
+            cur_val = self._id_or_label(model, current_ref)
+
+            if prev:
+                prev_ref = model.get_path(prev)
+                prev_val = self._id_or_label(model, prev_ref)
+
+            if next:
+                next_ref = model.get_path(next)
+                next_val = self._id_or_label(model, next_ref)
+
+        return ((prev_ref, prev_val), (current_ref, cur_val), (next_ref, next_val))
+
+    def _id_or_label(self, model, path):
+        """returns id or date, id if it is a fact row or date if it is a group row"""
+
+        try: # see if path is still valid
+            iter = model.get_iter(path)
+        except:
+            return None
+
+        if model[path][0]:
+            return model[path][0]['id']
+        else:
+            return model[path][1]['label']
 
     def detach_model(self):
         # ooh, somebody is going for refresh!
         # let's save selection too - maybe it will come handy
-        selection = self.get_selection()
-        self.stored_selection = selection.get_selected_rows()[1]
+        self.stored_selection = self._get_current_row_values()
 
         self.set_model()
 
@@ -162,8 +212,45 @@ class FactTree(gtk.TreeView):
         self.expand_all()
 
         if self.stored_selection:
+            self._restore_selection()
+
+
+    def _restore_selection(self):
+        """the code is quite hairy, but works with all kinds of deletes
+           and does not select row when it should not.
+           TODO - it might be worth replacing this with something much simpler"""
+        model = self.store_model
+        new_prev_val, new_cur_val, new_next_val = None, None, None
+        prev, cur, next = self.stored_selection
+
+        if cur and cur[0]:  new_cur_val  = self._id_or_label(model, cur[0])
+        if prev and prev[0]: new_prev_val = self._id_or_label(model, prev[0])
+        if next and next[0]: new_next_val = self._id_or_label(model, next[0])
+
+        path = None
+        values = (new_prev_val, new_cur_val, new_next_val)
+        paths = (prev, cur, next)
+
+        if cur[1] and cur[1] in values:
+            # look if we can find previous current in the new threesome
+            path = paths[values.index(cur[1])][0]
+        elif cur[0] and prev[1] and next[1] and prev[1] == new_prev_val and next[1] == new_next_val:
+            # if previous and next match by ID - we have been updated, select current
+            path = cur[0]
+        elif prev[1] == new_prev_val and new_cur_val:
+            path = cur[0]
+        elif new_cur_val and new_cur_val == next[1]:
+            # on deletion next will become current
+            path = cur[0]
+        elif prev[1] in values:
+            # as the last resort, we select the previous one
+            path =  paths[values.index(prev[1])][0]
+
+        if path:
             selection = self.get_selection()
-            selection.select_path(self.stored_selection[0])
+            selection.select_path(path)
+
+            self.scroll_to_cell(path)
 
 
     def get_selected_fact(self):
