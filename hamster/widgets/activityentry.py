@@ -182,12 +182,12 @@ class ActivityEntry(gtk.Entry):
             return #same thing, no need to repopulate
 
         self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
+        input_activity = stuff.parse_activity_input(self.filter)
 
         # do not cache as ordering and available options change over time
-        self.activities = runtime.storage.get_autocomplete_activities(self.filter)
+        self.activities = runtime.storage.get_autocomplete_activities(input_activity.activity_name)
         self.categories = self.categories or runtime.storage.get_category_list()
 
-        input_activity = stuff.parse_activity_input(self.filter)
 
         time = ''
         if input_activity.start_time:
