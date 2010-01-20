@@ -59,6 +59,8 @@ class Stats(object):
         self.init_stats()
 
         self.window.set_position(gtk.WIN_POS_CENTER)
+
+        self._gui.connect_signals(self)
         self.window.show_all()
         self.stats()
 
@@ -416,8 +418,19 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
+    def on_window_key_pressed(self, tree, event_key):
+      if (event_key.keyval == gtk.keysyms.Escape
+          or (event_key.keyval == gtk.keysyms.w
+              and event_key.state & gtk.gdk.CONTROL_MASK)):
+        self.close_window()
+
+    def on_stats_window_deleted(self, widget, event):
+        self.close_window()
 
     def close_window(self):
+        runtime.dispatcher.del_handler('activity_updated', self.after_fact_update)
+        runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
+
         if not self.parent:
             gtk.main_quit()
         else:
@@ -426,5 +439,5 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
 
 
 if __name__ == "__main__":
-    stats_viewer = StatsViewer2()
+    stats_viewer = Stats()
     gtk.main()

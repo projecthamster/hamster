@@ -11,7 +11,7 @@
     <property name="default_height">550</property>
     <property name="icon_name">hamster-applet</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
-    <signal name="delete_event" handler="on_close"/>
+    <signal name="delete_event" handler="on_stats_window_deleted"/>
     <child>
       <object class="GtkVBox" id="stats_box">
         <property name="visible">True</property>
