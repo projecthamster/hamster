@@ -764,7 +764,7 @@ class Storage(storage.Storage):
                     WHERE deleted IS NULL
                       AND a.name LIKE ? ESCAPE '\\'
                  GROUP BY a.id
-                 ORDER BY min(f.start_time) DESC, lower(a.name)
+                 ORDER BY max(f.start_time) DESC, lower(a.name)
                     LIMIT 50
         """
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
