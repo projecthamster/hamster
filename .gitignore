@@ -18,3 +18,5 @@ py-compile
 stamp-h1
 autom4te.cache
 m4
+gnome-doc-utils.make
+hamster-applet-*.tar.gz
