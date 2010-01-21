@@ -500,7 +500,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         tag_cell_start = cell_start + widget.longest_activity_category
         tag_cell_end = cell_start + cell_width
 
-        cell_height = label_h + 2
+        cell_height = label_h + 4
 
         cur_x, cur_y = tag_cell_start, 2
         if fact["tags"]:
@@ -514,7 +514,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                     cur_y += tag_h + 4
                 cur_x += tag_w + 4
 
-            cell_height = max(cell_height, cur_y + tag_h + 3)
+            cell_height = max(cell_height, cur_y + tag_h + 4)
 
             labels["tags"] = (None, tag_cell_start, 2, tag_cell_end)
 
@@ -541,7 +541,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             labels["description"] = (description, x, y, width * pango.SCALE)
 
-            cell_height += label_h + 2
+            cell_height += label_h + 4
 
         self.labels[fact["id"]] = labels
         return (0, 0, 0, cell_height)
