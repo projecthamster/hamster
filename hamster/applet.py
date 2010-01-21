@@ -357,8 +357,8 @@ class HamsterApplet(object):
         else:
             self.last_activity = None
 
-        if len(facts) > 10:
-            self._gui.get_object("today_box").set_size_request(-1, 250)
+        if len(facts) > 15:
+            self._gui.get_object("today_box").set_size_request(-1, 360)
             self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         else:
             self._gui.get_object("today_box").set_size_request(-1, -1)
