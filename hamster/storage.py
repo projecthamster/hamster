@@ -80,10 +80,12 @@ class Storage(object):
         return self.__get_popular_categories()
 
     def remove_fact(self, fact_id):
+        self.start_transaction()
         fact = self.get_fact(fact_id)
         if fact:
             self.__remove_fact(fact_id)
             self.dispatch('day_updated', fact['start_time'])
+        self.end_transaction()
 
     def update_fact(self, fact_id, activity_name, tags, start_time, end_time, description = None):
         now = datetime.datetime.now()
