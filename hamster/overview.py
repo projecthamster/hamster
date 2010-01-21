@@ -79,9 +79,6 @@ class Overview(object):
         self.range_combo.append_text(_("Week"))
         self.range_combo.append_text(_("Month"))
         self.range_combo.append_text(_("Date Range"))
-        self.range_combo.set_row_separator_func(lambda row, iter: row[iter][0] == "-")
-        self.range_combo.append_text("-")
-        self.range_combo.append_text("All")
         self.range_combo.set_active(0)
         self.range_combo.connect("changed", self.on_range_combo_changed)
 
