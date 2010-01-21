@@ -147,44 +147,6 @@ class FactTree(gtk.TreeView):
         self.expand_all()
 
 
-    def _get_current_row_values(self):
-        selection = self.get_selection()
-        (model, iter) = selection.get_selected()
-
-        cur_val, prev_val, next_val = None, None, None
-        prev_ref, current_ref, next_ref = None, None, None
-        if iter:
-
-            current_ref =  model.get_path(iter)
-
-            prev, next = None, None
-
-            next = model.iter_next(iter)
-
-
-
-
-            path = model.get_path(iter)
-            position = path[-1]
-            if position > 0:
-                prev_path = list(path)[:-1]
-                prev_path.append(position - 1)
-                prev = model.get_iter(tuple(prev_path))
-
-
-
-            cur_val = self._id_or_label(model, current_ref)
-
-            if prev:
-                prev_ref = model.get_path(prev)
-                prev_val = self._id_or_label(model, prev_ref)
-
-            if next:
-                next_ref = model.get_path(next)
-                next_val = self._id_or_label(model, next_ref)
-
-        return ((prev_ref, prev_val), (current_ref, cur_val), (next_ref, next_val))
-
     def _id_or_label(self, model, path):
         """returns id or date, id if it is a fact row or date if it is a group row"""
 
@@ -201,8 +163,17 @@ class FactTree(gtk.TreeView):
     def detach_model(self):
         # ooh, somebody is going for refresh!
         # let's save selection too - maybe it will come handy
-        self.stored_selection = self._get_current_row_values()
+        selection = self.get_selection()
+        model, iter = selection.get_selected()
 
+        if iter:
+            path = model.get_path(iter)[0]
+            prev, cur, next = path - 1, path, path + 1
+            self.stored_selection = ((prev, self._id_or_label(model, prev)),
+                                     (cur, self._id_or_label(model, cur)),
+                                     (next, self._id_or_label(model, next)))
+
+        # and now do what we were asked to
         self.set_model()
 
 
@@ -220,31 +191,29 @@ class FactTree(gtk.TreeView):
            and does not select row when it should not.
            TODO - it might be worth replacing this with something much simpler"""
         model = self.store_model
+
         new_prev_val, new_cur_val, new_next_val = None, None, None
         prev, cur, next = self.stored_selection
 
-        if cur and cur[0]:  new_cur_val  = self._id_or_label(model, cur[0])
-        if prev and prev[0]: new_prev_val = self._id_or_label(model, prev[0])
-        if next and next[0]: new_next_val = self._id_or_label(model, next[0])
+        if cur:  new_cur_val  = self._id_or_label(model, cur[0])
+        if prev: new_prev_val = self._id_or_label(model, prev[0])
+        if next: new_next_val = self._id_or_label(model, next[0])
 
         path = None
         values = (new_prev_val, new_cur_val, new_next_val)
         paths = (prev, cur, next)
 
-        if cur[1] and cur[1] in values:
+        if cur[1] and cur[1] in values: # simple case
             # look if we can find previous current in the new threesome
             path = paths[values.index(cur[1])][0]
-        elif cur[0] and prev[1] and next[1] and prev[1] == new_prev_val and next[1] == new_next_val:
-            # if previous and next match by ID - we have been updated, select current
+        elif prev[1] and prev[1] == new_prev_val and next[1] and next[1] == new_next_val:
+            # on update the ID changes so we find it by matching in between
             path = cur[0]
-        elif prev[1] == new_prev_val and new_cur_val:
-            path = cur[0]
-        elif new_cur_val and new_cur_val == next[1]:
-            # on deletion next will become current
-            path = cur[0]
-        elif prev[1] in values:
-            # as the last resort, we select the previous one
-            path =  paths[values.index(prev[1])][0]
+        elif prev[1] == new_prev_val: # all that's left is delete.
+            if new_cur_val:
+                path = cur[0]
+            else:
+                path = prev[0]
 
         if path:
             selection = self.get_selection()
