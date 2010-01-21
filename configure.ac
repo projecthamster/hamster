@@ -30,6 +30,7 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.37.1])
+GNOME_DOC_INIT([0.17.3])
 
 dnl ****************************************************************************
 dnl * GConf support
@@ -57,7 +58,7 @@ AC_SUBST(LIBDIR)
 
 AS_AC_EXPAND(PYEXECDIR, $pyexecdir)
 AC_SUBST(PYEXECDIR)
-		
+
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
@@ -171,6 +172,7 @@ po/Makefile.in
 ])
 AC_OUTPUT(
 hamster/widgets/Makefile
+help/Makefile
 )
 
 echo

@@ -1,4 +1,4 @@
-SUBDIRS = hamster data po
+SUBDIRS = hamster data po help
 ACLOCAL_AMFLAGS = -I m4
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
@@ -14,5 +14,3 @@ EXTRA_DIST = \
 	intltool-update.in
 	MAINTAINERS \
 	TODO
-
-
