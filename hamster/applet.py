@@ -347,10 +347,11 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
+        facts = runtime.storage.get_todays_facts()
+
         self.treeview.detach_model()
         self.treeview.clear()
 
-        facts = runtime.storage.get_todays_facts()
         if facts and facts[-1]["end_time"] == None:
             self.last_activity = facts[-1]
         else:

@@ -147,31 +147,28 @@ class FactTree(gtk.TreeView):
         self.expand_all()
 
 
-    def _id_or_label(self, model, path):
-        """returns id or date, id if it is a fact row or date if it is a group row"""
-
+    def get_row(self, path):
+        """checks if the path is valid and if so, returns the model row"""
         try: # see if path is still valid
-            iter = model.get_iter(path)
+            iter = self.store_model.get_iter(path)
+            return self.store_model[path]
         except:
             return None
 
-        if model[path][0]:
-            return model[path][0]['id']
+    def _id_or_label(self, model, path):
+        """returns id or date, id if it is a fact row or date if it is a group row"""
+        row = self.get_row(path)
+        if not row: return None
+
+        if row[0]:
+            return row[0]['id']
         else:
-            return model[path][1]['label']
+            return row[1]['label']
 
     def detach_model(self):
         # ooh, somebody is going for refresh!
         # let's save selection too - maybe it will come handy
-        selection = self.get_selection()
-        model, iter = selection.get_selected()
-
-        if iter:
-            path = model.get_path(iter)[0]
-            prev, cur, next = path - 1, path, path + 1
-            self.stored_selection = ((prev, self._id_or_label(model, prev)),
-                                     (cur, self._id_or_label(model, cur)),
-                                     (next, self._id_or_label(model, next)))
+        self.store_selection()
 
         # and now do what we were asked to
         self.set_model()
@@ -183,10 +180,22 @@ class FactTree(gtk.TreeView):
         self.expand_all()
 
         if self.stored_selection:
-            self._restore_selection()
+            self.restore_selection()
 
 
-    def _restore_selection(self):
+    def store_selection(self):
+        selection = self.get_selection()
+        model, iter = selection.get_selected()
+
+        if iter:
+            path = model.get_path(iter)[0]
+            prev, cur, next = path - 1, path, path + 1
+            self.stored_selection = ((prev, self._id_or_label(model, prev)),
+                                     (cur, self._id_or_label(model, cur)),
+                                     (next, self._id_or_label(model, next)))
+
+
+    def restore_selection(self):
         """the code is quite hairy, but works with all kinds of deletes
            and does not select row when it should not.
            TODO - it might be worth replacing this with something much simpler"""
@@ -220,6 +229,18 @@ class FactTree(gtk.TreeView):
             selection.select_path(path)
 
             self.scroll_to_cell(path)
+
+    def select_next(self):
+        selection = self.get_selection()
+        model, iter = selection.get_selected()
+
+        path = 0
+        if iter:
+            path = model.get_path(iter)[0]
+            if self.get_row(path+1):
+                path = path + 1
+
+        selection.select_path(path)
 
 
     def get_selected_fact(self):
