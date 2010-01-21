@@ -1,0 +1,26 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="reports">
+<info>
+  <link type="guide" xref="index"/>
+</info>
+<title>Generating reports and exporting data</title>
+
+<p>
+    Apart from the HTML format that is offered by default in the Save report
+    dialog, format drop-down allows to choose TSV (Tab Separated Values, good for
+    spreadsheets), XML and iCal formats.
+</p>
+<p>
+    For programmatic access, there is D-Bus API, that can be introspected
+    using tools like <link href="https://fedorahosted.org/d-feet/">D-Feet</link>.
+</p>
+
+<note style="info">
+    <p>
+        The really fastest way to get the data "out" of the Time Tracker, is by generatic the
+        HTML report, while holding the <key>Ctrl</key> key down, select all the
+        needed cells, and then copy/pasting them in the target application.
+    </p>
+</note>
+</page>

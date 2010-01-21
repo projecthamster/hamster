@@ -1,0 +1,51 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="input">
+<info>
+  <link type="guide" xref="index"/>
+</info>
+<title>Input</title>
+
+<p>
+    To start tracking, type in activity name in the input box and hit
+    <key>Enter</key> key.
+    There are few tricks however, that will allow you to specify more detail on
+    the fly:
+</p>
+
+<steps>
+    <item><p>Use @ symbol to add category</p></item>
+    <item><p>Everything after a comma "," will be stored in the description field</p></item>
+    <item><p>To specify time on the fly, enter it as first in the input box.</p></item>
+</steps>
+
+<p>
+    Few examples:
+</p>
+<example>
+    <code>12:30-12:45 watering flowers</code>
+    <p>Forgot to note the important act of watering flowers over the lunch.</p>
+</example>
+<example>
+    <code>tomatoes@garden, digging holes</code>
+    <p>
+        Need more tomatoes in the garden. Digging holes is purely informational,
+        so added it as a description
+    </p>
+</example>
+<example>
+    <code>-7 existentialism, thinking about the vastness of the universe</code>
+    <p>
+        Corrected information by informing application that I've been
+        onto something else for last seven minutes. Relative times work
+        only without end times - that is - for the most recent activity.
+    </p>
+</example>
+
+<p>
+    On top of that you can add tags in the tag input field.
+    Tags are delimited by comma. Hitting <key>Tab</key> when the suggestion
+    box shows up, will complete input to the first matching tag.
+</p>
+
+</page>

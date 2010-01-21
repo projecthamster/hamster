@@ -1,0 +1,22 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="backup">
+<info>
+  <link type="guide" xref="index"/>
+</info>
+<title>Backup</title>
+
+<p>
+    Activities are stored in an SQLite database, located
+    <file>~/.local/share/hamster-applet/hamster.db</file>.
+    The file can be backed up and restored on the go.
+    Application will reload the data automatically after a short while.
+</p>
+<note style="info">
+    <p>
+        For viewing contents of the database we can suggest using the
+        <link href="https://addons.mozilla.org/en-US/firefox/addon/5817"><app>SQLite Manager</app></link>
+        for Mozilla Firefox.
+    </p>
+</note>
+</page>

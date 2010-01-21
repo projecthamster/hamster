@@ -1,0 +1,19 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="statistics">
+<info>
+  <link type="guide" xref="index"/>
+</info>
+<title>Statistics</title>
+
+<p>
+    The results, that are accessible, via the
+    <gui style="button">Show Statistics</gui> link are experimental and
+    they are interpretation of the facts. Interpretation that should be compared
+    with your own observations. Patches are welcome.
+</p>
+<p>
+    However, the "Starts and Ends" should give you some idea about your active
+    time.
+</p>
+</page>
