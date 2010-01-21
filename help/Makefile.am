@@ -12,5 +12,5 @@ DOC_PAGES = \
         statistics.page
 
 
-DOC_LINGUAS = en_GB
+DOC_LINGUAS =
 dist-hook: doc-dist-hook
