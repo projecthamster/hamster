@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2008-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2010 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -112,12 +112,10 @@ class OverviewBox(gtk.VBox):
         runtime.storage.remove_fact(fact['id'])
 
     def copy_selected(self):
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
+        fact = self.fact_tree.get_selected_fact()
 
-        fact = model[iter][6]
-        if not fact:
-            return #not a fact
+        if isinstance(fact, dt.date):
+            return # heading
 
         fact_str = "%s-%s %s" % (fact["start_time"].strftime("%H:%M"),
                                (fact["end_time"] or dt.datetime.now()).strftime("%H:%M"),
@@ -126,8 +124,9 @@ class OverviewBox(gtk.VBox):
         if fact["category"]:
             fact_str += "@%s" % fact["category"]
 
-        if fact["description"]:
-            fact_str += ", %s" % fact["description"]
+        if fact["description"] or fact["tags"]:
+            tag_str = " ".join("#%s" % tag for tag in fact["tags"])
+            fact_str += ", %s" % ("%s %s" % (fact["description"] or "", tag_str)).strip()
 
         clipboard = gtk.Clipboard()
         clipboard.set_text(fact_str)
@@ -169,43 +168,34 @@ class OverviewBox(gtk.VBox):
 
     def on_clipboard_text(self, clipboard, text, data):
         # first check that we have a date selected
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
+        fact = self.fact_tree.get_selected_fact()
 
-        selected_date = self.view_date
-        if iter:
-            selected_date = model[iter][3].split("-")
-            selected_date = dt.date(int(selected_date[0]),
-                                    int(selected_date[1]),
-                                    int(selected_date[2]))
-        if not selected_date:
+        if not fact:
             return
 
-        res = stuff.parse_activity_input(text)
+        if isinstance(fact, dt.date):
+            selected_date = fact
+        else:
+            selected_date = fact["date"]
 
-        if res.start_time is None or res.end_time is None:
+        fact = stuff.parse_activity_input(text.decode("utf-8"))
+
+        if fact.start_time is None or fact.end_time is None:
             return
 
-        start_time = res.start_time.replace(year = selected_date.year,
-                                            month = selected_date.month,
-                                            day = selected_date.day)
-        end_time = res.end_time.replace(year = selected_date.year,
-                                               month = selected_date.month,
-                                               day = selected_date.day)
+        start_time = fact.start_time.replace(year = selected_date.year,
+                                             month = selected_date.month,
+                                             day = selected_date.day)
+        end_time = fact.end_time.replace(year = selected_date.year,
+                                         month = selected_date.month,
+                                         day = selected_date.day)
 
-        activity_name = res.activity_name
-        if res.category_name:
-            activity_name += "@%s" % res.category_name
-
-        if res.description:
-            activity_name += ", %s" % res.description
-
-        activity_name = activity_name.decode("utf-8")
-
-        # TODO - set cursor to the pasted entry when done
-        # TODO - revisit parsing of selected date
-        added_fact = runtime.storage.add_fact(activity_name, start_time, end_time)
-
+        new_id = runtime.storage.add_fact(fact.activity_name,
+                                          ", ".join(fact.tags),
+                                          start_time,
+                                          end_time,
+                                          fact.category_name,
+                                          fact.description)
 
 if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")
