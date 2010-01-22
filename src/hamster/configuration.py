@@ -200,6 +200,8 @@ class GConfStore(Singleton):
         'overview_window_maximized' :   False,          # Is overview window maximized
         'workspace_tracking'        :   [],             # Should hamster switch activities on workspace change 0,1,2
         'workspace_mapping'         :   [],             # Mapping between workspace numbers and activities
+        'standalone_window_box'       :   [],             # X, Y, W, H
+        'standalone_window_maximized' :   False,          # Is overview window maximized
     }
 
     def __init__(self):
