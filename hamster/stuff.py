@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2010 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -263,6 +263,22 @@ def parse_activity_input(text):
     if text.find(",") > 0:
         text, res.description = text.split(",", 1)
         res.description = res.description.strip()
+
+        # more of a hidden feature for copy and paste purposes
+        # tags are marked with hash sign and parsed only at the end of description
+        words = res.description.split(" ")
+        tags = []
+        for word in reversed(words):
+            if word.startswith("#"):
+                tags.append(word.strip("#,"))  #avoid commas
+            else:
+                break
+
+        if tags:
+            res.tags = tags
+            res.description = " ".join(res.description.split(" ")[:-len(tags)])
+
+
 
     if text.find("@") > 0:
         text, res.category_name = text.split("@", 1)
