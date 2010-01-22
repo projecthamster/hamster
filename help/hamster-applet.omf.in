@@ -1,10 +1,9 @@
 <?xml version="1.0" standalone="no"?>
 <omf>
   <resource>
-    <subject category="GNOME|Accessories"/>
+    <subject category="GNOME|Applications|Accessories"/>
     <type>manual</type>
-    <relation seriesid="59ac483c-fd87-16dc-922a-db91d98b186f"/>
+    <relation seriesid="04c0a69f-5d8a-ce4d-e0d5-5a39a83383bc00"/>
     <rights type="GNU FDL" license.version="1.1" holder="Toms Bauģis"/>
   </resource>
 </omf>
-
