@@ -2,13 +2,7 @@ SUBDIRS = keybinder widgets
 ACLOCAL_AMFLAGS = -I m4
 
 CPPFLAGS = \
-	$(PYTHON_INCLUDES) 
-
-hamster-applet: hamster-applet.py
-	$(AM_V_GEN)sed -e "s|\@PYTHONDIR\@|$(pyexecdir)|" $< > $@
-
-hamsterbindir = $(libdir)/hamster-applet
-hamsterbin_SCRIPTS = hamster-applet
+	$(PYTHON_INCLUDES)
 
 hamsterdir = $(pyexecdir)/hamster
 hamster_PYTHON = \
@@ -37,16 +31,8 @@ hamster_PYTHON = \
         pytweener.py \
 	__init__.py
 
-BUILT_SOURCES = \
-	hamster-applet
-
-CLEANFILES = \
-	$(BUILT_SOURCES)
-
 DISTCLEANFILES = \
-	defs.py \
-	$(CLEANFILES)
+	defs.py
 
 EXTRA_DIST = \
-	defs.py.in \
-	hamster-applet.py
+	defs.py.in

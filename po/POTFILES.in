@@ -8,16 +8,16 @@ data/Hamster_Applet.xml
 [type: gettext/glade]data/stats.ui
 [type: gettext/glade]data/overview.ui
 [type: gettext/glade]data/overview_totals.ui
-hamster/about.py
-hamster/applet.py
-hamster/db.py
-hamster/edit_activity.py
-hamster/preferences.py
-hamster/reports.py
-hamster/overview.py
-hamster/overview_activities.py
-hamster/overview_totals.py
-hamster/stats.py
-hamster/stuff.py
-hamster/widgets/reportchooserdialog.py
-hamster/widgets/timechart.py
+src/hamster/about.py
+src/hamster/applet.py
+src/hamster/db.py
+src/hamster/edit_activity.py
+src/hamster/preferences.py
+src/hamster/reports.py
+src/hamster/overview.py
+src/hamster/overview_activities.py
+src/hamster/overview_totals.py
+src/hamster/stats.py
+src/hamster/stuff.py
+src/hamster/widgets/reportchooserdialog.py
+src/hamster/widgets/timechart.py

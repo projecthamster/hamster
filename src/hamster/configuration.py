@@ -62,7 +62,7 @@ class RuntimeStore(Singleton):
         if os.path.realpath(__file__).startswith(defs.PYTHONDIR):
             data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
         else:
-            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'data'))
+            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'data'))
         self.data_dir = data_dir
         self.dispatcher = Dispatcher()
         self.storage = Storage(self.dispatcher)

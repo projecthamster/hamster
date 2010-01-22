@@ -1,4 +1,4 @@
-SUBDIRS = hamster data po help
+SUBDIRS = src data po help
 ACLOCAL_AMFLAGS = -I m4
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper

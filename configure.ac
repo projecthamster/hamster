@@ -1,5 +1,5 @@
 AC_INIT([hamster-applet],[2.29.6],[toms.baugis@gmail.com])
-AC_CONFIG_SRCDIR(hamster/__init__.py)
+AC_CONFIG_SRCDIR(src/hamster/__init__.py)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -163,15 +163,16 @@ dnl * --------------------------------------------------------------------------
 dnl ****************************************************************************
 AC_CONFIG_FILES([
 Makefile
-hamster/Makefile
-hamster/defs.py
-hamster/keybinder/Makefile
+src/Makefile
+src/hamster/defs.py
+src/hamster/keybinder/Makefile
 data/Makefile
 data/art/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT(
-hamster/widgets/Makefile
+src/hamster/Makefile
+src/hamster/widgets/Makefile
 help/Makefile
 )
 

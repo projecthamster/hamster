@@ -91,12 +91,7 @@ if __name__ == "__main__":
                             format = log_format)
 
     try:
-        # by AUTHORS file determine if we run from sources or installed
-        name = os.path.join(os.path.dirname(__file__), '..')
-        if os.path.exists(os.path.join(name, 'AUTHORS')):
-            logging.info("Running from source folder, modifying PYTHONPATH")
-            sys.path.insert(0, os.path.join(name, "hamster", "keybinder", ".libs"))
-            sys.path.insert(0, name)
+        sys.path.append(os.path.join(os.path.dirname(__file__), "hamster", "keybinder", ".libs"))  # TODO - deal with this
 
         # Now the path is set, import our applet
         from hamster import defs
