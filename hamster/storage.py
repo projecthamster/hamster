@@ -28,13 +28,13 @@ class Storage(object):
     def run_fixtures(self):
         pass
 
-    def dispatch(self, event, data):
+    def dispatch(self, event, data = None):
         self.parent.dispatch(event, data)
 
     def dispatch_overwrite(self):
-        self.dispatch('new_tags_added', ())
-        self.dispatch('day_updated', ())
-        self.dispatch('activity_updated', ())
+        self.dispatch('new_tags_added')
+        self.dispatch('day_updated')
+        self.dispatch('activity_updated')
 
     def get_tags(self, autocomplete = None):
         return self.__get_tags(autocomplete)
@@ -42,13 +42,13 @@ class Storage(object):
     def get_tag_ids(self, tags):
         tags, new_added = self.__get_tag_ids(tags)
         if new_added:
-            self.dispatch('new_tags_added', ())
+            self.dispatch('new_tags_added')
         return tags
 
     def update_autocomplete_tags(self, tags):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
-            self.dispatch('new_tags_added', ())
+            self.dispatch('new_tags_added')
 
     def get_fact(self, id):
         return self.__get_fact(id)
@@ -61,7 +61,7 @@ class Storage(object):
         self.end_transaction()
 
         if result:
-            self.dispatch('day_updated', result['start_time'])
+            self.dispatch('day_updated')
         return result
 
     def touch_fact(self, fact, end_time = None):
@@ -114,44 +114,44 @@ class Storage(object):
 
     def remove_activity(self, id):
         result = self.__remove_activity(id)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
         return result
 
     def remove_category(self, id):
         self.__remove_category(id)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
 
     def move_activity(self, source_id, target_order, insert_after = True):
         self.__move_activity(source_id, target_order, insert_after)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
 
     def change_category(self, id, category_id):
         changed = self.__change_category(id, category_id)
         if changed:
-            self.dispatch('activity_updated', ())
+            self.dispatch('activity_updated')
         return changed
 
     def swap_activities(self, id1, priority1, id2, priority2):
         res = self.__swap_activities(id1, priority1, id2, priority2)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
         return res
 
     def update_activity(self, id, name, category_id):
         self.__update_activity(id, name, category_id)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
 
     def add_activity(self, name, category_id = -1):
         new_id = self.__add_activity(name, category_id)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
         return new_id
 
     def update_category(self, id, name):
         self.__update_category(id, name)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
 
     def add_category(self, name):
         res = self.__add_category(name)
-        self.dispatch('activity_updated', ())
+        self.dispatch('activity_updated')
         return res
 
 
