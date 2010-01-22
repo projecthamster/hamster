@@ -106,7 +106,13 @@ class OverviewBox(gtk.VBox):
 
         selection = self.fact_tree.get_selection()
         (model, iter) = selection.get_selected()
-        self.fact_tree.select_next()
+        path = model.get_path(iter)[0]
+
+        # if next is fact, select that. otherwise select parent
+        if self.fact_tree.id_or_label(path+1) and model[path+1][0]:
+            selection.select_path(path + 1)
+        elif self.fact_tree.id_or_label(path-1):
+            selection.select_path(path - 1)
 
         model.remove(iter)
         runtime.storage.remove_fact(fact['id'])
@@ -196,6 +202,7 @@ class OverviewBox(gtk.VBox):
                                           end_time,
                                           fact.category_name,
                                           fact.description)
+        self.fact_tree.select_fact(new_id)
 
 if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")
