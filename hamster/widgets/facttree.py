@@ -149,6 +149,8 @@ class FactTree(gtk.TreeView):
 
     def get_row(self, path):
         """checks if the path is valid and if so, returns the model row"""
+        if path is None or path < 0: return None
+
         try: # see if path is still valid
             iter = self.store_model.get_iter(path)
             return self.store_model[path]
@@ -218,15 +220,17 @@ class FactTree(gtk.TreeView):
         elif prev[1] and prev[1] == new_prev_val and next[1] and next[1] == new_next_val:
             # on update the ID changes so we find it by matching in between
             path = cur[0]
-        elif prev[1] == new_prev_val: # all that's left is delete.
-            # if there is next record and the next record is a fact - select that
-            # (if next is date we would like to go back to our parent)
+        elif prev[1] and prev[1] == new_prev_val: # all that's left is delete.
             if new_cur_val:
                 path = cur[0]
             else:
                 path = prev[0]
+        elif not new_prev_val and not new_next_val and new_cur_val:
+            # the only record in the tree (no next no previous, but there is current)
+            path = cur[0]
 
-        if path:
+
+        if path is not None:
             selection = self.get_selection()
             selection.select_path(path)
 
