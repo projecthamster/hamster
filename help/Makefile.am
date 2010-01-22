@@ -1,7 +1,10 @@
 include $(top_srcdir)/gnome-doc-utils.make
+dist-hook: doc-dist-hook
 
 DOC_ID = hamster-applet
 DOC_INCLUDES = legal.xml
+DOC_LINGUAS =
+
 DOC_PAGES = \
         backup.page \
         index.page \
@@ -12,5 +15,3 @@ DOC_PAGES = \
         statistics.page
 
 
-DOC_LINGUAS =
-dist-hook: doc-dist-hook
