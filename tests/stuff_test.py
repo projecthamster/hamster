@@ -54,6 +54,15 @@ class TestActivityInputParsing(unittest.TestCase):
         assert activity.category_name is None and activity.start_time is None \
                and activity.end_time is None and activity.category_name is None
 
+    def test_tags(self):
+        # plain activity name
+        activity = stuff.parse_activity_input("case, with added #de description #and, #some #tags")
+        self.assertEquals(activity.activity_name, "case")
+        self.assertEquals(activity.description, "with added #de description")
+        self.assertEquals(activity.tags, ["tags", "some", "and"]) #the list is parsed from the other end
+        assert activity.category_name is None and activity.start_time is None \
+               and activity.end_time is None
+
     def test_full(self):
         # plain activity name
         activity = stuff.parse_activity_input("1225-1325 case@cat, description")
