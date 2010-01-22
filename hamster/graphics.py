@@ -33,7 +33,7 @@ class Colors(object):
 
     def parse(self, color):
         assert color is not None
-        
+
         #parse color into rgb values
         if isinstance(color, str) or isinstance(color, unicode):
             color = gtk.gdk.Color(color)
@@ -49,7 +49,7 @@ class Colors(object):
 
     def rgb(self, color):
         return [c * 255 for c in self.parse(color)]
-        
+
     def is_light(self, color):
         # tells you if color is dark or light, so you can up or down the scale for improved contrast
         return colorsys.rgb_to_hls(*self.rgb(color))[1] > 150
@@ -58,7 +58,7 @@ class Colors(object):
         # returns color darker by step (where step is in range 0..255)
         hls = colorsys.rgb_to_hls(*self.rgb(color))
         return colorsys.hls_to_rgb(hls[0], hls[1] - step, hls[2])
-        
+
 
 class Area(gtk.DrawingArea):
     """Abstraction on top of DrawingArea to work specifically with cairo"""
@@ -97,8 +97,8 @@ class Area(gtk.DrawingArea):
         self.last_frame_time = None
         self.__animating = False
 
-        self.mouse_drag = (None, None)
-        
+        self.mouse_drag = None
+
         self.colors = Colors() # handier this way
 
     def on_expose(self):
