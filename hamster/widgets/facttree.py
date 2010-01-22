@@ -155,7 +155,7 @@ class FactTree(gtk.TreeView):
         except:
             return None
 
-    def _id_or_label(self, model, path):
+    def id_or_label(self, path):
         """returns id or date, id if it is a fact row or date if it is a group row"""
         row = self.get_row(path)
         if not row: return None
@@ -190,9 +190,9 @@ class FactTree(gtk.TreeView):
         if iter:
             path = model.get_path(iter)[0]
             prev, cur, next = path - 1, path, path + 1
-            self.stored_selection = ((prev, self._id_or_label(model, prev)),
-                                     (cur, self._id_or_label(model, cur)),
-                                     (next, self._id_or_label(model, next)))
+            self.stored_selection = ((prev, self.id_or_label(prev)),
+                                     (cur, self.id_or_label(cur)),
+                                     (next, self.id_or_label(next)))
 
 
     def restore_selection(self):
@@ -204,9 +204,9 @@ class FactTree(gtk.TreeView):
         new_prev_val, new_cur_val, new_next_val = None, None, None
         prev, cur, next = self.stored_selection
 
-        if cur:  new_cur_val  = self._id_or_label(model, cur[0])
-        if prev: new_prev_val = self._id_or_label(model, prev[0])
-        if next: new_next_val = self._id_or_label(model, next[0])
+        if cur:  new_cur_val  = self.id_or_label(cur[0])
+        if prev: new_prev_val = self.id_or_label(prev[0])
+        if next: new_next_val = self.id_or_label(next[0])
 
         path = None
         values = (new_prev_val, new_cur_val, new_next_val)
@@ -219,6 +219,8 @@ class FactTree(gtk.TreeView):
             # on update the ID changes so we find it by matching in between
             path = cur[0]
         elif prev[1] == new_prev_val: # all that's left is delete.
+            # if there is next record and the next record is a fact - select that
+            # (if next is date we would like to go back to our parent)
             if new_cur_val:
                 path = cur[0]
             else:
@@ -230,18 +232,14 @@ class FactTree(gtk.TreeView):
 
             self.scroll_to_cell(path)
 
-    def select_next(self):
-        selection = self.get_selection()
-        model, iter = selection.get_selected()
+    def select_fact(self, fact_id):
+        i = 0
+        while self.id_or_label(i) and self.id_or_label(i) != fact_id:
+            i +=1
 
-        path = 0
-        if iter:
-            path = model.get_path(iter)[0]
-            if self.get_row(path+1):
-                path = path + 1
-
-        selection.select_path(path)
-
+        if self.id_or_label(i) == fact_id:
+            selection = self.get_selection()
+            selection.select_path(i)
 
     def get_selected_fact(self):
         selection = self.get_selection()
