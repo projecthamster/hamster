@@ -196,6 +196,7 @@ class HamsterApplet(object):
                                           [("about", self.on_about),
                                           ("overview", self.show_overview),
                                           ("preferences", self.show_preferences),
+                                          ("help", self.on_more_info_button_clicked),
                                           ])
 
         # load window of activity switcher and todays view
@@ -712,26 +713,6 @@ class HamsterApplet(object):
     def get_widget(self, name):
         return self._gui.get_object(name)
 
-    def on_more_info_button_clicked(self, button):
-        def on_response(self, widget):
-            self.destroy()
-
-        message_dialog = gtk.MessageDialog(buttons = gtk.BUTTONS_OK)
-        message_dialog.set_property("title", _("What should be typed in the activity box?"))
-        message_dialog.connect("response", on_response)
-
-        more_info = _("""There is a simple syntax that enables you to add details to your activities:
-
-"@" symbol marks a category. Example: "watering flowers@home" will start tracking the activity "watering flowers" in the category "home".
-
-Commas (",") mark beginning of a description. Example: "watering flowers, begonias and forgetmenots" will start tracking the activity "watering flowers" and add the description "begonias and forgetmenots" to it.
-
-Both can be combined: "watering flowers@home, begonias and forgetmenots" will work just fine!
-
-In the tag field, separate tags with a comma. You can use Tab button to autocomplete first tag displayed in the dropdown, as well as click on the tags using mouse.
-Now, start tracking!
-        """)
-
-        message_dialog.set_markup(more_info)
-        message_dialog.show()
+    def on_more_info_button_clicked(self, *args):
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
         return False
