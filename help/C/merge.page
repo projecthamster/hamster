@@ -3,6 +3,7 @@
       id="merge">
 <info>
   <link type="guide" xref="index"/>
+  <desc>Automatic conflict solving.</desc>
 </info>
 <title>Splitting activities</title>
 

@@ -3,6 +3,7 @@
       id="backup">
 <info>
   <link type="guide" xref="index"/>
+  <desc>How to back up the activity database.</desc>
 </info>
 <title>Backup</title>
 

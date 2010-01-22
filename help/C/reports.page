@@ -3,8 +3,9 @@
       id="reports">
 <info>
   <link type="guide" xref="index"/>
+  <desc>Get data out of Time Tracker</desc>
 </info>
-<title>Generating reports and exporting data</title>
+<title>Report and export</title>
 
 <p>
     Apart from the HTML format that is offered by default in the Save report
