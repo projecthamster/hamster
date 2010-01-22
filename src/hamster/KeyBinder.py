@@ -20,8 +20,8 @@
 
 
 import gtk, gconf
-import keybinder
-from configuration import runtime, conf
+from . import keybinder
+from .configuration import runtime, conf
 
 class Keybinder(object):
     def __init__(self):

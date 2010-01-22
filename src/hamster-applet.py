@@ -91,9 +91,6 @@ if __name__ == "__main__":
                             format = log_format)
 
     try:
-        sys.path.append(os.path.join(os.path.dirname(__file__), "hamster", "keybinder", ".libs"))  # TODO - deal with this
-
-        # Now the path is set, import our applet
         from hamster import defs
         from hamster.configuration import runtime, dialogs
 
