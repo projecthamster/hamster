@@ -2,4 +2,12 @@
       type="guide"
       id="index">
 <title>Time Tracking Help</title>
+
+<section id="this-release">
+    <title>What's new in this release</title>
+    <p>
+        News go here.
+    </p>
+</section>
+
 </page>
