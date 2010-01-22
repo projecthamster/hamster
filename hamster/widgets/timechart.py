@@ -74,10 +74,12 @@ class TimeChart(graphics.Area):
                 durations_start_time = dt.datetime.combine(durations[0][0], dt.time())
                 durations_end_time = dt.datetime.combine(durations[-1][0], dt.time())
 
+                if isinstance(durations[0][0], dt.datetime):
+                    durations_start_time = durations_start_time - dt.timedelta(1 if durations[0][0].time() < self.day_start else 0)
+                    durations_end_time = durations_end_time - dt.timedelta(1 if durations[-1][0].time() < self.day_start else 0)
+
             self.start_time = min([start_time, durations_start_time])
             self.end_time = max([end_time, durations_end_time])
-
-
 
         days = (self.end_time - self.start_time).days
 
