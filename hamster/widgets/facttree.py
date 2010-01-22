@@ -144,8 +144,6 @@ class FactTree(gtk.TreeView):
         for fact in facts:
             self.add_fact(fact)
 
-        self.expand_all()
-
 
     def get_row(self, path):
         """checks if the path is valid and if so, returns the model row"""
@@ -179,7 +177,6 @@ class FactTree(gtk.TreeView):
     def attach_model(self):
         # attach model is also where we calculate the bounding box widths
         self.set_model(self.store_model)
-        self.expand_all()
 
         if self.stored_selection:
             self.restore_selection()
@@ -188,7 +185,7 @@ class FactTree(gtk.TreeView):
     def store_selection(self):
         selection = self.get_selection()
         model, iter = selection.get_selected()
-
+        self.stored_selection = None
         if iter:
             path = model.get_path(iter)[0]
             prev, cur, next = path - 1, path, path + 1
@@ -234,7 +231,7 @@ class FactTree(gtk.TreeView):
             selection = self.get_selection()
             selection.select_path(path)
 
-            self.scroll_to_cell(path)
+            self.set_cursor_on_cell(path)
 
     def select_fact(self, fact_id):
         i = 0
@@ -543,7 +540,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             labels["description"] = (description, x, y, width * pango.SCALE)
 
-            cell_height += label_h + 4
+            cell_height = y + label_h + 4
 
         self.labels[fact["id"]] = labels
         return (0, 0, 0, cell_height)
