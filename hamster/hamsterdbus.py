@@ -183,8 +183,7 @@ class HamsterDbusController(dbus.service.Object):
         if end_time:
             end = datetime.datetime.utcfromtimestamp(end_time)
 
-        fact = runtime.storage.add_fact(activity, "", start, end)
-        return fact['id']
+        return runtime.storage.add_fact(activity, "", start, end)
 
     @dbus.service.method(HAMSTER_URI, in_signature='ss')
     def AddActivity(self, activity, category):

@@ -190,16 +190,13 @@ class Storage(storage.Storage):
         return True
 
     def __add_category(self, name):
-        new_rec = self.fetchone("select max(id) +1, max(category_order) + 1  from categories")
-
-        id, order = new_rec[0] or 1, new_rec[1] or 1
-
+        order = self.fetchone("select max(category_order) + 1  from categories")[0] or 1
         query = """
-                   INSERT INTO categories (id, name, category_order)
-                        VALUES (?, ?, ?)
+                   INSERT INTO categories (name, category_order)
+                        VALUES (?, ?)
         """
-        self.execute(query, (id, name, order))
-        return id
+        self.execute(query, (name, order))
+        return self.__last_insert_rowid()
 
     def __update_category(self, id,  name):
         if id > -1: # Update, and ignore unsorted, if that was somehow triggered
@@ -568,14 +565,18 @@ class Storage(storage.Storage):
         """
         self.execute(insert, (activity_id, start_time, end_time, activity.description))
 
-        fact_id = self.fetchone("select max(id) as max_id from facts")['max_id']
+        fact_id = self.__last_insert_rowid()
 
         #now link tags
         insert = ["insert into fact_tags(fact_id, tag_id) values(?, ?)"] * len(tags)
         params = [(fact_id, tag["id"]) for tag in tags]
         self.execute(insert, params)
 
-        return self.__get_fact(fact_id)
+        return fact_id
+
+    def __last_insert_rowid(self):
+        return self.fetchone("SELECT last_insert_rowid();")[0]
+
 
     def __get_todays_facts(self):
         from configuration import conf
@@ -809,15 +810,14 @@ class Storage(storage.Storage):
 
         #now do the create bit
         category_id = category_id or -1
-        new_rec = self.fetchone("select max(id) + 1 , max(activity_order) + 1  from activities")
-        new_id, new_order = new_rec[0] or 1, new_rec[1] or 1
+        new_order = self.fetchone("select max(activity_order) + 1  from activities")[0] or 1
 
         query = """
-                   INSERT INTO activities (id, name, category_id, activity_order)
-                        VALUES (?, ?, ?, ?)
+                   INSERT INTO activities (name, category_id, activity_order)
+                        VALUES (?, ?, ?)
         """
-        self.execute(query, (new_id, name, category_id, new_order))
-        return new_id
+        self.execute(query, (name, category_id, new_order))
+        return self.__last_insert_rowid()
 
     def __update_activity(self, id, name, category_id):
         query = """
