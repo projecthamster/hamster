@@ -88,19 +88,13 @@ class Storage(object):
         self.end_transaction()
 
     def update_fact(self, fact_id, activity_name, tags, start_time, end_time, description = None):
-        now = datetime.datetime.now()
         self.start_transaction()
-
-        fact = self.get_fact(fact_id)
-        if fact:
-            self.__remove_fact(fact_id)
-
+        self.__remove_fact(fact_id)
         result = self.__add_fact(activity_name, tags, start_time, end_time, description = description)
-
         self.end_transaction()
 
         if result:
-            self.dispatch('day_updated', result['start_time'])
+            self.dispatch('day_updated')
         return result
 
     def get_activities(self, category_id = None):
