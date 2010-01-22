@@ -32,15 +32,11 @@ class TimeInput(gtk.Entry):
 
     def __init__(self, time = None, start_time = None):
         gtk.Entry.__init__(self)
-
-        self.start_time = start_time
         self.news = False
-
         self.set_width_chars(7) #7 is like 11:24pm
-        self.time = time
-        if time:
-            self.set_time(time)
 
+        self.set_time(time)
+        self.set_start_time(start_time)
 
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
         time_box = gtk.ScrolledWindow()
@@ -68,16 +64,25 @@ class TimeInput(gtk.Entry):
         self.show()
 
 
+    def set_time(self, time):
+        time = time or dt.time()
+        if isinstance(time, dt.time): # ensure that we operate with time and strip seconds
+            self.time = dt.time(time.hour, time.minute)
+        else:
+            self.time = dt.time(time.time().hour, time.time().minute)
+
+        self.set_text(self._format_time(time))
+
     def set_start_time(self, start_time):
         """ set the start time. when start time is set, drop down list
             will start from start time and duration will be displayed in
             brackets
         """
-        self.start_time = start_time
-
-    def set_time(self, time):
-        self.time = time
-        self.set_text(self._format_time(time))
+        start_time = start_time or dt.time()
+        if isinstance(start_time, dt.time): # ensure that we operate with time
+            self.start_time = dt.time(start_time.hour, start_time.minute)
+        else:
+            self.start_time = dt.time(start_time.time().hour, start_time.time().minute)
 
     def _on_text_changed(self, widget):
         self.news = True
@@ -104,8 +109,7 @@ class TimeInput(gtk.Entry):
         if (hours is None or minutes is None) or hours > 24 or minutes > 60:
             return self.time #no can do
 
-        return dt.datetime.now().replace(hour = hours, minute = minutes,
-                                         second = 0, microsecond = 0)
+        return dt.time(hours, minutes)
 
 
     def _select_time(self, time_text):
@@ -126,10 +130,8 @@ class TimeInput(gtk.Entry):
         return self.time
 
     def _format_time(self, time):
-        if time is None:
-            return None
-
-        #return time.strftime("%I:%M%p").lstrip("0").lower()
+        if not time:
+            return ""
         return time.strftime("%H:%M").lower()
 
 
@@ -147,33 +149,33 @@ class TimeInput(gtk.Entry):
 
 
     def show_popup(self):
-        focus_time = self.figure_time(self.get_text())
+        # will be going either 24 hours or from start time to start time + 12 hours
 
-        hours = gtk.ListStore(gobject.TYPE_STRING)
-
-        # populate times
-        i_time = self.start_time or dt.datetime(1900, 1, 1, 0, 0)
-
-        if focus_time and focus_time < i_time:
-            focus_time += dt.timedelta(days = 1)
+        start_time = dt.datetime.combine(dt.date.today(), self.start_time) # we will be adding things
+        i_time = start_time # we will be adding things
 
         if self.start_time:
             end_time = i_time + dt.timedelta(hours = 12)
             i_time += dt.timedelta(minutes = 15)
         else:
-            end_time = i_time + dt.timedelta(hours = 24)
+            end_time = i_time + dt.timedelta(days = 1)
+
+
+        focus_time = dt.datetime.combine(dt.date.today(), self.figure_time(self.get_text()))
+        hours = gtk.ListStore(gobject.TYPE_STRING)
+
 
         i, focus_row = 0, None
-
         while i_time < end_time:
             row_text = self._format_time(i_time)
             if self.start_time:
-                delta = (i_time - self.start_time).seconds / 60
+                delta = (i_time - start_time).seconds / 60
                 delta_text = format_duration(delta)
 
                 row_text += " (%s)" % delta_text
 
             hours.append([row_text])
+
 
             if focus_time and i_time <= focus_time <= i_time + \
                                                      dt.timedelta(minutes = 30):
@@ -190,8 +192,10 @@ class TimeInput(gtk.Entry):
 
         #focus on row
         if focus_row != None:
-            self.time_tree.set_cursor(focus_row)
+            selection = self.time_tree.get_selection()
+            selection.select_path(focus_row)
             self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
+
 
         #move popup under the widget
         alloc = self.get_allocation()
@@ -245,6 +249,3 @@ class TimeInput(gtk.Entry):
         self.time_tree.set_cursor(i)
         self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
         return True
-
-
-

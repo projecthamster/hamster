@@ -168,7 +168,7 @@ class CustomFactController:
             time, date = start_time, start_date
 
         if time and date:
-            return dt.datetime.combine(date, time.time())
+            return dt.datetime.combine(date, time)
         else:
             return None
 
