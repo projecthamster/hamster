@@ -138,8 +138,19 @@ class ProjectHamster(object):
             else:
                 self.window.set_position(gtk.WIN_POS_CENTER)
 
-        self.window.show_all()
 
+        # bindings
+        self.accel_group = self.get_widget("accelgroup")
+        self.window.add_accel_group(self.accel_group)
+
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.Escape, 0)
+        gtk.accel_map_add_entry("<hamster-applet>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/help/contents", gtk.keysyms.F1, 0)
+
+        self.window.show_all()
 
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
@@ -182,11 +193,6 @@ class ProjectHamster(object):
         if message:
             self.notification.update(_("Time Tracker"), message, "hamster-applet")
             self.notification.show()
-
-
-    def edit_cb(self, n, action):
-        dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
-
 
     def load_day(self):
         """sets up today's tree and fills it with records
@@ -293,7 +299,7 @@ class ProjectHamster(object):
 
     def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
-        dialogs.edit.show(self.applet, fact_id = fact["id"])
+        dialogs.edit.show(self.window, fact_id = fact["id"])
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
@@ -306,34 +312,25 @@ class ProjectHamster(object):
             runtime.dispatcher.dispatch('panel_visible', False)
 
 
-    def on_windows_keys(self, tree, event_key):
-        if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w
-              and event_key.state & gtk.gdk.CONTROL_MASK)):
-            if self.new_name.popup.get_property("visible") == False \
-               and self.new_tags.popup.get_property("visible") == False:
-                runtime.dispatcher.dispatch('panel_visible', False)
-                return True
-        return False
-
     """button events"""
-    def on_overview(self, menu_item):
+    def on_menu_add_earlier_activate(self, menu):
+        dialogs.edit.show(self.window)
+
+    def on_menu_overview_activate(self, menu_item):
+        dialogs.overview.show(self.window)
+
+    def on_menu_about_activate(self, component):
+        dialogs.about.show(self.window)
+
+    def on_menu_statistics_activate(self, component):
+        dialogs.stats.show(self.window)
+
+    def on_menu_preferences_activate(self, menu_item):
         runtime.dispatcher.dispatch('panel_visible', False)
-        dialogs.overview.show(self.applet)
+        dialogs.prefs.show(self.window)
 
-    def show_overview(self, menu_item, verb):
-        return self.on_overview(menu_item)
-
-    def on_custom_fact(self, menu_item):
-        dialogs.edit.show(self.applet)
-
-    def on_about (self, component, verb):
-        dialogs.about.show()
-
-    def show_preferences(self, menu_item, verb):
-        runtime.dispatcher.dispatch('panel_visible', False)
-        dialogs.prefs.show(self.applet)
-
+    def on_menu_help_contents_activate(self, *args):
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
 
     """signals"""
     def after_activity_update(self, widget, renames):
