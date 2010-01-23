@@ -15,19 +15,84 @@
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
-          <object class="GtkToolbar" id="toolbar1">
+          <object class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToolButton" id="toolbutton1">
+              <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="label" translatable="yes">_Tracking</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-preferences</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_add_earlier">
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/add</property>
+                        <property name="label" translatable="yes">Add earlier activity</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_overview">
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/overview</property>
+                        <property name="label" translatable="yes">Overview</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_statistics">
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/statistics</property>
+                        <property name="label" translatable="yes">Statistics</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="quit">
+                        <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/quit</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu3">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_contents">
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/contents</property>
+                        <property name="label" translatable="yes">Contents</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="menu_about">
+                        <property name="label">gtk-about</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">/hamster/about</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
