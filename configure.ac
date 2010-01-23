@@ -59,6 +59,8 @@ AC_SUBST(LIBDIR)
 AS_AC_EXPAND(PYEXECDIR, $pyexecdir)
 AC_SUBST(PYEXECDIR)
 
+AS_AC_EXPAND(BINDIR, $bindir)
+
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
@@ -171,6 +173,7 @@ data/art/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT(
+data/hamster-applet.desktop.in
 src/hamster/Makefile
 src/hamster/widgets/Makefile
 help/Makefile

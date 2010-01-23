@@ -13,7 +13,8 @@ hamsterlib_SCRIPTS = hamster-applet
 
 hamsterbindir = $(bindir)
 hamsterbin_SCRIPTS = \
-	hamster-standalone
+	hamster-standalone \
+	gnome-time-tracker
 
 BUILT_SOURCES = \
 	hamster-applet
@@ -25,5 +26,6 @@ DISTCLEANFILES = \
 	$(CLEANFILES)
 
 EXTRA_DIST = \
-	hamster-applet.py
-	hamster-standalone
+	hamster-applet.py \
+	hamster-standalone \
+	gnome-time-tracker

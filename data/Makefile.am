@@ -7,6 +7,14 @@ serverdir = $(libdir)/bonobo/servers
 server_in_files = Hamster_Applet.server.in
 server_DATA = $(server_in_files:.server.in=.server)
 
+################################################################################
+# Desktop file
+################################################################################
+desktopdir = $(datadir)/applications
+desktop_in_files = hamster-applet.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+@INTLTOOL_DESKTOP_RULE@
 
 # ******************************************************************************
 # Misc data
@@ -48,4 +56,7 @@ DISTCLEANFILES = \
 EXTRA_DIST = \
 	$(xml_in_files) \
 	Hamster_Applet.server.in.in \
+	hamster-applet.desktop.in.in \
 	$(resources_DATA)
+
+CLEANFILES = hamster-applet.desktop
