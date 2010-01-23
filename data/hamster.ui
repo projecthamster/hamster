@@ -12,7 +12,6 @@
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
         <child>
           <object class="GtkMenuBar" id="menu">
             <property name="visible">True</property>
@@ -175,6 +174,7 @@
                             <child>
                               <object class="GtkLabel" id="last_activity_category">
                                 <property name="visible">True</property>
+                                <property name="no_show_all">True</property>
                                 <property name="xalign">0</property>
                                 <property name="label"> - Work</property>
                                 <attributes>
@@ -232,6 +232,7 @@
                         <child>
                           <object class="GtkLabel" id="last_activity_duration">
                             <property name="visible">True</property>
+                            <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
                             <property name="label">1h 23m</property>
                             <attributes>
@@ -302,113 +303,112 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="frame2">
-                    <property name="visible">True</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
-                    <child>
-                      <object class="GtkAlignment" id="alignment2">
-                        <property name="visible">True</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkAlignment" id="new_entry_box">
-                            <property name="visible">True</property>
-                            <property name="no_show_all">True</property>
-                            <property name="top_padding">12</property>
-                            <child>
-                              <object class="GtkHBox" id="bleh1">
-                                <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkAlignment" id="new_name_box">
-                                    <property name="width_request">280</property>
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="new_tags_box">
-                                    <property name="width_request">220</property>
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHButtonBox" id="hbuttonbox2">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkButton" id="switch_activity">
-                                        <property name="label" translatable="yes">S_witch</property>
-                                        <property name="width_request">80</property>
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_switch_activity_clicked"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="start_tracking">
-                                        <property name="label" translatable="yes">Start _Tracking</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_switch_activity_clicked"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Start new activity</property>
-                        <property name="use_markup">True</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame2">
+                <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="new_entry_box">
+                    <property name="visible">True</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkHBox" id="bleh1">
+                        <property name="visible">True</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkAlignment" id="new_name_box">
+                            <property name="width_request">280</property>
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="new_tags_box">
+                            <property name="width_request">220</property>
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHButtonBox" id="hbuttonbox2">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkButton" id="switch_activity">
+                                <property name="label" translatable="yes">S_witch</property>
+                                <property name="width_request">80</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="no_show_all">True</property>
+                                <property name="use_underline">True</property>
+                                <signal name="clicked" handler="on_switch_activity_clicked"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="start_tracking">
+                                <property name="label" translatable="yes">Start _Tracking</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="no_show_all">True</property>
+                                <property name="use_underline">True</property>
+                                <signal name="clicked" handler="on_switch_activity_clicked"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Start new activity</property>
+                    <property name="use_markup">True</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -446,7 +446,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
