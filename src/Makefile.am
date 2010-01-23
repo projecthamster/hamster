@@ -7,8 +7,13 @@ CPPFLAGS = \
 hamster-applet: hamster-applet.py
 	$(AM_V_GEN)sed -e "s|\@PYTHONDIR\@|$(pyexecdir)|" $< > $@
 
-hamsterbindir = $(libdir)/hamster-applet
-hamsterbin_SCRIPTS = hamster-applet
+hamsterlibdir = $(libdir)/hamster-applet
+hamsterlib_SCRIPTS = hamster-applet
+
+
+hamsterbindir = $(bindir)
+hamsterbin_SCRIPTS = \
+	hamster-standalone
 
 BUILT_SOURCES = \
 	hamster-applet
@@ -21,3 +26,4 @@ DISTCLEANFILES = \
 
 EXTRA_DIST = \
 	hamster-applet.py
+	hamster-standalone

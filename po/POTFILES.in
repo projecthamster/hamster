@@ -8,6 +8,8 @@ data/Hamster_Applet.xml
 [type: gettext/glade]data/stats.ui
 [type: gettext/glade]data/overview.ui
 [type: gettext/glade]data/overview_totals.ui
+[type: gettext/glade]data/hamster.ui
+src/hamster-standalone
 src/hamster/about.py
 src/hamster/applet.py
 src/hamster/db.py

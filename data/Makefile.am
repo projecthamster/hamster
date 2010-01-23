@@ -14,6 +14,7 @@ server_DATA = $(server_in_files:.server.in=.server)
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	Hamster_Applet.xml \
+	hamster.ui \
 	preferences.ui \
 	stats.ui \
 	overview.ui \
