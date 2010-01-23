@@ -9,29 +9,55 @@
         <property name="border_width">12</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkAlignment" id="alignment4">
+          <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="xalign">1</property>
-            <property name="xscale">0</property>
+            <property name="spacing">10</property>
             <child>
-              <object class="GtkButton" id="statistics_button">
+              <object class="GtkAlignment" id="alignment5">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_statistics_button_clicked"/>
+                <property name="xalign">1</property>
+                <property name="xscale">0</property>
                 <child>
-                  <object class="GtkLabel" id="label4">
+                  <object class="GtkLabel" id="total_hours">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Show Statistics</property>
+                    <property name="label">Total hours</property>
                     <attributes>
-                      <attribute name="underline" value="True"/>
                       <attribute name="size" value="10000"/>
-                      <attribute name="foreground" value="#00001154ffff"/>
                     </attributes>
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment4">
+                <property name="visible">True</property>
+                <property name="xalign">1</property>
+                <property name="xscale">0</property>
+                <child>
+                  <object class="GtkButton" id="statistics_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_statistics_button_clicked"/>
+                    <child>
+                      <object class="GtkLabel" id="statistics_button_label">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Show Statistics</property>
+                        <attributes>
+                          <attribute name="size" value="10000"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>

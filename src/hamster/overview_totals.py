@@ -23,9 +23,6 @@ import time
 import webbrowser
 from itertools import groupby
 
-import pygtk
-pygtk.require('2.0')
-
 from gettext import ngettext
 
 import os
@@ -80,7 +77,6 @@ class TotalsBox(gtk.VBox):
 
         self.get_widget("totals_by_tag").add(self.tag_chart);
 
-
         self._gui.connect_signals(self)
 
         self.report_chooser = None
@@ -128,14 +124,17 @@ class TotalsBox(gtk.VBox):
 
         self.do_graph()
 
+
     def do_graph(self):
         if self.facts:
             self.get_widget("no_data_label").hide()
             self.get_widget("charts").show()
+            self.get_widget("total_hours").show()
             self.do_charts()
         else:
             self.get_widget("no_data_label").show()
             self.get_widget("charts").hide()
+            self.get_widget("total_hours").hide()
 
 
     def do_charts(self):
@@ -144,6 +143,10 @@ class TotalsBox(gtk.VBox):
 
         import copy
         facts = copy.deepcopy(self.facts)
+
+        total_hours = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
+        total_label = _("%s hours tracked total") % ("%.1f" % (total_hours / 60.0))
+        self.get_widget("total_hours").set_text(total_label)
 
         for fact in facts:
             if self.selected_categories and fact["category"] not in self.selected_categories:
@@ -159,8 +162,8 @@ class TotalsBox(gtk.VBox):
         category_sums = stuff.totals(facts,
                                      lambda fact: (fact["category"]),
                                      lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
-        for sum in category_sums:
-            category_sums[sum] = category_sums[sum] / 60 / 60.0
+        for entry in category_sums:
+            category_sums[entry] = category_sums[entry] / 60 / 60.0
 
         if category_sums:
             if self.category_sums:
@@ -176,8 +179,8 @@ class TotalsBox(gtk.VBox):
         activity_sums = stuff.totals(facts,
                                      lambda fact: (fact["name"]),
                                      lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
-        for sum in activity_sums:
-            activity_sums[sum] = activity_sums[sum] / 60 / 60.0
+        for entry in activity_sums:
+            activity_sums[entry] = activity_sums[entry] / 60 / 60.0
 
         if self.activity_sums:
             activity_sums = [(key, activity_sums[key]) for key in self.activity_sums[0]]
@@ -194,8 +197,8 @@ class TotalsBox(gtk.VBox):
                 tag_sums.setdefault(tag, 0)
                 tag_sums[tag] += fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60
 
-        for sum in tag_sums:
-            tag_sums[sum] = tag_sums[sum] / 60 / 60.0
+        for entry in tag_sums:
+            tag_sums[entry] = tag_sums[entry] / 60 / 60.0
 
         if tag_sums:
             if self.tag_sums:
@@ -254,4 +257,3 @@ if __name__ == "__main__":
 
 
     gtk.main()
-
