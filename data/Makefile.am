@@ -11,7 +11,7 @@ server_DATA = $(server_in_files:.server.in=.server)
 # Desktop file
 ################################################################################
 desktopdir = $(datadir)/applications
-desktop_in_files = hamster-applet.desktop.in
+desktop_in_files = hamster-standalone.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @INTLTOOL_DESKTOP_RULE@
@@ -56,7 +56,7 @@ DISTCLEANFILES = \
 EXTRA_DIST = \
 	$(xml_in_files) \
 	Hamster_Applet.server.in.in \
-	hamster-applet.desktop.in.in \
+	hamster-standalone.desktop.in.in \
 	$(resources_DATA)
 
-CLEANFILES = hamster-applet.desktop
+CLEANFILES = hamster-standalone.desktop

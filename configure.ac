@@ -173,7 +173,7 @@ data/art/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT(
-data/hamster-applet.desktop.in
+data/hamster-standalone.desktop.in
 src/hamster/Makefile
 src/hamster/widgets/Makefile
 help/Makefile
