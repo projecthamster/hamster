@@ -57,6 +57,8 @@ class ProjectHamster(object):
         self.window = self._gui.get_object('hamster-window')
         self.window.connect("delete_event", self.close_window)
 
+        gtk.window_set_default_icon_name("hamster-applet")
+
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
         widgets.add_hint(self.new_name, _("Activity"))
