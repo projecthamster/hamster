@@ -95,9 +95,9 @@ class Area(gtk.DrawingArea):
         self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.easeInOut)
         self.framerate = 80
         self.last_frame_time = None
-        self.__animating = False
+        self.__drawing_queued = False
 
-        self.mouse_drag = None
+        self.mouse_drag = (None, None)
 
         self.colors = Colors() # handier this way
 
@@ -108,26 +108,23 @@ class Area(gtk.DrawingArea):
 
     def redraw_canvas(self):
         """Redraw canvas. Triggers also to do all animations"""
-        if not self.__animating: #if we are moving, then there is a timeout somewhere already
-            self.__animating = True
+        if not self.__drawing_queued: #if we are moving, then there is a timeout somewhere already
+            self.__drawing_queued = True
             self.last_frame_time = dt.datetime.now()
             gobject.timeout_add(1000 / self.framerate, self.__interpolate)
 
     """ animation bits """
     def __interpolate(self):
-        self.__animating = self.tweener.hasTweens()
-
         if not self.window: #will wait until window comes
-            return self.__animating
+            return True
 
 
-        time_since_start = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
-        self.tweener.update(time_since_start)
-
-        self.queue_draw()
+        time_since_last_frame = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
+        self.tweener.update(time_since_last_frame)
+        self.queue_draw() # this will trigger do_expose_event when the current events have been flushed
 
         self.last_frame_time = dt.datetime.now()
-        return self.__animating
+        return self.__drawing_queued
 
 
     def animate(self, object, params = {}, duration = None, easing = None, callback = None, instant = True):
@@ -228,6 +225,9 @@ class Area(gtk.DrawingArea):
 
         self.mouse_regions = [] #reset since these can move in each redraw
         self.on_expose()
+        
+        self.__drawing_queued = self.tweener.hasTweens()
+
 
 
     """ mouse events """
