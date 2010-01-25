@@ -1,4 +1,26 @@
 ===============
+Version 2.29.6
+===============
+  * workspace tracking - switch activity, when switching desktops 
+    (Ludwig Ortmann, Toms Baugis, Patryk Zawadzki)
+  * chart improvements - theme friendly and less noisier
+  * for those without GNOME panel there is now a standalone version, accessible 
+    via Applications -> Accessories -> Time Tracker
+  * overview window remembers position
+  * maintaining cursor on the selected row after edits / refreshes
+    (unimportant, but very convenient)
+  * descriptions once again in the main input field, delimited by comma
+  * activity suggestion box now sorts items by recency (Patryk Zawadzki)
+  
+  Updated translations
+    * es (Jorge González)
+    * eu (Iñaki Larrañaga Murgoitio)
+    * nb (Kjartan Maraas)
+    * sv (Daniel Nylander)
+    * zh_CN (Tao Wei)
+    
+  
+===============
 Version 2.29.5
 ===============
   * searching
