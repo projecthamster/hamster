@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 data/Hamster_Applet.server.in.in
+data/hamster-standalone.desktop.in.in
 data/Hamster_Applet.xml
 [type: gettext/glade]data/preferences.ui
 [type: gettext/glade]data/edit_activity.ui
