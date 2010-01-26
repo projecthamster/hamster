@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-01-23 18:33+0000\n"
-"PO-Revision-Date: 2010-01-25 19:37+0100\n"
+"POT-Creation-Date: 2010-01-25 21:52+0000\n"
+"PO-Revision-Date: 2010-01-26 19:52+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,11 +23,17 @@ msgstr ""
 msgid "Project Hamster — track your time"
 msgstr "Proyecto Hamster: gestione su tiempo"
 
-#: ../data/Hamster_Applet.server.in.in.h:2 ../data/hamster.ui.h:10
-#: ../src/hamster-standalone:194 ../src/hamster/about.py:39
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
+#: ../src/hamster-standalone:196 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/applet.py:336
 msgid "Time Tracker"
 msgstr "Gestor de tiempo"
+
+#: ../data/hamster-standalone.desktop.in.in.h:1
+#| msgid "Project Hamster Website"
+msgid "Project Hamster desktop time tracking"
+msgstr "Página web del proyecto de gestión de tiempo Hamster"
 
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
@@ -267,13 +273,12 @@ msgstr "No hay datos para este intervalo"
 msgid "Show Statistics"
 msgstr "Mostrar estadísticas"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster-standalone:68
+#: ../data/overview_totals.ui.h:5 ../src/hamster-standalone:70
 #: ../src/hamster/applet.py:214 ../src/hamster/reports.py:227
 msgid "Tags"
 msgstr "Etiquetas"
 
 #: ../data/hamster.ui.h:1
-#| msgid "Add Earlier Activity"
 msgid "Add earlier activity"
 msgstr "Añadir una actividad anterior"
 
@@ -286,7 +291,6 @@ msgid "Overview"
 msgstr "Resumen"
 
 #: ../data/hamster.ui.h:7
-#| msgid "New activity"
 msgid "Start new activity"
 msgstr "Iniciar una actividad nueva"
 
@@ -295,37 +299,35 @@ msgid "Today"
 msgstr "Hoy"
 
 #: ../data/hamster.ui.h:12
-#| msgid "Edit"
 msgid "_Edit"
 msgstr "_Editar"
 
 #: ../data/hamster.ui.h:14
-#| msgid "Tracking"
 msgid "_Tracking"
 msgstr "_Seguimiento"
 
-#: ../src/hamster-standalone:62 ../src/hamster/applet.py:208
+#: ../src/hamster-standalone:64 ../src/hamster/applet.py:208
 #: ../src/hamster/preferences.py:196 ../src/hamster/reports.py:225
 #: ../src/hamster/reports.py:289
 msgid "Activity"
 msgstr "Actividad"
 
-#: ../src/hamster-standalone:185 ../src/hamster/applet.py:327
+#: ../src/hamster-standalone:187 ../src/hamster/applet.py:327
 #, c-format, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Trabajando en <b>%s</b>"
 
-#: ../src/hamster-standalone:190 ../src/hamster-standalone:260
+#: ../src/hamster-standalone:192 ../src/hamster-standalone:262
 #: ../src/hamster/applet.py:309 ../src/hamster/applet.py:332
 #: ../src/hamster/applet.py:430
 msgid "No activity"
 msgstr "Sin actividad"
 
-#: ../src/hamster-standalone:246 ../src/hamster/applet.py:416
+#: ../src/hamster-standalone:248 ../src/hamster/applet.py:416
 msgid "Just started"
 msgstr "Acaba de empezar"
 
-#: ../src/hamster-standalone:249 ../src/hamster/applet.py:419
+#: ../src/hamster-standalone:251 ../src/hamster/applet.py:419
 #: ../src/hamster/db.py:243 ../src/hamster/db.py:253 ../src/hamster/db.py:307
 #: ../src/hamster/db.py:656 ../src/hamster/db.py:717
 #: ../src/hamster/edit_activity.py:51 ../src/hamster/preferences.py:61
@@ -334,11 +336,11 @@ msgstr "Acaba de empezar"
 msgid "Unsorted"
 msgstr "Sin clasificar"
 
-#: ../src/hamster-standalone:426 ../src/hamster/applet.py:653
+#: ../src/hamster-standalone:428 ../src/hamster/applet.py:653
 msgid "Changed activity"
 msgstr "Actividad cambiada"
 
-#: ../src/hamster-standalone:427 ../src/hamster/applet.py:654
+#: ../src/hamster-standalone:429 ../src/hamster/applet.py:654
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Se cambió a «%s»"
