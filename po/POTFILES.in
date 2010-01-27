@@ -1,25 +1,26 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
+data/hamster-applet.schemas.in
 data/Hamster_Applet.server.in.in
-data/hamster-standalone.desktop.in.in
 data/Hamster_Applet.xml
-[type: gettext/glade]data/preferences.ui
-[type: gettext/glade]data/edit_activity.ui
+data/hamster-standalone.desktop.in.in
 [type: gettext/glade]data/applet.ui
-[type: gettext/glade]data/stats.ui
-[type: gettext/glade]data/overview.ui
-[type: gettext/glade]data/overview_totals.ui
+[type: gettext/glade]data/edit_activity.ui
 [type: gettext/glade]data/hamster.ui
-src/hamster-standalone
+[type: gettext/glade]data/overview_totals.ui
+[type: gettext/glade]data/overview.ui
+[type: gettext/glade]data/preferences.ui
+[type: gettext/glade]data/stats.ui
 src/hamster/about.py
 src/hamster/applet.py
 src/hamster/db.py
 src/hamster/edit_activity.py
+src/hamster/overview_activities.py
+src/hamster/overview.py
+src/hamster/overview_totals.py
 src/hamster/preferences.py
 src/hamster/reports.py
-src/hamster/overview.py
-src/hamster/overview_activities.py
-src/hamster/overview_totals.py
+src/hamster-standalone
 src/hamster/stats.py
 src/hamster/stuff.py
 src/hamster/widgets/reportchooserdialog.py

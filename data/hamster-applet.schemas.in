@@ -1,0 +1,119 @@
+<gconfschemafile>
+    <schemalist>
+        <schema>
+            <key>/schemas/apps/hamster-applet/keybinding</key>
+            <applyto>/apps/hamster-applet/keybinding</applyto>
+            <owner>hamster-applet</owner>
+            <type>string</type>
+            <default>&lt;Super&gt;H</default>
+            <locale name="C">
+                <short>Show window</short>
+                <long>Keyboard shortcut for showing the Time Tracker window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/enable_timeout</key>
+            <applyto>/apps/hamster-applet/enable_timeout</applyto>
+            <owner>hamster-applet</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Stop tracking on idle</short>
+                <long>
+                    Stop tracking current activity when computer becomes idle
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/stop_on_shutdown</key>
+            <applyto>/apps/hamster-applet/stop_on_shutdown</applyto>
+            <owner>hamster-applet</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Stop tracking on shutdown</short>
+                <long>
+                    Stop tracking current activity on shutdown
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/notify_interval</key>
+            <applyto>/apps/hamster-applet/notify_interval</applyto>
+            <owner>hamster-applet</owner>
+            <type>int</type>
+            <default>27</default>
+            <locale name="C">
+                <short>Remind of current task every x minutes</short>
+                <long>
+                    Remind of current task every specified amount of minutes.
+                    Set to 0 or greater than 120 to disable reminder.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/notify_on_idle</key>
+            <applyto>/apps/hamster-applet/notify_on_idle</applyto>
+            <owner>hamster-applet</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Also remind when no activity is set</short>
+                <long>
+                    Also remind every notify_interval minutes if no activity
+                    has been started.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/day_start_minutes</key>
+            <applyto>/apps/hamster-applet/day_start_minutes</applyto>
+            <owner>hamster-applet</owner>
+            <type>int</type>
+            <default>330</default>
+            <locale name="C">
+                <short>At what time does the day start (defaults to 5:30AM)</short>
+                <long>
+                    Activities will be counted as to belong to yesterday if
+                    the current time is less than the specified day start and
+                    today, if it is over the time.
+                    Activities that span two days, will tip over to the side
+                    where the largest part of the activity is.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/workspace_tracking</key>
+            <applyto>/apps/hamster-applet/workspace_tracking</applyto>
+            <owner>hamster-applet</owner>
+            <type>list</type>
+            <list_type>string</list_type>
+            <default>[]</default>
+            <locale name="C">
+                <short>Should workspace switch trigger acitivity switch</short>
+                <long>
+                    List of enabled tracking methods. "name" will enable
+                    switching activities by name defined in workspace_mapping.
+                    "memory" will enable switching to last activity when
+                    returning to a previous workspace.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-applet/workspace_mapping</key>
+            <applyto>/apps/hamster-applet/workspace_mapping</applyto>
+            <owner>hamster-applet</owner>
+            <type>list</type>
+            <list_type>string</list_type>
+            <default>[]</default>
+            <locale name="C">
+                <short>Switch activity on workspace change</short>
+                <long>
+                    If switching by name is enabled, this list sets the activity
+                    names that should be switched to, workspaces represented by
+                    the index of item.
+                </long>
+            </locale>
+        </schema>
+    </schemalist>
+</gconfschemafile>
