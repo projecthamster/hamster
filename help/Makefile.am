@@ -9,9 +9,6 @@ DOC_PAGES = \
         backup.page \
         index.page \
         input.page \
-        legal.xml \
         merge.page \
         reports.page \
         statistics.page
-
-
