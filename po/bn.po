@@ -4,15 +4,16 @@
 #
 # Runa Bhattacharjee <runab@redhat.com>, 2008, 2009.
 # Maruf Ovee <maruf@ankur.org.bd>, 2009.
+# Israt Jahan <israt@ankur.org.bd>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 18:40+0000\n"
-"PO-Revision-Date: 2009-08-31 15:35+0700\n"
-"Last-Translator: Maruf Ovee <maruf@ankur.org.bd>\n"
+"POT-Creation-Date: 2010-01-27 16:34+0000\n"
+"PO-Revision-Date: 2010-01-28 15:35+0600\n"
+"Last-Translator: Israt Jahan <israt@ankur.org.bd>\n"
 "Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,13 +21,99 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"উপরন্তু, কোনো কাজ না আরম্ভ করা হলে প্রতি notify_interval মিনিটে সূচনা প্রদান করা "
+"হবে।"
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:5
+msgid "Also remind when no activity is set"
+msgstr "উপরন্তু, কোনো কাজ নির্ধারিত না হলে সূচিত করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "At what time does the day start (defaults to 5:30AM)"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "সময় নিরীক্ষণের উইন্ডো প্রদর্শনের জন্য কী-বোর্ড শর্টকাট।"
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"last activity when returning to a previous workspace."
+msgstr ""
+"List of enabled tracking methods. \"name\" will enable switching activities by "
+"name defined in workspace_mapping. \"memory\" will enable switching to last "
+"activity when returning to a previous workspace."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"মিনিটে ধার্য সুনির্দিষ্ট সময়ের অন্তরে বর্তমান কর্ম সম্বন্ধে স্মরণ করানো হবে। স্মরণ "
+"ব্যবস্থা নিষ্ক্রিয় করার জন্য ০ অথবা ১২০ থেকে অধিক কোনো সংখ্যা নির্ধারণ করুন।"
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid "Remind of current task every x minutes"
+msgstr "প্রতি x মিনিট অন্তর বর্তমান কর্মের বিষয়ে স্মরণ করানো হবে"
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Should workspace switch trigger acitivity switch"
+msgstr "Should workspace switch trigger acitivity switch"
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Show window"
+msgstr "উইন্ডো প্রদর্শন করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Stop tracking current activity on shutdown"
+msgstr "বন্ধ করা হলে বর্তমান কাজের নিরীক্ষণ বন্ধ করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking on idle"
+msgstr "কর্মহীন অবস্থায় বর্তমান কাজে নিরীক্ষণ বন্ধ করা হবে"
+
+#: ../data/hamster-applet.schemas.in.h:15 ../data/preferences.ui.h:20
+msgid "Stop tracking on shutdown"
+msgstr "কম্পিউটার বন্ধ হলে"
+
+#: ../data/hamster-applet.schemas.in.h:16
+msgid "Switch activity on workspace change"
+msgstr "Switch activity on workspace change"
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Project Hamster - সময় নিরীক্ষণ করুন"
 
-#. Title of reminder notification
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
-#: ../hamster/about.py:38 ../hamster/applet.py:63
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:336 ../src/hamster-standalone:196
 msgid "Time Tracker"
 msgstr "সময় অনুসরণ"
 
@@ -34,93 +121,57 @@ msgstr "সময় অনুসরণ"
 msgid "_About"
 msgstr "পরিচিতি (_A)"
 
-#: ../data/Hamster_Applet.xml.h:2
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:13
+msgid "_Help"
+msgstr "সহায়তা (_H)"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Overview"
 msgstr "সংক্ষিপ্ত তথ্য (_O)"
 
-#: ../data/Hamster_Applet.xml.h:3
+#: ../data/Hamster_Applet.xml.h:4
 msgid "_Preferences"
 msgstr "পছন্দ (_P)"
 
-#: ../data/preferences.ui.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>কাজ</b>"
+#: ../data/hamster-standalone.desktop.in.in.h:1
+#| msgid "Project Hamster Website"
+msgid "Project Hamster desktop time tracking"
+msgstr "প্রজেক্ট Hamster ওয়েব-সাইট অনুসরণ"
 
-#: ../data/preferences.ui.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>সার্বজনীন হট-কী</b>"
+#: ../data/applet.ui.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "পূর্ববর্তী কাজ যোগ করুন (_d)"
 
-#: ../data/preferences.ui.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>অনুসরণ</b>"
+#: ../data/applet.ui.h:2 ../src/hamster/applet.py:379
+msgid "No records today"
+msgstr "আজকের কোনো তথ্য উপস্থিত নেই"
 
-#: ../data/preferences.ui.h:4
-msgid "Activity list"
-msgstr "কাজের তালিকা"
+#: ../data/applet.ui.h:3 ../data/hamster.ui.h:4
+#| msgid "Switch"
+msgid "S_witch"
+msgstr "পরিবর্তন (_w)"
 
-#: ../data/preferences.ui.h:5
-msgid "Add activity"
-msgstr "কাজ যোগ করুন"
+#: ../data/applet.ui.h:4
+msgid "Show _Overview"
+msgstr "সংক্ষিপ্ত তথ্য প্রদর্শন করা হবে (_O)"
 
-#: ../data/preferences.ui.h:6
-msgid "Add category"
-msgstr "বিভাগ যোগ করুন"
+#: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
+#| msgid "_Stop Tracking"
+msgid "St_op tracking"
+msgstr "অনুসরণ বন্ধ করা হবে (_o)"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
-msgid "Also remind when no activity is set"
-msgstr "উপরন্তু, কোনো কাজ নির্ধারিত না হলে সূচিত করা হবে"
+#: ../data/applet.ui.h:6 ../data/hamster.ui.h:6
+#| msgid "_Stop Tracking"
+msgid "Start _Tracking"
+msgstr "অনুসরণ বন্ধ করা হবে (_T)"
 
-#: ../data/preferences.ui.h:8
-msgid "Category list"
-msgstr "বিভাগের তালিকা"
+#: ../data/applet.ui.h:7 ../data/hamster.ui.h:9
+msgid "Tell me more"
+msgstr "আরও বলুন"
 
-#: ../data/preferences.ui.h:9
-msgid "Edit activity"
-msgstr "কাজ সম্পাদনা"
-
-#: ../data/preferences.ui.h:10
-msgid "Edit category"
-msgstr "বিভাগ সম্পাদনা"
-
-#: ../data/preferences.ui.h:11
-msgid "Move activity down"
-msgstr "কাজ নীচে স্থানান্তর করুন"
-
-#: ../data/preferences.ui.h:12
-msgid "Move activity up"
-msgstr "কাজ উপরে স্থানান্তর করুন"
-
-#: ../data/preferences.ui.h:13
-msgid "Remind of current activity every:"
-msgstr "বর্তমান কাজ সম্বন্ধে স্মরণ করানো হবে, প্রতি:"
-
-#: ../data/preferences.ui.h:14
-msgid "Remove activity"
-msgstr "কাজ মুছে ফেলুন"
-
-#: ../data/preferences.ui.h:15
-msgid "Remove category"
-msgstr "বিভাগ মুছে ফেলুন"
-
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
-msgid "Stop tracking on shutdown"
-msgstr "কম্পিউটার বন্ধ হলে"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "কম্পিউটার কর্মহীন অবস্থায় থাকলে সময় নিরীক্ষণ বন্ধ করা হবে"
-
-#: ../data/preferences.ui.h:18
-msgid "Time Tracker Preferences"
-msgstr "সময় নিরীক্ষণ ব্যবস্থা সম্পর্কিত পছন্দ"
-
-#: ../data/preferences.ui.h:19
-msgid "_Activities"
-msgstr "কাজ (_A)"
-
-#: ../data/preferences.ui.h:20
-msgid "_Categories"
-msgstr "বিভাগ (_C)"
+#: ../data/applet.ui.h:8
+msgid "_Today"
+msgstr "আজ (_T)"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -139,374 +190,451 @@ msgid "Preview:"
 msgstr "প্রাকদর্শন:"
 
 #: ../data/edit_activity.ui.h:5
+msgid "Tags:"
+msgstr "ট্যাগ:"
+
+#: ../data/edit_activity.ui.h:6
 msgid "Time:"
 msgstr "সময়:"
 
-#: ../data/edit_activity.ui.h:6
+#: ../data/edit_activity.ui.h:7
 msgid "in progress"
 msgstr "চলমান"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:8 ../data/overview.ui.h:8
 msgid "to"
 msgstr "প্রতি"
 
-#: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr ""
-"উপরন্তু, কোনো কাজ না আরম্ভ করা হলে প্রতি notify_interval মিনিটে সূচনা প্রদান করা "
-"হবে।"
+#: ../data/hamster.ui.h:1
+#| msgid "Add Earlier Activity"
+msgid "Add earlier activity"
+msgstr "পূর্ববর্তী কাজ যোগ করুন"
 
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "সময় নিরীক্ষণের উইন্ডো প্রদর্শনের জন্য কী-বোর্ড শর্টকাট।"
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "বিষয়বস্তু"
 
-#: ../data/hamster-applet.schemas.in.h:4
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"মিনিটে ধার্য সুনির্দিষ্ট সময়ের অন্তরে বর্তমান কর্ম সম্বন্ধে স্মরণ করানো হবে। স্মরণ "
-"ব্যবস্থা নিষ্ক্রিয় করার জন্য ০ অথবা ১২০ থেকে অধিক কোনো সংখ্যা নির্ধারণ করুন।"
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Remind of current task every x minutes"
-msgstr "প্রতি x মিনিট অন্তর বর্তমান কর্মের বিষয়ে স্মরণ করানো হবে"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Show window"
-msgstr "উইন্ডো প্রদর্শন করা হবে"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking current activity on shutdown"
-msgstr "বন্ধ করা হলে বর্তমান কাজের নিরীক্ষণ বন্ধ করা হবে"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
-
-#: ../data/hamster-applet.schemas.in.h:9
-msgid "Stop tracking on idle"
-msgstr "কর্মহীন অবস্থায় বর্তমান কাজে নিরীক্ষণ বন্ধ করা হবে"
-
-#: ../data/applet.ui.h:1
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >কোনো কাজের অনুসরণ আরম্ভের জন্য কাজের নাম লিখুন ও Enter "
-"চাপুন!</span>"
-
-#: ../data/applet.ui.h:2
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">অধিক বিবরণ</span>"
-
-#: ../data/applet.ui.h:3
-msgid "Ad_d Earlier Activity"
-msgstr "পূর্ববর্তী কাজ যোগ করুন (_d)"
-
-#. This title appears only when debugging from console. Leave it as is.
-#: ../data/applet.ui.h:5
-msgid "Hamster"
-msgstr "Hamster (হ্যামস্টার)"
-
-#: ../data/applet.ui.h:6 ../hamster/applet.py:554
-msgid "No records today"
-msgstr "আজকের কোনো তথ্য উপস্থিত নেই"
-
-#: ../data/applet.ui.h:7
-msgid "Show _Overview"
-msgstr "সংক্ষিপ্ত তথ্য প্রদর্শন করা হবে (_O)"
-
-#: ../data/applet.ui.h:8
-msgid "_Activity:"
-msgstr "কাজ: (_A)"
-
-#: ../data/applet.ui.h:9
-msgid "_Stop Tracking"
-msgstr "অনুসরণ বন্ধ করা হবে (_S)"
-
-#: ../data/applet.ui.h:10
-msgid "_Today"
-msgstr "আজ (_T)"
-
-#: ../data/stats.ui.h:1
-msgid " _Day"
-msgstr " দিন (_D)"
-
-#: ../data/stats.ui.h:2
-msgid " _Month"
-msgstr " মাস (_M)"
-
-#: ../data/stats.ui.h:3
-msgid " _Week"
-msgstr " সপ্তাহ (_W)"
-
-#: ../data/stats.ui.h:4
-msgid "<b>Overview</b>"
-msgstr "<b>সংক্ষিপ্ত তথ্য</b>"
-
-#: ../data/stats.ui.h:5
-msgid "<b>Starts and ends</b>"
-msgstr "<b>আরম্ভ ও সমাপ্তি</b>"
-
-#: ../data/stats.ui.h:6
-msgid "<b>Totals</b>"
-msgstr "<b>সর্বমোট</b>"
-
-#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
-msgid "Activity"
-msgstr "কাজ"
-
-#: ../data/stats.ui.h:8
-msgid "Categories:"
-msgstr "বিভাগ:"
-
-#: ../data/stats.ui.h:9
-msgid "Date interval:"
-msgstr "তারিখের ব্যবধান:"
-
-#: ../data/stats.ui.h:10
-msgid "No data for this interval"
-msgstr "এই ব্যবধানের মধ্যে কোনো তথ্য উপস্থিত নেই"
-
-#: ../data/stats.ui.h:11
+#: ../data/hamster.ui.h:3
 msgid "Overview"
 msgstr "সংক্ষিপ্ত তথ্য"
 
-#: ../data/stats.ui.h:12
-msgid "Overview - Hamster"
-msgstr "সংক্ষিপ্ত তথ্য - Hamster"
+#: ../data/hamster.ui.h:7
+#| msgid "New activity"
+msgid "Start new activity"
+msgstr "নতুন কাজ শুরু"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "HTML রূপে সংরক্ষণ করুন"
-
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "রিপোর্ট সংরক্ষণ করুন - সময় অনুসরণ"
-
-#: ../data/stats.ui.h:15
+#: ../data/hamster.ui.h:8 ../data/stats.ui.h:2
 msgid "Statistics"
 msgstr "পরিসংখ্যান"
 
-#: ../data/stats.ui.h:16
+#: ../data/hamster.ui.h:11
 msgid "Today"
 msgstr "আজ"
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
-msgid "Week"
-msgstr "সপ্তাহ"
+#: ../data/hamster.ui.h:12
+#| msgid "Edit"
+msgid "_Edit"
+msgstr "সম্পাদনা (_E)"
 
-#: ../data/stats.ui.h:18
-msgid "Year:"
-msgstr "বৎসর:"
+#: ../data/hamster.ui.h:14
+#| msgid "_Stop Tracking"
+msgid "_Tracking"
+msgstr "অনুসরণ বন্ধ করা হবে (_T)"
 
-#: ../hamster/about.py:41
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "স্বত্বাধিকার © ২০০৭-২০০৯ টমস বগিস ও অন্যান্যদের"
+#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
+#: ../data/preferences.ui.h:1
+#| msgid "_Activities"
+msgid "Activities"
+msgstr "কাজ"
 
-#: ../hamster/about.py:43
-msgid "Project Hamster Website"
-msgstr "প্রজেক্ট Hamster ওয়েব-সাইট"
+#: ../data/overview_totals.ui.h:2
+#| msgid "_Categories"
+msgid "Categories"
+msgstr "বিভাগ"
 
-#: ../hamster/about.py:44
-msgid "About Time Tracker"
-msgstr "সময় অনুসরণ ব্যবস্থার পরিচিতি"
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "এই ব্যবধানের মধ্যে কোনো তথ্য উপস্থিত নেই"
 
-#: ../hamster/about.py:54
-msgid "translator-credits"
-msgstr "রুণা ভট্টাচার্য (runab@redhat.com)"
+#: ../data/overview_totals.ui.h:4
+#| msgid "Statistics"
+msgid "Show Statistics"
+msgstr "পরিসংখ্যান প্রদর্শন করুন"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:214
+#: ../src/hamster/reports.py:227 ../src/hamster-standalone:70
+#| msgid "Totals"
+msgid "Tags"
+msgstr "ট্যাগ"
+
+#: ../data/overview.ui.h:2
+msgid "Add"
+msgstr "যোগ"
+
+#: ../data/overview.ui.h:3
 msgid "Edit"
 msgstr "সম্পাদনা"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Switch"
-msgstr "পরিবর্তন"
+#: ../data/overview.ui.h:4
+msgid "Overview - Hamster"
+msgstr "সংক্ষিপ্ত তথ্য - Hamster"
 
-#: ../hamster/applet.py:305 ../hamster/reports.py:235
-#: ../hamster/reports.py:293
-msgid "Duration"
-msgstr "অবধি"
+#: ../data/overview.ui.h:5
+msgid "Remove"
+msgstr "মুছে ফেলুন"
 
-#: ../hamster/applet.py:492 ../hamster/applet.py:513
+#: ../data/overview.ui.h:6
+#| msgid "HTML Report"
+msgid "Save Report"
+msgstr "প্রতিবেদন সংরক্ষণ করুন"
+
+#. summary table
+#: ../data/overview.ui.h:7 ../data/stats.ui.h:3 ../src/hamster/reports.py:285
+msgid "Totals"
+msgstr "সর্বমোট"
+
+#: ../data/preferences.ui.h:2
+msgid "Activity list"
+msgstr "কাজের তালিকা"
+
+#: ../data/preferences.ui.h:3
+msgid "Add activity"
+msgstr "কাজ যোগ করুন"
+
+#: ../data/preferences.ui.h:4
+msgid "Add category"
+msgstr "বিভাগ যোগ করুন"
+
+#: ../data/preferences.ui.h:6
+#| msgid "_Categories"
+msgid "Categories and Tags"
+msgstr "বিভাগ এবং ট্যাগ"
+
+#: ../data/preferences.ui.h:7
+msgid "Category list"
+msgstr "বিভাগের তালিকা"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit activity"
+msgstr "কাজ সম্পাদনা"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit category"
+msgstr "বিভাগ সম্পাদনা"
+
+#: ../data/preferences.ui.h:10
+msgid "General"
+msgstr "সাধারণ"
+
+#: ../data/preferences.ui.h:11
+#| msgid "<b>Global Hotkey</b>"
+msgid "Global Hotkey"
+msgstr "সার্বজনীন হট-কী"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity down"
+msgstr "কাজ নীচে স্থানান্তর করুন"
+
+#: ../data/preferences.ui.h:13
+msgid "Move activity up"
+msgstr "কাজ উপরে স্থানান্তর করুন"
+
+#: ../data/preferences.ui.h:14
+msgid "New day starts at"
+msgstr "নতুন দিন শুরু হশ"
+
+#: ../data/preferences.ui.h:15
+msgid "Remind of current activity every:"
+msgstr "বর্তমান কাজ সম্বন্ধে স্মরণ করানো হবে, প্রতি:"
+
+#: ../data/preferences.ui.h:16
+msgid "Remove activity"
+msgstr "কাজ মুছে ফেলুন"
+
+#: ../data/preferences.ui.h:17
+msgid "Remove category"
+msgstr "বিভাগ মুছে ফেলুন"
+
+#: ../data/preferences.ui.h:18
+msgid "Resume the last activity when returning to a workspace"
+msgstr "Resume the last activity when returning to a workspace"
+
+#: ../data/preferences.ui.h:19
+msgid "Start new activity when switching workspaces:"
+msgstr "Start new activity when switching workspaces:"
+
+#: ../data/preferences.ui.h:21
+msgid "Stop tracking when computer becomes idle"
+msgstr "কম্পিউটার কর্মহীন অবস্থায় থাকলে সময় নিরীক্ষণ বন্ধ করা হবে"
+
+#: ../data/preferences.ui.h:22
+msgid "Tags that should appear in autocomplete"
+msgstr "Tags that should appear in autocomplete"
+
+#: ../data/preferences.ui.h:23
+msgid "Time Tracker Preferences"
+msgstr "সময় নিরীক্ষণ ব্যবস্থা সম্পর্কিত পছন্দ"
+
+#: ../data/preferences.ui.h:24
+#| msgid "_Stop Tracking"
+msgid "Tracking"
+msgstr "অনুসরণ বন্ধ করা হবে"
+
+#: ../data/preferences.ui.h:25
+msgid "Workspaces"
+msgstr "ওয়ার্কস্পেস"
+
+#: ../data/preferences.ui.h:26
+msgid "_Activities"
+msgstr "কাজ (_A)"
+
+#: ../data/preferences.ui.h:27
+msgid "_Categories"
+msgstr "বিভাগ (_C)"
+
+#: ../data/stats.ui.h:1
+#| msgid "<b>Starts and ends</b>"
+msgid "Starts and ends"
+msgstr "আরম্ভ ও সমাপ্তি"
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "বৎসর:"
+
+#: ../src/hamster/about.py:43
+msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgstr "স্বত্বাধিকার © ২০০৭-২০০৯ টমস বগিস ও অন্যান্যদের"
+
+#: ../src/hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "প্রজেক্ট Hamster ওয়েব-সাইট"
+
+#: ../src/hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "সময় অনুসরণ ব্যবস্থার পরিচিতি"
+
+#: ../src/hamster/about.py:56
+msgid "translator-credits"
+msgstr "রুণা ভট্টাচার্য (runab@redhat.com)"
+
+#: ../src/hamster/applet.py:208 ../src/hamster/preferences.py:196
+#: ../src/hamster/reports.py:225 ../src/hamster/reports.py:289
+#: ../src/hamster-standalone:64
+msgid "Activity"
+msgstr "কাজ"
+
+#: ../src/hamster/applet.py:309 ../src/hamster/applet.py:332
+#: ../src/hamster/applet.py:430 ../src/hamster-standalone:192
+#: ../src/hamster-standalone:262
 msgid "No activity"
 msgstr "কোনো কাজ হয়নি"
 
-#. activity reminder
-#: ../hamster/applet.py:508
-#, python-format
+#: ../src/hamster/applet.py:327 ../src/hamster-standalone:187
+#, c-format, python-format
 msgid "Working on <b>%s</b>"
 msgstr "<b>%s</b>-এ কাজ করা হচ্ছে"
 
-#: ../hamster/applet.py:562
+#: ../src/hamster/applet.py:387
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565
+#: ../src/hamster/applet.py:390
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
-#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
-#: ../hamster/stuff.py:94
+#: ../src/hamster/applet.py:416 ../src/hamster-standalone:248
+msgid "Just started"
+msgstr "কেবল শুরু হয়েছে"
+
+#: ../src/hamster/applet.py:419 ../src/hamster/db.py:243
+#: ../src/hamster/db.py:253 ../src/hamster/db.py:307 ../src/hamster/db.py:656
+#: ../src/hamster/db.py:717 ../src/hamster/edit_activity.py:51
+#: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
+#: ../src/hamster/reports.py:94 ../src/hamster/reports.py:243
+#: ../src/hamster-standalone:251 ../src/hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "অনুক্রম বিহীন"
 
-#: ../hamster/applet.py:833
-msgid "What should be typed in the activity box?"
-msgstr "কাজ চিহ্নকারী বাক্সের মধ্যে কী লেখা হবে?"
+#: ../src/hamster/applet.py:653 ../src/hamster-standalone:428
+#| msgid "Add activity"
+msgid "Changed activity"
+msgstr "কাজ যোগ করুন"
 
-#: ../hamster/applet.py:836
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"কাজের সাথে বিবরণ সংযোজনের জন্য একটি সহজ সিন্টেক্স উপস্থিত রয়েছে:\n"
-"        \n"
-"\"@\" চিহ্ন দ্বারা একটি শ্রেণী চিহ্নিত করা হয়। উদাহরণ: \"watering flowers@home\" "
-"লেখা হলে \"home\" শ্রেণীর অধিন উপস্থিত \"watering flowers\" কাজটি নিরীক্ষণ করা "
-"হবে।\n"
-"\n"
-"(\",\") চিহ্ন দ্বারা বিবরণের প্রারম্ভ চিহ্নিত করা হয়। উদাহরণ: \"watering flowers, "
-"begonias and forgetmenots\" লেখা হলে \"watering flowers\" কাজ অনুসরণ করা হবে "
-"ও \"begonias and forgetmenots\" বিবরণ এর সাথে যোগ করা হবে।\n"
-"\n"
-"উপরে উল্লিখিত দুটি বিন্যাস একসাথেও লেখা যাবে: \"watering flowers@home, begonias "
-"and forgetmenots\" \n"
-"\n"
-"কাজ অনুসরণ আরম্ভ করুন!\n"
-"        "
+#: ../src/hamster/applet.py:654 ../src/hamster-standalone:429
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "'%s' এ পরিবর্তিত"
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../src/hamster/db.py:912
 msgid "Work"
 msgstr "কাজ"
 
-#: ../hamster/db.py:729
+#: ../src/hamster/db.py:913
 msgid "Reading news"
 msgstr "সংবাদ পাঠ"
 
-#: ../hamster/db.py:730
+#: ../src/hamster/db.py:914
 msgid "Checking stocks"
 msgstr "স্টকের খবরাখবর"
 
-#: ../hamster/db.py:731
+#: ../src/hamster/db.py:915
 msgid "Super secret project X"
 msgstr "অত্যন্ত গোপনীয় প্রজেক্ট X"
 
-#: ../hamster/db.py:732
+#: ../src/hamster/db.py:916
 msgid "World domination"
 msgstr "বিশ্বের উপর রাজত্ব"
 
-#: ../hamster/db.py:734
+#: ../src/hamster/db.py:918
 msgid "Day-to-day"
 msgstr "দৈনন্দিন"
 
-#: ../hamster/db.py:735
+#: ../src/hamster/db.py:919
 msgid "Lunch"
 msgstr "মধ্যভোজ"
 
-#: ../hamster/db.py:736
+#: ../src/hamster/db.py:920
 msgid "Watering flowers"
 msgstr "ফুলের গাছে জল দেওয়া"
 
-#: ../hamster/db.py:737
+#: ../src/hamster/db.py:921
 msgid "Doing handstands"
 msgstr "যোগাসন"
 
-#: ../hamster/edit_activity.py:385
+#: ../src/hamster/edit_activity.py:67
 msgid "Update activity"
 msgstr "কাজ হালনাগাদ করুন"
 
-#: ../hamster/preferences.py:104
-msgid "Name"
-msgstr "নাম"
+#: ../src/hamster/overview_activities.py:94
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%1$A, %2$b %3$d"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:232
-#: ../hamster/reports.py:291
-msgid "Category"
-msgstr "বিভাগ"
+#: ../src/hamster/overview.py:79
+msgid "Week"
+msgstr "সপ্তাহ"
 
-#: ../hamster/preferences.py:559
-msgid "New category"
-msgstr "নতুন বিভাগ"
+#: ../src/hamster/overview.py:80
+msgid "Month"
+msgstr "মাস"
 
-#: ../hamster/preferences.py:572
-msgid "New activity"
-msgstr "নতুন কাজ"
+#: ../src/hamster/overview.py:81
+msgid "Date Range"
+msgstr "ডাটা সীমা"
 
-#. notify interval slider value label
-#: ../hamster/preferences.py:632
-#, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d মিনিট"
-
-#. notify interval slider value label
-#: ../hamster/preferences.py:635
-msgid "Never"
-msgstr "কখনো নয়"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:112
-msgid "activity"
-msgstr "কর্ম"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:114
-msgid "start time"
-msgstr "আরম্ভের সময়"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:116
-msgid "end time"
-msgstr "সমাপ্তির সময়"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:118
-msgid "duration minutes"
-msgstr "অবকাল, মিনিটে ধার্য"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:120
-msgid "category"
-msgstr "বিভাগ"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:122
-msgid "description"
-msgstr "বিবরণ"
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/overview.py:158
+#| msgctxt "single day overview"
+#| msgid "%B %d, %Y"
+msgid "%B %d, %Y"
+msgstr "%B %d, %Y"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:160 ../hamster/stats.py:933
+#: ../src/hamster/overview.py:166
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
+#| "(end_Y)s"
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. overview label if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/overview.py:172
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. overview label for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/overview.py:178
+#| msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#: ../src/hamster/overview_totals.py:148
+#, python-format
+msgid "%s hours tracked total"
+msgstr "%s hours tracked total"
+
+#: ../src/hamster/preferences.py:117 ../src/hamster/preferences.py:192
+msgid "Name"
+msgstr "নাম"
+
+#: ../src/hamster/preferences.py:137 ../src/hamster/reports.py:226
+#: ../src/hamster/reports.py:288
+msgid "Category"
+msgstr "বিভাগ"
+
+#: ../src/hamster/preferences.py:673
+msgid "New category"
+msgstr "নতুন বিভাগ"
+
+#: ../src/hamster/preferences.py:686
+msgid "New activity"
+msgstr "নতুন কাজ"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:757
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d মিনিট"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:760
+msgid "Never"
+msgstr "কখনো নয়"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:115
+msgid "activity"
+msgstr "কর্ম"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:117
+msgid "start time"
+msgstr "আরম্ভের সময়"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:119
+msgid "end time"
+msgstr "সমাপ্তির সময়"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:121
+msgid "duration minutes"
+msgstr "অবকাল, মিনিটে ধার্য"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:123
+msgid "category"
+msgstr "বিভাগ"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:125
+msgid "description"
+msgstr "বিবরণ"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:127
+#| msgid "Totals"
+msgid "tags"
+msgstr "ট্যাগ"
+
+#: ../src/hamster/reports.py:167
 #, python-format
 msgid ""
 "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
@@ -515,91 +643,60 @@ msgstr ""
 "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s-এর "
 "সংক্ষিপ্ত তথ্য"
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:162 ../hamster/stats.py:939
+#: ../src/hamster/reports.py:169
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s-এর সংক্ষিপ্ত তথ্য"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:164 ../hamster/stats.py:945
+#: ../src/hamster/reports.py:171
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s-এর সংক্ষিপ্ত তথ্য"
 
-#: ../hamster/reports.py:167
+#: ../src/hamster/reports.py:174
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "%(start_B)s %(start_d)s, %(start_Y)s-এর সংক্ষিপ্ত তথ্য"
 
-#: ../hamster/reports.py:230
+#: ../src/hamster/reports.py:224
 msgid "Date"
 msgstr "তারিখ"
 
-#: ../hamster/reports.py:233
+#: ../src/hamster/reports.py:228
 msgid "Start"
 msgstr "আরম্ভ"
 
-#: ../hamster/reports.py:234
+#: ../src/hamster/reports.py:229
 msgid "End"
 msgstr "সমাপ্তি"
 
-#: ../hamster/reports.py:236
+#: ../src/hamster/reports.py:230 ../src/hamster/reports.py:290
+msgid "Duration"
+msgstr "অবধি"
+
+#: ../src/hamster/reports.py:231
 msgid "Description"
 msgstr "বিবরণ"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:268
+#: ../src/hamster/reports.py:264
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%1$b %2$d, %3$Y"
 
-#. summary table
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "সর্বমোট"
-
-#: ../hamster/reports.py:303
+#: ../src/hamster/reports.py:300
 msgid "Total Time"
 msgstr "সর্বমোট সময়"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
-msgid "HTML Report"
-msgstr "HTML রিপোর্ট"
-
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
-msgid "Tab-Separated Values (TSV)"
-msgstr "ট্যাব দ্বারা বিভাজিত মান (TSV)"
-
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
-msgid "XML"
-msgstr "XML"
-
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
-msgid "iCal"
-msgstr "iCal"
-
-#. add unsorted category
-#: ../hamster/stats.py:120
-msgctxt "categories"
-msgid "All"
-msgstr "সর্বধরন"
-
-#: ../hamster/stats.py:435
+#: ../src/hamster/stats.py:86
 msgctxt "years"
 msgid "All"
 msgstr "সকল"
 
-#: ../hamster/stats.py:524
+#: ../src/hamster/stats.py:176
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -607,14 +704,15 @@ msgstr ""
 "পরিসংখ্যান নির্মাণের জন্য কোনো তথ্য উপস্থিত নেই।\n"
 "এক সপ্তাহ ব্যবহারের পরে পর্যাপ্ত তথ্য উপলব্ধ হবে!"
 
-#: ../hamster/stats.py:527
-msgid "Still collecting data — check back after a week has passed!"
+#: ../src/hamster/stats.py:179
+#| msgid "Still collecting data — check back after a week has passed!"
+msgid "Collecting data — check back after a week has passed!"
 msgstr "এখনো তথ্য সংগ্রহ করা হচ্ছে — এক সপ্তাহ পরে পুনরায় পরীক্ষা করুন!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:657
+#: ../src/hamster/stats.py:310
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%1$b %2$d, %3$Y"
@@ -622,18 +720,19 @@ msgstr "%1$b %2$d, %3$Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:662
-#, python-format
+#: ../src/hamster/stats.py:315
+#| msgctxt "overview graph"
+#| msgid "%b %d"
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgid "%b %d"
+msgstr "%b %d"
 
-#: ../hamster/stats.py:664
+#: ../src/hamster/stats.py:317
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "প্রথম কর্মের তথ্য %s-এ রেকর্ড করা হয়েছে।"
 
-#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#: ../src/hamster/stats.py:326 ../src/hamster/stats.py:330
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -641,7 +740,7 @@ msgstr[0] "%(num)s বৎসর"
 msgstr[1] "%(num)s বৎসর"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:682
+#: ../src/hamster/stats.py:335
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -653,12 +752,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:700
+#: ../src/hamster/stats.py:353
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#: ../hamster/stats.py:705
+#: ../src/hamster/stats.py:358
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -671,18 +770,18 @@ msgstr[1] ""
 "করা হয়েছে"
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713
+#: ../src/hamster/stats.py:366
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "%s-টি রেকর্ড উপস্থিত রয়েছে।"
 msgstr[1] "%s-টি রেকর্ড উপস্থিত রয়েছে।"
 
-#: ../hamster/stats.py:733
+#: ../src/hamster/stats.py:386
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster আরো কিছু সময়ের জন্য আপনার কাজ নিরীক্ষণ করতে ইচ্ছুক!"
 
-#: ../hamster/stats.py:735
+#: ../src/hamster/stats.py:388
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
@@ -691,7 +790,7 @@ msgstr ""
 "%s শতাংশ কর্ম সকাল ৯-টা আগে আরম্ভ করা হয়েছে। সম্ভবত আপনার দিন বেশ তাড়াতাড়ি শুরু "
 "হয়ে থাকে।"
 
-#: ../hamster/stats.py:738
+#: ../src/hamster/stats.py:391
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm you seem to be a night owl."
@@ -699,7 +798,7 @@ msgstr ""
 "%s শতাংশ কর্ম রাত ১১-টার পরে আরম্ভ করা হয়েছে। সম্ভবত আপনি রাতের বেলা কাজ করতে "
 "বেশি পছন্দ করেন।"
 
-#: ../hamster/stats.py:741
+#: ../src/hamster/stats.py:394
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes you seem to be a "
@@ -708,59 +807,145 @@ msgstr ""
 "%s শতাংশ কর্ম ১৫ মিনিটের মধ্যে সমাপ্ত হয়েছে। সম্ভবত আপনি অনেক ধরনের কাজ করে "
 "থাকেন।"
 
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:828
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%1$A, %2$b %3$d"
-
-#: ../hamster/stats.py:869
-msgid "Total"
-msgstr "সর্বমোট"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:891
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%b %d"
-
-#: ../hamster/stats.py:920
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
-
-#. Overview label if looking on single day
-#: ../hamster/stats.py:922
-#, python-format
-msgid "Overview for %(date)s"
-msgstr "%(date)s-র সংক্ষিপ্ত তথ্য"
-
-#: ../hamster/stats.py:950
-msgid "Month"
-msgstr "মাস"
-
-#: ../hamster/stats.py:952
-msgid "Day"
-msgstr "দিন"
-
 #. duration in round hours
-#: ../hamster/stuff.py:151
+#: ../src/hamster/stuff.py:56
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../hamster/stuff.py:154
+#: ../src/hamster/stuff.py:59
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:157
+#: ../src/hamster/stuff.py:62
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:38
+#| msgid "Save report – Time Tracker"
+msgid "Save report - Time Tracker"
+msgstr "রিপোর্ট সংরক্ষণ করুন - সময় অনুসরণ"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:50
+msgid "HTML Report"
+msgstr "HTML রিপোর্ট"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:58
+msgid "Tab-Separated Values (TSV)"
+msgstr "ট্যাব দ্বারা বিভাজিত মান (TSV)"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:66
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "iCal"
+msgstr "iCal"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>কাজ</b>"
+
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>অনুসরণ</b>"
+
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >কোনো কাজের অনুসরণ আরম্ভের জন্য কাজের নাম লিখুন ও Enter "
+#~ "চাপুন!</span>"
+
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">অধিক বিবরণ</span>"
+
+#~ msgid "Hamster"
+#~ msgstr "Hamster (হ্যামস্টার)"
+
+#~ msgid "_Activity:"
+#~ msgstr "কাজ: (_A)"
+
+#~ msgid " _Day"
+#~ msgstr " দিন (_D)"
+
+#~ msgid " _Month"
+#~ msgstr " মাস (_M)"
+
+#~ msgid " _Week"
+#~ msgstr " সপ্তাহ (_W)"
+
+#~ msgid "<b>Overview</b>"
+#~ msgstr "<b>সংক্ষিপ্ত তথ্য</b>"
+
+#~ msgid "<b>Totals</b>"
+#~ msgstr "<b>সর্বমোট</b>"
+
+#~ msgid "Categories:"
+#~ msgstr "বিভাগ:"
+
+#~ msgid "Date interval:"
+#~ msgstr "তারিখের ব্যবধান:"
+
+#~ msgid "Save as HTML"
+#~ msgstr "HTML রূপে সংরক্ষণ করুন"
+
+#~ msgid "What should be typed in the activity box?"
+#~ msgstr "কাজ চিহ্নকারী বাক্সের মধ্যে কী লেখা হবে?"
+
+#~ msgid ""
+#~ "There is a simple syntax that enables you to add details to your "
+#~ "activities:\n"
+#~ "        \n"
+#~ "\"@\" symbol marks a category. Example: \"watering flowers@home\" will "
+#~ "start tracking the activity \"watering flowers\" in the category \"home"
+#~ "\".\n"
+#~ "\n"
+#~ "Commas (\",\") mark beginning of a description. Example: \"watering "
+#~ "flowers, begonias and forgetmenots\" will start tracking the activity "
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
+#~ "\" to it.\n"
+#~ "\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
+#~ "\" will work just fine!\n"
+#~ "\n"
+#~ "Now, start tracking!\n"
+#~ "        "
+#~ msgstr ""
+#~ "কাজের সাথে বিবরণ সংযোজনের জন্য একটি সহজ সিন্টেক্স উপস্থিত রয়েছে:\n"
+#~ "        \n"
+#~ "\"@\" চিহ্ন দ্বারা একটি শ্রেণী চিহ্নিত করা হয়। উদাহরণ: \"watering flowers@home"
+#~ "\" লেখা হলে \"home\" শ্রেণীর অধিন উপস্থিত \"watering flowers\" কাজটি "
+#~ "নিরীক্ষণ করা হবে।\n"
+#~ "\n"
+#~ "(\",\") চিহ্ন দ্বারা বিবরণের প্রারম্ভ চিহ্নিত করা হয়। উদাহরণ: \"watering "
+#~ "flowers, begonias and forgetmenots\" লেখা হলে \"watering flowers\" কাজ "
+#~ "অনুসরণ করা হবে ও \"begonias and forgetmenots\" বিবরণ এর সাথে যোগ করা হবে।\n"
+#~ "\n"
+#~ "উপরে উল্লিখিত দুটি বিন্যাস একসাথেও লেখা যাবে: \"watering flowers@home, "
+#~ "begonias and forgetmenots\" \n"
+#~ "\n"
+#~ "কাজ অনুসরণ আরম্ভ করুন!\n"
+#~ "        "
+
+#~ msgctxt "categories"
+#~ msgid "All"
+#~ msgstr "সর্বধরন"
+
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(b)s %(d)s"
+
+#~ msgid "Total"
+#~ msgstr "সর্বমোট"
+
+#~ msgid "Overview for %(date)s"
+#~ msgstr "%(date)s-র সংক্ষিপ্ত তথ্য"
+
+#~ msgid "Day"
+#~ msgstr "দিন"
