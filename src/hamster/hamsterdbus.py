@@ -63,8 +63,10 @@ class HamsterDbusController(dbus.service.Object):
                 fact[key] = ''
 
             # convert times to gmtime
-            if isinstance(fact[key], datetime.datetime):
+            if isinstance(fact[key], datetime.datetime) or isinstance(fact[key], datetime.date):
                 fact[key] = timegm(fact[key].timetuple())
+            elif isinstance(fact[key], datetime.timedelta) :
+                fact[key] = fact[key].days * 24 * 60 * 60 + fact[key].seconds
 
         return fact
 
