@@ -2,13 +2,12 @@
 # Spanish translation for hamster-applet.
 # Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
 # This file is distributed under the same license as the hamster-applet package.
-#
-# Jorge González <jorgegonz@svn.gnome.org>, 2010, 2010.
+# Jorge González <jorgegonz@svn.gnome.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
 "POT-Creation-Date: 2010-01-29 16:17+0000\n"
-"PO-Revision-Date: 2010-01-31 11:45+0100\n"
+"PO-Revision-Date: 2010-01-31 18:59+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +64,7 @@ msgstr ""
 
 #: C/reports.page:8(title)
 msgid "Report and export"
-msgstr ""
+msgstr "Informar y exportar"
 
 #: C/reports.page:10(p)
 msgid ""
@@ -127,6 +126,9 @@ msgid ""
 "<key>Enter</key> key. There are few tricks however, that will allow you to "
 "specify more detail on the fly:"
 msgstr ""
+"Para iniciar un seguimiento, escriba el nombre de la actividad en la caja de "
+"entrada y pulse <key>Intro</key>. No obstante, existen unos pocos trucos que "
+"le permitirán especificar más detalles al vuelo:"
 
 #: C/input.page:18(p)
 msgid "Use @ symbol to add category"
@@ -135,10 +137,14 @@ msgstr "Use el símbolo @ para añadir una categoría"
 #: C/input.page:19(p)
 msgid "Everything after a comma \",\" will be stored in the description field"
 msgstr ""
+"Todo lo que vaya detrás de una coma «,» se almacenará en el campo de "
+"descripción"
 
 #: C/input.page:20(p)
 msgid "To specify time on the fly, enter it as first in the input box."
 msgstr ""
+"Para especificar una hora al vuelo, introdúzcala como el primer campo en la "
+"caja de entrada."
 
 #: C/input.page:23(p)
 msgid "Few examples:"
@@ -163,6 +169,8 @@ msgid ""
 "Need more tomatoes in the garden. Digging holes is purely informational, so "
 "added it as a description"
 msgstr ""
+"Se necesitan más tomates en el jardín. Cavar agujeros es puramente "
+"informativo, así que se añade como una descripción."
 
 #: C/input.page:38(code)
 #, no-wrap
