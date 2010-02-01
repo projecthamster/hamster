@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
 "POT-Creation-Date: 2010-01-29 16:17+0000\n"
-"PO-Revision-Date: 2010-01-31 18:59+0100\n"
+"PO-Revision-Date: 2010-02-01 19:47+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #: C/statistics.page:6(desc)
 msgid "Word on interpretation of statistics."
-msgstr ""
+msgstr "Unas palabras en la interpretación de estadísticas."
 
 #: C/statistics.page:8(title)
 msgid "Statistics"
@@ -51,16 +51,22 @@ msgid ""
 "facts. Interpretation that should be compared with your own observations. "
 "Patches are welcome."
 msgstr ""
+"Los resultados accesibles a través del enlace <gui style=\"button\">Mostrar "
+"estadísticas</gui> son experimentales y son interpretaciones de los hechos. "
+"Interpretación que se debe comparar con sus propias observaciones. Se "
+"agradecen parches."
 
 #: C/statistics.page:16(p)
 msgid ""
 "However, the \"Starts and Ends\" should give you some idea about your active "
 "time."
 msgstr ""
+"No obstante, «Comienza y acaba»le debería dar alguna idea acerca de los "
+"tiempos de sus actividades."
 
 #: C/reports.page:6(desc)
 msgid "Get data out of Time Tracker"
-msgstr ""
+msgstr "Sacar los datos del gestor de tiempo"
 
 #: C/reports.page:8(title)
 msgid "Report and export"
@@ -224,6 +230,9 @@ msgid ""
 "\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
 "app></link> for Mozilla Firefox."
 msgstr ""
+"Para ver el contenido de la base de datos le sugerimos usar <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> de Mozilla Firefox."
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
 #: C/index.page:0(None)
