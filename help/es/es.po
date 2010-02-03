@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
 "POT-Creation-Date: 2010-01-29 16:17+0000\n"
-"PO-Revision-Date: 2010-02-01 19:47+0100\n"
+"PO-Revision-Date: 2010-02-03 08:17+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -78,12 +78,19 @@ msgid ""
 "dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
 "for spreadsheets), XML and iCal formats."
 msgstr ""
+"Además del formato HTML que se ofrece de forma predeterminada en el diálogo "
+"Guardar informe, la lista desplegable de formatos permite elegir formatos "
+"TSV (valores separados por tabulaciones, bueno para hojas de cálculo), XML e "
+"iCal."
 
 #: C/reports.page:15(p)
 msgid ""
 "For programmatic access, there is D-Bus API, that can be introspected using "
 "tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
 msgstr ""
+"Para un acceso programado existe una API de D-Bus de la que se puede hacer "
+"introspección usando herramientas como <link href=\"https://fedorahosted.org/"
+"d-feet/\">D-Feet</link>."
 
 #: C/reports.page:21(p)
 msgid ""
@@ -108,6 +115,10 @@ msgid ""
 "will be split into two. In other cases of overlapping - the previous entries "
 "will be shrunk."
 msgstr ""
+"El <app>Gestor de tiempo</app> hace lo mejor que puede para evitar "
+"solapamientos entre actividades. Si crea una actividad en el medio de una "
+"actividad existente, la anterior se partirá en dos. En otros casos de "
+"solapamiento se encogerán las entradas anteriores."
 
 #: C/merge.page:17(p)
 msgid ""
@@ -159,11 +170,12 @@ msgstr "Algunos ejemplos:"
 #: C/input.page:27(code)
 #, no-wrap
 msgid "12:30-12:45 watering flowers"
-msgstr "12:30-12:45 regar plantas"
+msgstr "14:30-14:45 regar plantas"
 
 #: C/input.page:28(p)
 msgid "Forgot to note the important act of watering flowers over the lunch."
 msgstr ""
+"Se olvidó del importante acto de regar las plantas después de la comida."
 
 #: C/input.page:31(code)
 #, no-wrap
@@ -181,7 +193,7 @@ msgstr ""
 #: C/input.page:38(code)
 #, no-wrap
 msgid "-7 existentialism, thinking about the vastness of the universe"
-msgstr ""
+msgstr "-7 existencialismo, pensar acerca de la inmensidad del universo"
 
 #: C/input.page:39(p)
 msgid ""
