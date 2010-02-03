@@ -100,7 +100,7 @@ class Storage(object):
     def get_activities(self, category_id = None):
         return self.__get_activities(category_id = category_id)
 
-    def get_autocomplete_activities(self, search):
+    def get_autocomplete_activities(self, search = ""):
         return self.__get_autocomplete_activities(search)
 
     def get_last_activity(self):
