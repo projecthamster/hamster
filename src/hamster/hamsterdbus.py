@@ -47,7 +47,7 @@ class HamsterDbusController(dbus.service.Object):
             logging.warn("D-Bus interface registration failed - other hamster running somewhere")
 
     @staticmethod
-    def to_dbus_fact(fact):
+    def _to_dbus_fact(fact):
         """Perform the conversion between fact database query and
         dbus supported data types
         """
@@ -81,8 +81,10 @@ class HamsterDbusController(dbus.service.Object):
         s description: Description of the fact
         u start_time: Seconds since epoch (timestamp)
         u end_time: Seconds since epoch (timestamp)
+        u end_time: Seconds since epoch (timestamp)
+        as tags: List of tags used
         """
-        return HamsterDbusController.to_dbus_fact(runtime.storage.get_last_activity())
+        return HamsterDbusController._to_dbus_fact(runtime.storage.get_last_activity())
 
     @dbus.service.method(HAMSTER_URI, in_signature='i', out_signature='a{sv}')
     def GetFactById(self, fact_id):
@@ -96,8 +98,9 @@ class HamsterDbusController(dbus.service.Object):
         s description: Description of the fact
         u start_time: Seconds since epoch (timestamp)
         u end_time: Seconds since epoch (timestamp)
+        as tags: List of tags used
         """
-        return HamsterDbusController.to_dbus_fact(runtime.storage.get_fact(fact_id))
+        return HamsterDbusController._to_dbus_fact(runtime.storage.get_fact(fact_id))
 
     @dbus.service.method(HAMSTER_URI, in_signature='uu', out_signature='aa{sv}')
     def GetFacts(self, start_date, end_date):
@@ -112,6 +115,7 @@ class HamsterDbusController(dbus.service.Object):
         s description: Description of the fact
         u start_time: Seconds since epoch (timestamp)
         u end_time: Seconds since epoch (timestamp)
+        as tags: List of tags used
         """
         #TODO: Assert start > end ?
         if start_date:
@@ -126,7 +130,7 @@ class HamsterDbusController(dbus.service.Object):
 
         facts = dbus.Array([], signature='a{sv}')
         for fact in runtime.storage.get_facts(start, end):
-            facts.append(HamsterDbusController.to_dbus_fact(fact))
+            facts.append(HamsterDbusController._to_dbus_fact(fact))
 
         return facts
 
@@ -141,6 +145,15 @@ class HamsterDbusController(dbus.service.Object):
         for act in runtime.storage.get_autocomplete_activities():
             activities.append((act['name'] or '', act['category'] or ''))
         return activities
+
+    @dbus.service.method(HAMSTER_URI, out_signature='as')
+    def GetTags(self):
+        """Returns array of all active tags"""
+        tags = dbus.Array([], signature='s')
+
+        for tag in runtime.storage.get_tags():
+            tags.append(tag['name'] or '')
+        return tags
 
     @dbus.service.method(HAMSTER_URI, out_signature='ss')
     def GetCurrentActivity(self):
@@ -169,13 +182,13 @@ class HamsterDbusController(dbus.service.Object):
     def AddFact(self, activity, start_time, end_time):
         """Add a new fact
         Parameters:
-        s activity: Activity name with optional category and/or description
-                    in the form 'activity_name[@category_name][,description]'
-                    Activity and matching category will be refered or created
-                    on the fly.
+        s activity: Activity name with optional category, description and tags
+                    in the form
+                    'activity_name[@category_name][,description][#tag1 #tagN]'
+                    Activity, matching category and tags will be refered or
+                    created on the fly.
         u start_time: Seconds since epoch (timestamp). Use 0 for 'now'
-        u end_time: Seconds since epoch (timestamp).
-                    Use 0 for 'in progress task'
+        u end_time: Seconds since epoch (timestamp). Use 0 for ongoing task
         """
         #TODO: Assert start > end ?
         start, end = None, None
