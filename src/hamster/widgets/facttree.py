@@ -78,7 +78,7 @@ class FactTree(gtk.TreeView):
 
         self.connect("row-activated", self._on_row_activated)
         self.connect("button-release-event", self._on_button_release_event)
-        self.connect("key-press-event", self._on_key_pressed)
+        self.connect("key-release-event", self._on_key_released)
         self.connect("configure-event", lambda *args: self.columns_autosize())
 
         self.show()
@@ -269,10 +269,9 @@ class FactTree(gtk.TreeView):
             return True
 
 
-    def _on_key_pressed(self, tree, event):
-        # capture ctrl+e and pretend that user click on edit
-        if (event.keyval == gtk.keysyms.e  \
-              and event.state & gtk.gdk.CONTROL_MASK):
+    def _on_key_released(self, tree, event):
+        # capture e keypress and pretend that user click on edit
+        if (event.keyval == gtk.keysyms.e):
             self.emit("edit-clicked", self.get_selected_fact())
             return True
 
