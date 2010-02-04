@@ -155,6 +155,17 @@ class HamsterDbusController(dbus.service.Object):
             tags.append(tag['name'] or '')
         return tags
 
+    @dbus.service.method(HAMSTER_URI, in_signature='s')
+    def SetAutocompleteTags(self, tags):
+        """Update autocomplete tags with the given comma-delimited list.
+        If a tag is gone missing, it will be deleted if it has not been used.
+        If it has been used, it will be marked as not to be used in autocomplete
+        (and revived on first use). New tags will just appear.
+        Parameters:
+        s tags: Comma-separated tags ("tag1, tag2, tag3, and so, on")
+        """
+        runtime.storage.update_autocomplete_tags(tags)
+
     @dbus.service.method(HAMSTER_URI, out_signature='ss')
     def GetCurrentActivity(self):
         """Returns the Activity currently being used, or blanks if Hamster is not tracking currently
