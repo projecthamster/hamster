@@ -40,6 +40,7 @@
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkVBox" id="vbox6">
+                            <property name="width_request">520</property>
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <child>
@@ -77,36 +78,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHBox" id="hbox4">
+                                  <object class="GtkAlignment" id="tag_box">
                                     <property name="visible">True</property>
+                                    <property name="left_padding">4</property>
+                                    <property name="right_padding">4</property>
                                     <child>
-                                      <object class="GtkLinkButton" id="more_info_button">
-                                        <property name="label" translatable="yes">Tell me more</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="no_show_all">True</property>
-                                        <property name="relief">none</property>
-                                        <property name="xalign">0</property>
-                                        <property name="uri"> </property>
-                                        <signal name="clicked" handler="on_more_info_button_clicked"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="tag_box">
-                                        <property name="visible">True</property>
-                                        <property name="left_padding">4</property>
-                                        <property name="right_padding">4</property>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
@@ -119,32 +96,66 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="last_activity_duration">
+                              <object class="GtkHBox" id="hbox4">
+                                <property name="height_request">40</property>
                                 <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label">1h 23m</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
+                                <child>
+                                  <object class="GtkVBox" id="activity_info_box">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkLabel" id="last_activity_duration">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label">1h 23m</property>
+                                        <attributes>
+                                          <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="last_activity_description">
+                                        <property name="visible">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label">it's like in case if you need a description, i'll be here</property>
+                                        <property name="wrap">True</property>
+                                        <attributes>
+                                          <attribute name="size" value="10000"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLinkButton" id="more_info_button">
+                                    <property name="label" translatable="yes">Tell me more</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="relief">none</property>
+                                    <property name="xalign">0</property>
+                                    <property name="uri"> </property>
+                                    <signal name="clicked" handler="on_more_info_button_clicked"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
                                 <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="last_activity_description">
-                                <property name="visible">True</property>
-                                <property name="no_show_all">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label">it's like in case if you need a description, i'll be here</property>
-                                <property name="wrap">True</property>
-                                <attributes>
-                                  <attribute name="size" value="10000"/>
-                                </attributes>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
