@@ -50,6 +50,10 @@ class Colors(object):
     def rgb(self, color):
         return [c * 255 for c in self.parse(color)]
 
+    def gdk(self, color):
+        c = self.parse(color)
+        return gtk.gdk.Color(c[0] * 65535.0, c[1] * 65535.0, c[2] * 65535.0)
+
     def is_light(self, color):
         # tells you if color is dark or light, so you can up or down the scale for improved contrast
         return colorsys.rgb_to_hls(*self.rgb(color))[1] > 150
@@ -97,7 +101,7 @@ class Area(gtk.DrawingArea):
         self.last_frame_time = None
         self.__drawing_queued = False
 
-        self.mouse_drag = (None, None)
+        self.mouse_drag = None
 
         self.colors = Colors() # handier this way
 
@@ -121,6 +125,8 @@ class Area(gtk.DrawingArea):
 
         time_since_last_frame = (dt.datetime.now() - self.last_frame_time).microseconds / 1000000.0
         self.tweener.update(time_since_last_frame)
+        self.__drawing_queued = self.tweener.hasTweens()
+
         self.queue_draw() # this will trigger do_expose_event when the current events have been flushed
 
         self.last_frame_time = dt.datetime.now()
@@ -225,9 +231,6 @@ class Area(gtk.DrawingArea):
 
         self.mouse_regions = [] #reset since these can move in each redraw
         self.on_expose()
-        
-        self.__drawing_queued = self.tweener.hasTweens()
-
 
 
     """ mouse events """
