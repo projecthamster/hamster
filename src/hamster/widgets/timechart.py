@@ -52,8 +52,8 @@ class TimeChart(graphics.Area):
         if start_date > end_date:
             start_date, end_date = end_date, start_date
 
-        # for hourly representation we will operate in minutes since and until the day start
-        if end_date - start_date < dt.timedelta(days=2):
+        # adjust to day starts and ends if we show
+        if end_date - start_date < dt.timedelta(days=1):
             start_time = dt.datetime.combine(start_date, self.day_start.replace(minute=0))
             end_time = dt.datetime.combine(end_date, self.day_start.replace(minute=0)) + dt.timedelta(days = 1)
 
@@ -81,7 +81,7 @@ class TimeChart(graphics.Area):
             self.start_time = min([start_time, durations_start_time])
             self.end_time = max([end_time, durations_end_time])
 
-        days = (self.end_time - self.start_time).days
+        days = (end_date - start_date).days
 
 
         # determine fraction and do addittional start time move
@@ -100,7 +100,7 @@ class TimeChart(graphics.Area):
             if self.start_time - start_time == WEEK:
                 start_time += WEEK
             self.start_time = start_time
-        elif days > 2: # more than two days -> show per day
+        elif days >= 1: # more than two days -> show per day
             self.minor_tick = DAY
         else: # show per hour
             self.minor_tick = dt.timedelta(seconds = 60 * 60)
@@ -135,7 +135,7 @@ class TimeChart(graphics.Area):
         self.context.set_line_width(1)
 
         # major ticks
-        if self.end_time - self.start_time < dt.timedelta(days=3):  # about the same day
+        if self.end_time - self.start_time < dt.timedelta(days=1):  # about the same day
             major_step = dt.timedelta(seconds = 60 * 60)
         else:
             major_step = dt.timedelta(days=1)
