@@ -110,10 +110,6 @@ class PanelButton(gtk.ToggleButton):
         self.label.set_markup("") #clear - seems to fix the warning
         self.label.set_markup(label)
 
-    def get_pos(self):
-        return gtk.gdk.Window.get_origin(self.label.window)
-
-
     def use_two_line_format(self):
         if not self.get_parent():
             return False
@@ -202,6 +198,8 @@ class HamsterApplet(object):
         # load window of activity switcher and todays view
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
+        # on close don't destroy the popup, just hide it instead
+        self.window.connect("delete_event", lambda *args: self.__show_toggle(None, False))
 
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
@@ -456,7 +454,7 @@ class HamsterApplet(object):
 
         if not is_active:
             self.window.hide()
-            return
+            return True
 
         self.load_day() # reload day each time before showing to avoid outdated last activity
         self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
@@ -475,20 +473,32 @@ class HamsterApplet(object):
 
 
     def position_popup(self):
-        label_geom = self.button.get_allocation()
-        window_geom = self.window.get_allocation()
+        label = self.button.get_allocation()
+        window = self.window.get_allocation()
 
-        x, y = self.button.get_pos()
+        x, y = self.button.get_parent_window().get_origin()
 
         self.popup_dir = self.applet.get_orient()
-        if self.popup_dir == gnomeapplet.ORIENT_DOWN:
-            y = y + label_geom.height
-        elif self.popup_dir == gnomeapplet.ORIENT_UP:
-            y = y - window_geom.height
-        elif self.popup_dir == gnomeapplet.ORIENT_RIGHT:
-            x = x + label_geom.width
-        elif self.popup_dir == gnomeapplet.ORIENT_LEFT:
-            x = x - window_geom.width
+
+        if self.popup_dir in (gnomeapplet.ORIENT_DOWN, gnomeapplet.ORIENT_UP):
+            if self.popup_dir == gnomeapplet.ORIENT_DOWN:
+                y = y + label.height
+            else:
+                y = y - window.height
+
+            screen_w = self.button.get_screen().get_width()
+            if x + window.width > screen_w:
+                x = screen_w - window.width
+
+        elif self.popup_dir in (gnomeapplet.ORIENT_RIGHT, gnomeapplet.ORIENT_LEFT):
+            if self.popup_dir == gnomeapplet.ORIENT_RIGHT:
+                x = x + label.width
+            else:
+                x = x - window.width
+
+            screen_h = self.button.get_screen().get_height()
+            if y + window.height > screen_h:
+                y = screen_h - window.height
 
         self.window.move(x, y)
 
