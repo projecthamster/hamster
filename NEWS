@@ -1,4 +1,16 @@
 ===============
+Version 2.29.90
+===============
+  Updated translations
+    * bn (Israt Jahan)
+    * es (Jorge González)
+    * sl (Matej Urbančič)
+    * zh_CN (Ray Wang)
+  
+  Updated documentation translations
+    * es (Jorge González)
+
+===============
 Version 2.29.6
 ===============
   * workspace tracking - switch activity, when switching desktops 
