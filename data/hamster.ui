@@ -279,7 +279,7 @@
                         <property name="spacing">4</property>
                         <child>
                           <object class="GtkButton" id="stop_tracking">
-                            <property name="label" translatable="yes">St_op tracking</property>
+                            <property name="label" translatable="yes">Sto_p tracking</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>

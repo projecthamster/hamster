@@ -192,8 +192,8 @@ msgid "Show _Overview"
 msgstr "Visa _översikt"
 
 #: ../data/applet.ui.h:7
-msgid "St_op tracking"
-msgstr "St_oppa tidmätning"
+msgid "Sto_p tracking"
+msgstr "Sto_ppa tidmätning"
 
 #: ../data/applet.ui.h:8
 msgid "Start _Tracking"

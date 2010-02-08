@@ -204,8 +204,8 @@ msgid "Show _Overview"
 msgstr "Vis _oversikt"
 
 #: ../data/applet.ui.h:7
-msgid "St_op tracking"
-msgstr "St_opp sporing"
+msgid "Sto_p tracking"
+msgstr "Sto_pp sporing"
 
 #: ../data/applet.ui.h:8
 msgid "Start _Tracking"

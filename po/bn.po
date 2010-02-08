@@ -157,8 +157,8 @@ msgstr "সংক্ষিপ্ত তথ্য প্রদর্শন কর
 
 #: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
 #| msgid "_Stop Tracking"
-msgid "St_op tracking"
-msgstr "অনুসরণ বন্ধ করা হবে (_o)"
+msgid "Sto_p tracking"
+msgstr "অনুসরণ বন্ধ করা হবে (_p)"
 
 #: ../data/applet.ui.h:6 ../data/hamster.ui.h:6
 #| msgid "_Stop Tracking"

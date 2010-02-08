@@ -152,8 +152,8 @@ msgid "Show _Overview"
 msgstr "显示概要(_O)"
 
 #: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
-msgid "St_op tracking"
-msgstr "停止跟踪(_O)"
+msgid "Sto_p tracking"
+msgstr "停止跟踪(_P)"
 
 #: ../data/applet.ui.h:6 ../data/hamster.ui.h:6
 msgid "Start _Tracking"

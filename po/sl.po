@@ -142,7 +142,7 @@ msgstr "Pokaži _pregled"
 
 #: ../data/applet.ui.h:5
 #: ../data/hamster.ui.h:5
-msgid "St_op tracking"
+msgid "Sto_p tracking"
 msgstr "_Zaustavi sledenje"
 
 #: ../data/applet.ui.h:6

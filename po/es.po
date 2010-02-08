@@ -158,7 +158,7 @@ msgid "Show _Overview"
 msgstr "_Mostrar un resumen"
 
 #: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
-msgid "St_op tracking"
+msgid "Sto_p tracking"
 msgstr "_Detener el seguimiento"
 
 #: ../data/applet.ui.h:6 ../data/hamster.ui.h:6
