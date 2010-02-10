@@ -194,10 +194,11 @@ class HamsterDbusController(dbus.service.Object):
         """Add a new fact
         Parameters:
         s activity: Activity name with optional category, description and tags
-                    in the form
-                    'activity_name[@category_name][,description][#tag1 #tagN]'
-                    Activity, matching category and tags will be refered or
-                    created on the fly.
+          in the form 'activity_name[@category_name][,description [#tag1 #tagN]]'
+          Activity, matching category and tags will be refered or created on the
+          fly.
+          Note that tags go into description - this is in order to reduce number
+          of action symbols in activity string
         u start_time: Seconds since epoch (timestamp). Use 0 for 'now'
         u end_time: Seconds since epoch (timestamp). Use 0 for ongoing task
         """
