@@ -460,6 +460,10 @@ class Storage(storage.Storage):
 
         activity = stuff.parse_activity_input(activity_name)
 
+        # make sure that we do have an activity name after parsing
+        if not activity.activity_name:
+            return
+
         # explicitly stated takes precedence
         activity.description = description or activity.description
 
