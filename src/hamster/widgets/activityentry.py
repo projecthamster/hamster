@@ -294,7 +294,7 @@ class ActivityEntry(gtk.Entry):
         self.set_position(len(self.get_text()))
 
     def _on_selected(self):
-        if self.news and self.get_text():
+        if self.news and self.get_text().strip():
             self.set_position(len(self.get_text()))
             self.emit("value-entered")
 
