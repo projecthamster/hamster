@@ -27,6 +27,7 @@ from calendar import timegm
 from configuration import runtime
 
 # DBus service parameters
+HAMSTER_PATH = "/org/gnome/Hamster"
 HAMSTER_URI = "org.gnome.Hamster"
 
 
@@ -40,7 +41,7 @@ class HamsterDbusController(dbus.service.Object):
         between dbus types and hamster-applet data types
         """
         try:
-            dbus.service.Object.__init__(self, bus_name, "/org/gnome/Hamster")
+            dbus.service.Object.__init__(self, bus_name, HAMSTER_PATH)
         except KeyError:
             # KeyError is thrown when the dbus interface is taken
             # that is there is other hamster running somewhere

@@ -37,7 +37,7 @@ class TestTracking(unittest.TestCase):
         fact = self.__rndfactgenerator()
 
         activity = fact['name'] + '@' + fact['category'] + ',' + \
-                fact['description']
+                fact['description'] + "".join([" #%s" % x for x in fact['tags']])
         fact_id = self.addfact(activity, fact['start_time'], fact['end_time'])
         self.failUnless(type(fact_id) == dbus.Int32 and fact_id != 0,
             'expected non-zero dbus.Int32 as return value')
@@ -53,6 +53,8 @@ class TestTracking(unittest.TestCase):
                 'expected same start_time')
         self.assertEqual(fact['end_time'], dbfact['end_time'],
                 'expected same end_time')
+        self.assertEqual(set(fact['tags']), set(dbfact['tags']),
+                'expected same tags')
 
         facts = self.getfacts(dbfact['start_time'], dbfact['end_time'])
         in_facts = False
@@ -144,7 +146,8 @@ class TestTracking(unittest.TestCase):
                 'description':description or rndstr(),
                 'start_time':start_time or timegm(dt.datetime.now().timetuple()),
                 'end_time':end_time or timegm((dt.datetime.now() + \
-                        dt.timedelta(hours=1)).timetuple())}
+                        dt.timedelta(hours=1)).timetuple()),
+                'tags': [rndstr(), rndstr()]}
         return fact
 
     def __findactivity(self, act, cat):
