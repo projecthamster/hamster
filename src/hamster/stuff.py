@@ -237,7 +237,7 @@ def parse_activity_input(text):
 
     res = InputParseResult()
 
-    input_parts = text.split(" ")
+    input_parts = text.strip().split(" ")
     if len(input_parts) > 1 and re.match('^-?\d', input_parts[0]): #look for time only if there is more
         potential_time = text.split(" ")[0]
         potential_end_time = None
@@ -285,7 +285,7 @@ def parse_activity_input(text):
         res.category_name = res.category_name.strip()
 
     #only thing left now is the activity name itself
-    res.activity_name = text
+    res.activity_name = text.strip()
 
     #this is most essential
     if (text.find("bbq") > -1 or text.find("barbeque") > -1
