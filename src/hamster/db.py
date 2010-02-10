@@ -460,12 +460,14 @@ class Storage(storage.Storage):
 
         activity = stuff.parse_activity_input(activity_name)
 
-        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
-
         # explicitly stated takes precedence
         activity.description = description or activity.description
 
+        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
+        tags = tags or activity.tags # explicitly stated tags take priority
+
         tags = self.get_tag_ids(tags) #this will create any missing tags too
+
 
         if category_name:
             activity.category_name = category_name
