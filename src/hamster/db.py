@@ -928,7 +928,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 6
+        current_version = 7
 
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
@@ -1107,6 +1107,19 @@ class Storage(storage.Storage):
             self.execute("CREATE TABLE fact_tags(fact_id integer, tag_id integer)")
             self.execute("CREATE INDEX idx_fact_tags_fact ON fact_tags(fact_id)")
             self.execute("CREATE INDEX idx_fact_tags_tag ON fact_tags(tag_id)")
+
+
+        if version < 7:
+            self.execute("""CREATE TABLE increment_facts (id integer primary key autoincrement,
+                                                          activity_id integer,
+                                                          start_time timestamp,
+                                                          end_time timestamp,
+                                                          description varchar2)""")
+            self.execute("""INSERT INTO increment_facts(id, activity_id, start_time, end_time, description)
+                                 SELECT id, activity_id, start_time, end_time, description from facts""")
+            self.execute("DROP table facts")
+            self.execute("ALTER TABLE increment_facts RENAME TO facts")
+
 
         # at the happy end, update version number
         if version < current_version:
