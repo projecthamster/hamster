@@ -252,6 +252,7 @@
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
                             <property name="uri"> </property>
+                            <signal name="clicked" handler="on_more_info_button_clicked"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
