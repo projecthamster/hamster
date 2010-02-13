@@ -1,33 +1,101 @@
 # This file is distributed under the same license as the gnome-user-share package.
 # Alex Szasz
 # Adi Roiban https://launchpad.net/~adiroiban, 2009
-# Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2009
+# Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2009, 2010.
 # Mișu Moldovan <dumol@gnome.ro>, 2009.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnome\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-09-29 00:21+0000\n"
-"PO-Revision-Date: 2009-10-11 19:21+0300\n"
-"Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
-"Language-Team: Gnome Romanian Team <gnomero-list@lists.sourceforge.net>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2010-02-12 14:41+0000\n"
+"PO-Revision-Date: 2010-02-13 16:35+0200\n"
+"Last-Translator: Adi Roiban <adi@roiban.ro>\n"
+"Language-Team: Romanian GNOME Team <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ro\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
-"20)) ? 1 : 2);;\n"
-"X-Generator: Virtaal 0.3.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);;\n"
+"X-Generator: Virtaal 0.5.2\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/hamster-applet.schemas.in.h:1
+msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
+msgstr "Activitățile vor fi contabilizate pentru ziua precedentă dacă timpul curent este mai mic decât startul zilei specificat și pentru astăzi dacă depășește timpul. Activitățile care se întind pe două zile vor fi contorizate pentru ziua în care este cea mai mare parte a activității."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Also remind every notify_interval minutes if no activity has been started."
+msgstr "De asemenea, amintește la fiecare notify_interval minute dacă nu s-a pornit o activitate."
+
+#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/preferences.ui.h:5
+msgid "Also remind when no activity is set"
+msgstr "Amintește când nu s-a ales o activitate"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "La ce oră începe ziua (implicit 5:30AM)"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
+msgstr "Dacă comutarea după nume este activată, această listă definește numele activităților la care se comută, spațiile de lucru reprezentate prin indexul elementului."
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid "Keyboard shortcut for showing the Time Tracker window."
+msgstr "Combinație de taste pentru afișarea ferestrei de pontare."
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to last activity when returning to a previous workspace."
+msgstr "Listă de metode de urmărire activate. „name” va activa comutarea activităților după nume definit în workspace_mapping. „memory” va activa comutarea la ultima activitate la întoarcerea într-un spațiu de lucru anterior."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
+msgstr "Amintește sarcina curentă la un interval de minute specificat. Pentru dezactivare, definiți ca 0 sau mai mare de 120."
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid "Remind of current task every x minutes"
+msgstr "Amintește sarcina curentă la fiecare x minute"
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Should workspace switch trigger acitivity switch"
+msgstr "Dacă comutarea spațiului de lucru declanșează o comutare a activității"
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Show window"
+msgstr "Arată fereastra"
+
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Stop tracking current activity on shutdown"
+msgstr "Oprește pontarea activității curente când calculatorul este oprit"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "Oprește pontarea activității curente când calculatorul devine inactiv"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking on idle"
+msgstr "Oprește pontarea în inactivitate"
+
+#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/preferences.ui.h:20
+msgid "Stop tracking on shutdown"
+msgstr "Oprește pontarea când e oprit calculatorul"
+
+#: ../data/hamster-applet.schemas.in.h:16
+msgid "Switch activity on workspace change"
+msgstr "Comută activitatea la comutarea spațiului de lucru"
+
+#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Proiectul Hamster – pontați-vă activitățile"
 
-#. Title of reminder notification
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
-#: ../hamster/about.py:38 ../hamster/applet.py:63
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-standalone.desktop.in.in.h:2
+#: ../data/hamster.ui.h:10
+#: ../src/hamster/about.py:39
+#: ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:334
+#: ../src/hamster-standalone:196
 msgid "Time Tracker"
 msgstr "Pontator"
 
@@ -36,92 +104,58 @@ msgid "_About"
 msgstr "_Despre"
 
 #: ../data/Hamster_Applet.xml.h:2
+#: ../data/hamster.ui.h:13
+msgid "_Help"
+msgstr "_Ajutor"
+
+#: ../data/Hamster_Applet.xml.h:3
 msgid "_Overview"
 msgstr "P_rivire generală"
 
-#: ../data/Hamster_Applet.xml.h:3
+#: ../data/Hamster_Applet.xml.h:4
 msgid "_Preferences"
 msgstr "_Preferințe"
 
-#: ../data/preferences.ui.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>Activități</b>"
+#: ../data/hamster-standalone.desktop.in.in.h:1
+msgid "Project Hamster desktop time tracking"
+msgstr "Proiectul Hamster de monitorizare a timpului"
 
-#: ../data/preferences.ui.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Tastă rapidă globală</b>"
+#: ../data/applet.ui.h:1
+msgid "Ad_d Earlier Activity"
+msgstr "A_daugă o activitate anterioară"
 
-#: ../data/preferences.ui.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>Pontare</b>"
+#: ../data/applet.ui.h:2
+#: ../src/hamster/applet.py:377
+msgid "No records today"
+msgstr "Nu există înregistrări pentru astăzi"
 
-#: ../data/preferences.ui.h:4
-msgid "Activity list"
-msgstr "Listă de activități"
+#: ../data/applet.ui.h:3
+#: ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "Com_utare"
 
-#: ../data/preferences.ui.h:5
-msgid "Add activity"
-msgstr "Adăugați o activitate"
+#: ../data/applet.ui.h:4
+msgid "Show _Overview"
+msgstr "Arată _sumarul"
 
-#: ../data/preferences.ui.h:6
-msgid "Add category"
-msgstr "Adăugați o categorie"
+#: ../data/applet.ui.h:5
+#: ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "Porneș_te pontarea"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
-msgid "Also remind when no activity is set"
-msgstr "Amintește când nu s-a ales o activitate"
+#: ../data/applet.ui.h:6
+#: ../data/hamster.ui.h:8
+msgid "Sto_p tracking"
+msgstr "O_prește pontarea"
 
-#: ../data/preferences.ui.h:8
-msgid "Category list"
-msgstr "Listă de categorii"
+#: ../data/applet.ui.h:7
+#: ../data/hamster.ui.h:9
+msgid "Tell me more"
+msgstr "Vreau să aflu mai multe"
 
-#: ../data/preferences.ui.h:9
-msgid "Edit activity"
-msgstr "Editare activitate"
-
-#: ../data/preferences.ui.h:10
-msgid "Edit category"
-msgstr "Editare categorie"
-
-#: ../data/preferences.ui.h:11
-msgid "Move activity down"
-msgstr "Mută activitatea în jos"
-
-#: ../data/preferences.ui.h:12
-msgid "Move activity up"
-msgstr "Mută activitatea în sus"
-
-#: ../data/preferences.ui.h:13
-msgid "Remind of current activity every:"
-msgstr "Amintește activitatea curentă la fiecare:"
-
-#: ../data/preferences.ui.h:14
-msgid "Remove activity"
-msgstr "Șterge activitatea"
-
-#: ../data/preferences.ui.h:15
-msgid "Remove category"
-msgstr "Șterge categoria"
-
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
-msgid "Stop tracking on shutdown"
-msgstr "Oprește pontarea când e oprit calculatorul"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "Oprește pontarea când e inactiv calculatorul"
-
-#: ../data/preferences.ui.h:18
-msgid "Time Tracker Preferences"
-msgstr "Preferințe pentru pontare"
-
-#: ../data/preferences.ui.h:19
-msgid "_Activities"
-msgstr "_Activități"
-
-#: ../data/preferences.ui.h:20
-msgid "_Categories"
-msgstr "_Categorii"
+#: ../data/applet.ui.h:8
+msgid "_Today"
+msgstr "As_tăzi"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -140,185 +174,224 @@ msgid "Preview:"
 msgstr "Previzualizare:"
 
 #: ../data/edit_activity.ui.h:5
+msgid "Tags:"
+msgstr "Etichete:"
+
+#: ../data/edit_activity.ui.h:6
 msgid "Time:"
 msgstr "Durată:"
 
-#: ../data/edit_activity.ui.h:6
+#: ../data/edit_activity.ui.h:7
 msgid "in progress"
 msgstr "în curs"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:8
+#: ../data/overview.ui.h:8
 msgid "to"
 msgstr "pînă la"
 
-#: ../data/hamster-applet.schemas.in.h:1
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr ""
-"De asemenea, amintește la fiecare notify_interval minute dacă nu s-a "
-"pornit o activitate."
+#: ../data/hamster.ui.h:1
+msgid "Add earlier activity"
+msgstr "Adăugă activitate anterioară"
 
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Combinație de taste pentru afișarea ferestrei de pontare."
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "Conținut"
 
-#: ../data/hamster-applet.schemas.in.h:4
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"Amintește sarcina curentă la un interval de minute specificat. Pentru "
-"dezactivare, definiți ca 0 sau mai mare de 120."
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Remind of current task every x minutes"
-msgstr "Amintește sarcina curentă la fiecare x minute"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Show window"
-msgstr "Arată fereastra"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking current activity on shutdown"
-msgstr "Oprește pontarea activității curente când calculatorul este oprit"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "Oprește pontarea activității curente când calculatorul devine inactiv"
-
-#: ../data/hamster-applet.schemas.in.h:9
-msgid "Stop tracking on idle"
-msgstr "Oprește pontarea în inactivitate"
-
-#: ../data/applet.ui.h:1
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >Scrieți o activitate și apăsați Enter pentru a începe "
-"pontarea!</span>"
-
-#: ../data/applet.ui.h:2
-msgid ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr ""
-"<span size=\"small\" color=\"blue\" underline=\"single\">Spune-mi mai multe</"
-"span>"
-
-#: ../data/applet.ui.h:3
-msgid "Ad_d Earlier Activity"
-msgstr "A_daugă o activitate anterioară"
-
-#. This title appears only when debugging from console. Leave it as is.
-#: ../data/applet.ui.h:5
-msgid "Hamster"
-msgstr "Hamster"
-
-#: ../data/applet.ui.h:6 ../hamster/applet.py:554
-msgid "No records today"
-msgstr "Nu există înregistrări pentru astăzi"
-
-#: ../data/applet.ui.h:7
-msgid "Show _Overview"
-msgstr "Arată _sumarul"
-
-#: ../data/applet.ui.h:8
-msgid "_Activity:"
-msgstr "_Activitate:"
-
-#: ../data/applet.ui.h:9
-msgid "_Stop Tracking"
-msgstr "_Oprește pontarea"
-
-#: ../data/applet.ui.h:10
-msgid "_Today"
-msgstr "As_tăzi"
-
-#: ../data/stats.ui.h:1
-msgid " _Day"
-msgstr "_Zi"
-
-#: ../data/stats.ui.h:2
-msgid " _Month"
-msgstr "_Lună"
-
-#: ../data/stats.ui.h:3
-msgid " _Week"
-msgstr "_Săptămână"
-
-#: ../data/stats.ui.h:4
-msgid "<b>Overview</b>"
-msgstr "<b>Sumar</b>"
-
-#: ../data/stats.ui.h:5
-msgid "<b>Starts and ends</b>"
-msgstr "<b>Start și stop</b>"
-
-#: ../data/stats.ui.h:6
-msgid "<b>Totals</b>"
-msgstr "<b>Totaluri</b>"
-
-#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
-msgid "Activity"
-msgstr "Activitate"
-
-#: ../data/stats.ui.h:8
-msgid "Categories:"
-msgstr "Categorii:"
-
-#: ../data/stats.ui.h:9
-msgid "Date interval:"
-msgstr "Interval de timp:"
-
-#: ../data/stats.ui.h:10
-msgid "No data for this interval"
-msgstr "Nici o dată pentru acest interval"
-
-#: ../data/stats.ui.h:11
+#: ../data/hamster.ui.h:3
 msgid "Overview"
 msgstr "Sumar"
 
-#: ../data/stats.ui.h:12
-msgid "Overview - Hamster"
-msgstr "Sumar - Hamster"
+#: ../data/hamster.ui.h:6
+msgid "Start new activity"
+msgstr "Începe o activitate nouă"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "Salvează ca HTML"
-
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "Salvare raport – Pontaj activități"
-
-#: ../data/stats.ui.h:15
+#: ../data/hamster.ui.h:7
+#: ../data/stats.ui.h:2
 msgid "Statistics"
 msgstr "Statistici"
 
-#: ../data/stats.ui.h:16
+#: ../data/hamster.ui.h:11
 msgid "Today"
 msgstr "Astăzi"
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
-msgid "Week"
-msgstr "Săptămână"
+#: ../data/hamster.ui.h:12
+msgid "_Edit"
+msgstr "_Editare"
 
-#: ../data/stats.ui.h:18
+#: ../data/hamster.ui.h:14
+msgid "_Tracking"
+msgstr "Pon_tare"
+
+#: ../data/overview_totals.ui.h:1
+#: ../data/overview.ui.h:1
+#: ../data/preferences.ui.h:1
+msgid "Activities"
+msgstr "Activități"
+
+#: ../data/overview_totals.ui.h:2
+msgid "Categories"
+msgstr "Categorii"
+
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "Nici o dată pentru acest interval"
+
+#: ../data/overview_totals.ui.h:4
+msgid "Show Statistics"
+msgstr "Arată statistici"
+
+#: ../data/overview_totals.ui.h:5
+#: ../src/hamster/applet.py:212
+#: ../src/hamster/reports.py:227
+#: ../src/hamster-standalone:70
+msgid "Tags"
+msgstr "Etichete"
+
+#: ../data/overview.ui.h:2
+msgid "Add"
+msgstr "Adaugă"
+
+#: ../data/overview.ui.h:3
+msgid "Edit"
+msgstr "Editare"
+
+#: ../data/overview.ui.h:4
+msgid "Overview - Hamster"
+msgstr "Sumar - Hamster"
+
+#: ../data/overview.ui.h:5
+msgid "Remove"
+msgstr "Elimină"
+
+#: ../data/overview.ui.h:6
+msgid "Save Report"
+msgstr "Salvează raportul"
+
+#. summary table
+#: ../data/overview.ui.h:7
+#: ../data/stats.ui.h:3
+#: ../src/hamster/reports.py:285
+msgid "Totals"
+msgstr "Totaluri"
+
+#: ../data/preferences.ui.h:2
+msgid "Activity list"
+msgstr "Listă de activități"
+
+#: ../data/preferences.ui.h:3
+msgid "Add activity"
+msgstr "Adăugați o activitate"
+
+#: ../data/preferences.ui.h:4
+msgid "Add category"
+msgstr "Adăugați o categorie"
+
+#: ../data/preferences.ui.h:6
+msgid "Categories and Tags"
+msgstr "Categorii și etichete"
+
+#: ../data/preferences.ui.h:7
+msgid "Category list"
+msgstr "Listă de categorii"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit activity"
+msgstr "Editare activitate"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit category"
+msgstr "Editare categorie"
+
+#: ../data/preferences.ui.h:10
+msgid "General"
+msgstr "General"
+
+#: ../data/preferences.ui.h:11
+msgid "Global Hotkey"
+msgstr "Tastă rapidă globală"
+
+#: ../data/preferences.ui.h:12
+msgid "Move activity down"
+msgstr "Mută activitatea în jos"
+
+#: ../data/preferences.ui.h:13
+msgid "Move activity up"
+msgstr "Mută activitatea în sus"
+
+#: ../data/preferences.ui.h:14
+msgid "New day starts at"
+msgstr "Ziua începe la"
+
+#: ../data/preferences.ui.h:15
+msgid "Remind of current activity every:"
+msgstr "Amintește activitatea curentă la fiecare:"
+
+#: ../data/preferences.ui.h:16
+msgid "Remove activity"
+msgstr "Elimină activitatea"
+
+#: ../data/preferences.ui.h:17
+msgid "Remove category"
+msgstr "Elimină categoria"
+
+#: ../data/preferences.ui.h:18
+msgid "Resume the last activity when returning to a workspace"
+msgstr "Reia ultima activitate la întoarcerea într-un spațiu de lucru"
+
+#: ../data/preferences.ui.h:19
+msgid "Start new activity when switching workspaces:"
+msgstr "Începe o nouă activitate la comutarea spațiilor de lucru:"
+
+#: ../data/preferences.ui.h:21
+msgid "Stop tracking when computer becomes idle"
+msgstr "Oprește pontarea când e inactiv calculatorul"
+
+#: ../data/preferences.ui.h:22
+msgid "Tags that should appear in autocomplete"
+msgstr "Etichete ce ar trebui să apară la autocompletare"
+
+#: ../data/preferences.ui.h:23
+msgid "Time Tracker Preferences"
+msgstr "Preferințe pentru pontare"
+
+#: ../data/preferences.ui.h:24
+msgid "Tracking"
+msgstr "Pontare"
+
+#: ../data/preferences.ui.h:25
+msgid "Workspaces"
+msgstr "Spații de lucru"
+
+#: ../data/preferences.ui.h:26
+msgid "_Activities"
+msgstr "_Activități"
+
+#: ../data/preferences.ui.h:27
+msgid "_Categories"
+msgstr "_Categorii"
+
+#: ../data/stats.ui.h:1
+msgid "Starts and ends"
+msgstr "Start și stop"
+
+#: ../data/stats.ui.h:4
 msgid "Year:"
 msgstr "An:"
 
-#: ../hamster/about.py:41
+#: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2009 Toms Bauģis and others"
 msgstr "Drepturi de autor © 2007-2009 Tomis Baugis și alții"
 
-#: ../hamster/about.py:43
+#: ../src/hamster/about.py:45
 msgid "Project Hamster Website"
 msgstr "Pagina web a proiectului Hamster"
 
-#: ../hamster/about.py:44
+#: ../src/hamster/about.py:46
 msgid "About Time Tracker"
 msgstr "Despre pontatorul de activități"
 
-#: ../hamster/about.py:54
+#: ../src/hamster/about.py:56
 msgid "translator-credits"
 msgstr ""
 "Adi Roiban <adi@roiban.ro>\n"
@@ -326,285 +399,292 @@ msgstr ""
 "Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
 "Mișu Moldovan <dumol@gnome.ro>"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Editare"
+#: ../src/hamster/applet.py:206
+#: ../src/hamster/preferences.py:196
+#: ../src/hamster/reports.py:225
+#: ../src/hamster/reports.py:289
+#: ../src/hamster-standalone:64
+msgid "Activity"
+msgstr "Activitate"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Switch"
-msgstr "Comutare"
-
-#: ../hamster/applet.py:305 ../hamster/reports.py:235
-#: ../hamster/reports.py:293
-msgid "Duration"
-msgstr "Durată"
-
-#: ../hamster/applet.py:492 ../hamster/applet.py:513
+#: ../src/hamster/applet.py:307
+#: ../src/hamster/applet.py:330
+#: ../src/hamster/applet.py:427
+#: ../src/hamster-standalone:192
+#: ../src/hamster-standalone:261
 msgid "No activity"
 msgstr "Fără activitate"
 
-#. activity reminder
-#: ../hamster/applet.py:508
-#, python-format
+#: ../src/hamster/applet.py:325
+#: ../src/hamster-standalone:187
+#, c-format, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Se lucrează la <b>%s</b>"
 
-#: ../hamster/applet.py:562
+#: ../src/hamster/applet.py:385
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s, "
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565
+#: ../src/hamster/applet.py:388
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:470 ../hamster/db.py:543
-#: ../hamster/edit_activity.py:370 ../hamster/preferences.py:56
-#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
-#: ../hamster/stuff.py:94
+#: ../src/hamster/applet.py:410
+#: ../src/hamster/db.py:243
+#: ../src/hamster/db.py:253
+#: ../src/hamster/db.py:307
+#: ../src/hamster/db.py:662
+#: ../src/hamster/db.py:723
+#: ../src/hamster/edit_activity.py:51
+#: ../src/hamster/preferences.py:61
+#: ../src/hamster/reports.py:56
+#: ../src/hamster/reports.py:94
+#: ../src/hamster/reports.py:243
+#: ../src/hamster-standalone:244
+#: ../src/hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Nesortate"
 
-#: ../hamster/applet.py:833
-msgid "What should be typed in the activity box?"
-msgstr "Ce trebuie scris în căsuța de activități?"
+#: ../src/hamster/applet.py:418
+#: ../src/hamster-standalone:252
+msgid "Just started"
+msgstr "Tocmai începută"
 
-#: ../hamster/applet.py:836
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"Aceasta este o sintaxă simplă ce vă permite să adăugați detalii "
-"activităților:\n"
-"        \n"
-"simbolul „@” marchează o categorie. De exemplu: „udat florile@acasă” va "
-"începe pontarea pentru activitatea de „udat florile” în categoria „acasă”.\n"
-"\n"
-"Virgulele („,”) marchează începutul unei descrieri. De exemplu: „udat "
-"florile, lalelele și florile de nu-mă-uita” va începe activitatea de „udat "
-"florile” și va adăuga descrierea „lalelele și florile de nu-mă-uita”.\n"
-"\n"
-"Ambele pot fi combinate: „udat florile@acasă, lalelele și florile de nu-mă-"
-"uita” va funcționa fără probleme!\n"
-"\n"
-"Și acum, începeți pontajul!\n"
-"        "
+#: ../src/hamster/applet.py:661
+#: ../src/hamster-standalone:426
+msgid "Changed activity"
+msgstr "Activitate modificată"
+
+#: ../src/hamster/applet.py:662
+#: ../src/hamster-standalone:427
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "Comutat la „%s”"
 
 #. defaults
-#: ../hamster/db.py:733
+#: ../src/hamster/db.py:918
 msgid "Work"
 msgstr "Serviciu"
 
-#: ../hamster/db.py:734
+#: ../src/hamster/db.py:919
 msgid "Reading news"
 msgstr "Citit presa"
 
-#: ../hamster/db.py:735
+#: ../src/hamster/db.py:920
 msgid "Checking stocks"
 msgstr "Verificat stocuri"
 
-#: ../hamster/db.py:736
+#: ../src/hamster/db.py:921
 msgid "Super secret project X"
 msgstr "Proiectul ultrasecret X"
 
-#: ../hamster/db.py:737
+#: ../src/hamster/db.py:922
 msgid "World domination"
 msgstr "Cucerirea lumii"
 
-#: ../hamster/db.py:739
+#: ../src/hamster/db.py:924
 msgid "Day-to-day"
 msgstr "Zi de zi"
 
-#: ../hamster/db.py:740
+#: ../src/hamster/db.py:925
 msgid "Lunch"
 msgstr "Prânz"
 
-#: ../hamster/db.py:741
+#: ../src/hamster/db.py:926
 msgid "Watering flowers"
 msgstr "Udat flori"
 
-#: ../hamster/db.py:742
+#: ../src/hamster/db.py:927
 msgid "Doing handstands"
 msgstr "Genoflexiuni"
 
-#: ../hamster/edit_activity.py:387
+#: ../src/hamster/edit_activity.py:67
 msgid "Update activity"
 msgstr "Actualizare activitate"
 
-#: ../hamster/preferences.py:104
-msgid "Name"
-msgstr "Nume"
+#: ../src/hamster/overview_activities.py:94
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %d %b"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:232
-#: ../hamster/reports.py:291
-msgid "Category"
-msgstr "Categorie"
+#: ../src/hamster/overview.py:79
+msgid "Week"
+msgstr "Săptămână"
 
-#: ../hamster/preferences.py:559
-msgid "New category"
-msgstr "Categorie nouă"
+#: ../src/hamster/overview.py:80
+msgid "Month"
+msgstr "Lună"
 
-#: ../hamster/preferences.py:572
-msgid "New activity"
-msgstr "Activitate nouă"
+#: ../src/hamster/overview.py:81
+msgid "Date Range"
+msgstr "Interval dată"
 
-#. notify interval slider value label
-#: ../hamster/preferences.py:632
-#, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minute"
-
-#. notify interval slider value label
-#: ../hamster/preferences.py:635
-msgid "Never"
-msgstr "Niciodată"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:112
-msgid "activity"
-msgstr "activitate"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:114
-msgid "start time"
-msgstr "timp de începere"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:116
-msgid "end time"
-msgstr "timp de terminare"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:118
-msgid "duration minutes"
-msgstr "durată în minute"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:120
-msgid "category"
-msgstr "categorie"
-
-#. column title in the TSV export format
-#: ../hamster/reports.py:122
-msgid "description"
-msgstr "descriere"
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/overview.py:158
+msgid "%B %d, %Y"
+msgstr "%d %B %Y"
 
 #. overview label if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:160 ../hamster/stats.py:933
+#: ../src/hamster/overview.py:166
 #, python-format
-msgid ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
-msgstr ""
-"Sumar pentru %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %"
-"(end_Y)s"
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
 
 #. overview label if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:162 ../hamster/stats.py:939
+#: ../src/hamster/overview.py:172
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Sumar pentru %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
 
 #. overview label for interval in same month
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:164 ../hamster/stats.py:945
+#: ../src/hamster/overview.py:178
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
+
+#: ../src/hamster/overview_totals.py:148
+#, python-format
+msgid "%s hours tracked total"
+msgstr "%s ore pontate în total"
+
+#: ../src/hamster/preferences.py:117
+#: ../src/hamster/preferences.py:192
+msgid "Name"
+msgstr "Nume"
+
+#: ../src/hamster/preferences.py:137
+#: ../src/hamster/reports.py:226
+#: ../src/hamster/reports.py:288
+msgid "Category"
+msgstr "Categorie"
+
+#: ../src/hamster/preferences.py:673
+msgid "New category"
+msgstr "Categorie nouă"
+
+#: ../src/hamster/preferences.py:686
+msgid "New activity"
+msgstr "Activitate nouă"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:757
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d minute"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:760
+msgid "Never"
+msgstr "Niciodată"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:115
+msgid "activity"
+msgstr "activitate"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:117
+msgid "start time"
+msgstr "timp de începere"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:119
+msgid "end time"
+msgstr "timp de terminare"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:121
+msgid "duration minutes"
+msgstr "durată în minute"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:123
+msgid "category"
+msgstr "categorie"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:125
+msgid "description"
+msgstr "descriere"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:127
+msgid "tags"
+msgstr "etichete"
+
+#: ../src/hamster/reports.py:167
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Sumar pentru %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#: ../src/hamster/reports.py:169
+#, python-format
+msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "Sumar pentru %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#: ../src/hamster/reports.py:171
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Sumar pentru %(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
 
-#: ../hamster/reports.py:167
+#: ../src/hamster/reports.py:174
 #, python-format
 msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Sumar pentru %(start_d)s %(start_B)s %(start_Y)s"
 
-#: ../hamster/reports.py:230
+#: ../src/hamster/reports.py:224
 msgid "Date"
 msgstr "Dată"
 
-#: ../hamster/reports.py:233
+#: ../src/hamster/reports.py:228
 msgid "Start"
 msgstr "Începere"
 
-#: ../hamster/reports.py:234
+#: ../src/hamster/reports.py:229
 msgid "End"
 msgstr "Terminare"
 
-#: ../hamster/reports.py:236
+#: ../src/hamster/reports.py:230
+#: ../src/hamster/reports.py:290
+msgid "Duration"
+msgstr "Durată"
+
+#: ../src/hamster/reports.py:231
 msgid "Description"
 msgstr "Descriere"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:268
+#: ../src/hamster/reports.py:264
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#. summary table
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "Totaluri"
-
-#: ../hamster/reports.py:303
+#: ../src/hamster/reports.py:300
 msgid "Total Time"
 msgstr "Timp total"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
-msgid "HTML Report"
-msgstr "Raport HTML"
-
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
-msgid "Tab-Separated Values (TSV)"
-msgstr "Valori separate prin taburi (TSV)"
-
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
-msgid "XML"
-msgstr "XML"
-
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
-msgid "iCal"
-msgstr "iCal"
-
-#. add unsorted category
-#: ../hamster/stats.py:120
-msgctxt "categories"
-msgid "All"
-msgstr "Toate"
-
-#: ../hamster/stats.py:435
+#: ../src/hamster/stats.py:86
 msgctxt "years"
 msgid "All"
 msgstr "Toate"
 
-#: ../hamster/stats.py:524
+#: ../src/hamster/stats.py:176
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -612,15 +692,14 @@ msgstr ""
 "Nu există suficiente date pentru generarea statisticilor.\n"
 "Încercați după o săptămână de utilizare."
 
-#: ../hamster/stats.py:527
-msgid "Still collecting data — check back after a week has passed!"
-msgstr "Încă se colectează date, verificați după trecerea unei săptămâni de "
-"la începutul pontării!"
+#: ../src/hamster/stats.py:179
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Se colectează date – verificați după trecerea unei săptămâni de la începutul pontării!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:657
+#: ../src/hamster/stats.py:310
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%b %d %Y"
@@ -628,18 +707,18 @@ msgstr "%b %d %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:662
-#, python-format
+#: ../src/hamster/stats.py:315
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgid "%b %d"
+msgstr "%d %b"
 
-#: ../hamster/stats.py:664
+#: ../src/hamster/stats.py:317
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Prima activitate a fost înregistrată pe %s."
 
-#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#: ../src/hamster/stats.py:326
+#: ../src/hamster/stats.py:330
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -648,40 +727,29 @@ msgstr[1] "%(num)s ani"
 msgstr[2] "%(num)s de ani"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:682
+#: ../src/hamster/stats.py:335
 #, python-format
-msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
-msgstr ""
-"Timpul pontat până acum %(human_days)s zile umane (%(human_years)s) sau %"
-"(working_days)s zile de muncă (%(working_years)s)."
+msgid "Time tracked so far is %(human_days)s human days (%(human_years)s) or %(working_days)s working days (%(working_years)s)."
+msgstr "Timpul pontat până acum %(human_days)s zile umane (%(human_years)s) sau %(working_days)s zile de muncă (%(working_years)s)."
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:700
+#: ../src/hamster/stats.py:353
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#: ../hamster/stats.py:705
+#: ../src/hamster/stats.py:358
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] ""
-"Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %"
-"(hours)s oră."
-msgstr[1] ""
-"Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %"
-"(hours)s ore."
-msgstr[2] ""
-"Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %"
-"(hours)s de ore."
+msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] "Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %(hours)s oră."
+msgstr[1] "Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %(hours)s ore."
+msgstr[2] "Cea mai lungă activitate continuă a avut loc în data de %(date)s și a durat %(hours)s de ore."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713
+#: ../src/hamster/stats.py:366
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
@@ -689,90 +757,147 @@ msgstr[0] "Există %s înregistrare."
 msgstr[1] "Există %s înregistrări."
 msgstr[2] "Există %s de înregistrări."
 
-#: ../hamster/stats.py:733
+#: ../src/hamster/stats.py:386
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamsterul ar dori să vă observe mai mult!"
 
-#: ../hamster/stats.py:735
+#: ../src/hamster/stats.py:388
 #, python-format
-msgid ""
-"With %s percent of all facts starting before 9am you seem to be an early "
-"bird."
-msgstr ""
-"Cu %s procente din toate activitățile începând înainte de ora 9, se pare că "
-"sunteți matinal."
+msgid "With %s percent of all facts starting before 9am you seem to be an early bird."
+msgstr "Cu %s procente din toate activitățile începând înainte de ora 9, se pare că sunteți matinal."
 
-#: ../hamster/stats.py:738
+#: ../src/hamster/stats.py:391
 #, python-format
-msgid ""
-"With %s percent of all facts starting after 11pm you seem to be a night owl."
-msgstr ""
-"Cu %s procente din toate activitățile începând după ora 23, se pare că "
-"sunteți nocturn."
+msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
+msgstr "Cu %s procente din toate activitățile începând după ora 23, se pare că sunteți nocturn."
 
-#: ../hamster/stats.py:741
+#: ../src/hamster/stats.py:394
 #, python-format
-msgid ""
-"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
-"busy bee."
-msgstr ""
-"Cu %s procente din toate activitățile mai scurte de 15 minute, se pare că "
-"sunteți o albinuță harnică."
-
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:828
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %d %b"
-
-#: ../hamster/stats.py:869
-msgid "Total"
-msgstr "Total"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:891
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%d %b"
-
-#: ../hamster/stats.py:920
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%d %B %Y"
-
-#. Overview label if looking on single day
-#: ../hamster/stats.py:922
-#, python-format
-msgid "Overview for %(date)s"
-msgstr "Sumar pentru %(date)s"
-
-#: ../hamster/stats.py:950
-msgid "Month"
-msgstr "Lună"
-
-#: ../hamster/stats.py:952
-msgid "Day"
-msgstr "Zi"
+msgid "With %s percent of all tasks being shorter than 15 minutes you seem to be a busy bee."
+msgstr "Cu %s procente din toate activitățile mai scurte de 15 minute, se pare că sunteți o albinuță harnică."
 
 #. duration in round hours
-#: ../hamster/stuff.py:151
+#: ../src/hamster/stuff.py:56
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../hamster/stuff.py:154
+#: ../src/hamster/stuff.py:59
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:157
+#: ../src/hamster/stuff.py:62
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:38
+msgid "Save report - Time Tracker"
+msgstr "Salvare raport - Pontaj activități"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:50
+msgid "HTML Report"
+msgstr "Raport HTML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:58
+msgid "Tab-Separated Values (TSV)"
+msgstr "Valori separate prin taburi (TSV)"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:66
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "iCal"
+msgstr "iCal"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>Activități</b>"
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>Pontare</b>"
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >Scrieți o activitate și apăsați Enter pentru a "
+#~ "începe pontarea!</span>"
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Spune-mi mai "
+#~ "multe</span>"
+#~ msgid "Hamster"
+#~ msgstr "Hamster"
+#~ msgid "_Activity:"
+#~ msgstr "_Activitate:"
+#~ msgid " _Day"
+#~ msgstr "_Zi"
+#~ msgid " _Month"
+#~ msgstr "_Lună"
+#~ msgid " _Week"
+#~ msgstr "_Săptămână"
+#~ msgid "<b>Overview</b>"
+#~ msgstr "<b>Sumar</b>"
+#~ msgid "<b>Totals</b>"
+#~ msgstr "<b>Totaluri</b>"
+#~ msgid "Categories:"
+#~ msgstr "Categorii:"
+#~ msgid "Date interval:"
+#~ msgstr "Interval de timp:"
+#~ msgid "Save as HTML"
+#~ msgstr "Salvează ca HTML"
+#~ msgid "What should be typed in the activity box?"
+#~ msgstr "Ce trebuie scris în căsuța de activități?"
+#~ msgid ""
+#~ "There is a simple syntax that enables you to add details to your "
+#~ "activities:\n"
+#~ "        \n"
+#~ "\"@\" symbol marks a category. Example: \"watering flowers@home\" will "
+#~ "start tracking the activity \"watering flowers\" in the category \"home"
+#~ "\".\n"
+#~ "\n"
+#~ "Commas (\",\") mark beginning of a description. Example: \"watering "
+#~ "flowers, begonias and forgetmenots\" will start tracking the activity "
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
+#~ "\" to it.\n"
+#~ "\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
+#~ "\" will work just fine!\n"
+#~ "\n"
+#~ "Now, start tracking!\n"
+#~ "        "
+#~ msgstr ""
+#~ "Aceasta este o sintaxă simplă ce vă permite să adăugați detalii "
+#~ "activităților:\n"
+#~ "        \n"
+#~ "simbolul „@” marchează o categorie. De exemplu: „udat florile@acasă” va "
+#~ "începe pontarea pentru activitatea de „udat florile” în categoria "
+#~ "„acasă”.\n"
+#~ "\n"
+#~ "Virgulele („,”) marchează începutul unei descrieri. De exemplu: „udat "
+#~ "florile, lalelele și florile de nu-mă-uita” va începe activitatea de "
+#~ "„udat florile” și va adăuga descrierea „lalelele și florile de nu-mă-"
+#~ "uita”.\n"
+#~ "\n"
+#~ "Ambele pot fi combinate: „udat florile@acasă, lalelele și florile de nu-"
+#~ "mă-uita” va funcționa fără probleme!\n"
+#~ "\n"
+#~ "Și acum, începeți pontajul!\n"
+#~ "        "
+#~ msgctxt "categories"
+#~ msgid "All"
+#~ msgstr "Toate"
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(b)s %(d)s"
+#~ msgid "Total"
+#~ msgstr "Total"
+#~ msgid "Overview for %(date)s"
+#~ msgstr "Sumar pentru %(date)s"
+#~ msgid "Day"
+#~ msgstr "Zi"
 
