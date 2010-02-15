@@ -79,8 +79,8 @@ msgid "Remind of current task every x minutes"
 msgstr "প্রতি x মিনিট অন্তর বর্তমান কর্মের বিষয়ে স্মরণ করানো হবে"
 
 #: ../data/hamster-applet.schemas.in.h:10
-msgid "Should workspace switch trigger acitivity switch"
-msgstr "Should workspace switch trigger acitivity switch"
+msgid "Should workspace switch trigger activity switch"
+msgstr "Should workspace switch trigger activity switch"
 
 #: ../data/hamster-applet.schemas.in.h:11
 msgid "Show window"

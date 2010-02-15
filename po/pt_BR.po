@@ -85,7 +85,7 @@ msgid "Remind of current task every x minutes"
 msgstr "Lembra da tarefa atual a cada x minutos"
 
 #: ../data/hamster-applet.schemas.in.h:10
-msgid "Should workspace switch trigger acitivity switch"
+msgid "Should workspace switch trigger activity switch"
 msgstr "A troca do espaço de trabalho deve acionar troca de atividade"
 
 #: ../data/hamster-applet.schemas.in.h:11

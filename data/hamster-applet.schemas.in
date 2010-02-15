@@ -90,7 +90,7 @@
             <list_type>string</list_type>
             <default>[]</default>
             <locale name="C">
-                <short>Should workspace switch trigger acitivity switch</short>
+                <short>Should workspace switch trigger activity switch</short>
                 <long>
                     List of enabled tracking methods. "name" will enable
                     switching activities by name defined in workspace_mapping.

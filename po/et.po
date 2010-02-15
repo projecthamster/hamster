@@ -68,7 +68,7 @@ msgstr ""
 msgid "Remind of current task every x minutes"
 msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
 
-msgid "Should workspace switch trigger acitivity switch"
+msgid "Should workspace switch trigger activity switch"
 msgstr ""
 
 msgid "Show window"
