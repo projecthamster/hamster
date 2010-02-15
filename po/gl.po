@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 10:30+0100\n"
-"PO-Revision-Date: 2010-01-17 22:15+0100\n"
+"POT-Creation-Date: 2010-02-15 17:54+0100\n"
+"PO-Revision-Date: 2010-02-13 00:44+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -44,13 +44,16 @@ msgstr "Recordar tamén cando non hai actividade"
 
 #: ../data/hamster-applet.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr ""
+msgstr "En que momento comeza o día (o predefinido é ás 5:30AM)"
 
 #: ../data/hamster-applet.schemas.in.h:5
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
+"Se cambiar polo nome está activado, esta lista estabelece os nomes de "
+"actividade aos que debe cambiar, os espazos de traballo representados polo "
+"índice do elemento"
 
 #: ../data/hamster-applet.schemas.in.h:6
 msgid "Keyboard shortcut for showing the Time Tracker window."
@@ -62,6 +65,9 @@ msgid ""
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "last activity when returning to a previous workspace."
 msgstr ""
+"Lista dos métodos de seguimento activados. \"name \" permitirá cambiar as "
+"actividades polo nome definido en workspace_mapping. \"memory\" permite "
+"cambiar á última actividade ao volver ao espazo de traballo anterior."
 
 #: ../data/hamster-applet.schemas.in.h:8
 msgid ""
@@ -76,8 +82,10 @@ msgid "Remind of current task every x minutes"
 msgstr "Recordarme a tarefa actual cada x minutos"
 
 #: ../data/hamster-applet.schemas.in.h:10
+#, fuzzy
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
+"Debe o disparador de cambio de espazo de traballo o cambio de actividade"
 
 #: ../data/hamster-applet.schemas.in.h:11
 msgid "Show window"
@@ -102,7 +110,7 @@ msgstr "Deter o seguimento ao apagar"
 
 #: ../data/hamster-applet.schemas.in.h:16
 msgid "Switch activity on workspace change"
-msgstr ""
+msgstr "Cambiar a actividade ao cambiar de espazo de traballo"
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
@@ -111,7 +119,7 @@ msgstr "Proxecto Hamster - xestione o seu tempo"
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:334 ../src/hamster-standalone:196
+#: ../src/hamster/applet.py:344 ../src/hamster-standalone:196
 msgid "Time Tracker"
 msgstr "Xestor de tempo"
 
@@ -121,7 +129,7 @@ msgstr "_Sobre"
 
 #: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:13
 msgid "_Help"
-msgstr ""
+msgstr "_Axuda"
 
 #: ../data/Hamster_Applet.xml.h:3
 msgid "_Overview"
@@ -132,40 +140,36 @@ msgid "_Preferences"
 msgstr "_Preferencias"
 
 #: ../data/hamster-standalone.desktop.in.in.h:1
-#, fuzzy
 msgid "Project Hamster desktop time tracking"
-msgstr "Sitio web de Hamster"
+msgstr "Proxecto Hamster de seguimento de tempo do escritorio"
 
 #: ../data/applet.ui.h:1
 msgid "Ad_d Earlier Activity"
 msgstr "_Engadir unha actividade anterior"
 
-#: ../data/applet.ui.h:2 ../src/hamster/applet.py:377
+#: ../data/applet.ui.h:2 ../src/hamster/applet.py:387
 msgid "No records today"
 msgstr "Hoxe non hai rexistros"
 
 #: ../data/applet.ui.h:3 ../data/hamster.ui.h:4
-#, fuzzy
 msgid "S_witch"
-msgstr "Cambiar"
+msgstr "C_ambiar"
 
 #: ../data/applet.ui.h:4
 msgid "Show _Overview"
 msgstr "_Mostrar un resumo"
 
 #: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
-#, fuzzy
 msgid "Start _Tracking"
-msgstr "Deter o seguimento"
+msgstr "Comezar o _seguimento"
 
 #: ../data/applet.ui.h:6 ../data/hamster.ui.h:8
-#, fuzzy
 msgid "Sto_p tracking"
-msgstr "Deter o seguimento"
+msgstr "_Deter o seguimento"
 
 #: ../data/applet.ui.h:7 ../data/hamster.ui.h:9
 msgid "Tell me more"
-msgstr ""
+msgstr "Cónteme máis"
 
 #: ../data/applet.ui.h:8
 msgid "_Today"
@@ -204,22 +208,20 @@ msgid "to"
 msgstr "para"
 
 #: ../data/hamster.ui.h:1
-#, fuzzy
 msgid "Add earlier activity"
 msgstr "Engadir unha actividade anterior"
 
 #: ../data/hamster.ui.h:2
 msgid "Contents"
-msgstr ""
+msgstr "Contidos"
 
 #: ../data/hamster.ui.h:3
 msgid "Overview"
 msgstr "Resumo"
 
 #: ../data/hamster.ui.h:6
-#, fuzzy
 msgid "Start new activity"
-msgstr "Nova actividade"
+msgstr "Comezar unha nova actividade"
 
 #: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
 msgid "Statistics"
@@ -230,14 +232,12 @@ msgid "Today"
 msgstr "Hoxe"
 
 #: ../data/hamster.ui.h:12
-#, fuzzy
 msgid "_Edit"
-msgstr "Editar"
+msgstr "_Editar"
 
 #: ../data/hamster.ui.h:14
-#, fuzzy
 msgid "_Tracking"
-msgstr "Seguimento"
+msgstr "_Seguimento"
 
 #: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
 #: ../data/preferences.ui.h:1
@@ -253,9 +253,8 @@ msgid "No data for this interval"
 msgstr "Non hai datos neste intervalo"
 
 #: ../data/overview_totals.ui.h:4
-#, fuzzy
 msgid "Show Statistics"
-msgstr "Estatísticas"
+msgstr "Mostrar as estatísticas"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:212
 #: ../src/hamster/reports.py:227 ../src/hamster-standalone:70
@@ -349,11 +348,11 @@ msgstr "Nova categoría"
 
 #: ../data/preferences.ui.h:18
 msgid "Resume the last activity when returning to a workspace"
-msgstr ""
+msgstr "Reiniciar a última actividade ao volver ao espazo de traballo"
 
 #: ../data/preferences.ui.h:19
 msgid "Start new activity when switching workspaces:"
-msgstr ""
+msgstr "Iniciar unha nova actividade ao cambiar os espazos de traballo:"
 
 #: ../data/preferences.ui.h:21
 msgid "Stop tracking when computer becomes idle"
@@ -373,7 +372,7 @@ msgstr "Seguimento"
 
 #: ../data/preferences.ui.h:25
 msgid "Workspaces"
-msgstr ""
+msgstr "Espazos de traballo"
 
 #: ../data/preferences.ui.h:26
 msgid "_Activities"
@@ -416,29 +415,29 @@ msgstr ""
 msgid "Activity"
 msgstr "Actividade"
 
-#: ../src/hamster/applet.py:307 ../src/hamster/applet.py:330
-#: ../src/hamster/applet.py:427 ../src/hamster-standalone:192
+#: ../src/hamster/applet.py:317 ../src/hamster/applet.py:340
+#: ../src/hamster/applet.py:437 ../src/hamster-standalone:192
 #: ../src/hamster-standalone:261
 msgid "No activity"
 msgstr "Sen actividade"
 
-#: ../src/hamster/applet.py:325 ../src/hamster-standalone:187
+#: ../src/hamster/applet.py:335 ../src/hamster-standalone:187
 #, c-format, python-format
 msgid "Working on <b>%s</b>"
 msgstr "Traballando en <b>%s</b>"
 
-#: ../src/hamster/applet.py:385
+#: ../src/hamster/applet.py:395
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:388
+#: ../src/hamster/applet.py:398
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#: ../src/hamster/applet.py:410 ../src/hamster/db.py:243
+#: ../src/hamster/applet.py:420 ../src/hamster/db.py:243
 #: ../src/hamster/db.py:253 ../src/hamster/db.py:307 ../src/hamster/db.py:662
 #: ../src/hamster/db.py:723 ../src/hamster/edit_activity.py:51
 #: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
@@ -447,19 +446,18 @@ msgstr "%sh"
 msgid "Unsorted"
 msgstr "Sen clasificar"
 
-#: ../src/hamster/applet.py:418 ../src/hamster-standalone:252
+#: ../src/hamster/applet.py:428 ../src/hamster-standalone:252
 msgid "Just started"
 msgstr "Recén comezada"
 
-#: ../src/hamster/applet.py:661 ../src/hamster-standalone:426
-#, fuzzy
+#: ../src/hamster/applet.py:671 ../src/hamster-standalone:426
 msgid "Changed activity"
-msgstr "Engadir unha actividade"
+msgstr "Actividade cambiada"
 
-#: ../src/hamster/applet.py:662 ../src/hamster-standalone:427
+#: ../src/hamster/applet.py:672 ../src/hamster-standalone:427
 #, c-format, python-format
 msgid "Switched to '%s'"
-msgstr ""
+msgstr "Cambiado a '%s'"
 
 #. defaults
 #: ../src/hamster/db.py:918
@@ -557,7 +555,7 @@ msgstr "%(start_B)s de %(start_d)s – %(end_d)s ao %(end_Y)s"
 #: ../src/hamster/overview_totals.py:148
 #, python-format
 msgid "%s hours tracked total"
-msgstr ""
+msgstr "%s horas seguidas en total"
 
 #: ../src/hamster/preferences.py:117 ../src/hamster/preferences.py:192
 msgid "Name"
@@ -619,9 +617,8 @@ msgstr "descrición"
 
 #. column title in the TSV export format
 #: ../src/hamster/reports.py:127
-#, fuzzy
 msgid "tags"
-msgstr "Etiquetas"
+msgstr "etiquetas"
 
 #: ../src/hamster/reports.py:167
 #, python-format
@@ -694,10 +691,9 @@ msgstr ""
 "Unha semana de uso antes estaría ben!"
 
 #: ../src/hamster/stats.py:179
-#, fuzzy
 msgid "Collecting data — check back after a week has passed!"
 msgstr ""
-"Aínda se están recollendo datos - comprobe de novo dentro de unha semana."
+"Aínda se están recollendo datos — comprobe de novo dentro de unha semana."
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
