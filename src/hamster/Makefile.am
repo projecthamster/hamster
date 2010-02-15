@@ -19,7 +19,6 @@ hamster_PYTHON = \
 	charting.py \
         graphics.py \
 	configuration.py \
-	KeyBinder.py \
 	preferences.py \
 	stuff.py \
 	edit_activity.py \

@@ -34,7 +34,7 @@ import eds
 from configuration import conf, runtime, dialogs
 
 import stuff
-from KeyBinder import *
+import keybinder
 from hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
@@ -241,6 +241,9 @@ class HamsterApplet(object):
         self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
 
+        self.hotkey = conf.get("keybinding")
+        self.bind_hotkey()
+
         runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
@@ -257,7 +260,6 @@ class HamsterApplet(object):
         runtime.dispatcher.add_handler('panel_visible', self.__show_toggle)
         runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
         runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
-        runtime.dispatcher.add_handler('keybinding_activated', self.on_keybinding_activated)
 
         self.screen = None
         if self.workspace_tracking:
@@ -272,6 +274,14 @@ class HamsterApplet(object):
         self._gui.connect_signals(self)
 
         self.prev_size = None
+
+
+    def bind_hotkey(self):
+        try:
+            print 'Binding shortcut %s to popup hamster' % self.hotkey
+            keybinder.bind(self.hotkey, self.on_keybinding_activated)
+        except KeyError:
+            pass # don't care
 
 
     def init_workspace_tracking(self):
@@ -664,7 +674,7 @@ class HamsterApplet(object):
             self.notification.show()
 
     """global shortcuts"""
-    def on_keybinding_activated(self, event, data):
+    def on_keybinding_activated(self):
         self.__show_toggle(None, not self.button.get_active())
 
 
@@ -688,6 +698,15 @@ class HamsterApplet(object):
                 if self.screen:
                     self.screen.disconnect(self.screen.workspace_handler)
                     self.screen = None
+        elif key == "keybinding":
+            try:
+                keybinder.unbind(self.hotkey)
+            except KeyError:
+                pass # don't care
+
+            self.hotkey = value
+            self.bind_hotkey()
+
 
 
     def on_activity_text_changed(self, widget):
