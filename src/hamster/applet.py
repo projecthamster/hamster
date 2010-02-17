@@ -332,7 +332,7 @@ class HamsterApplet(object):
             duration = delta.seconds /  60
 
             if duration and duration % self.notify_interval == 0:
-                message = _(u"Working on <b>%s</b>") % self.last_activity['name']
+                message = self.last_activity['name']
 
         elif self.notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
