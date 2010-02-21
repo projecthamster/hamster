@@ -3,7 +3,7 @@ dist-hook: doc-dist-hook
 
 DOC_ID = hamster-applet
 DOC_INCLUDES = legal.xml
-DOC_LINGUAS = es
+DOC_LINGUAS = de es
 
 DOC_PAGES = \
         backup.page \
