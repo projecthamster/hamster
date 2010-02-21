@@ -1,0 +1,278 @@
+# German translation for hamster-applet.
+# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-applet package.
+# Mario Blättermann <mariobl@gnome.org>, 2010.
+# Christian Kirbach <Christian.Kirbach@googlemail.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"POT-Creation-Date: 2010-02-20 21:25+0000\n"
+"PO-Revision-Date: 2010-02-21 12:49+0100\n"
+"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
+"Language-Team: Deutsch <gnome-de@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: C/legal.xml:3(p)
+msgid ""
+"This work is licensed under a <link href=\"http://creativecommons.org/"
+"licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
+"License</link>."
+msgstr ""
+"Dieses Werk ist lizenziert unter einer <link href=\"http://creativecommons."
+"org/licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 "
+"Unported License</link>."
+
+#: C/legal.xml:6(p)
+msgid ""
+"As a special exception, the copyright holders give you permission to copy, "
+"modify, and distribute the example code contained in this document under the "
+"terms of your choosing, without restriction."
+msgstr ""
+"Als besondere Ausnahme erteilen Ihnen die Urheberrechtsinhaber die "
+"Genehmigung, den in diesem Dokument enthaltenen Beispielcode ohne "
+"Einschränkung unter den Bedingungen Ihrer Wahl zu verbreiten."
+
+#: C/statistics.page:6(desc)
+msgid "Word on interpretation of statistics."
+msgstr "Ein Wort zur Interpretation der Statistiken."
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "Statistiken"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results, that are accessible, via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are interpretation of the "
+"facts. Interpretation that should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"Die über den Knopf <gui style=\"button\">Statistiken zeigen</gui> "
+"anzeigbaren Ergebnisse sind experimentell und nur Interpretationen der "
+"Fakten. Die Interpretation sollte mit Ihren eigenen Beobachtungen verglichen "
+"werden. Fehlerkorrekturen sind willkommen."
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr ""
+"In jedem Fall sollten Ihnen »Beginn« und »Ende« einen Eindruck über die "
+"verbrauchte Zeit vermitteln."
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker"
+msgstr "Daten zur Zeiterfassung auslesen."
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "Berichte erstellen und exportieren"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
+"for spreadsheets), XML and iCal formats."
+msgstr ""
+"Neben dem als Vorgabe im Dialog <gui>Bericht speichern</gui> angebotenen "
+"HTML-Format ermöglicht die Format-Auswahlliste die Wahl zwischen TSV (durch "
+"Tabulatoren getrennte Werte, günstig für Tabellenkalkulationen), XML und "
+"iCal."
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"Für Zugriffe auf Softwareebene gibt es eine D-Bus-Schnittstelle, die mit "
+"Werkzeugen wie <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link> "
+"überwacht werden kann."
+
+#: C/reports.page:21(p)
+msgid ""
+"The really fastest way to get the data \"out\" of the Time Tracker, is by "
+"generatic the HTML report, while holding the <key>Ctrl</key> key down, "
+"select all the needed cells, and then copy/pasting them in the target "
+"application."
+msgstr ""
+"Der wirklich schnellste Weg, Daten aus der Zeiterfassung »heraus zu "
+"bekommen«, ist die Erstellung eines HTML-Berichts. Halten Sie die <key>Strg</"
+"key>-Taste gedrückt, während Sie alle benötigten Zellen auswählen und fügen "
+"Sie sie anschließend in die Zielanwendung ein."
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "Automatisches Lösen von Konflikten."
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "Teilen von Tätigkeiten"
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does it's best to avoid overlaps in the activities. "
+"If you create an activity in the middle of an existing activity. The former "
+"will be split into two. In other cases of overlapping - the previous entries "
+"will be shrunk."
+msgstr ""
+"Die <app>Zeiterfassung</app> tut ihr Bestes, Überschneidungen in den "
+"Tätigkeiten zu vermeiden. Falls Sie eine Tätigkeit innerhalb einer "
+"vorhandenen Tätigkeit erstellen, wird die erste vorhandene Tätigkeit in zwei "
+"unterteilt. In anderen Überschneidungsfällen werden vorherige Einträge "
+"geschrumpft."
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging aspect can come handy when entering information for the whole day. "
+"Start by entering the first activity and tick the \"in progress\" check box "
+"for the end time. For the next activity again set just the start time and "
+"mark it as ongoing. Observe how the end time of the previous activity get's "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"Diese Zusammenführung kann ins Blickfeld rücken, wenn Sie die Information "
+"auf einen ganzen Tag ausdehnen. Beginnen Sie mit der Eingabe der ersten "
+"Tätigkeit und aktivieren Sie das Ankreuzfeld <gui>im Gange</gui> für die "
+"Endzeit. Beobachten Sie, wie die Endzeit der vorhergehenden Tätigkeit an die "
+"Startzeit der neuen Tätigkeit angepasst wird. Wiederholen Sie diesen "
+"Prozess, bis Sie zufrieden sind!"
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "Tricks zum Beschleunigen der Eingabe von Tätigkeiten."
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "Eingabe"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in activity name in the input box and hit "
+"<key>Enter</key> key. There are few tricks however, that will allow you to "
+"specify more detail on the fly:"
+msgstr ""
+"Um mit der Zeiterfassung zu beginnen, geben Sie den Namen der Tätigkeit in "
+"das Eingabefeld ein und drücken Sie die <key>Eingabetaste</key>. Es gibt "
+"einige Tricks, mit deren Hilfe Sie unmittelbar einige Details hinzufügen "
+"können:"
+
+#: C/input.page:18(p)
+msgid "Use @ symbol to add category"
+msgstr "Verwenden Sie das Symbol @, um eine Kategorie hinzuzufügen"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma \",\" will be stored in the description field"
+msgstr "Alles nach dem Komma »,« wird zum Beschreibungsfeld hinzugefügt"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it as first in the input box."
+msgstr ""
+"Um die Zeit unmittelbar anzugeben, tippen Sie sie zuerst in das Eingabefeld "
+"ein."
+
+#: C/input.page:23(p)
+msgid "Few examples:"
+msgstr "Einige Beispiele"
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 Blumen gießen"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over the lunch."
+msgstr ""
+"Vergessen Sie nicht, den bedeutsamen Vorgang des Blumengießens während des "
+"Mittagessens zu erwähnen."
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "Tomaten@Garten, Löcher graben"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description"
+msgstr ""
+"Es werden mehr Tomaten im Garten gebraucht. Das Graben von Löchern ist rein "
+"informativ, deshalb wird es als Beschreibung hinzugefügt"
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 Existentialismus, Nachdenken über die Grundfesten des Universums"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been onto something "
+"else for last seven minutes. Relative times work only without end times - "
+"that is - for the most recent activity."
+msgstr ""
+"Informationen werden korrigiert, indem die Anwendung darüber informiert "
+"wird, was Sie in den letzten 7 Minuten getan haben. Relative Zeiten haben "
+"keine Endzeit, sie werden für die letzten Tätigkeiten genutzt."
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by comma. Hitting <key>Tab</key> when the suggestion box shows up, will "
+"complete input to the first matching tag."
+msgstr ""
+"Darüber hinaus können Sie Eingabefeld <gui>Kategorien und Schlagworte</gui> "
+"Schlagworte hinzufügen. Drücken Sie die <key>Tabulatortaste</key>, wenn das "
+"Vorschlagfeld angezeigt wird. Dadurch wird das erste zutreffende Schlagwort "
+"vervollständigt."
+
+#: C/index.page:4(title)
+msgid "Time Tracking Help"
+msgstr "Hilfe zur Zeiterfassung"
+
+#: C/index.page:7(title)
+msgid "What's new in this release"
+msgstr "Neues in dieser Version"
+
+#: C/index.page:8(p)
+msgid "News go here."
+msgstr "Hier Neuigkeiten einfügen."
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr "Sichern der Datenbank der Tätigkeiten."
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "Datensicherung"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. Application will reload the data automatically after a short while."
+msgstr ""
+"Die Tätigkeiten werden in einer SQLite-Datenbank gespeichert, die sich in "
+"<file>~/.local/share/hamster-applet/hamster.db</file> befindet. Die Datei "
+"kann gesichert und unmittelbar wiederhergestellt werden. Die Anwendung lädt "
+"die Daten automatisch nach einer kurzen Wartezeit neu."
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"Für die Betrachtung des Inhalts der Datenbank empfehlen wir den <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> für Mozilla Firefox."
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr ""
+"Mario Blättermann <mariobl@gnome.org>, 2010\n"
+"Christian Kirbach <Christian.Kirbach@googlemail.com>, 2010"
