@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-20 22:36+0200\n"
+"POT-Creation-Date: 2010-02-22 22:50+0200\n"
 "PO-Revision-Date: 2010-02-20 21:59+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -765,7 +765,7 @@ msgstr "Hamster трябва да ви наблюдава още известн�
 msgid ""
 "With %s percent of all facts starting before 9am you seem to be an early "
 "bird."
-msgstr "%s %% от всички записи са преди 9 часа̀̀. Много сте ранобуден!"
+msgstr "%s %% от всички записи са преди 9 часа̀. Много сте ранобуден!"
 
 #: ../src/hamster/stats.py:391
 #, python-format
