@@ -1,4 +1,27 @@
 ===============
+Version 2.29.91
+===============
+  * bug fixes - avoiding blank entries, not reusing fact ids; other details
+
+  Updated translations
+    * bg (Alexander Shopov)
+    * cs (Adrian Guniš)
+    * de (Mario Blättermann)
+    * et (Ivar Smolin)
+    * fr (Bernard Opic)
+    * gl (Fran Diéguez)
+    * pt_BR (Rodrigo Flores)
+    * ro (Lucian Adrian Grijincu)
+    * ta (Dr,T,Vasudevan)
+    * zh_HK (Chao-Hsiung Liao)
+    * zh_TW (Chao-Hsiung Liao)
+
+  Updated documentation translations
+    * cs (Adrian Guniš)
+    * de (Christian Kirbach)
+
+
+===============
 Version 2.29.90
 ===============
   Updated translations
@@ -6,32 +29,32 @@ Version 2.29.90
     * es (Jorge González)
     * sl (Matej Urbančič)
     * zh_CN (Ray Wang)
-  
+
   Updated documentation translations
     * es (Jorge González)
 
 ===============
 Version 2.29.6
 ===============
-  * workspace tracking - switch activity, when switching desktops 
+  * workspace tracking - switch activity, when switching desktops
     (Ludwig Ortmann, Toms Baugis, Patryk Zawadzki)
   * chart improvements - theme friendly and less noisier
-  * for those without GNOME panel there is now a standalone version, accessible 
+  * for those without GNOME panel there is now a standalone version, accessible
     via Applications -> Accessories -> Time Tracker
   * overview window remembers position
   * maintaining cursor on the selected row after edits / refreshes
     (unimportant, but very convenient)
   * descriptions once again in the main input field, delimited by comma
   * activity suggestion box now sorts items by recency (Patryk Zawadzki)
-  
+
   Updated translations
     * es (Jorge González)
     * eu (Iñaki Larrañaga Murgoitio)
     * nb (Kjartan Maraas)
     * sv (Daniel Nylander)
     * zh_CN (Tao Wei)
-    
-  
+
+
 ===============
 Version 2.29.5
 ===============
@@ -43,8 +66,8 @@ Version 2.29.5
   * interactive graphs to drill down in totals
   * miscellaneous performance improvements
   * pixel-perfect graphs
-  
-  
+
+
   Updated translations
    * es (Jorge González)
    * et (Ivar Smolin)
@@ -57,7 +80,7 @@ Version 2.29.4
 ===============
   * overview window overhaul(still in progress)
   * more progress on tag front (now showing in lists)
-  
+
   Updated translations
    * es (Jorge González)
    * et (Ivar Smolin)
@@ -73,14 +96,14 @@ Version 2.29.3
   * fixed glitches when editing ongoing task
   * improved save report dialog
   * better autocomplete for the entries
-  
+
  Updated translations
   * en@shaw (Thomas Thurman)
   * es (Jorge González)
   * et (Ivar Smolin)
   * sl (Matej Urbančič)
   * zh_CN (Ray Wang)
-  
+
 ===============
 Version 2.29.2
 ===============
@@ -97,7 +120,7 @@ Version 2.29.2
     for today
   * fixes to the dropdown in compiz (not spanning over virtual desktops anymore)
   * in dropdown added end time and dropped the stripes (too much noise already)
-  
+
  Updated translations:
   * ca (Gil Forcada)
   * en_GB (Bruce Cowan)
@@ -174,8 +197,8 @@ Version 2.27.92
   * ta (I. Felix)
   * te (Krishna Babu K)
   * zh_HK (Chao-Hsiung Liao)
- 
- 
+
+
 ===============
 Version 2.27.90
 ===============
@@ -191,7 +214,7 @@ Version 2.27.90
     * hu (Gabor Kelemen)
     * zh_HK (Chao-Hsiung Liao)
     * sv (Daniel Nylander)
-    
+
 
 ===============
 Version 2.27.5
@@ -200,7 +223,7 @@ Version 2.27.5
   * More skeptic on parsing time
   * Legend in overview is sized proportionally to screen size,
     allowing larger labels
-  
+
   Updated translations:
     * be (Alexander Nyakhaychyk)
     * es (Jorge González)
@@ -211,7 +234,7 @@ Version 2.27.4
 ===============
   * Now it is possible to copy/paste activities in the overview
   * mostly polishing and bug fixing the new stuff brought in in 2.27 cycle
-  
+
   Updated translations:
     * bn_IN (Runa Bhattacharjee)
     * es (Jorge González)
@@ -231,10 +254,10 @@ Version 2.27.3
   * TSV, XML and iCal export
   * Ability to filter task by date and category
   * Overview has been improved by adding some nifty statistics for your pleasure
-  
+
   Updated translations:
     * ta.po (Dr.T.Vasudevan)
-    
+
 ===============
 Version 2.27.2
 ===============
@@ -246,15 +269,15 @@ Version 2.27.2
        Example: 00:04 Hamster
   * slightly smarter autocomplete with category suggestions when after @ symbol
   * fixes to edit activity dialog's end time field
-  
+
   Updated translations:
     * el.po (Jennie Petoumenou)
     * et.po (Ivar Smolin)
     * ta.po (Dr.T.vasudevan)
     * uk.po (Maxim V. Dziumanenko)
     * ca@valencia.po (Gil Forcada/Miquel Esplà)
-  
-  
+
+
 ===============
 Version 2.27.1
 ===============
@@ -265,8 +288,8 @@ Version 2.27.1
   * In preferences UI buttons have been added for editing and deletion
   * Glade files have been migrated to gtkbuilder format
   * now it is possible to start overview and other windows straight from command
-    line using "-s [stats|edit|prefs]" switch 
-    
+    line using "-s [stats|edit|prefs]" switch
+
   Updated translations:
     * ca.po (David Planella)
     * cs.po (Petr Kovář)
@@ -293,13 +316,13 @@ Version 2.27.1
     * sv.po (Daniel Nylander)
     * tr.po (Baris Cicek)
     * zh_CN.po (Aron Xu)
-  
+
 
 ===============
 Version 2.25.3
 ===============
   We were late for 2.25.1 and 2.25.2, so here we go - changes since 2.24.0!
-  
+
   Applet - changes
     * Now it is possible to add description after activity, delimiting with
       comma: "watering flowers, begonias" will add activity "watering flowers"
@@ -311,14 +334,14 @@ Version 2.25.3
     * Hamster now can remind of itself every once in a while, interval is set
       in preferences (George Logiotatidis)
     * Sending dbus signals on activity change (Juanje Croissier)
-      
+
   Applet - love
     * Applet now again can be found in applet list by searching for 'hamster'
     * Get instant totals per category for today, in applet dropdown
     * Improvements in report - somewhat nicer look and there are also totals
       (Giorgos Logiotatidis)
     * Use vertical space if we have some on panel and show applet in two lines
-  
+
   Updated translations
     * bg.po (Alexander Shopov)
     * el (Nick Agianniotis)
@@ -328,7 +351,7 @@ Version 2.25.3
     * sv (Daniel Nylander)
     * zh_CN (Ray Wang)
 
-    
+
 
 ===============
 Version 2.24.0
@@ -390,7 +413,7 @@ Version 2.23.92
     * fixed code so that it works also with Python 2.4
     * Fixed bug with tasks falling into unsorted category (bug #548914)
     * Fixed error when switching tasks with doubleclick
-	
+
 
   Translations
     * ar (Anas Afif Emad)
@@ -433,7 +456,7 @@ Version 2.23.91
     * Respect theme colors for graph labels
       (bug 548840) patch by CJ van den Berg
     * Fixed fail on exit when there is no last activity
-	
+
 
   Translations
     * ar (Anas Afif Emad)
@@ -468,7 +491,7 @@ Version 2.23.90
 	* Information on when computer becomes idle is now determined from
 	  screensaver
 	* Fixes to focusing issues when calling applet with hotkey
-	
+
 
   Translations
 	* de (Matthias Mailänder)
@@ -576,7 +599,7 @@ Version 0.5
 Version 0.4.1
 =============
   Applet
-	* Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :) 
+	* Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :)
 	* Fixed rules as per bug 532711. Patch by Juanje Ojeda.
 
   Translations
@@ -634,7 +657,7 @@ Version 0.2
 	* es (Juanje Ojeda Croissier)
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
- 
+
 ===============
 Version 0.1.7.5
 ===============
@@ -804,4 +827,3 @@ Version 0.1.5
 =============
   Applet
 	* Initial release
-
