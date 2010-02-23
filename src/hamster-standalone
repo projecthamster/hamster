@@ -30,7 +30,7 @@ import dbus, dbus.service, dbus.mainloop.glib
 from hamster import eds
 from hamster.configuration import conf, runtime, dialogs
 
-from hamster import stuff
+from hamster import stuff, keybinder
 from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
@@ -98,6 +98,9 @@ class ProjectHamster(object):
         self.notify_on_idle = conf.get("notify_on_idle")
         self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
+
+        self.hotkey = conf.get("keybinding")
+        self.bind_hotkey()
 
         runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
 
@@ -270,6 +273,18 @@ class ProjectHamster(object):
     def delete_selected(self):
         fact = self.treeview.get_selected_fact()
         runtime.storage.remove_fact(fact["id"])
+
+    def bind_hotkey(self):
+        try:
+            print 'Binding shortcut %s to popup hamster' % self.hotkey
+            keybinder.bind(self.hotkey, self.on_keybinding_activated)
+        except KeyError:
+            pass # don't care
+
+    def on_keybinding_activated(self):
+        print "boink"
+        self.window.present()
+
 
     def __update_fact(self):
         """dbus controller current fact updating"""
@@ -449,6 +464,14 @@ class ProjectHamster(object):
                 if self.screen:
                     self.screen.disconnect(self.screen.workspace_handler)
                     self.screen = None
+        elif key == "keybinding":
+            try:
+                keybinder.unbind(self.hotkey)
+            except KeyError:
+                pass # don't care
+
+            self.hotkey = value
+            self.bind_hotkey()
 
 
     def on_activity_text_changed(self, widget):
