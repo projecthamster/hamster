@@ -1,13 +1,29 @@
 <page xmlns="http://projectmallard.org/1.0/"
       type="guide"
       id="index">
-<title>Time Tracking Help</title>
 
+  <info>
+    <title type="text">Time Tracking</title>
+    <title type="link">Time Tracking</title>
+    <credit type="author">
+      <name>Milo Casagrande</name>
+      <email>milo@ubuntu.com</email>
+    </credit>
+    <license>
+      <p>Creative Commons Share Alike 3.0</p>
+    </license>
+  </info> 
+  
+  <title>
+    <media type="image" mime="image/png" src="figures/hamster-logo.png">Time Tracking logo</media>Time Tracking
+   </title>
+
+<!--
 <section id="this-release">
     <title>What's new in this release</title>
     <p>
-        News go here.
+        News goes here.
     </p>
-</section>
-
+</>section>
+-->
 </page>
