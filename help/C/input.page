@@ -8,45 +8,45 @@
 <title>Input</title>
 
 <p>
-    To start tracking, type in activity name in the input box and hit
+    To start tracking, type in the activity name in the input box and hit the
     <key>Enter</key> key.
-    There are few tricks however, that will allow you to specify more detail on
+    There are a few tricks that will allow you to specify more detail on
     the fly:
 </p>
 
 <steps>
-    <item><p>Use @ symbol to add category</p></item>
-    <item><p>Everything after a comma "," will be stored in the description field</p></item>
-    <item><p>To specify time on the fly, enter it as first in the input box.</p></item>
+    <item><p>Use the @ symbol to add a category</p></item>
+    <item><p>Everything after a comma (,) will be stored in the description field</p></item>
+    <item><p>To specify time on the fly, enter it first in the input box</p></item>
 </steps>
 
 <p>
-    Few examples:
+    A few examples:
 </p>
 <example>
     <code>12:30-12:45 watering flowers</code>
-    <p>Forgot to note the important act of watering flowers over the lunch.</p>
+    <p>Forgot to note the important act of watering flowers over lunch.</p>
 </example>
 <example>
     <code>tomatoes@garden, digging holes</code>
     <p>
         Need more tomatoes in the garden. Digging holes is purely informational,
-        so added it as a description
+        so added it as a description.
     </p>
 </example>
 <example>
     <code>-7 existentialism, thinking about the vastness of the universe</code>
     <p>
         Corrected information by informing application that I've been
-        onto something else for last seven minutes. Relative times work
-        only without end times - that is - for the most recent activity.
+        doing something else for the last seven minutes. Relative times only
+        work for ongoing activities without an end time.
     </p>
 </example>
 
 <p>
     On top of that you can add tags in the tag input field.
-    Tags are delimited by comma. Hitting <key>Tab</key> when the suggestion
-    box shows up, will complete input to the first matching tag.
+    Tags are delimited by a comma. Press the <key>Tab</key> when the suggestion
+    box appears to complete the input to the first matching tag.
 </p>
 
 </page>

@@ -8,18 +8,18 @@
 <title>Splitting activities</title>
 
 <p>
-    <app>Time Tracker</app> does it's best to avoid overlaps in the activities.
-    If you create an activity in the middle of an existing activity. The former
-    will be split into two. In other cases of overlapping - the previous entries
+    <app>Time Tracker</app> does its best to avoid overlaps in activities.
+    If you create an activity in the middle of an existing activity, the former
+    will be split into two. In other cases of overlapping, the previous entries
     will be shrunk.
 </p>
 <note style="info">
     <p>
-        Merging aspect can come handy when entering information for the whole
-        day. Start by entering the first activity and tick the "in progress"
+        Merging can become handy when entering information for the whole
+        day. Start by entering the first activity and select the "in progress"
         check box for the end time. For the next activity again set just the
         start time and mark it as ongoing. Observe how the end time of the
-        previous activity get's adjusted to the start time of the new one.
+        previous activity gets adjusted to the start time of the new one.
         Repeat the process until happy!
     </p>
 </note>

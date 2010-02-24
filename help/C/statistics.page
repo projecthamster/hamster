@@ -3,14 +3,14 @@
       id="statistics">
 <info>
   <link type="guide" xref="index"/>
-  <desc>Word on interpretation of statistics.</desc>
+  <desc>Note on interpretation of statistics.</desc>
 </info>
 <title>Statistics</title>
 
 <p>
-    The results, that are accessible, via the
+    The results that are accessible via the
     <gui style="button">Show Statistics</gui> link are experimental and
-    they are interpretation of the facts. Interpretation that should be compared
+    they are an interpretation of the facts. This interpretation should be compared
     with your own observations. Patches are welcome.
 </p>
 <p>

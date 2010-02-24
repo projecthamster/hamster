@@ -8,10 +8,10 @@
 <title>Backup</title>
 
 <p>
-    Activities are stored in an SQLite database, located
+    Activities are stored in an SQLite database, located at
     <file>~/.local/share/hamster-applet/hamster.db</file>.
     The file can be backed up and restored on the go.
-    Application will reload the data automatically after a short while.
+    The application will reload the data automatically after a short while.
 </p>
 <note style="info">
     <p>
