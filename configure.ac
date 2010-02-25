@@ -64,12 +64,14 @@ AS_AC_EXPAND(BINDIR, $bindir)
 dnl ****************************************************************************
 dnl * PyGTK & co for Gnome Streamer
 dnl ****************************************************************************
+# regards python-gnome2-desktop: we just need python-wnck
+
 PKG_CHECK_MODULES(HAMSTER,
     gtk+-2.0            >= 2.12
     pygtk-2.0           >= 2.12
     pygobject-2.0       >= 2.14
     gnome-python-2.0    >= 2.10
-
+    gnome-python-desktop-2.0
 )
 AC_SUBST(HAMSTER_CFLAGS)
 AC_SUBST(HAMSTER_LIBS)
