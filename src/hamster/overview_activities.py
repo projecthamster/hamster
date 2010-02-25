@@ -61,14 +61,8 @@ class OverviewBox(gtk.VBox):
         scroll.add(self.fact_tree)
         self.add(scroll)
 
-        self.ignore_next_refresh = False
-
 
     def search(self, start_date, end_date, facts):
-        if self.ignore_next_refresh: # avoid reloading when we are operating with the data
-            self.ignore_next_refresh = False
-            return
-
         self.start_date = start_date
         self.end_date = end_date
         self.facts = facts
@@ -102,19 +96,6 @@ class OverviewBox(gtk.VBox):
         if not fact or isinstance(fact, dt.date):
             return
 
-        self.ignore_next_refresh = True
-
-        selection = self.fact_tree.get_selection()
-        (model, iter) = selection.get_selected()
-        path = model.get_path(iter)[0]
-
-        # if next is fact, select that. otherwise select parent
-        if self.fact_tree.id_or_label(path+1) and model[path+1][0]:
-            selection.select_path(path + 1)
-        elif self.fact_tree.id_or_label(path-1):
-            selection.select_path(path - 1)
-
-        model.remove(iter)
         runtime.storage.remove_fact(fact['id'])
 
     def copy_selected(self):
