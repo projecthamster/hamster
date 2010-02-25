@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
-"POT-Creation-Date: 2010-02-05 06:01+0000\n"
-"PO-Revision-Date: 2010-02-05 08:10+0100\n"
+"POT-Creation-Date: 2010-02-24 21:14+0000\n"
+"PO-Revision-Date: 2010-02-25 20:17+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,23 +37,29 @@ msgstr ""
 "en este documento bajo los términos que usted elija, sin restricción."
 
 #: C/statistics.page:6(desc)
-msgid "Word on interpretation of statistics."
-msgstr "Unas palabras en la interpretación de estadísticas."
+#| msgid "Word on interpretation of statistics."
+msgid "Note on interpretation of statistics."
+msgstr "Nota sobre la interpretación de estadísticas."
 
 #: C/statistics.page:8(title)
 msgid "Statistics"
 msgstr "Estadísticas"
 
 #: C/statistics.page:10(p)
+#| msgid ""
+#| "The results, that are accessible, via the <gui style=\"button\">Show "
+#| "Statistics</gui> link are experimental and they are interpretation of the "
+#| "facts. Interpretation that should be compared with your own observations. "
+#| "Patches are welcome."
 msgid ""
-"The results, that are accessible, via the <gui style=\"button\">Show "
-"Statistics</gui> link are experimental and they are interpretation of the "
-"facts. Interpretation that should be compared with your own observations. "
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
 "Patches are welcome."
 msgstr ""
 "Los resultados accesibles a través del enlace <gui style=\"button\">Mostrar "
 "estadísticas</gui> son experimentales y son interpretaciones de los hechos. "
-"Interpretación que se debe comparar con sus propias observaciones. Se "
+"Esta interpretación se debe comparar con sus propias observaciones. Se "
 "agradecen parches."
 
 #: C/statistics.page:16(p)
@@ -65,18 +71,23 @@ msgstr ""
 "tiempos de sus actividades."
 
 #: C/reports.page:6(desc)
-msgid "Get data out of Time Tracker"
-msgstr "Sacar los datos del gestor de tiempo"
+#| msgid "Get data out of Time Tracker"
+msgid "Get data out of Time Tracker."
+msgstr "Sacar los datos del Gestor de tiempo."
 
 #: C/reports.page:8(title)
 msgid "Report and export"
 msgstr "Informar y exportar"
 
 #: C/reports.page:10(p)
+#| msgid ""
+#| "Apart from the HTML format that is offered by default in the Save report "
+#| "dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
+#| "for spreadsheets), XML and iCal formats."
 msgid ""
 "Apart from the HTML format that is offered by default in the Save report "
-"dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
-"for spreadsheets), XML and iCal formats."
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
 msgstr ""
 "Además del formato HTML que se ofrece de forma predeterminada en el diálogo "
 "Guardar informe, la lista desplegable de formatos permite elegir formatos "
@@ -93,14 +104,18 @@ msgstr ""
 "d-feet/\">D-Feet</link>."
 
 #: C/reports.page:21(p)
+#| msgid ""
+#| "The really fastest way to get the data \"out\" of the Time Tracker, is by "
+#| "generatic the HTML report, while holding the <key>Ctrl</key> key down, "
+#| "select all the needed cells, and then copy/pasting them in the target "
+#| "application."
 msgid ""
-"The really fastest way to get the data \"out\" of the Time Tracker, is by "
-"generatic the HTML report, while holding the <key>Ctrl</key> key down, "
-"select all the needed cells, and then copy/pasting them in the target "
-"application."
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
 msgstr ""
 "La forma más rápida de «sacar» datos del Gestor de tiempo es generando un "
-"informe HTML, mientras mantiene pulsada la telca <key>Ctrl</key>, seleccione "
+"informe HTML, mientras mantiene pulsada la tecla <key>Ctrl</key>, seleccione "
 "todas las celdas necesarias y después cópielas y pégelas en la aplicación de "
 "destino."
 
@@ -113,10 +128,15 @@ msgid "Splitting activities"
 msgstr "Partir actividades"
 
 #: C/merge.page:10(p)
+#| msgid ""
+#| "<app>Time Tracker</app> does it's best to avoid overlaps in the "
+#| "activities. If you create an activity in the middle of an existing "
+#| "activity. The former will be split into two. In other cases of "
+#| "overlapping - the previous entries will be shrunk."
 msgid ""
-"<app>Time Tracker</app> does it's best to avoid overlaps in the activities. "
-"If you create an activity in the middle of an existing activity. The former "
-"will be split into two. In other cases of overlapping - the previous entries "
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
 "will be shrunk."
 msgstr ""
 "El <app>Gestor de tiempo</app> hace lo mejor que puede para evitar "
@@ -127,15 +147,16 @@ msgstr ""
 #: C/merge.page:17(p)
 #| msgid ""
 #| "Merging aspect can come handy when entering information for the whole "
-#| "day. Start by entering the first activity and set end time to \"ongoing"
-#| "\". For the next activity again set just the start time and mark it as "
-#| "ongoing. Observe how the end time of the previous activity get's adjusted "
-#| "to the start time of the new one. Repeat the process until happy!"
+#| "day. Start by entering the first activity and tick the \"in progress\" "
+#| "check box for the end time. For the next activity again set just the "
+#| "start time and mark it as ongoing. Observe how the end time of the "
+#| "previous activity get's adjusted to the start time of the new one. Repeat "
+#| "the process until happy!"
 msgid ""
-"Merging aspect can come handy when entering information for the whole day. "
-"Start by entering the first activity and tick the \"in progress\" check box "
-"for the end time. For the next activity again set just the start time and "
-"mark it as ongoing. Observe how the end time of the previous activity get's "
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
 "adjusted to the start time of the new one. Repeat the process until happy!"
 msgstr ""
 "Mezclar el aspecto puede ser útil al introducir información para todo el "
@@ -154,33 +175,42 @@ msgid "Input"
 msgstr "Entrada"
 
 #: C/input.page:10(p)
+#| msgid ""
+#| "To start tracking, type in activity name in the input box and hit "
+#| "<key>Enter</key> key. There are few tricks however, that will allow you "
+#| "to specify more detail on the fly:"
 msgid ""
-"To start tracking, type in activity name in the input box and hit "
-"<key>Enter</key> key. There are few tricks however, that will allow you to "
-"specify more detail on the fly:"
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
 msgstr ""
 "Para iniciar un seguimiento, escriba el nombre de la actividad en la caja de "
 "entrada y pulse <key>Intro</key>. No obstante, existen unos pocos trucos que "
 "le permitirán especificar más detalles al vuelo:"
 
 #: C/input.page:18(p)
-msgid "Use @ symbol to add category"
+#| msgid "Use @ symbol to add category"
+msgid "Use the @ symbol to add a category"
 msgstr "Use el símbolo @ para añadir una categoría"
 
 #: C/input.page:19(p)
-msgid "Everything after a comma \",\" will be stored in the description field"
+#| msgid ""
+#| "Everything after a comma \",\" will be stored in the description field"
+msgid "Everything after a comma (,) will be stored in the description field"
 msgstr ""
-"Todo lo que vaya detrás de una coma «,» se almacenará en el campo de "
+"Todo lo que vaya detrás de una coma (,) se almacenará en el campo de "
 "descripción"
 
 #: C/input.page:20(p)
-msgid "To specify time on the fly, enter it as first in the input box."
+#| msgid "To specify time on the fly, enter it as first in the input box."
+msgid "To specify time on the fly, enter it first in the input box"
 msgstr ""
 "Para especificar una hora al vuelo, introdúzcala como el primer campo en la "
-"caja de entrada."
+"caja de entrada"
 
 #: C/input.page:23(p)
-msgid "Few examples:"
+#| msgid "Few examples:"
+msgid "A few examples:"
 msgstr "Algunos ejemplos:"
 
 #: C/input.page:27(code)
@@ -189,7 +219,8 @@ msgid "12:30-12:45 watering flowers"
 msgstr "14:30-14:45 regar plantas"
 
 #: C/input.page:28(p)
-msgid "Forgot to note the important act of watering flowers over the lunch."
+#| msgid "Forgot to note the important act of watering flowers over the lunch."
+msgid "Forgot to note the important act of watering flowers over lunch."
 msgstr ""
 "Se olvidó del importante acto de regar las plantas después de la comida."
 
@@ -199,9 +230,12 @@ msgid "tomatoes@garden, digging holes"
 msgstr "tomates@jardín, hacer agujeros"
 
 #: C/input.page:32(p)
+#| msgid ""
+#| "Need more tomatoes in the garden. Digging holes is purely informational, "
+#| "so added it as a description"
 msgid ""
 "Need more tomatoes in the garden. Digging holes is purely informational, so "
-"added it as a description"
+"added it as a description."
 msgstr ""
 "Se necesitan más tomates en el jardín. Cavar agujeros es puramente "
 "informativo, así que se añade como una descripción."
@@ -212,10 +246,14 @@ msgid "-7 existentialism, thinking about the vastness of the universe"
 msgstr "-7 existencialismo, pensar acerca de la inmensidad del universo"
 
 #: C/input.page:39(p)
+#| msgid ""
+#| "Corrected information by informing application that I've been onto "
+#| "something else for last seven minutes. Relative times work only without "
+#| "end times - that is - for the most recent activity."
 msgid ""
-"Corrected information by informing application that I've been onto something "
-"else for last seven minutes. Relative times work only without end times - "
-"that is - for the most recent activity."
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
 msgstr ""
 "Información corregida informando a la aplicación que se ha estado ocupado en "
 "otro asunto durante los últimos siete minutos. Los tiempos relativos sólo "
@@ -223,27 +261,52 @@ msgstr ""
 "reciente."
 
 #: C/input.page:46(p)
+#| msgid ""
+#| "On top of that you can add tags in the tag input field. Tags are "
+#| "delimited by comma. Hitting <key>Tab</key> when the suggestion box shows "
+#| "up, will complete input to the first matching tag."
 msgid ""
 "On top of that you can add tags in the tag input field. Tags are delimited "
-"by comma. Hitting <key>Tab</key> when the suggestion box shows up, will "
-"complete input to the first matching tag."
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
 msgstr ""
 "Sobre ello puede añadir etiquetas en el campo de entrada de etiquetas. Las "
 "etiquetas están delimitadas por comas. Pulsar <key>Tab</key> cuando aparezca "
 "la caja de sugerencias completará la entrada con la primera etiqueta "
 "coincidente."
 
-#: C/index.page:4(title)
-msgid "Time Tracking Help"
-msgstr "Ayuda para el seguimiento del tiempo"
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/index.page:18(None)
+msgid ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
 
-#: C/index.page:7(title)
-msgid "What's new in this release"
-msgstr "Qué hay nuevo en esta publicación"
+#: C/index.page:6(title) C/index.page:7(title)
+#| msgid "Time Tracking Help"
+msgid "Time Tracking"
+msgstr "Gestión de tiempo"
 
-#: C/index.page:8(p)
-msgid "News go here."
-msgstr "Las noticias van aquí."
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Compartir Igual 3.0"
+
+#: C/index.page:17(title)
+msgid ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Time Tracking logo</media>Time Tracking"
+msgstr ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Logotipo del Gestor de tiempo</media> Gestión de tiempo"
 
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
@@ -254,15 +317,21 @@ msgid "Backup"
 msgstr "Respaldo"
 
 #: C/backup.page:10(p)
+#| msgid ""
+#| "Activities are stored in an SQLite database, located <file>~/.local/share/"
+#| "hamster-applet/hamster.db</file>. The file can be backed up and restored "
+#| "on the go. Application will reload the data automatically after a short "
+#| "while."
 msgid ""
-"Activities are stored in an SQLite database, located <file>~/.local/share/"
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
 "hamster-applet/hamster.db</file>. The file can be backed up and restored on "
-"the go. Application will reload the data automatically after a short while."
+"the go. The application will reload the data automatically after a short "
+"while."
 msgstr ""
-"Las actividades se almacenan en una base de datos SQLite, ubicada en "
-"<file>~/.local/share/hamster-applet/hamster.db</file>. El archivo se puede "
-"respaldar y recuperar al vuelo. La aplicación recargará automáticamente los "
-"datos tras un corto tiempo."
+"Las actividades se almacenan en una base de datos SQLite ubicada en <file>~/."
+"local/share/hamster-applet/hamster.db</file>. El archivo se puede respaldar "
+"y restaurar al vuelo. La aplicación recargará automáticamente los datos tras "
+"un corto tiempo."
 
 #: C/backup.page:17(p)
 msgid ""
@@ -278,3 +347,9 @@ msgstr ""
 #: C/index.page:0(None)
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 20010"
+
+#~ msgid "What's new in this release"
+#~ msgstr "Qué hay nuevo en esta publicación"
+
+#~ msgid "News go here."
+#~ msgstr "Las noticias van aquí."
