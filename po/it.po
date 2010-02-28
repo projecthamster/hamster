@@ -10,10 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: project-hamster\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-02-22 16:47+0000\n"
-"PO-Revision-Date: 2010-02-22 21:43+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-28 21:36+0100\n"
+"PO-Revision-Date: 2010-02-28 21:39+0100\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +20,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# (ndt) come prima stringa non è male. credo ci sia una virgola nel primo periodo dove non dovrebbe andare, dovrebbe essere messa prima di "and". suggerimenti per rendere tutta al frase sono i benvenuti!
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
@@ -31,9 +29,8 @@ msgid ""
 msgstr ""
 "Le attività verranno considerate: come del giorno precedente se l'ora "
 "corrente è minore di quella specificata come inizio della giornata, come del "
-"giorno attuale se superano tale ora. Le attività che si estendono su due "
-"giorni verranno visualizzate oltre la soglia della parte più grande "
-"dell'attività."
+"giorno attuale se supera tale ora. Le attività che si estendono su due "
+"giorni verranno visualizzate dove si è svolta la maggior parte dell'attività."
 
 # (ndt) non capisco se quello che indicano è un valore o un nome specifico di qualche cosa oppure solo un errore di digitazione...
 #: ../data/hamster-applet.schemas.in.h:2
@@ -127,7 +124,7 @@ msgstr "Tiene traccia del tempo trascorso nello svolgere delle attività"
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:344 ../src/hamster-standalone:196
+#: ../src/hamster/applet.py:344 ../src/hamster-standalone:199
 msgid "Time Tracker"
 msgstr "Conteggio tempo"
 
@@ -369,7 +366,7 @@ msgstr "Rimuovi categoria"
 
 #: ../data/preferences.ui.h:18
 msgid "Resume the last activity when returning to a workspace"
-msgstr "Riprendere l'ultima attività quando si torno a uno spazio di lavoro"
+msgstr "Riprendere l'ultima attività quando si torna a uno spazio di lavoro"
 
 #: ../data/preferences.ui.h:19
 msgid "Start new activity when switching workspaces:"
@@ -380,10 +377,9 @@ msgstr "Avviare una nuova attività quando si cambia spazio di lavoro:"
 msgid "Stop tracking when computer becomes idle"
 msgstr "Fermare il conteggio quando il computer è inattivo"
 
-# (ndt) lunga lunga lunga...
 #: ../data/preferences.ui.h:22
 msgid "Tags that should appear in autocomplete"
-msgstr "Etichette che dovrebbero comparire nel completamento automatico"
+msgstr "Etichette per il completamento automatico"
 
 # (ndt) titolo finestra
 #: ../data/preferences.ui.h:23
@@ -443,8 +439,8 @@ msgstr "Attività"
 # (ndt) questo compare nel pannello dove viene inserita
 # l'applet quando non sta tenendo conto delle nostre attività
 #: ../src/hamster/applet.py:317 ../src/hamster/applet.py:340
-#: ../src/hamster/applet.py:437 ../src/hamster-standalone:192
-#: ../src/hamster-standalone:261
+#: ../src/hamster/applet.py:437 ../src/hamster-standalone:195
+#: ../src/hamster-standalone:264
 msgid "No activity"
 msgstr "Nessuna attività"
 
@@ -467,19 +463,19 @@ msgstr "%sh"
 #: ../src/hamster/db.py:723 ../src/hamster/edit_activity.py:51
 #: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
 #: ../src/hamster/reports.py:94 ../src/hamster/reports.py:243
-#: ../src/hamster-standalone:244 ../src/hamster/stuff.py:132
+#: ../src/hamster-standalone:247 ../src/hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Non categorizzato"
 
-#: ../src/hamster/applet.py:428 ../src/hamster-standalone:252
+#: ../src/hamster/applet.py:428 ../src/hamster-standalone:255
 msgid "Just started"
 msgstr "Appena iniziato"
 
-#: ../src/hamster/applet.py:671 ../src/hamster-standalone:426
+#: ../src/hamster/applet.py:671 ../src/hamster-standalone:441
 msgid "Changed activity"
 msgstr "Attività modificata"
 
-#: ../src/hamster/applet.py:672 ../src/hamster-standalone:427
+#: ../src/hamster/applet.py:672 ../src/hamster-standalone:442
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Passati a «%s»"
@@ -526,7 +522,7 @@ msgstr "Piegamenti sulle braccia"
 msgid "Update activity"
 msgstr "Aggiorna attività"
 
-#: ../src/hamster/overview_activities.py:94
+#: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A %-d %b"
@@ -712,7 +708,7 @@ msgstr "%-d %b %Y"
 msgid "Total Time"
 msgstr "Tempo totale"
 
-#: ../src/hamster-standalone:187
+#: ../src/hamster-standalone:190
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Al lavoro su <b>%s</b>"
