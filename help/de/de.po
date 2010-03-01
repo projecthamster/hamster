@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"POT-Creation-Date: 2010-02-20 21:25+0000\n"
-"PO-Revision-Date: 2010-02-21 12:49+0100\n"
-"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
+"POT-Creation-Date: 2010-02-24 21:14+0000\n"
+"PO-Revision-Date: 2010-02-25 13:25+0100\n"
+"Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Einschränkung unter den Bedingungen Ihrer Wahl zu verbreiten."
 
 #: C/statistics.page:6(desc)
-msgid "Word on interpretation of statistics."
+msgid "Note on interpretation of statistics."
 msgstr "Ein Wort zur Interpretation der Statistiken."
 
 #: C/statistics.page:8(title)
@@ -48,9 +48,9 @@ msgstr "Statistiken"
 
 #: C/statistics.page:10(p)
 msgid ""
-"The results, that are accessible, via the <gui style=\"button\">Show "
-"Statistics</gui> link are experimental and they are interpretation of the "
-"facts. Interpretation that should be compared with your own observations. "
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
 "Patches are welcome."
 msgstr ""
 "Die über den Knopf <gui style=\"button\">Statistiken zeigen</gui> "
@@ -67,7 +67,7 @@ msgstr ""
 "verbrauchte Zeit vermitteln."
 
 #: C/reports.page:6(desc)
-msgid "Get data out of Time Tracker"
+msgid "Get data out of Time Tracker."
 msgstr "Daten zur Zeiterfassung auslesen."
 
 #: C/reports.page:8(title)
@@ -77,8 +77,8 @@ msgstr "Berichte erstellen und exportieren"
 #: C/reports.page:10(p)
 msgid ""
 "Apart from the HTML format that is offered by default in the Save report "
-"dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
-"for spreadsheets), XML and iCal formats."
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
 msgstr ""
 "Neben dem als Vorgabe im Dialog <gui>Bericht speichern</gui> angebotenen "
 "HTML-Format ermöglicht die Format-Auswahlliste die Wahl zwischen TSV (durch "
@@ -96,10 +96,9 @@ msgstr ""
 
 #: C/reports.page:21(p)
 msgid ""
-"The really fastest way to get the data \"out\" of the Time Tracker, is by "
-"generatic the HTML report, while holding the <key>Ctrl</key> key down, "
-"select all the needed cells, and then copy/pasting them in the target "
-"application."
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
 msgstr ""
 "Der wirklich schnellste Weg, Daten aus der Zeiterfassung »heraus zu "
 "bekommen«, ist die Erstellung eines HTML-Berichts. Halten Sie die <key>Strg</"
@@ -116,9 +115,9 @@ msgstr "Teilen von Tätigkeiten"
 
 #: C/merge.page:10(p)
 msgid ""
-"<app>Time Tracker</app> does it's best to avoid overlaps in the activities. "
-"If you create an activity in the middle of an existing activity. The former "
-"will be split into two. In other cases of overlapping - the previous entries "
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
 "will be shrunk."
 msgstr ""
 "Die <app>Zeiterfassung</app> tut ihr Bestes, Überschneidungen in den "
@@ -129,10 +128,10 @@ msgstr ""
 
 #: C/merge.page:17(p)
 msgid ""
-"Merging aspect can come handy when entering information for the whole day. "
-"Start by entering the first activity and tick the \"in progress\" check box "
-"for the end time. For the next activity again set just the start time and "
-"mark it as ongoing. Observe how the end time of the previous activity get's "
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
 "adjusted to the start time of the new one. Repeat the process until happy!"
 msgstr ""
 "Diese Zusammenführung kann ins Blickfeld rücken, wenn Sie die Information "
@@ -152,9 +151,9 @@ msgstr "Eingabe"
 
 #: C/input.page:10(p)
 msgid ""
-"To start tracking, type in activity name in the input box and hit "
-"<key>Enter</key> key. There are few tricks however, that will allow you to "
-"specify more detail on the fly:"
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
 msgstr ""
 "Um mit der Zeiterfassung zu beginnen, geben Sie den Namen der Tätigkeit in "
 "das Eingabefeld ein und drücken Sie die <key>Eingabetaste</key>. Es gibt "
@@ -162,22 +161,22 @@ msgstr ""
 "können:"
 
 #: C/input.page:18(p)
-msgid "Use @ symbol to add category"
+msgid "Use the @ symbol to add a category"
 msgstr "Verwenden Sie das Symbol @, um eine Kategorie hinzuzufügen"
 
 #: C/input.page:19(p)
-msgid "Everything after a comma \",\" will be stored in the description field"
-msgstr "Alles nach dem Komma »,« wird zum Beschreibungsfeld hinzugefügt"
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "Alles nach dem Komma (,) wird zum Beschreibungsfeld hinzugefügt"
 
 #: C/input.page:20(p)
-msgid "To specify time on the fly, enter it as first in the input box."
+msgid "To specify time on the fly, enter it first in the input box"
 msgstr ""
 "Um die Zeit unmittelbar anzugeben, tippen Sie sie zuerst in das Eingabefeld "
 "ein."
 
 #: C/input.page:23(p)
-msgid "Few examples:"
-msgstr "Einige Beispiele"
+msgid "A few examples:"
+msgstr "Einige Beispiele:"
 
 #: C/input.page:27(code)
 #, no-wrap
@@ -185,7 +184,7 @@ msgid "12:30-12:45 watering flowers"
 msgstr "12:30-12:45 Blumen gießen"
 
 #: C/input.page:28(p)
-msgid "Forgot to note the important act of watering flowers over the lunch."
+msgid "Forgot to note the important act of watering flowers over lunch."
 msgstr ""
 "Vergessen Sie nicht, den bedeutsamen Vorgang des Blumengießens während des "
 "Mittagessens zu erwähnen."
@@ -198,7 +197,7 @@ msgstr "Tomaten@Garten, Löcher graben"
 #: C/input.page:32(p)
 msgid ""
 "Need more tomatoes in the garden. Digging holes is purely informational, so "
-"added it as a description"
+"added it as a description."
 msgstr ""
 "Es werden mehr Tomaten im Garten gebraucht. Das Graben von Löchern ist rein "
 "informativ, deshalb wird es als Beschreibung hinzugefügt"
@@ -210,9 +209,9 @@ msgstr "-7 Existentialismus, Nachdenken über die Grundfesten des Universums"
 
 #: C/input.page:39(p)
 msgid ""
-"Corrected information by informing application that I've been onto something "
-"else for last seven minutes. Relative times work only without end times - "
-"that is - for the most recent activity."
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
 msgstr ""
 "Informationen werden korrigiert, indem die Anwendung darüber informiert "
 "wird, was Sie in den letzten 7 Minuten getan haben. Relative Zeiten haben "
@@ -221,25 +220,44 @@ msgstr ""
 #: C/input.page:46(p)
 msgid ""
 "On top of that you can add tags in the tag input field. Tags are delimited "
-"by comma. Hitting <key>Tab</key> when the suggestion box shows up, will "
-"complete input to the first matching tag."
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
 msgstr ""
 "Darüber hinaus können Sie Eingabefeld <gui>Kategorien und Schlagworte</gui> "
 "Schlagworte hinzufügen. Drücken Sie die <key>Tabulatortaste</key>, wenn das "
 "Vorschlagfeld angezeigt wird. Dadurch wird das erste zutreffende Schlagwort "
 "vervollständigt."
 
-#: C/index.page:4(title)
-msgid "Time Tracking Help"
-msgstr "Hilfe zur Zeiterfassung"
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/index.page:18(None)
+msgid ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr "a"
 
-#: C/index.page:7(title)
-msgid "What's new in this release"
-msgstr "Neues in dieser Version"
+#: C/index.page:6(title) C/index.page:7(title)
+msgid "Time Tracking"
+msgstr "Zeiterfassung"
 
-#: C/index.page:8(p)
-msgid "News go here."
-msgstr "Hier Neuigkeiten einfügen."
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Share Alike 3.0"
+
+#: C/index.page:17(title)
+msgid ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Time Tracking logo</media>Time Tracking"
+msgstr ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Zeiterfassungs-Logo</media>Zeiterfassung"
 
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
@@ -251,9 +269,10 @@ msgstr "Datensicherung"
 
 #: C/backup.page:10(p)
 msgid ""
-"Activities are stored in an SQLite database, located <file>~/.local/share/"
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
 "hamster-applet/hamster.db</file>. The file can be backed up and restored on "
-"the go. Application will reload the data automatically after a short while."
+"the go. The application will reload the data automatically after a short "
+"while."
 msgstr ""
 "Die Tätigkeiten werden in einer SQLite-Datenbank gespeichert, die sich in "
 "<file>~/.local/share/hamster-applet/hamster.db</file> befindet. Die Datei "
@@ -276,3 +295,9 @@ msgid "translator-credits"
 msgstr ""
 "Mario Blättermann <mariobl@gnome.org>, 2010\n"
 "Christian Kirbach <Christian.Kirbach@googlemail.com>, 2010"
+
+#~ msgid "What's new in this release"
+#~ msgstr "Neues in dieser Version"
+
+#~ msgid "News go here."
+#~ msgstr "Hier Neuigkeiten einfügen."
