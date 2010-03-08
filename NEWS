@@ -1,4 +1,25 @@
 ===============
+Version 2.29.92
+===============
+  Bug fixes
+    * depend on gnome-python-desktop to fulfill wnck-python dependency
+    * minor bug with screen refresh after deletion
+
+  Updated translations
+    * bg (Alexander Shopov)
+    * de (Mario Blättermann)
+    * el (Kostas Papadimas)
+    * en_GB (Bruce Cowan)
+    * es (Jorge González)
+    * it (Milo Casagrande)
+    * nb (Kjartan Maraas)
+    * pl (Piotr Drąg)
+
+  Updated documentation translations
+    * en (Bruce Cowan, Milo Casagrande)
+    * es (Jorge González)
+
+===============
 Version 2.29.91
 ===============
   * bug fixes - avoiding blank entries, not reusing fact ids; other details
