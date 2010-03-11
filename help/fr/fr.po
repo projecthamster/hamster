@@ -1,0 +1,294 @@
+# French translation for hamster-applet.
+# Copyright (C) 2010 Listed translators
+# This file is distributed under the same license as the hamster-applet package.
+# Florent Thévenet <feuloren@free.fr>, 2010.
+# Claude Paroz <claude@2xlibre.net>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"POT-Creation-Date: 2010-02-24 21:14+0000\n"
+"PO-Revision-Date: 2010-03-11 21:28+0100\n"
+"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: C/legal.xml:3(p)
+msgid ""
+"This work is licensed under a <link href=\"http://creativecommons.org/"
+"licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
+"License</link>."
+msgstr ""
+"Ce document est sous licence <link href=\"http://creativecommons.org/licenses/"
+"by-sa/3.0/deed.fr\">Creative Commons Paternité-Partage des Conditions Initiales "
+"à l'Identique 3.0 Unported</link>."
+
+#: C/legal.xml:6(p)
+msgid ""
+"As a special exception, the copyright holders give you permission to copy, "
+"modify, and distribute the example code contained in this document under the "
+"terms of your choosing, without restriction."
+msgstr ""
+"À titre d'exception, les titulaires des droits d'auteur vous autorisent à "
+"copier, modifier et redistribuer le code d'exemple contenu dans ce document, "
+"selon la license de votre choix, sans restrictions."
+
+#: C/statistics.page:6(desc)
+msgid "Note on interpretation of statistics."
+msgstr "Note sur l'interprétation des statistiques."
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"Les résultats accessibles depuis le bouton <gui style=\"button\">Afficher "
+"les statistiques</gui> sont expérimentaux et sont une interprétation de la "
+"réalité. Cette interprétation doit être comparée avec vos propres observations. "
+"Toutes corrections sont les bienvenues."
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr ""
+"Cependant, les « Débuts et fins » devraient vous donner une idée de votre "
+"temps d'activité."
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker."
+msgstr "Exploitation des données du gestionnaire de temps."
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "Rapports et exportations"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
+msgstr ""
+"À part le format HTML utilisé par défaut dans la boîte de dialogue "
+"d'enregistrement des rapports, la liste déroulante de formats vous permet de "
+"choisir parmi les formats TSV (Tab Separated Values, soit « Valeurs "
+"séparées par des tabulations », format bien adapté aux tableurs), "
+"XML et iCal."
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"Pour les programmeurs, il existe une API D-Bus, qui peut être introspectée "
+"avec des outils comme <link href=\"https://fedorahosted.org/d-feet/\">D-"
+"Feet</link>."
+
+#: C/reports.page:21(p)
+msgid ""
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
+msgstr ""
+"La façon la plus rapide pour extraire des données du gestionnaire de temps "
+"est de générer un rapport HTML. Tout en appuyant sur la touche <key>Ctrl</"
+"key>, sélectionnez toutes les cellules voulues, puis copiez et collez-les dans "
+"l'application cible."
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "Résolution automatique de conflits."
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "Découpage des activités"
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
+"will be shrunk."
+msgstr ""
+"Le <app>gestionnaire de temps</app> fait tout ce qu'il peut pour éviter des "
+"chevauchements dans les activités. Si vous créez une activité en plein milieu "
+"d'une activité existante, celle-ci sera coupée en deux. Dans les autres cas, "
+"les activités précédentes seront écourtées."
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"La fusion peut devenir commode lors de la saisie d'informations pour toute la "
+"journée. Commencez par saisir la première activité et cochez la case « en "
+"cours » pour l'heure de fin. Faites de même pour l'activité suivante et vous "
+"constaterez que l'heure de fin de l'activité précédente s'ajuste à l'heure de "
+"début de l'activité suivante. Vous pouvez continuer ainsi pour toutes les "
+"activités de votre journée !"
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "Astuces pour accélérer la saisie d'une activité."
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "Saisie"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
+msgstr ""
+"Pour commencer le suivi, saisissez le nom de l'activité dans la zone de "
+"saisie puis appuyez sur la touche <key>Entrée</key>. Voici quelques astuces "
+"qui vous permettent de fournir davantage de détails au passage :"
+
+#: C/input.page:18(p)
+msgid "Use the @ symbol to add a category"
+msgstr "Utilisez le symbole @ pour ajouter une catégorie"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "Tout ce qui vient après une virgule (,) est placé dans le champ description"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it first in the input box"
+msgstr ""
+"Pour indiquer l'heure tout en écrivant, saisissez-la en premier dans la zone "
+"de saisie"
+
+#: C/input.page:23(p)
+msgid "A few examples:"
+msgstr "Quelques exemples :"
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 arrosage des fleurs"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over lunch."
+msgstr "On a oublié de noter l'indispensable arrosage des fleurs avant le déjeuner."
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "tomates@jardin, creusé des trous"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description."
+msgstr ""
+"On a besoin de plus de tomates dans le jardin. Que l'on creuse des trous est "
+"juste une information, donc on l'ajoute comme description."
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 existentialisme, réflexion sur l'infinie grandeur de l'univers"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
+msgstr ""
+"Correction d'information en indiquant à l'application que j'ai fait "
+"quelque chose d'autre pendant les 7 dernières minutes. La saisie de temps "
+"relatif ne fonctionne que pour les activités en cours, sans heure de fin."
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
+msgstr ""
+"De plus, vous pouvez ajoutez des étiquettes dans le champ de saisie des "
+"étiquettes. Les étiquettes sont séparées par des virgules. Le gestionnaire de "
+"temps vous propose une liste d'étiquettes correspondant à votre saisie, "
+"appuyez sur la touche <key>Tab</key> pour finir la saisie de l'étiquette "
+"selon la première étiquette correspondante affichée."
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/index.page:18(None)
+msgid ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+
+#: C/index.page:6(title) C/index.page:7(title)
+msgid "Time Tracking"
+msgstr "Gestion du temps"
+
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Partage des Conditions Initiales à l'Identique 3.0"
+
+#: C/index.page:17(title)
+msgid ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Time Tracking logo</media>Time Tracking"
+msgstr ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Logo du gestionnaire de temps</media>Time Tracking"
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr "Sauvegarde de la base de données des activités."
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "Sauvegarde"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. The application will reload the data automatically after a short "
+"while."
+msgstr ""
+"Les activités sont stockées dans une base de données SQLite, dans le fichier "
+"<file>~/.local/share/hamster-applet/hamster.db</file>. Ce fichier peut être "
+"sauvegardé et restauré à n'importe quel moment. L'application recharge "
+"automatiquement les données après un court instant."
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"Pour explorer le contenu de la base de données, vous pouvez utiliser le <link "
+"href=\"https://addons.mozilla.org/en-US/firefox/addon/5817"
+"\"><app>Gestionnaire SQLite</app></link> pour Mozilla Firefox."
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr ""
+"Florent Thévenet <feuloren@free.fr>\n"
+"Claude Paroz <claude@2xlibre.net>"
