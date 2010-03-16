@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 10:00+0100\n"
-"PO-Revision-Date: 2010-03-15 11:48+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"POT-Creation-Date: 2010-03-15 10:43+0000\n"
+"PO-Revision-Date: 2010-03-16 18:18+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,12 +25,14 @@ msgid ""
 "part of the activity is."
 msgstr ""
 "Jarduerak atzokoak balira bezala zenbatuko dira uneko ordua eta gaurko "
-"zehaztutako hasierako data baino lehenago bada. Jarduerak bi egunetara "
-"zabal daitezke, jardueraren zatirik handienaren gainera jaurtiz."
+"zehaztutako hasierako data baino lehenago bada. Jarduerak bi egunetara zabal "
+"daitezke, jardueraren zatirik handienaren gainera jaurtiz."
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid "Also remind every notify_interval minutes if no activity has been started."
-msgstr "Gogoratu baita ere 'notify_interval' bakoitzaren minutuak jarduerarik ez bada hasi."
+msgstr ""
+"Gogoratu baita ere 'notify_interval' bakoitzaren minutuak jarduerarik ez "
+"bada hasi."
 
 #: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:5
 msgid "Also remind when no activity is set"
@@ -45,9 +47,9 @@ msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
-"Izenen arabera aldatzea gaituta badago, zerrenda honek alda "
-"daitezkeen jardueren izenak ezartzen ditu, elementuen indizeek "
-"laneko areak adierazten dituzte."
+"Izenen arabera aldatzea gaituta badago, zerrenda honek alda daitezkeen "
+"jardueren izenak ezartzen ditu, elementuen indizeek laneko areak adierazten "
+"dituzte."
 
 #: ../data/hamster-applet.schemas.in.h:6
 msgid "Keyboard shortcut for showing the Time Tracker window."
@@ -59,18 +61,18 @@ msgid ""
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "last activity when returning to a previous workspace."
 msgstr ""
-"Gaitutako jarraipenen metodoen zerrenda. \"name\" (izena) balioak 'workspace_mapping'-en definitutako izenen arabera "
-"jarduerak aldatzea gaitzen du. \"memory\" balioak berriz, aurreko "
-"laneko areara itzultzean azkenengo jarduerara aldatzea "
-"gaitzen du."
+"Gaitutako jarraipenen metodoen zerrenda. \"name\" (izena) balioak "
+"'workspace_mapping'-en definitutako izenen arabera jarduerak aldatzea "
+"gaitzen du. \"memory\" balioak berriz, aurreko laneko areara itzultzean "
+"azkenengo jarduerara aldatzea gaitzen du."
 
 #: ../data/hamster-applet.schemas.in.h:8
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
 msgstr ""
-"Gogoratu uneko ataza zehaztutako minutu kopururo. Ezarri 0 edo "
-"120 baino balio handiagoarekin oroigarria desgaitzeko."
+"Gogoratu uneko ataza zehaztutako minutu kopururo. Ezarri 0 edo 120 baino "
+"balio handiagoarekin oroigarria desgaitzeko."
 
 #: ../data/hamster-applet.schemas.in.h:9
 msgid "Remind of current task every x minutes"
@@ -484,6 +486,11 @@ msgstr "Beroketak egitea"
 msgid "Update activity"
 msgstr "Eguneratu jarduera"
 
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
 #: ../src/hamster/overview.py:79
 msgid "Week"
 msgstr "Astea"
@@ -642,6 +649,15 @@ msgstr "Iraupena"
 msgid "Description"
 msgstr "Azalpena"
 
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/reports.py:264
+#| msgid "%B %d, %Y"
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%Y-%b-%d"
+
 #: ../src/hamster/reports.py:300
 msgid "Total Time"
 msgstr "Osoko denbora"
@@ -650,6 +666,11 @@ msgstr "Osoko denbora"
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "<b>%s</b>(e)n lanean"
+
+#: ../src/hamster/stats.py:86
+msgctxt "years"
+msgid "All"
+msgstr "Denak"
 
 #: ../src/hamster/stats.py:176
 msgid ""
@@ -662,6 +683,23 @@ msgstr ""
 #: ../src/hamster/stats.py:179
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Datuak biltzen - begiratu berriro aste bat igarotakoan."
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:310
+#| msgid "%B %d, %Y"
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%Y %b %d"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:315
+msgctxt "first record"
+msgid "%b %d"
+msgstr "%b %d"
 
 #: ../src/hamster/stats.py:317
 #, python-format
@@ -684,6 +722,15 @@ msgid ""
 msgstr ""
 "Jarraitutako denbora  %(human_days)s egun arrunt (%(human_years)s) edo %"
 "(working_days)s laneko egun (%(working_years)s) da."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:353
+#| msgid "%B %d, %Y"
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%Y %b %d"
 
 #: ../src/hamster/stats.py:358
 #, python-format
