@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2010-03-15 10:43+0000\n"
-"PO-Revision-Date: 2010-03-16 18:18+0100\n"
+"PO-Revision-Date: 2010-03-24 10:15+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
 msgstr ""
-"Gogoratu uneko ataza zehaztutako minutu kopururo. Ezarri 0 edo 120 baino "
+"Gogoratu uneko ataza, zehaztutako minutu kopururo. Ezarri 0 edo 120 baino "
 "balio handiagoarekin oroigarria desgaitzeko."
 
 #: ../data/hamster-applet.schemas.in.h:9
@@ -460,7 +460,7 @@ msgstr "Burtsa-baloreak begiratzea"
 
 #: ../src/hamster/db.py:921
 msgid "Super secret project X"
-msgstr "X proiektu supersekretua"
+msgstr "Oso ezkutuko X proiektua"
 
 #: ../src/hamster/db.py:922
 msgid "World domination"
@@ -800,7 +800,7 @@ msgstr "HTML txostena"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:58
 msgid "Tab-Separated Values (TSV)"
-msgstr "Tabulatzailez bereiztutako balioak (TSV)"
+msgstr "Tabuladorez bereiztutako balioak (TSV)"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:66
 msgid "XML"
