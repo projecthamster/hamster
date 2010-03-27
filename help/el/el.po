@@ -1,0 +1,294 @@
+# Greek translation for hamster-applet.
+# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-applet package.
+#
+# Marios Zindilis <m.zindilis@dmajor.org>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"POT-Creation-Date: 2010-03-26 15:45+0000\n"
+"PO-Revision-Date: 2010-03-27 13:57+0200\n"
+"Last-Translator: Marios Zindilis <m.zindilis@dmajor.org>\n"
+"Language-Team: Greek <team@gnome.gr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.0\n"
+
+#: C/legal.xml:3(p)
+msgid ""
+"This work is licensed under a <link href=\"http://creativecommons.org/"
+"licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
+"License</link>."
+msgstr ""
+"Αυτό το έργο διατίθεται υπό την <link href=\"http://creativecommons."
+"org/licenses/by-sa/3.0/\">Άδεια Creative Commons Attribution-Share Alike 3.0 "
+"Unported</link>."
+
+#: C/legal.xml:6(p)
+msgid ""
+"As a special exception, the copyright holders give you permission to copy, "
+"modify, and distribute the example code contained in this document under the "
+"terms of your choosing, without restriction."
+msgstr ""
+"Ως ειδική εξαίρεση, οι πνευματικοί ιδιοκτήτες σας επιτρέπουν να αντιγράψετε, "
+"να τροποποιήσετε και να αναδιανείμετε τα παραδείγματα πηγαίου κώδικα που "
+"περιλαμβάνονται σ' αυτό το έγγραφο υπό τους όρους της επιλογής σας, χωρίς "
+"περιορισμό."
+
+#: C/statistics.page:6(desc)
+msgid "Note on interpretation of statistics."
+msgstr "Σημείωση για την ερμηνεία των στατιστικών."
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "Στατιστικά"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"Τα στατιστικά που διατίθενται μέσω του συνδέσμου <gui style=\"button\">"
+"Προβολή στατιστικών</gui> είναι πειραματικά και αποτελούν μόνο μια ερμηνεία "
+"των γεγονότων. Αυτή η ερμηνεία θα πρέπει να συγκρίνεται με τις δικές σας "
+"παρατηρήσεις. Οι διορθώσεις σας είναι καλοδεχούμενες."
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr ""
+"Ωστόσο, το «Αρχίζει και τελειώνει» θα πρέπει να σας δίνει μια ιδέα για τον "
+"ενεργό σας χρόνο."
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker."
+msgstr "Λήψη δεδομένων από τον Καταγραφέα χρόνου."
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "Αναφορά και εξαγωγή"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
+msgstr ""
+"Εκτός από τη μορφή HTML η οποία προσφέρεται από προεπιλογή στο διάλογο "
+"Αποθήκευση αναφοράς, η αναδιπλούμενη λίστα μορφής σας επιτρέπει να επιλέξετε "
+"ανάμεσα στις μορφές TSV (Tab Separated Values, τιμές χωρισμένες με "
+"στηλοθέτη, κατάλληλο για εισαγωγή σε λογιστικά φύλλα), XML και iCal."
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"Για πρόσβαση για προγραμματισμό, υπάρχει το D-Bus API, το οποίο μπορείτε να "
+"εξετάσετε με εργαλεία όπως το <link href=\"https://fedorahosted."
+"org/d-feet/\">D-Feet</link>."
+
+#: C/reports.page:21(p)
+msgid ""
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
+msgstr ""
+"Ο γρηγορότερος τρόπος για να εξάγετε δεδομένα από τον Καταγραφέα χρόνου "
+"είναι να δημιουργήσετε μια αναφορά σε HTML. Κρατώντας πατημένο το πλήκτρο <"
+"key>Ctrl</key>, επιλέξτε όλα τα απαραίτητα κελιά, και μετά αντιγράψτε τα και "
+"επικολλήστε τα στην εφαρμογή που θέλετε."
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "Αυτόμαρη επίλυση διενέξεων."
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "Διαχωρισμός δραστηριοτήτων"
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
+"will be shrunk."
+msgstr ""
+"Ο <app>Καταγραφέας χρόνου</app> κάνει ότι καλύτερο μπορεί για να αποφεύγει "
+"αλληλοεπικαλύψεις στις δραστηριότητες. Αν δημιουργήσετε μια δραστηριότητα "
+"στη μέση μιας άλλης, η πρώτη θα κοπεί στα δύο. Σε άλλες περιπτώσεις "
+"αλληλοεπικάλυψης, οι προηγούμενες καταχωρήσεις θα μικρύνουν."
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"Η συγχώνευση μπορεί να είναι χρήσιμη όταν εισάγετε πληροφορίες για ολόκληρη "
+"τη μέρα. Αρχίστε "
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "Κόλπα για να επιταχύνετε την εισαγωγή δραστηριοτήτων."
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "Είσοδος"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
+msgstr ""
+"Για να αρχίσετε την καταγραφή, πληκτρολογήστε το όνομα της δραστηριότητας "
+"στο πεδίο εισόδου και πιέστε το πλήκτρο <key>Enter</key>. Υπάρχουν μερικά "
+"κόλπα που θα σας επιτρέψουν να καθορίσετε περισσότερες λεπτομέρειες ενώ "
+"γράφετε:"
+
+#: C/input.page:18(p)
+msgid "Use the @ symbol to add a category"
+msgstr "Χρησιμοποιήστε το σύμβολο @ για να προσθέσετε μια κατηγορία"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "Ο,τιδήποτε μετά από ένα κόμμα (,) θα αποθηκευτεί στο πεδίο περιγραφής"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it first in the input box"
+msgstr ""
+"Για να καθορίσετε χρόνο ενώ γράφετε, εισάγετέ τον πρώτο στο πεδίο εισόδου"
+
+#: C/input.page:23(p)
+msgid "A few examples:"
+msgstr "Μερικά παραδείγματα:"
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 πότισμα λουλουδιών"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over lunch."
+msgstr ""
+"Ξέχασα να σημειώσω τη σημασία του ποτίσματος λουλουδιών κατά τη διάρκεια του "
+"γεύματος."
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "ντομάτες@κηπουρική, σκάβω τρύπες"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description."
+msgstr ""
+"Χρειάζομαι περισσότερες ντομάτες στον κήπο. Το σκάψιμο τρύπων είναι καθαρά "
+"πληροφοριακό, οπότε το προσέθεσα ως περιγραφή."
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 υπαρξιακά, συλλογίζομαι το απέραντο του σύμπαντος"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
+msgstr ""
+"Διόρθωσα την πληροφορία ενημερώνοντας την εφαρμογή ότι έκανα κάτι άλλο κατά "
+"τα τελευταία επτά λεπτά. Οι σχετικοί χρόνοι δουλεύουν μόνο για τρέχουσες "
+"δραστηριότητες χωρίς χρόνο τέλους."
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
+msgstr ""
+"Πέρα από αυτό μπορείτε να προσθέσετε ετικέτες στο πεδίο εισόδου ετικέτων. Οι "
+"ετικέτες διαχωρίζονται με ένα κόμμα. Πιέστε το πλήκτρο <key>Tab</key> όταν "
+"εμφανιστεί το κουτί εισηγήσεων για να συμπληρώσετε την είσοδο στην πρώτη "
+"ετικέτα που ταιριάζει."
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/index.page:18(None)
+msgid ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+
+#: C/index.page:6(title) C/index.page:7(title)
+msgid "Time Tracking"
+msgstr "Καταγραφή χρόνου"
+
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Share Alike 3.0"
+
+#: C/index.page:17(title)
+msgid ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Time Tracking logo</media>Time Tracking"
+msgstr ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Λογότυπο της Καταγραφής χρόνου</media>Καταγραφή χρόνου"
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr ""
+"Πώς να πάρετε ένα αντίγραφο ασφαλείας της βάσης δεδομένων δραστηριοτήτων."
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "Αντίγραφο ασφαλείας"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. The application will reload the data automatically after a short "
+"while."
+msgstr ""
+"Οι δραστηριότητες αποθηκεύονται σε μια βάση δεδομένων SQLite, που βρίσκεται "
+"στο <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. Μπορείτε να αντιγράψετε το αρχείο για "
+"λόγους ασφαλείας και να το επαναφέρετε ενώ δουλεύετε. Η εφαρμογή θα "
+"επαναφέρει τα δεδομένα αυτόματα μετά από ένα σύντομο χρονικό διάστημα."
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"Για να δείτε τα δεδομένα μέσα στη βάση δεδομένων σας εισηγούμαστε να "
+"χρησιμοποιήσετε το <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>Διαχειριστή "
+"SQLite</app></link> για το Mozilla Firefox."
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr "Μάριος Ζηντίλης <m.zindilis@dmajor.org>, 2010"
+
+
