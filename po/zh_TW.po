@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet 2.27.93\n"
+"Project-Id-Version: hamster-applet 2.29.93\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-16 19:05+0800\n"
-"PO-Revision-Date: 2010-02-16 11:55+0800\n"
+"POT-Creation-Date: 2010-03-27 20:33+0800\n"
+"PO-Revision-Date: 2010-03-27 14:59+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese/Traditional <zh-l10n@lists.linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/hamster-applet.schemas.in.h:1
-#, fuzzy
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start and today, if it is over the time. "
@@ -106,7 +105,7 @@ msgstr "Project Hamster - 追蹤您的時間"
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:344 ../src/hamster-standalone:196
+#: ../src/hamster/applet.py:344 ../src/hamster-standalone:199
 msgid "Time Tracker"
 msgstr "時間追蹤程式"
 
@@ -405,15 +404,10 @@ msgid "Activity"
 msgstr "活動"
 
 #: ../src/hamster/applet.py:317 ../src/hamster/applet.py:340
-#: ../src/hamster/applet.py:437 ../src/hamster-standalone:192
-#: ../src/hamster-standalone:261
+#: ../src/hamster/applet.py:437 ../src/hamster-standalone:195
+#: ../src/hamster-standalone:264
 msgid "No activity"
 msgstr "沒有活動"
-
-#: ../src/hamster/applet.py:335 ../src/hamster-standalone:187
-#, c-format, python-format
-msgid "Working on <b>%s</b>"
-msgstr "運作於 <b>%s</b>"
 
 #: ../src/hamster/applet.py:395
 #, python-format
@@ -431,19 +425,19 @@ msgstr "%s時"
 #: ../src/hamster/db.py:723 ../src/hamster/edit_activity.py:51
 #: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
 #: ../src/hamster/reports.py:94 ../src/hamster/reports.py:243
-#: ../src/hamster-standalone:244 ../src/hamster/stuff.py:132
+#: ../src/hamster-standalone:247 ../src/hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "未排序"
 
-#: ../src/hamster/applet.py:428 ../src/hamster-standalone:252
+#: ../src/hamster/applet.py:428 ../src/hamster-standalone:255
 msgid "Just started"
 msgstr "剛剛開始"
 
-#: ../src/hamster/applet.py:671 ../src/hamster-standalone:426
+#: ../src/hamster/applet.py:671 ../src/hamster-standalone:441
 msgid "Changed activity"
 msgstr "改變的活動"
 
-#: ../src/hamster/applet.py:672 ../src/hamster-standalone:427
+#: ../src/hamster/applet.py:672 ../src/hamster-standalone:442
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "已切換為「%s」"
@@ -489,7 +483,7 @@ msgstr "倒立"
 msgid "Update activity"
 msgstr "更新活動"
 
-#: ../src/hamster/overview_activities.py:94
+#: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %b %d"
@@ -662,6 +656,11 @@ msgstr "%b %d, %Y"
 #: ../src/hamster/reports.py:300
 msgid "Total Time"
 msgstr "總共時間"
+
+#: ../src/hamster-standalone:190
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "運作於 <b>%s</b>"
 
 #: ../src/hamster/stats.py:86
 msgctxt "years"
