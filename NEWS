@@ -1,4 +1,29 @@
 ===============
+Version 2.30.0
+===============
+  Updated translations
+    * ca (Gil Forcada)
+    * da (Kenneth Nielsen)
+    * et (Mattias Põldaru)
+    * eu (Iñaki Larrañaga Murgoitio)
+    * fi (Tommi Vainikainen)
+    * hu (Gabor Kelemen)
+    * lt (Gintautas Miliauskas)
+    * lv (Toms Bauģis)
+    * pa (A S Alam)
+    * pt (Duarte Loreto)
+    * ru (Alexander Saprykin)
+    * sv (Daniel Nylander)
+    * uk (Maxim Dziumanenko)
+
+  Updated documentation translations
+    * el (Marios Zindilis)
+    * fr (Claude Paroz)
+    * zh_HK (Chao-Hsiung Liao)
+    * zh_TW (Chao-Hsiung Liao)
+
+
+===============
 Version 2.29.92
 ===============
   Bug fixes
