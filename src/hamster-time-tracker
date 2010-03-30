@@ -25,38 +25,58 @@ import datetime as dt
 import gtk, gobject
 import dbus, dbus.service, dbus.mainloop.glib
 
+class ProjectHamsterStatusIcon(gtk.StatusIcon):
+    def __init__(self, project):
+        gtk.StatusIcon.__init__(self)
+
+        self.project = project
+
+        menu = '''
+            <ui>
+             <menubar name="Menubar">
+              <menu action="Menu">
+               <separator/>
+               <menuitem action="Quit"/>
+              </menu>
+             </menubar>
+            </ui>
+        '''
+        actions = [
+            ('Menu',  None, 'Menu'),
+            ('Quit', gtk.STOCK_QUIT, '_Quit...', None, 'Quit Time Tracker', self.on_quit)]
+        ag = gtk.ActionGroup('Actions')
+        ag.add_actions(actions)
+        self.manager = gtk.UIManager()
+        self.manager.insert_action_group(ag, 0)
+        self.manager.add_ui_from_string(menu)
+        self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
+        self.set_from_icon_name("hamster-applet")
+        self.set_tooltip(_('Time Tracker'))
+        self.connect('activate', self.on_activate)
+        self.connect('popup-menu', self.on_popup_menu)
+
+    def on_activate(self, data):
+        if self.project.window is None:
+            self.project.create_hamster_window()
+            self.project.load_day()
+            self.project.reposition_hamster_window()
+            self.project.show_hamster_window()
+
+    def on_popup_menu(self, status, button, time):
+        self.menu.popup(None, None, None, button, time)
+
+    def on_quit(self, data):
+        gtk.main_quit()
+
+
+
 class ProjectHamster(object):
-    def __init__(self, window_name = None):
-        # load window of activity switcher and todays view
-        self._gui = load_ui_file("hamster.ui")
-        self.window = self._gui.get_object('hamster-window')
-        self.window.connect("delete_event", self.close_window)
+    def __init__(self):
+        # initialize the window.  explicitly set it to None first, so that the
+        # creator knows it doesn't yet exist.
+        self.window = None
+        self.create_hamster_window()
 
-        gtk.window_set_default_icon_name("hamster-applet")
-
-        self.new_name = widgets.ActivityEntry()
-        self.new_name.connect("value-entered", self.on_switch_activity_clicked)
-        widgets.add_hint(self.new_name, _("Activity"))
-        self.get_widget("new_name_box").add(self.new_name)
-        self.new_name.connect("changed", self.on_activity_text_changed)
-
-        self.new_name.set_property("secondary-icon-name", "help")
-        self.new_name.connect("icon-press", self.on_more_info_button_clicked)
-
-        self.new_tags = widgets.TagsEntry()
-        self.new_tags.connect("tags_selected", self.on_switch_activity_clicked)
-        widgets.add_hint(self.new_tags, _("Tags"))
-        self.get_widget("new_tags_box").add(self.new_tags)
-
-        self.tag_box = widgets.TagBox(interactive = False)
-        self.get_widget("tag_box").add(self.tag_box)
-
-        self.treeview = widgets.FactTree()
-        self.treeview.connect("key-press-event", self.on_todays_keys)
-        self.treeview.connect("edit-clicked", self._open_edit_activity)
-        self.treeview.connect("row-activated", self.on_today_row_activated)
-
-        self.get_widget("today_box").add(self.treeview)
         self.new_name.grab_focus()
 
         # DBus Setup
@@ -95,9 +115,69 @@ class ProjectHamster(object):
                                                       "Greetings from hamster!")
             self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
 
-        self._gui.connect_signals(self)
 
         self.prev_size = None
+
+        # bindings
+        self.accel_group = self.get_widget("accelgroup")
+        self.window.add_accel_group(self.accel_group)
+
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/close", gtk.keysyms.Escape, 0)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.q, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-applet>/help/contents", gtk.keysyms.F1, 0)
+
+
+
+        # create the status icon
+        self.statusicon = ProjectHamsterStatusIcon(self)
+
+
+        self.reposition_hamster_window()
+        self.show_hamster_window()
+
+    def create_hamster_window(self):
+        if self.window is None:
+            # load window of activity switcher and todays view
+            self._gui = load_ui_file("hamster.ui")
+            self.window = self._gui.get_object('hamster-window')
+            self.window.connect("delete_event", self.on_delete_window)
+
+            gtk.window_set_default_icon_name("hamster-applet")
+
+            self.new_name = widgets.ActivityEntry()
+            self.new_name.connect("value-entered", self.on_switch_activity_clicked)
+            widgets.add_hint(self.new_name, _("Activity"))
+            self.get_widget("new_name_box").add(self.new_name)
+            self.new_name.connect("changed", self.on_activity_text_changed)
+
+            self.new_tags = widgets.TagsEntry()
+            self.new_tags.connect("tags_selected", self.on_switch_activity_clicked)
+            widgets.add_hint(self.new_tags, _("Tags"))
+            self.get_widget("new_tags_box").add(self.new_tags)
+
+            self.tag_box = widgets.TagBox(interactive = False)
+            self.get_widget("tag_box").add(self.tag_box)
+
+            self.treeview = widgets.FactTree()
+            self.treeview.connect("key-press-event", self.on_todays_keys)
+            self.treeview.connect("edit-clicked", self._open_edit_activity)
+            self.treeview.connect("row-activated", self.on_today_row_activated)
+
+            self.get_widget("today_box").add(self.treeview)
+
+            # connect the accelerators
+            self.accel_group = self.get_widget("accelgroup")
+            self.window.add_accel_group(self.accel_group)
+
+            self._gui.connect_signals(self)
+
+    def reposition_hamster_window(self):
+        if not self.window:
+            self.create_hamster_window()
 
         if conf.get("standalone_window_maximized"):
             self.window.maximize()
@@ -111,19 +191,14 @@ class ProjectHamster(object):
             else:
                 self.window.set_position(gtk.WIN_POS_CENTER)
 
-
-        # bindings
-        self.accel_group = self.get_widget("accelgroup")
-        self.window.add_accel_group(self.accel_group)
-
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.w, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/help/contents", gtk.keysyms.F1, 0)
+    def show_hamster_window(self):
+        if not self.window:
+            self.create_hamster_window()
+            self.reposition_hamster_window()
 
         self.window.show_all()
+        self.statusicon.set_visible(False)
+
 
         self.load_day()
         # refresh hamster every 60 seconds to update duration
@@ -435,7 +510,7 @@ class ProjectHamster(object):
         gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet#input", 0L)
         return False
 
-    def close_window(self, *args):
+    def save_window_position(self):
         # properly saving window state and position
         maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
         conf.set("standalone_window_maximized", maximized)
@@ -446,8 +521,29 @@ class ProjectHamster(object):
             w, h = self.window.get_size()
             conf.set("standalone_window_box", [x, y, w, h])
 
+    def quit_app(self, *args):
+        self.save_window_position()
+
+        # quit the application
         gtk.main_quit()
 
+    def close_window(self, *args):
+        self.save_window_position()
+        self.window.destroy()
+        self.window = None
+        self.show_in_tray()
+
+    def on_delete_window(self, event, data):
+        self.save_window_position()
+        self.window.destroy()
+        self.window = None
+        self.show_in_tray()
+
+    def show_in_tray(self):
+        # show the status tray icon
+        activity = self.get_widget("last_activity_name").get_text()
+        self.statusicon.set_tooltip(activity)
+        self.statusicon.set_visible(True)
 
 
 # maintain just one instance. this code feels hackish

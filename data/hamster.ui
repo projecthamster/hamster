@@ -56,13 +56,23 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="close">
+                        <property name="label">gtk-close</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/close</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="close_window"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="quit">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="accel_path">&lt;hamster-applet&gt;/tracking/quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="close_window" swapped="no"/>
+                        <signal name="activate" handler="quit_app" swapped="no"/>
                       </object>
                     </child>
                   </object>
