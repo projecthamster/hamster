@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-21 21:00+0100\n"
-"PO-Revision-Date: 2010-02-20 17:55+0100\n"
+"POT-Creation-Date: 2010-04-05 01:02+0200\n"
+"PO-Revision-Date: 2010-03-31 20:04+0100\n"
 "Last-Translator: Adrian Guniš <andygun696@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgstr "Projekt Hamster — sledujte svůj čas"
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:344 ../src/hamster-standalone:196
+#: ../src/hamster/applet.py:344 ../src/hamster-standalone:201
 msgid "Time Tracker"
 msgstr "Měřič času"
 
@@ -189,7 +189,7 @@ msgstr "Náhled:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Tags:"
-msgstr "Značky:"
+msgstr "Štítky:"
 
 #: ../data/edit_activity.ui.h:6
 msgid "Time:"
@@ -253,9 +253,9 @@ msgid "Show Statistics"
 msgstr "Zobrazit statistiky"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:212
-#: ../src/hamster/reports.py:227 ../src/hamster-standalone:70
+#: ../src/hamster/reports.py:227 ../src/hamster-standalone:72
 msgid "Tags"
-msgstr "Značky"
+msgstr "Štítky"
 
 #: ../data/overview.ui.h:2
 msgid "Add"
@@ -296,7 +296,7 @@ msgstr "Přidat kategorii"
 
 #: ../data/preferences.ui.h:6
 msgid "Categories and Tags"
-msgstr "Kategorie a značky"
+msgstr "Kategorie a štítky"
 
 #: ../data/preferences.ui.h:7
 msgid "Category list"
@@ -356,7 +356,7 @@ msgstr "Zastavit sledování při nečinnosti počítače"
 
 #: ../data/preferences.ui.h:22
 msgid "Tags that should appear in autocomplete"
-msgstr "Značky, které se objeví v automatickém doplňování"
+msgstr "Štítky, které se objeví v automatickém doplňování"
 
 #: ../data/preferences.ui.h:23
 msgid "Time Tracker Preferences"
@@ -404,13 +404,13 @@ msgstr "Adrian Guniš <andygun696@gmail.com>, 2009, 2010"
 
 #: ../src/hamster/applet.py:206 ../src/hamster/preferences.py:196
 #: ../src/hamster/reports.py:225 ../src/hamster/reports.py:289
-#: ../src/hamster-standalone:64
+#: ../src/hamster-standalone:66
 msgid "Activity"
 msgstr "Činnost"
 
 #: ../src/hamster/applet.py:317 ../src/hamster/applet.py:340
-#: ../src/hamster/applet.py:437 ../src/hamster-standalone:192
-#: ../src/hamster-standalone:261
+#: ../src/hamster/applet.py:437 ../src/hamster-standalone:197
+#: ../src/hamster-standalone:266
 msgid "No activity"
 msgstr "Žádná činnost"
 
@@ -430,19 +430,19 @@ msgstr "%sh"
 #: ../src/hamster/db.py:723 ../src/hamster/edit_activity.py:51
 #: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
 #: ../src/hamster/reports.py:94 ../src/hamster/reports.py:243
-#: ../src/hamster-standalone:244 ../src/hamster/stuff.py:132
+#: ../src/hamster-standalone:249 ../src/hamster/stuff.py:132
 msgid "Unsorted"
 msgstr "Bez kategorie"
 
-#: ../src/hamster/applet.py:428 ../src/hamster-standalone:252
+#: ../src/hamster/applet.py:428 ../src/hamster-standalone:257
 msgid "Just started"
 msgstr "Právě spuštěno"
 
-#: ../src/hamster/applet.py:671 ../src/hamster-standalone:426
+#: ../src/hamster/applet.py:671 ../src/hamster-standalone:443
 msgid "Changed activity"
 msgstr "Změněná činnost"
 
-#: ../src/hamster/applet.py:672 ../src/hamster-standalone:427
+#: ../src/hamster/applet.py:672 ../src/hamster-standalone:444
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Přepnuto na '%s'"
@@ -488,7 +488,7 @@ msgstr "Cvičení"
 msgid "Update activity"
 msgstr "Aktualizace činnosti"
 
-#: ../src/hamster/overview_activities.py:94
+#: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %d. %b"
@@ -605,7 +605,7 @@ msgstr "popis"
 #. column title in the TSV export format
 #: ../src/hamster/reports.py:127
 msgid "tags"
-msgstr "značky"
+msgstr "štítky"
 
 #: ../src/hamster/reports.py:167
 #, python-format
@@ -663,7 +663,7 @@ msgstr "%d. %b %Y"
 msgid "Total Time"
 msgstr "Celkový čas"
 
-#: ../src/hamster-standalone:187
+#: ../src/hamster-standalone:192
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Pracuje se na <b>%s</b>"
