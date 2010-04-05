@@ -3,7 +3,6 @@ Version=1.0
 Type=Application
 Terminal=false
 _Name=Time Tracker
-_GenericName=Time Tracker
 _Comment=Project Hamster desktop time tracking
 Icon=hamster-applet
 Exec=@BINDIR@/gnome-time-tracker
