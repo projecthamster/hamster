@@ -212,7 +212,7 @@ class TagsEntry(gtk.Entry):
             runtime.dispatcher.del_handler('new_tags_added', self.refresh_tags)
 
 
-class TagBox(graphics.Area):
+class TagBox(graphics.Scene):
     __gsignals__ = {
         'tag-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
         'tag-unselected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
@@ -223,13 +223,13 @@ class TagBox(graphics.Area):
         self.hover_tag = None
         self.tags = []
         self.selected_tags = []
-        graphics.Area.__init__(self)
+        graphics.Scene.__init__(self)
 
         self.font_size = 10 #override default font size
 
         if self.interactive:
-            self.connect("mouse-over", self.on_tag_hover)
-            self.connect("button-release", self.on_tag_click)
+            self.connect("on-mouse-over", self.on_tag_hover)
+            self.connect("on-click", self.on_tag_click)
 
     def on_tag_hover(self, widget, regions):
         if regions:
@@ -237,7 +237,7 @@ class TagBox(graphics.Area):
         else:
             self.hover_tag = None
 
-        self.redraw_canvas()
+        self.redraw()
 
     def on_tag_click(self, widget, regions):
         tag = regions[0]
@@ -248,13 +248,13 @@ class TagBox(graphics.Area):
             #self.selected_tags.append(tag)
             self.emit("tag-selected", tag)
 
-        self.redraw_canvas()
+        self.redraw()
 
     def draw(self, tags):
         """Draw chart with given data"""
         self.tags = tags
         self.show()
-        self.redraw_canvas()
+        self.redraw()
 
     def tag_size(self, label):
         text_w, text_h = self.set_text(label)

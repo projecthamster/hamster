@@ -30,11 +30,11 @@ from bisect import bisect
 DAY = dt.timedelta(1)
 WEEK = dt.timedelta(7)
 
-class TimeChart(graphics.Area):
+class TimeChart(graphics.Scene):
     """this widget is kind of half finished"""
 
     def __init__(self):
-        graphics.Area.__init__(self)
+        graphics.Scene.__init__(self)
         self.start_time, self.end_time = None, None
         self.durations = []
 
@@ -44,6 +44,8 @@ class TimeChart(graphics.Area):
         self.minor_tick = None
 
         self.tick_totals = []
+
+        self.connect("on-enter-frame", self.on_enter_frame)
 
 
     def draw(self, durations, start_date, end_date):
@@ -107,32 +109,33 @@ class TimeChart(graphics.Area):
 
         self.count_hours()
 
-        self.redraw_canvas()
+        self.redraw()
 
 
-    def on_expose(self):
+    def on_enter_frame(self, scene, context):
         if not self.start_time or not self.end_time:
             return
 
+        g = graphics.Graphics(context)
+
         # figure out colors
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(bg_color):
-            bar_color = self.colors.darker(bg_color,  30)
-            tick_color = self.colors.darker(bg_color,  50)
+        if g.colors.is_light(bg_color):
+            bar_color = g.colors.darker(bg_color,  30)
+            tick_color = g.colors.darker(bg_color,  50)
         else:
-            bar_color = self.colors.darker(bg_color,  -30)
-            tick_color = self.colors.darker(bg_color,  -50)
+            bar_color = g.colors.darker(bg_color,  -30)
+            tick_color = g.colors.darker(bg_color,  -50)
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(fg_color):
-            label_color = self.colors.darker(fg_color,  70)
+        if g.colors.is_light(fg_color):
+            label_color = g.colors.darker(fg_color,  70)
         else:
-            label_color = self.colors.darker(fg_color,  -70)
+            label_color = g.colors.darker(fg_color,  -70)
 
 
-
-        self.context.set_line_width(1)
+        g.set_line_style(width=1)
 
         # major ticks
         if self.end_time - self.start_time < dt.timedelta(days=1):  # about the same day
@@ -177,10 +180,10 @@ class TimeChart(graphics.Area):
 
 
         def line(x, color):
-            self.context.move_to(round(x) + 0.5, 0)
-            self.set_color(color)
-            self.context.line_to(round(x) + 0.5, self.height)
-            self.context.stroke()
+            g.move_to(round(x) + 0.5, 0)
+            g.set_color(color)
+            g.line_to(round(x) + 0.5, self.height)
+            g.stroke()
 
         def somewhere_in_middle(time, color):
             # draws line somewhere in middle of the minor tick
@@ -212,15 +215,15 @@ class TimeChart(graphics.Area):
             bar_size = max(round(self.height * total * 0.8), 1)
             x, bar_width = exes[current_time]
 
-            self.set_color(bar_color)
+            g.set_color(bar_color)
 
             # rounded corners
-            self.draw_rect(x, self.height - bar_size, bar_width - 1, bar_size, 3)
+            g.rectangle(x, self.height - bar_size, bar_width - 1, bar_size, 3)
 
             # straighten out bottom rounded corners
-            self.context.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2))
+            g.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2))
 
-            self.context.fill()
+            g.fill()
 
 
         # tick label format
@@ -239,6 +242,12 @@ class TimeChart(graphics.Area):
 
 
         # tick labels
+        # TODO - should handle the layout business in graphics
+        layout = context.create_layout()
+        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font.set_size(8 * pango.SCALE)
+        layout.set_font_description(default_font)
+
         for current_time, total in self.tick_totals:
             # if we are on the day level, show label only on week start
             if (self.end_time - self.start_time) > dt.timedelta(10) \
@@ -247,11 +256,11 @@ class TimeChart(graphics.Area):
 
             x, bar_width = exes[current_time]
 
-            self.set_color(label_color)
-            self.layout.set_width(int((self.width - x) * pango.SCALE))
-            self.layout.set_markup(current_time.strftime(step_format))
-            self.context.move_to(x + 2, 0)
-            self.context.show_layout(self.layout)
+            g.set_color(label_color)
+            layout.set_width(int((self.width - x) * pango.SCALE))
+            layout.set_markup(current_time.strftime(step_format))
+            g.move_to(x + 2, 0)
+            context.show_layout(layout)
 
 
     def count_hours(self):

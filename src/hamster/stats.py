@@ -126,15 +126,15 @@ class Stats(object):
 
 
         #ah, just want summary look just like all the other text on the page
-        class CairoText(graphics.Area):
+        class CairoText(graphics.Scene):
             def __init__(self, fontsize = 10):
-                graphics.Area.__init__(self)
+                graphics.Scene.__init__(self)
                 self.text = ""
                 self.fontsize = fontsize
 
             def set_text(self, text):
                 self.text = text
-                self.redraw_canvas()
+                self.redraw()
 
             def on_expose(self):
                 # now for the text - we want reduced contrast for relaxed visuals

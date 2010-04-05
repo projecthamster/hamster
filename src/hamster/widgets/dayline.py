@@ -28,7 +28,7 @@ import datetime as dt
 import colorsys
 
 
-class DayLine(graphics.Area):
+class DayLine(graphics.Scene):
     def get_value_at_pos(self, x):
         """returns mapped value at the coordinates x,y"""
         return x / float(self.width / self.view_minutes)
@@ -36,7 +36,7 @@ class DayLine(graphics.Area):
 
     #normal stuff
     def __init__(self):
-        graphics.Area.__init__(self)
+        graphics.Scene.__init__(self)
 
         self.set_events(gtk.gdk.EXPOSURE_MASK
                                  | gtk.gdk.LEAVE_NOTIFY_MASK
@@ -87,7 +87,7 @@ class DayLine(graphics.Area):
 
         self.show()
 
-        self.redraw_canvas()
+        self.redraw()
 
 
     def on_button_release(self, area, event):
@@ -179,7 +179,7 @@ class DayLine(graphics.Area):
 
                     if end - start > 1:
                         self.highlight = (self.get_time(start), self.get_time(end))
-                        self.redraw_canvas()
+                        self.redraw()
 
                     self.__call_parent_time_changed()
                 else:
@@ -202,7 +202,7 @@ class DayLine(graphics.Area):
             return delta.days * 24 * 60 + delta.seconds / 60
 
     def scroll_to_range_start(self):
-        self.tweener.killTweensOf(self)
+        self.tweener.kill_tweens(self)
         self.animate(self, {"range_start_int": int(time.mktime(self.range_start.timetuple())),
                             "tweenType": graphics.Easing.Expo.easeOut,
                             "tweenTime": 0.4})
