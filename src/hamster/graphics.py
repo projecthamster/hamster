@@ -591,8 +591,8 @@ class Scene(gtk.DrawingArea):
                             | gtk.gdk.LEAVE_NOTIFY_MASK | gtk.gdk.ENTER_NOTIFY_MASK
                             | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK)
             self.connect("motion_notify_event", self.__on_mouse_move)
-            self.connect_after("enter_notify_event", self.__on_mouse_enter)
-            self.connect_after("leave_notify_event", self.__on_mouse_leave)
+            self.connect("enter_notify_event", self.__on_mouse_enter)
+            self.connect("leave_notify_event", self.__on_mouse_leave)
             self.connect("button_press_event", self.__on_button_press)
             self.connect("button_release_event", self.__on_button_release)
 
