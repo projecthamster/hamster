@@ -226,10 +226,19 @@ class Graphics(object):
         self.fill(color, opacity)
 
 
-    def _show_layout(self, context, text, font_desc):
+    def _show_layout(self, context, text, font_desc, alignment, width, wrap, ellipsize):
         layout = context.create_layout()
         layout.set_font_description(font_desc)
         layout.set_text(text)
+        layout.set_width(width)
+        layout.set_alignment(alignment)
+
+        if width > 0:
+            if wrap is not None:
+                layout.set_wrap(wrap)
+            else:
+                layout.set_ellipsize(ellipsize or pango.ELLIPSIZE_END)
+
         context.show_layout(layout)
 
     def show_text(self, text):
@@ -237,12 +246,12 @@ class Graphics(object):
         font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
         self.show_layout(text, font_desc)
 
-    def show_layout(self, text, font_desc):
+    def show_layout(self, text, font_desc, alignment = pango.ALIGN_LEFT, width = -1, wrap = None, ellipsize = None):
         """display text. font_desc is string of pango font description
            often handier than calling this function directly, is to create
            a class:Label object
         """
-        self._add_instruction(self._show_layout, text, font_desc)
+        self._add_instruction(self._show_layout, text, font_desc, alignment, width, wrap, ellipsize)
 
     def _remember_path(self, context):
         context.save()
@@ -311,7 +320,7 @@ class Graphics(object):
 
 
         # if we have been moved around, we should update bounds
-        check_extents = with_extents and context.get_matrix() != self.last_matrix
+        check_extents = with_extents and (context.get_matrix() != self.last_matrix or not self.paths)
         if check_extents:
             self.paths = deque()
             self.extents = None
@@ -347,7 +356,7 @@ class Sprite(gtk.Object):
     }
     def __init__(self, x = 0, y = 0, opacity = 1, visible = True, rotation = 0, pivot_x = 0, pivot_y = 0, interactive = True, draggable = False):
         gtk.Widget.__init__(self)
-        self.child_sprites = []
+        self.sprites = []
         self.graphics = Graphics()
         self.interactive = interactive
         self.draggable = draggable
@@ -361,7 +370,7 @@ class Sprite(gtk.Object):
     def add_child(self, *sprites):
         """Add child sprite. Child will be nested within parent"""
         for sprite in sprites:
-            self.child_sprites.append(sprite)
+            self.sprites.append(sprite)
             sprite.parent = self
 
     def _draw(self, context, opacity = 1):
@@ -385,7 +394,7 @@ class Sprite(gtk.Object):
         #self.emit("on-draw") # TODO - this is expensive when doing constant redraw with many frames. maybe we can have a simple callback here?
         self.graphics._draw(context, self.interactive or self.draggable)
 
-        for sprite in self.child_sprites:
+        for sprite in self.sprites:
             sprite._draw(context, self.opacity * opacity)
 
         if self.x or self.y or self.rotation:
@@ -408,40 +417,6 @@ class Sprite(gtk.Object):
 
 
 """a few shapes"""
-class Label(Sprite):
-    def __init__(self, text = "", size = 10, color = None, **kwargs):
-        kwargs.setdefault('interactive', False)
-        Sprite.__init__(self, **kwargs)
-        self.text = text
-        self.color = color
-        self.width, self.height = None, None
-
-        self.font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
-        self.font_desc.set_size(size * pango.SCALE)
-        self._draw_label()
-
-    def _draw_label(self):
-        self._set_dimensions()
-        self.graphics.move_to(0, 0) #make sure we don't wander off somewhere nowhere
-
-        if self.color:
-            self.graphics.set_color(self.color)
-        self.graphics.show_layout(self.text, self.font_desc)
-
-        if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
-            self.graphics.set_color("#000", 0)
-            self.graphics.rectangle(0,0, self.width, self.height)
-            self.graphics.stroke()
-
-
-    def _set_dimensions(self):
-        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 500, 2000)))
-        layout = context.create_layout()
-        layout.set_font_description(self.font_desc)
-        layout.set_text(self.text)
-
-        self.width, self.height = layout.get_pixel_size()
-
 
 class Shape(Sprite):
     """shape is a simple continuous shape that can have fill and stroke"""
@@ -488,6 +463,72 @@ class Shape(Sprite):
         if self.stroke:
             self.graphics.stroke(self.stroke)
 
+
+class Label(Shape):
+    def __init__(self, text = "", size = 10, color = None, alignment = pango.ALIGN_LEFT, **kwargs):
+        kwargs.setdefault('interactive', False)
+        Shape.__init__(self, **kwargs)
+        self.width, self.height = None, None
+
+        self._bounds_width = -1
+        self.wrap = None      # can be set to pango. [WRAP_WORD, WRAP_CHAR, WRAP_WORD_CHAR]
+        self.ellipsize = None # can be set to pango. [ELLIPSIZE_NONE, ELLIPSIZE_START, ELLIPSIZE_MIDDLE, ELLIPSIZE_END]
+
+        self.font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self.font_desc.set_size(size * pango.SCALE)
+        self.text = text
+        self.color = color
+        self.size = size
+        self.alignment = alignment
+
+
+    def __setattr__(self, name, val):
+        self.__dict__[name] = val
+
+        if name == "width":
+            # setting width means consumer wants to contrain the label
+            if val is None or val == -1:
+                self.__dict__['_bounds_width'] = -1
+            else:
+                self.__dict__['_bounds_width'] = val * pango.SCALE
+
+        if name in ("text", "size"):
+            self._set_dimensions()
+
+
+    def draw_shape(self):
+        self._set_dimensions()
+        self.graphics.move_to(0, 0) #make sure we don't wander off somewhere nowhere
+
+        if self.color:
+            self.graphics.set_color(self.color)
+
+        self.graphics.show_layout(self.text, self.font_desc,
+                                  self.alignment,
+                                  self._bounds_width,
+                                  self.wrap,
+                                  self.ellipsize)
+
+        if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
+            self.graphics.set_color("#000", 0)
+            self.graphics.rectangle(0,0, self.width, self.height)
+            self.graphics.stroke()
+
+
+    def _set_dimensions(self):
+        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0,0)))
+        layout = context.create_layout()
+        layout.set_font_description(self.font_desc)
+        layout.set_text(self.text)
+
+        layout.set_width(self._bounds_width)
+        if self.wrap:
+            layout.set_wrap(self.wrap)
+        else:
+            layout.set_ellipsize(self.ellipsize or pango.ELLIPSIZE_END)
+
+        # TODO - the __dict__ part look rather lame but allows to circumvent the setattr
+        self.__dict__['width'], self.height = layout.get_pixel_size()
 
 
 class Rectangle(Shape):
@@ -546,8 +587,12 @@ class Scene(gtk.DrawingArea):
     def __init__(self, interactive = True, framerate = 80):
         gtk.DrawingArea.__init__(self)
         if interactive:
-            self.set_events(gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK)
+            self.set_events(gtk.gdk.POINTER_MOTION_MASK
+                            | gtk.gdk.LEAVE_NOTIFY_MASK | gtk.gdk.ENTER_NOTIFY_MASK
+                            | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK)
             self.connect("motion_notify_event", self.__on_mouse_move)
+            self.connect_after("enter_notify_event", self.__on_mouse_enter)
+            self.connect_after("leave_notify_event", self.__on_mouse_leave)
             self.connect("button_press_event", self.__on_button_press)
             self.connect("button_release_event", self.__on_button_release)
 
@@ -572,6 +617,7 @@ class Scene(gtk.DrawingArea):
         self.mouse_x, self.mouse_y = None, None
 
         self._debug_bounds = False
+        self._mouse_in = False
 
 
     def add_child(self, *sprites):
@@ -662,8 +708,6 @@ class Scene(gtk.DrawingArea):
                     context.rectangle(x, y, x2-x, y2-y)
             context.stroke()
 
-
-
         self.emit("on-finish-frame", context)
 
 
@@ -676,18 +720,15 @@ class Scene(gtk.DrawingArea):
 
         for sprite in sprites:
             yield sprite
-            if sprite.child_sprites:
-                for child in self.all_sprites(sprite.child_sprites):
+            if sprite.sprites:
+                for child in self.all_sprites(sprite.sprites):
                     yield child
 
-    def __on_mouse_move(self, area, event):
-        if event.is_hint:
-            mouse_x, mouse_y, state = event.window.get_pointer()
-        else:
-            mouse_x = event.x
-            mouse_y = event.y
-            state = event.state
 
+    def __on_mouse_move(self, area, event):
+        mouse_x = event.x
+        mouse_y = event.y
+        state = event.state
         self.mouse_x, self.mouse_y = mouse_x, mouse_y
 
 
@@ -729,7 +770,8 @@ class Scene(gtk.DrawingArea):
 
 
     def _check_mouse(self, mouse_x, mouse_y):
-        if mouse_x is None: return
+        if mouse_x is None or not self._mouse_in:
+            return
 
         #check if we have a mouse over
         over = set()
@@ -752,6 +794,7 @@ class Scene(gtk.DrawingArea):
                 sprite._on_mouse_over()
 
             self.emit("on-mouse-over", list(new_mouse_overs))
+            self.redraw()
 
 
         gone_mouse_overs = self._mouse_sprites - over
@@ -759,11 +802,22 @@ class Scene(gtk.DrawingArea):
             for sprite in gone_mouse_overs:
                 sprite._on_mouse_out()
             self.emit("on-mouse-out", list(gone_mouse_overs))
+            self.redraw()
 
 
         self._mouse_sprites = over
         self.window.set_cursor(gtk.gdk.Cursor(cursor))
 
+
+    def __on_mouse_enter(self, area, event):
+        self._mouse_in = True
+
+    def __on_mouse_leave(self, area, event):
+        self._mouse_in = False
+        if self._mouse_sprites:
+            self.emit("on-mouse-out", list(self._mouse_sprites))
+            self._mouse_sprites = set()
+            self.redraw()
 
     def _check_hit(self, sprite, x, y):
         if sprite == self._drag_sprite:
