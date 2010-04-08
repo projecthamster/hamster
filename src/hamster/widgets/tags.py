@@ -219,17 +219,20 @@ class TagBox(graphics.Scene):
     }
 
     def __init__(self, interactive = True):
+        graphics.Scene.__init__(self)
         self.interactive = interactive
         self.hover_tag = None
         self.tags = []
         self.selected_tags = []
-        graphics.Scene.__init__(self)
+        self.layout = None
 
         self.font_size = 10 #override default font size
 
         if self.interactive:
             self.connect("on-mouse-over", self.on_tag_hover)
             self.connect("on-click", self.on_tag_click)
+
+        self.connect("on-enter-frame", self.on_enter_frame)
 
     def on_tag_hover(self, widget, regions):
         if regions:
@@ -255,6 +258,12 @@ class TagBox(graphics.Scene):
         self.tags = tags
         self.show()
         self.redraw()
+
+    def set_text(self, text):
+        # sets text and returns width and height of the layout
+        self.layout.set_text(text)
+        w, h = self.layout.get_pixel_size()
+        return w, h
 
     def tag_size(self, label):
         text_w, text_h = self.set_text(label)
@@ -287,7 +296,7 @@ class TagBox(graphics.Scene):
             cur_x += w + 8 #some padding too, please
         return cur_y + h + 6
 
-    def on_expose(self):
+    def on_enter_frame(self, scene, context):
         cur_x, cur_y = 4, 4
         for tag in self.tags:
             w, h = self.tag_size(tag)
@@ -302,14 +311,14 @@ class TagBox(graphics.Scene):
             else:
                 color = (241, 234, 170)
 
-            Tag(self.context,
+            Tag(context,
                 self.layout,
                 True,
                 tag,
                 color,
                 gtk.gdk.Rectangle(cur_x, cur_y, self.width - cur_x, self.height - cur_y))
 
-            if self.interactive:
+            if 1==2 and self.interactive:
                 self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
 
             cur_x += w + 6 #some padding too, please

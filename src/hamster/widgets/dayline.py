@@ -21,11 +21,12 @@ import gtk
 import gobject
 
 from .hamster import stuff
-from .hamster import graphics
+from .hamster import graphics, pytweener
 
 import time
 import datetime as dt
 import colorsys
+import pango
 
 
 class DayLine(graphics.Scene):
@@ -64,6 +65,8 @@ class DayLine(graphics.Scene):
         # TODO - get rid of these
         # use these to mark area where the "real" drawing is going on
         self.graph_x, self.graph_y = 0, 0
+
+        self.connect("on-enter-frame", self.on_enter_frame)
 
     def draw(self, day_facts, highlight = None):
         """Draw chart with given data"""
@@ -204,10 +207,18 @@ class DayLine(graphics.Scene):
     def scroll_to_range_start(self):
         self.tweener.kill_tweens(self)
         self.animate(self, {"range_start_int": int(time.mktime(self.range_start.timetuple())),
-                            "tweenType": graphics.Easing.Expo.easeOut,
+                            "tweenType": pytweener.Easing.Expo.ease_out,
                             "tweenTime": 0.4})
 
-    def on_expose(self):
+    def on_enter_frame(self, scene, context):
+        g = graphics.Graphics(context)
+
+
+        self.layout = context.create_layout()
+        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font.set_size(pango.SCALE * 8)
+        self.layout.set_font_description(default_font)
+
         # check if maybe we are approaching day boundaries and should ask for
         # more data!
         now = dt.datetime.fromtimestamp(self.range_start_int)
@@ -223,10 +234,9 @@ class DayLine(graphics.Scene):
                 self.days.append(date_plus)
 
 
-        context = self.context
         #TODO - use system colors and fonts
 
-        context.set_line_width(1)
+        g.set_line_style(width=1)
 
         #we will buffer 4 hours to both sides so partial labels also appear
         range_end = now + dt.timedelta(hours = 12 + 2 * 4)
@@ -243,7 +253,7 @@ class DayLine(graphics.Scene):
 
 
         # graph area
-        self.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
+        g.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
 
         context.save()
         context.translate(self.graph_x, self.graph_y)
@@ -262,60 +272,60 @@ class DayLine(graphics.Scene):
 
             if end_minutes * pixels_in_minute > 0 and \
                 start_minutes * pixels_in_minute + self.graph_x < self.width:
-                    context.set_source_rgba(0.86, 0.86, 0.86, 0.5)
+                    g.set_color((0.86, 0.86, 0.86), 0.5)
 
-                    context.rectangle(round(start_minutes * pixels_in_minute),
+                    g.rectangle(round(start_minutes * pixels_in_minute),
                                       graph_y,
                                       round(end_minutes * pixels_in_minute - start_minutes * pixels_in_minute),
                                       graph_height - 1)
-                    context.fill()
-                    context.stroke()
+                    g.fill()
+                    g.stroke()
 
-                    context.set_source_rgba(0.86, 0.86, 0.86, 1)
-                    self.context.move_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y)
-                    self.context.line_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y2)
-                    self.context.move_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y)
-                    self.context.line_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y2)
-                    context.stroke()
+                    g.set_color((0.86, 0.86, 0.86), 1)
+                    g.move_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y)
+                    g.line_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y2)
+                    g.move_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y)
+                    g.line_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y2)
+                    g.stroke()
 
 
 
         #time scale
-        context.set_source_rgb(0, 0, 0)
+        g.set_color("#000")
         self.layout.set_width(-1)
         for i in range(minutes):
             label_time = (now + dt.timedelta(minutes=i))
 
             if label_time.minute == 0:
-                context.set_source_rgb(0.8, 0.8, 0.8)
-                self.context.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 15)
-                self.context.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
-                context.stroke()
+                g.set_color((0.8, 0.8, 0.8))
+                g.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 15)
+                g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
+                g.stroke()
             elif label_time.minute % 15 == 0:
-                context.set_source_rgb(0.8, 0.8, 0.8)
-                self.context.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 5)
-                self.context.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
-                context.stroke()
+                g.set_color((0.8, 0.8, 0.8))
+                g.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 5)
+                g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
+                g.stroke()
 
 
 
             if label_time.minute == 0 and label_time.hour % 2 == 0:
                 if label_time.hour == 0:
-                    context.set_source_rgb(0.8, 0.8, 0.8)
-                    self.context.move_to(round(i * pixels_in_minute) + 0.5, graph_y)
-                    self.context.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
+                    g.set_color((0.8, 0.8, 0.8))
+                    g.move_to(round(i * pixels_in_minute) + 0.5, graph_y)
+                    g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
                     label_minutes = label_time.strftime("%b %d")
                 else:
                     label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
 
-                context.set_source_rgb(0.4, 0.4, 0.4)
+                g.set_color((0.4, 0.4, 0.4))
                 self.layout.set_markup(label_minutes)
                 label_w, label_h = self.layout.get_pixel_size()
 
-                context.move_to(round(i * pixels_in_minute) + 2, graph_y2 - label_h - 8)
+                g.move_to(round(i * pixels_in_minute) + 2, graph_y2 - label_h - 8)
 
                 context.show_layout(self.layout)
-        context.stroke()
+        g.stroke()
 
         #highlight rectangle
         if self.highlight:
@@ -326,26 +336,26 @@ class DayLine(graphics.Scene):
         if self.highlight_end + self.graph_x > 0 and self.highlight_start + self.graph_x < self.width:
             rgb = colorsys.hls_to_rgb(.6, .7, .5)
 
-            self.fill_area(self.highlight_start,
+            g.fill_area(self.highlight_start,
                            graph_y,
                            self.highlight_end - self.highlight_start,
                            graph_height,
                            (rgb[0], rgb[1], rgb[2], 0.5))
-            context.stroke()
+            g.stroke()
 
-            context.set_source_rgb(*rgb)
-            self.context.move_to(self.highlight_start + 0.5, graph_y)
-            self.context.line_to(self.highlight_start + 0.5, graph_y + graph_height)
-            self.context.move_to(self.highlight_end + 0.5, graph_y)
-            self.context.line_to(self.highlight_end + 0.5, graph_y + graph_height)
-            context.stroke()
+            g.set_color(rgb)
+            g.move_to(self.highlight_start + 0.5, graph_y)
+            g.line_to(self.highlight_start + 0.5, graph_y + graph_height)
+            g.move_to(self.highlight_end + 0.5, graph_y)
+            g.line_to(self.highlight_end + 0.5, graph_y + graph_height)
+            g.stroke()
 
         context.restore()
 
         #and now put a frame around the whole thing
-        context.set_source_rgb(0.7, 0.7, 0.7)
-        context.rectangle(0, graph_y-0.5, self.width - 0.5, graph_height)
-        context.stroke()
+        g.set_color((0.7, 0.7, 0.7))
+        g.rectangle(0, graph_y-0.5, self.width - 0.5, graph_height)
+        g.stroke()
 
         if self.move_type == "move" and (self.highlight_start + self.graph_x <= 0 or self.highlight_end + self.graph_x >= self.width):
             if self.highlight_start + self.graph_x <= 0:
