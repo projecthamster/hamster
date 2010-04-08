@@ -483,36 +483,31 @@ class Label(Shape):
 
 
     def __setattr__(self, name, val):
-        self.__dict__[name] = val
-
+        Shape.__setattr__(self, name, val)
         if name == "width":
             # setting width means consumer wants to contrain the label
             if val is None or val == -1:
                 self.__dict__['_bounds_width'] = -1
             else:
                 self.__dict__['_bounds_width'] = val * pango.SCALE
-
-        if name in ("text", "size"):
+        elif name in ("text", "size", "width"):
             self._set_dimensions()
 
 
     def draw_shape(self):
-        self._set_dimensions()
         self.graphics.move_to(0, 0) #make sure we don't wander off somewhere nowhere
-
-        if self.color:
-            self.graphics.set_color(self.color)
-
-        self.graphics.show_layout(self.text, self.font_desc,
-                                  self.alignment,
-                                  self._bounds_width,
-                                  self.wrap,
-                                  self.ellipsize)
 
         if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
             self.graphics.set_color("#000", 0)
             self.graphics.rectangle(0,0, self.width, self.height)
             self.graphics.stroke()
+
+        self.graphics.set_color(self.color)
+        self.graphics.show_layout(self.text, self.font_desc,
+                                  self.alignment,
+                                  self._bounds_width,
+                                  self.wrap,
+                                  self.ellipsize)
 
 
     def _set_dimensions(self):
