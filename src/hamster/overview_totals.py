@@ -47,30 +47,27 @@ class TotalsBox(gtk.VBox):
         x_offset = 100 # align all graphs to the left edge
 
 
-        self.category_chart = charting.HorizontalBarChart(max_bar_width = 20,
-                                                          legend_width = x_offset,
-                                                          value_format = "%.1f",
-                                                          interactive = True)
+        self.category_chart = charting.Chart(max_bar_width = 20,
+                                             legend_width = x_offset,
+                                             value_format = "%.1f")
         self.category_chart.connect("bar-clicked", self.on_category_clicked)
         self.selected_categories = []
         self.category_sums = None
 
         self.get_widget("totals_by_category").add(self.category_chart);
 
-        self.activity_chart = charting.HorizontalBarChart(max_bar_width = 20,
-                                                          legend_width = x_offset,
-                                                          value_format = "%.1f",
-                                                          interactive = True)
+        self.activity_chart = charting.Chart(max_bar_width = 20,
+                                             legend_width = x_offset,
+                                             value_format = "%.1f")
         self.activity_chart.connect("bar-clicked", self.on_activity_clicked)
         self.selected_activities = []
         self.activity_sums = None
 
         self.get_widget("totals_by_activity").add(self.activity_chart);
 
-        self.tag_chart = charting.HorizontalBarChart(max_bar_width = 20,
-                                                     legend_width = x_offset,
-                                                     value_format = "%.1f",
-                                                     interactive = True)
+        self.tag_chart = charting.Chart(max_bar_width = 20,
+                                        legend_width = x_offset,
+                                        value_format = "%.1f")
         self.tag_chart.connect("bar-clicked", self.on_tag_clicked)
         self.selected_tags = []
         self.tag_sums = None
@@ -82,31 +79,32 @@ class TotalsBox(gtk.VBox):
         self.report_chooser = None
 
 
-    def on_category_clicked(self, widget, idx):
-        if idx in self.category_chart.bars_selected:
-            self.category_chart.bars_selected.remove(idx)
-            self.selected_categories.remove(self.category_sums[0][idx])
+    def on_category_clicked(self, widget, key):
+        if key in self.category_chart.selected_keys:
+            self.category_chart.selected_keys.remove(key)
+            self.selected_categories.remove(key)
         else:
-            self.category_chart.bars_selected.append(idx)
-            self.selected_categories.append(self.category_sums[0][idx])
+            self.category_chart.selected_keys.append(key)
+            self.selected_categories.append(key)
+
         self.do_charts()
 
-    def on_activity_clicked(self, widget, idx):
-        if idx in self.activity_chart.bars_selected:
-            self.activity_chart.bars_selected.remove(idx)
-            self.selected_activities.remove(self.activity_sums[0][idx])
+    def on_activity_clicked(self, widget, key):
+        if key in self.activity_chart.selected_keys:
+            self.activity_chart.selected_keys.remove(key)
+            self.selected_activities.remove(key)
         else:
-            self.activity_chart.bars_selected.append(idx)
-            self.selected_activities.append(self.activity_sums[0][idx])
+            self.activity_chart.selected_keys.append(key)
+            self.selected_activities.append(key)
         self.do_charts()
 
-    def on_tag_clicked(self, widget, idx):
-        if idx in self.tag_chart.bars_selected:
-            self.tag_chart.bars_selected.remove(idx)
-            self.selected_tags.remove(self.tag_sums[0][idx])
+    def on_tag_clicked(self, widget, key):
+        if key in self.tag_chart.selected_keys:
+            self.tag_chart.selected_keys.remove(key)
+            self.selected_tags.remove(key)
         else:
-            self.tag_chart.bars_selected.append(idx)
-            self.selected_tags.append(self.tag_sums[0][idx])
+            self.tag_chart.selected_keys.append(key)
+            self.selected_tags.append(key)
         self.do_charts()
 
 

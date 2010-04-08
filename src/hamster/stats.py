@@ -97,29 +97,25 @@ class Stats(object):
 
             year_box.show_all()
 
-        self.chart_category_totals = charting.HorizontalBarChart(value_format = "%.1f",
-                                                            bars_beveled = False,
-                                                            max_bar_width = 20,
-                                                            legend_width = 70)
+        self.chart_category_totals = charting.Chart(value_format = "%.1f",
+                                                       max_bar_width = 20,
+                                                       legend_width = 70,
+                                                       interactive = False)
         self.get_widget("explore_category_totals").add(self.chart_category_totals)
 
 
-        self.chart_weekday_totals = charting.HorizontalBarChart(value_format = "%.1f",
-                                                            bars_beveled = False,
-                                                            max_bar_width = 20,
-                                                            legend_width = 70)
+        self.chart_weekday_totals = charting.Chart(value_format = "%.1f",
+                                                      max_bar_width = 20,
+                                                      legend_width = 70,
+                                                      interactive = False)
         self.get_widget("explore_weekday_totals").add(self.chart_weekday_totals)
 
-        self.chart_weekday_starts_ends = charting.HorizontalDayChart(bars_beveled = False,
-                                                                animate = False,
-                                                                max_bar_width = 20,
-                                                                legend_width = 70)
+        self.chart_weekday_starts_ends = charting.HorizontalDayChart(max_bar_width = 20,
+                                                                     legend_width = 70)
         self.get_widget("explore_weekday_starts_ends").add(self.chart_weekday_starts_ends)
 
-        self.chart_category_starts_ends = charting.HorizontalDayChart(bars_beveled = False,
-                                                                animate = False,
-                                                                max_bar_width = 20,
-                                                                legend_width = 70)
+        self.chart_category_starts_ends = charting.HorizontalDayChart(max_bar_width = 20,
+                                                                      legend_width = 70)
         self.get_widget("explore_category_starts_ends").add(self.chart_category_starts_ends)
 
 
