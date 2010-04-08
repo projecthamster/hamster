@@ -424,14 +424,16 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 cur_x, cur_y = start_x, start_y
 
                 for i, tag in enumerate(fact["tags"]):
-                    tag_w, tag_h = Tag.tag_size(tag, self.tag_layout)
+                    temp_tag = Tag(tag)
+                    tag_w, tag_h = temp_tag.width, temp_tag.height
 
                     if i > 0 and cur_x + tag_w >= cell_end:
                         cur_x = start_x
                         cur_y += tag_h + 4
 
-                    Tag(context, self.tag_layout, True, tag, None,
-                        gtk.gdk.Rectangle(cur_x, cur_y, cell_end - cur_x, height - cur_y))
+                    sprite = Tag(tag, False)
+                    sprite.x, sprite.y  = cur_x, cur_y
+                    sprite._draw(context)
 
                     cur_x += tag_w + 4
 
@@ -505,7 +507,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             layout.set_font_description(self.tag_font)
 
             for i, tag in enumerate(fact["tags"]):
-                tag_w, tag_h = Tag.tag_size(tag, layout)
+                temp_tag = Tag(tag)
+                tag_w, tag_h = temp_tag.width, temp_tag.height
 
                 if i > 0 and cur_x + tag_w >= tag_cell_end:
                     cur_x = tag_cell_start

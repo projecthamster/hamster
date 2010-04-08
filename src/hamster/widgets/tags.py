@@ -229,178 +229,104 @@ class TagBox(graphics.Scene):
         self.font_size = 10 #override default font size
 
         if self.interactive:
-            self.connect("on-mouse-over", self.on_tag_hover)
+            self.connect("on-mouse-over", self.on_mouse_over)
+            self.connect("on-mouse-out", self.on_mouse_out)
             self.connect("on-click", self.on_tag_click)
 
         self.connect("on-enter-frame", self.on_enter_frame)
 
-    def on_tag_hover(self, widget, regions):
-        if regions:
-            self.hover_tag = regions[0]
+    def on_mouse_over(self, area, targets):
+        tag = targets[0]
+        tag.tag.fill = tag.graphics.colors.darker(tag.tag.fill, -20)
+
+    def on_mouse_out(self, area, targets):
+        tag = targets[0]
+
+        if tag.text in self.selected_tags:
+            tag.tag.fill = (242, 229, 97)
         else:
-            self.hover_tag = None
+            tag.tag.fill = (241, 234, 170)
 
-        self.redraw()
 
-    def on_tag_click(self, widget, regions):
-        tag = regions[0]
-        if tag in self.selected_tags:
-            #self.selected_tags.remove(tag)
-            self.emit("tag-unselected", tag)
+    def on_tag_click(self, area, event, targets):
+        tag = targets[0]
+        if tag.text in self.selected_tags:
+            self.emit("tag-unselected", tag.text)
         else:
-            #self.selected_tags.append(tag)
-            self.emit("tag-selected", tag)
-
+            self.emit("tag-selected", tag.text)
+        self.on_mouse_out(area, targets) #paint
         self.redraw()
 
     def draw(self, tags):
-        """Draw chart with given data"""
-        self.tags = tags
+        new_tags = [Tag(label) for label in tags]
+
+        for tag in self.tags:
+            self.sprites.remove(tag)
+
+        self.add_child(*new_tags)
+        self.tags = new_tags
+
         self.show()
         self.redraw()
 
-    def set_text(self, text):
-        # sets text and returns width and height of the layout
-        self.layout.set_text(text)
-        w, h = self.layout.get_pixel_size()
-        return w, h
-
-    def tag_size(self, label):
-        text_w, text_h = self.set_text(label)
-        w = text_w + 16 # padding (we have some diagonals to draw)
-        h = text_h + 2
-        return w, h
-
     def count_height(self, width):
-        # tells you how much height in this width is needed to show all tags
-
-        if not self.tags:
-            return None
-
-        pixmap = gtk.gdk.Pixmap(None, width, 500, 24)
-        context = pixmap.cairo_create()
-
-        if not self.layout:
-            self.layout = context.create_layout()
-            default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-            default_font.set_size(pango.SCALE * 10)
-            self.layout.set_font_description(default_font)
-
-        cur_x, cur_y = 4, 4
-        for tag in self.tags:
-            w, h = self.tag_size(tag)
-            if cur_x + w >= width - 5:  #if we do not fit, we wrap
-                cur_x = 5
-                cur_y += h + 6
-
-            cur_x += w + 8 #some padding too, please
-        return cur_y + h + 6
+        # reposition tags and see how much space we take up
+        self.width = width
+        w, h = self.on_enter_frame(None, None)
+        return h + 6
 
     def on_enter_frame(self, scene, context):
         cur_x, cur_y = 4, 4
+        tag = None
         for tag in self.tags:
-            w, h = self.tag_size(tag)
-            if cur_x + w >= self.width - 5:  #if we do not fit, we wrap
+            if cur_x + tag.width >= self.width - 5:  #if we do not fit, we wrap
                 cur_x = 5
-                cur_y += h + 6
+                cur_y += tag.height + 6
 
-            if tag in self.selected_tags:
-                color = (242, 229, 97)
-            elif tag == self.hover_tag:
-                color = (252, 248, 204)
-            else:
-                color = (241, 234, 170)
+            tag.x = cur_x
+            tag.y = cur_y
 
-            Tag(context,
-                self.layout,
-                True,
-                tag,
-                color,
-                gtk.gdk.Rectangle(cur_x, cur_y, self.width - cur_x, self.height - cur_y))
+            cur_x += tag.width + 6 #some padding too, please
 
-            if 1==2 and self.interactive:
-                self.register_mouse_region(cur_x, cur_y, cur_x + w, cur_y + h, tag)
+        if tag:
+            cur_y += tag.height + 2 # the last one
 
-            cur_x += w + 6 #some padding too, please
+        return cur_x, cur_y
 
+class Tag(graphics.Sprite):
+    def __init__(self, text, interactive = True, color = "#F1EAAA"):
+        graphics.Sprite.__init__(self, interactive = interactive)
 
-class Tag(object):
-    def __init__(self, context, layout, render_now = False, label = None, color = None, rect = None):
-        if not context:
-            render_now = False
-        else:
-            self.context = context
-            self.layout = layout
+        self.text = text
+        label = graphics.Label(text, size = 8, color = (30, 30, 30), y = 2)
 
-        self.x, self.y, self.width, self.height = rect.x, rect.y, rect.width, rect.height
-
-        if not render_now:
-            return
-
-        self.label = label
-        self.color = color or (241, 234, 170)
-
-        self.context.save()
-        self.draw_tag()
-        self.context.restore()
-
-    def set_color(self, color, opacity = None):
-        if color[0] > 1 or color[1] > 0 or color[2] > 0:
-            color = [c / 255.0 for c in color]
-
-        if opacity:
-            self.context.set_source_rgba(color[0], color[1], color[2], opacity)
-        elif len(color) == 3:
-            self.context.set_source_rgb(*color)
-        else:
-            self.context.set_source_rgba(*color)
-
-    def set_text(self, text):
-        # sets text and returns width and height of the layout
-        self.layout.set_text(text)
-        w, h = self.layout.get_pixel_size()
-        return w, h
-
-    @staticmethod
-    def tag_size(label, layout):
-        layout.set_text(label)
-        text_w, text_h = layout.get_pixel_size()
-        w = text_w + 16 # padding (we have some diagonals to draw)
-        h = text_h + 2
-        return w, h
-
-    def draw_tag(self):
-        self.context.set_line_width(1)
-        label, x, y, color = self.label, self.x, self.y, self.color
-        if x - round(x) != 0.5: x += 0.5
-        if y - round(y) != 0.5: y += 0.5
-
-        w, h = self.tag_size(label, self.layout)
+        w, h = label.width + 18, label.height + 3
         corner = h / 3
+        label.x = corner + 8
 
-        self.context.move_to(x, y + corner)
-        self.context.line_to(x + corner, y)
-        self.context.line_to(x + w, y)
-        self.context.line_to(x + w, y + h)
-        self.context.line_to(x + corner, y + h)
-        self.context.line_to(x, y + h - corner)
-        self.context.line_to(x, y + corner)
+        self.color = color
 
-        self.set_color(color)
-        self.context.fill_preserve()
-        self.set_color((180, 180, 180))
-        self.context.stroke()
+        self.tag = graphics.Polygon([(0, corner),
+                                         (corner, 0),
+                                         (w, 0),
+                                         (w, h),
+                                         (corner, h),
+                                         (0, h - corner)],
+                                        x = 0.5, y = 0.5,
+                                        fill = self.color,
+                                        stroke = "#b4b4b4",
+                                        line_width = 1)
 
-        self.context.arc(x + 6, y + h / 2 + 1, 2, 0, 2 * pi)
-        self.set_color((255, 255, 255))
-        self.context.fill_preserve()
-        self.set_color((180, 180, 180))
-        self.context.stroke()
+        self.add_child(self.tag)
+        self.add_child(graphics.Circle(2, x = 5.5, y = h / 2 - 1.5,
+                                       fill = "#fff",
+                                       stroke = "#b4b4b4",
+                                       line_width = 1))
 
-        self.set_color((0, 0, 0))
+        self.add_child(label)
+        self.width, self.height = w, h
 
-        #self.layout.set_width((self.width) * pango.SCALE)
-        self.context.move_to(x + 12,y)
+        self.graphics.set_color((0,0,0), 0)
+        self.graphics.rectangle(0, 0, w, h)
+        self.graphics.stroke()
 
-        self.set_color((30, 30, 30))
-        self.context.show_layout(self.layout)
