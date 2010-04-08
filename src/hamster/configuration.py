@@ -100,7 +100,7 @@ class RuntimeStore(Singleton):
 
 
 
-        self.database_file = gio.File(self.database_path)
+        self.database_file = gio.File(os.path.realpath(self.database_path))
         self.db_monitor = self.database_file.monitor_file()
         self.db_monitor.connect("changed", on_db_file_change)
 
