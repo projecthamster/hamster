@@ -262,6 +262,8 @@ class CustomFactController:
             # make sure we are within 24 hours of start time
             end_time -= dt.timedelta(days=(end_time - start_time).days)
 
+            if self.get_widget("in_progress").get_active():
+                end_time = None
 
             self.draw_preview(start_time.date(), [start_time, end_time])
         else:

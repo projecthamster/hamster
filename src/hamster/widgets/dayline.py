@@ -32,7 +32,7 @@ class Selection(graphics.Shape):
     def __init__(self, start_time = None, end_time = None):
         graphics.Shape.__init__(self, stroke = "#999", fill = "#999", z_order = 100)
         self.start_time, self.end_time  = None, None
-        self.width, self.height = 0, 0
+        self.width, self.height = None, None
         self.fixed = False
 
         self.start_label = graphics.Label("", 8, "#333", visible = False)
@@ -43,7 +43,7 @@ class Selection(graphics.Shape):
 
     def draw_shape(self):
         self.graphics.rectangle(0, 0, self.width, self.height - self.duration_label.height - 5.5)
-        self.graphics.fill(self.fill, 0.5)
+        self.graphics.fill(self.fill, 0.3)
 
         self.graphics.rectangle(0, 0, self.width, self.height - self.duration_label.height - 5.5)
         self.graphics.stroke(self.fill)
@@ -118,7 +118,7 @@ class DayLine(graphics.Scene):
 
     def add_facts(self, facts, highlight):
         for fact in facts:
-            fact_bar = graphics.Rectangle(0, 0, fill = "#aaa") # dimensions will depend on screen situation
+            fact_bar = graphics.Rectangle(0, 0, fill = "#aaa", stroke="#aaa") # dimensions will depend on screen situation
             fact_bar.fact = fact
 
             if fact['category'] in self.categories:
@@ -130,14 +130,15 @@ class DayLine(graphics.Scene):
             self.add_child(fact_bar)
             self.fact_bars.append(fact_bar)
 
-        if facts:
-            self.view_time = dt.datetime.combine(facts[0]['start_time'].date(), self.day_start)
-            self.start_time = self.view_time - dt.timedelta(hours=12)
+        self.view_time = dt.datetime.combine(highlight[0].date(), self.day_start)
+        self.start_time = self.view_time - dt.timedelta(hours=12)
 
         if highlight:
             self.chosen_selection.start_time = highlight[0]
             self.chosen_selection.end_time = highlight[1]
             self.chosen_selection.fixed = True
+
+        self.redraw()
 
 
     def on_mouse_down(self, scene, event):
@@ -196,9 +197,10 @@ class DayLine(graphics.Scene):
         g.set_line_style(width=1)
 
 
+        bottom = self.height - self.selection.end_label.height - 5
 
         for bar in self.fact_bars:
-            bar.y = vertical * bar.category
+            bar.y = vertical * bar.category + 5
             bar.height = vertical
 
 
@@ -214,15 +216,18 @@ class DayLine(graphics.Scene):
         if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = 24):
             minutes = round((dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel) + 0.5
             g.move_to(minutes, 0)
-            g.line_to(minutes, 0 + vertical * 10)
+            g.line_to(minutes, bottom)
             g.stroke("#f00", 0.4)
             snap_points.append(minutes - 0.5)
 
-        if self.chosen_selection.end_time and not self.chosen_selection.width:
+        if self.chosen_selection.start_time and self.chosen_selection.width is None:
             # we have time but no pixels
             minutes = round((self.chosen_selection.start_time - self.view_time).seconds / 60 / minute_pixel) + 0.5
-            self.chosen_selection.x = minutes
-            self.chosen_selection.width = round((self.chosen_selection.end_time - self.chosen_selection.start_time).seconds / 60 / minute_pixel)
+            self.chosen_selection.x = minutes - 1
+            if self.chosen_selection.end_time:
+                self.chosen_selection.width = round((self.chosen_selection.end_time - self.chosen_selection.start_time).seconds / 60 / minute_pixel)
+            else:
+                self.chosen_selection.width = 0
             self.chosen_selection.height = self.height
 
             # use the oportunity to set proper colors too
@@ -232,6 +237,8 @@ class DayLine(graphics.Scene):
 
         self.selection.visible = self.mouse_x is not None
 
+        self.selection.width = 0
+        self.selection.height = self.height
         if self.mouse_x:
             start_x = max(min(self.mouse_x, self.width-1), 0) #mouse, but within screen regions
 
@@ -267,12 +274,50 @@ class DayLine(graphics.Scene):
             self.selection.end_time = end_time
 
             self.selection.x = start_x
-            self.selection.width = 0
             if end_time:
                 self.selection.width = end_x - start_x
 
             self.selection.y = 0
-            self.selection.height = self.height
 
             self.selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
             self.selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+
+
+
+        #time scale
+        g.set_color("#000")
+        #self.layout.set_width(-1)
+
+        for i in range(24*60):
+            label_time = (self.view_time + dt.timedelta(minutes=i))
+
+            if label_time.minute == 0:
+                g.set_color((0.8, 0.8, 0.8))
+                g.move_to(round(i / minute_pixel) + 0.5, bottom - 15)
+                g.line_to(round(i / minute_pixel) + 0.5, bottom)
+                g.stroke()
+            elif label_time.minute % 15 == 0:
+                g.set_color((0.8, 0.8, 0.8))
+                g.move_to(round(i / minute_pixel) + 0.5, bottom - 5)
+                g.line_to(round(i / minute_pixel) + 0.5, bottom)
+                g.stroke()
+
+
+
+            if label_time.minute == 0 and label_time.hour % 2 == 0:
+                if label_time.hour == 0:
+                    g.set_color((0.8, 0.8, 0.8))
+                    g.move_to(round(i / minute_pixel) + 0.5, 0)
+                    g.line_to(round(i / minute_pixel) + 0.5, bottom)
+                    label_minutes = label_time.strftime("%b %d")
+                else:
+                    label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
+
+                g.set_color((0.4, 0.4, 0.4))
+                #self.layout.set_markup(label_minutes)
+                #label_w, label_h = self.layout.get_pixel_size()
+
+                #g.move_to(round(i * pixels_in_minute) + 2, graph_y2 - label_h - 8)
+
+                #context.show_layout(self.layout)
+        g.stroke()
