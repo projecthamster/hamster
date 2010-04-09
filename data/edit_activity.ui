@@ -15,7 +15,6 @@
     <child>
       <object class="GtkVBox" id="vbox2">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkTable" id="table1">
             <property name="visible">True</property>
@@ -25,7 +24,7 @@
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkEventBox" id="day_preview">
-                <property name="height_request">56</property>
+                <property name="height_request">70</property>
                 <property name="visible">True</property>
                 <child>
                   <placeholder/>
@@ -164,18 +163,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label4">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="label" translatable="yes">Preview:</property>
-              </object>
-              <packing>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="Description:">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
@@ -246,6 +233,18 @@
                 <property name="bottom_attach">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="label" translatable="yes">Preview:</property>
+              </object>
+              <packing>
+                <property name="top_attach">4</property>
+                <property name="bottom_attach">5</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -267,6 +266,8 @@
                 <signal name="clicked" handler="on_cancel_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -280,6 +281,8 @@
                 <signal name="clicked" handler="on_save_button_clicked"/>
               </object>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>

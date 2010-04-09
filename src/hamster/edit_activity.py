@@ -108,8 +108,7 @@ class CustomFactController:
 
 
         self.dayline = widgets.DayLine()
-        self.dayline.on_time_changed = self.update_time
-        self.dayline.on_more_data = runtime.storage.get_facts
+        self.dayline.connect("on-time-chosen", self.update_time)
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.on_in_progress_toggled(self.get_widget("in_progress"))
@@ -122,16 +121,20 @@ class CustomFactController:
 
         self.window.show_all()
 
-    def update_time(self, start_time, end_time):
+    def update_time(self, widget, start_time, end_time):
         self.start_time.set_time(start_time)
         self.start_date.set_date(start_time)
-        self.end_time.set_time(end_time)
-        self.set_end_date_label(end_time)
+
+        self.get_widget("in_progress").set_active(end_time is None)
+
+        if end_time:
+            self.end_time.set_time(end_time)
+            self.set_end_date_label(end_time)
 
 
     def draw_preview(self, date, highlight = None):
         day_facts = runtime.storage.get_facts(date)
-        self.dayline.draw(day_facts, highlight)
+        self.dayline.add_facts(day_facts, highlight)
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -222,7 +225,7 @@ class CustomFactController:
         self.get_widget("end_label").set_sensitive(sensitive)
         self.get_widget("end_date_label").set_sensitive(sensitive)
         self.validate_fields()
-        self.dayline.set_in_progress(not sensitive)
+        #self.dayline.set_in_progress(not sensitive)
 
     def on_cancel_clicked(self, button):
         self.close_window()

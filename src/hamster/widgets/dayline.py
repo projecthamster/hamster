@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2010 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -20,347 +20,258 @@
 import gtk
 import gobject
 
-from .hamster import stuff
-from .hamster import graphics, pytweener
-
 import time
 import datetime as dt
-import colorsys
-import pango
+
+from .hamster import stuff
+from .hamster import graphics, pytweener
+from .hamster.configuration import conf
+
+
+class Selection(graphics.Shape):
+    def __init__(self, start_time = None, end_time = None):
+        graphics.Shape.__init__(self, stroke = "#999", fill = "#999", z_order = 100)
+        self.start_time, self.end_time  = None, None
+        self.width, self.height = 0, 0
+        self.fixed = False
+
+        self.start_label = graphics.Label("", 8, "#333", visible = False)
+        self.end_label = graphics.Label("", 8, "#333", visible = False)
+        self.duration_label = graphics.Label("", 8, "#FFF", visible = False)
+
+        self.add_child(self.start_label, self.end_label, self.duration_label)
+
+    def draw_shape(self):
+        self.graphics.rectangle(0, 0, self.width, self.height - self.duration_label.height - 5.5)
+        self.graphics.fill(self.fill, 0.5)
+
+        self.graphics.rectangle(0, 0, self.width, self.height - self.duration_label.height - 5.5)
+        self.graphics.stroke(self.fill)
+
+
+        # adjust labels
+        self.start_label.visible = self.fixed == False and self.start_time is not None
+        if self.start_label.visible:
+            self.start_label.text = self.start_time.strftime("%H:%M")
+            if self.x - self.start_label.width - 5 > 0:
+                self.start_label.x = -self.start_label.width - 5
+            else:
+                self.start_label.x = 5
+
+            self.start_label.y = self.height - self.start_label.height
+
+        self.end_label.visible = self.fixed == False and self.end_time is not None
+        if self.end_label.visible:
+            self.end_label.text = self.end_time.strftime("%H:%M")
+            self.end_label.x = self.width + 5
+            self.end_label.y = self.height - self.end_label.height
+
+
+
+            duration = self.end_time - self.start_time
+            duration = int(duration.seconds / 60)
+            self.duration_label.text =  "%02d:%02d" % (duration / 60, duration % 60)
+
+            self.duration_label.visible = self.duration_label.width < self.width
+            if self.duration_label.visible:
+                self.duration_label.y = (self.height - self.duration_label.height) / 2
+                self.duration_label.x = (self.width - self.duration_label.width) / 2
+        else:
+            self.duration_label.visible = False
+
 
 
 class DayLine(graphics.Scene):
-    def get_value_at_pos(self, x):
-        """returns mapped value at the coordinates x,y"""
-        return x / float(self.width / self.view_minutes)
+    __gsignals__ = {
+        "on-time-chosen": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+    }
 
-
-    #normal stuff
-    def __init__(self):
+    def __init__(self, start_time = None):
         graphics.Scene.__init__(self)
 
-        self.set_events(gtk.gdk.EXPOSURE_MASK
-                                 | gtk.gdk.LEAVE_NOTIFY_MASK
-                                 | gtk.gdk.BUTTON_PRESS_MASK
-                                 | gtk.gdk.BUTTON_RELEASE_MASK
-                                 | gtk.gdk.POINTER_MOTION_MASK
-                                 | gtk.gdk.POINTER_MOTION_HINT_MASK)
-        self.connect("button_release_event", self.on_button_release)
-        self.connect("motion_notify_event", self.draw_cursor)
-        self.highlight_start, self.highlight_end = None, None
-        self.drag_start = None
-        self.move_type = ""
-        self.on_time_changed = None #override this with your func to get notified when user changes date
-        self.on_more_data = None #supplement with more data func that accepts single date
-        self.in_progress = False
 
-        self.range_start = None
-        self.range_start_int = None #same date just expressed as integer so we can interpolate it  (a temporar hack)
 
-        self.in_motion = False
-        self.days = []
+        day_start = conf.get("day_start_minutes")
+        self.day_start = dt.time(day_start / 60, day_start % 60)
 
-        self.view_minutes = float(12 * 60) #how many minutes are we going to show
+        self.view_time = start_time or dt.datetime.combine(dt.date.today(), self.day_start)
+        self.start_time = self.view_time - dt.timedelta(hours=12) # we will work with twice the time we will be displaying
 
-        # TODO - get rid of these
-        # use these to mark area where the "real" drawing is going on
-        self.graph_x, self.graph_y = 0, 0
+        self.fact_bars = []
+        self.categories = []
 
         self.connect("on-enter-frame", self.on_enter_frame)
-
-    def draw(self, day_facts, highlight = None):
-        """Draw chart with given data"""
-        self.facts = day_facts
-        if self.facts:
-            self.days.append(self.facts[0]["start_time"].date())
-
-        start_time = highlight[0] - dt.timedelta(minutes = highlight[0].minute) - dt.timedelta(hours = 10)
-
-        start_time_int = int(time.mktime(start_time.timetuple()))
-
-        if self.range_start:
-            self.range_start = start_time
-            self.scroll_to_range_start()
-        else:
-            self.range_start = start_time
-            self.range_start_int = start_time_int
+        self.connect("on-mouse-move", self.on_mouse_move)
+        self.connect("on-mouse-down", self.on_mouse_down)
+        self.connect("on-mouse-up", self.on_mouse_up)
+        self.connect("on-click", self.on_click)
 
 
-        self.highlight = highlight
+        self.selection = Selection()
+        self.chosen_selection = Selection()
 
-        self.show()
+        self.add_child(self.selection, self.chosen_selection)
+
+        self.drag_start = None
+        self.current_x = None
+
+
+    def add_facts(self, facts, highlight):
+        for fact in facts:
+            fact_bar = graphics.Rectangle(0, 0, fill = "#aaa") # dimensions will depend on screen situation
+            fact_bar.fact = fact
+
+            if fact['category'] in self.categories:
+                fact_bar.category = self.categories.index(fact['category'])
+            else:
+                fact_bar.category = len(self.categories)
+                self.categories.append(fact['category'])
+
+            self.add_child(fact_bar)
+            self.fact_bars.append(fact_bar)
+
+        self.view_time = dt.datetime.combine(facts[0]['start_time'].date(), self.day_start)
+        self.start_time = self.view_time - dt.timedelta(hours=12)
+
+        if highlight:
+            self.chosen_selection.start_time = highlight[0]
+            self.chosen_selection.end_time = highlight[1]
+            self.chosen_selection.fixed = True
+
+
+    def on_mouse_down(self, scene, event):
+        self.drag_start = self.current_x
+        if self.chosen_selection in self.sprites:
+            self.sprites.remove(self.chosen_selection)
+
+    def on_mouse_up(self, scene):
+        if self.drag_start:
+            self.drag_start = None
+            self.choose()
+
+    def on_click(self, scene, event, targets):
+        self.drag_start = None
+        self.emit("on-time-chosen", self.chosen_selection.start_time, None)
+        self.choose()
+
+
+    def choose(self):
+        self.sprites.remove(self.selection)
+
+        self.chosen_selection = self.selection
+        self.chosen_selection.fixed = True
+
+        self.selection = Selection()
+        self.add_child(self.selection, self.chosen_selection)
+
+        self.emit("on-time-chosen", self.chosen_selection.start_time, self.chosen_selection.end_time)
+        self.redraw()
+
+    def on_mouse_move(self, scene, event):
+        if self.current_x:
+            active_bar = None
+            # find if we are maybe on a bar
+            for bar in self.fact_bars:
+                if bar.x < self.current_x < bar.x + bar.width:
+                    active_bar = bar
+                    break
+
+            if active_bar:
+                self.set_tooltip_text("%s - %s" % (active_bar.fact['name'], active_bar.fact['category']))
+            else:
+                self.set_tooltip_text("")
 
         self.redraw()
 
 
-    def on_button_release(self, area, event):
-        if not self.drag_start:
-            return
-
-        self.drag_start, self.move_type = None, None
-
-        if event.state & gtk.gdk.BUTTON1_MASK:
-            self.__call_parent_time_changed()
-
-    def set_in_progress(self, in_progress):
-        self.in_progress = in_progress
-
-    def __call_parent_time_changed(self):
-        #now calculate back from pixels into minutes
-        start_time = self.highlight[0]
-        end_time = self.highlight[1]
-
-        if self.on_time_changed:
-            self.on_time_changed(start_time, end_time)
-
-    def get_time(self, pixels):
-        minutes = self.get_value_at_pos(x = pixels)
-        return dt.datetime.fromtimestamp(self.range_start_int) + dt.timedelta(minutes = minutes)
-
-
-
-    def draw_cursor(self, area, event):
-        if event.is_hint:
-            x, y, state = event.window.get_pointer()
-        else:
-            x = event.x + self.graph_x
-            y = event.y + self.graph_y
-            state = event.state
-
-        mouse_down = state & gtk.gdk.BUTTON1_MASK
-
-        highlight_start, highlight_end = None, None
-        if self.highlight_start:
-            highlight_start = self.highlight_start + self.graph_x
-            highlight_end = self.highlight_end + self.graph_x
-
-        if highlight_start != None:
-            start_drag = 10 > (highlight_start - x) > -1
-
-            end_drag = 10 > (x - highlight_end) > -1
-
-            if start_drag and end_drag:
-                start_drag = abs(x - highlight_start) < abs(x - highlight_end)
-
-            in_between = highlight_start <= x <= highlight_end
-            scale = True
-
-            if self.in_progress:
-                end_drag = False
-                in_between = False
-
-            if mouse_down and not self.drag_start:
-                self.drag_start = x
-                if start_drag:
-                    self.move_type = "start"
-                elif end_drag:
-                    self.move_type = "end"
-                elif in_between:
-                    self.move_type = "move"
-                    self.drag_start = x - self.highlight_start + self.graph_x
-                elif scale:
-                    self.move_type = "scale_drag"
-                    self.drag_start_time = dt.datetime.fromtimestamp(self.range_start_int)
-
-
-            if mouse_down and self.drag_start:
-                start, end = 0, 0
-                if self.move_type and self.move_type != "scale_drag":
-                    if self.move_type == "start":
-                        if 0 <= x <= self.width:
-                            start = x - self.graph_x
-                            end = self.highlight_end
-                    elif self.move_type == "end":
-                        if 0 <= x <= self.width:
-                            start = self.highlight_start
-                            end = x - self.graph_x
-                    elif self.move_type == "move":
-                        width = self.highlight_end - self.highlight_start
-                        start = x - self.drag_start + self.graph_x
-
-                        end = start + width
-
-                    if end - start > 1:
-                        self.highlight = (self.get_time(start), self.get_time(end))
-                        self.redraw()
-
-                    self.__call_parent_time_changed()
-                else:
-                    self.range_start = self.drag_start_time + dt.timedelta(minutes = self.get_value_at_pos(self.drag_start) - self.get_value_at_pos(x))
-                    self.scroll_to_range_start()
-
-
-            if start_drag:
-                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_SIDE))
-            elif end_drag:
-                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.RIGHT_SIDE))
-            elif in_between:
-                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
-            else:
-                area.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
-
-
-    def _minutes_from_start(self, date):
-            delta = (date - dt.datetime.fromtimestamp(self.range_start_int))
-            return delta.days * 24 * 60 + delta.seconds / 60
-
-    def scroll_to_range_start(self):
-        self.tweener.kill_tweens(self)
-        self.animate(self, {"range_start_int": int(time.mktime(self.range_start.timetuple())),
-                            "tweenType": pytweener.Easing.Expo.ease_out,
-                            "tweenTime": 0.4})
-
     def on_enter_frame(self, scene, context):
         g = graphics.Graphics(context)
 
+        vertical = 7
+        minute_pixel = (24.0 * 60) / self.width
 
-        self.layout = context.create_layout()
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(pango.SCALE * 8)
-        self.layout.set_font_description(default_font)
-
-        # check if maybe we are approaching day boundaries and should ask for
-        # more data!
-        now = dt.datetime.fromtimestamp(self.range_start_int)
-        if self.on_more_data:
-            date_plus = (now + dt.timedelta(hours = 12 + 2*4 + 1)).date()
-            date_minus = (now - dt.timedelta(hours=1)).date()
-
-            if date_minus != now.date() and date_minus not in self.days:
-                self.facts += self.on_more_data(date_minus)
-                self.days.append(date_minus)
-            elif date_plus != now.date() and date_plus not in self.days:
-                self.facts += self.on_more_data(date_plus)
-                self.days.append(date_plus)
-
-
-        #TODO - use system colors and fonts
+        snap_points = []
 
         g.set_line_style(width=1)
 
-        #we will buffer 4 hours to both sides so partial labels also appear
-        range_end = now + dt.timedelta(hours = 12 + 2 * 4)
-        self.graph_x = -self.width / 3 #so x moves one third out of screen
-
-        pixels_in_minute = self.width / self.view_minutes
-
-        minutes = self._minutes_from_start(range_end)
 
 
-        graph_y = 4
-        graph_height = self.height - 10
-        graph_y2 = graph_y + graph_height
+        for bar in self.fact_bars:
+            bar.y = vertical * bar.category
+            bar.height = vertical
 
 
-        # graph area
-        g.fill_area(0, graph_y - 1, self.width, graph_height, (1,1,1))
+            minutes = (bar.fact['start_time'] - self.view_time).seconds / 60 + (bar.fact['start_time'] - self.view_time).days * 24  * 60
 
-        context.save()
-        context.translate(self.graph_x, self.graph_y)
+            bar.x = round(minutes / minute_pixel) + 0.5
+            bar.width = round((bar.fact['delta']).seconds / 60 / minute_pixel)
 
-        #bars
-        for fact in self.facts:
-            start_minutes = self._minutes_from_start(fact["start_time"])
+            snap_points.append(bar.x)
+            snap_points.append(bar.x + bar.width)
 
-            if fact["end_time"]:
-                end_minutes = self._minutes_from_start(fact["end_time"])
+
+        if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = 24):
+            minutes = round((dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel) + 0.5
+            g.move_to(minutes, 0)
+            g.line_to(minutes, 0 + vertical * 10)
+            g.stroke("#f00", 0.4)
+            snap_points.append(minutes - 0.5)
+
+        if self.chosen_selection.end_time and not self.chosen_selection.width:
+            # we have time but no pixels
+            minutes = round((self.chosen_selection.start_time - self.view_time).seconds / 60 / minute_pixel) + 0.5
+            self.chosen_selection.x = minutes
+            self.chosen_selection.width = round((self.chosen_selection.end_time - self.chosen_selection.start_time).seconds / 60 / minute_pixel)
+            self.chosen_selection.height = self.height
+
+            # use the oportunity to set proper colors too
+            self.chosen_selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
+            self.chosen_selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+
+
+        self.selection.visible = self.mouse_x is not None
+
+        if self.mouse_x:
+            start_x = max(min(self.mouse_x, self.width-1), 0) #mouse, but within screen regions
+
+            # check for snap points
+            delta, closest_snap = min((abs(start_x - i), i) for i in snap_points)
+
+
+            if abs(closest_snap - start_x) < 5 and (not self.drag_start or self.drag_start != closest_snap):
+                start_x = closest_snap
+                minutes = int(start_x * minute_pixel)
             else:
-                if fact["start_time"].date() > dt.date.today() - dt.timedelta(days=1):
-                    end_minutes = self._minutes_from_start(dt.datetime.now())
-                else:
-                    end_minutes = start_minutes
-
-            if end_minutes * pixels_in_minute > 0 and \
-                start_minutes * pixels_in_minute + self.graph_x < self.width:
-                    g.set_color((0.86, 0.86, 0.86), 0.5)
-
-                    g.rectangle(round(start_minutes * pixels_in_minute),
-                                      graph_y,
-                                      round(end_minutes * pixels_in_minute - start_minutes * pixels_in_minute),
-                                      graph_height - 1)
-                    g.fill()
-                    g.stroke()
-
-                    g.set_color((0.86, 0.86, 0.86), 1)
-                    g.move_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y)
-                    g.line_to(round(start_minutes * pixels_in_minute) + 0.5, graph_y2)
-                    g.move_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y)
-                    g.line_to(round(end_minutes * pixels_in_minute) + 0.5, graph_y2)
-                    g.stroke()
+                start_x = start_x + 0.5
+                minutes = int(round(start_x * minute_pixel / 15)) * 15
 
 
-
-        #time scale
-        g.set_color("#000")
-        self.layout.set_width(-1)
-        for i in range(minutes):
-            label_time = (now + dt.timedelta(minutes=i))
-
-            if label_time.minute == 0:
-                g.set_color((0.8, 0.8, 0.8))
-                g.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 15)
-                g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
-                g.stroke()
-            elif label_time.minute % 15 == 0:
-                g.set_color((0.8, 0.8, 0.8))
-                g.move_to(round(i * pixels_in_minute) + 0.5, graph_y2 - 5)
-                g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
-                g.stroke()
+            self.current_x = minutes / minute_pixel
 
 
+            start_time = self.view_time + dt.timedelta(hours = minutes / 60, minutes = minutes % 60)
 
-            if label_time.minute == 0 and label_time.hour % 2 == 0:
-                if label_time.hour == 0:
-                    g.set_color((0.8, 0.8, 0.8))
-                    g.move_to(round(i * pixels_in_minute) + 0.5, graph_y)
-                    g.line_to(round(i * pixels_in_minute) + 0.5, graph_y2)
-                    label_minutes = label_time.strftime("%b %d")
-                else:
-                    label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
+            end_time, end_x = None, None
+            if self.drag_start:
+                minutes = int(self.drag_start * minute_pixel)
+                end_time =  self.view_time + dt.timedelta(hours = minutes / 60, minutes = minutes % 60)
+                end_x = round(self.drag_start) + 0.5
 
-                g.set_color((0.4, 0.4, 0.4))
-                self.layout.set_markup(label_minutes)
-                label_w, label_h = self.layout.get_pixel_size()
+            if end_time and end_time < start_time:
+                start_time, end_time = end_time, start_time
+                start_x, end_x = end_x, start_x
 
-                g.move_to(round(i * pixels_in_minute) + 2, graph_y2 - label_h - 8)
 
-                context.show_layout(self.layout)
-        g.stroke()
+            self.selection.start_time = start_time
+            self.selection.end_time = end_time
 
-        #highlight rectangle
-        if self.highlight:
-            self.highlight_start = round(self._minutes_from_start(self.highlight[0]) * pixels_in_minute)
-            self.highlight_end = round(self._minutes_from_start(self.highlight[1]) * pixels_in_minute)
+            self.selection.x = start_x
+            self.selection.width = 0
+            if end_time:
+                self.selection.width = end_x - start_x
 
-        #TODO - make a proper range check here
-        if self.highlight_end + self.graph_x > 0 and self.highlight_start + self.graph_x < self.width:
-            rgb = colorsys.hls_to_rgb(.6, .7, .5)
+            self.selection.y = 0
+            self.selection.height = self.height
 
-            g.fill_area(self.highlight_start,
-                           graph_y,
-                           self.highlight_end - self.highlight_start,
-                           graph_height,
-                           (rgb[0], rgb[1], rgb[2], 0.5))
-            g.stroke()
-
-            g.set_color(rgb)
-            g.move_to(self.highlight_start + 0.5, graph_y)
-            g.line_to(self.highlight_start + 0.5, graph_y + graph_height)
-            g.move_to(self.highlight_end + 0.5, graph_y)
-            g.line_to(self.highlight_end + 0.5, graph_y + graph_height)
-            g.stroke()
-
-        context.restore()
-
-        #and now put a frame around the whole thing
-        g.set_color((0.7, 0.7, 0.7))
-        g.rectangle(0, graph_y-0.5, self.width - 0.5, graph_height)
-        g.stroke()
-
-        if self.move_type == "move" and (self.highlight_start + self.graph_x <= 0 or self.highlight_end + self.graph_x >= self.width):
-            if self.highlight_start + self.graph_x <= 0:
-                self.range_start = self.range_start - dt.timedelta(minutes=30)
-            if self.highlight_end + self.graph_x >= self.width:
-                self.range_start = self.range_start + dt.timedelta(minutes=30)
-
-            self.scroll_to_range_start()
+            self.selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
+            self.selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
