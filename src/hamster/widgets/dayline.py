@@ -130,8 +130,9 @@ class DayLine(graphics.Scene):
             self.add_child(fact_bar)
             self.fact_bars.append(fact_bar)
 
-        self.view_time = dt.datetime.combine(facts[0]['start_time'].date(), self.day_start)
-        self.start_time = self.view_time - dt.timedelta(hours=12)
+        if facts:
+            self.view_time = dt.datetime.combine(facts[0]['start_time'].date(), self.day_start)
+            self.start_time = self.view_time - dt.timedelta(hours=12)
 
         if highlight:
             self.chosen_selection.start_time = highlight[0]
