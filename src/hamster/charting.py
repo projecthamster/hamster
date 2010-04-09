@@ -128,7 +128,7 @@ class Chart(graphics.Scene):
     def plot(self, keys, data):
         bars = dict([(bar.key, bar.normalized) for bar in self.bars])
 
-        max_val = float(max(data))
+        max_val = float(max(data or [0]))
 
         new_bars, new_labels = [], []
         for key, value in zip(keys, data):
