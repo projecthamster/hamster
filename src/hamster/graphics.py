@@ -168,7 +168,7 @@ class Graphics(object):
         """draw circle"""
         self._add_instruction(self._arc, x, y, radius, 0, math.pi * 2)
 
-    def ellipse(self, x, y, width, height, edges):
+    def ellipse(self, x, y, width, height, edges = None):
         """draw 'perfect' ellipse, opposed to squashed circle. works also for
            equilateral polygons"""
         steps = edges or max((32, width, height)) / 3 # the automatic edge case is somewhat arbitrary
@@ -177,17 +177,17 @@ class Graphics(object):
         step = math.pi * 2 / steps
         points = []
         while angle < math.pi * 2:
-            points.append((self.width / 2.0 * math.cos(angle),
-                           self.height / 2.0 * math.sin(angle)))
+            points.append((width / 2.0 * math.cos(angle),
+                           height / 2.0 * math.sin(angle)))
             angle += step
 
         min_x = min((point[0] for point in points))
         min_y = min((point[1] for point in points))
 
-        self._move_to(points[0][0] - min_x, points[0][1] - min_y)
-        for x, y in points:
-            self._line_to(x - min_x, y - min_y)
-        self._line_to(points[0][0] - min_x, points[0][1] - min_y)
+        self.move_to(points[0][0] - min_x + x, points[0][1] - min_y + y)
+        for p_x, p_y in points:
+            self.line_to(p_x - min_x + x, p_y - min_y + y)
+        self.line_to(points[0][0] - min_x + x, points[0][1] - min_y + y)
 
 
     def _arc_negative(self, context, x, y, radius, start_angle, end_angle): context.arc_negative(x, y, radius, start_angle, end_angle)
@@ -241,9 +241,11 @@ class Graphics(object):
 
         context.show_layout(layout)
 
-    def show_text(self, text):
+    def show_text(self, text, size = None, color = None):
         """display text with system's default font"""
         font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
+        if color: self.set_color(color)
+        if size: font_desc.set_size(size * pango.SCALE)
         self.show_layout(text, font_desc)
 
     def show_layout(self, text, font_desc, alignment = pango.ALIGN_LEFT, width = -1, wrap = None, ellipsize = None):
@@ -354,7 +356,11 @@ class Sprite(gtk.Object):
         "on-drag": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         #"on-draw": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
-    def __init__(self, x = 0, y = 0, opacity = 1, visible = True, rotation = 0, pivot_x = 0, pivot_y = 0, interactive = True, draggable = False):
+    def __init__(self, x = 0, y = 0,
+                 opacity = 1, visible = True,
+                 rotation = 0, pivot_x = 0, pivot_y = 0,
+                 interactive = True, draggable = False,
+                 z_order = 0):
         gtk.Widget.__init__(self)
         self.sprites = []
         self.graphics = Graphics()
@@ -366,12 +372,15 @@ class Sprite(gtk.Object):
         self.parent = None
         self.x, self.y = x, y
         self.rotation = rotation
+        self.z_order = z_order
 
     def add_child(self, *sprites):
         """Add child sprite. Child will be nested within parent"""
         for sprite in sprites:
             self.sprites.append(sprite)
             sprite.parent = self
+
+        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
     def _draw(self, context, opacity = 1):
         if self.visible is False:
@@ -574,6 +583,7 @@ class Scene(gtk.DrawingArea):
         "on-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
         "on-drag": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
         "on-mouse-move": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-down": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-mouse-up": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "on-mouse-over": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-mouse-out": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
@@ -619,6 +629,8 @@ class Scene(gtk.DrawingArea):
         """Add one or several :class:`graphics.Sprite` sprites to scene """
         for sprite in sprites:
             self.sprites.append(sprite)
+
+        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
     def clear(self):
         """Remove all sprites from scene"""
@@ -848,6 +860,7 @@ class Scene(gtk.DrawingArea):
                 over = sprite # last one will take precedence
         self._drag_sprite = over
         self._button_press_time = dt.datetime.now()
+        self.emit("on-mouse-down", event)
 
     def __on_button_release(self, area, event):
         #if the drag is less than 5 pixles, then we have a click
