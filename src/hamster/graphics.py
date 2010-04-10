@@ -382,6 +382,15 @@ class Sprite(gtk.Object):
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
+    def remove_child(self, *sprites):
+        """Add child sprite. Child will be nested within parent"""
+        for sprite in sprites:
+            if sprite in self.sprites:
+                self.sprites.remove(sprite)
+                sprite.parent = None
+
+        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
+
     def _draw(self, context, opacity = 1):
         if self.visible is False:
             return
@@ -632,6 +641,16 @@ class Scene(gtk.DrawingArea):
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
+
+    def remove_child(self, *sprites):
+        """Add child sprite. Child will be nested within parent"""
+        for sprite in sprites:
+            if sprite in self.sprites:
+                self.sprites.remove(sprite)
+                sprite.parent = None
+
+        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
+
     def clear(self):
         """Remove all sprites from scene"""
         self.sprites = []
@@ -864,7 +883,10 @@ class Scene(gtk.DrawingArea):
 
     def __on_button_release(self, area, event):
         #if the drag is less than 5 pixles, then we have a click
-        click = self._button_press_time and (dt.datetime.now() - self._button_press_time) < dt.timedelta(milliseconds = 300)
+        click = self._button_press_time \
+                and (dt.datetime.now() - self._button_press_time) < dt.timedelta(milliseconds = 200) \
+                and (event.x - self._mouse_drag[0]) ** 2 + (event.y - self._mouse_drag[1]) ** 2 < 60
+
         self._button_press_time = None
         self._mouse_drag = None
         self._drag_x, self._drag_y = None, None
