@@ -25,7 +25,7 @@ import datetime as dt
      * hook into notifications and refresh our days if some evil neighbour edit
        fact window has dared to edit facts
 """
-from configuration import runtime
+from configuration import runtime, conf
 import stuff, widgets
 
 class CustomFactController:
@@ -43,6 +43,9 @@ class CustomFactController:
 
         self.new_tags = widgets.TagsEntry()
         self.get_widget("tags_box").add(self.new_tags)
+
+        day_start = conf.get("day_start_minutes")
+        self.day_start = dt.time(day_start / 60, day_start % 60)
 
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
@@ -131,12 +134,16 @@ class CustomFactController:
             self.end_time.set_time(end_time)
             self.set_end_date_label(end_time)
 
-        self.draw_preview(start_time.date(), [start_time, end_time])
+        self.draw_preview(start_time, end_time)
 
 
-    def draw_preview(self, date, highlight = None):
-        day_facts = runtime.storage.get_facts(date)
-        self.dayline.set_facts(day_facts, highlight)
+    def draw_preview(self, start_time, end_time = None):
+
+        view_date = (start_time - dt.timedelta(hours = self.day_start.hour,
+                                              minutes = self.day_start.minute)).date()
+
+        day_facts = runtime.storage.get_facts(view_date)
+        self.dayline.plot(view_date, day_facts, start_time, end_time)
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -257,20 +264,15 @@ class CustomFactController:
     def validate_fields(self, widget = None):
         activity_text = self.new_name.get_text().decode('utf8', 'replace')
         start_time = self._get_datetime("start")
-
         end_time = self._get_datetime("end")
 
-        if start_time and end_time:
-            # make sure we are within 24 hours of start time
-            end_time -= dt.timedelta(days=(end_time - start_time).days)
+        # make sure we are within 24 hours of start time
+        end_time -= dt.timedelta(days=(end_time - start_time).days)
 
-            if self.get_widget("in_progress").get_active():
-                end_time = None
+        if self.get_widget("in_progress").get_active():
+            end_time = None
 
-            self.draw_preview(start_time.date(), [start_time, end_time])
-        else:
-            self.draw_preview(dt.datetime.today().date(), [dt.datetime.now(),
-                                                           dt.datetime.now()])
+        self.draw_preview(start_time, end_time)
 
         looks_good = False
         if activity_text != "" and start_time and end_time and \
