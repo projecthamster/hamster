@@ -382,13 +382,6 @@ class Sprite(gtk.Object):
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
-    def remove_child(self, *sprites):
-        """Add child sprite. Child will be nested within parent"""
-        for sprite in sprites:
-            if sprite in self.sprites:
-                self.sprites.remove(sprite)
-                sprite.parent = None
-
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
     def _draw(self, context, opacity = 1):
@@ -641,15 +634,6 @@ class Scene(gtk.DrawingArea):
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
-
-    def remove_child(self, *sprites):
-        """Add child sprite. Child will be nested within parent"""
-        for sprite in sprites:
-            if sprite in self.sprites:
-                self.sprites.remove(sprite)
-                sprite.parent = None
-
-        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
     def clear(self):
         """Remove all sprites from scene"""

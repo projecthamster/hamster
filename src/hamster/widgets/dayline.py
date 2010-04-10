@@ -118,7 +118,9 @@ class DayLine(graphics.Scene):
 
 
     def set_facts(self, facts, highlight):
-        self.remove_child(*self.fact_bars)
+        for bar in self.fact_bars:
+            self.sprites.remove(bar)
+            
         self.fact_bars = []
         for fact in facts:
             fact_bar = graphics.Rectangle(0, 0, fill = "#aaa", stroke="#aaa") # dimensions will depend on screen situation
