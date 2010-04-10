@@ -311,7 +311,7 @@ class DayLine(graphics.Scene):
 
         #time scale
         g.set_color("#000")
-        layout = g.create_layout(context, 8)
+        layout = g.create_layout(size = 8)
         for i in range(self.scope_hours * 60):
             label_time = (self.view_time + dt.timedelta(minutes=i))
 
