@@ -114,9 +114,12 @@ class DayLine(graphics.Scene):
 
         self.drag_start = None
         self.current_x = None
+        self.snap_points = []
 
 
-    def add_facts(self, facts, highlight):
+    def set_facts(self, facts, highlight):
+        self.remove_child(*self.fact_bars)
+        self.fact_bars = []
         for fact in facts:
             fact_bar = graphics.Rectangle(0, 0, fill = "#aaa", stroke="#aaa") # dimensions will depend on screen situation
             fact_bar.fact = fact
@@ -136,37 +139,46 @@ class DayLine(graphics.Scene):
         if highlight:
             self.chosen_selection.start_time = highlight[0]
             self.chosen_selection.end_time = highlight[1]
+            self.chosen_selection.width = None
             self.chosen_selection.fixed = True
+            self.chosen_selection.visible = True
 
         self.redraw()
 
 
     def on_mouse_down(self, scene, event):
         self.drag_start = self.current_x
-        if self.chosen_selection in self.sprites:
-            self.sprites.remove(self.chosen_selection)
+        self.chosen_selection.visible = False
 
     def on_mouse_up(self, scene):
         if self.drag_start:
             self.drag_start = None
-            self.choose()
+
+            start_time = self.selection.start_time
+            end_time = self.selection.end_time
+            self.new_selection()
+            self.emit("on-time-chosen", start_time, end_time)
 
     def on_click(self, scene, event, targets):
         self.drag_start = None
-        self.emit("on-time-chosen", self.chosen_selection.start_time, None)
-        self.choose()
+
+        start_time = self.selection.start_time
+        end_time = None
+        if self.fact_bars:
+            times = [bar.fact['start_time'] for bar in self.fact_bars if bar.fact['start_time'] - start_time > dt.timedelta(minutes=1)]
+            times.extend([bar.fact['end_time'] for bar in self.fact_bars if bar.fact['end_time'] - start_time  > dt.timedelta(minutes=1)])
+            if times:
+                end_time = min(times)
+
+        self.new_selection()
+
+        self.emit("on-time-chosen", start_time, end_time)
 
 
-    def choose(self):
+    def new_selection(self):
         self.sprites.remove(self.selection)
-
-        self.chosen_selection = self.selection
-        self.chosen_selection.fixed = True
-
         self.selection = Selection()
-        self.add_child(self.selection, self.chosen_selection)
-
-        self.emit("on-time-chosen", self.chosen_selection.start_time, self.chosen_selection.end_time)
+        self.add_child(self.selection)
         self.redraw()
 
     def on_mouse_move(self, scene, event):
@@ -212,6 +224,8 @@ class DayLine(graphics.Scene):
             snap_points.append(bar.x)
             snap_points.append(bar.x + bar.width)
 
+        self.snap_points = snap_points
+
 
         if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = 24):
             minutes = round((dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel) + 0.5
@@ -243,15 +257,15 @@ class DayLine(graphics.Scene):
             start_x = max(min(self.mouse_x, self.width-1), 0) #mouse, but within screen regions
 
             # check for snap points
-            delta, closest_snap = min((abs(start_x - i), i) for i in snap_points)
+            start_x = start_x + 0.5
+            minutes = int(round(start_x * minute_pixel / 15)) * 15
+            if snap_points:
+                delta, closest_snap = min((abs(start_x - i), i) for i in snap_points)
 
 
-            if abs(closest_snap - start_x) < 5 and (not self.drag_start or self.drag_start != closest_snap):
-                start_x = closest_snap
-                minutes = int(start_x * minute_pixel)
-            else:
-                start_x = start_x + 0.5
-                minutes = int(round(start_x * minute_pixel / 15)) * 15
+                if abs(closest_snap - start_x) < 5 and (not self.drag_start or self.drag_start != closest_snap):
+                    start_x = closest_snap
+                    minutes = int(start_x * minute_pixel)
 
 
             self.current_x = minutes / minute_pixel

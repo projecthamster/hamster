@@ -131,10 +131,12 @@ class CustomFactController:
             self.end_time.set_time(end_time)
             self.set_end_date_label(end_time)
 
+        self.draw_preview(start_time.date(), [start_time, end_time])
+
 
     def draw_preview(self, date, highlight = None):
         day_facts = runtime.storage.get_facts(date)
-        self.dayline.add_facts(day_facts, highlight)
+        self.dayline.set_facts(day_facts, highlight)
 
     def get_widget(self, name):
         """ skip one variable (huh) """
