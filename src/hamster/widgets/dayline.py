@@ -214,7 +214,7 @@ class DayLine(graphics.Scene):
 
 
         vertical = min(self.plot_area.height / 5 , 7)
-        minute_pixel = (self.scope_hours * 60.0) / self.width
+        minute_pixel = (self.scope_hours * 60.0 - 15) / self.width
 
         snap_points = []
 
