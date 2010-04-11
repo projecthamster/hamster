@@ -234,7 +234,6 @@ class CustomFactController:
         self.get_widget("end_label").set_sensitive(sensitive)
         self.get_widget("end_date_label").set_sensitive(sensitive)
         self.validate_fields()
-        #self.dayline.set_in_progress(not sensitive)
 
     def on_cancel_clicked(self, button):
         self.close_window()
@@ -264,20 +263,18 @@ class CustomFactController:
     def validate_fields(self, widget = None):
         activity_text = self.new_name.get_text().decode('utf8', 'replace')
         start_time = self._get_datetime("start")
-        end_time = self._get_datetime("end")
-
-        # make sure we are within 24 hours of start time
-        end_time -= dt.timedelta(days=(end_time - start_time).days)
 
         if self.get_widget("in_progress").get_active():
             end_time = None
+        else:
+            end_time = self._get_datetime("end")
+            # make sure we are within 24 hours of start time
+            end_time -= dt.timedelta(days=(end_time - start_time).days)
 
         self.draw_preview(start_time, end_time)
 
-        looks_good = False
-        if activity_text != "" and start_time and end_time and \
-           (end_time - start_time).days == 0:
-            looks_good = True
+        looks_good = activity_text != "" and start_time \
+                     and (not end_time or (end_time - start_time).days == 0)
 
         self.get_widget("save_button").set_sensitive(looks_good)
         return looks_good
