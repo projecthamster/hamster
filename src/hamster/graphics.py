@@ -12,7 +12,7 @@ import pango, cairo
 
 try:
     import pytweener
-except: # we can also live without tweener. Scene.animate won't work in this case
+except: # we can also live without tweener. Scene.animate won't work
     pytweener = None
 
 import colorsys
@@ -27,7 +27,9 @@ class Colors(object):
             color = gtk.gdk.Color(color)
 
         if isinstance(color, gtk.gdk.Color):
-            color = [color.red / 65535.0, color.green / 65535.0, color.blue / 65535.0]
+            color = [color.red / 65535.0,
+                     color.green / 65535.0,
+                     color.blue / 65535.0]
         else:
             # otherwise we assume we have color components in 0..255 range
             if color[0] > 1 or color[1] > 1 or color[2] > 1:
@@ -43,14 +45,15 @@ class Colors(object):
         return gtk.gdk.Color(c[0] * 65535.0, c[1] * 65535.0, c[2] * 65535.0)
 
     def is_light(self, color):
-        # tells you if color is dark or light, so you can up or down the scale for improved contrast
+        # tells you if color is dark or light, so you can up or down the
+        # scale for improved contrast
         return colorsys.rgb_to_hls(*self.rgb(color))[1] > 150
 
     def darker(self, color, step):
         # returns color darker by step (where step is in range 0..255)
         hls = colorsys.rgb_to_hls(*self.rgb(color))
         return colorsys.hls_to_rgb(hls[0], hls[1] - step, hls[2])
-Colors = Colors() # this is a static class, so an instance will do -- TODO - could be bad practice
+Colors = Colors() # this is a static class, so an instance will do
 
 class Graphics(object):
     """If context is given upon contruction, will perform drawing
@@ -65,78 +68,93 @@ class Graphics(object):
        for detailed description of the cairo drawing functions.
     """
     def __init__(self, context = None):
-        self._instructions = deque() # instruction set until it is converted into path-based instructions
-        self.instructions = [] # paths colors and operations
-        self.colors = Colors
-        self.extents = None
-        self.opacity = 1.0
-        self.paths = None
-        self.last_matrix = None
         self.context = context
+        self.colors = Colors    # pointer to the color utilities instance
+        self.extents = None     # bounds of the object, only if interactive
+        self.opacity = 1.0      # opacity get's adjusted by parent - TODO - wrong inheritance?
+        self.paths = None       # paths for mouse hit checks
+        self._last_matrix = None
+        self._instructions = [] # paths colors and operations
+        self._path_instructions = deque() # instruction set until it is converted into path-based instructions
 
     def clear(self):
         """clear all instructions"""
-        self._instructions = deque()
+        self._path_instructions = deque()
         self.paths = []
 
-    def _stroke(self, context): context.stroke()
+    @staticmethod
+    def _stroke(context): context.stroke()
     def stroke(self, color = None, alpha = 1):
         """stroke the line with given color and opacity"""
         if color or alpha < 1:self.set_color(color, alpha)
         self._add_instruction(self._stroke,)
 
-    def _fill(self, context): context.fill()
+    @staticmethod
+    def _fill(context): context.fill()
     def fill(self, color = None, alpha = 1):
         """fill path with given color and opacity"""
         if color or alpha < 1:self.set_color(color, alpha)
         self._add_instruction(self._fill,)
 
-    def _stroke_preserve(self, context): context.stroke_preserve()
+    @staticmethod
+    def _stroke_preserve(context): context.stroke_preserve()
     def stroke_preserve(self, color = None, alpha = 1):
         """same as stroke, only after stroking, don't discard the path"""
         if color or alpha < 1:self.set_color(color, alpha)
         self._add_instruction(self._stroke_preserve,)
 
-    def _fill_preserve(self, context): context.fill_preserve()
+    @staticmethod
+    def _fill_preserve(context): context.fill_preserve()
     def fill_preserve(self, color = None, alpha = 1):
         """same as fill, only after filling, don't discard the path"""
         if color or alpha < 1:self.set_color(color, alpha)
         self._add_instruction(self._fill_preserve,)
 
-    def _new_path(self, context): context.new_path()
+    @staticmethod
+    def _new_path(context): context.new_path()
     def new_path(self):
         """discard current path"""
         self._add_instruction(self._new_path,)
 
-    def _paint(self, context): context.paint()
+    @staticmethod
+    def _paint(context): context.paint()
     def paint(self):
         """errrm. paint"""
         self._add_instruction(self._paint,)
 
-    def _set_source_surface(self, context, image, x, y): context.set_source_surface(image, x, y)
-    def set_source_surface(self, image, x = 0, y = 0): self._add_instruction(self._set_source_surface, image, x, y)
+    @staticmethod
+    def _set_source_surface(context, image, x, y):
+        context.set_source_surface(image, x, y)
+    def set_source_surface(self, image, x = 0, y = 0):
+        self._add_instruction(self._set_source_surface, image, x, y)
 
-    def _move_to(self, context, x, y): context.move_to(x, y)
+    @staticmethod
+    def _move_to(context, x, y): context.move_to(x, y)
     def move_to(self, x, y):
         """change current position"""
         self._add_instruction(self._move_to, x, y)
 
-    def _line_to(self, context, x, y): context.line_to(x, y)
+    @staticmethod
+    def _line_to(context, x, y): context.line_to(x, y)
     def line_to(self, x, y):
         """draw line"""
         self._add_instruction(self._line_to, x, y)
 
-    def _curve_to(self, context, x, y, x2, y2, x3, y3): context.curve_to(x, y, x2, y2, x3, y3)
+    @staticmethod
+    def _curve_to(context, x, y, x2, y2, x3, y3):
+        context.curve_to(x, y, x2, y2, x3, y3)
     def curve_to(self, x, y, x2, y2, x3, y3):
         """draw curve. (x2, y2) is the middle point of the curve"""
         self._add_instruction(self._curve_to, x, y, x2, y2, x3, y3)
 
-    def _close_path(self, context): context.close_path()
+    @staticmethod
+    def _close_path(context): context.close_path()
     def close_path(self):
         """connect end with beginning of path"""
         self._add_instruction(self._close_path,)
 
-    def _set_line_width(self, context, width):
+    @staticmethod
+    def _set_line_width(context, width):
         context.set_line_width(width)
     def set_line_style(self, width = None):
         """change the width of the line"""
@@ -153,13 +171,15 @@ class Graphics(object):
         """set active color. You can use hex colors like "#aaa", or you can use
         normalized RGB tripplets (where every value is in range 0..1), or
         you can do the same thing in range 0..65535"""
-        color = self.colors.parse(color) #parse whatever we have there into a normalized triplet
+        color = self.colors.parse(color) # parse whatever we have there into a normalized triplet
         if len(color) == 4 and alpha is None:
             alpha = color[3]
         r, g, b = color[:3]
         self._add_instruction(self._set_color, r, g, b, alpha)
 
-    def _arc(self, context, x, y, radius, start_angle, end_angle): context.arc(x, y, radius, start_angle, end_angle)
+    @staticmethod
+    def _arc(context, x, y, radius, start_angle, end_angle):
+        context.arc(x, y, radius, start_angle, end_angle)
     def arc(self, x, y, radius, start_angle, end_angle):
         """draw arc going counter-clockwise from start_angle to end_angle"""
         self._add_instruction(self._arc, x, y, radius, start_angle, end_angle)
@@ -171,7 +191,8 @@ class Graphics(object):
     def ellipse(self, x, y, width, height, edges = None):
         """draw 'perfect' ellipse, opposed to squashed circle. works also for
            equilateral polygons"""
-        steps = edges or max((32, width, height)) / 3 # the automatic edge case is somewhat arbitrary
+        # the automatic edge case is somewhat arbitrary
+        steps = edges or max((32, width, height)) / 3
 
         angle = 0
         step = math.pi * 2 / steps
@@ -190,28 +211,32 @@ class Graphics(object):
         self.line_to(points[0][0] - min_x + x, points[0][1] - min_y + y)
 
 
-    def _arc_negative(self, context, x, y, radius, start_angle, end_angle): context.arc_negative(x, y, radius, start_angle, end_angle)
+    @staticmethod
+    def _arc_negative(context, x, y, radius, start_angle, end_angle):
+        context.arc_negative(x, y, radius, start_angle, end_angle)
     def arc_negative(self, x, y, radius, start_angle, end_angle):
         """draw arc going clockwise from start_angle to end_angle"""
         self._add_instruction(self._arc_negative, x, y, radius, start_angle, end_angle)
 
-    def _rounded_rectangle(self, context, x, y, x2, y2, corner_radius):
+    @staticmethod
+    def _rounded_rectangle(context, x, y, x2, y2, corner_radius):
         half_corner = corner_radius / 2
 
         context.move_to(x + corner_radius, y)
         context.line_to(x2 - corner_radius, y)
         context.curve_to(x2 - half_corner, y, x2, y + half_corner, x2, y + corner_radius)
         context.line_to(x2, y2 - corner_radius)
-        context.curve_to(x2, y2 - half_corner, x2 - half_corner, y2, x2 - corner_radius,y2)
+        context.curve_to(x2, y2 - half_corner, x2 - half_corner, y2, x2 - corner_radius, y2)
         context.line_to(x + corner_radius, y2)
         context.curve_to(x + half_corner, y2, x, y2 - half_corner, x, y2 - corner_radius)
         context.line_to(x, y + corner_radius)
-        context.curve_to(x, y + half_corner, x + half_corner, y, x + corner_radius,y)
+        context.curve_to(x, y + half_corner, x + half_corner, y, x + corner_radius, y)
 
-    def _rectangle(self, context, x, y, w, h): context.rectangle(x, y, w, h)
+    @staticmethod
+    def _rectangle(context, x, y, w, h): context.rectangle(x, y, w, h)
     def rectangle(self, x, y, width, height, corner_radius = 0):
         "draw a rectangle. if corner_radius is specified, will draw rounded corners"
-        if corner_radius <=0:
+        if corner_radius <= 0:
             self._add_instruction(self._rectangle, x, y, width, height)
             return
 
@@ -226,7 +251,8 @@ class Graphics(object):
         self.fill(color, opacity)
 
 
-    def _show_layout(self, context, text, font_desc, alignment, width, wrap, ellipsize):
+    @staticmethod
+    def _show_layout(context, text, font_desc, alignment, width, wrap, ellipsize):
         layout = context.create_layout()
         layout.set_font_description(font_desc)
         layout.set_text(text)
@@ -258,7 +284,6 @@ class Graphics(object):
         return layout
 
 
-
     def show_text(self, text, size = None, color = None):
         """display text with system's default font"""
         font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
@@ -276,7 +301,6 @@ class Graphics(object):
     def _remember_path(self, context):
         context.save()
         context.identity_matrix()
-        matrix = context.get_matrix()
 
         new_extents = context.path_extents()
         self.extents = self.extents or new_extents
@@ -295,57 +319,60 @@ class Graphics(object):
             function(self.context, *params)
         else:
             self.paths = None
-            self._instructions.append((function, params))
+            self._path_instructions.append((function, params))
 
 
     def _draw(self, context, with_extents = False):
         """draw accumulated instructions in context"""
 
-        if self._instructions: #new stuff!
-            self.instructions = deque()
+        if self._path_instructions: #new stuff!
+            self._instructions = deque()
             current_color = None
             current_line = None
             instruction_cache = []
 
-            while self._instructions:
-                instruction, args = self._instructions.popleft()
+            while self._path_instructions:
+                instruction, args = self._path_instructions.popleft()
 
                 if instruction in (self._set_source_surface, self._paint):
-                    self.instructions.append((None, None, None, instruction, args))
+                    self._instructions.append((None, None, None, instruction, args))
 
                 elif instruction == self._show_layout:
-                    x,y = context.get_current_point() or (0,0)
-                    self.instructions.append((None, None, None, self._move_to, (x,y))) #previous move_to call will be actually executed after this
-                    self.instructions.append((None, current_color, None, instruction, args))
+                    self._instructions.append((None, current_color, None, instruction, args))
 
+                elif instruction == self._set_color:
+                    current_color = args
+
+                elif instruction == self._set_line_width:
+                    current_line = args
+
+                elif instruction in (self._stroke, self._fill,
+                                     self._stroke_preserve,
+                                     self._fill_preserve):
+                    self._instructions.append((context.copy_path(),
+                                               current_color,
+                                               current_line,
+                                               instruction, ()))
+                    context.new_path() # reset even on preserve as the instruction will preserve it instead
+                    instruction_cache = []
                 else:
-                    if instruction == self._set_color:
-                        current_color = args
-
-                    if instruction == self._set_line_width:
-                        current_line = args
-
-                    elif instruction in (self._stroke, self._fill, self._stroke_preserve, self._fill_preserve):
-                        self.instructions.append((context.copy_path(), current_color, current_line, instruction, ()))
-                        context.new_path() # reset even on preserve as the instruction will preserve it instead
-                        instruction_cache = []
-                    else:
-                        instruction(context, *args)
-                        instruction_cache.append((instruction, args))
+                    # the rest are non-special
+                    instruction(context, *args)
+                    instruction_cache.append((instruction, args))
 
 
-                while instruction_cache: # stroke's missing so we just cache
-                    instruction, args = instruction_cache.pop(0)
-                    self.instructions.append((None, None, None, instruction, args))
+            while instruction_cache: # stroke's missing so we just cache
+                instruction, args = instruction_cache.pop(0)
+                self._instructions.append((None, None, None, instruction, args))
 
 
         # if we have been moved around, we should update bounds
-        check_extents = with_extents and (context.get_matrix() != self.last_matrix or not self.paths)
+        check_extents = with_extents and (context.get_matrix() != self._last_matrix or not self.paths)
         if check_extents:
             self.paths = deque()
             self.extents = None
 
-        for path, color, line, instruction, args in self.instructions:
+        for path, color, line, instruction, args in self._instructions:
             if color: self._set_color(context, *color)
             if line: self._set_line_width(context, *line)
 
@@ -357,8 +384,7 @@ class Graphics(object):
             if instruction:
                 instruction(context, *args)
 
-        self.last_matrix = context.get_matrix()
-
+        self._last_matrix = context.get_matrix()
 
 
 class Sprite(gtk.Object):
@@ -379,7 +405,7 @@ class Sprite(gtk.Object):
                  rotation = 0, pivot_x = 0, pivot_y = 0,
                  interactive = True, draggable = False,
                  z_order = 0):
-        gtk.Widget.__init__(self)
+        gtk.Object.__init__(self)
         self.sprites = []
         self.graphics = Graphics()
         self.interactive = interactive
@@ -397,8 +423,6 @@ class Sprite(gtk.Object):
         for sprite in sprites:
             self.sprites.append(sprite)
             sprite.parent = self
-
-        self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
@@ -421,6 +445,8 @@ class Sprite(gtk.Object):
         self.graphics.opacity = self.opacity * opacity
 
         #self.emit("on-draw") # TODO - this is expensive when doing constant redraw with many frames. maybe we can have a simple callback here?
+        #self.graphics._move_to(context, 0, 0) # TODO - i'm doing this move because otherwise the currentpoint is pointing to wherever it was left. check if we really need this
+        context.new_path()
         self.graphics._draw(context, self.interactive or self.draggable)
 
         for sprite in self.sprites:
@@ -445,8 +471,7 @@ class Sprite(gtk.Object):
         self.emit("on-drag", (x, y))
 
 
-"""a few shapes"""
-
+# a few shapes
 class Shape(Sprite):
     """shape is a simple continuous shape that can have fill and stroke"""
     def __init__(self, stroke = None, fill = None, line_width = None, **kwargs):
@@ -475,9 +500,9 @@ class Shape(Sprite):
 
     def draw_shape(self):
         """implement this function in your subclassed object. leave out stroke
-        and fill instructions - those will be performed by the shape itself, using
-        the stroke and fill attributes"""
-        raise(NotImplementedError, "expected draw_shape functoin in the class")
+        and fill instructions - those will be performed by the shape itself,
+        using the stroke and fill attributes"""
+        raise NotImplementedError("expected draw_shape function in the class")
 
     def _color(self):
         if self.line_width:
@@ -494,7 +519,8 @@ class Shape(Sprite):
 
 
 class Label(Shape):
-    def __init__(self, text = "", size = 10, color = None, alignment = pango.ALIGN_LEFT, **kwargs):
+    def __init__(self, text = "", size = 10, color = None,
+                 alignment = pango.ALIGN_LEFT, **kwargs):
         kwargs.setdefault('interactive', False)
         Shape.__init__(self, **kwargs)
         self.width, self.height = None, None
@@ -524,8 +550,6 @@ class Label(Shape):
 
 
     def draw_shape(self):
-        self.graphics.move_to(0, 0) #make sure we don't wander off somewhere nowhere
-
         if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
             self.graphics.set_color("#000", 0)
             self.graphics.rectangle(0,0, self.width, self.height)
@@ -540,7 +564,7 @@ class Label(Shape):
 
 
     def _set_dimensions(self):
-        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0,0)))
+        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
         layout = context.create_layout()
         layout.set_font_description(self.font_desc)
         layout.set_text(self.text)
@@ -630,19 +654,18 @@ class Scene(gtk.DrawingArea):
             self.tweener = pytweener.Tweener(0.4, pytweener.Easing.Cubic.ease_in_out)
 
         self.colors = Colors
-
-        self.__drawing_queued = False
+        self.mouse_x, self.mouse_y = None, None
 
         self._last_frame_time = None
         self._mouse_sprites = set()
         self._mouse_drag = None
         self._drag_sprite = None
-        self._drag_x, self._drag_y = None, None
         self._button_press_time = None # to distinguish between click and drag
-        self.mouse_x, self.mouse_y = None, None
 
-        self._debug_bounds = False
         self._mouse_in = False
+
+        self.__drawing_queued = False
+        self.__drag_x, self.__drag_y = None, None
 
 
     def add_child(self, *sprites):
@@ -651,7 +674,6 @@ class Scene(gtk.DrawingArea):
             self.sprites.append(sprite)
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
-
 
     def clear(self):
         """Remove all sprites from scene"""
@@ -665,7 +687,7 @@ class Scene(gtk.DrawingArea):
             self._last_frame_time = dt.datetime.now()
             gobject.timeout_add(1000 / self.framerate, self.__interpolate)
 
-    """ animation bits """
+    # animation bits
     def __interpolate(self):
         if not self.window: #will wait until window comes
             return True
@@ -699,42 +721,33 @@ class Scene(gtk.DrawingArea):
         if not pytweener: # here we complain
             raise Exception("pytweener not found. Include it to enable animations")
 
-        self.tweener.add_tween(sprite, duration = duration, easing = easing, on_complete = on_complete, on_update = on_update, delay = delay, **kwargs)
+        self.tweener.add_tween(sprite,
+                               duration=duration,
+                               easing=easing,
+                               on_complete=on_complete,
+                               on_update=on_update,
+                               delay=delay, **kwargs)
 
         if instant:
             self.redraw()
 
-    """ exposure events """
+    # exposure events
     def do_configure_event(self, event):
-        (self.width, self.height) = self.window.get_size()
+        self.width, self.height = event.width, event.height
 
     def do_expose_event(self, event):
-        self.width, self.height = self.window.get_size()
         context = self.window.cairo_create()
 
+        # clip to the visible part
         context.rectangle(event.area.x, event.area.y,
                           event.area.width, event.area.height)
         context.clip()
 
-        alloc = self.get_allocation()  #x, y, width, height
-        self.width, self.height = alloc.width, alloc.height
-
         self.emit("on-enter-frame", context)
-
         for sprite in self.sprites:
             sprite._draw(context)
 
         self._check_mouse(self.mouse_x, self.mouse_y)
-
-
-        if self._debug_bounds:
-            context.set_line_width(1)
-            context.set_source_rgb(.2, .2, .5)
-            for sprite in self.all_sprites():
-                if sprite.graphics.extents:
-                    x,y,x2,y2 = sprite.graphics.extents
-                    context.rectangle(x, y, x2-x, y2-y)
-            context.stroke()
 
         self.emit("on-finish-frame", context)
 
@@ -760,28 +773,32 @@ class Scene(gtk.DrawingArea):
         self.mouse_x, self.mouse_y = mouse_x, mouse_y
 
 
-        if self._drag_sprite and self._drag_sprite.draggable and gtk.gdk.BUTTON1_MASK & event.state:
+        if self._drag_sprite and self._drag_sprite.draggable \
+           and gtk.gdk.BUTTON1_MASK & event.state:
             self.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
 
             # dragging around
-            drag = self._mouse_drag and (self._mouse_drag[0] - event.x) ** 2 + \
-                                        (self._mouse_drag[1] - event.y) ** 2 > 5 ** 2
+            drag = self._mouse_drag \
+                   and (self._mouse_drag[0] - event.x) ** 2 + \
+                       (self._mouse_drag[1] - event.y) ** 2 > 5 ** 2
             if drag:
                 matrix = cairo.Matrix()
                 if self._drag_sprite.parent:
-                    # TODO - this currently works only until second level - take all parents into account
+                    # TODO - this currently works only until second level
+                    #        should take all parents into account
                     matrix.rotate(self._drag_sprite.parent.rotation)
                     matrix.invert()
 
-                if not self._drag_x:
-                    x1,y1 = matrix.transform_point(self._mouse_drag[0], self._mouse_drag[1])
+                if not self.__drag_x:
+                    x1,y1 = matrix.transform_point(self._mouse_drag[0],
+                                                   self._mouse_drag[1])
 
-                    self._drag_x = self._drag_sprite.x - x1
-                    self._drag_y = self._drag_sprite.y - y1
+                    self.__drag_x = self._drag_sprite.x - x1
+                    self.__drag_y = self._drag_sprite.y - y1
 
                 mouse_x, mouse_y = matrix.transform_point(mouse_x, mouse_y)
-                new_x = mouse_x + self._drag_x
-                new_y = mouse_y + self._drag_y
+                new_x = mouse_x + self.__drag_x
+                new_y = mouse_y + self.__drag_y
 
 
                 self._drag_sprite.x, self._drag_sprite.y = new_x, new_y
@@ -791,14 +808,15 @@ class Scene(gtk.DrawingArea):
 
                 return
         else:
-            if not self.__drawing_queued: # avoid double mouse checks - the redraw will also check for mouse!
+            # avoid double mouse checks - the redraw will also check for mouse!
+            if not self.__drawing_queued:
                 self._check_mouse(event.x, event.y)
 
         self.emit("on-mouse-move", event)
 
 
     def _check_mouse(self, mouse_x, mouse_y):
-        if mouse_x is None or not self._mouse_in:
+        if mouse_x is None or self._mouse_in == False:
             return
 
         #check if we have a mouse over
@@ -891,7 +909,7 @@ class Scene(gtk.DrawingArea):
 
         self._button_press_time = None
         self._mouse_drag = None
-        self._drag_x, self._drag_y = None, None
+        self.__drag_x, self.__drag_y = None, None
         self._drag_sprite = None
 
         if click:
