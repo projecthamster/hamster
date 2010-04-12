@@ -25,7 +25,7 @@ import sys, os
 import optparse
 import re
 import locale, gettext
-import time
+from calendar import timegm
 import datetime as dt
 
 import dbus
@@ -111,7 +111,7 @@ class HamsterClient(object):
                               len(headers['tags'])
 
         print "%s+%s" % ('-' * first_column_width, '-' * second_column_width)
-        for fact in self.conn.GetFacts(start_stamp, end_stamp):
+        for fact in self.conn.GetFacts(start_stamp, end_stamp, ""):
             if fact['start_time'] < start_stamp or fact['start_time'] > end_stamp:
                 # Hamster returns activities for the whole day, not just the
                 # time range we sent
@@ -140,8 +140,7 @@ class HamsterClient(object):
 def timestamp_from_datetime(date):
     '''Convert a local time datetime into an utc timestamp.'''
     if date:
-        tz_offset =  dt.timedelta(seconds=time.timezone)
-        return time.mktime((date-tz_offset).timetuple())
+        return timegm(date.timetuple())
     else:
         return 0
 
@@ -321,6 +320,3 @@ Time formats:
 
     elif command == 'list-categories':
         hamster_client.list_categories()
-
-
-

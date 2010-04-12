@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2010 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2007-2009 Patryk Zawadzki <patrys at pld-linux.org>
 # Copyright (C) 2008 Pēteris Caune <cuu508 at gmail.com>
 
@@ -35,7 +35,6 @@ from configuration import conf, runtime, dialogs
 
 import stuff
 import keybinder
-from hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
 import widgets
@@ -225,9 +224,6 @@ class HamsterApplet(object):
         # DBus Setup
         try:
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-            name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
-            self.dbusController = HamsterDbusController(bus_name = name)
-
             # Set up connection to the screensaver
             self.dbusIdleListener = idle.DbusIdleListener(runtime.dispatcher)
             runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
@@ -251,8 +247,6 @@ class HamsterApplet(object):
         self.load_day()
         self.update_label()
 
-        # Hamster DBusController current fact initialising
-        self.__update_fact()
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
@@ -447,17 +441,6 @@ class HamsterApplet(object):
         fact = self.treeview.get_selected_fact()
         runtime.storage.remove_fact(fact["id"])
 
-    def __update_fact(self):
-        """dbus controller current fact updating"""
-        last_activity_id = 0
-
-        if not self.last_activity:
-            self.dbusController.TrackingStopped()
-        else:
-            last_activity_id = self.last_activity['id']
-
-        self.dbusController.FactUpdated(last_activity_id)
-
     def __show_toggle(self, event, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
@@ -584,7 +567,6 @@ class HamsterApplet(object):
     def after_fact_update(self, event, date):
         self.load_day()
         self.update_label()
-        self.__update_fact()
 
     def on_idle_changed(self, event, state):
         # state values: 0 = active, 1 = idle

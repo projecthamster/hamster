@@ -10,3 +10,4 @@ sudo rm -Rf /usr/lib/python2.6/dist-packages/hamster/
 sudo rm -Rf /usr/local/lib/python2.6/dist-packages/hamster/
 sudo rm -Rf /usr/local/lib/python2.6/site-packages/hamster/
 sudo rm -Rf /usr/share/gnome/help/hamster-applet/
+sudo rm -f /usr/bin/hamster-*

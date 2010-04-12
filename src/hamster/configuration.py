@@ -26,7 +26,7 @@ import gconf
 import gettext
 import os
 import defs
-from db import Storage
+from client import Storage
 from dispatcher import Dispatcher
 from xdg.BaseDirectory import xdg_data_home
 import logging
@@ -96,7 +96,7 @@ class RuntimeStore(Singleton):
                     return
 
                 logging.info("DB file has been modified externally. Calling all stations")
-                self.storage.dispatch_overwrite()
+                #self.storage.dispatch_overwrite()
 
 
 

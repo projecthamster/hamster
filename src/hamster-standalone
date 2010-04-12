@@ -33,7 +33,6 @@ from hamster import eds
 from hamster.configuration import conf, runtime, dialogs
 
 from hamster import stuff, keybinder
-from hamster.hamsterdbus import HAMSTER_URI, HamsterDbusController
 
 # controllers for other windows
 from hamster import widgets
@@ -85,9 +84,6 @@ class ProjectHamster(object):
         # DBus Setup
         try:
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-            name = dbus.service.BusName(HAMSTER_URI, dbus.SessionBus())
-            self.dbusController = HamsterDbusController(bus_name = name)
-
             # Set up connection to the screensaver
             self.dbusIdleListener = idle.DbusIdleListener(runtime.dispatcher)
             runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
@@ -109,9 +105,6 @@ class ProjectHamster(object):
         # Load today's data, activities and set label
         self.last_activity = None
         self.load_day()
-
-        # Hamster DBusController current fact initialising
-        self.__update_fact()
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
@@ -288,17 +281,6 @@ class ProjectHamster(object):
         self.window.present()
 
 
-    def __update_fact(self):
-        """dbus controller current fact updating"""
-        last_activity_id = 0
-
-        if not self.last_activity:
-            self.dbusController.TrackingStopped()
-        else:
-            last_activity_id = self.last_activity['id']
-
-        self.dbusController.FactUpdated(last_activity_id)
-
     def _delayed_display(self):
         """show window only when gtk has become idle. otherwise we get
         mixed results. TODO - this looks like a hack though"""
@@ -356,7 +338,6 @@ class ProjectHamster(object):
 
     def after_fact_update(self, event, date):
         self.load_day()
-        self.__update_fact()
 
     def on_idle_changed(self, event, state):
         # state values: 0 = active, 1 = idle

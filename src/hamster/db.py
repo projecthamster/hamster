@@ -334,7 +334,8 @@ class Storage(storage.Storage):
             last_activity = facts[-1]
         return last_activity
 
-    def __touch_fact(self, fact, end_time):
+    def __touch_fact(self, fact):
+        end_time = dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
             self.__remove_fact(fact['id'])
@@ -470,7 +471,7 @@ class Storage(storage.Storage):
         tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
         tags = tags or activity.tags # explicitly stated tags take priority
 
-        tags = self.get_tag_ids(tags) #this will create any missing tags too
+        tags = self.GetTagIds(tags) #this will create any missing tags too
 
 
         if category_name:
@@ -480,13 +481,27 @@ class Storage(storage.Storage):
 
         start_time = activity.start_time or start_time or datetime.datetime.now()
 
-        if start_time > datetime.datetime.now():
-            return None #no facts in future, please
-
         start_time = start_time.replace(microsecond = 0)
         end_time = activity.end_time or end_time
         if end_time:
             end_time = end_time.replace(microsecond = 0)
+
+        now = datetime.datetime.now()
+        # if in future - roll back to past
+        if start_time > datetime.datetime.now():
+            start_time = dt.datetime.combine(now.date(),  start_time.time())
+            if start_time > now:
+                start_time -= dt.timedelta(days = 1)
+
+        if end_time and end_time > now:
+            end_time = dt.datetime.combine(now.date(),  end_time.time())
+            if end_time > now:
+                end_time -= dt.timedelta(days = 1)
+
+
+
+
+        print activity, start_time, end_time
 
         if not start_time or not activity.activity_name:  # sanity check
             return
@@ -710,18 +725,6 @@ class Storage(storage.Storage):
 
         return res
 
-    def __get_popular_categories(self):
-        """returns categories used in the specified interval"""
-        query = """
-                   SELECT coalesce(c.name, ?) as category, count(a.id) as popularity
-                     FROM facts a
-                LEFT JOIN activities b on a.activity_id = b.id
-                LEFT JOIN categories c on c.id = b.category_id
-                 GROUP BY b.category_id
-                 ORDER BY popularity desc
-        """
-        return self.fetchall(query, (_("Unsorted"), ))
-
     def __remove_fact(self, fact_id):
         statements = ["DELETE FROM fact_tags where fact_id = ?",
                       "DELETE FROM facts where id = ?"]
@@ -732,7 +735,7 @@ class Storage(storage.Storage):
            otherwise - by activity_order"""
         if category_id:
             query = """
-                       SELECT a.*, b.name as category
+                       SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
                          FROM activities a
                     LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                         WHERE category_id = ?

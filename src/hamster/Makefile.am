@@ -24,7 +24,7 @@ hamster_PYTHON = \
 	edit_activity.py \
 	applet.py \
 	about.py \
-	hamsterdbus.py \
+	client.py \
 	idle.py \
         i18n.py \
         pytweener.py \

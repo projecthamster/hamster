@@ -191,9 +191,10 @@ class TotalsBox(gtk.VBox):
         # tag totals
         tag_sums = {}
         for fact in facts:
-            for tag in fact["tags"]:
-                tag_sums.setdefault(tag, 0)
-                tag_sums[tag] += fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60
+            if fact["tags"]:
+                for tag in fact["tags"]:
+                    tag_sums.setdefault(tag, 0)
+                    tag_sums[tag] += fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60
 
         for entry in tag_sums:
             tag_sums[entry] = tag_sums[entry] / 60 / 60.0

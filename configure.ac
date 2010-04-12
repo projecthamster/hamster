@@ -144,8 +144,6 @@ except:
     fi
 fi
 
-
-
 dnl ==========================
 dnl Control-Center Keybindings
 dnl ==========================
