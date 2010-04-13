@@ -39,10 +39,10 @@ import stuff
 from shutil import copy as copyfile
 import datetime as dt
 import gettext
+from xdg.BaseDirectory import xdg_data_home
+import gio
 
 import itertools
-
-DB_FILE = 'hamster.db'
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -55,36 +55,62 @@ class Storage(storage.Storage):
 
         self.__con = None
         self.__cur = None
+        self.__last_etag = None
 
         from configuration import runtime
 
-        db_file = runtime.database_path
-        db_path, _ = os.path.split(os.path.realpath(db_file))
+        db_folder = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
+        self.db_path = os.path.realpath(os.path.join(db_folder, "hamster.db"))
 
-        if not os.path.exists(db_path):
+        if not os.path.exists(db_folder):
             try:
-                os.makedirs(db_path, 0744)
+                os.makedirs(db_folder, 0744)
             except Exception, msg:
-                logging.error("could not create user dir (%s): %s" % (db_path, msg))
+                logging.error("could not create user dir (%s): %s" % (db_folder, msg))
 
         data_dir = runtime.data_dir
 
         #check if db is here
-        if not os.path.exists(db_file):
-            logging.info("Database not found in %s - installing default from %s!" % (db_file, data_dir))
-            copyfile(os.path.join(data_dir, DB_FILE), db_file)
+        if not os.path.exists(self.db_path):
+            logging.info("Database not found in %s - installing default from %s!" % (self.db_path, data_dir))
+            copyfile(os.path.join(data_dir, 'hamster.db'), self.db_path)
 
             #change also permissions - sometimes they are 444
             try:
-                os.chmod(db_file, 0664)
+                os.chmod(self.db_path, 0664)
             except Exception, msg:
-                logging.error("Could not change mode on %s!" % (db_file))
+                logging.error("Could not change mode on %s!" % (self.db_path))
+
+
+        # add file monitoring so the app does not have to be restarted
+        # when db file is rewritten
+        def on_db_file_change(monitor, gio_file, event_uri, event):
+            if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+                if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
+                    # ours
+                    return
+
+                print "DB file has been modified externally. Calling all stations"
+                self.dispatch_overwrite()
+
+
+
+        self.__database_file = gio.File(self.db_path)
+        self.__db_monitor = self.__database_file.monitor_file()
+        self.__db_monitor.connect("changed", on_db_file_change)
+
+
         self.__setup.im_func.complete = True
         self.run_fixtures()
 
 
 
     __setup.complete = False
+
+    def register_modification(self):
+        # db.execute calls this so we know that we were the ones
+        # that modified the DB and no extra refesh is not needed
+        self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
 
     #tags, here we come!
     def __get_tags(self, autocomplete = None):
@@ -499,10 +525,6 @@ class Storage(storage.Storage):
                 end_time -= dt.timedelta(days = 1)
 
 
-
-
-        print activity, start_time, end_time
-
         if not start_time or not activity.activity_name:  # sanity check
             return
 
@@ -839,10 +861,8 @@ class Storage(storage.Storage):
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
-        from configuration import runtime
         if self.con is None:
-            db_file = runtime.database_path
-            self.con = sqlite.connect(db_file, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
+            self.con = sqlite.connect(self.db_path, detect_types=sqlite.PARSE_DECLTYPES|sqlite.PARSE_COLNAMES)
             self.con.row_factory = sqlite.Row
 
         return self.con
@@ -850,7 +870,6 @@ class Storage(storage.Storage):
     connection = property(get_connection, None)
 
     def fetchall(self, query, params = None):
-        from configuration import runtime
         self.__setup()
 
         con = self.connection
@@ -880,7 +899,6 @@ class Storage(storage.Storage):
         execute sql statement. optionally you can give multiple statements
         to save on cursor creation and closure
         """
-        from configuration import runtime
         self.__setup()
 
         con = self.__con or self.connection
@@ -899,7 +917,7 @@ class Storage(storage.Storage):
         if not self.__con:
             con.commit()
             cur.close()
-            runtime.register_modification()
+            self.register_modification()
 
 
     def start_transaction(self):
@@ -911,8 +929,7 @@ class Storage(storage.Storage):
         self.__con.commit()
         self.__cur.close()
         self.__con = None
-        from configuration import runtime
-        runtime.register_modification()
+        self.register_modification()
 
     def run_fixtures(self):
         self.start_transaction()

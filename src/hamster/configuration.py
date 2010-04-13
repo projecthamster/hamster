@@ -31,7 +31,6 @@ from dispatcher import Dispatcher
 from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
-import gio
 
 import logging
 log = logging.getLogger("configuration")
@@ -72,6 +71,7 @@ class RuntimeStore(Singleton):
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
         new_db_file = os.path.join(xdg_data_home, "hamster-applet", "hamster.db")
 
+        # move database to ~/.local/share/hamster-applet
         if os.path.exists(old_db_file):
             db_path, _ = os.path.split(os.path.realpath(new_db_file))
             if not os.path.exists(db_path):
@@ -83,33 +83,6 @@ class RuntimeStore(Singleton):
                 logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
             else:
                 os.rename(old_db_file, new_db_file)
-
-        self.database_path = new_db_file
-
-
-        # add file monitoring so the app does not have to be restarted
-        # when db file is rewritten
-        def on_db_file_change(monitor, gio_file, event_uri, event):
-            if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-                if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.last_etag:
-                    # ours
-                    return
-
-                logging.info("DB file has been modified externally. Calling all stations")
-                #self.storage.dispatch_overwrite()
-
-
-
-        self.database_file = gio.File(os.path.realpath(self.database_path))
-        self.db_monitor = self.database_file.monitor_file()
-        self.db_monitor.connect("changed", on_db_file_change)
-
-
-    def register_modification(self):
-        # db.execute calls this so we know that we were the ones
-        # that modified the DB and no extra refesh is not needed
-        self.last_etag = self.database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
-
 
     @property
     def art_dir(self):
