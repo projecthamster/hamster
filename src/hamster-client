@@ -25,17 +25,9 @@ import sys, os
 import optparse
 import re
 import locale, gettext
-from calendar import timegm
 import datetime as dt
 
-import dbus
-import dbus.mainloop.glib
-
-from hamster import defs, stuff
-
-HAMSTER_SERVICE = 'org.gnome.Hamster'
-HAMSTER_PATH = '/org/gnome/Hamster'
-HAMSTER_INTERFACE = 'org.gnome.Hamster'
+from hamster import client, defs, stuff
 
 class ConfigurationError(Exception):
     '''An error of configuration.'''
@@ -45,28 +37,17 @@ class HamsterClient(object):
     '''The main application.'''
 
     def __init__(self):
-        try:
-            connection = dbus.SessionBus()
-            hamster_conn = dbus.Interface(connection.get_object(HAMSTER_SERVICE,
-                                                                HAMSTER_PATH),
-                                          dbus_interface=HAMSTER_INTERFACE)
-            self.conn = hamster_conn
-        except dbus.DBusException:
-            sys.exit("Hamster appears to be down (can't connect via D-Bus)") # TODO - can't just sys.exit in constructor
+        self.storage = client.Storage()
 
 
     def start_tracking(self, activity, start_time = None, end_time = None):
         '''Start a new activity.'''
-
-        start_stamp = timestamp_from_datetime(start_time)
-        end_stamp = timestamp_from_datetime(end_time)
-
-        self.conn.AddFact(activity, dbus.UInt32(start_stamp), dbus.UInt32(end_stamp))
+        self.storage.add_fact(activity, start_time = start_time, end_time = end_time)
 
 
     def stop_tracking(self):
         '''Stop tracking the current activity.'''
-        self.conn.StopTracking()
+        self.storage.stop_tracking()
 
 
 
@@ -85,9 +66,6 @@ class HamsterClient(object):
                    'duration': _("Duration")}
         line_fmt = ' %*s - %*s (%*s) | %s@%s %s'
 
-
-        start_stamp = timestamp_from_datetime(start_time)
-        end_stamp = timestamp_from_datetime(end_time)
 
         print_with_date = start_time.date() != start_time.date()
         if print_with_date:
@@ -111,8 +89,8 @@ class HamsterClient(object):
                               len(headers['tags'])
 
         print "%s+%s" % ('-' * first_column_width, '-' * second_column_width)
-        for fact in self.conn.GetFacts(start_stamp, end_stamp, ""):
-            if fact['start_time'] < start_stamp or fact['start_time'] > end_stamp:
+        for fact in self.storage.get_facts(start_time, end_time, ""):
+            if fact['start_time'] < start_time or fact['start_time'] > end_time:
                 # Hamster returns activities for the whole day, not just the
                 # time range we sent
                 # TODO - why should that be a problem? /toms/
@@ -128,13 +106,13 @@ class HamsterClient(object):
 
     def list_activities(self):
         '''Print the names of all the activities.'''
-        for activity, category in self.conn.GetActivities():
-            print '%s@%s' % (activity.encode('utf8'), category.encode('utf8'))
+        for activity in self.storage.get_activities():
+            print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
 
     def list_categories(self):
         '''Print the names of all the categories.'''
-        for category in self.conn.GetCategories():
-            print category.encode('utf8')
+        for category in self.storage.get_category_list():
+            print category['name'].encode('utf8')
 
 
 def timestamp_from_datetime(date):
@@ -212,17 +190,14 @@ def fact_dict(fact_data, with_date):
     else:
         fmt = '%H:%M'
 
-    start_date = datetime_from_timestamp(fact_data['start_time'])
-    fact['start'] = start_date.strftime(fmt)
+    fact['start'] = fact_data['start_time'].strftime(fmt)
     if fact_data['end_time']:
-        end_date = datetime_from_timestamp(fact_data['end_time'])
-        fact['end'] = end_date.strftime(fmt)
+        fact['end'] = fact_data['end_time'].strftime(fmt)
     else:
         end_date = dt.datetime.now()
         fact['end'] = ''
 
-    fact['duration'] = stuff.format_duration(end_date - start_date)
-    fact['duration'] = fact['duration']
+    fact['duration'] = stuff.format_duration(fact_data['delta'])
 
     fact['activity'] = fact_data['name']
     fact['category'] = fact_data['category']
