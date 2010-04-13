@@ -10,7 +10,7 @@ DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
 
 # if gwibber-serivce is already running, don't start
-if "org.gnome.Hamster.Connection" in dbus.SessionBus().list_names():
+if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     print "Found hamster-service already running, exiting"
     quit()
 
