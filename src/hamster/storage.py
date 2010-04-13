@@ -300,7 +300,17 @@ class Storage(dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
     def GetActivities(self, category_id = None):
-        return [dict(activity) for activity in self.__get_activities(category_id = category_id)]
+        if not category_id or category_id == -1:
+            category_id = None
+
+        res = []
+        for activity in self.__get_activities(category_id = category_id):
+            activity = dict(activity)
+            activity['category'] = activity['category'] or ''
+
+            res.append(activity)
+
+        return res
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='aa{sv}')
@@ -321,11 +331,12 @@ class Storage(dbus.service.Object):
         self.ActivitiesChanged()
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='ii')
+    @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')
     def ChangeCategory(self, id, category_id):
         changed = self.__change_category(id, category_id)
         if changed:
             self.ActivitiesChanged()
+        return changed
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='iiii')

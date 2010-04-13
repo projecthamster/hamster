@@ -157,6 +157,7 @@ class Storage(object):
 
 
     def get_activities(self, category_id = None):
+        category_id = category_id or -1
         return self.conn.GetActivities(category_id)
 
 
@@ -173,7 +174,7 @@ class Storage(object):
         self.conn.MoveActivity(source_id, target_order, insert_after)
 
     def change_category(self, id, category_id):
-        self.conn.ChangeCategory(id, category_id)
+        return self.conn.ChangeCategory(id, category_id)
 
     def swap_activities(self, id1, priority1, id2, priority2):
         self.conn.SwapActivities(id1, priority1, id2, priority2)
