@@ -31,10 +31,7 @@ if exists(SOURCE_DIR):
 else:
     from hamster import db
 
-#TODO - add db monitor (or maybe do that in db itself)
-
-
-print "Starting up service..."
+print "hamster-service running"
 
 storage = db.Storage(loop)
 loop.run()
