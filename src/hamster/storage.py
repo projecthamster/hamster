@@ -309,6 +309,7 @@ class Storage(dbus.service.Object):
         for activity in self.__get_autocomplete_activities(search):
             activity = dict(activity)
             activity['category'] = activity['category'] or ''
+            res.append(activity)
 
         return res
 
