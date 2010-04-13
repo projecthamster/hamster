@@ -60,7 +60,7 @@ def from_dbus_fact(fact):
     return fact
 
 class Storage(object):
-    def __init__(self, parent):
+    def __init__(self, parent = None):
         self.parent = parent
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -70,9 +70,10 @@ class Storage(object):
                                       dbus_interface='org.gnome.Hamster')
         self.conn = hamster_conn
 
-        bus.add_signal_receiver(self.on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
-        bus.add_signal_receiver(self.on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
-        bus.add_signal_receiver(self.on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        if parent:
+            bus.add_signal_receiver(self.on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
+            bus.add_signal_receiver(self.on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
+            bus.add_signal_receiver(self.on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
 
 
     def on_tags_changed(self):
@@ -117,7 +118,7 @@ class Storage(object):
     def get_fact(self, id):
         return from_dbus_fact(self.conn.GetFact(id))
 
-    def add_fact(self, activity_name, tags, start_time = None, end_time = 0,
+    def add_fact(self, activity_name, tags = '', start_time = None, end_time = 0,
                                       category_name = None, description = None):
 
         if start_time:
@@ -135,9 +136,9 @@ class Storage(object):
 
         return self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description)
 
-    def touch_fact(self, fact, end_time = None):
-        # TODO - rename and remove all the attributes
-        return self.conn.StopTracking()
+    def stop_tracking(self, end_time = None):
+        end_time = timegm((end_time or dt.datetime.now()).timetuple())
+        return self.conn.StopTracking(end_time)
 
     def remove_fact(self, fact_id):
         self.conn.RemoveFact(fact_id)

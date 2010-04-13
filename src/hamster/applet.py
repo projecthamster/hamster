@@ -578,8 +578,7 @@ class HamsterApplet(object):
         elif self.timeout_enabled and self.last_activity and \
              self.last_activity['end_time'] is None:
 
-            runtime.storage.touch_fact(self.last_activity,
-                                       end_time = self.dbusIdleListener.getIdleFrom())
+            runtime.storage.stop_tracking(self.dbusIdleListener.getIdleFrom())
 
     def on_workspace_changed(self, screen, previous_workspace):
         if not previous_workspace:
@@ -705,7 +704,7 @@ class HamsterApplet(object):
         runtime.dispatcher.dispatch('panel_visible', False)
 
     def on_stop_tracking_clicked(self, widget):
-        runtime.storage.touch_fact(self.last_activity)
+        runtime.storage.stop_tracking()
         self.last_activity = None
         runtime.dispatcher.dispatch('panel_visible', False)
 

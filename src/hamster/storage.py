@@ -154,11 +154,13 @@ class Storage(dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster")
-    def StopTracking(self):
-        """Stops the current fact tracking"""
+    def StopTracking(self, end_time):
+        """Stops tracking the current activity"""
+        end_time = dt.datetime.utcfromtimestamp(end_time)
+
         fact = self.__get_last_activity()
         if fact:
-            self.__touch_fact(fact)
+            self.__touch_fact(fact, end_time)
             self.FactsChanged()
 
 

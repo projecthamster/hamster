@@ -47,7 +47,7 @@ def on_destroy(event):
     if conf.get("stop_on_shutdown"):
         last_activity = runtime.storage.get_last_activity()
         if last_activity and last_activity['end_time'] is None:
-            runtime.storage.touch_fact(last_activity)
+            runtime.storage.stop_tracking()
 
     if gtk.main_level():
         gtk.main_quit()

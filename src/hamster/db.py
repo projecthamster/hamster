@@ -364,8 +364,8 @@ class Storage(storage.Storage):
             last_activity = facts[-1]
         return last_activity
 
-    def __touch_fact(self, fact):
-        end_time = dt.datetime.now()
+    def __touch_fact(self, fact, end_time):
+        end_time = end_time or dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
             self.__remove_fact(fact['id'])
