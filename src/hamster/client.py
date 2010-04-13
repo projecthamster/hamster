@@ -48,9 +48,8 @@ def from_dbus_fact(fact):
     else:
         fact['end_time'] = None
 
-    if not fact['tags']:
-        fact['tags'] = []
-        
+    fact['tags'] = fact['tags'] or [] # effectively converting 0 to []
+
     if 'date' in fact:
         fact['date'] = dt.datetime.utcfromtimestamp(fact['date']).date()
 
