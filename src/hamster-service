@@ -1,37 +1,42 @@
 #!/usr/bin/python
 # nicked off gwibber
 
-import sys, optparse, gobject, dbus
-from os.path import join, dirname, exists, realpath, abspath
-from os import popen, getpid
+import os, sys, gobject, dbus
+
 from dbus.mainloop.glib import DBusGMainLoop
+import locale, gettext
+from hamster import defs
 
 DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
 
-# if gwibber-serivce is already running, don't start
 if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     print "Found hamster-service already running, exiting"
     quit()
 
 
-LAUNCH_DIR = abspath(sys.path[0])
+LAUNCH_DIR = os.path.abspath(sys.path[0])
 SOURCE_DIR = LAUNCH_DIR
-STORAGE = join(SOURCE_DIR, "hamster", "storage.py")
+STORAGE = os.path.join(SOURCE_DIR, "hamster", "storage.py")
 
-######################################################################
-# Setup path
-if exists(SOURCE_DIR):
-    sys.path.insert(0, realpath(dirname(SOURCE_DIR)))
-    try:
-        from hamster import db
-    finally:
-        del sys.path[0]
+if __name__ == '__main__':
+    # Setup i18n
+    gettext.install("hamster-applet", unicode=True)
+    locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
+    for module in (gettext, locale):
+        module.bindtextdomain('hamster-applet', locale_dir)
+        module.textdomain('hamster-applet')
 
-else:
+        if hasattr(module, 'bind_textdomain_codeset'):
+            module.bind_textdomain_codeset('hamster-applet','UTF-8')
+
+    # adjust path if running from source
+    if os.path.exists(SOURCE_DIR):
+        sys.path.insert(0, os.path.realpath(os.path.dirname(SOURCE_DIR)))
+
+
     from hamster import db
+    print "hamster-service running"
 
-print "hamster-service running"
-
-storage = db.Storage(loop)
-loop.run()
+    storage = db.Storage(loop)
+    loop.run()
