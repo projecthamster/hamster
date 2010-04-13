@@ -26,23 +26,17 @@ def to_dbus_fact(fact):
     """Perform the conversion between fact database query and
     dbus supported data types
     """
-    if not fact:
-        return dbus.Dictionary({}, signature='sv')
 
-    fact = dict(fact)
-    for key in fact.keys():
-        fact[key] = fact[key] or 0
-
-        # make sure we return correct type where strings are expected
-        if not fact[key] and key in ('name', 'category', 'description'):
-            fact[key] = ''
-
-        # convert times to gmtime
-        if isinstance(fact[key], dt.datetime) or isinstance(fact[key], dt.date):
-            fact[key] = timegm(fact[key].timetuple())
-        elif isinstance(fact[key], dt.timedelta) :
-            fact[key] = fact[key].days * 24 * 60 * 60 + fact[key].seconds
-    return fact
+    return (fact['id'],
+            timegm(fact['start_time'].timetuple()),
+            timegm(fact['end_time'].timetuple()) if fact['end_time'] else 0,
+            fact['description'] or '',
+            fact['name'] or '',
+            fact['activity_id'] or 0,
+            fact['category'] or '',
+            dbus.Array(fact['tags'], signature = 's'),
+            timegm(fact['date'].timetuple()),
+            fact['delta'].days * 24 * 60 * 60 + fact['delta'].seconds)
 
 
 class Storage(dbus.service.Object):
@@ -113,7 +107,7 @@ class Storage(dbus.service.Object):
         return result
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='a{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='(iiissisasii)')
     def GetFact(self, fact_id):
         """Gets the current displaying fact
         Parameters:
@@ -127,7 +121,10 @@ class Storage(dbus.service.Object):
         u end_time: Seconds since epoch (timestamp)
         as tags: List of tags used
         """
-        return to_dbus_fact(self.__get_fact(fact_id))
+        fact = dict(self.__get_fact(fact_id))
+        fact['date'] = fact['start_time'].date()
+        fact['delta'] = dt.timedelta()
+        return to_dbus_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='issiiss', out_signature='i')
@@ -174,21 +171,24 @@ class Storage(dbus.service.Object):
         self.end_transaction()
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='uus', out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='uus', out_signature='a(iiissisasii)')
     def GetFacts(self, start_date, end_date, search_terms):
         """Gets facts between the day of start_date and the day of end_date.
         Parameters:
-        u start_date: Seconds since epoch (timestamp). Use 0 for today
-        u end_date: Seconds since epoch (timestamp). Use 0 for today
+        i start_date: Seconds since epoch (timestamp). Use 0 for today
+        i end_date: Seconds since epoch (timestamp). Use 0 for today
         s search_terms: Bleh
-        Returns Array of fact where fact it's Dict of:
-        i id: Unique fact identifier
-        s name: Activity name
-        s category: Category name
-        s description: Description of the fact
-        u start_time: Seconds since epoch (timestamp)
-        u end_time: Seconds since epoch (timestamp)
-        as tags: List of tags used
+        Returns Array of fact where fact is struct of:
+            i  id
+            i  start_time
+            i  end_time
+            s  description
+            s  activity name
+            i  activity id
+            i  category name
+            as List of fact tags
+            i  date
+            i  delta
         """
         #TODO: Assert start > end ?
         if start_date:
@@ -201,29 +201,14 @@ class Storage(dbus.service.Object):
         else:
             end = dt.date.today()
 
-        facts = self.__get_facts(start, end, search_terms)
-        return [to_dbus_fact(fact) for fact in facts]
+        return [to_dbus_fact(fact) for fact in self.__get_facts(start, end, search_terms)]
 
 
-    @dbus.service.method("org.gnome.Hamster", out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", out_signature='a(iiissisasii)')
     def GetTodaysFacts(self):
-        """Gets facts of today, respecting hamster midnight.
-        Returns Array of fact where fact it's Dict of:
-        i id: Unique fact identifier
-        s name: Activity name
-        s category: Category name
-        s description: Description of the fact
-        u start_time: Seconds since epoch (timestamp)
-        u end_time: Seconds since epoch (timestamp)
-        as tags: List of tags used
-        """
-
-        facts = dbus.Array([], signature='a{sv}')
-
-        for fact in self.__get_todays_facts():
-            facts.append(to_dbus_fact(fact))
-
-        return facts
+        """Gets facts of today, respecting hamster midnight. See GetFacts for
+        return info"""
+        return [to_dbus_fact(fact) for fact in self.__get_todays_facts()]
 
 
     # categories

@@ -42,22 +42,20 @@ def debus(value):
     return value
 
 def from_dbus_fact(fact):
-    fact['start_time'] = dt.datetime.utcfromtimestamp(fact['start_time'])
-    if fact['end_time']:
-        fact['end_time'] = dt.datetime.utcfromtimestamp(fact['end_time'])
-    else:
-        fact['end_time'] = None
+    """unpack the struct into a proper dict"""
+    return dict(id = fact[0],
+                start_time  = dt.datetime.utcfromtimestamp(fact[1]),
+                end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
+                description = fact[3],
+                name = fact[4],
+                activity_id = fact[5],
+                category = fact[6],
+                tags = fact[7],
+                date = dt.datetime.utcfromtimestamp(fact[8]),
+                delta = dt.timedelta(days = fact[9] // 24 * 60 * 60,
+                                     seconds = fact[9] % 24 * 60 * 60)
+               )
 
-    fact['tags'] = fact['tags'] or [] # effectively converting 0 to []
-
-    if 'date' in fact:
-        fact['date'] = dt.datetime.utcfromtimestamp(fact['date']).date()
-
-    if 'delta' in fact:
-        days, seconds = divmod(fact['delta'], 24 * 60 * 60)
-        fact['delta'] = dt.timedelta(days = days, seconds = seconds)
-
-    return fact
 
 class Storage(object):
     def __init__(self, parent = None):
