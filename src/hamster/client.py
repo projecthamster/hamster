@@ -121,7 +121,7 @@ class Storage(object):
                                       category_name = None, description = None):
 
         if start_time:
-            start_time = timegm(start_time).timetuple()
+            start_time = timegm(start_time.timetuple())
         else:
             start_time = 0
 
