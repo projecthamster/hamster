@@ -335,10 +335,13 @@ class Storage(dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='sib', out_signature='a{sv}')
-    def GetActivityByName(self, activity, category_id = None, ressurect = True):
-        return dict(self.__get_activity_by_name(activity, category_id, ressurect))
+    def GetActivityByName(self, activity, category_id, ressurect = True):
+        category_id = category_id or None
 
-
+        if activity:
+            return dict(self.__get_activity_by_name(activity, category_id, ressurect))
+        else:
+            return {}
 
     # tags
     @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='aa{sv}')

@@ -118,7 +118,7 @@ class Storage(object):
         return from_dbus_fact(self.conn.GetFact(id))
 
     def add_fact(self, activity_name, tags, start_time = None, end_time = 0,
-                                      category_name = '', description = ''):
+                                      category_name = None, description = None):
 
         if start_time:
             start_time = timegm(start_time).timetuple()
@@ -129,6 +129,9 @@ class Storage(object):
             end_time = timegm(end_time.timetuple())
         else:
             end_time = 0
+
+        category_name = category_name or ''
+        description = description or ''
 
         return self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description)
 
@@ -192,4 +195,5 @@ class Storage(object):
         return self.conn.GetCategoryByName(category)
 
     def get_activity_by_name(self, activity, category_id = None, ressurect = True):
+        category_id = category_id or 0
         return self.conn.GetActivityByName(activity, category_id, ressurect)

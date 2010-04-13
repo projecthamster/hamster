@@ -279,10 +279,14 @@ class Storage(storage.Storage):
             res = self.fetchone(query, (_("Unsorted"), name, ))
 
         if res:
+            res = dict(res)
+            res['deleted'] = res['deleted'] or False
+
             # if the activity was marked as deleted, ressurect on first call
             # and put in the unsorted category
             if res['deleted'] and not ressurect:
                 return None
+
             elif res['deleted']:
                 update = """
                             UPDATE activities
@@ -450,7 +454,7 @@ class Storage(storage.Storage):
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
                 fact_name = fact["name"]
-                new_fact = self.__add_fact(fact["name"],
+                new_fact_id = self.__add_fact(fact["name"],
                                            "", # will create tags in the next step
                                            end_time,
                                            fact["end_time"],
@@ -460,7 +464,7 @@ class Storage(storage.Storage):
                                      SELECT ?, tag_id
                                        FROM fact_tags
                                       WHERE fact_id = ?"""
-                self.execute(tag_update, (new_fact["id"], fact["id"])) #clone tags
+                self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
             #eliminate
             elif fact["end_time"] and \
@@ -489,7 +493,7 @@ class Storage(storage.Storage):
 
         # make sure that we do have an activity name after parsing
         if not activity.activity_name:
-            return
+            return 0
 
         # explicitly stated takes precedence
         activity.description = description or activity.description
@@ -526,7 +530,7 @@ class Storage(storage.Storage):
 
 
         if not start_time or not activity.activity_name:  # sanity check
-            return
+            return 0
 
         # now check if maybe there is also a category
         category_id = None
@@ -560,7 +564,7 @@ class Storage(storage.Storage):
                 if previous["activity_id"] == activity_id \
                    and previous["tags"] == sorted([tag["name"] for tag in tags]) \
                    and previous["description"] == (description or ""):
-                    return previous
+                    return previous["id"]
 
                 # otherwise, if no description is added
                 # see if maybe it is too short to qualify as an activity
@@ -583,7 +587,7 @@ class Storage(storage.Storage):
                             """
                             self.execute(update, (before["id"],))
 
-                            return before
+                            return before["id"]
                 else:
                     # otherwise stop
                     update = """
