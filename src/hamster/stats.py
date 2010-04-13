@@ -67,7 +67,7 @@ class Stats(object):
 
 
     def init_stats(self):
-        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
+        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 2), dt.date.today())
 
         if not self.stat_facts or self.stat_facts[-1]["start_time"].year == self.stat_facts[0]["start_time"].year:
             self.get_widget("explore_controls").hide()
