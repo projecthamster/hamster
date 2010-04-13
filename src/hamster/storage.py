@@ -104,13 +104,11 @@ class Storage(dbus.service.Object):
         else:
             end_time = None
 
-        print activity_name, tags, start_time, end_time, category_name, description
         self.start_transaction()
         result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description)
         self.end_transaction()
 
         if result:
-            print "emiting factschanged"
             self.FactsChanged()
         return result
 
@@ -302,9 +300,7 @@ class Storage(dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
     def GetActivities(self, category_id = None):
-        print self.__get_activities(category_id = category_id)
         return [dict(activity) for activity in self.__get_activities(category_id = category_id)]
-
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='aa{sv}')
