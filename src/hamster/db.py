@@ -185,7 +185,7 @@ class Storage(storage.Storage):
         activity = self.fetchone("select name from activities where id = ?", (id, ))
         existing_activity = self.__get_activity_by_name(activity['name'], category_id)
 
-        if id == existing_activity['id']: # we are already there, go home
+        if existing_activity and id == existing_activity['id']: # we are already there, go home
             return False
 
         if existing_activity: #ooh, we have something here!
@@ -778,7 +778,7 @@ class Storage(storage.Storage):
 
         else:
             query = """
-                       SELECT a.*, b.name as category
+                       SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
                          FROM activities a
                     LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                         WHERE deleted IS NULL
