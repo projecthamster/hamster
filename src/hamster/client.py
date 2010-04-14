@@ -51,9 +51,9 @@ def from_dbus_fact(fact):
                 activity_id = fact[5],
                 category = fact[6],
                 tags = fact[7],
-                date = dt.datetime.utcfromtimestamp(fact[8]),
-                delta = dt.timedelta(days = fact[9] // 24 * 60 * 60,
-                                     seconds = fact[9] % 24 * 60 * 60)
+                date = dt.datetime.utcfromtimestamp(fact[8]).date(),
+                delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
+                                     seconds = fact[9] % (24 * 60 * 60))
                )
 
 
