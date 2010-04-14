@@ -62,7 +62,7 @@ class RuntimeStore(Singleton):
         else:
             data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'data'))
         self.data_dir = data_dir
-        self.storage = Storage()
+        self.storage = Storage(self)
 
 
         # figure out the correct database file
