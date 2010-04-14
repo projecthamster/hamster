@@ -33,6 +33,7 @@ import charting, reports
 from configuration import runtime, dialogs
 
 from hamster.i18n import C_
+from collections import defaultdict
 
 
 class TotalsBox(gtk.VBox):
@@ -146,23 +147,34 @@ class TotalsBox(gtk.VBox):
         total_label = _("%s hours tracked total") % ("%.1f" % (total_hours / 60.0))
         self.get_widget("total_hours").set_text(total_label)
 
+
+        category_sums, activity_sums, tag_sums = defaultdict(dt.timedelta), defaultdict(dt.timedelta), defaultdict(dt.timedelta),
+
         for fact in facts:
             if self.selected_categories and fact["category"] not in self.selected_categories:
-                fact["delta"] = dt.timedelta()
+                continue
             if self.selected_activities and fact["name"] not in self.selected_activities:
-                fact["delta"] = dt.timedelta()
+                continue
             if self.selected_tags and len(set(self.selected_tags) - set(fact["tags"])) > 0:
-                fact["delta"] = dt.timedelta()
+                continue
+
+            category_sums[fact["category"]] += fact["delta"]
+            activity_sums[fact["name"]] += fact["delta"]
+            for tag in fact["tags"]:
+                tag_sums[tag] += fact["delta"]
 
 
+        for key in category_sums:
+            category_sums[key] = stuff.duration_minutes(category_sums[key]) / 60.0
 
-        # category totals
-        category_sums = stuff.totals(facts,
-                                     lambda fact: (fact["category"]),
-                                     lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
-        for entry in category_sums:
-            category_sums[entry] = category_sums[entry] / 60 / 60.0
+        for key in activity_sums:
+            activity_sums[key] = stuff.duration_minutes(activity_sums[key]) / 60.0
 
+        for key in tag_sums:
+            tag_sums[key] = stuff.duration_minutes(tag_sums[key]) / 60.0
+
+
+        #category totals
         if category_sums:
             if self.category_sums:
                 category_sums = [(key, category_sums[key]) for key in self.category_sums[0]]
@@ -172,14 +184,7 @@ class TotalsBox(gtk.VBox):
             self.category_sums = zip(*category_sums)
 
 
-
         # activity totals
-        activity_sums = stuff.totals(facts,
-                                     lambda fact: (fact["name"]),
-                                     lambda fact: fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60)
-        for entry in activity_sums:
-            activity_sums[entry] = activity_sums[entry] / 60 / 60.0
-
         if self.activity_sums:
             activity_sums = [(key, activity_sums[key]) for key in self.activity_sums[0]]
         else:
@@ -189,24 +194,12 @@ class TotalsBox(gtk.VBox):
 
 
         # tag totals
-        tag_sums = {}
-        for fact in facts:
-            if fact["tags"]:
-                for tag in fact["tags"]:
-                    tag_sums.setdefault(tag, 0)
-                    tag_sums[tag] += fact["delta"].seconds + fact["delta"].days * 24 * 60 * 60
-
-        for entry in tag_sums:
-            tag_sums[entry] = tag_sums[entry] / 60 / 60.0
-
         if tag_sums:
             if self.tag_sums:
                 tag_sums = [(key, tag_sums[key]) for key in self.tag_sums[0]]
             else:
                 tag_sums = sorted(tag_sums.items(), key=lambda x:x[1], reverse = True)
             self.tag_sums = zip(*tag_sums)
-
-
 
 
         self.get_widget("totals_by_category").set_size_request(10,10)
