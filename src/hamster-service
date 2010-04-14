@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
 
     from hamster import db
-    print "hamster-service running"
+    print "hamster-service up"
 
     storage = db.Storage(loop)
     loop.run()
