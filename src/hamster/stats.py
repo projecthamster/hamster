@@ -53,8 +53,8 @@ class Stats(object):
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
-        runtime.dispatcher.add_handler('activity_updated', self.after_fact_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
+        runtime.storage.connect('activities-changed',self.after_fact_update)
+        runtime.storage.connect('facts-changed',self.after_fact_update)
 
         self.init_stats()
 
@@ -406,7 +406,7 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.stats(button.year)
 
 
-    def after_fact_update(self, event, date):
+    def after_fact_update(self, event):
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         self.stats()
 
@@ -424,9 +424,6 @@ than 15 minutes you seem to be a busy bee." % ("<b>%d</b>" % short_percent))
         self.close_window()
 
     def close_window(self):
-        runtime.dispatcher.del_handler('activity_updated', self.after_fact_update)
-        runtime.dispatcher.del_handler('day_updated', self.after_fact_update)
-
         if not self.parent:
             gtk.main_quit()
         else:

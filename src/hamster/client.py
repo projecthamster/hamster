@@ -22,6 +22,7 @@
 import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
+import gobject
 
 def debus(value):
     """recasts dbus types to the basic ones. should be quite an overhead"""
@@ -57,8 +58,16 @@ def from_dbus_fact(fact):
                )
 
 
-class Storage(object):
+class Storage(gobject.GObject):
+    __gsignals__ = {
+        "tags-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "facts-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self, parent = None):
+        gobject.GObject.__init__(self)
+
         self.parent = parent
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -75,13 +84,13 @@ class Storage(object):
 
 
     def on_tags_changed(self):
-        self.parent.dispatch('new_tags_added')
+        self.emit("tags-changed")
 
     def on_facts_changed(self):
-        self.parent.dispatch('day_updated')
+        self.emit("facts-changed")
 
     def on_activities_changed(self):
-        self.parent.dispatch('activity_updated')
+        self.emit("activities-changed")
 
 
     def get_todays_facts(self):

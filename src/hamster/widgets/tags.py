@@ -57,13 +57,12 @@ class TagsEntry(gtk.Entry):
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
-        self.connect("parent-set", self._on_parent_set)
 
-        runtime.dispatcher.add_handler('new_tags_added', self.refresh_tags)
+        runtime.storage.connect('tags-changed', self.refresh_tags)
         self.show()
         self.populate_suggestions()
 
-    def refresh_tags(self, event, data):
+    def refresh_tags(self, event):
         self.tags = None
 
     def get_tags(self):
@@ -206,11 +205,6 @@ class TagsEntry(gtk.Entry):
 
         return False
 
-    def _on_parent_set(self, old_parent, user_data):
-        # when parent changes to itself, that means that it has been actually deleted
-        if old_parent and old_parent == self.get_toplevel():
-            runtime.dispatcher.del_handler('new_tags_added', self.refresh_tags)
-
 
 class TagBox(graphics.Scene):
     __gsignals__ = {
@@ -329,4 +323,3 @@ class Tag(graphics.Sprite):
         self.graphics.set_color((0,0,0), 0)
         self.graphics.rectangle(0, 0, w, h)
         self.graphics.stroke()
-

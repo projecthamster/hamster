@@ -24,7 +24,7 @@ import gconf
 import datetime as dt
 import gobject
 
-class DbusIdleListener(object):
+class DbusIdleListener(gobject.GObject):
     """
     Listen for idleness coming from org.gnome.ScreenSaver
 
@@ -38,10 +38,13 @@ class DbusIdleListener(object):
     members coming from the org.gnome.ScreenSaver interface and the
     and is_screen_locked members are updated appropriately.
     """
-    def __init__(self, dispatcher):
-        self.screensaver_uri = "org.gnome.ScreenSaver"
+    __gsignals__ = {
+        "idle-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+    }
+    def __init__(self):
+        gobject.GObject.__init__(self)
 
-        self.dispatcher = dispatcher
+        self.screensaver_uri = "org.gnome.ScreenSaver"
         self.screen_locked = False
         self.idle_from = None
         self.timeout_minutes = 0 # minutes after session is considered idle
@@ -106,7 +109,7 @@ class DbusIdleListener(object):
                 # SessionIdleChanged signal kicks in
                 def dispatch_active_changed(idle_state):
                     if not self.idle_was_there:
-                        self.dispatcher.dispatch('active_changed', idle_state)
+                        self.emit('idle-changed', idle_state)
                     self.idle_was_there = False
 
                 gobject.timeout_add_seconds(1, dispatch_active_changed, idle_state)
@@ -114,7 +117,7 @@ class DbusIdleListener(object):
             else:
                 # dispatch idle status change to interested parties
                 self.idle_was_there = True
-                self.dispatcher.dispatch('active_changed', idle_state)
+                self.emit('idle-changed', idle_state)
 
         elif member == "Lock":
             # in case of lock, lock signal will be sent first, followed by
@@ -135,4 +138,3 @@ class DbusIdleListener(object):
             # Only subtract idle time from the running task when
             # idleness is due to time out, not a screen lock.
             return self.idle_from - dt.timedelta(minutes = self.timeout_minutes)
-

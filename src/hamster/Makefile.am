@@ -7,7 +7,6 @@ CPPFLAGS = \
 hamsterdir = $(pyexecdir)/hamster
 hamster_PYTHON = \
 	defs.py \
-	dispatcher.py \
 	storage.py \
 	db.py \
 	eds.py \

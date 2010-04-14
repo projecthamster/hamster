@@ -198,7 +198,7 @@ class HamsterApplet(object):
         self._gui = stuff.load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
         # on close don't destroy the popup, just hide it instead
-        self.window.connect("delete_event", lambda *args: self.__show_toggle(None, False))
+        self.window.connect("delete_event", lambda *args: self.__show_toggle(False))
 
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
@@ -225,8 +225,8 @@ class HamsterApplet(object):
         try:
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
             # Set up connection to the screensaver
-            self.dbusIdleListener = idle.DbusIdleListener(runtime.dispatcher)
-            runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
+            self.dbusIdleListener = idle.DbusIdleListener()
+            self.dbusIdleListener.connect('idle-changed', self.on_idle_changed)
 
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
@@ -240,7 +240,7 @@ class HamsterApplet(object):
         self.hotkey = conf.get("keybinding")
         self.bind_hotkey()
 
-        runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
+        conf.connect('conf-changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
         self.last_activity = None
@@ -250,10 +250,8 @@ class HamsterApplet(object):
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
-
-        runtime.dispatcher.add_handler('panel_visible', self.__show_toggle)
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
+        runtime.storage.connect('activities-changed',self.after_activity_update)
+        runtime.storage.connect('facts-changed',self.after_fact_update)
 
         self.screen = None
         if self.workspace_tracking:
@@ -343,7 +341,7 @@ class HamsterApplet(object):
         dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
 
     def switch_cb(self, n, action):
-        self.__show_toggle(None, not self.button.get_active())
+        self.__show_toggle(not self.button.get_active())
 
 
     def load_day(self):
@@ -441,7 +439,7 @@ class HamsterApplet(object):
         fact = self.treeview.get_selected_fact()
         runtime.storage.remove_fact(fact["id"])
 
-    def __show_toggle(self, event, is_active):
+    def __show_toggle(self, is_active):
         """main window display and positioning"""
         self.button.set_active(is_active)
 
@@ -504,7 +502,7 @@ class HamsterApplet(object):
 
     """events"""
     def on_toggle(self, widget):
-        self.__show_toggle(None, self.button.get_active())
+        self.__show_toggle(self.button.get_active())
 
 
     def on_todays_keys(self, tree, event):
@@ -526,7 +524,7 @@ class HamsterApplet(object):
                                      ", ".join(fact["tags"]),
                                      category_name = fact["category"],
                                      description = fact["description"])
-            runtime.dispatcher.dispatch('panel_visible', False)
+            self.__show_toggle(False)
 
 
     def on_windows_keys(self, tree, event_key):
@@ -535,13 +533,13 @@ class HamsterApplet(object):
               and event_key.state & gtk.gdk.CONTROL_MASK)):
             if self.new_name.popup.get_property("visible") == False \
                and self.new_tags.popup.get_property("visible") == False:
-                runtime.dispatcher.dispatch('panel_visible', False)
+                self.__show_toggle(False)
                 return True
         return False
 
     """button events"""
     def on_overview(self, menu_item):
-        runtime.dispatcher.dispatch('panel_visible', False)
+        self.__show_toggle(False)
         dialogs.overview.show(self.applet)
 
     def show_overview(self, menu_item, verb):
@@ -554,7 +552,7 @@ class HamsterApplet(object):
         dialogs.about.show()
 
     def show_preferences(self, menu_item, verb):
-        runtime.dispatcher.dispatch('panel_visible', False)
+        self.__show_toggle(False)
         dialogs.prefs.show(self.applet)
 
 
@@ -564,7 +562,7 @@ class HamsterApplet(object):
         self.load_day()
         self.update_label()
 
-    def after_fact_update(self, event, date):
+    def after_fact_update(self, event):
         self.load_day()
         self.update_label()
 
@@ -656,12 +654,10 @@ class HamsterApplet(object):
 
     """global shortcuts"""
     def on_keybinding_activated(self):
-        self.__show_toggle(None, not self.button.get_active())
+        self.__show_toggle(not self.button.get_active())
 
 
-    def on_conf_changed(self, event, data):
-        key, value = data
-
+    def on_conf_changed(self, event, key, value):
         if key == "enable_timeout":
             self.timeout_enabled = value
         elif key == "notify_on_idle":
@@ -701,12 +697,12 @@ class HamsterApplet(object):
                                  self.new_tags.get_text().decode("utf8", "replace"))
         self.new_name.set_text("")
         self.new_tags.set_text("")
-        runtime.dispatcher.dispatch('panel_visible', False)
+        self.__show_toggle(False)
 
     def on_stop_tracking_clicked(self, widget):
         runtime.storage.stop_tracking()
         self.last_activity = None
-        runtime.dispatcher.dispatch('panel_visible', False)
+        self.__show_toggle(False)
 
     def on_window_size_request(self, window, event):
         box = self.window.get_allocation()

@@ -27,10 +27,10 @@ import gettext
 import os
 import defs
 from client import Storage
-from dispatcher import Dispatcher
 from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
+import gobject
 
 import logging
 log = logging.getLogger("configuration")
@@ -49,7 +49,6 @@ class RuntimeStore(Singleton):
     database_file = None
     last_etag = None
     data_dir = ""
-    dispatcher = None
     storage = None
     conf = None
 
@@ -63,8 +62,7 @@ class RuntimeStore(Singleton):
         else:
             data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'data'))
         self.data_dir = data_dir
-        self.dispatcher = Dispatcher()
-        self.storage = Storage(self.dispatcher)
+        self.storage = Storage()
 
 
         # figure out the correct database file
@@ -155,7 +153,7 @@ dialogs = Dialogs()
 
 
 
-class GConfStore(Singleton):
+class GConfStore(gobject.GObject, Singleton):
     """
     Settings implementation which stores settings in GConf
     Snatched from the conduit project (http://live.gnome.org/Conduit)
@@ -177,10 +175,14 @@ class GConfStore(Singleton):
         'standalone_window_maximized' :   False,          # Is overview window maximized
     }
 
+    __gsignals__ = {
+        "conf-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
+    }
     def __init__(self):
-        self._client = gconf.client_get_default()
-        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
-        self._notifications = []
+          gobject.GObject.__init__(self)
+          self._client = gconf.client_get_default()
+          self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
+          self._notifications = []
 
     def _fix_key(self, key):
         """
@@ -203,7 +205,7 @@ class GConfStore(Singleton):
         key = self._fix_key(entry.key)[len(self.GCONF_DIR):]
         value = self._get_value(entry.value, self.DEFAULTS[key])
 
-        runtime.dispatcher.dispatch("conf_changed", (key, value))
+        self.emit('conf-changed', key, value)
 
 
     def _get_value(self, value, default):

@@ -91,9 +91,8 @@ class ActivityEntry(gtk.Entry):
         self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
         self.connect("changed", self._on_text_changed)
-        self.connect("parent-set", self._on_parent_set)
 
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
+        runtime.storage.connect('activities-changed',self.after_activity_update)
 
         self.show()
         self.populate_suggestions()
@@ -299,9 +298,3 @@ class ActivityEntry(gtk.Entry):
             self.emit("value-entered")
 
         self.news = False
-
-
-    def _on_parent_set(self, old_parent, user_data):
-        # when parent changes to itself, that means that it has been actually deleted
-        if old_parent and old_parent == self.get_toplevel():
-            runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)

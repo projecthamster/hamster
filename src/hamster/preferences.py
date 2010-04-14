@@ -94,7 +94,7 @@ appearances = ["text", "icon", "both"]
 
 from configuration import runtime, conf
 import widgets
-import dispatcher, storage, stuff
+import storage, stuff
 
 class PreferencesEditor:
     TARGETS = [

@@ -101,9 +101,10 @@ class Overview(object):
         self.get_widget("by_day_box").add(self.timechart)
 
         self._gui.connect_signals(self)
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('conf_changed', self.on_conf_change)
+        runtime.storage.connect('activities-changed',self.after_activity_update)
+        runtime.storage.connect('facts-changed',self.after_activity_update)
+
+        conf.connect('conf-changed', self.on_conf_change)
 
         if conf.get("overview_window_maximized"):
             self.window.maximize()
@@ -180,8 +181,7 @@ class Overview(object):
         self.get_widget("range_title").set_text(self.title)
 
 
-    def on_conf_change(self, event, data):
-        key, value = data
+    def on_conf_change(self, event, key, value):
         if key == "day_start_minutes":
             self.day_start = dt.time(value / 60, value % 60)
             self.timechart.day_start = self.day_start
@@ -351,10 +351,6 @@ class Overview(object):
         self.close_window()
 
     def close_window(self):
-        runtime.dispatcher.del_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.del_handler('day_updated', self.after_activity_update)
-        runtime.dispatcher.del_handler('conf_changed', self.on_conf_change)
-
         # properly saving window state and position
         maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
         conf.set("overview_window_maximized", maximized)

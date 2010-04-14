@@ -85,8 +85,8 @@ class ProjectHamster(object):
         try:
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
             # Set up connection to the screensaver
-            self.dbusIdleListener = idle.DbusIdleListener(runtime.dispatcher)
-            runtime.dispatcher.add_handler('active_changed', self.on_idle_changed)
+            self.dbusIdleListener = idle.DbusIdleListener()
+            self.dbusIdleListener.connect('idle-changed', self.on_idle_changed)
 
         except dbus.DBusException, e:
             logging.error("Can't init dbus: %s" % e)
@@ -100,7 +100,7 @@ class ProjectHamster(object):
         self.hotkey = conf.get("keybinding")
         self.bind_hotkey()
 
-        runtime.dispatcher.add_handler('conf_changed', self.on_conf_changed)
+        conf.connect('conf-changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
         self.last_activity = None
@@ -109,8 +109,8 @@ class ProjectHamster(object):
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
-        runtime.dispatcher.add_handler('activity_updated', self.after_activity_update)
-        runtime.dispatcher.add_handler('day_updated', self.after_fact_update)
+        runtime.storage.connect('activities-changed',self.after_activity_update)
+        runtime.storage.connect('facts-changed',self.after_fact_update)
 
         self.screen = None
         if self.workspace_tracking:
@@ -308,7 +308,6 @@ class ProjectHamster(object):
                                      ", ".join(fact["tags"]),
                                      category_name = fact["category"],
                                      description = fact["description"])
-            runtime.dispatcher.dispatch('panel_visible', False)
 
 
     """button events"""
@@ -325,7 +324,6 @@ class ProjectHamster(object):
         dialogs.stats.show(self.window)
 
     def on_menu_preferences_activate(self, menu_item):
-        runtime.dispatcher.dispatch('panel_visible', False)
         dialogs.prefs.show(self.window)
 
     def on_menu_help_contents_activate(self, *args):
@@ -336,7 +334,7 @@ class ProjectHamster(object):
         self.new_name.refresh_activities()
         self.load_day()
 
-    def after_fact_update(self, event, date):
+    def after_fact_update(self, event):
         self.load_day()
 
     def on_idle_changed(self, event, state):
@@ -426,9 +424,7 @@ class ProjectHamster(object):
             self.notification.show()
 
     """global shortcuts"""
-    def on_conf_changed(self, event, data):
-        key, value = data
-
+    def on_conf_changed(self, event, key, value):
         if key == "enable_timeout":
             self.timeout_enabled = value
         elif key == "notify_on_idle":
@@ -467,12 +463,10 @@ class ProjectHamster(object):
                                  self.new_tags.get_text().decode("utf8", "replace"))
         self.new_name.set_text("")
         self.new_tags.set_text("")
-        runtime.dispatcher.dispatch('panel_visible', False)
 
     def on_stop_tracking_clicked(self, widget):
         runtime.storage.stop_tracking()
         self.last_activity = None
-        runtime.dispatcher.dispatch('panel_visible', False)
 
     def on_window_configure_event(self, window, event):
         self.treeview.fix_row_heights()

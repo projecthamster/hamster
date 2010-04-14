@@ -215,11 +215,6 @@ class CustomFactController:
         else:
             runtime.storage.add_fact(activity, tags, start_time, end_time, description = description)
 
-
-        # hide panel only on add - on update user will want to see changes
-        if not self.fact_id:
-            runtime.dispatcher.dispatch('panel_visible', False)
-
         self.close_window()
 
     def on_activity_list_key_pressed(self, entry, event):
