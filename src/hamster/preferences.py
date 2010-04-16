@@ -51,7 +51,7 @@ class CategoryStore(gtk.ListStore):
         """ Loads activity list from database, ordered by
             activity_order """
 
-        category_list = runtime.storage.get_category_list()
+        category_list = runtime.storage.get_categories()
 
         for category in category_list:
             self.append([category['id'],
@@ -277,7 +277,7 @@ class PreferencesEditor:
         day_start = dt.time(day_start / 60, day_start % 60)
         self.day_start.set_time(day_start)
 
-        self.tags = [tag["name"] for tag in runtime.storage.get_tags(autocomplete=True)]
+        self.tags = [tag["name"] for tag in runtime.storage.get_tags()]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
 
         self.workspace_mapping = conf.get("workspace_mapping")
@@ -424,7 +424,7 @@ class PreferencesEditor:
             return False #ignoring unsorted category
 
         #look for dupes
-        categories = runtime.storage.get_category_list()
+        categories = runtime.storage.get_categories()
         for category in categories:
             if category['name'].lower() == new_text.lower():
                 if id == -2: # that was a new category

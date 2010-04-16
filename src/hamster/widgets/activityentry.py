@@ -185,7 +185,7 @@ class ActivityEntry(gtk.Entry):
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_autocomplete_activities(input_activity.activity_name)
-        self.categories = self.categories or runtime.storage.get_category_list()
+        self.categories = self.categories or runtime.storage.get_categories()
 
 
         time = ''
@@ -210,14 +210,14 @@ class ActivityEntry(gtk.Entry):
         else:
             key = input_activity.activity_name.decode('utf8', 'replace').lower()
             for activity in self.activities:
-                fillable = activity['name']
+                fillable = activity['name'].lower()
                 if activity['category']:
                     fillable += "@%s" % activity['category']
 
                 if time: #as we also support deltas, for the time we will grab anything up to first space
                     fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
 
-                store.append([fillable, activity['name'], activity['category'], time])
+                store.append([fillable, activity['name'].lower(), activity['category'], time])
 
     def after_activity_update(self, widget, event):
         self.refresh_activities()

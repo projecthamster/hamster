@@ -610,7 +610,7 @@ class HamsterApplet(object):
             if parsed_activity:
                 category_id = None
                 if parsed_activity.category_name:
-                    category_id = runtime.storage.get_category_by_name(parsed_activity.category_name)
+                    category_id = runtime.storage.get_category_id(parsed_activity.category_name)
 
                 activity = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
                                                                 category_id,

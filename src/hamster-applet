@@ -45,8 +45,8 @@ def on_destroy(event):
 
     # handle config option to stop tracking on shutdown
     if conf.get("stop_on_shutdown"):
-        last_activity = runtime.storage.get_last_activity()
-        if last_activity and last_activity['end_time'] is None:
+        todays_facts = runtime.storage.get_todays_facts()
+        if todays_facts and todays_facts[-1]['end_time'] is None:
             runtime.storage.stop_tracking()
 
     if gtk.main_level():

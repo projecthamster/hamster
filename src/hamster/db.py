@@ -113,13 +113,8 @@ class Storage(storage.Storage):
         self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
 
     #tags, here we come!
-    def __get_tags(self, autocomplete = None):
-        query = "select * from tags"
-        if autocomplete:
-            query += " where autocomplete='true'"
-
-        query += " order by name"
-        return self.fetchall(query)
+    def __get_tags(self):
+        return self.fetchall("select * from tags order by name")
 
     def __get_tag_ids(self, tags):
         """look up tags by their name. create if not found"""
@@ -177,7 +172,7 @@ class Storage(storage.Storage):
 
         return changes or len(to_delete + to_uncomplete) > 0
 
-    def __get_category_list(self):
+    def __get_categories(self):
         return self.fetchall("SELECT * FROM categories ORDER BY category_order")
 
     def __change_category(self, id, category_id):
@@ -299,7 +294,7 @@ class Storage(storage.Storage):
 
         return None
 
-    def __get_category_by_name(self, name):
+    def __get_category_id(self, name):
         """returns category by it's name"""
 
         query = """
@@ -357,12 +352,6 @@ class Storage(storage.Storage):
             grouped_facts.append(grouped_fact)
         return grouped_facts
 
-    def __get_last_activity(self):
-        facts = self.__get_todays_facts()
-        last_activity = None
-        if facts and facts[-1]["end_time"] == None:
-            last_activity = facts[-1]
-        return last_activity
 
     def __touch_fact(self, fact, end_time):
         end_time = end_time or dt.datetime.now()
@@ -535,7 +524,7 @@ class Storage(storage.Storage):
         # now check if maybe there is also a category
         category_id = None
         if activity.category_name:
-            category_id = self.__get_category_by_name(activity.category_name)
+            category_id = self.__get_category_id(activity.category_name)
             if not category_id:
                 category_id = self.__add_category(activity.category_name)
 
@@ -793,12 +782,12 @@ class Storage(storage.Storage):
            activity names converted to lowercase"""
 
         query = """
-                   SELECT lower(a.name) AS name, b.name AS category
+                   SELECT a.name AS name, b.name AS category
                      FROM activities a
                 LEFT JOIN categories b ON coalesce(b.id, -1) = a.category_id
                 LEFT JOIN facts f ON a.id = f.activity_id
                     WHERE deleted IS NULL
-                      AND a.name LIKE ? ESCAPE '\\'
+                      AND lower(a.name) LIKE ? ESCAPE '\\'
                  GROUP BY a.id
                  ORDER BY max(f.start_time) DESC, lower(a.name)
                     LIMIT 50

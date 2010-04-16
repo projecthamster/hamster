@@ -26,7 +26,6 @@ def to_dbus_fact(fact):
     """Perform the conversion between fact database query and
     dbus supported data types
     """
-
     return (fact['id'],
             timegm(fact['start_time'].timetuple()),
             timegm(fact['end_time'].timetuple()) if fact['end_time'] else 0,
@@ -109,18 +108,7 @@ class Storage(dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='(iiissisasii)')
     def GetFact(self, fact_id):
-        """Gets the current displaying fact
-        Parameters:
-        i id: Unique fact identifier
-        Returns Dict of:
-        i id: Unique fact identifier
-        s name: Activity name
-        s category: Category name
-        s description: Description of the fact
-        u start_time: Seconds since epoch (timestamp)
-        u end_time: Seconds since epoch (timestamp)
-        as tags: List of tags used
-        """
+        """Get fact by id. For output format see GetFacts"""
         fact = dict(self.__get_fact(fact_id))
         fact['date'] = fact['start_time'].date()
         fact['delta'] = dt.timedelta()
@@ -155,14 +143,15 @@ class Storage(dbus.service.Object):
         """Stops tracking the current activity"""
         end_time = dt.datetime.utcfromtimestamp(end_time)
 
-        fact = self.__get_last_activity()
-        if fact:
-            self.__touch_fact(fact, end_time)
+        facts = self.__get_todays_facts()
+        if facts:
+            self.__touch_fact(facts[-1], end_time)
             self.FactsChanged()
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def RemoveFact(self, fact_id):
+        """Remove fact from storage by it's ID"""
         self.start_transaction()
         fact = self.__get_fact(fact_id)
         if fact:
@@ -219,9 +208,9 @@ class Storage(dbus.service.Object):
         self.ActivitiesChanged()
         return res
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a{sv}')
-    def GetCategoryByName(self, category):
-        return dict(self.__get_category_by_name(category))
+    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
+    def GetCategoryId(self, category):
+        return self.__get_category_id(category)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='is')
     def UpdateCategory(self, id, name):
@@ -238,7 +227,7 @@ class Storage(dbus.service.Object):
     @dbus.service.method("org.gnome.Hamster", out_signature='aa{sv}')
     def GetCategories(self):
         res = []
-        for category in self.__get_category_list():
+        for category in self.__get_categories():
             category = dict(category)
             category['color_code'] = category['color_code'] or ''
             res.append(category)
@@ -268,22 +257,6 @@ class Storage(dbus.service.Object):
         result = self.__remove_activity(id)
         self.ActivitiesChanged()
         return result
-
-    @dbus.service.method("org.gnome.Hamster", out_signature='a{sv}')
-    def GetLastActivity(self):
-        """Gets the current displaying fact
-        Returns Dict of:
-        i id: Unique fact identifier
-        s name: Activity name
-        s category: Category name
-        s description: Description of the fact
-        u start_time: Seconds since epoch (timestamp)
-        u end_time: Seconds since epoch (timestamp)
-        u end_time: Seconds since epoch (timestamp)
-        as tags: List of tags used
-        """
-        return to_dbus_fact(self__.get_last_activity())
-
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
     def GetActivities(self, category_id = None):
@@ -342,9 +315,9 @@ class Storage(dbus.service.Object):
             return {}
 
     # tags
-    @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='aa{sv}')
-    def GetTags(self, autocomplete = None):
-        return [dict(tag) for tag in self.__get_tags(autocomplete)]
+    @dbus.service.method("org.gnome.Hamster", out_signature='aa{sv}')
+    def GetTags(self):
+        return [dict(tag) for tag in self.__get_tags()]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='aa{sv}')

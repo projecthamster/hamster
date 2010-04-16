@@ -111,7 +111,7 @@ class HamsterClient(object):
 
     def list_categories(self):
         '''Print the names of all the categories.'''
-        for category in self.storage.get_category_list():
+        for category in self.storage.get_categories():
             print category['name'].encode('utf8')
 
 
