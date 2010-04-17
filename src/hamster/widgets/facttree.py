@@ -119,7 +119,7 @@ class FactTree(gtk.TreeView):
         self.longest_interval = max(self.longest_interval, w + 20)
 
 
-        self._test_layout.set_markup("%s - <small>%s</small> " % (fact["name"], fact["category"]))
+        self._test_layout.set_markup("%s - <small>%s</small> " % (stuff.escape_pango(fact["name"]), stuff.escape_pango(fact["category"])))
         w, h = self._test_layout.get_pixel_size()
         self.longest_activity_category = max(self.longest_activity_category, w + 10)
 
