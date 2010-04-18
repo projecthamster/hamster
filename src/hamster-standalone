@@ -146,7 +146,7 @@ class ProjectHamster(object):
         gtk.accel_map_add_entry("<hamster-applet>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-applet>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-applet>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.Escape, 0)
+        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.w, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-applet>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-applet>/help/contents", gtk.keysyms.F1, 0)
 
