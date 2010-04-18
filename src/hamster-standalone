@@ -330,7 +330,7 @@ class ProjectHamster(object):
         gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
 
     """signals"""
-    def after_activity_update(self, widget, renames):
+    def after_activity_update(self, widget):
         self.new_name.refresh_activities()
         self.load_day()
 

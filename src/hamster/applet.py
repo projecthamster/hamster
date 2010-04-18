@@ -557,7 +557,7 @@ class HamsterApplet(object):
 
 
     """signals"""
-    def after_activity_update(self, widget, renames):
+    def after_activity_update(self, widget):
         self.new_name.refresh_activities()
         self.load_day()
         self.update_label()

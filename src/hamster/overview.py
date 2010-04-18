@@ -197,7 +197,7 @@ class Overview(object):
 
         return True
 
-    def after_activity_update(self, widget, renames):
+    def after_activity_update(self, widget):
         self.search()
 
     def on_search_activate(self, widget):
