@@ -186,8 +186,9 @@ class CustomFactController:
 
     def on_save_button_clicked(self, button):
         activity = self.new_name.get_text().decode("utf-8")
+        parsed = stuff.parse_activity_input(activity)
 
-        if not activity:
+        if not parsed.activity_name:
             return False
 
 
@@ -211,9 +212,20 @@ class CustomFactController:
             end_time = self._get_datetime("end")
 
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, activity, tags, start_time, end_time, description)
+            runtime.storage.update_fact(self.fact_id,
+                                        parsed.activity_name,
+                                        tags,
+                                        start_time,
+                                        end_time,
+                                        parsed.category_name,
+                                        description)
         else:
-            runtime.storage.add_fact(activity, tags, start_time, end_time, description = description)
+            runtime.storage.add_fact(parsed.activity_name,
+                                     tags,
+                                     start_time,
+                                     end_time,
+                                     parsed.category_name,
+                                     description)
 
         self.close_window()
 
