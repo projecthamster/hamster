@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-02-08 09:19+0000\n"
+"POT-Creation-Date: 2010-04-10 19:21+0000\n"
 "PO-Revision-Date: 2010-03-22 13:07+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Remind of current task every x minutes"
 msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
 
-msgid "Should workspace switch trigger acitivity switch"
+msgid "Should workspace switch trigger activity switch"
 msgstr "Kas tööala vahetus peaks valla päästma tegevuse vahetuse"
 
 msgid "Show window"
@@ -121,18 +121,15 @@ msgstr "Lisa _varasem tegevus"
 msgid "No records today"
 msgstr "Tänase kohta pole ühtegi kirjet"
 
-#| msgid "Switch"
 msgid "S_witch"
 msgstr "_Vaheta"
 
 msgid "Show _Overview"
 msgstr "_Näita ülevaadet"
 
-#| msgid "Start Tracking"
 msgid "Start _Tracking"
 msgstr "_Alusta jälgimist"
 
-#| msgid "Stop tracking"
 msgid "Sto_p tracking"
 msgstr "_Lõpeta jälgimine"
 
@@ -151,9 +148,6 @@ msgstr "Varasema tegevuse lisamine"
 msgid "Description:"
 msgstr "Kirjeldus:"
 
-msgid "Preview:"
-msgstr "Eelvaade:"
-
 msgid "Tags:"
 msgstr "Sildid:"
 
@@ -166,7 +160,6 @@ msgstr "kestab edasi"
 msgid "to"
 msgstr "kuni"
 
-#| msgid "Add Earlier Activity"
 msgid "Add earlier activity"
 msgstr "Varasema tegevuse lisamine"
 
@@ -176,7 +169,6 @@ msgstr "Sisukord"
 msgid "Overview"
 msgstr "Ülevaade"
 
-#| msgid "New activity"
 msgid "Start new activity"
 msgstr "Uue tegevuse käivitamine"
 
@@ -186,11 +178,9 @@ msgstr "Statistika"
 msgid "Today"
 msgstr "Täna"
 
-#| msgid "Edit"
 msgid "_Edit"
 msgstr "_Muuda"
 
-#| msgid "Tracking"
 msgid "_Tracking"
 msgstr "_Jälgimine"
 
@@ -326,10 +316,6 @@ msgstr "Tegevus"
 msgid "No activity"
 msgstr "Tegevusetu"
 
-#, c-format, python-format
-msgid "Working on <b>%s</b>"
-msgstr "Jooksev tegevus: <b>%s</b>"
-
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
@@ -345,7 +331,6 @@ msgstr "Sortimata"
 msgid "Just started"
 msgstr "Värskelt alustatud"
 
-#| msgid "Add activity"
 msgid "Changed activity"
 msgstr "Muudeti tegevust"
 
@@ -526,6 +511,10 @@ msgstr "%d. %b.%Y"
 msgid "Total Time"
 msgstr "Kogukestus"
 
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Jooksev tegevus: <b>%s</b>"
+
 msgctxt "years"
 msgid "All"
 msgstr "Kõik"
@@ -537,7 +526,6 @@ msgstr ""
 "Statistika genereerimiseks pole veel piisavalt andmeid.\n"
 "Nädalapikkune kasutamine võib aga juba midagi anda!"
 
-#| msgid "Still collecting data — check back after a week has passed!"
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Andmete kogumine — vaata järgmisel nädalal uuesti!"
 
@@ -655,15 +643,3 @@ msgstr "XML"
 
 msgid "iCal"
 msgstr "iCal"
-
-#~ msgid "Time at witch to consider beginning of new day"
-#~ msgstr "Uue päeva alustamiseks sobilik kellaaeg"
-
-#~ msgid "Hamster"
-#~ msgstr "Hamster"
-
-#~ msgid "Time and Name"
-#~ msgstr "Aeg ja nimi"
-
-#~ msgid "Tags or Description"
-#~ msgstr "Sildid või kirjeldus"
