@@ -184,6 +184,8 @@ class ProjectHamster(object):
             if duration and duration % self.notify_interval == 0:
                 message = _(u"Working on <b>%s</b>") % self.last_activity['name']
 
+            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
+
         elif self.notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour *60) % self.notify_interval == 0:
