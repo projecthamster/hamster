@@ -25,6 +25,7 @@ License: GPLv2
 import gconf
 import gettext
 import os
+from os.path import exists, dirname, realpath
 import defs
 from client import Storage
 from xdg.BaseDirectory import xdg_data_home
@@ -56,14 +57,14 @@ class RuntimeStore(Singleton):
     def __init__(self):
         gettext.install("hamster-applet", unicode = True)
 
-        # Typically shared data dir is /usr/share/hamster-applet
-        if os.path.realpath(__file__).startswith(defs.PYTHONDIR):
-            data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+        # Makefile.in shouldn't be in the final install
+        module_dir = dirname(realpath(__file__))
+        if exists(os.path.join(module_dir, "Makefile")):
+            self.data_dir = os.path.join(module_dir, '..', '..', 'data')
         else:
-            data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'data'))
-        self.data_dir = data_dir
-        self.storage = Storage(self)
+            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
 
+        self.storage = Storage(self)
 
         # figure out the correct database file
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
