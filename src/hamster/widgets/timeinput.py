@@ -130,7 +130,7 @@ class TimeInput(gtk.Entry):
         return self.time
 
     def _format_time(self, time):
-        if not time:
+        if time is None:
             return ""
         return time.strftime("%H:%M").lower()
 
