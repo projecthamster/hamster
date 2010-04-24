@@ -250,7 +250,6 @@ class CustomFactController:
 
     def on_start_date_entered(self, widget):
         self.validate_fields()
-        self.start_time.grab_focus()
 
     def on_start_time_entered(self, widget):
         start_time = self.start_time.get_time()
@@ -259,7 +258,6 @@ class CustomFactController:
 
         self.end_time.set_start_time(start_time)
         self.validate_fields()
-        self.end_time.grab_focus()
 
     def on_end_time_entered(self, widget):
         self.validate_fields()
