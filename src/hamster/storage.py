@@ -180,15 +180,13 @@ class Storage(dbus.service.Object):
             i  delta
         """
         #TODO: Assert start > end ?
+        start = dt.date.today()
         if start_date:
             start = dt.datetime.utcfromtimestamp(start_date).date()
-        else:
-            start = dt.date.today()
 
+        end = None
         if end_date:
             end = dt.datetime.utcfromtimestamp(end_date).date()
-        else:
-            end = dt.date.today()
 
         return [to_dbus_fact(fact) for fact in self.__get_facts(start, end, search_terms)]
 
