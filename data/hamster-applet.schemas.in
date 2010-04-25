@@ -75,7 +75,7 @@
                 <short>At what time does the day start (defaults to 5:30AM)</short>
                 <long>
                     Activities will be counted as to belong to yesterday if
-                    the current time is less than the specified day start and
+                    the current time is less than the specified day start; and
                     today, if it is over the time.
                     Activities that span two days, will tip over to the side
                     where the largest part of the activity is.
@@ -94,7 +94,7 @@
                 <long>
                     List of enabled tracking methods. "name" will enable
                     switching activities by name defined in workspace_mapping.
-                    "memory" will enable switching to last activity when
+                    "memory" will enable switching to the last activity when
                     returning to a previous workspace.
                 </long>
             </locale>

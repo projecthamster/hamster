@@ -4,7 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
   <object class="GtkWindow" id="tabs_window">
-    <property name="title" translatable="yes">Overview - Hamster</property>
+    <property name="title" translatable="yes">Overview — Hamster</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
     <signal name="configure_event" handler="on_tabs_window_configure_event"/>
