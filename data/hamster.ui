@@ -170,6 +170,7 @@
                         <child>
                           <object class="GtkLabel" id="last_activity_category">
                             <property name="visible">True</property>
+                            <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
                             <property name="label"> - Work</property>
                             <attributes>
@@ -212,6 +213,7 @@
                             <child>
                               <object class="GtkLabel" id="last_activity_duration">
                                 <property name="visible">True</property>
+                                <property name="no_show_all">True</property>
                                 <property name="xalign">0</property>
                                 <property name="label">1h 23m</property>
                                 <attributes>
