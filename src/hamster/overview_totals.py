@@ -177,16 +177,15 @@ class TotalsBox(gtk.VBox):
         #category totals
         if category_sums:
             if self.category_sums:
-                category_sums = [(key, category_sums[key]) for key in self.category_sums[0]]
+                category_sums = [(key, category_sums[key] or 0) for key in self.category_sums[0]]
             else:
                 category_sums = sorted(category_sums.items(), key=lambda x:x[1], reverse = True)
 
             self.category_sums = zip(*category_sums)
 
-
         # activity totals
         if self.activity_sums:
-            activity_sums = [(key, activity_sums[key]) for key in self.activity_sums[0]]
+            activity_sums = [(key, activity_sums[key] or 0) for key in self.activity_sums[0]]
         else:
             activity_sums = sorted(activity_sums.items(), key=lambda x:x[1], reverse = True)
 
@@ -196,7 +195,7 @@ class TotalsBox(gtk.VBox):
         # tag totals
         if tag_sums:
             if self.tag_sums:
-                tag_sums = [(key, tag_sums[key]) for key in self.tag_sums[0]]
+                tag_sums = [(key, tag_sums[key] or 0) for key in self.tag_sums[0]]
             else:
                 tag_sums = sorted(tag_sums.items(), key=lambda x:x[1], reverse = True)
             self.tag_sums = zip(*tag_sums)
