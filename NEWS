@@ -1,4 +1,9 @@
 ===============
+Version 2.31.1.1
+===============
+  * forgot to pull in translations
+
+===============
 Version 2.31.1
 ===============
   * application has been split up in back-end d-bus daemon and clients
