@@ -1,4 +1,17 @@
 ===============
+Version 2.31.1
+===============
+  * application has been split up in back-end d-bus daemon and clients
+  * edit activity preview widget got some love
+  * minor bugfixes from 2.30 release
+
+  Updated translations
+    * es (Jorge González)
+    * sl (Matej Urbančič)
+    * gl (Fran Diéguez)
+
+
+===============
 Version 2.30.0
 ===============
   Updated translations
