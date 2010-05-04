@@ -22,4 +22,5 @@ EXTRA_DIST = \
 	hamster-applet \
 	hamster-standalone \
 	gnome-time-tracker \
-	hamster-client
+	hamster-client \
+	hamster-service

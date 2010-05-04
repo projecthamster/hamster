@@ -1,4 +1,9 @@
 ===============
+Version 2.31.1.2
+===============
+  * hamster-service had not been packed in the tarball
+
+===============
 Version 2.31.1.1
 ===============
   * forgot to pull in translations
