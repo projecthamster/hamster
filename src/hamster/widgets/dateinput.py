@@ -58,6 +58,8 @@ class DateInput(gtk.Entry):
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("focus-in-event", self._on_focus_in_event)
         self.connect("focus-out-event", self._on_focus_out_event)
+        self._parent_click_watcher = None # bit lame but works
+
         self.connect("changed", self._on_text_changed)
         self.show()
 
@@ -106,15 +108,23 @@ class DateInput(gtk.Entry):
         self.date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
         self.set_text(self._format_date(self.date))
 
-        self.popup.hide()
+        self.hide_popup()
         if self.news:
             self.emit("date-entered")
             self.news = False
 
+    def hide_popup(self):
+        self.popup.hide()
+        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
+            self.get_toplevel().disconnect(self._parent_click_watcher)
+            self._parent_click_watcher = None
 
     def show_popup(self):
+        if not self._parent_click_watcher:
+            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
+
         window = self.get_parent_window()
-        x, y= window.get_origin()
+        x, y = window.get_origin()
 
         alloc = self.get_allocation()
 
@@ -135,7 +145,7 @@ class DateInput(gtk.Entry):
 
 
     def _on_focus_out_event(self, event, something):
-        self.popup.hide()
+        self.hide_popup()
         if self.news:
             self.emit("date-entered")
             self.news = False
@@ -159,11 +169,11 @@ class DateInput(gtk.Entry):
               event.keyval == gtk.keysyms.KP_Enter):
             enter_pressed = True
         elif (event.keyval == gtk.keysyms.Escape):
-            self.popup.hide()
+            self.hide_popup()
         elif event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
             return False #keep calendar open and allow user to walk in text
         else:
-            self.popup.hide()
+            self.hide_popup()
             return False
 
         if enter_pressed:

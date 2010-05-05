@@ -60,6 +60,8 @@ class TimeInput(gtk.Entry):
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("focus-in-event", self._on_focus_in_event)
         self.connect("focus-out-event", self._on_focus_out_event)
+        self._parent_click_watcher = None # bit lame but works
+
         self.connect("changed", self._on_text_changed)
         self.show()
 
@@ -119,7 +121,7 @@ class TimeInput(gtk.Entry):
 
         self.set_text(time_text)
         self.set_position(len(time_text))
-        self.popup.hide()
+        self.hide_popup()
         if self.news:
             self.emit("time-entered")
             self.news = False
@@ -142,15 +144,22 @@ class TimeInput(gtk.Entry):
         self.show_popup()
 
     def _on_focus_out_event(self, event, something):
-        self.popup.hide()
+        self.hide_popup()
         if self.news:
             self.emit("time-entered")
             self.news = False
 
+    def hide_popup(self):
+        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
+            self.get_toplevel().disconnect(self._parent_click_watcher)
+            self._parent_click_watcher = None
+        self.popup.hide()
 
     def show_popup(self):
-        # will be going either 24 hours or from start time to start time + 12 hours
+        if not self._parent_click_watcher:
+            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
+        # will be going either 24 hours or from start time to start time + 12 hours
         start_time = dt.datetime.combine(dt.date.today(), self.start_time) # we will be adding things
         i_time = start_time # we will be adding things
 
@@ -237,10 +246,10 @@ class TimeInput(gtk.Entry):
             else:
                 self._select_time(entry.get_text())
         elif (event.keyval == gtk.keysyms.Escape):
-            self.popup.hide()
+            self.hide_popup()
         else:
             #any kind of other input
-            self.popup.hide()
+            self.hide_popup()
             return False
 
         # keep it in the sane borders
