@@ -19,6 +19,7 @@
 
 from .hamster.stuff import format_duration
 import gtk
+from gtk import keysyms
 import datetime as dt
 import calendar
 import gobject
@@ -227,13 +228,17 @@ class TimeInput(gtk.Entry):
 
 
     def _on_key_press_event(self, entry, event):
-        cursor = self.time_tree.get_cursor()
+        if event.keyval not in (keysyms.Up, keysyms.Down, keysyms.Return, keysyms.KP_Enter):
+            #any kind of other input
+            self.hide_popup()
+            return False
 
-        if not cursor or not cursor[0]:
+        model, iter = self.time_tree.get_selection().get_selected()
+        if not iter:
             return
 
-        i = cursor[0][0]
 
+        i = model.get_path(iter)[0]
         if event.keyval == gtk.keysyms.Up:
             i-=1
         elif event.keyval == gtk.keysyms.Down:
@@ -247,14 +252,17 @@ class TimeInput(gtk.Entry):
                 self._select_time(entry.get_text())
         elif (event.keyval == gtk.keysyms.Escape):
             self.hide_popup()
-        else:
-            #any kind of other input
-            self.hide_popup()
-            return False
+            return
 
-        # keep it in the sane borders
+        # keep it in sane limits
         i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
 
         self.time_tree.set_cursor(i)
         self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+
+        # if popup is not visible, display it on up and down
+        if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down) and self.popup.props.visible == False:
+            self.show_popup()
+
         return True
+
