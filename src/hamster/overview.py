@@ -258,12 +258,12 @@ class Overview(object):
 
 
     def on_start_date_entered(self, input):
-        self.start_date = input.get_date().date()
+        self.start_date = input.get_date()
         self.view_date = self.start_date
         self.search()
 
     def on_end_date_entered(self, input):
-        self.end_date = input.get_date().date()
+        self.end_date = input.get_date()
         self.search()
 
     def _chosen_range(self):

@@ -34,7 +34,7 @@ class DateInput(gtk.Entry):
     def __init__(self, date = None):
         gtk.Entry.__init__(self)
 
-        self.set_width_chars(12) #12 is enough for 12-oct-2009, which is verbose
+        self.set_width_chars(len(dt.datetime.now().strftime("%x"))) # size to default format length
         self.date = date
         if date:
             self.set_date(date)
@@ -76,7 +76,7 @@ class DateInput(gtk.Entry):
 
     def _figure_date(self, date_str):
         try:
-            return dt.datetime.strptime(date_str, "%x")
+            return dt.datetime.strptime(date_str, "%x").date()
         except:
             return self.date
 
