@@ -22,6 +22,7 @@ import pango
 import datetime as dt
 import time
 import graphics
+import locale
 
 class Bar(graphics.Shape):
     def __init__(self, key, value, normalized, label_color):
@@ -136,7 +137,7 @@ class Chart(graphics.Scene):
                 normalized = value / max_val
             else:
                 normalized = 0
-            bar = Bar(key, self.value_format % value, normalized, self.label_color)
+            bar = Bar(key, locale.format(self.value_format, value), normalized, self.label_color)
             bar.interactive = self.graph_interactive
 
             if key in bars:

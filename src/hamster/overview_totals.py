@@ -22,6 +22,7 @@ import calendar
 import time
 import webbrowser
 from itertools import groupby
+import locale
 
 from gettext import ngettext
 
@@ -144,7 +145,7 @@ class TotalsBox(gtk.VBox):
         facts = copy.deepcopy(self.facts)
 
         total_hours = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
-        total_label = _("%s hours tracked total") % ("%.1f" % (total_hours / 60.0))
+        total_label = _("%s hours tracked total") % locale.format("%.1f", total_hours / 60.0)
         self.get_widget("total_hours").set_text(total_label)
 
 

@@ -29,6 +29,7 @@ import gtk
 import gnomeapplet
 import gobject
 import dbus, dbus.service, dbus.mainloop.glib
+import locale
 
 import eds
 from configuration import conf, runtime, dialogs
@@ -383,7 +384,7 @@ class HamsterApplet(object):
             total_strings = []
             for category in by_category:
                 # listing of today's categories and time spent in them
-                duration = "%.1f" % (by_category[category] / 60.0)
+                duration = locale.format("%.1f", (by_category[category] / 60.0))
                 total_strings.append(_("%(category)s: %(duration)s") % \
                         ({'category': category,
                           #duration in main drop-down per category in hours

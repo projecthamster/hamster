@@ -26,6 +26,7 @@ import datetime as dt
 import calendar
 from itertools import groupby
 from gettext import ngettext
+import locale
 
 import gtk, gobject
 import pango
@@ -322,11 +323,11 @@ A week of usage would be nice!"""))
             human_years_str = ngettext("%(num)s year",
                                        "%(num)s years",
                                        total_delta.days / 365) % {
-                              'num': "<b>%.2f</b>" % (total_delta.days / 365.0)}
+                              'num': "<b>%s</b>" % locale.format("%.2f", (total_delta.days / 365.0))}
             working_years_str = ngettext("%(num)s year",
                                          "%(num)s years",
                                          total_delta.days * 3 / 365) % {
-                         'num': "<b>%.2f</b>" % (total_delta.days * 3 / 365.0) }
+                         'num': "<b>%s</b>" % locale.format("%.2f",  (total_delta.days * 3 / 365.0)) }
             #FIXME: difficult string to properly pluralize
             summary += " " + _("""Time tracked so far is %(human_days)s human days \
 (%(human_years)s) or %(working_days)s working days (%(working_years)s).""") % {
@@ -349,7 +350,7 @@ A week of usage would be nice!"""))
             C_("date of the longest activity", "%b %d, %Y"))
 
         num_hours = max_fact["delta"].seconds / 60 / 60.0 + max_fact["delta"].days * 24
-        hours = "<b>%.1f</b>" % (num_hours)
+        hours = "<b>%s</b>" % locale.format("%.1f", num_hours)
 
         summary += "\n" + ngettext("Longest continuous work happened on \
 %(date)s and was %(hours)s hour.",
