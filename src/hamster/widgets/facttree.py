@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+"""beware, this code has some major dragons in it. i'll clean it up one day!"""
+
 import gtk, gobject
 import datetime as dt
 
@@ -376,7 +378,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
 
 
-        x, y, width, height = cell_area
+        x, y, width, height = self.on_get_size(widget, cell_area)
+        width = cell_area.width
         context.translate(x, y)
 
         current_fact = widget.get_selected_fact()
@@ -489,22 +492,34 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return c.red/65535.0, c.green/65535.0, c.blue/65535.0, a
 
 
-    def get_fact_size(self, widget):
-        """determine size and save calculated coordinates"""
+    def on_get_size (self, widget, cell_area):
+        x_offset, y_offset = 0, 0
+        if cell_area:
+            x_offset, y_offset = cell_area.x, cell_area.y
 
-        if not self.data or "id" not in self.data:
-            return None
+        if "id" not in self.data:
+            if self.data["first"]:
+                return (0, y_offset, 0, 25)
+            else:
+                return (0, y_offset, 0, 40)
+
+
         fact = self.data
         pixmap = gtk.gdk.Pixmap(None, 10, 10, 24)
         context = pixmap.cairo_create()
 
         layout = context.create_layout()
         layout.set_font_description(self.label_font)
-        x, y, width, height = widget.get_allocation()
+
+        if cell_area:
+            x, y, width, height = cell_area
+        else:
+            x, y, width, height = widget.get_allocation()
+
 
         labels = {}
 
-        cell_width = width - 45
+        cell_width = width
 
         """ start time and end time at beginning of column """
         interval = fact["start_time"].strftime("%H:%M -")
@@ -572,7 +587,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             tag_w, tag_h = temp_tag.width, temp_tag.height
             if tag_cell_start + tag_w >= tag_cell_end:
                 tag_cell_start = cell_start
-                tag_cell_top += activity_label_height + 4
+                tag_cell_top = activity_label_height + 4
+                cur_x = tag_cell_start
                 cur_y = tag_cell_top
 
 
@@ -615,14 +631,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             cell_height = y + label_h + 4
 
         self.labels[fact["id"]] = labels
-        return (0, 0, 0, cell_height)
 
 
-    def on_get_size (self, widget, cell_area):
-        if "id" in self.data: # fact
-            return self.get_fact_size(widget)
-        else:
-            if self.data["first"]:
-                return (0, 0, 0, 25)
-            else:
-                return (0, 0, 0, 40)
+        x_offset, y_offset = 0, 0
+        if cell_area:
+            x_offset, y_offset = cell_area.x, cell_area.y
+
+        return (0, y_offset, 1, cell_height)
