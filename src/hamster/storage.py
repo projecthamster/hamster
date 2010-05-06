@@ -313,9 +313,9 @@ class Storage(dbus.service.Object):
             return {}
 
     # tags
-    @dbus.service.method("org.gnome.Hamster", out_signature='aa{sv}')
-    def GetTags(self):
-        return [dict(tag) for tag in self.__get_tags()]
+    @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='aa{sv}')
+    def GetTags(self, only_autocomplete):
+        return [dict(tag) for tag in self.__get_tags(only_autocomplete)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='aa{sv}')
@@ -326,7 +326,7 @@ class Storage(dbus.service.Object):
         return [dict(tag) for tag in tags]
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='as')
+    @dbus.service.method("org.gnome.Hamster", in_signature='s')
     def SetTagsAutocomplete(self, tags):
         changes = self.__update_autocomplete_tags(tags)
         if changes:

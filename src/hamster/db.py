@@ -113,8 +113,11 @@ class Storage(storage.Storage):
         self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
 
     #tags, here we come!
-    def __get_tags(self):
-        return self.fetchall("select * from tags order by name")
+    def __get_tags(self, only_autocomplete = False):
+        if only_autocomplete:
+            return self.fetchall("select * from tags where autocomplete != 'false' order by name")
+        else:
+            return self.fetchall("select * from tags order by name")
 
     def __get_tag_ids(self, tags):
         """look up tags by their name. create if not found"""

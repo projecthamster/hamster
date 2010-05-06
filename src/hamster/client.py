@@ -120,9 +120,9 @@ class Storage(gobject.GObject):
         """returns list of categories"""
         return self.conn.GetCategories()
 
-    def get_tags(self):
+    def get_tags(self, only_autocomplete = False):
         """returns list of all tags. by default only those that have been set for autocomplete"""
-        return self.conn.GetTags()
+        return self.conn.GetTags(only_autocomplete)
 
 
     def get_tag_ids(self, tags):

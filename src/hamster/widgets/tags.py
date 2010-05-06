@@ -130,7 +130,7 @@ class TagsEntry(gtk.Entry):
         self.categories = None
 
     def populate_suggestions(self):
-        self.tags = self.tags or [tag["name"] for tag in runtime.storage.get_tags()]
+        self.tags = self.tags or [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
 
         cursor_tag = self.get_cursor_tag()
 
@@ -255,7 +255,7 @@ class TagBox(graphics.Scene):
     def on_tag_click(self, area, event, targets):
         if not targets:
             return
-        
+
         tag = targets[0]
         if tag.text in self.selected_tags:
             self.emit("tag-unselected", tag.text)

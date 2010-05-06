@@ -277,7 +277,7 @@ class PreferencesEditor:
         day_start = dt.time(day_start / 60, day_start % 60)
         self.day_start.set_time(day_start)
 
-        self.tags = [tag["name"] for tag in runtime.storage.get_tags()]
+        self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
 
         self.workspace_mapping = conf.get("workspace_mapping")
