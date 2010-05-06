@@ -440,9 +440,6 @@ class HamsterApplet(object):
             self.window.hide()
             return True
 
-        self.load_day() # reload day each time before showing to avoid outdated last activity
-        self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
-
         self.position_popup()
 
 
@@ -492,6 +489,9 @@ class HamsterApplet(object):
         self.window.show()
         self.window.present()
         self.new_name.grab_focus()
+
+        self.load_day() # reload day each time before showing to avoid outdated last activity
+        self.update_label() #update also label, otherwise we can get 1 minute difference in durations (due to timers refreshed once a minute)
 
 
     """events"""
