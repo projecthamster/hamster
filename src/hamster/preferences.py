@@ -269,7 +269,10 @@ class PreferencesEditor:
         self.get_widget("idle_track").set_active(conf.get("enable_timeout"))
         self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
         self.get_widget("keybinding").set_text(conf.get("keybinding"))
+
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
+        self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
+
         self.get_widget("workspace_tracking_name").set_active("name" in conf.get("workspace_tracking"))
         self.get_widget("workspace_tracking_memory").set_active("memory" in conf.get("workspace_tracking"))
 
@@ -771,7 +774,7 @@ class PreferencesEditor:
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.get_time()
-        if not day_start:
+        if day_start is None:
             return
 
         day_start = day_start.hour * 60 + day_start.minute
