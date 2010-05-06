@@ -73,13 +73,22 @@ class TagsEntry(gtk.Entry):
         return [tag.strip() for tag in self.get_text().decode('utf8', 'replace').split(",") if tag.strip()]
 
     def on_tag_selected(self, tag_box, tag):
-        tags = self.get_tags()
-        tags.append(tag)
+        cursor_tag = self.get_cursor_tag()
+        if cursor_tag and tag.startswith(cursor_tag):
+            self.replace_tag(cursor_tag, tag)
+            tags = self.get_tags()
+        else:
+            tags = self.get_tags()
+            tags.append(tag)
 
         self.tag_box.selected_tags = tags
 
-        self.set_text(", ".join(tags))
+
+        self.set_text("%s, " % ", ".join(tags))
         self.set_position(len(self.get_text()))
+
+        self.populate_suggestions()
+        self.show_popup()
 
     def on_tag_unselected(self, tag_box, tag):
         tags = self.get_tags()
@@ -88,7 +97,7 @@ class TagsEntry(gtk.Entry):
 
         self.tag_box.selected_tags = tags
 
-        self.set_text(", ".join(tags))
+        self.set_text("%s, " % ", ".join(tags))
         self.set_position(len(self.get_text()))
 
 
@@ -199,7 +208,7 @@ class TagsEntry(gtk.Entry):
             cursor = self.get_position()
 
         self.set_text(", ".join(tags))
-        self.set_position(cursor + len(new_tag)-len(old_tag)) # put the cursor back
+        self.set_position(len(self.get_text()))
 
     def _on_key_press_event(self, entry, event):
         if event.keyval == gtk.keysyms.Tab:
