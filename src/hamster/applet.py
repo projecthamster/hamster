@@ -200,6 +200,7 @@ class HamsterApplet(object):
         self.window = self._gui.get_object('hamster-window')
         # on close don't destroy the popup, just hide it instead
         self.window.connect("delete_event", lambda *args: self.__show_toggle(False))
+        self.window.connect("window-state-event", self.on_window_state_changed)
 
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
@@ -338,13 +339,6 @@ class HamsterApplet(object):
             self.notification.show()
 
 
-    def edit_cb(self, n, action):
-        dialogs.edit.show(self.applet, activity_id = self.last_activity['id'])
-
-    def switch_cb(self, n, action):
-        self.__show_toggle(not self.button.get_active())
-
-
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
@@ -455,7 +449,7 @@ class HamsterApplet(object):
 
 
         # doing unstick / stick here, because sometimes while switching
-        # between workplaces window still manages to dissappear
+        # between workplaces window still manages to disappear
         self.window.unstick()
         self.window.stick() #show on all desktops
 
@@ -497,11 +491,19 @@ class HamsterApplet(object):
     def _delayed_display(self):
         """show window only when gtk has become idle. otherwise we get
         mixed results. TODO - this looks like a hack though"""
+        self.window.show()
         self.window.present()
         self.new_name.grab_focus()
 
 
     """events"""
+    def on_window_state_changed(self, window, event):
+        """untoggle the button when window gets minimized"""
+        if (event.changed_mask & gtk.gdk.WINDOW_STATE_ICONIFIED \
+            and event.new_window_state & gtk.gdk.WINDOW_STATE_ICONIFIED):
+            self.button.set_active(False)
+
+
     def on_toggle(self, widget):
         self.__show_toggle(self.button.get_active())
 
