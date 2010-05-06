@@ -274,7 +274,12 @@ class TagBox(graphics.Scene):
         self.redraw()
 
     def draw(self, tags):
-        new_tags = [Tag(label) for label in tags]
+        new_tags = []
+        for label in tags:
+            tag = Tag(label)
+            if label in self.selected_tags:
+                tag.tag.fill = (242, 229, 97)
+            new_tags.append(tag)
 
         for tag in self.tags:
             self.sprites.remove(tag)
