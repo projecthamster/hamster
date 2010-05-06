@@ -10,7 +10,6 @@
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menu">
             <property name="visible">True</property>
@@ -138,7 +137,6 @@
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="border_width">12</property>
-            <property name="orientation">vertical</property>
             <property name="spacing">20</property>
             <child>
               <object class="GtkHBox" id="current_activity_box">
@@ -147,7 +145,6 @@
                   <object class="GtkVBox" id="vbox6">
                     <property name="width_request">520</property>
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
@@ -157,6 +154,7 @@
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label">Just an activity</property>
+                            <property name="wrap">True</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                               <attribute name="size" value="15000"/>
@@ -165,22 +163,6 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="last_activity_category">
-                            <property name="visible">True</property>
-                            <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label"> - Work</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                              <attribute name="size" value="15000"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -193,7 +175,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="position">2</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -209,7 +191,6 @@
                           <object class="GtkVBox" id="activity_info_box">
                             <property name="visible">True</property>
                             <property name="no_show_all">True</property>
-                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkLabel" id="last_activity_duration">
                                 <property name="visible">True</property>

@@ -80,6 +80,7 @@ class FactTree(gtk.TreeView):
         self.connect("button-release-event", self._on_button_release_event)
         self.connect("key-release-event", self._on_key_released)
         self.connect("configure-event", lambda *args: self.columns_autosize())
+        self.connect("motion-notify-event", self._on_motion)
 
         self.show()
 
@@ -278,6 +279,28 @@ class FactTree(gtk.TreeView):
         return False
 
 
+    def _on_motion(self, view, event):
+        'As the pointer moves across the view, show a tooltip.'
+
+        path = view.get_path_at_pos(int(event.x), int(event.y))
+
+        if path:
+            path, col, x, y = path
+
+            model = self.get_model()
+            data = model[path][0]
+
+            self.set_tooltip_text(None)
+            if data and "id" in data:
+                renderer = view.get_column(0).get_cell_renderers()[0]
+
+                label, x, y, w = renderer.labels[data["id"]]["activity"]
+                if w != -1:
+                    self.set_tooltip_text(label)
+
+            self.trigger_tooltip_query()
+
+
 
 class FactCellRenderer(gtk.GenericCellRenderer):
     """ We need all kinds of wrapping and spanning and the treeview just does
@@ -367,7 +390,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             self.set_color(context, text_color)
 
+            self.layout.set_width(-1)
+
             self.layout.set_markup("<b>%s</b>" % stuff.escape_pango(parent["label"]))
+
             if self.data["first"]:
                 y = 5
             else:
@@ -391,17 +417,21 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 text_color = self.selected_color
                 selected = True
 
-            def show_label(label, x, y, w):
+            def show_label(label_info):
+                label, x, y, w = label_info
                 self.layout.set_markup(label)
                 context.move_to(x, y)
                 if w:
                     self.layout.set_width(w)
+                else:
+                    self.layout.set_width(-1)
+
                 context.show_layout(self.layout)
 
             self.set_color(context, text_color)
 
             labels = self.labels[fact["id"]]
-            show_label(*labels["interval"])
+            show_label(labels["interval"])
 
             # for the right-aligned delta with have reserved space for scrollbar
             # but about it's existance we find only on expose, so we realign
@@ -410,13 +440,21 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             context.move_to(width - w, labels["delta"][2])
             context.show_layout(self.layout)
 
-            show_label(*labels["activity"])
+
+            label, label_x, label_y, label_w = labels["activity"]
+            self.layout.set_markup(label)
+            self.layout.set_ellipsize(pango.ELLIPSIZE_END)
+            context.move_to(label_x, label_y)
+            self.layout.set_width(label_w)
+            context.show_layout(self.layout)
+            self.layout.set_ellipsize(pango.ELLIPSIZE_NONE)
+
 
             if fact["category"]:
                 if not selected:
                     self.set_color(context, widget.get_style().text[gtk.STATE_INSENSITIVE])
 
-                show_label(*labels["category"])
+                show_label(labels["category"])
 
 
             if fact["tags"]:
@@ -440,7 +478,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             if fact["description"]:
                 self.set_color(context, text_color)
-                show_label(*labels["description"])
+                show_label(labels["description"])
 
 
 
@@ -486,25 +524,57 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         # both sides, in letter length
 
         cell_start = widget.longest_interval
+
         cell_width = cell_width - widget.longest_interval - widget.longest_duration
 
 
         layout.set_markup(stuff.escape_pango(fact["name"]))
-        label_w, label_h = layout.get_pixel_size()
-
-        labels["activity"] = (stuff.escape_pango(fact["name"]), cell_start, 2, -1)
-        labels["category"] = (" - <small>%s</small>" % stuff.escape_pango(fact["category"]),
-                              cell_start + label_w, 2, -1)
+        label_w, activity_label_height = layout.get_pixel_size()
 
 
-        tag_cell_start = cell_start + widget.longest_activity_category
+        category_label = " - <small>%s</small>" % stuff.escape_pango(fact["category"])
+        layout.set_markup(category_label)
+        category_width, label_h = layout.get_pixel_size()
+
+
+        activity_width = cell_width - category_width - 12
+
+        if label_w > activity_width:
+            activity_width = min(activity_width, label_w)
+            labels["activity"] = (stuff.escape_pango(fact["name"]),
+                                  cell_start,
+                                  2,
+                                  activity_width  * pango.SCALE)
+        else:
+            activity_width = label_w
+            labels["activity"] = (stuff.escape_pango(fact["name"]),
+                                  cell_start,
+                                  2,
+                                  -1)
+
+
+
+        labels["category"] = (category_label, cell_start + activity_width, 2, category_width * pango.SCALE)
+
+
+        tag_cell_start = cell_start + activity_width + category_width + 12
         tag_cell_end = cell_start + cell_width
+        tag_cell_top = 2
 
         cell_height = label_h + 4
 
-        cur_x, cur_y = tag_cell_start, 2
+        cur_x, cur_y = tag_cell_start, tag_cell_top
         if fact["tags"]:
             layout.set_font_description(self.tag_font)
+
+            # if we don't fit, jump to the next line
+            temp_tag = Tag(fact["tags"][0])
+            tag_w, tag_h = temp_tag.width, temp_tag.height
+            if tag_cell_start + tag_w >= tag_cell_end:
+                tag_cell_start = cell_start
+                tag_cell_top += activity_label_height + 4
+                cur_y = tag_cell_top
+
 
             for i, tag in enumerate(fact["tags"]):
                 temp_tag = Tag(tag)
@@ -517,7 +587,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
             cell_height = max(cell_height, cur_y + tag_h + 4)
 
-            labels["tags"] = (None, tag_cell_start, 2, tag_cell_end)
+            labels["tags"] = (None, tag_cell_start, tag_cell_top, tag_cell_end)
 
             layout.set_font_description(self.label_font)
 

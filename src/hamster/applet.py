@@ -403,11 +403,10 @@ class HamsterApplet(object):
             delta = dt.datetime.now() - activity['start_time']
             duration = delta.seconds /  60
 
-            self.get_widget("last_activity_name").set_text(activity['name'])
             if activity['category'] != _("Unsorted"):
-                self.get_widget("last_activity_category") \
-                    .set_text(" - %s" % activity['category'])
-            self.get_widget("last_activity_category").show()
+                self.get_widget("last_activity_name").set_text("%s - %s" % (activity['name'], activity['category']))
+            else:
+                self.get_widget("last_activity_name").set_text(activity['name'])
 
 
             self._gui.get_object("more_info_button").hide()
@@ -422,7 +421,6 @@ class HamsterApplet(object):
             self.get_widget("start_tracking").show()
 
             self.get_widget("last_activity_name").set_text(_("No activity"))
-            self.get_widget("last_activity_category").hide()
 
             self.get_widget("activity_info_box").hide()
             self._gui.get_object("more_info_button").show()
