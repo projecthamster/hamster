@@ -205,7 +205,7 @@ class Overview(object):
             widget.set_text('')
 
     def on_search_changed(self, widget):
-        has_text = widget.get_text_length() > 0
+        has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
         self.search()
 
