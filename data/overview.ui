@@ -4,7 +4,7 @@
   <!-- interface-naming-policy project-wide -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
   <object class="GtkWindow" id="tabs_window">
-    <property name="title" translatable="yes">Overview — Hamster</property>
+    <property name="title" translatable="yes">Overview &#x2014; Hamster</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
     <signal name="configure_event" handler="on_tabs_window_configure_event"/>
@@ -238,10 +238,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x2022;</property>
-                        <property name="secondary_icon_stock">gtk-find</property>
+                        <property name="primary_icon_stock">gtk-find</property>
+                        <property name="secondary_icon_stock">gtk-clear</property>
+                        <property name="secondary_icon_activatable">True</property>
                         <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
-                        <signal name="activate" handler="on_search_activate"/>
+                        <signal name="changed" handler="on_search_changed"/>
+                        <signal name="icon_press" handler="on_search_icon_press"/>
                       </object>
                     </child>
                   </object>
