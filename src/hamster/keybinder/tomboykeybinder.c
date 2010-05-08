@@ -129,7 +129,7 @@ do_grab_key (Binding *binding)
 	egg_keymap_resolve_virtual_modifiers (keymap,
 					      virtual_mods,
 					      &binding->modifiers);
-	if (binding->keycode == 0)
+	if (binding->modifiers == 0)
 		return FALSE;
 
 	TRACE (g_print ("Got modmask %d\n", binding->modifiers));
