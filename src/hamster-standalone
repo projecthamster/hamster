@@ -80,6 +80,7 @@ class ProjectHamster(object):
         self.treeview.connect("row-activated", self.on_today_row_activated)
 
         self.get_widget("today_box").add(self.treeview)
+        self.new_name.grab_focus()
 
         # DBus Setup
         try:
