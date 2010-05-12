@@ -28,11 +28,12 @@ from .hamster import graphics, pytweener
 from .hamster.configuration import conf
 
 
-class Selection(graphics.Shape):
+class Selection(graphics.Sprite):
     def __init__(self, start_time = None, end_time = None):
-        graphics.Shape.__init__(self, stroke = "#999", fill = "#999", z_order = 100)
+        graphics.Sprite.__init__(self, z_order = 100)
         self.start_time, self.end_time  = None, None
         self.width, self.height = None, None
+        self.fill = None # will be set to proper theme color on render
         self.fixed = False
 
         self.start_label = graphics.Label("", 8, "#333", visible = False)
@@ -40,8 +41,10 @@ class Selection(graphics.Shape):
         self.duration_label = graphics.Label("", 8, "#FFF", visible = False)
 
         self.add_child(self.start_label, self.end_label, self.duration_label)
+        self.connect("on-render", self.on_render)
 
-    def draw_shape(self):
+
+    def on_render(self, sprite):
         self.graphics.rectangle(0, 0, self.width, self.height)
         self.graphics.fill(self.fill, 0.3)
 

@@ -24,22 +24,24 @@ import time
 import graphics
 import locale
 
-class Bar(graphics.Shape):
+class Bar(graphics.Sprite):
     def __init__(self, key, value, normalized, label_color):
-        graphics.Shape.__init__(self)
+        graphics.Sprite.__init__(self)
         self.key, self.value, self.normalized = key, value, normalized
 
         self.height = 0
         self.width = 20
         self.vertical = True
         self.interactive = True
+        self.fill = None
 
         self.label = graphics.Label(value, size=8, color=label_color)
         self.label_background = graphics.Rectangle(self.label.width + 4, self.label.height + 4, 4, visible=False)
         self.add_child(self.label_background)
         self.add_child(self.label)
+        self.connect("on-render", self.on_render)
 
-    def draw_shape(self):
+    def on_render(self, sprite):
         # invisible rectangle for the mouse, covering whole area
         self.graphics.set_color("#000", 0)
         self.graphics.rectangle(0, 0, self.width, self.height)
@@ -49,6 +51,7 @@ class Bar(graphics.Shape):
 
         self.graphics.rectangle(0, 0, size, self.height, 3)
         self.graphics.rectangle(0, 0, min(size, 3), self.height)
+        self.graphics.fill(self.fill)
 
         self.label.y = (self.height - self.label.height) / 2
 

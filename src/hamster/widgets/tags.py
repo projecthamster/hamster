@@ -333,13 +333,14 @@ class Tag(graphics.Sprite):
                                          (w, h),
                                          (corner, h),
                                          (0, h - corner)],
-                                        x = 0.5, y = 0.5,
+                                        x = 0.5,
+                                        y = 0.5,
                                         fill = self.color,
                                         stroke = "#b4b4b4",
                                         line_width = 1)
 
         self.add_child(self.tag)
-        self.add_child(graphics.Circle(2, x = 5.5, y = h / 2 - 1.5,
+        self.add_child(graphics.Circle(2, 2, x = 5.5, y = h / 2 - 1.5,
                                        fill = "#fff",
                                        stroke = "#b4b4b4",
                                        line_width = 1))
