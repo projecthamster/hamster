@@ -60,10 +60,8 @@ class Storage(gobject.GObject):
         "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self, parent = None):
+    def __init__(self):
         gobject.GObject.__init__(self)
-
-        self.parent = parent
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         bus = dbus.SessionBus()
@@ -72,10 +70,9 @@ class Storage(gobject.GObject):
                                       dbus_interface='org.gnome.Hamster')
         self.conn = hamster_conn
 
-        if parent:
-            bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
-            bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
-            bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
+        bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
+        bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
 
 
     def _on_tags_changed(self):

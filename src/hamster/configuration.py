@@ -64,7 +64,7 @@ class RuntimeStore(Singleton):
         else:
             self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
 
-        self.storage = Storage(self)
+        self.storage = Storage()
 
         # figure out the correct database file
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
