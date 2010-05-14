@@ -95,6 +95,7 @@ class Graphics(object):
     def clear(self):
         """clear all instructions"""
         self.__path_instructions = deque()
+        self.__instructions = deque()
         self.paths = []
 
     @staticmethod
@@ -288,7 +289,7 @@ class Graphics(object):
     def _show_layout(context, text, font_desc, alignment, width, wrap, ellipsize):
         layout = context.create_layout()
         layout.set_font_description(font_desc)
-        layout.set_text(text)
+        layout.set_markup(text)
         layout.set_width(width)
         layout.set_alignment(alignment)
 
@@ -300,7 +301,7 @@ class Graphics(object):
 
         context.show_layout(layout)
 
-    def create_layout(self, size):
+    def create_layout(self, size = None):
         """utility function to create layout with the default font. Size and
         alignment parameters are shortcuts to according functions of the
         pango.Layout"""
@@ -487,7 +488,7 @@ class Sprite(gtk.Object):
     def __setattr__(self, name, val):
         self.__dict__[name] = val
         if name not in ('_sprite_dirty', 'x', 'y', 'rotation', 'scale_x', 'scale_y'):
-            self._sprite_dirty = True
+            self.__dict__["_sprite_dirty"] = True
 
 
     def add_child(self, *sprites):
@@ -584,23 +585,33 @@ class Label(Sprite):
         #: font size
         self.size = size
 
+
         self.connect("on-render", self.on_render)
 
 
     def __setattr__(self, name, val):
         Sprite.__setattr__(self, name, val)
+        if name == "_sprite_dirty":
+            return
+
         if name == "width":
             # setting width means consumer wants to contrain the label
             if val is None or val == -1:
                 self.__dict__['_bounds_width'] = -1
             else:
                 self.__dict__['_bounds_width'] = val * pango.SCALE
-        elif name in ("text", "size", "width"):
-            self._set_dimensions()
+
+        if name in ("width", "text", "size", "font_desc", "wrap", "ellipsize"):
+            # avoid chicken and egg
+            if "text" in self.__dict__ and "size" in self.__dict__ and "width" in self.__dict__:
+                self._set_dimensions()
 
 
     def on_render(self, sprite):
         self.graphics.clear()
+        if not self.text:
+            return
+
         if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
             self.graphics.set_color("#000", 0)
             self.graphics.rectangle(0,0, self.width, self.height)
@@ -617,11 +628,14 @@ class Label(Sprite):
     def _set_dimensions(self):
         context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
         layout = context.create_layout()
-        layout.set_font_description(self.font_desc)
-        layout.set_text(self.text)
 
+
+        layout.set_font_description(self.font_desc)
+        layout.set_markup(self.text)
         layout.set_width(self._bounds_width)
-        if self.wrap:
+        layout.set_ellipsize(pango.ELLIPSIZE_NONE)
+
+        if self.wrap is not None:
             layout.set_wrap(self.wrap)
         else:
             layout.set_ellipsize(self.ellipsize or pango.ELLIPSIZE_END)
