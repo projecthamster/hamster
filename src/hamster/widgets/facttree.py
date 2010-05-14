@@ -20,9 +20,10 @@
 """beware, this code has some major dragons in it. i'll clean it up one day!"""
 
 import gtk, gobject
+import cairo
 import datetime as dt
 
-from .hamster import stuff
+from .hamster import stuff, graphics
 from .hamster.stuff import format_duration, format_activity
 from tags import Tag
 
@@ -81,7 +82,7 @@ class FactTree(gtk.TreeView):
         self.connect("row-activated", self._on_row_activated)
         self.connect("button-release-event", self._on_button_release_event)
         self.connect("key-release-event", self._on_key_released)
-        self.connect("configure-event", lambda *args: self.columns_autosize())
+        self.connect("configure-event", lambda *args: self.fix_row_heights())
         self.connect("motion-notify-event", self._on_motion)
 
         self.show()
@@ -173,6 +174,9 @@ class FactTree(gtk.TreeView):
         # let's save selection too - maybe it will come handy
         self.store_selection()
 
+        #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+
+
         # and now do what we were asked to
         self.set_model()
 
@@ -180,6 +184,8 @@ class FactTree(gtk.TreeView):
     def attach_model(self):
         # attach model is also where we calculate the bounding box widths
         self.set_model(self.store_model)
+
+        #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 
         if self.stored_selection:
             self.restore_selection()
@@ -296,9 +302,8 @@ class FactTree(gtk.TreeView):
             if data and "id" in data:
                 renderer = view.get_column(0).get_cell_renderers()[0]
 
-                label, x, y, w = renderer.labels[data["id"]]["activity"]
-                if w != -1:
-                    self.set_tooltip_text(label)
+                label = data["name"]
+                self.set_tooltip_text(label)
 
             self.trigger_tooltip_query()
 
@@ -317,23 +322,35 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         self.height = 0
         self.data = None
 
+        font = gtk.Style().font_desc
+        default_size = font.get_size() / pango.SCALE
+
+        self.labels = graphics.Sprite()
+
+        self.date_label = graphics.Label(size = default_size)
+
+        self.interval_label = graphics.Label(size = default_size)
+        self.labels.add_child(self.interval_label)
+
+        self.activity_label = graphics.Label(size = default_size)
+        self.labels.add_child(self.activity_label)
+
+        self.category_label = graphics.Label(size = default_size)
+        self.labels.add_child(self.category_label)
+
+        self.description_label = graphics.Label(size = default_size)
+        self.labels.add_child(self.description_label)
+
+        self.duration_label = graphics.Label(size=default_size)
+        self.labels.add_child(self.duration_label)
+
         default_font = gtk.Style().font_desc.to_string()
-        self.label_font = pango.FontDescription(default_font)
-        self.label_font_size = 10
 
         self.selected_color = gtk.Style().text[gtk.STATE_SELECTED]
         self.normal_color = gtk.Style().text[gtk.STATE_NORMAL]
 
-        self.tag_font = pango.FontDescription(default_font)
-        self.tag_font.set_size(pango.SCALE * 8)
-
-        self.layout, self.tag_layout = None, None
-
         self.col_padding = 10
         self.row_padding = 4
-
-
-        self.labels = {}
 
     def do_set_property (self, pspec, value):
         setattr(self, pspec.name, value)
@@ -342,12 +359,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return getattr (self, pspec.name)
 
 
-    def set_text(self, text):
-        # sets text and returns width and height of the layout
-        self.layout.set_text(text)
-        w, h = self.layout.get_pixel_size()
-        return w, h
-
     def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
         if not self.data:
             return
@@ -355,20 +366,12 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         """
           ASCII Art
           --------------+--------------------------------------------+-------+---+
-          13:12 - 17:18 | Some activity - category, tag, tag, tag,   | 14:44 | E |
-                        | tag, tag, some description in grey italics |       |   |
+          13:12 - 17:18 | Some activity - category  tag, tag, tag,   | 14:44 | E |
+                        | tag, tag, some description                 |       |   |
           --------------+--------------------------------------------+-------+---+
         """
 
-
         context = window.cairo_create()
-        if not self.layout:
-            self.layout = context.create_layout()
-            self.layout.set_font_description(self.label_font)
-
-            self.tag_layout = context.create_layout()
-            self.tag_layout.set_font_description(self.tag_font)
-
 
         if "id" in self.data:
             fact, parent = self.data, None
@@ -376,14 +379,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             parent, fact = self.data, None
 
 
-
-
-        x, y, width, height = self.on_get_size(widget, cell_area)
-        width = cell_area.width
+        x, y, width, height = cell_area
         context.translate(x, y)
 
         current_fact = widget.get_selected_fact()
-
         if parent:
             text_color = self.normal_color
             # if we are selected, change font color appropriately
@@ -391,97 +390,27 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                and current_fact == parent["date"]:
                 text_color = self.selected_color
 
-            self.set_color(context, text_color)
-
-            self.layout.set_width(-1)
-
-            self.layout.set_markup("<b>%s</b>" % stuff.escape_pango(parent["label"]))
+            self.date_label.color = text_color
+            self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent["label"])
+            self.date_label.x = 5
 
             if self.data["first"]:
                 y = 5
             else:
                 y = 20
 
-            context.move_to(5, y)
-            context.show_layout(self.layout)
+            self.date_label.y = y
 
-            self.layout.set_markup("<b>%s</b>" % stuff.format_duration(parent["duration"]))
-            label_w, label_h = self.layout.get_pixel_size()
 
-            context.move_to(width - label_w, y)
-            context.show_layout(self.layout)
+            self.duration_label.color = text_color
+            self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent["duration"])
+            self.duration_label.x = width - self.duration_label.width
+            self.duration_label.y = y
 
+            self.date_label._draw(context)
+            self.duration_label._draw(context)
         else:
-            text_color = self.normal_color
-            selected = False
-            # if we are selected, change font color appropriately
-            if current_fact and isinstance(current_fact, dt.date) == False \
-               and current_fact["id"] == fact["id"]:
-                text_color = self.selected_color
-                selected = True
-
-            def show_label(label_info):
-                label, x, y, w = label_info
-                self.layout.set_markup(label)
-                context.move_to(x, y)
-                if w:
-                    self.layout.set_width(w)
-                else:
-                    self.layout.set_width(-1)
-
-                context.show_layout(self.layout)
-
-            self.set_color(context, text_color)
-
-            labels = self.labels[fact["id"]]
-            show_label(labels["interval"])
-
-            # for the right-aligned delta with have reserved space for scrollbar
-            # but about it's existance we find only on expose, so we realign
-            self.layout.set_markup(labels["delta"][0])
-            w, h = self.layout.get_pixel_size()
-            context.move_to(width - w, labels["delta"][2])
-            context.show_layout(self.layout)
-
-
-            label, label_x, label_y, label_w = labels["activity"]
-            self.layout.set_markup(label)
-            self.layout.set_ellipsize(pango.ELLIPSIZE_END)
-            context.move_to(label_x, label_y)
-            self.layout.set_width(label_w)
-            context.show_layout(self.layout)
-            self.layout.set_ellipsize(pango.ELLIPSIZE_NONE)
-
-
-            if fact["category"]:
-                if not selected:
-                    self.set_color(context, widget.get_style().text[gtk.STATE_INSENSITIVE])
-
-                show_label(labels["category"])
-
-
-            if fact["tags"]:
-                start_x, start_y, cell_end = labels["tags"][1:]
-                cur_x, cur_y = start_x, start_y
-
-                for i, tag in enumerate(fact["tags"]):
-                    temp_tag = Tag(tag)
-                    tag_w, tag_h = temp_tag.width, temp_tag.height
-
-                    if i > 0 and cur_x + tag_w >= cell_end:
-                        cur_x = start_x
-                        cur_y += tag_h + 4
-
-                    sprite = Tag(tag, False)
-                    sprite.x, sprite.y  = cur_x, cur_y
-                    sprite._draw(context)
-
-                    cur_x += tag_w + 4
-
-
-            if fact["description"]:
-                self.set_color(context, text_color)
-                show_label(labels["description"])
+            self.render_cell(context, (x,y,width,height), widget)
 
 
 
@@ -492,46 +421,42 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return c.red/65535.0, c.green/65535.0, c.blue/65535.0, a
 
 
-    def on_get_size (self, widget, cell_area):
-        x_offset, y_offset = 0, 0
-        if cell_area:
-            x_offset, y_offset = cell_area.x, cell_area.y
-
-        if "id" not in self.data:
-            if self.data["first"]:
-                return (0, y_offset, 0, 25)
-            else:
-                return (0, y_offset, 0, 40)
-
+    def render_cell(self, context, bounds, widget, really = True):
+        if not bounds:
+            return -1
+        x, y, cell_width, h = bounds
+        g = graphics.Graphics(context)
 
         fact = self.data
-        pixmap = gtk.gdk.Pixmap(None, 10, 10, 24)
-        context = pixmap.cairo_create()
 
-        layout = context.create_layout()
-        layout.set_font_description(self.label_font)
+        current_fact = widget.get_selected_fact()
+        text_color = self.normal_color
+        selected = False
+        # if we are selected, change font color appropriately
+        if current_fact and isinstance(current_fact, dt.date) == False \
+           and current_fact["id"] == fact["id"]:
+            text_color = self.selected_color
+            selected = True
 
-        if cell_area:
-            x, y, width, height = cell_area
-        else:
-            x, y, width, height = widget.get_allocation()
 
 
-        labels = {}
-
-        cell_width = width
 
         """ start time and end time at beginning of column """
         interval = fact["start_time"].strftime("%H:%M -")
         if fact["end_time"]:
             interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
-        labels["interval"] = (interval, self.col_padding, 2, -1)
+
+        self.interval_label.text = interval
+        self.interval_label.color = text_color
+        self.interval_label.x = self.col_padding
+        self.interval_label.y = 2
+
 
         """ duration at the end """
-        delta = stuff.format_duration(fact["delta"])
-        layout.set_markup(delta)
-        duration_w, duration_h = layout.get_pixel_size()
-        labels["delta"] = (delta, cell_width - duration_w, 2, -1)
+        self.duration_label.text = stuff.format_duration(fact["delta"])
+        self.duration_label.color = text_color
+        self.duration_label.x = cell_width - self.duration_label.width
+        self.duration_label.y = 2
 
 
         """ activity, category, tags, description in middle """
@@ -539,102 +464,121 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         # both sides, in letter length
 
         cell_start = widget.longest_interval
-
         cell_width = cell_width - widget.longest_interval - widget.longest_duration
 
 
-        layout.set_markup(stuff.escape_pango(fact["name"]))
-        label_w, activity_label_height = layout.get_pixel_size()
+        # align activity and category (ellipsize activity if it does not fit)
+        category_width = 0
+
+        self.category_label.text = ""
+        if fact["category"]:
+            self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact["category"])
+            if not selected:
+                self.category_label.color = widget.get_style().text[gtk.STATE_INSENSITIVE]
+            else:
+                self.category_label.color = text_color
+            category_width = self.category_label.width
 
 
-        category_label = " - <small>%s</small>" % stuff.escape_pango(fact["category"])
-        layout.set_markup(category_label)
-        category_width, label_h = layout.get_pixel_size()
+        self.activity_label.color = text_color
+        self.activity_label.width = None
+        self.activity_label.text = stuff.escape_pango(fact["name"])
+        #activity_label = g.create_layout()
+        #activity_label.set_markup(stuff.escape_pango(fact["name"]))
 
-
-        activity_width = cell_width - category_width - 12
-
-        if label_w > activity_width:
-            activity_width = min(activity_width, label_w)
-            labels["activity"] = (stuff.escape_pango(fact["name"]),
-                                  cell_start,
-                                  2,
-                                  activity_width  * pango.SCALE)
+        # if activity label does not fit, we will shrink it
+        if self.activity_label.width > cell_width - category_width:
+            self.activity_label.width = (cell_width - category_width - self.col_padding)
+            self.activity_label.ellipsize = pango.ELLIPSIZE_END
         else:
-            activity_width = label_w
-            labels["activity"] = (stuff.escape_pango(fact["name"]),
-                                  cell_start,
-                                  2,
-                                  -1)
+            self.activity_label.width = None
+            #self.activity_label.ellipsize = None
+
+        activity_width = self.activity_label.width
+
+        y = 2
+
+        self.activity_label.x = cell_start
+        self.activity_label.y = y
 
 
+        self.category_label.x = cell_start + activity_width
+        self.category_label.y = y
 
-        labels["category"] = (category_label, cell_start + activity_width, 2, category_width * pango.SCALE)
 
-
-        tag_cell_start = cell_start + activity_width + category_width + 12
-        tag_cell_end = cell_start + cell_width
-        tag_cell_top = 2
-
-        cell_height = label_h + 4
-
-        cur_x, cur_y = tag_cell_start, tag_cell_top
+        current_height = 0
         if fact["tags"]:
-            layout.set_font_description(self.tag_font)
+            # try putting tags on same line if they fit
+            # otherwise move to the next line
+            tags_end = cell_start + cell_width
+            x = cell_start + activity_width + category_width + 12
 
-            # if we don't fit, jump to the next line
-            temp_tag = Tag(fact["tags"][0])
-            tag_w, tag_h = temp_tag.width, temp_tag.height
-            if tag_cell_start + tag_w >= tag_cell_end:
-                tag_cell_start = cell_start
-                tag_cell_top = activity_label_height + 4
-                cur_x = tag_cell_start
-                cur_y = tag_cell_top
+            tag = Tag(fact["tags"][0])
+
+            if x + tag.width > tags_end:
+                x = cell_start
+                y = self.activity_label.height + 4
 
 
             for i, tag in enumerate(fact["tags"]):
-                temp_tag = Tag(tag)
-                tag_w, tag_h = temp_tag.width, temp_tag.height
+                tag = Tag(tag)
 
-                if i > 0 and cur_x + tag_w >= tag_cell_end:
-                    cur_x = tag_cell_start
-                    cur_y += tag_h + 4
-                cur_x += tag_w + 4
+                if x + tag.width >= tags_end:
+                    x = cell_start
+                    y += tag.height + 4
 
-            cell_height = max(cell_height, cur_y + tag_h + 4)
+                tag.x, tag.y = x, y
+                if really:
+                    tag._draw(context)
 
-            labels["tags"] = (None, tag_cell_start, tag_cell_top, tag_cell_end)
+                x += tag.width + 4
 
-            layout.set_font_description(self.label_font)
+            current_height = y + tag.height + 4
+
+
+        current_height = max(self.activity_label.height + 2, current_height)
 
 
         # see if we can fit in single line
         # if not, put description under activity
+        self.description_label.text = ""
         if fact["description"]:
-            description = "<small>%s</small>" % stuff.escape_pango(fact["description"])
-            layout.set_markup(description)
-            label_w, label_h = layout.get_pixel_size()
+            self.description_label.text = "<small>%s</small>" % stuff.escape_pango(fact["description"])
+            self.description_label.color = text_color
+            self.description_label.wrap = pango.WRAP_WORD
 
-            x, y = cur_x, cur_y
-            width = cell_start + cell_width - x
+            description_width = self.description_label.width
+            width = cell_width - x
 
-            if x + label_w > width:
+            if description_width > width:
                 x = cell_start
-                y = cell_height
-                width = cell_width
+                y = current_height
+                self.description_label.width = cell_width
+            else:
+                self.description_label.width = None
 
-            layout.set_width(width * pango.SCALE)
-            label_w, label_h = layout.get_pixel_size()
+            self.description_label.x = x
+            self.description_label.y = y
 
-            labels["description"] = (description, x, y, width * pango.SCALE)
+            current_height = max(current_height, self.description_label.y + self.description_label.height + 5)
 
-            cell_height = y + label_h + 4
+        self.labels._draw(context)
 
-        self.labels[fact["id"]] = labels
+        return current_height
 
 
-        x_offset, y_offset = 0, 0
-        if cell_area:
-            x_offset, y_offset = cell_area.x, cell_area.y
+    def on_get_size(self, widget, cell_area):
+        if "id" not in self.data:
+            if self.data["first"]:
+                return (0, 0, 0, 25)
+            else:
+                return (0, 0, 0, 40)
 
-        return (0, y_offset, 1, cell_height)
+
+        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
+        area = widget.get_allocation()
+
+        area.width -= 40 # minus the edit column, scrollbar and padding (and the scrollbar part is quite lame)
+
+        cell_height = self.render_cell(context, area, widget, False)
+        return (0, 0, -1, cell_height)
