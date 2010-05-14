@@ -31,7 +31,6 @@ import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
 
-import eds
 from configuration import conf, runtime, dialogs
 
 import stuff
