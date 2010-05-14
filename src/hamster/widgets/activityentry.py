@@ -21,9 +21,9 @@ import gtk, gobject
 import datetime as dt
 
 from .hamster.configuration import runtime
-
 from .hamster import stuff
 from .hamster.stuff import format_duration
+from .hamster import external
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {
@@ -38,6 +38,7 @@ class ActivityEntry(gtk.Entry):
         self.categories = None
         self.filter = None
         self.max_results = 10 # limit popup size to 10 results
+        self.external = external.ActivitiesSource()
 
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
 
@@ -192,6 +193,7 @@ class ActivityEntry(gtk.Entry):
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_autocomplete_activities(input_activity.activity_name)
+        self.activities.extend(self.external.get_activities(input_activity.activity_name))
         self.categories = self.categories or runtime.storage.get_categories()
 
 

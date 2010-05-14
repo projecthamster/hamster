@@ -9,7 +9,7 @@ hamster_PYTHON = \
 	defs.py \
 	storage.py \
 	db.py \
-	eds.py \
+	external.py \
 	stats.py \
         overview.py \
         overview_totals.py \
