@@ -83,10 +83,18 @@ class ReportChooserDialog(gtk.Dialog):
 
 
     def show(self, start_date, end_date):
-        #set suggested name to something readable, replace backslashes with dots
-        #so the name is valid in linux
-        filename = "Time track %s - %s.html" % (start_date.strftime("%x").replace("/", "."),
-                                                  end_date.strftime("%x").replace("/", "."))
+        """setting suggested name to something readable, replace backslashes
+           with dots so the name is valid in linux"""
+
+        # title in the report file name
+        vars = {"title": _("Time track"),
+                "start": start_date.strftime("%x").replace("/", "."),
+                "end": end_date.strftime("%x").replace("/", ".")}
+        if start_date != end_date:
+            filename = "%(title)s, %(start)s - %(end)s.html" % vars
+        else:
+            filename = "%(title)s, %(start)s.html" % vars
+
         self.dialog.set_current_name(filename)
 
         response = self.dialog.run()
