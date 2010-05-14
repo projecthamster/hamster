@@ -23,7 +23,6 @@
     <child>
       <object class="GtkVBox" id="big_box">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child>
           <object class="GtkNotebook" id="notebook1">
@@ -39,7 +38,6 @@
                 <child>
                   <object class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">20</property>
                     <child>
                       <object class="GtkFrame" id="frame3">
@@ -54,7 +52,6 @@
                             <child>
                               <object class="GtkVBox" id="vbox7">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <property name="spacing">8</property>
                                 <child>
                                   <object class="GtkCheckButton" id="shutdown_track">
@@ -98,7 +95,6 @@
                                         <child>
                                           <object class="GtkVBox" id="vbox3">
                                             <property name="visible">True</property>
-                                            <property name="orientation">vertical</property>
                                             <child>
                                               <object class="GtkHScale" id="notify_interval">
                                                 <property name="visible">True</property>
@@ -207,6 +203,60 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkFrame" id="frame4">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment11">
+                            <property name="visible">True</property>
+                            <property name="top_padding">8</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox4">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkLabel" id="label12">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Use following todo list:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="padding">4</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="todo_pick">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label11">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Integration</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
                         <property name="label_xalign">0</property>
@@ -240,7 +290,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -266,7 +316,6 @@
                 <child>
                   <object class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">15</property>
                     <child>
                       <object class="GtkFrame" id="frame2">
@@ -288,7 +337,6 @@
                                     <property name="width_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="orientation">vertical</property>
                                     <property name="spacing">4</property>
                                     <child>
                                       <object class="GtkLabel" id="categories_label">
@@ -427,7 +475,6 @@
                                   <object class="GtkVBox" id="vbox5">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="orientation">vertical</property>
                                     <property name="spacing">4</property>
                                     <child>
                                       <object class="GtkLabel" id="activities_label">
@@ -707,7 +754,6 @@
                 <child>
                   <object class="GtkVBox" id="vbox8">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkFrame" id="workspace_frame">
                         <property name="visible">True</property>
@@ -722,7 +768,6 @@
                             <child>
                               <object class="GtkVBox" id="vbox6">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <property name="spacing">8</property>
                                 <child>
                                   <object class="GtkCheckButton" id="workspace_tracking_memory">
@@ -741,7 +786,6 @@
                                 <child>
                                   <object class="GtkVBox" id="vbox9">
                                     <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
                                     <child>
                                       <object class="GtkCheckButton" id="workspace_tracking_name">
                                         <property name="label" translatable="yes">Start new activity when switching workspaces:</property>

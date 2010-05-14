@@ -108,6 +108,15 @@ class PreferencesEditor:
         self._gui = stuff.load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
 
+        self.activities_sources = [("", _("None")),
+                                   ("evo", "Evolution"),
+                                   ("gtg", "Getting Things Gnome")]
+        self.todo_combo = gtk.combo_box_new_text()
+        for code, label in self.activities_sources:
+            self.todo_combo.append_text(label)
+        self.todo_combo.connect("changed", self.on_todo_combo_changed)
+        self.get_widget("todo_pick").add(self.todo_combo)
+
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -233,6 +242,10 @@ class PreferencesEditor:
         self._gui.connect_signals(self)
         self.window.show_all()
 
+
+    def on_todo_combo_changed(self, combo):
+        conf.set("activities_source", self.activities_sources[combo.get_active()][0])
+
     def workspace_name_celldata(self, column, cell, model, iter, user_data=None):
         name = model.get_value(iter, 1).get_name()
         cell.set_property('text', str(name))
@@ -285,6 +298,12 @@ class PreferencesEditor:
 
         self.workspace_mapping = conf.get("workspace_mapping")
         self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
+
+
+        current_source = conf.get("activities_source")
+        for i, (code, label) in enumerate(self.activities_sources):
+            if code == current_source:
+                self.todo_combo.set_active(i)
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):

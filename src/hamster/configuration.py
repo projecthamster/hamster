@@ -162,18 +162,19 @@ class GConfStore(gobject.GObject, Singleton):
     GCONF_DIR = "/apps/hamster-applet/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
-        'enable_timeout'            :   False,          # Should hamster stop tracking on idle
-        'stop_on_shutdown'          :   False,          # Should hamster stop tracking on shutdown
-        'notify_on_idle'            :   False,          # Remind also if no activity is set
-        'notify_interval'           :   27,             # Remind of current activity every X minutes
-        'day_start_minutes'         :   5 * 60 + 30,    # At what time does the day start (5:30AM)
-        'keybinding'                :   "<Super>H",     # Key binding to summon hamster
-        'overview_window_box'       :   [],             # X, Y, W, H
-        'overview_window_maximized' :   False,          # Is overview window maximized
-        'workspace_tracking'        :   [],             # Should hamster switch activities on workspace change 0,1,2
-        'workspace_mapping'         :   [],             # Mapping between workspace numbers and activities
-        'standalone_window_box'       :   [],             # X, Y, W, H
-        'standalone_window_maximized' :   False,          # Is overview window maximized
+        'enable_timeout'              :   False,       # Should hamster stop tracking on idle
+        'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
+        'notify_on_idle'              :   False,       # Remind also if no activity is set
+        'notify_interval'             :   27,          # Remind of current activity every X minutes
+        'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
+        'keybinding'                  :   "<Super>H",  # Key binding to summon hamster
+        'overview_window_box'         :   [],          # X, Y, W, H
+        'overview_window_maximized'   :   False,       # Is overview window maximized
+        'workspace_tracking'          :   [],          # Should hamster switch activities on workspace change 0,1,2
+        'workspace_mapping'           :   [],          # Mapping between workspace numbers and activities
+        'standalone_window_box'       :   [],          # X, Y, W, H
+        'standalone_window_maximized' :   False,       # Is overview window maximized
+        'activities_source'           :   "",           # Source of TODO items ("", "evo", "gtg")
     }
 
     __gsignals__ = {
