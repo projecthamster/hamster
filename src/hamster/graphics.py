@@ -832,9 +832,6 @@ class Scene(gtk.DrawingArea):
 
     # animation bits
     def __interpolate(self):
-        if not self.window: #will wait until window comes
-            return True
-
         if self.tweener:
             self.tweener.update((dt.datetime.now() - self._last_frame_time).microseconds / 1000000.0)
 
