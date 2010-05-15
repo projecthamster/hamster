@@ -29,7 +29,6 @@ import gtk
 import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 
-from hamster import eds
 from hamster.configuration import conf, runtime, dialogs
 
 from hamster import stuff, keybinder
