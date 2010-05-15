@@ -154,9 +154,6 @@ class CustomFactController:
 
 
     def figure_description(self):
-        activity = self.new_name.get_text().decode("utf-8")
-
-        # juggle with description - break into parts and then put together
         buf = self.get_widget('description').get_buffer()
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
                          .decode("utf-8")
@@ -185,24 +182,17 @@ class CustomFactController:
             return None
 
     def on_save_button_clicked(self, button):
-        activity = self.new_name.get_text().decode("utf-8")
-        parsed = stuff.parse_activity_input(activity)
+        activity_name, temporary = self.new_name.get_value()
+        print activity_name, temporary
+        parsed = stuff.parse_activity_input(activity_name)
 
         if not parsed.activity_name:
             return False
 
-
-        # user might also type description in the activity name - strip it here
-        # and remember value
-        inline_description = None
-        if activity.find(",") != -1:
-            activity, inline_description  = activity.split(",", 1)
-            inline_description = inline_description.strip()
-
         # explicit takes precedence
-        description = self.figure_description() or inline_description
+        description = self.figure_description()
 
-        tags = self.new_tags.get_text().decode('utf8', 'replace')
+        tags = self.new_tags.get_text().decode('utf8')
 
         start_time = self._get_datetime("start")
 
@@ -213,19 +203,21 @@ class CustomFactController:
 
         if self.fact_id:
             runtime.storage.update_fact(self.fact_id,
-                                        parsed.activity_name,
+                                        activity_name,
                                         tags,
                                         start_time,
                                         end_time,
                                         parsed.category_name,
-                                        description)
+                                        description,
+                                        temporary = temporary)
         else:
-            runtime.storage.add_fact(parsed.activity_name,
+            runtime.storage.add_fact(activity_name,
                                      tags,
                                      start_time,
                                      end_time,
                                      parsed.category_name,
-                                     description)
+                                     description,
+                                     temporary = temporary)
 
         self.close_window()
 
@@ -266,7 +258,7 @@ class CustomFactController:
         self.get_widget("end_date_label").set_text(some_date.strftime("%x"))
 
     def validate_fields(self, widget = None):
-        activity_text = self.new_name.get_text().decode('utf8', 'replace')
+        activity_text, temporary = self.new_name.get_value()
         start_time = self._get_datetime("start")
 
         if self.get_widget("in_progress").get_active():

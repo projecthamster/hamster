@@ -614,7 +614,7 @@ class HamsterApplet(object):
 
                 activity = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
                                                                 category_id,
-                                                                ressurect = False)
+                                                                resurrect = False)
                 if activity:
                     # we need dict below
                     activity = dict(name = activity['name'],
@@ -690,11 +690,13 @@ class HamsterApplet(object):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
-        if not self.new_name.get_text():
+        activity_name, temporary = self.new_name.get_value()
+        if not activity_name:
             return False
 
         runtime.storage.add_fact(self.new_name.get_text().decode("utf8", "replace"),
-                                 self.new_tags.get_text().decode("utf8", "replace"))
+                                 self.new_tags.get_text().decode("utf8", "replace"),
+                                 temporary = temporary)
         self.new_name.set_text("")
         self.new_tags.set_text("")
         self.__show_toggle(False)

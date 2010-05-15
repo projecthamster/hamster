@@ -35,6 +35,7 @@ class ActivityEntry(gtk.Entry):
         gtk.Entry.__init__(self)
         self.news = False
         self.activities = None
+        self.external_activities = [] # suggestions from outer space
         self.categories = None
         self.filter = None
         self.max_results = 10 # limit popup size to 10 results
@@ -98,6 +99,24 @@ class ActivityEntry(gtk.Entry):
 
         self.show()
         self.populate_suggestions()
+
+    def get_value(self):
+        activity_name = self.get_text().decode("utf-8")
+        if not activity_name:
+            return None, False
+
+        # see if entered text matches something from the outer suggestions
+        # only consequence of if it does is that it will not attempt to
+        # ressurect the activity if it's deleted (hidden)
+        # thus avoiding polluting our local suggestions
+        external_names = set()
+        for activity in self.external_activities:
+            name = activity['name']
+            if activity['category']:
+                name = "%s@%s" % name, activity['category']
+            external_names.add(name.lower())
+
+        return activity_name, activity_name in external_names
 
     def hide_popup(self):
         if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
@@ -193,7 +212,9 @@ class ActivityEntry(gtk.Entry):
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_autocomplete_activities(input_activity.activity_name)
-        self.activities.extend(self.external.get_activities(input_activity.activity_name))
+        self.external_activities = self.external.get_activities(input_activity.activity_name)
+        self.activities.extend(self.external_activities)
+
         self.categories = self.categories or runtime.storage.get_categories()
 
 

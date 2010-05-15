@@ -127,7 +127,7 @@ class Storage(storage.Storage):
 
         changes = False
 
-        # check if any of tags needs ressurection
+        # check if any of tags needs resurrection
         set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] == "false"]
         if set_complete:
             changes = True
@@ -250,7 +250,7 @@ class Storage(storage.Storage):
 
 
 
-    def __get_activity_by_name(self, name, category_id = None, ressurect = True):
+    def __get_activity_by_name(self, name, category_id = None, resurrect = True):
         """get most recent, preferably not deleted activity by it's name"""
 
         if category_id:
@@ -280,12 +280,9 @@ class Storage(storage.Storage):
             res = dict(res)
             res['deleted'] = res['deleted'] or False
 
-            # if the activity was marked as deleted, ressurect on first call
+            # if the activity was marked as deleted, resurrect on first call
             # and put in the unsorted category
-            if res['deleted'] and not ressurect:
-                return None
-
-            elif res['deleted']:
+            if res['deleted'] and resurrect:
                 update = """
                             UPDATE activities
                                SET deleted = null, category_id = -1
@@ -479,7 +476,8 @@ class Storage(storage.Storage):
 
 
     def __add_fact(self, activity_name, tags, start_time = None,
-                     end_time = None, category_name = None, description = None):
+                   end_time = None, category_name = None,
+                   description = None, temporary = False):
 
         activity = stuff.parse_activity_input(activity_name)
 
@@ -531,15 +529,15 @@ class Storage(storage.Storage):
             if not category_id:
                 category_id = self.__add_category(activity.category_name)
 
-        # try to find activity
+        # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(activity.activity_name,
-                                                  category_id)
+                                                  category_id,
+                                                  resurrect = not temporary)
         if not activity_id:
             activity_id = self.__add_activity(activity.activity_name,
-                                              category_id)
+                                              category_id, temporary)
         else:
             activity_id = activity_id['id']
-
 
         # if we are working on +/- current day - check the last_activity
         if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
@@ -829,7 +827,7 @@ class Storage(storage.Storage):
                       "update activities set activity_order = ? where id = ?"],
                       [(priority1, id2), (priority2, id1)])
 
-    def __add_activity(self, name, category_id = None):
+    def __add_activity(self, name, category_id = None, temporary = False):
         # first check that we don't have anything like that yet
         activity = self.__get_activity_by_name(name, category_id)
         if activity:
@@ -839,11 +837,16 @@ class Storage(storage.Storage):
         category_id = category_id or -1
         new_order = self.fetchone("select max(activity_order) + 1  from activities")[0] or 1
 
+        deleted = None
+        if temporary:
+            deleted = 1
+
+
         query = """
-                   INSERT INTO activities (name, category_id, activity_order)
-                        VALUES (?, ?, ?)
+                   INSERT INTO activities (name, category_id, activity_order, deleted)
+                        VALUES (?, ?, ?, ?)
         """
-        self.execute(query, (name, category_id, new_order))
+        self.execute(query, (name, category_id, new_order, deleted))
         return self.__last_insert_rowid()
 
     def __update_activity(self, id, name, category_id):
@@ -1087,7 +1090,7 @@ class Storage(storage.Storage):
             # previously deleted records are now unsorted ones
             # user will be able to mark them as deleted again, in which case
             # they won't appear in autocomplete, or in categories
-            # ressurection happens, when user enters the exact same name
+            # resurrection happens, when user enters the exact same name
             self.execute("""
                                CREATE TABLE activities_new (id integer primary key,
                                                             name varchar2(500),

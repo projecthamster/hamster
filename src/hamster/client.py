@@ -141,7 +141,8 @@ class Storage(gobject.GObject):
         return from_dbus_fact(self.conn.GetFact(id))
 
     def add_fact(self, activity_name, tags = '', start_time = None, end_time = None,
-                                      category_name = None, description = None):
+                                      category_name = None, description = None,
+                                      temporary = False):
         """Add fact. activity name can use `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
         syntax, or params can be stated explicitly.
         Params, except for the start and end times will take precedence over
@@ -165,7 +166,7 @@ class Storage(gobject.GObject):
         category_name = category_name or ''
         description = description or ''
 
-        return self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description)
+        return self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description, temporary)
 
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
@@ -177,7 +178,9 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, activity_name, tags = None, start_time = None, end_time = None, category_name = None, description = None):
+    def update_fact(self, fact_id, activity_name, tags = None,
+                    start_time = None, end_time = None,
+                    category_name = None, description = None, temporary = False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -198,7 +201,9 @@ class Storage(gobject.GObject):
             tags = ", ".join(tags)
         tags = tags or ''
 
-        return self.conn.UpdateFact(fact_id, activity_name, tags, start_time, end_time, category_name, description)
+        return self.conn.UpdateFact(fact_id, activity_name, tags,
+                                    start_time, end_time,
+                                    category_name, description, temporary)
 
 
     def get_activities(self, category_id = None):
@@ -211,13 +216,13 @@ class Storage(gobject.GObject):
         """returns category id by name"""
         return self.conn.GetCategoryId(category_name)
 
-    def get_activity_by_name(self, activity, category_id = None, ressurect = True):
+    def get_activity_by_name(self, activity, category_id = None, resurrect = True):
         """returns activity dict by name and optionally filtering by category.
            if activity is found but is marked as deleted, it will be resurrected
-           unless told otherise in the ressurect param
+           unless told otherise in the resurrect param
         """
         category_id = category_id or 0
-        return self.conn.GetActivityByName(activity, category_id, ressurect)
+        return self.conn.GetActivityByName(activity, category_id, resurrect)
 
     # category and activity manipulations (normally just via preferences)
     def remove_activity(self, id):

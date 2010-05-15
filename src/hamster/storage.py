@@ -83,9 +83,9 @@ class Storage(dbus.service.Object):
 
     # facts
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='ssiiss', out_signature='i')
+    @dbus.service.method("org.gnome.Hamster", in_signature='ssiissb', out_signature='i')
     def AddFact(self, activity_name, tags, start_time, end_time,
-                                      category_name = None, description = None):
+                category_name = None, description = None, temporary = False):
 
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
@@ -98,7 +98,7 @@ class Storage(dbus.service.Object):
             end_time = None
 
         self.start_transaction()
-        result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description)
+        result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description, temporary)
         self.end_transaction()
 
         if result:
@@ -115,8 +115,10 @@ class Storage(dbus.service.Object):
         return to_dbus_fact(fact)
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='issiiss', out_signature='i')
-    def UpdateFact(self, fact_id, activity_name, tags, start_time, end_time, category_name = None, description = None):
+    @dbus.service.method("org.gnome.Hamster", in_signature='issiissb', out_signature='i')
+    def UpdateFact(self, fact_id, activity_name, tags,
+                   start_time, end_time,
+                   category_name = None, description = None, temporary = False):
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
         else:
@@ -127,10 +129,11 @@ class Storage(dbus.service.Object):
         else:
             end_time = None
 
-
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description)
+        result = self.__add_fact(activity_name, tags, start_time, end_time,
+                                 category_name, description, temporary)
+
         self.end_transaction()
 
         if result:
@@ -304,11 +307,11 @@ class Storage(dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='sib', out_signature='a{sv}')
-    def GetActivityByName(self, activity, category_id, ressurect = True):
+    def GetActivityByName(self, activity, category_id, resurrect = True):
         category_id = category_id or None
 
         if activity:
-            return dict(self.__get_activity_by_name(activity, category_id, ressurect))
+            return dict(self.__get_activity_by_name(activity, category_id, resurrect))
         else:
             return {}
 
