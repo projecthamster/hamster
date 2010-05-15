@@ -260,10 +260,7 @@ class Storage(dbus.service.Object):
         return result
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
-    def GetCategoryActivities(self, category_id = None):
-        if not category_id:
-            category_id = None
-
+    def GetCategoryActivities(self, category_id = -1):
         res = []
         for activity in self.__get_category_activities(category_id = category_id):
             activity = dict(activity)
