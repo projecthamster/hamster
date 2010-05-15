@@ -192,9 +192,12 @@ class FactTree(gtk.TreeView):
 
 
     def store_selection(self):
-        selection = self.get_selection()
-        model, iter = selection.get_selected()
         self.stored_selection = None
+        selection = self.get_selection()
+        if not selection:
+            return
+
+        model, iter = selection.get_selected()
         if iter:
             path = model.get_path(iter)[0]
             prev, cur, next = path - 1, path, path + 1
