@@ -106,12 +106,12 @@ class Storage(gobject.GObject):
                                                                     end_date,
                                                                     search_terms)]
 
-    def get_autocomplete_activities(self, search = ""):
+    def get_activities(self, search = ""):
         """returns list of activities name matching search criteria.
            results are sorted by most recent usage.
            search is case insensitive
         """
-        return self.conn.GetAutocompleteActivities(search)
+        return self.conn.GetActivities(search)
 
     def get_categories(self):
         """returns list of categories"""
@@ -206,11 +206,11 @@ class Storage(gobject.GObject):
                                     category_name, description, temporary)
 
 
-    def get_activities(self, category_id = None):
+    def get_category_activities(self, category_id = None):
         """Return activities for category. If category is not specified, will
         return activities that have no category"""
         category_id = category_id or -1
-        return self.conn.GetActivities(category_id)
+        return self.conn.GetCategoryActivities(category_id)
 
     def get_category_id(self, category_name):
         """returns category id by name"""

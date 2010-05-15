@@ -746,39 +746,27 @@ class Storage(storage.Storage):
                       "DELETE FROM facts where id = ?"]
         self.execute(statements, [(fact_id,)] * 2)
 
-    def __get_activities(self, category_id = None):
+    def __get_category_activities(self, category_id):
         """returns list of activities, if category is specified, order by name
            otherwise - by activity_order"""
-        if category_id:
-            query = """
-                       SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
-                         FROM activities a
-                    LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                        WHERE category_id = ?
-                          AND deleted is null
-            """
+        query = """
+                   SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
+                     FROM activities a
+                LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
+                    WHERE category_id = ?
+                      AND deleted is null
+        """
 
-            # unsorted entries we sort by name - others by ID
-            if category_id == -1:
-                query += "ORDER BY lower(a.name)"
-            else:
-                query += "ORDER BY a.activity_order"
-
-            activities = self.fetchall(query, (category_id, ))
-
+        # unsorted entries we sort by name - others by ID
+        if category_id == -1:
+            query += "ORDER BY lower(a.name)"
         else:
-            query = """
-                       SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
-                         FROM activities a
-                    LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
-                        WHERE deleted IS NULL
-                     ORDER BY lower(a.name)
-            """
-            activities = self.fetchall(query)
+            query += "ORDER BY a.activity_order"
 
-        return activities
+        activities = self.fetchall(query, (category_id, ))
 
-    def __get_autocomplete_activities(self, search):
+
+    def __get_activities(self, search):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""
 

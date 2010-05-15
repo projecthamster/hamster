@@ -75,7 +75,7 @@ class ActivityStore(gtk.ListStore):
         if category_id is None:
             return
 
-        activity_list = runtime.storage.get_activities(category_id)
+        activity_list = runtime.storage.get_category_activities(category_id)
 
         for activity in activity_list:
             self.append([activity['id'],
@@ -468,7 +468,7 @@ class PreferencesEditor:
         category_id = model[path][2]
 
         #look for dupes
-        activities = runtime.storage.get_activities(category_id)
+        activities = runtime.storage.get_category_activities(category_id)
         for activity in activities:
             if activity['name'].lower() == new_text.lower():
                 if id == -1: # that was a new category

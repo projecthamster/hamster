@@ -211,7 +211,7 @@ class ActivityEntry(gtk.Entry):
         input_activity = stuff.parse_activity_input(self.filter)
 
         # do not cache as ordering and available options change over time
-        self.activities = runtime.storage.get_autocomplete_activities(input_activity.activity_name)
+        self.activities = runtime.storage.get_activities(input_activity.activity_name)
         self.external_activities = self.external.get_activities(input_activity.activity_name)
         self.activities.extend(self.external_activities)
 

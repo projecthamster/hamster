@@ -260,12 +260,12 @@ class Storage(dbus.service.Object):
         return result
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
-    def GetActivities(self, category_id = None):
-        if not category_id or category_id == -1:
+    def GetCategoryActivities(self, category_id = None):
+        if not category_id:
             category_id = None
 
         res = []
-        for activity in self.__get_activities(category_id = category_id):
+        for activity in self.__get_category_activities(category_id = category_id):
             activity = dict(activity)
             activity['category'] = activity['category'] or ''
 
@@ -275,9 +275,9 @@ class Storage(dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='aa{sv}')
-    def GetAutocompleteActivities(self, search = ""):
+    def GetActivities(self, search = ""):
         res = []
-        for activity in self.__get_autocomplete_activities(search):
+        for activity in self.__get_activities(search):
             activity = dict(activity)
             activity['category'] = activity['category'] or ''
             res.append(activity)
