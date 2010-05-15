@@ -79,6 +79,7 @@ class Chart(graphics.Scene):
 
         self.bars = []
         self.labels = []
+        self.data = None
 
         self.max_width = max_bar_width
         self.legend_width = legend_width
@@ -130,6 +131,12 @@ class Chart(graphics.Scene):
 
 
     def plot(self, keys, data):
+        if data == self.data:
+            self.show()
+            self.redraw()
+            return
+        self.data = data
+
         bars = dict([(bar.key, bar.normalized) for bar in self.bars])
 
         max_val = float(max(data or [0]))
@@ -167,6 +174,8 @@ class Chart(graphics.Scene):
 
 
     def on_enter_frame(self, scene, context):
+        # adjust sizes and positions on redraw
+        
         self.find_colors()
 
         self.plot_area.y = 0
