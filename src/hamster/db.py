@@ -763,7 +763,7 @@ class Storage(storage.Storage):
         else:
             query += "ORDER BY a.activity_order"
 
-        activities = self.fetchall(query, (category_id, ))
+        return self.fetchall(query, (category_id, ))
 
 
     def __get_activities(self, search):
