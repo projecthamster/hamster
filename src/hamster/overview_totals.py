@@ -89,6 +89,7 @@ class TotalsBox(gtk.VBox):
             self.category_chart.selected_keys.append(key)
             self.selected_categories.append(key)
 
+        self.calculate_totals()
         self.do_charts()
 
     def on_activity_clicked(self, widget, key):
@@ -98,6 +99,7 @@ class TotalsBox(gtk.VBox):
         else:
             self.activity_chart.selected_keys.append(key)
             self.selected_activities.append(key)
+        self.calculate_totals()
         self.do_charts()
 
     def on_tag_clicked(self, widget, key):
@@ -107,6 +109,7 @@ class TotalsBox(gtk.VBox):
         else:
             self.tag_chart.selected_keys.append(key)
             self.selected_tags.append(key)
+        self.calculate_totals()
         self.do_charts()
 
 
@@ -130,6 +133,7 @@ class TotalsBox(gtk.VBox):
             self.get_widget("no_data_label").hide()
             self.get_widget("charts").show()
             self.get_widget("total_hours").show()
+            self.calculate_totals()
             self.do_charts()
         else:
             self.get_widget("no_data_label").show()
@@ -137,7 +141,7 @@ class TotalsBox(gtk.VBox):
             self.get_widget("total_hours").hide()
 
 
-    def do_charts(self):
+    def calculate_totals(self):
         if not self.facts:
             return
 
@@ -202,6 +206,7 @@ class TotalsBox(gtk.VBox):
             self.tag_sums = zip(*tag_sums)
 
 
+    def do_charts(self):
         self.get_widget("totals_by_category").set_size_request(10,10)
         if self.category_sums:
             self.get_widget("totals_by_category").set_size_request(280, len(self.category_sums[0]) * 20)
