@@ -25,6 +25,8 @@ from xml.dom.minidom import Document
 import csv
 from hamster.i18n import C_
 import copy
+import StringIO
+import itertools
 
 def simple(facts, start_date, end_date, format, path):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
@@ -62,7 +64,7 @@ class ReportWriter(object):
                         fact["end_time"] = fact["end_time"].strftime(self.datetime_format)
                     else:
                         fact["end_time"] = ""
-                fact["delta"] = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
+
                 fact["tags"] = ", ".join(fact["tags"])
 
                 self._write_fact(self.file, fact)
@@ -145,7 +147,8 @@ class XMLWriter(ReportWriter):
         activity.setAttribute("name", fact["name"])
         activity.setAttribute("start_time", fact["start_time"])
         activity.setAttribute("end_time", fact["end_time"])
-        activity.setAttribute("duration_minutes", str(fact["delta"]))
+        delta = fact["delta"].seconds / 60 + fact["delta"].days * 24 * 60
+        activity.setAttribute("duration_minutes", delta)
         activity.setAttribute("category", fact["category"])
         activity.setAttribute("description", fact["description"])
         activity.setAttribute("tags", fact["tags"])
@@ -158,23 +161,57 @@ class XMLWriter(ReportWriter):
 
 
 class HTMLWriter(ReportWriter):
+    class HTMLTable(object):
+        def __init__(self, id, headers):
+            self.output = StringIO.StringIO()
+            self.cols = len(headers)
+            self.even = True
+
+            self.output.write('<table id="%s" class="%s">')
+
+            if any(headers):
+                self.output.write('  <tr>')
+                for col in headers:
+                    self.output.write('    <th>%s</th>' % (col or ""))
+                self.output.write('  </tr>')
+
+        def add_row(self, *cols):
+            self.output.write('  <tr>')
+            for col in cols:
+                self.output.write('    <td class="%s">%s</td>' % (["even", "odd"][int(self.even)], col))
+            self.output.write('  </tr>')
+            self.even = not self.even
+
+        def add_heading(self, label):
+            self.output.write('  <tr>')
+            self.output.write('    <th colspan="%d">%s</td>' % (self.cols, label))
+            self.output.write('  </tr>')
+
+        def __str__(self):
+            return "%s</table>" % self.output.getvalue()
+
+
+
     def __init__(self, path, start_date, end_date):
         ReportWriter.__init__(self, path, datetime_format = None)
 
         dates_dict = stuff.dateDict(start_date, "start_")
         dates_dict.update(stuff.dateDict(end_date, "end_"))
+
         if start_date.year != end_date.year:
-            self.title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif start_date.month != end_date.month:
-            self.title = _(u"Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        elif start_date == end_date:
+            self.title = _(u"Activity log for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
         else:
-            self.title = _(u"Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
-        if start_date == end_date:
-            self.title = _(u"Overview for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
 
-        self.sum_time = {}
-        self.even_row = True
+        headers = (_("Date"), _("Activity"), _("Category"), _("Tags"),
+                   _("Start"), _("End"), _("Duration"), _("Description"))
+        self.fact_table = self.HTMLTable("facts", headers)
+
 
         """TODO bring template to external file or write to PDF"""
 
@@ -191,8 +228,12 @@ class HTMLWriter(ReportWriter):
             font-size: 12px;
             padding: 12px;
             color: #303030;
-
         }
+
+        table {
+            margin-left: 24px;
+        }
+
         h1 {
             border-bottom: 2px solid #303030;
             padding-bottom: 4px;
@@ -207,98 +248,73 @@ class HTMLWriter(ReportWriter):
             padding-right: 24px;
         }
 
-        .row0 {
-                background-color: #eee;
+        th {
+            padding-top: 12px;
         }
 
-        .row1 {
-                background-color: #ffffff;
-        }
+        ul {padding-bottom: 12px; margin-left: 12px; padding-left: 0px; list-style: none}
+        li {padding: 2px 0px; margin: 0}
+
+        .even {background-color: #eee;}
+        .odd {background-color: #ffffff;}
 
     </style>
 </head>
 <body>
-<h1>%(title)s</h1>""" % {"title": self.title} + """
-<table>
-    <tr>
-        <th>""" + _("Date") + """</th>
-        <th>""" + _("Activity") + """</th>
-        <th>""" + _("Category") + """</th>
-        <th>""" + _("Tags") + """</th>
-        <th>""" + _("Start") + """</th>
-        <th>""" + _("End") + """</th>
-        <th>""" + _("Duration") + """</th>
-        <th>""" + _("Description") + """</th>
-    </tr>""")
+<h1>%(title)s</h1>""" % {"title": self.title})
+
+
 
     def _write_fact(self, report, fact):
-        end_time = fact["end_time"]
-
-        # ongoing task in current day
+        # no having end time is fine
         end_time_str = ""
-        if end_time:
-            end_time_str = end_time.strftime('%H:%M')
+        if fact["end_time"]:
+            end_time_str = fact["end_time"].strftime('%H:%M')
 
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
             category = fact["category"]
 
-        description = fact["description"] or ""
-
-        # fact date column in HTML report
-        report.write("""<tr class="row%d">
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                        </tr>
-                       """ % (int(self.even_row),
-                              fact["start_time"].strftime(
+        self.fact_table.add_row(fact["start_time"].strftime(
                                 # date column format for each row in HTML report
                                 # Using python datetime formatting syntax. See:
                                 # http://docs.python.org/library/time.html#time.strftime
-                              C_("html report","%b %d, %Y")),
-                              fact["name"],
-                              category,
-                              fact["tags"],
-                              fact["start_time"].strftime('%H:%M'),
-                              end_time_str,
-                              stuff.format_duration(fact["delta"]) or "",
-                              description))
-
-        self.even_row = not self.even_row
-
-
-        # save data for summary table
-        if fact["delta"]:
-            id_string = "<td class=\"smallCell\">%s</td><td class=\"largeCell\">%s</td>" % (fact["category"], fact["name"])
-            self.sum_time[id_string] = self.sum_time.get(id_string, 0) + fact["delta"]
+                                C_("html report","%b %d, %Y")),
+                                fact["name"],
+                                category,
+                                fact["tags"],
+                                fact["start_time"].strftime('%H:%M'),
+                                end_time_str,
+                                stuff.format_duration(fact["delta"]) or "",
+                                fact["description"] or "")
 
     def _finish(self, report, facts):
-        report.write("</table>")
+        report.write(str(self.fact_table))
 
         # summary table
-        report.write("\n<h2>%s</h2>\n" % _("Totals"))
-        report.write("""<table>
-        <tr>
-            <th>""" + _("Category") + """</th>
-            <th>""" + _("Activity") + """</th>
-            <th>""" + _("Duration") + """</th>
-        </tr>\n""")
-        tot_time = 0
-        even_row = False
-        for key in sorted(self.sum_time.keys()):
-            report.write("    <tr class=\"row%d\">%s<td class=\"smallCell\">%s</td></tr>\n" % (int(even_row), key, stuff.format_duration(self.sum_time[key])))
-            tot_time += self.sum_time[key]
+        report.write("\n<h2>%s</h2>\n" % _("Totals by category, activity"))
 
-            even_row = not even_row
+        report.write("<ul>")
 
-        report.write("    <tr><th colspan=\"2\" style=\"text-align:right;\">" + _("Total Time") + ":</th><th>%s</th></tr>\n" % (stuff.format_duration(tot_time)))
-        report.write("</table>\n")
+        summary_table = self.HTMLTable("summary", ("", ""))
+
+        for category, cat_facts in itertools.groupby(sorted(facts, key=lambda fact: fact['category']), lambda fact: fact['category']):
+            cat_facts = list(cat_facts)
+            cat_total = dt.timedelta()
+            for fact in cat_facts:
+                cat_total += fact['delta']
+
+            report.write("<li>")
+            report.write("<b>%s: %s</b>" % (category, stuff.format_duration(cat_total)))
+
+            report.write("<ul>")
+            for activity, act_facts in itertools.groupby(sorted(cat_facts, key=lambda fact: fact['name']), lambda fact: fact['name']):
+                act_total = dt.timedelta()
+                for fact in act_facts:
+                    act_total += fact['delta']
+                report.write("<li>%s: %s</li>" % (activity, stuff.format_duration(act_total)))
+
+            report.write("</ul>")
+        report.write("</ul>")
 
         report.write("</body>\n</html>")
-
