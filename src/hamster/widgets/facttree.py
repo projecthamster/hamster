@@ -509,12 +509,13 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         self.category_label.y = y
 
 
+        x = cell_start + activity_width + category_width + 12
+
         current_height = 0
         if fact["tags"]:
             # try putting tags on same line if they fit
             # otherwise move to the next line
             tags_end = cell_start + cell_width
-            x = cell_start + activity_width + category_width + 12
 
             tag = Tag(fact["tags"][0])
 
