@@ -317,7 +317,7 @@
                 <property name="can_focus">True</property>
                 <property name="tab_hborder">8</property>
                 <property name="tab_vborder">4</property>
-                <signal name="switch_page" handler="on_window_tabs_switch_page"/>
+                <signal name="switch_page" handler="on_window_tabs_switch_page" after="yes"/>
                 <child>
                   <object class="GtkAlignment" id="overview_tab">
                     <property name="visible">True</property>

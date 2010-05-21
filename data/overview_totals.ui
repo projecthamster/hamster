@@ -79,7 +79,6 @@
                 <child>
                   <object class="GtkEventBox" id="reports_box">
                     <property name="visible">True</property>
-                    <signal name="expose_event" handler="on_reports_box_expose_event"/>
                     <child>
                       <object class="GtkVBox" id="vbox1">
                         <property name="visible">True</property>

@@ -131,10 +131,6 @@ class Chart(graphics.Scene):
 
 
     def plot(self, keys, data):
-        if data == self.data:
-            self.show()
-            self.redraw()
-            return
         self.data = data
 
         bars = dict([(bar.key, bar.normalized) for bar in self.bars])
@@ -175,7 +171,7 @@ class Chart(graphics.Scene):
 
     def on_enter_frame(self, scene, context):
         # adjust sizes and positions on redraw
-        
+
         self.find_colors()
 
         self.plot_area.y = 0

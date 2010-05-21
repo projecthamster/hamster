@@ -325,6 +325,7 @@ class Overview(object):
         elif pagenum == 1:
             self.get_widget('remove').set_sensitive(False)
             self.get_widget('edit').set_sensitive(False)
+            self.reports.do_charts()
 
 
     def on_add_clicked(self, button):
