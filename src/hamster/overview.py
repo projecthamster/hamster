@@ -204,10 +204,14 @@ class Overview(object):
         if position == gtk.ENTRY_ICON_SECONDARY:
             widget.set_text('')
 
+        self.search()
+
+    def on_search_activate(self, widget):
+        self.search()
+
     def on_search_changed(self, widget):
         has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
-        self.search()
 
     def on_report_button_clicked(self, widget):
         def on_report_chosen(widget, format, path):

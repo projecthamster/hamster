@@ -244,6 +244,7 @@
                         <property name="primary_icon_sensitive">True</property>
                         <signal name="changed" handler="on_search_changed"/>
                         <signal name="icon_press" handler="on_search_icon_press"/>
+                        <signal name="activate" handler="on_search_activate"/>
                       </object>
                     </child>
                   </object>
