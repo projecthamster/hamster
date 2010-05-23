@@ -76,10 +76,20 @@ class Overview(object):
         self.get_widget("reports_tab").add(self.reports)
 
         self.range_combo = gtk.combo_box_new_text()
+        def last_range_index():
+            """Get the number of elements in the range_combo"""
+            return self.range_combo.get_model().iter_n_children(None)-1
+
+        self.range_combo.append_text(_("Day"))
+        self.SHOW_DAY = last_range_index()
         self.range_combo.append_text(_("Week"))
+        self.SHOW_WEEK = last_range_index()
         self.range_combo.append_text(_("Month"))
+        self.SHOW_MONTH = last_range_index()
         self.range_combo.append_text(_("Date Range"))
-        self.range_combo.set_active(0)
+        self.SHOW_DATE_RANGE = last_range_index()
+        
+        self.range_combo.set_active(self.SHOW_WEEK)
         self.range_combo.connect("changed", self.on_range_combo_changed)
 
 
@@ -244,16 +254,21 @@ class Overview(object):
         self.get_widget("preset_range").hide()
         self.get_widget("range_box").hide()
 
-        if idx == 2: # date range
+        if idx == self.SHOW_DATE_RANGE:
             self.get_widget("range_box").show()
         else:
-            if idx == 0: # week
+            if idx == self.SHOW_DAY:
+                self.start_date = self.view_date
+                self.end_date = self.start_date + dt.timedelta(0)
+                self.get_widget("preset_range").show()
+
+            elif idx == self.SHOW_WEEK:
                 self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
                 self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
                 self.end_date = self.start_date + dt.timedelta(6)
                 self.get_widget("preset_range").show()
 
-            elif idx == 1: #month
+            elif idx == self.SHOW_MONTH:
                 self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
                 first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
                 self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
@@ -280,10 +295,13 @@ class Overview(object):
         return self.range_combo.get_active()
 
     def on_prev_clicked(self, button):
-        if self._chosen_range() == 0:  # week
+        if self._chosen_range() == self.SHOW_DAY:
+            self.start_date -= dt.timedelta(1)
+            self.end_date -= dt.timedelta(1)
+        elif self._chosen_range() == self.SHOW_WEEK:
             self.start_date -= dt.timedelta(7)
             self.end_date -= dt.timedelta(7)
-        elif self._chosen_range() == 1: # month
+        elif self._chosen_range() == self.SHOW_MONTH:
             self.end_date = self.start_date - dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.end_date.year, self.end_date.month)
             self.start_date = self.end_date - dt.timedelta(days_in_month - 1)
@@ -292,10 +310,13 @@ class Overview(object):
         self.search()
 
     def on_next_clicked(self, button):
-        if self._chosen_range() == 0:  # week
+        if self._chosen_range() == self.SHOW_DAY:
+            self.start_date += dt.timedelta(1)
+            self.end_date += dt.timedelta(1)
+        elif self._chosen_range() == self.SHOW_WEEK:
             self.start_date += dt.timedelta(7)
             self.end_date += dt.timedelta(7)
-        elif self._chosen_range() == 1: # month
+        elif self._chosen_range() == self.SHOW_MONTH:
             self.start_date = self.end_date + dt.timedelta(1)
             first_weekday, days_in_month = calendar.monthrange(self.start_date.year, self.start_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
@@ -307,12 +328,16 @@ class Overview(object):
     def on_home_clicked(self, button):
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
                                                         minutes = self.day_start.minute)).date()
-        if self._chosen_range() == 0: # week
+        if self._chosen_range() == self.SHOW_DAY:
+            self.start_date = self.view_date
+            self.end_date = self.start_date + dt.timedelta(0)
+
+        elif self._chosen_range() == self.SHOW_WEEK:
             self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
             self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
             self.end_date = self.start_date + dt.timedelta(6)
 
-        elif self._chosen_range() == 1: # month
+        elif self._chosen_range() == self.SHOW_MONTH:
             self.start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
             first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
             self.end_date = self.start_date + dt.timedelta(days_in_month - 1)
