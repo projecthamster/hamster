@@ -76,18 +76,15 @@ class Overview(object):
         self.get_widget("reports_tab").add(self.reports)
 
         self.range_combo = gtk.combo_box_new_text()
-        def last_range_index():
-            """Get the number of elements in the range_combo"""
+        def add_range_option(label):
+            """Insert a new item in the range combo and return its index"""
+            self.range_combo.append_text(label)
             return self.range_combo.get_model().iter_n_children(None)-1
 
-        self.range_combo.append_text(_("Day"))
-        self.SHOW_DAY = last_range_index()
-        self.range_combo.append_text(_("Week"))
-        self.SHOW_WEEK = last_range_index()
-        self.range_combo.append_text(_("Month"))
-        self.SHOW_MONTH = last_range_index()
-        self.range_combo.append_text(_("Date Range"))
-        self.SHOW_DATE_RANGE = last_range_index()
+        self.SHOW_DAY = add_range_option(_("Day"))
+        self.SHOW_WEEK = add_range_option(_("Week"))
+        self.SHOW_MONTH = add_range_option(_("Month"))
+        self.SHOW_DATE_RANGE = add_range_option(_("Date Range"))
         
         self.range_combo.set_active(self.SHOW_WEEK)
         self.range_combo.connect("changed", self.on_range_combo_changed)
