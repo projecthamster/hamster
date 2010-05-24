@@ -305,7 +305,7 @@ class FactTree(gtk.TreeView):
             if data and "id" in data:
                 renderer = view.get_column(0).get_cell_renderers()[0]
 
-                label = data["name"]
+                label = data["description"]
                 self.set_tooltip_text(label)
 
             self.trigger_tooltip_query()
