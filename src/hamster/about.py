@@ -40,7 +40,7 @@ class About(object):
             "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
             "version" : VERSION,
             "comments" : _("Project Hamster — track your time"),
-            "copyright" : _(u"Copyright © 2007–2009 Toms Bauģis and others"),
+            "copyright" : _(u"Copyright © 2007–2010 Toms Bauģis and others"),
             "website" : "http://projecthamster.wordpress.com/",
             "website-label" : _("Project Hamster Website"),
             "title": _("About Time Tracker"),
@@ -62,4 +62,3 @@ class About(object):
 
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()
-
