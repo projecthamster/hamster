@@ -1,4 +1,15 @@
 ===============
+Version 2.31.2
+===============
+  * optional integration with gtg (via preferences)
+  * all kinds of bugfixes
+
+  Updated translations
+    * ee (Ivar Smolin)
+    * en@shaw (Thomas Thurman)
+    * es (Jorge González)
+
+===============
 Version 2.31.1.2
 ===============
   * hamster-service had not been packed in the tarball
