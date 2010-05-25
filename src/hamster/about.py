@@ -19,7 +19,7 @@
 
 
 from os.path import join
-from defs import VERSION
+from configuration import runtime
 import gtk
 
 def on_email(about, mail):
@@ -38,7 +38,7 @@ class About(object):
         infos = {
             "program-name" : _("Time Tracker"),
             "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
-            "version" : VERSION,
+            "version" : runtime.version,
             "comments" : _("Project Hamster — track your time"),
             "copyright" : _(u"Copyright © 2007–2010 Toms Bauģis and others"),
             "website" : "http://projecthamster.wordpress.com/",

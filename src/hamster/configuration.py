@@ -26,7 +26,6 @@ import gconf
 import gettext
 import os
 from os.path import exists, dirname, realpath
-import defs
 from client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import logging
@@ -55,33 +54,37 @@ class RuntimeStore(Singleton):
 
 
     def __init__(self):
-        gettext.install("hamster-applet", unicode = True)
+          gettext.install("hamster-applet", unicode = True)
 
-        # Makefile.in shouldn't be in the final install
-        module_dir = dirname(realpath(__file__))
-        if exists(os.path.join(module_dir, "Makefile")):
-            self.data_dir = os.path.join(module_dir, '..', '..', 'data')
-        else:
-            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+          # Makefile.in shouldn't be in the final install
+          try:
+               import defs
+               self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+               self.version = defs.VERSION
+          except:
+               module_dir = dirname(realpath(__file__))
+               self.data_dir = os.path.join(module_dir, '..', '..', 'data')
+               self.version = "uninstalled"
 
-        self.storage = Storage()
 
-        # figure out the correct database file
-        old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
-        new_db_file = os.path.join(xdg_data_home, "hamster-applet", "hamster.db")
+          self.storage = Storage()
 
-        # move database to ~/.local/share/hamster-applet
-        if os.path.exists(old_db_file):
-            db_path, _ = os.path.split(os.path.realpath(new_db_file))
-            if not os.path.exists(db_path):
-                try:
-                    os.makedirs(db_path, 0744)
-                except Exception, msg:
-                    logging.error("could not create user dir (%s): %s" % (db_path, msg))
-            if os.path.exists(new_db_file):
-                logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
-            else:
-                os.rename(old_db_file, new_db_file)
+          # figure out the correct database file
+          old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+          new_db_file = os.path.join(xdg_data_home, "hamster-applet", "hamster.db")
+
+          # move database to ~/.local/share/hamster-applet
+          if os.path.exists(old_db_file):
+              db_path, _ = os.path.split(os.path.realpath(new_db_file))
+              if not os.path.exists(db_path):
+                  try:
+                      os.makedirs(db_path, 0744)
+                  except Exception, msg:
+                      logging.error("could not create user dir (%s): %s" % (db_path, msg))
+              if os.path.exists(new_db_file):
+                  logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
+              else:
+                  os.rename(old_db_file, new_db_file)
 
     @property
     def art_dir(self):
