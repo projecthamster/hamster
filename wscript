@@ -28,8 +28,13 @@ def configure(conf):
     conf.sub_config("help")
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster-applet', 'src/hamster-applet')
-    bld.install_files('${BINDIR}', 'src/hamster-standalone src/gnome-time-tracker src/hamster-client src/hamster-service')
+    bld.install_files('${LIBDIR}/hamster-applet', 'src/hamster-applet', chmod = 0755)
+    bld.install_files('${BINDIR}',
+                      """src/hamster-standalone
+                         src/gnome-time-tracker
+                         src/hamster-client
+                         src/hamster-service""",
+                      chmod = 0755)
 
 
     # set correct flags in defs.py
@@ -56,7 +61,7 @@ def build(bld):
     def post(ctx):
         # Postinstall tasks:
         # gnome.postinstall_scrollkeeper('hamster-applet') # Installing the user docs
-        # gnome.postinstall_schemas('hamster-applet') # Installing GConf schemas
+        gnome.postinstall_schemas('hamster-applet') # Installing GConf schemas
         gnome.postinstall_icons() # Updating the icon cache
 
     bld.add_post_fun(post)
