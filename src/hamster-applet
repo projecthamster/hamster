@@ -91,17 +91,10 @@ if __name__ == "__main__":
                             format = log_format)
 
     try:
-        from hamster import defs
+        from hamster import stuff
+        stuff.setup_i18n()
+
         from hamster.configuration import runtime, dialogs
-
-        # Setup i18n
-        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
-        for module in (gettext, locale):
-            module.bindtextdomain('hamster-applet', locale_dir)
-            module.textdomain('hamster-applet')
-
-            if hasattr(module, 'bind_textdomain_codeset'):
-                module.bind_textdomain_codeset('hamster-applet','UTF-8')
 
         gtk.window_set_default_icon_name("hamster-applet")
 
@@ -119,7 +112,7 @@ if __name__ == "__main__":
                 dialogs.prefs.show()
 
             else: #default to main applet
-                gnome.init(defs.PACKAGE, defs.VERSION)
+                gnome.init("hamster-applet", runtime.version)
 
                 app = gtk.Window(gtk.WINDOW_TOPLEVEL)
                 app.set_title(_(u"Time Tracker"))
@@ -134,8 +127,8 @@ if __name__ == "__main__":
             gnomeapplet.bonobo_factory(
                 "OAFIID:Hamster_Applet_Factory",
                 gnomeapplet.Applet.__gtype__,
-                defs.PACKAGE,
-                defs.VERSION,
+                "hamster-applet",
+                runtime.version,
                 applet_factory)
     except:
         # make sure the error appears somewhere

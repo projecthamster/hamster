@@ -30,8 +30,20 @@ from itertools import groupby
 import datetime as dt
 import time
 import re
-import locale
+import gettext, locale
 import os
+
+def setup_i18n():
+    # Setup i18n
+    from configuration import runtime
+    locale_dir = os.path.abspath(os.path.join(runtime.data_dir, "..", "locale"))
+    for module in (gettext, locale):
+        module.bindtextdomain('hamster-applet', locale_dir)
+        module.textdomain('hamster-applet')
+
+        if hasattr(module, 'bind_textdomain_codeset'):
+            module.bind_textdomain_codeset('hamster-applet','UTF-8')
+
 
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.
