@@ -34,7 +34,6 @@ import locale
 from configuration import conf, runtime, dialogs
 
 import stuff
-import keybinder
 
 # controllers for other windows
 import widgets
@@ -238,9 +237,6 @@ class HamsterApplet(object):
         self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
 
-        self.hotkey = conf.get("keybinding")
-        self.bind_hotkey()
-
         conf.connect('conf-changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
@@ -251,8 +247,9 @@ class HamsterApplet(object):
 
         # refresh hamster every 60 seconds to update duration
         gobject.timeout_add_seconds(60, self.refresh_hamster)
-        runtime.storage.connect('activities-changed',self.after_activity_update)
-        runtime.storage.connect('facts-changed',self.after_fact_update)
+        runtime.storage.connect('activities-changed', self.after_activity_update)
+        runtime.storage.connect('facts-changed', self.after_fact_update)
+        runtime.storage.connect('toggle-called', self.on_toggle_called)
 
         self.screen = None
         if self.workspace_tracking:
@@ -267,15 +264,6 @@ class HamsterApplet(object):
         self._gui.connect_signals(self)
 
         self.prev_size = None
-
-
-    def bind_hotkey(self):
-        try:
-            print 'Binding shortcut %s to popup hamster' % self.hotkey
-            keybinder.bind(self.hotkey, self.on_keybinding_activated)
-        except KeyError:
-            pass # don't care
-
 
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
@@ -652,10 +640,8 @@ class HamsterApplet(object):
                                      "hamster-applet")
             self.notification.show()
 
-    """global shortcuts"""
-    def on_keybinding_activated(self):
+    def on_toggle_called(self, client):
         self.__show_toggle(not self.button.get_active())
-
 
     def on_conf_changed(self, event, key, value):
         if key == "enable_timeout":
@@ -675,16 +661,6 @@ class HamsterApplet(object):
                 if self.screen:
                     self.screen.disconnect(self.screen.workspace_handler)
                     self.screen = None
-        elif key == "keybinding":
-            try:
-                keybinder.unbind(self.hotkey)
-            except KeyError:
-                pass # don't care
-
-            self.hotkey = value
-            self.bind_hotkey()
-
-
 
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")

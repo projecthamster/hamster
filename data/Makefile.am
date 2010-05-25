@@ -39,12 +39,14 @@ resources_DATA = \
         applet.ui \
 	hamster.db
 
-xml_in_files = 99-hamster-applet.xml
+xml_in_files = 90-hamster-applet.xml.in
 
 if CUSTOM_KEYBINDINGS
 xmldir = $(KEYBINDINGS_DIR)
-xml_DATA = $(xml_in_files)
+xml_DATA = $(xml_in_files:.xml.in=.xml)
 endif
+
+@INTLTOOL_XML_NOMERGE_RULE@
 
 hamsterbindir = $(libdir)/hamster-applet
 
@@ -68,6 +70,7 @@ endif
 DISTCLEANFILES = \
 	$(schema_DATA) \
 	$(server_DATA) \
+	$(xml_in_files)	\
 	$(server_in_files)
 
 EXTRA_DIST = \
@@ -75,6 +78,7 @@ EXTRA_DIST = \
 	$(xml_in_files) \
 	Hamster_Applet.server.in.in \
 	hamster-standalone.desktop.in.in \
-	$(resources_DATA)
+	$(resources_DATA) \
+	$(xml_in_files)
 
 CLEANFILES = hamster-standalone.desktop

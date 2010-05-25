@@ -167,7 +167,6 @@ AC_CONFIG_FILES([
 Makefile
 src/Makefile
 src/hamster/defs.py
-src/hamster/keybinder/Makefile
 data/Makefile
 data/art/Makefile
 po/Makefile.in

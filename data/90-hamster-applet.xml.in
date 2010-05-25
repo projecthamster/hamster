@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<KeyListEntries _name="Project Hamster (Gnome Time Tracker)" package="hamster-applet">
+    <KeyListEntry name="/desktop/gnome/keybindings/hamster-applet/binding" />
+</KeyListEntries>

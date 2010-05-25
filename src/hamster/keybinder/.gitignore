@@ -1,8 +1,0 @@
-_keybinder.c
-_keybinder.la
-_keybinder.lo
-_keybindermodule.lo
-eggaccelerators.lo
-tomboykeybinder.lo
-.deps
-.libs

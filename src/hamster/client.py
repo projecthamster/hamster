@@ -58,6 +58,7 @@ class Storage(gobject.GObject):
         "tags-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "facts-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "toggle-called": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):
@@ -73,6 +74,7 @@ class Storage(gobject.GObject):
         bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
         bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
         bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
 
 
     def _on_tags_changed(self):
@@ -84,6 +86,12 @@ class Storage(gobject.GObject):
     def _on_activities_changed(self):
         self.emit("activities-changed")
 
+    def _on_toggle_called(self):
+        self.emit("toggle-called")
+
+    def toggle(self):
+        """toggle visibility of the main application window if any"""
+        self.conn.Toggle()
 
     def get_todays_facts(self):
         """returns facts of the current date, respecting hamster midnight

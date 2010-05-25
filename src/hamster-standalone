@@ -31,7 +31,7 @@ import dbus, dbus.service, dbus.mainloop.glib
 
 from hamster.configuration import conf, runtime, dialogs
 
-from hamster import stuff, keybinder
+from hamster import stuff
 
 # controllers for other windows
 from hamster import widgets
@@ -97,9 +97,6 @@ class ProjectHamster(object):
         self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
 
-        self.hotkey = conf.get("keybinding")
-        self.bind_hotkey()
-
         conf.connect('conf-changed', self.on_conf_changed)
 
         # Load today's data, activities and set label
@@ -111,6 +108,7 @@ class ProjectHamster(object):
 
         runtime.storage.connect('activities-changed',self.after_activity_update)
         runtime.storage.connect('facts-changed',self.after_fact_update)
+        runtime.storage.connect('toggle-called', self.on_toggle_called)
 
         self.screen = None
         if self.workspace_tracking:
@@ -268,24 +266,6 @@ class ProjectHamster(object):
         fact = self.treeview.get_selected_fact()
         runtime.storage.remove_fact(fact["id"])
 
-    def bind_hotkey(self):
-        try:
-            print 'Binding shortcut %s to popup hamster' % self.hotkey
-            keybinder.bind(self.hotkey, self.on_keybinding_activated)
-        except KeyError:
-            pass # don't care
-
-    def on_keybinding_activated(self):
-        print "boink"
-        self.window.present()
-
-
-    def _delayed_display(self):
-        """show window only when gtk has become idle. otherwise we get
-        mixed results. TODO - this looks like a hack though"""
-        self.window.present()
-        self.new_name.grab_focus()
-
 
     """events"""
     def on_todays_keys(self, tree, event):
@@ -422,7 +402,9 @@ class ProjectHamster(object):
                                      "hamster-applet")
             self.notification.show()
 
-    """global shortcuts"""
+    def on_toggle_called(self, client):
+        self.window.present()
+
     def on_conf_changed(self, event, key, value):
         if key == "enable_timeout":
             self.timeout_enabled = value
@@ -441,15 +423,6 @@ class ProjectHamster(object):
                 if self.screen:
                     self.screen.disconnect(self.screen.workspace_handler)
                     self.screen = None
-        elif key == "keybinding":
-            try:
-                keybinder.unbind(self.hotkey)
-            except KeyError:
-                pass # don't care
-
-            self.hotkey = value
-            self.bind_hotkey()
-
 
     def on_activity_text_changed(self, widget):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")

@@ -60,6 +60,9 @@ class Storage(dbus.service.Object):
     @dbus.service.signal("org.gnome.Hamster")
     def ActivitiesChanged(self): pass
 
+    @dbus.service.signal("org.gnome.Hamster")
+    def ToggleCalled(self): pass
+
     def dispatch_overwrite(self):
         self.TagsChanged()
         self.FactsChanged()
@@ -81,8 +84,15 @@ class Storage(dbus.service.Object):
         self.mainloop.quit()
 
 
-    # facts
+    @dbus.service.method("org.gnome.Hamster")
+    def Toggle(self):
+        """Toggle visibility of the main application window.
+           If several instances are available, it will toggle them all.
+        """
+        #log.logger.info("Hamster Service is being shutdown")
+        self.ToggleCalled()
 
+    # facts
     @dbus.service.method("org.gnome.Hamster", in_signature='ssiissb', out_signature='i')
     def AddFact(self, activity_name, tags, start_time, end_time,
                 category_name = None, description = None, temporary = False):

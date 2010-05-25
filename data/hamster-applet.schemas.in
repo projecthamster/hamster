@@ -1,17 +1,6 @@
 <gconfschemafile>
     <schemalist>
         <schema>
-            <key>/schemas/apps/hamster-applet/keybinding</key>
-            <applyto>/apps/hamster-applet/keybinding</applyto>
-            <owner>hamster-applet</owner>
-            <type>string</type>
-            <default>&lt;Super&gt;H</default>
-            <locale name="C">
-                <short>Show window</short>
-                <long>Keyboard shortcut for showing the Time Tracker window.</long>
-            </locale>
-        </schema>
-        <schema>
             <key>/schemas/apps/hamster-applet/enable_timeout</key>
             <applyto>/apps/hamster-applet/enable_timeout</applyto>
             <owner>hamster-applet</owner>
@@ -113,6 +102,41 @@
                     names that should be switched to, workspaces represented by
                     the index of item.
                 </long>
+            </locale>
+        </schema>
+
+
+        <schema>
+            <key>/schemas/desktop/gnome/keybindings/hamster-applet/binding</key>
+            <applyto>/desktop/gnome/keybindings/hamster-applet/binding</applyto>
+            <owner>hamster-applet</owner>
+            <type>string</type>
+            <default>&lt;Super&gt;h</default>
+            <locale name="C">
+                <short>Show / hide Time Tracker Window</short>
+                <long>Keyboard shortcut for showing / hiding the Time Tracker window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/desktop/gnome/keybindings/hamster-applet/action</key>
+            <applyto>/desktop/gnome/keybindings/hamster-applet/action</applyto>
+            <owner>hamster-applet</owner>
+            <type>string</type>
+            <default>hamster-client toggle</default>
+            <locale name="C">
+                <short>Toggle hamster application window action</short>
+                <long>Command for toggling visibility of the hamster application window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/desktop/gnome/keybindings/hamster-applet/name</key>
+            <applyto>/desktop/gnome/keybindings/hamster-applet/name</applyto>
+            <owner>hamster-applet</owner>
+            <type>string</type>
+            <default>Toggle hamster application window</default>
+            <locale name="C">
+                <short>Toggle hamster application window</short>
+                <long>Toggle visibility of the hamster application window.</long>
             </locale>
         </schema>
     </schemalist>

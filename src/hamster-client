@@ -39,6 +39,9 @@ class HamsterClient(object):
     def __init__(self):
         self.storage = client.Storage()
 
+    def toggle(self):
+        self.storage.toggle()
+
 
     def start_tracking(self, activity, start_time = None, end_time = None):
         '''Start a new activity.'''
@@ -257,15 +260,17 @@ Time formats:
 
     command, args = sys.argv[1], sys.argv[2:]
 
-
-    if command not in ['start', 'stop', 'list', 'list-activities', 'list-categories']:
+    if command not in ['toggle', 'start', 'stop', 'list', 'list-activities', 'list-categories']:
         # unknown command - print usage, go home
         sys.exit(usage % {'prog': sys.argv[0]})
 
 
     hamster_client = HamsterClient()
 
-    if command == 'start':
+    if command == 'toggle':
+        hamster_client.toggle()
+
+    elif command == 'start':
         if not args: # mandatory is only the activity name
             sys.exit(usage % {'prog': sys.argv[0]})
 
