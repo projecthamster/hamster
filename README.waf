@@ -7,5 +7,9 @@ cd src
 
 
 To install:
-  ./waf --prefix=/usr configure build
+  ./waf --prefix=/usr configure
   sudo ./waf install
+
+
+
+Read more about waf online: http://code.google.com/p/waf/
