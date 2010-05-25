@@ -1,5 +1,5 @@
 <oaf_info>
-    <oaf_server iid="OAFIID:Hamster_Applet_Factory" type="exe" location="@LIBEXECDIR@/hamster-applet">
+    <oaf_server iid="OAFIID:Hamster_Applet_Factory" type="exe" location="@LIBDIR@/hamster-applet/hamster-applet">
         <oaf_attribute name="repo_ids" type="stringv">
             <item value="IDL:Bonobo/GenericFactory:1.0"/>
             <item value="IDL:Bonobo/Unknown:1.0"/>
