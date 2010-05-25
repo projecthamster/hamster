@@ -1,0 +1,6 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# Thomas Nagy, 2006-2009 (ita)
+
+def build(bld):
+    bld(features = 'intltool_po', appname = 'hamster-applet')

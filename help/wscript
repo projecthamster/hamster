@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+## Mallard functionality definitions ##
+import os
+import Task
+import TaskGen
+
+def _read_makefile_am(filename):
+	"read a Makefile.am file for DOC_* variable definitions, return a dict"
+	varstring = open(filename).read()
+	varstring = varstring.replace("\\\n", " ")
+	varlines = [L for L in varstring.splitlines() if L.startswith("DOC")]
+	return dict(tuple(map(str.strip, var.split("=", 1))) for var in varlines)
+
+def init_mallard(self):
+	mf_am = self.path.find_resource(self.variable_definitions)
+	DOC_VAR = _read_makefile_am(mf_am.abspath())
+
+	require_vars = "DOC_ID DOC_LINGUAS DOC_PAGES".split()
+	have_vars = set(var for var in DOC_VAR if DOC_VAR[var])
+	missing_vars = set(require_vars).difference(have_vars)
+	if missing_vars:
+		print "Missing DOC variable declarations in %s:" % (mf_am.abspath())
+		print "\n".join(missing_vars)
+
+	self.bld.env.update(DOC_VAR)
+	self.default_install_path='${PREFIX}/share/gnome/help/${DOC_ID}'
+
+def apply_mallard(self):
+	bld = self.bld
+	lst = self.to_list(bld.env["DOC_LINGUAS"])
+	cnode = self.path.find_dir("C")
+	self.bld.rescan(cnode)
+
+	pages = [p for p in self.bld.cache_dir_contents[cnode.id]
+			if (os.path.splitext(p)[-1].lower()) == ".page"]
+
+	# Check if the declared page list is consistent
+	declared_pages = self.to_list(bld.env["DOC_PAGES"])
+	missing_pages = set(pages).difference(declared_pages)
+	if missing_pages:
+		print "Warning: Some pages not declared:"
+		print "\n".join(missing_pages)
+
+	for lang in lst:
+		node = self.path.find_resource("%s/%s.po" % (lang, lang))
+		for page in pages:
+			tsk = self.create_task('xml2po')
+			out = self.path.find_or_declare('%s/%s' % (lang, page))
+			src = self.path.find_resource('C/%s' % page)
+			tsk.set_inputs([node,src])
+			tsk.set_outputs(out)
+			tsk.install_path = os.path.join(self.install_path, lang)
+	if bld.is_install:
+		for page in pages:
+			out = "%s/%s" % (cnode.abspath(), page)
+			instdir = os.path.join(self.install_path, "C")
+			bld.install_files(instdir, out)
+
+Task.simple_task_type('xml2po', '${XML2PO} ${XML2POFLAGS} ${SRC} > ${TGT}',
+		color='BLUE')
+
+TaskGen.feature("mallard")(init_mallard)
+TaskGen.feature("mallard")(apply_mallard)
+TaskGen.after('init_mallard')(apply_mallard)
+
+## End Mallard functionality ##
+
+
+# Build Configuration
+
+def set_options(opt):
+	pass
+
+def configure(conf):
+	xml2po = conf.find_program('xml2po', var='XML2PO')
+	conf.env['XML2POFLAGS'] = '-mmallard -p'
+
+def build(bld):
+	if bld.env["XML2PO"]:
+		task = bld.new_task_gen(
+			features="mallard",
+			variable_definitions="Makefile.am",
+		)
