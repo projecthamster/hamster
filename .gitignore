@@ -21,3 +21,6 @@ m4
 gnome-doc-utils.make
 hamster-applet-*.tar.gz
 org.gnome.hamster.service
+.waf*
+.lock-wscript
+build
