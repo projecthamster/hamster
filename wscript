@@ -31,10 +31,10 @@ def build(bld):
     bld.install_files('${LIBDIR}/hamster-applet', 'src/hamster-applet', chmod = 0755)
     bld.install_files('${BINDIR}',
                       """src/hamster-standalone
-                         src/gnome-time-tracker
                          src/hamster-client
                          src/hamster-service""",
                       chmod = 0755)
+    bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-service')
 
 
     # set correct flags in defs.py
