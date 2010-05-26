@@ -34,9 +34,14 @@ import gettext, locale
 import os
 
 def setup_i18n():
-    # Setup i18n
-    from configuration import runtime
-    locale_dir = os.path.abspath(os.path.join(runtime.data_dir, "..", "locale"))
+    #determine location of po files
+    try:
+        import defs
+        data_dir = defs.DATA_DIR
+    except:
+        data_dir = os.path.join(realpath(__file__), '..', 'data')
+
+    locale_dir = os.path.abspath(os.path.join(data_dir, "..", "locale"))
     for module in (gettext, locale):
         module.bindtextdomain('hamster-applet', locale_dir)
         module.textdomain('hamster-applet')
