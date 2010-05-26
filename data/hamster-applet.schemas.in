@@ -111,7 +111,7 @@
             <applyto>/desktop/gnome/keybindings/hamster-applet/binding</applyto>
             <owner>hamster-applet</owner>
             <type>string</type>
-            <default>&lt;Super&gt;h</default>
+            <default></default>
             <locale name="C">
                 <short>Show / hide Time Tracker Window</short>
                 <long>Keyboard shortcut for showing / hiding the Time Tracker window.</long>
