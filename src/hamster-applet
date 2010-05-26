@@ -23,7 +23,6 @@ import gtk, gnomeapplet
 import sys
 from optparse import OptionParser
 import os.path
-import gettext, locale
 import gnome
 import logging
 import gobject

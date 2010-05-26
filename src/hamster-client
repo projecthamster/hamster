@@ -24,10 +24,9 @@
 import sys, os
 import optparse
 import re
-import locale, gettext
 import datetime as dt
 
-from hamster import client, defs, stuff
+from hamster import client, stuff
 
 class ConfigurationError(Exception):
     '''An error of configuration.'''

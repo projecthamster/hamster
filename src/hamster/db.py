@@ -38,7 +38,6 @@ import storage
 import stuff
 from shutil import copy as copyfile
 import datetime as dt
-import gettext
 from xdg.BaseDirectory import xdg_data_home
 import gio
 

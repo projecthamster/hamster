@@ -23,9 +23,7 @@ License: GPLv2
 """
 
 import gconf
-import gettext
 import os
-from os.path import exists, dirname, realpath
 from client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import logging
@@ -54,15 +52,13 @@ class RuntimeStore(Singleton):
 
 
     def __init__(self):
-          gettext.install("hamster-applet", unicode = True)
-
           # Makefile.in shouldn't be in the final install
           try:
                import defs
                self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
                self.version = defs.VERSION
           except:
-               module_dir = dirname(realpath(__file__))
+               module_dir = os.path.dirname(os.path.realpath(__file__))
                self.data_dir = os.path.join(module_dir, '..', '..', 'data')
                self.version = "uninstalled"
 
@@ -75,7 +71,7 @@ class RuntimeStore(Singleton):
 
           # move database to ~/.local/share/hamster-applet
           if os.path.exists(old_db_file):
-              db_path, _ = os.path.split(os.path.realpath(new_db_file))
+              db_path = os.path.split(os.path.realpath(new_db_file), 1)[0]
               if not os.path.exists(db_path):
                   try:
                       os.makedirs(db_path, 0744)

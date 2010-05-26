@@ -21,7 +21,6 @@
 
 import logging
 import datetime as dt
-import gettext, locale
 import os.path
 
 import gtk
