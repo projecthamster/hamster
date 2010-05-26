@@ -1,10 +1,8 @@
 #!/usr/bin/python
 # nicked off gwibber
 
-import os, sys, gobject, dbus
-
+import gobject, dbus
 from dbus.mainloop.glib import DBusGMainLoop
-import locale, gettext
 
 DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
@@ -14,18 +12,9 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     quit()
 
 
-LAUNCH_DIR = os.path.abspath(sys.path[0])
-SOURCE_DIR = LAUNCH_DIR
-STORAGE = os.path.join(SOURCE_DIR, "hamster", "storage.py")
-
 if __name__ == '__main__':
     from hamster import stuff
     stuff.setup_i18n()
-
-    # adjust path if running from source
-    if os.path.exists(SOURCE_DIR):
-        sys.path.insert(0, os.path.realpath(os.path.dirname(SOURCE_DIR)))
-
 
     from hamster import db
     print "hamster-service up"
