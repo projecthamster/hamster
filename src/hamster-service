@@ -5,7 +5,6 @@ import os, sys, gobject, dbus
 
 from dbus.mainloop.glib import DBusGMainLoop
 import locale, gettext
-from hamster import defs
 
 DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
