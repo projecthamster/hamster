@@ -39,7 +39,7 @@ def setup_i18n():
         import defs
         data_dir = defs.DATA_DIR
     except:
-        data_dir = os.path.join(realpath(__file__), '..', 'data')
+        data_dir = os.path.join(os.path.realpath(__file__), '..', 'data')
 
     locale_dir = os.path.abspath(os.path.join(data_dir, "..", "locale"))
     for module in (gettext, locale):
