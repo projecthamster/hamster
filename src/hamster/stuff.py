@@ -37,17 +37,29 @@ def setup_i18n():
     #determine location of po files
     try:
         import defs
-        data_dir = defs.DATA_DIR
     except:
-        data_dir = os.path.join(os.path.realpath(__file__), '..', 'data')
+        defs = None
 
-    locale_dir = os.path.abspath(os.path.join(data_dir, "..", "locale"))
-    for module in (gettext, locale):
-        module.bindtextdomain('hamster-applet', locale_dir)
-        module.textdomain('hamster-applet')
 
-        if hasattr(module, 'bind_textdomain_codeset'):
-            module.bind_textdomain_codeset('hamster-applet','UTF-8')
+    # to avoid confusion, we won't translate unless running installed
+    # reason for that is that bindtextdomain is expecting
+    # localedir/language/LC_MESSAGES/domain.mo format, but we have
+    # localedir/language.mo at it's best (after build)
+    # and there does not seem to be any way to run straight from sources
+    if defs:
+        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
+
+        for module in (locale,):
+            module.bindtextdomain('hamster-applet', locale_dir)
+            module.textdomain('hamster-applet')
+
+            module.bind_textdomain_codeset('hamster-applet','utf8')
+
+        gettext.install("hamster-applet", locale_dir, unicode = True)
+
+    else:
+        gettext.install("hamster-applet-uninstalled")
+
 
 
 def format_duration(minutes, human = True):
