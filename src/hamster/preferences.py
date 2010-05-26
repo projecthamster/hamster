@@ -281,7 +281,6 @@ class PreferencesEditor:
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
         self.get_widget("idle_track").set_active(conf.get("enable_timeout"))
         self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
-        self.get_widget("keybinding").set_text(conf.get("keybinding"))
 
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
@@ -787,9 +786,6 @@ class PreferencesEditor:
         value = int(scale.get_value())
         conf.set("notify_interval", value)
         self.get_widget("notify_on_idle").set_sensitive(value <= 120)
-
-    def on_keybinding_changed(self, textbox):
-        conf.set("keybinding", textbox.get_text().decode('utf8', 'replace'))
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.get_time()
