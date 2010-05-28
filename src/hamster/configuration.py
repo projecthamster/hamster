@@ -52,12 +52,12 @@ class RuntimeStore(Singleton):
 
 
     def __init__(self):
-          # Makefile.in shouldn't be in the final install
           try:
                import defs
                self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
                self.version = defs.VERSION
           except:
+               # if defs is not there, we are running from sources
                module_dir = os.path.dirname(os.path.realpath(__file__))
                self.data_dir = os.path.join(module_dir, '..', '..', 'data')
                self.version = "uninstalled"
@@ -71,7 +71,7 @@ class RuntimeStore(Singleton):
 
           # move database to ~/.local/share/hamster-applet
           if os.path.exists(old_db_file):
-              db_path = os.path.split(os.path.realpath(new_db_file), 1)[0]
+              db_path = os.path.dirname(os.path.realpath(new_db_file))
               if not os.path.exists(db_path):
                   try:
                       os.makedirs(db_path, 0744)
