@@ -6,7 +6,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2010-04-28 05:50+0000\n"
 "PO-Revision-Date: 2010-04-28 19:08+0100\n"
