@@ -34,7 +34,7 @@ def build(bld):
                          src/hamster-client
                          src/hamster-service""",
                       chmod = 0755)
-    bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-service')
+    bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-standalone')
 
 
     # set correct flags in defs.py
