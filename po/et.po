@@ -1,19 +1,19 @@
-# projektihamstri eesti keele tõlge.
+# Projektihamstri eesti keele tõlge.
 # Estonian translation of Project Hamster.
 #
-# Copyright (C) 2008-2010 The GNOME Project.
+# Copyright (C) 2008–2010 The GNOME Project.
 # This file is distributed under the same license as the hamster-applet package.
 #
-# Ivar Smolin <okul linux ee>, 2008-2010.
-# Mattias Põldaru <mahfiaz gmail com>, 2009-2010.
+# Ivar Smolin <okul linux ee>, 2008–2010.
+# Mattias Põldaru <mahfiaz gmail com>, 2009–2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-05-08 12:29+0000\n"
-"PO-Revision-Date: 2010-05-09 09:28+0300\n"
+"POT-Creation-Date: 2010-05-26 09:56+0000\n"
+"PO-Revision-Date: 2010-05-30 21:20+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,9 @@ msgstr "Meeldetuletused ka tegevuse puudumise korral"
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Mis kell algab päev (vaikimisi 5:30)"
 
+msgid "Command for toggling visibility of the hamster application window."
+msgstr ""
+
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -51,8 +54,8 @@ msgstr ""
 "Kui nime järgi lülitumine on lubatud, siis see loend määrab tegevuste nimed, "
 "millele tuleks tööala vahetamisel lülituda."
 
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks."
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks või peitmiseks."
 
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
@@ -76,8 +79,8 @@ msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
 msgid "Should workspace switch trigger activity switch"
 msgstr "Kas tööala vahetus peaks valla päästma tegevuse vahetuse"
 
-msgid "Show window"
-msgstr "Akna näitamine"
+msgid "Show / hide Time Tracker Window"
+msgstr "Ajakasutuse jälgija akna näitamine või peitmine"
 
 msgid "Stop tracking current activity on shutdown"
 msgstr "Jooksva tegevuse jälgimine lõpetatakse arvuti väljalülitamisel"
@@ -93,6 +96,15 @@ msgstr "Väljalülitamisel lõpetatakse jälgimine"
 
 msgid "Switch activity on workspace change"
 msgstr "Tööala vahetamisel vahetatakse tegevust"
+
+msgid "Toggle hamster application window"
+msgstr ""
+
+msgid "Toggle hamster application window action"
+msgstr ""
+
+msgid "Toggle visibility of the hamster application window."
+msgstr ""
 
 msgid "Project Hamster — track your time"
 msgstr "Projektihamster — ajajälgija"
@@ -214,7 +226,6 @@ msgstr "Eemalda"
 msgid "Save Report"
 msgstr "Raporti salvestamine"
 
-#. summary table
 msgid "Totals"
 msgstr "Kokku"
 
@@ -239,11 +250,8 @@ msgstr "Tegevuse muutmine"
 msgid "Edit category"
 msgstr "Kategooria muutmine"
 
-msgid "General"
-msgstr "Üldine"
-
-msgid "Global Hotkey"
-msgstr "Globaalne kiirklahv"
+msgid "Integration"
+msgstr "Integratsioon"
 
 msgid "Move activity down"
 msgstr "Tegevuse liigutamine allapoole"
@@ -281,6 +289,9 @@ msgstr "Ajajälgija eelistused"
 msgid "Tracking"
 msgstr "Jälgimine"
 
+msgid "Use following todo list if available:"
+msgstr ""
+
 msgid "Workspaces"
 msgstr "Tööalad"
 
@@ -296,8 +307,8 @@ msgstr "Algus ja lõpp"
 msgid "Year:"
 msgstr "Aasta:"
 
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "Autoriõigused © 2007-2009 Toms Bauģis ja teised"
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "Autoriõigused © 2007–2010 Toms Bauģis ja teised"
 
 msgid "Project Hamster Website"
 msgstr "Projektihamstri veebisait"
@@ -307,8 +318,8 @@ msgstr "Ajajälgijast lähemalt"
 
 msgid "translator-credits"
 msgstr ""
-"Ivar Smolin <okul linux ee>, 2008-2010.\n"
-"Mattias Põldaru <mahfiaz gmail com>, 2009-2010."
+"Ivar Smolin <okul linux ee>, 2008–2010.\n"
+"Mattias Põldaru <mahfiaz gmail com>, 2009–2010."
 
 msgid "Activity"
 msgstr "Tegevus"
@@ -373,6 +384,9 @@ msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %d. %b"
 
+msgid "Day"
+msgstr "Päev"
+
 msgid "Week"
 msgstr "Nädal"
 
@@ -415,6 +429,9 @@ msgstr "%(start_d)s-%(end_d)s %(start_B)s %(end_Y)s"
 #, python-format
 msgid "%s hours tracked total"
 msgstr "Kokku on jälgitud %s tundi"
+
+msgid "None"
+msgstr "Puudub"
 
 msgid "Name"
 msgstr "Nimi"
@@ -467,24 +484,27 @@ msgstr "sildid"
 
 #, python-format
 msgid ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
+"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
+"%(end_Y)s"
 msgstr ""
-"Perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. %(end_B)s %(end_Y)"
-"s ülevaade"
+"Tegevuste logi perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. "
+"%(end_B)s %(end_Y)s kohta"
 
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid ""
+"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s %(end_Y)s ülevaade"
+"Tegevuste logi perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s "
+"%(end_Y)s kohta"
 
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s ülevaade"
+msgid "Activity log for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Tegevuste logi %(start_d)s. %(start_B)s %(start_Y)s"
 
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Päeva %(start_d)s. %(start_B)s %(start_Y)s ülevaade"
+msgid "Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr ""
+"Tegevuste logi perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s kohta"
 
 msgid "Date"
 msgstr "Kuupäev"
@@ -508,8 +528,9 @@ msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d. %b.%Y"
 
-msgid "Total Time"
-msgstr "Kogukestus"
+#. summary table
+msgid "Totals by category, activity"
+msgstr "Kokkuvõte kategooria ja tegevuse järgi"
 
 #, c-format
 msgid "Working on <b>%s</b>"
@@ -557,11 +578,11 @@ msgstr[1] "%(num)s aastat"
 #. FIXME: difficult string to properly pluralize
 #, python-format
 msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
 msgstr ""
-"Praeguseks on registreeritud %(human_days)s inimpäeva (%(human_years)s) ehk %"
-"(working_days)s tööpäeva (%(working_years)s)."
+"Praeguseks on registreeritud %(human_days)s inimpäeva (%(human_years)s) ehk "
+"%(working_days)s tööpäeva (%(working_years)s)."
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
@@ -575,11 +596,11 @@ msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
 "Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] ""
-"Pikim katkematu töö kestis %(hours)s tundi ja selle toimumise aeg oli %(date)"
-"s."
+"Pikim katkematu töö kestis %(hours)s tundi ja selle toimumise aeg oli "
+"%(date)s."
 msgstr[1] ""
-"Pikim katkematu töö kestis %(hours)s tundi ja selle toimumise aeg oli %(date)"
-"s."
+"Pikim katkematu töö kestis %(hours)s tundi ja selle toimumise aeg oli "
+"%(date)s."
 
 #. total records (in selected scope)
 #, python-format
@@ -643,3 +664,19 @@ msgstr "XML"
 
 msgid "iCal"
 msgstr "iCal"
+
+#. title in the report file name
+msgid "Time track"
+msgstr "Ajajälgimine"
+
+#~ msgid "Show window"
+#~ msgstr "Akna näitamine"
+
+#~ msgid "General"
+#~ msgstr "Üldine"
+
+#~ msgid "Global Hotkey"
+#~ msgstr "Globaalne kiirklahv"
+
+#~ msgid "Total Time"
+#~ msgstr "Kogukestus"
