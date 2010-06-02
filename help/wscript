@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Mallard waf adaptor written by Ulrik Sverdrup
+# may be distributed, changed, used, etc freely for any purpose
+
 ## Mallard functionality definitions ##
 import os
 import Task
