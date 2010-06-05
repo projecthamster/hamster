@@ -6,10 +6,10 @@
     <meta name="author" content="hamster-applet" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css" rel="stylesheet" /> 
-    
-    
-    <title>%(title)s</title>
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+    <title>$title</title>
     <style type="text/css">
         body {
             font-family: "sans-serif";
@@ -24,8 +24,6 @@
         }
         th, td {
             text-align: left;
-            padding-top: none
-            padding: 3px;
             padding-right: 24px;
         }
 
@@ -33,59 +31,96 @@
             padding-top: 12px;
         }
 
-        ul {padding-bottom: 12px; margin-left: 12px; padding-left: 0px; list-style: none}
-        li {padding: 2px 0px; margin: 0}
-
         .even {background-color: #eee;}
-        .odd {background-color: #ffffff;}
+        .odd {background-color: #fff;}
+
+        .by_day_controls {
+            margin-bottom: 24px;
+        }
     </style>
 
     <style type="text/css" media="print">
         div#tabs ul {
             display: none;
         }
-        
+
         div#tabs {
             border: none;
         }
+
+        div.by_day_controls {
+            display: none;
+        }
     </style>
-    
+
     <script type="text/javascript">
         $(document).ready(function() {
             $("#tabs").tabs()
+
+            $("#show_details").click(function() {
+                if ($(this).attr("checked")) {
+                    $(".by_date_row").show();
+                } else {
+                    $(".by_date_row").hide();
+                }
+
+            })
+
+            $("#show_totals").click(function() {
+                if ($(this).attr("checked")) {
+                    $(".by_date_total_row").show();
+                } else {
+                    $(".by_date_total_row").hide();
+                }
+
+
+            })
         });
     </script>
 </head>
 <body>
 
-<h1>%(title)s</h1>
+<h1>$title</h1>
 
 
 
-<div id="tabs"> 
-	<ul> 
-		<li><a href="#tabs-1">%(totals_by_day_title)s</a></li> 
-		<li><a href="#tabs-2">%(activity_log_title)s</a></li> 
-	</ul> 
-	<div id="tabs-1"> 
-        <table>
-            %(by_date_rows)s
-        </table>
+<div id="tabs">
+	<ul>
+            <li><a href="#tabs-1">$totals_by_day_title</a></li>
+            <li><a href="#tabs-2">$activity_log_title</a></li>
+	</ul>
+	<div id="tabs-1">
+            <div class="by_day_controls">
+                Show:
+                <input type="checkbox" id="show_details" checked="checked"></input>
+                <label for="show_details">$activity_totals_heading</label>
+                
+                <input type="checkbox" id="show_totals" checked="checked"></input>
+                <label for="show_totals">$category_totals_heading</label>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th class="by_date_row">$activity_totals_heading</th>
+                    <th class="by_date_total_row">$category_totals_heading</th>
+                <tr>
+
+                $by_date_rows
+            </table>
 	</div>
-	<div id="tabs-2"> 
-        <table>
-            <tr>
-                <th>%(header_date)s</th>
-                <th>%(header_activity)s</th>
-                <th>%(header_category)s</th>
-                <th>%(header_tags)s</th>
-                <th>%(header_start)s</th>
-                <th>%(header_duration)s</th>
-                <th>%(header_description)s</th>
-            </tr>
-            %(all_record_rows)s
-        </table>
+	<div id="tabs-2">
+            <table>
+                <tr>
+                    <th>$header_date</th>
+                    <th>$header_activity</th>
+                    <th>$header_category</th>
+                    <th>$header_tags</th>
+                    <th>$header_start</th>
+                    <th>$header_duration</th>
+                    <th>$header_description</th>
+                </tr>
+                $all_record_rows
+            </table>
 	</div>
 </div>
-
-

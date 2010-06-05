@@ -26,8 +26,9 @@ import csv
 from hamster.i18n import C_
 from hamster.configuration import runtime
 import copy
-import StringIO
 import itertools
+
+from string import Template
 
 def simple(facts, start_date, end_date, format, path):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
@@ -224,7 +225,7 @@ class HTMLWriter(ReportWriter):
             duration = stuff.format_duration(fact["delta"]) or "",
             description = fact["description"] or ""
         )
-        self.fact_rows.append(self.fact_row_template % data)
+        self.fact_rows.append(Template(self.fact_row_template).safe_substitute(data))
 
 
     def _finish(self, report, facts):
@@ -242,10 +243,10 @@ class HTMLWriter(ReportWriter):
                     duration += fact['delta']
 
 
-                by_date_rows.append(self.by_date_row_template %
+                by_date_rows.append(Template(self.by_date_row_template).safe_substitute(
                                     dict(activity = activity,
                                          category = category,
-                                         duration = stuff.format_duration(duration)))
+                                         duration = stuff.format_duration(duration))))
 
             by_date_total_rows = []
             for category, c_facts in itertools.groupby(by_name, lambda fact:fact['category']):
@@ -254,13 +255,13 @@ class HTMLWriter(ReportWriter):
                     duration += fact['delta']
 
 
-                by_date_total_rows.append(self.by_date_total_row_template %
+                by_date_total_rows.append(Template(self.by_date_total_row_template).safe_substitute(
                                           dict(category = category,
-                                               duration = stuff.format_duration(duration)))
+                                               duration = stuff.format_duration(duration))))
 
 
 
-            by_date.append(self.by_date_template %
+            by_date.append(Template(self.by_date_template).safe_substitute(
                            dict(date = fact["date"].strftime(
                                        # date column format for each row in HTML report
                                        # Using python datetime formatting syntax. See:
@@ -268,12 +269,15 @@ class HTMLWriter(ReportWriter):
                                        C_("html report","%b %d, %Y")),
                                 by_date_rows = "\n".join(by_date_rows),
                                 by_date_total_rows = "\n".join(by_date_total_rows),
-                           ))
+                           )))
 
         data = dict(
             title = self.title,
             totals_by_day_title = _("Totals by Day"),
             activity_log_title = _("Activity Log"),
+
+            activity_totals_heading = _("totals by activity"),
+            category_totals_heading = _("totals by category"),
 
             header_date = _("Date"),
             header_activity = _("Activity"),
@@ -288,6 +292,6 @@ class HTMLWriter(ReportWriter):
             by_date_rows = "\n".join(by_date)
         )
 
-        report.write(self.main_template % data)
+        report.write(Template(self.main_template).safe_substitute(data))
 
         return
