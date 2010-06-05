@@ -23,6 +23,7 @@ pygtk.require('2.0')
 
 import os
 import gtk, gobject
+from .hamster.configuration import conf
 
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
@@ -42,7 +43,13 @@ class ReportChooserDialog(gtk.Dialog):
                                                      gtk.RESPONSE_CANCEL,
                                                      gtk.STOCK_SAVE,
                                                      gtk.RESPONSE_OK))
-        self.dialog.set_current_folder(os.path.expanduser("~"))
+
+        # try to set path to last known folder or fall back to home
+        report_folder = os.path.expanduser(conf.get("last_report_folder"))
+        if os.path.exists(report_folder):
+            self.dialog.set_current_folder(report_folder)
+        else:
+            self.dialog.set_current_folder(os.path.expanduser("~"))
 
         self.filters = {}
 
@@ -124,6 +131,8 @@ class ReportChooserDialog(gtk.Dialog):
             path = "%s.%s" % (path.rstrip("."), format)
 
         categories = []
+
+        conf.set("last_report_folder", os.path.dirname(path))
 
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path)

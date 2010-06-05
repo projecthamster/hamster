@@ -175,7 +175,8 @@ class GConfStore(gobject.GObject, Singleton):
         'workspace_mapping'           :   [],          # Mapping between workspace numbers and activities
         'standalone_window_box'       :   [],          # X, Y, W, H
         'standalone_window_maximized' :   False,       # Is overview window maximized
-        'activities_source'           :   "",           # Source of TODO items ("", "evo", "gtg")
+        'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
+        'last_report_folder'          :   "~",         # Path to directory where the last report was saved
     }
 
     __gsignals__ = {
