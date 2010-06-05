@@ -46,7 +46,7 @@ class TotalsBox(gtk.VBox):
         self.start_date, self.end_date = None, None
 
         #graphs
-        x_offset = 100 # align all graphs to the left edge
+        x_offset = 0.4 # align all graphs to the left edge
 
 
         self.category_chart = charting.Chart(max_bar_width = 20,
@@ -111,7 +111,7 @@ class TotalsBox(gtk.VBox):
             self.selected_tags.append(key)
         self.calculate_totals()
         self.do_charts()
-        
+
 
     def search(self, start_date, end_date, facts):
         self.facts = facts
@@ -206,22 +206,22 @@ class TotalsBox(gtk.VBox):
     def do_charts(self):
         self.get_widget("totals_by_category").set_size_request(10,10)
         if self.category_sums:
-            self.get_widget("totals_by_category").set_size_request(280, len(self.category_sums[0]) * 20)
+            self.get_widget("totals_by_category").set_size_request(-1, len(self.category_sums[0]) * 20)
             self.category_chart.plot(*self.category_sums)
         else:
-            self.get_widget("totals_by_category").set_size_request(280, 10)
+            self.get_widget("totals_by_category").set_size_request(-1, 10)
             self.category_chart.plot([],[])
 
         self.get_widget("totals_by_activity").set_size_request(10,10)
-        self.get_widget("totals_by_activity").set_size_request(280, len(self.activity_sums[0]) * 20)
+        self.get_widget("totals_by_activity").set_size_request(-1, len(self.activity_sums[0]) * 20)
         self.activity_chart.plot(*self.activity_sums)
 
         self.get_widget("totals_by_tag").set_size_request(10,10)
         if self.tag_sums:
-            self.get_widget("totals_by_tag").set_size_request(280, len(self.tag_sums[0]) * 20)
+            self.get_widget("totals_by_tag").set_size_request(-1, len(self.tag_sums[0]) * 20)
             self.tag_chart.plot(*self.tag_sums)
         else:
-            self.get_widget("totals_by_tag").set_size_request(280, 10)
+            self.get_widget("totals_by_tag").set_size_request(-1, 10)
             self.tag_chart.plot([],[])
 
 

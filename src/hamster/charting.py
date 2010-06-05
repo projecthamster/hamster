@@ -172,11 +172,15 @@ class Chart(graphics.Scene):
     def on_enter_frame(self, scene, context):
         # adjust sizes and positions on redraw
 
+        legend_width = self.legend_width
+        if legend_width < 1: # allow fractions
+            legend_width = int(self.width * legend_width)
+
         self.find_colors()
 
         self.plot_area.y = 0
         self.plot_area.height = self.height - self.plot_area.y
-        self.plot_area.x = self.legend_width + 8
+        self.plot_area.x = legend_width + 8
         self.plot_area.width = self.width - self.plot_area.x
 
         y = 0
@@ -208,8 +212,9 @@ class Chart(graphics.Scene):
                 bar.label_background.fill = None
 
             label.y = y + (bar_width - label.height) / 2 + self.plot_area.y
+
+            label.width = legend_width
             if not label.color:
-                label.width = self.legend_width
                 label.color = self.label_color
 
             y += bar_width + 1
