@@ -34,10 +34,10 @@ import logging
 log = logging.getLogger("configuration")
 
 class Singleton(object):
-     def __new__(cls, *args, **kwargs):
-         if '__instance' not in vars(cls):
-             cls.__instance = object.__new__(cls, *args, **kwargs)
-         return cls.__instance
+    def __new__(cls, *args, **kwargs):
+        if '__instance' not in vars(cls):
+            cls.__instance = object.__new__(cls, *args, **kwargs)
+        return cls.__instance
 
 class RuntimeStore(Singleton):
     """
@@ -47,40 +47,43 @@ class RuntimeStore(Singleton):
     database_file = None
     last_etag = None
     data_dir = ""
+    home_data_dir = ""
     storage = None
     conf = None
 
 
     def __init__(self):
-          try:
-               import defs
-               self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
-               self.version = defs.VERSION
-          except:
-               # if defs is not there, we are running from sources
-               module_dir = os.path.dirname(os.path.realpath(__file__))
-               self.data_dir = os.path.join(module_dir, '..', '..', 'data')
-               self.version = "uninstalled"
+        try:
+            import defs
+            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+            self.version = defs.VERSION
+        except:
+            # if defs is not there, we are running from sources
+            module_dir = os.path.dirname(os.path.realpath(__file__))
+            self.data_dir = os.path.join(module_dir, '..', '..', 'data')
+            self.version = "uninstalled"
+
+        self.data_dir = os.path.realpath(self.data_dir)
+        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
+
+        if not os.path.exists(self.home_data_dir):
+            try:
+                os.makedirs(self.home_data_dir, 0744)
+            except Exception, msg:
+                logging.error("could not create user dir (%s): %s" % (self.home_data_dir, msg))
 
 
-          self.storage = Storage()
+        self.storage = Storage()
+        # figure out the correct database file
+        old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+        new_db_file = os.path.join(self.home_data_dir, "hamster.db")
 
-          # figure out the correct database file
-          old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
-          new_db_file = os.path.join(xdg_data_home, "hamster-applet", "hamster.db")
-
-          # move database to ~/.local/share/hamster-applet
-          if os.path.exists(old_db_file):
-              db_path = os.path.dirname(os.path.realpath(new_db_file))
-              if not os.path.exists(db_path):
-                  try:
-                      os.makedirs(db_path, 0744)
-                  except Exception, msg:
-                      logging.error("could not create user dir (%s): %s" % (db_path, msg))
-              if os.path.exists(new_db_file):
-                  logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
-              else:
-                  os.rename(old_db_file, new_db_file)
+        # move database to ~/.local/share/hamster-applet
+        if os.path.exists(old_db_file):
+            if os.path.exists(new_db_file):
+                logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
+            else:
+                os.rename(old_db_file, new_db_file)
 
     @property
     def art_dir(self):
@@ -179,10 +182,10 @@ class GConfStore(gobject.GObject, Singleton):
         "conf-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
     }
     def __init__(self):
-          gobject.GObject.__init__(self)
-          self._client = gconf.client_get_default()
-          self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
-          self._notifications = []
+        gobject.GObject.__init__(self)
+        self._client = gconf.client_get_default()
+        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
+        self._notifications = []
 
     def _fix_key(self, key):
         """

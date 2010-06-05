@@ -38,7 +38,6 @@ import storage
 import stuff
 from shutil import copy as copyfile
 import datetime as dt
-from xdg.BaseDirectory import xdg_data_home
 import gio
 
 import itertools
@@ -58,14 +57,7 @@ class Storage(storage.Storage):
 
         from configuration import runtime
 
-        db_folder = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
-        self.db_path = os.path.realpath(os.path.join(db_folder, "hamster.db"))
-
-        if not os.path.exists(db_folder):
-            try:
-                os.makedirs(db_folder, 0744)
-            except Exception, msg:
-                logging.error("could not create user dir (%s): %s" % (db_folder, msg))
+        self.db_path = os.path.join(runtime.home_data_dir, "hamster.db")
 
         data_dir = runtime.data_dir
 
