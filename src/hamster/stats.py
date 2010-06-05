@@ -167,7 +167,7 @@ class Stats(object):
                 label.set_text(_("""There is no data to generate statistics yet.
 A week of usage would be nice!"""))
             else:
-                label.set_text(_("Collecting data — check back after a week has passed!"))
+                label.set_text(_(u"Collecting data — check back after a week has passed!"))
 
             label.show()
             return

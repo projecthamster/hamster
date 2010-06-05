@@ -35,7 +35,7 @@ class ReportChooserDialog(gtk.Dialog):
         gtk.Dialog.__init__(self)
 
 
-        self.dialog = gtk.FileChooserDialog(title = _("Save Report — Time Tracker"),
+        self.dialog = gtk.FileChooserDialog(title = _(u"Save Report — Time Tracker"),
                                             parent = self,
                                             action = gtk.FILE_CHOOSER_ACTION_SAVE,
                                             buttons=(gtk.STOCK_CANCEL,
