@@ -466,11 +466,12 @@ class PreferencesEditor:
         id = model[path][0]
         category_id = model[path][2]
 
-        #look for dupes
+
+        # avoid two activities in same category with same name
         activities = runtime.storage.get_category_activities(category_id)
         for activity in activities:
-            if activity['name'].lower() == new_text.lower():
-                if id == -1: # that was a new category
+            if id != activity['id'] and activity['name'].lower() == new_text.lower():
+                if id == -1: # that was a new activity
                     self.activity_store.remove(model.get_iter(path))
                 self.select_activity(activity['id'])
                 return False
