@@ -24,6 +24,7 @@ import datetime as dt
 from xml.dom.minidom import Document
 import csv
 from hamster.i18n import C_
+from hamster.configuration import runtime
 import copy
 import StringIO
 import itertools
@@ -161,37 +162,6 @@ class XMLWriter(ReportWriter):
 
 
 class HTMLWriter(ReportWriter):
-    class HTMLTable(object):
-        def __init__(self, id, headers):
-            self.output = StringIO.StringIO()
-            self.cols = len(headers)
-            self.even = True
-
-            self.output.write('<table id="%s" class="%s">')
-
-            if any(headers):
-                self.output.write('  <tr>')
-                for col in headers:
-                    self.output.write('    <th>%s</th>' % (col or ""))
-                self.output.write('  </tr>')
-
-        def add_row(self, *cols):
-            self.output.write('  <tr>')
-            for col in cols:
-                self.output.write('    <td class="%s">%s</td>' % (["even", "odd"][int(self.even)], col))
-            self.output.write('  </tr>')
-            self.even = not self.even
-
-        def add_heading(self, label):
-            self.output.write('  <tr>')
-            self.output.write('    <th colspan="%d">%s</td>' % (self.cols, label))
-            self.output.write('  </tr>')
-
-        def __str__(self):
-            return "%s</table>" % self.output.getvalue()
-
-
-
     def __init__(self, path, start_date, end_date):
         ReportWriter.__init__(self, path, datetime_format = None)
 
@@ -207,62 +177,26 @@ class HTMLWriter(ReportWriter):
         else:
             self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
+        self.main_template = self._get_template("main.html")
+        self.fact_row_template = self._get_template("fact_row.html")
+        self.by_date_template= self._get_template("by_date.html")
+        self.by_date_row_template = self._get_template("by_date_row.html")
+        self.by_date_total_row_template = self._get_template("by_date_total_row.html")
 
-        headers = (_("Date"), _("Activity"), _("Category"), _("Tags"),
-                   _("Start"), _("End"), _("Duration"), _("Description"))
-        self.fact_table = self.HTMLTable("facts", headers)
+        self.fact_rows = []
 
+    def _get_template(self, name):
+        """returns contents of the template file. allows override from the
+           home folder"""
+        if os.path.exists(os.path.join(runtime.home_data_dir, name)):
+            template = os.path.join(runtime.home_data_dir, name)
+        else:
+            template = os.path.join(runtime.data_dir, "html_template", name)
 
-        """TODO bring template to external file or write to PDF"""
+        with open(template, 'r') as f:
+            contents = f.read()
 
-        self.file.write("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="author" content="hamster-applet" />
-    <title>%(title)s</title>
-    <style type="text/css">
-        body {
-            font-family: "sans-serif";
-            font-size: 12px;
-            padding: 12px;
-            color: #303030;
-        }
-
-        table {
-            margin-left: 24px;
-        }
-
-        h1 {
-            border-bottom: 2px solid #303030;
-            padding-bottom: 4px;
-        }
-        h2 {
-            margin-top: 2em;
-            border-bottom: 2px solid #303030;
-        }
-        th, td {
-            text-align: left;
-            padding: 3px;
-            padding-right: 24px;
-        }
-
-        th {
-            padding-top: 12px;
-        }
-
-        ul {padding-bottom: 12px; margin-left: 12px; padding-left: 0px; list-style: none}
-        li {padding: 2px 0px; margin: 0}
-
-        .even {background-color: #eee;}
-        .odd {background-color: #ffffff;}
-
-    </style>
-</head>
-<body>
-<h1>%(title)s</h1>""" % {"title": self.title})
-
+        return contents
 
 
     def _write_fact(self, report, fact):
@@ -275,46 +209,85 @@ class HTMLWriter(ReportWriter):
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
             category = fact["category"]
 
-        self.fact_table.add_row(fact["start_time"].strftime(
-                                # date column format for each row in HTML report
-                                # Using python datetime formatting syntax. See:
-                                # http://docs.python.org/library/time.html#time.strftime
-                                C_("html report","%b %d, %Y")),
-                                fact["name"],
-                                category,
-                                fact["tags"],
-                                fact["start_time"].strftime('%H:%M'),
-                                end_time_str,
-                                stuff.format_duration(fact["delta"]) or "",
-                                fact["description"] or "")
+
+        data = dict(
+            date = fact["start_time"].strftime(
+                   # date column format for each row in HTML report
+                   # Using python datetime formatting syntax. See:
+                   # http://docs.python.org/library/time.html#time.strftime
+                   C_("html report","%b %d, %Y")),
+            activity = fact["name"],
+            category = category,
+            tags = fact["tags"],
+            start = fact["start_time"].strftime('%H:%M'),
+            end = end_time_str,
+            duration = stuff.format_duration(fact["delta"]) or "",
+            description = fact["description"] or ""
+        )
+        self.fact_rows.append(self.fact_row_template % data)
+
 
     def _finish(self, report, facts):
-        report.write(str(self.fact_table))
+        # group by date
+        name_category = lambda fact: (fact['category'], fact['name'])
 
-        # summary table
-        report.write("\n<h2>%s</h2>\n" % _("Totals by category, activity"))
+        by_date = []
+        for date, date_facts in itertools.groupby(facts, lambda fact:fact['date']):
+            by_name = sorted(date_facts, key=name_category)
 
-        report.write("<ul>")
+            by_date_rows = []
+            for (category, activity), ac_facts in itertools.groupby(by_name, name_category):
+                duration = dt.timedelta()
+                for fact in ac_facts:
+                    duration += fact['delta']
 
-        summary_table = self.HTMLTable("summary", ("", ""))
 
-        for category, cat_facts in itertools.groupby(sorted(facts, key=lambda fact: fact['category']), lambda fact: fact['category']):
-            cat_facts = list(cat_facts)
-            cat_total = dt.timedelta()
-            for fact in cat_facts:
-                cat_total += fact['delta']
+                by_date_rows.append(self.by_date_row_template %
+                                    dict(activity = activity,
+                                         category = category,
+                                         duration = stuff.format_duration(duration)))
 
-            report.write("<li>")
-            report.write("<b>%s: %s</b>" % (category, stuff.format_duration(cat_total)))
+            by_date_total_rows = []
+            for category, c_facts in itertools.groupby(by_name, lambda fact:fact['category']):
+                duration = dt.timedelta()
+                for fact in c_facts:
+                    duration += fact['delta']
 
-            report.write("<ul>")
-            for activity, act_facts in itertools.groupby(sorted(cat_facts, key=lambda fact: fact['name']), lambda fact: fact['name']):
-                act_total = dt.timedelta()
-                for fact in act_facts:
-                    act_total += fact['delta']
-                report.write("<li>%s: %s</li>" % (activity, stuff.format_duration(act_total)))
 
-            report.write("</ul>")
-        report.write("</ul>")
+                by_date_total_rows.append(self.by_date_total_row_template %
+                                          dict(category = category,
+                                               duration = stuff.format_duration(duration)))
 
-        report.write("</body>\n</html>")
+
+
+            by_date.append(self.by_date_template %
+                           dict(date = fact["date"].strftime(
+                                       # date column format for each row in HTML report
+                                       # Using python datetime formatting syntax. See:
+                                       # http://docs.python.org/library/time.html#time.strftime
+                                       C_("html report","%b %d, %Y")),
+                                by_date_rows = "\n".join(by_date_rows),
+                                by_date_total_rows = "\n".join(by_date_total_rows),
+                           ))
+
+        data = dict(
+            title = self.title,
+            totals_by_day_title = _("Totals by Day"),
+            activity_log_title = _("Activity Log"),
+
+            header_date = _("Date"),
+            header_activity = _("Activity"),
+            header_category = _("Category"),
+            header_tags = _("Tags"),
+            header_start = _("Start"),
+            header_end = _("End"),
+            header_duration = _("Duration"),
+            header_description = _("Description"),
+
+            all_record_rows = "\n".join(self.fact_rows),
+            by_date_rows = "\n".join(by_date)
+        )
+
+        report.write(self.main_template % data)
+
+        return

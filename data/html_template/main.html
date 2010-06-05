@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="hamster-applet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css" rel="stylesheet" /> 
+    
+    
+    <title>%(title)s</title>
+    <style type="text/css">
+        body {
+            font-family: "sans-serif";
+            font-size: 12px;
+            padding: 12px;
+            color: #303030;
+        }
+
+        h2 {
+            margin-top: 2em;
+            border-bottom: 2px solid #303030;
+        }
+        th, td {
+            text-align: left;
+            padding-top: none
+            padding: 3px;
+            padding-right: 24px;
+        }
+
+        th {
+            padding-top: 12px;
+        }
+
+        ul {padding-bottom: 12px; margin-left: 12px; padding-left: 0px; list-style: none}
+        li {padding: 2px 0px; margin: 0}
+
+        .even {background-color: #eee;}
+        .odd {background-color: #ffffff;}
+    </style>
+
+    <style type="text/css" media="print">
+        div#tabs ul {
+            display: none;
+        }
+        
+        div#tabs {
+            border: none;
+        }
+    </style>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#tabs").tabs()
+        });
+    </script>
+</head>
+<body>
+
+<h1>%(title)s</h1>
+
+
+
+<div id="tabs"> 
+	<ul> 
+		<li><a href="#tabs-1">%(totals_by_day_title)s</a></li> 
+		<li><a href="#tabs-2">%(activity_log_title)s</a></li> 
+	</ul> 
+	<div id="tabs-1"> 
+        <table>
+            %(by_date_rows)s
+        </table>
+	</div>
+	<div id="tabs-2"> 
+        <table>
+            <tr>
+                <th>%(header_date)s</th>
+                <th>%(header_activity)s</th>
+                <th>%(header_category)s</th>
+                <th>%(header_tags)s</th>
+                <th>%(header_start)s</th>
+                <th>%(header_duration)s</th>
+                <th>%(header_description)s</th>
+            </tr>
+            %(all_record_rows)s
+        </table>
+	</div>
+</div>
+
+
