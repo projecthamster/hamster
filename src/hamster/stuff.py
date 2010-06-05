@@ -47,7 +47,7 @@ def setup_i18n():
     # localedir/language.mo at it's best (after build)
     # and there does not seem to be any way to run straight from sources
     if defs:
-        locale_dir = os.path.abspath(os.path.join(defs.DATA_DIR, "locale"))
+        locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
 
         for module in (locale,):
             module.bindtextdomain('hamster-applet', locale_dir)

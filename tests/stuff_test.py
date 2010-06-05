@@ -1,6 +1,6 @@
 import sys, os.path
 # a convoluted line to add hamster module to absolute path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
 
 import unittest
 from hamster import stuff
