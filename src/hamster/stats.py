@@ -124,35 +124,29 @@ class Stats(object):
 
         #ah, just want summary look just like all the other text on the page
         class CairoText(graphics.Scene):
-            def __init__(self, fontsize = 10):
+            def __init__(self):
                 graphics.Scene.__init__(self)
                 self.text = ""
-                self.fontsize = fontsize
+                self.label = graphics.Label(self.text, 10)
+                self.label.wrap = pango.WRAP_WORD
+                self.add_child(self.label)
+                self.connect("on-enter-frame", self.on_enter_frame)
 
             def set_text(self, text):
-                self.text = text
+                self.label.text = text
                 self.redraw()
 
-            def on_expose(self):
+            def on_enter_frame(self, scene, context):
                 # now for the text - we want reduced contrast for relaxed visuals
                 fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
                 if self.colors.is_light(fg_color):
                     label_color = self.colors.darker(fg_color,  80)
                 else:
                     label_color = self.colors.darker(fg_color,  -80)
+                self.label.color = label_color
 
-                default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-                default_font.set_size(self.fontsize * pango.SCALE)
-                self.layout.set_font_description(default_font)
+                self.label.width = self.width
 
-                #self.context.set_source_rgb(0,0,0)
-                self.layout.set_markup(self.text)
-
-                self.layout.set_width((self.width) * pango.SCALE)
-                self.context.move_to(0,0)
-                self.set_color(label_color)
-
-                self.context.show_layout(self.layout)
 
         self.explore_summary = CairoText()
         self.get_widget("explore_summary").add(self.explore_summary)
