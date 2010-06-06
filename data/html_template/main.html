@@ -51,6 +51,10 @@
         div.by_day_controls {
             display: none;
         }
+
+        p.template-instructions {
+            display: none;
+        }
     </style>
 
     <script type="text/javascript">
@@ -82,8 +86,6 @@
 
 <h1>$title</h1>
 
-
-
 <div id="tabs">
 	<ul>
             <li><a href="#tabs-1">$totals_by_day_title</a></li>
@@ -94,7 +96,7 @@
                 Show:
                 <input type="checkbox" id="show_details" checked="checked"></input>
                 <label for="show_details">$activity_totals_heading</label>
-                
+
                 <input type="checkbox" id="show_totals" checked="checked"></input>
                 <label for="show_totals">$category_totals_heading</label>
             </div>
@@ -117,6 +119,7 @@
                     <th>$header_category</th>
                     <th>$header_tags</th>
                     <th>$header_start</th>
+                    <th>$header_end</th>
                     <th>$header_duration</th>
                     <th>$header_description</th>
                 </tr>
@@ -124,3 +127,8 @@
             </table>
 	</div>
 </div>
+
+<p class="template-instructions">
+    <a href="file:///$data_dir/html_template">$show_templates</a>.
+    $template_instructions.
+</p>

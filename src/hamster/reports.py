@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 import stuff
-import os
+import os, sys
 import datetime as dt
 from xml.dom.minidom import Document
 import csv
@@ -202,9 +202,10 @@ class HTMLWriter(ReportWriter):
 
     def _write_fact(self, report, fact):
         # no having end time is fine
-        end_time_str = ""
+        end_time_str, end_time_iso_str = "", ""
         if fact["end_time"]:
             end_time_str = fact["end_time"].strftime('%H:%M')
+            end_time_iso_str = fact["end_time"].isoformat()
 
         category = ""
         if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
@@ -212,17 +213,22 @@ class HTMLWriter(ReportWriter):
 
 
         data = dict(
-            date = fact["start_time"].strftime(
+            date = fact["date"].strftime(
                    # date column format for each row in HTML report
                    # Using python datetime formatting syntax. See:
                    # http://docs.python.org/library/time.html#time.strftime
                    C_("html report","%b %d, %Y")),
+            date_iso = fact["date"].isoformat(),
             activity = fact["name"],
             category = category,
             tags = fact["tags"],
             start = fact["start_time"].strftime('%H:%M'),
+            start_iso = fact["start_time"].isoformat(),
             end = end_time_str,
+            end_iso = end_time_iso_str,
             duration = stuff.format_duration(fact["delta"]) or "",
+            duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
+            duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
             description = fact["description"] or ""
         )
         self.fact_rows.append(Template(self.fact_row_template).safe_substitute(data))
@@ -246,7 +252,11 @@ class HTMLWriter(ReportWriter):
                 by_date_rows.append(Template(self.by_date_row_template).safe_substitute(
                                     dict(activity = activity,
                                          category = category,
-                                         duration = stuff.format_duration(duration))))
+                                         duration = stuff.format_duration(duration),
+                                         duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
+                                         duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
+                                        )
+                                    ))
 
             by_date_total_rows = []
             for category, c_facts in itertools.groupby(by_name, lambda fact:fact['category']):
@@ -257,7 +267,11 @@ class HTMLWriter(ReportWriter):
 
                 by_date_total_rows.append(Template(self.by_date_total_row_template).safe_substitute(
                                           dict(category = category,
-                                               duration = stuff.format_duration(duration))))
+                                               duration = stuff.format_duration(duration),
+                                               duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
+                                               duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
+                                              )
+                                          ))
 
 
 
@@ -289,7 +303,11 @@ class HTMLWriter(ReportWriter):
             header_description = _("Description"),
 
             all_record_rows = "\n".join(self.fact_rows),
-            by_date_rows = "\n".join(by_date)
+            by_date_rows = "\n".join(by_date),
+
+            data_dir = runtime.data_dir,
+            show_templates = _("Show templates"),
+            template_instructions = _("You can override them by storing your version in %s" % runtime.home_data_dir),
         )
 
         report.write(Template(self.main_template).safe_substitute(data))
