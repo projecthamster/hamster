@@ -191,16 +191,12 @@ class HTMLWriter(ReportWriter):
             self.main_template =f.read()
 
 
-        self.fact_row_re = re.compile('<all-activities>(.*)</all-activities>', re.DOTALL)
+        self.fact_row_template = self._extract_template('all_activities')
 
-        self.fact_row_template = self.fact_row_re.search(self.main_template)
+        self.by_date_row_template = self._extract_template('by_date_activity')
+        self.by_date_total_row_template = self._extract_template("by_date_category")
 
-        self.fact_row_template = self._extract_template('all-activities')
-
-        self.by_date_row_template = self._extract_template('by-date-activity')
-        self.by_date_total_row_template = self._extract_template("by-date-category")
-
-        self.by_date_template = self._extract_template('by-date')
+        self.by_date_template = self._extract_template('by_date')
 
         self.fact_rows = []
 
@@ -210,14 +206,10 @@ class HTMLWriter(ReportWriter):
         match = pattern.search(self.main_template)
 
         if match:
-            self.main_template = self.main_template.replace(match.group(), "<the-actual-%s>" % name)
+            self.main_template = self.main_template.replace(match.group(), "$%s_rows" % name)
             return match.groups()[0]
 
         return ""
-
-    def _replace_template(self, target, name, value):
-        return target.replace('<the-actual-%s>' % name, value)
-
 
 
     def _write_fact(self, report, fact):
@@ -299,12 +291,10 @@ class HTMLWriter(ReportWriter):
                                        # date column format for each row in HTML report
                                        # Using python datetime formatting syntax. See:
                                        # http://docs.python.org/library/time.html#time.strftime
-                                       C_("html report","%b %d, %Y"))
+                                       C_("html report","%b %d, %Y")),
+                                by_date_activity_rows = "\n".join(by_date_rows),
+                                by_date_category_rows = "\n".join(by_date_total_rows)
                            ))
-
-            res = self._replace_template(res, 'by-date-activity', "\n".join(by_date_rows))
-            res = self._replace_template(res, 'by-date-category', "\n".join(by_date_total_rows))
-
             by_date.append(res)
 
 
@@ -329,13 +319,11 @@ class HTMLWriter(ReportWriter):
             data_dir = runtime.data_dir,
             show_template = _("Show template"),
             template_instructions = _("You can override them by storing your version in %s" % runtime.home_data_dir),
+
+            all_activities_rows = "\n".join(self.fact_rows),
+            by_date_rows = "\n".join(by_date)
         )
-
-        self.main_template = Template(self.main_template).safe_substitute(data)
-        self.main_template = self._replace_template(self.main_template, 'all-activities', "\n".join(self.fact_rows))
-        self.main_template = self._replace_template(self.main_template, 'by-date', "\n".join(by_date))
-
-        report.write(self.main_template)
+        report.write(Template(self.main_template).safe_substitute(data))
 
 
         return
