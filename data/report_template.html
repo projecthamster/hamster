@@ -108,7 +108,37 @@
                     <th class="by_date_total_row">$category_totals_heading</th>
                 <tr>
 
-                $by_date_rows
+                    <by-date>
+                        <tr valign="top">
+                            <td>$date</td>
+                            <td class="by_date_row">
+                                <table width="100%">
+                                    <by-date-activity>
+                                        <tr>
+                                            <td>$activity ($category)</td>
+                                            <td style="text-align: right">
+                                                <!-- there is also duration_decimal and duration_minutes -->
+                                                $duration
+                                            </td>
+                                        </tr>
+                                    </by-date-activity>
+                                </table>
+                            </td>
+                            <td class="by_date_total_row">
+                                <table width="100%">
+                                    <by-date-category>
+                                        <tr>
+                                            <td>$category</td>
+                                            <td style="text-align: right">
+                                                <!-- there is also duration_decimal and duration_minutes -->
+                                                $duration
+                                            </td>
+                                    </by-date-category>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr><td colspan="3">&nbsp</td></tr>
+                    </by-date>
             </table>
 	</div>
 	<div id="tabs-2">
@@ -123,12 +153,35 @@
                     <th>$header_duration</th>
                     <th>$header_description</th>
                 </tr>
-                $all_record_rows
+                <all-activities>
+                    <tr>
+                        <td>
+                            <!-- there is also date_iso -->
+                            $date
+                        </td>
+                        <td>$activity</td>
+                        <td>$category</td>
+                        <td>$tags</td>
+                        <td>
+                            <!-- there is also start_iso -->
+                            $start
+                        </td>
+                        <td>
+                            <!-- there is also end_iso -->
+                            $end
+                        </td>
+                        <td>
+                            <!-- there is also duration_decimal and duration_minutes -->
+                            $duration
+                        </td>
+                        <td>$description</td>
+                    </tr>
+                </all-activities>
             </table>
 	</div>
 </div>
 
 <p class="template-instructions">
-    <a href="file:///$data_dir/html_template">$show_templates</a>.
+    <a href="file:///$data_dir/report_template.html">$show_template</a>.
     $template_instructions.
 </p>

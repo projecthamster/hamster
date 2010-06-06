@@ -27,6 +27,7 @@ from hamster.i18n import C_
 from hamster.configuration import runtime
 import copy
 import itertools
+import re
 
 from string import Template
 
@@ -178,26 +179,45 @@ class HTMLWriter(ReportWriter):
         else:
             self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
-        self.main_template = self._get_template("main.html")
-        self.fact_row_template = self._get_template("fact_row.html")
-        self.by_date_template= self._get_template("by_date.html")
-        self.by_date_row_template = self._get_template("by_date_row.html")
-        self.by_date_total_row_template = self._get_template("by_date_total_row.html")
+
+        # read the template, allow override
+        if os.path.exists(os.path.join(runtime.home_data_dir, "report_template.html")):
+            template = os.path.join(runtime.home_data_dir, "report_template.html")
+        else:
+            template = os.path.join(runtime.data_dir, "report_template.html")
+
+        self.main_template = ""
+        with open(template, 'r') as f:
+            self.main_template =f.read()
+
+
+        self.fact_row_re = re.compile('<all-activities>(.*)</all-activities>', re.DOTALL)
+
+        self.fact_row_template = self.fact_row_re.search(self.main_template)
+
+        self.fact_row_template = self._extract_template('all-activities')
+
+        self.by_date_row_template = self._extract_template('by-date-activity')
+        self.by_date_total_row_template = self._extract_template("by-date-category")
+
+        self.by_date_template = self._extract_template('by-date')
 
         self.fact_rows = []
 
-    def _get_template(self, name):
-        """returns contents of the template file. allows override from the
-           home folder"""
-        if os.path.exists(os.path.join(runtime.home_data_dir, name)):
-            template = os.path.join(runtime.home_data_dir, name)
-        else:
-            template = os.path.join(runtime.data_dir, "html_template", name)
+    def _extract_template(self, name):
+        pattern = re.compile('<%s>(.*)</%s>' % (name, name), re.DOTALL)
 
-        with open(template, 'r') as f:
-            contents = f.read()
+        match = pattern.search(self.main_template)
 
-        return contents
+        if match:
+            self.main_template = self.main_template.replace(match.group(), "<the-actual-%s>" % name)
+            return match.groups()[0]
+
+        return ""
+
+    def _replace_template(self, target, name, value):
+        return target.replace('<the-actual-%s>' % name, value)
+
 
 
     def _write_fact(self, report, fact):
@@ -274,16 +294,20 @@ class HTMLWriter(ReportWriter):
                                           ))
 
 
-
-            by_date.append(Template(self.by_date_template).safe_substitute(
+            res = Template(self.by_date_template).safe_substitute(
                            dict(date = fact["date"].strftime(
                                        # date column format for each row in HTML report
                                        # Using python datetime formatting syntax. See:
                                        # http://docs.python.org/library/time.html#time.strftime
-                                       C_("html report","%b %d, %Y")),
-                                by_date_rows = "\n".join(by_date_rows),
-                                by_date_total_rows = "\n".join(by_date_total_rows),
-                           )))
+                                       C_("html report","%b %d, %Y"))
+                           ))
+
+            res = self._replace_template(res, 'by-date-activity', "\n".join(by_date_rows))
+            res = self._replace_template(res, 'by-date-category', "\n".join(by_date_total_rows))
+
+            by_date.append(res)
+
+
 
         data = dict(
             title = self.title,
@@ -302,14 +326,16 @@ class HTMLWriter(ReportWriter):
             header_duration = _("Duration"),
             header_description = _("Description"),
 
-            all_record_rows = "\n".join(self.fact_rows),
-            by_date_rows = "\n".join(by_date),
-
             data_dir = runtime.data_dir,
-            show_templates = _("Show templates"),
+            show_template = _("Show template"),
             template_instructions = _("You can override them by storing your version in %s" % runtime.home_data_dir),
         )
 
-        report.write(Template(self.main_template).safe_substitute(data))
+        self.main_template = Template(self.main_template).safe_substitute(data)
+        self.main_template = self._replace_template(self.main_template, 'all-activities', "\n".join(self.fact_rows))
+        self.main_template = self._replace_template(self.main_template, 'by-date', "\n".join(by_date))
+
+        report.write(self.main_template)
+
 
         return
