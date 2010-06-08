@@ -22,10 +22,25 @@ def configure(conf):
     conf.define('GETTEXT_PACKAGE', "hamster-applet")
     conf.define('PACKAGE', "hamster-applet")
     conf.define('PYEXECDIR', conf.env["PYTHONDIR"]) # i don't know the difference
+
+    # avoid case when we want to install globally (prefix=/usr) but sysconfdir
+    # was not specified
+    if conf.env['SYSCONFDIR'] == '/usr/etc':
+        conf.define('SYSCONFDIR', '/etc')
+    else:
+        conf.define('SYSCONFDIR', conf.env['SYSCONFDIR'])
+
     conf.define('prefix', conf.env["PREFIX"]) # to keep compatibility for now
 
-
     conf.sub_config("help")
+
+
+def set_options(opt):
+    # options for disabling pyc or pyo compilation
+    opt.tool_options("python")
+    opt.tool_options("misc")
+    opt.tool_options("gnu_dirs")
+
 
 def build(bld):
     bld.install_files('${LIBDIR}/hamster-applet', 'src/hamster-applet', chmod = 0755)
@@ -71,6 +86,7 @@ def copy_help(ctx):
     import os
     os.system('cp -R build/default/help/ .')
 
+
 def push_release(ctx):
     """copies generated page files to sources so that they are packaged on dist
        then creates the tarball and pushes to git master
@@ -82,6 +98,7 @@ def push_release(ctx):
     import os
     os.system('scp %s tbaugis@master.gnome.org:/home/users/tbaugis' % tarball)
     os.system("ssh tbaugis@master.gnome.org 'install-module %s'" % tarball)
+
 
 def release(ctx):
     """packaging a version"""

@@ -15,34 +15,34 @@ bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster
 
 
 bld(features = "subst",
-				 source= "hamster-standalone.desktop.in.in",
-				 target= "hamster-standalone.desktop.in",
-				 dict = bld.env
-				)
+    source= "hamster-standalone.desktop.in.in",
+    target= "hamster-standalone.desktop.in",
+    dict = bld.env
+   )
 
 bld(features = "subst",
-				 source= "Hamster_Applet.server.in.in",
-				 target= "Hamster_Applet.server.in",
-				 dict = bld.env
-				)
+    source= "Hamster_Applet.server.in.in",
+    target= "Hamster_Applet.server.in",
+    dict = bld.env
+   )
 
 bld.add_group()
 
 # process .in files with intl_tool
 bld(features = 'intltool_in',
-	source   = 'hamster-applet.schemas.in',
-	install_path = '${PREFIX}/etc/gconf/schemas',
-	podir    = '../po',
-	flags    = ['-s', '-u', '-c'])
+    source   = 'hamster-applet.schemas.in',
+    install_path = '${SYSCONFDIR}/gconf/schemas',
+    podir    = '../po',
+    flags    = ['-s', '-u', '-c'])
 
 bld(features = 'intltool_in',
-	source   = 'hamster-standalone.desktop.in',
-	install_path = '${DATADIR}/applications',
-	podir    = '../po',
-	flags    = ['-d', '-q', '-u', '-c'])
+    source   = 'hamster-standalone.desktop.in',
+    install_path = '${DATADIR}/applications',
+    podir    = '../po',
+    flags    = ['-d', '-q', '-u', '-c'])
 
 bld(features = 'intltool_in',
-	source   = 'Hamster_Applet.server.in',
-	install_path = '${LIBDIR}/bonobo/servers',
-	podir    = '../po',
-	flags    = ['-o', '-u', '-c'])
+    source   = 'Hamster_Applet.server.in',
+    install_path = '${LIBDIR}/bonobo/servers',
+    podir    = '../po',
+    flags    = ['-o', '-u', '-c'])
