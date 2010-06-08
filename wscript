@@ -67,15 +67,23 @@ def build(bld):
     bld.add_post_fun(post)
 
 
-def dist():
-    """overriding dist to include help pages
-       rather lame but effective. the pages are needed for library.gnome.org
-    """
-    # TODO - add dependency on build before dist
-    # TODO - maybe this can be done in a more elegant manner
-
+def copy_help(ctx):
     import os
-    from Scripting import dist, build
     os.system('cp -R build/default/help/ .')
 
-    dist(APPNAME, VERSION)
+def push_release(ctx):
+    """copies generated page files to sources so that they are packaged on dist
+       then creates the tarball and pushes to git master
+       TODO - this should depend and fail if distcheck fails. also it looks
+              suspiciously non-native
+    """
+    tarball = dist(APPNAME, VERSION)
+
+    import os
+    os.system('scp %s tbaugis@master.gnome.org:/home/users/tbaugis' % tarball)
+    os.system("ssh tbaugis@master.gnome.org 'install-module %s'" % tarball)
+
+def release(ctx):
+    """packaging a version"""
+    import Scripting
+    Scripting.commands += ['build', 'copy_help', 'push_release']
