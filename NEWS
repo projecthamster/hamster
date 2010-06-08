@@ -1,4 +1,24 @@
 ===============
+Version 2.31.3
+===============
+  * dropped in-house global hotkey management in favour to Gnome's global
+    hotkeys
+  * HTML report template now can be overridden from $HOME folder. instructions
+    can be found in the report footer
+  * remembering path of last saved report
+  * moved build system from autotools to waf
+
+  Updated translations
+    * cs (Adrian Guniš)
+    * es (Jorge González)
+    * et (Ivar Smolin)
+    * gl (Fran Diéguez)
+    * he (Yair Hershkovitz)
+    * nb (Kjartan Maraas)
+    * sl (Matej Urbančič)
+    * zh_CN (Ray Wang)
+
+===============
 Version 2.31.2
 ===============
   * optional integration with gtg (via preferences)
