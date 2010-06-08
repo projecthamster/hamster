@@ -65,3 +65,17 @@ def build(bld):
         gnome.postinstall_icons() # Updating the icon cache
 
     bld.add_post_fun(post)
+
+
+def dist():
+    """overriding dist to include help pages
+       rather lame but effective. the pages are needed for library.gnome.org
+    """
+    # TODO - add dependency on build before dist
+    # TODO - maybe this can be done in a more elegant manner
+
+    import os
+    from Scripting import dist, build
+    os.system('cp -R build/default/help/ .')
+
+    dist(APPNAME, VERSION)
