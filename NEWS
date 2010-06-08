@@ -1,4 +1,10 @@
 ===============
+Version 2.31.3.2
+===============
+  * respecting SYSCONFDIR environment variable to determine where to store
+    gconf schema (bug 620965)
+
+===============
 Version 2.31.3.1
 ===============
   * including generated help pages in the tarball so that they appear in
