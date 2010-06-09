@@ -27,6 +27,7 @@ import calendar
 from itertools import groupby
 from gettext import ngettext
 import locale
+import math
 
 import gtk, gobject
 import pango
@@ -231,8 +232,21 @@ A week of usage would be nice!"""))
 
 
         for day in by_weekday:
-            by_weekday[day] = (sum([fact[0] for fact in by_weekday[day]]) / len(by_weekday[day]),
-                               sum([fact[1] for fact in by_weekday[day]]) / len(by_weekday[day]))
+            n = len(by_weekday[day])
+            # calculate mean and variance for starts and ends
+            means = (sum([fact[0] for fact in by_weekday[day]]) / n,
+                     sum([fact[1] for fact in by_weekday[day]]) / n)
+            variances = (sum([(fact[0] - means[0]) ** 2 for fact in by_weekday[day]]) / n,
+                         sum([(fact[1] - means[1]) ** 2 for fact in by_weekday[day]]) / n)
+
+            # In the normal distribution, the range from
+            # (mean - standard deviation) to infinit, or from
+            # -infinit to (mean + standard deviation),  has an accumulated
+            # probability of 84.1%. Meaning we are using the place where if we
+            # picked a random start(or end), 84.1% of the times it will be
+            # inside the range.
+            by_weekday[day] = (int(means[0] - math.sqrt(variances[0])),
+                               int(means[1] + math.sqrt(variances[1])))
 
         min_weekday = min([by_weekday[day][0] for day in by_weekday])
         max_weekday = max([by_weekday[day][1] for day in by_weekday])
@@ -272,8 +286,15 @@ A week of usage would be nice!"""))
                     by_category[category].append((min(start_times), max(end_times)))
 
         for cat in by_category:
-            by_category[cat] = (sum([fact[0] for fact in by_category[cat]]) / len(by_category[cat]),
-                                sum([fact[1] for fact in by_category[cat]]) / len(by_category[cat]))
+            # For explanation see the comments in the starts and ends by day
+            n = len(by_category[cat])
+            means = (sum([fact[0] for fact in by_category[cat]]) / n,
+                     sum([fact[1] for fact in by_category[cat]]) / n)
+            variances = (sum([(fact[0] - means[0]) ** 2 for fact in by_category[cat]]) / n,
+                         sum([(fact[1] - means[1]) ** 2 for fact in by_category[cat]]) / n)
+
+            by_category[cat] = (int(means[0] - math.sqrt(variances[0])),
+                                int(means[1] + math.sqrt(variances[1])))
 
         min_category = min([by_category[day][0] for day in by_category])
         max_category = max([by_category[day][1] for day in by_category])
