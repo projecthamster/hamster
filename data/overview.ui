@@ -1,53 +1,184 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
-  <object class="GtkWindow" id="tabs_window">
-    <property name="title" translatable="yes">Overview — Hamster</property>
-    <property name="default_width">800</property>
-    <property name="default_height">600</property>
-    <signal name="configure_event" handler="on_tabs_window_configure_event"/>
-    <signal name="delete_event" handler="on_tabs_window_deleted"/>
+  <object class="GtkWindow" id="range_popup">
+    <property name="border_width">12</property>
+    <property name="resizable">False</property>
+    <property name="window_position">mouse</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkVBox" id="vbox3">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
         <child>
-          <object class="GtkToolbar" id="toolbar1">
+          <object class="GtkButton" id="day_range">
             <property name="visible">True</property>
-            <property name="show_arrow">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="related_action">day</property>
+            <property name="use_action_appearance">False</property>
+            <property name="relief">none</property>
             <child>
-              <object class="GtkToolItem" id="range_pick">
+              <object class="GtkHBox" id="hbox6">
                 <property name="visible">True</property>
+                <property name="spacing">8</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel" id="label2">
+                    <property name="width_request">100</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Day:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="day_preview">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label">Jun 17</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-              </packing>
             </child>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="week_range">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="related_action">week</property>
+            <property name="use_action_appearance">False</property>
+            <property name="relief">none</property>
             <child>
-              <object class="GtkToolItem" id="date_ranges">
+              <object class="GtkHBox" id="hbox7">
                 <property name="visible">True</property>
+                <property name="spacing">8</property>
                 <child>
-                  <object class="GtkHBox" id="hbox1">
+                  <object class="GtkLabel" id="label4">
+                    <property name="width_request">100</property>
                     <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Week:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="week_preview">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label">Jun 14 - 20, 2010</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="month_range">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="related_action">month</property>
+            <property name="use_action_appearance">False</property>
+            <property name="relief">none</property>
+            <child>
+              <object class="GtkHBox" id="hbox8">
+                <property name="visible">True</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkLabel" id="label6">
+                    <property name="width_request">100</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Month:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="month_preview">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label">Jun 1-30, 2010</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkAlignment" id="alignment6">
+            <property name="visible">True</property>
+            <property name="left_padding">4</property>
+            <child>
+              <object class="GtkHBox" id="hbox9">
+                <property name="visible">True</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkLabel" id="label8">
+                    <property name="width_request">100</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
+                    <property name="ypad">7</property>
+                    <property name="label" translatable="yes">Range:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkVBox" id="vbox4">
+                    <property name="visible">True</property>
+                    <property name="spacing">5</property>
                     <child>
-                      <object class="GtkHBox" id="preset_range">
+                      <object class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkButton" id="prev">
+                          <object class="GtkAlignment" id="range_start_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <signal name="clicked" handler="on_prev_clicked"/>
                             <child>
-                              <object class="GtkImage" id="image1">
+                              <object class="GtkCalendar" id="start_calendar">
                                 <property name="visible">True</property>
-                                <property name="stock">gtk-go-back</property>
+                                <property name="can_focus">True</property>
+                                <property name="year">2010</property>
+                                <property name="month">5</property>
+                                <property name="day">11</property>
+                                <signal name="day-selected-double-click" handler="on_manual_range_apply_clicked" swapped="no"/>
                               </object>
                             </child>
                           </object>
@@ -56,34 +187,27 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="home">
+                          <object class="GtkLabel" id="label1">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <signal name="clicked" handler="on_home_clicked"/>
-                            <child>
-                              <object class="GtkImage" id="image2">
-                                <property name="visible">True</property>
-                                <property name="stock">gtk-home</property>
-                              </object>
-                            </child>
+                            <property name="yalign">0</property>
+                            <property name="ypad">7</property>
+                            <property name="label" translatable="yes">to</property>
                           </object>
                           <packing>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="next">
+                          <object class="GtkAlignment" id="range_end_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <signal name="clicked" handler="on_next_clicked"/>
                             <child>
-                              <object class="GtkImage" id="image3">
+                              <object class="GtkCalendar" id="end_calendar">
                                 <property name="visible">True</property>
-                                <property name="stock">gtk-go-forward</property>
+                                <property name="can_focus">True</property>
+                                <property name="year">2010</property>
+                                <property name="month">5</property>
+                                <property name="day">11</property>
+                                <signal name="day-selected-double-click" handler="on_manual_range_apply_clicked" swapped="no"/>
                               </object>
                             </child>
                           </object>
@@ -97,47 +221,26 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="range_box">
-                        <property name="no_show_all">True</property>
-                        <property name="top_padding">3</property>
-                        <property name="bottom_padding">3</property>
-                        <property name="left_padding">6</property>
+                      <object class="GtkHButtonBox" id="hbuttonbox1">
+                        <property name="visible">True</property>
+                        <property name="layout_style">end</property>
                         <child>
-                          <object class="GtkHBox" id="hbox2">
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="manual_range_apply">
+                            <property name="label" translatable="yes">Apply</property>
                             <property name="visible">True</property>
-                            <property name="spacing">4</property>
-                            <child>
-                              <object class="GtkAlignment" id="range_start_box">
-                                <property name="visible">True</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label1">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">to</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkAlignment" id="range_end_box">
-                                <property name="visible">True</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_manual_range_apply_clicked" swapped="no"/>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -145,114 +248,144 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-              </packing>
             </child>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="view">
+    <child>
+      <object class="GtkAction" id="day">
+        <property name="label" translatable="yes">Day</property>
+        <signal name="activate" handler="on_day_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="week">
+        <property name="label" translatable="yes">Week</property>
+        <signal name="activate" handler="on_week_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="month">
+        <property name="label" translatable="yes">Month</property>
+        <signal name="activate" handler="on_month_activate" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="tabs_window">
+    <property name="title" translatable="yes">Overview — Hamster</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
+    <signal name="configure-event" handler="on_tabs_window_configure_event" swapped="no"/>
+    <signal name="delete-event" handler="on_tabs_window_deleted" swapped="no"/>
+    <child>
+      <object class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkMenuBar" id="menubar1">
+            <property name="visible">True</property>
             <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton1">
+              <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="add">
-                <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Add</property>
-                <property name="stock_id">gtk-add</property>
-                <signal name="clicked" handler="on_add_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="remove">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Remove</property>
-                <property name="stock_id">gtk-remove</property>
-                <signal name="clicked" handler="on_remove_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="edit">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="label" translatable="yes">Edit</property>
-                <property name="stock_id">gtk-edit</property>
-                <signal name="clicked" handler="on_edit_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton2">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="report_button">
-                <property name="visible">True</property>
-                <property name="is_important">True</property>
-                <property name="label" translatable="yes">Save Report</property>
+                <property name="label" translatable="yes">_Overview</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-save</property>
-                <signal name="clicked" handler="on_report_button_clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolItem" id="toolbutton7">
-                <property name="visible">True</property>
-                <child>
-                  <object class="GtkAlignment" id="alignment1">
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
-                    <property name="top_padding">3</property>
-                    <property name="bottom_padding">3</property>
-                    <property name="left_padding">6</property>
-                    <property name="right_padding">6</property>
                     <child>
-                      <object class="GtkEntry" id="search">
+                      <object class="GtkMenuItem" id="report_button">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">&#x2022;</property>
-                        <property name="primary_icon_stock">gtk-find</property>
-                        <property name="secondary_icon_stock">gtk-clear</property>
-                        <property name="secondary_icon_activatable">True</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <signal name="changed" handler="on_search_changed"/>
-                        <signal name="icon_press" handler="on_search_icon_press"/>
-                        <signal name="activate" handler="on_search_activate"/>
+                        <property name="label" translatable="yes">Export data...</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitem5">
+                        <property name="label">gtk-close</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem14">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Activity</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu5">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_edit">
+                        <property name="visible">True</property>
+                        <property name="related_action">edit</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_remove">
+                        <property name="visible">True</property>
+                        <property name="related_action">remove</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="menuitem2">
+                        <property name="visible">True</property>
+                        <property name="use_action_appearance">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_add">
+                        <property name="visible">True</property>
+                        <property name="related_action">add</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menu_view">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_View</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu4">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_view_day">
+                        <property name="visible">True</property>
+                        <property name="related_action">day</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_view_week">
+                        <property name="visible">True</property>
+                        <property name="related_action">week</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_view_month">
+                        <property name="visible">True</property>
+                        <property name="related_action">month</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -269,17 +402,154 @@
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
-                  <object class="GtkLabel" id="range_title">
+                  <object class="GtkHBox" id="hbox3">
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label">Range</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                      <attribute name="size" value="15000"/>
-                    </attributes>
+                    <child>
+                      <object class="GtkHBox" id="hbox4">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkButton" id="button_prev">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="related_action">prev</property>
+                            <property name="relief">none</property>
+                            <child>
+                              <object class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-go-back</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_home">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="related_action">home</property>
+                            <property name="relief">none</property>
+                            <child>
+                              <object class="GtkImage" id="image2">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-home</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_next">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="related_action">next</property>
+                            <property name="relief">none</property>
+                            <child>
+                              <object class="GtkImage" id="image3">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-go-forward</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="date_pick">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <signal name="toggled" handler="on_date_pick_toggled" swapped="no"/>
+                            <child>
+                              <object class="GtkAlignment" id="alignment4">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox1">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">3</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="alignment5">
+                                        <property name="visible">True</property>
+                                        <property name="top_padding">2</property>
+                                        <property name="bottom_padding">2</property>
+                                        <property name="left_padding">2</property>
+                                        <property name="right_padding">2</property>
+                                        <child>
+                                          <object class="GtkLabel" id="range_title">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label">Range</property>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                              <attribute name="size" value="15000"/>
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment1">
+                        <property name="width_request">250</property>
+                        <property name="visible">True</property>
+                        <property name="top_padding">3</property>
+                        <property name="bottom_padding">3</property>
+                        <property name="left_padding">6</property>
+                        <property name="right_padding">6</property>
+                        <child>
+                          <object class="GtkEntry" id="search">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="primary_icon_stock">gtk-find</property>
+                            <property name="secondary_icon_stock">gtk-clear</property>
+                            <property name="secondary_icon_activatable">True</property>
+                            <signal name="changed" handler="on_search_changed" swapped="no"/>
+                            <signal name="icon-press" handler="on_search_icon_press" swapped="no"/>
+                            <signal name="activate" handler="on_search_activate" swapped="no"/>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="position">0</property>
@@ -318,7 +588,7 @@
                 <property name="can_focus">True</property>
                 <property name="tab_hborder">8</property>
                 <property name="tab_vborder">4</property>
-                <signal name="switch_page" handler="on_window_tabs_switch_page" after="yes"/>
+                <signal name="switch-page" handler="on_window_tabs_switch_page" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkAlignment" id="overview_tab">
                     <property name="visible">True</property>
@@ -364,6 +634,78 @@
             <property name="position">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="activity">
+    <child>
+      <object class="GtkAction" id="remove">
+        <property name="label" translatable="yes">Remove</property>
+        <property name="stock_id">gtk-remove</property>
+        <property name="sensitive">False</property>
+        <signal name="activate" handler="on_remove_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="add">
+        <property name="label">Add new</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_add_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="edit">
+        <property name="label" translatable="yes">Edit</property>
+        <property name="stock_id">gtk-edit</property>
+        <property name="sensitive">False</property>
+        <signal name="activate" handler="on_edit_activate" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="fact_tree_popup">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkMenuItem" id="popup_edit">
+        <property name="visible">True</property>
+        <property name="related_action">edit</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="popup_remove">
+        <property name="visible">True</property>
+        <property name="related_action">remove</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem10">
+        <property name="visible">True</property>
+        <property name="use_action_appearance">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="popup_add">
+        <property name="visible">True</property>
+        <property name="related_action">add</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="go">
+    <child>
+      <object class="GtkAction" id="next">
+        <property name="stock_id">gtk-go-forward</property>
+        <signal name="activate" handler="on_next_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="home">
+        <property name="stock_id">gtk-home</property>
+        <signal name="activate" handler="on_home_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="prev">
+        <property name="stock_id">gtk-go-back</property>
+        <signal name="activate" handler="on_prev_activate" swapped="no"/>
       </object>
     </child>
   </object>
