@@ -129,7 +129,7 @@ class Overview(object):
         search_terms = self.get_widget("search").get_text().decode("utf8", "replace")
         self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
-        self.get_widget("report_button").set_sensitive(len(self.facts) > 0)
+        self.get_widget("export").set_sensitive(len(self.facts) > 0)
 
         self.set_title()
 
@@ -183,7 +183,7 @@ class Overview(object):
         has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
 
-    def on_report_button_clicked(self, widget):
+    def on_export_activate(self, widget):
         def on_report_chosen(widget, format, path):
             self.report_chooser = None
             reports.simple(self.facts, self.start_date, self.end_date, format, path)

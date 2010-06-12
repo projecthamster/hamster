@@ -3,6 +3,22 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
+  <object class="GtkActionGroup" id="overview">
+    <child>
+      <object class="GtkAction" id="export">
+        <property name="label" translatable="yes">Export data...</property>
+        <property name="icon_name">document-save</property>
+        <signal name="activate" handler="on_export_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="close">
+        <property name="stock_id">gtk-close</property>
+        <signal name="activate" handler="on_close_activate" swapped="no"/>
+      </object>
+      <accelerator key="w" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+  </object>
   <object class="GtkActionGroup" id="view">
     <child>
       <object class="GtkAction" id="day">
@@ -46,15 +62,13 @@
                     <child>
                       <object class="GtkMenuItem" id="report_button">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Export data...</property>
-                        <property name="use_underline">True</property>
+                        <property name="related_action">export</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem5">
-                        <property name="label">gtk-close</property>
                         <property name="visible">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="related_action">close</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
