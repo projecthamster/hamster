@@ -37,6 +37,9 @@ from reportchooserdialog import ReportChooserDialog
 
 from facttree import FactTree
 
+from rangepick import RangePick
+
+
 # handy wrappers
 def add_hint(entry, hint):
     entry.hint = hint
@@ -85,4 +88,3 @@ def add_hint(entry, hint):
     entry.connect('changed', entry._on_changed)
 
     entry._set_hint(entry, None)
-

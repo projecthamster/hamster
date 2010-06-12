@@ -28,6 +28,7 @@ from pango import ELLIPSIZE_END
 
 from itertools import groupby
 import datetime as dt
+import calendar
 import time
 import re
 import gettext, locale
@@ -94,6 +95,55 @@ def format_duration(minutes, human = True):
 
 
     return formatted_duration
+
+
+def format_range(start_date, end_date):
+    dates_dict = dateDict(start_date, "start_")
+    dates_dict.update(dateDict(end_date, "end_"))
+
+    if start_date == end_date:
+        # label of date range if looking on single day
+        # date format for overview label when only single day is visible
+        # Using python datetime formatting syntax. See:
+        # http://docs.python.org/library/time.html#time.strftime
+        title = start_date.strftime(_("%B %d, %Y"))
+    elif start_date.year != end_date.year:
+        # label of date range if start and end years don't match
+        # letter after prefixes (start_, end_) is the one of
+        # standard python date formatting ones- you can use all of them
+        # see http://docs.python.org/library/time.html#time.strftime
+        title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+    elif start_date.month != end_date.month:
+        # label of date range if start and end month do not match
+        # letter after prefixes (start_, end_) is the one of
+        # standard python date formatting ones- you can use all of them
+        # see http://docs.python.org/library/time.html#time.strftime
+        title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+    else:
+        # label of date range for interval in same month
+        # letter after prefixes (start_, end_) is the one of
+        # standard python date formatting ones- you can use all of them
+        # see http://docs.python.org/library/time.html#time.strftime
+        title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+
+    return title
+
+
+
+def week(view_date):
+    # aligns start and end date to week
+    start_date = view_date - dt.timedelta(view_date.weekday() + 1)
+    start_date = start_date + dt.timedelta(locale_first_weekday())
+    end_date = start_date + dt.timedelta(6)
+    return start_date, end_date
+
+def month(view_date):
+    # aligns start and end date to month
+    start_date = view_date - dt.timedelta(view_date.day - 1) #set to beginning of month
+    first_weekday, days_in_month = calendar.monthrange(view_date.year, view_date.month)
+    end_date = start_date + dt.timedelta(days_in_month - 1)
+    return start_date, end_date
+
 
 def duration_minutes(duration):
     """returns minutes from duration, otherwise we keep bashing in same math"""

@@ -54,6 +54,10 @@ class Overview(object):
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
                                                         minutes = self.day_start.minute)).date()
 
+        self.range_pick = widgets.RangePick()
+        self.get_widget("range_pick_box").add(self.range_pick)
+        self.range_pick.connect("range-selected", self.on_range_selected)
+
         #set to monday
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
 
@@ -90,9 +94,6 @@ class Overview(object):
 
         conf.connect('conf-changed', self.on_conf_change)
 
-        #self.get_widget("hbox1").pack_start(gtk.VSeparator())
-        self.get_widget("hbox1").pack_start(gtk.Arrow(gtk.ARROW_DOWN, gtk.SHADOW_ETCHED_IN))
-
         if conf.get("overview_window_maximized"):
             self.window.maximize()
         else:
@@ -107,7 +108,6 @@ class Overview(object):
 
         self.window.show_all()
         self.search()
-
 
     def on_fact_tree_button_press(self, treeview, event):
         if event.button == 3:
@@ -133,6 +133,8 @@ class Overview(object):
 
         self.set_title()
 
+        self.range_pick.set_range(self.start_date, self.end_date, self.view_date)
+
         durations = [(fact["start_time"], fact["delta"]) for fact in self.facts]
         self.timechart.draw(durations, self.start_date, self.end_date)
 
@@ -145,41 +147,9 @@ class Overview(object):
             self.overview.search(self.start_date, self.end_date, self.facts)
 
     def set_title(self):
-        self.title = self.format_range(self.start_date, self.end_date)
+        self.title = stuff.format_range(self.start_date, self.end_date)
         self.window.set_title(self.title.decode("utf-8"))
-        self.get_widget("range_title").set_text(self.title)
 
-
-    def format_range(self, start_date, end_date):
-        dates_dict = stuff.dateDict(start_date, "start_")
-        dates_dict.update(stuff.dateDict(end_date, "end_"))
-
-        if start_date == end_date:
-            # Overview label if looking on single day
-            # date format for overview label when only single day is visible
-            # Using python datetime formatting syntax. See:
-            # http://docs.python.org/library/time.html#time.strftime
-            title = start_date.strftime(_("%B %d, %Y"))
-        elif start_date.year != end_date.year:
-            # overview label if start and end years don't match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        elif start_date.month != end_date.month:
-            # overview label if start and end month do not match
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
-        else:
-            # overview label for interval in same month
-            # letter after prefixes (start_, end_) is the one of
-            # standard python date formatting ones- you can use all of them
-            # see http://docs.python.org/library/time.html#time.strftime
-            title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
-
-        return title
 
     def on_conf_change(self, event, key, value):
         if key == "day_start_minutes":
@@ -238,9 +208,14 @@ class Overview(object):
 
 
     def apply_range_select(self):
-        self.get_widget("range_popup").hide()
-        self.get_widget("date_pick").set_active(False)
         self.search()
+
+
+    def on_range_selected(self, widget, range, start, end):
+        self.current_range = range
+        self.start_date = start
+        self.end_date = end
+        self.apply_range_select()
 
     def on_day_activate(self, button):
         self.current_range = "day"
@@ -250,12 +225,12 @@ class Overview(object):
 
     def on_week_activate(self, button):
         self.current_range = "week"
-        self.start_date, self.end_date = self.week()
+        self.start_date, self.end_date = stuff.week(self.view_date)
         self.apply_range_select()
 
     def on_month_activate(self, button):
         self.current_range = "month"
-        self.start_date, self.end_date = self.month()
+        self.start_date, self.end_date = stuff.month(self.view_date)
         self.apply_range_select()
 
     def on_manual_range_apply_clicked(self, button):
@@ -269,36 +244,9 @@ class Overview(object):
         self.apply_range_select()
 
 
-
-
-    def week(self):
-        # aligns start and end date to week
-        start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-        start_date = start_date + dt.timedelta(stuff.locale_first_weekday())
-        end_date = start_date + dt.timedelta(6)
-        return start_date, end_date
-
-    def month(self):
-        # aligns start and end date to month
-        start_date = self.view_date - dt.timedelta(self.view_date.day - 1) #set to beginning of month
-        first_weekday, days_in_month = calendar.monthrange(self.view_date.year, self.view_date.month)
-        end_date = start_date + dt.timedelta(days_in_month - 1)
-        return start_date, end_date
-
-
     def on_tabs_window_configure_event(self, window, event):
         # this is required so that the rows would grow on resize
         self.fact_tree.fix_row_heights()
-
-
-    def on_start_date_entered(self, input):
-        self.start_date = input.get_date()
-        self.view_date = self.start_date
-        self.search()
-
-    def on_end_date_entered(self, input):
-        self.end_date = input.get_date()
-        self.search()
 
 
     def on_prev_activate(self, action):
@@ -391,34 +339,6 @@ class Overview(object):
     def on_remove_activate(self, button):
         self.overview.delete_selected()
 
-
-    def on_date_pick_toggled(self, button):
-        if button.get_active():
-            popup = self.get_widget("range_popup")
-
-
-            window = button.get_window()
-            x, y = window.get_origin()
-
-            alloc = button.get_allocation()
-
-            popup.move(x + alloc.x,y + alloc.y + alloc.height)
-
-            self.get_widget("day_preview").set_text(self.format_range(self.view_date, self.view_date).decode("utf-8"))
-            self.get_widget("week_preview").set_text(self.format_range(*self.week()).decode("utf-8"))
-            self.get_widget("month_preview").set_text(self.format_range(*self.month()).decode("utf-8"))
-
-            start_cal = self.get_widget("start_calendar")
-            start_cal.select_month(self.start_date.month, self.start_date.year)
-            start_cal.select_day(self.start_date.day)
-
-            end_cal = self.get_widget("end_calendar")
-            end_cal.select_month(self.end_date.month, self.end_date.year)
-            end_cal.select_day(self.end_date.day)
-
-            popup.show_all()
-        else:
-            self.get_widget("range_popup").hide()
 
     def on_edit_activate(self, button):
         fact = self.fact_tree.get_selected_fact()
