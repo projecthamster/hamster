@@ -355,6 +355,9 @@ class Overview(object):
               and event_key.state & gtk.gdk.CONTROL_MASK)):
         self.close_window()
 
+    def on_close_activate(self, action):
+        self.close_window()
+        
     def close_window(self):
         # properly saving window state and position
         maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
