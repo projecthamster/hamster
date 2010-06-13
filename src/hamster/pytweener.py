@@ -8,7 +8,10 @@
 # Python version by Ben Harling 2009
 # All kinds of slashing and dashing by Toms Baugis 2010
 import math
-import collections, itertools
+import collections
+import datetime as dt
+import time
+import re
 
 class Tweener(object):
     def __init__(self, default_duration = None, tween = None):
@@ -30,13 +33,26 @@ class Tweener(object):
             This will move the sprite to coordinates (500, 200) in 0.4 seconds.
             For parameter "easing" you can use one of the pytweener.Easing
             functions, or specify your own.
+            The tweener can handle numbers, dates and color strings in hex ("#ffffff")
         """
         duration = duration or self.default_duration
         easing = easing or self.default_easing
         delay = delay or 0
 
         tw = Tween(obj, duration, easing, on_complete, on_update, delay, **kwargs )
+
+        if obj in self.current_tweens:
+            for current_tween in self.current_tweens[obj]:
+                prev_keys = set((tweenable.key for tweenable in current_tween.tweenables))
+                dif = prev_keys & set(kwargs.keys())
+
+                removable = [tweenable for tweenable in current_tween.tweenables if tweenable.key in dif]
+                for tweenable in removable:
+                    current_tween.tweenables.remove(tweenable)
+
+
         self.current_tweens[obj].add(tw)
+        return tw
 
 
     def get_tweens(self, obj):
@@ -54,6 +70,11 @@ class Tweener(object):
                 pass
         else:
             self.current_tweens = collections.defaultdict(set)
+
+    def remove_tween(self, tween):
+        """"remove given tween without completing the motion or firing the on_complete"""
+        if tween.target in self.current_tweens and tween in self.current_tweens[tween.target]:
+            self.current_tweens[tween.target].remove(tween)
 
     def finish(self):
         """jump the the last frame of all tweens"""
@@ -82,6 +103,68 @@ class Tweener(object):
                 del self.current_tweens[tween.target]
 
 
+class Tweenable(object):
+    hex_color_normal = re.compile("#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})")
+    hex_color_short = re.compile("#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])")
+
+    def __init__(self, key, start_value, target_value):
+        self.key = key
+        self.change = None
+        self.decode_func = lambda x: x
+        self.encode_func = lambda x: x
+        self.start_value = start_value
+        self.target_value = target_value
+
+        if isinstance(start_value, int) or isinstance(start_value, float):
+            self.start_value = start_value
+            self.change = target_value - start_value
+        else:
+            if isinstance(start_value, dt.datetime) or isinstance(start_value, dt.date):
+                self.decode_func = lambda x: time.mktime(x.timetuple())
+                if isinstance(start_value, dt.datetime):
+                    self.encode_func = lambda x: dt.datetime.fromtimestamp(x)
+                else:
+                    self.encode_func = lambda x: dt.date.fromtimestamp(x)
+
+                self.start_value = self.decode_func(start_value)
+                self.change = self.decode_func(target_value) - self.start_value
+
+            elif isinstance(start_value, basestring) \
+             and (self.hex_color_normal.match(start_value) or self.hex_color_short.match(start_value)):
+                # code below is mainly based on jquery-color plugin
+                self.encode_func = lambda val: "#%02x%02x%02x" % (max(min(val[0], 255), 0),
+                                                                  max(min(val[1], 255), 0),
+                                                                  max(min(val[2], 255), 0))
+                if self.hex_color_normal.match(start_value):
+                    self.decode_func = lambda val: [int(match, 16)
+                                                    for match in self.hex_color_normal.match(val).groups()]
+
+                elif self.hex_color_short.match(start_value):
+                    self.decode_func = lambda val: [int(match + match, 16)
+                                                    for match in self.hex_color_short.match(val).groups()]
+
+                if self.hex_color_normal.match(target_value):
+                    target_value = [int(match, 16)
+                                    for match in self.hex_color_normal.match(target_value).groups()]
+                else:
+                    target_value = [int(match + match, 16)
+                                    for match in self.hex_color_short.match(target_value).groups()]
+
+                self.start_value = self.decode_func(start_value)
+                self.change = [target - start for start, target in zip(self.start_value, target_value)]
+
+
+    def update(self, ease, delta, duration):
+        # list means we are dealing with a color triplet
+        if isinstance(self.start_value, list):
+            return self.encode_func([ease(delta, self.start_value[i],
+                                                 self.change[i], duration)
+                                                             for i in range(3)])
+        else:
+            return self.encode_func(ease(delta, self.start_value, self.change, duration))
+
+
+
 class Tween(object):
     __slots__ = ('tweenables', 'target', 'delta', 'duration', 'delay',
                  'ease', 'delta', 'on_complete',
@@ -95,7 +178,9 @@ class Tween(object):
         self.ease = easing
 
         # list of (property, start_value, delta)
-        self.tweenables = set(((key, self.target.__dict__[key], value - self.target.__dict__[key]) for key, value in kwargs.items()))
+        self.tweenables = set()
+        for key, value in kwargs.items():
+            self.tweenables.add(Tweenable(key, self.target.__dict__[key], value))
 
         self.delta = 0
         self.on_complete = on_complete
@@ -137,8 +222,9 @@ class Tween(object):
         if self.delta > self.duration:
             self.delta = self.duration
 
-        for prop, start_value, delta_value in self.tweenables:
-            self.target.__dict__[prop] = self.ease(self.delta, start_value, delta_value, self.duration)
+        for tweenable in self.tweenables:
+            self.target.__setattr__(tweenable.key,
+                                    tweenable.update(self.ease, self.delta, self.duration))
 
         if self.delta == self.duration:
             self.complete = True
@@ -505,28 +591,15 @@ if __name__ == "__main__":
     tweener = Tweener()
     objects = []
     for i in range(10000):
-        objects.append(_PerformanceTester(i-100, i-100, i-100))
+        objects.append(_PerformanceTester(dt.datetime.now(), i-100, i-100))
 
 
     total = dt.datetime.now()
 
     t = dt.datetime.now()
     for i, o in enumerate(objects):
-        tweener.add_tween(o, a = i, b = i, c = i, duration = 1.0)
+        tweener.add_tween(o, a = dt.datetime.now() - dt.timedelta(days=3), b = i, c = i, duration = 1.0)
     print "add", dt.datetime.now() - t
 
-    t = dt.datetime.now()
-
-    for i in range(10):
-        tweener.update(0.01)
-    print "update", dt.datetime.now() - t
-
-    t = dt.datetime.now()
-
-    for i in range(10):
-        for i, o in enumerate(objects):
-            tweener.kill_tweens(o)
-            tweener.add_tween(o, a = i, b = i, c = i, duration = 1.0)
-    print "kill-add", dt.datetime.now() - t
-
-    print "total", dt.datetime.now() - total
+    tweener.finish()
+    print objects[0].a

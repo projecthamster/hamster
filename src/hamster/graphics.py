@@ -483,12 +483,13 @@ class Sprite(gtk.Object):
         #: drawing order between siblings. The one with the highest z_order will be on top.
         self.z_order = z_order
 
-        self._sprite_dirty = True # flag that indicates that the graphics object of the sprite should be rendered
+        self.__dict__["_sprite_dirty"] = True # flag that indicates that the graphics object of the sprite should be rendered
 
     def __setattr__(self, name, val):
-        self.__dict__[name] = val
-        if name not in ('_sprite_dirty', 'x', 'y', 'rotation', 'scale_x', 'scale_y'):
-            self.__dict__["_sprite_dirty"] = True
+        if self.__dict__.get(name, "hamster_graphics_no_value_really") != val:
+            self.__dict__[name] = val
+            if name not in ('x', 'y', 'rotation', 'scale_x', 'scale_y'):
+                self.__dict__["_sprite_dirty"] = True
 
 
     def add_child(self, *sprites):
@@ -526,7 +527,7 @@ class Sprite(gtk.Object):
 
         if (self._sprite_dirty): # send signal to redo the drawing when sprite's dirty
             self.emit("on-render")
-            self._sprite_dirty = False
+            self.__dict__["_sprite_dirty"] = False
 
         self.graphics._draw(context, self.interactive or self.draggable)
 
@@ -591,8 +592,6 @@ class Label(Sprite):
 
     def __setattr__(self, name, val):
         Sprite.__setattr__(self, name, val)
-        if name == "_sprite_dirty":
-            return
 
         if name == "width":
             # setting width means consumer wants to contrain the label
@@ -798,12 +797,21 @@ class Scene(gtk.DrawingArea):
         #: read only info about current framerate (frames per second)
         self.fps = 0 # inner frames per second counter
 
+        #: Mouse cursor appearance.
+        #: Replace with your own cursor or set to False to have no cursor.
+        #: None will revert back the default behavior
+        self.mouse_cursor = None
+
+        blank_pixmap = gtk.gdk.Pixmap(None, 1, 1, 1)
+        self._blank_cursor = gtk.gdk.Cursor(blank_pixmap, blank_pixmap, gtk.gdk.Color(), gtk.gdk.Color(), 0, 0)
+
 
         self._last_frame_time = None
         self._mouse_sprites = set()
         self._mouse_drag = None
         self._drag_sprite = None
         self._button_press_time = None # to distinguish between click and drag
+
 
         self._mouse_in = False
 
@@ -857,14 +865,15 @@ class Scene(gtk.DrawingArea):
         if not self.tweener: # here we complain
             raise Exception("pytweener was not found. Include it to enable animations")
 
-        self.tweener.add_tween(sprite,
-                               duration=duration,
-                               easing=easing,
-                               on_complete=on_complete,
-                               on_update=on_update,
-                               delay=delay, **kwargs)
-
+        tween = self.tweener.add_tween(sprite,
+                                       duration=duration,
+                                       easing=easing,
+                                       on_complete=on_complete,
+                                       on_update=on_update,
+                                       delay=delay, **kwargs)
         self.redraw()
+        return tween
+
 
     # exposure events
     def do_configure_event(self, event):
@@ -915,8 +924,6 @@ class Scene(gtk.DrawingArea):
 
         if self._drag_sprite and self._drag_sprite.draggable \
            and gtk.gdk.BUTTON1_MASK & event.state:
-            self.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.FLEUR))
-
             # dragging around
             drag = self._mouse_drag \
                    and (self._mouse_drag[0] - event.x) ** 2 + \
@@ -959,17 +966,25 @@ class Scene(gtk.DrawingArea):
         if mouse_x is None or self._mouse_in == False:
             return
 
-        #check if we have a mouse over
-        over = set()
+        custom_mouse = self.mouse_cursor is not None
 
         cursor = gtk.gdk.ARROW
+        if custom_mouse:
+            if self.mouse_cursor == False:
+                cursor = self._blank_cursor
+            else:
+                cursor = self.mouse_cursor
 
+
+        #check if we have a mouse over
+        over = set()
         for sprite in self.all_sprites():
             if sprite.interactive and self._check_hit(sprite, mouse_x, mouse_y):
-                if sprite.draggable:
-                    cursor = gtk.gdk.FLEUR
-                else:
-                    cursor = gtk.gdk.HAND2
+                if custom_mouse == False:
+                    if sprite.draggable:
+                        cursor = gtk.gdk.FLEUR
+                    else:
+                        cursor = gtk.gdk.HAND2
 
                 over.add(sprite)
 
@@ -992,7 +1007,11 @@ class Scene(gtk.DrawingArea):
 
 
         self._mouse_sprites = over
-        self.window.set_cursor(gtk.gdk.Cursor(cursor))
+
+        if isinstance(cursor, gtk.gdk.Cursor):
+            self.window.set_cursor(cursor)
+        else:
+            self.window.set_cursor(gtk.gdk.Cursor(cursor))
 
 
     def __on_mouse_enter(self, area, event):
