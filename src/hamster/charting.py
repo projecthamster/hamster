@@ -31,7 +31,6 @@ class Bar(graphics.Sprite):
 
         self.height = 0
         self.width = 20
-        self.vertical = True
         self.interactive = True
         self.fill = None
 
@@ -86,7 +85,6 @@ class Chart(graphics.Scene):
         self.value_format = value_format
         self.graph_interactive = interactive
 
-        self.vertical = True
         self.plot_area = graphics.Sprite(interactive = False)
         self.add_child(self.plot_area)
 
@@ -187,7 +185,6 @@ class Chart(graphics.Scene):
         for i, (label, bar) in enumerate(zip(self.labels, self.bars)):
             bar_width = min(round((self.plot_area.height - y) / (len(self.bars) - i)), self.max_width)
             bar.y = y
-            bar.vertical = False
             bar.height = bar_width
             bar.width = self.plot_area.width
 
