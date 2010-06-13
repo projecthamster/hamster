@@ -20,7 +20,7 @@
 import os  # for locale
 import gtk, pango
 
-from .hamster import graphics
+from .hamster import graphics, stuff
 
 import time, datetime as dt
 import calendar
@@ -29,6 +29,43 @@ from bisect import bisect
 
 DAY = dt.timedelta(1)
 WEEK = dt.timedelta(7)
+
+class VerticalBar(graphics.Sprite):
+    def __init__(self, key, format, value, normalized, label_color):
+        graphics.Sprite.__init__(self)
+
+        self.key, self.format = key, format,
+        self.value, self.normalized = value, normalized
+
+        # area dimensions - to be set externally
+        self.height = 0
+        self.width = 20
+        self.fill = None
+
+        self.key_label = graphics.Label(key.strftime(format), x=2, y=0, size=8, color=label_color)
+        self.show_label = True
+
+        self.add_child(self.key_label)
+        self.connect("on-render", self.on_render)
+
+    def on_render(self, sprite):
+        # invisible rectangle for the mouse, covering whole area
+        self.graphics.set_color("#000", 0)
+        self.graphics.rectangle(0, 0, self.width, self.height)
+        self.graphics.stroke()
+
+        size = max(round(self.height * self.normalized * 0.8), 1)
+
+        self.graphics.rectangle(0, self.height - size, self.width, size, 3)
+        self.graphics.rectangle(0, self.height - min(size, 3), self.width, min(size, 3))
+        self.graphics.fill(self.fill)
+
+        if self.show_label and self.key_label not in self.sprites:
+            self.add_child(self.key_label)
+        elif self.show_label == False and self.key_label in self.sprites:
+            self.sprites.remove(self.key_label)
+
+
 
 class TimeChart(graphics.Scene):
     """this widget is kind of half finished"""
@@ -39,14 +76,25 @@ class TimeChart(graphics.Scene):
         self.durations = []
 
         self.day_start = dt.time() # ability to start day at another hour
-        self.first_weekday = self.locale_first_weekday()
+        self.first_weekday = stuff.locale_first_weekday()
 
         self.minor_tick = None
-
         self.tick_totals = []
+        self.bars = []
 
         self.connect("on-enter-frame", self.on_enter_frame)
+        self.connect("on-mouse-over", self.on_mouse_over)
+        self.connect("on-mouse-out", self.on_mouse_out)
 
+
+    def on_mouse_over(self, scene, targets):
+        bar = targets[0]
+        bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
+        self.redraw()
+
+    def on_mouse_out(self, scene, targets):
+        bar = targets[0]
+        bar.fill = self.bar_color
 
     def draw(self, durations, start_date, end_date):
         self.durations = durations
@@ -111,21 +159,23 @@ class TimeChart(graphics.Scene):
 
         self.redraw()
 
-
     def on_enter_frame(self, scene, context):
         if not self.start_time or not self.end_time:
             return
 
         g = graphics.Graphics(context)
 
+
         # figure out colors
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
         if g.colors.is_light(bg_color):
-            bar_color = g.colors.darker(bg_color,  30)
-            tick_color = g.colors.darker(bg_color,  50)
+            self.bar_color = g.colors.darker(bg_color,  30)
+            self.tick_color = g.colors.darker(bg_color,  50)
         else:
-            bar_color = g.colors.darker(bg_color,  -30)
-            tick_color = g.colors.darker(bg_color,  -50)
+            self.bar_color = g.colors.darker(bg_color,  -30)
+            self.tick_color = g.colors.darker(bg_color,  -50)
+
+
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
@@ -164,32 +214,49 @@ class TimeChart(graphics.Scene):
         exes = {}
 
         x = 0
-        bar_width = (float(self.width) - len(ticks) * 2)  / len(self.tick_totals)
+        bar_width = round((float(self.width) - len(ticks) * 2)  / len(self.tick_totals))
         remaining_ticks = len(ticks)
-        for i, (current_time, total) in enumerate(self.tick_totals):
-            # move the x bit further when ticks kick in
-            if current_time in ticks:
+
+
+        for i, bar in enumerate(self.bars):
+            if bar.key in ticks:
                 x += 2
                 remaining_ticks -= 1
 
-            exes[current_time] = (x, int(bar_width)) #saving those as getting pixel precision is not an exact science
+            bar.x = x
+            bar.width = bar_width - 1
+            bar.height = self.height
+
+            if not bar.fill:
+                bar.fill = self.bar_color
+
+            if (self.end_time - self.start_time) > dt.timedelta(10) \
+               and self.minor_tick == DAY and first_weekday(bar.key) == False:
+                if bar.show_label:
+                    bar.show_label = False
+            else:
+                if bar.show_label == False:
+                    bar.show_label = True
+
+
+
+            exes[bar.key] = (x, int(bar_width)) #saving those as getting pixel precision is not an exact science
 
             x = int(x + bar_width)
-            bar_width = (self.width - x - remaining_ticks * 2) / float(max(len(self.tick_totals) - i - 1, 1))
+            bar_width = round((self.width - x - remaining_ticks * 2) / float(max(len(self.tick_totals) - i - 1, 1)))
 
 
 
         def line(x, color):
             g.move_to(round(x) + 0.5, 0)
-            g.set_color(color)
             g.line_to(round(x) + 0.5, self.height)
-            g.stroke()
+            g.stroke(color)
 
         def somewhere_in_middle(time, color):
             # draws line somewhere in middle of the minor tick
             left_index = exes.keys()[bisect(exes.keys(), time) - 1]
             #should yield something between 0 and 1
-            adjustment = self.duration_minutes(time - left_index) / float(self.duration_minutes(self.minor_tick))
+            adjustment = stuff.duration_minutes(time - left_index) / float(stuff.duration_minutes(self.minor_tick))
             x, width = exes[left_index]
             line(x + round(width * adjustment) - 1, color)
 
@@ -198,73 +265,20 @@ class TimeChart(graphics.Scene):
         current_time = self.start_time + major_step
         while current_time < self.end_time:
             if current_time in ticks:
-                line(exes[current_time][0] - 2, tick_color)
+                line(exes[current_time][0] - 2, self.tick_color)
             else:
                 if self.minor_tick <= WEEK and current_time.day == 1:  # month change
-                    somewhere_in_middle(current_time, tick_color)
+                    somewhere_in_middle(current_time, self.tick_color)
                 # year change
                 elif current_time.timetuple().tm_yday == 1: # year change
-                    somewhere_in_middle(current_time, tick_color)
+                    somewhere_in_middle(current_time, self.tick_color)
 
             current_time += major_step
 
 
 
-        # the bars
-        for current_time, total in self.tick_totals:
-            bar_size = max(round(self.height * total * 0.8), 1)
-            x, bar_width = exes[current_time]
-
-            g.set_color(bar_color)
-
-            # rounded corners
-            g.rectangle(x, self.height - bar_size, bar_width - 1, bar_size, 3)
-
-            # straighten out bottom rounded corners
-            g.rectangle(x, self.height - min(bar_size, 2), bar_width - 1, min(bar_size, 2))
-
-            g.fill()
-
-
-        # tick label format
-        if self.minor_tick >= dt.timedelta(days = 28): # month
-            step_format = "%b"
-
-        elif self.minor_tick == WEEK: # week
-            step_format = "%b %d"
-        elif self.minor_tick == DAY: # day
-            if (self.end_time - self.start_time) > dt.timedelta(10):
-                step_format = "%b %d"
-            else:
-                step_format = "%a"
-        else:
-            step_format = "%H<small><sup>%M</sup></small>"
-
-
-        # tick labels
-        # TODO - should handle the layout business in graphics
-        layout = context.create_layout()
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        default_font.set_size(8 * pango.SCALE)
-        layout.set_font_description(default_font)
-
-        for current_time, total in self.tick_totals:
-            # if we are on the day level, show label only on week start
-            if (self.end_time - self.start_time) > dt.timedelta(10) \
-               and self.minor_tick == DAY and first_weekday(current_time) == False:
-                continue
-
-            x, bar_width = exes[current_time]
-
-            g.set_color(label_color)
-            layout.set_width(int((self.width - x) * pango.SCALE))
-            layout.set_markup(current_time.strftime(step_format))
-            g.move_to(x + 2, 0)
-            context.show_layout(layout)
-
-
     def count_hours(self):
-        #go through facts and make array of time used by our fraction
+        # go through facts and make array of time used by our fraction
         fractions = []
 
         current_time = self.start_time
@@ -282,7 +296,7 @@ class TimeChart(graphics.Scene):
 
         hours = [0] * len(fractions)
 
-        tick_minutes = float(self.duration_minutes(self.minor_tick))
+        tick_minutes = float(stuff.duration_minutes(self.minor_tick))
 
         for start_time, duration in self.durations:
             if isinstance(duration, dt.timedelta):
@@ -295,7 +309,7 @@ class TimeChart(graphics.Scene):
                     first_index = bisect(fractions, start_time) - 1
                     step_time = fractions[first_index]
                     first_end = min(end_time, step_time + self.minor_tick)
-                    first_tick = self.duration_minutes(first_end - start_time) / tick_minutes
+                    first_tick = stuff.duration_minutes(first_end - start_time) / tick_minutes
 
                     hours[first_index] += first_tick
                     step_time = step_time + self.minor_tick
@@ -303,7 +317,7 @@ class TimeChart(graphics.Scene):
                     # now go through ticks until we reach end of the time
                     while step_time < end_time:
                         index = bisect(fractions, step_time) - 1
-                        interval = min([1, self.duration_minutes(end_time - step_time) / tick_minutes])
+                        interval = min([1, stuff.duration_minutes(end_time - step_time) / tick_minutes])
                         hours[index] += interval
 
                         step_time += self.minor_tick
@@ -311,7 +325,7 @@ class TimeChart(graphics.Scene):
 
                     duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
                     hour_index = bisect(fractions, dt.datetime.combine(duration_date, dt.time())) - 1
-                    hours[hour_index] += self.duration_minutes(duration)
+                    hours[hour_index] += stuff.duration_minutes(duration)
             else:
                 if isinstance(start_time, dt.datetime):
                     duration_date = start_time.date() - dt.timedelta(1 if start_time.time() < self.day_start else 0)
@@ -324,28 +338,33 @@ class TimeChart(graphics.Scene):
 
         # now normalize
         max_hour = max(hours)
-        hours = [hour / float(max_hour or 1) for hour in hours]
+        normalized_hours = [hour / float(max_hour or 1) for hour in hours]
 
-        self.tick_totals = zip(fractions, hours)
+        self.tick_totals = zip(fractions, normalized_hours)
 
 
-    def duration_minutes(self, duration):
-        """returns minutes from duration, otherwise we keep bashing in same math"""
-        return duration.seconds / 60 + duration.days * 24 * 60
 
-    def locale_first_weekday(self):
-        """figure if week starts on monday or sunday"""
-        first_weekday = 6 #by default settle on monday
 
-        try:
-            process = os.popen("locale first_weekday week-1stday")
-            week_offset, week_start = process.read().split('\n')[:2]
-            process.close()
-            week_start = dt.date(*time.strptime(week_start, "%Y%m%d")[:3])
-            week_offset = dt.timedelta(int(week_offset) - 1)
-            beginning = week_start + week_offset
-            first_weekday = int(beginning.strftime("%w"))
-        except:
-            print("WARNING - Failed to get first weekday from locale")
+        # tick label format
+        if self.minor_tick >= dt.timedelta(days = 28): # month
+            step_format = "%b"
 
-        return first_weekday
+        elif self.minor_tick == WEEK: # week
+            step_format = "%b %d"
+        elif self.minor_tick == DAY: # day
+            if (self.end_time - self.start_time) > dt.timedelta(10):
+                step_format = "%b %d"
+            else:
+                step_format = "%a"
+        else:
+            step_format = "%H<small><sup>%M</sup></small>"
+
+
+        for bar in self.bars: # remove any previous bars
+            self.sprites.remove(bar)
+
+        self.bars = []
+        for key, value, normalized in zip(fractions, hours, normalized_hours):
+            bar = VerticalBar(key, step_format, value, normalized, "#000")
+            self.add_child(bar)
+            self.bars.append(bar)
