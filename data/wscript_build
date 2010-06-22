@@ -5,7 +5,7 @@
 bld.install_files('${DATADIR}/hamster-applet', '*.ui')
 bld.install_files('${DATADIR}/hamster-applet', 'hamster.db Hamster_Applet.xml')
 bld.install_files('${DATADIR}/hamster-applet/art', 'art/*.png')
-bld.install_files('${DATADIR}/hamster-applet/report_template.html', 'report_template.html')
+bld.install_files('${DATADIR}/hamster-applet', 'report_template.html')
 
 bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/hamster-applet.png')
 bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/hamster-applet.png')
