@@ -362,7 +362,7 @@
     </child>
     <child>
       <object class="GtkAction" id="add">
-        <property name="label">Add new</property>
+        <property name="label" translatable="yes">Add new</property>
         <property name="stock_id">gtk-add</property>
         <signal name="activate" handler="on_add_activate" swapped="no"/>
       </object>
