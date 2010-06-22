@@ -13,7 +13,7 @@ import re
 
 try:
     import pytweener
-except: # we can also live without tweener. Scene.animate won't work
+except: # we can also live without tweener. Scene.animate will not work
     pytweener = None
 
 import colorsys
@@ -395,7 +395,7 @@ class Graphics(object):
                     instruction_cache.append((instruction, args))
 
 
-            while instruction_cache: # stroke's missing so we just cache
+            while instruction_cache: # stroke is missing so we just cache
                 instruction, args = instruction_cache.pop(0)
                 self.__instructions.append((None, None, None, instruction, args))
 
@@ -525,7 +525,7 @@ class Sprite(gtk.Object):
         #self.graphics._move_to(context, 0, 0) # TODO - i'm doing this move because otherwise the currentpoint is pointing to wherever it was left. check if we really need this
         context.new_path()
 
-        if (self._sprite_dirty): # send signal to redo the drawing when sprite's dirty
+        if (self._sprite_dirty): # send signal to redo the drawing when sprite is dirty
             self.emit("on-render")
             self.__dict__["_sprite_dirty"] = False
 
