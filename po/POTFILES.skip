@@ -1,2 +1,3 @@
 data/Hamster_Applet.server.in
 data/hamster-standalone.desktop.in
+build/
