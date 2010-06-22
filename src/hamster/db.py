@@ -44,12 +44,11 @@ import itertools
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
-    def __setup(self):
+    def __init__(self, loop):
         """
         Delayed setup so we don't do everything at the same time
         """
-        if self.__setup.im_func.complete:
-            return
+        storage.Storage.__init__(self, loop)
 
         self.__con = None
         self.__cur = None
@@ -90,13 +89,9 @@ class Storage(storage.Storage):
         self.__db_monitor = self.__database_file.monitor_file()
         self.__db_monitor.connect("changed", on_db_file_change)
 
-
-        self.__setup.im_func.complete = True
         self.run_fixtures()
 
 
-
-    __setup.complete = False
 
     def register_modification(self):
         # db.execute calls this so we know that we were the ones
@@ -848,8 +843,6 @@ class Storage(storage.Storage):
     connection = property(get_connection, None)
 
     def fetchall(self, query, params = None):
-        self.__setup()
-
         con = self.connection
         cur = con.cursor()
 
@@ -877,8 +870,6 @@ class Storage(storage.Storage):
         execute sql statement. optionally you can give multiple statements
         to save on cursor creation and closure
         """
-        self.__setup()
-
         con = self.__con or self.connection
         cur = self.__cur or con.cursor()
 
