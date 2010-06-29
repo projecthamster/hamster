@@ -126,6 +126,8 @@ class CustomFactController:
 
     def update_time(self, widget, start_time, end_time):
         self.start_time.set_time(start_time)
+        self.on_start_time_entered(None)
+
         self.start_date.set_date(start_time)
 
         self.get_widget("in_progress").set_active(end_time is None)
@@ -183,7 +185,6 @@ class CustomFactController:
 
     def on_save_button_clicked(self, button):
         activity_name, temporary = self.new_name.get_value()
-        print activity_name, temporary
         parsed = stuff.parse_activity_input(activity_name)
 
         if not parsed.activity_name:
@@ -245,8 +246,10 @@ class CustomFactController:
 
     def on_start_time_entered(self, widget):
         start_time = self.start_time.get_time()
+
         if not start_time:
             return
+
 
         self.end_time.set_start_time(start_time)
         self.validate_fields()
