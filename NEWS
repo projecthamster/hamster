@@ -1,4 +1,20 @@
 ===============
+Version 2.31.4
+===============
+  * overview gets a menu, drops toolbars and now supports date range browsing
+  * adjustments to starts and ends graph in statistics (should be more accurate)
+  * performance updates in graphics
+  * html report was looking in the wrong place for the template
+
+  Updated translations
+    * es (Jorge González)
+    * et (Ivar Smolin)
+    * gl (Fran Diéguez)
+    * he (Yaron Shahrabani)
+    * lv (Anita Reitere)
+    * nb (Kjartan Maraas)
+
+===============
 Version 2.31.3.2
 ===============
   * respecting SYSCONFDIR environment variable to determine where to store
