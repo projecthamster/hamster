@@ -20,10 +20,10 @@
 import gtk, gobject
 import datetime as dt
 
-from .hamster.configuration import runtime
-from .hamster import stuff
-from .hamster.stuff import format_duration
-from .hamster import external
+from ..configuration import runtime
+from .. import stuff
+from ..stuff import format_duration
+from .. import external
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {

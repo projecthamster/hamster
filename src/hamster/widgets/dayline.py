@@ -23,9 +23,9 @@ import gobject
 import time
 import datetime as dt
 
-from .hamster import stuff
-from .hamster import graphics, pytweener
-from .hamster.configuration import conf
+from .. import stuff
+from .. import graphics, pytweener
+from ..configuration import conf
 
 
 class Selection(graphics.Sprite):

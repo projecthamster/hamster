@@ -21,23 +21,23 @@ import datetime as dt
 import gtk, pango
 
 # import our children
-from activityentry import ActivityEntry
-from dateinput import DateInput
-from timeinput import TimeInput
+from .activityentry import ActivityEntry
+from .dateinput import DateInput
+from .timeinput import TimeInput
 
-from timechart import TimeChart
+from .timechart import TimeChart
 
-from dayline import DayLine
+from .dayline import DayLine
 
-from tags import Tag
-from tags import TagBox
-from tags import TagsEntry
+from .tags import Tag
+from .tags import TagBox
+from .tags import TagsEntry
 
-from reportchooserdialog import ReportChooserDialog
+from .reportchooserdialog import ReportChooserDialog
 
-from facttree import FactTree
+from .facttree import FactTree
 
-from rangepick import RangePick
+from .rangepick import RangePick
 
 
 # handy wrappers

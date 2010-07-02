@@ -23,9 +23,9 @@ import gtk, gobject
 import cairo
 import datetime as dt
 
-from .hamster import stuff, graphics
-from .hamster.stuff import format_duration, format_activity
-from tags import Tag
+from .. import stuff, graphics
+from ..stuff import format_duration, format_activity
+from .tags import Tag
 
 import pango
 
