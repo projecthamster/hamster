@@ -238,8 +238,6 @@ class TagBox(graphics.Scene):
         self.selected_tags = []
         self.layout = None
 
-        self.font_size = 10 #override default font size
-
         if self.interactive:
             self.connect("on-mouse-over", self.on_mouse_over)
             self.connect("on-mouse-out", self.on_mouse_out)
@@ -318,9 +316,13 @@ class Tag(graphics.Sprite):
         graphics.Sprite.__init__(self, interactive = interactive)
 
         self.text = text
-        label = graphics.Label(text, size = 8, color = (30, 30, 30), y = 2)
 
-        w, h = label.width + 18, label.height + 3
+        font = gtk.Style().font_desc
+        font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
+
+        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 2)
+
+        w, h = int((label.width + 8) * 1.3), label.height + 3
         corner = h / 3
         label.x = corner + 8
 

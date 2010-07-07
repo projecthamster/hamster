@@ -326,25 +326,25 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         self.data = None
 
         font = gtk.Style().font_desc
-        default_size = font.get_size() / pango.SCALE
+        self.default_size = font.get_size() / pango.SCALE
 
         self.labels = graphics.Sprite()
 
-        self.date_label = graphics.Label(size = default_size)
+        self.date_label = graphics.Label(size = self.default_size)
 
-        self.interval_label = graphics.Label(size = default_size)
+        self.interval_label = graphics.Label(size = self.default_size)
         self.labels.add_child(self.interval_label)
 
-        self.activity_label = graphics.Label(size = default_size)
+        self.activity_label = graphics.Label(size = self.default_size)
         self.labels.add_child(self.activity_label)
 
-        self.category_label = graphics.Label(size = default_size)
+        self.category_label = graphics.Label(size = self.default_size)
         self.labels.add_child(self.category_label)
 
-        self.description_label = graphics.Label(size = default_size)
+        self.description_label = graphics.Label(size = self.default_size)
         self.labels.add_child(self.description_label)
 
-        self.duration_label = graphics.Label(size=default_size)
+        self.duration_label = graphics.Label(size=self.default_size)
         self.labels.add_child(self.duration_label)
 
         default_font = gtk.Style().font_desc.to_string()
@@ -574,9 +574,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
     def on_get_size(self, widget, cell_area):
         if "id" not in self.data:
             if self.data["first"]:
-                return (0, 0, 0, 25)
+                return (0, 0, 0, (self.default_size + 10) * 1.5)
             else:
-                return (0, 0, 0, 40)
+                return (0, 0, 0, (self.default_size + 10) * 2)
 
 
         context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
