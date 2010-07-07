@@ -307,6 +307,8 @@ class HTMLWriter(ReportWriter):
             activity_totals_heading = _("totals by activity"),
             category_totals_heading = _("totals by category"),
 
+            show_prompt = _("Show:"),
+
             header_date = _("Date"),
             header_activity = _("Activity"),
             header_category = _("Category"),
@@ -318,7 +320,7 @@ class HTMLWriter(ReportWriter):
 
             data_dir = runtime.data_dir,
             show_template = _("Show template"),
-            template_instructions = _("You can override them by storing your version in %s" % runtime.home_data_dir),
+            template_instructions = _("You can override it by storing your version in %(home_folder)s") % {'home_folder': runtime.home_data_dir},
 
             all_activities_rows = "\n".join(self.fact_rows),
             by_date_rows = "\n".join(by_date)
