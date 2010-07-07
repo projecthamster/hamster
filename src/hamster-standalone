@@ -466,8 +466,8 @@ class ProjectHamster(object):
         gtk.main_quit()
 
 if __name__ == "__main__":
-    from hamster import stuff
-    stuff.setup_i18n()
+    from hamster import i18n
+    i18n.setup_i18n()
 
     gtk.gdk.threads_init()
     app = ProjectHamster()

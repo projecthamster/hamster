@@ -211,8 +211,8 @@ def fact_dict(fact_data, with_date):
 
 
 if __name__ == '__main__':
-    from hamster import stuff
-    stuff.setup_i18n()
+    from hamster import i18n
+    i18n.setup_i18n()
 
     usage = _(
 """Client for controlling the hamster-applet. Usage:
