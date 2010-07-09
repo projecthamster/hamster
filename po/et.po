@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-06-22 10:40+0000\n"
-"PO-Revision-Date: 2010-06-28 07:45+0300\n"
+"POT-Creation-Date: 2010-07-07 13:19+0000\n"
+"PO-Revision-Date: 2010-07-09 17:50+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -130,9 +130,6 @@ msgstr "_Eelistused"
 msgid "Project Hamster desktop time tracking"
 msgstr "Projektihamster - ajakasutuse jälgimise programm"
 
-msgid "Ad_d Earlier Activity"
-msgstr "Lisa _varasem tegevus"
-
 msgid "No records today"
 msgstr "Tänase kohta pole ühtegi kirjet"
 
@@ -145,14 +142,17 @@ msgstr "_Näita ülevaadet"
 msgid "Start _Tracking"
 msgstr "_Alusta jälgimist"
 
-msgid "Sto_p tracking"
+msgid "Sto_p Tracking"
 msgstr "_Lõpeta jälgimine"
 
 msgid "Tell me more"
 msgstr "Räägi lähemalt"
 
-msgid "_Today"
+msgid "To_day"
 msgstr "_Täna"
+
+msgid "_Add earlier activity"
+msgstr "Lisa _varasem tegevus"
 
 msgid "Activity:"
 msgstr "Tegevus:"
@@ -189,6 +189,9 @@ msgstr "Uue tegevuse käivitamine"
 
 msgid "Statistics"
 msgstr "Statistika"
+
+msgid "Sto_p tracking"
+msgstr "_Lõpeta jälgimine"
 
 msgid "Today"
 msgstr "Täna"
@@ -237,9 +240,6 @@ msgstr "Eemalda"
 
 msgid "Save report..."
 msgstr "Salvesta raport..."
-
-msgid "Save report…"
-msgstr "Salvesta raport…"
 
 msgid "Totals"
 msgstr "Kokku"
@@ -516,6 +516,9 @@ msgstr "kokku tegevuse järgi"
 msgid "totals by category"
 msgstr "kokkuvõte kategooria järgi"
 
+msgid "Show:"
+msgstr ""
+
 msgid "Date"
 msgstr "Kuupäev"
 
@@ -535,7 +538,7 @@ msgid "Show template"
 msgstr "Näita malli"
 
 #, python-format
-msgid "You can override them by storing your version in %s"
+msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
 
 #, c-format
@@ -705,6 +708,15 @@ msgstr "iCal"
 #. title in the report file name
 msgid "Time track"
 msgstr "Ajajälgimine"
+
+#~ msgid "Ad_d Earlier Activity"
+#~ msgstr "Lisa _varasem tegevus"
+
+#~ msgid "_Today"
+#~ msgstr "_Täna"
+
+#~ msgid "Save report…"
+#~ msgstr "Salvesta raport…"
 
 #~ msgid "Show window"
 #~ msgstr "Akna näitamine"
