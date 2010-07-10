@@ -108,6 +108,7 @@ class PreferencesEditor:
         self._gui = stuff.load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
 
+        # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
                                    ("gtg", "Getting Things Gnome")]
