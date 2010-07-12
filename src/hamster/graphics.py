@@ -57,7 +57,7 @@ class Colors(object):
 
     def gdk(self, color):
         c = self.parse(color)
-        return gtk.gdk.Color(c[0] * 65535.0, c[1] * 65535.0, c[2] * 65535.0)
+        return gtk.gdk.Color(int(c[0] * 65535.0), int(c[1] * 65535.0), int(c[2] * 65535.0))
 
     def is_light(self, color):
         # tells you if color is dark or light, so you can up or down the
@@ -68,6 +68,16 @@ class Colors(object):
         # returns color darker by step (where step is in range 0..255)
         hls = colorsys.rgb_to_hls(*self.rgb(color))
         return colorsys.hls_to_rgb(hls[0], hls[1] - step, hls[2])
+
+    def contrast(self, color, step):
+        """if color is dark, will return a lighter one, otherwise darker"""
+        hls = colorsys.rgb_to_hls(*self.rgb(color))
+        if self.is_light(color):
+            return colorsys.hls_to_rgb(hls[0], hls[1] - step, hls[2])
+        else:
+            return colorsys.hls_to_rgb(hls[0], hls[1] + step, hls[2])
+        # returns color darker by step (where step is in range 0..255)
+
 Colors = Colors() # this is a static class, so an instance will do
 
 class Graphics(object):
