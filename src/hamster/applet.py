@@ -537,7 +537,7 @@ class HamsterApplet(object):
         dialogs.edit.show(self.applet)
 
     def on_about (self, component, verb):
-        dialogs.about.show()
+        dialogs.about.show(self.window)
 
     def show_preferences(self, menu_item, verb):
         self.__show_toggle(False)

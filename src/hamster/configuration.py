@@ -28,7 +28,7 @@ from client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
-import gobject
+import gobject, gtk
 
 import logging
 log = logging.getLogger("configuration")
@@ -111,13 +111,20 @@ class OneWindow(object):
             if parent:
                 dialog = self.get_dialog_class()(parent, **kwargs)
                 dialog.window.set_transient_for(parent.get_toplevel())
+
+                # to make things simple, we hope that the target has defined self.window
+                dialog.window.connect("destroy",
+                                      lambda window, params: self.on_dialog_destroy(params),
+                                      params)
+
             else:
                 dialog = self.get_dialog_class()(**kwargs)
 
-            # to make things simple, we hope that the target has defined self.window
-            dialog.window.connect("destroy",
-                                  lambda window, params: self.on_dialog_destroy(params),
-                                  params)
+                # no parent means we close on window close
+                dialog.window.connect("destroy",
+                                      lambda window, params: gtk.main_quit(),
+                                      params)
+
 
             self.dialogs[params] = dialog
 
