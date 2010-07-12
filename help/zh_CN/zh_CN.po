@@ -1,0 +1,263 @@
+# Chinese (China) translation for hamster-applet.
+# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-applet package.
+# TeliuTe <teliute@163.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"POT-Creation-Date: 2010-05-16 21:18+0000\n"
+"PO-Revision-Date: 2010-07-12 12:34+0800\n"
+"Last-Translator: TeliuTe <teliute@163.com>\n"
+"Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: C/legal.xml:3(p)
+msgid ""
+"This work is licensed under a <link href=\"http://creativecommons.org/"
+"licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
+"License</link>."
+msgstr ""
+"本文的许可协议: <link href=\"http://creativecommons.org/licenses/by-sa/3.0/"
+"\">知识共享署名-相同方式共享 3.0 Unported License</link>."
+
+#: C/legal.xml:6(p)
+msgid ""
+"As a special exception, the copyright holders give you permission to copy, "
+"modify, and distribute the example code contained in this document under the "
+"terms of your choosing, without restriction."
+msgstr ""
+"相应地，您可以根据自己的选择，复制、修改和分发文档里的代码范例，这没有什么限"
+"制。"
+
+#: C/statistics.page:6(desc)
+msgid "Note on interpretation of statistics."
+msgstr "解释各项统计条目"
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "统计"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"通过访问 <gui style=\"button\">显示统计</gui> 链接得到的结果，是实验用的，它"
+"们应该可以和你自己的经验相对照。欢迎指出不足之处。"
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr "不过，“开始和结束”可以给出一些你活动时间长短的参考。"
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker."
+msgstr "从时间追踪器里获得数据。"
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "报告和导出"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
+msgstr ""
+"在保存报告对话框中，默认提供的是 HTML 网页格式，在格式下拉列表中，您还可以选"
+"择 TSV 格式(标签分离数值，用于电子表格较好)，XML 和 iCal 格式。"
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"对于可编程访问，可以使用内置类似 <link href=\"https://fedorahosted.org/d-"
+"feet/\">D-Feet</link> 的工具。"
+
+#: C/reports.page:21(p)
+msgid ""
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
+msgstr ""
+"要快速从时间追踪器的 HTML 报告中“取出”数据，按住 <key>Ctrl</key> 键，选择所需"
+"的单元格，然后把它们复制粘贴到其他应用程序中。"
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "自动解决矛盾。"
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "分离活动"
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
+"will be shrunk."
+msgstr ""
+"<app>时间追踪器</app>  可以非常好地解决各个活动的重叠部分。如果你在一个活动时"
+"间段内，创建了另一个活动，表格将会分成两个。在其他重叠情况下，原来的项目会避"
+"让。"
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"一整天的输入信息也很容易合并，选中第一个开始的活动，然后在最后的时间打勾“正在"
+"进行中”复选框。第二个活动也点开始时间然后标记正在进行。检查上一个活动的结束时"
+"间，已调整为一个新活动的开始时间，重复这些过程到完工！"
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "快捷操作活动项的诀窍。"
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "输入"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
+msgstr ""
+"要开始跟踪，在输入框里输入活动名称，然后按 <key>回车键</key>。还有一些方法可"
+"以让你设定更多细节："
+
+#: C/input.page:18(p)
+msgid "Use the @ symbol to add a category"
+msgstr "添加项目时使用 @ 符号"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "在英文逗点(,)后的内容，将会保存到活动描述里"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it first in the input box"
+msgstr "要设定时间，请在输入框开头输入它"
+
+#: C/input.page:23(p)
+msgid "A few examples:"
+msgstr "一些例子："
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 浇花"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over lunch."
+msgstr "标记备忘午饭后浇花的重要事情。"
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "西红柿@花园, 翻地"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description."
+msgstr "在花园里种更多西红柿，翻地是一个具体的任务信息，因此把它添加到描述里。"
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 的存在，是考虑到更广阔的应用环境中"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
+msgstr ""
+"让应用程序提供正确信息，我已经做了一些，除了最后的7分钟。重新激活的时间仅仅用"
+"于正在进行的没有结束时间的活动。"
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
+msgstr ""
+"在顶部，你可以在标签输入框添加标签，标签由逗号分割，按 <key>Tab</key> 键可以"
+"完成输入第一个匹配的标签。"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/index.page:18(None)
+msgid ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr ""
+"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+
+#: C/index.page:6(title) C/index.page:7(title)
+msgid "Time Tracking"
+msgstr "时间追踪器"
+
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "知识共享-相同方式共享协议 3.0"
+
+#: C/index.page:17(title)
+msgid ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+"\">Time Tracking logo</media>Time Tracking"
+msgstr ""
+"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png\">时"
+"间追踪器图标</media> 时间追踪器"
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr "如何备份活动的数据库。"
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "备份"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. The application will reload the data automatically after a short "
+"while."
+msgstr ""
+"活动存储在一个 SQLite 数据库里，位于 <file>~/.local/share/hamster-applet/"
+"hamster.db</file>。应用程序会在一个短时间后自动重载数据。"
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"要查看数据库的内容，我们建议您使用 Mozilla Firefox 的 <link href=\"https://"
+"addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite 管理器</app></"
+"link> 扩展。"
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr "TeliuTe <teliute@163.com>, 2010"
