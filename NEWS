@@ -1,4 +1,20 @@
 ===============
+Version 2.31.5
+===============
+  * adjustments for custom widgets to better work with themes
+  * if dialog windows are called from commandline, make sure they shut down
+    properly
+
+  Update translation
+    * ee (Ivar Smolin)
+    * es (Jorge González)
+    * fr (Jean-Philippe Fleury)
+    * gl (Fran Diéguez)
+
+  Updated documentation translations
+    * zh_CN (TeliuTe)
+
+===============
 Version 2.31.4
 ===============
   * overview gets a menu, drops toolbars and now supports date range browsing
