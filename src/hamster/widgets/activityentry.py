@@ -17,11 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
+import gtk, gobject, pango
 import datetime as dt
 
 from ..configuration import runtime
-from .. import stuff
+from .. import stuff, graphics
 from ..stuff import format_duration
 from .. import external
 
@@ -51,21 +51,17 @@ class ActivityEntry(gtk.Entry):
         self.tree.set_headers_visible(False)
         self.tree.set_hover_selection(True)
 
-        bgcolor = gtk.Style().bg[gtk.STATE_NORMAL].to_string()
-        time_cell = gtk.CellRendererPixbuf()
-        time_cell.set_property("icon-name", "appointment-new")
-        time_cell.set_property("cell-background", bgcolor)
+        self.time_icon_cell = gtk.CellRendererPixbuf()
+        self.time_icon_cell.set_property("icon-name", "appointment-new")
 
-        self.time_icon_column = gtk.TreeViewColumn("",
-                                              time_cell)
+        self.time_icon_column = gtk.TreeViewColumn("", self.time_icon_cell)
         self.tree.append_column(self.time_icon_column)
 
-        time_cell = gtk.CellRendererText()
-        time_cell.set_property("scale", 0.8)
-        time_cell.set_property("cell-background", bgcolor)
+        self.time_cell = gtk.CellRendererText()
+        self.time_cell.set_property("scale", 0.8)
 
         self.time_column = gtk.TreeViewColumn("Time",
-                                              time_cell,
+                                              self.time_cell,
                                               text = 3)
         self.tree.append_column(self.time_column)
 
@@ -76,8 +72,13 @@ class ActivityEntry(gtk.Entry):
         self.activity_column.set_expand(True)
         self.tree.append_column(self.activity_column)
 
+        self.category_cell = gtk.CellRendererText()
+        self.category_cell.set_property('alignment', pango.ALIGN_RIGHT)
+        self.category_cell.set_property('scale', pango.SCALE_SMALL)
+        self.category_cell.set_property('yalign', 0.0)
+
         self.category_column = gtk.TreeViewColumn("Category",
-                                                  stuff.CategoryCell(),
+                                                  self.category_cell,
                                                   text=2)
         self.tree.append_column(self.category_column)
 
@@ -145,6 +146,16 @@ class ActivityEntry(gtk.Entry):
 
 
         self.category_column.set_visible(self.filter.find("@") == -1)
+
+
+        #set proper background color (we can do that only on a realised widget)
+        bgcolor = self.get_style().bg[gtk.STATE_NORMAL]
+        self.time_icon_cell.set_property("cell-background", bgcolor)
+        self.time_cell.set_property("cell-background", bgcolor)
+
+        text_color = self.get_style().text[gtk.STATE_NORMAL]
+        category_color = graphics.Colors.contrast(text_color,  100)
+        self.category_cell.set_property('foreground-gdk', graphics.Colors.gdk(category_color))
 
 
         #move popup under the widget

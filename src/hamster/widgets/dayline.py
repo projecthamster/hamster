@@ -314,17 +314,22 @@ class DayLine(graphics.Scene):
 
         #time scale
         g.set_color("#000")
+
+        background = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        text = self.get_style().text[gtk.STATE_NORMAL].to_string()
+
+        tick_color = g.colors.contrast(background, 80)
+
         layout = g.create_layout(size = 8)
         for i in range(self.scope_hours * 60):
             label_time = (self.view_time + dt.timedelta(minutes=i))
 
+            g.set_color(tick_color)
             if label_time.minute == 0:
-                g.set_color((0.8, 0.8, 0.8))
                 g.move_to(round(i / minute_pixel) + 0.5, bottom - 15)
                 g.line_to(round(i / minute_pixel) + 0.5, bottom)
                 g.stroke()
             elif label_time.minute % 15 == 0:
-                g.set_color((0.8, 0.8, 0.8))
                 g.move_to(round(i / minute_pixel) + 0.5, bottom - 5)
                 g.line_to(round(i / minute_pixel) + 0.5, bottom)
                 g.stroke()
@@ -333,20 +338,18 @@ class DayLine(graphics.Scene):
 
             if label_time.minute == 0 and label_time.hour % 4 == 0:
                 if label_time.hour == 0:
-                    g.set_color((0.8, 0.8, 0.8))
                     g.move_to(round(i / minute_pixel) + 0.5, self.plot_area.y)
                     g.line_to(round(i / minute_pixel) + 0.5, bottom)
                     label_minutes = label_time.strftime("%b %d")
                 else:
                     label_minutes = label_time.strftime("%H<small><sup>%M</sup></small>")
 
-                g.set_color((0.4, 0.4, 0.4))
+                g.set_color(text)
                 layout.set_markup(label_minutes)
                 label_w, label_h = layout.get_pixel_size()
 
                 g.move_to(round(i / minute_pixel) + 2, 0)
                 context.show_layout(layout)
-        g.stroke()
 
         #current time
         if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = self.scope_hours):

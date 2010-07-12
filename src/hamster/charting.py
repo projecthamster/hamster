@@ -99,18 +99,11 @@ class Chart(graphics.Scene):
 
     def find_colors(self):
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(bg_color):
-            self.bar_color = self.colors.darker(bg_color,  30)
-        else:
-            self.bar_color = self.colors.darker(bg_color,  -30)
-
+        self.bar_color = self.colors.contrast(bg_color, 30)
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(fg_color):
-            self.label_color = self.colors.darker(fg_color,  80)
-        else:
-            self.label_color = self.colors.darker(fg_color,  -80)
+        self.label_color = self.colors.contrast(fg_color,  80)
 
 
     def on_mouse_over(self, scene, targets):
@@ -258,7 +251,7 @@ class HorizontalDayChart(graphics.Scene):
 
         # TODO - should handle the layout business in graphics
         self.layout = context.create_layout()
-        default_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        default_font = pango.FontDescription(self.get_style().font_desc.to_string())
         default_font.set_size(8 * pango.SCALE)
         self.layout.set_font_description(default_font)
 
@@ -290,11 +283,7 @@ class HorizontalDayChart(graphics.Scene):
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(fg_color):
-            label_color = self.colors.darker(fg_color,  80)
-        else:
-            label_color = self.colors.darker(fg_color,  -80)
-
+        label_color = self.colors.contrast(fg_color,  80)
 
         self.layout.set_alignment(pango.ALIGN_RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
@@ -306,10 +295,7 @@ class HorizontalDayChart(graphics.Scene):
 
         # determine bar color
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        if self.colors.is_light(bg_color):
-            base_color = self.colors.darker(bg_color,  30)
-        else:
-            base_color = self.colors.darker(bg_color,  -30)
+        base_color = self.colors.contrast(bg_color,  30)
 
         for i, label in enumerate(keys):
             g.set_color(label_color)

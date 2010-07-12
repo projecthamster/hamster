@@ -45,7 +45,6 @@ class TagsEntry(gtk.Entry):
         self.tag_box = TagBox()
         self.tag_box.connect("tag-selected", self.on_tag_selected)
         self.tag_box.connect("tag-unselected", self.on_tag_unselected)
-        self.tag_box.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(65536.0,65536.0,65536.0))
 
 
         viewport.add(self.tag_box)
@@ -122,6 +121,9 @@ class TagsEntry(gtk.Entry):
         w = alloc.width
 
         height = self.tag_box.count_height(w)
+
+
+        self.tag_box.modify_bg(gtk.STATE_NORMAL, self.get_style().base[gtk.STATE_NORMAL])
 
         self.scroll_box.set_size_request(w, height)
         self.popup.resize(w, height)

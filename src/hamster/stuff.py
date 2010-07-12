@@ -164,33 +164,6 @@ def locale_first_weekday():
 
     return first_weekday
 
-class CategoryCell(gtk.CellRendererText):
-    def __init__(self):
-        gtk.CellRendererText.__init__(self)
-        self.set_property('alignment', pango.ALIGN_RIGHT)
-
-        insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE]
-        self.set_property('foreground-gdk', insensitive_color)
-        self.set_property('scale', pango.SCALE_SMALL)
-        self.set_property('yalign', 0.0)
-
-
-insensitive_color = gtk.Label().style.fg[gtk.STATE_INSENSITIVE].to_string()
-def format_activity(name, category, description, pad_description = False):
-    "returns pango markup for activity with category and description"
-    text = name
-    if category and category != _("Unsorted"):
-        text += """ - <span color="%s" size="x-small">%s</span>""" % (insensitive_color, category)
-
-    if description:
-        text+= "\n"
-        if pad_description:
-            text += " " * 23
-
-        text += """<span style="italic" size="small">%s</span>""" % description
-
-    return text
-
 
 def totals(iter, keyfunc, sumfunc):
     """groups items by field described in keyfunc and counts totals using value
@@ -203,8 +176,6 @@ def totals(iter, keyfunc, sumfunc):
         res[k] = sum([sumfunc(entry) for entry in group])
 
     return res
-
-
 
 
 def dateDict(date, prefix = ""):

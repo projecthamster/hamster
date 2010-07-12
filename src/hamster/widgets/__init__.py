@@ -56,15 +56,16 @@ def add_hint(entry, hint):
             return
 
         self.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color("gray"))
-        hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        hint_font = pango.FontDescription(self.get_style().font_desc.to_string())
         hint_font.set_style(pango.STYLE_ITALIC)
         self.modify_font(hint_font)
 
         self.set_text(self.hint)
 
     def _set_normal(self, widget, event):
-        self.modify_text(gtk.STATE_NORMAL, gtk.Style().fg[gtk.STATE_NORMAL])
-        hint_font = pango.FontDescription(gtk.Style().font_desc.to_string())
+        self.modify_text(gtk.STATE_NORMAL, self.get_style().fg[gtk.STATE_NORMAL])
+        hint_font = pango.FontDescription(self.get_style().font_desc.to_string())
+        hint_font.set_style(pango.STYLE_NORMAL)
         self.modify_font(hint_font)
 
         if self.real_get_text() == self.hint:

@@ -24,7 +24,7 @@ import cairo
 import datetime as dt
 
 from .. import stuff, graphics
-from ..stuff import format_duration, format_activity
+from ..stuff import format_duration
 from .tags import Tag
 
 import pango
@@ -349,8 +349,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         default_font = gtk.Style().font_desc.to_string()
 
-        self.selected_color = gtk.Style().text[gtk.STATE_SELECTED]
-        self.normal_color = gtk.Style().text[gtk.STATE_NORMAL]
+        self.selected_color = None
+        self.normal_color = None
 
         self.col_padding = 10
         self.row_padding = 4
@@ -428,12 +428,20 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         if not bounds:
             return -1
         x, y, cell_width, h = bounds
+
         g = graphics.Graphics(context)
+
+        # set the colors
+        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
+        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
 
         fact = self.data
 
         current_fact = widget.get_selected_fact()
+
+
         text_color = self.normal_color
+
         selected = False
         # if we are selected, change font color appropriately
         if current_fact and isinstance(current_fact, dt.date) == False \
@@ -477,7 +485,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         if fact["category"]:
             self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact["category"])
             if not selected:
-                self.category_label.color = widget.get_style().text[gtk.STATE_INSENSITIVE]
+                category_color = graphics.Colors.contrast(text_color,  100)
+
+                self.category_label.color = category_color
             else:
                 self.category_label.color = text_color
             category_width = self.category_label.width

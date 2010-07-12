@@ -31,7 +31,7 @@ DAY = dt.timedelta(1)
 WEEK = dt.timedelta(7)
 
 class VerticalBar(graphics.Sprite):
-    def __init__(self, key, format, value, normalized, label_color):
+    def __init__(self, key, format, value, normalized):
         graphics.Sprite.__init__(self)
 
         self.key, self.format = key, format,
@@ -42,7 +42,7 @@ class VerticalBar(graphics.Sprite):
         self.width = 20
         self.fill = None
 
-        self.key_label = graphics.Label(key.strftime(format), x=2, y=0, size=8, color=label_color)
+        self.key_label = graphics.Label(key.strftime(format), x=2, y=0, size=8, color="#000")
         self.show_label = True
 
         self.add_child(self.key_label)
@@ -168,21 +168,14 @@ class TimeChart(graphics.Scene):
 
         # figure out colors
         bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        if g.colors.is_light(bg_color):
-            self.bar_color = g.colors.darker(bg_color,  30)
-            self.tick_color = g.colors.darker(bg_color,  50)
-        else:
-            self.bar_color = g.colors.darker(bg_color,  -30)
-            self.tick_color = g.colors.darker(bg_color,  -50)
+        self.bar_color = g.colors.contrast(bg_color,  30)
+        self.tick_color = g.colors.contrast(bg_color,  50)
 
 
 
         # now for the text - we want reduced contrast for relaxed visuals
         fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
-        if g.colors.is_light(fg_color):
-            label_color = g.colors.darker(fg_color,  70)
-        else:
-            label_color = g.colors.darker(fg_color,  -70)
+        label_color = g.colors.contrast(fg_color,  70)
 
 
         g.set_line_style(width=1)
@@ -218,6 +211,8 @@ class TimeChart(graphics.Scene):
         remaining_ticks = len(ticks)
 
 
+        self.text_color = self.get_style().text[gtk.STATE_NORMAL].to_string()
+
         for i, bar in enumerate(self.bars):
             if bar.key in ticks:
                 x += 2
@@ -226,6 +221,7 @@ class TimeChart(graphics.Scene):
             bar.x = x
             bar.width = bar_width - 1
             bar.height = self.height
+            bar.key_label.color = self.text_color
 
             if not bar.fill:
                 bar.fill = self.bar_color
@@ -365,6 +361,6 @@ class TimeChart(graphics.Scene):
 
         self.bars = []
         for key, value, normalized in zip(fractions, hours, normalized_hours):
-            bar = VerticalBar(key, step_format, value, normalized, "#000")
+            bar = VerticalBar(key, step_format, value, normalized)
             self.add_child(bar)
             self.bars.append(bar)

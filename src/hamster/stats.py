@@ -140,11 +140,7 @@ class Stats(object):
             def on_enter_frame(self, scene, context):
                 # now for the text - we want reduced contrast for relaxed visuals
                 fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
-                if self.colors.is_light(fg_color):
-                    label_color = self.colors.darker(fg_color,  80)
-                else:
-                    label_color = self.colors.darker(fg_color,  -80)
-                self.label.color = label_color
+                self.label.color = self.colors.contrast(fg_color,  80)
 
                 self.label.width = self.width
 
