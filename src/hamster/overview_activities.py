@@ -78,8 +78,6 @@ class OverviewBox(gtk.VBox):
 
         dates = defaultdict(list)
 
-        print self.end_date, self.start_date
-
         # fill blanks
         for i in range((self.end_date - self.start_date).days + 1):
             dates[self.start_date + dt.timedelta(i)] = []
