@@ -127,7 +127,7 @@ class Overview(object):
     def on_timechart_new_range(self, chart, start_date, end_date):
         self.start_date = start_date
         self.end_date = end_date
-        self.search()
+        self.apply_range_select()
 
     def on_timechart_zoom_out_clicked(self, chart):
         if (self.end_date - self.start_date < dt.timedelta(days=6)):
@@ -229,6 +229,12 @@ class Overview(object):
 
 
     def apply_range_select(self):
+        if self.view_date < self.start_date:
+            self.view_date = self.start_date
+
+        if self.view_date > self.end_date:
+            self.view_date = self.end_date
+
         self.search()
 
 
