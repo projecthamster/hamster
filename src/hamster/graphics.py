@@ -155,6 +155,13 @@ class Graphics(object):
         self._add_instruction(self._set_source_surface, image, x, y)
 
     @staticmethod
+    def _set_source_pixbuf(context, pixbuf, x, y):
+        context.set_source_pixbuf(pixbuf, x, y)
+    def set_source_pixbuf(self, pixbuf, x = 0, y = 0):
+        self._add_instruction(self._set_source_pixbuf, pixbuf, x, y)
+
+
+    @staticmethod
     def _move_to(context, x, y): context.move_to(x, y)
     def move_to(self, x, y):
         """change current position"""
@@ -378,7 +385,7 @@ class Graphics(object):
             while self.__path_instructions:
                 instruction, args = self.__path_instructions.popleft()
 
-                if instruction in (self._set_source_surface, self._paint):
+                if instruction in (self._set_source_surface, self._set_source_pixbuf, self._paint):
                     self.__instructions.append((None, None, None, instruction, args))
 
                 elif instruction == self._show_layout:
@@ -991,7 +998,7 @@ class Scene(gtk.DrawingArea):
         #check if we have a mouse over
         over = None
         for sprite in self.all_sprites():
-            if sprite.interactive and self._check_hit(sprite, mouse_x, mouse_y):
+            if sprite.interactive and sprite.visible and self._check_hit(sprite, mouse_x, mouse_y):
                 over = sprite
 
         if over:
@@ -1061,7 +1068,7 @@ class Scene(gtk.DrawingArea):
 
         over = None
         for sprite in self.all_sprites():
-            if sprite.interactive and self._check_hit(sprite, event.x, event.y):
+            if sprite.interactive and sprite.visible and self._check_hit(sprite, event.x, event.y):
                 over = sprite # last one will take precedence
         self._drag_sprite = over
         self._button_press_time = dt.datetime.now()
@@ -1081,7 +1088,7 @@ class Scene(gtk.DrawingArea):
         if click:
             target = None
             for sprite in self.all_sprites():
-                if sprite.interactive and self._check_hit(sprite, event.x, event.y):
+                if sprite.interactive and sprite.visible and self._check_hit(sprite, event.x, event.y):
                     target = sprite
 
             if target:
