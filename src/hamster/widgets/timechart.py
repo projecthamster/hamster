@@ -67,12 +67,25 @@ class VerticalBar(graphics.Sprite):
         elif self.show_label == False and self.key_label in self.sprites:
             self.sprites.remove(self.key_label)
 
+class Icon(graphics.Sprite):
+    def __init__(self, pixbuf, **kwargs):
+        graphics.Sprite.__init__(self, **kwargs)
+        self.pixbuf = pixbuf
+        self.interactive = True
+        self.connect("on-render", self.on_render)
+
+    def on_render(self, sprite):
+        self.graphics.set_source_pixbuf(self.pixbuf, 0, 0)
+        self.graphics.paint()
+        self.graphics.rectangle(0,0,24,24) #transparent rectangle
+        self.graphics.stroke("#000", 0)
 
 
 class TimeChart(graphics.Scene):
     """this widget is kind of half finished"""
     __gsignals__ = {
-        'range-picked': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'range-picked':     (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'zoom-out-clicked': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):
@@ -94,6 +107,21 @@ class TimeChart(graphics.Scene):
         self.connect("on-mouse-out", self.on_mouse_out)
         self.connect("on-click", self.on_click)
 
+        self.connect("enter_notify_event", self.on_mouse_enter)
+        self.connect("leave_notify_event", self.on_mouse_leave)
+
+        self.zoom_out_icon = Icon(self.render_icon(gtk.STOCK_ZOOM_OUT, 16), visible = False, z_order = 500)
+        self.add_child(self.zoom_out_icon)
+
+
+    def on_mouse_enter(self, scene, event):
+        if (self.end_time - self.start_time) < dt.timedelta(days=356):
+            self.zoom_out_icon.visible = True
+        self.redraw()
+
+    def on_mouse_leave(self, scene, event):
+        self.zoom_out_icon.visible = False
+        self.redraw()
 
     def on_mouse_over(self, scene, target):
         if isinstance(target, VerticalBar):
@@ -109,7 +137,9 @@ class TimeChart(graphics.Scene):
             bar.fill = self.bar_color
 
     def on_click(self, scene, event, target):
-        if isinstance(target, VerticalBar):
+        if target == self.zoom_out_icon:
+            self.emit("zoom-out-clicked")
+        elif isinstance(target, VerticalBar):
             self.emit("range-picked", target.key.date(), (target.key + self.minor_tick - dt.timedelta(days=1)).date())
         else:
             self.emit("range-picked", target.parent.key.date(), (target.parent.key + dt.timedelta(days=6)).date())
@@ -175,6 +205,9 @@ class TimeChart(graphics.Scene):
             self.minor_tick = dt.timedelta(seconds = 60 * 60)
 
         self.count_hours()
+
+
+        self.zoom_out_icon.visible = (self.end_time - self.start_time) < dt.timedelta(days=356)
 
         self.redraw()
 
@@ -291,6 +324,8 @@ class TimeChart(graphics.Scene):
             current_time += major_step
 
 
+        self.zoom_out_icon.x = self.width - 24
+
 
     def count_hours(self):
         # go through facts and make array of time used by our fraction
@@ -382,7 +417,7 @@ class TimeChart(graphics.Scene):
         for i, (key, value, normalized) in enumerate(zip(fractions, hours, normalized_hours)):
             bar = VerticalBar(key, step_format, value, normalized)
             bar.z_order = len(fractions) - i
-            bar.interactive = self.minor_tick in (DAY, WEEK) and bar.value > 0
+            bar.interactive = self.minor_tick >= DAY and bar.value > 0
 
             self.add_child(bar)
             self.bars.append(bar)

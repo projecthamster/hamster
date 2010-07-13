@@ -84,6 +84,7 @@ class Overview(object):
         self.current_range = "week"
 
         self.timechart = widgets.TimeChart()
+        self.timechart.connect("zoom-out-clicked", self.on_timechart_zoom_out_clicked)
         self.timechart.connect("range-picked", self.on_timechart_new_range)
         self.timechart.day_start = self.day_start
 
@@ -127,6 +128,20 @@ class Overview(object):
         self.start_date = start_date
         self.end_date = end_date
         self.search()
+
+    def on_timechart_zoom_out_clicked(self, chart):
+        if (self.end_date - self.start_date < dt.timedelta(days=6)):
+            self.on_week_activate(None)
+        elif (self.end_date - self.start_date < dt.timedelta(days=27)):
+            self.on_month_activate(None)
+        else:
+            self.current_range = "manual"
+            self.start_date = self.view_date.replace(day=1, month=1)
+            self.end_date = self.start_date.replace(year = self.start_date.year + 1) - dt.timedelta(days=1)
+            self.apply_range_select()
+
+
+
 
     def search(self):
         if self.start_date > self.end_date: # make sure the end is always after beginning
