@@ -18,7 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import os  # for locale
-import gtk, pango
+import gobject, gtk, pango
 
 from .. import graphics, stuff
 
@@ -43,9 +43,10 @@ class VerticalBar(graphics.Sprite):
         self.fill = None
 
         self.key_label = graphics.Label(key.strftime(format), x=2, y=0, size=8, color="#000")
-        self.show_label = True
 
         self.add_child(self.key_label)
+        self.show_label = True
+
         self.connect("on-render", self.on_render)
 
     def on_render(self, sprite):
@@ -60,6 +61,7 @@ class VerticalBar(graphics.Sprite):
         self.graphics.rectangle(0, self.height - min(size, 3), self.width, min(size, 3))
         self.graphics.fill(self.fill)
 
+
         if self.show_label and self.key_label not in self.sprites:
             self.add_child(self.key_label)
         elif self.show_label == False and self.key_label in self.sprites:
@@ -69,6 +71,9 @@ class VerticalBar(graphics.Sprite):
 
 class TimeChart(graphics.Scene):
     """this widget is kind of half finished"""
+    __gsignals__ = {
+        'range-picked': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+    }
 
     def __init__(self):
         graphics.Scene.__init__(self)
@@ -78,6 +83,8 @@ class TimeChart(graphics.Scene):
         self.day_start = dt.time() # ability to start day at another hour
         self.first_weekday = stuff.locale_first_weekday()
 
+        self.interactive = True
+
         self.minor_tick = None
         self.tick_totals = []
         self.bars = []
@@ -85,16 +92,28 @@ class TimeChart(graphics.Scene):
         self.connect("on-enter-frame", self.on_enter_frame)
         self.connect("on-mouse-over", self.on_mouse_over)
         self.connect("on-mouse-out", self.on_mouse_out)
+        self.connect("on-click", self.on_click)
 
 
-    def on_mouse_over(self, scene, targets):
-        bar = targets[0]
-        bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
-        self.redraw()
+    def on_mouse_over(self, scene, target):
+        if isinstance(target, VerticalBar):
+            bar = target
+            bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
+            self.set_tooltip_text(stuff.format_duration(bar.value))
 
-    def on_mouse_out(self, scene, targets):
-        bar = targets[0]
-        bar.fill = self.bar_color
+            self.redraw()
+
+    def on_mouse_out(self, scene, target):
+        if isinstance(target, VerticalBar):
+            bar = target
+            bar.fill = self.bar_color
+
+    def on_click(self, scene, event, target):
+        if isinstance(target, VerticalBar):
+            self.emit("range-picked", target.key.date(), (target.key + self.minor_tick - dt.timedelta(days=1)).date())
+        else:
+            self.emit("range-picked", target.parent.key.date(), (target.parent.key + dt.timedelta(days=6)).date())
+
 
     def draw(self, durations, start_date, end_date):
         self.durations = durations
@@ -226,13 +245,13 @@ class TimeChart(graphics.Scene):
             if not bar.fill:
                 bar.fill = self.bar_color
 
+            bar.key_label.interactive = (self.end_time - self.start_time) > dt.timedelta(10) and self.minor_tick == DAY
+
             if (self.end_time - self.start_time) > dt.timedelta(10) \
                and self.minor_tick == DAY and first_weekday(bar.key) == False:
-                if bar.show_label:
-                    bar.show_label = False
+                bar.show_label = False
             else:
-                if bar.show_label == False:
-                    bar.show_label = True
+                bar.show_label = True
 
 
 
@@ -360,7 +379,10 @@ class TimeChart(graphics.Scene):
             self.sprites.remove(bar)
 
         self.bars = []
-        for key, value, normalized in zip(fractions, hours, normalized_hours):
+        for i, (key, value, normalized) in enumerate(zip(fractions, hours, normalized_hours)):
             bar = VerticalBar(key, step_format, value, normalized)
+            bar.z_order = len(fractions) - i
+            bar.interactive = self.minor_tick in (DAY, WEEK) and bar.value > 0
+
             self.add_child(bar)
             self.bars.append(bar)

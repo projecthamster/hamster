@@ -84,6 +84,7 @@ class Overview(object):
         self.current_range = "week"
 
         self.timechart = widgets.TimeChart()
+        self.timechart.connect("range-picked", self.on_timechart_new_range)
         self.timechart.day_start = self.day_start
 
         self.get_widget("by_day_box").add(self.timechart)
@@ -121,6 +122,11 @@ class Overview(object):
                 treeview.set_cursor( path, col, 0)
                 self.get_widget("fact_tree_popup").popup( None, None, None, event.button, time)
             return True
+
+    def on_timechart_new_range(self, chart, start_date, end_date):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.search()
 
     def search(self):
         if self.start_date > self.end_date: # make sure the end is always after beginning
@@ -357,7 +363,7 @@ class Overview(object):
 
     def on_close_activate(self, action):
         self.close_window()
-        
+
     def close_window(self):
         # properly saving window state and position
         maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
