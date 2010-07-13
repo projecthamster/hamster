@@ -38,6 +38,7 @@ import datetime as dt
 import calendar
 import time
 from hamster.i18n import C_
+from collections import defaultdict
 
 
 
@@ -70,21 +71,26 @@ class OverviewBox(gtk.VBox):
 
 
     def fill_facts_tree(self):
-        #create list of all required dates
-        dates = [(self.start_date + dt.timedelta(i), [])
-                    for i in range((self.end_date - self.start_date).days  + 1)]
-
-        #update with facts for the day
-        for date, facts in groupby(self.facts, lambda fact: fact["date"]):
-            dates[dates.index((date, []))] = (date, list(facts))
-
-
         # detach model to trigger selection memory and speeding up
         self.fact_tree.detach_model()
         self.fact_tree.clear()
 
+
+        dates = defaultdict(list)
+
+        print self.end_date, self.start_date
+
+        # fill blanks
+        for i in range((self.end_date - self.start_date).days + 1):
+            dates[self.start_date + dt.timedelta(i)] = []
+
+        #update with facts for the day
+        for date, facts in groupby(self.facts, lambda fact: fact["date"]):
+            dates[date] = list(facts)
+
+
         # push facts in tree
-        for date, facts in dates:
+        for date, facts in sorted(dates.items(), key=lambda t: t[0]):
             fact_date = date.strftime(C_("overview list", "%A, %b %d"))
             self.fact_tree.add_group(fact_date, date, facts)
 
