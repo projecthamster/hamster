@@ -106,20 +106,16 @@ class Chart(graphics.Scene):
         self.label_color = self.colors.contrast(fg_color,  80)
 
 
-    def on_mouse_over(self, scene, targets):
-        bar = targets[0]
+    def on_mouse_over(self, scene, bar):
         if bar.key not in self.selected_keys:
             bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
 
-    def on_mouse_out(self, scene, targets):
-        bar = targets[0]
+    def on_mouse_out(self, scene, bar):
         if bar.key not in self.selected_keys:
             bar.fill = self.bar_color
 
-    def on_click(self, scene, event, targets):
-        clicked_bar = targets[0]
+    def on_click(self, scene, event, clicked_bar):
         self.emit("bar-clicked", clicked_bar.key)
-
 
     def plot(self, keys, data):
         self.data = data

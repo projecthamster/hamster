@@ -549,6 +549,8 @@ class Sprite(gtk.Object):
 
     def _on_click(self, button_state):
         self.emit("on-click", button_state)
+        if self.parent and isinstance(self.parent, Sprite):
+            self.parent._on_click(button_state)
 
     def _on_mouse_over(self):
         # scene will call us when there is mouse
@@ -817,7 +819,7 @@ class Scene(gtk.DrawingArea):
 
 
         self._last_frame_time = None
-        self._mouse_sprites = set()
+        self._mouse_sprite = None
         self._mouse_drag = None
         self._drag_sprite = None
         self._button_press_time = None # to distinguish between click and drag
@@ -987,36 +989,31 @@ class Scene(gtk.DrawingArea):
 
 
         #check if we have a mouse over
-        over = set()
+        over = None
         for sprite in self.all_sprites():
             if sprite.interactive and self._check_hit(sprite, mouse_x, mouse_y):
-                if custom_mouse == False:
-                    if sprite.draggable:
-                        cursor = gtk.gdk.FLEUR
-                    else:
-                        cursor = gtk.gdk.HAND2
+                over = sprite
 
-                over.add(sprite)
+        if over:
+            if custom_mouse == False:
+                if over.draggable:
+                    cursor = gtk.gdk.FLEUR
+                else:
+                    cursor = gtk.gdk.HAND2
 
+            if over != self._mouse_sprite:
+                over._on_mouse_over()
 
-        new_mouse_overs = over - self._mouse_sprites
-        if new_mouse_overs:
-            for sprite in new_mouse_overs:
-                sprite._on_mouse_over()
+                self.emit("on-mouse-over", over)
+                self.redraw()
 
-            self.emit("on-mouse-over", list(new_mouse_overs))
+        if self._mouse_sprite and self._mouse_sprite != over:
+            self._mouse_sprite._on_mouse_out()
+            self.emit("on-mouse-out", self._mouse_sprite)
             self.redraw()
 
 
-        gone_mouse_overs = self._mouse_sprites - over
-        if gone_mouse_overs:
-            for sprite in gone_mouse_overs:
-                sprite._on_mouse_out()
-            self.emit("on-mouse-out", list(gone_mouse_overs))
-            self.redraw()
-
-
-        self._mouse_sprites = over
+        self._mouse_sprite = over
 
         if isinstance(cursor, gtk.gdk.Cursor):
             self.window.set_cursor(cursor)
@@ -1029,9 +1026,9 @@ class Scene(gtk.DrawingArea):
 
     def __on_mouse_leave(self, area, event):
         self._mouse_in = False
-        if self._mouse_sprites:
-            self.emit("on-mouse-out", list(self._mouse_sprites))
-            self._mouse_sprites = set()
+        if self._mouse_sprite:
+            self.emit("on-mouse-out", self._mouse_sprite)
+            self._mouse_sprite = None
             self.redraw()
 
     def _check_hit(self, sprite, x, y):
@@ -1082,11 +1079,13 @@ class Scene(gtk.DrawingArea):
         self._drag_sprite = None
 
         if click:
-            targets = []
+            target = None
             for sprite in self.all_sprites():
                 if sprite.interactive and self._check_hit(sprite, event.x, event.y):
-                    targets.append(sprite)
-                    sprite._on_click(event.state)
+                    target = sprite
 
-            self.emit("on-click", event, targets)
+            if target:
+                target._on_click(event.state)
+                self.emit("on-click", event, target)
+
         self.emit("on-mouse-up")

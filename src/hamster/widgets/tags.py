@@ -247,29 +247,22 @@ class TagBox(graphics.Scene):
 
         self.connect("on-enter-frame", self.on_enter_frame)
 
-    def on_mouse_over(self, area, targets):
-        tag = targets[0]
+    def on_mouse_over(self, area, tag):
         tag.tag.fill = tag.graphics.colors.darker(tag.tag.fill, -20)
 
-    def on_mouse_out(self, area, targets):
-        tag = targets[0]
-
+    def on_mouse_out(self, area, tag):
         if tag.text in self.selected_tags:
             tag.tag.fill = (242, 229, 97)
         else:
             tag.tag.fill = (241, 234, 170)
 
 
-    def on_tag_click(self, area, event, targets):
-        if not targets:
-            return
-
-        tag = targets[0]
+    def on_tag_click(self, area, event, tag):
         if tag.text in self.selected_tags:
             self.emit("tag-unselected", tag.text)
         else:
             self.emit("tag-selected", tag.text)
-        self.on_mouse_out(area, targets) #paint
+        self.on_mouse_out(area, tag) #paint
         self.redraw()
 
     def draw(self, tags):
