@@ -70,7 +70,6 @@ class Overview(object):
 
         self.end_date = self.start_date + dt.timedelta(6)
 
-
         self.overview = OverviewBox()
         self.get_widget("overview_tab").add(self.overview)
         self.fact_tree = self.overview.fact_tree # TODO - this is upside down, should maybe get the overview tab over here
@@ -101,14 +100,14 @@ class Overview(object):
         else:
             window_box = conf.get("overview_window_box")
             if window_box:
-                x,y,w,h = (int(i) for i in window_box)
-                self.window.move(x, y)
+                x, y, w, h = (int(i) for i in window_box)
                 self.window.move(x, y)
                 self.window.resize(w, h)
             else:
                 self.window.set_position(gtk.WIN_POS_CENTER)
 
         self.window.show_all()
+
         self.search()
 
     def on_fact_tree_button_press(self, treeview, event):
@@ -158,7 +157,6 @@ class Overview(object):
 
         durations = [(fact["start_time"], fact["delta"]) for fact in self.facts]
         self.timechart.draw(durations, self.start_date, self.end_date)
-
 
         if self.get_widget("window_tabs").get_current_page() == 0:
             self.overview.search(self.start_date, self.end_date, self.facts)
