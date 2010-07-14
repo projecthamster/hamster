@@ -423,7 +423,7 @@ class HamsterApplet(object):
         """main window display and positioning"""
         self.button.set_active(is_active)
 
-        if not is_active:
+        if is_active == False:
             self.window.hide()
             return True
 
@@ -527,8 +527,8 @@ class HamsterApplet(object):
 
     """button events"""
     def on_overview(self, menu_item):
-        self.__show_toggle(False)
         dialogs.overview.show(self.applet)
+        self.__show_toggle(False)
 
     def show_overview(self, menu_item, verb):
         return self.on_overview(menu_item)
@@ -540,8 +540,8 @@ class HamsterApplet(object):
         dialogs.about.show(self.window)
 
     def show_preferences(self, menu_item, verb):
-        self.__show_toggle(False)
         dialogs.prefs.show(self.applet)
+        self.__show_toggle(False)
 
 
     """signals"""
