@@ -3,75 +3,39 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
-  <object class="GtkActionGroup" id="go">
+  <object class="GtkActionGroup" id="overview">
     <child>
-      <object class="GtkAction" id="prev">
-        <property name="stock_id">gtk-go-back</property>
-        <signal name="activate" handler="on_prev_activate" swapped="no"/>
+      <object class="GtkAction" id="export">
+        <property name="label" translatable="yes">Save report...</property>
+        <property name="icon_name">document-save</property>
+        <signal name="activate" handler="on_export_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="home">
-        <property name="stock_id">gtk-home</property>
-        <signal name="activate" handler="on_home_activate" swapped="no"/>
+      <object class="GtkAction" id="close">
+        <property name="stock_id">gtk-close</property>
+        <signal name="activate" handler="on_close_activate" swapped="no"/>
       </object>
-    </child>
-    <child>
-      <object class="GtkAction" id="next">
-        <property name="stock_id">gtk-go-forward</property>
-        <signal name="activate" handler="on_next_activate" swapped="no"/>
-      </object>
+      <accelerator key="w" modifiers="GDK_CONTROL_MASK"/>
     </child>
   </object>
-  <object class="GtkMenu" id="fact_tree_popup">
-    <property name="visible">True</property>
+  <object class="GtkActionGroup" id="view">
     <child>
-      <object class="GtkMenuItem" id="popup_edit">
-        <property name="visible">True</property>
-        <property name="related_action">edit</property>
+      <object class="GtkAction" id="day">
+        <property name="label" translatable="yes">Day</property>
+        <signal name="activate" handler="on_day_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="popup_remove">
-        <property name="visible">True</property>
-        <property name="related_action">remove</property>
+      <object class="GtkAction" id="week">
+        <property name="label" translatable="yes">Week</property>
+        <signal name="activate" handler="on_week_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="menuitem10">
-        <property name="visible">True</property>
-        <property name="use_action_appearance">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="popup_add">
-        <property name="visible">True</property>
-        <property name="related_action">add</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkActionGroup" id="activity">
-    <child>
-      <object class="GtkAction" id="edit">
-        <property name="label" translatable="yes">Edit</property>
-        <property name="stock_id">gtk-edit</property>
-        <property name="sensitive">False</property>
-        <signal name="activate" handler="on_edit_activate" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkAction" id="add">
-        <property name="label" translatable="yes">Add new</property>
-        <property name="stock_id">gtk-add</property>
-        <signal name="activate" handler="on_add_activate" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkAction" id="remove">
-        <property name="label" translatable="yes">Remove</property>
-        <property name="stock_id">gtk-remove</property>
-        <property name="sensitive">False</property>
-        <signal name="activate" handler="on_remove_activate" swapped="no"/>
+      <object class="GtkAction" id="month">
+        <property name="label" translatable="yes">Month</property>
+        <signal name="activate" handler="on_month_activate" swapped="no"/>
       </object>
     </child>
   </object>
@@ -79,6 +43,7 @@
     <property name="title" translatable="yes">Overview — Hamster</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <signal name="key-press-event" handler="on_window_key_pressed" swapped="no"/>
     <signal name="configure-event" handler="on_tabs_window_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_tabs_window_deleted" swapped="no"/>
     <child>
@@ -388,39 +353,75 @@
       </object>
     </child>
   </object>
-  <object class="GtkActionGroup" id="view">
+  <object class="GtkActionGroup" id="activity">
     <child>
-      <object class="GtkAction" id="month">
-        <property name="label" translatable="yes">Month</property>
-        <signal name="activate" handler="on_month_activate" swapped="no"/>
+      <object class="GtkAction" id="remove">
+        <property name="label" translatable="yes">Remove</property>
+        <property name="stock_id">gtk-remove</property>
+        <property name="sensitive">False</property>
+        <signal name="activate" handler="on_remove_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="week">
-        <property name="label" translatable="yes">Week</property>
-        <signal name="activate" handler="on_week_activate" swapped="no"/>
+      <object class="GtkAction" id="add">
+        <property name="label" translatable="yes">Add new</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_add_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="day">
-        <property name="label" translatable="yes">Day</property>
-        <signal name="activate" handler="on_day_activate" swapped="no"/>
+      <object class="GtkAction" id="edit">
+        <property name="label" translatable="yes">Edit</property>
+        <property name="stock_id">gtk-edit</property>
+        <property name="sensitive">False</property>
+        <signal name="activate" handler="on_edit_activate" swapped="no"/>
       </object>
     </child>
   </object>
-  <object class="GtkActionGroup" id="overview">
+  <object class="GtkMenu" id="fact_tree_popup">
+    <property name="visible">True</property>
     <child>
-      <object class="GtkAction" id="close">
-        <property name="stock_id">gtk-close</property>
-        <signal name="activate" handler="on_close_activate" swapped="no"/>
+      <object class="GtkMenuItem" id="popup_edit">
+        <property name="visible">True</property>
+        <property name="related_action">edit</property>
       </object>
-      <accelerator key="w" modifiers="GDK_CONTROL_MASK"/>
     </child>
     <child>
-      <object class="GtkAction" id="export">
-        <property name="label" translatable="yes">Save report...</property>
-        <property name="icon_name">document-save</property>
-        <signal name="activate" handler="on_export_activate" swapped="no"/>
+      <object class="GtkMenuItem" id="popup_remove">
+        <property name="visible">True</property>
+        <property name="related_action">remove</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem10">
+        <property name="visible">True</property>
+        <property name="use_action_appearance">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="popup_add">
+        <property name="visible">True</property>
+        <property name="related_action">add</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="go">
+    <child>
+      <object class="GtkAction" id="next">
+        <property name="stock_id">gtk-go-forward</property>
+        <signal name="activate" handler="on_next_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="home">
+        <property name="stock_id">gtk-home</property>
+        <signal name="activate" handler="on_home_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="prev">
+        <property name="stock_id">gtk-go-back</property>
+        <signal name="activate" handler="on_prev_activate" swapped="no"/>
       </object>
     </child>
   </object>
