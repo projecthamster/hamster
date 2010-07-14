@@ -110,7 +110,8 @@ class TimeChart(graphics.Scene):
         self.connect("enter_notify_event", self.on_mouse_enter)
         self.connect("leave_notify_event", self.on_mouse_leave)
 
-        self.zoom_out_icon = Icon(self.render_icon(gtk.STOCK_ZOOM_OUT, 16), visible = False, z_order = 500)
+        self.zoom_out_icon = Icon(self.render_icon(gtk.STOCK_ZOOM_OUT, gtk.ICON_SIZE_MENU),
+                                  visible = False, z_order = 500)
         self.add_child(self.zoom_out_icon)
 
 
