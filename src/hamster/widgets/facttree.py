@@ -416,14 +416,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             self.render_cell(context, (x,y,width,height), widget)
 
 
-
-    def set_color(self, context, color):
-        context.set_source_rgba(*self.color_to_cairo_rgba(color))
-
-    def color_to_cairo_rgba(self, c, a=1):
-        return c.red/65535.0, c.green/65535.0, c.blue/65535.0, a
-
-
     def render_cell(self, context, bounds, widget, really = True):
         if not bounds:
             return -1
@@ -448,7 +440,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
            and current_fact["id"] == fact["id"]:
             text_color = self.selected_color
             selected = True
-
 
 
 
@@ -584,7 +575,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
     def on_get_size(self, widget, cell_area):
         if "id" not in self.data:
             if self.data["first"]:
-                return (0, 0, 0, (self.default_size + 10) * 1.5)
+                return (0, 0, 0, int((self.default_size + 10) * 1.5))
             else:
                 return (0, 0, 0, (self.default_size + 10) * 2)
 
