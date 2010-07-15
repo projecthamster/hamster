@@ -45,31 +45,23 @@ def get_prev(selection, model):
 class CategoryStore(gtk.ListStore):
     def __init__(self):
         #id, name, color_code, order
-        gtk.ListStore.__init__(self, int, str, int)
+        gtk.ListStore.__init__(self, int, str)
 
     def load(self):
-        """ Loads activity list from database, ordered by
-            activity_order """
-
         category_list = runtime.storage.get_categories()
 
         for category in category_list:
-            self.append([category['id'],
-                         category['name'],
-                         category['category_order']])
+            self.append([category['id'], category['name']])
 
-        self.unsorted_category = self.append([-1, _("Unsorted"), 999]) # all activities without category
+        self.unsorted_category = self.append([-1, _("Unsorted")]) # all activities without category
 
 
 class ActivityStore(gtk.ListStore):
     def __init__(self):
         #id, name, category_id, order
-        gtk.ListStore.__init__(self, int, str, int, int)
+        gtk.ListStore.__init__(self, int, str, int)
 
     def load(self, category_id):
-        """ Loads activity list from database, ordered by
-            activity_order """
-
         self.clear()
 
         if category_id is None:
@@ -80,8 +72,7 @@ class ActivityStore(gtk.ListStore):
         for activity in activity_list:
             self.append([activity['id'],
                          activity['name'],
-                         activity['category_id'],
-                         activity['activity_order']])
+                         activity['category_id']])
 
 
 class WorkspaceStore(gtk.ListStore):
@@ -173,15 +164,11 @@ class PreferencesEditor:
                                                 self.TARGETS,
                                                 gtk.gdk.ACTION_DEFAULT|
                                                 gtk.gdk.ACTION_MOVE)
-        self.activity_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_MOVE)
 
         self.category_tree.enable_model_drag_dest(self.TARGETS,
                                                   gtk.gdk.ACTION_MOVE)
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
-        self.activity_tree.connect("drag_data_received",
-                                   self.drag_data_received_data)
 
         self.category_tree.connect("drag_data_received",
                                    self.on_category_drop)
@@ -341,23 +328,6 @@ class PreferencesEditor:
                 self.category_tree.set_cursor((i, ))
             i += 1
 
-    def on_activity_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
-        self.prev_selected_activity = None
-        try:
-            target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
-            model, source = treeview.get_selection().get_selected()
-
-        except:
-            return
-
-        drop_yes = ("drop_yes", gtk.TARGET_SAME_APP, 0)
-        drop_no = ("drop_no", gtk.TARGET_SAME_APP, 0)
-
-        if drop_position == gtk.TREE_VIEW_DROP_AFTER or \
-           drop_position == gtk.TREE_VIEW_DROP_BEFORE:
-            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
-        else:
-            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
 
 
     def on_category_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
@@ -379,34 +349,6 @@ class PreferencesEditor:
             treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
 
 
-    def drag_data_received_data(self, treeview, context, x, y, selection,
-                                info, etime):
-        model = treeview.get_model()
-        data = selection.data
-        drop_info = treeview.get_dest_row_at_pos(x, y)
-
-        if drop_info:
-            path, position = drop_info
-            iter = model.get_iter(path)
-            if (position == gtk.TREE_VIEW_DROP_BEFORE
-                or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
-                logging.debug("insert '%s' before '%s'" % (data, model[iter][3]))
-                runtime.storage.move_activity(int(data), model[iter][3], insert_after = False)
-            else:
-                logging.debug("insert '%s' after '%s'" % (data, model[iter][3]))
-                runtime.storage.move_activity(int(data), model[iter][3], insert_after = True)
-        else:
-            logging.debug("append '%s'" % data)
-
-        if context.action == gtk.gdk.ACTION_MOVE:
-            context.finish(True, True, etime)
-
-
-        self.activity_store.load(self._get_selected_category())
-
-        self.select_activity(int(data))
-
-        return
 
     def on_category_drop(self, treeview, context, x, y, selection,
                                 info, etime):
@@ -499,8 +441,6 @@ class PreferencesEditor:
             self.activity_store.load(model[iter][0])
 
         #start with nothing
-        self.get_widget('activity_up').set_sensitive(False)
-        self.get_widget('activity_down').set_sensitive(False)
         self.get_widget('activity_edit').set_sensitive(False)
         self.get_widget('activity_remove').set_sensitive(False)
 
@@ -522,18 +462,9 @@ class PreferencesEditor:
 
         # treat any selected case
         unsorted_selected = self._get_selected_category() == -1
-        self.get_widget('activity_up').set_sensitive(False)
-        self.get_widget('activity_down').set_sensitive(False)
-
         self.get_widget('activity_edit').set_sensitive(iter != None)
         self.get_widget('activity_remove').set_sensitive(iter != None)
 
-        if iter != None and not unsorted_selected:
-            first_item = model.get_path(iter) == (0,)
-            self.get_widget('activity_up').set_sensitive(not first_item)
-
-            last_item = model.iter_next(iter) is None
-            self.get_widget('activity_down').set_sensitive(not last_item)
 
     def _del_selected_row(self, tree):
         selection = tree.get_selection()
@@ -693,7 +624,7 @@ class PreferencesEditor:
         """ appends row, jumps to it and allows user to input name """
 
         new_category = self.category_store.insert_before(self.category_store.unsorted_category,
-                                                         [-2, _(u"New category"), -1])
+                                                         [-2, _(u"New category")])
 
         self.categoryCell.set_property("editable", True)
         self.category_tree.set_cursor_on_cell((len(self.category_tree.get_model()) - 2, ),
@@ -706,7 +637,7 @@ class PreferencesEditor:
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
 
-        new_activity = self.activity_store.append([-1, _(u"New activity"), category_id, -1])
+        new_activity = self.activity_store.append([-1, _(u"New activity"), category_id])
 
         (model, iter) = self.selection.get_selected()
 
@@ -720,26 +651,6 @@ class PreferencesEditor:
         removable_id = self._del_selected_row(self.activity_tree)
         runtime.storage.remove_activity(removable_id)
 
-    def on_activity_up_clicked(self, button):
-        (model, iter) = self.selection.get_selected()
-
-        #previous item
-        prev_iter = get_prev(self.selection, model)
-        runtime.storage.swap_activities(model[iter][0], model[iter][3],
-                                model[prev_iter][0], model[prev_iter][3])
-        model.move_before(iter, prev_iter)
-
-        self.activity_changed(self.selection, model)
-
-    def on_activity_down_clicked(self, button):
-        (model, iter) = self.selection.get_selected()
-
-        next_iter = model.iter_next(iter)
-        runtime.storage.swap_activities(model[iter][0], model[iter][3],
-                                model[next_iter][0], model[next_iter][3])
-        self.activity_store.move_after(iter, next_iter)
-
-        self.activity_changed(self.selection, model)
 
     def on_close_button_clicked(self, button):
         self.close_window()

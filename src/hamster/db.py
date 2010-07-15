@@ -162,7 +162,7 @@ class Storage(storage.Storage):
         return changes or len(to_delete + to_uncomplete) > 0
 
     def __get_categories(self):
-        return self.fetchall("SELECT * FROM categories ORDER BY category_order")
+        return self.fetchall("SELECT id, name FROM categories ORDER BY lower(name)")
 
     def __change_category(self, id, category_id):
         # first check if we don't have an activity with same name before us
@@ -186,26 +186,22 @@ class Storage(storage.Storage):
             self.__remove_activity(id)
 
         else: #just moving
-            query = "SELECT max(activity_order) + 1 FROM activities WHERE category_id = ?"
-            max_order = self.fetchone(query, (category_id, ))[0] or 1
-
             statement = """
                        UPDATE activities
-                          SET category_id = ?, activity_order = ?
+                          SET category_id = ?
                         WHERE id = ?
             """
 
-            self.execute(statement, (category_id, max_order, id))
+            self.execute(statement, (category_id, id))
 
         return True
 
     def __add_category(self, name):
-        order = self.fetchone("select max(category_order) + 1  from categories")[0] or 1
         query = """
-                   INSERT INTO categories (name, category_order)
-                        VALUES (?, ?)
+                   INSERT INTO categories (name)
+                        VALUES (?)
         """
-        self.execute(query, (name, order))
+        self.execute(query, (name,))
         return self.__last_insert_rowid()
 
     def __update_category(self, id,  name):
@@ -216,24 +212,6 @@ class Storage(storage.Storage):
                          WHERE id = ?
             """
             self.execute(update, (name, id))
-
-    def __move_activity(self, source_id, target_order, insert_after = True):
-        statement = "UPDATE activities SET activity_order = activity_order + 1"
-
-        if insert_after:
-            statement += " WHERE activity_order > ?"
-        else:
-            statement += " WHERE activity_order >= ?"
-
-        self.execute(statement, (target_order, ))
-
-        statement = "UPDATE activities SET activity_order = ? WHERE id = ?"
-
-        if insert_after:
-            self.execute(statement, (target_order + 1, source_id))
-        else:
-            self.execute(statement, (target_order, source_id))
-
 
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
@@ -736,18 +714,13 @@ class Storage(storage.Storage):
         """returns list of activities, if category is specified, order by name
            otherwise - by activity_order"""
         query = """
-                   SELECT a.id, a.name, a.activity_order, a.category_id, b.name as category
+                   SELECT a.id, a.name, a.category_id, b.name as category
                      FROM activities a
                 LEFT JOIN categories b on coalesce(b.id, -1) = a.category_id
                     WHERE category_id = ?
                       AND deleted is null
+                 ORDER BY lower(a.name)
         """
-
-        # unsorted entries we sort by name - others by ID
-        if category_id == -1:
-            query += "ORDER BY lower(a.name)"
-        else:
-            query += "ORDER BY a.activity_order"
 
         return self.fetchall(query, (category_id, ))
 
@@ -794,13 +767,6 @@ class Storage(storage.Storage):
         self.execute("delete from categories where id = ?", (id, ))
 
 
-    def __swap_activities(self, id1, priority1, id2, priority2):
-        """ swaps nearby activities """
-        # TODO - 2 selects and 2 updates is wrong we could live without selects
-        self.execute(["update activities set activity_order = ? where id = ?",
-                      "update activities set activity_order = ? where id = ?"],
-                      [(priority1, id2), (priority2, id1)])
-
     def __add_activity(self, name, category_id = None, temporary = False):
         # first check that we don't have anything like that yet
         activity = self.__get_activity_by_name(name, category_id)
@@ -809,7 +775,6 @@ class Storage(storage.Storage):
 
         #now do the create bit
         category_id = category_id or -1
-        new_order = self.fetchone("select max(activity_order) + 1  from activities")[0] or 1
 
         deleted = None
         if temporary:
@@ -817,10 +782,10 @@ class Storage(storage.Storage):
 
 
         query = """
-                   INSERT INTO activities (name, category_id, activity_order, deleted)
-                        VALUES (?, ?, ?, ?)
+                   INSERT INTO activities (name, category_id, deleted)
+                        VALUES (?, ?, ?)
         """
-        self.execute(query, (name, category_id, new_order, deleted))
+        self.execute(query, (name, category_id, deleted))
         return self.__last_insert_rowid()
 
     def __update_activity(self, id, name, category_id):

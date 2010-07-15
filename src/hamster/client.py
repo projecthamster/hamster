@@ -239,14 +239,8 @@ class Storage(gobject.GObject):
     def remove_category(self, id):
         self.conn.RemoveCategory(id)
 
-    def move_activity(self, source_id, target_order, insert_after = True):
-        self.conn.MoveActivity(source_id, target_order, insert_after)
-
     def change_category(self, id, category_id):
         return self.conn.ChangeCategory(id, category_id)
-
-    def swap_activities(self, id1, priority1, id2, priority2):
-        self.conn.SwapActivities(id1, priority1, id2, priority2)
 
     def update_activity(self, id, name, category_id):
         return self.conn.UpdateActivity(id, name, category_id)
