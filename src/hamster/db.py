@@ -198,20 +198,20 @@ class Storage(storage.Storage):
 
     def __add_category(self, name):
         query = """
-                   INSERT INTO categories (name)
-                        VALUES (?)
+                   INSERT INTO categories (name, search_name)
+                        VALUES (?, ?)
         """
-        self.execute(query, (name,))
+        self.execute(query, (name, name.lower()))
         return self.__last_insert_rowid()
 
     def __update_category(self, id,  name):
         if id > -1: # Update, and ignore unsorted, if that was somehow triggered
             update = """
                        UPDATE categories
-                           SET name = ?
+                           SET name = ?, search_name = ?
                          WHERE id = ?
             """
-            self.execute(update, (name, id))
+            self.execute(update, (name, name.lower(), id))
 
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
@@ -618,8 +618,8 @@ class Storage(storage.Storage):
 
         def all_fields(term):
             return """(lower(a.description) like '%%%(term)s%%'
-                       or lower(b.name) = '%(term)s'
-                       or lower(c.name) = '%(term)s'
+                       or b.search_name = '%(term)s'
+                       or c.search_name = '%(term)s'
                        or lower(e.name) = '%(term)s' )""" % dict(term = term)
 
         if or_bits:
@@ -735,11 +735,12 @@ class Storage(storage.Storage):
                 LEFT JOIN categories b ON coalesce(b.id, -1) = a.category_id
                 LEFT JOIN facts f ON a.id = f.activity_id
                     WHERE deleted IS NULL
-                      AND lower(a.name) LIKE ? ESCAPE '\\'
+                      AND a.search_name LIKE ? ESCAPE '\\'
                  GROUP BY a.id
                  ORDER BY max(f.start_time) DESC, lower(a.name)
                     LIMIT 50
         """
+        search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
         activities = self.fetchall(query, (u'%s%%' % search, ))
 
@@ -782,20 +783,21 @@ class Storage(storage.Storage):
 
 
         query = """
-                   INSERT INTO activities (name, category_id, deleted)
-                        VALUES (?, ?, ?)
+                   INSERT INTO activities (name, search_name, category_id, deleted)
+                        VALUES (?, ?, ?, ?)
         """
-        self.execute(query, (name, category_id, deleted))
+        self.execute(query, (name, name.lower(), category_id, deleted))
         return self.__last_insert_rowid()
 
     def __update_activity(self, id, name, category_id):
         query = """
                    UPDATE activities
                        SET name = ?,
+                           search_name = ?,
                            category_id = ?
                      WHERE id = ?
         """
-        self.execute(query, (name, category_id, id))
+        self.execute(query, (name, name.lower(), category_id, id))
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
@@ -882,7 +884,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 7
+        current_version = 8
 
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
@@ -1073,6 +1075,23 @@ class Storage(storage.Storage):
                                  SELECT id, activity_id, start_time, end_time, description from facts""")
             self.execute("DROP table facts")
             self.execute("ALTER TABLE increment_facts RENAME TO facts")
+
+        if version < 8:
+            # working around sqlite's utf-f case sensitivity (bug 624438)
+            # more info: http://www.gsak.net/help/hs23820.htm
+            self.execute("ALTER TABLE activities ADD COLUMN search_name varchar2")
+
+            activities = self.fetchall("select * from activities")
+            statement = "update activities set search_name = ? where id = ?"
+            for activity in activities:
+                self.execute(statement, (activity['name'].lower(), activity['id']))
+
+            # same for categories
+            self.execute("ALTER TABLE categories ADD COLUMN search_name varchar2")
+            categories = self.fetchall("select * from categories")
+            statement = "update categories set search_name = ? where id = ?"
+            for category in categories:
+                self.execute(statement, (category['name'].lower(), category['id']))
 
 
         # at the happy end, update version number
