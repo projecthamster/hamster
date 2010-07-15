@@ -1093,6 +1093,7 @@ class Scene(gtk.DrawingArea):
 
             if target:
                 target._on_click(event.state)
-                self.emit("on-click", event, target)
+                
+            self.emit("on-click", event, target)
 
         self.emit("on-mouse-up")
