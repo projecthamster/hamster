@@ -63,6 +63,13 @@ def build(bld):
     bld.install_files('${PYTHONDIR}/hamster', 'src/hamster/*.py')
     bld.install_files('${PYTHONDIR}/hamster/widgets', 'src/hamster/widgets/*.py')
 
+    bld.install_files('${DATADIR}/docky/helpers',
+                      'src/docky_control/hamster_control.py',
+                      chmod = 0755)
+    bld.install_files('${DATADIR}/docky/helpers/metadata',
+                      'src/docky_control/hamster_control.py.info')
+
+
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",
                      target= "org.gnome.hamster.service",
