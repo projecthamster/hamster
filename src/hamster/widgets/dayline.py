@@ -168,7 +168,7 @@ class DayLine(graphics.Scene):
             self.new_selection()
             self.emit("on-time-chosen", start_time, end_time)
 
-    def on_click(self, scene, event, targets):
+    def on_click(self, scene, event, target):
         self.drag_start = None
 
         start_time = self.selection.start_time

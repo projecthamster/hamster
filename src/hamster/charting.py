@@ -115,6 +115,7 @@ class Chart(graphics.Scene):
             bar.fill = self.bar_color
 
     def on_click(self, scene, event, clicked_bar):
+        if not clicked_bar: return
         self.emit("bar-clicked", clicked_bar.key)
 
     def plot(self, keys, data):

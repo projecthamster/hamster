@@ -258,6 +258,8 @@ class TagBox(graphics.Scene):
 
 
     def on_tag_click(self, area, event, tag):
+        if not tag: return
+
         if tag.text in self.selected_tags:
             self.emit("tag-unselected", tag.text)
         else:

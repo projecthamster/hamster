@@ -138,6 +138,8 @@ class TimeChart(graphics.Scene):
             bar.fill = self.bar_color
 
     def on_click(self, scene, event, target):
+        if not target: return
+
         if target == self.zoom_out_icon:
             self.emit("zoom-out-clicked")
         elif isinstance(target, VerticalBar):
