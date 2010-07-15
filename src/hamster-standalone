@@ -49,8 +49,22 @@ except:
     logging.warning("Could not import pynotify - notifications will be disabled")
     pynotify = None
 
-class ProjectHamster(object):
+import dbus, dbus.service, sys
+
+class ProjectHamster(dbus.service.Object):
+    __dbus_object_path__ = "/org/gnome/Hamster/Standalone"
+
     def __init__(self):
+        # maintain just one instance. this code feels hackish
+        self.bus = dbus.SessionBus()
+        if "org.gnome.Hamster.Standalone" not in dbus.SessionBus().list_names():
+            bus_name = dbus.service.BusName("org.gnome.Hamster.Standalone", bus=self.bus)
+            dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
+        else:
+            overview = self.bus.get_object("org.gnome.Hamster.Standalone", self.__dbus_object_path__)
+            overview.show()
+            sys.exit(0)
+
         # load window of activity switcher and todays view
         self._gui = stuff.load_ui_file("hamster.ui")
         self.window = self._gui.get_object('hamster-window')
@@ -442,8 +456,10 @@ class ProjectHamster(object):
     def on_window_configure_event(self, window, event):
         self.treeview.fix_row_heights()
 
+    @dbus.service.method("org.gnome.Hamster.Standalone")
     def show(self):
         self.window.show_all()
+        self.window.present()
 
     def get_widget(self, name):
         return self._gui.get_object(name)
