@@ -4,6 +4,7 @@ data/90-hamster-applet.xml.in
 data/hamster-applet.schemas.in
 data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
+data/hamster-applet.desktop.in.in
 data/hamster-standalone.desktop.in.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/edit_activity.ui

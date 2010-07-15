@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+_Name=Time Tracker
+_Comment=Project Hamster - track your time
+Icon=hamster-applet
+Exec=@LIBDIR@/hamster-applet/hamster-applet
+Categories=GNOME;GTK;Utility;
+NoDisplay=true
