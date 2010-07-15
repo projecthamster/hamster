@@ -14,6 +14,7 @@ data/hamster-standalone.desktop.in.in
 [type: gettext/glade]data/preferences.ui
 [type: gettext/glade]data/range_pick.ui
 [type: gettext/glade]data/stats.ui
+src/docky_control/hamster_control.py
 src/hamster/about.py
 src/hamster/applet.py
 src/hamster/db.py

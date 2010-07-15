@@ -63,7 +63,7 @@ class DockyHamsterItem(DockyItem):
             self.iface.SetText("%(name)s - %(category)s" % fact)
             self.iface.SetBadgeText(stuff.format_duration(fact['delta'], human=False))
         else:
-            self.iface.ResetText()
+            self.iface.SetText(_("No activity"))
             self.iface.ResetBadgeText()
 
 
