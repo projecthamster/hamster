@@ -250,43 +250,63 @@ Time formats:
 
     command, args = sys.argv[1], sys.argv[2:]
 
-    if command not in ['toggle', 'start', 'stop', 'list', 'list-activities', 'list-categories']:
+    if command in ("toggle", "start", "stop", "list", "list-activities", "list-categories"):
+        hamster_client = HamsterClient()
+
+        if command == 'toggle':
+            hamster_client.toggle()
+
+        elif command == 'start':
+            if not args: # mandatory is only the activity name
+                sys.exit(usage % {'prog': sys.argv[0]})
+
+            activity = args[0]
+
+            start_time, end_time = None, None
+            if len(args) > 1:
+                start_time, end_time = parse_datetime_range(args[1])
+
+                if start_time > dt.datetime.now() or (end_time and end_time > dt.datetime.now()):
+                    sys.exit("Activity must start and finish before current time")
+
+            hamster_client.start_tracking(activity, start_time, end_time)
+
+        elif command == 'stop':
+            hamster_client.stop_tracking()
+
+        elif command == 'list':
+            start_time, end_time = None, None
+            if args:
+                start_time, end_time = parse_datetime_range(args[0])
+
+            hamster_client.list(start_time, end_time)
+
+        elif command == 'list-activities':
+            hamster_client.list_activities()
+
+        elif command == 'list-categories':
+            hamster_client.list_categories()
+
+    elif command in ("overview", "statistics", "edit", "preferences"): # windows
+        import gtk
+        from hamster import i18n
+        i18n.setup_i18n()
+
+        gtk.window_set_default_icon_name("hamster-applet")
+        from hamster.configuration import dialogs
+
+
+        if command == "overview":
+            dialogs.overview.show()
+        elif command == "statistics":
+            dialogs.stats.show()
+        elif command == "edit":
+            dialogs.edit.show()
+        elif command == "preferences":
+            dialogs.prefs.show()
+
+        gtk.main()
+
+    else:
         # unknown command - print usage, go home
         sys.exit(usage % {'prog': sys.argv[0]})
-
-
-    hamster_client = HamsterClient()
-
-    if command == 'toggle':
-        hamster_client.toggle()
-
-    elif command == 'start':
-        if not args: # mandatory is only the activity name
-            sys.exit(usage % {'prog': sys.argv[0]})
-
-        activity = args[0]
-
-        start_time, end_time = None, None
-        if len(args) > 1:
-            start_time, end_time = parse_datetime_range(args[1])
-
-            if start_time > dt.datetime.now() or (end_time and end_time > dt.datetime.now()):
-                sys.exit("Activity must start and finish before current time")
-
-        hamster_client.start_tracking(activity, start_time, end_time)
-
-    elif command == 'stop':
-        hamster_client.stop_tracking()
-
-    elif command == 'list':
-        start_time, end_time = None, None
-        if args:
-            start_time, end_time = parse_datetime_range(args[0])
-
-        hamster_client.list(start_time, end_time)
-
-    elif command == 'list-activities':
-        hamster_client.list_activities()
-
-    elif command == 'list-categories':
-        hamster_client.list_categories()
