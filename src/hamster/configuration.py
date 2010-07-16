@@ -110,7 +110,9 @@ class OneWindow(object):
         else:
             if parent:
                 dialog = self.get_dialog_class()(parent, **kwargs)
-                dialog.window.set_transient_for(parent.get_toplevel())
+
+                if isinstance(parent, gtk.Widget):
+                    dialog.window.set_transient_for(parent.get_toplevel())
 
                 # to make things simple, we hope that the target has defined self.window
                 dialog.window.connect("destroy",
