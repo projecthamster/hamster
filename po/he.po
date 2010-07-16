@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster Applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-16 15:43+0300\n"
-"PO-Revision-Date: 2010-07-16 15:44+0200\n"
+"POT-Creation-Date: 2010-07-16 18:01+0300\n"
+"PO-Revision-Date: 2010-07-16 18:02+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer <sh.yaron@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -231,7 +231,9 @@ msgstr "הוספת פעילות קודמת"
 msgid "Contents"
 msgstr "תכנים"
 
-#: ../data/hamster.ui.h:3
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/hamster_control.py:79
+#: ../src/docky_control/hamster_control.py:94
 msgid "Overview"
 msgstr "סקירה"
 
@@ -442,11 +444,16 @@ msgstr "מתחיל ומסתיים"
 msgid "Year:"
 msgstr "שנה:"
 
-#: ../src/docky_control/hamster_control.py:66 ../src/hamster/applet.py:298
+#: ../src/docky_control/hamster_control.py:71 ../src/hamster/applet.py:298
 #: ../src/hamster/applet.py:321 ../src/hamster/applet.py:410
 #: ../src/hamster-standalone:203 ../src/hamster-standalone:270
 msgid "No activity"
 msgstr "אין פעילות"
+
+#: ../src/docky_control/hamster_control.py:81
+#: ../src/docky_control/hamster_control.py:95
+msgid "Preferences"
+msgstr "העדפות"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
