@@ -23,6 +23,8 @@
 import atexit
 import gobject
 import sys, os
+from subprocess import Popen
+
 
 import gtk
 from docky.docky import DockyItem, DockySink
@@ -43,7 +45,10 @@ class DockyHamsterItem(DockyItem):
         self.storage.connect("facts-changed", lambda storage: self.refresh_hamster())
         self.storage.connect("activities-changed", lambda storage: self.refresh_hamster())
 
+        self.id_map = {} #menu items
+
         self.update_text()
+        self.add_actions()
         gobject.timeout_add_seconds(60, self.refresh_hamster)
 
 
@@ -65,6 +70,29 @@ class DockyHamsterItem(DockyItem):
         else:
             self.iface.SetText(_("No activity"))
             self.iface.ResetBadgeText()
+
+    def add_menu_item(self, name, icon):
+        menu_id = self.iface.AddMenuItem(name, icon, "")
+        self.id_map[menu_id] = name
+
+    def menu_pressed(self, menu_id):
+        if self.id_map[menu_id] == _("Overview"):
+            Popen(["hamster-client", "overview", "&"])
+        elif self.id_map[menu_id] == _("Preferences"):
+            Popen(["hamster-client", "preferences", "&"])
+
+        self.add_actions() # TODO - figure out why is it that we have to regen all menu items after each click
+
+
+    def add_actions(self):
+        # first clear the menu
+        for k, v in self.id_map.iteritems():
+            self.iface.RemoveItem(k)
+
+        self.id_map = {}
+        # now add buttons
+        self.add_menu_item(_("Overview"), "")
+        self.add_menu_item(_("Preferences"), "preferences-desktop-personal")
 
 
 class DockyHamsterSink(DockySink):

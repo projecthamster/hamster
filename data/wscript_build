@@ -27,6 +27,12 @@ bld(features = "subst",
    )
 
 bld(features = "subst",
+    source= "hamster-client.desktop.in.in",
+    target= "hamster-client.desktop.in",
+    dict = bld.env
+   )
+
+bld(features = "subst",
     source= "Hamster_Applet.server.in.in",
     target= "Hamster_Applet.server.in",
     dict = bld.env
@@ -42,7 +48,9 @@ bld(features = 'intltool_in',
     flags    = ['-s', '-u', '-c'])
 
 bld(features = 'intltool_in',
-    source   = 'hamster-standalone.desktop.in hamster-applet.desktop.in',
+    source   = """hamster-standalone.desktop.in
+                  hamster-applet.desktop.in
+                  hamster-client.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',
     flags    = ['-d', '-q', '-u', '-c'])
