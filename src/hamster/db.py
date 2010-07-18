@@ -398,6 +398,8 @@ class Storage(storage.Storage):
                                           end_time, start_time, end_time, start_time))
 
         for fact in conflicts:
+            # won't eliminate as it is better to have overlapping entries than loosing data
+
             # split - truncate until beginning of new entry and create new activity for end
             if fact["start_time"] < start_time < fact["end_time"] and \
                fact["start_time"] < end_time < fact["end_time"]:
@@ -418,13 +420,6 @@ class Storage(storage.Storage):
                                        FROM fact_tags
                                       WHERE fact_id = ?"""
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
-
-            #eliminate
-            elif fact["end_time"] and \
-                 start_time < fact["start_time"] < end_time and \
-                 start_time < fact["end_time"] < end_time:
-                logging.info("eliminating %s" % fact["name"])
-                self.__remove_fact(fact["id"])
 
             # overlap start
             elif start_time < fact["start_time"] < end_time:
