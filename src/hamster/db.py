@@ -241,7 +241,8 @@ class Storage(storage.Storage):
             res = self.fetchone(query, (_("Unsorted"), name, ))
 
         if res:
-            res = dict(res)
+            keys = ('id', 'name', 'deleted', 'category')
+            res = dict([(key, res[key]) for key in keys])
             res['deleted'] = res['deleted'] or False
 
             # if the activity was marked as deleted, resurrect on first call
@@ -450,7 +451,7 @@ class Storage(storage.Storage):
         tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
         tags = tags or activity.tags # explicitly stated tags take priority
 
-        tags = self.GetTagIds(tags) #this will create any missing tags too
+        tags = [dict(zip(('id', 'name', 'autocomplete'), row)) for row in self.GetTagIds(tags)] #this will create any missing tags too
 
 
         if category_name:

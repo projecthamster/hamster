@@ -235,9 +235,9 @@ class Storage(dbus.service.Object):
         self.ActivitiesChanged()
 
 
-    @dbus.service.method("org.gnome.Hamster", out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", out_signature='a(is)')
     def GetCategories(self):
-        return [dict(category) for category in self.__get_categories()]
+        return [(category['id'], category['name']) for category in self.__get_categories()]
 
 
     # activities
@@ -262,27 +262,19 @@ class Storage(dbus.service.Object):
         self.ActivitiesChanged()
         return result
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='a(isis)')
     def GetCategoryActivities(self, category_id = -1):
-        res = []
-        for activity in self.__get_category_activities(category_id = category_id):
-            activity = dict(activity)
-            activity['category'] = activity['category'] or ''
 
-            res.append(activity)
-
-        return res
+        return [(row['id'],
+                 row['name'],
+                 row['category_id'],
+                 row['name'] or '') for row in
+                      self.__get_category_activities(category_id = category_id)]
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
     def GetActivities(self, search = ""):
-        res = []
-        for activity in self.__get_activities(search):
-            activity = dict(activity)
-            activity['category'] = activity['category'] or ''
-            res.append(activity)
-
-        return res
+        return [(row['name'], row['category'] or '') for row in self.__get_activities(search)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')
@@ -303,17 +295,17 @@ class Storage(dbus.service.Object):
             return {}
 
     # tags
-    @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='a(isb)')
     def GetTags(self, only_autocomplete):
-        return [dict(tag) for tag in self.__get_tags(only_autocomplete)]
+        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.__get_tags(only_autocomplete)]
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='aa{sv}')
+    @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='a(isb)')
     def GetTagIds(self, tags):
         tags, new_added = self.__get_tag_ids(tags)
         if new_added:
             self.TagsChanged()
-        return [dict(tag) for tag in tags]
+        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in tags]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s')

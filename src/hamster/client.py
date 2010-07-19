@@ -76,6 +76,9 @@ class Storage(gobject.GObject):
         bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
         bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
 
+    @staticmethod
+    def _to_dict(columns, result_list):
+        return [dict(zip(columns, row)) for row in result_list]
 
     def _on_tags_changed(self):
         self.emit("tags-changed")
@@ -119,15 +122,15 @@ class Storage(gobject.GObject):
            results are sorted by most recent usage.
            search is case insensitive
         """
-        return self.conn.GetActivities(search)
+        return self._to_dict(('name', 'category'), self.conn.GetActivities(search))
 
     def get_categories(self):
         """returns list of categories"""
-        return self.conn.GetCategories()
+        return self._to_dict(('id', 'name'), self.conn.GetCategories())
 
     def get_tags(self, only_autocomplete = False):
         """returns list of all tags. by default only those that have been set for autocomplete"""
-        return self.conn.GetTags(only_autocomplete)
+        return self._to_dict(('id', 'name', 'autocomplete'), self.conn.GetTags(only_autocomplete))
 
 
     def get_tag_ids(self, tags):
@@ -137,7 +140,7 @@ class Storage(gobject.GObject):
            be created.
            on database changes the `tags-changed` signal is emitted.
         """
-        return self.conn.GetTagIds(tags)
+        return self._to_dict(('id', 'name', 'autocomplete'), self.conn.GetTagIds(tags))
 
     def update_autocomplete_tags(self, tags):
         """update list of tags that should autocomplete. this list replaces
@@ -218,7 +221,7 @@ class Storage(gobject.GObject):
         """Return activities for category. If category is not specified, will
         return activities that have no category"""
         category_id = category_id or -1
-        return self.conn.GetCategoryActivities(category_id)
+        return self._to_dict(('id', 'name', 'category_id', 'category'), self.conn.GetCategoryActivities(category_id))
 
     def get_category_id(self, category_name):
         """returns category id by name"""
