@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster Applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-16 18:01+0300\n"
-"PO-Revision-Date: 2010-07-16 18:02+0200\n"
+"POT-Creation-Date: 2010-07-19 21:16+0300\n"
+"PO-Revision-Date: 2010-07-19 21:16+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer <sh.yaron@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -133,9 +133,9 @@ msgstr "פרוייקט Hamster - עקוב אחר הזמן שלך"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-applet.desktop.in.in.h:2
-#: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:10
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:325 ../src/hamster-standalone:207
+#: ../src/hamster/applet.py:325 ../src/hamster-time-tracker:169
 msgid "Time Tracker"
 msgstr "מעקב אחרי הזמן"
 
@@ -156,12 +156,9 @@ msgid "_Preferences"
 msgstr "_העדפות"
 
 #: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 msgid "Project Hamster - track your time"
 msgstr "מיזם Hamster — מעקב אחר הזמן שלך"
-
-#: ../data/hamster-standalone.desktop.in.in.h:1
-msgid "Project Hamster desktop time tracking"
-msgstr "מיזם Hamster מעקב זמנים לשולחן העבודה"
 
 #: ../data/applet.ui.h:1 ../src/hamster/applet.py:361
 msgid "No records today"
@@ -278,13 +275,13 @@ msgid "Show Statistics"
 msgstr "הצגת סטטיסטיקה"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:315 ../src/hamster-standalone:83
+#: ../src/hamster/reports.py:315 ../src/hamster-time-tracker:45
 msgid "Tags"
 msgstr "תויות"
 
 #: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
 #: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:313
-#: ../src/hamster-standalone:77
+#: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "פעילות"
 
@@ -446,7 +443,7 @@ msgstr "שנה:"
 
 #: ../src/docky_control/hamster_control.py:71 ../src/hamster/applet.py:298
 #: ../src/hamster/applet.py:321 ../src/hamster/applet.py:410
-#: ../src/hamster-standalone:203 ../src/hamster-standalone:270
+#: ../src/hamster-time-tracker:165 ../src/hamster-time-tracker:232
 msgid "No activity"
 msgstr "אין פעילות"
 
@@ -486,61 +483,61 @@ msgid "%sh"
 msgstr "%s שעות"
 
 #: ../src/hamster/applet.py:393 ../src/hamster/db.py:231
-#: ../src/hamster/db.py:241 ../src/hamster/db.py:296 ../src/hamster/db.py:657
+#: ../src/hamster/db.py:241 ../src/hamster/db.py:297 ../src/hamster/db.py:653
 #: ../src/hamster/edit_activity.py:54 ../src/hamster/preferences.py:56
 #: ../src/hamster/reports.py:61 ../src/hamster/reports.py:99
-#: ../src/hamster/reports.py:223 ../src/hamster-standalone:254
+#: ../src/hamster/reports.py:223 ../src/hamster-time-tracker:216
 msgid "Unsorted"
 msgstr "לא ממוין"
 
-#: ../src/hamster/applet.py:401 ../src/hamster-standalone:198
-#: ../src/hamster-standalone:261
+#: ../src/hamster/applet.py:401 ../src/hamster-time-tracker:160
+#: ../src/hamster-time-tracker:223
 msgid "Just started"
 msgstr "רק התחיל"
 
-#: ../src/hamster/applet.py:638 ../src/hamster-standalone:413
+#: ../src/hamster/applet.py:638 ../src/hamster-time-tracker:370
 msgid "Changed activity"
 msgstr "פעילות שהשתנתה"
 
-#: ../src/hamster/applet.py:639 ../src/hamster-standalone:414
+#: ../src/hamster/applet.py:639 ../src/hamster-time-tracker:371
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "הוחלף ל־'%s'"
 
 #. defaults
-#: ../src/hamster/db.py:874
+#: ../src/hamster/db.py:870
 msgid "Work"
 msgstr "עבודה"
 
-#: ../src/hamster/db.py:875
+#: ../src/hamster/db.py:871
 msgid "Reading news"
 msgstr "קורא חדשות"
 
-#: ../src/hamster/db.py:876
+#: ../src/hamster/db.py:872
 msgid "Checking stocks"
 msgstr "בודק מניות"
 
-#: ../src/hamster/db.py:877
+#: ../src/hamster/db.py:873
 msgid "Super secret project X"
 msgstr "פרוייקט סופר סודי S"
 
-#: ../src/hamster/db.py:878
+#: ../src/hamster/db.py:874
 msgid "World domination"
 msgstr "שליטה עולמית"
 
-#: ../src/hamster/db.py:880
+#: ../src/hamster/db.py:876
 msgid "Day-to-day"
 msgstr "יום יומי"
 
-#: ../src/hamster/db.py:881
+#: ../src/hamster/db.py:877
 msgid "Lunch"
 msgstr "ארוחת צהריים"
 
-#: ../src/hamster/db.py:882
+#: ../src/hamster/db.py:878
 msgid "Watering flowers"
 msgstr "השקיית פרחים"
 
-#: ../src/hamster/db.py:883
+#: ../src/hamster/db.py:879
 msgid "Doing handstands"
 msgstr "עמידת ידיים"
 
@@ -708,10 +705,14 @@ msgstr "הצגת התבנית"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "ניתן לשכתב עליהן על ידי שמירת הגרסה שלך תחת %(home_folder)s"
 
-#: ../src/hamster-standalone:196
+#: ../src/hamster-time-tracker:158
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "עובד על <b>%s</b>"
+
+#: ../src/hamster-time-tracker:488
+msgid "Hamster time tracker. Usage:"
+msgstr "מעקב אחר הזמן עם Hamster. שימוש:"
 
 #: ../src/hamster/stats.py:88
 msgctxt "years"
@@ -896,6 +897,9 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "מעקב אחרי הזמן"
+
+#~ msgid "Project Hamster desktop time tracking"
+#~ msgstr "מיזם Hamster מעקב זמנים לשולחן העבודה"
 
 #~ msgid "Move activity down"
 #~ msgstr "הזז פעילות למטה"
