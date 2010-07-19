@@ -77,9 +77,9 @@ class DockyHamsterItem(DockyItem):
 
     def menu_pressed(self, menu_id):
         if self.id_map[menu_id] == _("Overview"):
-            Popen(["hamster-client", "overview", "&"])
+            Popen(["hamster-time-tracker", "overview"])
         elif self.id_map[menu_id] == _("Preferences"):
-            Popen(["hamster-client", "preferences", "&"])
+            Popen(["hamster-time-tracker", "preferences"])
 
         self.add_actions() # TODO - figure out why is it that we have to regen all menu items after each click
 

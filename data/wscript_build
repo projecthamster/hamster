@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # encoding: utf-8
-# Thomas Nagy, 2006-2009 (ita)
 
 bld.install_files('${DATADIR}/hamster-applet', '*.ui')
 bld.install_files('${DATADIR}/hamster-applet', 'hamster.db Hamster_Applet.xml')
@@ -15,20 +14,14 @@ bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster
 
 
 bld(features = "subst",
-    source= "hamster-standalone.desktop.in.in",
-    target= "hamster-standalone.desktop.in",
-    dict = bld.env
-   )
-
-bld(features = "subst",
     source= "hamster-applet.desktop.in.in",
     target= "hamster-applet.desktop.in",
     dict = bld.env
    )
 
 bld(features = "subst",
-    source= "hamster-client.desktop.in.in",
-    target= "hamster-client.desktop.in",
+    source= "hamster-time-tracker.desktop.in.in",
+    target= "hamster-time-tracker.desktop.in",
     dict = bld.env
    )
 
@@ -48,9 +41,8 @@ bld(features = 'intltool_in',
     flags    = ['-s', '-u', '-c'])
 
 bld(features = 'intltool_in',
-    source   = """hamster-standalone.desktop.in
-                  hamster-applet.desktop.in
-                  hamster-client.desktop.in""",
+    source   = """hamster-time-tracker.desktop.in
+                  hamster-applet.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',
     flags    = ['-d', '-q', '-u', '-c'])

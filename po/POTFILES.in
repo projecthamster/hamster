@@ -5,7 +5,7 @@ data/hamster-applet.schemas.in
 data/Hamster_Applet.server.in.in
 data/Hamster_Applet.xml
 data/hamster-applet.desktop.in.in
-data/hamster-standalone.desktop.in.in
+data/hamster-time-tracker.desktop.in.in
 [type: gettext/glade]data/applet.ui
 [type: gettext/glade]data/edit_activity.ui
 [type: gettext/glade]data/hamster.ui
@@ -24,7 +24,7 @@ src/hamster/overview.py
 src/hamster/overview_totals.py
 src/hamster/preferences.py
 src/hamster/reports.py
-src/hamster-standalone
+src/hamster-time-tracker
 src/hamster/stats.py
 src/hamster/stuff.py
 src/hamster/widgets/reportchooserdialog.py

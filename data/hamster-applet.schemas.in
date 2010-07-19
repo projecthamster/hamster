@@ -122,7 +122,7 @@
             <applyto>/desktop/gnome/keybindings/hamster-applet/action</applyto>
             <owner>hamster-applet</owner>
             <type>string</type>
-            <default>hamster-client toggle</default>
+            <default>hamster-time-tracker toggle</default>
             <locale name="C">
                 <short>Toggle hamster application window action</short>
                 <long>Command for toggling visibility of the hamster application window.</long>

@@ -243,7 +243,7 @@ Time formats:
 """)
 
 
-    # CLI Structure: ./hamster-client.py <start|stop|list|...> <conditional_args>
+    # CLI Structure: ./hamster-cli.py <start|stop|list|...> <conditional_args>
 
     if len(sys.argv) < 2:
         sys.exit(usage % {'prog': sys.argv[0]})
@@ -286,26 +286,6 @@ Time formats:
 
         elif command == 'list-categories':
             hamster_client.list_categories()
-
-    elif command in ("overview", "statistics", "edit", "preferences"): # windows
-        import gtk
-        from hamster import i18n
-        i18n.setup_i18n()
-
-        gtk.window_set_default_icon_name("hamster-applet")
-        from hamster.configuration import dialogs
-
-
-        if command == "overview":
-            dialogs.overview.show()
-        elif command == "statistics":
-            dialogs.stats.show()
-        elif command == "edit":
-            dialogs.edit.show()
-        elif command == "preferences":
-            dialogs.prefs.show()
-
-        gtk.main()
 
     else:
         # unknown command - print usage, go home
