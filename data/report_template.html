@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="hamster-applet" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
     <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css" rel="stylesheet" />
 
 
@@ -106,39 +106,40 @@
                     <th>Date</th>
                     <th class="by_date_row">$activity_totals_heading</th>
                     <th class="by_date_total_row">$category_totals_heading</th>
-                <tr>
+                </tr>
 
-                    <by_date>
-                        <tr valign="top">
-                            <td>$date</td>
-                            <td class="by_date_row">
-                                <table width="100%">
-                                    <by_date_activity>
-                                        <tr>
-                                            <td>$activity ($category)</td>
-                                            <td style="text-align: right">
-                                                <!-- there is also duration_decimal and duration_minutes -->
-                                                $duration
-                                            </td>
-                                        </tr>
-                                    </by_date_activity>
-                                </table>
-                            </td>
-                            <td class="by_date_total_row">
-                                <table width="100%">
-                                    <by_date_category>
-                                        <tr>
-                                            <td>$category</td>
-                                            <td style="text-align: right">
-                                                <!-- there is also duration_decimal and duration_minutes -->
-                                                $duration
-                                            </td>
-                                    </by_date_category>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr><td colspan="3">&nbsp</td></tr>
-                    </by_date>
+                <by_date>
+                    <tr valign="top">
+                        <td>$date</td>
+                        <td class="by_date_row">
+                            <table width="100%">
+                                <by_date_activity>
+                                    <tr>
+                                        <td>$activity ($category)</td>
+                                        <td style="text-align: right">
+                                            <!-- there is also duration_decimal and duration_minutes -->
+                                            $duration
+                                        </td>
+                                    </tr>
+                                </by_date_activity>
+                            </table>
+                        </td>
+                        <td class="by_date_total_row">
+                            <table width="100%">
+                                <by_date_category>
+                                    <tr>
+                                        <td>$category</td>
+                                        <td style="text-align: right">
+                                            <!-- there is also duration_decimal and duration_minutes -->
+                                            $duration
+                                        </td>
+                                    </tr>
+                                </by_date_category>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr><td colspan="3">&nbsp;</td></tr>
+                </by_date>
             </table>
 	</div>
 	<div id="tabs-2">
@@ -185,3 +186,5 @@
     <a href="file:///$data_dir/report_template.html">$show_template</a>.
     $template_instructions.
 </p>
+</body>
+</html>
