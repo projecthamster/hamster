@@ -97,7 +97,7 @@ class DockyHamsterItem(DockyItem):
 
 class DockyHamsterSink(DockySink):
     def item_path_found(self, pathtoitem, item):
-        if item.GetOwnsDesktopFile() and item.GetDesktopFile().endswith("hamster-standalone.desktop"):
+        if item.GetOwnsDesktopFile() and item.GetDesktopFile().endswith("hamster-time-tracker.desktop"):
             self.items[pathtoitem] = DockyHamsterItem(pathtoitem)
 
 dockysink = DockyHamsterSink()
