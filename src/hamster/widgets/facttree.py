@@ -95,7 +95,7 @@ class FactTree(gtk.TreeView):
         self.box = None
 
 
-        pixmap = gtk.gdk.Pixmap(None, 10, 10, 24)
+        pixmap = gtk.gdk.Pixmap(None, 10, 10, 1)
         _test_context = pixmap.cairo_create()
         self._test_layout = _test_context.create_layout()
         font = pango.FontDescription(gtk.Style().font_desc.to_string())
