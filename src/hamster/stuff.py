@@ -118,7 +118,16 @@ def month(view_date):
 
 def duration_minutes(duration):
     """returns minutes from duration, otherwise we keep bashing in same math"""
-    return duration.seconds / 60 + duration.days * 24 * 60
+    if isinstance(duration, list):
+        res = dt.timedelta()
+        for entry in duration:
+            res += entry
+
+        return duration_minutes(res)
+    elif isinstance(duration, dt.timedelta):
+        return duration.seconds / 60 + duration.days * 24 * 60
+    else:
+        return duration
 
 
 def load_ui_file(name):

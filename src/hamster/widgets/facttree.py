@@ -138,7 +138,7 @@ class FactTree(gtk.TreeView):
 
 
     def add_group(self, group_label, group_date, facts):
-        total = sum([stuff.duration_minutes(fact["delta"]) for fact in facts])
+        total = stuff.duration_minutes([fact["delta"] for fact in facts])
 
         # adds group of facts with the given label
         self.store_model.append([None, dict(date = group_date,
