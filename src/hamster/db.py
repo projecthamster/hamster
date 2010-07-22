@@ -600,6 +600,8 @@ class Storage(storage.Storage):
 
         split_time = day_start
         datetime_from = dt.datetime.combine(date, split_time)
+
+        end_date = end_date or date
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
 
         query = """
@@ -630,7 +632,6 @@ class Storage(storage.Storage):
 
 
         query += " ORDER BY a.start_time, e.name"
-        end_date = end_date or date
 
         facts = self.fetchall(query, (_("Unsorted"),
                                       datetime_from,
