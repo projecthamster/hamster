@@ -164,6 +164,20 @@ class Storage(storage.Storage):
     def __get_categories(self):
         return self.fetchall("SELECT id, name FROM categories ORDER BY lower(name)")
 
+    def __update_activity(self, id, name, category_id):
+        query = """
+                   UPDATE activities
+                       SET name = ?,
+                           search_name = ?,
+                           category_id = ?
+                     WHERE id = ?
+        """
+        self.execute(query, (name, name.lower(), category_id, id))
+
+        affected_ids = [res[0] for res in self.fetchall("select id from facts where activity_id = ?", (id,))]
+        self.__remove_index(affected_ids)
+
+
     def __change_category(self, id, category_id):
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
@@ -193,6 +207,11 @@ class Storage(storage.Storage):
             """
 
             self.execute(statement, (category_id, id))
+
+        affected_ids = [res[0] for res in self.fetchall("select id from facts where activity_id = ?", (id,))]
+        if existing_activity:
+            affected_ids.extend([res[0] for res in self.fetchall("select id from facts where activity_id = ?", (existing_activity['id'],))])
+        self.__remove_index(affected_ids)
 
         return True
 
@@ -624,7 +643,7 @@ class Storage(storage.Storage):
             # check if we need changes to the index
             self.__check_index(datetime_from, datetime_to)
 
-            search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
+            search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
             query += """ AND a.id in (SELECT id
                                         FROM fact_index
                                        WHERE fact_index MATCH '%s')""" % search_terms
@@ -778,20 +797,6 @@ class Storage(storage.Storage):
         """
         self.execute(query, (name, name.lower(), category_id, deleted))
         return self.__last_insert_rowid()
-
-    def __update_activity(self, id, name, category_id):
-        query = """
-                   UPDATE activities
-                       SET name = ?,
-                           search_name = ?,
-                           category_id = ?
-                     WHERE id = ?
-        """
-        self.execute(query, (name, name.lower(), category_id, id))
-
-        affected_ids = [res[0] for res in self.fetchall("select id from facts where activity_id = ?", (id,))]
-        self.__remove_index(affected_ids)
-
 
     def __remove_index(self, ids):
         """remove affected ids from the index"""
