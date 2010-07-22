@@ -213,6 +213,14 @@ class Storage(storage.Storage):
             """
             self.execute(update, (name, name.lower(), id))
 
+        affected_query = """
+            SELECT id
+              FROM facts
+             WHERE activity_id in (SELECT id FROM activities where category_id=?)
+        """
+        affected_ids = [res[0] for res in self.fetchall(affected_query, (id,))]
+        self.__remove_index(affected_ids)
+
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
         """get most recent, preferably not deleted activity by it's name"""
@@ -569,6 +577,7 @@ class Storage(storage.Storage):
         params = [(fact_id, tag["id"]) for tag in tags]
         self.execute(insert, params)
 
+        self.__remove_index([fact_id])
         return fact_id
 
     def __last_insert_rowid(self):
@@ -585,6 +594,14 @@ class Storage(storage.Storage):
 
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
+        from configuration import conf
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
+
+        split_time = day_start
+        datetime_from = dt.datetime.combine(date, split_time)
+        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
+
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
@@ -601,54 +618,19 @@ class Storage(storage.Storage):
                     WHERE (a.end_time >= ? OR a.end_time IS NULL) AND a.start_time <= ?
         """
 
-        # let's see what we can do with search terms
-        # we will be looking in activity names, descriptions, categories and tags
-        # comma will be treated as OR
-        # space will be treated as AND or possible join
+        if search_terms:
+            # check if we need changes to the index
+            self.__check_index(datetime_from, datetime_to)
 
-
-        # split by comma and then by space and remove all extra spaces
-        or_bits = [[term.strip().lower().replace("'", "''") #striping removing case sensitivity and escaping quotes in term
-                          for term in terms.strip().split(" ") if term.strip()]
-                          for terms in search_terms.split(",") if terms.strip()]
-
-        def all_fields(term):
-            return """(lower(a.description) like '%%%(term)s%%'
-                       or b.search_name = '%(term)s'
-                       or c.search_name = '%(term)s'
-                       or lower(e.name) = '%(term)s' )""" % dict(term = term)
-
-        if or_bits:
-            search_query = "1<>1 " # will be building OR chain, so start with a false
-
-            for and_bits in or_bits:
-                if len(and_bits) == 1:
-                    and_query = all_fields(and_bits[0])
-                else:
-                    and_query = "1=1 "  # will be building AND chain, so start with a true
-                    # if we have more than one word, go for "(a and b) or ab"
-                    # to match two word tags
-                    for bit1, bit2 in zip(and_bits, and_bits[1:]):
-                        and_query += "and (%s and %s) or %s" % (all_fields(bit1),
-                                                                all_fields(bit2),
-                                                                all_fields("%s %s" % (bit1, bit2)))
-
-                search_query = "%s or (%s) " % (search_query, and_query)
-
-            query = "%s and (%s)" % (query, search_query)
+            search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
+            query += """ AND a.id in (SELECT id
+                                        FROM fact_index
+                                       WHERE fact_index MATCH '%s')""" % search_terms
 
 
 
         query += " ORDER BY a.start_time, e.name"
         end_date = end_date or date
-
-        from configuration import conf
-        day_start = conf.get("day_start_minutes")
-        day_start = dt.time(day_start / 60, day_start % 60)
-
-        split_time = day_start
-        datetime_from = dt.datetime.combine(date, split_time)
-        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
 
         facts = self.fetchall(query, (_("Unsorted"),
                                       datetime_from,
@@ -706,6 +688,8 @@ class Storage(storage.Storage):
                       "DELETE FROM facts where id = ?"]
         self.execute(statements, [(fact_id,)] * 2)
 
+        self.__remove_index([fact_id])
+
     def __get_category_activities(self, category_id):
         """returns list of activities, if category is specified, order by name
            otherwise - by activity_order"""
@@ -758,10 +742,19 @@ class Storage(storage.Storage):
     def __remove_category(self, id):
         """move all activities to unsorted and remove category"""
 
+        affected_query = """
+            SELECT id
+              FROM facts
+             WHERE activity_id in (SELECT id FROM activities where category_id=?)
+        """
+        affected_ids = [res[0] for res in self.fetchall(affected_query, (id,))]
+
         update = "update activities set category_id = -1 where category_id = ?"
         self.execute(update, (id, ))
 
         self.execute("delete from categories where id = ?", (id, ))
+
+        self.__remove_index(affected_ids)
 
 
     def __add_activity(self, name, category_id = None, temporary = False):
@@ -794,6 +787,56 @@ class Storage(storage.Storage):
                      WHERE id = ?
         """
         self.execute(query, (name, name.lower(), category_id, id))
+
+        affected_ids = [res[0] for res in self.fetchall("select id from facts where activity_id = ?", (id,))]
+        self.__remove_index(affected_ids)
+
+
+    def __remove_index(self, ids):
+        """remove affected ids from the index"""
+        if not ids:
+            return
+
+        ids = ",".join((str(id) for id in ids))
+        self.execute("DELETE FROM fact_index where id in (%s)" % ids)
+
+
+    def __check_index(self, start_date, end_date):
+        """check if maybe index needs rebuilding in the time span"""
+        index_query = """SELECT id
+                           FROM facts
+                          WHERE (end_time >= ? OR end_time IS NULL)
+                            AND start_time <= ?
+                            AND id not in(select id from fact_index)"""
+
+        rebuild_ids = ",".join([str(res[0]) for res in self.fetchall(index_query, (start_date, end_date))])
+
+        if rebuild_ids:
+            query = """
+                       SELECT a.id AS id,
+                              a.start_time AS start_time,
+                              a.end_time AS end_time,
+                              a.description as description,
+                              b.name AS name, b.id as activity_id,
+                              coalesce(c.name, ?) as category,
+                              e.name as tag
+                         FROM facts a
+                    LEFT JOIN activities b ON a.activity_id = b.id
+                    LEFT JOIN categories c ON b.category_id = c.id
+                    LEFT JOIN fact_tags d ON d.fact_id = a.id
+                    LEFT JOIN tags e ON e.id = d.tag_id
+                        WHERE a.id in (%s)
+                     ORDER BY a.id
+            """ % rebuild_ids
+
+            facts = self.__group_tags(self.fetchall(query, (_("Unsorted"), )))
+
+            insert = """INSERT INTO fact_index (id, name, category, description, tag)
+                             VALUES (?, ?, ?, ?, ?)"""
+            params = [(fact['id'], fact['name'], fact['category'], fact['description'], " ".join(fact['tags'])) for fact in facts]
+
+            self.executemany(insert, params)
+
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
@@ -836,20 +879,31 @@ class Storage(storage.Storage):
         con = self.__con or self.connection
         cur = self.__cur or con.cursor()
 
-        if isinstance(statement, list) == False: #we kind of think that we will get list of instructions
+        if isinstance(statement, list) == False: # we expect to receive instructions in list
             statement = [statement]
             params = [params]
 
-        if isinstance(statement, list):
-            for i in range(len(statement)):
-                logging.debug("%s %s" % (statement[i], params[i]))
-
-                res = cur.execute(statement[i], params[i])
+        for state, param in zip(statement, params):
+            logging.debug("%s %s" % (state, param))
+            cur.execute(state, param)
 
         if not self.__con:
             con.commit()
             cur.close()
             self.register_modification()
+
+    def executemany(self, statement, params = []):
+        con = self.__con or self.connection
+        cur = self.__cur or con.cursor()
+
+        logging.debug("%s %s" % (statement, params))
+        cur.executemany(statement, params)
+
+        if not self.__con:
+            con.commit()
+            cur.close()
+            self.register_modification()
+
 
 
     def start_transaction(self):
@@ -880,7 +934,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 8
+        current_version = 9
 
         if version < 2:
             """moving from fact_date, fact_time to start_time, end_time"""
@@ -1089,11 +1143,17 @@ class Storage(storage.Storage):
             for category in categories:
                 self.execute(statement, (category['name'].lower(), category['id']))
 
+        if version < 9:
+            # adding full text search
+            self.execute("""CREATE VIRTUAL TABLE fact_index
+                                           USING fts3(id, name, category, description, tag)""")
+
 
         # at the happy end, update version number
         if version < current_version:
             #lock down current version
             self.execute("UPDATE version SET version = %d" % current_version)
+            print "updated database from version %d to %d" % (version, current_version)
 
         """we start with an empty database and then populate with default
            values. This way defaults can be localized!"""
