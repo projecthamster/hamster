@@ -359,7 +359,7 @@ class Overview(object):
         else:
             selected_date = fact["date"]
 
-        dialogs.edit.show(fact_date = selected_date)
+        dialogs.edit.show(self, fact_date = selected_date)
 
     def on_remove_activate(self, button):
         self.overview.delete_selected()
@@ -369,7 +369,7 @@ class Overview(object):
         fact = self.fact_tree.get_selected_fact()
         if not fact or isinstance(fact, dt.date):
             return
-        dialogs.edit.show(fact_id = fact["id"])
+        dialogs.edit.show(self, fact_id = fact["id"])
 
     def on_tabs_window_deleted(self, widget, event):
         self.close_window()
