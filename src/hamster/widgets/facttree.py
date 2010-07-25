@@ -30,24 +30,58 @@ from .tags import Tag
 import pango
 
 def parent_painter(column, cell, model, iter):
-    fact = model.get_value(iter, 0)
-    parent_info = model.get_value(iter, 1)
+    row = model.get_value(iter, 0)
 
-    if fact is None:
-        parent_info["first"] = model.get_path(iter) == (0,) # first row
-        cell.set_property('data', parent_info)
+    if isinstance(row, FactRow):
+        cell.set_property('data', row)
     else:
-        cell.set_property('data', fact)
+        row.first = model.get_path(iter) == (0,) # first row
+        cell.set_property('data', row)
 
 def action_painter(column, cell, model, iter):
     cell.set_property('xalign', 1)
     cell.set_property('yalign', 0)
 
-    if model.get_value(iter, 0) is None:
+    if isinstance(model.get_value(iter, 0), GroupRow):
         cell.set_property("stock_id", "")
     else:
         cell.set_property("stock_id", "gtk-edit")
 
+
+
+class GroupRow(object):
+    def __init__(self, label, date, duration):
+        self.label = label
+        self.duration = duration
+        self.date = date
+        self.first = False # will be set by the painter, used
+
+    def __eq__(self, other):
+        return isinstance(other, GroupRow) \
+           and self.label == other.label \
+           and self.duration == other.duration \
+           and self.date == other.date
+
+    def __hash__(self):
+        return 1
+
+class FactRow(object):
+    def __init__(self, fact):
+        self.fact = fact
+        self.id = fact['id']
+        self.name = fact['name']
+        self.category = fact['category']
+        self.description = fact['description']
+        self.tags = fact['tags']
+        self.start_time = fact['start_time']
+        self.end_time = fact['end_time']
+        self.delta = fact['delta']
+
+    def __eq__(self, other):
+        return isinstance(other, FactRow) and other.id == self.id
+
+    def __hash__(self):
+        return self.id
 
 class FactTree(gtk.TreeView):
     __gsignals__ = {
@@ -62,7 +96,7 @@ class FactTree(gtk.TreeView):
         self.set_show_expanders(False)
 
         # fact (None for parent), duration, parent data (if any)
-        self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)
+        self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT)
         self.set_model(self.store_model)
 
 
@@ -100,6 +134,8 @@ class FactTree(gtk.TreeView):
         self._test_layout = _test_context.create_layout()
         font = pango.FontDescription(gtk.Style().font_desc.to_string())
         self._test_layout.set_font_description(font)
+        self.prev_rows = []
+        self.new_rows = []
 
 
     def fix_row_heights(self):
@@ -109,41 +145,40 @@ class FactTree(gtk.TreeView):
             self.columns_autosize()
 
     def clear(self):
-        self.store_model.clear()
+        #self.store_model.clear()
         self.longest_activity_category = 0
         self.longest_interval = 0
         self.longest_duration = 0
 
     def update_longest_dimensions(self, fact):
-        interval = "%s -" % fact["start_time"].strftime("%H:%M")
-        if fact["end_time"]:
-            interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
+        interval = "%s -" % fact.start_time.strftime("%H:%M")
+        if fact.end_time:
+            interval = "%s %s" % (interval, fact.end_time.strftime("%H:%M"))
         self._test_layout.set_markup(interval)
         w, h = self._test_layout.get_pixel_size()
         self.longest_interval = max(self.longest_interval, w + 20)
 
 
-        self._test_layout.set_markup("%s - <small>%s</small> " % (stuff.escape_pango(fact["name"]), stuff.escape_pango(fact["category"])))
+        self._test_layout.set_markup("%s - <small>%s</small> " % (stuff.escape_pango(fact.name),
+                                                                  stuff.escape_pango(fact.category)))
         w, h = self._test_layout.get_pixel_size()
         self.longest_activity_category = max(self.longest_activity_category, w + 10)
 
-        self._test_layout.set_markup("%s" % stuff.format_duration(fact["delta"]))
+        self._test_layout.set_markup("%s" % stuff.format_duration(fact.delta))
         w, h = self._test_layout.get_pixel_size()
         self.longest_duration = max(self.longest_duration, w)
 
 
     def add_fact(self, fact):
+        fact = FactRow(fact)
         self.update_longest_dimensions(fact)
-        self.store_model.append([fact, None])
+        self.new_rows.append(fact)
 
 
     def add_group(self, group_label, group_date, facts):
-        total = stuff.duration_minutes([fact["delta"] for fact in facts])
+        total_duration = stuff.duration_minutes([fact["delta"] for fact in facts])
 
-        # adds group of facts with the given label
-        self.store_model.append([None, dict(date = group_date,
-                                            label = group_label,
-                                            duration = total)])
+        self.new_rows.append(GroupRow(group_label, group_date, total_duration))
 
         for fact in facts:
             self.add_fact(fact)
@@ -164,12 +199,15 @@ class FactTree(gtk.TreeView):
         row = self.get_row(path)
         if not row: return None
 
-        if row[0]:
-            return row[0]['id']
+        if isinstance(row[0], FactRow):
+            return row[0].id
         else:
-            return row[1]['label']
+            return row[0].label
+
 
     def detach_model(self):
+        self.prev_rows = list(self.new_rows)
+        self.new_rows = []
         # ooh, somebody is going for refresh!
         # let's save selection too - maybe it will come handy
         self.store_selection()
@@ -178,12 +216,53 @@ class FactTree(gtk.TreeView):
 
 
         # and now do what we were asked to
-        self.set_model()
+        #self.set_model()
+        self.clear()
 
 
     def attach_model(self):
+        print "*" * 20
+        prev_rows = set(self.prev_rows)
+        new_rows = set(self.new_rows)
+        common = set(prev_rows) & set(new_rows)
+
+        if common: # do full refresh only if we don't recognize any rows
+            gone = prev_rows - new_rows
+            if gone:
+                all_rows = len(self.store_model)
+                rows = list(self.store_model)
+                rows.reverse()
+
+                for i, row in enumerate(rows):
+                    if row[0] in gone:
+                        print "removing row"
+                        self.store_model.remove(self.store_model.get_iter(all_rows - i-1))
+
+                self.prev_rows = [row[0] for row in self.store_model]
+
+            new = new_rows - prev_rows
+            if new:
+                for i, row in enumerate(self.new_rows):
+                    if i <= len(self.store_model) - 1:
+                        if row == self.store_model[i][0]:
+                            continue
+
+                        print "adding new row"
+                        self.store_model.insert_before(self.store_model.get_iter(i), (row,))
+                    else:
+                        self.store_model.append((row, ))
+
+
+        else:
+            self.store_model.clear()
+            for row in self.new_rows:
+                self.store_model.append((row, ))
+
+
+
+
         # attach model is also where we calculate the bounding box widths
-        self.set_model(self.store_model)
+        #self.set_model(self.store_model)
 
         #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
 
@@ -258,7 +337,11 @@ class FactTree(gtk.TreeView):
         selection = self.get_selection()
         (model, iter) = selection.get_selected()
         if iter:
-            return model[iter][0] or model[iter][1]["date"]
+            data = model[iter][0]
+            if isinstance(data, FactRow):
+                return data.fact
+            else:
+                return data.date
         else:
             return None
 
@@ -302,10 +385,11 @@ class FactTree(gtk.TreeView):
             data = model[path][0]
 
             self.set_tooltip_text(None)
-            if data and "id" in data:
+
+            if isinstance(data, FactRow):
                 renderer = view.get_column(0).get_cell_renderers()[0]
 
-                label = data["description"]
+                label = data.description
                 self.set_tooltip_text(label)
 
             self.trigger_tooltip_query()
@@ -376,7 +460,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         context = window.cairo_create()
 
-        if "id" in self.data:
+        if isinstance(self.data, FactRow):
             fact, parent = self.data, None
         else:
             parent, fact = self.data, None
@@ -390,14 +474,14 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             text_color = self.normal_color
             # if we are selected, change font color appropriately
             if current_fact and isinstance(current_fact, dt.date) \
-               and current_fact == parent["date"]:
+               and current_fact == parent.date:
                 text_color = self.selected_color
 
             self.date_label.color = text_color
-            self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent["label"])
+            self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent.label)
             self.date_label.x = 5
 
-            if self.data["first"]:
+            if self.data.first:
                 y = 5
             else:
                 y = 20
@@ -406,7 +490,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
 
             self.duration_label.color = text_color
-            self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent["duration"])
+            self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent.duration)
             self.duration_label.x = width - self.duration_label.width
             self.duration_label.y = y
 
@@ -437,16 +521,16 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         selected = False
         # if we are selected, change font color appropriately
         if current_fact and isinstance(current_fact, dt.date) == False \
-           and current_fact["id"] == fact["id"]:
+           and current_fact["id"] == fact.id:
             text_color = self.selected_color
             selected = True
 
 
 
         """ start time and end time at beginning of column """
-        interval = fact["start_time"].strftime("%H:%M -")
-        if fact["end_time"]:
-            interval = "%s %s" % (interval, fact["end_time"].strftime("%H:%M"))
+        interval = fact.start_time.strftime("%H:%M -")
+        if fact.end_time:
+            interval = "%s %s" % (interval, fact.end_time.strftime("%H:%M"))
 
         self.interval_label.text = interval
         self.interval_label.color = text_color
@@ -455,7 +539,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
 
         """ duration at the end """
-        self.duration_label.text = stuff.format_duration(fact["delta"])
+        self.duration_label.text = stuff.format_duration(fact.delta)
         self.duration_label.color = text_color
         self.duration_label.x = cell_width - self.duration_label.width
         self.duration_label.y = 2
@@ -473,8 +557,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         category_width = 0
 
         self.category_label.text = ""
-        if fact["category"]:
-            self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact["category"])
+        if fact.category:
+            self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact.category)
             if not selected:
                 category_color = graphics.Colors.contrast(text_color,  100)
 
@@ -486,9 +570,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         self.activity_label.color = text_color
         self.activity_label.width = None
-        self.activity_label.text = stuff.escape_pango(fact["name"])
-        #activity_label = g.create_layout()
-        #activity_label.set_markup(stuff.escape_pango(fact["name"]))
+        self.activity_label.text = stuff.escape_pango(fact.name)
 
         # if activity label does not fit, we will shrink it
         if self.activity_label.width > cell_width - category_width:
@@ -513,19 +595,19 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         x = cell_start + activity_width + category_width + 12
 
         current_height = 0
-        if fact["tags"]:
+        if fact.tags:
             # try putting tags on same line if they fit
             # otherwise move to the next line
             tags_end = cell_start + cell_width
 
-            tag = Tag(fact["tags"][0])
+            tag = Tag(fact.tags[0])
 
             if x + tag.width > tags_end:
                 x = cell_start
                 y = self.activity_label.height + 4
 
 
-            for i, tag in enumerate(fact["tags"]):
+            for i, tag in enumerate(fact.tags):
                 tag = Tag(tag)
 
                 if x + tag.width >= tags_end:
@@ -547,8 +629,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         # see if we can fit in single line
         # if not, put description under activity
         self.description_label.text = ""
-        if fact["description"]:
-            self.description_label.text = "<small>%s</small>" % stuff.escape_pango(fact["description"])
+        if fact.description:
+            self.description_label.text = "<small>%s</small>" % stuff.escape_pango(fact.description)
             self.description_label.color = text_color
             self.description_label.wrap = pango.WRAP_WORD
 
@@ -573,8 +655,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
 
     def on_get_size(self, widget, cell_area):
-        if "id" not in self.data:
-            if self.data["first"]:
+        if isinstance(self.data, GroupRow):
+            if self.data.first:
                 return (0, 0, 0, int((self.default_size + 10) * 1.5))
             else:
                 return (0, 0, 0, (self.default_size + 10) * 2)
