@@ -71,11 +71,6 @@ class OverviewBox(gtk.VBox):
 
 
     def fill_facts_tree(self):
-        # detach model to trigger selection memory and speeding up
-        self.fact_tree.detach_model()
-        self.fact_tree.clear()
-
-
         dates = defaultdict(list)
 
         # fill blanks
@@ -86,6 +81,9 @@ class OverviewBox(gtk.VBox):
         for date, facts in groupby(self.facts, lambda fact: fact["date"]):
             dates[date] = list(facts)
 
+
+        # detach model to trigger selection memory and speeding up
+        self.fact_tree.detach_model()
 
         # push facts in tree
         for date, facts in sorted(dates.items(), key=lambda t: t[0]):

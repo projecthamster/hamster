@@ -333,7 +333,6 @@ class HamsterApplet(object):
         facts = runtime.storage.get_todays_facts()
 
         self.treeview.detach_model()
-        self.treeview.clear()
 
         if facts and facts[-1]["end_time"] == None:
             self.last_activity = facts[-1]
