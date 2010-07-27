@@ -221,7 +221,6 @@ class FactTree(gtk.TreeView):
 
 
     def attach_model(self):
-        print "*" * 20
         prev_rows = set(self.prev_rows)
         new_rows = set(self.new_rows)
         common = set(prev_rows) & set(new_rows)
@@ -235,7 +234,6 @@ class FactTree(gtk.TreeView):
 
                 for i, row in enumerate(rows):
                     if row[0] in gone:
-                        print "removing row"
                         self.store_model.remove(self.store_model.get_iter(all_rows - i-1))
 
                 self.prev_rows = [row[0] for row in self.store_model]
@@ -247,7 +245,6 @@ class FactTree(gtk.TreeView):
                         if row == self.store_model[i][0]:
                             continue
 
-                        print "adding new row"
                         self.store_model.insert_before(self.store_model.get_iter(i), (row,))
                     else:
                         self.store_model.append((row, ))
