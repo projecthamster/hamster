@@ -202,6 +202,10 @@ class HamsterApplet(object):
 
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
+
+        self.new_name.set_property("secondary-icon-name", "help")
+        self.new_name.connect("icon-press", self.on_more_info_button_clicked)
+
         widgets.add_hint(self.new_name, _("Activity"))
         self.get_widget("new_name_box").add(self.new_name)
         self.new_name.connect("changed", self.on_activity_text_changed)
@@ -395,8 +399,6 @@ class HamsterApplet(object):
                 self.get_widget("last_activity_name").set_text(activity['name'])
 
 
-            self._gui.get_object("more_info_button").hide()
-
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
             self.get_widget("last_activity_description").set_text(activity['description'] or "")
             self.get_widget("activity_info_box").show()
@@ -409,8 +411,6 @@ class HamsterApplet(object):
             self.get_widget("last_activity_name").set_text(_("No activity"))
 
             self.get_widget("activity_info_box").hide()
-            self._gui.get_object("more_info_button").show()
-
             self.tag_box.draw([])
 
 
@@ -695,5 +695,5 @@ class HamsterApplet(object):
         return self._gui.get_object(name)
 
     def on_more_info_button_clicked(self, *args):
-        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet#input", 0L)
         return False
