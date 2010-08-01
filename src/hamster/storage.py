@@ -21,6 +21,7 @@
 import dbus, dbus.service
 import datetime as dt
 from calendar import timegm
+import gio
 
 def to_dbus_fact(fact):
     """Perform the conversion between fact database query and
@@ -47,6 +48,16 @@ class Storage(dbus.service.Object):
         dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
         self.mainloop = loop
 
+        self.__file = gio.File(__file__)
+        self.__monitor = self.__file.monitor_file()
+        self.__monitor.connect("changed", self._on_us_change)
+
+    # stop service when we have been updated (will be brought back in next call)
+    # anyway. should make updating simpler
+    def _on_us_change(self, monitor, gio_file, event_uri, event):
+        if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+            print "`%s` has changed. Quitting!" % __file__
+            self.Quit()
 
     def run_fixtures(self):
         pass
