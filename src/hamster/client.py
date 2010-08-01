@@ -65,20 +65,30 @@ class Storage(gobject.GObject):
         gobject.GObject.__init__(self)
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        bus = dbus.SessionBus()
-        hamster_conn = dbus.Interface(bus.get_object('org.gnome.Hamster',
-                                                     '/org/gnome/Hamster'),
-                                      dbus_interface='org.gnome.Hamster')
-        self.conn = hamster_conn
+        self.bus = dbus.SessionBus()
+        self._connection = None # will be initiated on demand
 
-        bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
-        bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
-        bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
-        bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
 
+        self.bus.add_signal_receiver(self._on_dbus_connection_change, 'NameOwnerChanged',
+                                     'org.freedesktop.DBus', arg0='org.gnome.Hamster')
     @staticmethod
     def _to_dict(columns, result_list):
         return [dict(zip(columns, row)) for row in result_list]
+
+    @property
+    def conn(self):
+        if not self._connection:
+            self._connection = dbus.Interface(self.bus.get_object('org.gnome.Hamster',
+                                                              '/org/gnome/Hamster'),
+                                              dbus_interface='org.gnome.Hamster')
+        return self._connection
+
+    def _on_dbus_connection_change(self, name, old, new):
+        self._connection = None
 
     def _on_tags_changed(self):
         self.emit("tags-changed")
