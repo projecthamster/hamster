@@ -99,7 +99,7 @@ class Graphics(object):
         self.opacity = 1.0      # opacity get's adjusted by parent - TODO - wrong inheritance?
         self.paths = None       # paths for mouse hit checks
         self._last_matrix = None
-        self.__instructions = [] # paths colors and operations
+        self.__instructions = deque() # paths colors and operations
         self.__path_instructions = deque() # instruction set until it is converted into path-based instructions
 
     def clear(self):
@@ -195,10 +195,17 @@ class Graphics(object):
     @staticmethod
     def _set_line_width(context, width):
         context.set_line_width(width)
-    def set_line_style(self, width = None):
+    @staticmethod
+    def _set_dash(context, dash, dash_offset = 0):
+        context.set_dash(dash, dash_offset)
+
+    def set_line_style(self, width = None, dash = None, dash_offset = 0):
         """change the width of the line"""
         if width is not None:
             self._add_instruction(self._set_line_width, width)
+
+        if dash is not None:
+            self._add_instruction(self._set_dash, dash, dash_offset)
 
     def _set_color(self, context, r, g, b, a):
         if a * self.opacity >= 1:
@@ -431,6 +438,7 @@ class Graphics(object):
                 context.append_path(path)
                 if check_extents:
                     self._remember_path(context)
+
 
             if instruction:
                 instruction(context, *args)
@@ -1093,7 +1101,7 @@ class Scene(gtk.DrawingArea):
 
             if target:
                 target._on_click(event.state)
-                
+
             self.emit("on-click", event, target)
 
         self.emit("on-mouse-up")
