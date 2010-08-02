@@ -12,18 +12,7 @@
     <license>
       <p>Creative Commons Share Alike 3.0</p>
     </license>
-  </info> 
-  
-  <title>
-    <media type="image" mime="image/png" src="figures/hamster-logo.png">Time Tracking logo</media>Time Tracking
-   </title>
+  </info>
 
-<!--
-<section id="this-release">
-    <title>What's new in this release</title>
-    <p>
-        News goes here.
-    </p>
-</>section>
--->
+  <title>Time Tracking</title>
 </page>
