@@ -1,0 +1,82 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="tracking">
+<info>
+    <link type="seealso" xref="input"></link>
+    <link type="guide" xref="index"/>
+</info>
+<title>How to track time</title>
+
+<p>
+    Your time tracking habbits should heavily depend on the reason why you are
+    collecting the data. What is that you want to do with it? Is it plain
+    curiosity, or a work requirement? And in what detail are you interested
+    in the results?
+</p>
+
+<section id="granularity">
+<title>Granularity</title>
+<p>
+    A suggested pace is to have 5 to 30 activities per day.
+    The intention of <app>Time Tracker</app> is to avoid micro-tracking so that
+    one does not turn out spending more time on tracking than doing the things.
+    But not tracking in enough detail could result that there is nothing to
+    dwell on a month later.
+</p>
+</section>
+
+<section id="fields">
+<title>What goes where</title>
+
+<note style="info">
+<p>
+We suggest to write project name into the activity field, use category to
+define the project in wider context - is it private or work, or something else.
+Use tags to distinguish between different activities in the
+project. Example: hamster@hacking, #prog #bugs
+</p>
+<p>
+    Exception to this rule are simple activities that don't have project.
+    For those cases use the action as activity name, and category for wider
+    context. Example: lunch@work.
+</p>
+</note>
+
+<p>Here are few tips that might improve your tracking data:</p>
+
+<list>
+    <item><p>Name activities so that they can be easily distinguished from each
+    other. Activity name is also the only bit that appears in the panel.  Will
+    you be able to determine what you are working on just by looking on the
+    activity name?
+    </p></item>
+
+    <item><p>Keep your category number low (say, 3 to 7) and pick ones that
+    are unlikely to change over time. Also, keep them generic. For example:
+    "work", "private", "misc".
+    </p></item>
+
+    <item><p>Tags are best when you need to handle large numbers - say if
+    you have hundred of projects - having a large activity list will just
+    slow down the input as it will be hard to remember the right name.
+    Instead consider using tags.
+    </p></item>
+
+    <item><p>Use the description field for short-term information like
+    bug numbers.
+    The search in overview window also looks in the description field, so
+    finding activities where you mention the specific bug or key will be
+    as simple as typing it in the search box and hitting <key>Enter</key>.
+    </p></item>
+
+    <item><p>Activities and tags can come and go as necessary. Once you
+    think that you are done with an activity for good - remove it so it does
+    not pop up in the auto-complete.
+    Don't worry - the facts (activities in the log) will stay in tact. This
+    is just the "operational list"
+    </p></item>
+</list>
+</section>
+
+
+</page>

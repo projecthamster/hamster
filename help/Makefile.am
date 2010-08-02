@@ -11,4 +11,5 @@ DOC_PAGES = \
         input.page \
         merge.page \
         reports.page \
-        statistics.page
+        statistics.page \
+        tracking.page
