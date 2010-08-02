@@ -1,4 +1,26 @@
 ===============
+Version 2.31.6
+===============
+  * the top graph in overview is now interactive and allows zooming in and out
+  * sqlite utf-8 case sensitivity workarounds for queries
+  * hamster's docky helper installed together with hamster
+  * using full text search in the overview window now
+  * hopefully activity trees now behave better on refresh
+
+  Updated translations:
+    * de (Mario Blättermann)
+    * es (Jorge González)
+    * sl (Matej Urbančič)
+    * ta (Dr.T.Vasudevan)
+    * zh_CN (Tao Wang)
+    * gl (Fran Diéguez)
+    * he (Yaron Shahrabani)
+    * zh_TW (Cheng-Chia Tseng)
+    * zh_HK (Cheng-Chia Tseng)
+    * nb (Kjartan Maraas)
+
+
+===============
 Version 2.31.5
 ===============
   * adjustments for custom widgets to better work with themes
