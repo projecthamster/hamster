@@ -4,75 +4,78 @@
 <info>
     <link type="seealso" xref="input"></link>
     <link type="guide" xref="index"/>
+    <desc>Tips on how to track your activities effectively.</desc>
 </info>
+
 <title>How to track time</title>
 
 <p>
-    Your time tracking habbits should heavily depend on the reason why you are
-    collecting the data. What is that you want to do with it? Is it plain
-    curiosity, or a work requirement? And in what detail are you interested
-    in the results?
+    Your time tracking habits will be dictated by your reason for 
+    collecting the data. What is that you want to do with the data? Is it plain
+    curiosity, or a work requirement? And at what level of detail are you 
+    interested in the results?
 </p>
 
 <section id="granularity">
 <title>Granularity</title>
+<p>A suggested pace is to have 5 to 30 activities per day.</p>
 <p>
-    A suggested pace is to have 5 to 30 activities per day.
     The intention of <app>Time Tracker</app> is to avoid micro-tracking so that
-    one does not turn out spending more time on tracking than doing the things.
-    But not tracking in enough detail could result that there is nothing to
-    dwell on a month later.
+    one does not turn out spending more time on tracking than doing the 
+    activities! However, tracking in insufficient detail could result in 
+    there being no data which is useful to you a month later.
 </p>
 </section>
 
 <section id="fields">
-<title>What goes where</title>
+<title>What should I write in each box?</title>
 
-<note style="info">
 <p>
-We suggest to write project name into the activity field, use category to
-define the project in wider context - is it private or work, or something else.
-Use tags to distinguish between different activities in the
-project. Example: hamster@hacking, #prog #bugs
+We suggest that you write the project name in the <gui>activity</gui> field and use <gui>category</gui> to define the project in its wider context - is it private or work, or something else?
 </p>
 <p>
-    Exception to this rule are simple activities that don't have project.
-    For those cases use the action as activity name, and category for wider
-    context. Example: lunch@work.
+You can use tags to distinguish between different activities in the
+project. For example: <input>presentation@work, #writing</input>.
 </p>
-</note>
+<p>
+    For simple activities that don't have a project, use the action as the 
+    activity name and the category for the wider context instead. For 
+    example: <input>lunch@work</input>.
+</p>
+</section>
 
-<p>Here are few tips that might improve your tracking data:</p>
+<section>
+<title>Tips for improving your tracking data</title>
 
 <list>
     <item><p>Name activities so that they can be easily distinguished from each
-    other. Activity name is also the only bit that appears in the panel.  Will
-    you be able to determine what you are working on just by looking on the
-    activity name?
+    other. Activity name is also the only information that appears in the 
+    panel.  Will you be able to determine what you are working on just 
+    by looking at the activity name?
     </p></item>
 
-    <item><p>Keep your category number low (say, 3 to 7) and pick ones that
+    <item><p>Keep your list of categories small (say, 3 to 7) and pick ones that
     are unlikely to change over time. Also, keep them generic. For example:
     "work", "private", "misc".
     </p></item>
 
-    <item><p>Tags are best when you need to handle large numbers - say if
-    you have hundred of projects - having a large activity list will just
-    slow down the input as it will be hard to remember the right name.
-    Instead consider using tags.
+    <item><p>Use tags instead of activities when you need to handle a large 
+    number of activities (if you have hundreds of projects, for example). 
+    Having a long list of activities will just slow down input, as it will 
+    be hard to remember the right name.
     </p></item>
 
     <item><p>Use the description field for short-term information like
-    bug numbers.
-    The search in overview window also looks in the description field, so
-    finding activities where you mention the specific bug or key will be
-    as simple as typing it in the search box and hitting <key>Enter</key>.
+    reference numbers. The search in the <gui>Overview</gui> window also 
+    looks in the description field, so finding activities where you mention 
+    the specific reference number will be as simple as typing it in the 
+    search box and pressing <key>Enter</key>.
     </p></item>
 
     <item><p>Activities and tags can come and go as necessary. Once you think
-    that you are done with an activity for good, remove it so it does not pop up
-    in the auto-complete. Don't worry, the facts (activities in the log) will
-    stay intact. This is just the "operational list".
+    that you are done with an activity for good, remove it so that it doesn't 
+    pop up in the auto-complete. Don't worry: the facts (activities in the 
+    log) will not be deleted. This is just the "operational list".
     </p></item>
 </list>
 </section>
