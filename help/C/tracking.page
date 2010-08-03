@@ -69,11 +69,10 @@ project. Example: hamster@hacking, #prog #bugs
     as simple as typing it in the search box and hitting <key>Enter</key>.
     </p></item>
 
-    <item><p>Activities and tags can come and go as necessary. Once you
-    think that you are done with an activity for good - remove it so it does
-    not pop up in the auto-complete.
-    Don't worry - the facts (activities in the log) will stay in tact. This
-    is just the "operational list"
+    <item><p>Activities and tags can come and go as necessary. Once you think
+    that you are done with an activity for good, remove it so it does not pop up
+    in the auto-complete. Don't worry, the facts (activities in the log) will
+    stay intact. This is just the "operational list".
     </p></item>
 </list>
 </section>
