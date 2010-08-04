@@ -102,7 +102,7 @@ class ActivityEntry(gtk.Entry):
         self.populate_suggestions()
 
     def get_value(self):
-        activity_name = self.get_text().decode("utf-8")
+        activity_name = self.get_text().decode("utf-8").strip()
         if not activity_name:
             return None, False
 
