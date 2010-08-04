@@ -190,7 +190,7 @@ class HamsterApplet(object):
                                           [("about", self.on_about),
                                           ("overview", self.show_overview),
                                           ("preferences", self.show_preferences),
-                                          ("help", self.on_more_info_button_clicked),
+                                          ("help", self.on_help_clicked),
                                           ])
 
         # load window of activity switcher and todays view
@@ -336,49 +336,52 @@ class HamsterApplet(object):
 
         facts = runtime.storage.get_todays_facts()
 
-        self.treeview.detach_model()
-
         if facts and facts[-1]["end_time"] == None:
             self.last_activity = facts[-1]
         else:
             self.last_activity = None
 
-        if len(facts) > 15:
-            self._gui.get_object("today_box").set_size_request(-1, 360)
-            self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        else:
-            self._gui.get_object("today_box").set_size_request(-1, -1)
-            self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
 
-        by_category = {}
-        for fact in facts:
-            duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
-            by_category[fact['category']] = \
-                          by_category.setdefault(fact['category'], 0) + duration
-            self.treeview.add_fact(fact)
+        if self.button.get_active():
+            self.treeview.detach_model()
 
-        self.treeview.attach_model()
 
-        if not facts:
-            self._gui.get_object("today_box").hide()
-            self._gui.get_object("fact_totals").set_text(_("No records today"))
-        else:
-            self._gui.get_object("today_box").show()
+            if len(facts) > 15:
+                self._gui.get_object("today_box").set_size_request(-1, 360)
+                self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+            else:
+                self._gui.get_object("today_box").set_size_request(-1, -1)
+                self._gui.get_object("today_box").set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_NEVER)
 
-            total_strings = []
-            for category in by_category:
-                # listing of today's categories and time spent in them
-                duration = locale.format("%.1f", (by_category[category] / 60.0))
-                total_strings.append(_("%(category)s: %(duration)s") % \
-                        ({'category': category,
-                          #duration in main drop-down per category in hours
-                          'duration': _("%sh") % duration
-                          }))
+            by_category = {}
+            for fact in facts:
+                duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
+                by_category[fact['category']] = \
+                              by_category.setdefault(fact['category'], 0) + duration
+                self.treeview.add_fact(fact)
 
-            total_string = ", ".join(total_strings)
-            self._gui.get_object("fact_totals").set_text(total_string)
+            self.treeview.attach_model()
 
-        self.set_last_activity()
+            if not facts:
+                self._gui.get_object("today_box").hide()
+                self._gui.get_object("fact_totals").set_text(_("No records today"))
+            else:
+                self._gui.get_object("today_box").show()
+
+                total_strings = []
+                for category in by_category:
+                    # listing of today's categories and time spent in them
+                    duration = locale.format("%.1f", (by_category[category] / 60.0))
+                    total_strings.append(_("%(category)s: %(duration)s") % \
+                            ({'category': category,
+                              #duration in main drop-down per category in hours
+                              'duration': _("%sh") % duration
+                              }))
+
+                total_string = ", ".join(total_strings)
+                self._gui.get_object("fact_totals").set_text(total_string)
+
+            self.set_last_activity()
 
     def set_last_activity(self):
         activity = self.last_activity
@@ -696,4 +699,8 @@ class HamsterApplet(object):
 
     def on_more_info_button_clicked(self, *args):
         gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet#input", 0L)
+        return False
+
+    def on_help_clicked(self, *args):
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
         return False
