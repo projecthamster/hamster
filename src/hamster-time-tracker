@@ -457,19 +457,19 @@ class WindowServer(dbus.service.Object):
             self.app = ProjectHamster()
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def edit(self): dialogs.edit.show()
+    def edit(self): dialogs.edit.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def overview(self): dialogs.overview.show()
+    def overview(self): dialogs.overview.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def about(self): dialogs.about.show()
+    def about(self): dialogs.about.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def statistics(self): dialogs.stats.show()
+    def statistics(self): dialogs.stats.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def preferences(self): dialogs.prefs.show()
+    def preferences(self): dialogs.prefs.show(self.app)
 
 
 if __name__ == "__main__":
