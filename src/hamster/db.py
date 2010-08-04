@@ -372,11 +372,14 @@ class Storage(storage.Storage):
                      FROM facts a
                 LEFT JOIN activities b on b.id = a.activity_id
                     WHERE ((start_time < ? and end_time > ?)
+                           OR (start_time > ? and start_time < ? and end_time is null)
                            OR (start_time > ? and start_time < ?))
                  ORDER BY start_time
                     LIMIT 1
                 """
         fact = self.fetchone(query, (start_time,
+                                     start_time,
+                                     start_time - dt.timedelta(seconds = 60 * 60 * 12),
                                      start_time,
                                      start_time,
                                      start_time + dt.timedelta(seconds = 60 * 60 * 12)))
@@ -384,17 +387,11 @@ class Storage(storage.Storage):
         end_time = None
 
         if fact:
-            if fact["end_time"] and start_time > fact["start_time"]:
+            if start_time > fact["start_time"]:
                 #we are in middle of a fact - truncate it to our start
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
 
-                # hamster is second-aware, but the edit dialog naturally is not
-                # so when an ongoing task is being edited, the seconds get truncated
-                # and the start time will be before previous task's end time.
-                # so set our end time only if it is not about seconds
-                if fact["end_time"].replace(second = 0) > start_time:
-                    end_time = fact["end_time"]
             else: #otherwise we have found a task that is after us
                 end_time = fact["start_time"]
 
