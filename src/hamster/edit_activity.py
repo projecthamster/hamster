@@ -273,8 +273,9 @@ class CustomFactController:
 
         self.draw_preview(start_time, end_time)
 
-        looks_good = activity_text != "" and start_time \
+        looks_good = activity_text is not None and start_time \
                      and (not end_time or (end_time - start_time).days == 0)
+
 
         self.get_widget("save_button").set_sensitive(looks_good)
         return looks_good
