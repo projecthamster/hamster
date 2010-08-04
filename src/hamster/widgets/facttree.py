@@ -78,7 +78,15 @@ class FactRow(object):
         self.delta = fact['delta']
 
     def __eq__(self, other):
-        return isinstance(other, FactRow) and other.id == self.id
+        return isinstance(other, FactRow) and other.id == self.id \
+           and other.name == self.name \
+           and other.category == self.category \
+           and other.description == self.description \
+           and other.tags == self.tags \
+           and other.start_time == self.start_time \
+           and other.end_time == self.end_time \
+           and other.delta == self.delta
+
 
     def __hash__(self):
         return self.id
