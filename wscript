@@ -64,10 +64,17 @@ def build(bld):
     bld.install_files('${PYTHONDIR}/hamster/widgets', 'src/hamster/widgets/*.py')
 
     bld.install_files('${DATADIR}/docky/helpers',
-                      'src/docky_control/hamster_control.py',
+                      'src/docky_control/2.0/hamster_control.py',
                       chmod = 0755)
     bld.install_files('${DATADIR}/docky/helpers/metadata',
-                      'src/docky_control/hamster_control.py.info')
+                      'src/docky_control/2.0/hamster_control.py.info')
+
+    # docky 2.1+ changes python API, folder and other things (how amusing)
+    bld.install_files('${DATADIR}/dockmanager/scripts',
+                      'src/docky_control/2.1/hamster_control.py',
+                      chmod = 0755)
+    bld.install_files('${DATADIR}/dockmanager/metadata',
+                      'src/docky_control/2.1/hamster_control.py.info')
 
 
     bld.new_task_gen("subst",
