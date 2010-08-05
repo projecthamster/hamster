@@ -10,9 +10,9 @@
 <title>How to track time</title>
 
 <p>
-    Your time tracking habits will be dictated by your reason for 
+    Your time tracking habits will be dictated by your reason for
     collecting the data. What is that you want to do with the data? Is it plain
-    curiosity, or a work requirement? And at what level of detail are you 
+    curiosity, or a work requirement? And at what level of detail are you
     interested in the results?
 </p>
 
@@ -21,8 +21,8 @@
 <p>A suggested pace is to have 5 to 30 activities per day.</p>
 <p>
     The intention of <app>Time Tracker</app> is to avoid micro-tracking so that
-    one does not turn out spending more time on tracking than doing the 
-    activities! However, tracking in insufficient detail could result in 
+    one does not turn out spending more time on tracking than doing the
+    activities! However, tracking in insufficient detail could result in
     there being no data which is useful to you a month later.
 </p>
 </section>
@@ -31,16 +31,23 @@
 <title>What should I write in each box?</title>
 
 <p>
-We suggest that you write the project name in the <gui>activity</gui> field and use <gui>category</gui> to define the project in its wider context - is it private or work, or something else?
-</p>
-<p>
-You can use tags to distinguish between different activities in the
-project. For example: <input>presentation@work, #writing</input>.
-</p>
-<p>
-    For simple activities that don't have a project, use the action as the 
-    activity name and the category for the wider context instead. For 
+    For simple activities that don't have a project, use the action as the
+    <gui>activity</gui> name and the <gui>category</gui> for the wider context. For
     example: <input>lunch@work</input>.
+</p>
+<p>
+For more sophisticated tracking try to caption your activity in one or two
+words ("tree house", "project x", or similar) and use that caption in the
+<gui>activity</gui> field.
+Use the <gui>category</gui> to describe the activity in it's wider context -
+is it private or work, or something else?
+Finally, use <gui>tags</gui> to describe your actual action - is it reading
+or constructing, writing or painting.
+</p>
+<p>This approach will alow you to see how much reading you have done through
+all your projects (by tag), how much time you have spent in your hobbies
+(by category), and how much time of all your work in project x you have spent
+analysing (by activity and tag)
 </p>
 </section>
 
@@ -49,8 +56,8 @@ project. For example: <input>presentation@work, #writing</input>.
 
 <list>
     <item><p>Name activities so that they can be easily distinguished from each
-    other. Activity name is also the only information that appears in the 
-    panel.  Will you be able to determine what you are working on just 
+    other. Activity name is also the only information that appears in the
+    panel.  Will you be able to determine what you are working on just
     by looking at the activity name?
     </p></item>
 
@@ -59,23 +66,17 @@ project. For example: <input>presentation@work, #writing</input>.
     "work", "private", "misc".
     </p></item>
 
-    <item><p>Use tags instead of activities when you need to handle a large 
-    number of activities (if you have hundreds of projects, for example). 
-    Having a long list of activities will just slow down input, as it will 
-    be hard to remember the right name.
-    </p></item>
-
     <item><p>Use the description field for short-term information like
-    reference numbers. The search in the <gui>Overview</gui> window also 
-    looks in the description field, so finding activities where you mention 
-    the specific reference number will be as simple as typing it in the 
+    reference numbers. The search in the <gui>Overview</gui> window also
+    looks in the description field, so finding activities where you mention
+    the specific reference number will be as simple as typing it in the
     search box and pressing <key>Enter</key>.
     </p></item>
 
     <item><p>Activities and tags can come and go as necessary. Once you think
-    that you are done with an activity for good, remove it so that it doesn't 
-    pop up in the auto-complete. Don't worry: the facts (activities in the 
-    log) will not be deleted. This is just the "operational list".
+    that you are done with an activity for good, remove it so that it doesn't
+    pop up in the auto-complete any more. Don't worry: the facts (activities in
+    the log) will not be deleted. This is just the "operational list".
     </p></item>
 </list>
 </section>
