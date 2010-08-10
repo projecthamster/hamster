@@ -65,7 +65,11 @@ class Storage(storage.Storage):
                 if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
                     # ours
                     return
+            elif event == gio.FILE_MONITOR_EVENT_CREATED:
+                # treat case when instead of a move, a remove and create has been performed
+                self.con = None
 
+            if event in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, gio.FILE_MONITOR_EVENT_CREATED):
                 print "DB file has been modified externally. Calling all stations"
                 self.dispatch_overwrite()
 
