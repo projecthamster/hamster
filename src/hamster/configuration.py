@@ -64,26 +64,12 @@ class RuntimeStore(Singleton):
             self.version = "uninstalled"
 
         self.data_dir = os.path.realpath(self.data_dir)
-        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
-
-        if not os.path.exists(self.home_data_dir):
-            try:
-                os.makedirs(self.home_data_dir, 0744)
-            except Exception, msg:
-                logging.error("could not create user dir (%s): %s" % (self.home_data_dir, msg))
 
 
         self.storage = Storage()
-        # figure out the correct database file
-        old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
-        new_db_file = os.path.join(self.home_data_dir, "hamster.db")
 
-        # move database to ~/.local/share/hamster-applet
-        if os.path.exists(old_db_file):
-            if os.path.exists(new_db_file):
-                logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
-            else:
-                os.rename(old_db_file, new_db_file)
+
+        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
 
     @property
     def art_dir(self):

@@ -39,6 +39,7 @@ import stuff
 from shutil import copy as copyfile
 import datetime as dt
 import gio
+from xdg.BaseDirectory import xdg_data_home
 
 import itertools
 
@@ -54,23 +55,8 @@ class Storage(storage.Storage):
         self.__cur = None
         self.__last_etag = None
 
-        from configuration import runtime
 
-        self.db_path = os.path.join(runtime.home_data_dir, "hamster.db")
-
-        data_dir = runtime.data_dir
-
-        #check if db is here
-        if not os.path.exists(self.db_path):
-            logging.info("Database not found in %s - installing default from %s!" % (self.db_path, data_dir))
-            copyfile(os.path.join(data_dir, 'hamster.db'), self.db_path)
-
-            #change also permissions - sometimes they are 444
-            try:
-                os.chmod(self.db_path, 0664)
-            except Exception, msg:
-                logging.error("Could not change mode on %s!" % (self.db_path))
-
+        self.db_path = self.__init_db_file()
 
         # add file monitoring so the app does not have to be restarted
         # when db file is rewritten
@@ -91,6 +77,44 @@ class Storage(storage.Storage):
 
         self.run_fixtures()
 
+    def __init_db_file(self):
+        home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
+        if not os.path.exists(home_data_dir):
+            os.makedirs(home_data_dir, 0744)
+
+        # handle the move to xdg_data_home
+        old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
+        new_db_file = os.path.join(home_data_dir, "hamster.db")
+        if os.path.exists(old_db_file):
+            if os.path.exists(new_db_file):
+                logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
+            else:
+                os.rename(old_db_file, new_db_file)
+
+
+        db_path = os.path.join(home_data_dir, "hamster.db")
+
+
+        # check if we have a database at all
+        if not os.path.exists(db_path):
+            # if not there, copy from the defaults
+            try:
+                import defs
+                data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+            except:
+                # if defs is not there, we are running from sources
+                module_dir = os.path.dirname(os.path.realpath(__file__))
+                data_dir = os.path.join(module_dir, '..', '..', 'data')
+
+            data_dir = os.path.realpath(data_dir)
+
+            logging.info("Database not found in %s - installing default from %s!" % (db_path, data_dir))
+            copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
+
+            #change also permissions - sometimes they are 444
+            os.chmod(db_path, 0664)
+
+        return db_path
 
 
     def register_modification(self):
