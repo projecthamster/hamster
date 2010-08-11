@@ -261,6 +261,7 @@ class PreferencesEditor:
         while index >= len(self.workspace_mapping):
             self.workspace_mapping.append("")
 
+        value = value.decode("utf8", "replace")
         self.workspace_mapping[index] = value
         conf.set("workspace_mapping", self.workspace_mapping)
         self.workspace_store[path][2] = value
