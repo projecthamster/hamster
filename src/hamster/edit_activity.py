@@ -74,6 +74,8 @@ class CustomFactController:
             # otherwise let's start at 8am (unless it is today - in that case
             # we will assume that the user wants to start from this moment)
             fact_date = fact_date or dt.date.today()
+            if fact_date > dt.date.today():
+                fact_date = dt.date.today()
 
             last_activity = runtime.storage.get_facts(fact_date)
             if last_activity and last_activity[-1]["end_time"]:
@@ -133,6 +135,9 @@ class CustomFactController:
         self.get_widget("in_progress").set_active(end_time is None)
 
         if end_time:
+            if end_time > dt.datetime.now():
+                end_time = dt.datetime.now()
+
             self.end_time.set_time(end_time)
             self.set_end_date_label(end_time)
 
@@ -242,6 +247,13 @@ class CustomFactController:
         self.validate_fields()
 
     def on_start_date_entered(self, widget):
+        if dt.datetime.combine(self.start_date.get_date(), self.start_time.get_time()) > dt.datetime.now():
+            self.start_date.set_date(dt.date.today())
+
+            # if we are still over - push one more day back
+            if dt.datetime.combine(self.start_date.get_date(), self.start_time.get_time()) > dt.datetime.now():
+                self.start_date.set_date(dt.date.today() - dt.timedelta(days=1))
+
         self.validate_fields()
 
     def on_start_time_entered(self, widget):
@@ -249,6 +261,9 @@ class CustomFactController:
 
         if not start_time:
             return
+
+        if dt.datetime.combine(self.start_date.get_date(), start_time) > dt.datetime.now():
+            self.start_date.set_date(dt.date.today() - dt.timedelta(days=1))
 
 
         self.end_time.set_start_time(start_time)
@@ -268,8 +283,13 @@ class CustomFactController:
             end_time = None
         else:
             end_time = self._get_datetime("end")
+            if end_time > dt.datetime.now():
+                end_time = dt.datetime.now()
+
             # make sure we are within 24 hours of start time
             end_time -= dt.timedelta(days=(end_time - start_time).days)
+
+            self.end_time.set_time(end_time)
 
         self.draw_preview(start_time, end_time)
 
