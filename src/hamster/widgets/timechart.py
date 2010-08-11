@@ -281,7 +281,7 @@ class TimeChart(graphics.Scene):
             if not bar.fill:
                 bar.fill = self.bar_color
 
-            bar.key_label.interactive = (self.end_time - self.start_time) > dt.timedelta(10) and self.minor_tick == DAY
+            bar.key_label.interactive = self.interactive and (self.end_time - self.start_time) > dt.timedelta(10) and self.minor_tick == DAY
 
             if (self.end_time - self.start_time) > dt.timedelta(10) \
                and self.minor_tick == DAY and first_weekday(bar.key) == False:
@@ -420,7 +420,7 @@ class TimeChart(graphics.Scene):
         for i, (key, value, normalized) in enumerate(zip(fractions, hours, normalized_hours)):
             bar = VerticalBar(key, step_format, value, normalized)
             bar.z_order = len(fractions) - i
-            bar.interactive = self.minor_tick >= DAY and bar.value > 0
+            bar.interactive = self.interactive and self.minor_tick >= DAY and bar.value > 0
 
             self.add_child(bar)
             self.bars.append(bar)

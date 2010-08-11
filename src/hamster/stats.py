@@ -50,6 +50,7 @@ class Stats(object):
         day_start = conf.get("day_start_minutes")
         day_start = dt.time(day_start / 60, day_start % 60)
         self.timechart = widgets.TimeChart()
+        self.timechart.interactive = False
         self.timechart.day_start = day_start
 
         self.get_widget("explore_everything").add(self.timechart)
