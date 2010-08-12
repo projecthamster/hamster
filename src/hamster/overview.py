@@ -210,8 +210,10 @@ class Overview(object):
             if format == ("html"):
                 webbrowser.open_new("file://%s" % path)
             else:
-                gtk.show_uri(gtk.gdk.Screen(),
-                             "file://%s" % os.path.split(path)[0], 0L)
+                try:
+                    gtk.show_uri(gtk.gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
+                except:
+                    pass # bug 626656 - no use in capturing this one i think
 
         def on_report_chooser_closed(widget):
             self.report_chooser = None
