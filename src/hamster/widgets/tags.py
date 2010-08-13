@@ -319,9 +319,9 @@ class Tag(graphics.Sprite):
 
         label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 2)
 
-        w, h = int((label.width + 8) * 1.3), label.height + 3
-        corner = h / 3
-        label.x = corner + 8
+        corner = (label.height + 3) / 3
+        label.x = corner + 6
+        w, h = int(label.x + label.width + label.height * 0.3), label.height + 3
 
         self.color = color
 
