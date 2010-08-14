@@ -26,10 +26,14 @@ import sys, os
 from subprocess import Popen
 
 
-import gtk
-from dockmanager.dockmanager import DockManagerItem, DockManagerSink
-from signal import signal, SIGTERM
-from sys import exit
+try:
+	import gtk
+	from dockmanager.dockmanager import DockManagerItem, DockManagerSink, DOCKITEM_IFACE
+	from signal import signal, SIGTERM
+	from sys import exit
+except ImportError, e:
+	print e
+	exit()
 
 
 from hamster import client, stuff
@@ -93,7 +97,7 @@ class HamsterItem(DockManagerItem):
 
 class HamsterSink(DockManagerSink):
     def item_path_found(self, pathtoitem, item):
-        if item.Get("org.freedesktop.DockItem", "DesktopFile", dbus_interface="org.freedesktop.DBus.Properties").endswith ("hamster-time-tracker.desktop"):
+        if item.Get(DOCKITEM_IFACE, "DesktopFile", dbus_interface="org.freedesktop.DBus.Properties").endswith ("hamster-time-tracker.desktop"):
             self.items[pathtoitem] = HamsterItem(self, pathtoitem)
 
 hamstersink = HamsterSink()
