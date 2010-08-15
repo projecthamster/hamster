@@ -480,16 +480,20 @@ if __name__ == "__main__":
     window = None
     if len(sys.argv) == 1:
         window = "main"
-    elif len(sys.argv) == 2 and sys.argv[1] in ("overview", "statistics", "edit", "preferences", "about"):
+    elif len(sys.argv) == 2 and sys.argv[1] in ("overview", "statistics", "edit", "preferences", "about", "toggle"):
         window = sys.argv[1]
     else:
         usage = _(
 """Hamster time tracker. Usage:
-  %(prog)s [overview|statistics|edit|preferences|about]
+  %(prog)s [overview|statistics|edit|preferences|about|toggle]
 """)
         sys.exit(usage % {'prog': sys.argv[0]})
 
-
+    if window == "toggle":
+        from hamster.client import Storage
+        storage = Storage()
+        storage.toggle()
+        sys.exit()
 
     from hamster.configuration import runtime, dialogs, conf
 
