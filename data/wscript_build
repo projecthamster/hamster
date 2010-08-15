@@ -35,6 +35,12 @@ bld.add_group()
 
 # process .in files with intl_tool
 bld(features = 'intltool_in',
+    source   = '90-hamster-applet.xml.in',
+    install_path = '${GNOME-KEYBINDINGS_keysdir}',
+    podir    = 'art', # any valid dir will do as we don't want the translations actually in (keybinder will get them)
+    flags    = ['-x', '-u', '-c'])
+
+bld(features = 'intltool_in',
     source   = 'hamster-applet.schemas.in',
     install_path = '${SYSCONFDIR}/gconf/schemas',
     podir    = '../po',
