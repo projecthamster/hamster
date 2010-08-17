@@ -1,4 +1,19 @@
 ===============
+Version 2.31.90
+===============
+  * maintaining selection on refresh in a more sane manner
+  * self-monitor the database not only for updates but also for remove/create
+    (solves problems with some synchronization tools)
+  * documentation updates
+  * fixed the global hotkey. require gnome-keybindings (gnome-control-center-dev)
+    package as the hotkey is part of expected functionality
+
+  Updated translations:
+    * es (Jorge González)
+    * nb (Kjartan Maraas)
+    * ro (Lucian Adrian Grijincu)
+
+===============
 Version 2.31.6
 ===============
   * the top graph in overview is now interactive and allows zooming in and out
