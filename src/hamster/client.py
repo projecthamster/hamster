@@ -23,6 +23,7 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 import gobject
+from trophies import checker
 
 
 def from_dbus_fact(fact):
@@ -187,7 +188,13 @@ class Storage(gobject.GObject):
         category_name = category_name or ''
         description = description or ''
 
-        return self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description, temporary)
+        new_id = self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description, temporary)
+
+        # TODO - the parsing should happen just once and preferably here
+        # we should feed (serialized_activity, start_time, end_time) into AddFact and others
+        checker.check_fact_based(activity_name, tags, start_time, end_time, category_name, description)
+
+        return new_id
 
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
