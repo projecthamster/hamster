@@ -13,10 +13,11 @@ el/*.xml
 fr/*.page
 fr/*.mo
 fr/*.xml
+gl/*.page
 zh_HK/*.page
 zh_HK/*.mo
 zh_HK/*.xml
 zh_TW/*.page
 zh_TW/*.mo
 zh_TW/*.xml
-
+zh_CN/*.page
