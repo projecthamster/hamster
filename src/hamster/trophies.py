@@ -45,14 +45,20 @@ class Checker(object):
 
         # explicit over implicit
         fact = stuff.parse_activity_input(activity_name)
+        if not fact.activity_name:  # TODO - parse_activity could return None for these cases
+            return
+
+        # full plate - use all elements of syntax parsing
+        if all((fact.category_name, fact.description, fact.tags, fact.start_time, fact.end_time)):
+            self.trophies.unlock_achievement("hamster-applet", "full_plate")
+
+
         fact.tags = [tag.strip() for tag in tags.split(",") if tag.strip()] or fact.tags
         fact.category_name = category_name or fact.category_name
         fact.description = description or fact.description
         fact.start_time = start_time or fact.start_time
         fact.end_time = end_time or fact.end_time
 
-        if not fact.activity_name:  # TODO - parse_activity could return None for these cases
-            return
 
 
         # cryptic - hidden - used word shorter than 4 letters for the activity name
@@ -63,5 +69,12 @@ class Checker(object):
         if fact.activity_name == fact.activity_name.upper():
             self.trophies.unlock_achievement("hamster-applet", "madness")
 
+        # verbose - hidden - description longer than 5 words
+        if fact.description and len((word for word in fact.description.split(" ") if word.strip())) >= 5:
+            self.trophies.unlock_achievement("hamster-applet", "verbose")
+
+        # overkill - used 8 or more tags on a single activity
+        if len(fact.tags) >=8:
+            self.trophies.unlock_achievement("hamster-applet", "overkill")
 
 checker = Checker()
