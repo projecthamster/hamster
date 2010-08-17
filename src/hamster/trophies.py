@@ -41,7 +41,7 @@ class Checker(object):
 
     def check_fact_based(self, activity_name, tags, start_time, end_time, category_name, description):
         # checks fact based trophies
-        if not self.trophies: return
+        if not trophies_client: return
 
         # explicit over implicit
         fact = stuff.parse_activity_input(activity_name)
