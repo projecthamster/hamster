@@ -59,6 +59,11 @@ class Checker(object):
         fact.start_time = start_time or fact.start_time
         fact.end_time = end_time or fact.end_time
 
+        # alpha bravo charlie – used delta times to enter at least 50 activities
+        if fact.start_time and activity_name.startswith("-"):
+            counter = self.trophies.increment_counter("hamster-applet", "alpha_bravo_charlie")
+            if counter == 50:
+                self.trophies.unlock_achievement("hamster-applet", "alpha_bravo_charlie")
 
 
         # cryptic - hidden - used word shorter than 4 letters for the activity name
