@@ -229,9 +229,14 @@ class Storage(gobject.GObject):
             tags = ", ".join(tags)
         tags = tags or ''
 
-        return self.conn.UpdateFact(fact_id, activity_name, tags,
-                                    start_time, end_time,
-                                    category_name, description, temporary)
+        new_id =  self.conn.UpdateFact(fact_id, activity_name, tags,
+                                       start_time, end_time,
+                                       category_name, description, temporary)
+
+        checker.check_update_based(fact_id, new_id, activity_name, tags,
+                                   start_time, end_time,
+                                   category_name, description)
+        return new_id
 
 
     def get_category_activities(self, category_id = None):

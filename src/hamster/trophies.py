@@ -37,6 +37,21 @@ class Checker(object):
         if trophies_client:
             self.trophies = trophies_client.Storage()
 
+        # some state flags
+        self.last_update_id = None
+
+
+    def check_update_based(self, prev_id, new_id, activity_name, tags, start_time, end_time, category_name, description):
+        if not self.last_update_id or prev_id != self.last_update_id:
+            self.same_updates_in_row = 0
+        elif self.last_update_id == prev_id:
+            self.same_updates_in_row +=1
+        self.last_update_id = new_id
+
+
+        # all wrong – edited same activity 5 times in a row
+        if self.same_updates_in_row == 5:
+            self.trophies.unlock_achievement("hamster-applet", "all_wrong")
 
 
     def check_fact_based(self, activity_name, tags, start_time, end_time, category_name, description):
