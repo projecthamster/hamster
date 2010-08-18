@@ -474,14 +474,12 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         x, y, width, height = cell_area
         context.translate(x, y)
 
-        current_fact = widget.get_selected_fact()
-        if parent:
+        if flags & gtk.CELL_RENDERER_SELECTED:
+            text_color = self.selected_color
+        else:
             text_color = self.normal_color
-            # if we are selected, change font color appropriately
-            if current_fact and isinstance(current_fact, dt.date) \
-               and current_fact == parent.date:
-                text_color = self.selected_color
 
+        if parent:
             self.date_label.color = text_color
             self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent.label)
             self.date_label.x = 5
@@ -502,10 +500,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             self.date_label._draw(context)
             self.duration_label._draw(context)
         else:
-            self.render_cell(context, (x,y,width,height), widget)
+            self.render_cell(context, (x,y,width,height), widget, flags)
 
 
-    def render_cell(self, context, bounds, widget, really = True):
+    def render_cell(self, context, bounds, widget, flags, really = True):
         if not bounds:
             return -1
         x, y, cell_width, h = bounds
@@ -518,17 +516,11 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         fact = self.data
 
-        current_fact = widget.get_selected_fact()
-
+        selected = flags and flags & gtk.CELL_RENDERER_SELECTED
 
         text_color = self.normal_color
-
-        selected = False
-        # if we are selected, change font color appropriately
-        if current_fact and isinstance(current_fact, dt.date) == False \
-           and current_fact["id"] == fact.id:
+        if selected:
             text_color = self.selected_color
-            selected = True
 
 
 
@@ -672,5 +664,5 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         area.width -= 40 # minus the edit column, scrollbar and padding (and the scrollbar part is quite lame)
 
-        cell_height = self.render_cell(context, area, widget, False)
+        cell_height = self.render_cell(context, area, widget, None, False)
         return (0, 0, -1, cell_height)
