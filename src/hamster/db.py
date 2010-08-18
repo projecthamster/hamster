@@ -73,6 +73,14 @@ class Storage(storage.Storage):
                 print "DB file has been modified externally. Calling all stations"
                 self.dispatch_overwrite()
 
+                try:
+                    from gnome_achievements.client import Storage as TrophiesStorage
+                    trophies = TrophiesStorage()
+                    # plan "b" – synchronize the time tracker's database from external source while the tracker is running
+                    trophies.unlock_achievement("hamster-applet", "plan_b")
+                except:
+                    pass
+
 
 
         self.__database_file = gio.File(self.db_path)
@@ -1185,6 +1193,15 @@ class Storage(storage.Storage):
             #lock down current version
             self.execute("UPDATE version SET version = %d" % current_version)
             print "updated database from version %d to %d" % (version, current_version)
+
+            try:
+                from gnome_achievements.client import Storage as TrophiesStorage
+                trophies = TrophiesStorage()
+                # oldtimer – database version structure had been performed on startup (thus we know that he has been on at least 2 versions)
+                trophies.unlock_achievement("hamster-applet", "oldtimer")
+            except:
+                pass
+
 
         """we start with an empty database and then populate with default
            values. This way defaults can be localized!"""
