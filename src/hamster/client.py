@@ -111,7 +111,9 @@ class Storage(gobject.GObject):
         """returns facts of the current date, respecting hamster midnight
            hamster midnight is stored in gconf, and presented in minutes
         """
-        return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
+        today = [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
+        checker.check_today(today)
+        return today
 
     def get_facts(self, date, end_date = None, search_terms = ""):
         """Returns facts for the time span matching the optional filter criteria.
