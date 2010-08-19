@@ -194,7 +194,8 @@ class Storage(gobject.GObject):
 
         # TODO - the parsing should happen just once and preferably here
         # we should feed (serialized_activity, start_time, end_time) into AddFact and others
-        checker.check_fact_based(activity_name, tags, start_time, end_time, category_name, description)
+        if new_id:
+            checker.check_fact_based(activity_name, tags, start_time, end_time, category_name, description)
 
         return new_id
 

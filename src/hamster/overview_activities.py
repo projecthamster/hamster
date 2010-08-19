@@ -185,7 +185,8 @@ class OverviewBox(gtk.VBox):
                                           end_time,
                                           fact.category_name,
                                           fact.description)
-        self.fact_tree.select_fact(new_id)
+        if new_id:
+            self.fact_tree.select_fact(new_id)
 
 if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")
