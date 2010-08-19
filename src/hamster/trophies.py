@@ -53,6 +53,10 @@ class Checker(object):
                (fact['end_time'] is None and fact['start_time'].date() != dt.date.today()):
                 self.trophies.unlock_achievement("hamster-applet", "insomnia")
 
+        # overwhelmed: tracking for more than 16 hours during one da
+        total = stuff.duration_minutes([fact['delta'] for fact in facts])
+        if total > 16 * 60:
+            self.trophies.unlock_achievement("hamster-applet", "overwhelmed")
 
 
     def check_update_based(self, prev_id, new_id, activity_name, tags, start_time, end_time, category_name, description):
