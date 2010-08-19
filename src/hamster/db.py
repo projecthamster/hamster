@@ -573,7 +573,7 @@ class Storage(storage.Storage):
                 # check if maybe that is the same one, in that case no need to restart
                 if previous["activity_id"] == activity_id \
                    and previous["tags"] == sorted([tag["name"] for tag in tags]) \
-                   and previous["description"] == (description or ""):
+                   and (previous["description"] or "") == (description or ""):
                     return previous["id"]
 
                 # otherwise, if no description is added
