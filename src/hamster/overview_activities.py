@@ -140,7 +140,7 @@ class OverviewBox(gtk.VBox):
             self.delete_selected()
             return True
         elif (event.keyval == gtk.keysyms.Insert):
-            dialogs.edit.show()
+            self.launch_edit(self.fact_tree.get_selected_fact())
             return True
         elif event.keyval == gtk.keysyms.c and event.state & gtk.gdk.CONTROL_MASK:
             self.copy_selected()
