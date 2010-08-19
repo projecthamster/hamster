@@ -540,7 +540,7 @@ class Storage(storage.Storage):
 
 
         if not start_time or not activity.activity_name:  # sanity check
-            return 0
+            return None
 
         # now check if maybe there is also a category
         category_id = None
@@ -574,7 +574,7 @@ class Storage(storage.Storage):
                 if previous["activity_id"] == activity_id \
                    and previous["tags"] == sorted([tag["name"] for tag in tags]) \
                    and (previous["description"] or "") == (description or ""):
-                    return previous["id"]
+                    return None
 
                 # otherwise, if no description is added
                 # see if maybe it is too short to qualify as an activity
