@@ -108,15 +108,13 @@ class Storage(dbus.service.Object):
     def AddFact(self, activity_name, tags, start_time, end_time,
                 category_name = None, description = None, temporary = False):
 
+        start_time = start_time or None
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
-        else:
-            start_time = None
 
+        end_time = end_time or None
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
-        else:
-            end_time = None
 
         self.start_transaction()
         result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description, temporary)
@@ -124,7 +122,8 @@ class Storage(dbus.service.Object):
 
         if result:
             self.FactsChanged()
-        return result
+
+        return result or 0
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='(iiissisasii)')
