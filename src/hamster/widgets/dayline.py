@@ -45,6 +45,9 @@ class Selection(graphics.Sprite):
 
 
     def on_render(self, sprite):
+        if not self.fill: # not ready yet
+            return
+
         self.graphics.rectangle(0, 0, self.width, self.height)
         self.graphics.fill(self.fill, 0.3)
 
