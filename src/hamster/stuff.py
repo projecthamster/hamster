@@ -263,6 +263,7 @@ def parse_activity_input(text):
             self.end_time = None
             self.description = None
             self.tags = []
+            self.ponies = False
 
 
     res = InputParseResult()
@@ -318,8 +319,8 @@ def parse_activity_input(text):
     res.activity_name = text.strip()
 
     #this is most essential
-    if (text.find("bbq") > -1 or text.find("barbeque") > -1
-        or text.find("barbecue") > -1)  and text.find("omg") > -1:
+    if any([b in text for b in ("bbq", "barbeque", "barbecue")]) and "omg" in text:
+        res.ponies = True
         res.description = "[ponies = 1], [rainbows = 0]"
 
     return res
