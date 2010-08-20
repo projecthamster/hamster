@@ -26,40 +26,46 @@
 
 try:
     from gnome_achievements import client as trophies_client
+    storage = trophies_client.Storage()
 except:
-    trophies_client = None
+    storage = None
 
 import stuff
 import datetime as dt
 
+def unlock(achievement_id):
+    if not storage: return
+    storage.unlock_achievement("hamster-applet", achievement_id)
+
+
 class Checker(object):
     def __init__(self):
-        self.storage = None
-        if trophies_client:
-            self.trophies = trophies_client.Storage()
-
         # use runtime flags where practical
         self.flags = {}
 
 
     def check_today(self, facts):
+        if not storage: return
+
         for fact in facts[-2:]: # consider just the last two current ongoing and the previous one
-            # focused - spent 6 hours on single activity
+            # in_the_zone - spent 6 hours on single activity
             if fact['end_time'] and fact['end_time'] - fact['start_time'] > dt.timedelta(hours = 6):
-                self.trophies.unlock_achievement("hamster-applet", "focused")
+                unlock("in_the_zone")
 
             # insomnia - finish activity in a new day
             if (fact['end_time'] and fact['start_time'].date() != fact['end_time'].date()) or \
                (fact['end_time'] is None and fact['start_time'].date() != dt.date.today()):
-                self.trophies.unlock_achievement("hamster-applet", "insomnia")
+                unlock("insomnia")
 
         # overwhelmed: tracking for more than 16 hours during one da
         total = stuff.duration_minutes([fact['delta'] for fact in facts])
         if total > 16 * 60:
-            self.trophies.unlock_achievement("hamster-applet", "overwhelmed")
+            unlock("overwhelmed")
 
 
     def check_update_based(self, prev_id, new_id, activity_name, tags, start_time, end_time, category_name, description):
+        if not storage: return
+
         if not self.flags.get('last_update_id') or prev_id != self.flags['last_update_id']:
             self.flags['same_updates_in_row'] = 0
         elif self.flags['last_update_id'] == prev_id:
@@ -69,12 +75,15 @@ class Checker(object):
 
         # all wrong – edited same activity 5 times in a row
         if self.flags['same_updates_in_row'] == 5:
-            self.trophies.unlock_achievement("hamster-applet", "all_wrong")
+            unlock("all_wrong")
 
 
     def check_fact_based(self, activity_name, tags, start_time, end_time, category_name, description):
+        """quite possibly these all could be called from the service as
+           there is bigger certainty as to what did actually happen"""
+
         # checks fact based trophies
-        if not trophies_client: return
+        if not storage: return
 
         # explicit over implicit
         fact = stuff.parse_activity_input(activity_name)
@@ -83,7 +92,7 @@ class Checker(object):
 
         # full plate - use all elements of syntax parsing
         if all((fact.category_name, fact.description, fact.tags, fact.start_time, fact.end_time)):
-            self.trophies.unlock_achievement("hamster-applet", "full_plate")
+            unlock("full_plate")
 
 
         fact.tags = [tag.strip() for tag in tags.split(",") if tag.strip()] or fact.tags
@@ -100,7 +109,7 @@ class Checker(object):
             last_ten = last_ten[-10:]
 
             if len(last_ten) == 10 and (last_ten[-1].start_time - last_ten[0].start_time) <= dt.timedelta(hours=1):
-                self.trophies.unlock_achievement("hamster-applet", "jumper")
+                unlock("jumper")
 
 
         # layering - entered 4 activities in a row in one of previous days, each one overlapping the previous one
@@ -117,36 +126,52 @@ class Checker(object):
                     layered = False
 
             if layered:
-                self.trophies.unlock_achievement("hamster-applet", "layered")
+                unlock("layered")
 
         # wait a minute! - Switch to a new activity within 60 seconds
         if len(last_four) >= 2:
             prev, next = last_four[-2:]
             if prev.end_time is None and next.end_time is None and (next.start_time - prev.start_time) < dt.timedelta(minutes = 1):
-                self.trophies.unlock_achievement("hamster-applet", "wait_a_minute")
+                unlock("wait_a_minute")
 
 
         # alpha bravo charlie – used delta times to enter at least 50 activities
         if fact.start_time and activity_name.startswith("-"):
-            counter = self.trophies.increment_counter("hamster-applet", "alpha_bravo_charlie")
+            counter = storage.increment_counter("hamster-applet", "alpha_bravo_charlie")
             if counter == 50:
-                self.trophies.unlock_achievement("hamster-applet", "alpha_bravo_charlie")
+                unlock("alpha_bravo_charlie")
 
 
         # cryptic - hidden - used word shorter than 4 letters for the activity name
         if len(fact.activity_name) < 4:
-            self.trophies.unlock_achievement("hamster-applet", "cryptic")
+            unlock("cryptic")
 
         # madness – hidden – entered an activity in all caps
         if fact.activity_name == fact.activity_name.upper():
-            self.trophies.unlock_achievement("hamster-applet", "madness")
+            unlock("madness")
 
         # verbose - hidden - description longer than 5 words
         if fact.description and len((word for word in fact.description.split(" ") if word.strip())) >= 5:
-            self.trophies.unlock_achievement("hamster-applet", "verbose")
+            unlock("verbose")
 
         # overkill - used 8 or more tags on a single activity
         if len(fact.tags) >=8:
-            self.trophies.unlock_achievement("hamster-applet", "overkill")
+            unlock("overkill")
+
+
+        # TODO - after the trophies have been unlocked there is not much point in going on
+        #        patrys complains about who's gonna garbage collect. should think
+        #        about this
+        if not storage.check_achievement("hamster-applet", "ultra_focused"):
+            activity_count = storage.increment_counter("hamster-applet",
+                                                             "focused_%s@%s" % (fact.activity_name, fact.category_name or ""))
+            # focused – 100 facts with single activity
+            if activity_count == 100:
+                unlock("hamster-applet", "focused")
+
+            # ultra focused – 500 facts with single activity
+            if activity_count == 500:
+                unlock("hamster-applet", "ultra_focused")
+
 
 checker = Checker()
