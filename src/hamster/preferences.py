@@ -85,7 +85,7 @@ appearances = ["text", "icon", "both"]
 
 from configuration import runtime, conf
 import widgets
-import storage, stuff
+import storage, stuff, trophies
 
 class PreferencesEditor:
     TARGETS = [
@@ -410,21 +410,28 @@ class PreferencesEditor:
         id = model[path][0]
         category_id = model[path][2]
 
-
-        # avoid two activities in same category with same name
         activities = runtime.storage.get_category_activities(category_id)
+        prev = None
         for activity in activities:
-            if id != activity['id'] and activity['name'].lower() == new_text.lower():
-                if id == -1: # that was a new activity
-                    self.activity_store.remove(model.get_iter(path))
-                self.select_activity(activity['id'])
-                return False
-
+            if id == activity['id']:
+                prev = activity['name']
+            else:
+                # avoid two activities in same category with same name
+                if activity['name'].lower() == new_text.lower():
+                    if id == -1: # that was a new activity
+                        self.activity_store.remove(model.get_iter(path))
+                    self.select_activity(activity['id'])
+                    return False
 
         if id == -1: #new activity -> add
             model[path][0] = runtime.storage.add_activity(new_text.decode("utf-8"), category_id)
         else: #existing activity -> update
-            runtime.storage.update_activity(id, new_text.decode("utf-8"), category_id)
+            new = new_text.decode("utf-8")
+            runtime.storage.update_activity(id, new, category_id)
+            # size matters - when editing activity name just changed the case (bar -> Bar)
+            if prev != new and prev.lower() == new.lower():
+                trophies.unlock("size_matters")
+
         model[path][1] = new_text
         return True
 
