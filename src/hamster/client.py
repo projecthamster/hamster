@@ -175,13 +175,13 @@ class Storage(gobject.GObject):
         """
 
 
-        start_time = start_time or 0
-        if start_time:
-            start_time = timegm(start_time.timetuple())
+        start_timestamp = start_time or 0
+        if start_timestamp:
+            start_timestamp = timegm(start_time.timetuple())
 
-        end_time = end_time or 0
-        if end_time:
-            end_time = timegm(end_time.timetuple())
+        end_timestamp = end_time or 0
+        if end_timestamp:
+            end_timestamp = timegm(end_time.timetuple())
 
         if isinstance(tags, list): #make sure we send what storage expects
             tags = ", ".join(tags)
@@ -190,7 +190,7 @@ class Storage(gobject.GObject):
         category_name = category_name or ''
         description = description or ''
 
-        new_id = self.conn.AddFact(activity_name, tags, start_time, end_time, category_name, description, temporary)
+        new_id = self.conn.AddFact(activity_name, tags, start_timestamp, end_timestamp, category_name, description, temporary)
 
         # TODO - the parsing should happen just once and preferably here
         # we should feed (serialized_activity, start_time, end_time) into AddFact and others
