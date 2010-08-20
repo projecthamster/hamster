@@ -73,14 +73,12 @@ class Storage(storage.Storage):
                 print "DB file has been modified externally. Calling all stations"
                 self.dispatch_overwrite()
 
+                # plan "b" – synchronize the time tracker's database from external source while the tracker is running
                 try:
-                    from gnome_achievements.client import Storage as TrophiesStorage
-                    trophies = TrophiesStorage()
-                    # plan "b" – synchronize the time tracker's database from external source while the tracker is running
-                    trophies.unlock_achievement("hamster-applet", "plan_b")
+                    import trophies
+                    trophies.unlock("plan_b")
                 except:
                     pass
-
 
 
         self.__database_file = gio.File(self.db_path)
@@ -792,6 +790,14 @@ class Storage(storage.Storage):
         else:
             self.execute("delete from activities where id = ?", (id,))
 
+        # Finished! - deleted an activity with more than 50 facts on it
+        if bound_facts >= 50:
+            try:
+                import trophies
+                trophies.unlock("finished")
+            except:
+                pass
+
     def __remove_category(self, id):
         """move all activities to unsorted and remove category"""
 
@@ -1195,10 +1201,9 @@ class Storage(storage.Storage):
             print "updated database from version %d to %d" % (version, current_version)
 
             try:
-                from gnome_achievements.client import Storage as TrophiesStorage
-                trophies = TrophiesStorage()
                 # oldtimer – database version structure had been performed on startup (thus we know that he has been on at least 2 versions)
-                trophies.unlock_achievement("hamster-applet", "oldtimer")
+                import trophies
+                trophies.unlock("oldtimer")
             except:
                 pass
 
