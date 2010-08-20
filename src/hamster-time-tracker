@@ -276,6 +276,8 @@ class ProjectHamster(object):
         dialogs.prefs.show(self.window)
     def on_menu_help_contents_activate(self, *args):
         gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
+        trophies.unlock("basic_instructions")
+
 
     """signals"""
     def after_activity_update(self, widget):
@@ -509,7 +511,7 @@ if __name__ == "__main__":
     gtk.gdk.threads_init()
     gtk.window_set_default_icon_name("hamster-applet")
 
-    from hamster import stuff, widgets, idle
+    from hamster import stuff, widgets, idle, trophies
 
     try:
         import wnck

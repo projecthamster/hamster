@@ -33,7 +33,7 @@ import locale
 
 from configuration import conf, runtime, dialogs
 
-import stuff
+import stuff, trophies
 
 # controllers for other windows
 import widgets
@@ -703,4 +703,6 @@ class HamsterApplet(object):
 
     def on_help_clicked(self, *args):
         gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
+
+        trophies.unlock("basic_instructions")
         return False
