@@ -188,5 +188,10 @@ class Checker(object):
             if activity_count == 500:
                 unlock("hamster-applet", "ultra_focused")
 
+        # elite - hidden - start an activity at 13:37
+        if dt.datetime.now().hour == 13 and dt.datetime.now().minute == 37:
+            unlock("elite")
+
+
 
 checker = Checker()
