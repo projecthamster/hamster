@@ -30,9 +30,9 @@ import gtk, gobject
 import pango
 
 import stuff
-from hamster.i18n import C_
+from i18n import C_
 from configuration import runtime, conf, dialogs
-import widgets, reports
+import widgets, reports, trophies
 
 from overview_activities import OverviewBox
 from overview_totals import TotalsBox
@@ -274,6 +274,14 @@ class Overview(object):
     def on_tabs_window_configure_event(self, window, event):
         # this is required so that the rows would grow on resize
         self.fact_tree.fix_row_heights()
+
+    def on_tabs_window_state_changed(self, window, event):
+        # not enough space - maximized the overview window
+        maximized = window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
+        if maximized:
+            trophies.unlock("not_enough_space")
+
+
 
 
     def on_prev_activate(self, action):
