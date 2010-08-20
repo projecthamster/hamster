@@ -24,11 +24,6 @@ pygtk.require('2.0')
 import os
 import gtk, gobject
 
-import stuff
-
-import widgets
-
-from configuration import runtime, dialogs
 import webbrowser
 
 from itertools import groupby
@@ -37,9 +32,11 @@ from gettext import ngettext
 import datetime as dt
 import calendar
 import time
-from hamster.i18n import C_
 from collections import defaultdict
 
+import stuff, widgets, trophies
+from i18n import C_
+from configuration import runtime, dialogs
 
 
 class OverviewBox(gtk.VBox):
@@ -169,7 +166,7 @@ class OverviewBox(gtk.VBox):
 
         fact = stuff.parse_activity_input(text.decode("utf-8"))
 
-        if fact.start_time is None or fact.end_time is None:
+        if not all((fact.activity_name, fact.start_time, fact.end_time)):
             return
 
         start_time = fact.start_time.replace(year = selected_date.year,
@@ -185,6 +182,10 @@ class OverviewBox(gtk.VBox):
                                           end_time,
                                           fact.category_name,
                                           fact.description)
+
+        # You can do that?! - copy/pasted an activity
+        trophies.unlock("can_do_that")
+
         if new_id:
             self.fact_tree.select_fact(new_id)
 
