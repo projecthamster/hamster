@@ -18,18 +18,18 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-import stuff
 import os, sys
 import datetime as dt
 from xml.dom.minidom import Document
 import csv
-from hamster.i18n import C_
-from hamster.configuration import runtime
 import copy
 import itertools
 import re
-
 from string import Template
+
+from i18n import C_
+from configuration import runtime
+import stuff, trophies
 
 def simple(facts, start_date, end_date, format, path):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
@@ -45,6 +45,16 @@ def simple(facts, start_date, end_date, format, path):
         writer = HTMLWriter(report_path, start_date, end_date)
 
     writer.write_report(facts)
+
+    # some assembly required - hidden - saved a report for single day
+    if start_date == end_date:
+        trophies.unlock("some_assembly_required")
+
+    # I want this on my desk - generated over 10 different reports
+    if trophies.check("on_my_desk") == False:
+        current = trophies.increment("reports_generated")
+        if current == 10:
+            trophies.unlock("on_my_desk")
 
 
 class ReportWriter(object):
@@ -180,7 +190,8 @@ class HTMLWriter(ReportWriter):
 
 
         # read the template, allow override
-        if os.path.exists(os.path.join(runtime.home_data_dir, "report_template.html")):
+        self.override = os.path.exists(os.path.join(runtime.home_data_dir, "report_template.html"))
+        if self.override:
             template = os.path.join(runtime.home_data_dir, "report_template.html")
         else:
             template = os.path.join(runtime.data_dir, "report_template.html")
@@ -326,5 +337,8 @@ class HTMLWriter(ReportWriter):
         )
         report.write(Template(self.main_template).safe_substitute(data))
 
+        if self.override:
+            # my report is better than your report - overrode and ran the default report
+            trophies.unlock("my_report")
 
         return
