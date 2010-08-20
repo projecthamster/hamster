@@ -37,6 +37,13 @@ def unlock(achievement_id):
     if not storage: return
     storage.unlock_achievement("hamster-applet", achievement_id)
 
+def check(achievement_id):
+    if not storage: return None
+    return storage.check_achievement("hamster-applet", achievement_id)
+
+def increment(counter_id, context = ""):
+    if not storage: return 0
+    return storage.increment_counter("hamster-applet", counter_id, context)
 
 class Checker(object):
     def __init__(self):
@@ -111,12 +118,17 @@ class Checker(object):
             if len(last_ten) == 10 and (last_ten[-1].start_time - last_ten[0].start_time) <= dt.timedelta(hours=1):
                 unlock("jumper")
 
+        # good memory - entered three past activities during a day
+        if fact.end_time and fact.start_time.date() == dt.date.today():
+            good_memory = increment("past_activities", dt.date.today().strftime("%Y%m%d"))
+            if good_memory == 3:
+                unlock("good_memory")
 
         # layering - entered 4 activities in a row in one of previous days, each one overlapping the previous one
         #            avoiding today as in that case the layering
         last_four = self.flags.setdefault('last_four', [])
         last_four.append(fact)
-        last_four = last_ten[-4:]
+        last_four = last_four[-4:]
         if len(last_four) == 4:
             layered = True
             for prev, next in zip(last_four, last_four[1:]):
@@ -137,7 +149,7 @@ class Checker(object):
 
         # alpha bravo charlie – used delta times to enter at least 50 activities
         if fact.start_time and activity_name.startswith("-"):
-            counter = storage.increment_counter("hamster-applet", "alpha_bravo_charlie")
+            counter = increment("hamster-applet", "alpha_bravo_charlie")
             if counter == 50:
                 unlock("alpha_bravo_charlie")
 
@@ -151,20 +163,23 @@ class Checker(object):
             unlock("madness")
 
         # verbose - hidden - description longer than 5 words
-        if fact.description and len((word for word in fact.description.split(" ") if word.strip())) >= 5:
+        if fact.description and len([word for word in fact.description.split(" ") if len(word.strip()) > 2]) >= 5:
             unlock("verbose")
 
         # overkill - used 8 or more tags on a single activity
         if len(fact.tags) >=8:
             unlock("overkill")
 
+        # ponies - hidden - discovered the ponies
+        if fact.ponies:
+            unlock("ponies")
+
 
         # TODO - after the trophies have been unlocked there is not much point in going on
         #        patrys complains about who's gonna garbage collect. should think
         #        about this
         if not storage.check_achievement("hamster-applet", "ultra_focused"):
-            activity_count = storage.increment_counter("hamster-applet",
-                                                             "focused_%s@%s" % (fact.activity_name, fact.category_name or ""))
+            activity_count = increment("hamster-applet", "focused_%s@%s" % (fact.activity_name, fact.category_name or ""))
             # focused – 100 facts with single activity
             if activity_count == 100:
                 unlock("hamster-applet", "focused")
