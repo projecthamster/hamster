@@ -61,6 +61,7 @@ def build(bld):
 
     bld.install_files('${PYTHONDIR}/hamster', 'src/hamster/*.py')
     bld.install_files('${PYTHONDIR}/hamster/widgets', 'src/hamster/widgets/*.py')
+    bld.install_files('${PYTHONDIR}/hamster/utils', 'src/hamster/utils/*.py')
 
     bld.install_files('${DATADIR}/docky/helpers',
                       'src/docky_control/2.0/hamster_control.py',
