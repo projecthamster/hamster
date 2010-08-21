@@ -163,7 +163,7 @@ class Storage(gobject.GObject):
         """returns fact by it's ID"""
         return from_dbus_fact(self.conn.GetFact(id))
 
-    def add_fact(self, fact):
+    def add_fact(self, fact, temporary_activity):
         """Add fact. activity name can use the
         `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
         syntax, or params can be stated explicitly.
@@ -188,7 +188,7 @@ class Storage(gobject.GObject):
         new_id = self.conn.AddFact(serialized,
                                    start_timestamp,
                                    end_timestamp,
-                                   fact.temporary)
+                                   temporary_activity)
 
         # TODO - the parsing should happen just once and preferably here
         # we should feed (serialized_activity, start_time, end_time) into AddFact and others
@@ -206,7 +206,7 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact):
+    def update_fact(self, fact_id, fact, temporary_activity):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -224,7 +224,7 @@ class Storage(gobject.GObject):
                                        fact.serialized_name(),
                                        start_time,
                                        end_time,
-                                       fact.temporary)
+                                       temporary_activity)
 
         trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id

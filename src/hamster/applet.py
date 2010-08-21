@@ -672,12 +672,11 @@ class HamsterApplet(object):
         activity, temporary = self.new_name.get_value()
 
         fact = stuff.Fact(activity,
-                          tags = self.new_tags.get_text().decode("utf8", "replace"),
-                          temporary = temporary)
+                          tags = self.new_tags.get_text().decode("utf8", "replace"))
         if not fact.activity:
             return
 
-        runtime.storage.add_fact(fact)
+        runtime.storage.add_fact(fact, temporary)
         self.new_name.set_text("")
         self.new_tags.set_text("")
         self.__show_toggle(False)

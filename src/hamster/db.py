@@ -492,8 +492,7 @@ class Storage(storage.Storage):
     def __add_fact(self, activity_name, start_time, end_time = None, temporary = False):
         fact = stuff.Fact(activity_name,
                           start_time = start_time,
-                          end_time = end_time,
-                          temporary = temporary)
+                          end_time = end_time)
 
         if not fact.activity or start_time is None:  # sanity check
             return 0

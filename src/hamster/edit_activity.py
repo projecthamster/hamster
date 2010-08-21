@@ -200,15 +200,14 @@ class CustomFactController:
                           description = self.figure_description(),
                           tags = self.new_tags.get_text().decode('utf8'),
                           start_time = self._get_datetime("start"),
-                          end_time = end_time,
-                          temporary = temporary)
+                          end_time = end_time)
         if not fact.activity:
             return False
 
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, fact)
+            runtime.storage.update_fact(self.fact_id, fact, temporary)
         else:
-            runtime.storage.add_fact(fact)
+            runtime.storage.add_fact(fact, temporary)
 
         self.close_window()
 
