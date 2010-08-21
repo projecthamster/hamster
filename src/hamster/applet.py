@@ -24,22 +24,17 @@ import datetime as dt
 
 import pygtk
 pygtk.require("2.0")
-import gtk
+import gtk, pango
 
 import gnomeapplet
 import gobject
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
 
-from configuration import conf, runtime, dialogs
+from configuration import conf, runtime, dialogs, load_ui_file
 
-import stuff, trophies
-
-# controllers for other windows
-import widgets
-import idle
-
-import pango
+import widgets, idle
+from utils import stuff, trophies
 
 try:
     import wnck
@@ -194,7 +189,7 @@ class HamsterApplet(object):
                                           ])
 
         # load window of activity switcher and todays view
-        self._gui = stuff.load_ui_file("applet.ui")
+        self._gui = load_ui_file("applet.ui")
         self.window = self._gui.get_object('hamster-window')
         # on close don't destroy the popup, just hide it instead
         self.window.connect("delete_event", lambda *args: self.__show_toggle(False))

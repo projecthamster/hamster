@@ -36,8 +36,8 @@ except ImportError, e:
 	exit()
 
 
-from hamster import client, stuff
-from hamster import i18n
+from hamster import client
+from hamster.utils import stuff, i18n
 i18n.setup_i18n()
 
 

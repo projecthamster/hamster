@@ -27,9 +27,9 @@ import itertools
 import re
 from string import Template
 
-from i18n import C_
 from configuration import runtime
-import stuff, trophies
+from utils import stuff, trophies
+from utils.i18n import C_
 
 def simple(facts, start_date, end_date, format, path):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input

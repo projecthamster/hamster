@@ -21,17 +21,17 @@ import gtk
 import time
 import datetime as dt
 
-""" TODO:
-     * hook into notifications and refresh our days if some evil neighbour edit
-       fact window has dared to edit facts
+""" TODO: hook into notifications and refresh our days if some evil neighbour
+          edit fact window has dared to edit facts
 """
-from configuration import runtime, conf
-import stuff, widgets
+import widgets
+from configuration import runtime, conf, load_ui_file
+from utils import stuff
 
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
 
-        self._gui = stuff.load_ui_file("edit_activity.ui")
+        self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
 
         self.parent, self.fact_id = parent, fact_id

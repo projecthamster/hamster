@@ -90,7 +90,7 @@ if __name__ == "__main__":
                             format = log_format)
 
     try:
-        from hamster import i18n
+        from hamster.utils import i18n
         i18n.setup_i18n()
 
         from hamster.configuration import runtime, dialogs

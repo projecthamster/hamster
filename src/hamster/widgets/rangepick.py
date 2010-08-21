@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from .. import stuff
-
+from ..utils import stuff
+from ..configuration import load_ui_file
 
 import gtk, gobject, pango
 import datetime as dt
@@ -37,7 +37,7 @@ class RangePick(gtk.ToggleButton):
     def __init__(self, date = None):
         gtk.ToggleButton.__init__(self)
 
-        self._gui = stuff.load_ui_file("range_pick.ui")
+        self._gui = load_ui_file("range_pick.ui")
         self.popup = self.get_widget("range_popup")
 
         hbox = gtk.HBox()

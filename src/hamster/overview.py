@@ -29,10 +29,10 @@ import webbrowser
 import gtk, gobject
 import pango
 
-import stuff
-from i18n import C_
-from configuration import runtime, conf, dialogs
-import widgets, reports, trophies
+import widgets, reports
+from configuration import runtime, conf, dialogs, load_ui_file
+from utils import stuff, trophies
+from utils.i18n import C_
 
 from overview_activities import OverviewBox
 from overview_totals import TotalsBox
@@ -41,7 +41,7 @@ from overview_totals import TotalsBox
 class Overview(object):
     def __init__(self, parent = None):
         self.parent = parent# determine if app should shut down on close
-        self._gui = stuff.load_ui_file("overview.ui")
+        self._gui = load_ui_file("overview.ui")
         self.report_chooser = None
 
         self.facts = None

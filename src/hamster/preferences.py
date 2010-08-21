@@ -83,7 +83,7 @@ class WorkspaceStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime, conf
+from configuration import runtime, conf, load_ui_file
 import widgets
 import storage, stuff, trophies
 
@@ -96,7 +96,7 @@ class PreferencesEditor:
 
     def __init__(self, parent = None):
         self.parent = parent
-        self._gui = stuff.load_ui_file("preferences.ui")
+        self._gui = load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
 
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)

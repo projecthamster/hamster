@@ -34,9 +34,10 @@ import calendar
 import time
 from collections import defaultdict
 
-import stuff, widgets, trophies
-from i18n import C_
+import widgets
 from configuration import runtime, dialogs
+from utils import stuff, trophies
+from utils.i18n import C_
 
 
 class OverviewBox(gtk.VBox):

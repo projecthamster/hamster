@@ -28,19 +28,18 @@ from gettext import ngettext
 
 import os
 import gtk, gobject
-
-import stuff, widgets
-import charting, reports
-from configuration import runtime, dialogs
-
-from hamster.i18n import C_
 from collections import defaultdict
+
+import widgets, reports
+from configuration import runtime, dialogs, load_ui_file
+from utils import stuff, charting
+from utils.i18n import C_
 
 
 class TotalsBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
-        self._gui = stuff.load_ui_file("overview_totals.ui")
+        self._gui = load_ui_file("overview_totals.ui")
         self.get_widget("reports_vbox").reparent(self) #mine!
 
         self.start_date, self.end_date = None, None

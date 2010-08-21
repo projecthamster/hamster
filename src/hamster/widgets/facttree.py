@@ -23,9 +23,8 @@ import gtk, gobject
 import cairo
 import datetime as dt
 
-from .. import stuff, graphics
-from ..stuff import format_duration
-from .tags import Tag
+from ..utils import stuff, graphics
+from tags import Tag
 
 import pango
 

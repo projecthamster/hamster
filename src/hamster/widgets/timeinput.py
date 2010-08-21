@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..stuff import format_duration
+from ..utils.stuff import format_duration
 import gtk
 from gtk import keysyms
 import datetime as dt
@@ -265,4 +265,3 @@ class TimeInput(gtk.Entry):
             self.show_popup()
 
         return True
-

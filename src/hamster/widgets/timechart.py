@@ -20,7 +20,7 @@
 import os  # for locale
 import gobject, gtk, pango
 
-from .. import graphics, stuff
+from ..utils import graphics, stuff
 
 import time, datetime as dt
 import calendar

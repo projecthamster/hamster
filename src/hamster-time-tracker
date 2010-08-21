@@ -28,7 +28,7 @@ import dbus, dbus.service, dbus.mainloop.glib
 class ProjectHamster(object):
     def __init__(self, window_name = None):
         # load window of activity switcher and todays view
-        self._gui = stuff.load_ui_file("hamster.ui")
+        self._gui = load_ui_file("hamster.ui")
         self.window = self._gui.get_object('hamster-window')
         self.window.connect("delete_event", self.close_window)
 
@@ -479,7 +479,7 @@ class WindowServer(dbus.service.Object):
 
 
 if __name__ == "__main__":
-    from hamster import i18n
+    from hamster.utils import i18n
     i18n.setup_i18n()
 
     # determine the window we will be launching
@@ -501,7 +501,7 @@ if __name__ == "__main__":
         storage.toggle()
         sys.exit()
 
-    from hamster.configuration import runtime, dialogs, conf
+    from hamster.configuration import runtime, dialogs, conf, load_ui_file
 
     # if there is windowserver hanging in dbus - call that and exit
     bus = dbus.SessionBus()
@@ -515,7 +515,7 @@ if __name__ == "__main__":
     gtk.gdk.threads_init()
     gtk.window_set_default_icon_name("hamster-applet")
 
-    from hamster import stuff, widgets, idle, trophies
+    from hamster.utils import stuff, widgets, idle, trophies
 
     try:
         import wnck

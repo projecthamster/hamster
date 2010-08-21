@@ -23,7 +23,7 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 import gobject
-from trophies import checker
+from utils.trophies import checker
 
 
 def from_dbus_fact(fact):

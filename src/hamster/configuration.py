@@ -148,8 +148,10 @@ class Dialogs(Singleton):
 dialogs = Dialogs()
 
 
-
-
+def load_ui_file(name):
+    ui = gtk.Builder()
+    ui.add_from_file(os.path.join(runtime.data_dir, name))
+    return ui
 
 class GConfStore(gobject.GObject, Singleton):
     """

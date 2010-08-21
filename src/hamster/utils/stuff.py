@@ -130,12 +130,6 @@ def duration_minutes(duration):
         return duration
 
 
-def load_ui_file(name):
-    from configuration import runtime
-    ui = gtk.Builder()
-    ui.add_from_file(os.path.join(runtime.data_dir, name))
-    return ui
-
 def zero_hour(date):
     return dt.datetime.combine(date.date(), dt.time(0,0))
 

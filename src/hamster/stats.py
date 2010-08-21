@@ -32,14 +32,15 @@ import math
 import gtk, gobject
 import pango
 
-import stuff, charting, graphics, widgets
-from configuration import runtime, conf
+import widgets
+from utils import stuff, charting, graphics
+from configuration import runtime, conf, load_ui_file
 
-from hamster.i18n import C_
+from utils.i18n import C_
 
 class Stats(object):
     def __init__(self, parent = None):
-        self._gui = stuff.load_ui_file("stats.ui")
+        self._gui = load_ui_file("stats.ui")
         self.report_chooser = None
         self.window = self.get_widget("stats_window")
 
