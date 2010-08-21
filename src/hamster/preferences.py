@@ -85,7 +85,7 @@ appearances = ["text", "icon", "both"]
 
 from configuration import runtime, conf, load_ui_file
 import widgets
-import storage, stuff, trophies
+from utils import stuff, trophies
 
 class PreferencesEditor:
     TARGETS = [
