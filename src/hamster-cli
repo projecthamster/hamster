@@ -45,7 +45,9 @@ class HamsterClient(object):
 
     def start_tracking(self, activity, start_time = None, end_time = None):
         '''Start a new activity.'''
-        self.storage.add_fact(activity, start_time = start_time, end_time = end_time)
+        self.storage.add_fact(stuff.Fact(activity,
+                                         start_time = start_time,
+                                         end_time = end_time))
 
 
     def stop_tracking(self):

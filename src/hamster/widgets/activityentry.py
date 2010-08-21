@@ -133,15 +133,15 @@ class ActivityEntry(gtk.Entry):
         if not self._parent_click_watcher:
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
-        activity = stuff.parse_activity_input(self.filter)
+        fact = stuff.Fact(self.filter)
         time = ''
-        if activity.start_time:
-            time = activity.start_time.strftime("%H:%M")
-            if activity.end_time:
-                time += "-%s" % activity.end_time.strftime("%H:%M")
+        if fact.start_time:
+            time = fact.start_time.strftime("%H:%M")
+            if fact.end_time:
+                time += "-%s" % fact.end_time.strftime("%H:%M")
 
-        self.time_icon_column.set_visible(activity.start_time != None and self.filter.find("@") == -1)
-        self.time_column.set_visible(activity.start_time != None and self.filter.find("@") == -1)
+        self.time_icon_column.set_visible(fact.start_time is not None and self.filter.find("@") == -1)
+        self.time_column.set_visible(fact.start_time is not None and self.filter.find("@") == -1)
 
 
         self.category_column.set_visible(self.filter.find("@") == -1)
@@ -179,7 +179,6 @@ class ActivityEntry(gtk.Entry):
 
     def complete_inline(self):
         model = self.tree.get_model()
-        activity = stuff.parse_activity_input(self.filter)
         subject = self.get_text()
 
         if not subject or model.iter_n_children(None) == 0:
@@ -218,21 +217,21 @@ class ActivityEntry(gtk.Entry):
             return #same thing, no need to repopulate
 
         self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
-        input_activity = stuff.parse_activity_input(self.filter)
+        fact = stuff.Fact(self.filter)
 
         # do not cache as ordering and available options change over time
-        self.activities = runtime.storage.get_activities(input_activity.activity_name)
-        self.external_activities = self.external.get_activities(input_activity.activity_name)
+        self.activities = runtime.storage.get_activities(fact.activity)
+        self.external_activities = self.external.get_activities(fact.activity)
         self.activities.extend(self.external_activities)
 
         self.categories = self.categories or runtime.storage.get_categories()
 
 
         time = ''
-        if input_activity.start_time:
-            time = input_activity.start_time.strftime("%H:%M")
-            if input_activity.end_time:
-                time += "-%s" % input_activity.end_time.strftime("%H:%M")
+        if fact.start_time:
+            time = fact.start_time.strftime("%H:%M")
+            if fact.end_time:
+                time += "-%s" % fact.end_time.strftime("%H:%M")
 
 
         store = self.tree.get_model()
@@ -248,7 +247,7 @@ class ActivityEntry(gtk.Entry):
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
                     store.append([fillable, category['name'], fillable, time])
         else:
-            key = input_activity.activity_name.decode('utf8', 'replace').lower()
+            key = fact.activity.decode('utf8', 'replace').lower()
             for activity in self.activities:
                 fillable = activity['name'].lower()
                 if activity['category']:

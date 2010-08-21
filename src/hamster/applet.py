@@ -508,12 +508,13 @@ class HamsterApplet(object):
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
+        fact = stuff.Fact(fact["name"],
+                    tags = ", ".join(fact["tags"]),
+                    category = fact["category"],
+                    description = fact["description"])
 
-        if fact:
-            runtime.storage.add_fact(fact["name"],
-                                     ", ".join(fact["tags"]),
-                                     category_name = fact["category"],
-                                     description = fact["description"])
+        if fact.activity:
+            runtime.storage.add_fact(fact)
             self.__show_toggle(False)
 
 
@@ -587,30 +588,29 @@ class HamsterApplet(object):
         # on switch, update our mapping between spaces and activities
         self.workspace_activities[prev] = self.last_activity
 
-
         activity = None
         if "name" in self.workspace_tracking:
             # first try to look up activity by desktop name
             mapping = conf.get("workspace_mapping")
 
-            parsed_activity = None
+            fact = None
             if new < len(mapping):
-                parsed_activity = stuff.parse_activity_input(mapping[new])
+                fact = stuff.Fact(mapping[new])
 
-            if parsed_activity:
-                category_id = None
-                if parsed_activity.category_name:
-                    category_id = runtime.storage.get_category_id(parsed_activity.category_name)
+                if fact.activity:
+                    category_id = None
+                    if fact.category:
+                        category_id = runtime.storage.get_category_id(fact.category)
 
-                activity = runtime.storage.get_activity_by_name(parsed_activity.activity_name,
-                                                                category_id,
-                                                                resurrect = False)
-                if activity:
-                    # we need dict below
-                    activity = dict(name = activity['name'],
-                                    category = activity['category'],
-                                    description = parsed_activity.description,
-                                    tags = parsed_activity.tags)
+                    activity = runtime.storage.get_activity_by_name(fact.activity,
+                                                                    category_id,
+                                                                    ressurect = False)
+                    if activity:
+                        # we need dict below
+                        activity = dict(name = activity['name'],
+                                        category = activity['category'],
+                                        description = fact.description,
+                                        tags = fact.tags)
 
 
         if not activity and "memory" in self.workspace_tracking:
@@ -631,10 +631,11 @@ class HamsterApplet(object):
             return
 
         # ok, switch
-        runtime.storage.add_fact(activity['name'],
-                                 ", ".join(activity['tags']),
-                                 category_name = activity['category'],
-                                 description = activity['description'])
+        fact = stuff.Fact(activity['name'],
+                          tags = ", ".join(activity['tags']),
+                          category = activity['category'],
+                          description = activity['description']);
+        runtime.storage.add_fact(fact)
 
         if self.notification:
             self.notification.update(_("Changed activity"),
@@ -668,13 +669,15 @@ class HamsterApplet(object):
         self.get_widget("switch_activity").set_sensitive(widget.get_text() != "")
 
     def on_switch_activity_clicked(self, widget):
-        activity_name, temporary = self.new_name.get_value()
-        if not activity_name:
-            return False
+        activity, temporary = self.new_name.get_value()
 
-        runtime.storage.add_fact(self.new_name.get_text().decode("utf8", "replace"),
-                                 self.new_tags.get_text().decode("utf8", "replace"),
-                                 temporary = temporary)
+        fact = stuff.Fact(activity,
+                          tags = self.new_tags.get_text().decode("utf8", "replace"),
+                          temporary = temporary)
+        if not fact.activity:
+            return
+
+        runtime.storage.add_fact(fact)
         self.new_name.set_text("")
         self.new_tags.set_text("")
         self.__show_toggle(False)

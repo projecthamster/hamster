@@ -35,13 +35,13 @@ except ImportError:
 import os, time
 import datetime
 import storage
-from utils import stuff
 from shutil import copy as copyfile
+import itertools
 import datetime as dt
 import gio
 from xdg.BaseDirectory import xdg_data_home
 
-import itertools
+from utils import stuff, trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -74,11 +74,7 @@ class Storage(storage.Storage):
                 self.dispatch_overwrite()
 
                 # plan "b" – synchronize the time tracker's database from external source while the tracker is running
-                try:
-                    import trophies
-                    trophies.unlock("plan_b")
-                except:
-                    pass
+                trophies.unlock("plan_b")
 
 
         self.__database_file = gio.File(self.db_path)
@@ -493,36 +489,20 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, activity_name, tags, start_time = None,
-                   end_time = None, category_name = None,
-                   description = None, temporary = False):
+    def __add_fact(self, activity_name, start_time, end_time = None, temporary = False):
+        fact = stuff.Fact(activity_name,
+                          start_time = start_time,
+                          end_time = end_time,
+                          temporary = temporary)
 
-        activity = stuff.parse_activity_input(activity_name)
-
-        # make sure that we do have an activity name after parsing
-        if not activity.activity_name:
+        if not fact.activity or start_time is None:  # sanity check
             return 0
 
-        # explicitly stated takes precedence
-        activity.description = description or activity.description
 
-        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]  # split by comma
-        tags = tags or activity.tags # explicitly stated tags take priority
+        # get tags from database - this will create any missing tags too
+        tags = [dict(zip(('id', 'name', 'autocomplete'), row))
+                                           for row in self.GetTagIds(fact.tags)]
 
-        tags = [dict(zip(('id', 'name', 'autocomplete'), row)) for row in self.GetTagIds(tags)] #this will create any missing tags too
-
-
-        if category_name:
-            activity.category_name = category_name
-        if description:
-            activity.description = description #override
-
-        start_time = activity.start_time or start_time or datetime.datetime.now()
-
-        start_time = start_time.replace(microsecond = 0)
-        end_time = activity.end_time or end_time
-        if end_time:
-            end_time = end_time.replace(microsecond = 0)
 
         now = datetime.datetime.now()
         # if in future - roll back to past
@@ -537,29 +517,25 @@ class Storage(storage.Storage):
                 end_time -= dt.timedelta(days = 1)
 
 
-        if not start_time or not activity.activity_name:  # sanity check
-            return None
-
         # now check if maybe there is also a category
         category_id = None
-        if activity.category_name:
-            category_id = self.__get_category_id(activity.category_name)
+        if fact.category:
+            category_id = self.__get_category_id(fact.category)
             if not category_id:
-                category_id = self.__add_category(activity.category_name)
+                category_id = self.__add_category(fact.category)
 
         # try to find activity, resurrect if not temporary
-        activity_id = self.__get_activity_by_name(activity.activity_name,
+        activity_id = self.__get_activity_by_name(fact.activity,
                                                   category_id,
                                                   resurrect = not temporary)
         if not activity_id:
-            activity_id = self.__add_activity(activity.activity_name,
+            activity_id = self.__add_activity(fact.activity,
                                               category_id, temporary)
         else:
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
         if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
-
             # pull in previous facts
             facts = self.__get_todays_facts()
 
@@ -570,8 +546,8 @@ class Storage(storage.Storage):
             if previous and previous['start_time'] < start_time:
                 # check if maybe that is the same one, in that case no need to restart
                 if previous["activity_id"] == activity_id \
-                   and previous["tags"] == sorted([tag["name"] for tag in tags]) \
-                   and (previous["description"] or "") == (description or ""):
+                   and set(previous["tags"]) == set([tag["name"] for tag in tags]) \
+                   and (previous["description"] or "") == (fact.description or ""):
                     return None
 
                 # otherwise, if no description is added
@@ -618,7 +594,7 @@ class Storage(storage.Storage):
                     INSERT INTO facts (activity_id, start_time, end_time, description)
                                VALUES (?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, activity.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description))
 
         fact_id = self.__last_insert_rowid()
 
@@ -792,11 +768,7 @@ class Storage(storage.Storage):
 
         # Finished! - deleted an activity with more than 50 facts on it
         if bound_facts >= 50:
-            try:
-                import trophies
-                trophies.unlock("finished")
-            except:
-                pass
+            trophies.unlock("finished")
 
     def __remove_category(self, id):
         """move all activities to unsorted and remove category"""
@@ -1200,12 +1172,8 @@ class Storage(storage.Storage):
             self.execute("UPDATE version SET version = %d" % current_version)
             print "updated database from version %d to %d" % (version, current_version)
 
-            try:
-                # oldtimer – database version structure had been performed on startup (thus we know that he has been on at least 2 versions)
-                import trophies
-                trophies.unlock("oldtimer")
-            except:
-                pass
+            # oldtimer – database version structure had been performed on startup (thus we know that he has been on at least 2 versions)
+            trophies.unlock("oldtimer")
 
 
         """we start with an empty database and then populate with default

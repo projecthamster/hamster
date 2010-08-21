@@ -23,7 +23,8 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 import gobject
-from utils.trophies import checker
+from utils import stuff, trophies
+
 
 
 def from_dbus_fact(fact):
@@ -162,39 +163,37 @@ class Storage(gobject.GObject):
         """returns fact by it's ID"""
         return from_dbus_fact(self.conn.GetFact(id))
 
-    def add_fact(self, activity_name, tags = '', start_time = None, end_time = None,
-                                      category_name = None, description = None,
-                                      temporary = False):
-        """Add fact. activity name can use `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
+    def add_fact(self, fact):
+        """Add fact. activity name can use the
+        `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
         syntax, or params can be stated explicitly.
-        Params, except for the start and end times will take precedence over
-        derived values.
+        Params will take precedence over the derived values.
         start_time defaults to current moment.
         """
+        if not fact.activity:
+            return None
 
+        fact.start_time = fact.start_time or dt.datetime.now()
 
-        start_timestamp = start_time or 0
+        serialized = fact.serialized_name()
+
+        start_timestamp = fact.start_time or 0
         if start_timestamp:
-            start_timestamp = timegm(start_time.timetuple())
+            start_timestamp = timegm(fact.start_time.timetuple())
 
-        end_timestamp = end_time or 0
+        end_timestamp = fact.end_time or 0
         if end_timestamp:
-            end_timestamp = timegm(end_time.timetuple())
+            end_timestamp = timegm(fact.end_time.timetuple())
 
-        if isinstance(tags, list): #make sure we send what storage expects
-            tags = ", ".join(tags)
-        tags = tags or ''
-
-        category_name = category_name or ''
-        description = description or ''
-
-        new_id = self.conn.AddFact(activity_name, tags, start_timestamp, end_timestamp, category_name, description, temporary)
+        new_id = self.conn.AddFact(serialized,
+                                   start_timestamp,
+                                   end_timestamp,
+                                   fact.temporary)
 
         # TODO - the parsing should happen just once and preferably here
         # we should feed (serialized_activity, start_time, end_time) into AddFact and others
         if new_id:
-            checker.check_fact_based(activity_name, tags, start_time, end_time, category_name, description)
-
+            trophies.checker.check_fact_based(fact)
         return new_id
 
     def stop_tracking(self, end_time = None):
@@ -207,36 +206,27 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, activity_name, tags = None,
-                    start_time = None, end_time = None,
-                    category_name = None, description = None, temporary = False):
+    def update_fact(self, fact_id, fact):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
-        category_name = category_name or '' # so to override None
-        description = description or '' # so to override None
+        start_time = fact.start_time or 0
+        if fact.start_time:
+            start_time = timegm(fact.start_time.timetuple())
 
-        start_time = start_time or 0
-        if start_time:
-            start_time = timegm(start_time.timetuple())
+        end_time = fact.end_time or 0
+        if fact.end_time:
+            end_time = timegm(fact.end_time.timetuple())
 
-        end_time = end_time or 0
-        if end_time:
-            end_time = timegm(end_time.timetuple())
+        new_id =  self.conn.UpdateFact(fact_id,
+                                       fact.serialized_name(),
+                                       start_time,
+                                       end_time,
+                                       fact.temporary)
 
-        if tags and isinstance(tags, list):
-            tags = ", ".join(tags)
-        tags = tags or ''
-
-        new_id =  self.conn.UpdateFact(fact_id, activity_name, tags,
-                                       start_time, end_time,
-                                       category_name, description, temporary)
-
-        checker.check_update_based(fact_id, new_id, activity_name, tags,
-                                   start_time, end_time,
-                                   category_name, description)
+        trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id
 
 

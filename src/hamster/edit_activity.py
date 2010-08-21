@@ -190,40 +190,25 @@ class CustomFactController:
 
     def on_save_button_clicked(self, button):
         activity_name, temporary = self.new_name.get_value()
-        parsed = stuff.parse_activity_input(activity_name)
-
-        if not parsed.activity_name:
-            return False
-
-        # explicit takes precedence
-        description = self.figure_description()
-
-        tags = self.new_tags.get_text().decode('utf8')
-
-        start_time = self._get_datetime("start")
 
         if self.get_widget("in_progress").get_active():
             end_time = None
         else:
             end_time = self._get_datetime("end")
 
+        fact = stuff.Fact(activity_name,
+                          description = self.figure_description(),
+                          tags = self.new_tags.get_text().decode('utf8'),
+                          start_time = self._get_datetime("start"),
+                          end_time = end_time,
+                          temporary = temporary)
+        if not fact.activity:
+            return False
+
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id,
-                                        activity_name,
-                                        tags,
-                                        start_time,
-                                        end_time,
-                                        parsed.category_name,
-                                        description,
-                                        temporary = temporary)
+            runtime.storage.update_fact(self.fact_id, fact)
         else:
-            runtime.storage.add_fact(activity_name,
-                                     tags,
-                                     start_time,
-                                     end_time,
-                                     parsed.category_name,
-                                     description,
-                                     temporary = temporary)
+            runtime.storage.add_fact(fact)
 
         self.close_window()
 

@@ -246,75 +246,103 @@ def figure_time(str_time):
     return dt.datetime.now().replace(hour = hours, minute = minutes,
                                      second = 0, microsecond = 0)
 
-def parse_activity_input(text):
-    """Currently pretty braindead function that tries to parse arbitrary input
-    into a activity"""
-    class InputParseResult(object):
-        def __init__(self):
-            self.activity_name = None
-            self.category_name = None
-            self.start_time = None
-            self.end_time = None
-            self.description = None
-            self.tags = []
-            self.ponies = False
 
+class Fact(object):
+    def __init__(self, activity, category = "", description = "", tags = "",
+                 start_time = None, end_time = None, id = None,
+                 temporary = False):
+        """the category, description and tags can be either passed in explicitly
+        or by using the "activity@category, description #tag #tag" syntax.
+        explicitly stated values will take precedence over derived ones"""
+        self.original_activity = activity # unparsed version, mainly for trophies right now
+        self.activity = None
+        self.category = None
+        self.description = None
+        self.tags = None
+        self.start_time = None
+        self.end_time = None
+        self.temporary = temporary
+        self.id = id
+        self.ponies = False
 
-    res = InputParseResult()
+        # parse activity
+        input_parts = activity.strip().split(" ")
+        if len(input_parts) > 1 and re.match('^-?\d', input_parts[0]): #look for time only if there is more
+            potential_time = activity.split(" ")[0]
+            potential_end_time = None
+            if len(potential_time) > 1 and  potential_time.startswith("-"):
+                #if starts with minus, treat as minus delta minutes
+                self.start_time = dt.datetime.now() + dt.timedelta(minutes = int(potential_time))
 
-    input_parts = text.strip().split(" ")
-    if len(input_parts) > 1 and re.match('^-?\d', input_parts[0]): #look for time only if there is more
-        potential_time = text.split(" ")[0]
-        potential_end_time = None
-        if len(potential_time) > 1 and  potential_time.startswith("-"):
-            #if starts with minus, treat as minus delta minutes
-            res.start_time = dt.datetime.now() + dt.timedelta(minutes =
-                                                                int(potential_time))
-
-        else:
-            if potential_time.find("-") > 0:
-                potential_time, potential_end_time = potential_time.split("-", 2)
-                res.end_time = figure_time(potential_end_time)
-
-            res.start_time = figure_time(potential_time)
-
-        #remove parts that worked
-        if res.start_time and potential_end_time and not res.end_time:
-            res.start_time = None #scramble
-        elif res.start_time:
-            text = text[text.find(" ")+1:]
-
-    #see if we have description of activity somewhere here (delimited by comma)
-    if text.find(",") > 0:
-        text, res.description = text.split(",", 1)
-        res.description = res.description.strip()
-
-        # more of a hidden feature for copy and paste purposes
-        # tags are marked with hash sign and parsed only at the end of description
-        words = res.description.split(" ")
-        tags = []
-        for word in reversed(words):
-            if word.startswith("#"):
-                tags.append(word.strip("#,"))  #avoid commas
             else:
-                break
+                if potential_time.find("-") > 0:
+                    potential_time, potential_end_time = potential_time.split("-", 2)
+                    self.end_time = figure_time(potential_end_time)
 
-        if tags:
-            res.tags = tags
-            res.description = " ".join(res.description.split(" ")[:-len(tags)])
+                self.start_time = figure_time(potential_time)
+
+            #remove parts that worked
+            if self.start_time and potential_end_time and not self.end_time:
+                self.start_time = None #scramble
+            elif self.start_time:
+                activity = activity[activity.find(" ")+1:]
+
+        #see if we have description of activity somewhere here (delimited by comma)
+        if activity.find(",") > 0:
+            activity, self.description = activity.split(",", 1)
+            self.description = self.description.strip()
+
+            # tags are marked with hash sign and parsed only at the end of description
+            # stop looking for tags if we stumble upon a non tag
+            words = self.description.split(" ")
+            parsed_tags = []
+            for word in reversed(words):
+                if word.startswith("#"):
+                    parsed_tags.append(word.strip("#,"))  #avoid commas
+                else:
+                    break
+
+            if parsed_tags:
+                self.tags = parsed_tags
+                self.description = " ".join(self.description.split(" ")[:-len(self.tags)])
+
+        if activity.find("@") > 0:
+            activity, self.category = activity.split("@", 1)
+            self.category = self.category.strip()
+
+        #this is most essential
+        if any([b in activity for b in ("bbq", "barbeque", "barbecue")]) and "omg" in activity:
+            self.ponies = True
+            self.description = "[ponies = 1], [rainbows = 0]"
+
+        #only thing left now is the activity name itself
+        self.activity = activity.strip()
+
+        if tags and isinstance(tags, list):
+            tags = " ".join(tags)
+        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
+
+        # override implicit with explicit
+        self.category = category.replace("#", "").replace(",", "") or self.category or None
+        self.description = description.replace("#", "") or self.description or None
+        self.tags =  tags or self.tags or None
+        self.start_time = start_time or self.start_time or None
+        self.end_time = end_time or self.end_time or None
 
 
+    def serialized_name(self):
+        res = self.activity
 
-    if text.find("@") > 0:
-        text, res.category_name = text.split("@", 1)
-        res.category_name = res.category_name.strip()
+        if self.category:
+            res += "@%s" % self.category
 
-    #only thing left now is the activity name itself
-    res.activity_name = text.strip()
+        if self.description or self.tags:
+            res += ",%s %s" % (self.description or "",
+                               " ".join(["#%s" % tag for tag in self.tags]))
+        return res
 
-    #this is most essential
-    if any([b in text for b in ("bbq", "barbeque", "barbecue")]) and "omg" in text:
-        res.ponies = True
-        res.description = "[ponies = 1], [rainbows = 0]"
-
-    return res
+    def __str__(self):
+        time = self.start_time.strftime("%d %m %Y %H:%M")
+        if self.end_time:
+            time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
+        return "%s %s" % (time, self.serialized_name())

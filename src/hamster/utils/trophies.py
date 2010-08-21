@@ -80,7 +80,7 @@ class Checker(object):
         self.flags = {}
 
 
-    def check_update_based(self, prev_id, new_id, activity_name, tags, start_time, end_time, category_name, description):
+    def check_update_based(self, prev_id, new_id, fact):
         if not storage: return
 
         if not self.flags.get('last_update_id') or prev_id != self.flags['last_update_id']:
@@ -95,7 +95,7 @@ class Checker(object):
             unlock("all_wrong")
 
 
-    def check_fact_based(self, activity_name, tags, start_time, end_time, category_name, description):
+    def check_fact_based(self, fact):
         """quite possibly these all could be called from the service as
            there is bigger certainty as to what did actually happen"""
 
@@ -103,24 +103,18 @@ class Checker(object):
         if not storage: return
 
         # explicit over implicit
-        fact = stuff.parse_activity_input(activity_name)
-        if not fact.activity_name:  # TODO - parse_activity could return None for these cases
+        if not fact.activity:  # TODO - parse_activity could return None for these cases
             return
 
         # full plate - use all elements of syntax parsing
-        if all((fact.category_name, fact.description, fact.tags, fact.start_time, fact.end_time)):
+        derived_fact = stuff.Fact(fact.original_activity)
+        if all((derived_fact.category, derived_fact.description,
+                derived_fact.tags, derived_fact.start_time, derived_fact.end_time)):
             unlock("full_plate")
 
 
-        fact.tags = [tag.strip() for tag in tags.split(",") if tag.strip()] or fact.tags
-        fact.category_name = category_name or fact.category_name
-        fact.description = description or fact.description
-        fact.start_time = start_time or fact.start_time or dt.datetime.now()
-        fact.end_time = end_time or fact.end_time
-
-
         # Jumper - hidden - made 10 switches within an hour (radical)
-        if not fact.end_time: #end time normally denotes switch
+        if not fact.end_time: # end time normally denotes switch
             last_ten = self.flags.setdefault('last_ten_ongoing', [])
             last_ten.append(fact)
             last_ten = last_ten[-10:]
@@ -135,7 +129,7 @@ class Checker(object):
                 unlock("good_memory")
 
         # layering - entered 4 activities in a row in one of previous days, each one overlapping the previous one
-        #            avoiding today as in that case the layering
+        # avoiding today as in that case the layering might be automotical
         last_four = self.flags.setdefault('last_four', [])
         last_four.append(fact)
         last_four = last_four[-4:]
@@ -158,18 +152,18 @@ class Checker(object):
 
 
         # alpha bravo charlie – used delta times to enter at least 50 activities
-        if fact.start_time and activity_name.startswith("-"):
+        if fact.start_time and fact.original_activity.startswith("-"):
             counter = increment("hamster-applet", "alpha_bravo_charlie")
             if counter == 50:
                 unlock("alpha_bravo_charlie")
 
 
         # cryptic - hidden - used word shorter than 4 letters for the activity name
-        if len(fact.activity_name) < 4:
+        if len(fact.activity) < 4:
             unlock("cryptic")
 
         # madness – hidden – entered an activity in all caps
-        if fact.activity_name == fact.activity_name.upper():
+        if fact.activity == fact.activity.upper():
             unlock("madness")
 
         # verbose - hidden - description longer than 5 words
@@ -189,7 +183,7 @@ class Checker(object):
         #        patrys complains about who's gonna garbage collect. should think
         #        about this
         if not storage.check_achievement("hamster-applet", "ultra_focused"):
-            activity_count = increment("hamster-applet", "focused_%s@%s" % (fact.activity_name, fact.category_name or ""))
+            activity_count = increment("hamster-applet", "focused_%s@%s" % (fact.activity, fact.category or ""))
             # focused – 100 facts with single activity
             if activity_count == 100:
                 unlock("hamster-applet", "focused")

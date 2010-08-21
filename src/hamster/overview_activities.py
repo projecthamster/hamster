@@ -165,24 +165,18 @@ class OverviewBox(gtk.VBox):
         else:
             selected_date = fact["date"]
 
-        fact = stuff.parse_activity_input(text.decode("utf-8"))
+        fact = stuff.Fact(text.decode("utf-8"))
 
-        if not all((fact.activity_name, fact.start_time, fact.end_time)):
+        if not all((fact.activity, fact.start_time, fact.end_time)):
             return
 
-        start_time = fact.start_time.replace(year = selected_date.year,
-                                             month = selected_date.month,
-                                             day = selected_date.day)
-        end_time = fact.end_time.replace(year = selected_date.year,
-                                         month = selected_date.month,
-                                         day = selected_date.day)
-
-        new_id = runtime.storage.add_fact(fact.activity_name,
-                                          ", ".join(fact.tags),
-                                          start_time,
-                                          end_time,
-                                          fact.category_name,
-                                          fact.description)
+        fact.start_time = fact.start_time.replace(year = selected_date.year,
+                                                  month = selected_date.month,
+                                                  day = selected_date.day)
+        fact.end_time = fact.end_time.replace(year = selected_date.year,
+                                              month = selected_date.month,
+                                              day = selected_date.day)
+        new_id = runtime.storage.add_fact(fact)
 
         # You can do that?! - copy/pasted an activity
         trophies.unlock("can_do_that")

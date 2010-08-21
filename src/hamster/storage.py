@@ -104,10 +104,8 @@ class Storage(dbus.service.Object):
         self.ToggleCalled()
 
     # facts
-    @dbus.service.method("org.gnome.Hamster", in_signature='ssiissb', out_signature='i')
-    def AddFact(self, activity_name, tags, start_time, end_time,
-                category_name = None, description = None, temporary = False):
-
+    @dbus.service.method("org.gnome.Hamster", in_signature='siib', out_signature='i')
+    def AddFact(self, fact, start_time, end_time, temporary = False):
         start_time = start_time or None
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
@@ -117,7 +115,7 @@ class Storage(dbus.service.Object):
             end_time = dt.datetime.utcfromtimestamp(end_time)
 
         self.start_transaction()
-        result = self.__add_fact(activity_name, tags, start_time, end_time, category_name, description, temporary)
+        result = self.__add_fact(fact, start_time, end_time, temporary)
         self.end_transaction()
 
         if result:
@@ -135,10 +133,8 @@ class Storage(dbus.service.Object):
         return to_dbus_fact(fact)
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='issiissb', out_signature='i')
-    def UpdateFact(self, fact_id, activity_name, tags,
-                   start_time, end_time,
-                   category_name = None, description = None, temporary = False):
+    @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
+    def UpdateFact(self, fact_id, fact, start_time, end_time, temporary = False):
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
         else:
@@ -151,8 +147,7 @@ class Storage(dbus.service.Object):
 
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(activity_name, tags, start_time, end_time,
-                                 category_name, description, temporary)
+        result = self.__add_fact(fact, start_time, end_time, temporary)
 
         self.end_transaction()
 
