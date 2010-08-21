@@ -66,19 +66,19 @@ class ReportWriter(object):
     def write_report(self, facts):
         try:
             for fact in facts:
-                fact["name"]= fact["name"].encode('utf-8')
-                fact["description"] = (fact["description"] or u"").encode('utf-8')
-                fact["category"] = (fact["category"] or _("Unsorted")).encode('utf-8')
+                fact.activity= fact.activity.encode('utf-8')
+                fact.description = (fact.description or u"").encode('utf-8')
+                fact.category = (fact.category or _("Unsorted")).encode('utf-8')
 
                 if self.datetime_format:
-                    fact["start_time"] = fact["start_time"].strftime(self.datetime_format)
+                    fact.start_time = fact.start_time.strftime(self.datetime_format)
 
-                    if fact["end_time"]:
-                        fact["end_time"] = fact["end_time"].strftime(self.datetime_format)
+                    if fact.end_time:
+                        fact.end_time = fact.end_time.strftime(self.datetime_format)
                     else:
-                        fact["end_time"] = ""
+                        fact.end_time = ""
 
-                fact["tags"] = ", ".join(fact["tags"])
+                fact.tags = ", ".join(fact.tags)
 
                 self._write_fact(self.file, fact)
 
@@ -104,10 +104,10 @@ class ICalWriter(ReportWriter):
 
     def _write_fact(self, file, fact):
         #for now we will skip ongoing facts
-        if not fact["end_time"]: return
+        if not fact.end_time: return
 
-        if fact["category"] == _("Unsorted"):
-            fact["category"] = None
+        if fact.category == _("Unsorted"):
+            fact.category = None
 
         self.file.write("""BEGIN:VEVENT
 CATEGORIES:%(category)s
@@ -143,9 +143,13 @@ class TSVWriter(ReportWriter):
         self.csv_writer.writerow([h.encode('utf-8') for h in headers])
 
     def _write_fact(self, file, fact):
-        self.csv_writer.writerow([fact[key] for key in ["name", "start_time",
-                               "end_time", "delta", "category", "description",
-                               "tags"]])
+        self.csv_writer.writerow([fact.activity,
+                                  fact.start_time,
+                                  fact.end_time,
+                                  fact.delta,
+                                  fact.category,
+                                  fact.description,
+                                  fact.tags])
     def _finish(self, file, facts):
         pass
 
@@ -157,13 +161,13 @@ class XMLWriter(ReportWriter):
 
     def _write_fact(self, file, fact):
         activity = self.doc.createElement("activity")
-        activity.setAttribute("name", fact["name"])
-        activity.setAttribute("start_time", fact["start_time"])
-        activity.setAttribute("end_time", fact["end_time"])
-        activity.setAttribute("duration_minutes", stuff.duration_minutes(fact["delta"]))
-        activity.setAttribute("category", fact["category"])
-        activity.setAttribute("description", fact["description"])
-        activity.setAttribute("tags", fact["tags"])
+        activity.setAttribute("name", fact.activity)
+        activity.setAttribute("start_time", fact.start_time)
+        activity.setAttribute("end_time", fact.end_time)
+        activity.setAttribute("duration_minutes", str(stuff.duration_minutes(fact.delta)))
+        activity.setAttribute("category", fact.category)
+        activity.setAttribute("description", fact.description)
+        activity.setAttribute("tags", fact.tags)
         self.activity_list.appendChild(activity)
 
     def _finish(self, file, facts):
@@ -225,79 +229,79 @@ class HTMLWriter(ReportWriter):
     def _write_fact(self, report, fact):
         # no having end time is fine
         end_time_str, end_time_iso_str = "", ""
-        if fact["end_time"]:
-            end_time_str = fact["end_time"].strftime('%H:%M')
-            end_time_iso_str = fact["end_time"].isoformat()
+        if fact.end_time:
+            end_time_str = fact.end_time.strftime('%H:%M')
+            end_time_iso_str = fact.end_time.isoformat()
 
         category = ""
-        if fact["category"] != _("Unsorted"): #do not print "unsorted" in list
-            category = fact["category"]
+        if fact.category != _("Unsorted"): #do not print "unsorted" in list
+            category = fact.category
 
 
         data = dict(
-            date = fact["date"].strftime(
+            date = fact.date.strftime(
                    # date column format for each row in HTML report
                    # Using python datetime formatting syntax. See:
                    # http://docs.python.org/library/time.html#time.strftime
                    C_("html report","%b %d, %Y")),
-            date_iso = fact["date"].isoformat(),
-            activity = fact["name"],
+            date_iso = fact.date.isoformat(),
+            activity = fact.activity,
             category = category,
-            tags = fact["tags"],
-            start = fact["start_time"].strftime('%H:%M'),
-            start_iso = fact["start_time"].isoformat(),
+            tags = fact.tags,
+            start = fact.start_time.strftime('%H:%M'),
+            start_iso = fact.start_time.isoformat(),
             end = end_time_str,
             end_iso = end_time_iso_str,
-            duration = stuff.format_duration(fact["delta"]) or "",
-            duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
-            duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
-            description = fact["description"] or ""
+            duration = stuff.format_duration(fact.delta) or "",
+            duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
+            duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
+            description = fact.description or ""
         )
         self.fact_rows.append(Template(self.fact_row_template).safe_substitute(data))
 
 
     def _finish(self, report, facts):
         # group by date
-        name_category = lambda fact: (fact['category'], fact['name'])
+        name_category = lambda fact: (fact.category, fact.activity)
 
         by_date = []
-        for date, date_facts in itertools.groupby(facts, lambda fact:fact['date']):
+        for date, date_facts in itertools.groupby(facts, lambda fact:fact.date):
             by_name = sorted(date_facts, key=name_category)
 
             by_date_rows = []
             for (category, activity), ac_facts in itertools.groupby(by_name, name_category):
                 duration = dt.timedelta()
                 for fact in ac_facts:
-                    duration += fact['delta']
+                    duration += fact.delta
 
 
                 by_date_rows.append(Template(self.by_date_row_template).safe_substitute(
                                     dict(activity = activity,
                                          category = category,
                                          duration = stuff.format_duration(duration),
-                                         duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
-                                         duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
+                                         duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
+                                         duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
                                         )
                                     ))
 
             by_date_total_rows = []
-            for category, c_facts in itertools.groupby(by_name, lambda fact:fact['category']):
+            for category, c_facts in itertools.groupby(by_name, lambda fact:fact.category):
                 duration = dt.timedelta()
                 for fact in c_facts:
-                    duration += fact['delta']
+                    duration += fact.delta
 
 
                 by_date_total_rows.append(Template(self.by_date_total_row_template).safe_substitute(
                                           dict(category = category,
                                                duration = stuff.format_duration(duration),
-                                               duration_minutes = "%d" % (stuff.duration_minutes(fact["delta"])),
-                                               duration_decimal = "%.2f" % (stuff.duration_minutes(fact["delta"]) / 60.0),
+                                               duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
+                                               duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
                                               )
                                           ))
 
 
             res = Template(self.by_date_template).safe_substitute(
-                           dict(date = fact["date"].strftime(
+                           dict(date = fact.date.strftime(
                                        # date column format for each row in HTML report
                                        # Using python datetime formatting syntax. See:
                                        # http://docs.python.org/library/time.html#time.strftime

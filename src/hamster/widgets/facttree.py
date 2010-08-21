@@ -67,14 +67,14 @@ class GroupRow(object):
 class FactRow(object):
     def __init__(self, fact):
         self.fact = fact
-        self.id = fact['id']
-        self.name = fact['name']
-        self.category = fact['category']
-        self.description = fact['description']
-        self.tags = fact['tags']
-        self.start_time = fact['start_time']
-        self.end_time = fact['end_time']
-        self.delta = fact['delta']
+        self.id = fact.id
+        self.name = fact.activity
+        self.category = fact.category
+        self.description = fact.description
+        self.tags = fact.tags
+        self.start_time = fact.start_time
+        self.end_time = fact.end_time
+        self.delta = fact.delta
 
     def __eq__(self, other):
         return isinstance(other, FactRow) and other.id == self.id \
@@ -183,7 +183,7 @@ class FactTree(gtk.TreeView):
 
 
     def add_group(self, group_label, group_date, facts):
-        total_duration = stuff.duration_minutes([fact["delta"] for fact in facts])
+        total_duration = stuff.duration_minutes([fact.delta for fact in facts])
 
         self.new_rows.append(GroupRow(group_label, group_date, total_duration))
 

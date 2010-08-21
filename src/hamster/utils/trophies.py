@@ -53,24 +53,24 @@ def check_ongoing(todays_facts):
     last_activity = None
     if todays_facts[-1]['end_time'] is None:
         last_activity = todays_facts[-1]
-        last_activity['delta'] = dt.datetime.now() - last_activity['start_time']
+        last_activity.delta = dt.datetime.now() - last_activity.start_time
 
     # overwhelmed: tracking for more than 16 hours during one day
-    total = stuff.duration_minutes([fact['delta'] for fact in todays_facts])
+    total = stuff.duration_minutes([fact.delta for fact in todays_facts])
     if total > 16 * 60:
         unlock("overwhelmed")
 
     if last_activity:
         # Welcome! – track an activity for 10 minutes
-        if last_activity['delta'] >= dt.timedelta(minutes = 10):
+        if last_activity.delta >= dt.timedelta(minutes = 10):
             unlock("welcome")
 
         # in_the_zone - spend 6 hours non-stop on an activity
-        if last_activity['delta'] > dt.timedelta(hours = 6):
+        if last_activity.delta > dt.timedelta(hours = 6):
             unlock("in_the_zone")
 
         # insomnia - meet the new day while tracking an activity
-        if last_activity['start_time'].date() != dt.date.today():
+        if last_activity.start_time.date() != dt.date.today():
             unlock("insomnia")
 
 

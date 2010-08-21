@@ -291,12 +291,12 @@ class HamsterApplet(object):
 
 
     def update_label(self):
-        if self.last_activity and self.last_activity['end_time'] is None:
-            delta = dt.datetime.now() - self.last_activity['start_time']
+        if self.last_activity and self.last_activity.end_time is None:
+            delta = dt.datetime.now() - self.last_activity.start_time
             duration = delta.seconds /  60
-            label = "%s %s" % (self.last_activity['name'],
+            label = "%s %s" % (self.last_activity.activity,
                                stuff.format_duration(duration, False))
-            self.button.set_text(self.last_activity['name'],
+            self.button.set_text(self.last_activity.activity,
                                  stuff.format_duration(duration, False))
         else:
             label = "%s" % _(u"No activity")
@@ -313,11 +313,11 @@ class HamsterApplet(object):
         now = dt.datetime.now()
         message = None
         if self.last_activity:
-            delta = now - self.last_activity['start_time']
+            delta = now - self.last_activity.start_time
             duration = delta.seconds /  60
 
             if duration and duration % self.notify_interval == 0:
-                message = self.last_activity['name']
+                message = self.last_activity.activity
 
         elif self.notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
@@ -336,7 +336,7 @@ class HamsterApplet(object):
 
         facts = self.todays_facts = runtime.storage.get_todays_facts()
 
-        if facts and facts[-1]["end_time"] == None:
+        if facts and facts[-1].end_time == None:
             self.last_activity = facts[-1]
         else:
             self.last_activity = None
@@ -355,9 +355,9 @@ class HamsterApplet(object):
 
             by_category = {}
             for fact in facts:
-                duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
-                by_category[fact['category']] = \
-                              by_category.setdefault(fact['category'], 0) + duration
+                duration = 24 * 60 * fact.delta.days + fact.delta.seconds / 60
+                by_category[fact.category] = \
+                              by_category.setdefault(fact.category, 0) + duration
                 self.treeview.add_fact(fact)
 
             self.treeview.attach_model()
@@ -393,20 +393,20 @@ class HamsterApplet(object):
             self.get_widget("switch_activity").show()
             self.get_widget("start_tracking").hide()
 
-            delta = dt.datetime.now() - activity['start_time']
+            delta = dt.datetime.now() - activity.start_time
             duration = delta.seconds /  60
 
-            if activity['category'] != _("Unsorted"):
-                self.get_widget("last_activity_name").set_text("%s - %s" % (activity['name'], activity['category']))
+            if activity.category != _("Unsorted"):
+                self.get_widget("last_activity_name").set_text("%s - %s" % (activity.activity, activity.category))
             else:
-                self.get_widget("last_activity_name").set_text(activity['name'])
+                self.get_widget("last_activity_name").set_text(activity.activity)
 
 
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
-            self.get_widget("last_activity_description").set_text(activity['description'] or "")
+            self.get_widget("last_activity_description").set_text(activity.description or "")
             self.get_widget("activity_info_box").show()
 
-            self.tag_box.draw(activity["tags"])
+            self.tag_box.draw(activity.tags)
         else:
             self.get_widget("switch_activity").hide()
             self.get_widget("start_tracking").show()
@@ -419,7 +419,7 @@ class HamsterApplet(object):
 
     def delete_selected(self):
         fact = self.treeview.get_selected_fact()
-        runtime.storage.remove_fact(fact["id"])
+        runtime.storage.remove_fact(fact.id)
 
     def __show_toggle(self, is_active):
         """main window display and positioning"""
@@ -504,14 +504,14 @@ class HamsterApplet(object):
 
     def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
-        dialogs.edit.show(self.applet, fact_id = fact["id"])
+        dialogs.edit.show(self.applet, fact_id = fact.id)
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
-        fact = stuff.Fact(fact["name"],
-                    tags = ", ".join(fact["tags"]),
-                    category = fact["category"],
-                    description = fact["description"])
+        fact = stuff.Fact(fact.activity,
+                    tags = ", ".join(fact.tags),
+                    category = fact.category,
+                    description = fact.description)
 
         if fact.activity:
             runtime.storage.add_fact(fact)
@@ -565,7 +565,7 @@ class HamsterApplet(object):
         if state == 0:
             self.refresh_hamster()
         elif self.timeout_enabled and self.last_activity and \
-             self.last_activity['end_time'] is None:
+             self.last_activity.end_time is None:
 
             runtime.storage.stop_tracking(self.dbusIdleListener.getIdleFrom())
 
@@ -607,8 +607,8 @@ class HamsterApplet(object):
                                                                     ressurect = False)
                     if activity:
                         # we need dict below
-                        activity = dict(name = activity['name'],
-                                        category = activity['category'],
+                        activity = dict(name = activity.activity,
+                                        category = activity.category,
                                         description = fact.description,
                                         tags = fact.tags)
 
@@ -625,21 +625,21 @@ class HamsterApplet(object):
 
         # check if maybe there is no need to switch, as field match:
         if self.last_activity and \
-           self.last_activity['name'].lower() == activity['name'].lower() and \
-           (self.last_activity['category'] or "").lower() == (activity['category'] or "").lower() and \
-           ", ".join(self.last_activity['tags']).lower() == ", ".join(activity['tags']).lower():
+           self.last_activity.activity.lower() == activity.activity.lower() and \
+           (self.last_activity.category or "").lower() == (activity.category or "").lower() and \
+           ", ".join(self.last_activity.tags).lower() == ", ".join(activity.tags).lower():
             return
 
         # ok, switch
-        fact = stuff.Fact(activity['name'],
-                          tags = ", ".join(activity['tags']),
-                          category = activity['category'],
-                          description = activity['description']);
+        fact = stuff.Fact(activity.activity,
+                          tags = ", ".join(activity.tags),
+                          category = activity.category,
+                          description = activity.description);
         runtime.storage.add_fact(fact)
 
         if self.notification:
             self.notification.update(_("Changed activity"),
-                                     _("Switched to '%s'") % activity['name'],
+                                     _("Switched to '%s'") % activity.activity,
                                      "hamster-applet")
             self.notification.show()
 

@@ -249,8 +249,8 @@ def figure_time(str_time):
 
 class Fact(object):
     def __init__(self, activity, category = "", description = "", tags = "",
-                 start_time = None, end_time = None, id = None,
-                 temporary = False):
+                 start_time = None, end_time = None, id = None, delta = None,
+                 date = None, activity_id = None):
         """the category, description and tags can be either passed in explicitly
         or by using the "activity@category, description #tag #tag" syntax.
         explicitly stated values will take precedence over derived ones"""
@@ -258,12 +258,14 @@ class Fact(object):
         self.activity = None
         self.category = None
         self.description = None
-        self.tags = None
+        self.tags = []
         self.start_time = None
         self.end_time = None
-        self.temporary = temporary
         self.id = id
         self.ponies = False
+        self.delta = delta
+        self.date = date
+        self.activity_id = activity_id
 
         # parse activity
         input_parts = activity.strip().split(" ")
@@ -318,14 +320,16 @@ class Fact(object):
         #only thing left now is the activity name itself
         self.activity = activity.strip()
 
+        tags = tags or ""
         if tags and isinstance(tags, list):
             tags = " ".join(tags)
+
         tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
 
         # override implicit with explicit
         self.category = category.replace("#", "").replace(",", "") or self.category or None
-        self.description = description.replace("#", "") or self.description or None
-        self.tags =  tags or self.tags or None
+        self.description = (description or "").replace("#", "") or self.description or None
+        self.tags =  tags or self.tags or []
         self.start_time = start_time or self.start_time or None
         self.end_time = end_time or self.end_time or None
 
@@ -342,7 +346,9 @@ class Fact(object):
         return res
 
     def __str__(self):
-        time = self.start_time.strftime("%d %m %Y %H:%M")
+        time = ""
+        if self.start_time:
+            self.start_time.strftime("%d-%m-%Y %H:%M")
         if self.end_time:
             time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
         return "%s %s" % (time, self.serialized_name())

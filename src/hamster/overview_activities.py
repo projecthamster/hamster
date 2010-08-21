@@ -76,7 +76,7 @@ class OverviewBox(gtk.VBox):
             dates[self.start_date + dt.timedelta(i)] = []
 
         #update with facts for the day
-        for date, facts in groupby(self.facts, lambda fact: fact["date"]):
+        for date, facts in groupby(self.facts, lambda fact: fact.date):
             dates[date] = list(facts)
 
 
@@ -104,16 +104,16 @@ class OverviewBox(gtk.VBox):
         if isinstance(fact, dt.date):
             return # heading
 
-        fact_str = "%s-%s %s" % (fact["start_time"].strftime("%H:%M"),
-                               (fact["end_time"] or dt.datetime.now()).strftime("%H:%M"),
+        fact_str = "%s-%s %s" % (fact.start_time.strftime("%H:%M"),
+                               (fact.end_time or dt.datetime.now()).strftime("%H:%M"),
                                fact["name"])
 
-        if fact["category"]:
-            fact_str += "@%s" % fact["category"]
+        if fact.category:
+            fact_str += "@%s" % fact.category
 
-        if fact["description"] or fact["tags"]:
-            tag_str = " ".join("#%s" % tag for tag in fact["tags"])
-            fact_str += ", %s" % ("%s %s" % (fact["description"] or "", tag_str)).strip()
+        if fact.description or fact.tags:
+            tag_str = " ".join("#%s" % tag for tag in fact.tags)
+            fact_str += ", %s" % ("%s %s" % (fact.description or "", tag_str)).strip()
 
         clipboard = gtk.Clipboard()
         clipboard.set_text(fact_str)
@@ -163,7 +163,7 @@ class OverviewBox(gtk.VBox):
         if isinstance(fact, dt.date):
             selected_date = fact
         else:
-            selected_date = fact["date"]
+            selected_date = fact.date
 
         fact = stuff.Fact(text.decode("utf-8"))
 

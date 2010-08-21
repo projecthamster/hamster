@@ -145,19 +145,21 @@ class TotalsBox(gtk.VBox):
         category_sums, activity_sums, tag_sums = defaultdict(dt.timedelta), defaultdict(dt.timedelta), defaultdict(dt.timedelta),
 
         for fact in facts:
-            if self.selected_categories and fact["category"] not in self.selected_categories:
+            if self.selected_categories and fact.category not in self.selected_categories:
                 continue
-            if self.selected_activities and fact["name"] not in self.selected_activities:
+            if self.selected_activities and fact.activity not in self.selected_activities:
                 continue
-            if self.selected_tags and len(set(self.selected_tags) - set(fact["tags"])) > 0:
+            if self.selected_tags and len(set(self.selected_tags) - set(fact.tags)) > 0:
                 continue
 
-            category_sums[fact["category"]] += fact["delta"]
-            activity_sums[fact["name"]] += fact["delta"]
-            for tag in fact["tags"]:
-                tag_sums[tag] += fact["delta"]
+            category_sums[fact.category] += fact.delta
+            activity_sums[fact.activity] += fact.delta
 
-        total_label = _("%s hours tracked total") % locale.format("%.1f", stuff.duration_minutes([fact["delta"] for fact in facts]) / 60.0)
+            print fact.activity, fact.tags
+            for tag in fact.tags:
+                tag_sums[tag] += fact.delta
+
+        total_label = _("%s hours tracked total") % locale.format("%.1f", stuff.duration_minutes([fact.delta for fact in facts]) / 60.0)
         self.get_widget("total_hours").set_text(total_label)
 
 

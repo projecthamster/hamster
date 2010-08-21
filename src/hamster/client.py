@@ -29,19 +29,18 @@ from utils import stuff, trophies
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
-    return dict(id = fact[0],
-                start_time  = dt.datetime.utcfromtimestamp(fact[1]),
-                end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
-                description = fact[3],
-                name = fact[4],
-                activity_id = fact[5],
-                category = fact[6],
-                tags = fact[7],
-                date = dt.datetime.utcfromtimestamp(fact[8]).date(),
-                delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
-                                     seconds = fact[9] % (24 * 60 * 60))
-               )
-
+    return stuff.Fact(fact[4],
+                      start_time  = dt.datetime.utcfromtimestamp(fact[1]),
+                      end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
+                      description = fact[3],
+                      activity_id = fact[5],
+                      category = fact[6],
+                      tags = fact[7],
+                      date = dt.datetime.utcfromtimestamp(fact[8]).date(),
+                      delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
+                                           seconds = fact[9] % (24 * 60 * 60)),
+            id = fact[0]
+            )
 
 class Storage(gobject.GObject):
     """Hamster client class, communicating to hamster storage daemon via d-bus.
@@ -163,7 +162,7 @@ class Storage(gobject.GObject):
         """returns fact by it's ID"""
         return from_dbus_fact(self.conn.GetFact(id))
 
-    def add_fact(self, fact, temporary_activity):
+    def add_fact(self, fact, temporary_activity = False):
         """Add fact. activity name can use the
         `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
         syntax, or params can be stated explicitly.
@@ -173,17 +172,18 @@ class Storage(gobject.GObject):
         if not fact.activity:
             return None
 
-        fact.start_time = fact.start_time or dt.datetime.now()
-
         serialized = fact.serialized_name()
 
-        start_timestamp = fact.start_time or 0
-        if start_timestamp:
-            start_timestamp = timegm(fact.start_time.timetuple())
+        start_timestamp = timegm((fact.start_time or dt.datetime.now()).timetuple())
 
         end_timestamp = fact.end_time or 0
         if end_timestamp:
-            end_timestamp = timegm(fact.end_time.timetuple())
+            end_timestamp = timegm(end_timestamp.timetuple())
+
+        print serialized
+        print start_timestamp
+        print end_timestamp
+        print temporary_activity
 
         new_id = self.conn.AddFact(serialized,
                                    start_timestamp,
@@ -206,19 +206,17 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact, temporary_activity):
+    def update_fact(self, fact_id, fact, temporary_activity = False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
-        start_time = fact.start_time or 0
-        if fact.start_time:
-            start_time = timegm(fact.start_time.timetuple())
+        start_time = timegm((fact.start_time or dt.datetime.now()).timetuple())
 
         end_time = fact.end_time or 0
-        if fact.end_time:
-            end_time = timegm(fact.end_time.timetuple())
+        if end_time:
+            end_time = timegm(end_time.timetuple())
 
         new_id =  self.conn.UpdateFact(fact_id,
                                        fact.serialized_name(),

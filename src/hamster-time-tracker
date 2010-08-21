@@ -158,11 +158,11 @@ class ProjectHamster(object):
         now = dt.datetime.now()
         message = None
         if self.last_activity:
-            delta = now - self.last_activity['start_time']
+            delta = now - self.last_activity.start_time
             duration = delta.seconds /  60
 
             if duration and duration % self.notify_interval == 0:
-                message = _(u"Working on <b>%s</b>") % self.last_activity['name']
+                message = _(u"Working on <b>%s</b>") % self.last_activity.name
 
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
 
@@ -184,16 +184,16 @@ class ProjectHamster(object):
 
         self.treeview.detach_model()
 
-        if facts and facts[-1]["end_time"] == None:
+        if facts and facts[-1].end_time == None:
             self.last_activity = facts[-1]
         else:
             self.last_activity = None
 
         by_category = {}
         for fact in facts:
-            duration = 24 * 60 * fact["delta"].days + fact["delta"].seconds / 60
-            by_category[fact['category']] = \
-                          by_category.setdefault(fact['category'], 0) + duration
+            duration = 24 * 60 * fact.delta.days + fact.delta.seconds / 60
+            by_category[fact.category] = \
+                          by_category.setdefault(fact.category, 0) + duration
             self.treeview.add_fact(fact)
 
         self.treeview.attach_model()
@@ -216,19 +216,19 @@ class ProjectHamster(object):
             self.get_widget("switch_activity").show()
             self.get_widget("start_tracking").hide()
 
-            delta = dt.datetime.now() - activity['start_time']
+            delta = dt.datetime.now() - activity.start_time
             duration = delta.seconds /  60
 
-            if activity['category'] != _("Unsorted"):
-                self.get_widget("last_activity_name").set_text("%s - %s" % (activity['name'], activity['category']))
+            if activity.category != _("Unsorted"):
+                self.get_widget("last_activity_name").set_text("%s - %s" % (activity.activity, activity.category))
             else:
-                self.get_widget("last_activity_name").set_text(activity['name'])
+                self.get_widget("last_activity_name").set_text(activity.activity)
 
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
-            self.get_widget("last_activity_description").set_text(activity['description'] or "")
+            self.get_widget("last_activity_description").set_text(activity.description or "")
             self.get_widget("activity_info_box").show()
 
-            self.tag_box.draw(activity["tags"])
+            self.tag_box.draw(activity.tags)
         else:
             self.get_widget("switch_activity").hide()
             self.get_widget("start_tracking").show()
@@ -259,10 +259,10 @@ class ProjectHamster(object):
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
-        fact = stuff.Fact(fact["name"],
-                    tags = ", ".join(fact["tags"]),
-                    category = fact["category"],
-                    description = fact["description"])
+        fact = stuff.Fact(fact.activity,
+                          category = fact.category,
+                          description = fact.description,
+                          tags = ", ".join(fact.tags))
         if fact.activity:
             runtime.storage.add_fact(fact)
 
@@ -299,7 +299,7 @@ class ProjectHamster(object):
         if state == 0:
             self.refresh_hamster()
         elif self.timeout_enabled and self.last_activity and \
-             self.last_activity['end_time'] is None:
+             self.last_activity.end_time is None:
 
             runtime.storage.stop_tracking(end_time = self.dbusIdleListener.getIdleFrom())
 
@@ -342,8 +342,8 @@ class ProjectHamster(object):
                                                                     ressurect = False)
                     if activity:
                         # we need dict below
-                        activity = dict(name = activity['name'],
-                                        category = activity['category'],
+                        activity = dict(name = activity.name,
+                                        category = activity.category,
                                         description = fact.description,
                                         tags = fact.tags)
 
@@ -360,21 +360,21 @@ class ProjectHamster(object):
 
         # check if maybe there is no need to switch, as field match:
         if self.last_activity and \
-           self.last_activity['name'].lower() == activity['name'].lower() and \
-           (self.last_activity['category'] or "").lower() == (activity['category'] or "").lower() and \
+           self.last_activity.name.lower() == activity.name.lower() and \
+           (self.last_activity.category or "").lower() == (activity.category or "").lower() and \
            ", ".join(self.last_activity['tags']).lower() == ", ".join(activity['tags']).lower():
             return
 
         # ok, switch
-        fact = stuff.Fact(activity['name'],
+        fact = stuff.Fact(activity.name,
                           tags = ", ".join(activity['tags']),
-                          category = activity['category'],
-                          description = activity['description']);
+                          category = activity.category,
+                          description = activity.description);
         runtime.storage.add_fact(fact)
 
         if self.notification:
             self.notification.update(_("Changed activity"),
-                                     _("Switched to '%s'") % activity['name'],
+                                     _("Switched to '%s'") % activity.name,
                                      "hamster-applet")
             self.notification.show()
 

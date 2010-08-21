@@ -50,20 +50,20 @@ class CustomFactController:
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
 
-            label = fact['name']
-            if fact['category'] != _("Unsorted"):
-                label += "@%s" %  fact['category']
+            label = fact.activity
+            if fact.category != _("Unsorted"):
+                label += "@%s" %  fact.category
 
             self.new_name.set_text(label)
 
-            self.new_tags.set_text(", ".join(fact['tags']))
+            self.new_tags.set_text(", ".join(fact.tags))
 
 
-            start_date = fact["start_time"]
-            end_date = fact["end_time"]
+            start_date = fact.start_time
+            end_date = fact.end_time
 
             buf = gtk.TextBuffer()
-            buf.set_text(fact["description"] or "")
+            buf.set_text(fact.description or "")
             self.get_widget('description').set_buffer(buf)
 
             self.get_widget("save_button").set_label("gtk-save")
@@ -78,8 +78,8 @@ class CustomFactController:
                 fact_date = dt.date.today()
 
             last_activity = runtime.storage.get_facts(fact_date)
-            if last_activity and last_activity[-1]["end_time"]:
-                start_date = last_activity[-1]["end_time"]
+            if last_activity and last_activity[-1].end_time:
+                start_date = last_activity[-1].end_time
 
                 if fact_date != dt.date.today():
                     end_date = start_date + dt.timedelta(minutes=30)

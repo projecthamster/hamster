@@ -155,7 +155,7 @@ class Overview(object):
 
         self.range_pick.set_range(self.start_date, self.end_date, self.view_date)
 
-        durations = [(fact["start_time"], fact["delta"]) for fact in self.facts]
+        durations = [(fact.start_time, fact.delta) for fact in self.facts]
         self.timechart.draw(durations, self.start_date, self.end_date)
 
         if self.get_widget("window_tabs").get_current_page() == 0:

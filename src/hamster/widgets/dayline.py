@@ -137,11 +137,11 @@ class DayLine(graphics.Scene):
             fact_bar = graphics.Rectangle(0, 0, fill = "#aaa", stroke="#aaa") # dimensions will depend on screen situation
             fact_bar.fact = fact
 
-            if fact['category'] in self.categories:
-                fact_bar.category = self.categories.index(fact['category'])
+            if fact.category in self.categories:
+                fact_bar.category = self.categories.index(fact.category)
             else:
                 fact_bar.category = len(self.categories)
-                self.categories.append(fact['category'])
+                self.categories.append(fact.category)
 
             self.plot_area.add_child(fact_bar)
             self.fact_bars.append(fact_bar)
@@ -189,8 +189,8 @@ class DayLine(graphics.Scene):
 
         end_time = None
         if self.fact_bars:
-            times = [bar.fact['start_time'] for bar in self.fact_bars if bar.fact['start_time'] - start_time > dt.timedelta(minutes=5)]
-            times.extend([bar.fact['start_time'] + bar.fact['delta'] for bar in self.fact_bars if bar.fact['start_time'] + bar.fact['delta'] - start_time  > dt.timedelta(minutes=5)])
+            times = [bar.fact.start_time for bar in self.fact_bars if bar.fact.start_time - start_time > dt.timedelta(minutes=5)]
+            times.extend([bar.fact.start_time + bar.fact.delta for bar in self.fact_bars if bar.fact.start_time + bar.fact.delta - start_time  > dt.timedelta(minutes=5)])
             if times:
                 end_time = min(times)
 
@@ -215,7 +215,7 @@ class DayLine(graphics.Scene):
                     break
 
             if active_bar:
-                self.set_tooltip_text("%s - %s" % (active_bar.fact['name'], active_bar.fact['category']))
+                self.set_tooltip_text("%s - %s" % (active_bar.fact.activity, active_bar.fact.category))
             else:
                 self.set_tooltip_text("")
 
@@ -247,17 +247,17 @@ class DayLine(graphics.Scene):
             bar.y = vertical * bar.category + 5
             bar.height = vertical
 
-            bar_start_time = bar.fact['start_time'] - self.view_time
+            bar_start_time = bar.fact.start_time - self.view_time
             minutes = bar_start_time.seconds / 60 + bar_start_time.days * self.scope_hours  * 60
 
             bar.x = round(minutes / minute_pixel) + 0.5
-            bar.width = round((bar.fact['delta']).seconds / 60 / minute_pixel)
+            bar.width = round((bar.fact.delta).seconds / 60 / minute_pixel)
 
             if not snap_points or bar.x - snap_points[-1][0] > 1:
-                snap_points.append((bar.x, bar.fact['start_time']))
+                snap_points.append((bar.x, bar.fact.start_time))
 
             if not snap_points or bar.x + bar.width - snap_points[-1][0] > 1:
-                snap_points.append((bar.x + bar.width, bar.fact['start_time'] + bar.fact['delta']))
+                snap_points.append((bar.x + bar.width, bar.fact.start_time + bar.fact.delta))
 
         self.snap_points = snap_points
 

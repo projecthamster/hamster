@@ -70,7 +70,7 @@ class HamsterItem(DockManagerItem):
             fact = today[-1]
 
             self.set_tooltip("%(name)s - %(category)s" % fact)
-            self.set_badge(stuff.format_duration(fact['delta'], human=False))
+            self.set_badge(stuff.format_duration(fact.delta, human=False))
         else:
             self.set_tooltip(_("No activity"))
             self.reset_badge()

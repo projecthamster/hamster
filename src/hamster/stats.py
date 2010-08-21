@@ -73,11 +73,11 @@ class Stats(object):
     def init_stats(self):
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 2), dt.date.today())
 
-        if not self.stat_facts or self.stat_facts[-1]["start_time"].year == self.stat_facts[0]["start_time"].year:
+        if not self.stat_facts or self.stat_facts[-1].start_time.year == self.stat_facts[0].start_time.year:
             self.get_widget("explore_controls").hide()
         else:
             by_year = stuff.totals(self.stat_facts,
-                                   lambda fact: fact["start_time"].year,
+                                   lambda fact: fact.start_time.year,
                                    lambda fact: 1)
 
             year_box = self.get_widget("year_box")
@@ -154,10 +154,10 @@ class Stats(object):
     def stats(self, year = None):
         facts = self.stat_facts
         if year:
-            facts = filter(lambda fact: fact["start_time"].year == year,
+            facts = filter(lambda fact: fact.start_time.year == year,
                            facts)
 
-        if not facts or (facts[-1]["start_time"] - facts[0]["start_time"]) < dt.timedelta(days=6):
+        if not facts or (facts[-1].start_time - facts[0].start_time) < dt.timedelta(days=6):
             self.get_widget("statistics_box").hide()
             #self.get_widget("explore_controls").hide()
             label = self.get_widget("not_enough_records_label")
@@ -176,23 +176,23 @@ A week of usage would be nice!"""))
             self.get_widget("not_enough_records_label").hide()
 
         # All dates in the scope
-        durations = [(fact["start_time"], fact["delta"]) for fact in facts]
-        self.timechart.draw(durations, facts[0]["date"], facts[-1]["date"])
+        durations = [(fact.start_time, fact.delta) for fact in facts]
+        self.timechart.draw(durations, facts[0].date, facts[-1].date)
 
 
         # Totals by category
         categories = stuff.totals(facts,
-                                  lambda fact: fact["category"],
-                                  lambda fact: fact['delta'].seconds / 60 / 60.0)
+                                  lambda fact: fact.category,
+                                  lambda fact: fact.delta.seconds / 60 / 60.0)
         category_keys = sorted(categories.keys())
         categories = [categories[key] for key in category_keys]
         self.chart_category_totals.plot(category_keys, categories)
 
         # Totals by weekday
         weekdays = stuff.totals(facts,
-                                lambda fact: (fact["start_time"].weekday(),
-                                              fact["start_time"].strftime("%a")),
-                                lambda fact: fact['delta'].seconds / 60 / 60.0)
+                                lambda fact: (fact.start_time.weekday(),
+                                              fact.start_time.strftime("%a")),
+                                lambda fact: fact.delta.seconds / 60 / 60.0)
 
         weekday_keys = sorted(weekdays.keys(), key = lambda x: x[0]) #sort
         weekdays = [weekdays[key] for key in weekday_keys] #get values in the order
@@ -204,18 +204,18 @@ A week of usage would be nice!"""))
 
         # starts and ends by weekday
         by_weekday = {}
-        for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
+        for date, date_facts in groupby(facts, lambda fact: fact.start_time.date()):
             date_facts = list(date_facts)
-            weekday = (date_facts[0]["start_time"].weekday(),
-                       date_facts[0]["start_time"].strftime("%a"))
+            weekday = (date_facts[0].start_time.weekday(),
+                       date_facts[0].start_time.strftime("%a"))
             by_weekday.setdefault(weekday, [])
 
             start_times, end_times = [], []
             for fact in date_facts:
-                start_time = fact["start_time"].time()
+                start_time = fact.start_time.time()
                 start_time = start_time.hour * 60 + start_time.minute
-                if fact["end_time"]:
-                    end_time = fact["end_time"].time()
+                if fact.end_time:
+                    end_time = fact.end_time.time()
                     end_time = end_time.hour * 60 + end_time.minute
 
                     if start_time < split_minutes:
@@ -257,19 +257,19 @@ A week of usage would be nice!"""))
 
         # starts and ends by category
         by_category = {}
-        for date, date_facts in groupby(facts, lambda fact: fact["start_time"].date()):
-            date_facts = sorted(list(date_facts), key = lambda x: x["category"])
+        for date, date_facts in groupby(facts, lambda fact: fact.start_time.date()):
+            date_facts = sorted(list(date_facts), key = lambda x: x.category)
 
-            for category, category_facts in groupby(date_facts, lambda x: x["category"]):
+            for category, category_facts in groupby(date_facts, lambda x: x.category):
                 category_facts = list(category_facts)
                 by_category.setdefault(category, [])
 
                 start_times, end_times = [], []
                 for fact in category_facts:
-                    start_time = fact["start_time"]
+                    start_time = fact.start_time
                     start_time = start_time.hour * 60 + start_time.minute
-                    if fact["end_time"]:
-                        end_time = fact["end_time"].time()
+                    if fact.end_time:
+                        end_time = fact.end_time.time()
                         end_time = end_time.hour * 60 + end_time.minute
 
                         if start_time < split_minutes:
@@ -317,12 +317,12 @@ A week of usage would be nice!"""))
             # date format for the first record if the year has not been selected
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
-            first_date = facts[0]["start_time"].strftime(C_("first record", "%b %d, %Y"))
+            first_date = facts[0].start_time.strftime(C_("first record", "%b %d, %Y"))
         else:
             # date of first record when year has been selected
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
-            first_date = facts[0]["start_time"].strftime(C_("first record", "%b %d"))
+            first_date = facts[0].start_time.strftime(C_("first record", "%b %d"))
 
         summary += _("First activity was recorded on %s.") % \
                                                      ("<b>%s</b>" % first_date)
@@ -330,7 +330,7 @@ A week of usage would be nice!"""))
         # total time tracked
         total_delta = dt.timedelta(days=0)
         for fact in facts:
-            total_delta += fact["delta"]
+            total_delta += fact.delta
 
         if total_delta.days > 1:
             human_years_str = ngettext("%(num)s year",
@@ -353,16 +353,16 @@ A week of usage would be nice!"""))
         # longest fact
         max_fact = None
         for fact in facts:
-            if not max_fact or fact["delta"] > max_fact["delta"]:
+            if not max_fact or fact.delta > max_fact.delta:
                 max_fact = fact
 
-        longest_date = max_fact["start_time"].strftime(
+        longest_date = max_fact.start_time.strftime(
             # How the date of the longest activity should be displayed in statistics
             # Using python datetime formatting syntax. See:
             # http://docs.python.org/library/time.html#time.strftime
             C_("date of the longest activity", "%b %d, %Y"))
 
-        num_hours = max_fact["delta"].seconds / 60 / 60.0 + max_fact["delta"].days * 24
+        num_hours = max_fact.delta.seconds / 60 / 60.0 + max_fact.delta.days * 24
         hours = "<b>%s</b>" % locale.format("%.1f", num_hours)
 
         summary += "\n" + ngettext("Longest continuous work happened on \
@@ -388,9 +388,9 @@ A week of usage would be nice!"""))
             return round(len(matches) / float(fact_count) * 100)
 
 
-        early_percent = percent(lambda fact: early_start < fact["start_time"].time() < early_end)
-        late_percent = percent(lambda fact: fact["start_time"].time() > late_start or fact["start_time"].time() < late_end)
-        short_percent = percent(lambda fact: fact["delta"] <= dt.timedelta(seconds = 60 * 15))
+        early_percent = percent(lambda fact: early_start < fact.start_time.time() < early_end)
+        late_percent = percent(lambda fact: fact.start_time.time() > late_start or fact.start_time.time() < late_end)
+        short_percent = percent(lambda fact: fact.delta <= dt.timedelta(seconds = 60 * 15))
 
         if fact_count < 100:
             summary += "\n\n" + _("Hamster would like to observe you some more!")

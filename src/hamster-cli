@@ -95,7 +95,7 @@ class HamsterClient(object):
 
         print "%s+%s" % ('-' * first_column_width, '-' * second_column_width)
         for fact in self.storage.get_facts(start_time, end_time, ""):
-            if fact['start_time'] < start_time or fact['start_time'] > end_time:
+            if fact.start_time < start_time or fact.start_time > end_time:
                 # Hamster returns activities for the whole day, not just the
                 # time range we sent
                 # TODO - why should that be a problem? /toms/
@@ -195,14 +195,14 @@ def fact_dict(fact_data, with_date):
     else:
         fmt = '%H:%M'
 
-    fact['start'] = fact_data['start_time'].strftime(fmt)
+    fact['start'] = fact_data.start_time.strftime(fmt)
     if fact_data['end_time']:
         fact['end'] = fact_data['end_time'].strftime(fmt)
     else:
         end_date = dt.datetime.now()
         fact['end'] = ''
 
-    fact['duration'] = stuff.format_duration(fact_data['delta'])
+    fact['duration'] = stuff.format_duration(fact_data.delta)
 
     fact['activity'] = fact_data['name']
     fact['category'] = fact_data['category']
