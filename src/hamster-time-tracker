@@ -79,10 +79,7 @@ class ProjectHamster(object):
 
         # Load today's data, activities and set label
         self.last_activity = None
-        self.load_day()
-
-        # refresh hamster every 60 seconds to update duration
-        gobject.timeout_add_seconds(60, self.refresh_hamster)
+        self.todays_facts = None
 
         runtime.storage.connect('activities-changed',self.after_activity_update)
         runtime.storage.connect('facts-changed',self.after_fact_update)
@@ -128,6 +125,12 @@ class ProjectHamster(object):
 
         self.window.show_all()
 
+        self.load_day()
+        # refresh hamster every 60 seconds to update duration
+        gobject.timeout_add_seconds(60, self.refresh_hamster)
+        self.refresh_hamster()
+
+
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
             return
@@ -141,6 +144,7 @@ class ProjectHamster(object):
         """refresh hamster every x secs - load today, check last activity etc."""
         try:
             self.check_user()
+            trophies.check_ongoing(self.todays_facts)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 
@@ -176,7 +180,7 @@ class ProjectHamster(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        facts = runtime.storage.get_todays_facts()
+        facts = self.todays_facts = runtime.storage.get_todays_facts()
 
         self.treeview.detach_model()
 

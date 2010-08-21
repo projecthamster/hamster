@@ -45,29 +45,39 @@ def increment(counter_id, context = ""):
     if not storage: return 0
     return storage.increment_counter("hamster-applet", counter_id, context)
 
+
+
+def check_ongoing(todays_facts):
+    if not storage or not todays_facts: return
+
+    last_activity = None
+    if todays_facts[-1]['end_time'] is None:
+        last_activity = todays_facts[-1]
+        last_activity['delta'] = dt.datetime.now() - last_activity['start_time']
+
+    # overwhelmed: tracking for more than 16 hours during one day
+    total = stuff.duration_minutes([fact['delta'] for fact in todays_facts])
+    if total > 16 * 60:
+        unlock("overwhelmed")
+
+    if last_activity:
+        # Welcome! – track an activity for 10 minutes
+        if last_activity['delta'] >= dt.timedelta(minutes = 10):
+            unlock("welcome")
+
+        # in_the_zone - spend 6 hours non-stop on an activity
+        if last_activity['delta'] > dt.timedelta(hours = 6):
+            unlock("in_the_zone")
+
+        # insomnia - meet the new day while tracking an activity
+        if last_activity['start_time'].date() != dt.date.today():
+            unlock("insomnia")
+
+
 class Checker(object):
     def __init__(self):
         # use runtime flags where practical
         self.flags = {}
-
-
-    def check_today(self, facts):
-        if not storage: return
-
-        for fact in facts[-2:]: # consider just the last two current ongoing and the previous one
-            # in_the_zone - spent 6 hours on single activity
-            if fact['end_time'] and fact['end_time'] - fact['start_time'] > dt.timedelta(hours = 6):
-                unlock("in_the_zone")
-
-            # insomnia - finish activity in a new day
-            if (fact['end_time'] and fact['start_time'].date() != fact['end_time'].date()) or \
-               (fact['end_time'] is None and fact['start_time'].date() != dt.date.today()):
-                unlock("insomnia")
-
-        # overwhelmed: tracking for more than 16 hours during one da
-        total = stuff.duration_minutes([fact['delta'] for fact in facts])
-        if total > 16 * 60:
-            unlock("overwhelmed")
 
 
     def check_update_based(self, prev_id, new_id, activity_name, tags, start_time, end_time, category_name, description):
@@ -132,7 +142,7 @@ class Checker(object):
         if len(last_four) == 4:
             layered = True
             for prev, next in zip(last_four, last_four[1:]):
-                if next.start_time.date == dt.date.today() or \
+                if next.start_time.date() == dt.date.today() or \
                    next.start_time < prev.start_time or \
                    (prev.end_time and prev.end_time < next.start_time):
                     layered = False

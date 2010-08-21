@@ -245,12 +245,9 @@ class HamsterApplet(object):
 
         # Load today's data, activities and set label
         self.last_activity = None
-        self.load_day()
-        self.update_label()
+        self.todays_facts = None
 
 
-        # refresh hamster every 60 seconds to update duration
-        gobject.timeout_add_seconds(60, self.refresh_hamster)
         runtime.storage.connect('activities-changed', self.after_activity_update)
         runtime.storage.connect('facts-changed', self.after_fact_update)
         runtime.storage.connect('toggle-called', self.on_toggle_called)
@@ -266,8 +263,14 @@ class HamsterApplet(object):
             self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
 
         self._gui.connect_signals(self)
-
         self.prev_size = None
+
+        self.load_day()
+        gobject.timeout_add_seconds(60, self.refresh_hamster) # refresh hamster every 60 seconds to update duration
+        self.refresh_hamster()
+
+
+
 
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
@@ -287,8 +290,10 @@ class HamsterApplet(object):
 
             self.update_label()
             self.check_user()
+            trophies.check_ongoing(self.todays_facts)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
+
 
     def update_label(self):
         if self.last_activity and self.last_activity['end_time'] is None:
@@ -334,7 +339,7 @@ class HamsterApplet(object):
         """sets up today's tree and fills it with records
            returns information about last activity"""
 
-        facts = runtime.storage.get_todays_facts()
+        facts = self.todays_facts = runtime.storage.get_todays_facts()
 
         if facts and facts[-1]["end_time"] == None:
             self.last_activity = facts[-1]
