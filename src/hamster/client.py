@@ -180,11 +180,6 @@ class Storage(gobject.GObject):
         if end_timestamp:
             end_timestamp = timegm(end_timestamp.timetuple())
 
-        print serialized
-        print start_timestamp
-        print end_timestamp
-        print temporary_activity
-
         new_id = self.conn.AddFact(serialized,
                                    start_timestamp,
                                    end_timestamp,
@@ -211,6 +206,7 @@ class Storage(gobject.GObject):
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
+
 
         start_time = timegm((fact.start_time or dt.datetime.now()).timetuple())
 

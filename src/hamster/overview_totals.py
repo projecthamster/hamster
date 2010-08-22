@@ -155,7 +155,6 @@ class TotalsBox(gtk.VBox):
             category_sums[fact.category] += fact.delta
             activity_sums[fact.activity] += fact.delta
 
-            print fact.activity, fact.tags
             for tag in fact.tags:
                 tag_sums[tag] += fact.delta
 
