@@ -390,13 +390,13 @@ class Storage(storage.Storage):
             self.execute(query, (end_time, fact['id']))
 
     def __squeeze_in(self, start_time):
-        # tries to put task in the given date
-        # if there are conflicts, we will only truncate the ongoing task
-        # and replace it's end part with our activity
+        """ tries to put task in the given date
+            if there are conflicts, we will only truncate the ongoing task
+            and replace it's end part with our activity """
 
         # we are checking if our start time is in the middle of anything
         # or maybe there is something after us - so we know to adjust end time
-        # in the latter case go only few days ahead. everything else is madness, heh
+        # in the latter case go only few hours ahead. everything else is madness, heh
         query = """
                    SELECT a.*, b.name
                      FROM facts a
@@ -407,15 +407,11 @@ class Storage(storage.Storage):
                  ORDER BY start_time
                     LIMIT 1
                 """
-        fact = self.fetchone(query, (start_time,
-                                     start_time,
-                                     start_time - dt.timedelta(seconds = 60 * 60 * 12),
-                                     start_time,
-                                     start_time,
-                                     start_time + dt.timedelta(seconds = 60 * 60 * 12)))
-
+        fact = self.fetchone(query, (start_time, start_time,
+                                     start_time - dt.timedelta(hours = 12),
+                                     start_time, start_time,
+                                     start_time + dt.timedelta(hours = 12)))
         end_time = None
-
         if fact:
             if start_time > fact["start_time"]:
                 #we are in middle of a fact - truncate it to our start
@@ -429,47 +425,54 @@ class Storage(storage.Storage):
 
     def __solve_overlaps(self, start_time, end_time):
         """finds facts that happen in given interval and shifts them to
-        make room for new fact"""
-
-        # this function is destructive - can't go with a wildcard
-        if not end_time or not start_time:
+        make room for new fact
+        """
+        if end_time is None or start_time is None:
             return
 
-        # activities that we are overlapping.
-        # second OR clause is for elimination - |new fact--|---old-fact--|--new fact|
+        # possible combinations and the OR clauses that catch them
+        # (the side of the number marks if it catches the end or start time)
+        #             |----------------- NEW -----------------|
+        #      |--- old --- 1|   |2 --- old --- 1|   |2 --- old ---|
+        # |3 -----------------------  big old   ------------------------ 3|
         query = """
                    SELECT a.*, b.name, c.name as category
                      FROM facts a
                 LEFT JOIN activities b on b.id = a.activity_id
                 LEFT JOIN categories c on b.category_id = c.id
-                    WHERE ((start_time < ? and end_time > ?)
-                           OR (start_time < ? and end_time > ?))
-
-                       OR ((start_time < ? and start_time > ?)
-                           OR (end_time < ? and end_time > ?))
+                    WHERE (end_time > ? and end_time < ?)
+                       OR (start_time > ? and start_time < ?)
+                       OR (start_time < ? and end_time > ?)
                  ORDER BY start_time
                 """
-        conflicts = self.fetchall(query, (start_time, start_time, end_time, end_time,
-                                          end_time, start_time, end_time, start_time))
+        conflicts = self.fetchall(query, (start_time, end_time,
+                                          start_time, end_time,
+                                          start_time, end_time))
 
         for fact in conflicts:
             # won't eliminate as it is better to have overlapping entries than loosing data
+            if start_time < fact["start_time"] and end_time > fact["end_time"]:
+                continue
 
             # split - truncate until beginning of new entry and create new activity for end
             if fact["start_time"] < start_time < fact["end_time"] and \
                fact["start_time"] < end_time < fact["end_time"]:
 
                 logging.info("splitting %s" % fact["name"])
+                # truncate until beginning of the new entry
                 self.execute("""UPDATE facts
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
                 fact_name = fact["name"]
-                new_fact_id = self.__add_fact(fact["name"],
-                                           "", # will create tags in the next step
-                                           end_time,
-                                           fact["end_time"],
-                                           fact["category"],
-                                           fact["description"])
+
+                # create new fact for the end
+                new_fact = stuff.Fact(fact["name"],
+                    category = fact["category"],
+                    description = fact["description"],
+                )
+                new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact["end_time"])
+
+                # copy tags
                 tag_update = """INSERT INTO fact_tags(fact_id, tag_id)
                                      SELECT ?, tag_id
                                        FROM fact_tags
@@ -489,8 +492,8 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, activity_name, start_time, end_time = None, temporary = False):
-        fact = stuff.Fact(activity_name,
+    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
+        fact = stuff.Fact(serialized_fact,
                           start_time = start_time,
                           end_time = end_time)
 
@@ -549,10 +552,10 @@ class Storage(storage.Storage):
                    and (previous["description"] or "") == (fact.description or ""):
                     return None
 
-                # otherwise, if no description is added
-                # see if maybe it is too short to qualify as an activity
+                # if no description is added
+                # see if maybe previous was too short to qualify as an activity
                 if not previous["description"] \
-                    and 60 >= (start_time - previous['start_time']).seconds >= 0:
+                   and 60 >= (start_time - previous['start_time']).seconds >= 0:
                     self.__remove_fact(previous['id'])
 
                     # now that we removed the previous one, see if maybe the one
@@ -561,8 +564,8 @@ class Storage(storage.Storage):
                     if len(facts) > 1 and 60 >= (start_time - facts[-2]['end_time']).seconds >= 0:
                         before = facts[-2]
                         if before["activity_id"] == activity_id \
-                           and before["tags"] == sorted([tag["name"] for tag in tags]):
-                            # essentially same activity - resume it and return
+                           and set(before["tags"]) == set([tag["name"] for tag in tags]):
+                            # resume and return
                             update = """
                                        UPDATE facts
                                           SET end_time = null
