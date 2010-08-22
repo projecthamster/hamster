@@ -96,7 +96,7 @@ class OverviewBox(gtk.VBox):
         if not fact or isinstance(fact, dt.date):
             return
 
-        runtime.storage.remove_fact(fact['id'])
+        runtime.storage.remove_fact(fact.id)
 
     def copy_selected(self):
         fact = self.fact_tree.get_selected_fact()
