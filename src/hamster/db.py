@@ -479,6 +479,8 @@ class Storage(storage.Storage):
                                       WHERE fact_id = ?"""
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
+                trophies.unlock("split")
+
             # overlap start
             elif start_time < fact["start_time"] < end_time:
                 logging.info("Overlapping start of %s" % fact["name"])
@@ -525,6 +527,8 @@ class Storage(storage.Storage):
             category_id = self.__get_category_id(fact.category)
             if not category_id:
                 category_id = self.__add_category(fact.category)
+
+                trophies.unlock("no_hands")
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,
