@@ -130,7 +130,7 @@ class OverviewBox(gtk.VBox):
         if isinstance(fact_or_date, dt.date):
             dialogs.edit.show(self, fact_date = fact_or_date)
         else:
-            dialogs.edit.show(self, fact_id = fact_or_date["id"])
+            dialogs.edit.show(self, fact_id = fact_or_date.id)
 
 
     def on_facts_keys(self, tree, event):
