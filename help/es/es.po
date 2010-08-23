@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
 "POT-Creation-Date: 2010-08-23 15:40+0000\n"
-"PO-Revision-Date: 2010-08-23 19:46+0200\n"
+"PO-Revision-Date: 2010-08-24 00:02+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -94,7 +94,6 @@ msgid "What should I write in each box?"
 msgstr "¿Qué debería escribir en cada caja?"
 
 #: C/tracking.page:33(p)
-#, fuzzy
 #| msgid ""
 #| "Exception to this rule are simple activities that don't have project. For "
 #| "those cases use the action as activity name, and category for wider "
@@ -104,9 +103,9 @@ msgid ""
 "<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
 "For example: <input>lunch@work</input>."
 msgstr ""
-"Las excepciones a esta regla son las actividades simples que no tienen "
-"proyecto. Para esos casos, use la acción como el nombre de la acción, y la "
-"categoría para un contexto más amplio. Ejemplo: comer@trabajo."
+"Para actividades simples que no tienen un proyecto, use la acción como el "
+"nombre de la <gui>actividad</gui> y la <gui>categoría</gui> para un contexto "
+"más amplio. Ejemplo: <input>comer@trabajo</input>."
 
 #: C/tracking.page:38(p)
 msgid ""
@@ -117,6 +116,12 @@ msgid ""
 "Finally, use <gui>tags</gui> to describe your actual action - is it reading "
 "or constructing, writing or painting."
 msgstr ""
+"Para un seguimiento más sofisticado intente resumir su actividad en una o "
+"dos palabras («árbol de casa», «proyecto x», o similar) y use ese resumen en "
+"el campo <gui>actividad</gui>. Use la <gui>categoría</gui> para describir la "
+"actividad en su contexto más amplio; ¿es un trabajo privado u otra cosa? "
+"Finalmente use las <gui>etiquetas</gui> para describir su acción actual; ya "
+"sea leyendo, construyendo, escribiendo o pintando."
 
 #: C/tracking.page:47(p)
 msgid ""
@@ -125,17 +130,17 @@ msgid ""
 "category), and how much time of all your work in project x you have spent "
 "analysing (by activity and tag)"
 msgstr ""
+"Ésta aproximación le permitirá ver cuánta lectura ha realizado para todos "
+"sus proyectos (por etiqueta), cuánto tiempo ha empleado en sus hobbies (por "
+"categoría) y cuánto tiempo ha dedicado al proyecto x que ha estado "
+"analizando (por actividad y etiqueta)."
 
 #: C/tracking.page:55(title)
-#, fuzzy
 #| msgid "Here are few tips that might improve your tracking data:"
 msgid "Tips for improving your tracking data"
-msgstr ""
-"Aquí tiene algunas sugerencias que pueden mejorar el seguimiento de sus "
-"datos:"
+msgstr "Sugerencias para mejorar el seguimiento de sus datos"
 
 #: C/tracking.page:58(p)
-#, fuzzy
 #| msgid ""
 #| "Name activities so that they can be easily distinguished from each other. "
 #| "Activity name is also the only bit that appears in the panel. Will you be "
@@ -153,7 +158,6 @@ msgstr ""
 "la actividad?"
 
 #: C/tracking.page:64(p)
-#, fuzzy
 #| msgid ""
 #| "Keep your category number low (say, 3 to 7) and pick ones that are "
 #| "unlikely to change over time. Also, keep them generic. For example: \"work"
@@ -168,7 +172,6 @@ msgstr ""
 "genéricas. Por ejemplo: «trabajo», «privado», «varios»."
 
 #: C/tracking.page:69(p)
-#, fuzzy
 #| msgid ""
 #| "Use the description field for short-term information like bug numbers. "
 #| "The search in overview window also looks in the description field, so "
