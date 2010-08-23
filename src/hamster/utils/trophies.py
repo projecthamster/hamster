@@ -182,15 +182,15 @@ class Checker(object):
         # TODO - after the trophies have been unlocked there is not much point in going on
         #        patrys complains about who's gonna garbage collect. should think
         #        about this
-        if not storage.check_achievement("hamster-applet", "ultra_focused"):
+        if not check("ultra_focused"):
             activity_count = increment("hamster-applet", "focused_%s@%s" % (fact.activity, fact.category or ""))
             # focused – 100 facts with single activity
             if activity_count == 100:
-                unlock("hamster-applet", "focused")
+                unlock("focused")
 
             # ultra focused – 500 facts with single activity
             if activity_count == 500:
-                unlock("hamster-applet", "ultra_focused")
+                unlock("ultra_focused")
 
         # elite - hidden - start an activity at 13:37
         if dt.datetime.now().hour == 13 and dt.datetime.now().minute == 37:
