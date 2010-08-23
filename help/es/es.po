@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.help.master\n"
-"POT-Creation-Date: 2010-08-02 19:43+0000\n"
-"PO-Revision-Date: 2010-08-03 07:53+0200\n"
+"POT-Creation-Date: 2010-08-03 16:55+0000\n"
+"PO-Revision-Date: 2010-08-23 17:30+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,32 +37,54 @@ msgstr ""
 "permiso para copiar, modificar y distribuir el ejemplo de código contenido "
 "en este documento bajo los términos que usted elija, sin restricción."
 
-#: C/tracking.page:8(title)
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr ""
+"Consejos acerca de cómo seguir el tiempo de sus actividades de forma "
+"efectiva."
+
+#: C/tracking.page:10(title)
 msgid "How to track time"
 msgstr "¿Cómo seguir el tiempo?"
 
-#: C/tracking.page:10(p)
+#: C/tracking.page:12(p)
+#, fuzzy
+#| msgid ""
+#| "Your time tracking habbits should heavily depend on the reason why you "
+#| "are collecting the data. What is that you want to do with it? Is it plain "
+#| "curiosity, or a work requirement? And in what detail are you interested "
+#| "in the results?"
 msgid ""
-"Your time tracking habbits should heavily depend on the reason why you are "
-"collecting the data. What is that you want to do with it? Is it plain "
-"curiosity, or a work requirement? And in what detail are you interested in "
-"the results?"
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
 msgstr ""
 "Sus hábitos de seguimiento de tiempo deberían depender de la razón por la "
 "que recolecta los datos. ¿Qué quiere hacer con ellos? ¿Es simple curiosidad "
 "o una necesidad del trabajo? ¿Y en qué detalle le interesan los resultados?"
 
-#: C/tracking.page:18(title)
+#: C/tracking.page:20(title)
 msgid "Granularity"
 msgstr "Granularidad"
 
-#: C/tracking.page:19(p)
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "Una pauta sugerida es tener entre 5 y 30 actividades por día."
+
+#: C/tracking.page:22(p)
+#, fuzzy
+#| msgid ""
+#| "A suggested pace is to have 5 to 30 activities per day. The intention of "
+#| "<app>Time Tracker</app> is to avoid micro-tracking so that one does not "
+#| "turn out spending more time on tracking than doing the things. But not "
+#| "tracking in enough detail could result that there is nothing to dwell on "
+#| "a month later."
 msgid ""
-"A suggested pace is to have 5 to 30 activities per day. The intention of "
-"<app>Time Tracker</app> is to avoid micro-tracking so that one does not turn "
-"out spending more time on tracking than doing the things. But not tracking "
-"in enough detail could result that there is nothing to dwell on a month "
-"later."
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
 msgstr ""
 "Se sugiere tener entre 5 y 30 actividades al día. La intención del "
 "<app>Gestor de tiempo</app> es evitar los microseguimientos de tal forma que "
@@ -70,78 +92,122 @@ msgstr ""
 "si. Pero no seguir con suficiente detalle podría acabar con información "
 "insuficiente un mes después."
 
-#: C/tracking.page:29(title)
-msgid "What goes where"
-msgstr "¿Qué va dónde?"
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "¿Qué debería escribir en cada caja?"
 
-#: C/tracking.page:32(p)
+#: C/tracking.page:33(p)
+#, fuzzy
+#| msgid ""
+#| "We suggest to write project name into the activity field, use category to "
+#| "define the project in wider context - is it private or work, or something "
+#| "else. Use tags to distinguish between different activities in the "
+#| "project. Example: hamster@hacking, #prog #bugs"
 msgid ""
-"We suggest to write project name into the activity field, use category to "
-"define the project in wider context - is it private or work, or something "
-"else. Use tags to distinguish between different activities in the project. "
-"Example: hamster@hacking, #prog #bugs"
+"We suggest that you write the project name in the <gui>activity</gui> field "
+"and use <gui>category</gui> to define the project in its wider context - is "
+"it private or work, or something else?"
 msgstr ""
 "Se sugiere que escriba el nombre del proyecto en el campo de actividad, use "
 "la categoría para definir el proyecto en un contexto más amplio; es trabajo "
 "privado o algo más. Use las etiquetas para distinguir entre las diferentes "
 "actividades en el proyecto. Ejemplo: hamster@programación, #software #bugs"
 
-#: C/tracking.page:38(p)
+#: C/tracking.page:36(p)
 msgid ""
-"Exception to this rule are simple activities that don't have project. For "
-"those cases use the action as activity name, and category for wider context. "
-"Example: lunch@work."
+"You can use tags to distinguish between different activities in the project. "
+"For example: <input>presentation@work, #writing</input>."
+msgstr ""
+"Puede usar etiquetas para distinguir entre diferentes actividades en el "
+"proyecto. Por ejemplo: <input>presentación@trabajo, #escribir</input>."
+
+#: C/tracking.page:40(p)
+#, fuzzy
+#| msgid ""
+#| "Exception to this rule are simple activities that don't have project. For "
+#| "those cases use the action as activity name, and category for wider "
+#| "context. Example: lunch@work."
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"activity name and the category for the wider context instead. For example: "
+"<input>lunch@work</input>."
 msgstr ""
 "Las excepciones a esta regla son las actividades simples que no tienen "
 "proyecto. Para esos casos, use la acción como el nombre de la acción, y la "
 "categoría para un contexto más amplio. Ejemplo: comer@trabajo."
 
-#: C/tracking.page:45(p)
-msgid "Here are few tips that might improve your tracking data:"
+#: C/tracking.page:48(title)
+#, fuzzy
+#| msgid "Here are few tips that might improve your tracking data:"
+msgid "Tips for improving your tracking data"
 msgstr ""
 "Aquí tiene algunas sugerencias que pueden mejorar el seguimiento de sus "
 "datos:"
 
-#: C/tracking.page:48(p)
+#: C/tracking.page:51(p)
+#, fuzzy
+#| msgid ""
+#| "Name activities so that they can be easily distinguished from each other. "
+#| "Activity name is also the only bit that appears in the panel. Will you be "
+#| "able to determine what you are working on just by looking on the activity "
+#| "name?"
 msgid ""
 "Name activities so that they can be easily distinguished from each other. "
-"Activity name is also the only bit that appears in the panel. Will you be "
-"able to determine what you are working on just by looking on the activity "
-"name?"
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
 msgstr ""
 "Nombre las actividades para que se puedan distinguir fácilmente entre ellas. "
 "El nombre de la actividad es también lo único que aparece en el panel. ¿Será "
 "capaz de determinar en qué está trabajando simplemente mirando el nombre de "
 "la actividad?"
 
-#: C/tracking.page:54(p)
+#: C/tracking.page:57(p)
+#, fuzzy
+#| msgid ""
+#| "Keep your category number low (say, 3 to 7) and pick ones that are "
+#| "unlikely to change over time. Also, keep them generic. For example: \"work"
+#| "\", \"private\", \"misc\"."
 msgid ""
-"Keep your category number low (say, 3 to 7) and pick ones that are unlikely "
-"to change over time. Also, keep them generic. For example: \"work\", "
-"\"private\", \"misc\"."
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
 msgstr ""
 "Mantenga su número de categorías bajo (entre 3 y 7) y elija unas que "
 "probablemente no cambien a lo largo del tiempo. También, manténgalas "
 "genéricas. Por ejemplo: «trabajo», «privado», «varios»."
 
-#: C/tracking.page:59(p)
+#: C/tracking.page:62(p)
+#, fuzzy
+#| msgid ""
+#| "Tags are best when you need to handle large numbers - say if you have "
+#| "hundred of projects - having a large activity list will just slow down "
+#| "the input as it will be hard to remember the right name. Instead consider "
+#| "using tags."
 msgid ""
-"Tags are best when you need to handle large numbers - say if you have "
-"hundred of projects - having a large activity list will just slow down the "
-"input as it will be hard to remember the right name. Instead consider using "
-"tags."
+"Use tags instead of activities when you need to handle a large number of "
+"activities (if you have hundreds of projects, for example). Having a long "
+"list of activities will just slow down input, as it will be hard to remember "
+"the right name."
 msgstr ""
 "Las etiquetas son lo más indicado cuando necesita gestionar grandes números "
 "(si tiene cientos de proyectos) tener una gran lista de actividades sólo "
 "ralentizará la entrada ya que será difícil recoerdar el nombre correcto. En "
 "su lugar, considere usar las etiquetas."
 
-#: C/tracking.page:65(p)
+#: C/tracking.page:68(p)
+#, fuzzy
+#| msgid ""
+#| "Use the description field for short-term information like bug numbers. "
+#| "The search in overview window also looks in the description field, so "
+#| "finding activities where you mention the specific bug or key will be as "
+#| "simple as typing it in the search box and hitting <key>Enter</key>."
 msgid ""
-"Use the description field for short-term information like bug numbers. The "
-"search in overview window also looks in the description field, so finding "
-"activities where you mention the specific bug or key will be as simple as "
-"typing it in the search box and hitting <key>Enter</key>."
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
 msgstr ""
 "Use el campo de descripción para información a corto plazo, como números de "
 "errores. La búsqueda en la ventana de vista general también busca en el "
@@ -149,12 +215,18 @@ msgstr ""
 "error o clave específica, es tan simple como escribirlo en la caja de "
 "búsqueda y pulsar <key>Intro</key>.."
 
-#: C/tracking.page:72(p)
+#: C/tracking.page:75(p)
+#, fuzzy
+#| msgid ""
+#| "Activities and tags can come and go as necessary. Once you think that you "
+#| "are done with an activity for good - remove it so it does not pop up in "
+#| "the auto-complete. Don't worry - the facts (activities in the log) will "
+#| "stay in tact. This is just the \"operational list\""
 msgid ""
 "Activities and tags can come and go as necessary. Once you think that you "
-"are done with an activity for good - remove it so it does not pop up in the "
-"auto-complete. Don't worry - the facts (activities in the log) will stay in "
-"tact. This is just the \"operational list\""
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete. Don't worry: the facts (activities in the log) will not "
+"be deleted. This is just the \"operational list\"."
 msgstr ""
 "Las actividades y etiquetas pueden aparecer y desaparecer según las "
 "necesidades. Una vez que crea que ha terminado con una actividad; quítela "
@@ -402,6 +474,9 @@ msgstr ""
 #: C/index.page:0(None)
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 20010"
+
+#~ msgid "What goes where"
+#~ msgstr "¿Qué va dónde?"
 
 #~ msgid ""
 #~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
