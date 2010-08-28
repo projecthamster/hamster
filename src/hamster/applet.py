@@ -286,6 +286,8 @@ class HamsterApplet(object):
             self.update_label()
             self.check_user()
             trophies.check_ongoing(self.todays_facts)
+        except Exception, e:
+            logging.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 
