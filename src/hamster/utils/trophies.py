@@ -51,7 +51,7 @@ def check_ongoing(todays_facts):
     if not storage or not todays_facts: return
 
     last_activity = None
-    if todays_facts[-1]['end_time'] is None:
+    if todays_facts[-1].end_time is None:
         last_activity = todays_facts[-1]
         last_activity.delta = dt.datetime.now() - last_activity.start_time
 
@@ -66,7 +66,7 @@ def check_ongoing(todays_facts):
             unlock("welcome")
 
         # in_the_zone - spend 6 hours non-stop on an activity
-        if last_activity.delta > dt.timedelta(hours = 6):
+        if last_activity.delta >= dt.timedelta(hours = 6):
             unlock("in_the_zone")
 
         # insomnia - meet the new day while tracking an activity
