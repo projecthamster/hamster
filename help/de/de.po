@@ -7,14 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"POT-Creation-Date: 2010-02-24 21:14+0000\n"
-"PO-Revision-Date: 2010-02-25 13:25+0100\n"
-"Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
+"POT-Creation-Date: 2010-08-26 20:14+0000\n"
+"PO-Revision-Date: 2010-08-28 23:56+0200\n"
+"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
@@ -38,6 +38,145 @@ msgstr ""
 "Genehmigung, den in diesem Dokument enthaltenen Beispielcode ohne "
 "Einschränkung unter den Bedingungen Ihrer Wahl zu verbreiten."
 
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr "Tipps zum effektiven Erfassen Ihrer Tätigkeiten."
+
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "Zeiterfassung"
+
+#: C/tracking.page:12(p)
+msgid ""
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
+msgstr ""
+"Ihre Gewohnheiten zur Zeiterfassung werden davon bestimmt, aus welchen "
+"Gründen Sie diese Daten überhaupt sammeln wollen. Was wollen Sie damit "
+"machen? Ist es einfach nur Spielerei, oder tatsächlich für Ihre tägliche "
+"Arbeit? Wie detailliert sollen die Ergebnisse sein?"
+
+#
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "Detailgrad"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "Empfehlenswert sind ungefähr zwischen 5 und 30 Tätigkeiten pro Tag."
+
+#: C/tracking.page:22(p)
+msgid ""
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
+msgstr ""
+"Die <app>Zeiterfassung</app> will auch das allzu detaillierte Erfassen "
+"vermeiden. Schließlich sollen Sie ja nicht mehr Zeit für die Erfassung Ihrer "
+"Tätigkeiten aufwenden als für die Tätigkeiten selbst! Anders herum "
+"betrachtet, können mangelnde Details dazu führen, dass die erfassten Daten "
+"vielleicht schon einen Monat später nicht mehr sinnvoll verwertbar sind."
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "Was soll ich in jedes der Felder eintragen?"
+
+#: C/tracking.page:33(p)
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
+"For example: <input>lunch@work</input>."
+msgstr ""
+"Für einfache Tätigkeiten ohne übergeordnetes Projekt verwenden Sie die "
+"Aktion an sich als <gui>Tätigkeit</gui> und die <gui>Kategorie</gui> für "
+"eine Verallgemeinerung. Beispiel: <input>Mittagessen@Arbeit</input>."
+
+#: C/tracking.page:38(p)
+msgid ""
+"For more sophisticated tracking try to caption your activity in one or two "
+"words (\"tree house\", \"project x\", or similar) and use that caption in "
+"the <gui>activity</gui> field. Use the <gui>category</gui> to describe the "
+"activity in it's wider context - is it private or work, or something else? "
+"Finally, use <gui>tags</gui> to describe your actual action - is it reading "
+"or constructing, writing or painting."
+msgstr ""
+"Für die etwas anspruchsvollere Erfassung sollten Sie Ihre Tätigkeit in ein "
+"oder zwei Worte fassen (»Baumhaus«, »Projekt X« o.ä.). Geben Sie dies im Feld "
+"<gui>Tätigkeit</gui> ein. Im <gui>Kategorie</gui>-Feld geben Sie einen "
+"verallgemeinernden Begriff ein, der beschreibt, ob es sich beispielsweise um "
+"eine private oder berufliche Angelegenheit oder auch etwas ganz Anderes "
+"handelt. Letztendlich beschreiben Sie im Feld <gui>Schlagworte</gui> Ihre "
+"aktuelle Aktion, ob Lesen oder Basteln, Schreiben oder Malen ..."
+
+#: C/tracking.page:47(p)
+msgid ""
+"This approach will alow you to see how much reading you have done through "
+"all your projects (by tag), how much time you have spent in your hobbies (by "
+"category), and how much time of all your work in project x you have spent "
+"analysing (by activity and tag)"
+msgstr ""
+"Dieser Ansatz vermittelt Ihnen einen Überblick, wie viel Zeit Sie in Ihren "
+"gesamten Projekten mit Lesen verbracht haben (anhand des Schlagwortes), wie "
+"viel Zeit Sie Ihren Hobbys gewidmet haben (anhand der Kategorie) oder wie "
+"viel Zeit die Arbeit am Projekt X in Anspruch nahm (anhand von Tätigkeit und "
+"Schlagwort)."
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "Tipps zum Verbessern der erfassten Daten"
+
+#: C/tracking.page:58(p)
+msgid ""
+"Name activities so that they can be easily distinguished from each other. "
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
+msgstr ""
+"Benennen Sie Tätigkeiten so, dass Sie einfach voneinander zu unterscheiden "
+"sind. Der Name der Tätigkeit ist die einzige Information, die im Panel "
+"erscheint. Sind Sie in der Lage, allein anhand des Namens der Tätigkeit zu "
+"bestimmen, woran Sie gerade arbeiten?"
+
+#: C/tracking.page:64(p)
+msgid ""
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
+msgstr ""
+"Halten Sie Ihre Kategorienliste klein (etwa 3 bis 7 Kategorien) und suchen "
+"Sie sich Begriffe aus, die sich höchstwahrscheinlich auch über längere Zeit "
+"nicht ändern werden. Beispiele: »Arbeit«, »Privat«, »Sonstiges«."
+
+#: C/tracking.page:69(p)
+msgid ""
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
+msgstr ""
+"Tragen Sie im Beschreibungsfeld kurz gefasste Informationen wie "
+"Referenzierungsnummern ein. Die Suche im <gui>Übersicht</gui>-Fenster "
+"berücksichtigt auch das Beschreibungsfeld, so dass das Finden von "
+"Tätigkeiten anhand der Referenzierungsnummer ebenso einfach wird wie die "
+"Eingabe in das Suchfeld und das Drücken der <key>Eingabetaste</key>."
+
+#: C/tracking.page:76(p)
+msgid ""
+"Activities and tags can come and go as necessary. Once you think that you "
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete any more. Don't worry: the facts (activities in the log) "
+"will not be deleted. This is just the \"operational list\"."
+msgstr ""
+"Tätigkeiten und Schlagworte kommen und gehen… Sobald Sie der Meinung sind, "
+"dass Sie eine Tätigkeit erledigt haben, sollten Sie sie entfernen, so dass "
+"sie nicht mehr in der Liste zur automatischen Vervollständigung auftaucht. "
+"Keine Angst, die Daten an sich, also die Protokolle der Tätigkeit, werden "
+"dadurch nicht gelöscht. Dies ist nur die »Verlaufsliste«."
+
 #: C/statistics.page:6(desc)
 msgid "Note on interpretation of statistics."
 msgstr "Ein Wort zur Interpretation der Statistiken."
@@ -54,7 +193,7 @@ msgid ""
 "Patches are welcome."
 msgstr ""
 "Die über den Knopf <gui style=\"button\">Statistiken zeigen</gui> "
-"anzeigbaren Ergebnisse sind experimentell und nur Interpretationen der "
+"aufrufbaren Ergebnisse sind experimentell und nur Interpretationen der "
 "Fakten. Die Interpretation sollte mit Ihren eigenen Beobachtungen verglichen "
 "werden. Fehlerkorrekturen sind willkommen."
 
@@ -64,7 +203,7 @@ msgid ""
 "time."
 msgstr ""
 "In jedem Fall sollten Ihnen »Beginn« und »Ende« einen Eindruck über die "
-"verbrauchte Zeit vermitteln."
+"aufgewendete Zeit vermitteln."
 
 #: C/reports.page:6(desc)
 msgid "Get data out of Time Tracker."
@@ -228,14 +367,7 @@ msgstr ""
 "Vorschlagfeld angezeigt wird. Dadurch wird das erste zutreffende Schlagwort "
 "vervollständigt."
 
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: C/index.page:18(None)
-msgid ""
-"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-msgstr "a"
-
-#: C/index.page:6(title) C/index.page:7(title)
+#: C/index.page:6(title) C/index.page:7(title) C/index.page:17(title)
 msgid "Time Tracking"
 msgstr "Zeiterfassung"
 
@@ -250,14 +382,6 @@ msgstr "milo@ubuntu.com"
 #: C/index.page:13(p)
 msgid "Creative Commons Share Alike 3.0"
 msgstr "Creative Commons Share Alike 3.0"
-
-#: C/index.page:17(title)
-msgid ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
-"\">Time Tracking logo</media>Time Tracking"
-msgstr ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
-"\">Zeiterfassungs-Logo</media>Zeiterfassung"
 
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
@@ -295,6 +419,17 @@ msgid "translator-credits"
 msgstr ""
 "Mario Blättermann <mariobl@gnome.org>, 2010\n"
 "Christian Kirbach <Christian.Kirbach@googlemail.com>, 2010"
+
+#~ msgid ""
+#~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+#~ msgstr "a"
+
+#~ msgid ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+#~ "\">Time Tracking logo</media>Time Tracking"
+#~ msgstr ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+#~ "\">Zeiterfassungs-Logo</media>Zeiterfassung"
 
 #~ msgid "What's new in this release"
 #~ msgstr "Neues in dieser Version"
