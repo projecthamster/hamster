@@ -294,19 +294,9 @@ class Fact(object):
             activity, self.description = activity.split(",", 1)
             self.description = self.description.strip()
 
-            # tags are marked with hash sign and parsed only at the end of description
-            # stop looking for tags if we stumble upon a non tag
-            words = self.description.split(" ")
-            parsed_tags = []
-            for word in reversed(words):
-                if word.startswith("#"):
-                    parsed_tags.append(word.strip("#,"))  #avoid commas
-                else:
-                    break
-
-            if parsed_tags:
-                self.tags = parsed_tags
-                self.description = " ".join(self.description.split(" ")[:-len(self.tags)])
+            if "#" in self.description:
+                self.description, self.tags = self.description.split("#", 1)
+                self.tags = [tag.strip(", ") for tag in self.tags.split("#") if tag.strip(", ")]
 
         if activity.find("@") > 0:
             activity, self.category = activity.split("@", 1)
@@ -321,10 +311,8 @@ class Fact(object):
         self.activity = activity.strip()
 
         tags = tags or ""
-        if tags and isinstance(tags, list):
-            tags = " ".join(tags)
-
-        tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
+        if tags and isinstance(tags, basestring):
+            tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
 
         # override implicit with explicit
         self.category = category.replace("#", "").replace(",", "") or self.category or None
