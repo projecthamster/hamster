@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-12 02:36+0100\n"
-"PO-Revision-Date: 2010-03-12 02:36+0100\n"
+"POT-Creation-Date: 2010-08-31 15:09+0200\n"
+"PO-Revision-Date: 2010-08-31 15:08+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "MIME-Version: 1.0\n"
@@ -19,10 +19,14 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
+#: ../data/90-hamster-applet.xml.in.h:1
+msgid "Project Hamster (Gnome Time Tracker)"
+msgstr "Hamster időnyilvántartó"
+
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
-"less than the specified day start and today, if it is over the time. "
+"less than the specified day start; and today, if it is over the time. "
 "Activities that span two days, will tip over to the side where the largest "
 "part of the activity is."
 msgstr ""
@@ -38,7 +42,7 @@ msgstr ""
 "Emlékeztessen notify_interval percenként akkor is, ha nincs elkezdve "
 "tevékenység."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:5
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Emlékeztessen akkor is, ha nincs beállítva tevékenység"
 
@@ -47,6 +51,10 @@ msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Mikor kezdődik a nap (az alapértelmezett érték DE 5.30)"
 
 #: ../data/hamster-applet.schemas.in.h:5
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "A Hamster alkalmazásablak láthatóságának átváltására szolgáló parancs."
+
+#: ../data/hamster-applet.schemas.in.h:6
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -55,22 +63,23 @@ msgstr ""
 "azon tevékenységneveket, amelyekre váltani kell. A munkaterületeket az "
 "elemek indexe jelzi."
 
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Gyorsbillentyű az Időnyilvántartó ablakának megjelenítéséhez."
-
 #: ../data/hamster-applet.schemas.in.h:7
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr ""
+"Gyorsbillentyű az Időnyilvántartó ablakának megjelenítéséhez/elrejtéséhez."
+
+#: ../data/hamster-applet.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
-"last activity when returning to a previous workspace."
+"the last activity when returning to a previous workspace."
 msgstr ""
 "Az elérhető nyilvántartási módok listája. A „name” (név) engedélyezi a "
 "tevékenységek közötti név szerinti váltást a workspace_mapping kulcsban "
 "megadott módon. A „memory” (memória) engedélyezi az utolsó tevékenységre "
 "váltást, amikor visszatér az előző munkaterületre."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-applet.schemas.in.h:9
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -78,48 +87,61 @@ msgstr ""
 "Emlékeztessen az adott feladatra a megadott percenként. Az emlékeztető "
 "letiltásához állítsa 0-ra vagy 120-nál nagyobb értékűre."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-applet.schemas.in.h:10
 msgid "Remind of current task every x minutes"
 msgstr "Emlékeztető az aktuális feladatra ennyi percenként"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-applet.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "A munkaterület-váltás együtt jár-e tevékenységváltással"
 
-#: ../data/hamster-applet.schemas.in.h:11
-msgid "Show window"
-msgstr "Ablak megjelenítése"
-
 #: ../data/hamster-applet.schemas.in.h:12
+msgid "Show / hide Time Tracker Window"
+msgstr "Időnyilvántartó ablakának megjelenítése/elrejtése."
+
+#: ../data/hamster-applet.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
 msgstr "Az aktuális tevékenység nyilvántartásának befejezése leállításkor"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-applet.schemas.in.h:14
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr ""
 "Az aktuális tevékenység nyilvántartásának befejezése a számítógép "
 "üresjáratában"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-applet.schemas.in.h:15
 msgid "Stop tracking on idle"
 msgstr "Nyilvántartás befejezése üresjáratban"
 
-#: ../data/hamster-applet.schemas.in.h:15 ../data/preferences.ui.h:20
+#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
 msgstr "Nyilvántartás befejezése leállításkor"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-applet.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "Tevékenységváltás munkaterület-váltáskor"
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Toggle hamster application window"
+msgstr "A Hamster alkalmazás ablakának átváltása"
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window action"
+msgstr "A Hamster alkalmazás ablakának átváltása művelet"
+
+#: ../data/hamster-applet.schemas.in.h:20
+msgid "Toggle visibility of the hamster application window."
+msgstr "A Hamster alkalmazás ablakának láthatóságának átváltása."
 
 #: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Hamster projekt – időnyilvántartó"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-standalone.desktop.in.in.h:2 ../data/hamster.ui.h:10
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:344 ../src/hamster-standalone:199
+#: ../src/hamster/applet.py:329 ../src/hamster-time-tracker:172
 msgid "Time Tracker"
 msgstr "Időnyilvántartó"
 
@@ -127,11 +149,11 @@ msgstr "Időnyilvántartó"
 msgid "_About"
 msgstr "_Névjegy"
 
-#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:13
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../data/Hamster_Applet.xml.h:3
+#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
 msgid "_Overview"
 msgstr "Á_ttekintés"
 
@@ -139,41 +161,38 @@ msgstr "Á_ttekintés"
 msgid "_Preferences"
 msgstr "_Beállítások"
 
-#: ../data/hamster-standalone.desktop.in.in.h:1
-msgid "Project Hamster desktop time tracking"
-msgstr "Hamster asztali időnyilvántartó"
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Hamster projekt – időnyilvántartó"
 
-#: ../data/applet.ui.h:1
-msgid "Ad_d Earlier Activity"
-msgstr "_Korábbi tevékenység hozzáadása"
-
-#: ../data/applet.ui.h:2 ../src/hamster/applet.py:387
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:367
 msgid "No records today"
 msgstr "Ma nincsenek bejegyzések"
 
-#: ../data/applet.ui.h:3 ../data/hamster.ui.h:4
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
 msgid "S_witch"
 msgstr "_Váltás"
 
-#: ../data/applet.ui.h:4
+#: ../data/applet.ui.h:3
 msgid "Show _Overview"
 msgstr "Áttekintés m_egjelenítése"
 
-#: ../data/applet.ui.h:5 ../data/hamster.ui.h:5
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
 msgid "Start _Tracking"
 msgstr "Nyilvántartás _megkezdése"
 
-#: ../data/applet.ui.h:6 ../data/hamster.ui.h:8
-msgid "Sto_p tracking"
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
 msgstr "Nyilvántartás _befejezése"
 
-#: ../data/applet.ui.h:7 ../data/hamster.ui.h:9
-msgid "Tell me more"
-msgstr "Többet szeretnék tudni"
-
-#: ../data/applet.ui.h:8
-msgid "_Today"
+#: ../data/applet.ui.h:6
+msgid "To_day"
 msgstr "_Ma"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "K_orábbi tevékenység hozzáadása"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -188,22 +207,18 @@ msgid "Description:"
 msgstr "Leírás:"
 
 #: ../data/edit_activity.ui.h:4
-msgid "Preview:"
-msgstr "Előnézet:"
-
-#: ../data/edit_activity.ui.h:5
 msgid "Tags:"
 msgstr "Címkék:"
 
-#: ../data/edit_activity.ui.h:6
+#: ../data/edit_activity.ui.h:5
 msgid "Time:"
 msgstr "Idő:"
 
-#: ../data/edit_activity.ui.h:7
+#: ../data/edit_activity.ui.h:6
 msgid "in progress"
 msgstr "folyamatban"
 
-#: ../data/edit_activity.ui.h:8 ../data/overview.ui.h:8
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
 msgid "to"
 msgstr "eddig:"
 
@@ -215,7 +230,11 @@ msgstr "Korábbi tevékenység hozzáadása"
 msgid "Contents"
 msgstr "Tartalom"
 
-#: ../data/hamster.ui.h:3
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../src/docky_control/2.0/hamster_control.py:94
+#: ../src/docky_control/2.1/hamster_control.py:79
+#: ../src/docky_control/2.1/hamster_control.py:94
 msgid "Overview"
 msgstr "Áttekintés"
 
@@ -227,20 +246,23 @@ msgstr "Új tevékenység"
 msgid "Statistics"
 msgstr "Statisztikák"
 
-#: ../data/hamster.ui.h:11
+#: ../data/hamster.ui.h:8
+msgid "Sto_p tracking"
+msgstr "Nyilvántartás _befejezése"
+
+#: ../data/hamster.ui.h:10
 msgid "Today"
 msgstr "Ma"
 
-#: ../data/hamster.ui.h:12
+#: ../data/hamster.ui.h:11
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: ../data/hamster.ui.h:14
+#: ../data/hamster.ui.h:13
 msgid "_Tracking"
 msgstr "_Nyilvántartás"
 
 #: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
-#: ../data/preferences.ui.h:1
 msgid "Activities"
 msgstr "Tevékenységek"
 
@@ -256,131 +278,164 @@ msgstr "Nincsenek adatok ebben az időszakban"
 msgid "Show Statistics"
 msgstr "Statisztikák megjelenítése"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:212
-#: ../src/hamster/reports.py:227 ../src/hamster-standalone:70
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:215
+#: ../src/hamster/reports.py:314 ../src/hamster-time-tracker:48
 msgid "Tags"
 msgstr "Címkék"
 
-#: ../data/overview.ui.h:2
-msgid "Add"
-msgstr "Hozzáadás"
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:209
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:312
+#: ../src/hamster-time-tracker:39
+msgid "Activity"
+msgstr "Tevékenység"
 
 #: ../data/overview.ui.h:3
+msgid "Add new"
+msgstr "Új hozzáadása"
+
+#: ../data/overview.ui.h:4
+msgid "Day"
+msgstr "Nap"
+
+#: ../data/overview.ui.h:5
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: ../data/overview.ui.h:4
-msgid "Overview - Hamster"
+#: ../data/overview.ui.h:6
+msgid "Month"
+msgstr "Hónap"
+
+#: ../data/overview.ui.h:7
+msgid "Overview — Hamster"
 msgstr "Áttekintés – Hamster"
 
-#: ../data/overview.ui.h:5
+#: ../data/overview.ui.h:8
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: ../data/overview.ui.h:6
-msgid "Save Report"
-msgstr "Jelentés mentése"
+#: ../data/overview.ui.h:9
+msgid "Save report..."
+msgstr "Jelentés mentése…"
 
-#. summary table
-#: ../data/overview.ui.h:7 ../data/stats.ui.h:3 ../src/hamster/reports.py:285
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3
 msgid "Totals"
 msgstr "Összesítés"
 
-#: ../data/preferences.ui.h:2
+#: ../data/overview.ui.h:11
+msgid "Week"
+msgstr "Hét"
+
+#: ../data/overview.ui.h:13
+msgid "_View"
+msgstr "_Nézet"
+
+#: ../data/preferences.ui.h:1
 msgid "Activity list"
 msgstr "Tevékenységlista"
 
-#: ../data/preferences.ui.h:3
+#: ../data/preferences.ui.h:2
 msgid "Add activity"
 msgstr "Tevékenység hozzáadása"
 
-#: ../data/preferences.ui.h:4
+#: ../data/preferences.ui.h:3
 msgid "Add category"
 msgstr "Új kategória"
 
-#: ../data/preferences.ui.h:6
+#: ../data/preferences.ui.h:5
 msgid "Categories and Tags"
 msgstr "Kategóriák és címkék"
 
-#: ../data/preferences.ui.h:7
+#: ../data/preferences.ui.h:6
 msgid "Category list"
 msgstr "Kategórialista"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:7
 msgid "Edit activity"
 msgstr "Tevékenység szerkesztése"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:8
 msgid "Edit category"
 msgstr "Kategória szerkesztése"
 
+#: ../data/preferences.ui.h:9
+msgid "Integration"
+msgstr "Integráció"
+
 #: ../data/preferences.ui.h:10
-msgid "General"
-msgstr "Általános"
-
-#: ../data/preferences.ui.h:11
-msgid "Global Hotkey"
-msgstr "Globális gyorsbillentyű"
-
-#: ../data/preferences.ui.h:12
-msgid "Move activity down"
-msgstr "Tevékenység mozgatása le"
-
-#: ../data/preferences.ui.h:13
-msgid "Move activity up"
-msgstr "Tevékenység mozgatása fel"
-
-#: ../data/preferences.ui.h:14
 msgid "New day starts at"
 msgstr "Az új nap ekkor kezdődik"
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
 msgstr "Emlékeztessen az aktuális tevékenységre minden:"
 
-#: ../data/preferences.ui.h:16
+#: ../data/preferences.ui.h:12
 msgid "Remove activity"
 msgstr "Tevékenység eltávolítása"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:13
 msgid "Remove category"
 msgstr "Kategória eltávolítása"
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:14
 msgid "Resume the last activity when returning to a workspace"
 msgstr "Az utolsó tevékenység folytatása a munkaterületre visszatéréskor"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:15
 msgid "Start new activity when switching workspaces:"
 msgstr "Új tevékenység megkezdése a munkaterületek közötti váltáskor:"
 
-#: ../data/preferences.ui.h:21
+#: ../data/preferences.ui.h:17
 msgid "Stop tracking when computer becomes idle"
 msgstr "Nyilvántartás befejezése a számítógép üresjáratában"
 
-#: ../data/preferences.ui.h:22
+#: ../data/preferences.ui.h:18
 msgid "Tags that should appear in autocomplete"
 msgstr "Az automatikus kiegészítésben megjelenítendő címkék"
 
-#: ../data/preferences.ui.h:23
+#: ../data/preferences.ui.h:19
 msgid "Time Tracker Preferences"
 msgstr "Időnyilvántartó tulajdonságai"
 
-#: ../data/preferences.ui.h:24
+#: ../data/preferences.ui.h:20
 msgid "Tracking"
 msgstr "Nyilvántartás"
 
-#: ../data/preferences.ui.h:25
+#: ../data/preferences.ui.h:21
+msgid "Use following todo list if available:"
+msgstr "A következő teendőlista használata, ha elérhető:"
+
+#: ../data/preferences.ui.h:22
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: ../data/preferences.ui.h:26
+#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "_Tevékenységek"
 
-#: ../data/preferences.ui.h:27
+#: ../data/preferences.ui.h:24
 msgid "_Categories"
 msgstr "_Kategóriák"
+
+#: ../data/range_pick.ui.h:1
+msgid "Apply"
+msgstr "Alkalmaz"
+
+#: ../data/range_pick.ui.h:2
+msgid "Day:"
+msgstr "Nap:"
+
+#: ../data/range_pick.ui.h:3
+msgid "Month:"
+msgstr "Hónap:"
+
+#: ../data/range_pick.ui.h:4
+msgid "Range:"
+msgstr "Időszak:"
+
+#: ../data/range_pick.ui.h:5
+msgid "Week:"
+msgstr "Hét:"
 
 #: ../data/stats.ui.h:1
 msgid "Starts and ends"
@@ -390,9 +445,23 @@ msgstr "Kezdet és vég"
 msgid "Year:"
 msgstr "Év:"
 
+#: ../src/docky_control/2.0/hamster_control.py:71
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:302
+#: ../src/hamster/applet.py:325 ../src/hamster/applet.py:414
+#: ../src/hamster-time-tracker:168 ../src/hamster-time-tracker:232
+msgid "No activity"
+msgstr "Nincs tevékenység"
+
+#: ../src/docky_control/2.0/hamster_control.py:81
+#: ../src/docky_control/2.0/hamster_control.py:95
+#: ../src/docky_control/2.1/hamster_control.py:81
+#: ../src/docky_control/2.1/hamster_control.py:95
+msgid "Preferences"
+msgstr "Beállítások"
+
 #: ../src/hamster/about.py:43
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "Copyright © 2007–2009 Toms Bauģis és mások"
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "Copyright © 2007–2010 Toms Bauģis és mások"
 
 #: ../src/hamster/about.py:45
 msgid "Project Hamster Website"
@@ -406,279 +475,256 @@ msgstr "Az Időnyilvántartó névjegye"
 msgid "translator-credits"
 msgstr "Kelemen Gábor <kelemeng@gnome.hu>"
 
-#: ../src/hamster/applet.py:206 ../src/hamster/preferences.py:196
-#: ../src/hamster/reports.py:225 ../src/hamster/reports.py:289
-#: ../src/hamster-standalone:64
-msgid "Activity"
-msgstr "Tevékenység"
-
-#: ../src/hamster/applet.py:317 ../src/hamster/applet.py:340
-#: ../src/hamster/applet.py:437 ../src/hamster-standalone:195
-#: ../src/hamster-standalone:264
-msgid "No activity"
-msgstr "Nincs tevékenység"
-
-#: ../src/hamster/applet.py:395
+#: ../src/hamster/applet.py:375
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:398
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%sh"
 msgstr "%só"
 
-#: ../src/hamster/applet.py:420 ../src/hamster/db.py:243
-#: ../src/hamster/db.py:253 ../src/hamster/db.py:307 ../src/hamster/db.py:662
-#: ../src/hamster/db.py:723 ../src/hamster/edit_activity.py:51
-#: ../src/hamster/preferences.py:61 ../src/hamster/reports.py:56
-#: ../src/hamster/reports.py:94 ../src/hamster/reports.py:243
-#: ../src/hamster-standalone:247 ../src/hamster/stuff.py:132
+#: ../src/hamster/applet.py:399 ../src/hamster/db.py:286
+#: ../src/hamster/db.py:296 ../src/hamster/db.py:352 ../src/hamster/db.py:682
+#: ../src/hamster/db.py:865 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:61
+#: ../src/hamster/reports.py:99 ../src/hamster/reports.py:222
+#: ../src/hamster-time-tracker:218
 msgid "Unsorted"
 msgstr "Rendezetlen"
 
-#: ../src/hamster/applet.py:428 ../src/hamster-standalone:255
+#: ../src/hamster/applet.py:405 ../src/hamster-time-tracker:163
+#: ../src/hamster-time-tracker:223
 msgid "Just started"
 msgstr "Épp megkezdődött"
 
-#: ../src/hamster/applet.py:671 ../src/hamster-standalone:441
+#: ../src/hamster/applet.py:640 ../src/hamster-time-tracker:369
 msgid "Changed activity"
 msgstr "Tevékenységváltás"
 
-#: ../src/hamster/applet.py:672 ../src/hamster-standalone:442
+#: ../src/hamster/applet.py:641 ../src/hamster-time-tracker:370
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Átváltott a következőre: „%s”"
 
 #. defaults
-#: ../src/hamster/db.py:918
+#: ../src/hamster/db.py:957
 msgid "Work"
 msgstr "Munka"
 
-#: ../src/hamster/db.py:919
+#: ../src/hamster/db.py:958
 msgid "Reading news"
 msgstr "Hírek olvasása"
 
-#: ../src/hamster/db.py:920
+#: ../src/hamster/db.py:959
 msgid "Checking stocks"
 msgstr "Árfolyamok ellenőrzése"
 
-#: ../src/hamster/db.py:921
+#: ../src/hamster/db.py:960
 msgid "Super secret project X"
 msgstr "A szupertitkos X projekt"
 
-#: ../src/hamster/db.py:922
+#: ../src/hamster/db.py:961
 msgid "World domination"
 msgstr "Világuralom"
 
-#: ../src/hamster/db.py:924
+#: ../src/hamster/db.py:963
 msgid "Day-to-day"
 msgstr "Mindennapi"
 
-#: ../src/hamster/db.py:925
+#: ../src/hamster/db.py:964
 msgid "Lunch"
 msgstr "Ebéd"
 
-#: ../src/hamster/db.py:926
+#: ../src/hamster/db.py:965
 msgid "Watering flowers"
 msgstr "Virágok meglocsolása"
 
-#: ../src/hamster/db.py:927
+#: ../src/hamster/db.py:966
 msgid "Doing handstands"
 msgstr "Kézenállás"
 
-#: ../src/hamster/edit_activity.py:67
+#: ../src/hamster/edit_activity.py:70
 msgid "Update activity"
 msgstr "Tevékenység frissítése"
 
-#: ../src/hamster/overview_activities.py:88
+#: ../src/hamster/overview_activities.py:90
 msgctxt "overview list"
 msgid "%A, %b %d"
 msgstr "%A, %b %e."
 
-#: ../src/hamster/overview.py:79
-msgid "Week"
-msgstr "Hét"
-
-#: ../src/hamster/overview.py:80
-msgid "Month"
-msgstr "Hónap"
-
-#: ../src/hamster/overview.py:81
-msgid "Date Range"
-msgstr "Dátumtartomány"
-
-#. date format for overview label when only single day is visible
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/overview.py:158
-msgid "%B %d, %Y"
-msgstr "%Y. %B %e."
-
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/overview.py:166
-#, python-format
-msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
-"%(start_Y)s. %(start_B)s %(start_d)s. – %(end_Y)s. %(end_B)s %(end_d)s."
-
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/overview.py:172
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s. – %(end_B)s %(end_d)s. %(end_Y)s."
-
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/overview.py:178
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s. – %(end_d)s. %(end_Y)s."
-
-#: ../src/hamster/overview_totals.py:148
+#: ../src/hamster/overview_totals.py:161
 #, python-format
 msgid "%s hours tracked total"
 msgstr "Az összesen nyilvántartott órák száma: %s"
 
-#: ../src/hamster/preferences.py:117 ../src/hamster/preferences.py:192
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:103
+msgid "None"
+msgstr "Nincs"
+
+#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
 msgid "Name"
 msgstr "Név"
 
-#: ../src/hamster/preferences.py:137 ../src/hamster/reports.py:226
-#: ../src/hamster/reports.py:288
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:313
 msgid "Category"
 msgstr "Kategória"
 
-#: ../src/hamster/preferences.py:673
+#: ../src/hamster/preferences.py:628
 msgid "New category"
 msgstr "Új kategória"
 
-#: ../src/hamster/preferences.py:686
+#: ../src/hamster/preferences.py:641
 msgid "New activity"
 msgstr "Új tevékenység"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:757
+#: ../src/hamster/preferences.py:692
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d perc"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:760
+#: ../src/hamster/preferences.py:695
 msgid "Never"
 msgstr "Soha"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:115
+#: ../src/hamster/reports.py:120
 msgid "activity"
 msgstr "tevékenység"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:117
+#: ../src/hamster/reports.py:122
 msgid "start time"
 msgstr "kezdési idő"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:119
+#: ../src/hamster/reports.py:124
 msgid "end time"
 msgstr "befejezési idő"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:121
+#: ../src/hamster/reports.py:126
 msgid "duration minutes"
 msgstr "időtartam percekben"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:123
+#: ../src/hamster/reports.py:128
 msgid "category"
 msgstr "kategória"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:125
+#: ../src/hamster/reports.py:130
 msgid "description"
 msgstr "leírás"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:127
+#: ../src/hamster/reports.py:132
 msgid "tags"
 msgstr "címkék"
 
-#: ../src/hamster/reports.py:167
+#: ../src/hamster/reports.py:173
 #, python-format
 msgid ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
+"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
+"%(end_Y)s"
 msgstr ""
-"Áttekintés: %(start_Y)s. %(start_B)s %(start_d)s. – %(end_Y)s. %(end_B)s %"
-"(end_d)s."
+"Tevékenységnapló: %(start_Y)s. %(start_B)s %(start_d)s. – %(end_Y)s. %(end_B)"
+"s %(end_d)s."
 
-#: ../src/hamster/reports.py:169
+#: ../src/hamster/reports.py:175
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "Áttekintés: %(start_B)s %(start_d)s. – %(end_B)s %(end_d)s. %(end_Y)s."
+msgid ""
+"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"Tevékenységnapló: %(start_B)s %(start_d)s. –  %(end_Y)s. %(end_B)s %(end_d)s."
 
-#: ../src/hamster/reports.py:171
+#: ../src/hamster/reports.py:177
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Áttekintés: %(start_B)s %(start_d)s. – %(end_d)s. %(end_Y)s."
+msgid "Activity log for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Tevékenységnapló: %(start_Y)s. %(start_B)s %(start_d)s."
 
-#: ../src/hamster/reports.py:174
+#: ../src/hamster/reports.py:179
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Áttekintés: %(start_Y)s. %(start_B)s %(start_d)s."
-
-#: ../src/hamster/reports.py:224
-msgid "Date"
-msgstr "Dátum"
-
-#: ../src/hamster/reports.py:228
-msgid "Start"
-msgstr "Kezdés"
-
-#: ../src/hamster/reports.py:229
-msgid "End"
-msgstr "Befejezés"
-
-#: ../src/hamster/reports.py:230 ../src/hamster/reports.py:290
-msgid "Duration"
-msgstr "Időtartam"
-
-#: ../src/hamster/reports.py:231
-msgid "Description"
-msgstr "Leírás"
+msgid "Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Tevékenységnapló: %(start_B)s %(start_d)s. –  %(end_Y)s. %(end_d)s."
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:264
+#: ../src/hamster/reports.py:231 ../src/hamster/reports.py:293
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%Y. %b %e."
 
-#: ../src/hamster/reports.py:300
-msgid "Total Time"
-msgstr "Teljes idő"
+#: ../src/hamster/reports.py:303
+msgid "Totals by Day"
+msgstr "Napi összesítés"
 
-#: ../src/hamster-standalone:190
+#: ../src/hamster/reports.py:304
+msgid "Activity Log"
+msgstr "Tevékenységnapló"
+
+#: ../src/hamster/reports.py:306
+msgid "totals by activity"
+msgstr "összesítés tevékenység szerint"
+
+#: ../src/hamster/reports.py:307
+msgid "totals by category"
+msgstr "összesítés kategória szerint"
+
+#: ../src/hamster/reports.py:309
+msgid "Show:"
+msgstr "Megjelenítés:"
+
+#: ../src/hamster/reports.py:311
+msgid "Date"
+msgstr "Dátum"
+
+#: ../src/hamster/reports.py:315
+msgid "Start"
+msgstr "Kezdés"
+
+#: ../src/hamster/reports.py:316
+msgid "End"
+msgstr "Befejezés"
+
+#: ../src/hamster/reports.py:317
+msgid "Duration"
+msgstr "Időtartam"
+
+#: ../src/hamster/reports.py:318
+msgid "Description"
+msgstr "Leírás"
+
+#: ../src/hamster/reports.py:321
+msgid "Show template"
+msgstr "Sablon megjelenítése"
+
+#: ../src/hamster/reports.py:322
+#, python-format
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr "Ezt felülbírálhatja saját verziójának %(home_folder)s alá mentésével"
+
+#: ../src/hamster-time-tracker:161
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Ezen dolgozik: <b>%s</b>"
 
-#: ../src/hamster/stats.py:86
+#: ../src/hamster-time-tracker:489
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamster időnyilvántartó. Használat:"
+
+#: ../src/hamster/stats.py:89
 msgctxt "years"
 msgid "All"
 msgstr "Összes"
 
-#: ../src/hamster/stats.py:176
+#: ../src/hamster/stats.py:165
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -686,14 +732,14 @@ msgstr ""
 "Még nincs elegendő adat a statisztikák előállításához.\n"
 "Legalább egy heti használat kellene."
 
-#: ../src/hamster/stats.py:179
+#: ../src/hamster/stats.py:168
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Még folyik az adatgyűjtés – egy hét múlva nézze meg újra!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:310
+#: ../src/hamster/stats.py:319
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%Y. %b %e."
@@ -701,17 +747,17 @@ msgstr "%Y. %b %e."
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:315
+#: ../src/hamster/stats.py:324
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%b %e"
 
-#: ../src/hamster/stats.py:317
+#: ../src/hamster/stats.py:326
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Az első tevékenység ekkor lett rögzítve: %s."
 
-#: ../src/hamster/stats.py:326 ../src/hamster/stats.py:330
+#: ../src/hamster/stats.py:335 ../src/hamster/stats.py:339
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -719,7 +765,7 @@ msgstr[0] "%(num)s év"
 msgstr[1] "%(num)s év"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:335
+#: ../src/hamster/stats.py:344
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -731,12 +777,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:353
+#: ../src/hamster/stats.py:362
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%Y. %b %e."
 
-#: ../src/hamster/stats.py:358
+#: ../src/hamster/stats.py:367
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -749,77 +795,118 @@ msgstr[1] ""
 "tartott."
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:366
+#: ../src/hamster/stats.py:375
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "%s rekord van."
 msgstr[1] "%s rekord van."
 
-#: ../src/hamster/stats.py:386
+#: ../src/hamster/stats.py:395
 msgid "Hamster would like to observe you some more!"
 msgstr "A Hamster szeretné Önt jobban megismerni."
 
-#: ../src/hamster/stats.py:388
+#: ../src/hamster/stats.py:397
 #, python-format
 msgid ""
-"With %s percent of all facts starting before 9am you seem to be an early "
+"With %s percent of all facts starting before 9am, you seem to be an early "
 "bird."
 msgstr ""
 "Mivel az összes tevékenységeinek %s százaléka reggel 9 óra előtt kezdődik, "
 "ezért Ön valószínűleg koránkelő."
 
-#: ../src/hamster/stats.py:391
+#: ../src/hamster/stats.py:400
 #, python-format
 msgid ""
-"With %s percent of all facts starting after 11pm you seem to be a night owl."
+"With %s percent of all facts starting after 11pm, you seem to be a night owl."
 msgstr ""
 "Mivel az összes tevékenységeinek %s százaléka este 11 óra után kezdődik, "
 "ezért Ön valószínűleg egy éjjeli bagoly."
 
-#: ../src/hamster/stats.py:394
+#: ../src/hamster/stats.py:403
 #, python-format
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
+"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
 "busy bee."
 msgstr ""
 "Mivel az összes tevékenységeinek %s százaléka 15 percnél rövidebb, ezért Ön "
 "valószínűleg hangyaszorgalmú."
 
 #. duration in round hours
-#: ../src/hamster/stuff.py:56
+#: ../src/hamster/stuff.py:57
 #, python-format
 msgid "%dh"
 msgstr "%dó"
 
 #. duration less than hour
-#: ../src/hamster/stuff.py:59
+#: ../src/hamster/stuff.py:60
 #, python-format
 msgid "%dmin"
 msgstr "%dp"
 
 #. x hours, y minutes
-#: ../src/hamster/stuff.py:62
+#: ../src/hamster/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dó %dp"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:38
-msgid "Save report - Time Tracker"
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%Y. %B %e."
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_Y)s. %(start_B)s %(start_d)s. – %(end_Y)s. %(end_B)s %(end_d)s."
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s. – %(end_B)s %(end_d)s. %(end_Y)s."
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s. – %(end_d)s. %(end_Y)s."
+
+#: ../src/hamster/widgets/reportchooserdialog.py:39
+msgid "Save Report — Time Tracker"
 msgstr "Jelentés mentése – Időnyilvántartó"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:50
+#: ../src/hamster/widgets/reportchooserdialog.py:57
 msgid "HTML Report"
 msgstr "HTML jelentés"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:58
+#: ../src/hamster/widgets/reportchooserdialog.py:65
 msgid "Tab-Separated Values (TSV)"
 msgstr "Tab-bal elválasztott értékek (TSV)"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:66
+#: ../src/hamster/widgets/reportchooserdialog.py:73
 msgid "XML"
 msgstr "XML"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:73
+#: ../src/hamster/widgets/reportchooserdialog.py:80
 msgid "iCal"
 msgstr "iCal"
+
+#. title in the report file name
+#: ../src/hamster/widgets/reportchooserdialog.py:97
+msgid "Time track"
+msgstr "Időnyilvántartás"
