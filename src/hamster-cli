@@ -197,17 +197,17 @@ def fact_dict(fact_data, with_date):
 
     fact['start'] = fact_data.start_time.strftime(fmt)
     if fact_data['end_time']:
-        fact['end'] = fact_data['end_time'].strftime(fmt)
+        fact['end'] = fact_data.end_time.strftime(fmt)
     else:
         end_date = dt.datetime.now()
         fact['end'] = ''
 
     fact['duration'] = stuff.format_duration(fact_data.delta)
 
-    fact['activity'] = fact_data['name']
-    fact['category'] = fact_data['category']
+    fact['activity'] = fact_data.name
+    fact['category'] = fact_data.category
     if fact_data['tags']:
-        fact['tags'] = ' '.join('#%s' % tag for tag in fact_data['tags'])
+        fact['tags'] = ' '.join('#%s' % tag for tag in fact_data.tags)
     else:
         fact['tags'] = ''
     return fact

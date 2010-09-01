@@ -66,7 +66,7 @@ class HamsterItem(DockManagerItem):
     def update_text(self):
         today = self.storage.get_todays_facts()
 
-        if today and today[-1]['end_time'] is None:
+        if today and today[-1].end_time is None:
             fact = today[-1]
 
             self.set_tooltip("%(name)s - %(category)s" % fact)

@@ -244,7 +244,7 @@ class ProjectHamster(object):
 
     def delete_selected(self):
         fact = self.treeview.get_selected_fact()
-        runtime.storage.remove_fact(fact["id"])
+        runtime.storage.remove_fact(fact.id)
 
 
     """events"""
@@ -257,7 +257,7 @@ class ProjectHamster(object):
 
     def _open_edit_activity(self, row, fact):
         """opens activity editor for selected row"""
-        dialogs.edit.show(self.window, fact_id = fact["id"])
+        dialogs.edit.show(self.window, fact_id = fact.id)
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
@@ -364,12 +364,12 @@ class ProjectHamster(object):
         if self.last_activity and \
            self.last_activity.name.lower() == activity.name.lower() and \
            (self.last_activity.category or "").lower() == (activity.category or "").lower() and \
-           ", ".join(self.last_activity['tags']).lower() == ", ".join(activity['tags']).lower():
+           ", ".join(self.last_activity.tags).lower() == ", ".join(activity.tags).lower():
             return
 
         # ok, switch
         fact = stuff.Fact(activity.name,
-                          tags = ", ".join(activity['tags']),
+                          tags = ", ".join(activity.tags),
                           category = activity.category,
                           description = activity.description);
         runtime.storage.add_fact(fact)
