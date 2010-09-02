@@ -69,7 +69,7 @@ class HamsterItem(DockManagerItem):
         if today and today[-1].end_time is None:
             fact = today[-1]
 
-            self.set_tooltip("%(name)s - %(category)s" % fact)
+            self.set_tooltip("%s - %s" % (fact.activity, fact.category))
             self.set_badge(stuff.format_duration(fact.delta, human=False))
         else:
             self.set_tooltip(_("No activity"))

@@ -65,7 +65,7 @@ class DockyHamsterItem(DockyItem):
         if today and today[-1].end_time is None:
             fact = today[-1]
 
-            self.iface.SetText("%(name)s - %(category)s" % fact)
+            self.iface.SetText("%s - %s" % (fact.activity, fact.category))
             self.iface.SetBadgeText(stuff.format_duration(fact.delta, human=False))
         else:
             self.iface.SetText(_("No activity"))
