@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-07-07 13:19+0000\n"
-"PO-Revision-Date: 2010-07-09 17:50+0300\n"
+"POT-Creation-Date: 2010-08-13 19:08+0000\n"
+"PO-Revision-Date: 2010-09-03 09:17+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -127,8 +127,8 @@ msgstr "Üle_vaade"
 msgid "_Preferences"
 msgstr "_Eelistused"
 
-msgid "Project Hamster desktop time tracking"
-msgstr "Projektihamster - ajakasutuse jälgimise programm"
+msgid "Project Hamster - track your time"
+msgstr "Projektihamster - ajajälgija"
 
 msgid "No records today"
 msgstr "Tänase kohta pole ühtegi kirjet"
@@ -144,9 +144,6 @@ msgstr "_Alusta jälgimist"
 
 msgid "Sto_p Tracking"
 msgstr "_Lõpeta jälgimine"
-
-msgid "Tell me more"
-msgstr "Räägi lähemalt"
 
 msgid "To_day"
 msgstr "_Täna"
@@ -181,6 +178,7 @@ msgstr "Varasema tegevuse lisamine"
 msgid "Contents"
 msgstr "Sisukord"
 
+#. now add buttons
 msgid "Overview"
 msgstr "Ülevaade"
 
@@ -274,12 +272,6 @@ msgstr "Kategooria muutmine"
 msgid "Integration"
 msgstr "Integratsioon"
 
-msgid "Move activity down"
-msgstr "Tegevuse liigutamine allapoole"
-
-msgid "Move activity up"
-msgstr "Tegevuse liigutamine ülespoole"
-
 msgid "New day starts at"
 msgstr "Uus päev algab"
 
@@ -343,6 +335,12 @@ msgstr "Algus ja lõpp"
 msgid "Year:"
 msgstr "Aasta:"
 
+msgid "No activity"
+msgstr "Tegevusetu"
+
+msgid "Preferences"
+msgstr "Eelistused"
+
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
 msgstr "Autoriõigused © 2007–2010 Toms Bauģis ja teised"
 
@@ -356,9 +354,6 @@ msgid "translator-credits"
 msgstr ""
 "Ivar Smolin <okul linux ee>, 2008–2010.\n"
 "Mattias Põldaru <mahfiaz gmail com>, 2009–2010."
-
-msgid "No activity"
-msgstr "Tegevusetu"
 
 #, python-format
 msgid "%(category)s: %(duration)s"
@@ -421,6 +416,7 @@ msgstr "%A, %d. %b"
 msgid "%s hours tracked total"
 msgstr "Kokku on jälgitud %s tundi"
 
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
 msgid "None"
 msgstr "Puudub"
 
@@ -517,7 +513,7 @@ msgid "totals by category"
 msgstr "kokkuvõte kategooria järgi"
 
 msgid "Show:"
-msgstr ""
+msgstr "Näidata:"
 
 msgid "Date"
 msgstr "Kuupäev"
@@ -540,10 +536,15 @@ msgstr "Näita malli"
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
+"Seda on võimalik asendada, kui salvestada oma versioon kataloogi "
+"%(home_folder)s"
 
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Jooksev tegevus: <b>%s</b>"
+
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamstri ajajälgija. Kasutamine:"
 
 msgctxt "years"
 msgid "All"
@@ -708,6 +709,18 @@ msgstr "iCal"
 #. title in the report file name
 msgid "Time track"
 msgstr "Ajajälgimine"
+
+#~ msgid "Project Hamster desktop time tracking"
+#~ msgstr "Projektihamster - ajakasutuse jälgimise programm"
+
+#~ msgid "Tell me more"
+#~ msgstr "Räägi lähemalt"
+
+#~ msgid "Move activity down"
+#~ msgstr "Tegevuse liigutamine allapoole"
+
+#~ msgid "Move activity up"
+#~ msgstr "Tegevuse liigutamine ülespoole"
 
 #~ msgid "Ad_d Earlier Activity"
 #~ msgstr "Lisa _varasem tegevus"
