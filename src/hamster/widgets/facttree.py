@@ -262,14 +262,6 @@ class FactTree(gtk.TreeView):
             for row in self.new_rows:
                 self.store_model.append((row, ))
 
-
-
-
-        # attach model is also where we calculate the bounding box widths
-        #self.set_model(self.store_model)
-
-        #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-
         if self.stored_selection:
             self.restore_selection()
 
@@ -461,6 +453,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                         | tag, tag, some description                 |       |   |
           --------------+--------------------------------------------+-------+---+
         """
+        # set the colors
+        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
+        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
 
         context = window.cairo_create()
 
@@ -478,8 +473,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         else:
             text_color = self.normal_color
 
+        self.date_label.color = text_color
+        self.duration_label.color = text_color
+
         if parent:
-            self.date_label.color = text_color
             self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent.label)
             self.date_label.x = 5
 
@@ -491,7 +488,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             self.date_label.y = y
 
 
-            self.duration_label.color = text_color
             self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent.duration)
             self.duration_label.x = width - self.duration_label.width
             self.duration_label.y = y
@@ -508,10 +504,6 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         x, y, cell_width, h = bounds
 
         g = graphics.Graphics(context)
-
-        # set the colors
-        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
-        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
 
         fact = self.data
 
