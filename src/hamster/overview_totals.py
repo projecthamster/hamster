@@ -208,9 +208,13 @@ class TotalsBox(gtk.VBox):
             self.get_widget("totals_by_category").set_size_request(-1, 10)
             self.category_chart.plot([],[])
 
-        self.get_widget("totals_by_activity").set_size_request(10,10)
-        self.get_widget("totals_by_activity").set_size_request(-1, len(self.activity_sums[0]) * 20)
-        self.activity_chart.plot(*self.activity_sums)
+        if self.activity_sums:
+            self.get_widget("totals_by_activity").set_size_request(10,10)
+            self.get_widget("totals_by_activity").set_size_request(-1, len(self.activity_sums[0]) * 20)
+            self.activity_chart.plot(*self.activity_sums)
+        else:
+            self.get_widget("totals_by_category").set_size_request(-1, 10)
+            self.activity_chart.plot([],[])
 
         self.get_widget("totals_by_tag").set_size_request(10,10)
         if self.tag_sums:
