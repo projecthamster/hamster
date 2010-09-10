@@ -26,7 +26,7 @@ import locale
 
 class Bar(graphics.Sprite):
     def __init__(self, key, value, normalized, label_color):
-        graphics.Sprite.__init__(self)
+        graphics.Sprite.__init__(self, cache_as_bitmap=True)
         self.key, self.value, self.normalized = key, value, normalized
 
         self.height = 0
@@ -42,9 +42,8 @@ class Bar(graphics.Sprite):
 
     def on_render(self, sprite):
         # invisible rectangle for the mouse, covering whole area
-        self.graphics.set_color("#000", 0)
         self.graphics.rectangle(0, 0, self.width, self.height)
-        self.graphics.stroke()
+        self.graphics.fill("#000", 0)
 
         size = round(self.width * self.normalized)
 
@@ -143,11 +142,8 @@ class Chart(graphics.Scene):
             new_labels.append(label)
 
 
-        for sprite in self.bars:
-            self.plot_area.sprites.remove(sprite)
-
-        for sprite in self.labels:
-            self.sprites.remove(sprite)
+        self.plot_area.remove_child(*self.bars)
+        self.remove_child(*self.labels)
 
         self.bars, self.labels = new_bars, new_labels
         self.add_child(*self.labels)
