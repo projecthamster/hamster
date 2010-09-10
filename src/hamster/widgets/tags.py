@@ -317,31 +317,31 @@ class Tag(graphics.Sprite):
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 2)
+        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1, cache_as_bitmap = True)
 
-        corner = (label.height + 3) / 3
+        corner = int((label.height + 3) / 3) + 0.5
         label.x = corner + 6
+
         w, h = int(label.x + label.width + label.height * 0.3), label.height + 3
 
         self.color = color
 
-        self.tag = graphics.Polygon([(0, corner),
-                                         (corner, 0),
-                                         (w, 0),
-                                         (w, h),
-                                         (corner, h),
-                                         (0, h - corner)],
-                                        x = 0.5,
-                                        y = 0.5,
-                                        fill = self.color,
-                                        stroke = "#b4b4b4",
-                                        line_width = 1)
+        self.tag = graphics.Polygon([(0.5, corner),
+                                     (corner, 0.5),
+                                     (w + 0.5, 0.5),
+                                     (w + 0.5, h - 0.5),
+                                     (corner, h - 0.5),
+                                     (0.5, h - corner)],
+                                     fill = self.color,
+                                     stroke = "#b4b4b4",
+                                     line_width = 1, cache_as_bitmap = True)
 
         self.add_child(self.tag)
-        self.add_child(graphics.Circle(2, 2, x = 5.5, y = h / 2 - 1.5,
+        self.add_child(graphics.Circle(4, 4, x = 2, y = h / 2 - 2,
                                        fill = "#fff",
                                        stroke = "#b4b4b4",
-                                       line_width = 1))
+                                       line_width = 1,
+                                       cache_as_bitmap = True))
 
         self.add_child(label)
         self.width, self.height = w, h
