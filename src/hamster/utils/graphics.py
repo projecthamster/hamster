@@ -99,13 +99,14 @@ class Graphics(object):
         self.opacity = 1.0      # opacity get's adjusted by parent - TODO - wrong inheritance?
         self.paths = None       # paths for mouse hit checks
         self._last_matrix = None
-        self.__instructions = deque() # paths colors and operations
-        self.__path_instructions = deque() # instruction set until it is converted into path-based instructions
+        self.__new_instructions = deque() # instruction set until it is converted into path-based instructions
+        self.__instruction_cache = None
+        self.cache_surface = None
 
     def clear(self):
         """clear all instructions"""
-        self.__path_instructions = deque()
-        self.__instructions = deque()
+        self.__new_instructions = deque()
+        self.__instruction_cache = None
         self.paths = []
 
     @staticmethod
@@ -149,10 +150,16 @@ class Graphics(object):
         self._add_instruction(self._paint,)
 
     @staticmethod
-    def _set_source_surface(context, image, x, y):
-        context.set_source_surface(image, x, y)
-    def set_source_surface(self, image, x = 0, y = 0):
-        self._add_instruction(self._set_source_surface, image, x, y)
+    def _set_source(context, image):
+        context.set_source(image)
+    def set_source(self, image, x = 0, y = 0):
+        self._add_instruction(self._set_source, image)
+
+    @staticmethod
+    def _set_source_surface(context, surface, x, y):
+        context.set_source_surface(surface, x, y)
+    def set_source_surface(self, surface, x = 0, y = 0):
+        self._add_instruction(self._set_source_surface, surface, x, y)
 
     @staticmethod
     def _set_source_pixbuf(context, pixbuf, x, y):
@@ -160,6 +167,30 @@ class Graphics(object):
     def set_source_pixbuf(self, pixbuf, x = 0, y = 0):
         self._add_instruction(self._set_source_pixbuf, pixbuf, x, y)
 
+    @staticmethod
+    def _save_context(context): context.save()
+    def save_context(self):
+        """change current position"""
+        self._add_instruction(self._save_context)
+
+    @staticmethod
+    def _restore_context(context): context.restore()
+    def restore_context(self):
+        """change current position"""
+        self._add_instruction(self._restore_context)
+
+
+    @staticmethod
+    def _translate(context, x, y): context.translate(x, y)
+    def translate(self, x, y):
+        """change current position"""
+        self._add_instruction(self._translate, x, y)
+
+    @staticmethod
+    def _rotate(context, radians): context.rotate(radians)
+    def rotate(self, radians):
+        """change current position"""
+        self._add_instruction(self._rotate, radians)
 
     @staticmethod
     def _move_to(context, x, y): context.move_to(x, y)
@@ -169,15 +200,25 @@ class Graphics(object):
 
     @staticmethod
     def _line_to(context, x, y): context.line_to(x, y)
-    def line_to(self, x, y):
+    def line_to(self, x, y = None):
         """draw line"""
-        self._add_instruction(self._line_to, x, y)
+        if y is not None:
+            self._add_instruction(self._line_to, x, y)
+        elif isinstance(x, list) and y is None:
+            for x2, y2 in x:
+                self._add_instruction(self._line_to, x2, y2)
+
 
     @staticmethod
     def _rel_line_to(context, x, y): context.rel_line_to(x, y)
-    def rel_line_to(self, x, y):
+    def rel_line_to(self, x, y = None):
         """draw line"""
-        self._add_instruction(self._rel_line_to, x, y)
+        if x and y:
+            self._add_instruction(self._rel_line_to, x, y)
+        elif isinstance(x, list) and y is None:
+            for x2, y2 in x:
+                self._add_instruction(self._rel_line_to, x2, y2)
+
 
     @staticmethod
     def _curve_to(context, x, y, x2, y2, x3, y3):
@@ -356,11 +397,15 @@ class Graphics(object):
         """
         self._add_instruction(self._show_layout, text, font_desc, alignment, width, wrap, ellipsize)
 
-    def _remember_path(self, context):
+    def _remember_path(self, context, instruction):
         context.save()
         context.identity_matrix()
 
-        new_extents = context.path_extents()
+        if instruction in (self._fill, self._fill_preserve):
+            new_extents = context.path_extents()
+        else:
+            new_extents = context.stroke_extents()
+
         self.extents = self.extents or new_extents
         self.extents = (min(self.extents[0], new_extents[0]),
                         min(self.extents[1], new_extents[1]),
@@ -377,26 +422,31 @@ class Graphics(object):
             function(self.context, *params)
         else:
             self.paths = None
-            self.__path_instructions.append((function, params))
+            self.__new_instructions.append((function, params))
 
 
     def _draw(self, context, with_extents = False):
         """draw accumulated instructions in context"""
-
-        if self.__path_instructions: #new stuff!
-            self.__instructions = deque()
+        if self.__new_instructions: #new stuff!
+            self.__instruction_cache = deque()
             current_color = None
             current_line = None
             instruction_cache = []
 
-            while self.__path_instructions:
-                instruction, args = self.__path_instructions.popleft()
+            while self.__new_instructions:
+                instruction, args = self.__new_instructions.popleft()
 
-                if instruction in (self._set_source_surface, self._set_source_pixbuf, self._paint):
-                    self.__instructions.append((None, None, None, instruction, args))
+                if instruction in (self._set_source,
+                                   self._set_source_surface,
+                                   self._set_source_pixbuf,
+                                   self._paint,
+                                   self._translate,
+                                   self._save_context,
+                                   self._restore_context):
+                    self.__instruction_cache.append((None, None, None, instruction, args))
 
                 elif instruction == self._show_layout:
-                    self.__instructions.append((None, current_color, None, instruction, args))
+                    self.__instruction_cache.append((None, current_color, None, instruction, args))
 
                 elif instruction == self._set_color:
                     current_color = args
@@ -404,10 +454,10 @@ class Graphics(object):
                 elif instruction == self._set_line_width:
                     current_line = args
 
-                elif instruction in (self._stroke, self._fill,
+                elif instruction in (self._new_path, self._stroke, self._fill,
                                      self._stroke_preserve,
                                      self._fill_preserve):
-                    self.__instructions.append((context.copy_path(),
+                    self.__instruction_cache.append((context.copy_path(),
                                                current_color,
                                                current_line,
                                                instruction, ()))
@@ -421,7 +471,7 @@ class Graphics(object):
 
             while instruction_cache: # stroke is missing so we just cache
                 instruction, args = instruction_cache.pop(0)
-                self.__instructions.append((None, None, None, instruction, args))
+                self.__instruction_cache.append((None, None, None, instruction, args))
 
 
         # if we have been moved around, we should update bounds
@@ -430,20 +480,97 @@ class Graphics(object):
             self.paths = deque()
             self.extents = None
 
-        for path, color, line, instruction, args in self.__instructions:
+        if not self.__instruction_cache:
+            return
+
+        for path, color, line, instruction, args in self.__instruction_cache:
             if color: self._set_color(context, *color)
             if line: self._set_line_width(context, *line)
 
             if path:
                 context.append_path(path)
                 if check_extents:
-                    self._remember_path(context)
+                    self._remember_path(context, self._fill)
 
 
             if instruction:
-                instruction(context, *args)
+                if instruction == self._paint and self.opacity < 1:
+                    context.paint_with_alpha(self.opacity)
+                else:
+                    instruction(context, *args)
+
+        if check_extents and instruction not in (self._fill, self._stroke, self._fill_preserve, self._stroke_preserve):
+            # last one
+            self._remember_path(context, self._fill)
 
         self._last_matrix = context.get_matrix()
+
+
+    def _draw_as_bitmap(self, context):
+        """
+            instead of caching paths, this function caches the whole drawn thing
+            use cache_as_bitmap on sprite to enable this mode
+        """
+        matrix = context.get_matrix()
+
+        if self.__new_instructions or matrix != self._last_matrix:
+            if self.__new_instructions:
+                self.__instruction_cache = list(self.__new_instructions)
+                self.__new_instructions = deque()
+
+            self.paths = deque()
+            self.extents = None
+
+            if not self.__instruction_cache:
+                # no instructions - nothing to do
+                return
+
+            # instructions that end path
+            path_end_instructions = (self._new_path, self._stroke, self._fill, self._stroke_preserve, self._fill_preserve)
+
+            # measure the path extents so we know the size of surface
+            for instruction, args in self.__instruction_cache:
+                if instruction in path_end_instructions:
+                    self._remember_path(context, instruction)
+
+                if instruction in (self._set_source_pixbuf, self._set_source_surface):
+                    # draw a rectangle around the pathless instructions so that the extents are correct
+                    pixbuf = args[0]
+                    x = args[1] if len(args) > 1 else 0
+                    y = args[2] if len(args) > 2 else 0
+                    self._rectangle(context, x, y, pixbuf.get_width(), pixbuf.get_height())
+
+                instruction(context, *args)
+
+            if instruction not in path_end_instructions: # last one
+                self._remember_path(context, self._fill)
+
+            # now draw the instructions on the caching surface
+            w = int(self.extents[2] - self.extents[0]) + 1
+            h = int(self.extents[3] - self.extents[1]) + 1
+            self.cache_surface = context.get_target().create_similar(cairo.CONTENT_COLOR_ALPHA, w, h)
+            ctx = gtk.gdk.CairoContext(cairo.Context(self.cache_surface))
+            ctx.translate(-self.extents[0], -self.extents[1])
+
+            ctx.transform(matrix)
+            for instruction, args in self.__instruction_cache:
+                instruction(ctx, *args)
+
+            self._last_matrix = matrix
+        else:
+            context.save()
+            context.identity_matrix()
+            context.translate(self.extents[0], self.extents[1])
+            context.set_source_surface(self.cache_surface)
+
+            if self.opacity < 1:
+                context.paint_with_alpha(self.opacity)
+            else:
+                context.paint()
+            context.restore()
+
+
+
 
 
 class Sprite(gtk.Object):
@@ -457,16 +584,17 @@ class Sprite(gtk.Object):
         "on-mouse-over": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "on-mouse-out": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "on-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        "on-drag-start": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-drag": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        "on-drag-finish": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-render": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        #"on-draw": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
     def __init__(self, x = 0, y = 0,
                  opacity = 1, visible = True,
                  rotation = 0, pivot_x = 0, pivot_y = 0,
                  scale_x = 1, scale_y = 1,
                  interactive = False, draggable = False,
-                 z_order = 0):
+                 z_order = 0, cache_as_bitmap = False, mouse_cursor = None):
         gtk.Object.__init__(self)
 
         #: list of children sprites. Use :func:`add_child` to add sprites
@@ -508,31 +636,119 @@ class Sprite(gtk.Object):
         #: drawing order between siblings. The one with the highest z_order will be on top.
         self.z_order = z_order
 
+        #: Whether the sprite should be cached as a bitmap. Default: true
+        #: Generally good when you have many static sprites
+        self.cache_as_bitmap = cache_as_bitmap
+
+        #: mouse-over cursor of the sprite. See :class:`Scene`.mouse_cursor
+        #: for possible values
+        self.mouse_cursor = mouse_cursor
+
+        #: x position of the cursor within mouse upon drag. change this value
+        #: in on-drag-start to adjust drag point
+        self.drag_x = None
+
+        #: y position of the cursor within mouse upon drag. change this value
+        #: in on-drag-start to adjust drag point
+        self.drag_y = None
+
         self.__dict__["_sprite_dirty"] = True # flag that indicates that the graphics object of the sprite should be rendered
 
     def __setattr__(self, name, val):
         if self.__dict__.get(name, "hamster_graphics_no_value_really") != val:
-            self.__dict__[name] = val
-            if name not in ('x', 'y', 'rotation', 'scale_x', 'scale_y'):
+            if name not in ('x', 'y', 'rotation', 'scale_x', 'scale_y', 'visible'):
                 self.__dict__["_sprite_dirty"] = True
+            if name in ('x', 'y'):
+                val = int(val)
+
+            self.__dict__[name] = val
+            self.redraw()
 
 
     def add_child(self, *sprites):
         """Add child sprite. Child will be nested within parent"""
         for sprite in sprites:
+            if sprite.parent:
+                sprite.parent.remove_child(sprite)
+
             self.sprites.append(sprite)
             sprite.parent = self
 
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
 
+    def remove_child(self, *sprites):
+        for sprite in sprites:
+            self.sprites.remove(sprite)
+            sprite.parent = None
+
+    def check_hit(self, x, y):
+        """check if the given coordinates are inside the sprite's fill or stroke
+           path"""
+        if not self.graphics.extents:
+            return False
+
+        sprite_x, sprite_y, sprite_x2, sprite_y2 = self.graphics.extents
+
+        if sprite_x <= x <= sprite_x2 and sprite_y <= y <= sprite_y2:
+            paths = self.graphics.paths
+            if not paths:
+                return True
+
+            context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
+            for path in paths:
+                context.append_path(path)
+            return context.in_fill(x, y)
+        else:
+            return False
+
+    def get_scene(self):
+        """returns class:`Scene` the sprite belongs to"""
+        if hasattr(self, 'parent') and self.parent:
+            if isinstance(self.parent, Scene):
+                return self.parent
+            else:
+                return self.parent.get_scene()
+        return None
+
+    def redraw(self):
+        """queue redraw of the sprite. this function is called automatically
+           whenever a sprite attribute changes. sprite changes that happen
+           during scene redraw are ignored in order to avoid echoes.
+           Call scene.redraw() explicitly if you need to redraw in these cases.
+        """
+        scene = self.get_scene()
+        if scene and scene._redraw_in_progress == False:
+            self.parent.redraw()
+
+    def animate(self, duration = None, easing = None, on_complete = None, on_update = None, delay = None, **kwargs):
+        """Request paretn Scene to Interpolate attributes using the internal tweener.
+           Specify sprite's attributes that need changing.
+           `duration` defaults to 0.4 seconds and `easing` to cubic in-out
+           (for others see pytweener.Easing class).
+
+           Example::
+             # tween some_sprite to coordinates (50,100) using default duration and easing
+             self.animate(x = 50, y = 100)
+        """
+        scene = self.get_scene()
+        if scene:
+            scene.animate(self, duration, easing, on_complete, on_update, delay, **kwargs)
+
     def _draw(self, context, opacity = 1):
         if self.visible is False:
             return
 
-        if any([self.x, self.y, self.rotation, self.scale_x, self.scale_y]):
+        context.new_path()
+
+        if (self._sprite_dirty): # send signal to redo the drawing when sprite is dirty
+            self.emit("on-render")
+            self.__dict__["_sprite_dirty"] = False
+
+
+        if any((self.x, self.y, self.rotation, self.scale_x, self.scale_y)):
             context.save()
 
-            if self.x or self.y or self.pivot_x or self.pivot_y:
+            if any((self.x, self.y, self.pivot_x, self.pivot_y)):
                 context.translate(self.x + self.pivot_x, self.y + self.pivot_y)
 
             if self.rotation:
@@ -546,21 +762,18 @@ class Sprite(gtk.Object):
 
         self.graphics.opacity = self.opacity * opacity
 
-        #self.emit("on-draw") # TODO - this is expensive when doing constant redraw with many frames. maybe we can have a simple callback here?
-        #self.graphics._move_to(context, 0, 0) # TODO - i'm doing this move because otherwise the currentpoint is pointing to wherever it was left. check if we really need this
-        context.new_path()
-
-        if (self._sprite_dirty): # send signal to redo the drawing when sprite is dirty
-            self.emit("on-render")
-            self.__dict__["_sprite_dirty"] = False
-
-        self.graphics._draw(context, self.interactive or self.draggable)
+        if self.cache_as_bitmap:
+            self.graphics._draw_as_bitmap(context)
+        else:
+            self.graphics._draw(context, self.interactive or self.draggable)
 
         for sprite in self.sprites:
             sprite._draw(context, self.opacity * opacity)
 
-        if any([self.x, self.y, self.rotation, self.scale_x, self.scale_y]):
+        if any((self.x, self.y, self.rotation, self.scale_x, self.scale_y)):
             context.restore()
+
+        context.new_path() #forget about us
 
     def _on_click(self, button_state):
         self.emit("on-click", button_state)
@@ -575,10 +788,100 @@ class Sprite(gtk.Object):
         # scene will call us when there is mouse
         self.emit("on-mouse-out")
 
-    def _on_drag(self, x, y):
+    def _on_drag_start(self, event):
         # scene will call us when there is mouse
-        self.emit("on-drag", (x, y))
+        self.emit("on-drag-start", event)
 
+    def _on_drag(self, event):
+        # scene will call us when there is mouse
+        self.emit("on-drag", event)
+
+    def _on_drag_finish(self, event):
+        # scene will call us when there is mouse
+        self.emit("on-drag-finish", event)
+
+class BitmapSprite(Sprite):
+    """Caches given image data in a surface similar to targets, which ensures
+       that drawing it will be quick and low on CPU.
+       Image data can be either :class:`cairo.ImageSurface` or :class:`gtk.gdk.Pixbuf`
+    """
+    def __init__(self, image_data = None, **kwargs):
+        Sprite.__init__(self, **kwargs)
+
+        #: image data
+        self.image_data = image_data
+
+        self._surface = None
+
+    def __setattr__(self, name, val):
+        Sprite.__setattr__(self, name, val)
+        if name == 'image_data':
+            self.__dict__['_surface'] = None
+            if self.image_data:
+                self.__dict__['width'] = self.image_data.get_width()
+                self.__dict__['height'] = self.image_data.get_height()
+
+    def _draw(self, context, opacity = 1):
+        if self.image_data is None or self.width is None or self.height is None:
+            return
+
+        if not self._surface:
+            # caching image on surface similar to the target
+            self._surface = context.get_target().create_similar(cairo.CONTENT_COLOR_ALPHA,
+                                                               self.width,
+                                                               self.height)
+
+
+            local_context = gtk.gdk.CairoContext(cairo.Context(self._surface))
+            if isinstance(self.image_data, gtk.gdk.Pixbuf):
+                local_context.set_source_pixbuf(self.image_data, 0, 0)
+            else:
+                local_context.set_source_surface(self.image_data)
+            local_context.paint()
+
+            # add instructions with the resulting surface
+            self.graphics.set_source_surface(self._surface)
+            self.graphics.paint()
+            self.graphics.rectangle(0, 0, self.width, self.height)
+
+
+        Sprite._draw(self,  context, opacity)
+
+
+class Image(BitmapSprite):
+    """Displays image by path"""
+    def __init__(self, path, **kwargs):
+        BitmapSprite.__init__(self, **kwargs)
+
+        #: path to the image
+        self.path = path
+
+    def __setattr__(self, name, val):
+        BitmapSprite.__setattr__(self, name, val)
+        if name == 'path': # load when the value is set to avoid penalty on render
+            self.image_data = cairo.ImageSurface.create_from_png(self.path)
+
+
+
+class Icon(BitmapSprite):
+    """Displays icon by name and size in the theme"""
+    def __init__(self, name, size=24, **kwargs):
+        BitmapSprite.__init__(self, **kwargs)
+        self.theme = gtk.icon_theme_get_default()
+
+        #: icon name from theme
+        self.name = name
+
+        #: icon size in pixels
+        self.size = size
+
+    def __setattr__(self, name, val):
+        BitmapSprite.__setattr__(self, name, val)
+        if name in ('name', 'size'): # no other reason to discard cache than just on path change
+            if self.__dict__.get('name') and self.__dict__.get('size'):
+                self.image_data = self.theme.load_icon(self.name, self.size, 0)
+            else:
+                self.image_data = None
 
 
 class Label(Sprite):
@@ -613,35 +916,35 @@ class Label(Sprite):
         #: font size
         self.size = size
 
+        self.__surface = None
+
 
         self.connect("on-render", self.on_render)
 
 
     def __setattr__(self, name, val):
-        Sprite.__setattr__(self, name, val)
+        if self.__dict__.get(name, "hamster_graphics_no_value_really") != val:
+            if name == "width" and val and self.__dict__.get('_bounds_width') and val * pango.SCALE == self.__dict__['_bounds_width']:
+                return
 
-        if name == "width":
-            # setting width means consumer wants to contrain the label
-            if val is None or val == -1:
-                self.__dict__['_bounds_width'] = -1
-            else:
-                self.__dict__['_bounds_width'] = val * pango.SCALE
+            Sprite.__setattr__(self, name, val)
 
-        if name in ("width", "text", "size", "font_desc", "wrap", "ellipsize"):
-            # avoid chicken and egg
-            if "text" in self.__dict__ and "size" in self.__dict__ and "width" in self.__dict__:
-                self._set_dimensions()
 
+            if name == "width":
+                # setting width means consumer wants to contrain the label
+                if val is None or val == -1:
+                    self.__dict__['_bounds_width'] = -1
+                else:
+                    self.__dict__['_bounds_width'] = val * pango.SCALE
+
+            if name in ("width", "text", "size", "font_desc", "wrap", "ellipsize"):
+                # avoid chicken and egg
+                if "text" in self.__dict__ and "size" in self.__dict__:
+                    self._set_dimensions()
 
     def on_render(self, sprite):
-        self.graphics.clear()
         if not self.text:
             return
-
-        if self.interactive: #if label is interactive, draw invisible bounding box for simple hit calculations
-            self.graphics.set_color("#000", 0)
-            self.graphics.rectangle(0,0, self.width, self.height)
-            self.graphics.stroke()
 
         self.graphics.set_color(self.color)
         self.graphics.show_layout(self.text, self.font_desc,
@@ -649,6 +952,12 @@ class Label(Sprite):
                                   self._bounds_width,
                                   self.wrap,
                                   self.ellipsize)
+
+        if self._bounds_width != -1:
+            rect_width = self._bounds_width / pango.SCALE
+        else:
+            rect_width = self.width
+        self.graphics.rectangle(0, 0, rect_width, self.height)
 
 
     def _set_dimensions(self):
@@ -694,7 +1003,6 @@ class Rectangle(Sprite):
         self.connect("on-render", self.on_render)
 
     def on_render(self, sprite):
-        self.graphics.clear()
         self.graphics.rectangle(0, 0, self.width, self.height, self.corner_radius)
         self.graphics.fill_stroke(self.fill, self.stroke, self.line_width)
 
@@ -719,12 +1027,10 @@ class Polygon(Sprite):
         self.connect("on-render", self.on_render)
 
     def on_render(self, sprite):
-        self.graphics.clear()
         if not self.points: return
 
         self.graphics.move_to(*self.points[0])
-        for point in self.points:
-            self.graphics.line_to(*point)
+        self.graphics.line_to(self.points)
         self.graphics.close_path()
 
         self.graphics.fill_stroke(self.fill, self.stroke, self.line_width)
@@ -752,7 +1058,6 @@ class Circle(Sprite):
         self.connect("on-render", self.on_render)
 
     def on_render(self, sprite):
-        self.graphics.clear()
         if self.width == self.height:
             self.graphics.circle(self.width, self.width / 2.0, self.width / 2.0)
         else:
@@ -760,26 +1065,31 @@ class Circle(Sprite):
 
         self.graphics.fill_stroke(self.fill, self.stroke, self.line_width)
 
+
 class Scene(gtk.DrawingArea):
-    """ Widget for displaying sprites.
+    """ Drawing area for displaying sprites.
         Add sprites to the Scene by calling :func:`add_child`.
         Scene is descendant of `gtk.DrawingArea <http://www.pygtk.org/docs/pygtk/class-gtkdrawingarea.html>`_
         and thus inherits all it's methods and everything.
     """
 
     __gsignals__ = {
-        #: yes can haz instance attribute docstring
         "expose-event": "override",
         "configure_event": "override",
         "on-enter-frame": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "on-finish-frame": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+
         "on-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
         "on-drag": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        "on-drag-start": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        "on-drag-finish": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+
         "on-mouse-move": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-mouse-down": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-        "on-mouse-up": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "on-mouse-up": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-mouse-over": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         "on-mouse-out": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+
         "on-scroll": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
@@ -805,9 +1115,13 @@ class Scene(gtk.DrawingArea):
         #: also influence the smoothness of tweeners.
         self.framerate = framerate
 
-        #: width and height of the scene. Will be `None` until first
-        #: expose (that is until first on-enter-frame signal below).
-        self.width, self.height = None, None
+        #: Scene width. Will be `None` until first expose (that is until first
+        #: on-enter-frame signal below).
+        self.width = None
+
+        #: Scene height. Will be `None` until first expose (that is until first
+        #: on-enter-frame signal below).
+        self.height = None
 
         #: instance of :class:`pytweener.Tweener` that is used by
         #: :func:`animate` function, but can be also accessed directly for advanced control.
@@ -818,11 +1132,14 @@ class Scene(gtk.DrawingArea):
         #: instance of :class:`Colors` class for color parsing
         self.colors = Colors
 
-        #: last known coordinates of mouse cursor
-        self.mouse_x, self.mouse_y = None, None
-
         #: read only info about current framerate (frames per second)
         self.fps = 0 # inner frames per second counter
+
+        #: Last known x position of the mouse (set on expose event)
+        self.mouse_x = None
+
+        #: Last known y position of the mouse (set on expose event)
+        self.mouse_y = None
 
         #: Mouse cursor appearance.
         #: Replace with your own cursor or set to False to have no cursor.
@@ -833,29 +1150,42 @@ class Scene(gtk.DrawingArea):
         self._blank_cursor = gtk.gdk.Cursor(blank_pixmap, blank_pixmap, gtk.gdk.Color(), gtk.gdk.Color(), 0, 0)
 
 
+        #: Miminum distance in pixels for a drag to occur
+        self.drag_distance = 1
+
         self._last_frame_time = None
         self._mouse_sprite = None
-        self._mouse_drag = None
         self._drag_sprite = None
-        self._button_press_time = None # to distinguish between click and drag
-
+        self.__drag_started = False
+        self.__drag_start_x, self.__drag_start_y = None, None
 
         self._mouse_in = False
 
         self.__drawing_queued = False
-        self.__drag_x, self.__drag_y = None, None
         self.__last_expose_time = dt.datetime.now()
+        self.__last_cursor = None
+
+        self._redraw_in_progress = False
 
     def add_child(self, *sprites):
         """Add one or several :class:`graphics.Sprite` sprites to scene """
         for sprite in sprites:
+            if sprite.parent:
+                sprite.parent.remove_child(sprite)
             self.sprites.append(sprite)
-
+            sprite.parent = self
         self.sprites = sorted(self.sprites, key=lambda sprite:sprite.z_order)
+
+    def remove_child(self, *sprites):
+        """Remove one or several :class:`graphics.Sprite` sprites from scene """
+        for sprite in sprites:
+            self.sprites.remove(sprite)
+            sprite.parent = None
 
     def clear(self):
         """Remove all sprites from scene"""
-        self.sprites = []
+        self.remove_child(*self.sprites)
+
 
     def redraw(self):
         """Queue redraw. The redraw will be performed not more often than
@@ -918,17 +1248,20 @@ class Scene(gtk.DrawingArea):
         self.fps = 1 / ((now - self.__last_expose_time).microseconds / 1000000.0)
         self.__last_expose_time = now
 
+        self.mouse_x, self.mouse_y, mods = self.get_window().get_pointer()
+
+        self._redraw_in_progress = True
         self.emit("on-enter-frame", context)
         for sprite in self.sprites:
             sprite._draw(context)
 
-        self._check_mouse(self.mouse_x, self.mouse_y)
+        self.__check_mouse(self.mouse_x, self.mouse_y)
         self.emit("on-finish-frame", context)
+        self._redraw_in_progress = False
 
 
-    """ mouse events """
     def all_sprites(self, sprites = None):
-        """returns flat list of the sprite tree for simplified iteration"""
+        """Returns flat list of the sprite tree for simplified iteration"""
 
         if sprites is None:
             sprites = self.sprites
@@ -939,78 +1272,55 @@ class Scene(gtk.DrawingArea):
                 for child in self.all_sprites(sprite.sprites):
                     yield child
 
-    def __on_scroll(self, area, event):
-        self.emit("on-scroll", event)
+    def all_visible_sprites(self, sprites = None):
+        """Returns flat list of just the visible sprites - avoid children whos
+        parents are not displayed"""
+        if sprites is None:
+            sprites = self.sprites
 
-    def __on_mouse_move(self, area, event):
-        mouse_x = event.x
-        mouse_y = event.y
-        state = event.state
-        self.mouse_x, self.mouse_y = mouse_x, mouse_y
-
-
-        if self._drag_sprite and self._drag_sprite.draggable \
-           and gtk.gdk.BUTTON1_MASK & event.state:
-            # dragging around
-            drag = self._mouse_drag \
-                   and (self._mouse_drag[0] - event.x) ** 2 + \
-                       (self._mouse_drag[1] - event.y) ** 2 > 5 ** 2
-            if drag:
-                matrix = cairo.Matrix()
-                if self._drag_sprite.parent:
-                    # TODO - this currently works only until second level
-                    #        should take all parents into account
-                    matrix.rotate(self._drag_sprite.parent.rotation)
-                    matrix.invert()
-
-                if not self.__drag_x:
-                    x1,y1 = matrix.transform_point(self._mouse_drag[0],
-                                                   self._mouse_drag[1])
-
-                    self.__drag_x = self._drag_sprite.x - x1
-                    self.__drag_y = self._drag_sprite.y - y1
-
-                mouse_x, mouse_y = matrix.transform_point(mouse_x, mouse_y)
-                new_x = mouse_x + self.__drag_x
-                new_y = mouse_y + self.__drag_y
+        for sprite in sprites:
+            if sprite.visible:
+                yield sprite
+                if sprite.sprites:
+                    for child in self.all_visible_sprites(sprite.sprites):
+                        yield child
 
 
-                self._drag_sprite.x, self._drag_sprite.y = new_x, new_y
-                self._drag_sprite._on_drag(new_x, new_y)
-                self.emit("on-drag", self._drag_sprite, (new_x, new_y))
-                self.redraw()
+    def get_sprite_at_position(self, x, y):
+        """Returns the topmost visible interactive sprite for given coordinates"""
+        over = None
+        for sprite in self.all_visible_sprites():
+            if (sprite.interactive or sprite.draggable) and self.__check_hit(sprite, x, y):
+                over = sprite
 
-                return
-        else:
-            # avoid double mouse checks - the redraw will also check for mouse!
-            if not self.__drawing_queued:
-                self._check_mouse(event.x, event.y)
-
-        self.emit("on-mouse-move", event)
+        return over
 
 
-    def _check_mouse(self, mouse_x, mouse_y):
-        if mouse_x is None or self._mouse_in == False:
+    def __check_hit(self, sprite, x, y):
+        if sprite == self._drag_sprite:
+            return True
+
+        return sprite.check_hit(x, y)
+
+
+    def __check_mouse(self, x, y):
+        if x is None or self._mouse_in == False:
             return
 
-        custom_mouse = self.mouse_cursor is not None
+        cursor = gtk.gdk.ARROW # default
 
-        cursor = gtk.gdk.ARROW
-        if custom_mouse:
-            if self.mouse_cursor == False:
-                cursor = self._blank_cursor
-            else:
-                cursor = self.mouse_cursor
+        if self.mouse_cursor is not None:
+            cursor = self.mouse_cursor
 
 
         #check if we have a mouse over
-        over = None
-        for sprite in self.all_sprites():
-            if sprite.interactive and sprite.visible and self._check_hit(sprite, mouse_x, mouse_y):
-                over = sprite
-
+        over = self.get_sprite_at_position(x, y)
         if over:
-            if custom_mouse == False:
+            if over.mouse_cursor is not None:
+                cursor = over.mouse_cursor
+
+            elif self.mouse_cursor is None:
+                # resort to defaults
                 if over.draggable:
                     cursor = gtk.gdk.FLEUR
                 else:
@@ -1020,21 +1330,79 @@ class Scene(gtk.DrawingArea):
                 over._on_mouse_over()
 
                 self.emit("on-mouse-over", over)
-                self.redraw()
 
         if self._mouse_sprite and self._mouse_sprite != over:
             self._mouse_sprite._on_mouse_out()
             self.emit("on-mouse-out", self._mouse_sprite)
-            self.redraw()
-
-
         self._mouse_sprite = over
 
-        if isinstance(cursor, gtk.gdk.Cursor):
-            self.window.set_cursor(cursor)
-        else:
-            self.window.set_cursor(gtk.gdk.Cursor(cursor))
+        if cursor == False:
+            cursor = self._blank_cursor
 
+        if not self.__last_cursor or cursor != self.__last_cursor:
+            if isinstance(cursor, gtk.gdk.Cursor):
+                self.window.set_cursor(cursor)
+            else:
+                self.window.set_cursor(gtk.gdk.Cursor(cursor))
+
+            self.__last_cursor = cursor
+
+
+    """ mouse events """
+    def __on_mouse_move(self, area, event):
+        state = event.state
+
+
+        if self._drag_sprite and self._drag_sprite.draggable \
+           and gtk.gdk.BUTTON1_MASK & event.state:
+            # dragging around
+            drag_started = (self.__drag_start_x is not None and \
+                           (self.__drag_start_x - event.x) ** 2 + \
+                           (self.__drag_start_y - event.y) ** 2 > self.drag_distance ** 2)
+
+            if drag_started and not self.__drag_started:
+                matrix = cairo.Matrix()
+                if self._drag_sprite.parent and isinstance(self._drag_sprite.parent, Sprite):
+                    # TODO - this currently works only until second level
+                    #        should take all parents into account
+                    matrix.rotate(self._drag_sprite.parent.rotation)
+                    matrix.invert()
+
+                x1,y1 = matrix.transform_point(self.__drag_start_x,
+                                               self.__drag_start_y)
+                self._drag_sprite.drag_x = x1 - self._drag_sprite.x
+                self._drag_sprite.drag_y = y1 - self._drag_sprite.y
+
+                self._drag_sprite._on_drag_start(event)
+                self.emit("on-drag-start", self._drag_sprite, event)
+
+
+            self.__drag_started = self.__drag_started or drag_started
+
+            if self.__drag_started:
+                matrix = cairo.Matrix()
+                if self._drag_sprite.parent and isinstance(self._drag_sprite.parent, Sprite):
+                    # TODO - this currently works only until second level
+                    #        should take all parents into account
+                    matrix.rotate(self._drag_sprite.parent.rotation)
+                    matrix.invert()
+
+                mouse_x, mouse_y = matrix.transform_point(event.x, event.y)
+                new_x = mouse_x - self._drag_sprite.drag_x
+                new_y = mouse_y - self._drag_sprite.drag_y
+
+
+                self._drag_sprite.x, self._drag_sprite.y = new_x, new_y
+                self._drag_sprite._on_drag(event)
+                self.emit("on-drag", self._drag_sprite, event)
+
+                return
+        else:
+            # avoid double mouse checks - the redraw will also check for mouse!
+            if not self.__drawing_queued:
+                self.__check_mouse(event.x, event.y)
+
+        self.emit("on-mouse-move", event)
 
     def __on_mouse_enter(self, area, event):
         self._mouse_in = True
@@ -1044,64 +1412,39 @@ class Scene(gtk.DrawingArea):
         if self._mouse_sprite:
             self.emit("on-mouse-out", self._mouse_sprite)
             self._mouse_sprite = None
-            self.redraw()
-
-    def _check_hit(self, sprite, x, y):
-        if sprite == self._drag_sprite:
-            return True
-
-        if not sprite.graphics.extents:
-            return False
-
-        sprite_x, sprite_y, sprite_x2, sprite_y2 = sprite.graphics.extents
-
-        if sprite_x <= x <= sprite_x2 and sprite_y <= y <= sprite_y2:
-            paths = sprite.graphics.paths
-            if not paths:
-                return True
-
-            context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, self.width, self.height))
-            for path in paths:
-                context.append_path(path)
-            return context.in_fill(x, y)
-        else:
-            return False
 
 
     def __on_button_press(self, area, event):
-        x = event.x
-        y = event.y
-        state = event.state
-        self._mouse_drag = (x, y)
+        self.__drag_start_x, self.__drag_start_y = event.x, event.y
 
-        over = None
-        for sprite in self.all_sprites():
-            if sprite.interactive and sprite.visible and self._check_hit(sprite, event.x, event.y):
-                over = sprite # last one will take precedence
-        self._drag_sprite = over
-        self._button_press_time = dt.datetime.now()
+        self._drag_sprite = self.get_sprite_at_position(event.x, event.y)
+        if self._drag_sprite and self._drag_sprite.draggable == False:
+            self._drag_sprite = None
+
         self.emit("on-mouse-down", event)
 
     def __on_button_release(self, area, event):
-        #if the drag is less than 5 pixles, then we have a click
-        click = self._button_press_time \
-                and (dt.datetime.now() - self._button_press_time) < dt.timedelta(milliseconds = 200) \
-                and (event.x - self._mouse_drag[0]) ** 2 + (event.y - self._mouse_drag[1]) ** 2 < 60
-
-        self._button_press_time = None
-        self._mouse_drag = None
-        self.__drag_x, self.__drag_y = None, None
-        self._drag_sprite = None
-
-        if click:
-            target = None
-            for sprite in self.all_sprites():
-                if sprite.interactive and sprite.visible and self._check_hit(sprite, event.x, event.y):
-                    target = sprite
+        # trying to not emit click and drag-finish at the same time
+        click = not self.__drag_started or (event.x - self.__drag_start_x) ** 2 + \
+                                           (event.y - self.__drag_start_y) ** 2 < self.drag_distance
+        if (click and self.__drag_started == False) or not self._drag_sprite:
+            target = self.get_sprite_at_position(event.x, event.y)
 
             if target:
                 target._on_click(event.state)
 
             self.emit("on-click", event, target)
 
-        self.emit("on-mouse-up")
+        if self._drag_sprite:
+            self._drag_sprite._on_drag_finish(event)
+            self.emit("on-drag-finish", self._drag_sprite, event)
+
+            self._drag_sprite.drag_x, self._drag_sprite.drag_y = None, None
+            self._drag_sprite = None
+
+        self.__drag_started = False
+        self.__drag_start_x, self__drag_start_y = None, None
+        self.emit("on-mouse-up", event)
+
+    def __on_scroll(self, area, event):
+        self.emit("on-scroll", event)
