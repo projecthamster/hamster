@@ -503,6 +503,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             return -1
         x, y, cell_width, h = bounds
 
+        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
+        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
+
         g = graphics.Graphics(context)
 
         fact = self.data
