@@ -27,6 +27,6 @@ src/hamster/preferences.py
 src/hamster/reports.py
 src/hamster-time-tracker
 src/hamster/stats.py
-src/hamster/stuff.py
+src/hamster/utils/stuff.py
 src/hamster/widgets/reportchooserdialog.py
 src/hamster/widgets/timechart.py
