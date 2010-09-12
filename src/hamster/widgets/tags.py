@@ -317,7 +317,7 @@ class Tag(graphics.Sprite):
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1, cache_as_bitmap = True)
+        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)
 
         corner = int((label.height + 3) / 3) + 0.5
         label.x = corner + 6
@@ -337,7 +337,7 @@ class Tag(graphics.Sprite):
                                      line_width = 1, cache_as_bitmap = True)
 
         self.add_child(self.tag)
-        self.add_child(graphics.Circle(4, 4, x = 2, y = h / 2 - 2,
+        self.add_child(graphics.Circle(3, 3, x = 2, y = h / 2 - 2,
                                        fill = "#fff",
                                        stroke = "#b4b4b4",
                                        line_width = 1,
