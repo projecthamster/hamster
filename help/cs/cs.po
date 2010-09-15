@@ -6,13 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"POT-Creation-Date: 2010-04-04 23:03+0000\n"
-"PO-Revision-Date: 2010-05-03 21:48+0100\n"
+"POT-Creation-Date: 2010-08-14 22:54+0000\n"
+"PO-Revision-Date: 2010-08-18 16:18+0100\n"
 "Last-Translator: Adrian Guniš <andygun696@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
 
@@ -24,8 +25,67 @@ msgstr "Toto dílo podléhá licenci <link href=\"http://creativecommons.org/lic
 msgid "As a special exception, the copyright holders give you permission to copy, modify, and distribute the example code contained in this document under the terms of your choosing, without restriction."
 msgstr "Držitelé autorských práv vám poskytují svolení ke kopírování, upravování a šíření ukázkového kódu obsaženého v tomto dokumentu za podmínek dle vašeho výběru bez omezení."
 
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr "Tipy na efektivní sledování vašich činností"
+
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "Jak sledovat čas"
+
+#: C/tracking.page:12(p)
+msgid "Your time tracking habits will be dictated by your reason for collecting the data. What is that you want to do with the data? Is it plain curiosity, or a work requirement? And at what level of detail are you interested in the results?"
+msgstr "Vaše zvyky ohledně sledování času se budou odvíjet od toho, kvůli čemu data sbíráte. Co plánujete dělat s daty? Jde o pouhou zvědavost nebo o pracovní povinnost? A do jaké úrovně podrobností vás zajímají výsledky?"
+
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "Četnost"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "Navržené tempo je 5 až 30 činností za den."
+
+#: C/tracking.page:22(p)
+msgid "The intention of <app>Time Tracker</app> is to avoid micro-tracking so that one does not turn out spending more time on tracking than doing the activities! However, tracking in insufficient detail could result in there being no data which is useful to you a month later."
+msgstr "Záměrem aplikace <app>Měřič času</app> je vyhnout se podrobnému sledování, tak aby člověk nestrávil více času nad sledováním než nad prací! Na druhou stranu, sledování bez dostatku podrobností by mohlo vést k tomu, že nebude dostatek dat, která by mohla být užitečná o měsíc později."
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "Co bych měl psát do každého pole?"
+
+#: C/tracking.page:33(p)
+msgid "For simple activities that don't have a project, use the action as the <gui>activity</gui> name and the <gui>category</gui> for the wider context. For example: <input>lunch@work</input>."
+msgstr "U jednoduchých činností, u kterých neexistuje plán, použijte úkon jako název <gui>činnosti</gui> a <gui>kategorii</gui> pro širší kontext. Například: <input>oběd@práce</input>."
+
+#: C/tracking.page:38(p)
+msgid "For more sophisticated tracking try to caption your activity in one or two words (\"tree house\", \"project x\", or similar) and use that caption in the <gui>activity</gui> field. Use the <gui>category</gui> to describe the activity in it's wider context - is it private or work, or something else? Finally, use <gui>tags</gui> to describe your actual action - is it reading or constructing, writing or painting."
+msgstr "Pro důmyslnější sledování zkuste popsat vaši činnost jedním nebo dvěma slovy (\"dům na stromě\", \"projekt x\" nebo podobně) a tento titulek použijte v poli <gui>činnost</gui>. <gui>Kategorii</gui> použijte k popisu činnosti v širším kontextu - jde o soukromí nebo práci, nebo něco jiného? Nakonec použijte pole <gui>štítky</gui> k popisu vašeho aktuálního úkonu - jedná se o čtení nebo konstruování, psaní nebo malování?"
+
+#: C/tracking.page:47(p)
+msgid "This approach will alow you to see how much reading you have done through all your projects (by tag), how much time you have spent in your hobbies (by category), and how much time of all your work in project x you have spent analysing (by activity and tag)"
+msgstr "Tento přístup vám umožní sledovat, kolik jste toho přečetli během všech svých projektů (podle štítku), kolik času jste strávili nad svými koníčky (podle kategorie) a kolik času ze všech svých prací v rámci projektu x jste strávili analyzováním (podle činnosti a štítku)."
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "Tipy na vylepšení vašich sledovaných dat"
+
+#: C/tracking.page:58(p)
+msgid "Name activities so that they can be easily distinguished from each other. Activity name is also the only information that appears in the panel. Will you be able to determine what you are working on just by looking at the activity name?"
+msgstr "Činnosti popisujte tak, aby byly pro každého srozumitelné. Název činnosti je také jedinou informací, která se objeví na panelu. Budete schopni určit, na čem právě pracujete, při pouhém pohledu na název činnosti?"
+
+#: C/tracking.page:64(p)
+msgid "Keep your list of categories small (say, 3 to 7) and pick ones that are unlikely to change over time. Also, keep them generic. For example: \"work\", \"private\", \"misc\"."
+msgstr "Udržujte svůj seznam kategorií malý (tak 3 až 7) a vybírejte takové, u kterých je pravděpodobné, že se časem nezmění. Také by se mělo jednat o všeobecné názvy, jako např.: \"práce\", \"soukromí\", \"různé\"."
+
+#: C/tracking.page:69(p)
+msgid "Use the description field for short-term information like reference numbers. The search in the <gui>Overview</gui> window also looks in the description field, so finding activities where you mention the specific reference number will be as simple as typing it in the search box and pressing <key>Enter</key>."
+msgstr "Pole s popisem můžete použít pro krátkodobé informace jako např. referenční čísla. Vyhledávání v okně <gui>Přehled</gui> nahlíží také do pole s popisem, takže hledání činností, ve kterých uvedete určité referenční číslo, bude tak snadné jako jeho napsání do vyhledávacího pole a stisknutí klávesy <key>Enter</key>."
+
+#: C/tracking.page:76(p)
+msgid "Activities and tags can come and go as necessary. Once you think that you are done with an activity for good, remove it so that it doesn't pop up in the auto-complete any more. Don't worry: the facts (activities in the log) will not be deleted. This is just the \"operational list\"."
+msgstr "Činnosti a štítky můžete přidávat a odebírat podle potřeby. Pokud si myslíte, že činnost je již úplně ukončena, odstraňte ji tak, aby se již nezobrazovala v automatickém doplňování. Nedělejte si starosti: data (činnosti v protokolu) nebudou smazána. Jedná se pouze o \"provozní seznam\"."
+
 #: C/statistics.page:6(desc)
-#| msgid "Word on interpretation of statistics."
 msgid "Note on interpretation of statistics."
 msgstr "Pár slov ke statistikám"
 
@@ -34,11 +94,6 @@ msgid "Statistics"
 msgstr "Statistiky"
 
 #: C/statistics.page:10(p)
-#| msgid ""
-#| "The results, that are accessible, via the <gui style=\"button\">Show "
-#| "Statistics</gui> link are experimental and they are interpretation of the "
-#| "facts. Interpretation that should be compared with your own observations. "
-#| "Patches are welcome."
 msgid "The results that are accessible via the <gui style=\"button\">Show Statistics</gui> link are experimental and they are an interpretation of the facts. This interpretation should be compared with your own observations. Patches are welcome."
 msgstr "Výsledky, které jsou dostupné přes odkaz <gui style=\"button\">Zobrazit statistiky</gui>, jsou experimentální a jsou brány jako vyhodnocení faktů, které můžete porovnat s vašim vlastním pozorováním. Opravy jsou vítány."
 
@@ -47,7 +102,6 @@ msgid "However, the \"Starts and Ends\" should give you some idea about your act
 msgstr "Nicméně, ukazatel \"Začátky a konce\" by vám měl dát jistou představu o využití vašeho času."
 
 #: C/reports.page:6(desc)
-#| msgid "Get data out of Time Tracker"
 msgid "Get data out of Time Tracker."
 msgstr "Získání dat z Měřiče času"
 
@@ -56,10 +110,6 @@ msgid "Report and export"
 msgstr "Zprávy a jejich export"
 
 #: C/reports.page:10(p)
-#| msgid ""
-#| "Apart from the HTML format that is offered by default in the Save report "
-#| "dialog, format drop-down allows to choose TSV (Tab Separated Values, good "
-#| "for spreadsheets), XML and iCal formats."
 msgid "Apart from the HTML format that is offered by default in the Save report dialog, the format drop-down allows you to choose TSV (Tab Separated Values, good for spreadsheets), XML, and iCal formats."
 msgstr "Kromě formátu HTML, který je standardně nabízen v dialogu Uložit zprávu, nabízí rozbalovací seznam na výběr také formáty TSV (hodnoty oddělené tabulátory, vhodné pro tabulkové procesory), XML a iCal."
 
@@ -69,11 +119,6 @@ msgid "For programmatic access, there is D-Bus API, that can be introspected usi
 msgstr "Pro přístup z programu existuje D-Bus API, které může být prohlíženo pomocí nástrojů jako <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
 
 #: C/reports.page:21(p)
-#| msgid ""
-#| "The really fastest way to get the data \"out\" of the Time Tracker, is by "
-#| "generatic the HTML report, while holding the <key>Ctrl</key> key down, "
-#| "select all the needed cells, and then copy/pasting them in the target "
-#| "application."
 msgid "The fastest way to get the data \"out\" of the Time Tracker is by generating a HTML report. While holding the <key>Ctrl</key> key down, select all the needed cells, and then copy and paste them into the target application."
 msgstr "Nejrychlejším způsobem získání dat z Měřiče času je vygenerování zprávy ve formátu HTML. Při stisknuté klávese <key>Ctrl</key> vyberte všechny potřebné buňky a pak je zkopírujte a vložte do cílové aplikace."
 
@@ -86,22 +131,10 @@ msgid "Splitting activities"
 msgstr "Rozdělování činností"
 
 #: C/merge.page:10(p)
-#| msgid ""
-#| "<app>Time Tracker</app> does it's best to avoid overlaps in the "
-#| "activities. If you create an activity in the middle of an existing "
-#| "activity. The former will be split into two. In other cases of "
-#| "overlapping - the previous entries will be shrunk."
 msgid "<app>Time Tracker</app> does its best to avoid overlaps in activities. If you create an activity in the middle of an existing activity, the former will be split into two. In other cases of overlapping, the previous entries will be shrunk."
 msgstr "<app>Měřič času</app> se vždy snaží předcházet překrývání činností. Pokud vytvoříte činnost uprostřed existující činnosti, starší se rozdělí na dvě. V jiných případech překrytí dojde ke zkrácení předchozích záznamů."
 
 #: C/merge.page:17(p)
-#| msgid ""
-#| "Merging aspect can come handy when entering information for the whole "
-#| "day. Start by entering the first activity and tick the \"in progress\" "
-#| "check box for the end time. For the next activity again set just the "
-#| "start time and mark it as ongoing. Observe how the end time of the "
-#| "previous activity get's adjusted to the start time of the new one. Repeat "
-#| "the process until happy!"
 msgid "Merging can become handy when entering information for the whole day. Start by entering the first activity and select the \"in progress\" check box for the end time. For the next activity again set just the start time and mark it as ongoing. Observe how the end time of the previous activity gets adjusted to the start time of the new one. Repeat the process until happy!"
 msgstr "Slučování může přijít vhod při zadávání informací za celý den. Začněte zadáním první činnosti a jako čas ukončení zaškrtněte pole \"probíhá\". U další činnosti opět nastavte pouze čas zahájení a označte ji jako probíhající. Dbejte na to, aby čas ukončení předchozí činnosti souhlasil s časem zahájení nové činnosti. Takto můžete pokračovat dále."
 
@@ -114,31 +147,22 @@ msgid "Input"
 msgstr "Zadávání dat"
 
 #: C/input.page:10(p)
-#| msgid ""
-#| "To start tracking, type in activity name in the input box and hit "
-#| "<key>Enter</key> key. There are few tricks however, that will allow you "
-#| "to specify more detail on the fly:"
 msgid "To start tracking, type in the activity name in the input box and hit the <key>Enter</key> key. There are a few tricks that will allow you to specify more detail on the fly:"
 msgstr "Pro spuštění sledování napište název činnosti do vstupního pole a stiskněte klávesu <key>Enter</key>. Nicméně existuje několik triků, které vám ihned umožní stanovit více podrobností:"
 
 #: C/input.page:18(p)
-#| msgid "Use @ symbol to add category"
 msgid "Use the @ symbol to add a category"
 msgstr "Použití znaku @ přidá kategorii"
 
 #: C/input.page:19(p)
-#| msgid ""
-#| "Everything after a comma \",\" will be stored in the description field"
 msgid "Everything after a comma (,) will be stored in the description field"
 msgstr "Všechno za znakem čárky (,) bude uloženo v poli popis"
 
 #: C/input.page:20(p)
-#| msgid "To specify time on the fly, enter it as first in the input box."
 msgid "To specify time on the fly, enter it first in the input box"
 msgstr "Pro okamžité stanovení času je nutné, aby byl zadán do vstupního pole jako první."
 
 #: C/input.page:23(p)
-#| msgid "Few examples:"
 msgid "A few examples:"
 msgstr "Několik příkladů:"
 
@@ -148,7 +172,6 @@ msgid "12:30-12:45 watering flowers"
 msgstr "12:30-12:45 zalévání květin"
 
 #: C/input.page:28(p)
-#| msgid "Forgot to note the important act of watering flowers over the lunch."
 msgid "Forgot to note the important act of watering flowers over lunch."
 msgstr "Nezapomeňte si zaznamenat důležitou činnost - zalévání květin přes oběd."
 
@@ -158,9 +181,6 @@ msgid "tomatoes@garden, digging holes"
 msgstr "rajčata@zahrada, vyhloubení jamek"
 
 #: C/input.page:32(p)
-#| msgid ""
-#| "Need more tomatoes in the garden. Digging holes is purely informational, "
-#| "so added it as a description"
 msgid "Need more tomatoes in the garden. Digging holes is purely informational, so added it as a description."
 msgstr "V zahradě potřebujete více rajčat. Vyhloubení jamek je čistě informativní, takže slouží jako popis."
 
@@ -170,27 +190,17 @@ msgid "-7 existentialism, thinking about the vastness of the universe"
 msgstr "-7 existencialismus, přemýšlení o rozlehlosti vesmíru"
 
 #: C/input.page:39(p)
-#| msgid ""
-#| "Corrected information by informing application that I've been onto "
-#| "something else for last seven minutes. Relative times work only without "
-#| "end times - that is - for the most recent activity."
 msgid "Corrected information by informing application that I've been doing something else for the last seven minutes. Relative times only work for ongoing activities without an end time."
 msgstr "Opravná informace sdělující aplikaci, že před sedmi minutami jste dělali něco jiného. Relativní časy fungují pouze u probíhajících činností bez časů ukončení."
 
+# Poslední věta nedává moc smysl. Přeložil jsem to tedy tak, jak to funguje.
 #: C/input.page:46(p)
-#, fuzzy
 msgid "On top of that you can add tags in the tag input field. Tags are delimited by a comma. Press the <key>Tab</key> when the suggestion box appears to complete the input to the first matching tag."
-msgstr "K tomu všemu je možné do vstupního pole pro štítky přidávat štítky. Štítky jsou oddělené čárkou. Stisknutím klávesy <key>Tab</key>, když se zobrazí pole s návrhy, se dokončí záznam prvního odpovídajícího štítku."
-
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: C/index.page:18(None)
-msgid "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-msgstr "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+msgstr "K tomu všemu je možné do vstupního pole pro štítky přidávat štítky. Štítky jsou oddělené čárkou. Když se zobrazí pole s návrhy, napište první písmeno štítku a stiskněte klávesu <key>Tab</key> pro dokončení záznamu prvního odpovídajícího štítku."
 
 #: C/index.page:6(title)
 #: C/index.page:7(title)
-#| msgid "Time Tracking Help"
+#: C/index.page:17(title)
 msgid "Time Tracking"
 msgstr "Měřič času"
 
@@ -206,10 +216,6 @@ msgstr "milo@ubuntu.com"
 msgid "Creative Commons Share Alike 3.0"
 msgstr "Creative Commons Share Alike 3.0"
 
-#: C/index.page:17(title)
-msgid "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png\">Time Tracking logo</media>Time Tracking"
-msgstr "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png\">Time Tracking logo</media>Měřič času"
-
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
 msgstr "Jak zálohovat databázi činností"
@@ -219,11 +225,6 @@ msgid "Backup"
 msgstr "Zálohování"
 
 #: C/backup.page:10(p)
-#| msgid ""
-#| "Activities are stored in an SQLite database, located <file>~/.local/share/"
-#| "hamster-applet/hamster.db</file>. The file can be backed up and restored "
-#| "on the go. Application will reload the data automatically after a short "
-#| "while."
 msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-applet/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
 msgstr "Činnosti jsou ukládány do databáze SQLite umístěné v <file>~/.local/share/hamster-applet/hamster.db</file>. Soubor je možné zálohovat a obnovit za chodu. Aplikace načte data automaticky za chvilku."
 
@@ -236,6 +237,16 @@ msgstr "K prohlížení obsahu databáze můžeme doporučit použití doplňku 
 msgid "translator-credits"
 msgstr "Adrian Guniš <andygun696@gmail.com>, 2010"
 
+#~ msgid ""
+#~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+#~ msgstr ""
+#~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+#~ msgid ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+#~ "\">Time Tracking logo</media>Time Tracking"
+#~ msgstr ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+#~ "\">Time Tracking logo</media>Měřič času"
 #~ msgid "What's new in this release"
 #~ msgstr "Novinky v tomto vydání"
 #~ msgid "News go here."
