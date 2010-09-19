@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-09-03 15:07+0000\n"
-"PO-Revision-Date: 2010-09-05 02:46+0900\n"
+"POT-Creation-Date: 2010-09-19 16:03+0000\n"
+"PO-Revision-Date: 2010-09-17 13:17+0900\n"
 "Last-Translator: Nishio Futoshi <fut_nis@d3.dion.ne.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
-"アクティビティが何も開始されていない場合、注意喚起の間隔が記録されます。"
+"アクティビティが何も開始されていない場合、notify_interval 分毎に通知する。"
 
 #: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
@@ -73,9 +73,9 @@ msgid ""
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
 msgstr ""
-"利用可能な集計手法のリストです。\"名前\"はワークスペース・マッピングで定義さ"
-"れていて、アクティビティで切り替え可能です。\"メモリー\"は、以前のワークス"
-"ペースに戻るときに、最近のアクティビティに変更されるでしょう。"
+"利用可能な集計手法のリストです。\"name\"は workspace_mapping で定義されていて"
+"る名前でアクティビティを切り替え可能ににします。\"memory\" は、前のワークス"
+"ペースに戻るときに、そこで最後のアクティビティに変更します。"
 
 #: ../data/hamster-applet.schemas.in.h:9
 msgid ""
@@ -95,7 +95,7 @@ msgstr "ワークスペース切り替え時に動作を切り替えます"
 
 #: ../data/hamster-applet.schemas.in.h:12
 msgid "Show / hide Time Tracker Window"
-msgstr "タイム・トラッカーのウィンドウの表示／非表示"
+msgstr "タイム・トラッカーのウィンドウの表示/非表示"
 
 #: ../data/hamster-applet.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
@@ -723,7 +723,7 @@ msgctxt "years"
 msgid "All"
 msgstr "すべて"
 
-#: ../src/hamster/stats.py:165
+#: ../src/hamster/stats.py:166
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -731,14 +731,14 @@ msgstr ""
 "統計情報を生成するデータがまだありません。\n"
 "1週間使ってみませんか!"
 
-#: ../src/hamster/stats.py:168
+#: ../src/hamster/stats.py:169
 msgid "Collecting data — check back after a week has passed!"
 msgstr "データを集めています ー 一週間後に調査してください!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:319
+#: ../src/hamster/stats.py:320
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%Y年%b月%d日"
@@ -746,24 +746,24 @@ msgstr "%Y年%b月%d日"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:324
+#: ../src/hamster/stats.py:325
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%b月%d日"
 
-#: ../src/hamster/stats.py:326
+#: ../src/hamster/stats.py:327
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "最初のアクティビティは%sに記録されました。"
 
-#: ../src/hamster/stats.py:335 ../src/hamster/stats.py:339
+#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
 msgstr[0] "%(num)s年間"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:344
+#: ../src/hamster/stats.py:345
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
@@ -775,12 +775,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:362
+#: ../src/hamster/stats.py:363
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%Y年%b月%d日"
 
-#: ../src/hamster/stats.py:367
+#: ../src/hamster/stats.py:368
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -788,30 +788,30 @@ msgid_plural ""
 msgstr[0] "%(date)s日の最長継続作業は、%(hours)s時間です。"
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:375
+#: ../src/hamster/stats.py:376
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "%sレコードあります。"
 
-#: ../src/hamster/stats.py:395
+#: ../src/hamster/stats.py:396
 msgid "Hamster would like to observe you some more!"
 msgstr "ハムスターは、もう少し観察したがってます!"
 
-#: ../src/hamster/stats.py:397
+#: ../src/hamster/stats.py:398
 #, python-format
 msgid ""
 "With %s percent of all facts starting before 9am, you seem to be an early "
 "bird."
 msgstr "午前9時以前に開始したものは%sパーセントなので、早起きですね。"
 
-#: ../src/hamster/stats.py:400
+#: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
 "With %s percent of all facts starting after 11pm, you seem to be a night owl."
 msgstr "午後11時以降に開始したものは%sパーセントなので、宵っ張りですね。"
 
-#: ../src/hamster/stats.py:403
+#: ../src/hamster/stats.py:404
 #, python-format
 msgid ""
 "With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
