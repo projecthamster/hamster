@@ -179,7 +179,7 @@ class Overview(object):
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
         fact = tree.get_selected_fact()
-        real_fact = fact is not None and isinstance(fact, dict)
+        real_fact = fact is not None and isinstance(fact, stuff.Fact)
 
         self.get_widget('remove').set_sensitive(real_fact)
         self.get_widget('edit').set_sensitive(real_fact)
