@@ -1,16 +1,18 @@
 # French translation for hamster-applet.
 # Copyright (C) 2010 Listed translators
 # This file is distributed under the same license as the hamster-applet package.
+#
 # Florent Thévenet <feuloren@free.fr>, 2010.
 # Claude Paroz <claude@2xlibre.net>, 2010.
+# Bruno Brouard <annoa.b@gmail.com>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"POT-Creation-Date: 2010-02-24 21:14+0000\n"
-"PO-Revision-Date: 2010-03-11 21:28+0100\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
-"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"POT-Creation-Date: 2010-09-21 11:51+0000\n"
+"PO-Revision-Date: 2010-09-23 22:23+0200\n"
+"Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
+"Language-Team: GNOME french team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,9 +24,9 @@ msgid ""
 "licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
 "License</link>."
 msgstr ""
-"Ce document est sous licence <link href=\"http://creativecommons.org/licenses/"
-"by-sa/3.0/deed.fr\">Creative Commons Paternité-Partage des Conditions Initiales "
-"à l'Identique 3.0 Unported</link>."
+"Ce document est sous licence <link href=\"http://creativecommons.org/"
+"licenses/by-sa/3.0/deed.fr\">Creative Commons Paternité-Partage des "
+"Conditions Initiales à l'Identique 3.0 Unported</link>."
 
 #: C/legal.xml:6(p)
 msgid ""
@@ -34,7 +36,145 @@ msgid ""
 msgstr ""
 "À titre d'exception, les titulaires des droits d'auteur vous autorisent à "
 "copier, modifier et redistribuer le code d'exemple contenu dans ce document, "
-"selon la license de votre choix, sans restrictions."
+"selon la licence de votre choix, sans restrictions."
+
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr "Astuces pour bien gérer vos activités."
+
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "La gestion du temps"
+
+#: C/tracking.page:12(p)
+msgid ""
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
+msgstr ""
+"Les raisons pour lesquelles vous accumulez des données sur votre emploi du "
+"temps vont déterminer la manière d'effectuer le suivi de vos activités. Que "
+"voulez-vous faire avec les données ? Est-ce juste de la curiosité ou une "
+"nécessité professionnelle ? Quel niveau de détails vous intéresse dans les "
+"résultats ?"
+
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "Granularité"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "Un bon rythme est d'avoir 5 à 30 activités par jour."
+
+#: C/tracking.page:22(p)
+msgid ""
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
+msgstr ""
+"Le but du <app>gestionnaire de temps</app> est d'éviter la micro-gestion "
+"afin que vous ne passiez pas plus de temps à gérer vos activités qu'à les "
+"pratiquer ! Cependant, des détails insuffisants peuvent provoquer un manque "
+"de données qui vous seraient utiles un mois plus tard."
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "Que dois-je écrire dans chaque champ ?"
+
+#: C/tracking.page:33(p)
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
+"For example: <input>lunch@work</input>."
+msgstr ""
+"Pour des activités simples qui ne font pas partie d'un projet, utilisez "
+"l'action comme nom d'<gui>activité</gui> et la <gui>catégorie</gui> comme "
+"contexte plus large. Par exemple : <input>déjeuner@travail</input>."
+
+#: C/tracking.page:38(p)
+msgid ""
+"For more sophisticated tracking try to caption your activity in one or two "
+"words (\"tree house\", \"project x\", or similar) and use that caption in "
+"the <gui>activity</gui> field. Use the <gui>category</gui> to describe the "
+"activity in it's wider context - is it private or work, or something else? "
+"Finally, use <gui>tags</gui> to describe your actual action - is it reading "
+"or constructing, writing or painting."
+msgstr ""
+"Pour une gestion plus sophistiquée, essayez de décrire vos activités en un "
+"ou deux mots (« arbre maison », « projet x » ou quelque chose de similaire) et "
+"utilisez cette légende dans le champ <gui>activité</gui>. Utilisez la "
+"<gui>catégorie</gui> pour décrire l'activité dans un contexte plus "
+"large - est-ce privé, professionnel ou autre chose ? Enfin, utilisez les "
+"<gui>étiquettes</gui> pour décrire l'action précise - est-ce de la lecture "
+"ou de la création, de l'écriture ou du dessin."
+
+#: C/tracking.page:47(p)
+msgid ""
+"This approach will alow you to see how much reading you have done through "
+"all your projects (by tag), how much time you have spent in your hobbies (by "
+"category), and how much time of all your work in project x you have spent "
+"analysing (by activity and tag)"
+msgstr ""
+"Cette approche vous permet de voir combien de temps de lecture vous avez "
+"consacré dans tous vos projets (par étiquette), combien de temps consacré à "
+"vos passe-temps (par catégorie) et combien de temps à faire de l'analyse "
+"pour votre travail dans le projet x (par activité et étiquette)"
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "Astuces pour améliorer vos données de suivi"
+
+#: C/tracking.page:58(p)
+msgid ""
+"Name activities so that they can be easily distinguished from each other. "
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
+msgstr ""
+"Nommez les activités de façon à pouvoir les différencier facilement l'une de "
+"l'autre. Le nom de l'activité est également la seule information qui "
+"apparaît dans le tableau de bord. Êtes-vous capable de déterminer sur quoi "
+"vous travaillez rien qu'en voyant le nom de l'activité ?"
+
+#: C/tracking.page:64(p)
+msgid ""
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
+msgstr ""
+"Réduisez au minimum la liste des catégories (disons 3 à 7) et choisissez-les "
+"pour qu'elles varient le moins possible dans le temps. Elles devraient être "
+"génériques, comme par exemple : « travail », « privé », « divers »."
+
+#: C/tracking.page:69(p)
+msgid ""
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
+msgstr ""
+"Utilisez le champ de description pour des informations brèves comme des "
+"numéros de référence. La recherche dans la fenêtre <gui>Résumé</gui> se fait "
+"également dans ce champ ; ainsi, pour rechercher des activités pour "
+"lesquelles vous avez inscrit un numéro de référence particulier, il suffit "
+"de le saisir dans le champ de recherche et d'appuyer sur <key>Entrée</key>."
+
+#: C/tracking.page:76(p)
+msgid ""
+"Activities and tags can come and go as necessary. Once you think that you "
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete any more. Don't worry: the facts (activities in the log) "
+"will not be deleted. This is just the \"operational list\"."
+msgstr ""
+"Les activités et les étiquettes peuvent apparaître et disparaître selon les "
+"besoins. Une fois que vous pensez en avoir fini pour de bon avec une "
+"activité, supprimez-la afin qu'elle n'apparaissent plus dans les "
+"propositions d'auto-complétion. Ne vous inquiétez pas : les faits (activités "
+"journalisées) ne sont pas détruits. Il s'agit juste de la « liste "
+"opérationnelle »."
 
 #: C/statistics.page:6(desc)
 msgid "Note on interpretation of statistics."
@@ -53,8 +193,8 @@ msgid ""
 msgstr ""
 "Les résultats accessibles depuis le bouton <gui style=\"button\">Afficher "
 "les statistiques</gui> sont expérimentaux et sont une interprétation de la "
-"réalité. Cette interprétation doit être comparée avec vos propres observations. "
-"Toutes corrections sont les bienvenues."
+"réalité. Cette interprétation doit être comparée avec vos propres "
+"observations. Toutes corrections sont les bienvenues."
 
 #: C/statistics.page:16(p)
 msgid ""
@@ -80,18 +220,17 @@ msgid ""
 msgstr ""
 "À part le format HTML utilisé par défaut dans la boîte de dialogue "
 "d'enregistrement des rapports, la liste déroulante de formats vous permet de "
-"choisir parmi les formats TSV (Tab Separated Values, soit « Valeurs "
-"séparées par des tabulations », format bien adapté aux tableurs), "
-"XML et iCal."
+"choisir parmi les formats TSV (Tab Separated Values, soit « Valeurs séparées "
+"par des tabulations », format bien adapté aux tableurs), XML et iCal."
 
 #: C/reports.page:15(p)
 msgid ""
 "For programmatic access, there is D-Bus API, that can be introspected using "
 "tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
 msgstr ""
-"Pour les programmeurs, il existe une API D-Bus, qui peut être introspectée "
-"avec des outils comme <link href=\"https://fedorahosted.org/d-feet/\">D-"
-"Feet</link>."
+"Pour les programmeurs, il existe une API D-Bus, qui peut être examinée en "
+"profondeur avec des outils comme <link href=\"https://fedorahosted.org/d-"
+"feet/\">D-Feet</link>."
 
 #: C/reports.page:21(p)
 msgid ""
@@ -101,8 +240,8 @@ msgid ""
 msgstr ""
 "La façon la plus rapide pour extraire des données du gestionnaire de temps "
 "est de générer un rapport HTML. Tout en appuyant sur la touche <key>Ctrl</"
-"key>, sélectionnez toutes les cellules voulues, puis copiez et collez-les dans "
-"l'application cible."
+"key>, sélectionnez toutes les cellules voulues, puis copiez et collez-les "
+"dans l'application cible."
 
 #: C/merge.page:6(desc)
 msgid "Automatic conflict solving."
@@ -120,9 +259,9 @@ msgid ""
 "will be shrunk."
 msgstr ""
 "Le <app>gestionnaire de temps</app> fait tout ce qu'il peut pour éviter des "
-"chevauchements dans les activités. Si vous créez une activité en plein milieu "
-"d'une activité existante, celle-ci sera coupée en deux. Dans les autres cas, "
-"les activités précédentes seront écourtées."
+"chevauchements dans les activités. Si vous créez une activité en plein "
+"milieu d'une activité existante, celle-ci sera coupée en deux. Dans les "
+"autres cas, les activités précédentes seront écourtées."
 
 #: C/merge.page:17(p)
 msgid ""
@@ -132,11 +271,11 @@ msgid ""
 "it as ongoing. Observe how the end time of the previous activity gets "
 "adjusted to the start time of the new one. Repeat the process until happy!"
 msgstr ""
-"La fusion peut devenir commode lors de la saisie d'informations pour toute la "
-"journée. Commencez par saisir la première activité et cochez la case « en "
+"La fusion peut devenir commode lors de la saisie d'informations pour toute "
+"la journée. Commencez par saisir la première activité et cochez la case « en "
 "cours » pour l'heure de fin. Faites de même pour l'activité suivante et vous "
-"constaterez que l'heure de fin de l'activité précédente s'ajuste à l'heure de "
-"début de l'activité suivante. Vous pouvez continuer ainsi pour toutes les "
+"constaterez que l'heure de fin de l'activité précédente s'ajuste à l'heure "
+"de début de l'activité suivante. Vous pouvez continuer ainsi pour toutes les "
 "activités de votre journée !"
 
 #: C/input.page:6(desc)
@@ -163,7 +302,8 @@ msgstr "Utilisez le symbole @ pour ajouter une catégorie"
 
 #: C/input.page:19(p)
 msgid "Everything after a comma (,) will be stored in the description field"
-msgstr "Tout ce qui vient après une virgule (,) est placé dans le champ description"
+msgstr ""
+"Tout ce qui vient après une virgule « , » est placé dans le champ description"
 
 #: C/input.page:20(p)
 msgid "To specify time on the fly, enter it first in the input box"
@@ -182,7 +322,8 @@ msgstr "12:30-12:45 arrosage des fleurs"
 
 #: C/input.page:28(p)
 msgid "Forgot to note the important act of watering flowers over lunch."
-msgstr "On a oublié de noter l'indispensable arrosage des fleurs avant le déjeuner."
+msgstr ""
+"On a oublié de noter l'indispensable arrosage des fleurs avant le déjeuner."
 
 #: C/input.page:31(code)
 #, no-wrap
@@ -208,9 +349,9 @@ msgid ""
 "something else for the last seven minutes. Relative times only work for "
 "ongoing activities without an end time."
 msgstr ""
-"Correction d'information en indiquant à l'application que j'ai fait "
-"quelque chose d'autre pendant les 7 dernières minutes. La saisie de temps "
-"relatif ne fonctionne que pour les activités en cours, sans heure de fin."
+"Correction d'information en indiquant à l'application que j'ai fait quelque "
+"chose d'autre pendant les 7 dernières minutes. La saisie de temps relatif ne "
+"fonctionne que pour les activités en cours, sans heure de fin."
 
 #: C/input.page:46(p)
 msgid ""
@@ -219,20 +360,12 @@ msgid ""
 "complete the input to the first matching tag."
 msgstr ""
 "De plus, vous pouvez ajoutez des étiquettes dans le champ de saisie des "
-"étiquettes. Les étiquettes sont séparées par des virgules. Le gestionnaire de "
-"temps vous propose une liste d'étiquettes correspondant à votre saisie, "
+"étiquettes. Les étiquettes sont séparées par des virgules. Le gestionnaire "
+"de temps vous propose une liste d'étiquettes correspondant à votre saisie, "
 "appuyez sur la touche <key>Tab</key> pour finir la saisie de l'étiquette "
 "selon la première étiquette correspondante affichée."
 
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: C/index.page:18(None)
-msgid ""
-"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-msgstr ""
-"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-
-#: C/index.page:6(title) C/index.page:7(title)
+#: C/index.page:6(title) C/index.page:7(title) C/index.page:17(title)
 msgid "Time Tracking"
 msgstr "Gestion du temps"
 
@@ -247,14 +380,6 @@ msgstr "milo@ubuntu.com"
 #: C/index.page:13(p)
 msgid "Creative Commons Share Alike 3.0"
 msgstr "Creative Commons Partage des Conditions Initiales à l'Identique 3.0"
-
-#: C/index.page:17(title)
-msgid ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
-"\">Time Tracking logo</media>Time Tracking"
-msgstr ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
-"\">Logo du gestionnaire de temps</media>Time Tracking"
 
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
@@ -282,13 +407,14 @@ msgid ""
 "\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
 "app></link> for Mozilla Firefox."
 msgstr ""
-"Pour explorer le contenu de la base de données, vous pouvez utiliser le <link "
-"href=\"https://addons.mozilla.org/en-US/firefox/addon/5817"
+"Pour explorer le contenu de la base de données, vous pouvez utiliser le "
+"<link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817"
 "\"><app>Gestionnaire SQLite</app></link> pour Mozilla Firefox."
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
 #: C/index.page:0(None)
 msgid "translator-credits"
 msgstr ""
-"Florent Thévenet <feuloren@free.fr>\n"
-"Claude Paroz <claude@2xlibre.net>"
+"Florent Thévenet <feuloren@free.fr>, 2010\n"
+"Claude Paroz <claude@2xlibre.net>, 2010\n"
+"Bruno Brouard <annoa.b@gmail.com>, 2010"
