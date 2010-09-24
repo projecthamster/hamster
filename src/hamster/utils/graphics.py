@@ -944,6 +944,7 @@ class Label(Sprite):
 
     def on_render(self, sprite):
         if not self.text:
+            self.graphics.clear()
             return
 
         self.graphics.set_color(self.color)
