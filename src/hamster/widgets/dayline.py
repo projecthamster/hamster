@@ -50,7 +50,7 @@ class Selection(graphics.Sprite):
         self.graphics.rectangle(0, 0, self.width, self.height)
         self.graphics.fill(self.fill, 0.3)
 
-        self.graphics.rectangle(0, 0, self.width, self.height)
+        self.graphics.rectangle(0.5, 0.5, self.width, self.height)
         self.graphics.stroke(self.fill)
 
 
@@ -167,7 +167,7 @@ class DayLine(graphics.Scene):
         self.drag_start = self.current_x
         self.chosen_selection.visible = False
 
-    def on_mouse_up(self, scene):
+    def on_mouse_up(self, scene, event):
         if self.drag_start:
             self.drag_start = None
 
