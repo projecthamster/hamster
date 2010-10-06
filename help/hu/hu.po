@@ -1,0 +1,400 @@
+# Hungarian translation of hamster-applet help
+# Gabor Kelemen <kelemeng at gnome dot hu>, 2010.
+# Copyright (C) 2010. Free Software Foundation, Inc.
+# This file is distributed under the same license as the hamster-applet package.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet-help master\n"
+"POT-Creation-Date: 2010-10-05 20:52+0000\n"
+"PO-Revision-Date: 2010-10-06 04:04+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"Language-Team: Hungarian <gnome at fsf dot hu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr "Tippek tevékenységeinek hatékony nyilvántartásához."
+
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "Hogyan tartsa nyilván idejét"
+
+#: C/tracking.page:12(p)
+msgid ""
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
+msgstr ""
+"Időnyilvántartási szokásait az adatgyűjtés oka diktálja. Mit szeretne tenni "
+"az adatokkal? Egyszerűen csak kíváncsi, vagy munkája megköveteli? Milyen "
+"részletességben kíváncsi az eredményekre?"
+
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "Részletesség"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "A javasolt sebesség napi 5 és 30 közötti tevékenység naponta."
+
+#: C/tracking.page:22(p)
+msgid ""
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
+msgstr ""
+"Az <app>Időnyilvántartó</app> célja a mikronyilvántartás elkerülése, nehogy "
+"több időt töltsön a nyilvántartással, mint a tényleges tevékenységekkel. "
+"Azonban a nem elég részletes nyilvántartás azt is eredményezheti, hogy egy "
+"hónap múlva már nem lesznek értelmezhetők az adatok."
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "Mit írjak az egyes mezőkbe?"
+
+#: C/tracking.page:33(p)
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
+"For example: <input>lunch@work</input>."
+msgstr ""
+"Egyszerű tevékenységekhez, amelyek nem egy projekt részei, használja a "
+"<gui>tevékenység</gui> nevét, és bővebb kontextushoz a <gui>kategóriát</"
+"gui>. Például: <input>ebéd@munka</input>."
+
+#: C/tracking.page:38(p)
+msgid ""
+"For more sophisticated tracking try to caption your activity in one or two "
+"words (\"tree house\", \"project x\", or similar) and use that caption in "
+"the <gui>activity</gui> field. Use the <gui>category</gui> to describe the "
+"activity in it's wider context - is it private or work, or something else? "
+"Finally, use <gui>tags</gui> to describe your actual action - is it reading "
+"or constructing, writing or painting."
+msgstr ""
+"A részletesebb nyilvántartás érdekében próbálja meg tevékenységeit egy vagy "
+"két szóban összefoglalni („kutyaház-barkácsolás”, „X projekt”, vagy "
+"ilyesmi), és használja ezt az összefoglalót a <gui>tevékenység</gui> mezőben "
+"a tevékenység szélesebb kontextusban való leírásához – magánjellegű vagy "
+"munkahelyi, vagy valami más? Végül <gui>címkék</gui> használatával írja le a "
+"tényleges tevékenységet – olvasás vagy építés, írás vagy festés."
+
+#: C/tracking.page:47(p)
+msgid ""
+"This approach will alow you to see how much reading you have done through "
+"all your projects (by tag), how much time you have spent in your hobbies (by "
+"category), and how much time of all your work in project x you have spent "
+"analysing (by activity and tag)"
+msgstr ""
+"Ez a megközelítés lehetővé teszi, hogy mennyit töltött olvasással az összes "
+"projektjében (címke szerint), mennyi időt töltött hobbijaival (kategória "
+"szerint), és az X projekten a munkával töltött időből mennyit töltött "
+"elemzéssel (tevékenység és címke szerint)."
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "Tippek a nyilvántartási adatok javításához"
+
+#: C/tracking.page:58(p)
+msgid ""
+"Name activities so that they can be easily distinguished from each other. "
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
+msgstr ""
+"Tevékenységeit nevezze el, hogy egyszerűen megkülönböztethesse azokat "
+"egymástól. A tevékenység neve az egyetlen információ, ami a panelen "
+"megjelenik. Meg fogja tudni határozni, hogy min dolgozik, ha csak a "
+"tevékenység nevét látja?"
+
+#: C/tracking.page:64(p)
+msgid ""
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
+msgstr ""
+"A kategóriák listáját fogja rövidre (3-7 elem), és válasszon várhatóan "
+"később sem változó és általános neveket. Például: „munka”, „személyes”, "
+"„egyéb”."
+
+#: C/tracking.page:69(p)
+msgid ""
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
+msgstr ""
+"A leírás mezőt rövid távú információkhoz, például referenciaszámokhoz "
+"használhatja. Az <gui>Áttekintés</gui> ablakban történő keresés a leírás "
+"mezőben is keres, így az adott referenciaszámot tartalmazó tevékenységek "
+"megkeresése a keresés mezőbe gépeléssel, és az <key>Enter</key> "
+"megnyomásával egyszerűen elvégezhető."
+
+#: C/tracking.page:76(p)
+msgid ""
+"Activities and tags can come and go as necessary. Once you think that you "
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete any more. Don't worry: the facts (activities in the log) "
+"will not be deleted. This is just the \"operational list\"."
+msgstr ""
+"A tevékenységek és címkék igény szerint változhatnak. Ha úgy gondolja, hogy "
+"egy tevékenységgel kész van, távolítsa el azt, így nem jelenik meg többé az "
+"automatikus kiegészítésben. Ne aggódjon: a tények (a naplóban lévő "
+"tevékenységek) nem kerülnek törlésre. Ez csak a „műveleti lista”."
+
+#: C/statistics.page:6(desc)
+msgid "Note on interpretation of statistics."
+msgstr "A statisztika értelmezése."
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "Statisztika"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"A <gui style=\"button\">Statisztika megjelenítése</gui> hivatkozáson "
+"keresztül elérhető eredmények kísérletiek, és a tények értelmezését "
+"képviselik. Ezt az értelmezést vesse össze megfigyeléseivel. A programhoz "
+"küldött javításokat nagyra értékeljük!"
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr ""
+"Azonban a „Kezdet és vég” nagyjából pontosan összefoglalja az aktívan "
+"töltött idejét."
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker."
+msgstr "Adatok kinyerése az Időnyilvántartóból."
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "Jelentés és exportálás"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
+msgstr ""
+"A Jelentés mentése ablakban alapértelmezésben felajánlott HTML formátumon "
+"kívül a formátum legördülő lista lehetővé teszi a TSV (Tab-határolt értékek, "
+"táblázatkezelőhöz), XML és iCal formátumok kiválasztását is."
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"Programokból való eléréshez használható a D-Bus API, amely a <link href="
+"\"https://fedorahosted.org/d-feet/\">D-Feethez</link> hasonló eszközökkel "
+"figyelhető."
+
+#: C/reports.page:21(p)
+msgid ""
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
+msgstr ""
+"Az Időnyilvántartóból a leggyorsabban HTML jelentés készítésével nyerheti ki "
+"az adatokat. A <key>Ctrl</key> billentyű lenyomása közben jelölje ki a "
+"szükséges cellákat, majd másolja és illessze be azokat a célalkalmazásba."
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "Automatikus ütközésfeloldás."
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "Tevékenységek elválasztása"
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
+"will be shrunk."
+msgstr ""
+"Az <app>Időnyilvántartó</app> mindent megtesz a tevékenységek közti "
+"átfedések elkerüléséhez. Ha egy meglévő tevékenység közepén hoz létre új "
+"tevékenységet, akkor az előbbi ketté lesz vágva. Más esetekben a korábbi "
+"bejegyzések le lesznek rövidítve."
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"Az egyesítés az egész napra vonatkozó információk bevitelekor jön jól. "
+"Kezdje el bevinni az első tevékenységet, és válassza ki a „folyamatban” "
+"jelölőnégyzetet befejezési időként. A következő tevékenységhez ismét csak a "
+"kezdési időt adja meg, és jelölje folyamatban lévőként. Figyelje meg, hogy "
+"az előző tevékenység befejezési ideje hogyan változik az új kezdési idejére."
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "Trükkök a tevékenységek bevitelének felgyorsítására."
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "Adatbevitel"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
+msgstr ""
+"A követés megkezdéséhez írja be a tevékenység nevét a beviteli mezőbe, és "
+"nyomja meg az <key>Enter</key> billentyűt. Néhány egyszerű trükk "
+"segítségével több részletet adhat meg menet közben:"
+
+#: C/input.page:18(p)
+msgid "Use the @ symbol to add a category"
+msgstr "Kategória hozzáadásához használja a @ szimbólumot"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "A vesszőt (,) követően minden a leírás mezőbe kerül"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it first in the input box"
+msgstr "Az idő megadásához elsőként adja meg azt a beviteli mezőben"
+
+#: C/input.page:23(p)
+msgid "A few examples:"
+msgstr "Néhány példa:"
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 virágok meglocsolása"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over lunch."
+msgstr ""
+"Elfelejtettem felírni a virágok halaszthatatlan meglocsolását ebéd után."
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "paradicsomok@kert, lyukak ásása"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description."
+msgstr ""
+"Több paradicsom kell a kertbe. A lyukak ásása csak információs célt szolgál, "
+"így leírásként van megadva."
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 lételmélet, gondolkodás az univerzum végtelenségéről"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
+msgstr ""
+"Az információk javítása az alkalmazás értesítésével arról, hogy valami mást "
+"csinált az utolsó hét percben. A relatív idők csak folyamatban lévő, "
+"befejezési idő nélküli tevékenységekkel működnek."
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
+msgstr ""
+"Ezen kívül megadhat címkéket is a címke bemeneti mezőben. A címkéket vessző "
+"választja el. Nyomja meg a <key>Tab</key> billentyűt a javaslatdoboz "
+"megjelenésekor az adatbevitel kiegészítéséhez az első illeszkedő címkére."
+
+#: C/index.page:6(title) C/index.page:7(title) C/index.page:17(title)
+msgid "Time Tracking"
+msgstr "Időnyilvántartás"
+
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Share Alike 3.0"
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr "Hogyan mentse a tevékenység-adatbázist."
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "Biztonsági mentés"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. The application will reload the data automatically after a short "
+"while."
+msgstr ""
+"A tevékenységek egy SQLite adatbázisban találhatók a <file>~/.local/share/"
+"hamster-applet/hamster.db</file> helyen. A fájl menet közben menthető és "
+"helyreállítható. Az alkalmazás egy rövid idő elteltével automatikusan "
+"újratölti az adatokat."
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"Az adatbázis tartalmának megjelenítéséhez a Mozilla Firefoxhoz készült <link "
+"href=\"https://addons.mozilla.org/hu/firefox/addon/5817\"><app>SQLite "
+"Managert</app></link> javasoljuk."
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr "Kelemen Gábor <kelemeng at gnome dot hu>"
+
+#~ msgid ""
+#~ "This work is licensed under a <link href=\"http://creativecommons.org/"
+#~ "licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 "
+#~ "Unported License</link>."
+#~ msgstr ""
+#~ "Ez a mű a <link href=\"http://creativecommons.org/licenses/by-sa/3.0/"
+#~ "\">Creative Commons Attribution-Share Alike 3.0 Unported License</link> "
+#~ "alá esik."
+
+#~ msgid ""
+#~ "As a special exception, the copyright holders give you permission to "
+#~ "copy, modify, and distribute the example code contained in this document "
+#~ "under the terms of your choosing, without restriction."
+#~ msgstr ""
+#~ "Speciális kivételként a szerzői jog tulajdonosai engedélyezik a "
+#~ "dokumentum által tartalmazott példakód másolását, módosítását és "
+#~ "terjesztését az Ön által választott feltételek szerint, korlátozások "
+#~ "nélkül."
