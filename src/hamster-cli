@@ -196,7 +196,7 @@ def fact_dict(fact_data, with_date):
         fmt = '%H:%M'
 
     fact['start'] = fact_data.start_time.strftime(fmt)
-    if fact_data['end_time']:
+    if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
         end_date = dt.datetime.now()
@@ -204,9 +204,9 @@ def fact_dict(fact_data, with_date):
 
     fact['duration'] = stuff.format_duration(fact_data.delta)
 
-    fact['activity'] = fact_data.name
+    fact['activity'] = fact_data.activity
     fact['category'] = fact_data.category
-    if fact_data['tags']:
+    if fact_data.tags:
         fact['tags'] = ' '.join('#%s' % tag for tag in fact_data.tags)
     else:
         fact['tags'] = ''
