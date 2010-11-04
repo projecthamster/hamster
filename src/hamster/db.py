@@ -937,7 +937,7 @@ class Storage(storage.Storage):
     def end_transaction(self):
         self.__con.commit()
         self.__cur.close()
-        self.__con = None
+        self.__con, self.__cur = None, None
         self.register_modification()
 
     def run_fixtures(self):
