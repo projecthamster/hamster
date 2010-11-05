@@ -198,7 +198,7 @@ class HamsterApplet(object):
         self.new_name = widgets.ActivityEntry()
         self.new_name.connect("value-entered", self.on_switch_activity_clicked)
 
-        self.new_name.set_property("secondary-icon-name", "help")
+        self.new_name.set_property("secondary-icon-name", "help-contents")
         self.new_name.connect("icon-press", self.on_more_info_button_clicked)
 
         widgets.add_hint(self.new_name, _("Activity"))
