@@ -209,6 +209,8 @@ class HTMLWriter(ReportWriter):
 
         self.by_date_row_template = self._extract_template('by_date_activity')
         self.by_date_total_row_template = self._extract_template("by_date_category")
+        self.by_activity_category_row_template = self._extract_template("by_activity_category")
+        self.totals_row_template = self._extract_template("totals_activity")
 
         self.by_date_template = self._extract_template('by_date')
 
@@ -311,12 +313,50 @@ class HTMLWriter(ReportWriter):
                            ))
             by_date.append(res)
 
+        by_activity_category_rows = []
+        # group by activity
+        name_category = lambda fact: (fact.category)
+        name_activity = lambda fact: (fact.activity)
+
+        total_duration = None
+        by_category = sorted(facts, key=name_category)
+        for category, category_facts in itertools.groupby(by_category, lambda fact:fact.category):
+            by_activity = sorted(category_facts, key=name_activity)
+
+            for (activity), ac_facts in itertools.groupby(by_activity, name_activity):
+                duration = dt.timedelta()
+                for fact in ac_facts:
+                    duration += fact.delta
+
+                by_activity_category_rows.append(Template(self.by_activity_category_row_template).safe_substitute(
+                                        dict(activity = activity,
+                                             category = category,
+                                             duration = stuff.format_duration(duration),
+                                             duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
+                                             duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
+                                        )
+                                    ))
+                if (total_duration):
+                    total_duration += duration
+                else:
+                    total_duration = duration
+
+        by_totals_rows = []
+        if (len(by_activity_category_rows) > 0):
+            by_totals_rows.append(Template(self.totals_row_template).safe_substitute(
+                                  dict(total_duration = stuff.format_duration(total_duration),
+                                         total_duration_minutes = "%d" % (stuff.duration_minutes(total_duration)),
+                                         total_duration_decimal = "%.2f" % (stuff.duration_minutes(total_duration) / 60.0),
+                                         total_row = _("Total")
+                                    )
+                                ))
 
 
         data = dict(
             title = self.title,
             totals_by_day_title = _("Totals by Day"),
             activity_log_title = _("Activity Log"),
+            totals_title = _("Totals"),
 
             activity_totals_heading = _("totals by activity"),
             category_totals_heading = _("totals by category"),
@@ -337,7 +377,9 @@ class HTMLWriter(ReportWriter):
             template_instructions = _("You can override it by storing your version in %(home_folder)s") % {'home_folder': runtime.home_data_dir},
 
             all_activities_rows = "\n".join(self.fact_rows),
-            by_date_rows = "\n".join(by_date)
+            by_date_rows = "\n".join(by_date),
+            by_activity_category_rows = "\n".join(by_activity_category_rows),
+            totals_activity_rows = "\n".join(by_totals_rows)
         )
         report.write(Template(self.main_template).safe_substitute(data))
 

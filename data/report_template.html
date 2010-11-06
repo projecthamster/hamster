@@ -88,100 +88,116 @@
 
 <div id="tabs">
 	<ul>
-            <li><a href="#tabs-1">$totals_by_day_title</a></li>
+            <li><a href="#tabs-1">$totals_title</a></li>
             <li><a href="#tabs-2">$activity_log_title</a></li>
 	</ul>
 	<div id="tabs-1">
-            <div class="by_day_controls">
-                $show_prompt
-                <input type="checkbox" id="show_details" checked="checked"></input>
-                <label for="show_details">$activity_totals_heading</label>
+        <h2>$totals_title</h2>
+        <table>
+            <tr>
+                <th>$header_category</th>
+                <th>$header_activity</th>
+                <th>$header_duration</th>
+            </tr>
+            <by_activity_category>
+                <tr><td>$category</td><td>$activity</td><td>$duration</td></tr>
+            </by_activity_category>
+            <totals_activity>
+                <tr><th colspan="2" style="text-align:right;">$total_row</th><th>$total_duration</th></tr>
+            </totals_activity>
+        </table>
 
-                <input type="checkbox" id="show_totals" checked="checked"></input>
-                <label for="show_totals">$category_totals_heading</label>
-            </div>
+        <h2>$totals_by_day_title</h2>
 
-            <table>
-                <tr>
-                    <th>Date</th>
-                    <th class="by_date_row">$activity_totals_heading</th>
-                    <th class="by_date_total_row">$category_totals_heading</th>
+        <div class="by_day_controls">
+            $show_prompt
+            <input type="checkbox" id="show_details" checked="checked"></input>
+            <label for="show_details">$activity_totals_heading</label>
+
+            <input type="checkbox" id="show_totals" checked="checked"></input>
+            <label for="show_totals">$category_totals_heading</label>
+        </div>
+
+        <table>
+            <tr>
+                <th>Date</th>
+                <th class="by_date_row">$activity_totals_heading</th>
+                <th class="by_date_total_row">$category_totals_heading</th>
+            </tr>
+
+            <by_date>
+                <tr valign="top">
+                    <td>$date</td>
+                    <td class="by_date_row">
+                        <table width="100%">
+                            <by_date_activity>
+                                <tr>
+                                    <td>$activity ($category)</td>
+                                    <td style="text-align: right">
+                                        <!-- there is also duration_decimal and duration_minutes -->
+                                        $duration
+                                    </td>
+                                </tr>
+                            </by_date_activity>
+                        </table>
+                    </td>
+                    <td class="by_date_total_row">
+                        <table width="100%">
+                            <by_date_category>
+                                <tr>
+                                    <td>$category</td>
+                                    <td style="text-align: right">
+                                        <!-- there is also duration_decimal and duration_minutes -->
+                                        $duration
+                                    </td>
+                                </tr>
+                            </by_date_category>
+                        </table>
+                    </td>
                 </tr>
-
-                <by_date>
-                    <tr valign="top">
-                        <td>$date</td>
-                        <td class="by_date_row">
-                            <table width="100%">
-                                <by_date_activity>
-                                    <tr>
-                                        <td>$activity ($category)</td>
-                                        <td style="text-align: right">
-                                            <!-- there is also duration_decimal and duration_minutes -->
-                                            $duration
-                                        </td>
-                                    </tr>
-                                </by_date_activity>
-                            </table>
-                        </td>
-                        <td class="by_date_total_row">
-                            <table width="100%">
-                                <by_date_category>
-                                    <tr>
-                                        <td>$category</td>
-                                        <td style="text-align: right">
-                                            <!-- there is also duration_decimal and duration_minutes -->
-                                            $duration
-                                        </td>
-                                    </tr>
-                                </by_date_category>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr><td colspan="3">&nbsp;</td></tr>
-                </by_date>
-            </table>
+                <tr><td colspan="3">&nbsp;</td></tr>
+            </by_date>
+        </table>
 	</div>
 	<div id="tabs-2">
-            <table>
+        <table>
+            <tr>
+                <th>$header_date</th>
+                <th>$header_activity</th>
+                <th>$header_category</th>
+                <th>$header_tags</th>
+                <th>$header_start</th>
+                <th>$header_end</th>
+                <th>$header_duration</th>
+                <th>$header_description</th>
+            </tr>
+            <all_activities>
                 <tr>
-                    <th>$header_date</th>
-                    <th>$header_activity</th>
-                    <th>$header_category</th>
-                    <th>$header_tags</th>
-                    <th>$header_start</th>
-                    <th>$header_end</th>
-                    <th>$header_duration</th>
-                    <th>$header_description</th>
+                    <td>
+                        <!-- there is also date_iso -->
+                        $date
+                    </td>
+                    <td>$activity</td>
+                    <td>$category</td>
+                    <td>$tags</td>
+                    <td>
+                        <!-- there is also start_iso -->
+                        $start
+                    </td>
+                    <td>
+                        <!-- there is also end_iso -->
+                        $end
+                    </td>
+                    <td>
+                        <!-- there is also duration_decimal and duration_minutes -->
+                        $duration
+                    </td>
+                    <td>$description</td>
                 </tr>
-                <all_activities>
-                    <tr>
-                        <td>
-                            <!-- there is also date_iso -->
-                            $date
-                        </td>
-                        <td>$activity</td>
-                        <td>$category</td>
-                        <td>$tags</td>
-                        <td>
-                            <!-- there is also start_iso -->
-                            $start
-                        </td>
-                        <td>
-                            <!-- there is also end_iso -->
-                            $end
-                        </td>
-                        <td>
-                            <!-- there is also duration_decimal and duration_minutes -->
-                            $duration
-                        </td>
-                        <td>$description</td>
-                    </tr>
-                </all_activities>
-            </table>
+            </all_activities>
+        </table>
 	</div>
 </div>
-
 <p class="template-instructions">
     <a href="file:///$data_dir/report_template.html">$show_template</a>.
     $template_instructions.
