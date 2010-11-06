@@ -322,6 +322,21 @@ class Fact(object):
         self.end_time = end_time or self.end_time or None
 
 
+    def __iter__(self):
+        keys = {
+            'id': int(self.id),
+            'activity': self.activity,
+            'category': self.category,
+            'description': self.description,
+            'tags': [tag.encode("utf-8").strip() for tag in self.tags.split(",")],
+            'date': calendar.timegm(self.date.timetuple()),
+            'start_time': calendar.timegm(self.start_time.timetuple()),
+            'end_time': calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
+            'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 #duration in seconds
+        }
+        return iter(keys.items())
+
+
     def serialized_name(self):
         res = self.activity
 
