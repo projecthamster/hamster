@@ -120,17 +120,6 @@ class HamsterClient(object):
             print category['name'].encode('utf8')
 
 
-def timestamp_from_datetime(date):
-    '''Convert a local time datetime into an utc timestamp.'''
-    if date:
-        return timegm(date.timetuple())
-    else:
-        return 0
-
-def datetime_from_timestamp(timestamp):
-    '''Convert an utc timestamp into a local time datetime.'''
-    return dt.datetime.utcfromtimestamp(timestamp)
-
 def parse_datetime_range(time):
     '''Parse starting and ending datetime separated by a '-'.'''
     start_time, remainder = parse_datetime(time)
