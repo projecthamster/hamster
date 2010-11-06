@@ -12,16 +12,12 @@
     <title>$title</title>
     <style type="text/css">
         body {
-            font-family: "sans-serif";
+            font-family: "Droid Sans", "Liberation Sans", "Helvetica", "Arial", sans-serif;
             font-size: 12px;
             padding: 12px;
             color: #303030;
         }
 
-        h2 {
-            margin-top: 2em;
-            border-bottom: 2px solid #303030;
-        }
         th, td {
             text-align: left;
             padding-right: 24px;
@@ -31,11 +27,72 @@
             padding-top: 12px;
         }
 
+        h1 {margin-top: 0; margin-bottom: 1em;}
+        h2 {margin-bottom: 4px;}
+
         .even {background-color: #eee;}
         .odd {background-color: #fff;}
 
         .by_day_controls {
             margin-bottom: 24px;
+        }
+
+        #activity_log {
+            display: none;
+        }
+
+
+        table.chart {
+            border-collapse:collapse;
+            margin-bottom: 2em;
+        }
+
+        td.bar_col {
+            width: 100px;
+        }
+
+        .bar {
+            background-color: #7B8ED7;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            color: #fff;
+            height: 100%;
+        }
+
+        #date_chart table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4px;
+        }
+
+        #date_chart table tr {
+            vertical-align: bottom;
+        }
+
+        #date_chart table td {
+            padding: 0;
+            padding-right: 1px;
+        }
+
+        #date_chart .bar {
+            width: 100%;
+            background-color: #ccc;
+            border-radius: 0;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        .duration {
+            color: #999;
+        }
+
+        #activity_log {
+            padding: 6px;
+            margin: 6px;
+            padding-left: 12px;
+            border: 1px solid silver;
+            background: #eee;
+
         }
     </style>
 
@@ -58,8 +115,117 @@
     </style>
 
     <script type="text/javascript">
+        var facts = $facts;
+
+        function showChart(target, data) {
+            totals = []
+            // turn object into a list of tuples and convert durations from seconds to hours
+            var max_duration = 0;
+            for (var key in data) {
+                var duration = data[key] / 60 / 60.0;
+                totals.push([key, duration]); // hours
+
+                max_duration = Math.max(max_duration, duration);
+            }
+
+            // sort by duration descending
+            totals.sort(function compare(a,b) {return b[1] - a[1]})
+
+            // create the HTML
+            var table = $("<table class='chart' style='width:100%' />")
+            for (var i=0; i < totals.length; i++) {
+                var total = totals[i];
+
+                var row = $("<tr />");
+                var label = $("<td />");
+
+                label.text(total[0]);
+                row.append(label);
+
+
+                var duration = Math.round(total[1] * 10) / 10; // round to one decimal
+                var duration_label = $("<td />");
+                duration_label.text(duration);
+                row.append(duration_label);
+
+
+                var bar_col = $("<td class='bar_col' />");
+                var bar = $("<div class='bar'>&nbsp;</div>");
+                bar.width(total[1] / max_duration * 100);
+                bar_col.append(bar);
+                row.append(bar_col);
+
+                table.append(row);
+            }
+
+            target.append(table);
+
+        }
+
         $(document).ready(function() {
-            $("#tabs").tabs()
+            var categoryTotals = {};
+            var activityTotals = {};
+            var tagTotals = {};
+            var dateTotals = {}
+
+            function add(list, key, value) {
+                list[key] = list[key] || 0;
+                list[key] += value;
+            }
+
+            for (var i=0; i < facts.length; i++) {
+                var fact = facts[i];
+
+                add(dateTotals, fact.date, fact.delta)
+                add(categoryTotals, fact.category, fact.delta)
+                add(activityTotals, fact.activity, fact.delta)
+
+                for (var j=0; j < fact.tags.length; j++) {
+                    add(tagTotals, fact.tags[j], fact.delta)
+                }
+            }
+
+            showChart($("#category_chart"), categoryTotals)
+            showChart($("#activity_chart"), activityTotals)
+            showChart($("#tag_chart"), tagTotals)
+
+
+            // create the by-day chart
+            var startDate = $start_date;
+            var endDate = $end_date;
+
+            var dates = [];
+            var dateMax = 0;
+            for (var i=startDate; i <= endDate; i += 24 * 60 * 60) {
+                var duration = dateTotals[i] || 0;
+                dateMax = Math.max(dateMax, duration);
+                dates.push([new Date(i), duration])
+            }
+
+            var table = $("<table />")
+            var row = $("<tr />");
+            for (var i=0; i<dates.length; i++) {
+                var date = dates[i];
+                var col = $("<td />");
+
+                var bar = $("<div class='bar'>&nbsp;</div>");
+                var bar_height = date[1] / dateMax * 100;
+                if (bar_height < 1)
+                    bar.height("1px");
+                else
+                    bar.height(bar_height)
+
+                col.append(bar);
+                row.append(col);
+            }
+            table.append(row);
+            $("#date_chart").append(table);
+
+
+
+            $("#activity_log_link").click(function() {
+                $("#activity_log").toggle()
+            })
 
             $("#show_details").click(function() {
                 if ($(this).attr("checked")) {
@@ -84,120 +250,128 @@
 </head>
 <body>
 
-<h1>$title</h1>
+<h1>$title <span class="duration">(<totals_activity>$total_duration</totals_activity>)</span></h1>
 
-<div id="tabs">
-	<ul>
-            <li><a href="#tabs-1">$totals_title</a></li>
-            <li><a href="#tabs-2">$activity_log_title</a></li>
-	</ul>
-	<div id="tabs-1">
-        <h2>$totals_title</h2>
-        <table>
+<div id="date_chart"></div>
+
+<a id="activity_log_link" href="javascript: false">Show activity log</a>
+<div id="activity_log">
+    <h2>$activity_log_title</h2>
+    <table>
+        <tr>
+            <th>$header_date</th>
+            <th>$header_activity</th>
+            <th>$header_category</th>
+            <th>$header_tags</th>
+            <th>$header_start</th>
+            <th>$header_end</th>
+            <th>$header_duration</th>
+            <th>$header_description</th>
+        </tr>
+        <all_activities>
             <tr>
-                <th>$header_category</th>
-                <th>$header_activity</th>
-                <th>$header_duration</th>
+                <td>
+                    <!-- there is also date_iso -->
+                    $date
+                </td>
+                <td>$activity</td>
+                <td>$category</td>
+                <td>$tags</td>
+                <td>
+                    <!-- there is also start_iso -->
+                    $start
+                </td>
+                <td>
+                    <!-- there is also end_iso -->
+                    $end
+                </td>
+                <td>
+                    <!-- there is also duration_decimal and duration_minutes -->
+                    $duration
+                </td>
+                <td>$description</td>
             </tr>
-            <by_activity_category>
-                <tr><td>$category</td><td>$activity</td><td>$duration</td></tr>
-            </by_activity_category>
-            <totals_activity>
-                <tr><th colspan="2" style="text-align:right;">$total_row</th><th>$total_duration</th></tr>
-            </totals_activity>
-        </table>
-
-        <h2>$totals_by_day_title</h2>
-
-        <div class="by_day_controls">
-            $show_prompt
-            <input type="checkbox" id="show_details" checked="checked"></input>
-            <label for="show_details">$activity_totals_heading</label>
-
-            <input type="checkbox" id="show_totals" checked="checked"></input>
-            <label for="show_totals">$category_totals_heading</label>
-        </div>
-
-        <table>
-            <tr>
-                <th>Date</th>
-                <th class="by_date_row">$activity_totals_heading</th>
-                <th class="by_date_total_row">$category_totals_heading</th>
-            </tr>
-
-            <by_date>
-                <tr valign="top">
-                    <td>$date</td>
-                    <td class="by_date_row">
-                        <table width="100%">
-                            <by_date_activity>
-                                <tr>
-                                    <td>$activity ($category)</td>
-                                    <td style="text-align: right">
-                                        <!-- there is also duration_decimal and duration_minutes -->
-                                        $duration
-                                    </td>
-                                </tr>
-                            </by_date_activity>
-                        </table>
-                    </td>
-                    <td class="by_date_total_row">
-                        <table width="100%">
-                            <by_date_category>
-                                <tr>
-                                    <td>$category</td>
-                                    <td style="text-align: right">
-                                        <!-- there is also duration_decimal and duration_minutes -->
-                                        $duration
-                                    </td>
-                                </tr>
-                            </by_date_category>
-                        </table>
-                    </td>
-                </tr>
-                <tr><td colspan="3">&nbsp;</td></tr>
-            </by_date>
-        </table>
-	</div>
-	<div id="tabs-2">
-        <table>
-            <tr>
-                <th>$header_date</th>
-                <th>$header_activity</th>
-                <th>$header_category</th>
-                <th>$header_tags</th>
-                <th>$header_start</th>
-                <th>$header_end</th>
-                <th>$header_duration</th>
-                <th>$header_description</th>
-            </tr>
-            <all_activities>
-                <tr>
-                    <td>
-                        <!-- there is also date_iso -->
-                        $date
-                    </td>
-                    <td>$activity</td>
-                    <td>$category</td>
-                    <td>$tags</td>
-                    <td>
-                        <!-- there is also start_iso -->
-                        $start
-                    </td>
-                    <td>
-                        <!-- there is also end_iso -->
-                        $end
-                    </td>
-                    <td>
-                        <!-- there is also duration_decimal and duration_minutes -->
-                        $duration
-                    </td>
-                    <td>$description</td>
-                </tr>
-            </all_activities>
-        </table>
-	</div>
+        </all_activities>
+    </table>
 </div>
+
+
+
+<table>
+    <tr style="vertical-align: top">
+        <td style="width: 100%">
+
+            <h2>$totals_by_day_title</h2>
+
+            <div class="by_day_controls">
+                $show_prompt
+                <input type="checkbox" id="show_details" checked="checked"></input>
+                <label for="show_details">$activity_totals_heading</label>
+
+                <input type="checkbox" id="show_totals" checked="checked"></input>
+                <label for="show_totals">$category_totals_heading</label>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th class="by_date_row">$activity_totals_heading</th>
+                    <th class="by_date_total_row">$category_totals_heading</th>
+                </tr>
+
+                <by_date>
+                    <tr valign="top">
+                        <td>$date</td>
+                        <td class="by_date_row">
+                            <table width="100%">
+                                <by_date_activity>
+                                    <tr>
+                                        <td>$activity ($category)</td>
+                                        <td style="text-align: right">
+                                            <!-- there is also duration_decimal and duration_minutes -->
+                                            $duration
+                                        </td>
+                                    </tr>
+                                </by_date_activity>
+                            </table>
+                        </td>
+                        <td class="by_date_total_row">
+                            <table width="100%">
+                                <by_date_category>
+                                    <tr>
+                                        <td>$category</td>
+                                        <td style="text-align: right">
+                                            <!-- there is also duration_decimal and duration_minutes -->
+                                            $duration
+                                        </td>
+                                    </tr>
+                                </by_date_category>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr><td colspan="3">&nbsp;</td></tr>
+                </by_date>
+            </table>
+        </td>
+        <td>
+            <div>
+                <h2>Categories</h2>
+                <div id="category_chart"></div>
+            </div>
+            <div>
+                <h2>Activities</h2>
+                <div id="activity_chart"></div>
+            </div>
+            <div>
+                <h2>Tags</h2>
+                <div id="tag_chart"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
 <p class="template-instructions">
     <a href="file:///$data_dir/report_template.html">$show_template</a>.
     $template_instructions.

@@ -31,6 +31,8 @@ from configuration import runtime
 from utils import stuff, trophies
 from utils.i18n import C_
 
+from calendar import timegm
+
 def simple(facts, start_date, end_date, format, path):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
@@ -179,6 +181,7 @@ class XMLWriter(ReportWriter):
 class HTMLWriter(ReportWriter):
     def __init__(self, path, start_date, end_date):
         ReportWriter.__init__(self, path, datetime_format = None)
+        self.start_date, self.end_date = start_date, end_date
 
         dates_dict = stuff.dateDict(start_date, "start_")
         dates_dict.update(stuff.dateDict(end_date, "end_"))
@@ -375,6 +378,10 @@ class HTMLWriter(ReportWriter):
             data_dir = runtime.data_dir,
             show_template = _("Show template"),
             template_instructions = _("You can override it by storing your version in %(home_folder)s") % {'home_folder': runtime.home_data_dir},
+
+            start_date = timegm(self.start_date.timetuple()),
+            end_date = timegm(self.end_date.timetuple()),
+            facts = [dict(fact) for fact in facts],
 
             all_activities_rows = "\n".join(self.fact_rows),
             by_date_rows = "\n".join(by_date),
