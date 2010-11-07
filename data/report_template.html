@@ -98,7 +98,7 @@
             border-top-right-radius: 2px;
         }
 
-        .duration {
+        #grand_total {
             color: #999;
         }
 
@@ -113,6 +113,10 @@
 
         #date_facts tr:td {
             padding-left: 24px;
+        }
+
+        p.template-instructions {
+            margin-top: 2em;
         }
     </style>
 
@@ -193,6 +197,7 @@
                 list[key] += value;
             }
 
+            var grandTotal = 0;
             for (var i=0; i < facts.length; i++) {
                 var fact = facts[i];
 
@@ -203,7 +208,14 @@
                 for (var j=0; j < fact.tags.length; j++) {
                     add(tagTotals, fact.tags[j], fact.delta)
                 }
+
+                grandTotal += fact.delta;
             }
+
+            grandTotal = Math.round(grandTotal / 60 / 60 * 10) / 10;
+            $("#grand_total").text("(" + grandTotal + ")");
+
+
 
             showChart($("#category_chart"), categoryTotals)
             showChart($("#activity_chart"), activityTotals)
@@ -335,7 +347,7 @@
 <body>
 
 <div id="content">
-    <h1>$title <span class="duration">($grand_total)</span></h1>
+    <h1>$title <span id="grand_total"></span></h1>
 
     <div id="date_chart"></div>
 
