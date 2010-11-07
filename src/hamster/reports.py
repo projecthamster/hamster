@@ -211,9 +211,6 @@ class HTMLWriter(ReportWriter):
         self.fact_row_template = self._extract_template('all_activities')
 
         self.by_date_row_template = self._extract_template('by_date_activity')
-        self.by_date_total_row_template = self._extract_template("by_date_category")
-        self.by_activity_category_row_template = self._extract_template("by_activity_category")
-        self.totals_row_template = self._extract_template("totals_activity")
 
         self.by_date_template = self._extract_template('by_date')
 
@@ -266,105 +263,38 @@ class HTMLWriter(ReportWriter):
 
 
     def _finish(self, report, facts):
-        # group by date
-        name_category = lambda fact: (fact.category, fact.activity)
 
+        # group by date
         by_date = []
         for date, date_facts in itertools.groupby(facts, lambda fact:fact.date):
-            by_name = sorted(date_facts, key=name_category)
+            by_date.append((date, [dict(fact) for fact in date_facts]))
+        by_date = dict(by_date)
 
-            by_date_rows = []
-            for (category, activity), ac_facts in itertools.groupby(by_name, name_category):
-                duration = dt.timedelta()
-                for fact in ac_facts:
-                    duration += fact.delta
-
-
-                by_date_rows.append(Template(self.by_date_row_template).safe_substitute(
-                                    dict(activity = activity,
-                                         category = category,
-                                         duration = stuff.format_duration(duration),
-                                         duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
-                                         duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
-                                        )
-                                    ))
-
-            by_date_total_rows = []
-            for category, c_facts in itertools.groupby(by_name, lambda fact:fact.category):
-                duration = dt.timedelta()
-                for fact in c_facts:
-                    duration += fact.delta
-
-
-                by_date_total_rows.append(Template(self.by_date_total_row_template).safe_substitute(
-                                          dict(category = category,
-                                               duration = stuff.format_duration(duration),
-                                               duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
-                                               duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
-                                              )
-                                          ))
-
-
-            res = Template(self.by_date_template).safe_substitute(
-                           dict(date = fact.date.strftime(
-                                       # date column format for each row in HTML report
-                                       # Using python datetime formatting syntax. See:
-                                       # http://docs.python.org/library/time.html#time.strftime
-                                       C_("html report","%b %d, %Y")),
-                                by_date_activity_rows = "\n".join(by_date_rows),
-                                by_date_category_rows = "\n".join(by_date_total_rows)
-                           ))
-            by_date.append(res)
-
-        by_activity_category_rows = []
-        # group by activity
-        name_category = lambda fact: (fact.category)
-        name_activity = lambda fact: (fact.activity)
-
-        total_duration = None
-        by_category = sorted(facts, key=name_category)
-        for category, category_facts in itertools.groupby(by_category, lambda fact:fact.category):
-            by_activity = sorted(category_facts, key=name_activity)
-
-            for (activity), ac_facts in itertools.groupby(by_activity, name_activity):
-                duration = dt.timedelta()
-                for fact in ac_facts:
-                    duration += fact.delta
-
-                by_activity_category_rows.append(Template(self.by_activity_category_row_template).safe_substitute(
-                                        dict(activity = activity,
-                                             category = category,
-                                             duration = stuff.format_duration(duration),
-                                             duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
-                                             duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
-                                        )
-                                    ))
-                if (total_duration):
-                    total_duration += duration
-                else:
-                    total_duration = duration
-
-        by_totals_rows = []
-        if (len(by_activity_category_rows) > 0):
-            by_totals_rows.append(Template(self.totals_row_template).safe_substitute(
-                                  dict(total_duration = stuff.format_duration(total_duration),
-                                         total_duration_minutes = "%d" % (stuff.duration_minutes(total_duration)),
-                                         total_duration_decimal = "%.2f" % (stuff.duration_minutes(total_duration) / 60.0),
-                                         total_row = _("Total")
-                                    )
-                                ))
+        date_facts = []
+        date = self.start_date
+        while date <= self.end_date:
+            str_date = date.strftime(
+                        # date column format for each row in HTML report
+                        # Using python datetime formatting syntax. See:
+                        # http://docs.python.org/library/time.html#time.strftime
+                        C_("html report","%b %d, %Y"))
+            date_facts.append([str_date, by_date.get(date, [])])
+            date += dt.timedelta(days=1)
 
 
         data = dict(
             title = self.title,
+            #grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+
             totals_by_day_title = _("Totals by Day"),
             activity_log_title = _("Activity Log"),
             totals_title = _("Totals"),
 
-            activity_totals_heading = _("totals by activity"),
-            category_totals_heading = _("totals by category"),
+            activity_totals_heading = _("activities"),
+            category_totals_heading = _("categories"),
+            tag_totals_heading = _("tags"),
 
-            show_prompt = _("Show:"),
+            show_prompt = _("Distinguish:"),
 
             header_date = _("Date"),
             header_activity = _("Activity"),
@@ -382,11 +312,9 @@ class HTMLWriter(ReportWriter):
             start_date = timegm(self.start_date.timetuple()),
             end_date = timegm(self.end_date.timetuple()),
             facts = [dict(fact) for fact in facts],
+            date_facts = date_facts,
 
-            all_activities_rows = "\n".join(self.fact_rows),
-            by_date_rows = "\n".join(by_date),
-            by_activity_category_rows = "\n".join(by_activity_category_rows),
-            totals_activity_rows = "\n".join(by_totals_rows)
+            all_activities_rows = "\n".join(self.fact_rows)
         )
         report.write(Template(self.main_template).safe_substitute(data))
 
