@@ -187,13 +187,13 @@ class HTMLWriter(ReportWriter):
         dates_dict.update(stuff.dateDict(end_date, "end_"))
 
         if start_date.year != end_date.year:
-            self.title = _(u"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif start_date.month != end_date.month:
-            self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif start_date == end_date:
-            self.title = _(u"Activity log for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
+            self.title = _(u"Activity report for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
         else:
-            self.title = _(u"Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _(u"Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
 
         # read the template, allow override
