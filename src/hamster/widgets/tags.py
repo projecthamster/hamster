@@ -21,7 +21,7 @@ import gtk, gobject
 import pango, cairo
 from math import pi
 
-from ..utils import graphics
+from ..utils import graphics, stuff
 from ..configuration import runtime
 
 class TagsEntry(gtk.Entry):
@@ -312,12 +312,11 @@ class Tag(graphics.Sprite):
     def __init__(self, text, interactive = True, color = "#F1EAAA"):
         graphics.Sprite.__init__(self, interactive = interactive)
 
-        self.text = text
-
+        self.text = stuff.escape_pango(text)
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)
+        label = graphics.Label(self.text, size = font_size, color = (30, 30, 30), y = 1)
 
         corner = int((label.height + 3) / 3) + 0.5
         label.x = corner + 6

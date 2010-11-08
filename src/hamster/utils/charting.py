@@ -21,7 +21,7 @@ import gtk, gobject
 import pango
 import datetime as dt
 import time
-import graphics
+import graphics, stuff
 import locale
 
 class Bar(graphics.Sprite):
@@ -138,7 +138,7 @@ class Chart(graphics.Scene):
                 self.tweener.add_tween(bar, normalized=normalized)
             new_bars.append(bar)
 
-            label = graphics.Label(key, size = 8, alignment = pango.ALIGN_RIGHT)
+            label = graphics.Label(stuff.escape_pango(key), size = 8, alignment = pango.ALIGN_RIGHT)
             new_labels.append(label)
 
 
