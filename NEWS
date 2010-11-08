@@ -1,4 +1,37 @@
 ===============
+Version 2.91.2
+===============
+  * experimental trophy support (to try out need to install the achievement
+    service from https://github.com/tbaugis/gnome-achievements)
+  * improvements in HTML reports
+
+  Updated translations:
+    * ar (Khaled Hosny)
+    * bq (Damyan Ivanov)
+    * ca (Gil Forcada)
+    * ca@valencia (Gil Forcada)
+    * cs (Adrian Guniš)
+    * da (Kenneth Nielsen)
+    * de (Christian Kirbach)
+    * el (Michael Kotsarinis)
+    * en_GB (Bruce Cowan)
+    * es (Jorge González)
+    * et (Ivar Smolin)
+    * fr (Bruno Brouard)
+    * gl (Fran Dieguez)
+    * he (Yaron Shahrabani)
+    * hu (Gabor Kelemen)
+    * it (Milo Casagrande)
+    * ja (Takayuki KUSANO)
+    * ko (Changwoo Ryu)
+    * lt (Žygimantas Beručka)
+    * pl (Piotr Drąg)
+    * pt_BR (Og Maciel)
+    * pt (Duarte Loreto)
+    * sl (Andrej Žnidaršič)
+    * sr (Милош Поповић)
+
+===============
 Version 2.31.90
 ===============
   * maintaining selection on refresh in a more sane manner
