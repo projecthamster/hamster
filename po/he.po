@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hamster Applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-06 17:10+0200\n"
-"PO-Revision-Date: 2010-11-06 17:12+0200\n"
+"POT-Creation-Date: 2010-11-08 23:22+0200\n"
+"PO-Revision-Date: 2010-11-09 07:52+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer <sh.yaron@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -273,12 +273,12 @@ msgid "Show Statistics"
 msgstr "הצגת סטטיסטיקה"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:372 ../src/hamster-time-tracker:48
+#: ../src/hamster/reports.py:302 ../src/hamster-time-tracker:48
 msgid "Tags"
 msgstr "תויות"
 
 #: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:370
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:300
 #: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "פעילות"
@@ -311,7 +311,7 @@ msgstr "הסר"
 msgid "Save report..."
 msgstr "שמירת דיווח..."
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:362
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:291
 msgid "Totals"
 msgstr "סך הכול"
 
@@ -487,7 +487,7 @@ msgstr "%s שעות"
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:242
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:239
 #: ../src/hamster-time-tracker:224
 msgid "Unsorted"
 msgstr "לא ממוין"
@@ -566,7 +566,7 @@ msgstr "ללא"
 msgid "Name"
 msgstr "שם"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:371
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:301
 msgid "Category"
 msgstr "קטגוריה"
 
@@ -620,93 +620,90 @@ msgid "description"
 msgstr "תיאור"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:295
 msgid "tags"
 msgstr "תגיות"
 
 #: ../src/hamster/reports.py:190
 #, python-format
 msgid ""
-"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
-"%(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
+"s, %(end_Y)s"
 msgstr ""
-"יומן פעילות עבור %(start_B)s %(start_d)s, %(start_Y)s‏ – %(end_B)s %(end_d)s, "
-"%(end_Y)s"
+"דוח פעילות עבור %(start_d)s ב%(start_B)s %(start_Y)s – %(end_d)s ב%(end_B)s %"
+"(end_Y)s"
 
 #: ../src/hamster/reports.py:192
 #, python-format
 msgid ""
-"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"יומן פעילות עבור %(start_B)s %(start_d)s‏ – %(end_B)s %(end_d)s, %(end_Y)s"
+"דוח פעילות עבור %(start_d)s ב%(start_B)s – %(end_d)s ב%(end_B)s %(end_Y)s"
 
 #: ../src/hamster/reports.py:194
 #, python-format
-msgid "Activity log for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "יומן פעילות עבור %(start_B)s %(start_d)s,‏ %(start_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "דוח פעילות עבור ה־%(start_d)s ב%(start_B)s %(start_Y)s"
 
 #: ../src/hamster/reports.py:196
 #, python-format
-msgid "Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "יומן פעילות עבור %(start_B)s %(start_d)s‏ – %(end_d)s, %(end_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "דוח פעילות עבור %(start_d)s – %(end_d)s ב%(start_B)s %(end_Y)s"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:251 ../src/hamster/reports.py:313
+#: ../src/hamster/reports.py:248 ../src/hamster/reports.py:280
 msgctxt "html report"
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "ה־%d ב%b, %Y"
 
-#: ../src/hamster/reports.py:353
-msgid "Total"
-msgstr "סך הכול"
-
-#: ../src/hamster/reports.py:360
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:289
 msgid "Totals by Day"
 msgstr "סך הכול לפי יום"
 
-#: ../src/hamster/reports.py:361
+#: ../src/hamster/reports.py:290
 msgid "Activity Log"
 msgstr "יומן הפעילות"
 
-#: ../src/hamster/reports.py:364
-msgid "totals by activity"
-msgstr "סך הכול לפי פעילות"
+#: ../src/hamster/reports.py:293
+msgid "activities"
+msgstr "פעילויות"
 
-#: ../src/hamster/reports.py:365
-msgid "totals by category"
-msgstr "סך הכול לפי קטגוריה"
+#: ../src/hamster/reports.py:294
+msgid "categories"
+msgstr "קטגוריות"
 
-#: ../src/hamster/reports.py:367
-msgid "Show:"
-msgstr "הצגה:"
+#: ../src/hamster/reports.py:297
+msgid "Distinguish:"
+msgstr "הבדלה:"
 
-#: ../src/hamster/reports.py:369
+#: ../src/hamster/reports.py:299
 msgid "Date"
 msgstr "תאריך"
 
-#: ../src/hamster/reports.py:373
+#: ../src/hamster/reports.py:303
 msgid "Start"
 msgstr "התחלה"
 
-#: ../src/hamster/reports.py:374
+#: ../src/hamster/reports.py:304
 msgid "End"
 msgstr "סיום"
 
-#: ../src/hamster/reports.py:375
+#: ../src/hamster/reports.py:305
 msgid "Duration"
 msgstr "משך"
 
-#: ../src/hamster/reports.py:376
+#: ../src/hamster/reports.py:306
 msgid "Description"
 msgstr "תיאור"
 
-#: ../src/hamster/reports.py:379
+#: ../src/hamster/reports.py:309
 msgid "Show template"
 msgstr "הצגת התבנית"
 
-#: ../src/hamster/reports.py:380
+#: ../src/hamster/reports.py:310
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "ניתן לשכתב עליהן על ידי שמירת הגרסה שלך תחת %(home_folder)s"
@@ -903,6 +900,18 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "מעקב אחרי הזמן"
+
+#~ msgid "Total"
+#~ msgstr "סך הכול"
+
+#~ msgid "totals by activity"
+#~ msgstr "סך הכול לפי פעילות"
+
+#~ msgid "totals by category"
+#~ msgstr "סך הכול לפי קטגוריה"
+
+#~ msgid "Show:"
+#~ msgstr "הצגה:"
 
 #~ msgid "Tell me more"
 #~ msgstr "ספרו לי עוד"
