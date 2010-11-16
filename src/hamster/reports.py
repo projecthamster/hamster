@@ -145,6 +145,7 @@ class TSVWriter(ReportWriter):
         self.csv_writer.writerow([h.encode('utf-8') for h in headers])
 
     def _write_fact(self, file, fact):
+        fact.delta = stuff.duration_minutes(fact.delta)
         self.csv_writer.writerow([fact.activity,
                                   fact.start_time,
                                   fact.end_time,
