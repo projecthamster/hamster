@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: hamster-applet MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-11-07 22:53+0000\n"
-"PO-Revision-Date: 2010-11-08 09:00+0200\n"
+"POT-Creation-Date: 2010-11-16 00:07+0000\n"
+"PO-Revision-Date: 2010-11-18 15:44+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgid "Remove"
 msgstr "Eemalda"
 
 msgid "Save report..."
-msgstr "Salvesta raport..."
+msgstr "Salvesta aruanne..."
 
 msgid "Totals"
 msgstr "Kokku"
@@ -471,27 +471,27 @@ msgstr "sildid"
 
 #, python-format
 msgid ""
-"Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
-"%(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 msgstr ""
-"Tegevuste logi perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. "
+"Tegevuste aruanne perioodi %(start_d)s. %(start_B)s %(start_Y)s - %(end_d)s. "
 "%(end_B)s %(end_Y)s kohta"
 
 #, python-format
 msgid ""
-"Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Tegevuste logi perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s "
+"Tegevuste aruanne perioodi %(start_d)s. %(start_B)s - %(end_d)s. %(end_B)s "
 "%(end_Y)s kohta"
 
 #, python-format
-msgid "Activity log for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Tegevuste logi %(start_d)s. %(start_B)s %(start_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Tegevuste aruanne %(start_d)s. %(start_B)s %(start_Y)s"
 
 #, python-format
-msgid "Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr ""
-"Tegevuste logi perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s kohta"
+"Tegevuste aruanne perioodi %(start_d)s-%(end_d)s %(start_B)s %(end_Y)s kohta"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
@@ -693,10 +693,10 @@ msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s-%(end_d)s %(start_B)s %(end_Y)s"
 
 msgid "Save Report — Time Tracker"
-msgstr "Ajajälgija - raporti salvestamine"
+msgstr "Ajajälgija - aruande salvestamine"
 
 msgid "HTML Report"
-msgstr "HTML-raport"
+msgstr "HTML-aruanne"
 
 msgid "Tab-Separated Values (TSV)"
 msgstr "Tabulaatoriga eraldatud väärtused (TSV)"
