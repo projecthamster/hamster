@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-11-09 22:34+0000\n"
+"POT-Creation-Date: 2010-11-16 00:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gheyret Kenji<gheyret@yahoo.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -193,7 +193,7 @@ msgstr "بەتكۈچلەر:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
-msgstr ":ۋاقتى"
+msgstr "ۋاقتى:"
 
 #: ../data/edit_activity.ui.h:6
 msgid "in progress"
@@ -260,19 +260,19 @@ msgid "Show Statistics"
 msgstr "ستاتىستىكا كۆرسەت"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:302 ../src/hamster-time-tracker:48
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
 msgid "Tags"
 msgstr "خەتكۈچلەر"
 
 #: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:300
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
 #: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "ئاكتىپ"
 
 #: ../data/overview.ui.h:3
 msgid "Add new"
-msgstr ""
+msgstr "يېڭىدىن قوش"
 
 #: ../data/overview.ui.h:4
 msgid "Day"
@@ -298,7 +298,7 @@ msgstr "چىقىرىۋەت"
 msgid "Save report..."
 msgstr ""
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:291
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
 msgid "Totals"
 msgstr ""
 
@@ -424,7 +424,7 @@ msgstr ""
 
 #: ../data/stats.ui.h:4
 msgid "Year:"
-msgstr ":يىلى"
+msgstr "يىلى:"
 
 #: ../src/docky_control/2.0/hamster_control.py:71
 #: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
@@ -450,7 +450,7 @@ msgstr ""
 
 #: ../src/hamster/about.py:46
 msgid "About Time Tracker"
-msgstr ""
+msgstr "Time Tracker ھەققىدە"
 
 #: ../src/hamster/about.py:56
 msgid "translator-credits"
@@ -474,7 +474,7 @@ msgstr "%sh"
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:239
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:224
 msgid "Unsorted"
 msgstr "تەرتىپلەنمىگەن"
@@ -553,7 +553,7 @@ msgstr "يوق"
 msgid "Name"
 msgstr "ئاتى"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:301
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "كاتېگورىيە"
 
@@ -607,29 +607,29 @@ msgid "description"
 msgstr "چۈشەندۈرۈش"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
 msgid "tags"
 msgstr ""
 
-#: ../src/hamster/reports.py:190
+#: ../src/hamster/reports.py:191
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
 "s, %(end_Y)s"
 msgstr ""
 
-#: ../src/hamster/reports.py:192
+#: ../src/hamster/reports.py:193
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 
-#: ../src/hamster/reports.py:194
+#: ../src/hamster/reports.py:195
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr ""
 
-#: ../src/hamster/reports.py:196
+#: ../src/hamster/reports.py:197
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -637,57 +637,57 @@ msgstr ""
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:248 ../src/hamster/reports.py:280
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d، %Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:289
+#: ../src/hamster/reports.py:290
 msgid "Totals by Day"
 msgstr ""
 
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:291
 msgid "Activity Log"
 msgstr ""
 
-#: ../src/hamster/reports.py:293
+#: ../src/hamster/reports.py:294
 msgid "activities"
 msgstr ""
 
-#: ../src/hamster/reports.py:294
+#: ../src/hamster/reports.py:295
 msgid "categories"
 msgstr ""
 
-#: ../src/hamster/reports.py:297
+#: ../src/hamster/reports.py:298
 msgid "Distinguish:"
 msgstr ""
 
-#: ../src/hamster/reports.py:299
+#: ../src/hamster/reports.py:300
 msgid "Date"
 msgstr "چېسلا"
 
-#: ../src/hamster/reports.py:303
+#: ../src/hamster/reports.py:304
 msgid "Start"
 msgstr "باشلا"
 
-#: ../src/hamster/reports.py:304
+#: ../src/hamster/reports.py:305
 msgid "End"
 msgstr "تامام"
 
-#: ../src/hamster/reports.py:305
+#: ../src/hamster/reports.py:306
 msgid "Duration"
 msgstr "ۋاقتى"
 
-#: ../src/hamster/reports.py:306
+#: ../src/hamster/reports.py:307
 msgid "Description"
 msgstr "چۈشەندۈرۈش"
 
-#: ../src/hamster/reports.py:309
+#: ../src/hamster/reports.py:310
 msgid "Show template"
 msgstr ""
 
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:311
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
