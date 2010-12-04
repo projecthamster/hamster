@@ -429,6 +429,8 @@ class FactCellRenderer(gtk.GenericCellRenderer):
 
         default_font = gtk.Style().font_desc.to_string()
 
+        self.tag = Tag("")
+
         self.selected_color = None
         self.normal_color = None
 
@@ -591,27 +593,25 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             # otherwise move to the next line
             tags_end = cell_start + cell_width
 
-            tag = Tag(fact.tags[0])
-
-            if x + tag.width > tags_end:
+            if x + self.tag.width > tags_end:
                 x = cell_start
                 y = self.activity_label.height + 4
 
 
             for i, tag in enumerate(fact.tags):
-                tag = Tag(tag)
+                self.tag.text = tag
 
-                if x + tag.width >= tags_end:
+                if x + self.tag.width >= tags_end:
                     x = cell_start
-                    y += tag.height + 4
+                    y += self.tag.height + 4
 
-                tag.x, tag.y = x, y
+                self.tag.x, self.tag.y = x, y
                 if really:
-                    tag._draw(context)
+                    self.tag._draw(context)
 
-                x += tag.width + 4
+                x += self.tag.width + 4
 
-            current_height = y + tag.height + 4
+            current_height = y + self.tag.height + 4
 
 
         current_height = max(self.activity_label.height + 2, current_height)

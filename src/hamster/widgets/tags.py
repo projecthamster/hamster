@@ -316,35 +316,40 @@ class Tag(graphics.Sprite):
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        label = graphics.Label(self.text, size = font_size, color = (30, 30, 30), y = 1)
+        self.width, self.height = 0,0
 
-        corner = int((label.height + 3) / 3) + 0.5
-        label.x = corner + 6
-
-        w, h = int(label.x + label.width + label.height * 0.3), label.height + 3
-
+        self.label = graphics.Label(self.text, size = font_size, color = (30, 30, 30), y = 1)
+        self.corner = int((self.label.height + 3) / 3) + 0.5
+        self.label.x = self.corner + 6
         self.color = color
+        self.add_child(self.label)
 
-        self.tag = graphics.Polygon([(0.5, corner),
-                                     (corner, 0.5),
-                                     (w + 0.5, 0.5),
-                                     (w + 0.5, h - 0.5),
-                                     (corner, h - 0.5),
-                                     (0.5, h - corner)],
-                                     fill = self.color,
-                                     stroke = "#b4b4b4",
-                                     line_width = 1, cache_as_bitmap = True)
 
-        self.add_child(self.tag)
-        self.add_child(graphics.Circle(3, 3, x = 2, y = h / 2 - 2,
-                                       fill = "#fff",
-                                       stroke = "#b4b4b4",
-                                       line_width = 1,
-                                       cache_as_bitmap = True))
+        self.connect("on-render", self.on_render)
 
-        self.add_child(label)
-        self.width, self.height = w, h
+    def __setattr__(self, name, value):
+        graphics.Sprite.__setattr__(self, name, value)
+        if name == 'text' and hasattr(self, 'label'):
+            self.label.text = value
 
-        self.graphics.set_color((0,0,0), 0)
-        self.graphics.rectangle(0, 0, w, h)
-        self.graphics.stroke()
+    def on_render(self, sprite):
+
+        w, h = int(self.label.x + self.label.width + self.label.height * 0.3), self.label.height + 3
+
+        self.graphics.set_line_style(width=1)
+
+        self.graphics.move_to(0.5, self.corner)
+        self.graphics.line_to([(self.corner, 0.5),
+                               (w + 0.5, 0.5),
+                               (w + 0.5, h - 0.5),
+                               (self.corner, h - 0.5),
+                               (0.5, h - self.corner)])
+        self.graphics.close_path()
+        self.graphics.fill_stroke(self.color, "#b4b4b4")
+
+        self.graphics.circle(6, h / 2, 2)
+        self.graphics.fill_stroke("#fff", "#b4b4b4")
+
+
+
+        self.__dict__['width'], self.__dict__['height'] =  w, h
