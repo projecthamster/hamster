@@ -248,13 +248,13 @@ class TagBox(graphics.Scene):
         self.connect("on-enter-frame", self.on_enter_frame)
 
     def on_mouse_over(self, area, tag):
-        tag.tag.fill = tag.graphics.colors.darker(tag.tag.fill, -20)
+        tag.color = tag.graphics.colors.darker(tag.color, -20)
 
     def on_mouse_out(self, area, tag):
         if tag.text in self.selected_tags:
-            tag.tag.fill = (242, 229, 97)
+            tag.color = (242, 229, 97)
         else:
-            tag.tag.fill = (241, 234, 170)
+            tag.color = (241, 234, 170)
 
 
     def on_tag_click(self, area, event, tag):
@@ -312,44 +312,38 @@ class Tag(graphics.Sprite):
     def __init__(self, text, interactive = True, color = "#F1EAAA"):
         graphics.Sprite.__init__(self, interactive = interactive)
 
-        self.text = stuff.escape_pango(text)
+        self.width, self.height = 0,0
+
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        self.width, self.height = 0,0
-
-        self.label = graphics.Label(self.text, size = font_size, color = (30, 30, 30), y = 1)
-        self.corner = int((self.label.height + 3) / 3) + 0.5
-        self.label.x = self.corner + 6
+        self.label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)
         self.color = color
         self.add_child(self.label)
 
+        self.corner = int((self.label.height + 3) / 3) + 0.5
+        self.label.x = self.corner + 6
 
+        self.text = stuff.escape_pango(text)
         self.connect("on-render", self.on_render)
 
     def __setattr__(self, name, value):
         graphics.Sprite.__setattr__(self, name, value)
         if name == 'text' and hasattr(self, 'label'):
             self.label.text = value
+            self.__dict__['width'], self.__dict__['height'] = int(self.label.x + self.label.width + self.label.height * 0.3), self.label.height + 3
 
     def on_render(self, sprite):
-
-        w, h = int(self.label.x + self.label.width + self.label.height * 0.3), self.label.height + 3
-
         self.graphics.set_line_style(width=1)
 
         self.graphics.move_to(0.5, self.corner)
         self.graphics.line_to([(self.corner, 0.5),
-                               (w + 0.5, 0.5),
-                               (w + 0.5, h - 0.5),
-                               (self.corner, h - 0.5),
-                               (0.5, h - self.corner)])
+                               (self.width + 0.5, 0.5),
+                               (self.width + 0.5, self.height - 0.5),
+                               (self.corner, self.height - 0.5),
+                               (0.5, self.height - self.corner)])
         self.graphics.close_path()
         self.graphics.fill_stroke(self.color, "#b4b4b4")
 
-        self.graphics.circle(6, h / 2, 2)
+        self.graphics.circle(6, self.height / 2, 2)
         self.graphics.fill_stroke("#fff", "#b4b4b4")
-
-
-
-        self.__dict__['width'], self.__dict__['height'] =  w, h
