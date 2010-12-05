@@ -485,7 +485,7 @@ class WindowServer(dbus.service.Object):
 
 
 if __name__ == "__main__":
-    from hamster.utils import i18n
+    from hamster.lib import i18n
     i18n.setup_i18n()
 
     # determine the window we will be launching
@@ -522,7 +522,7 @@ if __name__ == "__main__":
     gtk.window_set_default_icon_name("hamster-applet")
 
     from hamster import widgets, idle
-    from hamster.utils import stuff, trophies
+    from hamster.lib import stuff, trophies
 
     try:
         import wnck

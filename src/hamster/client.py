@@ -23,7 +23,7 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 import gobject
-from utils import stuff, trophies
+from lib import stuff, trophies
 
 
 

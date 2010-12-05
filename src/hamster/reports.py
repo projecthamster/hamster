@@ -28,8 +28,8 @@ import re
 from string import Template
 
 from configuration import runtime
-from utils import stuff, trophies
-from utils.i18n import C_
+from lib import stuff, trophies
+from lib.i18n import C_
 
 from calendar import timegm
 

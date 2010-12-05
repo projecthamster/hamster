@@ -32,8 +32,8 @@ from collections import defaultdict
 
 import widgets, reports
 from configuration import runtime, dialogs, load_ui_file
-from utils import stuff, charting
-from utils.i18n import C_
+from lib import stuff, charting
+from lib.i18n import C_
 
 
 class TotalsBox(gtk.VBox):

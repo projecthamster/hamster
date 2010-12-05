@@ -31,8 +31,8 @@ import pango
 
 import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
-from utils import stuff, trophies
-from utils.i18n import C_
+from lib import stuff, trophies
+from lib.i18n import C_
 
 from overview_activities import OverviewBox
 from overview_totals import TotalsBox

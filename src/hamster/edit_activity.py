@@ -26,7 +26,7 @@ import datetime as dt
 """
 import widgets
 from configuration import runtime, conf, load_ui_file
-from utils import stuff
+from lib import stuff
 
 class CustomFactController:
     def __init__(self,  parent = None, fact_date = None, fact_id = None):

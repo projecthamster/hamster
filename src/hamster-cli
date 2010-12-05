@@ -27,7 +27,7 @@ import re
 import datetime as dt
 
 from hamster import client
-from hamster.utils import stuff
+from hamster.lib import stuff
 
 class ConfigurationError(Exception):
     '''An error of configuration.'''
@@ -203,7 +203,7 @@ def fact_dict(fact_data, with_date):
 
 
 if __name__ == '__main__':
-    from hamster.utils import i18n
+    from hamster.lib import i18n
     i18n.setup_i18n()
 
     usage = _(

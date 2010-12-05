@@ -21,7 +21,7 @@ import gtk, gobject
 import pango, cairo
 from math import pi
 
-from ..utils import graphics, stuff
+from ..lib import graphics, stuff
 from ..configuration import runtime
 
 class TagsEntry(gtk.Entry):

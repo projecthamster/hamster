@@ -21,7 +21,7 @@ import gtk, gobject, pango
 import datetime as dt
 
 from ..configuration import runtime
-from ..utils import stuff, graphics
+from ..lib import stuff, graphics
 from .. import external
 
 class ActivityEntry(gtk.Entry):

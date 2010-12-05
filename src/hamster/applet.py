@@ -34,7 +34,7 @@ import locale
 from configuration import conf, runtime, dialogs, load_ui_file
 
 import widgets, idle
-from utils import stuff, trophies
+from lib import stuff, trophies
 
 try:
     import wnck

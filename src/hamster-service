@@ -13,7 +13,7 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
 
 
 if __name__ == '__main__':
-    from hamster.utils import i18n
+    from hamster.lib import i18n
     i18n.setup_i18n()
 
     from hamster import db

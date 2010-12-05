@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..utils import stuff
+from ..lib import stuff
 from ..configuration import load_ui_file
 
 import gtk, gobject, pango

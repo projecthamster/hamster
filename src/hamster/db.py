@@ -41,7 +41,7 @@ import datetime as dt
 import gio
 from xdg.BaseDirectory import xdg_data_home
 
-from utils import stuff, trophies
+from lib import stuff, trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand

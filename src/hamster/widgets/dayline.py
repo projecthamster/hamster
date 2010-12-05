@@ -23,7 +23,7 @@ import gobject
 import time
 import datetime as dt
 
-from ..utils import stuff, graphics, pytweener
+from ..lib import stuff, graphics, pytweener
 from ..configuration import conf
 
 

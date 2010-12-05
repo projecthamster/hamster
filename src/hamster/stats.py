@@ -33,10 +33,10 @@ import gtk, gobject
 import pango
 
 import widgets
-from utils import stuff, charting, graphics
+from lib import stuff, charting, graphics
 from configuration import runtime, conf, load_ui_file
 
-from utils.i18n import C_
+from lib.i18n import C_
 
 class Stats(object):
     def __init__(self, parent = None):

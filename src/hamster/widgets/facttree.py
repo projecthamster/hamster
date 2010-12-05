@@ -23,7 +23,7 @@ import gtk, gobject
 import cairo
 import datetime as dt
 
-from ..utils import stuff, graphics
+from ..lib import stuff, graphics
 from tags import Tag
 
 import pango

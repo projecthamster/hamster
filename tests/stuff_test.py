@@ -3,7 +3,7 @@ import sys, os.path
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
 
 import unittest
-from hamster.utils import stuff
+from hamster.lib import stuff
 
 class TestActivityInputParsing(unittest.TestCase):
     def test_plain_name(self):

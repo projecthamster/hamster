@@ -36,8 +36,8 @@ from collections import defaultdict
 
 import widgets
 from configuration import runtime, dialogs
-from utils import stuff, trophies
-from utils.i18n import C_
+from lib import stuff, trophies
+from lib.i18n import C_
 
 
 class OverviewBox(gtk.VBox):
