@@ -1,0 +1,398 @@
+# Romanian translation for hamster-applet.
+# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-applet package.
+# Tabita Dolean <dtabita21@gmail.com>, 2010.
+# Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"Report-Msgid-Bugs-To: "
+"http://bugzilla.gnome.org/enter_bug.cgi?product=tasque&component=general\n"
+"POT-Creation-Date: 2010-12-05 11:27+0000\n"
+"PO-Revision-Date: 2010-12-08 01:06+0300\n"
+"Last-Translator: Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
+"Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2);;\n"
+"X-Generator: Virtaal 0.6.1\n"
+
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr ""
+"Sfaturi despre cum să pontați activitățile dumneavoastră într-un mod "
+"eficient."
+
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "Cum să țineți evidența timpului"
+
+#: C/tracking.page:12(p)
+msgid ""
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
+msgstr ""
+"Obiceiurile dumneavoastră de pontaj vor fi dictate de motivul pentru care "
+"adunați informațiile. Ce doriți să faceți cu informațiile? Este o simplă "
+"curiozitate sau o cerință de serviciu? Și la ce nivel de detaliu sunteți "
+"interesat de rezultate?"
+
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "Granularitate"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "Un ritm sugerat este de avea 5-30 activități pe zi."
+
+#: C/tracking.page:22(p)
+msgid ""
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
+msgstr ""
+"Scopul programului <app>Pontaj activități</app> este de a evita micro-"
+"pontajul astfel încât nu se va întâmpla să consumați mai mult timp pentru "
+"pontaj în loc să vă faceți treaba! Cu toate acestea, o granularitate prea "
+"mare ar putea face ca datele să nu vă mai fie utile o lună mai târziu."
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "Ce ar trebui să scriu în fiecare căsuță?"
+
+#: C/tracking.page:33(p)
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
+"For example: <input>lunch@work</input>."
+msgstr ""
+"Pentru activități simple care nu au un proiect, utilizați acțiunea ca numele "
+"<gui>activității</gui> și <gui>categoria</gui> pentru contextul mai larg. "
+"De exemplu: <input>prânz@muncă</input>."
+
+#: C/tracking.page:38(p)
+msgid ""
+"For more sophisticated tracking try to caption your activity in one or two "
+"words (\"tree house\", \"project x\", or similar) and use that caption in "
+"the <gui>activity</gui> field. Use the <gui>category</gui> to describe the "
+"activity in it's wider context - is it private or work, or something else? "
+"Finally, use <gui>tags</gui> to describe your actual action - is it reading "
+"or constructing, writing or painting."
+msgstr ""
+"Pentru un pontaj mai sofisticat încercați să dați un titlu activității "
+"dumneavoastră prin unul sau mai multe cuvinte („casă în copac”, „proiectul "
+"x”, sau asemănător) și folosiți titlul în câmpul <gui>activitate</gui>. "
+"Utilizați <gui>categorie</gui> pentru a descrie activitatea în contextul ei "
+"mai larg - este personal sau pentru muncă, sau altceva? În cele din urmă, "
+"folosiți <gui>etichete</gui> pentru a descrie acțiunea dumneavoastră curentă "
+"- citiți, construiți, scrieți sau pictați."
+
+#: C/tracking.page:47(p)
+msgid ""
+"This approach will alow you to see how much reading you have done through "
+"all your projects (by tag), how much time you have spent in your hobbies (by "
+"category), and how much time of all your work in project x you have spent "
+"analysing (by activity and tag)"
+msgstr ""
+"Această metodă vă va permite să vedeți cât de mult ați citit prin toate "
+"proiectele dumneavoastră (prin etichetă), cât de mult timp v-ați petrecut "
+"pentru  hobbyurile dumneavoastră (prin categorie), cât de mult timp din "
+"toată munca în cadrul proiectului x ați petrecut-o analizând (prin "
+"activitate și etichetă)"
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "Sfaturi pentru îmbunătățirea informațiilor de pontaj"
+
+#: C/tracking.page:58(p)
+msgid ""
+"Name activities so that they can be easily distinguished from each other. "
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
+msgstr ""
+"Numiți activitățile astfel încât acestea să poată fi ușor diferențiate unele "
+"de altele. Numele activității este de asemenea singura informație ce apare "
+"în panou. Veți fi capabil să determinați la ce lucrați doar uitându-vă la "
+"numele activității?"
+
+#: C/tracking.page:64(p)
+msgid ""
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
+msgstr ""
+"Păstrați lista de categorii mici (să zicem, 3-7) și alegeți-le pe acelea "
+"care sunt puțin probabil să se schimbe în timp. De asemenea, păstrați-le "
+"generice. De exemplu: „muncă”, „personal”, „diverse”."
+
+#: C/tracking.page:69(p)
+msgid ""
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
+msgstr ""
+"Utilizați câmpul descriere pentru informații pe termen scurt cum ar fi "
+"numere de referință. Căutarea în fereastra <gui>Privire de ansamblu</gui> "
+"caută de asemenea și în câmpul de descriere, astfel încât căutarea "
+"activităților unde menționați numărul de referință specific, vor fi atât de "
+"simple ca tastarea lui în caseta de căutare și apăsând tasta "
+"<key>Enter</key>."
+
+#: C/tracking.page:76(p)
+msgid ""
+"Activities and tags can come and go as necessary. Once you think that you "
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete any more. Don't worry: the facts (activities in the log) "
+"will not be deleted. This is just the \"operational list\"."
+msgstr ""
+"Activitățile și etichetele pot veni și pleca cum este necesar. După ce "
+"credeți că ați terminat cu o activitate de-a binele, eliminați-o ca să nu "
+"apară în auto-completare deloc. Nu vă faceți griji: acțiunile (activitățile "
+"din istoric) nu vor fi șterse. Aceasta este doar „lista cu operații”."
+
+#: C/statistics.page:6(desc)
+msgid "Note on interpretation of statistics."
+msgstr "Notă privind interpretarea statisticilor."
+
+#: C/statistics.page:8(title)
+msgid "Statistics"
+msgstr "Statistici"
+
+#: C/statistics.page:10(p)
+msgid ""
+"The results that are accessible via the <gui style=\"button\">Show "
+"Statistics</gui> link are experimental and they are an interpretation of the "
+"facts. This interpretation should be compared with your own observations. "
+"Patches are welcome."
+msgstr ""
+"Rezultatele care sunt accesibile prin intermediul legăturii <gui "
+"style=\"button\">Arată statisticile</gui> sunt experimentale și sunt o "
+"interpretare a acțiunilor. Această interpretare ar trebui să fie comparată "
+"cu observațiile dumneavoastră."
+
+#: C/statistics.page:16(p)
+msgid ""
+"However, the \"Starts and Ends\" should give you some idea about your active "
+"time."
+msgstr ""
+"Cu toate acestea, „Începutul și sfârșitul” ar trebui să vă facă o idee cu "
+"privire la timpul dumneavoastră activ."
+
+#: C/reports.page:6(desc)
+msgid "Get data out of Time Tracker."
+msgstr "Obține date din Pontaj activități."
+
+#: C/reports.page:8(title)
+msgid "Report and export"
+msgstr "Raportare și exportare"
+
+#: C/reports.page:10(p)
+msgid ""
+"Apart from the HTML format that is offered by default in the Save report "
+"dialog, the format drop-down allows you to choose TSV (Tab Separated Values, "
+"good for spreadsheets), XML, and iCal formats."
+msgstr ""
+"În afară de formatul HTML care este în mod implicit oferit în fereastra "
+"Salvează raport, lista de selecție vă permite sa alegeți TSV (Valori "
+"separate prin tab, bun pentru foi de calcul tabelar), XML și formate iCal."
+
+#: C/reports.page:15(p)
+msgid ""
+"For programmatic access, there is D-Bus API, that can be introspected using "
+"tools like <link href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+msgstr ""
+"Pentru accesul programatic, există API-ul D-Bus, care poate fi analizat "
+"utilizând instrumente cum ar fi <link "
+"href=\"https://fedorahosted.org/d-feet/\">D-Feet</link>."
+
+#: C/reports.page:21(p)
+msgid ""
+"The fastest way to get the data \"out\" of the Time Tracker is by generating "
+"a HTML report. While holding the <key>Ctrl</key> key down, select all the "
+"needed cells, and then copy and paste them into the target application."
+msgstr ""
+"Cea mai rapidă modalitate de a obține date în afara Pontajului de activități "
+"este prin generarea unui raport HTML. În timp ce țineți apăsat tasta "
+"<key>Ctrl</key>, selectați toate celulele necesare, și apoi copiați-le și "
+"lipiți-le în aplicația destinație."
+
+#: C/merge.page:6(desc)
+msgid "Automatic conflict solving."
+msgstr "Rezolvarea automată a conflictelor."
+
+#: C/merge.page:8(title)
+msgid "Splitting activities"
+msgstr "Divizarea activităților."
+
+#: C/merge.page:10(p)
+msgid ""
+"<app>Time Tracker</app> does its best to avoid overlaps in activities. If "
+"you create an activity in the middle of an existing activity, the former "
+"will be split into two. In other cases of overlapping, the previous entries "
+"will be shrunk."
+msgstr ""
+"<app>Pontaj activități</app> face tot posibilul pentru a evita suprapunerile "
+"de activități. Dacă veți crea o activitate în mijlocul unei activități "
+"existente, fosta activitate va fi împărțită în două. În aceste cazuri de "
+"suprapunere, intrările anterioare vor fi micșorate."
+
+#: C/merge.page:17(p)
+msgid ""
+"Merging can become handy when entering information for the whole day. Start "
+"by entering the first activity and select the \"in progress\" check box for "
+"the end time. For the next activity again set just the start time and mark "
+"it as ongoing. Observe how the end time of the previous activity gets "
+"adjusted to the start time of the new one. Repeat the process until happy!"
+msgstr ""
+"Fuzionarea poate fi la îndemână atunci când introduceți informații pentru o "
+"zi întreagă. Începeți prin introducerea primei activități și selectați "
+"caseta „în curs” pentru timpul de finalizare. Pentru următoarea activitate "
+"din nou selectați doar ora de începere și marcați-o ca fiind în desfășurare. "
+"Observați modul în care timpul de încheiere a activității anterioare s-a "
+"ajustat la ora de începere a uneia noi. Repetați procesul până când sunteți "
+"fericit!"
+
+#: C/input.page:6(desc)
+msgid "Tricks to speed up activity entry."
+msgstr "Trucuri pentru a accelera introducerea activităților."
+
+#: C/input.page:8(title)
+msgid "Input"
+msgstr "Intrare"
+
+#: C/input.page:10(p)
+msgid ""
+"To start tracking, type in the activity name in the input box and hit the "
+"<key>Enter</key> key. There are a few tricks that will allow you to specify "
+"more detail on the fly:"
+msgstr ""
+"Pentru a începe pontajul, tastați numele activității în caseta de intrare și "
+"apăsați tasta <key>Enter</key>. Există câteva trucuri care vă permit să "
+"specificați mai multe detalii în timpul rulării:"
+
+#: C/input.page:18(p)
+msgid "Use the @ symbol to add a category"
+msgstr "Utilizați simbolul @ pentru a adăuga o categorie"
+
+#: C/input.page:19(p)
+msgid "Everything after a comma (,) will be stored in the description field"
+msgstr "Totul după o virgulă (,) va fi stocat în câmpul de descriere"
+
+#: C/input.page:20(p)
+msgid "To specify time on the fly, enter it first in the input box"
+msgstr ""
+"Pentru a specifica timpul în timpul rulării, introduceți-l mai întâi în "
+"căsuța de intrare"
+
+#: C/input.page:23(p)
+msgid "A few examples:"
+msgstr "Câteva exemple:"
+
+#: C/input.page:27(code)
+#, no-wrap
+msgid "12:30-12:45 watering flowers"
+msgstr "12:30-12:45 udat flori"
+
+#: C/input.page:28(p)
+msgid "Forgot to note the important act of watering flowers over lunch."
+msgstr ""
+"Am uitat să notez actul important de udare al florilor după masa de prânz."
+
+#: C/input.page:31(code)
+#, no-wrap
+msgid "tomatoes@garden, digging holes"
+msgstr "roșii@grădină, săpat gropi"
+
+#: C/input.page:32(p)
+msgid ""
+"Need more tomatoes in the garden. Digging holes is purely informational, so "
+"added it as a description."
+msgstr ""
+"Am nevoie de roșii mai multe în grădină. Săparea de gropi este pur "
+"informațional, așa că adăugați-o ca descriere."
+
+#: C/input.page:38(code)
+#, no-wrap
+msgid "-7 existentialism, thinking about the vastness of the universe"
+msgstr "-7 existențialism, cu gândul la imensitatea universului"
+
+#: C/input.page:39(p)
+msgid ""
+"Corrected information by informing application that I've been doing "
+"something else for the last seven minutes. Relative times only work for "
+"ongoing activities without an end time."
+msgstr ""
+"Am corectat informațiile prin informarea aplicației că am făcut altceva în "
+"ultimele șapte minute. Timpul relativ funcționează doar pentru activitățile "
+"fără timp de terminare."
+
+#: C/input.page:46(p)
+msgid ""
+"On top of that you can add tags in the tag input field. Tags are delimited "
+"by a comma. Press the <key>Tab</key> when the suggestion box appears to "
+"complete the input to the first matching tag."
+msgstr ""
+"Pe partea de sus puteți să adăugați etichete în câmpul de introducere de "
+"etichete. Etichetele sunt delimitate printr-o virgulă. Apăsați <key>Tab</"
+"key> când apare caseta de sugestii pentru a finaliza introducerea primei "
+"etichete care se potrivește."
+
+#: C/index.page:6(title) C/index.page:7(title) C/index.page:17(title)
+msgid "Time Tracking"
+msgstr "Pontaj activități"
+
+#: C/index.page:9(name)
+msgid "Milo Casagrande"
+msgstr "Milo Casagrande"
+
+#: C/index.page:10(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
+
+#: C/index.page:13(p)
+msgid "Creative Commons Share Alike 3.0"
+msgstr "Creative Commons Distribuire în condiții identice 3.0"
+
+#: C/backup.page:6(desc)
+msgid "How to back up the activity database."
+msgstr "Cum să faceți copie de siguranță bazei de date cu activități"
+
+#: C/backup.page:8(title)
+msgid "Backup"
+msgstr "Copie de siguranță"
+
+#: C/backup.page:10(p)
+msgid ""
+"Activities are stored in an SQLite database, located at <file>~/.local/share/"
+"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"the go. The application will reload the data automatically after a short "
+"while."
+msgstr ""
+"Activitățile sunt stocate într-o bază de date SQLite, situată la <file>~/."
+"local/share/hamster-applet/hamster.db</file>. Puteți crea copie de siguranță "
+"și să îl restaurați în timpul rulării. Aplicația va reîncărca informațiile "
+"automat după un timp scurt."
+
+#: C/backup.page:17(p)
+msgid ""
+"For viewing contents of the database we can suggest using the <link href="
+"\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</"
+"app></link> for Mozilla Firefox."
+msgstr ""
+"Pentru a vedea conținutul bazei de date vă putem sugera să utilizați <link "
+"href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite "
+"Manager</app></link> pentru Mozilla Firefox."
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
+#: C/index.page:0(None)
+msgid "translator-credits"
+msgstr "Tabita Dolean <dtabita21@gmail.com>, 2010"
