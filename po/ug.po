@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-11-16 00:07+0000\n"
+"POT-Creation-Date: 2010-12-20 12:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gheyret Kenji<gheyret@yahoo.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -245,7 +245,7 @@ msgstr ""
 
 #: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
 msgid "Activities"
-msgstr "ھەرىكەتچان"
+msgstr "پائالىيەتلەر"
 
 #: ../data/overview_totals.ui.h:2
 msgid "Categories"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
 msgid "Totals"
-msgstr ""
+msgstr "ئومۇمىي سانى"
 
 #: ../data/overview.ui.h:11
 msgid "Week"
@@ -332,11 +332,11 @@ msgstr ""
 
 #: ../data/preferences.ui.h:7
 msgid "Edit activity"
-msgstr ""
+msgstr "تەھرىرلەش مەشغۇلاتى"
 
 #: ../data/preferences.ui.h:8
 msgid "Edit category"
-msgstr ""
+msgstr "كاتېگورىيە تەھرىرلە"
 
 #: ../data/preferences.ui.h:9
 msgid "Integration"
@@ -344,7 +344,7 @@ msgstr "توپلاشتۇرۇش"
 
 #: ../data/preferences.ui.h:10
 msgid "New day starts at"
-msgstr ""
+msgstr "يېڭى كۈننىڭ باشلىنىش ۋاقتى"
 
 #: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
@@ -356,7 +356,7 @@ msgstr ""
 
 #: ../data/preferences.ui.h:13
 msgid "Remove category"
-msgstr ""
+msgstr "كاتېگورىيىنى چىقىرىۋەت"
 
 #: ../data/preferences.ui.h:14
 msgid "Resume the last activity when returning to a workspace"
@@ -412,7 +412,7 @@ msgstr "ئاي:"
 
 #: ../data/range_pick.ui.h:4
 msgid "Range:"
-msgstr ""
+msgstr "دائىرە:"
 
 #: ../data/range_pick.ui.h:5
 msgid "Week:"
@@ -431,7 +431,7 @@ msgstr "يىلى:"
 #: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
 #: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
 msgid "No activity"
-msgstr ""
+msgstr "پائالىيەت يوق"
 
 #: ../src/docky_control/2.0/hamster_control.py:81
 #: ../src/docky_control/2.0/hamster_control.py:95
@@ -454,10 +454,8 @@ msgstr "Time Tracker ھەققىدە"
 
 #: ../src/hamster/about.py:56
 msgid "translator-credits"
-msgstr "Sahran <sahran@live.com>\n"
-"Gheyret T.Kenji <gheyret@yahoo.com>\n"
-"Zeper <zeper@msn.com>\n"
-"Abduxukur Abdurixit <abduxukur.abdurixit@t-systems.ch>"
+msgstr "Gheyret Kenji <gheyret@gmail.com>\n"
+"Sahran<sahran@live.com>"
 
 #: ../src/hamster/applet.py:377
 #, python-format
@@ -500,7 +498,7 @@ msgstr "ئىش"
 
 #: ../src/hamster/db.py:948
 msgid "Reading news"
-msgstr ""
+msgstr "خەۋەر ئوقۇۋاتىدۇ"
 
 #: ../src/hamster/db.py:949
 msgid "Checking stocks"
@@ -559,11 +557,11 @@ msgstr "كاتېگورىيە"
 
 #: ../src/hamster/preferences.py:635
 msgid "New category"
-msgstr ""
+msgstr "يېڭى كاتېگورىيە"
 
 #: ../src/hamster/preferences.py:648
 msgid "New activity"
-msgstr ""
+msgstr "يېڭى پائالىيەت"
 
 #. notify interval slider value label
 #: ../src/hamster/preferences.py:699
@@ -798,19 +796,19 @@ msgid ""
 msgstr ""
 
 #. duration in round hours
-#: ../src/hamster/utils/stuff.py:57
+#: ../src/hamster/lib/stuff.py:57
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../src/hamster/utils/stuff.py:60
+#: ../src/hamster/lib/stuff.py:60
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../src/hamster/utils/stuff.py:63
+#: ../src/hamster/lib/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
@@ -819,7 +817,7 @@ msgstr "%dh %dmin"
 #. date format for overview label when only single day is visible
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:80
+#: ../src/hamster/lib/stuff.py:80
 msgid "%B %d, %Y"
 msgstr "%B %d، %Y"
 
@@ -827,7 +825,7 @@ msgstr "%B %d، %Y"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:86
+#: ../src/hamster/lib/stuff.py:86
 #, python-format
 msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s، %(start_Y)s – %(end_B)s %(end_d)s، %(end_Y)s"
@@ -836,7 +834,7 @@ msgstr "%(start_B)s %(start_d)s، %(start_Y)s – %(end_B)s %(end_d)s، %(end_Y)
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:92
+#: ../src/hamster/lib/stuff.py:92
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s، %(end_Y)s"
@@ -845,7 +843,7 @@ msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s، %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:98
+#: ../src/hamster/lib/stuff.py:98
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_d)s، %(end_Y)s"
@@ -856,7 +854,7 @@ msgstr ""
 
 #: ../src/hamster/widgets/reportchooserdialog.py:57
 msgid "HTML Report"
-msgstr ""
+msgstr "HTML مەلۇماتلىرى"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:65
 msgid "Tab-Separated Values (TSV)"
