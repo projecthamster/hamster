@@ -2,16 +2,17 @@
 # Copyright (C) 2008, 2009, 2010 the author(s) of hamster-applet.
 # This file is distributed under the same license as the hamster-applet package.
 #
-#
-# Petr Kovar <pknbe@volny.cz>, 2009, 2010.
 # Adrian Guniš <andygun696@gmail.com>, 2008, 2009, 2010.
+# Petr Kovar <pknbe@volny.cz>, 2009, 2010.
+# Marek Černocký <marek@manet.cz>, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-15 06:18+0100\n"
-"PO-Revision-Date: 2010-11-15 06:15+0100\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"POT-Creation-Date: 2010-12-30 00:09+0100\n"
+"PO-Revision-Date: 2010-12-28 12:14+0100\n"
+"Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -277,12 +278,12 @@ msgid "Show Statistics"
 msgstr "Zobrazit statistiky"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:302 ../src/hamster-time-tracker:48
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
 msgid "Tags"
 msgstr "Štítky"
 
 #: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:300
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
 #: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "Činnost"
@@ -315,7 +316,7 @@ msgstr "Odstranit"
 msgid "Save report..."
 msgstr "Uložit zprávu..."
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:291
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
 msgid "Totals"
 msgstr "Celkem"
 
@@ -488,7 +489,7 @@ msgstr "%sh"
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:239
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:224
 msgid "Unsorted"
 msgstr "Bez kategorie"
@@ -567,7 +568,7 @@ msgstr "Žádný"
 msgid "Name"
 msgstr "Název"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:301
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategorie"
 
@@ -621,92 +622,92 @@ msgid "description"
 msgstr "popis"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
 msgid "tags"
 msgstr "štítky"
 
-#: ../src/hamster/reports.py:190
-#, fuzzy, python-format
+#: ../src/hamster/reports.py:191
+#, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
 "%(end_d)s, %(end_Y)s"
 msgstr ""
-"Záznam činností za %(start_d)s. %(start_B)s %(start_Y)s – %(end_d)s. "
-"%(end_B)s %(end_Y)s"
+"Výstupní sestava činností za %(start_d)s. %(start_B)s %(start_Y)s – "
+"%(end_d)s. %(end_B)s %(end_Y)s"
 
-#: ../src/hamster/reports.py:192
-#, fuzzy, python-format
+#: ../src/hamster/reports.py:193
+#, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Záznam činností za %(start_d)s. %(start_B)s – %(end_d)s. %(end_B)s %(end_Y)s"
+"Výstupní sestava  činností za %(start_d)s. %(start_B)s – %(end_d)s. "
+"%(end_B)s %(end_Y)s"
 
-#: ../src/hamster/reports.py:194
-#, fuzzy, python-format
+#: ../src/hamster/reports.py:195
+#, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Záznam činností za %(start_d)s. %(start_B)s %(start_Y)s"
+msgstr "Výstupní sestava  činností za %(start_d)s. %(start_B)s %(start_Y)s"
 
-#: ../src/hamster/reports.py:196
-#, fuzzy, python-format
+#: ../src/hamster/reports.py:197
+#, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Záznam činností za %(start_d)s. – %(end_d)s. %(start_B)s %(end_Y)s"
+msgstr ""
+"Výstupní sestava činností za %(start_d)s. – %(end_d)s. %(start_B)s %(end_Y)s"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:248 ../src/hamster/reports.py:280
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d. %b %Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:289
+#: ../src/hamster/reports.py:290
 msgid "Totals by Day"
 msgstr "Souhrny za den"
 
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:291
 msgid "Activity Log"
 msgstr "Záznam činností"
 
-#: ../src/hamster/reports.py:293
-#, fuzzy
-msgid "activities"
-msgstr "Činnosti"
-
 #: ../src/hamster/reports.py:294
-#, fuzzy
+msgid "activities"
+msgstr "činnosti"
+
+#: ../src/hamster/reports.py:295
 msgid "categories"
-msgstr "Kategorie"
+msgstr "kategorie"
 
-#: ../src/hamster/reports.py:297
+#: ../src/hamster/reports.py:298
 msgid "Distinguish:"
-msgstr ""
+msgstr "Rozlišit:"
 
-#: ../src/hamster/reports.py:299
+#: ../src/hamster/reports.py:300
 msgid "Date"
 msgstr "Datum"
 
-#: ../src/hamster/reports.py:303
+#: ../src/hamster/reports.py:304
 msgid "Start"
 msgstr "Začátek"
 
-#: ../src/hamster/reports.py:304
+#: ../src/hamster/reports.py:305
 msgid "End"
 msgstr "Konec"
 
-#: ../src/hamster/reports.py:305
+#: ../src/hamster/reports.py:306
 msgid "Duration"
 msgstr "Trvání"
 
-#: ../src/hamster/reports.py:306
+#: ../src/hamster/reports.py:307
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/hamster/reports.py:309
+#: ../src/hamster/reports.py:310
 msgid "Show template"
 msgstr "Zobrazit šablonu"
 
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:311
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Můžete ji přepsat uložením vaší verze do %(home_folder)s"
@@ -832,19 +833,19 @@ msgstr ""
 "S %s procenty všech dat kratších než 15 minut se zdá, že jste pilná včela."
 
 #. duration in round hours
-#: ../src/hamster/utils/stuff.py:57
+#: ../src/hamster/lib/stuff.py:57
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../src/hamster/utils/stuff.py:60
+#: ../src/hamster/lib/stuff.py:60
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../src/hamster/utils/stuff.py:63
+#: ../src/hamster/lib/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
@@ -853,7 +854,7 @@ msgstr "%dh %dmin"
 #. date format for overview label when only single day is visible
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:80
+#: ../src/hamster/lib/stuff.py:80
 msgid "%B %d, %Y"
 msgstr "%d. %B %Y"
 
@@ -861,7 +862,7 @@ msgstr "%d. %B %Y"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:86
+#: ../src/hamster/lib/stuff.py:86
 #, python-format
 msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s. %(start_B)s %(start_Y)s – %(end_d)s. %(end_B)s %(end_Y)s"
@@ -870,7 +871,7 @@ msgstr "%(start_d)s. %(start_B)s %(start_Y)s – %(end_d)s. %(end_B)s %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:92
+#: ../src/hamster/lib/stuff.py:92
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s. %(start_B)s – %(end_d)s. %(end_B)s %(end_Y)s"
@@ -879,7 +880,7 @@ msgstr "%(start_d)s. %(start_B)s – %(end_d)s. %(end_B)s %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:98
+#: ../src/hamster/lib/stuff.py:98
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s. – %(end_d)s. %(start_B)s %(end_Y)s"
