@@ -6,31 +6,135 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"POT-Creation-Date: 2010-05-16 21:18+0000\n"
-"PO-Revision-Date: 2010-07-12 12:34+0800\n"
+"POT-Creation-Date: 2010-12-07 23:55+0000\n"
+"PO-Revision-Date: 2010-12-18 00:19+0800\n"
 "Last-Translator: TeliuTe <teliute@163.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
 
-#: C/legal.xml:3(p)
-msgid ""
-"This work is licensed under a <link href=\"http://creativecommons.org/"
-"licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 Unported "
-"License</link>."
-msgstr ""
-"本文的许可协议: <link href=\"http://creativecommons.org/licenses/by-sa/3.0/"
-"\">知识共享署名-相同方式共享 3.0 Unported License</link>."
+#: C/tracking.page:7(desc)
+msgid "Tips on how to track your activities effectively."
+msgstr "如何更有效追踪您活动的小提示。"
 
-#: C/legal.xml:6(p)
+#: C/tracking.page:10(title)
+msgid "How to track time"
+msgstr "如何追踪时间"
+
+#: C/tracking.page:12(p)
 msgid ""
-"As a special exception, the copyright holders give you permission to copy, "
-"modify, and distribute the example code contained in this document under the "
-"terms of your choosing, without restriction."
+"Your time tracking habits will be dictated by your reason for collecting the "
+"data. What is that you want to do with the data? Is it plain curiosity, or a "
+"work requirement? And at what level of detail are you interested in the "
+"results?"
 msgstr ""
-"相应地，您可以根据自己的选择，复制、修改和分发文档里的代码范例，这没有什么限"
-"制。"
+"您的时间追踪习惯将会由您收集这些数据的原因来描述。您希望用这些数据来做什么？"
+"只是简单的好奇，或者是工作需要？您对多详细的结果感兴趣？"
+
+#: C/tracking.page:20(title)
+msgid "Granularity"
+msgstr "间隔"
+
+#: C/tracking.page:21(p)
+msgid "A suggested pace is to have 5 to 30 activities per day."
+msgstr "建议每天有5到30个活动。"
+
+#: C/tracking.page:22(p)
+msgid ""
+"The intention of <app>Time Tracker</app> is to avoid micro-tracking so that "
+"one does not turn out spending more time on tracking than doing the "
+"activities! However, tracking in insufficient detail could result in there "
+"being no data which is useful to you a month later."
+msgstr ""
+"<app>时间追踪器</app>的意图是防止琐碎记录，因而花费较多时间的项目比正在活动的"
+"项目更不容易被移除！然而，不够详细的追踪会导致一个月后，您不能得到有用的数"
+"据。"
+
+#: C/tracking.page:31(title)
+msgid "What should I write in each box?"
+msgstr "我应该在每个盒子里写什么？"
+
+#: C/tracking.page:33(p)
+msgid ""
+"For simple activities that don't have a project, use the action as the "
+"<gui>activity</gui> name and the <gui>category</gui> for the wider context. "
+"For example: <input>lunch@work</input>."
+msgstr ""
+"对于简单的、不是一项工程的活动，使用动作来作为<gui>活动</gui> 名，<gui>项目</"
+"gui>作上下文。例如：<input>午饭@工作</input>。"
+
+#: C/tracking.page:38(p)
+msgid ""
+"For more sophisticated tracking try to caption your activity in one or two "
+"words (\"tree house\", \"project x\", or similar) and use that caption in "
+"the <gui>activity</gui> field. Use the <gui>category</gui> to describe the "
+"activity in it's wider context - is it private or work, or something else? "
+"Finally, use <gui>tags</gui> to describe your actual action - is it reading "
+"or constructing, writing or painting."
+msgstr ""
+"对于更复杂的追踪，尝试用一到两个词来标记您的活动(“树屋”、“项目 x”，或类似"
+"的)，在<gui>活动</gui>区域中输入标题。在<gui>项目</gui>中描述活动的相关情况 "
+"- 它是私人的还是工作上的，或是其他别的？最后，在<gui>标签</gui>里输入活动的实"
+"际操作 - 是阅读还是制作，是写作还是绘画。"
+
+#: C/tracking.page:47(p)
+msgid ""
+"This approach will alow you to see how much reading you have done through "
+"all your projects (by tag), how much time you have spent in your hobbies (by "
+"category), and how much time of all your work in project x you have spent "
+"analysing (by activity and tag)"
+msgstr ""
+"这个近似值能让您看到在所有的项目(通过标签)中，阅读花费了多少时间，多少时间您"
+"花费在爱好上(通过分类)，以及在某个项目上您花费时间的细节(通过活动和标签)"
+
+#: C/tracking.page:55(title)
+msgid "Tips for improving your tracking data"
+msgstr "用于您改进数据跟踪的小提示"
+
+#: C/tracking.page:58(p)
+msgid ""
+"Name activities so that they can be easily distinguished from each other. "
+"Activity name is also the only information that appears in the panel. Will "
+"you be able to determine what you are working on just by looking at the "
+"activity name?"
+msgstr ""
+"给活动起个好名称，以便使它们很容易区分。活动名也是面板上显示的唯一信息。您能"
+"仅仅通过查看活动名，就知道当前进行的工作吗？"
+
+#: C/tracking.page:64(p)
+msgid ""
+"Keep your list of categories small (say, 3 to 7) and pick ones that are "
+"unlikely to change over time. Also, keep them generic. For example: \"work"
+"\", \"private\", \"misc\"."
+msgstr ""
+"保持简短列表项(一般说是3到7个)，选择那种不大可能随着时间而改变的。当然也要保"
+"证它们的通用性，比如：“工作”、“私人”、“音乐”。"
+
+#: C/tracking.page:69(p)
+msgid ""
+"Use the description field for short-term information like reference numbers. "
+"The search in the <gui>Overview</gui> window also looks in the description "
+"field, so finding activities where you mention the specific reference number "
+"will be as simple as typing it in the search box and pressing <key>Enter</"
+"key>."
+msgstr ""
+"在描述框里输入简短的信息，比如是编号。在<gui>概述</gui>窗口中搜索也可以查找描"
+"述框内容，因此在这里，您可以通过简单地输入它，然后按<key>回车键</key>，就可以"
+"找到指定编号的活动。"
+
+#: C/tracking.page:76(p)
+msgid ""
+"Activities and tags can come and go as necessary. Once you think that you "
+"are done with an activity for good, remove it so that it doesn't pop up in "
+"the auto-complete any more. Don't worry: the facts (activities in the log) "
+"will not be deleted. This is just the \"operational list\"."
+msgstr ""
+"活动和标签可以根据需要来取舍，一旦您认为已经很好地完成了活动，就可以删除它，"
+"这样它就不会在自动完成中弹出。不必担心：实际的工作(记录在日志中的活动)不会被"
+"删除，这仅仅只是“列表操作”。"
 
 #: C/statistics.page:6(desc)
 msgid "Note on interpretation of statistics."
@@ -197,15 +301,7 @@ msgstr ""
 "在顶部，你可以在标签输入框添加标签，标签由逗号分割，按 <key>Tab</key> 键可以"
 "完成输入第一个匹配的标签。"
 
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: C/index.page:18(None)
-msgid ""
-"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-msgstr ""
-"@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
-
-#: C/index.page:6(title) C/index.page:7(title)
+#: C/index.page:6(title) C/index.page:7(title) C/index.page:17(title)
 msgid "Time Tracking"
 msgstr "时间追踪器"
 
@@ -220,14 +316,6 @@ msgstr "milo@ubuntu.com"
 #: C/index.page:13(p)
 msgid "Creative Commons Share Alike 3.0"
 msgstr "知识共享-相同方式共享协议 3.0"
-
-#: C/index.page:17(title)
-msgid ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
-"\">Time Tracking logo</media>Time Tracking"
-msgstr ""
-"<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png\">时"
-"间追踪器图标</media> 时间追踪器"
 
 #: C/backup.page:6(desc)
 msgid "How to back up the activity database."
@@ -261,3 +349,31 @@ msgstr ""
 #: C/index.page:0(None)
 msgid "translator-credits"
 msgstr "TeliuTe <teliute@163.com>, 2010"
+
+#~ msgid ""
+#~ "This work is licensed under a <link href=\"http://creativecommons.org/"
+#~ "licenses/by-sa/3.0/\">Creative Commons Attribution-Share Alike 3.0 "
+#~ "Unported License</link>."
+#~ msgstr ""
+#~ "本文的许可协议: <link href=\"http://creativecommons.org/licenses/by-"
+#~ "sa/3.0/\">知识共享署名-相同方式共享 3.0 Unported License</link>."
+
+#~ msgid ""
+#~ "As a special exception, the copyright holders give you permission to "
+#~ "copy, modify, and distribute the example code contained in this document "
+#~ "under the terms of your choosing, without restriction."
+#~ msgstr ""
+#~ "相应地，您可以根据自己的选择，复制、修改和分发文档里的代码范例，这没有什么"
+#~ "限制。"
+
+#~ msgid ""
+#~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+#~ msgstr ""
+#~ "@@image: 'figures/hamster-logo.png'; md5=4a7b2f9ef6d9510fe1a648429bc4e3ba"
+
+#~ msgid ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
+#~ "\">Time Tracking logo</media>Time Tracking"
+#~ msgstr ""
+#~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png\">"
+#~ "时间追踪器图标</media> 时间追踪器"
