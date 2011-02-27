@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
 "POT-Creation-Date: 2011-02-27 17:44+0900\n"
-"PO-Revision-Date: 2011-02-27 17:46+0900\n"
+"PO-Revision-Date: 2011-02-27 17:57+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: Korean\n"
@@ -619,14 +619,14 @@ msgid "tags"
 msgstr "꼬리표"
 
 #: ../src/hamster/reports.py:191
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
 "%(end_d)s, %(end_Y)s"
 msgstr "활동 보고, %(start_Y)s년 %(start_B)s %(start_d)s일 – %(end_Y)s년 %(end_B)s %(end_d)s일"
 
 #: ../src/hamster/reports.py:193
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "활동 보고, %(end_Y)s년 %(start_B)s %(start_d)s일 – %(end_B)s %(end_d)s일"
