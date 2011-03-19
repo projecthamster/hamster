@@ -1,0 +1,882 @@
+# Translation of hamster-applet to Bahasa Indonesia
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Dirgita <dirgitadevina@yahoo.co.id>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-03-11 07:55+0000\n"
+"PO-Revision-Date: 2011-03-05 15:18+0700\n"
+"Last-Translator: Dirgita <dirgitadevina@yahoo.co.id>\n"
+"Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.1\n"
+
+#: ../data/90-hamster-applet.xml.in.h:1
+msgid "Project Hamster (Gnome Time Tracker)"
+msgstr "Proyek Hamster (Pelacak Waktu Gnome)"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start; and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Command for toggling visibility of the hamster application window."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr ""
+"Tombol kombinasi pintasan untuk menampilkan/menyembunyikan jendela Pelacak "
+"Waktu."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"the last activity when returning to a previous workspace."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Remind of current task every x minutes"
+msgstr "Mengingatkan tugas yang berlangsung setiap x menit."
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Show / hide Time Tracker Window"
+msgstr "Menampilkan/menyembunyikan Jendela Pelacak Waktu"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity on shutdown"
+msgstr "Berhenti melacak aktivitas ketika komputer dimatikan"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "Berhenti melacak aktivitas ketika komputer menganggur"
+
+#: ../data/hamster-applet.schemas.in.h:15
+msgid "Stop tracking on idle"
+msgstr "Berhenti melacak saat menganggur"
+
+#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+msgid "Stop tracking on shutdown"
+msgstr "Berhenti melacak saat diamtikan"
+
+#: ../data/hamster-applet.schemas.in.h:17
+msgid "Switch activity on workspace change"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Toggle hamster application window"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window action"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:20
+msgid "Toggle visibility of the hamster application window."
+msgstr ""
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Proyek Hamster — melacak waktu Anda"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+msgid "Time Tracker"
+msgstr "Pelacak Waktu"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "Tent_ang"
+
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
+msgid "_Help"
+msgstr "Ba_ntuan"
+
+#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
+msgid "_Overview"
+msgstr "_Ikhtisar"
+
+#: ../data/Hamster_Applet.xml.h:4
+msgid "_Preferences"
+msgstr "_Preferensi"
+
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Proyek Hamster - melacak waktu kegiatan Anda"
+
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
+msgid "No records today"
+msgstr "Tidak ada catatan hari ini"
+
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr ""
+
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "Tampilkan _Ikhtisar"
+
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "_Mulai Melacak"
+
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "_Berhenti Melacak"
+
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "_Hari Ini"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "T_ambah aktivitas yang lebih dini"
+
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Aktivitas:"
+
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Tambah Aktivitas yang Lebih Dini"
+
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Deskripsi:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Tag:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Waktu:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "sedang dikerjakan"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr "hingga"
+
+#: ../data/hamster.ui.h:1
+msgid "Add earlier activity"
+msgstr "Tambah aktivitas lebih dini"
+
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "Isi"
+
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../src/docky_control/2.0/hamster_control.py:94
+#: ../src/docky_control/2.1/hamster_control.py:79
+#: ../src/docky_control/2.1/hamster_control.py:94
+msgid "Overview"
+msgstr "Ikhtisar"
+
+#: ../data/hamster.ui.h:6
+msgid "Start new activity"
+msgstr ""
+
+#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
+msgid "Statistics"
+msgstr "Statistik"
+
+#: ../data/hamster.ui.h:8
+msgid "Sto_p tracking"
+msgstr "_Berhenti melacak"
+
+#: ../data/hamster.ui.h:10
+msgid "Today"
+msgstr "Hari ini"
+
+#: ../data/hamster.ui.h:11
+msgid "_Edit"
+msgstr "_Sunting"
+
+#: ../data/hamster.ui.h:13
+msgid "_Tracking"
+msgstr "_Pelacakan"
+
+#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
+msgid "Activities"
+msgstr "Aktivitas"
+
+#: ../data/overview_totals.ui.h:2
+msgid "Categories"
+msgstr "Kategori"
+
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "Tidak ada data untuk interval ini"
+
+#: ../data/overview_totals.ui.h:4
+msgid "Show Statistics"
+msgstr ""
+
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+msgid "Tags"
+msgstr "Tag"
+
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:39
+msgid "Activity"
+msgstr "Aktivitas"
+
+#: ../data/overview.ui.h:3
+msgid "Add new"
+msgstr "Tambah baru"
+
+#: ../data/overview.ui.h:4
+msgid "Day"
+msgstr "Hari"
+
+#: ../data/overview.ui.h:5
+msgid "Edit"
+msgstr "Sunting"
+
+#: ../data/overview.ui.h:6
+msgid "Month"
+msgstr "Bulan"
+
+#: ../data/overview.ui.h:7
+msgid "Overview — Hamster"
+msgstr "Ikhtisar — Hamster"
+
+#: ../data/overview.ui.h:8
+msgid "Remove"
+msgstr "Hapus"
+
+#: ../data/overview.ui.h:9
+msgid "Save report..."
+msgstr "Simpan laporan..."
+
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+msgid "Totals"
+msgstr "Total"
+
+#: ../data/overview.ui.h:11
+msgid "Week"
+msgstr "Minggu"
+
+#: ../data/overview.ui.h:13
+msgid "_View"
+msgstr "_Tampilan"
+
+#: ../data/preferences.ui.h:1
+msgid "Activity list"
+msgstr "Daftar aktivitas"
+
+#: ../data/preferences.ui.h:2
+msgid "Add activity"
+msgstr "Tambah aktivitas"
+
+#: ../data/preferences.ui.h:3
+msgid "Add category"
+msgstr "Tambah kategori"
+
+#: ../data/preferences.ui.h:5
+msgid "Categories and Tags"
+msgstr "Kategori dan Tag"
+
+#: ../data/preferences.ui.h:6
+msgid "Category list"
+msgstr "Daftar kategori"
+
+#: ../data/preferences.ui.h:7
+msgid "Edit activity"
+msgstr "Sunting aktivitas"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit category"
+msgstr "Sunting kategori"
+
+#: ../data/preferences.ui.h:9
+msgid "Integration"
+msgstr "Integrasi"
+
+#: ../data/preferences.ui.h:10
+msgid "New day starts at"
+msgstr "Permulaan hari pada"
+
+#: ../data/preferences.ui.h:11
+msgid "Remind of current activity every:"
+msgstr "Ingatkan aktivitas terkini setiap:"
+
+#: ../data/preferences.ui.h:12
+msgid "Remove activity"
+msgstr "Hapus aktivitas"
+
+#: ../data/preferences.ui.h:13
+msgid "Remove category"
+msgstr "Hapus kategori"
+
+#: ../data/preferences.ui.h:14
+msgid "Resume the last activity when returning to a workspace"
+msgstr "Lanjutkan aktivitas terakhir saat kembali ke area kerja"
+
+#: ../data/preferences.ui.h:15
+msgid "Start new activity when switching workspaces:"
+msgstr "Mulai aktivitas baru saat berpindah area kerja:"
+
+#: ../data/preferences.ui.h:17
+msgid "Stop tracking when computer becomes idle"
+msgstr "Berhenti melacak ketika komputer menganggur"
+
+#: ../data/preferences.ui.h:18
+msgid "Tags that should appear in autocomplete"
+msgstr "Tag yang seharusnya muncul untuk otokomplesi"
+
+#: ../data/preferences.ui.h:19
+msgid "Time Tracker Preferences"
+msgstr "Preferensi Pelacak Waktu"
+
+#: ../data/preferences.ui.h:20
+msgid "Tracking"
+msgstr "Pelacakan"
+
+#: ../data/preferences.ui.h:21
+msgid "Use following todo list if available:"
+msgstr ""
+
+#: ../data/preferences.ui.h:22
+msgid "Workspaces"
+msgstr "Area Kerja"
+
+#: ../data/preferences.ui.h:23
+msgid "_Activities"
+msgstr "_Aktivitas"
+
+#: ../data/preferences.ui.h:24
+msgid "_Categories"
+msgstr "_Kategori"
+
+#: ../data/range_pick.ui.h:1
+msgid "Apply"
+msgstr "Terapkan"
+
+#: ../data/range_pick.ui.h:2
+msgid "Day:"
+msgstr "Hari:"
+
+#: ../data/range_pick.ui.h:3
+msgid "Month:"
+msgstr "Bulan:"
+
+#: ../data/range_pick.ui.h:4
+msgid "Range:"
+msgstr "Jangkauan:"
+
+#: ../data/range_pick.ui.h:5
+msgid "Week:"
+msgstr "Minggu:"
+
+#: ../data/stats.ui.h:1
+msgid "Starts and ends"
+msgstr ""
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "Tahun:"
+
+#: ../src/docky_control/2.0/hamster_control.py:71
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
+#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
+#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+msgid "No activity"
+msgstr "Tidak ada aktivitas"
+
+#: ../src/docky_control/2.0/hamster_control.py:81
+#: ../src/docky_control/2.0/hamster_control.py:95
+#: ../src/docky_control/2.1/hamster_control.py:81
+#: ../src/docky_control/2.1/hamster_control.py:95
+msgid "Preferences"
+msgstr "Preferensi"
+
+#: ../src/hamster/about.py:43
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "Hak cipta © 2007–2010 Toms Bauģis dan lainnya"
+
+#: ../src/hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "Situs Web Proyek Hamster"
+
+#: ../src/hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "Tentang Pelacak Waktu"
+
+#: ../src/hamster/about.py:56
+msgid "translator-credits"
+msgstr "Dirgita <dirgitadevina@yahoo.co.id>, 2011."
+
+#: ../src/hamster/applet.py:377
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/applet.py:380
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
+#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
+#: ../src/hamster-time-tracker:224
+msgid "Unsorted"
+msgstr ""
+
+#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
+#: ../src/hamster-time-tracker:229
+msgid "Just started"
+msgstr "Baru dimulai"
+
+#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+msgid "Changed activity"
+msgstr ""
+
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "Berpindah ke '%s'"
+
+#. defaults
+#: ../src/hamster/db.py:947
+msgid "Work"
+msgstr ""
+
+#: ../src/hamster/db.py:948
+msgid "Reading news"
+msgstr "Membaca berita"
+
+#: ../src/hamster/db.py:949
+msgid "Checking stocks"
+msgstr "Memeriksa persediaan"
+
+#: ../src/hamster/db.py:950
+msgid "Super secret project X"
+msgstr "Proyek sangat rahasia"
+
+#: ../src/hamster/db.py:951
+msgid "World domination"
+msgstr "Mengambil alih dunia"
+
+#: ../src/hamster/db.py:953
+msgid "Day-to-day"
+msgstr ""
+
+#: ../src/hamster/db.py:954
+msgid "Lunch"
+msgstr "Makan siang"
+
+#: ../src/hamster/db.py:955
+msgid "Watering flowers"
+msgstr "Menyiram bunga"
+
+#: ../src/hamster/db.py:956
+msgid "Doing handstands"
+msgstr "Berdiri dengan tangan"
+
+#: ../src/hamster/edit_activity.py:70
+msgid "Update activity"
+msgstr ""
+
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %d %b"
+
+#: ../src/hamster/overview_totals.py:161
+#, python-format
+msgid "%s hours tracked total"
+msgstr ""
+
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:103
+msgid "None"
+msgstr "Nihil"
+
+#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
+msgid "Name"
+msgstr "Nama"
+
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
+msgid "Category"
+msgstr "Kategori"
+
+#: ../src/hamster/preferences.py:635
+msgid "New category"
+msgstr "Kategori baru"
+
+#: ../src/hamster/preferences.py:648
+msgid "New activity"
+msgstr "Aktivitas baru"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:699
+#, python-format
+msgid "%(interval_minutes)d minutes"
+msgstr "%(interval_minutes)d menit"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:702
+msgid "Never"
+msgstr ""
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:132
+msgid "activity"
+msgstr "aktivitas"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:134
+msgid "start time"
+msgstr ""
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:136
+msgid "end time"
+msgstr ""
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:138
+msgid "duration minutes"
+msgstr "menit durasi"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:140
+msgid "category"
+msgstr "kategori"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:142
+msgid "description"
+msgstr "deskripsi"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+msgid "tags"
+msgstr "tag"
+
+#: ../src/hamster/reports.py:191
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
+"s, %(end_Y)s"
+msgstr ""
+"Laporan aktivitas untuk %(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %"
+"(end_B)s %(end_Y)s"
+
+#: ../src/hamster/reports.py:193
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"Laporan aktivitas untuk %(start_d)s %(start_B)s – %(end_d)s %(end_B)s %"
+"(end_Y)s"
+
+#: ../src/hamster/reports.py:195
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Laporan aktivitas untuk %(start_d)s %(start_B)s %(start_Y)s"
+
+#: ../src/hamster/reports.py:197
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Laporan aktivitas untuk %(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
+
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:290
+msgid "Totals by Day"
+msgstr ""
+
+#: ../src/hamster/reports.py:291
+msgid "Activity Log"
+msgstr "Log Aktivitas"
+
+#: ../src/hamster/reports.py:294
+msgid "activities"
+msgstr "aktivitas"
+
+#: ../src/hamster/reports.py:295
+msgid "categories"
+msgstr "kategori"
+
+#: ../src/hamster/reports.py:298
+msgid "Distinguish:"
+msgstr ""
+
+#: ../src/hamster/reports.py:300
+msgid "Date"
+msgstr "Tanggal"
+
+#: ../src/hamster/reports.py:304
+msgid "Start"
+msgstr ""
+
+#: ../src/hamster/reports.py:305
+msgid "End"
+msgstr ""
+
+#: ../src/hamster/reports.py:306
+msgid "Duration"
+msgstr "Durasi"
+
+#: ../src/hamster/reports.py:307
+msgid "Description"
+msgstr "Deskripsi"
+
+#: ../src/hamster/reports.py:310
+msgid "Show template"
+msgstr ""
+
+#: ../src/hamster/reports.py:311
+#, python-format
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr ""
+
+#: ../src/hamster-time-tracker:167
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Bekerja pada <b>%s</b>"
+
+#: ../src/hamster-time-tracker:499
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamster pelacak waktu. Cara pakai:"
+
+#: ../src/hamster/stats.py:90
+msgctxt "years"
+msgid "All"
+msgstr "Semua"
+
+#: ../src/hamster/stats.py:166
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"Belum ada data untuk membuat statistik.\n"
+"Pakailah dulu selama satu minggu!"
+
+#: ../src/hamster/stats.py:169
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Mengumpulkan data — periksalah kembali setelah satu minggu!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:320
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:325
+msgctxt "first record"
+msgid "%b %d"
+msgstr "%d %b"
+
+#: ../src/hamster/stats.py:327
+#, python-format
+msgid "First activity was recorded on %s."
+msgstr "Aktivitas pertama direkam pada %s."
+
+#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s tahun"
+
+#. FIXME: difficult string to properly pluralize
+#: ../src/hamster/stats.py:345
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
+"(working_days)s working days (%(working_years)s)."
+msgstr ""
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:363
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#: ../src/hamster/stats.py:368
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+
+#. total records (in selected scope)
+#: ../src/hamster/stats.py:376
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "Terdapat %s catatan/"
+
+#: ../src/hamster/stats.py:396
+msgid "Hamster would like to observe you some more!"
+msgstr ""
+
+#: ../src/hamster/stats.py:398
+#, python-format
+msgid ""
+"With %s percent of all facts starting before 9am, you seem to be an early "
+"bird."
+msgstr ""
+
+#: ../src/hamster/stats.py:401
+#, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm, you seem to be a night owl."
+msgstr ""
+
+#: ../src/hamster/stats.py:404
+#, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
+"busy bee."
+msgstr ""
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%dh"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%d %B %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:39
+msgid "Save Report — Time Tracker"
+msgstr "Simpan Laporan — Pelacak Waktu"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:57
+msgid "HTML Report"
+msgstr "Laporan HTML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:65
+msgid "Tab-Separated Values (TSV)"
+msgstr ""
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:80
+msgid "iCal"
+msgstr "iCal"
+
+#. title in the report file name
+#: ../src/hamster/widgets/reportchooserdialog.py:97
+msgid "Time track"
+msgstr "Pelacakan waktu"
