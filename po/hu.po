@@ -474,7 +474,9 @@ msgstr "Az Időnyilvántartó névjegye"
 
 #: ../src/hamster/about.py:56
 msgid "translator-credits"
-msgstr "Kelemen Gábor <kelemeng@gnome.hu>"
+msgstr " Avramucz Péter <muczyjoe at gmail dot com>"
+"Hammer Attila <hammera at pickup dot hu>"
+"Kelemen Gábor <kelemeng at gnome dot hu>"
 
 #: ../src/hamster/applet.py:377
 #, python-format
