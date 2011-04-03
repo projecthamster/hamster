@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hamster-applet 2.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-30 21:21+0200\n"
-"PO-Revision-Date: 2011-03-29 01:03+0200\n"
+"PO-Revision-Date: 2011-04-03 23:12+0200\n"
 "Last-Translator: Sílvia Miranda <silvia@softcatala.cat>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -214,7 +214,7 @@ msgstr "Temps:"
 
 #: ../data/edit_activity.ui.h:6
 msgid "in progress"
-msgstr "en progrés"
+msgstr "en curs"
 
 #: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
 msgid "to"
