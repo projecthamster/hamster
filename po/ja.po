@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-04-04 01:40+0000\n"
+"POT-Creation-Date: 2011-04-04 08:28+0000\n"
 "PO-Revision-Date: 2011-04-04 17:26+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -74,9 +74,9 @@ msgid ""
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
 msgstr ""
-"利用可能な集計手法のリストです。\"name\"は workspace_mapping で定義されていて"
-"る名前でアクティビティを切り替え可能にします。\"memory\" は、前のワークスペー"
-"スに戻るときに、そこで最後のアクティビティに変更します。"
+"利用可能な集計手法のリストです。\"name\"は workspace_mapping で定義されている"
+"名前でアクティビティを切り替え可能にします。\"memory\" は、前のワークスペース"
+"に戻るときに、そこで最後のアクティビティに変更します。"
 
 #: ../data/hamster-applet.schemas.in.h:9
 msgid ""
@@ -735,7 +735,7 @@ msgstr ""
 
 #: ../src/hamster/stats.py:169
 msgid "Collecting data — check back after a week has passed!"
-msgstr "データを集めています ー 一週間後に調査してください!"
+msgstr "データを集めています - 一週間後に調査してください!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
