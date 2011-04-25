@@ -278,7 +278,7 @@ class Fact(object):
 
             else:
                 if potential_time.find("-") > 0:
-                    potential_time, potential_end_time = potential_time.split("-", 2)
+                    potential_time, potential_end_time = potential_time.split("-", 1)
                     self.end_time = figure_time(potential_end_time)
 
                 self.start_time = figure_time(potential_time)
