@@ -1,27 +1,139 @@
 # Turkish translation of hamster-applet application
 # Copyright (C) 2008
 # This file is distributed under the same license as the hamster-applet package.
-#
+# 
 # Baris Cicek <baris@teamforce.name.tr>, 2008, 2009.
+# Fatih Ergüven <fatih@erguven.org>, 2009.
+# Muhammet Kara <muhammet.k@gmail.com>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-22 22:12+0200\n"
-"PO-Revision-Date: 2009-02-22 22:09+0200\n"
-"Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-03-11 07:55+0000\n"
+"PO-Revision-Date: 2011-04-29 01:55+0300\n"
+"Last-Translator: Muhammet Kara <muhammet.k@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"\n"
+"\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:42
-msgid "Project Hamster - track your time"
-msgstr "Proje Hamster - zamanınız takip edin"
+#: ../data/90-hamster-applet.xml.in.h:1
+#| msgid "Project Hamster Website"
+msgid "Project Hamster (Gnome Time Tracker)"
+msgstr "Proje Hamster (Gnome Zaman Takipçisi)"
 
-#. Title of reminder baloon
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:40
-#: ../hamster/applet.py:65
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start; and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Ayrıca, hiçbir etkinlik başlatılmadığında her notify_interval dakikada bir "
+"hatırlat."
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "Hiçbir etkinlik ayarlanmadığında ayrıca hatırlat"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Command for toggling visibility of the hamster application window."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:7
+#| msgid "Keyboard shortcut for showing the Time Tracker window."
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr "Zaman Takipçisi penceresini göstermek / gizlemek için klavye kısayolu."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"the last activity when returning to a previous workspace."
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"Mevcut görevi belirtilen miktardaki dakikada hatırlat. 0 ya da 120'den daha "
+"büyük bir değer atayarak hatırlatıcıyı kapatabilirsiniz."
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Remind of current task every x minutes"
+msgstr "Mevcut görevi her x dakikada hatırlat"
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:12
+#| msgid "Keyboard shortcut for showing the Time Tracker window."
+msgid "Show / hide Time Tracker Window"
+msgstr "Zaman Takipçisi Penceresini Göster / Gizle"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity on shutdown"
+msgstr "Bilgisayar kapatıldığında mevcut etkinliği takip etmeyi durdur"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "Bilgisayar boşta olduğunda mevcut etkinliği takip etmeyi durdur"
+
+#: ../data/hamster-applet.schemas.in.h:15
+msgid "Stop tracking on idle"
+msgstr "Beklemede takibi durdur"
+
+#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+msgid "Stop tracking on shutdown"
+msgstr "Kapatıldığında takibi durdur"
+
+#: ../data/hamster-applet.schemas.in.h:17
+msgid "Switch activity on workspace change"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Toggle hamster application window"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window action"
+msgstr ""
+
+#: ../data/hamster-applet.schemas.in.h:20
+msgid "Toggle visibility of the hamster application window."
+msgstr ""
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Proje Hamster — zamanınızı takip edin"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
 msgid "Time Tracker"
 msgstr "Zaman Takipçisi"
 
@@ -29,460 +141,999 @@ msgstr "Zaman Takipçisi"
 msgid "_About"
 msgstr "_Hakkında"
 
-#: ../data/Hamster_Applet.xml.h:2
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
+msgid "_Help"
+msgstr "_Yardım"
+
+#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
 msgid "_Overview"
 msgstr "_Genel Görünüm"
 
-#: ../data/Hamster_Applet.xml.h:3
+#: ../data/Hamster_Applet.xml.h:4
 msgid "_Preferences"
 msgstr "_Tercihler"
 
-#: ../data/preferences.glade.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>Etkinlikler</b>"
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#| msgid "Project Hamster — track your time"
+msgid "Project Hamster - track your time"
+msgstr "Proje Hamster - zamanınızı takip edin"
 
-#: ../data/preferences.glade.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>Genel Kısayol Tuşu</b>"
-
-#: ../data/preferences.glade.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>Takip</b>"
-
-#: ../data/preferences.glade.h:4
-msgid "Move _Down"
-msgstr "_Aşağı Taşı"
-
-#: ../data/preferences.glade.h:5
-msgid "Move _Up"
-msgstr "_Yukarı Taşı"
-
-#: ../data/preferences.glade.h:6
-msgid "N_ew Category"
-msgstr "_Yeni Kategori"
-
-#: ../data/preferences.glade.h:7
-msgid "Remind of current activity every:"
-msgstr "Mevcut etkinliği hatırlatma sıklığı:"
-
-#: ../data/preferences.glade.h:8 ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking on shutdown"
-msgstr "Kapatıldığında takibi durdur"
-
-#: ../data/preferences.glade.h:9
-msgid "Stop tracking when computer becomes idle"
-msgstr "Bilgisayar beklemedeyken takibi durdur"
-
-#: ../data/preferences.glade.h:10
-msgid "Time Tracker Preferences"
-msgstr "Zaman Takipçisi Tercihleri"
-
-#: ../data/preferences.glade.h:11
-msgid "_Activities"
-msgstr "_Etkinlikler"
-
-#: ../data/preferences.glade.h:12
-msgid "_Categories"
-msgstr "_Kategoriler"
-
-#: ../data/preferences.glade.h:13
-msgid "_New Activity"
-msgstr "_Yeni Etkinlik"
-
-#: ../data/edit_activity.glade.h:1
-msgid "20/01/08"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:2
-msgid "20/01/09"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:3
-msgid "3:30pm"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:4
-#, fuzzy
-msgid "Activity:"
-msgstr "_Etkinlik:"
-
-#: ../data/edit_activity.glade.h:5
-msgid "Add Earlier Activity"
-msgstr "Önceki Etkinliği Ekle"
-
-#: ../data/edit_activity.glade.h:6
-msgid "Description:"
-msgstr "Tanım:"
-
-#: ../data/edit_activity.glade.h:7
-#, fuzzy
-msgid "Time:"
-msgstr "İsim:"
-
-#: ../data/edit_activity.glade.h:8
-msgid "gtk-cancel"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:9
-msgid "gtk-save"
-msgstr ""
-
-#: ../data/edit_activity.glade.h:10
-#, fuzzy
-msgid "in progress"
-msgstr ""
-"devam ediyor...\n"
-"kadar\n"
-"süresince"
-
-#: ../data/edit_activity.glade.h:11
-msgid "to"
-msgstr ""
-
-#: ../data/hamster-applet.schemas.in.h:1
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "Zaman Takipçisi penceresini göstermek için klavye kısayolu."
-
-#: ../data/hamster-applet.schemas.in.h:2
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or bigger "
-"than 120 to disable reminder."
-msgstr ""
-"Mevcut görevi belirtilen miktardaki dakikada hatırlar. 0 ya da 120'den daha\n"
-"büyük bir değer atayarak hatırlatıcıyı kapatabilirsiniz."
-
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Remind of current task every x minutes"
-msgstr "Mevcut görevi her x dakikada hatırlat"
-
-#: ../data/hamster-applet.schemas.in.h:4
-msgid "Show window"
-msgstr "Pencere göster"
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Stop tracking current activity on shutdown"
-msgstr "Bilgisayar kapatıldığında mevcut etkinliği takip etmeyi durdur"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Stop tracking current activity, when computer becomes idle"
-msgstr "Bilgisayar beklemede olduğunda mevcut etkinliği takip etmeyi durdur"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking on idle"
-msgstr "Beklemede takibi durdur"
-
-#: ../data/menu.glade.h:1
-msgid "Ad_d Earlier Activity"
-msgstr "_Daha Önceki Etkinliği Ekle"
-
-#. This title appears only when debugging from console. Leave it as is.
-#: ../data/menu.glade.h:3
-msgid "Hamster"
-msgstr "Hamster"
-
-#: ../data/menu.glade.h:4 ../hamster/applet.py:447
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
 msgid "No records today"
 msgstr "Bugün hiçbir kayıt yok"
 
-#: ../data/menu.glade.h:5
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+#| msgid "Switch"
+msgid "S_witch"
+msgstr "Ge_çiş Yap"
+
+#: ../data/applet.ui.h:3
 msgid "Show _Overview"
 msgstr "_Genel Görünümü Göster"
 
-#: ../data/menu.glade.h:6
-msgid "_Activity:"
-msgstr "_Etkinlik:"
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+#| msgid "_Stop Tracking"
+msgid "Start _Tracking"
+msgstr "_Takibi Başlat"
 
-#: ../data/menu.glade.h:7
-msgid "_Stop Tracking"
-msgstr "_Takibi Durdur"
+#: ../data/applet.ui.h:5
+#| msgid "_Stop Tracking"
+msgid "Sto_p Tracking"
+msgstr "Taki_bi Durdur"
 
-#: ../data/menu.glade.h:8
-msgid "_Today"
-msgstr "_Bugün"
+#: ../data/applet.ui.h:6
+#| msgid "Today"
+msgid "To_day"
+msgstr "Bu _gün"
 
-#: ../data/stats.glade.h:1
-msgid " _Month"
-msgstr " _Ay"
+#: ../data/applet.ui.h:7
+#| msgid "Add Earlier Activity"
+msgid "_Add earlier activity"
+msgstr "_Daha önceki etkinliği ekle"
 
-#: ../data/stats.glade.h:2
-msgid " _Week"
-msgstr " _Hafta"
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Etkinlik:"
 
-#: ../data/stats.glade.h:3
-msgid "<b>Overview</b>"
-msgstr "<b>Genel Görünüm</b>"
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Önceki Etkinliği Ekle"
 
-#: ../data/stats.glade.h:4 ../hamster/reports.py:105 ../hamster/reports.py:173
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Tanım:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Etiketler:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Süre:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "devam ediyor"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr ""
+
+#: ../data/hamster.ui.h:1
+#| msgid "Add Earlier Activity"
+msgid "Add earlier activity"
+msgstr "Daha önceki etkinliği ekle"
+
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "İçerik"
+
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../src/docky_control/2.0/hamster_control.py:94
+#: ../src/docky_control/2.1/hamster_control.py:79
+#: ../src/docky_control/2.1/hamster_control.py:94
+msgid "Overview"
+msgstr "Genel Görünüm"
+
+#: ../data/hamster.ui.h:6
+#| msgid "New activity"
+msgid "Start new activity"
+msgstr "Yeni etkinlik başlat"
+
+#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
+msgid "Statistics"
+msgstr "İstatistikler"
+
+#: ../data/hamster.ui.h:8
+#| msgid "_Stop Tracking"
+msgid "Sto_p tracking"
+msgstr "Taki_bi durdur"
+
+#: ../data/hamster.ui.h:10
+msgid "Today"
+msgstr "Bugün"
+
+#: ../data/hamster.ui.h:11
+#| msgid "Edit"
+msgid "_Edit"
+msgstr "_Düzenle"
+
+#: ../data/hamster.ui.h:13
+#| msgid "_Stop Tracking"
+msgid "_Tracking"
+msgstr "_Takip"
+
+#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
+#| msgid "_Activities"
+msgid "Activities"
+msgstr "Etkinlikler"
+
+#: ../data/overview_totals.ui.h:2
+#| msgid "_Categories"
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "Bu aralık için veri yok"
+
+#: ../data/overview_totals.ui.h:4
+#| msgid "Statistics"
+msgid "Show Statistics"
+msgstr "İstatistikleri Göster"
+
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#| msgid "Totals"
+msgid "Tags"
+msgstr "Etiketler"
+
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
+#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "Etkinlik"
 
-#: ../data/stats.glade.h:5
-msgid "Add activity"
-msgstr "Etkinlik ekle"
+#: ../data/overview.ui.h:3
+msgid "Add new"
+msgstr "Yeni ekle"
 
-#: ../data/stats.glade.h:6
-msgid "Delete activity"
-msgstr "Etkinlik sil"
+#: ../data/overview.ui.h:4
+msgid "Day"
+msgstr "Gün"
 
-#: ../data/stats.glade.h:7
-msgid "Edit activity"
-msgstr "Etkinliği düzenle"
+#: ../data/overview.ui.h:5
+msgid "Edit"
+msgstr "Düzenle"
 
-#: ../data/stats.glade.h:8
-msgid "Generate Report"
-msgstr "Rapor Oluştur"
+#: ../data/overview.ui.h:6
+msgid "Month"
+msgstr "Ay"
 
-#: ../data/stats.glade.h:9
-msgid "Newer activities"
-msgstr "Yeni etkinlikler"
+#: ../data/overview.ui.h:7
+#| msgid "Overview - Hamster"
+msgid "Overview — Hamster"
+msgstr "Genel Görünüm — Hamster"
 
-#: ../data/stats.glade.h:10
-msgid "No data for this interval"
-msgstr ""
+#: ../data/overview.ui.h:8
+msgid "Remove"
+msgstr "Sil"
 
-#: ../data/stats.glade.h:11
-msgid "Overview - Hamster"
-msgstr "Genel Görünüm - Hamster"
+#: ../data/overview.ui.h:9
+msgid "Save report..."
+msgstr "Raporu kaydet..."
 
-#: ../data/stats.glade.h:12
-msgid "Show month"
-msgstr "Ay göster"
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+msgid "Totals"
+msgstr "Toplamlar"
 
-#: ../data/stats.glade.h:13
-msgid "Show week"
-msgstr "Hafta göster"
-
-#: ../data/stats.glade.h:14 ../hamster/stats.py:347
+#: ../data/overview.ui.h:11
 msgid "Week"
 msgstr "Hafta"
 
-#: ../hamster/about.py:43
-msgid "Copyright © 2007-2008 Toms Baugis and others"
-msgstr "Telif Hakkı © 2007-2008 Toms Baugis ve diğerleri"
+#: ../data/overview.ui.h:13
+msgid "_View"
+msgstr "_Görüntüle"
 
-#: ../hamster/about.py:45
-msgid "Hamster Website"
-msgstr "Hamster Web Sitesi"
+#: ../data/preferences.ui.h:1
+msgid "Activity list"
+msgstr "Etkinlik listesi"
 
-#: ../hamster/about.py:54
+#: ../data/preferences.ui.h:2
+msgid "Add activity"
+msgstr "Etkinlik ekle"
+
+#: ../data/preferences.ui.h:3
+msgid "Add category"
+msgstr "Kategori ekle"
+
+#: ../data/preferences.ui.h:5
+#| msgid "_Categories"
+msgid "Categories and Tags"
+msgstr "Kategoriler ve Etiketler"
+
+#: ../data/preferences.ui.h:6
+msgid "Category list"
+msgstr "Kategori listesi"
+
+#: ../data/preferences.ui.h:7
+msgid "Edit activity"
+msgstr "Etkinliği düzenle"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit category"
+msgstr "Kategoriyi düzenle"
+
+#: ../data/preferences.ui.h:9
+#| msgid "Duration"
+msgid "Integration"
+msgstr "Bütünleşme"
+
+#: ../data/preferences.ui.h:10
+msgid "New day starts at"
+msgstr ""
+
+#: ../data/preferences.ui.h:11
+msgid "Remind of current activity every:"
+msgstr "Mevcut etkinliği hatırlatma sıklığı:"
+
+#: ../data/preferences.ui.h:12
+msgid "Remove activity"
+msgstr "Etkinliği sil"
+
+#: ../data/preferences.ui.h:13
+msgid "Remove category"
+msgstr "Kategoriyi sil"
+
+#: ../data/preferences.ui.h:14
+msgid "Resume the last activity when returning to a workspace"
+msgstr ""
+
+#: ../data/preferences.ui.h:15
+msgid "Start new activity when switching workspaces:"
+msgstr ""
+
+#: ../data/preferences.ui.h:17
+msgid "Stop tracking when computer becomes idle"
+msgstr "Bilgisayar beklemedeyken takibi durdur"
+
+#: ../data/preferences.ui.h:18
+msgid "Tags that should appear in autocomplete"
+msgstr ""
+
+#: ../data/preferences.ui.h:19
+msgid "Time Tracker Preferences"
+msgstr "Zaman Takipçisi Tercihleri"
+
+#: ../data/preferences.ui.h:20
+#| msgid "_Stop Tracking"
+msgid "Tracking"
+msgstr "Takip"
+
+#: ../data/preferences.ui.h:21
+msgid "Use following todo list if available:"
+msgstr "Eğer kullanılabilir durumdaysa şu yapılacaklar listesini kullan:"
+
+#: ../data/preferences.ui.h:22
+msgid "Workspaces"
+msgstr "Çalışma Alanları"
+
+#: ../data/preferences.ui.h:23
+msgid "_Activities"
+msgstr "_Etkinlikler"
+
+#: ../data/preferences.ui.h:24
+msgid "_Categories"
+msgstr "_Kategoriler"
+
+#: ../data/range_pick.ui.h:1
+msgid "Apply"
+msgstr "Uygula"
+
+#: ../data/range_pick.ui.h:2
+#| msgid "Day"
+msgid "Day:"
+msgstr "Gün:"
+
+#: ../data/range_pick.ui.h:3
+#| msgid "Month"
+msgid "Month:"
+msgstr "Ay:"
+
+#: ../data/range_pick.ui.h:4
+msgid "Range:"
+msgstr "Aralık:"
+
+#: ../data/range_pick.ui.h:5
+#| msgid "Week"
+msgid "Week:"
+msgstr "Hafta:"
+
+#: ../data/stats.ui.h:1
+#| msgid "<b>Starts and ends</b>"
+msgid "Starts and ends"
+msgstr "Başlayor ve bitiyor"
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "Yıl:"
+
+#: ../src/docky_control/2.0/hamster_control.py:71
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
+#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
+#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+msgid "No activity"
+msgstr "Etkinlik yok"
+
+#: ../src/docky_control/2.0/hamster_control.py:81
+#: ../src/docky_control/2.0/hamster_control.py:95
+#: ../src/docky_control/2.1/hamster_control.py:81
+#: ../src/docky_control/2.1/hamster_control.py:95
+#| msgid "_Preferences"
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: ../src/hamster/about.py:43
+#| msgid "Copyright © 2007–2009 Toms Bauģis and others"
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "Telif Hakkı © 2007-2010 Toms Bauģis ve diğerleri"
+
+#: ../src/hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "Proje Hamster Web Sitesi"
+
+#: ../src/hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "Zaman Takipçisi Hakkında"
+
+#: ../src/hamster/about.py:56
 msgid "translator-credits"
-msgstr "Barış Çiçek <baris@teamforce.name.tr>"
+msgstr ""
+"Barış Çiçek <baris@teamforce.name.tr>\n"
+"Fatih Ergüven <fatih@erguven.org>\n"
+"Muhammet Kara <muhammet.k@gmail.com>"
 
-#. try yesterday if there is nothing today
-#: ../hamster/preferences.py:56 ../hamster/db.py:203 ../hamster/db.py:206
-#: ../hamster/db.py:354 ../hamster/db.py:456 ../hamster/db.py:470
-#: ../hamster/reports.py:129
+#: ../src/hamster/applet.py:377
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/applet.py:380
+#, python-format
+msgid "%sh"
+msgstr "%ssa"
+
+#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
+#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
+#: ../src/hamster-time-tracker:224
 msgid "Unsorted"
 msgstr "Sırasız"
 
-#: ../hamster/preferences.py:103
+#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
+#: ../src/hamster-time-tracker:229
+msgid "Just started"
+msgstr "Yeni başladı"
+
+#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+#| msgid "Add activity"
+msgid "Changed activity"
+msgstr "Etkinlik değiştirildi"
+
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "'%s'e geçiş yapıldı"
+
+#. defaults
+#: ../src/hamster/db.py:947
+msgid "Work"
+msgstr "İş"
+
+#: ../src/hamster/db.py:948
+msgid "Reading news"
+msgstr "Haberleri okuma"
+
+#: ../src/hamster/db.py:949
+msgid "Checking stocks"
+msgstr "Borsayı kontrol"
+
+#: ../src/hamster/db.py:950
+msgid "Super secret project X"
+msgstr "Çok gizli proje X"
+
+#: ../src/hamster/db.py:951
+msgid "World domination"
+msgstr "Dünyayı ele geçirme"
+
+#: ../src/hamster/db.py:953
+msgid "Day-to-day"
+msgstr "Günden güne"
+
+#: ../src/hamster/db.py:954
+msgid "Lunch"
+msgstr "Öğle Yemeği"
+
+#: ../src/hamster/db.py:955
+msgid "Watering flowers"
+msgstr "Çiçekleri sulama"
+
+#: ../src/hamster/db.py:956
+msgid "Doing handstands"
+msgstr "Amuda kalkma"
+
+#: ../src/hamster/edit_activity.py:70
+msgid "Update activity"
+msgstr "Etkinliği güncelle"
+
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
+#: ../src/hamster/overview_totals.py:161
+#, python-format
+msgid "%s hours tracked total"
+msgstr "Toplam %s saat takip edildi"
+
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:103
+msgid "None"
+msgstr "Hiçbiri"
+
+#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
 msgid "Name"
 msgstr "İsim"
 
-#: ../hamster/preferences.py:123 ../hamster/reports.py:106
-#: ../hamster/reports.py:172
+#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategori"
 
-#: ../hamster/preferences.py:510
+#: ../src/hamster/preferences.py:635
 msgid "New category"
 msgstr "Yeni kategori"
 
-#: ../hamster/preferences.py:523
+#: ../src/hamster/preferences.py:648
 msgid "New activity"
 msgstr "Yeni etkinlik"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:568
+#: ../src/hamster/preferences.py:699
 #, python-format
 msgid "%(interval_minutes)d minutes"
 msgstr "%(interval_minutes)d dakika"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:571
+#: ../src/hamster/preferences.py:702
 msgid "Never"
 msgstr "Asla"
 
-#: ../hamster/edit_activity.py:67
-msgid "Update activity"
-msgstr "Etkinliği güncelle"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:132
+msgid "activity"
+msgstr "etkinlik"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
-msgid "Edit"
-msgstr "Düzenle"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:134
+msgid "start time"
+msgstr "başlama zamanı"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Switch"
-msgstr "Geçiş"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:136
+msgid "end time"
+msgstr "bitiş zamanı"
 
-#: ../hamster/applet.py:290 ../hamster/reports.py:109
-#: ../hamster/reports.py:174
-msgid "Duration"
-msgstr "Süre"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:138
+msgid "duration minutes"
+msgstr "süreç dakikaları"
 
-#: ../hamster/applet.py:407 ../hamster/applet.py:513
-msgid "No activity"
-msgstr "Etkinlik yok"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:140
+msgid "category"
+msgstr "kategori"
 
-#. activity reminder
-#: ../hamster/applet.py:421
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "<b>%s</b> üzerinde çalışılıyor"
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:142
+msgid "description"
+msgstr "açıklama"
 
-#: ../hamster/applet.py:453
-#, python-format
-msgid "%(category)s: %(duration)s, "
-msgstr "%(category)s: %(duration)s, "
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+#| msgid "Totals"
+msgid "tags"
+msgstr "etiketler"
 
-#. defaults
-#: ../hamster/db.py:641
-msgid "Work"
-msgstr "İş"
-
-#: ../hamster/db.py:642
-msgid "Reading news"
-msgstr "Haberleri okuma"
-
-#: ../hamster/db.py:643
-msgid "Checking stocks"
-msgstr "Borsayı kontrol"
-
-#: ../hamster/db.py:644
-msgid "Super secret project X"
-msgstr "Çok gizli proje X"
-
-#: ../hamster/db.py:645
-msgid "World domination"
-msgstr "Dünyayı ele geçirme"
-
-#: ../hamster/db.py:647
-msgid "Day to day"
-msgstr "Günden Güne"
-
-#: ../hamster/db.py:648
-msgid "Lunch"
-msgstr "Öğle Yemeği"
-
-#: ../hamster/db.py:649
-msgid "Watering flowers"
-msgstr "Çiçekleri sulama"
-
-#: ../hamster/db.py:650
-msgid "Doing handstands"
-msgstr "Amuda kalkma"
-
-#: ../hamster/db.py:833 ../hamster/db.py:837
-msgid "name"
-msgstr "isim"
-
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:32 ../hamster/stats.py:334
-#, python-format
+#: ../src/hamster/reports.py:191
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
+#| "%(end_Y)s"
 msgid ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 msgstr ""
 "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s için "
 "gözden geçirme"
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:34 ../hamster/stats.py:339
-#, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+#: ../src/hamster/reports.py:193
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s için gözden geçirme"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#: ../hamster/reports.py:36 ../hamster/stats.py:344
-#, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s için gözden geçirme"
-
-#: ../hamster/reports.py:39
-#, python-format
-msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+#: ../src/hamster/reports.py:195
+#, fuzzy, python-format
+#| msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "%(start_B)s %(start_d)s, %(start_Y)s için gözden geçirme"
 
-#: ../hamster/reports.py:104
+#: ../src/hamster/reports.py:197
+#, fuzzy, python-format
+#| msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s için gözden geçirme"
+
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:290
+#, fuzzy
+#| msgid "Totals"
+msgid "Totals by Day"
+msgstr "Toplamlar"
+
+#: ../src/hamster/reports.py:291
+#| msgid "Activity"
+msgid "Activity Log"
+msgstr "Etkinlik Günlüğü"
+
+#: ../src/hamster/reports.py:294
+#| msgid "_Activities"
+msgid "activities"
+msgstr "etkinlikler"
+
+#: ../src/hamster/reports.py:295
+#| msgid "_Categories"
+msgid "categories"
+msgstr "kategoriler"
+
+#: ../src/hamster/reports.py:298
+msgid "Distinguish:"
+msgstr ""
+
+#: ../src/hamster/reports.py:300
 msgid "Date"
 msgstr "Tarih"
 
-#: ../hamster/reports.py:107
+#: ../src/hamster/reports.py:304
 msgid "Start"
 msgstr "Başlangıç"
 
-#: ../hamster/reports.py:108
+#: ../src/hamster/reports.py:305
 msgid "End"
 msgstr "Bitiş"
 
-#: ../hamster/reports.py:110
+#: ../src/hamster/reports.py:306
+msgid "Duration"
+msgstr "Süre"
+
+#: ../src/hamster/reports.py:307
 msgid "Description"
 msgstr "Tanım"
 
-#. fact date column in HTML report
-#: ../hamster/reports.py:144
+#: ../src/hamster/reports.py:310
+#| msgid "Show week"
+msgid "Show template"
+msgstr "Şablonu göster"
+
+#: ../src/hamster/reports.py:311
 #, python-format
-msgid "%(report_b)s %(report_d)s, %(report_Y)s"
-msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr ""
 
-#. summary table
-#: ../hamster/reports.py:169
-msgid "Totals"
-msgstr "Toplamlar"
+#: ../src/hamster-time-tracker:167
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "<b>%s</b> üzerinde çalışılıyor"
 
-#: ../hamster/reports.py:186
-msgid "Total Time"
-msgstr "Toplam Zaman"
+#: ../src/hamster-time-tracker:499
+msgid "Hamster time tracker. Usage:"
+msgstr ""
 
-#. date format in overview window fact listing
-#. prefix is "o_",letter after prefix is regular python format. you can use all of them
-#: ../hamster/stats.py:221
+#: ../src/hamster/stats.py:90
+msgctxt "years"
+msgid "All"
+msgstr "Hepsi"
+
+#: ../src/hamster/stats.py:166
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"İstatistikleri oluşturmak için henüz veri yok.\n"
+"Bir haftalık kullanım iyi olurdu!"
+
+#: ../src/hamster/stats.py:169
+#| msgid "Still collecting data — check back after a week has passed!"
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Veri toplanıyor — bir hafta geçtikten sonra tekrar bakın!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:320
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:325
+#| msgctxt "overview graph"
+#| msgid "%b %d"
+msgctxt "first record"
+msgid "%b %d"
+msgstr "%b %d"
+
+#: ../src/hamster/stats.py:327
 #, python-format
-msgid "%(o_A)s, %(o_b)s %(o_d)s"
-msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+msgid "First activity was recorded on %s."
+msgstr "İlk etkinlik %s tarihinde kaydedildi."
 
-#: ../hamster/stats.py:349
-msgid "Month"
-msgstr "Ay"
-
-#: ../hamster/stats.py:386
+#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
 #, python-format
-msgid "%(m_b)s %(m_d)s"
-msgstr "%(m_b)s %(m_d)s"
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s yıl"
 
-#: ../hamster/stats.py:393
-#, fuzzy
-msgid "Total"
-msgstr "Toplamlar"
+#. FIXME: difficult string to properly pluralize
+#: ../src/hamster/stats.py:345
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
+msgstr ""
+"Şu ana kadar %(human_days)s normal gün (%(human_years)s) ya da "
+"%(working_days)s iş günü (%(working_years)s) takip edildi."
 
-#: ../hamster/stats.py:402
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:363
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%d %b %Y"
+
+#: ../src/hamster/stats.py:368
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+"En uzun devam eden görev %(date)s tarihinde gerçekleşti ve %(hours)s saat "
+"sürdü."
+
+#. total records (in selected scope)
+#: ../src/hamster/stats.py:376
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "%s adet kayıt var."
+
+#: ../src/hamster/stats.py:396
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamster sizi biraz daha gözlemlemek istiyor!"
+
+#: ../src/hamster/stats.py:398
 #, fuzzy, python-format
-msgid "%(category)s: %(duration).1f, "
-msgstr "%(category)s: %(duration)s, "
+msgid ""
+"With %s percent of all facts starting before 9am, you seem to be an early "
+"bird."
+msgstr ""
+"Tüm görevlerin yüzde %s'si sabah 9'dan önce başlıyor, erkenci biri gibi "
+"gözüküyorsun."
+
+#: ../src/hamster/stats.py:401
+#, fuzzy, python-format
+msgid ""
+"With %s percent of all facts starting after 11pm, you seem to be a night owl."
+msgstr ""
+"Tüm görevlerin yüzde %s'si gece 11'den sonra başlıyor, gece kuşu gibi "
+"gözüküyorsun."
+
+#: ../src/hamster/stats.py:404
+#, fuzzy, python-format
+msgid ""
+"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
+"busy bee."
+msgstr ""
+"Tüm görevlerin yüzde %s'si 15 dakikadan daha kısa, meşgul bir arı gibi "
+"gözüküyorsun."
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%dsa"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%ddk"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dsa %ddk"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+#| msgctxt "html report"
+#| msgid "%b %d, %Y"
+msgid "%B %d, %Y"
+msgstr "%d %B %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
+#| "%(end_Y)s"
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s için "
+"gözden geçirme"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, fuzzy, python-format
+#| msgid ""
+#| "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s için gözden geçirme"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, fuzzy, python-format
+#| msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s için gözden geçirme"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:39
+#, fuzzy
+#| msgid "Save report – Time Tracker"
+msgid "Save Report — Time Tracker"
+msgstr "Raporu kaydet – Zaman Takipçisi"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:57
+msgid "HTML Report"
+msgstr "HTML Raporu"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:65
+msgid "Tab-Separated Values (TSV)"
+msgstr "Sekmeyle Ayrılmış Değerler (TSV)"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:80
+msgid "iCal"
+msgstr "iCal"
+
+#. title in the report file name
+#: ../src/hamster/widgets/reportchooserdialog.py:97
+#| msgid "Time Tracker"
+msgid "Time track"
+msgstr "Zaman takibi"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>Etkinlikler</b>"
+
+#~ msgid "<b>Global Hotkey</b>"
+#~ msgstr "<b>Genel Kısayol Tuşu</b>"
+
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>Takip</b>"
+
+#~| msgid "No activity"
+#~ msgid "Move activity down"
+#~ msgstr "Etkinliği aşağı taşı"
+
+#~| msgid "No activity"
+#~ msgid "Move activity up"
+#~ msgstr "Etkinliği yukarı taşı"
+
+#~ msgid "Preview:"
+#~ msgstr "Önizleme:"
+
+#~ msgid "Show window"
+#~ msgstr "Pencere göster"
+
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >Bir etkinlik yazın ve Enter'a basıp takibe başlayın!"
+#~ "</span>"
+
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Daha detaylı "
+#~ "bilgi ver</span>"
+
+#~ msgid "Ad_d Earlier Activity"
+#~ msgstr "_Daha Önceki Etkinliği Ekle"
+
+#~ msgid "Hamster"
+#~ msgstr "Hamster"
+
+#~ msgid "_Activity:"
+#~ msgstr "_Etkinlik:"
+
+#~ msgid "_Today"
+#~ msgstr "_Bugün"
+
+#~ msgid " _Day"
+#~ msgstr " _Gün"
+
+#~ msgid " _Month"
+#~ msgstr " _Ay"
+
+#~ msgid " _Week"
+#~ msgstr " _Hafta"
+
+#~ msgid "<b>Overview</b>"
+#~ msgstr "<b>Genel Görünüm</b>"
+
+#~| msgid "<b>Tracking</b>"
+#~ msgid "<b>Totals</b>"
+#~ msgstr "<b>Toplamlar</b>"
+
+#~| msgid "_Categories"
+#~ msgid "Categories:"
+#~ msgstr "Kategoriler"
+
+#~ msgid "Date interval:"
+#~ msgstr "Tarih aralığı:"
+
+#~ msgid "Save as HTML"
+#~ msgstr "HTML olarak kaydet"
+
+#~ msgid "What should be typed in the activity box?"
+#~ msgstr "Etkinlik kutusuna ne yazılmalı?"
+
+#~ msgid ""
+#~ "There is a simple syntax that enables you to add details to your "
+#~ "activities:\n"
+#~ "        \n"
+#~ "\"@\" symbol marks a category. Example: \"watering flowers@home\" will "
+#~ "start tracking the activity \"watering flowers\" in the category \"home"
+#~ "\".\n"
+#~ "\n"
+#~ "Commas (\",\") mark beginning of a description. Example: \"watering "
+#~ "flowers, begonias and forgetmenots\" will start tracking the activity "
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
+#~ "\" to it.\n"
+#~ "\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
+#~ "\" will work just fine!\n"
+#~ "\n"
+#~ "Now, start tracking!\n"
+#~ "        "
+#~ msgstr ""
+#~ "Etkinliklerinize detaylar ekleyebilmenize olanak veren basit yazım "
+#~ "biçimi:\n"
+#~ "        \n"
+#~ "\"@\" sembolü bir kategori belirtir. Örneğin: \"çiçekleri sula@ev\", "
+#~ "\"çicekleri sula\" etkinliğini \"ev\" kategorisi içerisinde takibe "
+#~ "başlayacaktır.\n"
+#~ "\n"
+#~ "Virgül (\",\") bir açıklamanın başlangıç işaretidir. Örneğin: \"çiçekleri "
+#~ "sula, begonyalar ve unutma beni çiçekleri\", \"çiçekleri sula\" "
+#~ "etkinliğini takibe başlayacak ve \"begonyalar ve unutma beni çiçekleri\" "
+#~ "notunu ekleyecektir.\n"
+#~ "\n"
+#~ "Her iki kullanım da birleştirilebilir: \"çiçekleri sula@ev, begonyalar ve "
+#~ "unutmabeni çiçekleri\" gayet güzel çalışacaktır.\n"
+#~ "\n"
+#~ "Şimdi, takibe başla!\n"
+#~ "        "
+
+#~ msgid "Total Time"
+#~ msgstr "Toplam Zaman"
+
+#~ msgctxt "categories"
+#~ msgid "All"
+#~ msgstr "Tümü"
+
+#~| msgid "%(m_b)s %(m_d)s"
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(b)s %(d)s"
+
+#~ msgid "Total"
+#~ msgstr "Toplam"
+
+#~| msgid "Overview for %s"
+#~ msgid "Overview for %(date)s"
+#~ msgstr "%(date)s için genel görünüm"
+
+#~ msgid "Move _Down"
+#~ msgstr "_Aşağı Taşı"
+
+#~ msgid "Move _Up"
+#~ msgstr "_Yukarı Taşı"
+
+#~ msgid "N_ew Category"
+#~ msgstr "_Yeni Kategori"
+
+#~ msgid "_New Activity"
+#~ msgstr "_Yeni Etkinlik"
+
+#~ msgid "Delete activity"
+#~ msgstr "Etkinlik sil"
+
+#~ msgid "Generate Report"
+#~ msgstr "Rapor Oluştur"
+
+#~ msgid "Newer activities"
+#~ msgstr "Yeni etkinlikler"
+
+#~ msgid "Show month"
+#~ msgstr "Ay göster"
+
+#~ msgid "name"
+#~ msgstr "isim"
+
+#~ msgid "%(report_b)s %(report_d)s, %(report_Y)s"
+#~ msgstr "%(report_b)s %(report_d)s, %(report_Y)s"
+
+#~ msgid "%(o_A)s, %(o_b)s %(o_d)s"
+#~ msgstr "%(o_A)s, %(o_b)s %(o_d)s"
+
+#, fuzzy
+#~ msgid "%(category)s: %(duration).1f, "
+#~ msgstr "%(category)s: %(duration)s, "
 
 #~ msgid "<b>Activity</b>"
 #~ msgstr "<b>Etkinlik</b>"
 
-#~ msgid "<b>Date and Time</b>"
-#~ msgstr "<b>Tarih ve Zaman</b>"
-
 #~ msgid "hours"
 #~ msgstr "saat"
-
-#~ msgid "minutes"
-#~ msgstr "dakika"
-
-#~ msgid " _Day"
-#~ msgstr " _Gün"
 
 #~ msgid "<b>Category</b>"
 #~ msgstr "<b>Kategori</b>"
@@ -499,20 +1150,11 @@ msgstr "%(category)s: %(duration)s, "
 #~ msgid "Other"
 #~ msgstr "Diğer"
 
-#~ msgid "Day"
-#~ msgstr "Gün"
-
 #~ msgid "Time tracking for masses"
 #~ msgstr "Kitleler için zaman takibi"
 
-#~ msgid "Today"
-#~ msgstr "Bugün"
-
 #~ msgid "Time tracking for masses."
 #~ msgstr "Kitleler için zaman takibi."
-
-#~ msgid "Overview for %s"
-#~ msgstr "%s için genel görünüm"
 
 #~ msgid "Overview for %s - %s"
 #~ msgstr "%s için genel görünüm - %s"
