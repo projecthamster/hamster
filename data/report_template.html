@@ -241,11 +241,11 @@
                 var col = $("<td />");
 
                 var bar = $("<div class='bar'>&nbsp;</div>");
-                var bar_height = date[1] / dateMax * 100;
+                var bar_height = date[1] / dateMax * 70;
                 if (bar_height < 1)
-                    bar.height("1px");
+                    bar.height(1);
                 else
-                    bar.height(bar_height +"%")
+                    bar.height(bar_height)
 
                 col.append(bar);
                 row.append(col);
