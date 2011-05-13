@@ -83,11 +83,12 @@ class PanelButton(gtk.ToggleButton):
         self.set_property('active', is_active)
 
     def set_text(self, activity, duration):
-        activity = stuff.escape_pango(activity)
-        if len(activity) > 25:  #ellipsize at some random length
-            activity = "%s%s" % (activity[:25], "&#8230;")
+        label = stuff.escape_pango(activity)
 
-        self.activity = activity
+        if len(activity) > 25:  #ellipsize at some random length
+            label = "%s%s" % (stuff.escape_pango(activity[:25]), "&#8230;")
+
+        self.activity = label
         self.duration = duration
         self.reformat_label()
 
