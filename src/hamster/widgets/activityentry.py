@@ -113,7 +113,7 @@ class ActivityEntry(gtk.Entry):
         for activity in self.external_activities:
             name = activity['name']
             if activity['category']:
-                name = "%s@%s" % name, activity['category']
+                name = "%s@%s" % (name, activity['category'])
             external_names.add(name.lower())
 
         return activity_name, activity_name in external_names
