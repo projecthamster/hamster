@@ -395,13 +395,13 @@ A week of usage would be nice!"""))
         if fact_count < 100:
             summary += "\n\n" + _("Hamster would like to observe you some more!")
         elif early_percent >= 20:
-            summary += "\n\n" + _("With %s percent of all facts starting before \
+            summary += "\n\n" + _("With %s percent of all activities starting before \
 9am, you seem to be an early bird.") % ("<b>%d</b>" % early_percent)
         elif late_percent >= 20:
-            summary += "\n\n" + _("With %s percent of all facts starting after \
+            summary += "\n\n" + _("With %s percent of all activities starting after \
 11pm, you seem to be a night owl.") % ("<b>%d</b>" % late_percent)
         elif short_percent >= 20:
-            summary += "\n\n" + _("With %s percent of all tasks being shorter \
+            summary += "\n\n" + _("With %s percent of all activities being shorter \
 than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
 
         self.explore_summary.set_text(summary)
