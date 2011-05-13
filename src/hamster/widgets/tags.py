@@ -72,7 +72,7 @@ class TagsEntry(gtk.Entry):
 
     def on_tag_selected(self, tag_box, tag):
         cursor_tag = self.get_cursor_tag()
-        if cursor_tag and tag.startswith(cursor_tag):
+        if cursor_tag and tag.lower().startswith(cursor_tag.lower()):
             self.replace_tag(cursor_tag, tag)
             tags = self.get_tags()
         else:
@@ -272,7 +272,7 @@ class TagBox(graphics.Scene):
         for label in tags:
             tag = Tag(label)
             if label in self.selected_tags:
-                tag.tag.fill = (242, 229, 97)
+                tag.color = (242, 229, 97)
             new_tags.append(tag)
 
         for tag in self.tags:
