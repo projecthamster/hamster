@@ -4,27 +4,29 @@
 #
 # Adrian Guniš <andygun696@gmail.com>, 2008, 2009, 2010.
 # Petr Kovar <pknbe@volny.cz>, 2009, 2010.
-# Marek Černocký <marek@manet.cz>, 2010.
+# Marek Černocký <marek@manet.cz>, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-30 00:09+0100\n"
-"PO-Revision-Date: 2010-12-28 12:14+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-05-13 19:22+0000\n"
+"PO-Revision-Date: 2011-05-16 07:55+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
 "X-Generator: Lokalize 1.1\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
-msgid "Project Hamster (Gnome Time Tracker)"
-msgstr "Projekt Hamster (Sledování času v Gnome)"
+#| msgid "Project Hamster (Gnome Time Tracker)"
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "Projekt Hamster (Sledování času v GNOME)"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -811,26 +813,39 @@ msgstr "Hamster by vás rád sledoval o trochu víc!"
 
 #: ../src/hamster/stats.py:398
 #, python-format
+#| msgid ""
+#| "With %s percent of all facts starting before 9am, you seem to be an early "
+#| "bird."
 msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
 msgstr ""
-"S %s procenty všech dat spuštěných před 9 hodinou se zdá, že jste ranní "
+"S %s procenty všech aktivit spuštěných před 9 hodinou se zdá, že jste ranní "
 "ptáče."
 
 #: ../src/hamster/stats.py:401
 #, python-format
+#| msgid ""
+#| "With %s percent of all facts starting after 11pm, you seem to be a night "
+#| "owl."
 msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
-msgstr "S %s procenty všech dat spuštěných po 23 hodině se zdá, že jste sova."
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr ""
+"S %s procenty všech aktivit spuštěných po 23 hodině se zdá, že jste noční "
+"sova."
 
 #: ../src/hamster/stats.py:404
 #, python-format
+#| msgid ""
+#| "With %s percent of all tasks being shorter than 15 minutes, you seem to "
+#| "be a busy bee."
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
 msgstr ""
-"S %s procenty všech dat kratších než 15 minut se zdá, že jste pilná včela."
+"S %s procenty všech aktivit kratších než 15 minut se zdá, že jste pilná "
+"včela."
 
 #. duration in round hours
 #: ../src/hamster/lib/stuff.py:57
