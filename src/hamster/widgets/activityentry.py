@@ -149,8 +149,8 @@ class ActivityEntry(gtk.Entry):
 
         #set proper background color (we can do that only on a realised widget)
         bgcolor = self.get_style().bg[gtk.STATE_NORMAL]
-        self.time_icon_cell.set_property("cell-background", bgcolor)
-        self.time_cell.set_property("cell-background", bgcolor)
+        self.time_icon_cell.set_property("cell-background-gdk", bgcolor)
+        self.time_cell.set_property("cell-background-gdk", bgcolor)
 
         text_color = self.get_style().text[gtk.STATE_NORMAL]
         category_color = graphics.Colors.contrast(text_color,  100)
