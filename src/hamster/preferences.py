@@ -32,6 +32,8 @@ try:
 except:
     wnck = None
 
+from gettext import ngettext
+
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
 
@@ -696,7 +698,9 @@ class PreferencesEditor:
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
-            label = _(u"%(interval_minutes)d minutes") % {'interval_minutes': value}
+            label = ngettext("%(interval_minutes)d minute",
+                             "%(interval_minutes)d minutes",
+                             value) % {'interval_minutes': value}
         else:
             # notify interval slider value label
             label = _(u"Never")
