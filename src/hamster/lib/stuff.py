@@ -294,8 +294,8 @@ class Fact(object):
             activity, self.description = activity.split(",", 1)
             self.description = self.description.strip()
 
-            if "#" in self.description:
-                self.description, self.tags = self.description.split("#", 1)
+            if " #" in self.description:
+                self.description, self.tags = self.description.split(" #", 1)
                 self.tags = [tag.strip(", ") for tag in self.tags.split("#") if tag.strip(", ")]
 
         if activity.find("@") > 0:
@@ -315,8 +315,8 @@ class Fact(object):
             tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
 
         # override implicit with explicit
-        self.category = category.replace("#", "").replace(",", "") or self.category or None
-        self.description = (description or "").replace("#", "") or self.description or None
+        self.category = category.replace(",", "") or self.category or None
+        self.description = (description or "").replace(" #", " ") or self.description or None
         self.tags =  tags or self.tags or []
         self.start_time = start_time or self.start_time or None
         self.end_time = end_time or self.end_time or None
