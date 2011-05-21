@@ -107,7 +107,7 @@ class ActivityEntry(gtk.Entry):
 
         # see if entered text matches something from the outer suggestions
         # only consequence of if it does is that it will not attempt to
-        # ressurect the activity if it's deleted (hidden)
+        # resurrect the activity if it's deleted (hidden)
         # thus avoiding polluting our local suggestions
         external_names = set()
         for activity in self.external_activities:

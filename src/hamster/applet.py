@@ -607,7 +607,7 @@ class HamsterApplet(object):
 
                     activity = runtime.storage.get_activity_by_name(fact.activity,
                                                                     category_id,
-                                                                    ressurect = False)
+                                                                    resurrect = False)
                     if activity:
                         # we need dict below
                         activity = dict(name = activity.activity,

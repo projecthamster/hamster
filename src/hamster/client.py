@@ -237,7 +237,7 @@ class Storage(gobject.GObject):
     def get_activity_by_name(self, activity, category_id = None, resurrect = True):
         """returns activity dict by name and optionally filtering by category.
            if activity is found but is marked as deleted, it will be resurrected
-           unless told otherise in the resurrect param
+           unless told otherwise in the resurrect param
         """
         category_id = category_id or 0
         return self.conn.GetActivityByName(activity, category_id, resurrect)
