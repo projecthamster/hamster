@@ -295,7 +295,7 @@ class Storage(dbus.service.Object):
         category_id = category_id or None
 
         if activity:
-            return dict(self.__get_activity_by_name(activity, category_id, resurrect))
+            return dict(self.__get_activity_by_name(activity, category_id, resurrect) or {})
         else:
             return {}
 
