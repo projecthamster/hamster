@@ -292,11 +292,12 @@ class Fact(object):
         #see if we have description of activity somewhere here (delimited by comma)
         if activity.find(",") > 0:
             activity, self.description = activity.split(",", 1)
-            self.description = self.description.strip()
 
             if " #" in self.description:
                 self.description, self.tags = self.description.split(" #", 1)
                 self.tags = [tag.strip(", ") for tag in self.tags.split("#") if tag.strip(", ")]
+
+            self.description = self.description.strip()
 
         if activity.find("@") > 0:
             activity, self.category = activity.split("@", 1)
