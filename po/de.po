@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the projecthamster package.
 # Matthias Mailänder https://launchpad.net/~mailaender, 2008.
 # Hendrik Richter <hendrikr@gnome.org>, 2008, 2009.
-# Mario Blättermann <mariobl@gnome.org>, 2009-2011.
+# Mario Blättermann <mariobl@freenet.de>, 2009-2011.
 # Christian Kirbach <Christian.Kirbach@googlemail.com>, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Hamster master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-21 12:42+0000\n"
-"PO-Revision-Date: 2011-05-14 00:41+0200\n"
-"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-"
+"applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-05-21 16:38+0000\n"
+"PO-Revision-Date: 2011-05-26 22:06+0100\n"
+"Last-Translator: Mario Blättermann <mariobl@freenet.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,10 +33,10 @@ msgid ""
 "Activities that span two days, will tip over to the side where the largest "
 "part of the activity is."
 msgstr ""
-"Tätigkeiten werden dem gestrigen Tag zugeordnet, falls die aktuelle "
-"Tageszeit vor der als Tagesbeginn festgelegten Zeit liegt, und dem heutigen "
-"Tag, falls danach. Tätigkeiten, die sich über zwei Tage erstrecken, werden "
-"dem Tag zugeordnet, zu dem der längste Teil der Tätigkeit gehört."
+"Tätigkeiten werden dem gestrigen Tag zugeordnet, falls die aktuelle Tageszeit "
+"vor der als Tagesbeginn festgelegten Zeit liegt, und dem heutigen Tag, falls "
+"danach. Tätigkeiten, die sich über zwei Tage erstrecken, werden dem Tag "
+"zugeordnet, zu dem der längste Teil der Tätigkeit gehört."
 
 #: ../data/hamster-applet.schemas.in.h:2
 msgid ""
@@ -64,9 +64,9 @@ msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
-"Falls der Wechsel anhand des Namens aktiviert ist, gibt diese Liste die "
-"Namen an, zu denen gewechselt werden soll. Arbeitsflächen werden durch den "
-"Index des Eintrags dargestellt."
+"Falls der Wechsel anhand des Namens aktiviert ist, gibt diese Liste die Namen "
+"an, zu denen gewechselt werden soll. Arbeitsflächen werden durch den Index "
+"des Eintrags dargestellt."
 
 #: ../data/hamster-applet.schemas.in.h:7
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
@@ -75,8 +75,8 @@ msgstr "Tastenkürzel um das Zeiterfassungsfenster anzuzeigen/zu verbergen."
 #: ../data/hamster-applet.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
-"by name defined in workspace_mapping. \"memory\" will enable switching to "
-"the last activity when returning to a previous workspace."
+"by name defined in workspace_mapping. \"memory\" will enable switching to the "
+"last activity when returning to a previous workspace."
 msgstr ""
 "Liste der aktivierten Methoden zur Zeiterfassung. »name« aktiviert den "
 "Wechsel der Tätigkeit anhand des Namens, der in »workspace_mapping« "
@@ -85,8 +85,8 @@ msgstr ""
 
 #: ../data/hamster-applet.schemas.in.h:9
 msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
+"Remind of current task every specified amount of minutes. Set to 0 or greater "
+"than 120 to disable reminder."
 msgstr ""
 "Alle X Minuten an momentane Tätigkeit erinnern. Wenn dieser Wert 0 oder "
 "größer als 120 ist, wird die Erinnerung deaktiviert."
@@ -483,7 +483,7 @@ msgid "translator-credits"
 msgstr ""
 "Matthias Mailänder https://launchpad.net/~mailaender\n"
 "Hendrik Richter <hendrikr@gnome.org>\n"
-"Mario Blättermann <mariobl@gnome.org>\n"
+"Mario Blättermann <mariobl@freenet.de>\n"
 "Christian Kirbach <Christian.Kirbach@googlemail.com>"
 
 #: ../src/hamster/applet.py:378
@@ -594,11 +594,10 @@ msgstr "Neue Tätigkeit"
 
 #. notify interval slider value label
 #: ../src/hamster/preferences.py:701
-#, fuzzy, python-format
-#| msgid "%(interval_minutes)d minutes"
+#, python-format
 msgid "%(interval_minutes)d minute"
 msgid_plural "%(interval_minutes)d minutes"
-msgstr[0] "%(interval_minutes)d Minuten"
+msgstr[0] "%(interval_minutes)d Minute"
 msgstr[1] "%(interval_minutes)d Minuten"
 
 #. notify interval slider value label
@@ -644,19 +643,19 @@ msgstr "Schlagworte"
 #: ../src/hamster/reports.py:191
 #, python-format
 msgid ""
-"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
-"s, %(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 msgstr ""
-"Tätigkeitsprotokoll für %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %"
-"(end_d)s, %(end_Y)s"
+"Tätigkeitsprotokoll für %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 
 #: ../src/hamster/reports.py:193
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Tätigkeitsprotokoll für %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
+"Tätigkeitsprotokoll für %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, "
+"%(end_Y)s"
 
 #: ../src/hamster/reports.py:195
 #, python-format
@@ -787,8 +786,8 @@ msgstr[1] "%(num)s Jahre"
 #: ../src/hamster/stats.py:345
 #, python-format
 msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
 msgstr ""
 "Die bisher erfasste Zeit ist %(human_days)s Kalendertage (%(human_years)s) "
 "oder %(working_days)s Arbeitstage (%(working_years)s)."
@@ -807,11 +806,11 @@ msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
 "Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] ""
-"Die längste zusammenhängende Tätigkeit geschah am %(date)s und dauerte %"
-"(hours)s Stunde."
+"Die längste zusammenhängende Tätigkeit geschah am %(date)s und dauerte "
+"%(hours)s Stunde."
 msgstr[1] ""
-"Die längste zusammenhängende Tätigkeit geschah am %(date)s und dauerte %"
-"(hours)s Stunden."
+"Die längste zusammenhängende Tätigkeit geschah am %(date)s und dauerte "
+"%(hours)s Stunden."
 
 #. total records (in selected scope)
 #: ../src/hamster/stats.py:376
@@ -837,11 +836,11 @@ msgstr ""
 #: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
-"With %s percent of all activities starting after 11pm, you seem to be a "
-"night owl."
+"With %s percent of all activities starting after 11pm, you seem to be a night "
+"owl."
 msgstr ""
-"Da %s Prozent aller Aufgaben nach 23 Uhr begonnen wurden, sind Sie "
-"sicherlich eine Nachteule."
+"Da %s Prozent aller Aufgaben nach 23 Uhr begonnen wurden, sind Sie sicherlich "
+"eine Nachteule."
 
 #: ../src/hamster/stats.py:404
 #, python-format
@@ -1035,11 +1034,11 @@ msgstr "Zeiterfassung"
 #~ "\n"
 #~ "Commas (\",\") mark beginning of a description. Example: \"watering "
 #~ "flowers, begonias and forgetmenots\" will start tracking the activity "
-#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
-#~ "\" to it.\n"
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots\" "
+#~ "to it.\n"
 #~ "\n"
-#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
-#~ "\" will work just fine!\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
+#~ "will work just fine!\n"
 #~ "\n"
 #~ "Now, start tracking!\n"
 #~ "        "
@@ -1146,11 +1145,11 @@ msgstr "Zeiterfassung"
 #~ msgstr "Alte Begebenheit hinzufügen"
 
 #~ msgid ""
-#~ "After how many minutes hamster should stop tracking activity when "
-#~ "computer is idle. Set to 0 to disable."
+#~ "After how many minutes hamster should stop tracking activity when computer "
+#~ "is idle. Set to 0 to disable."
 #~ msgstr ""
-#~ "Nach wie vielen Minuten soll Hamster aufhören die Aktivitäten zu "
-#~ "verfolgen wenn der Computer im Leerlauf ist. Auf 0 setzen zum Abschalten "
+#~ "Nach wie vielen Minuten soll Hamster aufhören die Aktivitäten zu verfolgen "
+#~ "wenn der Computer im Leerlauf ist. Auf 0 setzen zum Abschalten "
 #~ "deaktivieren."
 
 #~ msgid "Ad_d Older Fact"
