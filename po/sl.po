@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-14 16:23+0000\n"
-"PO-Revision-Date: 2011-05-14 20:38+0100\n"
+"POT-Creation-Date: 2011-05-27 08:18+0000\n"
+"PO-Revision-Date: 2011-05-27 22:26+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: \n"
@@ -274,7 +274,7 @@ msgstr "Oznake"
 
 #: ../data/overview.ui.h:2
 #: ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:193
+#: ../src/hamster/preferences.py:195
 #: ../src/hamster/reports.py:301
 #: ../src/hamster-time-tracker:39
 msgid "Activity"
@@ -489,7 +489,7 @@ msgstr "%sh"
 #: ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855
 #: ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56
+#: ../src/hamster/preferences.py:58
 #: ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111
 #: ../src/hamster/reports.py:240
@@ -566,36 +566,40 @@ msgid "%s hours tracked total"
 msgstr "%s ur skupno sledenja"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
+#: ../src/hamster/preferences.py:105
 msgid "None"
 msgstr "Brez"
 
-#: ../src/hamster/preferences.py:118
-#: ../src/hamster/preferences.py:189
+#: ../src/hamster/preferences.py:120
+#: ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "Ime"
 
-#: ../src/hamster/preferences.py:138
+#: ../src/hamster/preferences.py:140
 #: ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategorija"
 
-#: ../src/hamster/preferences.py:635
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "Nova kategorija"
 
-#: ../src/hamster/preferences.py:648
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "Nova dejavnost"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:699
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minut"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d minut"
+msgstr[1] "%(interval_minutes)d minuta"
+msgstr[2] "%(interval_minutes)d minuti"
+msgstr[3] "%(interval_minutes)d minute"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:702
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "Nikoli"
 
