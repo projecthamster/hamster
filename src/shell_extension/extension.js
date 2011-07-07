@@ -51,7 +51,6 @@ function fromDbusFact(fact) {
 		let res = new Date(timestamp)
 		return new Date(res.setUTCMinutes(res.getUTCMinutes() + res.getTimezoneOffset()));
 	}
-	global.log(fact[1] + " ----- " + fact[2])
 
     return {
 		name: fact[4],
@@ -174,7 +173,7 @@ HamsterButton.prototype = {
 			this.facts = facts;
 
     	    let fact = null;
-    	    if (facts) {
+    	    if (facts.length) {
     	        fact = fromDbusFact(facts[facts.length - 1]);
     	    }
 
