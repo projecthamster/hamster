@@ -10,6 +10,7 @@
  */
 
 const DBus = imports.dbus;
+const GLib = imports.gi.GLib
 const Lang = imports.lang;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
@@ -113,6 +114,9 @@ HamsterButton.prototype = {
 		this.facts = null;
 		this.currentFact = null;
 
+		// refresh the label every 60 secs
+		GLib.timeout_add_seconds(0, 60,
+								 Lang.bind(this, function () {this.refresh(); return true}))
 		this.refresh();
 
 
