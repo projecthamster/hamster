@@ -76,6 +76,10 @@ def build(bld):
     bld.install_files('${DATADIR}/dockmanager/metadata',
                       'src/docky_control/2.1/hamster_control.py.info')
 
+    # gnome shell applet
+    bld.install_files('${DATADIR}/gnome-shell/extensions/hamster@gnome.org',
+                      'src/shell_extension/*')
+
 
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",

@@ -1,0 +1,7 @@
+{
+"shell-version": ["3.0.2"],
+"uuid": "hamster@gnome.org",
+"name": "Hamster Menu",
+"url": "http://projecthamster.wordpress.com/",
+"description": "Shell extension for project hamster - the GNOME time tracker"
+}
