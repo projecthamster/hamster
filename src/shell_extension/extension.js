@@ -53,6 +53,10 @@ function fromDbusFact(fact) {
 		return new Date(res.setUTCMinutes(res.getUTCMinutes() + res.getTimezoneOffset()));
 	}
 
+	delta = Math.round(fact[9] / 60)
+	delta = [(delta - delta % 60) / 60, delta % 60]
+
+
     return {
 		name: fact[4],
 		startTime: UTCToLocal(fact[1]*1000),
@@ -62,7 +66,7 @@ function fromDbusFact(fact) {
 		category: fact[6],
 		tags: fact[7],
 		date: UTCToLocal(fact[8] * 1000),
-		delta: fact[9] / (60 * 60), // hours; TODO - want timedelta
+		delta_minutes: delta, // minutes
 		id: fact[0]
 	}
 };
@@ -109,14 +113,20 @@ HamsterButton.prototype = {
 
 		this.panel_label = new St.Label({ style_class: 'hamster-label', text: _("Loading...") });
 		this.actor.set_child(this.panel_label);
+
+		// moving calendar to the left side (hummm....)
+		let calendar = Main.panel._centerBox.get_children()[0]
+		Main.panel._centerBox.remove_actor(calendar)
+		Main.panel._rightBox.add_actor(calendar)
+
+
 		Main.panel._centerBox.add(this.actor, { y_fill: true });
 
 		this.facts = null;
 		this.currentFact = null;
 
 		// refresh the label every 60 secs
-		GLib.timeout_add_seconds(0, 60,
-								 Lang.bind(this, function () {this.refresh(); return true}))
+		GLib.timeout_add_seconds(0, 60, Lang.bind(this, function () {this.refresh(); return true}))
 		this.refresh();
 
 
@@ -184,7 +194,7 @@ HamsterButton.prototype = {
     	    if (fact && !fact.endTime) {
 				this.currentFact = fact;
 
-        	    this.panel_label.text = fact.name + " " + Number(fact.delta).toPrecision(2) + "h";
+        	    this.panel_label.text = "%s %02d:%02d".format(fact.name, fact.delta_minutes[0], fact.delta_minutes[1])
     	    } else {
         	    this.panel_label.text = "No activity";
     	    }
