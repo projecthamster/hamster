@@ -45,6 +45,28 @@ const HamsterIface = {
 let HamsterProxy = DBus.makeProxyClass(HamsterIface);
 
 
+function formatDuration(minutes) {
+	return "%02d:%02d".format((minutes - minutes % 60) / 60, minutes % 60)
+}
+
+function formatDurationHuman(minutes) {
+	let hours = (minutes - minutes % 60) / 60;
+	let mins = minutes % 60;
+	let res = ""
+
+	if (hours > 0 || mins > 0) {
+		if (hours > 0)
+			res += "%dh ".format(hours)
+
+		if (mins > 0)
+			res += "%dmin".format(mins)
+	} else {
+		res = "Just started"
+	}
+
+	return res;
+}
+
 function fromDbusFact(fact) {
 	// converts a fact coming from dbus into a usable object
 	function UTCToLocal(timestamp) {
@@ -52,10 +74,6 @@ function fromDbusFact(fact) {
 		let res = new Date(timestamp)
 		return new Date(res.setUTCMinutes(res.getUTCMinutes() + res.getTimezoneOffset()));
 	}
-
-	delta = Math.round(fact[9] / 60)
-	delta = [(delta - delta % 60) / 60, delta % 60]
-
 
     return {
 		name: fact[4],
@@ -66,10 +84,36 @@ function fromDbusFact(fact) {
 		category: fact[6],
 		tags: fact[7],
 		date: UTCToLocal(fact[8] * 1000),
-		delta_minutes: delta, // minutes
+		delta: Math.floor(fact[9] / 60), // minutes
 		id: fact[0]
 	}
 };
+
+function fromDbusFacts(facts) {
+	let res = [];
+	for each(var fact in facts) {
+		res.push(fromDbusFact(fact));
+	}
+
+	return res;
+};
+
+
+function moveCalendar() {
+	// moving calendar to the left side (hummm....)
+	let calendar = Main.panel._dateMenu.actor;
+	let calendarFound = false;
+	for each(var elem in Main.panel._centerBox.get_children()) {
+		if (elem == calendar) {
+			calendarFound = true;
+		}
+	}
+
+	if (calendarFound) {
+		Main.panel._centerBox.remove_actor(calendar)
+		Main.panel._rightBox.add_actor(calendar)
+	}
+}
 
 
 /* Popup */
@@ -77,22 +121,60 @@ function HamsterPopupMenuEntry() {
 	this._init.apply(this, arguments);
 }
 
-HamsterPopupMenuEntry.prototype = {
+
+/* a little box or something */
+function HamsterBox() {
+	this._init.apply(this, arguments);
+}
+
+HamsterBox.prototype = {
 	__proto__: PopupMenu.PopupBaseMenuItem.prototype,
 
-	_init: function(itemParams, entryParams) {
-		PopupMenu.PopupBaseMenuItem.prototype._init.call(this, itemParams);
-		this._textEntry = new St.Entry(entryParams);
-		this._textEntry.clutter_text.connect('activate',
-			Lang.bind(this, this._onEntryActivated));
-		this.addActor(this._textEntry);
+	_init: function(itemParams) {
+		PopupMenu.PopupBaseMenuItem.prototype._init.call(this, {reactive: false});
+
+		let box = new St.BoxLayout({style_class: 'hamster-box'});
+		box.set_vertical(true);
+
+		let label = new St.Label({ style_class: 'hamster-box-label'});
+		label.set_text("What are you doing?")
+		box.add(label);
+
+		this._textEntry = new St.Entry({name: 'searchEntry',
+										can_focus: true,
+										track_hover: false,
+										hint_text: _("Enter activity...")});
+		this._textEntry.clutter_text.connect('activate', Lang.bind(this, this._onEntryActivated));
+		box.add(this._textEntry);
+
+
+		let scrollbox = new St.ScrollView({ x_fill: true, y_fill: true });
+		scrollbox.get_hscroll_bar().hide();
+		//box.add(scrollbox, {expand: true})
+
+
+		label = new St.Label({ style_class: 'hamster-box-label'});
+		label.set_text("Todays activities")
+		box.add(label);
+
+
+		this.activities = new St.Table({ style_class: 'hamster-activities'})
+		box.add(this.activities)
+
+
+
+
+		this.addActor(box);
 	},
+
 
 	_onEntryActivated: function() {
 		this.emit('activate');
 		this._textEntry.set_text('');
 	}
 };
+
+
 
 /* Panel button */
 function HamsterButton() {
@@ -114,10 +196,7 @@ HamsterButton.prototype = {
 		this.panel_label = new St.Label({ style_class: 'hamster-label', text: _("Loading...") });
 		this.actor.set_child(this.panel_label);
 
-		// moving calendar to the left side (hummm....)
-		let calendar = Main.panel._centerBox.get_children()[0]
-		Main.panel._centerBox.remove_actor(calendar)
-		Main.panel._rightBox.add_actor(calendar)
+		moveCalendar();
 
 
 		Main.panel._centerBox.add(this.actor, { y_fill: true });
@@ -130,14 +209,19 @@ HamsterButton.prototype = {
 		this.refresh();
 
 
-		/* Create all items in the dropdown menu: */
 		let item;
+
+		item = new HamsterBox()
+		item.connect('activate', Lang.bind(this, this._onActivityEntry));
+		this._activityEntry = item;
+
+		this.menu.addMenuItem(item);
+
 
 		/* This one make the hamster applet appear */
 		item = new PopupMenu.PopupMenuItem(_("Show Hamster"));
 		item.connect('activate', function() {
-			let app = Shell.AppSystem.get_default().get_app(
-				'hamster-time-tracker.desktop');
+			let app = Shell.AppSystem.get_default().get_app('hamster-time-tracker.desktop');
 			app.activate(-1);
 		});
 		this.menu.addMenuItem(item);
@@ -145,17 +229,6 @@ HamsterButton.prototype = {
 		/* To stop tracking the current activity */
 		item = new PopupMenu.PopupMenuItem(_("Stop tracking"));
 		item.connect('activate', Lang.bind(this, this._onStopTracking));
-		this.menu.addMenuItem(item);
-
-		/* The activity item has a text entry field to quickly log something */
-		item = new HamsterPopupMenuEntry({ reactive: false }, {
-			name: 'searchEntry',
-			can_focus: true,
-			track_hover: false,
-			hint_text: _("Enter activity...")
-		});
-		item.connect('activate', Lang.bind(this, this._onActivityEntry));
-		this._activityEntry = item;
 		this.menu.addMenuItem(item);
 
 		/* Integrate previously defined menu to panel */
@@ -183,21 +256,52 @@ HamsterButton.prototype = {
 
 
 	refresh: function() {
-    	this._proxy.GetTodaysFactsRemote(Lang.bind(this, function(facts, err) {
-			this.facts = facts;
+    	this._proxy.GetTodaysFactsRemote(Lang.bind(this, function(response, err) {
+			let facts = fromDbusFacts(response);
 
     	    let fact = null;
     	    if (facts.length) {
-    	        fact = fromDbusFact(facts[facts.length - 1]);
+    	        fact = facts[facts.length - 1];
     	    }
 
     	    if (fact && !fact.endTime) {
 				this.currentFact = fact;
 
-        	    this.panel_label.text = "%s %02d:%02d".format(fact.name, fact.delta_minutes[0], fact.delta_minutes[1])
+        	    this.panel_label.text = "%s %s".format(fact.name, formatDuration(fact.delta))
     	    } else {
         	    this.panel_label.text = "No activity";
     	    }
+
+
+			let activities = this._activityEntry.activities
+
+			// TODO - find remove_all or whatever the function is called
+			for each(var child in activities.get_children()) {
+				activities.remove_child(child);
+			}
+
+			var i = 0;
+			for each (var fact in facts) {
+				let label;
+
+				label = new St.Label({ style_class: 'cell-label'});
+				let text = "%02d:%02d - ".format(fact.startTime.getHours(), fact.startTime.getMinutes());
+				if (fact.endTime) {
+					text += "%02d:%02d".format(fact.endTime.getHours(), fact.endTime.getMinutes());
+				}
+				label.set_text(text)
+				activities.add(label, { row: i, col: 0});
+
+				label = new St.Label({ style_class: 'cell-label'});
+				label.set_text(fact.name)
+				activities.add(label, { row: i, col: 1});
+
+				label = new St.Label({style_class: 'cell-label'});
+				label.set_text(formatDurationHuman(fact.delta))
+				activities.add(label, { row: i, col: 2, x_expand: false});
+				i += 1;
+			}
+
     	}));
 	},
 

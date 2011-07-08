@@ -1,3 +1,18 @@
-.hamster-label {
-	margin-left: 30px;
+
+.hamster-box {
+	spacing: 15px;
+}
+
+.hamster-box-label {
+	padding-top: 1em;
+	text-align: center;
+}
+
+.hamster-activities {
+	border: 1px solid #333;
+}
+
+.cell-label {
+	padding: 3px;
+	color: #aaa;
 }
