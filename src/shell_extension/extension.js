@@ -35,6 +35,7 @@ const HamsterIface = {
     methods: [
 		{ name: 'GetTodaysFacts', inSignature: '', outSignature: 'a(iiissisasii)'},
 		{ name: 'StopTracking', inSignature: 'i'},
+		{ name: 'AddFact', inSignature: 'siib', outSignature: 'i'},
     ],
     signals: [
         {name: 'TagsChanged', inSignature: ''},
@@ -316,19 +317,18 @@ HamsterButton.prototype = {
 		let date = new Date()
 		date = new Date(date.setUTCMinutes(date.getUTCMinutes() - date.getTimezoneOffset())); // getting back to UTC
 
-		let epochSeconds = date.getTime() / 1000;
+		let epochSeconds = Math.floor(date.getTime() / 1000);
 		this._proxy.StopTrackingRemote(epochSeconds);
 	},
 
 	_onActivityEntry: function() {
 		let text = this._activityEntry._textEntry.get_text();
-		let cmdline = 'hamster-cli start "' + text + '"';
-		try {
-			Util.trySpawnCommandLine(cmdline);
-			this._activityLabel.set_text(' ' + text);
-		} catch (e) {
-			global.log('_onActivityEntry(): got exception: ' + e);
-		}
+
+		let date = new Date()
+		date = new Date(date.setUTCMinutes(date.getUTCMinutes() - date.getTimezoneOffset())); // getting back to UTC
+		let epochSeconds = Math.floor(date.getTime() / 1000);
+
+		this._proxy.AddFactRemote(text, epochSeconds, 0, false)
 	},
 
 	_onGlobalKeyBinding: function() {
