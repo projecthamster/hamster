@@ -5,6 +5,7 @@ top = '.'
 out = 'build'
 
 import intltool, gnome
+import os
 
 def configure(conf):
     conf.check_tool('python')
@@ -80,6 +81,9 @@ def build(bld):
     bld.install_files('${DATADIR}/gnome-shell/extensions/hamster@gnome.org',
                       'src/shell_extension/*')
 
+    # the gsettings schemas - TODO - use whatever default tools there are
+    bld.install_files('${DATADIR}/glib-2.0/schemas',
+                      'data/hamster-applet.gschema.xml')
 
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",
@@ -97,11 +101,15 @@ def build(bld):
         gnome.postinstall_schemas('hamster-applet') # Installing GConf schemas
         gnome.postinstall_icons() # Updating the icon cache
 
+        if bld.is_install:
+            print "Compiling schema"
+            ctx.exec_command("glib-compile-schemas '%s'" % os.path.join(ctx.env['DATADIR'], "glib-2.0", "schemas"))
+
+
     bld.add_post_fun(post)
 
 
 def copy_help(ctx):
-    import os
     os.system('cp -R build/default/help/ .')
 
 

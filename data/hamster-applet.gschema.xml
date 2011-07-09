@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.hamster" path="/org/gnome/hamster/">
+    <key name="swap-with-calendar" type="b">
+      <default>false</default>
+      <summary>Placement</summary>
+      <description>When enabled, time tracker extension will occupy calendar's place and move calendar to the right</description>
+    </key>
+  </schema>
+</schemalist>

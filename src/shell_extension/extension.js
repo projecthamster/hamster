@@ -15,6 +15,7 @@ const Lang = imports.lang;
 const St = imports.gi.St;
 const Shell = imports.gi.Shell;
 const Main = imports.ui.main;
+const Gio = imports.gi.Gio;
 const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
 const Util = imports.misc.util;
@@ -188,18 +189,24 @@ HamsterButton.prototype = {
 		PanelMenu.Button.prototype._init.call(this, 0.0);
 
 		this._proxy = new HamsterProxy(DBus.session, 'org.gnome.Hamster', '/org/gnome/Hamster');
-
 		this._proxy.connect('FactsChanged', Lang.bind(this, this.onFactsChanged));
 		this._proxy.connect('ActivitiesChanged', Lang.bind(this, this.onActivitiesChanged));
 		this._proxy.connect('TagsChanged', Lang.bind(this, this.onTagsChanged));
 
+
+
+		this._settings = new Gio.Settings({ schema: 'org.gnome.hamster' });
+
 		this.panel_label = new St.Label({ style_class: 'hamster-label', text: _("Loading...") });
 		this.actor.set_child(this.panel_label);
 
-		moveCalendar();
+		if (this._settings.get_boolean("swap-with-calendar")) {
+			moveCalendar();
+			Main.panel._centerBox.add(this.actor);
+		} else {
+			Main.panel._rightBox.add(this.actor);
+		}
 
-
-		Main.panel._centerBox.add(this.actor, { y_fill: true });
 
 		this.facts = null;
 		this.currentFact = null;
@@ -290,7 +297,7 @@ HamsterButton.prototype = {
 					text += "%02d:%02d".format(fact.endTime.getHours(), fact.endTime.getMinutes());
 				}
 				label.set_text(text)
-				activities.add(label, { row: i, col: 0});
+				activities.add(label, { row: i, col: 0, x_expand: false});
 
 				label = new St.Label({ style_class: 'cell-label'});
 				label.set_text(fact.name)
