@@ -30,6 +30,13 @@ from string import Template
 from configuration import runtime
 from lib import stuff, trophies
 from lib.i18n import C_
+try:
+    import json
+except ImportError:
+    # fallback for python < 2.6
+    json_dumps = lambda s: s
+else:
+    json_dumps = json.dumps
 
 from calendar import timegm
 
@@ -312,8 +319,8 @@ class HTMLWriter(ReportWriter):
 
             start_date = timegm(self.start_date.timetuple()),
             end_date = timegm(self.end_date.timetuple()),
-            facts = [dict(fact) for fact in facts],
-            date_facts = date_facts,
+            facts = json_dumps([dict(fact) for fact in facts]),
+            date_facts = json_dumps(date_facts),
 
             all_activities_rows = "\n".join(self.fact_rows)
         )
