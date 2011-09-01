@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-26 15:15+0100\n"
-"PO-Revision-Date: 2011-01-26 15:22+0100\n"
+"POT-Creation-Date: 2011-09-01 08:10+0200\n"
+"PO-Revision-Date: 2011-09-01 08:14+0200\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 1.1\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
-msgid "Project Hamster (Gnome Time Tracker)"
+msgid "Project Hamster (GNOME Time Tracker)"
 msgstr "Prosjekt Hamster (GNOM tidssporing)"
 
 #: ../data/hamster-applet.schemas.in.h:1
@@ -123,7 +123,7 @@ msgstr "Prosjekt hamster - følg med på din tidsbruk"
 #: ../data/hamster-applet.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
 msgid "Time Tracker"
 msgstr "Tidsporing"
 
@@ -148,7 +148,7 @@ msgstr "_Brukervalg"
 msgid "Project Hamster - track your time"
 msgstr "Prosjekt Hamster - følg med på din tidsbruk"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
 msgid "No records today"
 msgstr "Ingen oppføringer i dag"
 
@@ -260,14 +260,14 @@ msgstr "Ingen data for dette intervallet"
 msgid "Show Statistics"
 msgstr "Vis statistikk"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
 msgid "Tags"
 msgstr "Tagger"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:39
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:153
 msgid "Activity"
 msgstr "Aktivitet"
 
@@ -429,9 +429,9 @@ msgid "Year:"
 msgstr "År:"
 
 #: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
-#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
-#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
 msgid "No activity"
 msgstr "Ingen aktivitet"
 
@@ -460,36 +460,36 @@ msgstr ""
 "Kjartan Maraas <kmaraas@gnome.org>\n"
 "Torstein Adolf Winterseth <kvikende@fsfe.org>"
 
-#: ../src/hamster/applet.py:377
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:380
+#: ../src/hamster/applet.py:381
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:224
+#: ../src/hamster-time-tracker:299
 msgid "Unsorted"
 msgstr "Usortert"
 
-#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
-#: ../src/hamster-time-tracker:229
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
 msgid "Just started"
 msgstr "Akkurat startet"
 
-#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
 msgid "Changed activity"
 msgstr "Endret aktivitet"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Byttet til «%s»"
@@ -546,34 +546,36 @@ msgid "%s hours tracked total"
 msgstr "%s timer sporet totalt"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
+#: ../src/hamster/preferences.py:105
 msgid "None"
 msgstr "Ingen"
 
-#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategori"
 
-#: ../src/hamster/preferences.py:635
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "Ny kategori"
 
-#: ../src/hamster/preferences.py:648
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "Ny aktivitet"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:699
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minutter"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d minutt"
+msgstr[1] "%(interval_minutes)d minutter"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:702
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "Aldri"
 
@@ -696,12 +698,12 @@ msgstr "Vis mal"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Du kan overstyre dem ved å lagre din versjon i %(home_folder)s"
 
-#: ../src/hamster-time-tracker:167
+#: ../src/hamster-time-tracker:242
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Arbeider på <b>%s</b>?"
 
-#: ../src/hamster-time-tracker:499
+#: ../src/hamster-time-tracker:595
 msgid "Hamster time tracker. Usage:"
 msgstr "Hamster tidsporing. Bruk:"
 
@@ -793,22 +795,23 @@ msgstr "Hamster vil gjerne observere deg litt lenger!"
 #: ../src/hamster/stats.py:398
 #, python-format
 msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
-msgstr "Siden %s prosent av alle fakta starter før ni om morgenen ser det ut til at du er en morgenfugl."
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+msgstr "Siden %s prosent av alle aktiviter starter før ni om morgenen ser det ut til at du er en morgenfugl."
 
 #: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
-msgstr ""
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr "Siden %s prosent av alle aktiviteter starter etter elleve om kvelden ser det ut til at du er en nattugle."
 
 #: ../src/hamster/stats.py:404
 #, python-format
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
-msgstr ""
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+msgstr "Siden %s prosent av alle aktiviteter varer kortere enn 15 minutter ser det ut til at du er en flittig bie."
 
 #. duration in round hours
 #: ../src/hamster/lib/stuff.py:57
