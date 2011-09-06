@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet 2.29.93\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-20 22:12+0800\n"
-"PO-Revision-Date: 2011-01-16 19:52+0800\n"
+"POT-Creation-Date: 2011-09-06 19:43+0800\n"
+"PO-Revision-Date: 2011-09-05 19:59+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese/Traditional <zh-l10n@lists.linux.org.tw>\n"
 "Language: \n"
@@ -20,8 +20,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
-msgid "Project Hamster (Gnome Time Tracker)"
-msgstr "Hamster 專案 (Gnome 桌面時間追蹤)"
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "Project Hamster (Gnome 時間追蹤程式)"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -129,7 +129,7 @@ msgstr "Hamster 專案 - 追蹤您的時間"
 #: ../data/hamster-applet.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
 msgid "Time Tracker"
 msgstr "時間追蹤程式"
 
@@ -154,7 +154,7 @@ msgstr "偏好設定(_P)"
 msgid "Project Hamster - track your time"
 msgstr "Project Hamster - 追蹤您的時間"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
 msgid "No records today"
 msgstr "今天沒有紀錄"
 
@@ -266,14 +266,14 @@ msgstr "這個間隔中沒有資料"
 msgid "Show Statistics"
 msgstr "顯示統計"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
 msgid "Tags"
 msgstr "標籤"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:39
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:153
 msgid "Activity"
 msgstr "活動"
 
@@ -434,9 +434,9 @@ msgid "Year:"
 msgstr "年："
 
 #: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
-#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
-#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
 msgid "No activity"
 msgstr "沒有活動"
 
@@ -468,36 +468,36 @@ msgstr ""
 "\n"
 "Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2008"
 
-#: ../src/hamster/applet.py:377
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s：%(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:380
+#: ../src/hamster/applet.py:381
 #, python-format
 msgid "%sh"
 msgstr "%s時"
 
-#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:224
+#: ../src/hamster-time-tracker:299
 msgid "Unsorted"
 msgstr "未排序"
 
-#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
-#: ../src/hamster-time-tracker:229
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
 msgid "Just started"
 msgstr "剛剛開始"
 
-#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
 msgid "Changed activity"
 msgstr "改變的活動"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "已切換為「%s」"
@@ -554,34 +554,35 @@ msgid "%s hours tracked total"
 msgstr "總計已追蹤 %s 小時"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
+#: ../src/hamster/preferences.py:105
 msgid "None"
 msgstr "無"
 
-#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "分類"
 
-#: ../src/hamster/preferences.py:635
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "新增分類"
 
-#: ../src/hamster/preferences.py:648
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "新增活動"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:699
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d 分鐘"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d 分鐘"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:702
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "永不"
 
@@ -703,12 +704,12 @@ msgstr "顯示模板"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "您可以藉由於 %(home_folder)s 儲存您自己的版本來凌駕它"
 
-#: ../src/hamster-time-tracker:167
+#: ../src/hamster-time-tracker:242
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "運作於 <b>%s</b>"
 
-#: ../src/hamster-time-tracker:499
+#: ../src/hamster-time-tracker:595
 msgid "Hamster time tracker. Usage:"
 msgstr "Hamster 時間追蹤程式。用法："
 
@@ -795,22 +796,23 @@ msgstr "Hamster 會更仔細的觀察您！"
 #: ../src/hamster/stats.py:398
 #, python-format
 msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
-msgstr "在所有活動中有 %s％ 在早上 9 點前開始，看起來您是早起的鳥兒。"
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+msgstr "在所有活動中有 %s ％ 在早上 9 點前開始，看起來您是早起的鳥兒。"
 
 #: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
-msgstr "在所有活動中有 %s％ 在晚上 11 點後開始，看起來您是個夜貓子。"
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr "在所有活動中有 %s ％ 在晚上 11 點後開始，看起來您是個夜貓子。"
 
 #: ../src/hamster/stats.py:404
 #, python-format
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
-msgstr "在所有工作中有 %s％ 短於 15 分鐘，看起來您是忙碌的蜜蜂。"
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+msgstr "在所有工作中有 %s ％ 短於 15 分鐘，看起來您是忙碌的蜜蜂。"
 
 #. duration in round hours
 #: ../src/hamster/lib/stuff.py:57
