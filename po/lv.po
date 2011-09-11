@@ -3,14 +3,15 @@
 #
 # Anita Reitere <nitalynx@gmail.com>, 2010.
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2011.
+# Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2010-11-08 11:22+0000\n"
-"PO-Revision-Date: 2011-02-07 11:31+0200\n"
-"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
+"cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-07-07 01:00+0000\n"
+"PO-Revision-Date: 2011-09-07 02:40+0300\n"
+"Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,16 +21,11 @@ msgstr ""
 "X-Generator: Lokalize 1.1\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
-#| msgid "Project Hamster desktop time tracking"
-msgid "Project Hamster (Gnome Time Tracker)"
-msgstr "Project Hamster (Gnome laika uzskaite)"
+#| msgid "Project Hamster (Gnome Time Tracker)"
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "Project Hamster (GNOME laika uzskaite)"
 
 #: ../data/hamster-applet.schemas.in.h:1
-#| msgid ""
-#| "Activities will be counted as to belong to yesterday if the current time "
-#| "is less than the specified day start and today, if it is over the time. "
-#| "Activities that span two days, will tip over to the side where the "
-#| "largest part of the activity is."
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -68,15 +64,10 @@ msgstr ""
 "nosaukumus, uz kurām jāpārslēdzas. Indeksi apzīmē darbvirsmas."
 
 #: ../data/hamster-applet.schemas.in.h:7
-#| msgid "Keyboard shortcut for showing the Time Tracker window."
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Taustiņu kombinācija laika uzskaites loga rādīšanai / slēpšanai."
 
 #: ../data/hamster-applet.schemas.in.h:8
-#| msgid ""
-#| "List of enabled tracking methods. \"name\" will enable switching "
-#| "activities by name defined in workspace_mapping. \"memory\" will enable "
-#| "switching to last activity when returning to a previous workspace."
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -146,7 +137,7 @@ msgstr "Projekts Hamster — seko līdzi laikam"
 #: ../data/hamster-applet.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:178
 msgid "Time Tracker"
 msgstr "Laika uzskaites programma"
 
@@ -168,11 +159,10 @@ msgstr "_Iestatījumi"
 
 #: ../data/hamster-applet.desktop.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#| msgid "Project Hamster — track your time"
 msgid "Project Hamster - track your time"
 msgstr "Projekts Hamster - seko līdzi laikam"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
 msgid "No records today"
 msgstr "Šodien ierakstu nav"
 
@@ -189,17 +179,14 @@ msgid "Start _Tracking"
 msgstr "Sāk_t uzskaiti"
 
 #: ../data/applet.ui.h:5
-#| msgid "Sto_p tracking"
 msgid "Sto_p Tracking"
 msgstr "_Pārtraukt uzskaiti"
 
 #: ../data/applet.ui.h:6
-#| msgid "Today"
 msgid "To_day"
 msgstr "Šo_diena"
 
 #: ../data/applet.ui.h:7
-#| msgid "Add earlier activity"
 msgid "_Add earlier activity"
 msgstr "Pievienot _agrāku darbību"
 
@@ -287,19 +274,18 @@ msgstr "Šajā intervālā nav datu"
 msgid "Show Statistics"
 msgstr "Rādīt statistiku"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:302 ../src/hamster-time-tracker:48
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
 msgid "Tags"
 msgstr "Birkas"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:300
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
 #: ../src/hamster-time-tracker:39
 msgid "Activity"
 msgstr "Darbība"
 
 #: ../data/overview.ui.h:3
-#| msgid "Add"
 msgid "Add new"
 msgstr "Pievienot jaunu"
 
@@ -316,7 +302,6 @@ msgid "Month"
 msgstr "Mēnesis"
 
 #: ../data/overview.ui.h:7
-#| msgid "Overview - Hamster"
 msgid "Overview — Hamster"
 msgstr "Pārskats — Hamster"
 
@@ -325,11 +310,10 @@ msgid "Remove"
 msgstr "Dzēst"
 
 #: ../data/overview.ui.h:9
-#| msgid "Save Report"
 msgid "Save report..."
 msgstr "Saglabāt atskaiti..."
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:291
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
 msgid "Totals"
 msgstr "Laika sadalījums"
 
@@ -434,22 +418,18 @@ msgid "Apply"
 msgstr "Pielietot"
 
 #: ../data/range_pick.ui.h:2
-#| msgid "Day"
 msgid "Day:"
 msgstr "Diena:"
 
 #: ../data/range_pick.ui.h:3
-#| msgid "Month"
 msgid "Month:"
 msgstr "Mēnesis:"
 
 #: ../data/range_pick.ui.h:4
-#| msgid "Date Range"
 msgid "Range:"
 msgstr "Intervāls:"
 
 #: ../data/range_pick.ui.h:5
-#| msgid "Week"
 msgid "Week:"
 msgstr "Nedēļa:"
 
@@ -462,8 +442,8 @@ msgid "Year:"
 msgstr "Gads:"
 
 #: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
-#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
 #: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
 msgid "No activity"
 msgstr "Nekas nenotiek"
@@ -472,12 +452,10 @@ msgstr "Nekas nenotiek"
 #: ../src/docky_control/2.0/hamster_control.py:95
 #: ../src/docky_control/2.1/hamster_control.py:81
 #: ../src/docky_control/2.1/hamster_control.py:95
-#| msgid "_Preferences"
 msgid "Preferences"
 msgstr "Iestatījumi"
 
 #: ../src/hamster/about.py:43
-#| msgid "Copyright © 2007–2009 Toms Bauģis and others"
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
 msgstr "Autortiesības © 2007–2010 Toms Bauģis un citi"
 
@@ -495,36 +473,36 @@ msgstr ""
 "Toms Bauģis <toms.baugis@gmail.com>\n"
 "Anita Reitere <nitalynx@gmail.com>"
 
-#: ../src/hamster/applet.py:377
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:380
+#: ../src/hamster/applet.py:381
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:239
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:224
 msgid "Unsorted"
 msgstr "Nešķirotie"
 
-#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:169
 #: ../src/hamster-time-tracker:229
 msgid "Just started"
 msgstr "Nupat uzsākta"
 
-#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:378
 msgid "Changed activity"
 msgstr "Nodarbes maiņa"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:379
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Nomainīts uz '%s'"
@@ -581,34 +559,38 @@ msgid "%s hours tracked total"
 msgstr "pavisam uzskaitītas %s stundas"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
+#: ../src/hamster/preferences.py:105
 msgid "None"
 msgstr "Nekas"
 
-#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "Nosaukums"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:301
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategorija"
 
-#: ../src/hamster/preferences.py:635
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "Jauna kategorija"
 
-#: ../src/hamster/preferences.py:648
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "Jauna darbība"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:699
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minūtes"
+#| msgid "%(interval_minutes)d minutes"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d minūte"
+msgstr[1] "%(interval_minutes)d minūtes"
+msgstr[2] "%(interval_minutes)d minūšu"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:702
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "Nekad"
 
@@ -643,15 +625,12 @@ msgid "description"
 msgstr "apraksts"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
 msgid "tags"
 msgstr "birkas"
 
-#: ../src/hamster/reports.py:190
+#: ../src/hamster/reports.py:191
 #, python-format
-#| msgid ""
-#| "Activity log for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
-#| "s, %(end_Y)s"
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
 "s, %(end_Y)s"
@@ -659,86 +638,80 @@ msgstr ""
 "Darbību atskaite periodam %(start_d)s. %(start_B)s, %(start_Y)s – %(end_d)s. "
 "%(end_B)s, %(end_Y)s"
 
-#: ../src/hamster/reports.py:192
+#: ../src/hamster/reports.py:193
 #, python-format
-#| msgid ""
-#| "Activity log for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Darbību atskaite periodam %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, "
-"%(end_Y)s"
+"Darbību atskaite periodam %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %"
+"(end_Y)s"
 
-#: ../src/hamster/reports.py:194
+#: ../src/hamster/reports.py:195
 #, python-format
-#| msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Darbību atskaite %(start_B)s %(start_d)s, %(start_Y)s"
 
-#: ../src/hamster/reports.py:196
+#: ../src/hamster/reports.py:197
 #, python-format
-#| msgid "Activity log for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr ""
-"Darbību atskaite periodam %(start_d)s. %(start_B)s  – %(end_d)s. "
-"%(start_B)s, %(end_Y)s"
+"Darbību atskaite periodam %(start_d)s. %(start_B)s  – %(end_d)s. %(start_B)"
+"s, %(end_Y)s"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:248 ../src/hamster/reports.py:280
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:289
+#: ../src/hamster/reports.py:290
 msgid "Totals by Day"
 msgstr "Kopā pa dienu"
 
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:291
 msgid "Activity Log"
 msgstr "Darbību žurnāls"
 
-#: ../src/hamster/reports.py:293
-#| msgid "Activities"
+#: ../src/hamster/reports.py:294
 msgid "activities"
 msgstr "darbības"
 
-#: ../src/hamster/reports.py:294
-#| msgid "Categories"
+#: ../src/hamster/reports.py:295
 msgid "categories"
 msgstr "kategorijas"
 
-#: ../src/hamster/reports.py:297
+#: ../src/hamster/reports.py:298
 msgid "Distinguish:"
 msgstr "Atšķirt:"
 
-#: ../src/hamster/reports.py:299
+#: ../src/hamster/reports.py:300
 msgid "Date"
 msgstr "Datums"
 
-#: ../src/hamster/reports.py:303
+#: ../src/hamster/reports.py:304
 msgid "Start"
 msgstr "Sākums"
 
-#: ../src/hamster/reports.py:304
+#: ../src/hamster/reports.py:305
 msgid "End"
 msgstr "Beigas"
 
-#: ../src/hamster/reports.py:305
+#: ../src/hamster/reports.py:306
 msgid "Duration"
 msgstr "Ilgums"
 
-#: ../src/hamster/reports.py:306
+#: ../src/hamster/reports.py:307
 msgid "Description"
 msgstr "Apraksts"
 
-#: ../src/hamster/reports.py:309
+#: ../src/hamster/reports.py:310
 msgid "Show template"
 msgstr "Rādīt veidni"
 
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:311
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "To var pārrakstīt, saglabājot savu versiju mapē %(home_folder)s"
@@ -847,22 +820,23 @@ msgstr "Hamster (Kāmis) vēlētos jūs pavērot vēl kādu laiku!"
 #: ../src/hamster/stats.py:398
 #, python-format
 #| msgid ""
-#| "With %s percent of all facts starting before 9am you seem to be an early "
+#| "With %s percent of all facts starting before 9am, you seem to be an early "
 #| "bird."
 msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
 msgstr ""
 "Spriežot pēc tā, ka %s procenti ierakstu sākas pirms deviņiem rītā, "
-"izskatās, ka esat agrais putns."
+"izskatās, ka esat cīrulis."
 
 #: ../src/hamster/stats.py:401
 #, python-format
 #| msgid ""
-#| "With %s percent of all facts starting after 11pm you seem to be a night "
+#| "With %s percent of all facts starting after 11pm, you seem to be a night "
 #| "owl."
 msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
 msgstr ""
 "Spriežot pēc tā, ka %s procenti ierakstu sākas pēc vienpadsmitiem vakarā, "
 "izskatās, ka esat pūce."
@@ -870,29 +844,29 @@ msgstr ""
 #: ../src/hamster/stats.py:404
 #, python-format
 #| msgid ""
-#| "With %s percent of all tasks being shorter than 15 minutes you seem to be "
-#| "a busy bee."
+#| "With %s percent of all tasks being shorter than 15 minutes, you seem to "
+#| "be a busy bee."
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
 msgstr ""
 "%s procenti no visiem darbiem ir īsāki par piecpadsmit minūtēm. Izskatās, ka "
 "esat varen darbīgs."
 
 #. duration in round hours
-#: ../src/hamster/utils/stuff.py:57
+#: ../src/hamster/lib/stuff.py:57
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../src/hamster/utils/stuff.py:60
+#: ../src/hamster/lib/stuff.py:60
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../src/hamster/utils/stuff.py:63
+#: ../src/hamster/lib/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
@@ -901,7 +875,7 @@ msgstr "%dh %dmin"
 #. date format for overview label when only single day is visible
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:80
+#: ../src/hamster/lib/stuff.py:80
 msgid "%B %d, %Y"
 msgstr "%b %d, %Y"
 
@@ -909,7 +883,7 @@ msgstr "%b %d, %Y"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:86
+#: ../src/hamster/lib/stuff.py:86
 #, python-format
 msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -919,7 +893,7 @@ msgstr ""
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:92
+#: ../src/hamster/lib/stuff.py:92
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -928,13 +902,12 @@ msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 #. letter after prefixes (start_, end_) is the one of
 #. standard python date formatting ones- you can use all of them
 #. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/utils/stuff.py:98
+#: ../src/hamster/lib/stuff.py:98
 #, python-format
 msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_d)s. %(start_B)s  – %(end_d)s. %(start_B)s, %(end_Y)s"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
-#| msgid "Save report - Time Tracker"
 msgid "Save Report — Time Tracker"
 msgstr "Saglabāt atskaiti — Laika uzskaite"
 
