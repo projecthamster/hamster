@@ -1,5 +1,5 @@
 # Italian translations for hamster-applet package.
-# Copyright (C) 2008, 2009, 2010 hamster-applet copyright holder
+# Copyright (C) 2008, 2009, 2010, 2011 hamster-applet copyright holder
 # This file is distributed under the same license as the hamster-applet package.
 #
 # earlier activity -> attività precedente
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: project-hamster\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-23 19:07+0100\n"
-"PO-Revision-Date: 2011-03-23 19:07+0100\n"
+"POT-Creation-Date: 2011-09-11 22:04+0200\n"
+"PO-Revision-Date: 2011-09-11 22:08+0200\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -22,8 +22,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
-msgid "Project Hamster (Gnome Time Tracker)"
-msgstr "Conteggio tempo «Project Hamster»"
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "Project Hamster (Conteggio tempo)"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -146,7 +146,7 @@ msgstr "Tiene traccia del tempo trascorso nello svolgere delle attività"
 #: ../data/hamster-applet.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
 msgid "Time Tracker"
 msgstr "Conteggio tempo"
 
@@ -173,7 +173,7 @@ msgstr "Preferen_ze"
 msgid "Project Hamster - track your time"
 msgstr "Tiene traccia del tempo trascorso nello svolgere delle attività"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
 msgid "No records today"
 msgstr "Niente da visualizzare per oggi"
 
@@ -296,14 +296,14 @@ msgstr "Nessun dato per questo intervallo"
 msgid "Show Statistics"
 msgstr "Mostra statistiche"
 
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
 msgid "Tags"
 msgstr "Etichette"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:39
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:153
 msgid "Activity"
 msgstr "Attività"
 
@@ -471,9 +471,9 @@ msgstr "Anno:"
 # (ndt) questo compare nel pannello dove viene inserita
 # l'applet quando non sta tenendo conto delle nostre attività
 #: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
-#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
-#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
 msgid "No activity"
 msgstr "Nessuna attività"
 
@@ -503,13 +503,13 @@ msgstr ""
 "Milo Casagrande <milo@ubuntu.com>\n"
 "Stefano Pedretti <stefano.pedretti@gmail.com>"
 
-#: ../src/hamster/applet.py:377
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:380
+#: ../src/hamster/applet.py:381
 #, python-format
 msgid "%sh"
 msgstr "%sh"
@@ -517,25 +517,25 @@ msgstr "%sh"
 # (ndt) questo dovrebbe essere quello che si vede
 # nel riepilogo delle categorie, quando non è stata
 # associata una categoria a un'attività
-#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
 #: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:224
+#: ../src/hamster-time-tracker:299
 msgid "Unsorted"
 msgstr "Non categorizzato"
 
-#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
-#: ../src/hamster-time-tracker:229
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
 msgid "Just started"
 msgstr "Appena iniziato"
 
-#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
 msgid "Changed activity"
 msgstr "Attività modificata"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Passati a «%s»"
@@ -593,34 +593,36 @@ msgid "%s hours tracked total"
 msgstr "%s ore conteggiate in totale"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
+#: ../src/hamster/preferences.py:105
 msgid "None"
 msgstr "Nessuna"
 
-#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Categoria"
 
-#: ../src/hamster/preferences.py:635
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "Nuova categoria"
 
-#: ../src/hamster/preferences.py:648
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "Nuova attività"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:699
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d minuti"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d minuto"
+msgstr[1] "%(interval_minutes)d minuti"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:702
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "Mai"
 
@@ -748,12 +750,12 @@ msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
 "È possibile sovrascriverlo salvando la propria versione in %(home_folder)s"
 
-#: ../src/hamster-time-tracker:167
+#: ../src/hamster-time-tracker:242
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "Al lavoro su <b>%s</b>"
 
-#: ../src/hamster-time-tracker:499
+#: ../src/hamster-time-tracker:595
 msgid "Hamster time tracker. Usage:"
 msgstr "Uso di «Conteggio tempo»:"
 
@@ -851,8 +853,8 @@ msgstr "È utile registrare altre attività."
 #: ../src/hamster/stats.py:398
 #, python-format
 msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
 msgstr ""
 "Con il %s%% di tutte le attività che iniziano prima delle 9 potete "
 "considerarvi dei veri mattinieri."
@@ -860,7 +862,8 @@ msgstr ""
 #: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
 msgstr ""
 "Con il %s%% di tutte le attività che iniziano dopo le 23 potete considerarvi "
 "dei veri nottambuli."
@@ -868,8 +871,8 @@ msgstr ""
 #: ../src/hamster/stats.py:404
 #, python-format
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
 msgstr ""
 "Con il %s%% di tutte le attività dalla durata di meno di 15 minuti potete "
 "considerarvi delle persone energiche."
@@ -957,12 +960,3 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Conteggio tempo"
-
-msgid "totals by activity"
-msgstr "totali per attività"
-
-msgid "totals by category"
-msgstr "totali per categoria"
-
-msgid "Show:"
-msgstr "Mostrare:"
