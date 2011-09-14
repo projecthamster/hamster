@@ -1,0 +1,905 @@
+# Canadian English translation for hamster-applet.
+# Copyright (C) 2011 HAMSTER-APPLET'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-applet package.
+# Tiffany Antopolski <tiffany.antpoolski@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: hamster-applet master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-14 13:44-0400\n"
+"PO-Revision-Date: 2011-09-14 14:01-0400\n"
+"Last-Translator: Tiffany Antopolski <tiffany.antopolski@gmail.com>\n"
+"Language-Team: Canadian English\n"
+"Language: en_CA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0\n"
+
+#: ../src/hamster/applet.py:378
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/applet.py:381
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "Switched to '%s'"
+
+#: ../src/hamster/db.py:949
+msgid "Checking stocks"
+msgstr "Checking stocks"
+
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
+#: ../src/hamster/overview_totals.py:161
+#, python-format
+msgid "%s hours tracked total"
+msgstr "%s hours tracked total"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:701
+#, python-format
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d minute"
+msgstr[1] "%(interval_minutes)d minutes"
+
+#: ../src/hamster/reports.py:191
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
+msgstr ""
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
+
+#: ../src/hamster/reports.py:193
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#: ../src/hamster/reports.py:195
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+
+#: ../src/hamster/reports.py:197
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%b %e, %Y"
+
+#: ../src/hamster/reports.py:311
+#, python-format
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr "You can override it by storing your version in %(home_folder)s"
+
+#: ../src/hamster-time-tracker:242
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Working on <b>%s</b>"
+
+#: ../src/hamster/stats.py:169
+msgid "Collecting data — check back after a week has passed!"
+msgstr "Collecting data — check back after a week has passed!"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:320
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%b %e, %Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:325
+msgctxt "first record"
+msgid "%b %d"
+msgstr "%b %e"
+
+#: ../src/hamster/stats.py:327
+#, python-format
+msgid "First activity was recorded on %s."
+msgstr "First activity was recorded on %s."
+
+#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s year"
+msgstr[1] "%(num)s years"
+
+#. FIXME: difficult string to properly pluralize
+#: ../src/hamster/stats.py:345
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
+msgstr ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:363
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%b %e, %Y"
+
+#: ../src/hamster/stats.py:368
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] ""
+"Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgstr[1] ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+
+#. total records (in selected scope)
+#: ../src/hamster/stats.py:376
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "There is %s record."
+msgstr[1] "There are %s records."
+
+#: ../src/hamster/stats.py:398
+#, python-format
+msgid ""
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+msgstr ""
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+
+#: ../src/hamster/stats.py:401
+#, python-format
+msgid ""
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr ""
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+
+#: ../src/hamster/stats.py:404
+#, python-format
+msgid ""
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+msgstr ""
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%dh"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%B %e, %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#: ../data/90-hamster-applet.xml.in.h:1
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "Project Hamster (GNOME Time Tracker)"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start; and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start; and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Also remind every notify_interval minutes if no activity has been started."
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "Also remind when no activity is set"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "At what time does the day start (defaults to 5:30AM)"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "Command for toggling visibility of the hamster application window."
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr "Keyboard shortcut for showing / hiding the Time Tracker window."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"the last activity when returning to a previous workspace."
+msgstr ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"the last activity when returning to a previous workspace."
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Remind of current task every x minutes"
+msgstr "Remind of current task every x minutes"
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr "Should workspace switch trigger activity switch"
+
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Show / hide Time Tracker Window"
+msgstr "Show / hide Time Tracker Window"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity on shutdown"
+msgstr "Stop tracking current activity on shutdown"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "Stop tracking current activity when computer becomes idle"
+
+#: ../data/hamster-applet.schemas.in.h:15
+msgid "Stop tracking on idle"
+msgstr "Stop tracking on idle"
+
+#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+msgid "Stop tracking on shutdown"
+msgstr "Stop tracking on shutdown"
+
+#: ../data/hamster-applet.schemas.in.h:17
+msgid "Switch activity on workspace change"
+msgstr "Switch activity on workspace change"
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Toggle hamster application window"
+msgstr "Toggle hamster application window"
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window action"
+msgstr "Toggle hamster application window action"
+
+#: ../data/hamster-applet.schemas.in.h:20
+msgid "Toggle visibility of the hamster application window."
+msgstr "Toggle visibility of the hamster application window."
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Project Hamster — track your time"
+
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
+msgid "Time Tracker"
+msgstr "Time Tracker"
+
+#: ../data/Hamster_Applet.xml.h:1
+msgid "_About"
+msgstr "_About"
+
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
+msgid "_Help"
+msgstr "_Help"
+
+#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
+msgid "_Overview"
+msgstr "_Overview"
+
+#: ../data/Hamster_Applet.xml.h:4
+msgid "_Preferences"
+msgstr "_Preferences"
+
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Project Hamster - track your time"
+
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
+msgid "No records today"
+msgstr "No records today"
+
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "S_witch"
+
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "Show _Overview"
+
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "Start _Tracking"
+
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "Sto_p Tracking"
+
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "To_day"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "_Add earlier activity"
+
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Activity:"
+
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Add Earlier Activity"
+
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Description:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Tags:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Time:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "in progress"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr "to"
+
+#: ../data/hamster.ui.h:1
+msgid "Add earlier activity"
+msgstr "Add earlier activity"
+
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "Contents"
+
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../src/docky_control/2.0/hamster_control.py:94
+#: ../src/docky_control/2.1/hamster_control.py:79
+#: ../src/docky_control/2.1/hamster_control.py:94
+msgid "Overview"
+msgstr "Overview"
+
+#: ../data/hamster.ui.h:6
+msgid "Start new activity"
+msgstr "Start new activity"
+
+#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
+msgid "Statistics"
+msgstr "Statistics"
+
+#: ../data/hamster.ui.h:8
+msgid "Sto_p tracking"
+msgstr "Sto_p tracking"
+
+#: ../data/hamster.ui.h:10
+msgid "Today"
+msgstr "Today"
+
+#: ../data/hamster.ui.h:11
+msgid "_Edit"
+msgstr "_Edit"
+
+#: ../data/hamster.ui.h:13
+msgid "_Tracking"
+msgstr "_Tracking"
+
+#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
+msgid "Activities"
+msgstr "Activities"
+
+#: ../data/overview_totals.ui.h:2
+msgid "Categories"
+msgstr "Categories"
+
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "No data for this interval"
+
+#: ../data/overview_totals.ui.h:4
+msgid "Show Statistics"
+msgstr "Show Statistics"
+
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
+msgid "Tags"
+msgstr "Tags"
+
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:153
+msgid "Activity"
+msgstr "Activity"
+
+#: ../data/overview.ui.h:3
+msgid "Add new"
+msgstr "Add new"
+
+#: ../data/overview.ui.h:4
+msgid "Day"
+msgstr "Day"
+
+#: ../data/overview.ui.h:5
+msgid "Edit"
+msgstr "Edit"
+
+#: ../data/overview.ui.h:6
+msgid "Month"
+msgstr "Month"
+
+#: ../data/overview.ui.h:7
+msgid "Overview — Hamster"
+msgstr "Overview — Hamster"
+
+#: ../data/overview.ui.h:8
+msgid "Remove"
+msgstr "Remove"
+
+#: ../data/overview.ui.h:9
+msgid "Save report..."
+msgstr "Save report..."
+
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+msgid "Totals"
+msgstr "Totals"
+
+#: ../data/overview.ui.h:11
+msgid "Week"
+msgstr "Week"
+
+#: ../data/overview.ui.h:13
+msgid "_View"
+msgstr "_View"
+
+#: ../data/preferences.ui.h:1
+msgid "Activity list"
+msgstr "Activity list"
+
+#: ../data/preferences.ui.h:2
+msgid "Add activity"
+msgstr "Add activity"
+
+#: ../data/preferences.ui.h:3
+msgid "Add category"
+msgstr "Add category"
+
+#: ../data/preferences.ui.h:5
+msgid "Categories and Tags"
+msgstr "Categories and Tags"
+
+#: ../data/preferences.ui.h:6
+msgid "Category list"
+msgstr "Category list"
+
+#: ../data/preferences.ui.h:7
+msgid "Edit activity"
+msgstr "Edit activity"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit category"
+msgstr "Edit category"
+
+#: ../data/preferences.ui.h:9
+msgid "Integration"
+msgstr "Integration"
+
+#: ../data/preferences.ui.h:10
+msgid "New day starts at"
+msgstr "New day starts at"
+
+#: ../data/preferences.ui.h:11
+msgid "Remind of current activity every:"
+msgstr "Remind of current activity every:"
+
+#: ../data/preferences.ui.h:12
+msgid "Remove activity"
+msgstr "Remove activity"
+
+#: ../data/preferences.ui.h:13
+msgid "Remove category"
+msgstr "Remove category"
+
+#: ../data/preferences.ui.h:14
+msgid "Resume the last activity when returning to a workspace"
+msgstr "Resume the last activity when returning to a workspace"
+
+#: ../data/preferences.ui.h:15
+msgid "Start new activity when switching workspaces:"
+msgstr "Start new activity when switching workspaces:"
+
+#: ../data/preferences.ui.h:17
+msgid "Stop tracking when computer becomes idle"
+msgstr "Stop tracking when computer becomes idle"
+
+#: ../data/preferences.ui.h:18
+msgid "Tags that should appear in autocomplete"
+msgstr "Tags that should appear in autocomplete"
+
+#: ../data/preferences.ui.h:19
+msgid "Time Tracker Preferences"
+msgstr "Time Tracker Preferences"
+
+#: ../data/preferences.ui.h:20
+msgid "Tracking"
+msgstr "Tracking"
+
+#: ../data/preferences.ui.h:21
+msgid "Use following todo list if available:"
+msgstr "Use following todo list if available:"
+
+#: ../data/preferences.ui.h:22
+msgid "Workspaces"
+msgstr "Workspaces"
+
+#: ../data/preferences.ui.h:23
+msgid "_Activities"
+msgstr "_Activities"
+
+#: ../data/preferences.ui.h:24
+msgid "_Categories"
+msgstr "_Categories"
+
+#: ../data/range_pick.ui.h:1
+msgid "Apply"
+msgstr "Apply"
+
+#: ../data/range_pick.ui.h:2
+msgid "Day:"
+msgstr "Day:"
+
+#: ../data/range_pick.ui.h:3
+msgid "Month:"
+msgstr "Month:"
+
+#: ../data/range_pick.ui.h:4
+msgid "Range:"
+msgstr "Range:"
+
+#: ../data/range_pick.ui.h:5
+msgid "Week:"
+msgstr "Week:"
+
+#: ../data/stats.ui.h:1
+msgid "Starts and ends"
+msgstr "Starts and ends"
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "Year:"
+
+#: ../src/docky_control/2.0/hamster_control.py:71
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
+msgid "No activity"
+msgstr "No activity"
+
+#: ../src/docky_control/2.0/hamster_control.py:81
+#: ../src/docky_control/2.0/hamster_control.py:95
+#: ../src/docky_control/2.1/hamster_control.py:81
+#: ../src/docky_control/2.1/hamster_control.py:95
+msgid "Preferences"
+msgstr "Preferences"
+
+#: ../src/hamster/about.py:43
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "Copyright © 2007–2010 Toms Bauģis and others"
+
+#: ../src/hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "Project Hamster Website"
+
+#: ../src/hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "About Time Tracker"
+
+#: ../src/hamster/about.py:56
+msgid "translator-credits"
+msgstr "translator-credits"
+
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
+#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
+#: ../src/hamster-time-tracker:299
+msgid "Unsorted"
+msgstr "Unsorted"
+
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
+msgid "Just started"
+msgstr "Just started"
+
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
+msgid "Changed activity"
+msgstr "Changed activity"
+
+#. defaults
+#: ../src/hamster/db.py:947
+msgid "Work"
+msgstr "Work"
+
+#: ../src/hamster/db.py:948
+msgid "Reading news"
+msgstr "Reading news"
+
+#: ../src/hamster/db.py:950
+msgid "Super secret project X"
+msgstr "Super secret project X"
+
+#: ../src/hamster/db.py:951
+msgid "World domination"
+msgstr "World domination"
+
+#: ../src/hamster/db.py:953
+msgid "Day-to-day"
+msgstr "Day-to-day"
+
+#: ../src/hamster/db.py:954
+msgid "Lunch"
+msgstr "Lunch"
+
+#: ../src/hamster/db.py:955
+msgid "Watering flowers"
+msgstr "Watering flowers"
+
+#: ../src/hamster/db.py:956
+msgid "Doing handstands"
+msgstr "Doing handstands"
+
+#: ../src/hamster/edit_activity.py:70
+msgid "Update activity"
+msgstr "Update activity"
+
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:105
+msgid "None"
+msgstr "None"
+
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
+msgid "Name"
+msgstr "Name"
+
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
+msgid "Category"
+msgstr "Category"
+
+#: ../src/hamster/preferences.py:637
+msgid "New category"
+msgstr "New category"
+
+#: ../src/hamster/preferences.py:650
+msgid "New activity"
+msgstr "New activity"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:706
+msgid "Never"
+msgstr "Never"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:132
+msgid "activity"
+msgstr "activity"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:134
+msgid "start time"
+msgstr "start time"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:136
+msgid "end time"
+msgstr "end time"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:138
+msgid "duration minutes"
+msgstr "duration minutes"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:140
+msgid "category"
+msgstr "category"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:142
+msgid "description"
+msgstr "description"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+msgid "tags"
+msgstr "tags"
+
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:290
+msgid "Totals by Day"
+msgstr "Totals by Day"
+
+#: ../src/hamster/reports.py:291
+msgid "Activity Log"
+msgstr "Activity Log"
+
+#: ../src/hamster/reports.py:294
+msgid "activities"
+msgstr "activities"
+
+#: ../src/hamster/reports.py:295
+msgid "categories"
+msgstr "categories"
+
+#: ../src/hamster/reports.py:298
+msgid "Distinguish:"
+msgstr "Distinguish:"
+
+#: ../src/hamster/reports.py:300
+msgid "Date"
+msgstr "Date"
+
+#: ../src/hamster/reports.py:304
+msgid "Start"
+msgstr "Start"
+
+#: ../src/hamster/reports.py:305
+msgid "End"
+msgstr "End"
+
+#: ../src/hamster/reports.py:306
+msgid "Duration"
+msgstr "Duration"
+
+#: ../src/hamster/reports.py:307
+msgid "Description"
+msgstr "Description"
+
+#: ../src/hamster/reports.py:310
+msgid "Show template"
+msgstr "Show template"
+
+#: ../src/hamster-time-tracker:595
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamster time tracker. Usage:"
+
+#: ../src/hamster/stats.py:90
+msgctxt "years"
+msgid "All"
+msgstr "All"
+
+#: ../src/hamster/stats.py:166
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+
+#: ../src/hamster/stats.py:396
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamster would like to observe you some more!"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:39
+msgid "Save Report — Time Tracker"
+msgstr "Save Report — Time Tracker"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:57
+msgid "HTML Report"
+msgstr "HTML Report"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:65
+msgid "Tab-Separated Values (TSV)"
+msgstr "Tab-Separated Values (TSV)"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:80
+msgid "iCal"
+msgstr "iCal"
+
+#. title in the report file name
+#: ../src/hamster/widgets/reportchooserdialog.py:97
+msgid "Time track"
+msgstr "Time track"
