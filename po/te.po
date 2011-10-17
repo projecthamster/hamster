@@ -1,31 +1,141 @@
 # translation of hamster-applet.master.te.po to Telugu
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2011 Swecha Telugu Localisation Team <localization@swecha.net>.
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Krishna Babu K <kkrothap@redhat.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet.master.te\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
-"POT-Creation-Date: 2009-08-31 12:51+0000\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-10-08 21:22+0000\n"
 "PO-Revision-Date: 2009-09-17 20:24+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
-"Language-Team: Telugu <en@li.org>\n"
+"Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
+"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
 "\n"
 "\n"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../hamster/about.py:40
+#: ../data/90-hamster-applet.xml.in.h:1
+msgid "Project Hamster (GNOME Time Tracker)"
+msgstr "ప్రోజెక్టు హామ్‌స్టర్(గ్నొం టైం ట్రాకర్)"
+
+#: ../data/hamster-applet.schemas.in.h:1
+msgid ""
+"Activities will be counted as to belong to yesterday if the current time is "
+"less than the specified day start; and today, if it is over the time. "
+"Activities that span two days, will tip over to the side where the largest "
+"part of the activity is."
+msgstr ""
+"రోజు యొక్క పరిమితి లోపే కార్యకలాపములు మొదలుపెట్టిన యెడల అవి నిన్నటికి మరియు పరిమితి దాటిన మీదట రేపటీకి "
+"చెందును.కార్యకలాపములు రెండు రోజులు గడిపినచో  ప్రధాన భాగము ఉన్న  రోజున అవి చెందుతాయి."
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr "ఏ క్రియాకలాపము ప్రారంభించకపోతే ప్రతి notify_interval నిమిషాలను గుర్తుచేస్తుంది."
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "ఏ క్రియాకలాపము అమర్చనప్పుడు కూడా గుర్తుచేస్తుంది"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "ఏ సమయానికి రోజు మొదలవుతుంది(5:30AM అప్రమేయం)"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "హామ్‌స్టర్ కార్యక్షేత్రపు విండో యొక్క ద్రుస్యమానము మార్పునకు ఆదేశము."
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"నామము ద్వారా మీటటం  సశక్త పరిచినచో ఈ జాబితాలోని ఒక అంశము ద్వారా సూచిం చబడిన పని ప్రదేశాలకు క్రియాకలాపపు "
+"పేర్లను అమర్చబడుతుంది."
+
+#: ../data/hamster-applet.schemas.in.h:7
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr "సమయము ట్రాక్‌చేయుదాని విండో చూపుటకు / దాచుటకు కీబోర్డు లఘువు."
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"List of enabled tracking methods. \"name\" will enable switching activities "
+"by name defined in workspace_mapping. \"memory\" will enable switching to "
+"the last activity when returning to a previous workspace."
+msgstr ""
+"సశక్త పరువు ట్రాక్ చేయు విధానములు యొక్క పట్టిక. \"నామము\" పని ప్రదేశాలు అనువంశిక లక్షణసంపుటిలో "
+"జన్యుకణపు స్థలములో నిర్వచించిన క్రియాకలాపములు మార్చటం సశక్త పరుస్తుంది.\"జ్ఞాపకశక్తి\" పూర్వపు పని "
+"ప్రదేశాలు వెల్లినచో ఆఖరి క్రియాకలాపమునకు మారుట మొదలవుతుంది."
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"తెలుపబడిన యిన్ని నిముషములకు వొకసారి ప్రస్తుత కర్తవ్యాన్ని గుర్తుచేయండి. గుర్తుచేయుదానిని అచేతనపరచుటకు "
+"0కు లేదా 120 కన్నా యెక్కువకు అమర్చండి."
+
+#: ../data/hamster-applet.schemas.in.h:10
+msgid "Remind of current task every x minutes"
+msgstr "ప్రస్తుత కర్తవ్యాన్ని ప్రతి x నిముషములకు వొకసారి గుర్తుచేయుము"
+
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr "పని ప్రదేశాలు స్విచ్  క్రియాకలాపము స్విచ్ ని ట్రిగర్ చేయాలా"
+
+#: ../data/hamster-applet.schemas.in.h:12
+msgid "Show / hide Time Tracker Window"
+msgstr "సమయము ట్రాక్‌చేయుదాని విండోని చూపు / దాచు"
+
+#: ../data/hamster-applet.schemas.in.h:13
+msgid "Stop tracking current activity on shutdown"
+msgstr "మూసివేయునపుడు ప్రస్తుత కార్యకలాపముపై ట్రాక్‌చేయుట ఆపుము"
+
+#: ../data/hamster-applet.schemas.in.h:14
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "కంప్యూటర్ జడముగా వున్నప్పుడు, ప్రస్తుత క్రియాకలాపముపై ట్రాక్‌చేయుట ఆపుము"
+
+#: ../data/hamster-applet.schemas.in.h:15
+msgid "Stop tracking on idle"
+msgstr "జడముగా వుండునపుడు ట్రాక్‌చేయుట ఆపుము"
+
+#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+msgid "Stop tracking on shutdown"
+msgstr "మూసివేయుటపై ట్రాకింగ్ ఆపుము"
+
+#: ../data/hamster-applet.schemas.in.h:17
+msgid "Switch activity on workspace change"
+msgstr "పని ప్రదేశాలు మార్పు మీద క్రియాకలాపమును మీటుట."
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Toggle hamster application window"
+msgstr "హంస్ట్ ర్ కార్యక్షేత్రం విండోని మార్చుట"
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window action"
+msgstr "హామ్‌స్టర్ కార్యక్షేత్రం విండో కార్యమును మార్చుట"
+
+#: ../data/hamster-applet.schemas.in.h:20
+msgid "Toggle visibility of the hamster application window."
+msgstr "హామ్‌స్టర్  కార్యక్షేత్రం విండో ద్రుశ్యమానం మార్చుట."
+
+#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "ప్రోజెక్టు హామ్‌స్టర్ — మీ సమయము ట్రాక్ చేయును"
 
-#. Title of reminder notification
-#: ../data/Hamster_Applet.server.in.in.h:2 ../hamster/about.py:37
-#: ../hamster/about.py:38 ../hamster/applet.py:63
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
 msgid "Time Tracker"
 msgstr "సమయం ట్రాక్‌చేయునది"
 
@@ -33,93 +143,50 @@ msgstr "సమయం ట్రాక్‌చేయునది"
 msgid "_About"
 msgstr "గురించి(_A)"
 
-#: ../data/Hamster_Applet.xml.h:2
+#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
+msgid "_Help"
+msgstr "సహాయము(_H)"
+
+#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
 msgid "_Overview"
 msgstr "ఉపరితలదర్శనం (_O)"
 
-#: ../data/Hamster_Applet.xml.h:3
+#: ../data/Hamster_Applet.xml.h:4
 msgid "_Preferences"
 msgstr "అభీష్టాలు (_P)"
 
-#: ../data/preferences.ui.h:1
-msgid "<b>Activities</b>"
-msgstr "<b>కార్యకలాపములు</b>"
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "ప్రోజెక్టు హామ్‌స్టర్ - మీ సమయము ట్రాక్ చేయును"
 
-#: ../data/preferences.ui.h:2
-msgid "<b>Global Hotkey</b>"
-msgstr "<b>గ్లోబల్ హాట్‌కీ</b>"
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
+msgid "No records today"
+msgstr "ఈరోజు ఏ రికార్డులులేవు"
 
-#: ../data/preferences.ui.h:3
-msgid "<b>Tracking</b>"
-msgstr "<b>ట్రాక్‌చేయుచున్నది</b>"
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "స్విచ్(_w)"
 
-#: ../data/preferences.ui.h:4
-msgid "Activity list"
-msgstr "క్రియాకలాపము జాబితా"
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "ఉపరితలదర్శనం చూపుము (_O)"
 
-#: ../data/preferences.ui.h:5
-msgid "Add activity"
-msgstr "క్రియాకలాపమును జతచేయుము"
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "ట్రాక్‌చేయుట మొదలుపెట్టుము (_T)"
 
-#: ../data/preferences.ui.h:6
-msgid "Add category"
-msgstr "వర్గమును జతచేయి"
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "ట్రాక్‌చేయుట ఆపుము (_p)"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
-msgid "Also remind when no activity is set"
-msgstr "ఏ క్రియాకలాపము అమర్చనప్పుడు కూడా గుర్తుచేస్తుంది"
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "ఈ రోజు(_d)"
 
-#: ../data/preferences.ui.h:8
-msgid "Category list"
-msgstr "వర్గము జాబితా"
-
-#: ../data/preferences.ui.h:9
-msgid "Edit activity"
-msgstr "క్రియాకలాపమును సరికూర్చుము"
-
-#: ../data/preferences.ui.h:10
-msgid "Edit category"
-msgstr "వర్గమును సరికూర్చుము"
-
-#: ../data/preferences.ui.h:11
-msgid "Move activity down"
-msgstr "క్రియాకలాపమును క్రిందకి కదుల్చుము"
-
-#: ../data/preferences.ui.h:12
-msgid "Move activity up"
-msgstr "క్రియాకలాపమును పైనకు కదుల్చుము"
-
-#: ../data/preferences.ui.h:13
-msgid "Remind of current activity every:"
-msgstr "ప్రస్తుత కార్యకలాపమును యింతకు వొకసారి గుర్తుచేయుము:"
-
-#: ../data/preferences.ui.h:14
-msgid "Remove activity"
-msgstr "క్రియాకలాపము తీసివేయుము"
-
-#: ../data/preferences.ui.h:15
-msgid "Remove category"
-msgstr "వర్గమును తీసివేయుము"
-
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
-msgid "Stop tracking on shutdown"
-msgstr "మూసివేయుటపై ట్రాకింగ్ ఆపుము"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "కంప్యూటర్ జడముగా వున్నప్పుడు ట్రాకింగ్‌ను ఆపుము"
-
-#: ../data/preferences.ui.h:18
-msgid "Time Tracker Preferences"
-msgstr "సమయం ట్రాక్‌చేయుదాని అభీష్టాలు"
-
-#: ../data/preferences.ui.h:19
-msgid "_Activities"
-msgstr "క్రియాకలాపములు (_A)"
-
-#: ../data/preferences.ui.h:20
-msgid "_Categories"
-msgstr "విభాగాలు(_C)"
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "ముందలి క్రియాకలాపమును జతచేయుము(_A)"
 
 #: ../data/edit_activity.ui.h:1
 msgid "Activity:"
@@ -134,8 +201,8 @@ msgid "Description:"
 msgstr "వివరణ:"
 
 #: ../data/edit_activity.ui.h:4
-msgid "Preview:"
-msgstr "ఉపదర్శనము:"
+msgid "Tags:"
+msgstr "ట్యాగ్ లు:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
@@ -145,454 +212,516 @@ msgstr "సమయము:"
 msgid "in progress"
 msgstr "పురోగమనంలో వుంది"
 
-#: ../data/edit_activity.ui.h:7 ../data/stats.ui.h:19
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
 msgid "to"
 msgstr "దీనికి"
 
-#: ../data/hamster-applet.schemas.in.h:1
-msgid "Also remind every notify_interval minutes if no activity has been started."
-msgstr "ఏ క్రియాకలాపము ప్రారంభించకపోతే ప్రతి notify_interval నిమిషాలను గుర్తుచేస్తుంది."
+#: ../data/hamster.ui.h:1
+msgid "Add earlier activity"
+msgstr "ముందలి క్రియాకలాపమును జతచేయుము"
 
-#: ../data/hamster-applet.schemas.in.h:3
-msgid "Keyboard shortcut for showing the Time Tracker window."
-msgstr "సమయము ట్రాక్‌చేయుదాని విండో చూపుటకు కీబోర్డు లఘువు."
+#: ../data/hamster.ui.h:2
+msgid "Contents"
+msgstr "సారంశములు"
 
-#: ../data/hamster-applet.schemas.in.h:4
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"తెలుపబడిన యిన్ని నిముషములకు వొకసారి ప్రస్తుత కర్తవ్యాన్ని గుర్తుచేయండి. గుర్తుచేయుదానిని అచేతనపరచుటకు "
-"0కు లేదా 120 కన్నా యెక్కువకు అమర్చండి."
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Remind of current task every x minutes"
-msgstr "ప్రస్తుత కర్తవ్యాన్ని ప్రతి x నిముషములకు వొకసారి గుర్తుచేయుము"
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid "Show window"
-msgstr "విండోను చూపుము"
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Stop tracking current activity on shutdown"
-msgstr "మూసివేయునపుడు ప్రస్తుత కార్యకలాపముపై ట్రాక్‌చేయుట ఆపుము"
-
-#: ../data/hamster-applet.schemas.in.h:8
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "కంప్యూటర్ జడముగా వున్నప్పుడు, ప్రస్తుత క్రియాకలాపముపై ట్రాక్‌చేయుట ఆపుము"
-
-#: ../data/hamster-applet.schemas.in.h:9
-msgid "Stop tracking on idle"
-msgstr "జడముగా వుండునపుడు ట్రాక్‌చేయుట ఆపుము"
-
-#: ../data/applet.ui.h:1
-msgid ""
-"<span size=\"small\" >Type in an activity and hit Enter to start tracking!</"
-"span>"
-msgstr ""
-"<span size=\"small\" >ట్రాక్ చేయుట ప్రారంభించుటకు క్రియాకలాపమునందు టైపు చేసి Enter కొట్టండి!</"
-"span>"
-
-#: ../data/applet.ui.h:2
-msgid "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</span>"
-msgstr "<span size=\"small\" color=\"blue\" underline=\"single\">ఇంకా చెప్పండి</span>"
-
-#: ../data/applet.ui.h:3
-msgid "Ad_d Earlier Activity"
-msgstr "ముందలి క్రియాకలాపమును జతచేయుము (_d)"
-
-#. This title appears only when debugging from console. Leave it as is.
-#: ../data/applet.ui.h:5
-msgid "Hamster"
-msgstr "హామ్‌స్టర్"
-
-#: ../data/applet.ui.h:6 ../hamster/applet.py:554
-msgid "No records today"
-msgstr "ఈరోజు ఏ రికార్డులులేవు"
-
-#: ../data/applet.ui.h:7
-msgid "Show _Overview"
-msgstr "ఉపరితలదర్శనం చూపుము (_O)"
-
-#: ../data/applet.ui.h:8
-msgid "_Activity:"
-msgstr "క్రియాకలాపము (_A):"
-
-#: ../data/applet.ui.h:9
-msgid "_Stop Tracking"
-msgstr "ట్రాక్‌చేయుట ఆపుము (_S)"
-
-#: ../data/applet.ui.h:10
-msgid "_Today"
-msgstr "ఈ రోజు(_T)"
-
-#: ../data/stats.ui.h:1
-msgid " _Day"
-msgstr " రోజు (_D)"
-
-#: ../data/stats.ui.h:2
-msgid " _Month"
-msgstr " నెల (_M)"
-
-#: ../data/stats.ui.h:3
-msgid " _Week"
-msgstr " వారము (_W)"
-
-#: ../data/stats.ui.h:4
-msgid "<b>Overview</b>"
-msgstr "<b>ఉపరితలదర్శనం</b>"
-
-#: ../data/stats.ui.h:5
-msgid "<b>Starts and ends</b>"
-msgstr "<b>ప్రారంభిస్తుంది మరియు ముగిస్తుంది</b>"
-
-#: ../data/stats.ui.h:6
-msgid "<b>Totals</b>"
-msgstr "<b>మొత్తములు</b>"
-
-#: ../data/stats.ui.h:7 ../hamster/reports.py:231 ../hamster/reports.py:292
-msgid "Activity"
-msgstr "క్రియాకలాపము"
-
-#: ../data/stats.ui.h:8
-msgid "Categories:"
-msgstr "వర్గములు:"
-
-#: ../data/stats.ui.h:9
-msgid "Date interval:"
-msgstr "తేదీ విరామము:"
-
-#: ../data/stats.ui.h:10
-msgid "No data for this interval"
-msgstr "ఈ విరామము కొరకు డాటా లేదు"
-
-#: ../data/stats.ui.h:11
+#. now add buttons
+#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../src/docky_control/2.0/hamster_control.py:94
+#: ../src/docky_control/2.1/hamster_control.py:79
+#: ../src/docky_control/2.1/hamster_control.py:94
 msgid "Overview"
 msgstr "ఉపరితలదర్శనం"
 
-#: ../data/stats.ui.h:12
-msgid "Overview - Hamster"
-msgstr "ఉపరితలదర్శనం - హామ్‌స్టర్"
+#: ../data/hamster.ui.h:6
+msgid "Start new activity"
+msgstr "కొత్త కార్యకలాపము మొదలపెట్టుము"
 
-#: ../data/stats.ui.h:13
-msgid "Save as HTML"
-msgstr "HTML వలె దాయుము"
-
-#: ../data/stats.ui.h:14
-msgid "Save report – Time Tracker"
-msgstr "నివేదిక – సమయ ట్రాకర్‌ను దాయుము"
-
-#: ../data/stats.ui.h:15
+#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
 msgid "Statistics"
 msgstr "గణాంకములు"
 
-#: ../data/stats.ui.h:16
+#: ../data/hamster.ui.h:8
+msgid "Sto_p tracking"
+msgstr "ట్రాక్‌చేయుట ఆపుము (_p)"
+
+#: ../data/hamster.ui.h:10
 msgid "Today"
 msgstr "ఈ రోజు"
 
-#: ../data/stats.ui.h:17 ../hamster/stats.py:948
-msgid "Week"
-msgstr "వారము"
+#: ../data/hamster.ui.h:11
+msgid "_Edit"
+msgstr "సరిచేయు(_E)"
 
-#: ../data/stats.ui.h:18
-msgid "Year:"
-msgstr "సంవత్సరము:"
+#: ../data/hamster.ui.h:13
+msgid "_Tracking"
+msgstr "ట్రాక్‌చేయుచున్నది(_T)"
 
-#: ../hamster/about.py:41
-msgid "Copyright © 2007–2009 Toms Bauģis and others"
-msgstr "కాపీరైట్ © 2007–2009 టామ్స్ బౌగిల్ మరియు యితరులు"
+#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
+msgid "Activities"
+msgstr "క్రియాకలాపములు "
 
-#: ../hamster/about.py:43
-msgid "Project Hamster Website"
-msgstr "ప్రోజక్టు హామ్‌స్టర్ వెబ్‌సైట్"
+#: ../data/overview_totals.ui.h:2
+msgid "Categories"
+msgstr "విభాగాలు"
 
-#: ../hamster/about.py:44
-msgid "About Time Tracker"
-msgstr "సమయం ట్రాక్‌చేయుదాని గురించి"
+#: ../data/overview_totals.ui.h:3
+msgid "No data for this interval"
+msgstr "ఈ విరామము కొరకు డాటా లేదు"
 
-#: ../hamster/about.py:54
-msgid "translator-credits"
-msgstr "KrishnaBabu K <kkrothap@redhat.com> 2008."
+#: ../data/overview_totals.ui.h:4
+msgid "Show Statistics"
+msgstr "గణాంకములు చూపుము"
 
-#. translators: this is edit activity action in the notifier bubble
-#: ../hamster/applet.py:73
+#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
+msgid "Tags"
+msgstr "ట్యాగ్ లు"
+
+#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:153
+msgid "Activity"
+msgstr "క్రియాకలాపము"
+
+#: ../data/overview.ui.h:3
+msgid "Add new"
+msgstr "కొత్తది జతచేయము"
+
+#: ../data/overview.ui.h:4
+msgid "Day"
+msgstr "రోజులు"
+
+#: ../data/overview.ui.h:5
 msgid "Edit"
 msgstr "సరిచేయు"
 
-#. translators: this is switch activity action in the notifier bubble
-#: ../hamster/applet.py:75
-msgid "Switch"
-msgstr "స్విచ్"
+#: ../data/overview.ui.h:6
+msgid "Month"
+msgstr "నెల"
 
-#: ../hamster/applet.py:305 ../hamster/reports.py:235
-#: ../hamster/reports.py:293
-msgid "Duration"
-msgstr "వ్యవధి"
+#: ../data/overview.ui.h:7
+msgid "Overview — Hamster"
+msgstr "ఉపరితలదర్శనం — హామ్‌స్టర్"
 
-#: ../hamster/applet.py:492 ../hamster/applet.py:513
+#: ../data/overview.ui.h:8
+msgid "Remove"
+msgstr "తీసివేయుము"
+
+#: ../data/overview.ui.h:9
+msgid "Save report..."
+msgstr "నివేదనని దాచుము"
+
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+msgid "Totals"
+msgstr "మొత్తములు"
+
+#: ../data/overview.ui.h:11
+msgid "Week"
+msgstr "వారము"
+
+#: ../data/overview.ui.h:13
+msgid "_View"
+msgstr "దర్శనము(_V)"
+
+#: ../data/preferences.ui.h:1
+msgid "Activity list"
+msgstr "క్రియాకలాపము జాబితా"
+
+#: ../data/preferences.ui.h:2
+msgid "Add activity"
+msgstr "క్రియాకలాపమును జతచేయుము"
+
+#: ../data/preferences.ui.h:3
+msgid "Add category"
+msgstr "వర్గమును జతచేయి"
+
+#: ../data/preferences.ui.h:5
+msgid "Categories and Tags"
+msgstr "విభాగాలుమరియు ట్యాగ్ లు"
+
+#: ../data/preferences.ui.h:6
+msgid "Category list"
+msgstr "వర్గము జాబితా"
+
+#: ../data/preferences.ui.h:7
+msgid "Edit activity"
+msgstr "క్రియాకలాపమును సరికూర్చుము"
+
+#: ../data/preferences.ui.h:8
+msgid "Edit category"
+msgstr "వర్గమును సరికూర్చుము"
+
+#: ../data/preferences.ui.h:9
+msgid "Integration"
+msgstr "పెంపొందించటం"
+
+#: ../data/preferences.ui.h:10
+msgid "New day starts at"
+msgstr "కొత్త రోజు మొదలు"
+
+#: ../data/preferences.ui.h:11
+msgid "Remind of current activity every:"
+msgstr "ప్రస్తుత కార్యకలాపమును యింతకు వొకసారి గుర్తుచేయుము:"
+
+#: ../data/preferences.ui.h:12
+msgid "Remove activity"
+msgstr "క్రియాకలాపము తీసివేయుము"
+
+#: ../data/preferences.ui.h:13
+msgid "Remove category"
+msgstr "వర్గమును తీసివేయుము"
+
+#: ../data/preferences.ui.h:14
+msgid "Resume the last activity when returning to a workspace"
+msgstr "పని ప్రదేశానికి మరలి వచినప్పుడు ఆఖరి కార్యకలాపము కొనసగును"
+
+#: ../data/preferences.ui.h:15
+msgid "Start new activity when switching workspaces:"
+msgstr "పని ప్రదేశాలు మారినప్పుడు కొత్త కార్యకలాపము మొదలపెట్టుము:"
+
+#: ../data/preferences.ui.h:17
+msgid "Stop tracking when computer becomes idle"
+msgstr "కంప్యూటర్ జడముగా వున్నప్పుడు ట్రాకింగ్‌ను ఆపుము"
+
+#: ../data/preferences.ui.h:18
+msgid "Tags that should appear in autocomplete"
+msgstr "ట్యాగ్ లు స్వయంగాపూర్తిగావటం లో మెలగాలి"
+
+#: ../data/preferences.ui.h:19
+msgid "Time Tracker Preferences"
+msgstr "సమయం ట్రాక్‌చేయుదాని అభీష్టాలు"
+
+#: ../data/preferences.ui.h:20
+msgid "Tracking"
+msgstr "ట్రాక్‌చేయుచున్నది"
+
+#: ../data/preferences.ui.h:21
+msgid "Use following todo list if available:"
+msgstr "ఒకవేళ లభించినచో ఈ క్రింది చేయవలసిన పనుల జాబితాను ఉపయోగించుము:"
+
+#: ../data/preferences.ui.h:22
+msgid "Workspaces"
+msgstr "పని ప్రదేశాలు"
+
+#: ../data/preferences.ui.h:23
+msgid "_Activities"
+msgstr "క్రియాకలాపములు (_A)"
+
+#: ../data/preferences.ui.h:24
+msgid "_Categories"
+msgstr "విభాగాలు(_C)"
+
+#: ../data/range_pick.ui.h:1
+msgid "Apply"
+msgstr "అమలుచేయండి"
+
+#: ../data/range_pick.ui.h:2
+msgid "Day:"
+msgstr "రోజు:"
+
+#: ../data/range_pick.ui.h:3
+msgid "Month:"
+msgstr "నెల:"
+
+#: ../data/range_pick.ui.h:4
+msgid "Range:"
+msgstr "విస్త్రుతి:"
+
+#: ../data/range_pick.ui.h:5
+msgid "Week:"
+msgstr "వారము:"
+
+#: ../data/stats.ui.h:1
+msgid "Starts and ends"
+msgstr "ప్రారంభిస్తుంది మరియు ముగిస్తుంది"
+
+#: ../data/stats.ui.h:4
+msgid "Year:"
+msgstr "సంవత్సరము:"
+
+#: ../src/docky_control/2.0/hamster_control.py:71
+#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
+#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
 msgid "No activity"
 msgstr "ఎటువంటి క్రియాకలాపములేదు"
 
-#. activity reminder
-#: ../hamster/applet.py:508
-#, python-format
-msgid "Working on <b>%s</b>"
-msgstr "<b>%s</b> పై పనిచేయుచున్నది"
+#: ../src/docky_control/2.0/hamster_control.py:81
+#: ../src/docky_control/2.0/hamster_control.py:95
+#: ../src/docky_control/2.1/hamster_control.py:81
+#: ../src/docky_control/2.1/hamster_control.py:95
+msgid "Preferences"
+msgstr "అభీష్టాలు"
 
-#: ../hamster/applet.py:562
+#: ../src/hamster/about.py:43
+msgid "Copyright © 2007–2010 Toms Bauģis and others"
+msgstr "కాపీరైట్ © 2007–2010 టామ్స్ బౌగిస్ మరియు ఇతరులు"
+
+#: ../src/hamster/about.py:45
+msgid "Project Hamster Website"
+msgstr "ప్రోజక్టు హామ్‌స్టర్ వెబ్‌సైట్"
+
+#: ../src/hamster/about.py:46
+msgid "About Time Tracker"
+msgstr "సమయం ట్రాక్‌చేయుదాని గురించి"
+
+#: ../src/hamster/about.py:56
+msgid "translator-credits"
+msgstr "KrishnaBabu K <kkrothap@redhat.com> 2008."
+
+#: ../src/hamster/applet.py:378
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../hamster/applet.py:565
+#: ../src/hamster/applet.py:381
 #, python-format
 msgid "%sh"
 msgstr "%sh"
 
-#. unsorted category
-#: ../hamster/applet.py:601 ../hamster/db.py:226 ../hamster/db.py:243
-#: ../hamster/db.py:248 ../hamster/db.py:465 ../hamster/db.py:538
-#: ../hamster/edit_activity.py:368 ../hamster/preferences.py:56
-#: ../hamster/reports.py:54 ../hamster/reports.py:91 ../hamster/reports.py:248
-#: ../hamster/stuff.py:94
+#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
+#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
+#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
+#: ../src/hamster-time-tracker:299
 msgid "Unsorted"
 msgstr "క్రమపరచని"
 
-#: ../hamster/applet.py:833
-msgid "What should be typed in the activity box?"
-msgstr "క్రియాకలాపము పెట్టెనందు యేమి ప్రవేశపెట్టవలెను?"
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
+msgid "Just started"
+msgstr "ఇప్పుడే మొదలయెను"
 
-#: ../hamster/applet.py:836
-msgid ""
-"There is a simple syntax that enables you to add details to your "
-"activities:\n"
-"        \n"
-"\"@\" symbol marks a category. Example: \"watering flowers@home\" will start "
-"tracking the activity \"watering flowers\" in the category \"home\".\n"
-"\n"
-"Commas (\",\") mark beginning of a description. Example: \"watering flowers, "
-"begonias and forgetmenots\" will start tracking the activity \"watering "
-"flowers\" and add the description \"begonias and forgetmenots\" to it.\n"
-"\n"
-"Both can be combined: \"watering flowers@home, begonias and forgetmenots\" "
-"will work just fine!\n"
-"\n"
-"Now, start tracking!\n"
-"        "
-msgstr ""
-"మీ క్రియాకలాపములకు వివరములను జతచేయుగలుగుటకు సరళమైన సిన్టాక్సు వొకటి వుంది:\n"
-"        \n"
-"\"@\" చిహ్నము వర్గమువలె గుర్తుంచబడుతుంది. ఉదాహరణ: \"పువ్వులకు నీళ్ళుజల్లుట@ఇంటివద్ద\" అనునది "
-"క్రియాకలాపము "
-"\"పువ్వులకు నీళ్ళుజల్లుట\" ను వర్గము \"ఇంటివద్ద\" నందు ట్రాక్ చేయుట ప్రారంభిస్తుంది.\n"
-"\n"
-"కామాలు (\",\") వివరణ యొక్క ప్రారంభమును గుర్తుంచుతాయి. ఉదాహరణ: \"పువ్వులకు నీళ్ళుజల్లుట, "
-"గులాబీలు మరియు చామంతులు\" అనునది క్రియాకలాపము \"పువ్వులకు నీళ్ళుజల్లుట\"ను ట్రాక్‌చేయుట "
-"ప్రారంభిస్తుంది మరియు వివరణ \"గులాబీలు మరియు చామంతులు\" ను దానికి జతచేస్తుంది.\n"
-"\n"
-"రెండూ కలుపవచ్చును: \"పువ్వులకు నీళ్ళుజల్లుట@ఇంటివద్ద, గులాబీలు మరియు చామంతులు\" కూడా "
-"చక్కగా పనిచేస్తుంది!\n"
-"\n"
-"ఇప్పుడు, ట్రాక్ చేయుట ప్రారంభించండి!\n"
-"        "
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
+msgid "Changed activity"
+msgstr "మార్చబడిన క్రియాకలాపమును"
+
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
+#, c-format, python-format
+msgid "Switched to '%s'"
+msgstr "'%s' కు మార్చబడినది"
 
 #. defaults
-#: ../hamster/db.py:728
+#: ../src/hamster/db.py:947
 msgid "Work"
 msgstr "పని"
 
-#: ../hamster/db.py:729
+#: ../src/hamster/db.py:948
 msgid "Reading news"
 msgstr "వార్తలు చదువుచున్నది"
 
-#: ../hamster/db.py:730
+#: ../src/hamster/db.py:949
 msgid "Checking stocks"
 msgstr "స్టాక్‌లను పరిశీలించుచున్నది"
 
-#: ../hamster/db.py:731
+#: ../src/hamster/db.py:950
 msgid "Super secret project X"
 msgstr "అత్యంత రహస్య ప్రోజెక్టు X"
 
-#: ../hamster/db.py:732
+#: ../src/hamster/db.py:951
 msgid "World domination"
 msgstr "ప్రపంచ ఆధిక్యత"
 
-#: ../hamster/db.py:734
+#: ../src/hamster/db.py:953
 msgid "Day-to-day"
 msgstr "రోజు రోజుకు"
 
-#: ../hamster/db.py:735
+#: ../src/hamster/db.py:954
 msgid "Lunch"
 msgstr "మధ్యాహ్నభోజనము"
 
-#: ../hamster/db.py:736
+#: ../src/hamster/db.py:955
 msgid "Watering flowers"
 msgstr "పువ్వులపై నీళ్ళుచిలకరించుట"
 
-#: ../hamster/db.py:737
+#: ../src/hamster/db.py:956
 msgid "Doing handstands"
 msgstr "చేతిస్టాండులను చేయుట"
 
-#: ../hamster/edit_activity.py:385
+#: ../src/hamster/edit_activity.py:70
 msgid "Update activity"
 msgstr "క్రియాకలాపమును నవీకరించుము"
 
-#: ../hamster/preferences.py:104
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A, %b %d"
+
+#: ../src/hamster/overview_totals.py:161
+#, python-format
+msgid "%s hours tracked total"
+msgstr "మొత్తము %s గడియలు ట్రాక్ చేయబడినవి"
+
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:105
+msgid "None"
+msgstr "ఏమి లేదు"
+
+#: ../src/hamster/preferences.py:120 ../src/hamster/preferences.py:191
 msgid "Name"
 msgstr "నామము"
 
-#: ../hamster/preferences.py:124 ../hamster/reports.py:232
-#: ../hamster/reports.py:291
+#: ../src/hamster/preferences.py:140 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "విభాగము"
 
-#: ../hamster/preferences.py:559
+#: ../src/hamster/preferences.py:637
 msgid "New category"
 msgstr "కొత్త వర్గము"
 
-#: ../hamster/preferences.py:572
+#: ../src/hamster/preferences.py:650
 msgid "New activity"
 msgstr "కొత్త కార్యకలాపము"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:632
+#: ../src/hamster/preferences.py:701
 #, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d నిముషములు"
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d నిముషము"
+msgstr[1] "%(interval_minutes)d నిముషములు"
 
 #. notify interval slider value label
-#: ../hamster/preferences.py:635
+#: ../src/hamster/preferences.py:706
 msgid "Never"
 msgstr "ఎప్పటికివద్దు"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:112
+#: ../src/hamster/reports.py:132
 msgid "activity"
 msgstr "క్రియాకలాపము"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:114
+#: ../src/hamster/reports.py:134
 msgid "start time"
 msgstr "ప్రారంభ సమయం"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:116
+#: ../src/hamster/reports.py:136
 msgid "end time"
 msgstr "ముగింపు సమయం"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:118
+#: ../src/hamster/reports.py:138
 msgid "duration minutes"
 msgstr "నిడివి నిమిషాలలో"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:120
+#: ../src/hamster/reports.py:140
 msgid "category"
 msgstr "వర్గము"
 
 #. column title in the TSV export format
-#: ../hamster/reports.py:122
+#: ../src/hamster/reports.py:142
 msgid "description"
 msgstr "వివరణ"
 
-#. overview label if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:160 ../hamster/stats.py:933
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+msgid "tags"
+msgstr "ట్యాగ్ లు"
+
+#: ../src/hamster/reports.py:191
 #, python-format
 msgid ""
-"Overview for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %"
-"(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 msgstr ""
-"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s కొరకు "
-"ఉపరితలదర్శనము"
+"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)sయొక్క కార్యకలాపపు నివేదనs,"
+"%(end_Y)s "
 
-#. overview label if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:162 ../hamster/stats.py:939
+#: ../src/hamster/reports.py:193
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s కొరకు ఉపరితలదర్శనము"
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s యొక్క కార్యకలాపపు నివేదన"
 
-#. overview label for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:164 ../hamster/stats.py:945
+#: ../src/hamster/reports.py:195
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s కొరకు ఉపరితలదర్శనము"
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s యొక్క కార్యకలాపపు నివేదన"
 
-#: ../hamster/reports.py:167
+#: ../src/hamster/reports.py:197
 #, python-format
-msgid "Overview for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "%(start_B)s %(start_d)s, %(start_Y)s కొరకు ఉపరితలదర్శనము"
-
-#: ../hamster/reports.py:230
-msgid "Date"
-msgstr "తేద"
-
-#: ../hamster/reports.py:233
-msgid "Start"
-msgstr "మొదలు"
-
-#: ../hamster/reports.py:234
-msgid "End"
-msgstr "సమాప్తం"
-
-#: ../hamster/reports.py:236
-msgid "Description"
-msgstr "వివరణ"
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s యొక్క కార్యకలాపపు నివేదన"
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/reports.py:268
+#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#. summary table
-#: ../hamster/reports.py:288
-msgid "Totals"
-msgstr "మొత్తములు"
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:290
+msgid "Totals by Day"
+msgstr "రోజుకి మొత్తములు"
 
-#: ../hamster/reports.py:303
-msgid "Total Time"
-msgstr "మొత్తము సమయం"
+#: ../src/hamster/reports.py:291
+msgid "Activity Log"
+msgstr "క్రియాకలాపము నమోదు"
 
-#: ../hamster/stats.py:64 ../hamster/stats.py:1241
-msgid "HTML Report"
-msgstr "HTML నివేదిక"
+#: ../src/hamster/reports.py:294
+msgid "activities"
+msgstr "క్రియాకలాపములు "
 
-#: ../hamster/stats.py:72 ../hamster/stats.py:1249
-msgid "Tab-Separated Values (TSV)"
-msgstr "టాబ్‌-విభజిత విలువలు (TSV)"
+#: ../src/hamster/reports.py:295
+msgid "categories"
+msgstr "విభాగాలు"
 
-#: ../hamster/stats.py:80 ../hamster/stats.py:1257
-msgid "XML"
-msgstr "XML"
+#: ../src/hamster/reports.py:298
+msgid "Distinguish:"
+msgstr "భేదమును చూపించు"
 
-#: ../hamster/stats.py:87 ../hamster/stats.py:1264
-msgid "iCal"
-msgstr "iCal"
+#: ../src/hamster/reports.py:300
+msgid "Date"
+msgstr "తేది"
 
-#. add unsorted category
-#: ../hamster/stats.py:120
-msgctxt "categories"
-msgid "All"
-msgstr "అన్ని"
+#: ../src/hamster/reports.py:304
+msgid "Start"
+msgstr "మొదలు"
 
-#: ../hamster/stats.py:435
+#: ../src/hamster/reports.py:305
+msgid "End"
+msgstr "సమాప్తం"
+
+#: ../src/hamster/reports.py:306
+msgid "Duration"
+msgstr "వ్యవధి"
+
+#: ../src/hamster/reports.py:307
+msgid "Description"
+msgstr "వివరణ"
+
+#: ../src/hamster/reports.py:310
+msgid "Show template"
+msgstr "చుపించు మాదిరి"
+
+#: ../src/hamster/reports.py:311
+#, python-format
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr "మీరు మీ వివరణమును %(home_folder)s లో భద్రపరిచి దానిని రద్దుచేయుము"
+
+#: ../src/hamster-time-tracker:242
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "<b>%s</b> పై పనిచేయుచున్నది"
+
+#: ../src/hamster-time-tracker:595
+msgid "Hamster time tracker. Usage:"
+msgstr "హామ్‌స్టర్ సనయము ట్రాక్ చెయునది. ఉపయోగము:"
+
+#: ../src/hamster/stats.py:90
 msgctxt "years"
 msgid "All"
 msgstr "అన్ని"
 
-#: ../hamster/stats.py:524
+#: ../src/hamster/stats.py:166
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -600,14 +729,14 @@ msgstr ""
 "గణాంకాలను తయారుచేయుటకు యింకా అక్కడ యెటువంటి టాడాలేదు.\n"
 "ఒక వారపు వినియోగించుట మంచిది!"
 
-#: ../hamster/stats.py:527
-msgid "Still collecting data — check back after a week has passed!"
-msgstr "ఇంకా డాటాను సేకరించుచున్నది — ఒక వారము గడిచిన తర్వాత పరిశీలించండి!"
+#: ../src/hamster/stats.py:169
+msgid "Collecting data — check back after a week has passed!"
+msgstr "డాటాను సేకరించుచున్నది — ఒక వారము గడిచిన తర్వాత పరిశీలించండి!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:657
+#: ../src/hamster/stats.py:320
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -615,18 +744,17 @@ msgstr "%b %d, %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:662
-#, python-format
+#: ../src/hamster/stats.py:325
 msgctxt "first record"
-msgid "%(b)s %(d)s"
-msgstr "%(b)s %(d)s"
+msgid "%b %d"
+msgstr "%b %d"
 
-#: ../hamster/stats.py:664
+#: ../src/hamster/stats.py:327
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "మొదటి క్రియాకలాపము %s నందు రికార్డైనది."
 
-#: ../hamster/stats.py:673 ../hamster/stats.py:677
+#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -634,115 +762,264 @@ msgstr[0] "%(num)s సంవత్సరము"
 msgstr[1] "%(num)s సంవత్సరములు"
 
 #. FIXME: difficult string to properly pluralize
-#: ../hamster/stats.py:682
+#: ../src/hamster/stats.py:345
 #, python-format
 msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
 msgstr ""
-"ఇంత వరకు ట్రాకైన సమయం  %(human_days)s మానవ(హ్యూమన్) రోజులు (%(human_years)s) "
-"లేదా %(working_days)s పనిచేయు రోజులు (%(working_years)s)."
+"ఇంత వరకు ట్రాకైన సమయం  %(human_days)s మానవ(హ్యూమన్) రోజులు (%(human_years)s) లేదా "
+"%(working_days)s పనిచేయు రోజులు (%(working_years)s)."
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:700
+#: ../src/hamster/stats.py:363
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#: ../hamster/stats.py:705
+#: ../src/hamster/stats.py:368
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] "%(date)s నందు నిరంతరంగా పని జరిగినవాటిలో పొడవైనది %(hours)s గంట."
 msgstr[1] "%(date)s నందు నిరంతరంగా పని జరిగినవాటిలో పొడవైనవి %(hours)s గంటలు."
 
 #. total records (in selected scope)
-#: ../hamster/stats.py:713
+#: ../src/hamster/stats.py:376
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "అక్కడ %s రికార్డువుంది."
 msgstr[1] "అక్కడ %s రికార్డులు వున్నాయి."
 
-#: ../hamster/stats.py:733
+#: ../src/hamster/stats.py:396
 msgid "Hamster would like to observe you some more!"
 msgstr "హామ్‌స్టర్ మీరు యింకా కొన్ని గమనించాలని కొరుకొంటోంది!"
 
-#: ../hamster/stats.py:735
+#: ../src/hamster/stats.py:398
 #, python-format
 msgid ""
-"With %s percent of all facts starting before 9am you seem to be an early "
-"bird."
-msgstr "9am ముందు ప్రారంభించబడిన అన్ని నిజాల %s శాతముతో మీరు ముందున్నట్లుగా అనిపిస్తోంది."
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+msgstr "9am ముందు ప్రారంభించబడిన అన్ని కార్యకలాపాల %s శాతముతో మీరు ముందున్నట్లుగా అనిపిస్తోంది."
 
-#: ../hamster/stats.py:738
-#, python-format
-msgid "With %s percent of all facts starting after 11pm you seem to be a night owl."
-msgstr "11pm తరువాత ప్రారంభించబడిన అన్ని నిజాల %s శాతముతో మీరు రాత్రి పనిచేస్తున్నట్లు అనిపిస్తోంది."
-
-#: ../hamster/stats.py:741
+#: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
-"With %s percent of all tasks being shorter than 15 minutes you seem to be a "
-"busy bee."
-msgstr "15 నిముషముల కన్నా తక్కువవున్న అన్ని కర్తవ్యముల %s శాతముతో మీరు విరామంలేని వారుగా అనిపిస్తోంది."
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr ""
+"11pm తరువాత ప్రారంభించబడిన అన్ని కార్యకలాపాల %s శాతముతో మీరు రాత్రి పనిచేస్తున్నట్లు అనిపిస్తోంది."
 
-#. Date format for the label in overview window fact listing
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:828
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A, %b %d"
-
-#: ../hamster/stats.py:869
-msgid "Total"
-msgstr "మొత్తము"
-
-#. date format used in the overview graph when month view is selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../hamster/stats.py:891
-msgctxt "overview graph"
-msgid "%b %d"
-msgstr "%b %d"
-
-#: ../hamster/stats.py:920
-msgctxt "single day overview"
-msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
-
-#. Overview label if looking on single day
-#: ../hamster/stats.py:922
+#: ../src/hamster/stats.py:404
 #, python-format
-msgid "Overview for %(date)s"
-msgstr "%(date)s కొరకు వుపరితలదర్శనము"
-
-#: ../hamster/stats.py:950
-msgid "Month"
-msgstr "నెల"
-
-#: ../hamster/stats.py:952
-msgid "Day"
-msgstr "రోజులు"
+msgid ""
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+msgstr "15 నిముషముల కన్నా తక్కువవున్న అన్ని కార్యకలాపాల %s శాతముతో మీరు విరామంలేని వారుగా అనిపిస్తోంది."
 
 #. duration in round hours
-#: ../hamster/stuff.py:151
+#: ../src/hamster/lib/stuff.py:57
 #, python-format
 msgid "%dh"
 msgstr "%dh"
 
 #. duration less than hour
-#: ../hamster/stuff.py:154
+#: ../src/hamster/lib/stuff.py:60
 #, python-format
 msgid "%dmin"
 msgstr "%dmin"
 
 #. x hours, y minutes
-#: ../hamster/stuff.py:157
+#: ../src/hamster/lib/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
 msgstr "%dh %dmin"
 
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%B %d, %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:39
+msgid "Save Report — Time Tracker"
+msgstr "నివేదిక — సమయ ట్రాకర్‌ను భద్రపరుచుము"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:57
+msgid "HTML Report"
+msgstr "HTML నివేదిక"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:65
+msgid "Tab-Separated Values (TSV)"
+msgstr "టాబ్‌-విభజిత విలువలు (TSV)"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:73
+msgid "XML"
+msgstr "XML"
+
+#: ../src/hamster/widgets/reportchooserdialog.py:80
+msgid "iCal"
+msgstr "iCal"
+
+#. title in the report file name
+#: ../src/hamster/widgets/reportchooserdialog.py:97
+msgid "Time track"
+msgstr "సమయపు ట్రాక్"
+
+#~ msgid "<b>Activities</b>"
+#~ msgstr "<b>కార్యకలాపములు</b>"
+
+#~ msgid "<b>Global Hotkey</b>"
+#~ msgstr "<b>గ్లోబల్ హాట్‌కీ</b>"
+
+#~ msgid "<b>Tracking</b>"
+#~ msgstr "<b>ట్రాక్‌చేయుచున్నది</b>"
+
+#~ msgid "Move activity down"
+#~ msgstr "క్రియాకలాపమును క్రిందకి కదుల్చుము"
+
+#~ msgid "Move activity up"
+#~ msgstr "క్రియాకలాపమును పైనకు కదుల్చుము"
+
+#~ msgid "Preview:"
+#~ msgstr "ఉపదర్శనము:"
+
+#~ msgid "Show window"
+#~ msgstr "విండోను చూపుము"
+
+#~ msgid ""
+#~ "<span size=\"small\" >Type in an activity and hit Enter to start tracking!"
+#~ "</span>"
+#~ msgstr ""
+#~ "<span size=\"small\" >ట్రాక్ చేయుట ప్రారంభించుటకు క్రియాకలాపమునందు టైపు చేసి Enter "
+#~ "కొట్టండి!</span>"
+
+#~ msgid ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">Tell me more</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size=\"small\" color=\"blue\" underline=\"single\">ఇంకా చెప్పండి</span>"
+
+#~ msgid "Ad_d Earlier Activity"
+#~ msgstr "ముందలి క్రియాకలాపమును జతచేయుము (_d)"
+
+#~ msgid "Hamster"
+#~ msgstr "హామ్‌స్టర్"
+
+#~ msgid "_Activity:"
+#~ msgstr "క్రియాకలాపము (_A):"
+
+#~ msgid "_Today"
+#~ msgstr "ఈ రోజు(_T)"
+
+#~ msgid " _Day"
+#~ msgstr " రోజు (_D)"
+
+#~ msgid " _Month"
+#~ msgstr " నెల (_M)"
+
+#~ msgid " _Week"
+#~ msgstr " వారము (_W)"
+
+#~ msgid "<b>Overview</b>"
+#~ msgstr "<b>ఉపరితలదర్శనం</b>"
+
+#~ msgid "<b>Totals</b>"
+#~ msgstr "<b>మొత్తములు</b>"
+
+#~ msgid "Categories:"
+#~ msgstr "వర్గములు:"
+
+#~ msgid "Date interval:"
+#~ msgstr "తేదీ విరామము:"
+
+#~ msgid "Save as HTML"
+#~ msgstr "HTML వలె దాయుము"
+
+#~ msgid "What should be typed in the activity box?"
+#~ msgstr "క్రియాకలాపము పెట్టెనందు యేమి ప్రవేశపెట్టవలెను?"
+
+#~ msgid ""
+#~ "There is a simple syntax that enables you to add details to your "
+#~ "activities:\n"
+#~ "        \n"
+#~ "\"@\" symbol marks a category. Example: \"watering flowers@home\" will "
+#~ "start tracking the activity \"watering flowers\" in the category \"home"
+#~ "\".\n"
+#~ "\n"
+#~ "Commas (\",\") mark beginning of a description. Example: \"watering "
+#~ "flowers, begonias and forgetmenots\" will start tracking the activity "
+#~ "\"watering flowers\" and add the description \"begonias and forgetmenots"
+#~ "\" to it.\n"
+#~ "\n"
+#~ "Both can be combined: \"watering flowers@home, begonias and forgetmenots"
+#~ "\" will work just fine!\n"
+#~ "\n"
+#~ "Now, start tracking!\n"
+#~ "        "
+#~ msgstr ""
+#~ "మీ క్రియాకలాపములకు వివరములను జతచేయుగలుగుటకు సరళమైన సిన్టాక్సు వొకటి వుంది:\n"
+#~ "        \n"
+#~ "\"@\" చిహ్నము వర్గమువలె గుర్తుంచబడుతుంది. ఉదాహరణ: \"పువ్వులకు నీళ్ళుజల్లుట@ఇంటివద్ద\" "
+#~ "అనునది క్రియాకలాపము \"పువ్వులకు నీళ్ళుజల్లుట\" ను వర్గము \"ఇంటివద్ద\" నందు ట్రాక్ చేయుట "
+#~ "ప్రారంభిస్తుంది.\n"
+#~ "\n"
+#~ "కామాలు (\",\") వివరణ యొక్క ప్రారంభమును గుర్తుంచుతాయి. ఉదాహరణ: \"పువ్వులకు నీళ్ళుజల్లుట, "
+#~ "గులాబీలు మరియు చామంతులు\" అనునది క్రియాకలాపము \"పువ్వులకు నీళ్ళుజల్లుట\"ను ట్రాక్‌చేయుట "
+#~ "ప్రారంభిస్తుంది మరియు వివరణ \"గులాబీలు మరియు చామంతులు\" ను దానికి జతచేస్తుంది.\n"
+#~ "\n"
+#~ "రెండూ కలుపవచ్చును: \"పువ్వులకు నీళ్ళుజల్లుట@ఇంటివద్ద, గులాబీలు మరియు చామంతులు\" కూడా "
+#~ "చక్కగా పనిచేస్తుంది!\n"
+#~ "\n"
+#~ "ఇప్పుడు, ట్రాక్ చేయుట ప్రారంభించండి!\n"
+#~ "        "
+
+#~ msgid "Total Time"
+#~ msgstr "మొత్తము సమయం"
+
+#~ msgctxt "categories"
+#~ msgid "All"
+#~ msgstr "అన్ని"
+
+#~ msgctxt "first record"
+#~ msgid "%(b)s %(d)s"
+#~ msgstr "%(b)s %(d)s"
+
+#~ msgid "Total"
+#~ msgstr "మొత్తము"
+
+#~ msgid "Overview for %(date)s"
+#~ msgstr "%(date)s కొరకు వుపరితలదర్శనము"
