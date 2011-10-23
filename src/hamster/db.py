@@ -499,6 +499,9 @@ class Storage(storage.Storage):
                           start_time = start_time,
                           end_time = end_time)
 
+        start_time = start_time or fact.start_time
+        end_time = end_time or fact.end_time
+
         if not fact.activity or start_time is None:  # sanity check
             return 0
 

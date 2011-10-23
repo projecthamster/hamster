@@ -22,6 +22,7 @@ import dbus, dbus.service
 import datetime as dt
 from calendar import timegm
 import gio
+from lib import stuff
 
 def to_dbus_fact(fact):
     """Perform the conversion between fact database query and
@@ -106,21 +107,18 @@ class Storage(dbus.service.Object):
     # facts
     @dbus.service.method("org.gnome.Hamster", in_signature='siib', out_signature='i')
     def AddFact(self, fact, start_time, end_time, temporary = False):
-        start_time = start_time or None
-        if start_time:
-            start_time = dt.datetime.utcfromtimestamp(start_time)
+        start_time = dt.datetime.utcfromtimestamp(start_time) if start_time else None
+        end_time = dt.datetime.utcfromtimestamp(end_time) if end_time else None
 
-        end_time = end_time or None
-        if end_time:
-            end_time = dt.datetime.utcfromtimestamp(end_time)
+        fact = stuff.Fact(fact, start_time = start_time, end_time = end_time)
+        start_time = fact.start_time or dt.datetime.now().replace(second = 0, microsecond = 0)
 
         self.start_transaction()
-        result = self.__add_fact(fact, start_time, end_time, temporary)
+        result = self.__add_fact(fact.serialized_name(), start_time, end_time, temporary)
         self.end_transaction()
 
         if result:
             self.FactsChanged()
-
         return result or 0
 
 
