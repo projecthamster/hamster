@@ -13,23 +13,16 @@ bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/hamster
 bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster-applet.svg')
 
 
-bld(features = "subst",
-    source= "hamster-applet.desktop.in.in",
-    target= "hamster-applet.desktop.in",
-    dict = bld.env
-   )
+for filename in ["hamster-applet.desktop",
+                 "hamster-time-tracker.desktop",
+                 "hamster-time-tracker-overview.desktop",
+                 "Hamster_Applet.server"]:
+    bld(features = "subst",
+        source= "%s.in.in" % filename,
+        target= "%s.in" % filename,
+        dict = bld.env
+       )
 
-bld(features = "subst",
-    source= "hamster-time-tracker.desktop.in.in",
-    target= "hamster-time-tracker.desktop.in",
-    dict = bld.env
-   )
-
-bld(features = "subst",
-    source= "Hamster_Applet.server.in.in",
-    target= "Hamster_Applet.server.in",
-    dict = bld.env
-   )
 
 bld.add_group()
 
@@ -48,6 +41,7 @@ bld(features = 'intltool_in',
 
 bld(features = 'intltool_in',
     source   = """hamster-time-tracker.desktop.in
+                  hamster-time-tracker-overview.desktop.in
                   hamster-applet.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',

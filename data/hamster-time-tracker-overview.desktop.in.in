@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+_Name=Time Tracking Overview
+_Comment=The overview window of hamster time tracker
+Icon=hamster-applet
+Exec=@BINDIR@/hamster-time-tracker overview
+Categories=GNOME;GTK;Utility;
