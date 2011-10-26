@@ -7,23 +7,92 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product"
-"=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-24 22:29+0000\n"
-"PO-Revision-Date: 2011-08-30 23:22-0400\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-10-24 15:10+0000\n"
+"PO-Revision-Date: 2011-10-25 14:14-0400\n"
 "Last-Translator: Tiffany Antopolski <tiffany.antopolski@gmail.com>\n"
-"Language-Team: Esperanto <ubuntu-l10n-eo@lists.launchpad.net>\n"
-"Language: eo\n"
+"Language-Team: Esperanto\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1-rc1\n"
 "X-Project-Style: gnome\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
 msgid "Project Hamster (GNOME Time Tracker)"
 msgstr "Projekto Hamster (GNOME-Tempo-Ŝanĝospurilo)"
+
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
+msgid "No records today"
+msgstr "Neniuj rikordoj hodiaŭ"
+
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "Ŝ_anĝi"
+
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "Montri superrigard_on"
+
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "K_omenci ŝanĝospuradon"
+
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "Ĉ_esi ŝanĝospuradon"
+
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "Ho_diaŭ"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "_Aldoni antaŭan activecon"
+
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Activeco:"
+
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Aldoni antaŭan activecon"
+
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Priskribo:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Etikedoj:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Horo:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "farata"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr "al"
+
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Projekto Hamster - ŝanĝospuru vian tempon"
+
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
+msgid "Time Tracker"
+msgstr "Tempo-ŝanĝospurilo"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -111,7 +180,7 @@ msgstr "Ĉesi ŝanĝospuri kiam la komputilo estas senaga"
 
 #: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
-msgstr "Ĉesi ŝanĝospuri je komputila malŝalto"
+msgstr "Ĉesi ŝanĝospuri je komputila elŝalto"
 
 #: ../data/hamster-applet.schemas.in.h:17
 msgid "Switch activity on workspace change"
@@ -133,14 +202,6 @@ msgstr "Baskuligi videblecon de la hamster-aplikofenestro."
 msgid "Project Hamster — track your time"
 msgstr "Projekto Hamster - Ŝanĝospuru vian tempon"
 
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
-msgid "Time Tracker"
-msgstr "Tempo-ŝanĝospurilo"
-
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "_Pri"
@@ -157,66 +218,13 @@ msgstr "Superrigard_o"
 msgid "_Preferences"
 msgstr "_Agordoj"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "Projekto Hamster - ŝanĝospuru vian tempon"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
+msgid "The overview window of hamster time tracker"
+msgstr "La superrigarda fenestro de hamster-tempo-ŝangospurilo"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-msgid "No records today"
-msgstr "Neniuj rikordoj hodiaŭ"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
-msgid "S_witch"
-msgstr "Ŝ_anĝi"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "Montri superrigard_on"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
-msgid "Start _Tracking"
-msgstr "K_omenci ŝanĝospuradon"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "Ĉ_esi ŝanĝospuradon"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "Ho_diaŭ"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "_Aldoni antaŭan activecon"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "Activeco:"
-
-#: ../data/edit_activity.ui.h:2
-msgid "Add Earlier Activity"
-msgstr "Aldoni antaŭan activecon"
-
-#: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Priskribo:"
-
-#: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "Etikedoj:"
-
-#: ../data/edit_activity.ui.h:5
-msgid "Time:"
-msgstr "Horo:"
-
-#: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "farata"
-
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "al"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "Time Tracking Overview"
+msgstr "Tempo-ŝanĝospurila superrigardo"
 
 #: ../data/hamster.ui.h:1
 msgid "Add earlier activity"
@@ -486,8 +494,8 @@ msgid "%sh"
 msgstr "%sh"
 
 #: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
-#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
+#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:299
@@ -509,45 +517,98 @@ msgid "Switched to '%s'"
 msgstr "Aliigis al '%s'"
 
 #. defaults
-#: ../src/hamster/db.py:947
+#: ../src/hamster/db.py:950
 msgid "Work"
 msgstr "Laboro"
 
-#: ../src/hamster/db.py:948
+#: ../src/hamster/db.py:951
 msgid "Reading news"
 msgstr "Leganta novaĵojn"
 
-#: ../src/hamster/db.py:949
+#: ../src/hamster/db.py:952
 msgid "Checking stocks"
 msgstr "Kontrolanta stokojn"
 
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:953
 msgid "Super secret project X"
 msgstr "Sekretega projekto X"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:954
 msgid "World domination"
 msgstr "Superregi la mondon"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:956
 msgid "Day-to-day"
 msgstr "Tago-al-tago"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:957
 msgid "Lunch"
 msgstr "Lunĉo"
 
-#: ../src/hamster/db.py:955
+#: ../src/hamster/db.py:958
 msgid "Watering flowers"
 msgstr "Akvumadon de floroj"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:959
 msgid "Doing handstands"
 msgstr "Stari sur la manoj"
 
 #: ../src/hamster/edit_activity.py:70
 msgid "Update activity"
 msgstr "Ĝisdatigi aktivecon"
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%dh"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%B %d, %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 
 #: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
@@ -712,15 +773,6 @@ msgstr "Montri ŝablonon"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Vi povas transpasi ĝin per enmemorigo de via versio en %(home_folder)s"
 
-#: ../src/hamster-time-tracker:242
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "Laboranta sur <b>%s</b>"
-
-#: ../src/hamster-time-tracker:595
-msgid "Hamster time tracker. Usage:"
-msgstr "Hamster tempo-ŝanĝospurilo. Uzo:"
-
 #: ../src/hamster/stats.py:90
 msgctxt "years"
 msgid "All"
@@ -833,58 +885,14 @@ msgstr ""
 "Kun %s elcentoj de ĉiuj aktivecoj estantaj malpli ol 15 minutoj, vi ŝajnas "
 "esti multmovema abelo."
 
-#. duration in round hours
-#: ../src/hamster/lib/stuff.py:57
-#, python-format
-msgid "%dh"
-msgstr "%dh"
+#: ../src/hamster-time-tracker:242
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Laboranta sur <b>%s</b>"
 
-#. duration less than hour
-#: ../src/hamster/lib/stuff.py:60
-#, python-format
-msgid "%dmin"
-msgstr "%dmin"
-
-#. x hours, y minutes
-#: ../src/hamster/lib/stuff.py:63
-#, python-format
-msgid "%dh %dmin"
-msgstr "%dh %dmin"
-
-#. label of date range if looking on single day
-#. date format for overview label when only single day is visible
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:80
-msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
-
-#. label of date range if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:86
-#, python-format
-msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-
-#. label of date range if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:92
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-
-#. label of date range for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:98
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+#: ../src/hamster-time-tracker:595
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamster tempo-ŝanĝospurilo. Uzo:"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
