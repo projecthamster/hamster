@@ -9,15 +9,16 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2009.
 # Laurent Coudeur <laurentc@iol.ie>, 2009, 2010.
 # Jean-Philippe Fleury <contact@jpfleury.net>, 2010.
+# Bruno Brouard <annoa.b@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-07-07 01:00+0000\n"
-"PO-Revision-Date: 2011-09-02 17:56+0200\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"POT-Creation-Date: 2011-10-23 19:47+0000\n"
+"PO-Revision-Date: 2011-10-29 18:58+0200\n"
+"Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,6 +28,75 @@ msgstr ""
 #: ../data/90-hamster-applet.xml.in.h:1
 msgid "Project Hamster (GNOME Time Tracker)"
 msgstr "Projet Hamster (gestionnaire de temps de GNOME)"
+
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
+msgid "No records today"
+msgstr "Aucun enregistrement aujourd'hui"
+
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "C_hanger"
+
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "Afficher le _résumé"
+
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "_Commencer le suivi"
+
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "_Arrêter le suivi"
+
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "Aujourd'_hui"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "Ajou_ter une activité antérieure"
+
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Activité :"
+
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Ajout d'une activité antérieure"
+
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Description :"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Étiquettes :"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Heure :"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "en cours"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr "à"
+
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Projet Hamster - Gérez votre emploi du temps"
+
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
+msgid "Time Tracker"
+msgstr "Gestionnaire de temps"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -146,14 +216,6 @@ msgstr "Afficher ou masquer la fenêtre de l'application de Hamster."
 msgid "Project Hamster — track your time"
 msgstr "Projet Hamster — Gérez votre emploi du temps"
 
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:178
-msgid "Time Tracker"
-msgstr "Gestionnaire de temps"
-
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "À pr_opos"
@@ -170,66 +232,13 @@ msgstr "_Résumé"
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "Projet Hamster - Gérez votre emploi du temps"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
+msgid "The overview window of hamster time tracker"
+msgstr "La fenêtre de résumé du gestionnaire de temps hamster"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-msgid "No records today"
-msgstr "Aucun enregistrement aujourd'hui"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
-msgid "S_witch"
-msgstr "C_hanger"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "Afficher le _résumé"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
-msgid "Start _Tracking"
-msgstr "_Commencer le suivi"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "_Arrêter le suivi"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "Aujourd'_hui"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "Ajou_ter une activité antérieure"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "Activité :"
-
-#: ../data/edit_activity.ui.h:2
-msgid "Add Earlier Activity"
-msgstr "Ajout d'une activité antérieure"
-
-#: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Description :"
-
-#: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "Étiquettes :"
-
-#: ../data/edit_activity.ui.h:5
-msgid "Time:"
-msgstr "Heure :"
-
-#: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "en cours"
-
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "à"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "Time Tracking Overview"
+msgstr "Résumé de la gestion du temps"
 
 #: ../data/hamster.ui.h:1
 msgid "Add earlier activity"
@@ -288,13 +297,13 @@ msgid "Show Statistics"
 msgstr "Afficher les statistiques"
 
 #: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
 msgid "Tags"
 msgstr "Étiquettes"
 
 #: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
 #: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:39
+#: ../src/hamster-time-tracker:153
 msgid "Activity"
 msgstr "Activité"
 
@@ -458,7 +467,7 @@ msgstr "Année :"
 #: ../src/docky_control/2.0/hamster_control.py:71
 #: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
 #: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
-#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
 msgid "No activity"
 msgstr "Aucune activité"
 
@@ -503,68 +512,121 @@ msgid "%sh"
 msgstr "%s h"
 
 #: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
-#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
+#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:224
+#: ../src/hamster-time-tracker:299
 msgid "Unsorted"
 msgstr "Divers"
 
-#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:169
-#: ../src/hamster-time-tracker:229
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
+#: ../src/hamster-time-tracker:304
 msgid "Just started"
 msgstr "Vient de commencer"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:378
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
 msgid "Changed activity"
 msgstr "Activité changée"
 
-#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:379
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "Passé à « %s »"
 
 #. defaults
-#: ../src/hamster/db.py:947
+#: ../src/hamster/db.py:950
 msgid "Work"
 msgstr "Travail"
 
-#: ../src/hamster/db.py:948
+#: ../src/hamster/db.py:951
 msgid "Reading news"
 msgstr "Lecture de nouvelles"
 
-#: ../src/hamster/db.py:949
+#: ../src/hamster/db.py:952
 msgid "Checking stocks"
 msgstr "Vérification des indices boursiers"
 
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:953
 msgid "Super secret project X"
 msgstr "Projet X super secret"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:954
 msgid "World domination"
 msgstr "Domination mondiale"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:956
 msgid "Day-to-day"
 msgstr "Quotidien"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:957
 msgid "Lunch"
 msgstr "Repas"
 
-#: ../src/hamster/db.py:955
+#: ../src/hamster/db.py:958
 msgid "Watering flowers"
 msgstr "Arrosage des plantes"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:959
 msgid "Doing handstands"
 msgstr "Faire le poirier"
 
 #: ../src/hamster/edit_activity.py:70
 msgid "Update activity"
 msgstr "Mettre à jour l'activité"
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%d h"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%d min"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%d h %d min"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%d %B %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
 
 #: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
@@ -731,15 +793,6 @@ msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
 "Vous pouvez le remplacer en enregistrant votre version dans %(home_folder)s"
 
-#: ../src/hamster-time-tracker:167
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "Travaille sur <b>%s</b>"
-
-#: ../src/hamster-time-tracker:499
-msgid "Hamster time tracker. Usage:"
-msgstr "Gestionnaire de temps Hamster. Utilisation :"
-
 #: ../src/hamster/stats.py:90
 msgctxt "years"
 msgid "All"
@@ -854,58 +907,14 @@ msgstr ""
 "Avec %s %% d'activités ne dépassant pas 15 minutes, vous semblez être très "
 "occupé."
 
-#. duration in round hours
-#: ../src/hamster/lib/stuff.py:57
-#, python-format
-msgid "%dh"
-msgstr "%d h"
+#: ../src/hamster-time-tracker:242
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Travaille sur <b>%s</b>"
 
-#. duration less than hour
-#: ../src/hamster/lib/stuff.py:60
-#, python-format
-msgid "%dmin"
-msgstr "%d min"
-
-#. x hours, y minutes
-#: ../src/hamster/lib/stuff.py:63
-#, python-format
-msgid "%dh %dmin"
-msgstr "%d h %d min"
-
-#. label of date range if looking on single day
-#. date format for overview label when only single day is visible
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:80
-msgid "%B %d, %Y"
-msgstr "%d %B %Y"
-
-#. label of date range if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:86
-#, python-format
-msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_d)s %(start_B)s %(start_Y)s – %(end_d)s %(end_B)s %(end_Y)s"
-
-#. label of date range if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:92
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_d)s %(start_B)s – %(end_d)s %(end_B)s %(end_Y)s"
-
-#. label of date range for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:98
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_d)s – %(end_d)s %(start_B)s %(end_Y)s"
+#: ../src/hamster-time-tracker:595
+msgid "Hamster time tracker. Usage:"
+msgstr "Gestionnaire de temps Hamster. Utilisation :"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
