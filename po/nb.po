@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-01 08:10+0200\n"
-"PO-Revision-Date: 2011-09-01 08:14+0200\n"
+"POT-Creation-Date: 2011-12-14 22:58+0100\n"
+"PO-Revision-Date: 2011-12-14 22:58+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -22,6 +22,75 @@ msgstr ""
 #: ../data/90-hamster-applet.xml.in.h:1
 msgid "Project Hamster (GNOME Time Tracker)"
 msgstr "Prosjekt Hamster (GNOM tidssporing)"
+
+#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
+msgid "No records today"
+msgstr "Ingen oppføringer i dag"
+
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
+msgid "S_witch"
+msgstr "B_ytt"
+
+#: ../data/applet.ui.h:3
+msgid "Show _Overview"
+msgstr "Vis _oversikt"
+
+#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
+msgid "Start _Tracking"
+msgstr "Star_t sporing"
+
+#: ../data/applet.ui.h:5
+msgid "Sto_p Tracking"
+msgstr "Sto_pp sporing"
+
+#: ../data/applet.ui.h:6
+msgid "To_day"
+msgstr "I _dag"
+
+#: ../data/applet.ui.h:7
+msgid "_Add earlier activity"
+msgstr "_Legg til tidligere aktivitet"
+
+#: ../data/edit_activity.ui.h:1
+msgid "Activity:"
+msgstr "Aktivitet:"
+
+#: ../data/edit_activity.ui.h:2
+msgid "Add Earlier Activity"
+msgstr "Legg til tidligere aktivitet"
+
+#: ../data/edit_activity.ui.h:3
+msgid "Description:"
+msgstr "Beskrivelse:"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Tags:"
+msgstr "Tagger:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "Tid:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "in progress"
+msgstr "under arbeid"
+
+#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
+msgid "to"
+msgstr "til"
+
+#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+msgid "Project Hamster - track your time"
+msgstr "Prosjekt Hamster - følg med på din tidsbruk"
+
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/Hamster_Applet.server.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
+msgid "Time Tracker"
+msgstr "Tidsporing"
 
 #: ../data/hamster-applet.schemas.in.h:1
 msgid ""
@@ -119,14 +188,6 @@ msgstr ""
 msgid "Project Hamster — track your time"
 msgstr "Prosjekt hamster - følg med på din tidsbruk"
 
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
-msgid "Time Tracker"
-msgstr "Tidsporing"
-
 #: ../data/Hamster_Applet.xml.h:1
 msgid "_About"
 msgstr "_Om"
@@ -143,66 +204,13 @@ msgstr "_Oversikt"
 msgid "_Preferences"
 msgstr "_Brukervalg"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "Prosjekt Hamster - følg med på din tidsbruk"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
+msgid "The overview window of hamster time tracker"
+msgstr "Oversiktsvindu for hamster tidsporing"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-msgid "No records today"
-msgstr "Ingen oppføringer i dag"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
-msgid "S_witch"
-msgstr "B_ytt"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "Vis _oversikt"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
-msgid "Start _Tracking"
-msgstr "Star_t sporing"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "Sto_pp sporing"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "I _dag"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "_Legg til tidligere aktivitet"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "Aktivitet:"
-
-#: ../data/edit_activity.ui.h:2
-msgid "Add Earlier Activity"
-msgstr "Legg til tidligere aktivitet"
-
-#: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Beskrivelse:"
-
-#: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "Tagger:"
-
-#: ../data/edit_activity.ui.h:5
-msgid "Time:"
-msgstr "Tid:"
-
-#: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "under arbeid"
-
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "til"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "Time Tracking Overview"
+msgstr "Oversikt over tidsporing"
 
 #: ../data/hamster.ui.h:1
 msgid "Add earlier activity"
@@ -472,8 +480,8 @@ msgid "%sh"
 msgstr "%sh"
 
 #: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
-#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
+#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:299
@@ -495,45 +503,98 @@ msgid "Switched to '%s'"
 msgstr "Byttet til «%s»"
 
 #. defaults
-#: ../src/hamster/db.py:947
+#: ../src/hamster/db.py:950
 msgid "Work"
 msgstr "Arbeid"
 
-#: ../src/hamster/db.py:948
+#: ../src/hamster/db.py:951
 msgid "Reading news"
 msgstr "Leser nyheter"
 
-#: ../src/hamster/db.py:949
+#: ../src/hamster/db.py:952
 msgid "Checking stocks"
 msgstr "Sjekker aksjer"
 
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:953
 msgid "Super secret project X"
 msgstr "Superhemmelig prosjekt X"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:954
 msgid "World domination"
 msgstr "Verdensherredømme"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:956
 msgid "Day-to-day"
 msgstr "Dag til dag"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:957
 msgid "Lunch"
 msgstr "Lunsj"
 
-#: ../src/hamster/db.py:955
+#: ../src/hamster/db.py:958
 msgid "Watering flowers"
 msgstr "Vanner blomster"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:959
 msgid "Doing handstands"
 msgstr "Står på hendene"
 
 #: ../src/hamster/edit_activity.py:70
 msgid "Update activity"
 msgstr "Oppdater aktivitet"
+
+#. duration in round hours
+#: ../src/hamster/lib/stuff.py:57
+#, python-format
+msgid "%dh"
+msgstr "%dt"
+
+#. duration less than hour
+#: ../src/hamster/lib/stuff.py:60
+#, python-format
+msgid "%dmin"
+msgstr "%dmin"
+
+#. x hours, y minutes
+#: ../src/hamster/lib/stuff.py:63
+#, python-format
+msgid "%dh %dmin"
+msgstr "%dt %dmin"
+
+#. label of date range if looking on single day
+#. date format for overview label when only single day is visible
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:80
+msgid "%B %d, %Y"
+msgstr "%d %B, %Y"
+
+#. label of date range if start and end years don't match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:86
+#, python-format
+msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s - %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range if start and end month do not match
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:92
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s - %(end_B)s %(end_d)s, %(end_Y)s"
+
+#. label of date range for interval in same month
+#. letter after prefixes (start_, end_) is the one of
+#. standard python date formatting ones- you can use all of them
+#. see http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/lib/stuff.py:98
+#, python-format
+msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s - %(end_d)s, %(end_Y)s"
 
 #: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
@@ -698,15 +759,6 @@ msgstr "Vis mal"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Du kan overstyre dem ved å lagre din versjon i %(home_folder)s"
 
-#: ../src/hamster-time-tracker:242
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "Arbeider på <b>%s</b>?"
-
-#: ../src/hamster-time-tracker:595
-msgid "Hamster time tracker. Usage:"
-msgstr "Hamster tidsporing. Bruk:"
-
 #: ../src/hamster/stats.py:90
 msgctxt "years"
 msgid "All"
@@ -797,74 +849,36 @@ msgstr "Hamster vil gjerne observere deg litt lenger!"
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
 "early bird."
-msgstr "Siden %s prosent av alle aktiviter starter før ni om morgenen ser det ut til at du er en morgenfugl."
+msgstr ""
+"Siden %s prosent av alle aktiviter starter før ni om morgenen ser det ut til "
+"at du er en morgenfugl."
 
 #: ../src/hamster/stats.py:401
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
 "night owl."
-msgstr "Siden %s prosent av alle aktiviteter starter etter elleve om kvelden ser det ut til at du er en nattugle."
+msgstr ""
+"Siden %s prosent av alle aktiviteter starter etter elleve om kvelden ser det "
+"ut til at du er en nattugle."
 
 #: ../src/hamster/stats.py:404
 #, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
 "be a busy bee."
-msgstr "Siden %s prosent av alle aktiviteter varer kortere enn 15 minutter ser det ut til at du er en flittig bie."
+msgstr ""
+"Siden %s prosent av alle aktiviteter varer kortere enn 15 minutter ser det "
+"ut til at du er en flittig bie."
 
-#. duration in round hours
-#: ../src/hamster/lib/stuff.py:57
-#, python-format
-msgid "%dh"
-msgstr "%dt"
+#: ../src/hamster-time-tracker:242
+#, c-format
+msgid "Working on <b>%s</b>"
+msgstr "Arbeider på <b>%s</b>?"
 
-#. duration less than hour
-#: ../src/hamster/lib/stuff.py:60
-#, python-format
-msgid "%dmin"
-msgstr "%dmin"
-
-#. x hours, y minutes
-#: ../src/hamster/lib/stuff.py:63
-#, python-format
-msgid "%dh %dmin"
-msgstr "%dt %dmin"
-
-#. label of date range if looking on single day
-#. date format for overview label when only single day is visible
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:80
-msgid "%B %d, %Y"
-msgstr "%d %B, %Y"
-
-#. label of date range if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:86
-#, python-format
-msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s, %(start_Y)s - %(end_B)s %(end_d)s, %(end_Y)s"
-
-#. label of date range if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:92
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s - %(end_B)s %(end_d)s, %(end_Y)s"
-
-#. label of date range for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:98
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s - %(end_d)s, %(end_Y)s"
+#: ../src/hamster-time-tracker:595
+msgid "Hamster time tracker. Usage:"
+msgstr "Hamster tidsporing. Bruk:"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
