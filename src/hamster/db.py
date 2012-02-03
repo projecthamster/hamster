@@ -552,7 +552,7 @@ class Storage(storage.Storage):
             if facts and facts[-1]["end_time"] == None:
                 previous = facts[-1]
 
-            if previous and previous['start_time'] < start_time:
+            if previous and previous['start_time'] <= start_time:
                 # check if maybe that is the same one, in that case no need to restart
                 if previous["activity_id"] == activity_id \
                    and set(previous["tags"]) == set([tag["name"] for tag in tags]) \
