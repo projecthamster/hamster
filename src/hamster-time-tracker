@@ -546,39 +546,6 @@ class ProjectHamster(object):
         self.statusicon.set_visible(True)
 
 
-# maintain just one instance. this code feels hackish
-class WindowServer(dbus.service.Object):
-    __dbus_object_path__ = "/org/gnome/Hamster/WindowServer"
-
-    def __init__(self):
-        self.app = None
-        self.bus = dbus.SessionBus()
-        bus_name = dbus.service.BusName("org.gnome.Hamster.WindowServer", bus=self.bus)
-        dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def main(self):
-        if self.app:
-            self.app.window.show()
-            self.app.window.present()
-        else:
-            self.app = ProjectHamster()
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def edit(self): dialogs.edit.show(self.app)
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def overview(self): dialogs.overview.show(self.app)
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def about(self): dialogs.about.show(self.app)
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def statistics(self): dialogs.stats.show(self.app)
-
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def preferences(self): dialogs.prefs.show(self.app)
-
 
 if __name__ == "__main__":
     from hamster.lib import i18n
@@ -597,34 +564,16 @@ if __name__ == "__main__":
 """)
         sys.exit(usage % {'prog': sys.argv[0]})
 
-    if window == "toggle":
-        from hamster.client import Storage
-        storage = Storage()
-        storage.toggle()
-        sys.exit()
-
-    from hamster.configuration import runtime, dialogs, conf, load_ui_file
-
-    # if there is windowserver hanging in dbus - call that and exit
-    bus = dbus.SessionBus()
-    if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
-        server = bus.get_object("org.gnome.Hamster.WindowServer", WindowServer.__dbus_object_path__)
+    if window != "main":
+        bus = dbus.SessionBus()
+        server = bus.get_object("org.gnome.Hamster.WindowServer",
+                                "/org/gnome/Hamster/WindowServer")
         getattr(server, window)()
         sys.exit(0)
 
-
-    # otherwise proceed and do all the import and everything
-    gtk.gdk.threads_init()
-    gtk.window_set_default_icon_name("hamster-applet")
-
+    from hamster.configuration import runtime, dialogs, conf, load_ui_file
     from hamster import widgets, idle
     from hamster.lib import stuff, trophies
-
-    try:
-        import wnck
-    except:
-        logging.warning("Could not import wnck - workspace tracking will be disabled")
-        wnck = None
 
     try:
         import pynotify
@@ -633,6 +582,5 @@ if __name__ == "__main__":
         logging.warning("Could not import pynotify - notifications will be disabled")
         pynotify = None
 
-
-    getattr(WindowServer(), window)()
+    app = ProjectHamster()
     gtk.main()

@@ -47,7 +47,8 @@ def build(bld):
     bld.install_files('${BINDIR}',
                       """src/hamster-time-tracker
                          src/hamster-cli
-                         src/hamster-service""",
+                         src/hamster-service
+                         src/hamster-windows-service""",
                       chmod = 0755)
     bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-time-tracker')
 
@@ -80,6 +81,12 @@ def build(bld):
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",
                      target= "org.gnome.hamster.service",
+                     install_path="${DATADIR}/dbus-1/services",
+                     dict = bld.env
+                    )
+    bld.new_task_gen("subst",
+                     source= "org.gnome.hamster.Windows.service.in",
+                     target= "org.gnome.hamster.Windows.service",
                      install_path="${DATADIR}/dbus-1/services",
                      dict = bld.env
                     )
