@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-01-14 22:14+0000\n"
-"PO-Revision-Date: 2012-01-15 14:07+0900\n"
-"Last-Translator: Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
+"POT-Creation-Date: 2012-02-03 22:40+0000\n"
+"PO-Revision-Date: 2012-02-03 15:45+0900\n"
+"Last-Translator: OKANO Takayoshi <kano@na.rim.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -585,7 +585,7 @@ msgstr "%d時間 %d分"
 #. http://docs.python.org/library/time.html#time.strftime
 #: ../src/hamster/lib/stuff.py:80
 msgid "%B %d, %Y"
-msgstr "%Y年%B%d日"
+msgstr "%Y年%m月%d日"
 
 #. label of date range if start and end years don't match
 #. letter after prefixes (start_, end_) is the one of
@@ -619,7 +619,7 @@ msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_d)s日"
 #: ../src/hamster/overview_activities.py:88
 msgctxt "overview list"
 msgid "%A, %b %d"
-msgstr "%A, %b %d"
+msgstr "%m月%d日 (%a)"
 
 #: ../src/hamster/overview_totals.py:161
 #, python-format
@@ -725,7 +725,7 @@ msgstr "%(end_Y)s年%(start_B)s%(start_d)s日-%(end_d)s日の集計結果"
 #: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
 msgctxt "html report"
 msgid "%b %d, %Y"
-msgstr "%Y年%b月%d日 "
+msgstr "%Y年%m月%d日 "
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
 #: ../src/hamster/reports.py:290
@@ -800,7 +800,7 @@ msgstr "データを集めています — 一週間後に調査してくださ�
 #: ../src/hamster/stats.py:320
 msgctxt "first record"
 msgid "%b %d, %Y"
-msgstr "%Y年%b月%d日"
+msgstr "%Y年%m月%d日"
 
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
@@ -808,7 +808,7 @@ msgstr "%Y年%b月%d日"
 #: ../src/hamster/stats.py:325
 msgctxt "first record"
 msgid "%b %d"
-msgstr "%b月%d日"
+msgstr "%m月%d日"
 
 #: ../src/hamster/stats.py:327
 #, python-format
@@ -837,7 +837,7 @@ msgstr ""
 #: ../src/hamster/stats.py:363
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
-msgstr "%Y年%b月%d日"
+msgstr "%Y年%m月%d日"
 
 #: ../src/hamster/stats.py:368
 #, python-format
@@ -885,7 +885,7 @@ msgstr "15分未満のアクティビティが%sパーセントなので、忙�
 msgid "Working on <b>%s</b>"
 msgstr "<b>%s</b>で動作中"
 
-#: ../src/hamster-time-tracker:595
+#: ../src/hamster-time-tracker:562
 msgid "Hamster time tracker. Usage:"
 msgstr "ハムスター・タイムトラッカー。使い方:"
 
