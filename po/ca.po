@@ -2,14 +2,14 @@
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the hamster-applet package.
 # Sílvia Miranda <silvia@softcatala.cat>, 2010, 2011.
-# Gil Forcada <gilforcada@guifi.net>, 2008, 2009, 2010, 2011.
+# Gil Forcada <gilforcada@guifi.net>, 2008, 2009, 2010, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet 2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 21:24+0200\n"
-"PO-Revision-Date: 2011-10-29 21:24+0200\n"
+"POT-Creation-Date: 2012-02-10 23:45+0100\n"
+"PO-Revision-Date: 2012-02-10 23:45+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: català; valencià <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -22,76 +22,121 @@ msgstr ""
 msgid "Project Hamster (GNOME Time Tracker)"
 msgstr "Projecte Hamster (comptador de temps del GNOME)"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-msgid "No records today"
-msgstr "No hi ha registres d'avui"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
-msgid "S_witch"
-msgstr "_Canvia"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "Mostra un _resum general"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
-msgid "Start _Tracking"
-msgstr "C_omença a comptar"
-
-#: ../data/applet.ui.h:5
+#: ../data/applet.ui.h:1
 msgid "Sto_p Tracking"
 msgstr "_Para de comptar"
 
-#: ../data/applet.ui.h:6
+#: ../data/applet.ui.h:2 ../data/hamster.ui.h:10
+msgid "S_witch"
+msgstr "_Canvia"
+
+#: ../data/applet.ui.h:3 ../data/hamster.ui.h:11
+msgid "Start _Tracking"
+msgstr "C_omença a comptar"
+
+#: ../data/applet.ui.h:4
 msgid "To_day"
 msgstr "A_vui"
 
-#: ../data/applet.ui.h:7
+#: ../data/applet.ui.h:5 ../src/hamster/applet.py:370
+#: ../src/hamster-time-tracker:279
+msgid "No records today"
+msgstr "No hi ha registres d'avui"
+
+#: ../data/applet.ui.h:6
 msgid "_Add earlier activity"
 msgstr "_Afegeix una activitat prèvia"
 
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "Activitat:"
+#: ../data/applet.ui.h:7
+msgid "Show _Overview"
+msgstr "Mostra un _resum general"
 
-#: ../data/edit_activity.ui.h:2
+#: ../data/edit_activity.ui.h:1 ../data/hamster.ui.h:15
 msgid "Add Earlier Activity"
 msgstr "Afegeix una activitat prèvia"
 
+#: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
+msgid "to"
+msgstr "fins"
+
 #: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Descripció:"
+msgid "in progress"
+msgstr "en curs"
 
 #: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "Etiquetes:"
+msgid "Description:"
+msgstr "Descripció:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
 msgstr "Temps:"
 
 #: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "en curs"
+msgid "Activity:"
+msgstr "Activitat:"
 
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "fins"
+#: ../data/edit_activity.ui.h:7
+msgid "Tags:"
+msgstr "Etiquetes:"
 
 #: ../data/hamster-applet.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "Projecte Hamster: controleu el temps"
-
-#: ../data/hamster-applet.desktop.in.in.h:2
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
+#: ../data/Hamster_Applet.server.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:253
+#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:252
+#: ../src/hamster-time-tracker:569
 msgid "Time Tracker"
 msgstr "Comptador de temps"
 
+#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
+msgid "Project Hamster - track your time"
+msgstr "Projecte Hamster: controleu el temps"
+
 #: ../data/hamster-applet.schemas.in.h:1
+msgid "Stop tracking on idle"
+msgstr "Para de comptar quan l'ordinador estigui inactiu"
+
+#: ../data/hamster-applet.schemas.in.h:2
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "Para de comptar l'activitat actual quan l'ordinador estigui inactiu"
+
+#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:2
+msgid "Stop tracking on shutdown"
+msgstr "Para el comptador en aturar l'ordinador"
+
+#: ../data/hamster-applet.schemas.in.h:4
+msgid "Stop tracking current activity on shutdown"
+msgstr "Para de comptar l'activitat actual en aturar l'ordinador"
+
+#: ../data/hamster-applet.schemas.in.h:5
+msgid "Remind of current task every x minutes"
+msgstr "Recorda l'activitat actual cada x minuts"
+
+#: ../data/hamster-applet.schemas.in.h:6
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"Recorda l'activitat actual cada interval de minuts indicat. Si és 0 o més "
+"gran de 120 s'inhabiliten els recordatoris."
+
+#: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "Recorda'm també si no hi ha cap activitat en actiu"
+
+#: ../data/hamster-applet.schemas.in.h:8
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Recorda'm també si no s'ha iniciat cap activitat cada "
+"«notify_interval» (interval de notificació) minuts."
+
+#: ../data/hamster-applet.schemas.in.h:9
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "Hora d'inici del dia (hora per defecte: les 5:30)"
+
+#: ../data/hamster-applet.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -104,40 +149,12 @@ msgstr ""
 "dies es comptabilitzen al dia en què es realitzi la major part de "
 "l'activitat."
 
-#: ../data/hamster-applet.schemas.in.h:2
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
+#: ../data/hamster-applet.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
 msgstr ""
-"Recorda'm també si no s'ha iniciat cap activitat cada "
-"«notify_interval» (interval de notificació) minuts."
+"Indica si en canviar d'espai de treball s'ha d'activar el canvi d'activitat"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
-msgid "Also remind when no activity is set"
-msgstr "Recorda'm també si no hi ha cap activitat en actiu"
-
-#: ../data/hamster-applet.schemas.in.h:4
-msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr "Hora d'inici del dia (hora per defecte: les 5:30)"
-
-#: ../data/hamster-applet.schemas.in.h:5
-msgid "Command for toggling visibility of the hamster application window."
-msgstr "Ordre per ocultar o mostrar la finestra de l'aplicació Hamster."
-
-#: ../data/hamster-applet.schemas.in.h:6
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"Si s'ha habilitat l'opció de canvi d'activitat per nom, en aquesta llista "
-"s'estableixen els noms d'activitat a què es podrà canviar. Els espais de "
-"treball es representen mitjançant l'índex de l'element."
-
-#: ../data/hamster-applet.schemas.in.h:7
-msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr ""
-"Drecera de teclat per mostrar o ocultar la finestra del comptador de temps."
-
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-applet.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -148,289 +165,282 @@ msgstr ""
 "«memory» (memòria) permet canviar a l'última activitat quan es torna a un "
 "espai de treball anterior."
 
-#: ../data/hamster-applet.schemas.in.h:9
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"Recorda l'activitat actual cada interval de minuts indicat. Si és 0 o més "
-"gran de 120 s'inhabiliten els recordatoris."
-
-#: ../data/hamster-applet.schemas.in.h:10
-msgid "Remind of current task every x minutes"
-msgstr "Recorda l'activitat actual cada x minuts"
-
-#: ../data/hamster-applet.schemas.in.h:11
-msgid "Should workspace switch trigger activity switch"
-msgstr ""
-"Indica si en canviar d'espai de treball s'ha d'activar el canvi d'activitat"
-
-#: ../data/hamster-applet.schemas.in.h:12
-msgid "Show / hide Time Tracker Window"
-msgstr "Mostra/oculta la finestra del comptador de temps"
-
 #: ../data/hamster-applet.schemas.in.h:13
-msgid "Stop tracking current activity on shutdown"
-msgstr "Para de comptar l'activitat actual en aturar l'ordinador"
-
-#: ../data/hamster-applet.schemas.in.h:14
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "Para de comptar l'activitat actual quan l'ordinador estigui inactiu"
-
-#: ../data/hamster-applet.schemas.in.h:15
-msgid "Stop tracking on idle"
-msgstr "Para de comptar quan l'ordinador estigui inactiu"
-
-#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
-msgid "Stop tracking on shutdown"
-msgstr "Para el comptador en aturar l'ordinador"
-
-#: ../data/hamster-applet.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "Canvia d'activitat en canviar d'espai de treball"
 
-#: ../data/hamster-applet.schemas.in.h:18
-msgid "Toggle hamster application window"
-msgstr "Oculta o mostra la finestra de l'aplicació Hamster"
+#: ../data/hamster-applet.schemas.in.h:14
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"Si s'ha habilitat l'opció de canvi d'activitat per nom, en aquesta llista "
+"s'estableixen els noms d'activitat a què es podrà canviar. Els espais de "
+"treball es representen mitjançant l'índex de l'element."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-applet.schemas.in.h:15
+msgid "Show / hide Time Tracker Window"
+msgstr "Mostra/oculta la finestra del comptador de temps"
+
+#: ../data/hamster-applet.schemas.in.h:16
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr ""
+"Drecera de teclat per mostrar o ocultar la finestra del comptador de temps."
+
+#: ../data/hamster-applet.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Acció per ocultar o mostrar la finestra de l'aplicació Hamster"
+
+#: ../data/hamster-applet.schemas.in.h:18
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "Ordre per ocultar o mostrar la finestra de l'aplicació Hamster."
+
+#: ../data/hamster-applet.schemas.in.h:19
+msgid "Toggle hamster application window"
+msgstr "Oculta o mostra la finestra de l'aplicació Hamster"
 
 #: ../data/hamster-applet.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Oculta o mostra la finestra de l'aplicació Hamster."
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
+#: ../data/Hamster_Applet.server.in.in.h:2 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
 msgstr "Projecte Hamster: controleu el temps"
 
-#: ../data/Hamster_Applet.xml.h:1
-msgid "_About"
-msgstr "_Quant a"
-
-#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
-msgid "_Help"
-msgstr "A_juda"
-
-#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
+#: ../data/Hamster_Applet.xml.h:1 ../data/overview.ui.h:6
 msgid "_Overview"
 msgstr "_Resum general"
 
-#: ../data/Hamster_Applet.xml.h:4
+#: ../data/Hamster_Applet.xml.h:2
 msgid "_Preferences"
 msgstr "_Preferències"
 
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-msgid "The overview window of hamster time tracker"
-msgstr "La finestra de la vista general del comptador de temps Hamster"
+#: ../data/Hamster_Applet.xml.h:3 ../data/hamster.ui.h:7
+msgid "_Help"
+msgstr "A_juda"
 
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+#: ../data/Hamster_Applet.xml.h:4
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
 msgid "Time Tracking Overview"
 msgstr "Vista general del comptador de temps"
 
-#: ../data/hamster.ui.h:1
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "The overview window of hamster time tracker"
+msgstr "La finestra de la vista general del comptador de temps Hamster"
+
+#: ../data/hamster.ui.h:2
+msgid "_Tracking"
+msgstr "_Comptador"
+
+#: ../data/hamster.ui.h:3
 msgid "Add earlier activity"
 msgstr "Afegeix una activitat prèvia"
 
-#: ../data/hamster.ui.h:2
-msgid "Contents"
-msgstr "Contingut"
-
 #. now add buttons
-#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
+#: ../data/hamster.ui.h:4 ../src/docky_control/2.0/hamster_control.py:79
 #: ../src/docky_control/2.0/hamster_control.py:94
 #: ../src/docky_control/2.1/hamster_control.py:79
 #: ../src/docky_control/2.1/hamster_control.py:94
 msgid "Overview"
 msgstr "Resum general"
 
-#: ../data/hamster.ui.h:6
-msgid "Start new activity"
-msgstr "Comença una activitat nova"
-
-#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
+#: ../data/hamster.ui.h:5 ../data/stats.ui.h:1
 msgid "Statistics"
 msgstr "Estadístiques"
 
-#: ../data/hamster.ui.h:8
-msgid "Sto_p tracking"
-msgstr "_Para de comptar"
-
-#: ../data/hamster.ui.h:10
-msgid "Today"
-msgstr "Avui"
-
-#: ../data/hamster.ui.h:11
+#: ../data/hamster.ui.h:6
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../data/hamster.ui.h:13
-msgid "_Tracking"
-msgstr "_Comptador"
+#: ../data/hamster.ui.h:8
+msgid "Contents"
+msgstr "Contingut"
 
-#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
-msgid "Activities"
-msgstr "Activitats"
+#: ../data/hamster.ui.h:9
+msgid "Sto_p tracking"
+msgstr "_Para de comptar"
+
+#: ../data/hamster.ui.h:12
+msgid "Start new activity"
+msgstr "Comença una activitat nova"
+
+#: ../data/hamster.ui.h:13
+msgid "Today"
+msgstr "Avui"
+
+#: ../data/hamster.ui.h:14
+msgid "totals"
+msgstr "totals"
+
+#: ../data/hamster.ui.h:16
+msgid "Show Overview"
+msgstr "Mostra un resum general"
+
+#: ../data/overview_totals.ui.h:1
+msgid "Show Statistics"
+msgstr "Mostra les estadístiques"
 
 #: ../data/overview_totals.ui.h:2
 msgid "Categories"
 msgstr "Categories"
 
-#: ../data/overview_totals.ui.h:3
-msgid "No data for this interval"
-msgstr "No hi ha dades en aquest interval"
+#: ../data/overview_totals.ui.h:3 ../data/overview.ui.h:9
+msgid "Activities"
+msgstr "Activitats"
 
-#: ../data/overview_totals.ui.h:4
-msgid "Show Statistics"
-msgstr "Mostra les estadístiques"
-
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:159
+#: ../data/overview_totals.ui.h:4 ../src/hamster/applet.py:211
+#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:160
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:153
-msgid "Activity"
-msgstr "Activitat"
+#: ../data/overview_totals.ui.h:5
+msgid "No data for this interval"
+msgstr "No hi ha dades en aquest interval"
 
-#: ../data/overview.ui.h:3
-msgid "Add new"
-msgstr "Afegeix una nova"
-
-#: ../data/overview.ui.h:4
-msgid "Day"
-msgstr "Dia"
-
-#: ../data/overview.ui.h:5
-msgid "Edit"
-msgstr "Edita"
-
-#: ../data/overview.ui.h:6
-msgid "Month"
-msgstr "Mes"
-
-#: ../data/overview.ui.h:7
-msgid "Overview — Hamster"
-msgstr "Resum general: Hamster"
-
-#: ../data/overview.ui.h:8
-msgid "Remove"
-msgstr "Suprimeix"
-
-#: ../data/overview.ui.h:9
+#: ../data/overview.ui.h:1
 msgid "Save report..."
 msgstr "Desa l'informe..."
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+#: ../data/overview.ui.h:2
+msgid "Day"
+msgstr "Dia"
+
+#: ../data/overview.ui.h:3
+msgid "Week"
+msgstr "Setmana"
+
+#: ../data/overview.ui.h:4
+msgid "Month"
+msgstr "Mes"
+
+#: ../data/overview.ui.h:5
+msgid "Overview — Hamster"
+msgstr "Resum general: Hamster"
+
+#: ../data/overview.ui.h:7 ../src/hamster/applet.py:205
+#: ../src/hamster/preferences.py:195 ../src/hamster/reports.py:301
+#: ../src/hamster-time-tracker:154
+msgid "Activity"
+msgstr "Activitat"
+
+#: ../data/overview.ui.h:8
+msgid "_View"
+msgstr "_Visualització"
+
+#: ../data/overview.ui.h:10 ../data/stats.ui.h:4 ../src/hamster/reports.py:292
 msgid "Totals"
 msgstr "Totals"
 
 #: ../data/overview.ui.h:11
-msgid "Week"
-msgstr "Setmana"
+msgid "Remove"
+msgstr "Suprimeix"
+
+#: ../data/overview.ui.h:12
+msgid "Add new"
+msgstr "Afegeix una nova"
 
 #: ../data/overview.ui.h:13
-msgid "_View"
-msgstr "_Visualització"
+msgid "Edit"
+msgstr "Edita"
 
 #: ../data/preferences.ui.h:1
-msgid "Activity list"
-msgstr "Llista d'activitats"
-
-#: ../data/preferences.ui.h:2
-msgid "Add activity"
-msgstr "Afegeix una activitat"
+msgid "Time Tracker Preferences"
+msgstr "Preferències del comptador de temps"
 
 #: ../data/preferences.ui.h:3
-msgid "Add category"
-msgstr "Afegeix una categoria"
+msgid "Stop tracking when computer becomes idle"
+msgstr "Atura el comptador quan l'ordinador estigui inactiu"
 
 #: ../data/preferences.ui.h:5
-msgid "Categories and Tags"
-msgstr "Categories i etiquetes"
-
-#: ../data/preferences.ui.h:6
-msgid "Category list"
-msgstr "Llista de categories"
-
-#: ../data/preferences.ui.h:7
-msgid "Edit activity"
-msgstr "Edita l'activitat"
-
-#: ../data/preferences.ui.h:8
-msgid "Edit category"
-msgstr "Edita la categoria"
-
-#: ../data/preferences.ui.h:9
-msgid "Integration"
-msgstr "Integració"
-
-#: ../data/preferences.ui.h:10
-msgid "New day starts at"
-msgstr "El dia comença a les"
-
-#: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
 msgstr "Recorda l'activitat actual cada:"
 
+#: ../data/preferences.ui.h:6
+msgid "New day starts at"
+msgstr "El dia comença a les"
+
+#: ../data/preferences.ui.h:7
+msgid "Use following todo list if available:"
+msgstr "Utilitza la llista de tasques següent si està disponible:"
+
+#: ../data/preferences.ui.h:8
+msgid "Integration"
+msgstr "Integració"
+
+#: ../data/preferences.ui.h:9
+msgid "Tracking"
+msgstr "Comptador"
+
+#: ../data/preferences.ui.h:10
+msgid "_Categories"
+msgstr "_Categories"
+
+#: ../data/preferences.ui.h:11
+msgid "Category list"
+msgstr "Llista de categories"
+
 #: ../data/preferences.ui.h:12
-msgid "Remove activity"
-msgstr "Suprimeix l'activitat"
+msgid "Add category"
+msgstr "Afegeix una categoria"
 
 #: ../data/preferences.ui.h:13
 msgid "Remove category"
 msgstr "Suprimeix la categoria"
 
 #: ../data/preferences.ui.h:14
-msgid "Resume the last activity when returning to a workspace"
-msgstr "Reprèn l'última activitat en tornar a un espai de treball"
+msgid "Edit category"
+msgstr "Edita la categoria"
 
 #: ../data/preferences.ui.h:15
-msgid "Start new activity when switching workspaces:"
-msgstr "Comença una activitat nova en canviar d'espai de treball:"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "Atura el comptador quan l'ordinador estigui inactiu"
-
-#: ../data/preferences.ui.h:18
-msgid "Tags that should appear in autocomplete"
-msgstr "Etiquetes que han d'aparèixer a la compleció automàtica"
-
-#: ../data/preferences.ui.h:19
-msgid "Time Tracker Preferences"
-msgstr "Preferències del comptador de temps"
-
-#: ../data/preferences.ui.h:20
-msgid "Tracking"
-msgstr "Comptador"
-
-#: ../data/preferences.ui.h:21
-msgid "Use following todo list if available:"
-msgstr "Utilitza la llista de tasques següent si està disponible:"
-
-#: ../data/preferences.ui.h:22
-msgid "Workspaces"
-msgstr "Espais de treball"
-
-#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "_Activitats"
 
+#: ../data/preferences.ui.h:16
+msgid "Activity list"
+msgstr "Llista d'activitats"
+
+#: ../data/preferences.ui.h:17
+msgid "Add activity"
+msgstr "Afegeix una activitat"
+
+#: ../data/preferences.ui.h:18
+msgid "Remove activity"
+msgstr "Suprimeix l'activitat"
+
+#: ../data/preferences.ui.h:19
+msgid "Edit activity"
+msgstr "Edita l'activitat"
+
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "Etiquetes que han d'aparèixer a la compleció automàtica"
+
+#: ../data/preferences.ui.h:21
+msgid "Categories and Tags"
+msgstr "Categories i etiquetes"
+
+#: ../data/preferences.ui.h:22
+msgid "Resume the last activity when returning to a workspace"
+msgstr "Reprèn l'última activitat en tornar a un espai de treball"
+
+#: ../data/preferences.ui.h:23
+msgid "Start new activity when switching workspaces:"
+msgstr "Comença una activitat nova en canviar d'espai de treball:"
+
 #: ../data/preferences.ui.h:24
-msgid "_Categories"
-msgstr "_Categories"
+msgid "Workspaces"
+msgstr "Espais de treball"
 
 #: ../data/range_pick.ui.h:1
-msgid "Apply"
-msgstr "Aplica"
-
-#: ../data/range_pick.ui.h:2
 msgid "Day:"
 msgstr "Dia:"
+
+#: ../data/range_pick.ui.h:2
+msgid "Week:"
+msgstr "Setmana:"
 
 #: ../data/range_pick.ui.h:3
 msgid "Month:"
@@ -440,22 +450,22 @@ msgstr "Mes:"
 msgid "Range:"
 msgstr "Període:"
 
-#: ../data/range_pick.ui.h:5
-msgid "Week:"
-msgstr "Setmana:"
+#: ../data/range_pick.ui.h:6
+msgid "Apply"
+msgstr "Aplica"
 
-#: ../data/stats.ui.h:1
-msgid "Starts and ends"
-msgstr "Inicis i finals"
-
-#: ../data/stats.ui.h:4
+#: ../data/stats.ui.h:2
 msgid "Year:"
 msgstr "Any:"
+
+#: ../data/stats.ui.h:3
+msgid "Starts and ends"
+msgstr "Inicis i finals"
 
 #: ../src/docky_control/2.0/hamster_control.py:71
 #: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
 #: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
-#: ../src/hamster-time-tracker:249 ../src/hamster-time-tracker:313
+#: ../src/hamster-time-tracker:248 ../src/hamster-time-tracker:324
 msgid "No activity"
 msgstr "Cap activitat"
 
@@ -484,14 +494,14 @@ msgstr ""
 "Gil Forcada <gilforcada@guifi.net>\n"
 "Sílvia Miranda <silvia@softcatala.cat>"
 
-#: ../src/hamster/applet.py:378
+#: ../src/hamster/applet.py:378 ../src/hamster-time-tracker:286
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s"
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:381
-#, python-format
+#: ../src/hamster/applet.py:381 ../src/hamster-time-tracker:289
+#, c-format, python-format
 msgid "%sh"
 msgstr "%s h"
 
@@ -500,20 +510,20 @@ msgstr "%s h"
 #: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
 #: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:299
+#: ../src/hamster-time-tracker:310
 msgid "Unsorted"
 msgstr "Sense ordre"
 
-#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:244
-#: ../src/hamster-time-tracker:304
+#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:243
+#: ../src/hamster-time-tracker:315
 msgid "Just started"
 msgstr "S'acaba de començar"
 
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:453
+#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:470
 msgid "Changed activity"
 msgstr "S'ha canviat d'activitat"
 
-#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:454
+#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:471
 #, c-format, python-format
 msgid "Switched to '%s'"
 msgstr "S'ha canviat a «%s»"
@@ -891,12 +901,12 @@ msgstr ""
 "El %s per cent de les activitats han durat menys de 15 minuts: sembla que "
 "sou una persona molt ocupada."
 
-#: ../src/hamster-time-tracker:242
+#: ../src/hamster-time-tracker:241
 #, c-format
 msgid "Working on <b>%s</b>"
 msgstr "S'està fent <b>%s</b>"
 
-#: ../src/hamster-time-tracker:595
+#: ../src/hamster-time-tracker:579
 msgid "Hamster time tracker. Usage:"
 msgstr "Comptador de temps Hamster. Ús:"
 
