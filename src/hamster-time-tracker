@@ -59,11 +59,7 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
         self.connect('popup-menu', self.on_popup_menu)
 
     def on_activate(self, data):
-        if self.project.window is None:
-            self.project.create_hamster_window()
-            self.project.load_day()
-            self.project.reposition_hamster_window()
-            self.project.show_hamster_window()
+        self.project.show_hamster_window()
 
     def on_popup_menu(self, status, button, time):
         self.menu.popup(None, None, None, button, time)
