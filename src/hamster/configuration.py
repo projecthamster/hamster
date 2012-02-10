@@ -84,27 +84,21 @@ class OneWindow(object):
         self.dialogs = {}
         self.get_dialog_class = get_dialog_class
 
-    def on_dialog_destroy(self, params):
-        del self.dialogs[params]
-        #self.dialogs[params] = None
 
     def show(self, parent = None, **kwargs):
         params = str(sorted(kwargs.items())) #this is not too safe but will work for most cases
 
         if params in self.dialogs:
-            self.dialogs[params].window.present()
+            window = self.dialogs[params].window
+            if not window.get_visible():
+                self.dialogs[params].show()
+            window.present()
         else:
             if parent:
                 dialog = self.get_dialog_class()(parent, **kwargs)
 
                 if isinstance(parent, gtk.Widget):
                     dialog.window.set_transient_for(parent.get_toplevel())
-
-                # to make things simple, we hope that the target has defined self.window
-                dialog.window.connect("destroy",
-                                      lambda window, params: self.on_dialog_destroy(params),
-                                      params)
-
             else:
                 dialog = self.get_dialog_class()(**kwargs)
 
@@ -112,7 +106,6 @@ class OneWindow(object):
                 dialog.window.connect("destroy",
                                       lambda window, params: gtk.main_quit(),
                                       params)
-
 
             self.dialogs[params] = dialog
 

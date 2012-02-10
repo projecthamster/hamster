@@ -89,6 +89,8 @@ from configuration import runtime, conf, load_ui_file
 import widgets
 from lib import stuff, trophies
 
+
+
 class PreferencesEditor:
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
@@ -100,6 +102,7 @@ class PreferencesEditor:
         self.parent = parent
         self._gui = load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
+        self.window.connect("delete_event", self.on_delete_window)
 
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
@@ -185,7 +188,6 @@ class PreferencesEditor:
 
         # create and fill workspace tree
         self.workspace_tree = self.get_widget('workspace_list')
-#        self.get_widget("workspaces_label").set_mnemonic_widget(self.workspace_tree)
         self.workspace_store = WorkspaceStore()
 
         self.wNameColumn = gtk.TreeViewColumn(_("Name"))
@@ -230,6 +232,11 @@ class PreferencesEditor:
 
 
         self._gui.connect_signals(self)
+        self.show()
+
+
+    def show(self):
+        self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
 
 
@@ -371,8 +378,6 @@ class PreferencesEditor:
         return
 
 
-
-
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
@@ -381,8 +386,6 @@ class PreferencesEditor:
         """returns store, so we can add some watchers in case if anything changes"""
         return self.activity_store
 
-    def show(self):
-        self.window.show_all()
 
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
@@ -668,11 +671,15 @@ class PreferencesEditor:
     def on_close(self, widget, event):
         self.close_window()
 
+    def on_delete_window(self, window, event):
+        self.close_window()
+        return True
+
     def close_window(self):
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.destroy()
+            self.window.hide()
             return False
 
     def on_workspace_tracking_toggled(self, checkbox):

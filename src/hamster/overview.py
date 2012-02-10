@@ -43,20 +43,47 @@ class Overview(object):
         self.parent = parent# determine if app should shut down on close
         self._gui = load_ui_file("overview.ui")
         self.report_chooser = None
+        self.window = self.get_widget("tabs_window")
+        self.window.connect("delete_event", self.on_delete_window)
+
+        self.range_pick = widgets.RangePick()
+        self.get_widget("range_pick_box").add(self.range_pick)
+        self.range_pick.connect("range-selected", self.on_range_selected)
+
+        self.overview = OverviewBox()
+        self.get_widget("overview_tab").add(self.overview)
+        self.fact_tree = self.overview.fact_tree # TODO - this is upside down, should maybe get the overview tab over here
+        self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
+
+        self.fact_tree.connect("button-press-event", self.on_fact_tree_button_press)
+
+        self.reports = TotalsBox()
+        self.get_widget("reports_tab").add(self.reports)
+
+        self.timechart = widgets.TimeChart()
+        self.timechart.connect("zoom-out-clicked", self.on_timechart_zoom_out_clicked)
+        self.timechart.connect("range-picked", self.on_timechart_new_range)
+        self.get_widget("by_day_box").add(self.timechart)
+
+        self._gui.connect_signals(self)
+        runtime.storage.connect('activities-changed',self.after_activity_update)
+        runtime.storage.connect('facts-changed',self.after_activity_update)
+
+        conf.connect('conf-changed', self.on_conf_change)
+        self.show()
+
+
+    def show(self):
+        self.position_window()
+        self.window.show_all()
 
         self.facts = None
-
-        self.window = self.get_widget("tabs_window")
 
         self.day_start = conf.get("day_start_minutes")
         self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
 
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
                                                         minutes = self.day_start.minute)).date()
-
-        self.range_pick = widgets.RangePick()
-        self.get_widget("range_pick_box").add(self.range_pick)
-        self.range_pick.connect("range-selected", self.on_range_selected)
 
         #set to monday
         self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
@@ -70,31 +97,14 @@ class Overview(object):
 
         self.end_date = self.start_date + dt.timedelta(6)
 
-        self.overview = OverviewBox()
-        self.get_widget("overview_tab").add(self.overview)
-        self.fact_tree = self.overview.fact_tree # TODO - this is upside down, should maybe get the overview tab over here
-        self.fact_tree.connect("cursor-changed", self.on_fact_selection_changed)
-
-        self.fact_tree.connect("button-press-event", self.on_fact_tree_button_press)
-
-        self.reports = TotalsBox()
-        self.get_widget("reports_tab").add(self.reports)
-
         self.current_range = "week"
 
-        self.timechart = widgets.TimeChart()
-        self.timechart.connect("zoom-out-clicked", self.on_timechart_zoom_out_clicked)
-        self.timechart.connect("range-picked", self.on_timechart_new_range)
         self.timechart.day_start = self.day_start
 
-        self.get_widget("by_day_box").add(self.timechart)
 
-        self._gui.connect_signals(self)
-        runtime.storage.connect('activities-changed',self.after_activity_update)
-        runtime.storage.connect('facts-changed',self.after_activity_update)
+        self.search()
 
-        conf.connect('conf-changed', self.on_conf_change)
-
+    def position_window(self):
         if conf.get("overview_window_maximized"):
             self.window.maximize()
         else:
@@ -106,9 +116,6 @@ class Overview(object):
             else:
                 self.window.set_position(gtk.WIN_POS_CENTER)
 
-        self.window.show_all()
-
-        self.search()
 
     def on_fact_tree_button_press(self, treeview, event):
         if event.button == 3:
@@ -138,8 +145,6 @@ class Overview(object):
             self.start_date = self.view_date.replace(day=1, month=1)
             self.end_date = self.start_date.replace(year = self.start_date.year + 1) - dt.timedelta(days=1)
             self.apply_range_select()
-
-
 
 
     def search(self):
@@ -187,7 +192,11 @@ class Overview(object):
         return True
 
     def after_activity_update(self, widget):
+        if not self.window.get_visible():
+            return
+
         self.search()
+
 
     def on_search_icon_press(self, widget, position, data):
         if position == gtk.ENTRY_ICON_SECONDARY:
@@ -404,12 +413,14 @@ class Overview(object):
             w, h = self.window.get_size()
             conf.set("overview_window_box", [x, y, w, h])
 
-
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.destroy()
+            self.window.hide()
+            self.facts = None
             return False
 
-    def show(self):
-        self.window.show()
+    def on_delete_window(self, window, event):
+        self.close_window()
+        return True
+

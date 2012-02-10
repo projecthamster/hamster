@@ -46,60 +46,15 @@ class Stats(object):
 
         self.parent = parent# determine if app should shut down on close
 
-        self.stat_facts = None
-
-        day_start = conf.get("day_start_minutes")
-        day_start = dt.time(day_start / 60, day_start % 60)
         self.timechart = widgets.TimeChart()
         self.timechart.interactive = False
-        self.timechart.day_start = day_start
 
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
         runtime.storage.connect('activities-changed',self.after_fact_update)
         runtime.storage.connect('facts-changed',self.after_fact_update)
-
-        self.init_stats()
-
         self.window.set_position(gtk.WIN_POS_CENTER)
-
-        self._gui.connect_signals(self)
-        self.window.show_all()
-        self.stats()
-
-
-
-    def init_stats(self):
-        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 2), dt.date.today())
-
-        if not self.stat_facts or self.stat_facts[-1].start_time.year == self.stat_facts[0].start_time.year:
-            self.get_widget("explore_controls").hide()
-        else:
-            by_year = stuff.totals(self.stat_facts,
-                                   lambda fact: fact.start_time.year,
-                                   lambda fact: 1)
-
-            year_box = self.get_widget("year_box")
-            class YearButton(gtk.ToggleButton):
-                def __init__(self, label, year, on_clicked):
-                    gtk.ToggleButton.__init__(self, label)
-                    self.year = year
-                    self.connect("clicked", on_clicked)
-
-            all_button = YearButton(C_("years", "All").encode("utf-8"),
-                                    None,
-                                    self.on_year_changed)
-            year_box.pack_start(all_button)
-            self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
-            all_button.set_active(True)
-            self.bubbling = False # TODO figure out how to properly work with togglebuttons as radiobuttons
-
-            years = sorted(by_year.keys())
-            for year in years:
-                year_box.pack_start(YearButton(str(year), year, self.on_year_changed))
-
-            year_box.show_all()
 
         self.chart_category_totals = charting.Chart(value_format = "%.1f",
                                                        max_bar_width = 20,
@@ -121,8 +76,6 @@ class Stats(object):
         self.chart_category_starts_ends = charting.HorizontalDayChart(max_bar_width = 20,
                                                                       legend_width = 70)
         self.get_widget("explore_category_starts_ends").add(self.chart_category_starts_ends)
-
-
 
 
         #ah, just want summary look just like all the other text on the page
@@ -150,6 +103,55 @@ class Stats(object):
         self.explore_summary = CairoText()
         self.get_widget("explore_summary").add(self.explore_summary)
         self.get_widget("explore_summary").show_all()
+
+
+        self._gui.connect_signals(self)
+        self.show()
+
+    def show(self):
+        self.window.show_all()
+        self.stat_facts = None
+        day_start = conf.get("day_start_minutes")
+        day_start = dt.time(day_start / 60, day_start % 60)
+        self.timechart.day_start = day_start
+        self.init_stats()
+        self.get_widget("year_box").get_children()[0].set_active(True)
+        self.stats()
+
+
+
+    def init_stats(self):
+        self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 2), dt.date.today())
+
+        if not self.stat_facts or self.stat_facts[-1].start_time.year == self.stat_facts[0].start_time.year:
+            self.get_widget("explore_controls").hide()
+        else:
+            by_year = stuff.totals(self.stat_facts,
+                                   lambda fact: fact.start_time.year,
+                                   lambda fact: 1)
+
+            year_box = self.get_widget("year_box")
+            if len(year_box.get_children()) == 0:
+                class YearButton(gtk.ToggleButton):
+                    def __init__(self, label, year, on_clicked):
+                        gtk.ToggleButton.__init__(self, label)
+                        self.year = year
+                        self.connect("clicked", on_clicked)
+
+                all_button = YearButton(C_("years", "All").encode("utf-8"),
+                                        None,
+                                        self.on_year_changed)
+                year_box.pack_start(all_button)
+                self.bubbling = True # TODO figure out how to properly work with togglebuttons as radiobuttons
+                all_button.set_active(True)
+                self.bubbling = False # TODO figure out how to properly work with togglebuttons as radiobuttons
+
+                years = sorted(by_year.keys())
+                for year in years:
+                    year_box.pack_start(YearButton(str(year), year, self.on_year_changed))
+
+                year_box.show_all()
+
 
     def stats(self, year = None):
         facts = self.stat_facts
@@ -421,6 +423,9 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
 
 
     def after_fact_update(self, event):
+        if not self.window.get_visible():
+            return
+
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         self.stats()
 
@@ -436,12 +441,13 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
 
     def on_stats_window_deleted(self, widget, event):
         self.close_window()
+        return True
 
     def close_window(self):
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.destroy()
+            self.window.hide()
             return False
 
 
