@@ -23,6 +23,7 @@ import logging
 import datetime as dt
 
 import gtk, gobject
+import glib
 import dbus, dbus.service, dbus.mainloop.glib
 
 class ProjectHamsterStatusIcon(gtk.StatusIcon):
@@ -548,6 +549,11 @@ class ProjectHamster(object):
 
 
 if __name__ == "__main__":
+    # First thing, ensure our WM_CLASS is hamster-applet, which
+    # matches the .desktop file.
+    glib.set_prgname("hamster-applet")
+
+
     from hamster.lib import i18n
     i18n.setup_i18n()
 

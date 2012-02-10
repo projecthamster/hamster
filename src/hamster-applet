@@ -26,6 +26,7 @@ import os.path
 import gnome
 import logging
 import gobject
+import glib
 
 def applet_factory(applet, iid):
     applet.connect("destroy", on_destroy)
@@ -52,6 +53,9 @@ def on_destroy(event):
         gtk.main_quit()
 
 if __name__ == "__main__":
+    # First thing, ensure our WM_CLASS is hamster-applet, which
+    # matches the .desktop file.
+    glib.set_prgname("hamster-applet")
     gtk.gdk.threads_init()
 
     parser = OptionParser(usage = "hamster-applet [OPTIONS]")
