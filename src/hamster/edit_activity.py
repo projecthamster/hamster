@@ -68,8 +68,9 @@ class CustomFactController:
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
-
         else:
+            self.get_widget("delete_button").set_sensitive(False)
+
             # if there is previous activity with end time - attach to it
             # otherwise let's start at 8am (unless it is today - in that case
             # we will assume that the user wants to start from this moment)
@@ -209,6 +210,10 @@ class CustomFactController:
         else:
             runtime.storage.add_fact(fact, temporary)
 
+        self.close_window()
+
+    def on_delete_clicked(self, button):
+        runtime.storage.remove_fact(self.fact_id)
         self.close_window()
 
     def on_activity_list_key_pressed(self, entry, event):
