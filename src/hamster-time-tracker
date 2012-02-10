@@ -51,8 +51,10 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
         self.manager.insert_action_group(ag, 0)
         self.manager.add_ui_from_string(menu)
         self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
+
         self.set_from_icon_name("hamster-applet")
-        self.set_tooltip(_('Time Tracker'))
+        self.set_name(_('Time Tracker'))
+
         self.connect('activate', self.on_activate)
         self.connect('popup-menu', self.on_popup_menu)
 
@@ -139,6 +141,7 @@ class ProjectHamster(object):
 
         self.reposition_hamster_window()
         self.show_hamster_window()
+        self.show_in_tray()
 
     def create_hamster_window(self):
         if self.window is None:
@@ -198,8 +201,6 @@ class ProjectHamster(object):
             self.reposition_hamster_window()
 
         self.window.show_all()
-        self.statusicon.set_visible(False)
-
 
         self.load_day()
         # refresh hamster every 60 seconds to update duration
@@ -532,13 +533,11 @@ class ProjectHamster(object):
         self.save_window_position()
         self.window.destroy()
         self.window = None
-        self.show_in_tray()
 
     def on_delete_window(self, event, data):
         self.save_window_position()
         self.window.destroy()
         self.window = None
-        self.show_in_tray()
 
     def show_in_tray(self):
         # show the status tray icon
@@ -549,13 +548,10 @@ class ProjectHamster(object):
 
 
 if __name__ == "__main__":
-    # First thing, ensure our WM_CLASS is hamster-applet, which
-    # matches the .desktop file.
-    glib.set_prgname("hamster-applet")
-
-
     from hamster.lib import i18n
     i18n.setup_i18n()
+
+    glib.set_prgname(_("Time Tracker"))
 
     # determine the window we will be launching
     window = None
