@@ -25,6 +25,7 @@ import datetime as dt
 import gtk, gobject
 import glib
 import dbus, dbus.service, dbus.mainloop.glib
+import locale
 
 class ProjectHamsterStatusIcon(gtk.StatusIcon):
     def __init__(self, project):
@@ -275,9 +276,21 @@ class ProjectHamster(object):
 
         if not facts:
             self._gui.get_object("today_box").hide()
-            #self._gui.get_object("fact_totals").set_text(_("No records today"))
+            self._gui.get_object("fact_totals").set_text(_("No records today"))
         else:
             self._gui.get_object("today_box").show()
+            total_strings = []
+            for category in by_category:
+                # listing of today's categories and time spent in them
+                duration = locale.format("%.1f", (by_category[category] / 60.0))
+                total_strings.append(_("%(category)s: %(duration)s") % \
+                        ({'category': category,
+                          #duration in main drop-down per category in hours
+                          'duration': _("%sh") % duration
+                          }))
+
+            total_string = ", ".join(total_strings)
+            self._gui.get_object("fact_totals").set_text(total_string)
 
         self.set_last_activity()
 
@@ -340,6 +353,12 @@ class ProjectHamster(object):
                           tags = ", ".join(fact.tags))
         if fact.activity:
             runtime.storage.add_fact(fact)
+
+    def on_add_activity_clicked(self, button):
+        dialogs.edit.show(self.window)
+
+    def on_show_overview_clicked(self, button):
+        dialogs.overview.show(self.window)
 
 
     """button events"""

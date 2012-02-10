@@ -342,6 +342,7 @@
                   <object class="GtkAlignment" id="new_entry_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">5</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkHBox" id="bleh1">
@@ -382,6 +383,7 @@
                           <object class="GtkHButtonBox" id="hbuttonbox2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">5</property>
                             <child>
                               <object class="GtkButton" id="switch_activity">
                                 <property name="label" translatable="yes">S_witch</property>
@@ -456,6 +458,7 @@
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">5</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkScrolledWindow" id="today_box">
@@ -486,6 +489,83 @@
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="fact_totals">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">totals</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHButtonBox" id="hbuttonbox4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">5</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <object class="GtkButton" id="add_activity_button">
+                        <property name="label" translatable="yes">Add Earlier Activity</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="on_add_activity_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="overview_button">
+                        <property name="label" translatable="yes">Show Overview</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="on_show_overview_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
