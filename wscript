@@ -43,12 +43,17 @@ def set_options(opt):
 
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster-applet', 'src/hamster-applet', chmod = 0755)
+    bld.install_files('${LIBDIR}/hamster-applet',
+                      """src/hamster-applet
+                         src/hamster-service
+                         src/hamster-windows-service
+                      """,
+                      chmod = 0755)
+    
     bld.install_files('${BINDIR}',
                       """src/hamster-time-tracker
                          src/hamster-cli
-                         src/hamster-service
-                         src/hamster-windows-service""",
+                      """,
                       chmod = 0755)
     bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-time-tracker')
 
