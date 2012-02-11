@@ -16,6 +16,7 @@ bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster
 for filename in ["hamster-applet.desktop",
                  "hamster-time-tracker.desktop",
                  "hamster-time-tracker-overview.desktop",
+                 "hamster-windows-service.desktop",
                  "Hamster_Applet.server"]:
     bld(features = "subst",
         source= "%s.in.in" % filename,
@@ -42,7 +43,8 @@ bld(features = 'intltool_in',
 bld(features = 'intltool_in',
     source   = """hamster-time-tracker.desktop.in
                   hamster-time-tracker-overview.desktop.in
-                  hamster-applet.desktop.in""",
+                  hamster-applet.desktop.in
+                  hamster-windows-service.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',
     flags    = ['-d', '-q', '-u', '-c'])
