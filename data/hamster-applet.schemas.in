@@ -107,8 +107,8 @@
 
 
         <schema>
-            <key>/schemas/desktop/gnome/keybindings/hamster-applet/binding</key>
-            <applyto>/desktop/gnome/keybindings/hamster-applet/binding</applyto>
+            <key>/schemas/desktop/gnome/keybindings/hamster-applet/activate_hamster_window</key>
+            <applyto>/desktop/gnome/keybindings/hamster-applet/activate_hamster_window</applyto>
             <owner>hamster-applet</owner>
             <type>string</type>
             <default></default>
