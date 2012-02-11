@@ -566,7 +566,7 @@ if __name__ == "__main__":
     from hamster.lib import i18n
     i18n.setup_i18n()
 
-    glib.set_prgname(_("Time Tracker"))
+    glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
 
     # determine the window we will be launching
     window = None

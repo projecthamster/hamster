@@ -3,6 +3,7 @@
 
 import gobject
 import dbus, dbus.service
+import glib
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
@@ -51,6 +52,8 @@ class WindowServer(dbus.service.Object):
 if __name__ == '__main__':
     from hamster.lib import i18n
     i18n.setup_i18n()
+
+    glib.set_prgname(unicode(_("hamster-windows-service")).encode("utf-8"))
 
     from hamster.configuration import runtime, dialogs, conf, load_ui_file
     window_server = WindowServer(loop)
