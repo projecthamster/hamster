@@ -38,8 +38,13 @@ from configuration import runtime, conf, load_ui_file
 
 from lib.i18n import C_
 
-class Stats(object):
+class Stats(gtk.Object):
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self, parent = None):
+        gtk.Object.__init__(self)
         self._gui = load_ui_file("stats.ui")
         self.report_chooser = None
         self.window = self.get_widget("stats_window")
@@ -52,10 +57,7 @@ class Stats(object):
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
-        runtime.storage.connect('activities-changed',self.after_fact_update)
-        runtime.storage.connect('facts-changed',self.after_fact_update)
         self.window.set_position(gtk.WIN_POS_CENTER)
-
         self.chart_category_totals = charting.Chart(value_format = "%.1f",
                                                        max_bar_width = 20,
                                                        legend_width = 70,
@@ -104,6 +106,10 @@ class Stats(object):
         self.get_widget("explore_summary").add(self.explore_summary)
         self.get_widget("explore_summary").show_all()
 
+        self.external_listeners = [
+            (runtime.storage, runtime.storage.connect('activities-changed',self.after_fact_update)),
+            (runtime.storage, runtime.storage.connect('facts-changed',self.after_fact_update))
+        ]
 
         self._gui.connect_signals(self)
         self.show()
@@ -423,9 +429,6 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
 
 
     def after_fact_update(self, event):
-        if not self.window.get_visible():
-            return
-
         self.stat_facts = runtime.storage.get_facts(dt.date(1970, 1, 1), dt.date.today())
         self.stats()
 
@@ -447,8 +450,12 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.hide()
-            return False
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+            self.window.destroy()
+            self.window = None
+            self._gui = None
+            self.emit("on-close")
 
 
 if __name__ == "__main__":

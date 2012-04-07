@@ -91,14 +91,19 @@ from lib import stuff, trophies
 
 
 
-class PreferencesEditor:
+class PreferencesEditor(gtk.Object):
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
         ]
 
 
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self, parent = None):
+        gtk.Object.__init__(self)
         self.parent = parent
         self._gui = load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
@@ -120,10 +125,14 @@ class PreferencesEditor:
         self.get_widget("activities_label").set_mnemonic_widget(self.activity_tree)
         self.activity_store = ActivityStore()
 
+        self.external_listeners = []
+
         self.activityColumn = gtk.TreeViewColumn(_("Name"))
         self.activityColumn.set_expand(True)
         self.activityCell = gtk.CellRendererText()
-        self.activityCell.connect('edited', self.activity_name_edited_cb, self.activity_store)
+        self.external_listeners.extend([
+            (self.activityCell, self.activityCell.connect('edited', self.activity_name_edited_cb, self.activity_store))
+        ])
         self.activityColumn.pack_start(self.activityCell, True)
         self.activityColumn.set_attributes(self.activityCell, text=1)
         self.activityColumn.set_sort_column_id(1)
@@ -132,7 +141,10 @@ class PreferencesEditor:
         self.activity_tree.set_model(self.activity_store)
 
         self.selection = self.activity_tree.get_selection()
-        self.selection.connect('changed', self.activity_changed, self.activity_store)
+
+        self.external_listeners.extend([
+            (self.selection, self.selection.connect('changed', self.activity_changed, self.activity_store))
+        ])
 
 
         # create and fill category tree
@@ -143,7 +155,10 @@ class PreferencesEditor:
         self.categoryColumn = gtk.TreeViewColumn(_("Category"))
         self.categoryColumn.set_expand(True)
         self.categoryCell = gtk.CellRendererText()
-        self.categoryCell.connect('edited', self.category_edited_cb, self.category_store)
+
+        self.external_listeners.extend([
+            (self.categoryCell, self.categoryCell.connect('edited', self.category_edited_cb, self.category_store))
+        ])
 
         self.categoryColumn.pack_start(self.categoryCell, True)
         self.categoryColumn.set_attributes(self.categoryCell, text=1)
@@ -155,11 +170,12 @@ class PreferencesEditor:
         self.category_tree.set_model(self.category_store)
 
         selection = self.category_tree.get_selection()
-        selection.connect('changed', self.category_changed_cb, self.category_store)
+        self.external_listeners.extend([
+            (selection, selection.connect('changed', self.category_changed_cb, self.category_store))
+        ])
 
         self.day_start = widgets.TimeInput(dt.time(5,30))
         self.get_widget("day_start_placeholder").add(self.day_start)
-        self.day_start.connect("time-entered", self.on_day_start_changed)
 
 
         self.load_config()
@@ -175,8 +191,7 @@ class PreferencesEditor:
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
 
-        self.category_tree.connect("drag_data_received",
-                                   self.on_category_drop)
+        self.category_tree.connect("drag_data_received", self.on_category_drop)
 
         #select first category
         selection = self.category_tree.get_selection()
@@ -198,7 +213,10 @@ class PreferencesEditor:
         self.wActivityColumn.set_expand(True)
         self.wActivityCell = gtk.CellRendererText()
         self.wActivityCell.set_property('editable', True)
-        self.wActivityCell.connect('edited', self.on_workspace_activity_edited)
+
+        self.external_listeners.extend([
+            (self.wActivityCell, self.wActivityCell.connect('edited', self.on_workspace_activity_edited))
+        ])
 
         self.wNameColumn.pack_start(self.wNameCell, True)
         self.wNameColumn.set_attributes(self.wNameCell)
@@ -219,14 +237,20 @@ class PreferencesEditor:
             self.get_widget("notification_preference_frame").hide()
 
 
+        self.external_listeners.extend([
+            (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
+        ])
+
         # disable workspace tracking if wnck is not there
         if wnck:
             self.screen = wnck.screen_get_default()
             for workspace in self.screen.get_workspaces():
                 self.on_workspace_created(self.screen, workspace)
 
-            self.screen.workspace_add_handler = self.screen.connect("workspace-created", self.on_workspace_created)
-            self.screen.workspace_del_handler = self.screen.connect("workspace-destroyed", self.on_workspace_deleted)
+            self.external_listeners.extend([
+                (self.screen, self.screen.connect("workspace-created", self.on_workspace_created)),
+                (self.screen, self.screen.connect("workspace-destroyed", self.on_workspace_deleted))
+            ])
         else:
             self.get_widget("workspace_tab").hide()
 
@@ -679,8 +703,14 @@ class PreferencesEditor:
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.hide()
-            return False
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+            self.window.destroy()
+            self.window = None
+            self._gui = None
+            self.wNameColumn = None
+            self.categoryColumn = None
+            self.emit("on-close")
 
     def on_workspace_tracking_toggled(self, checkbox):
         workspace_tracking = []

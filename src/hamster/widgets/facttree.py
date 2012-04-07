@@ -144,6 +144,13 @@ class FactTree(gtk.TreeView):
         self.prev_rows = []
         self.new_rows = []
 
+        self.connect("destroy", self.on_destroy)
+
+    def on_destroy(self, widget):
+        for col in self.get_columns():
+            col.destroy()
+            self.remove_column(col)
+
 
     def fix_row_heights(self):
         alloc = self.get_allocation()

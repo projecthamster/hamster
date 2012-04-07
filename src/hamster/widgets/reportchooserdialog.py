@@ -109,6 +109,7 @@ class ReportChooserDialog(gtk.Dialog):
         if response != gtk.RESPONSE_OK:
             self.emit("report-chooser-closed")
             self.dialog.destroy()
+            self.dialog = None
         else:
             self.on_save_button_clicked()
 
@@ -137,3 +138,4 @@ class ReportChooserDialog(gtk.Dialog):
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path)
         self.dialog.destroy()
+        self.dialog = None

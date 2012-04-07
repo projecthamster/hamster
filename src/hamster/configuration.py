@@ -83,6 +83,15 @@ class OneWindow(object):
     def __init__(self, get_dialog_class):
         self.dialogs = {}
         self.get_dialog_class = get_dialog_class
+        self.dialog_close_handlers = {}
+
+    def on_close_window(self, dialog):
+        for key, assoc_dialog in list(self.dialogs.iteritems()):
+            if dialog == assoc_dialog:
+                del self.dialogs[key]
+
+        handler = self.dialog_close_handlers.pop(dialog)
+        dialog.disconnect(handler)
 
 
     def show(self, parent = None, **kwargs):
@@ -90,8 +99,7 @@ class OneWindow(object):
 
         if params in self.dialogs:
             window = self.dialogs[params].window
-            if not window.get_visible():
-                self.dialogs[params].show()
+            self.dialogs[params].show()
             window.present()
         else:
             if parent:
@@ -99,6 +107,8 @@ class OneWindow(object):
 
                 if isinstance(parent, gtk.Widget):
                     dialog.window.set_transient_for(parent.get_toplevel())
+
+                self.dialog_close_handlers[dialog] = dialog.connect("on-close", self.on_close_window)
             else:
                 dialog = self.get_dialog_class()(**kwargs)
 

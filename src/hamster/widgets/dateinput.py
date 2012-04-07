@@ -61,6 +61,11 @@ class DateInput(gtk.Entry):
 
         self.connect("changed", self._on_text_changed)
         self.show()
+        self.connect("destroy", self.on_destroy)
+
+    def on_destroy(self, window):
+        self.popup.destroy()
+        self.popup = None
 
     def set_date(self, date):
         """sets date to specified, using default format"""

@@ -95,10 +95,21 @@ class ActivityEntry(gtk.Entry):
         self.connect("changed", self._on_text_changed)
         self._parent_click_watcher = None # bit lame but works
 
-        runtime.storage.connect('activities-changed',self.after_activity_update)
+        self.external_listeners = [
+            (runtime.storage, runtime.storage.connect('activities-changed',self.after_activity_update)),
+        ]
 
         self.show()
         self.populate_suggestions()
+
+        self.connect("destroy", self.on_destroy)
+
+    def on_destroy(self, window):
+        for obj, handler in self.external_listeners:
+            obj.disconnect(handler)
+
+        self.popup.destroy()
+        self.popup = None
 
     def get_value(self):
         activity_name = self.get_text().decode("utf-8").strip()

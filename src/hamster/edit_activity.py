@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk
+import gtk, gobject
 import time
 import datetime as dt
 
@@ -28,8 +28,13 @@ import widgets
 from configuration import runtime, conf, load_ui_file
 from lib import stuff
 
-class CustomFactController:
+class CustomFactController(gtk.Object):
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
+        gtk.Object.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
@@ -307,5 +312,10 @@ class CustomFactController:
         self.close_window()
 
     def close_window(self):
-        self.window.destroy()
-        return False
+        if not self.parent:
+            gtk.main_quit()
+        else:
+            self.window.destroy()
+            self.window = None
+            self._gui = None
+            self.emit("on-close")

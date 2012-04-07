@@ -38,8 +38,14 @@ from overview_activities import OverviewBox
 from overview_totals import TotalsBox
 
 
-class Overview(object):
+class Overview(gtk.Object):
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self, parent = None):
+        gtk.Object.__init__(self)
+
         self.parent = parent# determine if app should shut down on close
         self._gui = load_ui_file("overview.ui")
         self.report_chooser = None
@@ -66,10 +72,12 @@ class Overview(object):
         self.get_widget("by_day_box").add(self.timechart)
 
         self._gui.connect_signals(self)
-        runtime.storage.connect('activities-changed',self.after_activity_update)
-        runtime.storage.connect('facts-changed',self.after_activity_update)
 
-        conf.connect('conf-changed', self.on_conf_change)
+        self.external_listeners = [
+            (runtime.storage, runtime.storage.connect('activities-changed',self.after_activity_update)),
+            (runtime.storage, runtime.storage.connect('facts-changed',self.after_activity_update)),
+            (conf, conf.connect('conf-changed', self.on_conf_change))
+        ]
         self.show()
 
 
@@ -192,9 +200,6 @@ class Overview(object):
         return True
 
     def after_activity_update(self, widget):
-        if not self.window.get_visible():
-            return
-
         self.search()
 
 
@@ -416,11 +421,16 @@ class Overview(object):
         if not self.parent:
             gtk.main_quit()
         else:
-            self.window.hide()
-            self.facts = None
-            return False
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+            self._gui = None
+            self.window.destroy()
+            self.window = None
+
+            self.emit("on-close")
+
+
 
     def on_delete_window(self, window, event):
         self.close_window()
         return True
-

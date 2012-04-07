@@ -54,7 +54,12 @@ class RangePick(gtk.ToggleButton):
         self.connect("toggled", self.on_toggle)
 
         self._gui.connect_signals(self)
+        self.connect("destroy", self.on_destroy)
 
+    def on_destroy(self, window):
+        self.popup.destroy()
+        self.popup = None
+        self._gui = None
 
     def on_toggle(self, button):
         if self.get_active():
