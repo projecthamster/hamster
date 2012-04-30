@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-19 23:37+0100\n"
-"PO-Revision-Date: 2012-02-19 23:37+0100\n"
+"POT-Creation-Date: 2012-04-30 13:26+0200\n"
+"PO-Revision-Date: 2012-04-30 13:26+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -188,7 +188,7 @@ msgstr "Slå av/på programvindu for hamster"
 
 #: ../data/hamster-applet.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
-msgstr ""
+msgstr "Slå av/på synlighet for hamster programvinduet."
 
 #: ../data/Hamster_Applet.server.in.in.h:2 ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
@@ -308,7 +308,7 @@ msgid "Overview — Hamster"
 msgstr "Oversikt – Hamster"
 
 #: ../data/overview.ui.h:7 ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:197 ../src/hamster/reports.py:301
+#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:301
 #: ../src/hamster-time-tracker:154
 msgid "Activity"
 msgstr "Aktivitet"
@@ -495,7 +495,7 @@ msgstr "%sh"
 
 #: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
 #: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
-#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
+#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:59
 #: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
 #: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
 #: ../src/hamster-time-tracker:310
@@ -553,7 +553,7 @@ msgstr "Vanner blomster"
 msgid "Doing handstands"
 msgstr "Står på hendene"
 
-#: ../src/hamster/edit_activity.py:70
+#: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
 msgstr "Oppdater aktivitet"
 
@@ -621,28 +621,28 @@ msgid "%s hours tracked total"
 msgstr "%s timer sporet totalt"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:108
+#: ../src/hamster/preferences.py:113
 msgid "None"
 msgstr "Ingen"
 
-#: ../src/hamster/preferences.py:123 ../src/hamster/preferences.py:193
+#: ../src/hamster/preferences.py:130 ../src/hamster/preferences.py:208
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/hamster/preferences.py:143 ../src/hamster/reports.py:302
+#: ../src/hamster/preferences.py:155 ../src/hamster/reports.py:302
 msgid "Category"
 msgstr "Kategori"
 
-#: ../src/hamster/preferences.py:640
+#: ../src/hamster/preferences.py:664
 msgid "New category"
 msgstr "Ny kategori"
 
-#: ../src/hamster/preferences.py:653
+#: ../src/hamster/preferences.py:677
 msgid "New activity"
 msgstr "Ny aktivitet"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:708
+#: ../src/hamster/preferences.py:738
 #, python-format
 msgid "%(interval_minutes)d minute"
 msgid_plural "%(interval_minutes)d minutes"
@@ -650,7 +650,7 @@ msgstr[0] "%(interval_minutes)d minutt"
 msgstr[1] "%(interval_minutes)d minutter"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:713
+#: ../src/hamster/preferences.py:743
 msgid "Never"
 msgstr "Aldri"
 
@@ -773,12 +773,12 @@ msgstr "Vis mal"
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Du kan overstyre dem ved å lagre din versjon i %(home_folder)s"
 
-#: ../src/hamster/stats.py:141
+#: ../src/hamster/stats.py:147
 msgctxt "years"
 msgid "All"
 msgstr "Alle"
 
-#: ../src/hamster/stats.py:168
+#: ../src/hamster/stats.py:174
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -786,14 +786,14 @@ msgstr ""
 "Ingen data å lage statistikk for ennå.\n"
 "En ukes bruk hadde vært bra!"
 
-#: ../src/hamster/stats.py:171
+#: ../src/hamster/stats.py:177
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Samler inn data - sjekk om en ukes tid!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:322
+#: ../src/hamster/stats.py:328
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
@@ -801,17 +801,17 @@ msgstr "%d %b %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:327
+#: ../src/hamster/stats.py:333
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%d %b"
 
-#: ../src/hamster/stats.py:329
+#: ../src/hamster/stats.py:335
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Første aktivitet ble oppdaget på %s."
 
-#: ../src/hamster/stats.py:338 ../src/hamster/stats.py:342
+#: ../src/hamster/stats.py:344 ../src/hamster/stats.py:348
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -819,7 +819,7 @@ msgstr[0] "%(num)s år"
 msgstr[1] "%(num)s år"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:347
+#: ../src/hamster/stats.py:353
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or "
@@ -831,12 +831,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:365
+#: ../src/hamster/stats.py:371
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%d %b %Y"
 
-#: ../src/hamster/stats.py:370
+#: ../src/hamster/stats.py:376
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -847,18 +847,18 @@ msgstr[1] ""
 "Lengste sammenhengende arbeidsperiode var på %(date)s og var %(hours)s timer."
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:378
+#: ../src/hamster/stats.py:384
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Det finnes %s oppføring."
 msgstr[1] "Det finnes %s oppføringer."
 
-#: ../src/hamster/stats.py:398
+#: ../src/hamster/stats.py:404
 msgid "Hamster would like to observe you some more!"
 msgstr "Hamster vil gjerne observere deg litt lenger!"
 
-#: ../src/hamster/stats.py:400
+#: ../src/hamster/stats.py:406
 #, python-format
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
@@ -867,7 +867,7 @@ msgstr ""
 "Siden %s prosent av alle aktiviter starter før ni om morgenen ser det ut til "
 "at du er en morgenfugl."
 
-#: ../src/hamster/stats.py:403
+#: ../src/hamster/stats.py:409
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
@@ -876,7 +876,7 @@ msgstr ""
 "Siden %s prosent av alle aktiviteter starter etter elleve om kvelden ser det "
 "ut til at du er en nattugle."
 
-#: ../src/hamster/stats.py:406
+#: ../src/hamster/stats.py:412
 #, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
@@ -918,6 +918,3 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Tidsporing"
-
-#~ msgid "Project Hamster (GNOME Time Tracker)"
-#~ msgstr "Prosjekt Hamster (GNOM tidssporing)"
