@@ -1,19 +1,20 @@
 # hamster-applet ja.po.
-# Copyright (C) 2008-2011 hamster-applet's COPYRIGHT HOLDER
+# Copyright (C) 2008-2012 hamster-applet's COPYRIGHT HOLDER
 # This file is distributed under the same license as the hamster-applet package.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2008.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009-2011.
 # Nishio Futoshi <fut_nis@d3.dion.ne.jp>, 2010.
 # Takayoshi OKANO <kano@na.rim.or.jp>, 2011.
 # Hideki Yamane <henrich@debian.org>, 2011.
+# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-18 21:33+0000\n"
-"PO-Revision-Date: 2012-02-18 23:06+0900\n"
-"Last-Translator: OKANO Takayoshi <kano@na.rim.or.jp>\n"
+"PO-Revision-Date: 2012-08-10 23:35+0900\n"
+"Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -199,7 +200,7 @@ msgstr "ヘルプ(_H)"
 
 #: ../data/Hamster_Applet.xml.h:4
 msgid "_About"
-msgstr "情報(_A)"
+msgstr "このアプリケーションについて(_A)"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
 msgid "Time Tracking Overview"
@@ -468,7 +469,7 @@ msgstr "プロジェクト・ハムスターのウェブサイト"
 
 #: ../src/hamster/about.py:46
 msgid "About Time Tracker"
-msgstr "タイムトラッカーについて"
+msgstr "このアプリケーションについて"
 
 #: ../src/hamster/about.py:56
 msgid "translator-credits"
