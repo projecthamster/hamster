@@ -10,16 +10,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-applet master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-18 13:10+0000\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-02-18 21:33+0000\n"
 "PO-Revision-Date: 2012-02-18 23:06+0900\n"
 "Last-Translator: OKANO Takayoshi <kano@na.rim.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/90-hamster-applet.xml.in.h:1
@@ -123,20 +122,15 @@ msgid "Remind of current task every x minutes"
 msgstr "現在のタスクを x 分ごとに通知します"
 
 #: ../data/hamster-applet.schemas.in.h:6
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"現在のタスクを、指定した時間(分)ごとに通知します。0または120を超える値に設定"
-"すると通知しません。"
+msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
+msgstr "現在のタスクを、指定した時間(分)ごとに通知します。0または120を超える値に設定すると通知しません。"
 
 #: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "活動が設定されていない時にも通知する"
 
 #: ../data/hamster-applet.schemas.in.h:8
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
+msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "活動が何も開始されていない場合にも、notify_interval 分毎に通知する。"
 
 #: ../data/hamster-applet.schemas.in.h:9
@@ -144,41 +138,24 @@ msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "一日の開始時間(デフォルトは午前5:30)"
 
 #: ../data/hamster-applet.schemas.in.h:10
-msgid ""
-"Activities will be counted as to belong to yesterday if the current time is "
-"less than the specified day start; and today, if it is over the time. "
-"Activities that span two days, will tip over to the side where the largest "
-"part of the activity is."
-msgstr ""
-"現在の時間が一日の開始時間より前の場合、活動は昨日の集計に計上され、時間を超"
-"えたものが今日に集計されます。2日にまたがる活動は、活動の最大部分がある側か"
-"ら、反転します。"
+msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start; and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
+msgstr "現在の時間が一日の開始時間より前の場合、活動は昨日の集計に計上され、時間を超えたものが今日に集計されます。2日にまたがる活動は、活動の最大部分がある側から、反転します。"
 
 #: ../data/hamster-applet.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "ワークスペース切り替え時に動作を切り替えます"
 
 #: ../data/hamster-applet.schemas.in.h:12
-msgid ""
-"List of enabled tracking methods. \"name\" will enable switching activities "
-"by name defined in workspace_mapping. \"memory\" will enable switching to "
-"the last activity when returning to a previous workspace."
-msgstr ""
-"利用可能な記録手法のリストです。\"name\"は workspace_mapping で定義されている"
-"名前で活動を切り替え可能にします。\"memory\" は、前のワークスペースに戻るとき"
-"に、そこで最後の活動に変更します。"
+msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to the last activity when returning to a previous workspace."
+msgstr "利用可能な記録手法のリストです。\"name\"は workspace_mapping で定義されている名前で活動を切り替え可能にします。\"memory\" は、前のワークスペースに戻るときに、そこで最後の活動に変更します。"
 
 #: ../data/hamster-applet.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "ワークスペースの変更時に動作を切り替えます。"
 
 #: ../data/hamster-applet.schemas.in.h:14
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"名前で切り替え可能にする場合、このリストは切り替える活動の名前に設定し、ワー"
-"クスペースはアイテムのインデックスで再表示されます。"
+msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
+msgstr "名前で切り替え可能にする場合、このリストは切り替える活動の名前に設定し、ワークスペースはアイテムのインデックスで再表示されます。"
 
 #: ../data/hamster-applet.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
@@ -186,9 +163,7 @@ msgstr "タイムトラッカーのウィンドウの表示/非表示"
 
 #: ../data/hamster-applet.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr ""
-"タイムトラッカーのウィンドウ表示・非表示を切り替えるキーボードショートカット"
-"です。"
+msgstr "タイムトラッカーのウィンドウ表示・非表示を切り替えるキーボードショートカットです。"
 
 #: ../data/hamster-applet.schemas.in.h:17
 msgid "Toggle hamster application window action"
@@ -612,9 +587,7 @@ msgstr "%Y年%m月%d日"
 #: ../src/hamster/lib/stuff.py:86
 #, python-format
 msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
-"%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の集計"
-"結果"
+msgstr "%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の集計結果"
 
 #. label of date range if start and end month do not match
 #. letter after prefixes (start_, end_) is the one of
@@ -714,19 +687,13 @@ msgstr "タグ"
 
 #: ../src/hamster/reports.py:191
 #, python-format
-msgid ""
-"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
-"s, %(end_Y)s"
-msgstr ""
-"%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の活動"
-"レポート"
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の活動レポート"
 
 #: ../src/hamster/reports.py:193
 #, python-format
-msgid ""
-"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
-"%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_B)s%(end_d)s日の活動レポート"
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_B)s%(end_d)s日の活動レポート"
 
 #: ../src/hamster/reports.py:195
 #, python-format
@@ -843,12 +810,8 @@ msgstr[0] "%(num)s年間"
 #. FIXME: difficult string to properly pluralize
 #: ../src/hamster/stats.py:347
 #, python-format
-msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
-msgstr ""
-"これまでの記録時間は、%(human_days)s日(%(human_years)s)または%(working_days)s"
-"作業日(%(working_years)s)。"
+msgid "Time tracked so far is %(human_days)s human days (%(human_years)s) or %(working_days)s working days (%(working_years)s)."
+msgstr "これまでの記録時間は、%(human_days)s日(%(human_years)s)または%(working_days)s作業日(%(working_years)s)。"
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
@@ -861,8 +824,7 @@ msgstr "%Y年%m月%d日"
 #: ../src/hamster/stats.py:370
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] "%(date)s日の最長継続作業は、%(hours)s時間です。"
 
 #. total records (in selected scope)
@@ -878,23 +840,17 @@ msgstr "ハムスターは、もう少し観察したがってます!"
 
 #: ../src/hamster/stats.py:400
 #, python-format
-msgid ""
-"With %s percent of all activities starting before 9am, you seem to be an "
-"early bird."
+msgid "With %s percent of all activities starting before 9am, you seem to be an early bird."
 msgstr "午前9時以前に開始した活動は%sパーセントなので、早起きですね。"
 
 #: ../src/hamster/stats.py:403
 #, python-format
-msgid ""
-"With %s percent of all activities starting after 11pm, you seem to be a "
-"night owl."
+msgid "With %s percent of all activities starting after 11pm, you seem to be a night owl."
 msgstr "午後11時以降に開始した活動は%sパーセントなので、宵っ張りですね。"
 
 #: ../src/hamster/stats.py:406
 #, python-format
-msgid ""
-"With %s percent of all activities being shorter than 15 minutes, you seem to "
-"be a busy bee."
+msgid "With %s percent of all activities being shorter than 15 minutes, you seem to be a busy bee."
 msgstr "15分未満の活動が%sパーセントなので、忙しそうですね。"
 
 #: ../src/hamster-time-tracker:241
