@@ -11,7 +11,7 @@ RPM-based: @yum install git-core gettext intltool gnome-control-center-dev@
 
 h1. Installing
 
-./waf configure build --prefix=/usr
+pre. ./waf configure build --prefix=/usr
 sudo ./waf install
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
