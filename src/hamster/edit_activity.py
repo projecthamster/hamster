@@ -295,18 +295,25 @@ class CustomFactController(gtk.Object):
         return looks_good
 
     def on_window_key_pressed(self, tree, event_key):
-        if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w
-              and event_key.state & gtk.gdk.CONTROL_MASK)):
+        popups = self.start_date.popup.get_property("visible") or \
+                 self.start_time.popup.get_property("visible") or \
+                 self.end_time.popup.get_property("visible") or \
+                 self.new_name.popup.get_property("visible") or \
+                 self.new_tags.popup.get_property("visible")
 
-            if self.start_date.popup.get_property("visible") or \
-               self.start_time.popup.get_property("visible") or \
-               self.end_time.popup.get_property("visible") or \
-               self.new_name.popup.get_property("visible") or \
-               self.new_tags.popup.get_property("visible"):
+        if (event_key.keyval == gtk.keysyms.Escape or \
+           (event_key.keyval == gtk.keysyms.w and event_key.state & gtk.gdk.CONTROL_MASK)):
+            if popups:
                 return False
 
             self.close_window()
+
+        elif event_key.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter):
+            if popups:
+                return False
+            self.on_save_button_clicked(None)
+
+
 
     def on_close(self, widget, event):
         self.close_window()
