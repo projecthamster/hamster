@@ -256,7 +256,8 @@
 
 
             $("#activity_log_link").click(function() {
-                $("#activity_log").toggle()
+                $("#activity_log").toggle();
+                return false;
             })
 
             $("#show_details").click(function() {
@@ -351,7 +352,7 @@
 
     <div id="date_chart"></div>
 
-    <a id="activity_log_link" href="javascript: false">Show activity log</a>
+    <a id="activity_log_link" href="#">Show activity log</a>
     <div id="activity_log">
         <h2>$activity_log_title</h2>
         <table>
