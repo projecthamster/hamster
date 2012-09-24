@@ -182,6 +182,13 @@ class DayLine(graphics.Scene):
     def on_click(self, scene, event, target):
         self.drag_start = None
 
+        # If self.selection.start_time is somehow None, just reset the selection.
+        # This can sometimes happen when dragging left to right in small
+        # increments. https://bugzilla.gnome.org/show_bug.cgi?id=669478
+        if self.selection == None or self.selection.start_time == None:
+            self.new_selection()
+            return
+
         start_time = self.selection.start_time
         if start_time > dt.datetime.now():
             start_time = dt.datetime.now()
