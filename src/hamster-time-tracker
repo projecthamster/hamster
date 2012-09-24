@@ -60,7 +60,7 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
         self.connect('popup-menu', self.on_popup_menu)
 
     def on_activate(self, data):
-        self.project.show_hamster_window()
+        self.project.toggle_hamster_window()
 
     def on_popup_menu(self, status, button, time):
         self.menu.popup(None, None, None, button, time)
@@ -115,6 +115,8 @@ class ProjectHamster(object):
                                                       "Greetings from hamster!")
             self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
 
+        # refresh hamster every 60 seconds
+        gobject.timeout_add_seconds(60, self.refresh_hamster)
 
         self.prev_size = None
 
@@ -192,16 +194,18 @@ class ProjectHamster(object):
             else:
                 self.window.set_position(gtk.WIN_POS_CENTER)
 
+    def toggle_hamster_window(self):
+        if not self.window:
+            self.show_hamster_window()
+        else:
+            self.close_window()
+
     def show_hamster_window(self):
         if not self.window:
             self.create_hamster_window()
             self.reposition_hamster_window()
 
         self.window.show_all()
-
-        self.load_day()
-        # refresh hamster every 60 seconds to update duration
-        gobject.timeout_add_seconds(60, self.refresh_hamster)
         self.refresh_hamster()
 
 
@@ -217,6 +221,9 @@ class ProjectHamster(object):
     def refresh_hamster(self):
         """refresh hamster every x secs - load today, check last activity etc."""
         try:
+            if self.window:
+                self.load_day()
+
             self.check_user()
             trophies.check_ongoing(self.todays_facts)
         except Exception, e:
@@ -225,14 +232,14 @@ class ProjectHamster(object):
             return True
 
     def check_user(self):
-        if not self.notification:
-            return
-
-        if self.notify_interval <= 0 or self.notify_interval >= 121:
+        """check if we need to notify user perhaps"""
+        if not self.notification or self.notify_interval <= 0 or self.notify_interval >= 121:
             return
 
         now = dt.datetime.now()
         message = None
+
+        # update duration of current task
         if self.last_activity:
             delta = now - self.last_activity.start_time
             duration = delta.seconds /  60
@@ -242,11 +249,10 @@ class ProjectHamster(object):
 
             self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
 
-        elif self.notify_on_idle:
+        if not self.last_activity and self.notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour *60) % self.notify_interval == 0:
                 message = _(u"No activity")
-
 
         if message:
             self.notification.update(_("Time Tracker"), message, "hamster-applet")
@@ -255,7 +261,6 @@ class ProjectHamster(object):
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
-
         facts = self.todays_facts = runtime.storage.get_todays_facts()
 
         self.treeview.detach_model()
@@ -293,6 +298,7 @@ class ProjectHamster(object):
             self._gui.get_object("fact_totals").set_text(total_string)
 
         self.set_last_activity()
+
 
     def set_last_activity(self):
         activity = self.last_activity
