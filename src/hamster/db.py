@@ -511,19 +511,6 @@ class Storage(storage.Storage):
                                            for row in self.GetTagIds(fact.tags)]
 
 
-        now = datetime.datetime.now()
-        # if in future - roll back to past
-        if start_time > datetime.datetime.now():
-            start_time = dt.datetime.combine(now.date(),  start_time.time())
-            if start_time > now:
-                start_time -= dt.timedelta(days = 1)
-
-        if end_time and end_time > now:
-            end_time = dt.datetime.combine(now.date(),  end_time.time())
-            if end_time > now:
-                end_time -= dt.timedelta(days = 1)
-
-
         # now check if maybe there is also a category
         category_id = None
         if fact.category:
@@ -544,7 +531,7 @@ class Storage(storage.Storage):
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
-        if (dt.datetime.now() - start_time <= dt.timedelta(days=1)):
+        if (dt.timedelta(days=-1) <= dt.datetime.now() - start_time <= dt.timedelta(days=1)):
             # pull in previous facts
             facts = self.__get_todays_facts()
 

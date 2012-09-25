@@ -148,12 +148,7 @@ class DayLine(graphics.Scene):
 
         self.view_time = dt.datetime.combine((select_start - dt.timedelta(hours=self.day_start.hour, minutes=self.day_start.minute)).date(), self.day_start)
 
-        if select_start and select_start > dt.datetime.now():
-            select_start = dt.datetime.now()
         self.chosen_selection.start_time = select_start
-
-        if select_end and select_end > dt.datetime.now():
-            select_end = dt.datetime.now()
         self.chosen_selection.end_time = select_end
 
         self.chosen_selection.width = None
@@ -172,9 +167,6 @@ class DayLine(graphics.Scene):
             self.drag_start = None
 
             start_time = self.selection.start_time
-            if start_time > dt.datetime.now():
-                start_time = dt.datetime.now()
-
             end_time = self.selection.end_time
             self.new_selection()
             self.emit("on-time-chosen", start_time, end_time)
@@ -190,10 +182,6 @@ class DayLine(graphics.Scene):
             return
 
         start_time = self.selection.start_time
-        if start_time > dt.datetime.now():
-            start_time = dt.datetime.now()
-
-
         end_time = None
         if self.fact_bars:
             times = [bar.fact.start_time for bar in self.fact_bars if bar.fact.start_time - start_time > dt.timedelta(minutes=5)]
