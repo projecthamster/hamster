@@ -109,9 +109,23 @@ class HamsterClient(object):
                               fact_data['category'],
                               fact_data['tags'])
 
-    def list_activities(self):
+    def _activities(self, search=""):
         '''Print the names of all the activities.'''
-        for activity in self.storage.get_activities():
+        if "@" in search:
+            activity, category = search.split("@")
+            for cat in self.storage.get_categories():
+                if not category or cat['name'].lower().startswith(category.lower()):
+                    print "%s@%s" % (activity.encode("utf8"), cat['name'].encode("utf8"))
+        else:
+            for activity in self.storage.get_activities(search):
+                print activity['name'].encode('utf8')
+                if activity['category']:
+                    print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
+
+
+    def list_activities(self, search=""):
+        '''Print the names of all the activities.'''
+        for activity in self.storage.get_activities(search):
             print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
 
     def list_categories(self):
@@ -242,10 +256,19 @@ Time formats:
 
     command, args = sys.argv[1], sys.argv[2:]
 
-    if command in ("toggle", "start", "stop", "list", "list-activities", "list-categories"):
+
+    if command in ("assist", "toggle", "start", "stop", "list",
+                   "list-activities", "list-categories"):
         hamster_client = HamsterClient()
 
-        if command == 'toggle':
+
+        if command == 'assist':
+            hamster_client._activities(sys.argv[-1])
+
+
+
+
+        elif command == 'toggle':
             hamster_client.toggle()
 
         elif command == 'start':
