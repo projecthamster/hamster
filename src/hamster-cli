@@ -26,7 +26,7 @@ import optparse
 import re
 import datetime as dt
 
-from hamster import client
+from hamster import client, reports
 from hamster.lib import stuff
 
 class ConfigurationError(Exception):
@@ -109,6 +109,16 @@ class HamsterClient(object):
                               fact_data['category'],
                               fact_data['tags'])
 
+    def export(self, export_format, start_time, end_time):
+        start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
+        end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
+        print start_time, end_time
+        facts = self.storage.get_facts(start_time, end_time)
+
+        writer = reports.simple(facts, start_time, end_time, export_format)
+        print writer.export()
+
+
     def _activities(self, search=""):
         '''Print the names of all the activities.'''
         if "@" in search:
@@ -134,62 +144,52 @@ class HamsterClient(object):
             print category['name'].encode('utf8')
 
 
-def parse_datetime_range(time):
-    '''Parse starting and ending datetime separated by a '-'.'''
-    start_time, remainder = parse_datetime(time)
 
-    end_time = None
-    if remainder and remainder.startswith("-"):
-        end_time, remainder = parse_datetime(remainder[1:])
-
-    return start_time, end_time
-
-_DATETIME_PATTERN = ('^((?P<relative>-)?|'
-                       '(?P<year>\d{4})'
-                       '(-(?P<month>\d{1,2})'
-                        '(-(?P<day>\d{1,2}))?)? )?'
-                     '((?P<hour>\d{1,2}):)?'
-                     '(?P<minute>\d{1,2})'
-                     '(:(?P<second>\d{1,2}))?'
+_DATETIME_PATTERN = ('^((?P<relative>-\d.+)?|('
+                     '(?P<date1>\d{4}-\d{2}-\d{2})?'
+                     '(?P<time1> ?\d{2}:\d{2})?'
+                     '(?P<dash> ?-)?'
+                     '(?P<date2> ?\d{4}-\d{2}-\d{2})?'
+                     '(?P<time2> ?\d{2}:\d{2})?)?)'
                      '(?P<rest>\D.+)?$')
 _DATETIME_REGEX = re.compile(_DATETIME_PATTERN)
-
-def parse_datetime(arg):
+def parse_datetime_range(arg):
     '''Parse a date and time.'''
     match = _DATETIME_REGEX.match(arg)
     if not match:
         return dt.datetime.now(), arg
 
-    if match.groupdict()['relative']:
-        hour = int(match.groupdict()['hour'] or 0)
-        minute = int(match.groupdict()['minute'])
-        second = int(match.groupdict()['second'] or 0)
-        time_ago = dt.timedelta(hours=hour,
-                                      minutes=minute,
-                                      seconds=second)
-        rest = (match.groupdict()['rest'] or '').strip()
-        return dt.datetime.now() - time_ago, rest
-    else:
-        date = dt.datetime.now().date()
-        try:
-            if match.groupdict()['year']:
-                date = date.replace(year=int(match.groupdict()['year']))
-                if match.groupdict()['month']:
-                    date = date.replace(month=int(match.groupdict()['month']))
-                    if match.groupdict()['day']:
-                        date = date.replace(day=int(match.groupdict()['day']))
-            time = dt.time(hour=int(match.groupdict()['hour'] or 0),
-                                 minute=int(match.groupdict()['minute']),
-                                 second=int(match.groupdict()['second'] or 0))
-        except ValueError, err:
-            if match.groupdict()['rest']:
-                date_str = arg[:-len(match.groupdict()['rest'])]
-            else:
-                date_str = arg
+    fragments = match.groupdict()
+    rest = (fragments['rest'] or '').strip()
 
-            raise ConfigurationError(_("invalid date/time '%s'" % date_str))
-        rest = (match.groupdict()['rest'] or '').strip()
-        return dt.datetime.combine(date, time), rest
+    # bail out early on relative minutes
+    if fragments['relative']:
+        delta_minutes = int(fragments['relative'])
+        return dt.datetime.now() - delta_minutes, rest
+
+    start_time, end_time = None, None
+
+    def to_time(timestr):
+        timestr = (timestr or "").strip()
+        try:
+            return dt.datetime.strptime(timestr, "%Y-%m-%d").date()
+        except ValueError:
+            try:
+                return dt.datetime.strptime(timestr, "%H:%M").time()
+            except ValueError:
+                pass
+        return None
+
+
+    if fragments['date1'] or fragments['time1']:
+        start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
+                                         to_time(fragments['time1']) or dt.time())
+    if fragments['date2'] or fragments['time2']:
+        end_time = dt.datetime.combine(to_time(fragments['date2']) or start_time or dt.date.today(),
+                                       to_time(fragments['time2']) or dt.time())
+
+    return start_time, end_time
+
 
 def fact_dict(fact_data, with_date):
     fact = {}
@@ -237,15 +237,9 @@ Time formats:
     * 'YYYY-MM-DD hh:mm:ss': Absolute time. Defaulting to 0 for the time
             values missing, and current day for date values.
             E.g. (considering 2010-03-09 16:30:20 as current date, time):
-                2010-03 13:15:40 is 2010-03-09 13:15:40
                 2010-03-09 13:15 is 2010-03-09 13:15:00
-                2010-03-09 13    is 2010-03-09 00:13:00
-                2010-02 13:15:40 is 2010-02-09 13:15:40
                 13:20            is 2010-03-09 13:20:00
-                20               is 2010-03-09 00:20:00
-    * '-hh:mm:ss': Relative time. From the current date and time. Defaulting
-            to 0 for the time values missing, same as in absolute time.
-
+    * '-minutes': Relative time from the current date and time.
 """)
 
 
@@ -258,14 +252,18 @@ Time formats:
 
 
     if command in ("assist", "toggle", "start", "stop", "list",
-                   "list-activities", "list-categories"):
+                   "list-activities", "list-categories", "export"):
         hamster_client = HamsterClient()
 
-
         if command == 'assist':
-            hamster_client._activities(sys.argv[-1])
-
-
+            assist_command = sys.argv[2]
+            if assist_command == "start":
+                hamster_client._activities(sys.argv[-1])
+            elif assist_command == "export":
+                formats = "html tsv xml ical".split()
+                chosen = sys.argv[-1]
+                formats = [f for f in formats if not chosen or f.startswith(chosen)]
+                print "\n".join(formats)
 
 
         elif command == 'toggle':
@@ -295,6 +293,15 @@ Time formats:
                 start_time, end_time = parse_datetime_range(args[0])
 
             hamster_client.list(start_time, end_time)
+
+        elif command == 'export':
+            export_format, start_time, end_time = "html", None, None
+            export_format = args.pop(0)
+            if args:
+                allargs = reduce(lambda acc, e: acc+" "+e, args)
+                start_time, end_time = parse_datetime_range(allargs)
+
+            hamster_client.export(export_format, start_time, end_time)
 
         elif command == 'list-activities':
             hamster_client.list_activities()
