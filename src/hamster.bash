@@ -26,7 +26,7 @@ _hamster()
     #
     case "${prev}" in
 
-    start)
+    start|export)
         _hamster_helper "assist" "$prev" "$cur"
         return 0
         ;;
