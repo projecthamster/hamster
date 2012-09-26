@@ -1,8 +1,9 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2012 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2008 Nathan Samson <nathansamson at gmail dot com>
 # Copyright (C) 2008 Giorgos Logiotatidis  <seadog at sealabs dot net>
+# Copyright (C) 2012 Ted Smith <tedks at cs.umd.edu>
 
 # This file is part of Project Hamster.
 
@@ -40,7 +41,9 @@ else:
 
 from calendar import timegm
 
-def simple(facts, start_date, end_date, format, path):
+from StringIO import StringIO
+
+def simple(facts, start_date, end_date, format, path = None):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
 
@@ -65,12 +68,22 @@ def simple(facts, start_date, end_date, format, path):
         if current == 10:
             trophies.unlock("on_my_desk")
 
+    return writer
+
 
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
-    def __init__(self, path, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        self.file = open(path, "w")
+    def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
+        if not path:
+            self.file = StringIO()
+            self.close = False
+        else:
+            self.file = open(path, "w")
+            self.store = True
         self.datetime_format = datetime_format
+
+    def export(self):
+        return self.file.getvalue()
 
     def write_report(self, facts):
         try:
@@ -93,7 +106,8 @@ class ReportWriter(object):
 
             self._finish(self.file, facts)
         finally:
-            self.file.close()
+            if self.close:
+                self.file.close()
 
     def _start(self, file, facts):
         raise NotImplementedError
