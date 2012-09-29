@@ -5,7 +5,7 @@ _hamster_helper()
 {
     local IFS=$'\n'
     COMPREPLY+=( $(
-        hamster-cli "$@" 2>/dev/null ) )
+        /home/z/code/projecthamster/hamster/src/hamster-cli "$@" 2>/dev/null ) )
 }
 
 _hamster()
@@ -18,7 +18,7 @@ _hamster()
     #
     #  The basic options we'll complete.
     #
-    opts="start stop list export" #  TODO - overview statistics edit preferences about
+    opts="activities categories current export list search start stop "
 
 
     #
