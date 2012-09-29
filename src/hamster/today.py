@@ -27,6 +27,19 @@ import glib
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
 
+try:
+    import pynotify
+    pynotify.init('Hamster Applet')
+except:
+    logging.warning("Could not import pynotify - notifications will be disabled")
+    pynotify = None
+
+
+from hamster.configuration import runtime, dialogs, conf, load_ui_file
+from hamster import widgets, idle
+from hamster.lib import stuff, trophies
+
+
 class ProjectHamsterStatusIcon(gtk.StatusIcon):
     def __init__(self, project):
         gtk.StatusIcon.__init__(self)
@@ -70,7 +83,7 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
 
 
 
-class ProjectHamster(object):
+class DailyView(object):
     def __init__(self):
         # initialize the window.  explicitly set it to None first, so that the
         # creator knows it doesn't yet exist.
@@ -565,45 +578,3 @@ class ProjectHamster(object):
         activity = self.get_widget("last_activity_name").get_text()
         self.statusicon.set_tooltip(activity)
         self.statusicon.set_visible(True)
-
-
-
-if __name__ == "__main__":
-    from hamster.lib import i18n
-    i18n.setup_i18n()
-
-    glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
-
-    # determine the window we will be launching
-    window = None
-    if len(sys.argv) == 1:
-        window = "main"
-    elif len(sys.argv) == 2 and sys.argv[1] in ("overview", "statistics", "edit", "preferences", "about", "toggle"):
-        window = sys.argv[1]
-    else:
-        usage = _(
-"""Hamster time tracker. Usage:
-  %(prog)s [overview|statistics|edit|preferences|about|toggle]
-""")
-        sys.exit(usage % {'prog': sys.argv[0]})
-
-    if window != "main":
-        bus = dbus.SessionBus()
-        server = bus.get_object("org.gnome.Hamster.WindowServer",
-                                "/org/gnome/Hamster/WindowServer")
-        getattr(server, window)()
-        sys.exit(0)
-
-    from hamster.configuration import runtime, dialogs, conf, load_ui_file
-    from hamster import widgets, idle
-    from hamster.lib import stuff, trophies
-
-    try:
-        import pynotify
-        pynotify.init('Hamster Applet')
-    except:
-        logging.warning("Could not import pynotify - notifications will be disabled")
-        pynotify = None
-
-    app = ProjectHamster()
-    gtk.main()

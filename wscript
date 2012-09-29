@@ -50,12 +50,7 @@ def build(bld):
                       """,
                       chmod = 0755)
 
-    bld.install_files('${BINDIR}',
-                      """src/hamster-time-tracker
-                         src/hamster-cli
-                      """,
-                      chmod = 0755)
-    bld.symlink_as('${BINDIR}/gnome-time-tracker', 'hamster-time-tracker')
+    bld.install_files('${BINDIR}', "src/bin/hamster", chmod = 0755)
 
 
     bld.install_files('${SYSCONFDIR}/bash_completion.d','src/hamster.bash')

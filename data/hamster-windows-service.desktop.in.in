@@ -5,6 +5,6 @@ Terminal=false
 _Name=Time Tracker
 _Comment=Project Hamster - track your time
 Icon=hamster-applet
-Exec=@BINDIR@/hamster-time-tracker overview
+Exec=@BINDIR@/hamster overview
 Categories=GNOME;GTK;Utility;
 NoDisplay=true
