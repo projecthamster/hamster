@@ -5,7 +5,7 @@ _hamster_helper()
 {
     local IFS=$'\n'
     COMPREPLY+=( $(
-        /home/z/code/projecthamster/hamster/src/hamster-cli "$@" 2>/dev/null ) )
+        hamster "$@" 2>/dev/null ) )
 }
 
 _hamster()
@@ -36,4 +36,4 @@ _hamster()
    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
    return 0
 }
-complete -F _hamster hamster-cli
+complete -F _hamster hamster
