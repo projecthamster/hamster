@@ -14,6 +14,8 @@ h1. Installing
 pre. ./waf configure build --prefix=/usr
 sudo ./waf install
 
-Now restart your panels/dockies and you should be able to add hamster to your panel!
+After that make sure that the old daemons aren't roaming around:
 
-*Note*: reason for the /usr prefix is that the applet server is not looking into the default prefix (which is /usr/local).
+pre. killall hamster-service & killall hamster-windows-service
+
+Now restart your panels/dockies and you should be able to add hamster to your panel!
