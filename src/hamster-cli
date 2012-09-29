@@ -159,13 +159,6 @@ class HamsterClient(object):
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
         start_time = start_time or dt.datetime.now()
 
-
-
-        print activity, start_time, end_time
-        return
-
-        hamster_client.start_tracking(activity, start_time, end_time)
-
         self.storage.add_fact(stuff.Fact(activity,
                                          start_time = start_time,
                                          end_time = end_time))
@@ -219,7 +212,7 @@ class HamsterClient(object):
 
     def list(self, *times):
         """list facts within a date range"""
-        start_time, end_time = parse_datetime_range(" ".join(times))
+        start_time, end_time = parse_datetime_range(" ".join(times or []))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -238,6 +231,7 @@ class HamsterClient(object):
 
     def search(self, *args):
         """search for activities by name and optionally within a date range"""
+        args = args or []
         search = ""
         if args:
             search = args[0]
@@ -358,4 +352,3 @@ Example usage:
         getattr(hamster_client, command)(*args)
     else:
         sys.exit(usage % {'prog': sys.argv[0]})
-
