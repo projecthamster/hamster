@@ -133,15 +133,13 @@ class Storage(dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
     def UpdateFact(self, fact_id, fact, start_time, end_time, temporary = False):
+        start_time = start_time or None
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
-        else:
-            start_time = None
 
+        end_time = end_time or None
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
-        else:
-            end_time = None
 
         self.start_transaction()
         self.__remove_fact(fact_id)
@@ -154,10 +152,12 @@ class Storage(dbus.service.Object):
         return result
 
 
-    @dbus.service.method("org.gnome.Hamster")
+    @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def StopTracking(self, end_time):
         """Stops tracking the current activity"""
-        end_time = dt.datetime.utcfromtimestamp(end_time)
+        end_time = end_time or None
+        if end_time:
+            end_time = dt.datetime.utcfromtimestamp(end_time)
 
         facts = self.__get_todays_facts()
         if facts:
