@@ -375,7 +375,7 @@ class Storage(storage.Storage):
         return grouped_facts
 
 
-    def __touch_fact(self, fact, end_time):
+    def __touch_fact(self, fact, end_time = None):
         end_time = end_time or dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
