@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007-2010 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2012 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2007-2009 Patryk Zawadzki <patrys at pld-linux.org>
 # Copyright (C) 2008 Pēteris Caune <cuu508 at gmail.com>
 
@@ -33,8 +33,8 @@ import locale
 
 from configuration import conf, runtime, dialogs, load_ui_file
 
-import widgets, idle
-from lib import stuff, trophies
+from hamster import widgets
+from hamster.lib import stuff, trophies
 
 try:
     import wnck
@@ -42,12 +42,6 @@ except:
     logging.warning("Could not import wnck - workspace tracking will be disabled")
     wnck = None
 
-try:
-    import pynotify
-    pynotify.init('Hamster Applet')
-except:
-    logging.warning("Could not import pynotify - notifications will be disabled")
-    pynotify = None
 
 class PanelButton(gtk.ToggleButton):
     def __init__(self):
@@ -221,20 +215,7 @@ class HamsterApplet(object):
 
         self.get_widget("today_box").add(self.treeview)
 
-        # DBus Setup
-        try:
-            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-            # Set up connection to the screensaver
-            self.dbusIdleListener = idle.DbusIdleListener()
-            self.dbusIdleListener.connect('idle-changed', self.on_idle_changed)
-
-        except dbus.DBusException, e:
-            logging.error("Can't init dbus: %s" % e)
-
         # configuration
-        self.timeout_enabled = conf.get("enable_timeout")
-        self.notify_on_idle = conf.get("notify_on_idle")
-        self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
 
         conf.connect('conf-changed', self.on_conf_changed)
@@ -251,12 +232,6 @@ class HamsterApplet(object):
         self.screen = None
         if self.workspace_tracking:
             self.init_workspace_tracking()
-
-        self.notification = None
-        if pynotify:
-            self.notification = pynotify.Notification("Oh hi",
-                                                      "Greetings from hamster!")
-            self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
 
         self._gui.connect_signals(self)
         self.prev_size = None
@@ -285,8 +260,6 @@ class HamsterApplet(object):
                 self.load_day()
 
             self.update_label()
-            self.check_user()
-            trophies.check_ongoing(self.todays_facts)
         except Exception, e:
             logging.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
@@ -304,33 +277,6 @@ class HamsterApplet(object):
         else:
             label = "%s" % _(u"No activity")
             self.button.set_text(label, None)
-
-
-    def check_user(self):
-        if not self.notification:
-            return
-
-        if self.notify_interval <= 0 or self.notify_interval >= 121:
-            return
-
-        now = dt.datetime.now()
-        message = None
-        if self.last_activity:
-            delta = now - self.last_activity.start_time
-            duration = delta.seconds /  60
-
-            if duration and duration % self.notify_interval == 0:
-                message = self.last_activity.activity
-
-        elif self.notify_on_idle:
-            #if we have no last activity, let's just calculate duration from 00:00
-            if (now.minute + now.hour *60) % self.notify_interval == 0:
-                message = _(u"No activity")
-
-
-        if message:
-            self.notification.update(_("Time Tracker"), message, "hamster-applet")
-            self.notification.show()
 
 
     def load_day(self):
@@ -560,18 +506,6 @@ class HamsterApplet(object):
         self.load_day()
         self.update_label()
 
-    def on_idle_changed(self, event, state):
-        # state values: 0 = active, 1 = idle
-
-        # refresh when we are out of idle
-        # for example, instantly after coming back from suspend
-        if state == 0:
-            self.refresh_hamster()
-        elif self.timeout_enabled and self.last_activity and \
-             self.last_activity.end_time is None:
-
-            runtime.storage.stop_tracking(self.dbusIdleListener.getIdleFrom())
-
     def on_workspace_changed(self, screen, previous_workspace):
         if not previous_workspace:
             # wnck has a slight hiccup on init and after that calls
@@ -640,22 +574,12 @@ class HamsterApplet(object):
                           description = activity.description);
         runtime.storage.add_fact(fact)
 
-        if self.notification:
-            self.notification.update(_("Changed activity"),
-                                     _("Switched to '%s'") % activity.activity,
-                                     "hamster-applet")
-            self.notification.show()
-
     def on_toggle_called(self, client):
         self.__show_toggle(not self.button.get_active())
 
     def on_conf_changed(self, event, key, value):
         if key == "enable_timeout":
             self.timeout_enabled = value
-        elif key == "notify_on_idle":
-            self.notify_on_idle = value
-        elif key == "notify_interval":
-            self.notify_interval = value
         elif key == "day_start_minutes":
             self.load_day()
             self.update_label()

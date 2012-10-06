@@ -1,7 +1,7 @@
 # - coding: utf-8 -
 
 # Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
-# Copyright (C) 2007-2009 Toms Baugis <toms.baugis@gmail.com>
+# Copyright (C) 2007-2012 Toms Baugis <toms.baugis@gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -22,7 +22,7 @@ import dbus, dbus.service
 import datetime as dt
 from calendar import timegm
 import gio
-from lib import stuff
+from hamster.lib import stuff, desktop
 
 def to_dbus_fact(fact):
     """Perform the conversion between fact database query and
@@ -53,6 +53,9 @@ class Storage(dbus.service.Object):
         self.__monitor = self.__file.monitor_file()
         self.__monitor.connect("changed", self._on_us_change)
 
+        # central place were we plug in all the notifications and such
+        self.integrations = desktop.DesktopIntegrations(self)
+
     # stop service when we have been updated (will be brought back in next call)
     # anyway. should make updating simpler
     def _on_us_change(self, monitor, gio_file, event_uri, event):
@@ -79,8 +82,6 @@ class Storage(dbus.service.Object):
         self.TagsChanged()
         self.FactsChanged()
         self.ActivitiesChanged()
-
-
 
     @dbus.service.method("org.gnome.Hamster")
     def Quit(self):

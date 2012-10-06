@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # - coding: utf-8 -
 
-# Copyright (C) 2009, 2010 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2009-2012 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2009 Patryk Zawadzki <patrys at pld-linux.org>
 
 # This file is part of Project Hamster.
@@ -27,16 +27,9 @@ import glib
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
 
-try:
-    import pynotify
-    pynotify.init('Hamster Applet')
-except:
-    logging.warning("Could not import pynotify - notifications will be disabled")
-    pynotify = None
-
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
-from hamster import widgets, idle
+from hamster import widgets
 from hamster.lib import stuff, trophies
 
 
@@ -92,20 +85,7 @@ class DailyView(object):
 
         self.new_name.grab_focus()
 
-        # DBus Setup
-        try:
-            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-            # Set up connection to the screensaver
-            self.dbusIdleListener = idle.DbusIdleListener()
-            self.dbusIdleListener.connect('idle-changed', self.on_idle_changed)
-
-        except dbus.DBusException, e:
-            logging.error("Can't init dbus: %s" % e)
-
         # configuration
-        self.timeout_enabled = conf.get("enable_timeout")
-        self.notify_on_idle = conf.get("notify_on_idle")
-        self.notify_interval = conf.get("notify_interval")
         self.workspace_tracking = conf.get("workspace_tracking")
 
         conf.connect('conf-changed', self.on_conf_changed)
@@ -122,11 +102,6 @@ class DailyView(object):
         if self.workspace_tracking:
             self.init_workspace_tracking()
 
-        self.notification = None
-        if pynotify:
-            self.notification = pynotify.Notification("Oh hi",
-                                                      "Greetings from hamster!")
-            self.notification.set_urgency(pynotify.URGENCY_LOW) # lower than grass
 
         # refresh hamster every 60 seconds
         gobject.timeout_add_seconds(60, self.refresh_hamster)
@@ -236,40 +211,11 @@ class DailyView(object):
         try:
             if self.window:
                 self.load_day()
-
-            self.check_user()
-            trophies.check_ongoing(self.todays_facts)
         except Exception, e:
             logging.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 
-    def check_user(self):
-        """check if we need to notify user perhaps"""
-        if not self.notification or self.notify_interval <= 0 or self.notify_interval >= 121:
-            return
-
-        now = dt.datetime.now()
-        message = None
-
-        # update duration of current task
-        if self.last_activity:
-            delta = now - self.last_activity.start_time
-            duration = delta.seconds /  60
-
-            if duration and duration % self.notify_interval == 0:
-                message = _(u"Working on <b>%s</b>") % self.last_activity.name
-
-            self.get_widget("last_activity_duration").set_text(stuff.format_duration(duration) or _("Just started"))
-
-        if not self.last_activity and self.notify_on_idle:
-            #if we have no last activity, let's just calculate duration from 00:00
-            if (now.minute + now.hour *60) % self.notify_interval == 0:
-                message = _(u"No activity")
-
-        if message:
-            self.notification.update(_("Time Tracker"), message, "hamster-applet")
-            self.notification.show()
 
     def load_day(self):
         """sets up today's tree and fills it with records
@@ -404,18 +350,6 @@ class DailyView(object):
     def after_fact_update(self, event):
         self.load_day()
 
-    def on_idle_changed(self, event, state):
-        # state values: 0 = active, 1 = idle
-
-        # refresh when we are out of idle
-        # for example, instantly after coming back from suspend
-        if state == 0:
-            self.refresh_hamster()
-        elif self.timeout_enabled and self.last_activity and \
-             self.last_activity.end_time is None:
-
-            runtime.storage.stop_tracking(end_time = self.dbusIdleListener.getIdleFrom())
-
     def on_workspace_changed(self, screen, previous_workspace):
         if not previous_workspace:
             # wnck has a slight hiccup on init and after that calls
@@ -485,23 +419,12 @@ class DailyView(object):
                           description = activity.description);
         runtime.storage.add_fact(fact)
 
-        if self.notification:
-            self.notification.update(_("Changed activity"),
-                                     _("Switched to '%s'") % activity.name,
-                                     "hamster-applet")
-            self.notification.show()
 
     def on_toggle_called(self, client):
         self.window.present()
 
     def on_conf_changed(self, event, key, value):
-        if key == "enable_timeout":
-            self.timeout_enabled = value
-        elif key == "notify_on_idle":
-            self.notify_on_idle = value
-        elif key == "notify_interval":
-            self.notify_interval = value
-        elif key == "day_start_minutes":
+        if key == "day_start_minutes":
             self.load_day()
 
         elif key == "workspace_tracking":
