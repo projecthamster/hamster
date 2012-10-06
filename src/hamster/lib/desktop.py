@@ -18,6 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
+from calendar import timegm
 import logging
 import gobject
 
@@ -31,7 +32,6 @@ import dbus
 class DesktopIntegrations(object):
     def __init__(self, storage):
         self.storage = storage # can't use client as then we get in a dbus loop
-        self.last_activity = None
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
@@ -70,15 +70,15 @@ class DesktopIntegrations(object):
         now = dt.datetime.now()
         message = None
 
-        self.last_activity = todays_facts[-1] if todays_facts else None
+        last_activity = todays_facts[-1] if todays_facts else None
 
         # update duration of current task
-        if self.last_activity:
-            delta = now - self.last_activity['start_time']
+        if last_activity:
+            delta = now - last_activity['start_time']
             duration = delta.seconds /  60
 
             if duration and duration % interval == 0:
-                message = _(u"Working on %s") % self.last_activity['name']
+                message = _(u"Working on %s") % last_activity['name']
                 self.notify_user(message)
 
         elif self.conf_notify_on_idle:
@@ -100,13 +100,11 @@ class DesktopIntegrations(object):
 
 
     def on_idle_changed(self, event, state):
-        print "idle check", event, state
         # state values: 0 = active, 1 = idle
-        if state and self.conf_enable_timeout and self.last_activity and \
-             self.last_activity['end_time'] is None:
-
+        if state == 1 and self.conf_enable_timeout:
             idle_from = self.idle_listener.getIdleFrom()
-            self.storage._Storage__touch_fact(self.last_activity, idle_from)
+            idle_from = timegm(idle_from.timetuple())
+            self.storage.StopTracking(idle_from)
 
 
     def on_conf_changed(self, event, key, value):
