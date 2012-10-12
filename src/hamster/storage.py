@@ -161,7 +161,7 @@ class Storage(dbus.service.Object):
             end_time = dt.datetime.utcfromtimestamp(end_time)
 
         facts = self.__get_todays_facts()
-        if facts:
+        if facts and not facts[-1]['end_time']:
             self.__touch_fact(facts[-1], end_time)
             self.FactsChanged()
 
