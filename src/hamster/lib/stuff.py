@@ -331,8 +331,8 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.encode("utf-8").strip() for tag in self.tags.split(",")],
             'date': calendar.timegm(self.date.timetuple()),
-            'start_time': calendar.timegm(self.start_time.timetuple()),
-            'end_time': calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
+            'start_time': self.start_time if isinstance(self.start_time, basestring) else calendar.timegm(self.start_time.timetuple()),
+            'end_time': self.end_time if isinstance(self.end_time, basestring) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
             'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 #duration in seconds
         }
         return iter(keys.items())
