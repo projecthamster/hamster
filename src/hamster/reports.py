@@ -74,12 +74,7 @@ def simple(facts, start_date, end_date, format, path = None):
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        if not path:
-            self.file = StringIO()
-            self.close = False
-        else:
-            self.file = open(path, "w")
-            self.store = True
+        self.file = open(path, "w") if path else StringIO()
         self.datetime_format = datetime_format
 
     def export(self):
@@ -102,20 +97,20 @@ class ReportWriter(object):
 
                 fact.tags = ", ".join(fact.tags)
 
-                self._write_fact(self.file, fact)
+                self._write_fact(fact)
 
-            self._finish(self.file, facts)
+            self._finish(facts)
         finally:
-            if self.close:
+            if isinstance(self.file, file):
                 self.file.close()
 
-    def _start(self, file, facts):
+    def _start(self, facts):
         raise NotImplementedError
 
-    def _write_fact(self, file, fact):
+    def _write_fact(self, fact):
         raise NotImplementedError
 
-    def _finish(self, file, facts):
+    def _finish(self, facts):
         raise NotImplementedError
 
 class ICalWriter(ReportWriter):
@@ -125,7 +120,7 @@ class ICalWriter(ReportWriter):
         self.file.write("BEGIN:VCALENDAR\nVERSION:1.0\n")
 
 
-    def _write_fact(self, file, fact):
+    def _write_fact(self, fact):
         #for now we will skip ongoing facts
         if not fact.end_time: return
 
@@ -136,12 +131,12 @@ class ICalWriter(ReportWriter):
 CATEGORIES:%(category)s
 DTSTART:%(start_time)s
 DTEND:%(end_time)s
-SUMMARY:%(name)s
+SUMMARY:%(activity)s
 DESCRIPTION:%(description)s
 END:VEVENT
-""" % fact)
+""" % dict(fact))
 
-    def _finish(self, file, facts):
+    def _finish(self, facts):
         self.file.write("END:VCALENDAR\n")
 
 class TSVWriter(ReportWriter):
@@ -165,7 +160,7 @@ class TSVWriter(ReportWriter):
                    _("tags")]
         self.csv_writer.writerow([h.encode('utf-8') for h in headers])
 
-    def _write_fact(self, file, fact):
+    def _write_fact(self, fact):
         fact.delta = stuff.duration_minutes(fact.delta)
         self.csv_writer.writerow([fact.activity,
                                   fact.start_time,
@@ -174,7 +169,7 @@ class TSVWriter(ReportWriter):
                                   fact.category,
                                   fact.description,
                                   fact.tags])
-    def _finish(self, file, facts):
+    def _finish(self, facts):
         pass
 
 class XMLWriter(ReportWriter):
@@ -183,7 +178,7 @@ class XMLWriter(ReportWriter):
         self.doc = Document()
         self.activity_list = self.doc.createElement("activities")
 
-    def _write_fact(self, file, fact):
+    def _write_fact(self, fact):
         activity = self.doc.createElement("activity")
         activity.setAttribute("name", fact.activity)
         activity.setAttribute("start_time", fact.start_time)
@@ -194,9 +189,9 @@ class XMLWriter(ReportWriter):
         activity.setAttribute("tags", fact.tags)
         self.activity_list.appendChild(activity)
 
-    def _finish(self, file, facts):
+    def _finish(self, facts):
         self.doc.appendChild(self.activity_list)
-        file.write(self.doc.toxml())
+        self.file.write(self.doc.toxml())
 
 
 
@@ -250,7 +245,7 @@ class HTMLWriter(ReportWriter):
         return ""
 
 
-    def _write_fact(self, report, fact):
+    def _write_fact(self, fact):
         # no having end time is fine
         end_time_str, end_time_iso_str = "", ""
         if fact.end_time:
@@ -284,7 +279,7 @@ class HTMLWriter(ReportWriter):
         self.fact_rows.append(Template(self.fact_row_template).safe_substitute(data))
 
 
-    def _finish(self, report, facts):
+    def _finish(self, facts):
 
         # group by date
         by_date = []
@@ -338,7 +333,7 @@ class HTMLWriter(ReportWriter):
 
             all_activities_rows = "\n".join(self.fact_rows)
         )
-        report.write(Template(self.main_template).safe_substitute(data))
+        self.file.write(Template(self.main_template).safe_substitute(data))
 
         if self.override:
             # my report is better than your report - overrode and ran the default report
