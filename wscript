@@ -50,7 +50,7 @@ def build(bld):
                       """,
                       chmod = 0755)
 
-    bld.install_files('${BINDIR}', "src/bin/hamster", chmod = 0755)
+    bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod = 0755)
 
 
     bld.install_files('${SYSCONFDIR}/bash_completion.d','src/hamster.bash')
