@@ -133,7 +133,7 @@ class DailyView(object):
     def create_hamster_window(self):
         if self.window is None:
             # load window of activity switcher and todays view
-            self._gui = load_ui_file("hamster.ui")
+            self._gui = load_ui_file("today.ui")
             self.window = self._gui.get_object('hamster-window')
             self.window.connect("delete_event", self.on_delete_window)
 
