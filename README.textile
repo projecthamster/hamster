@@ -4,6 +4,16 @@ are for installing from sources for testing and development purposes.
 The instructions are mix between Gnome 2 and Gnome 3, so, errm, just bear with
 us.
 
+h1. hamster-applet -> hamster-time-tracker clean up
+
+Previously hamster was installed everywhere under @hamster-applet@. As
+the applet is long gone, the paths and file names have changed to
+@hamster-time-tracker@. To clean up previous install follow these steps:
+
+pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
+./waf configure build --prefix=/usr
+sudo ./waf uninstall
+
 h1. Dependencies
 
 Debian-based: @apt-get install git-core gettext intltool python-gconf@
