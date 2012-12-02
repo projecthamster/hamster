@@ -1,12 +1,12 @@
-# Swedish translation of hamster-applet.
+# Swedish translation of hamster-time-tracker.
 # Copyright (C) 2008-2012 Free Software Foundation, Inc.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Kalle Persson <kalle@kallepersson.se>, 2008.
 # Daniel Nylander <po@danielnylander.se>, 2008, 2009, 2010, 2011, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-19 10:49+0100\n"
 "PO-Revision-Date: 2012-02-19 10:50+0100\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster.ui.h:1
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "Tidmätare"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 msgid "Show activities window"
 msgstr "Visa aktivitetsfönster"
 
@@ -98,91 +98,91 @@ msgstr "Aktivitet:"
 msgid "Tags:"
 msgstr "Taggar:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Hamster-projektet - mät din tid"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Stoppa tidmätning vid inaktivitet"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Stoppa tidmätning av aktuell aktivitet när datorn blir overksam"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 #: ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Stoppa tidmätning vid avstängning"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Stoppa tidmätning av aktuell aktivitet vid avstängning"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Påminn om aktuell uppgift var x minuter"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
 msgstr "Påminn om aktuell uppgift varje angivet antal minuter. Ställ in till 0 eller större än 120 för att inaktivera påminnelser."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 #: ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Påminn även när ingen aktivitet är inställd"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "Påminn även varje notify_interval minuter om ingen aktivitet har startats."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Vid vilken tidpunkt som dagen börjar (standard är 05.30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start; and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
 msgstr "Aktiviteter kommer att räknas som gårdagens om den aktuella tiden är mindre än den angivna dagens start, och idag, om den går över tiden. Aktiviteter som spänner över två dagar kommer att tippa över till den sida där den största delen av aktiviteten är."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Ska växling av arbetsyta generera aktivitetsväxling"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to the last activity when returning to a previous workspace."
 msgstr "Lista över aktiverade mätmetoder. \"name\" kommer att aktivera växling av aktivitet efter namn i workspace_mapping. \"memory\" kommer att aktivera växling till senaste aktivitet vid när man återvänder till en tidigare arbetsyta."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Växla aktivitet vid byte av arbetsyta"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
 msgstr "Om växling efter namn är aktiverat kommer denna lista att ställa in aktivitetsnamnen som ska växlas till, arbetsytor representeras av indexet för objektet."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Visa / dölj Tidmätare-fönstret"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Tangentbordsgenväg för att visa /dölja Tidmätare-fönstret."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Växla fönsteråtgärd för hamster-programmet"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Kommando för att växla fönstersynlighet för hamster-programmet."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Växla programfönstret för hamster"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Växla fönstersynlighet för hamster-programmet."
 

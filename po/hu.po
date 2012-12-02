@@ -1,15 +1,15 @@
-# Hungarian translation of hamster-applet
+# Hungarian translation of hamster-time-tracker
 # Copyright (C) 2008, 2009, 2010, 2011 Free Software Foundation, Inc.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2008, 2009, 2010, 2011, 2012.
 # Avramucz Péter <muczyjoe at gmail dot com>, 2009.
 # Attila Hammer <hammera at pickup dot hu>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"cgi?product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-11 13:29+0000\n"
 "PO-Revision-Date: 2012-02-29 03:44+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
@@ -21,8 +21,8 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "Időnyilvántartó"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 #| msgid "activities"
 msgid "Show activities window"
 msgstr "Tevékenységek ablak megjelenítése"
@@ -93,34 +93,34 @@ msgstr "Tevékenység:"
 msgid "Tags:"
 msgstr "Címkék:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Hamster projekt – időnyilvántartó"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Nyilvántartás befejezése üresjáratban"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr ""
 "Az aktuális tevékenység nyilvántartásának befejezése a számítógép "
 "üresjáratában"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Nyilvántartás befejezése leállításkor"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Az aktuális tevékenység nyilvántartásának befejezése leállításkor"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Emlékeztető az aktuális feladatra ennyi percenként"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -128,22 +128,22 @@ msgstr ""
 "Emlékeztessen az adott feladatra a megadott percenként. Az emlékeztető "
 "letiltásához állítsa 0-ra vagy 120-nál nagyobb értékűre."
 
-#: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Emlékeztessen akkor is, ha nincs beállítva tevékenység"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Emlékeztessen notify_interval percenként akkor is, ha nincs elkezdve "
 "tevékenység."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Mikor kezdődik a nap (az alapértelmezett érték DE 5.30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -155,11 +155,11 @@ msgstr ""
 "nyúló tevékenységek arra a napra fognak kerülni, amelyre a nagyobb részük "
 "esik."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "A munkaterület-váltás együtt jár-e tevékenységváltással"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -170,11 +170,11 @@ msgstr ""
 "megadott módon. A „memory” (memória) engedélyezi az utolsó tevékenységre "
 "váltást, amikor visszatér az előző munkaterületre."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Tevékenységváltás munkaterület-váltáskor"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -183,28 +183,28 @@ msgstr ""
 "azon tevékenységneveket, amelyekre váltani kell. A munkaterületeket az "
 "elemek indexe jelzi."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Időnyilvántartó ablakának megjelenítése/elrejtése."
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr ""
 "Gyorsbillentyű az Időnyilvántartó ablakának megjelenítéséhez/elrejtéséhez."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "A Hamster alkalmazás ablakának átváltása művelet"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "A Hamster alkalmazásablak láthatóságának átváltására szolgáló parancs."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "A Hamster alkalmazás ablakának átváltása"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "A Hamster alkalmazás ablakának láthatóságának átváltása."
 

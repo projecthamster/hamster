@@ -1,13 +1,13 @@
-# Bulgarian translation of hamster-applet po-file.
+# Bulgarian translation of hamster-time-tracker po-file.
 # Copyright (C) 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc.
 # Copyright (C) 2010 Damyan Ivanov.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Alexander Shopov <ash@kambanaria.org>, 2008, 2009, 2010, 2011, 2012.
 # Damyan Ivanov <dmn@debian.org>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-22 20:27+0200\n"
 "PO-Revision-Date: 2012-02-22 20:27+0200\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
 msgid "Show activities window"
 msgstr "Показване на прозореца с дейностите"
 
-#: ../data/90-hamster-applet.xml.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/Hamster_Applet.server.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:11
 #: ../data/hamster-windows-service.desktop.in.in.h:2
@@ -91,13 +91,13 @@ msgstr "тече"
 msgid "to"
 msgstr "до"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1
 msgid "Project Hamster - track your time"
 msgstr "Проект Хамстер — отчитане на времето"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -109,26 +109,26 @@ msgstr ""
 "това. Дейностите, които са в два дни, се броят към този, в който е по-"
 "голямата част от тях."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Да се напомня на интервал равен на ключа „notify_interval“ в минути, ако не "
 "е зададена текуща дейност."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Напомняне и когато не е зададена дейност"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Кога започва денят (стандартно е в 5:30)"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Команда за показване и скриване на главния прозорец на програмата."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -137,13 +137,13 @@ msgstr ""
 "които да се превключва. Работните плотове се представят с индекса на "
 "дейността."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr ""
 "Клавишна комбинация за показване и скриване на прозореца за отчитане на "
 "времето."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -153,7 +153,7 @@ msgstr ""
 "името, указано в ключа „workspace_mapping“. При „memory“ ще се превключва "
 "към последната дейност при преминаване към предишен работен плот."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -161,50 +161,50 @@ msgstr ""
 "Напомняне за текущата задача на всяко изтичане на указания брой минути. За "
 "да изключите напомнянето, задайте да е 0 или над 120."
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Remind of current task every x minutes"
 msgstr "Време в минути за повтарящо се напомняне"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Дали смяната на плота означава и смяна на дейността"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "Show / hide Time Tracker Window"
 msgstr "Показване и скриване на прозореца за отчитане на времето."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
 msgstr ""
 "Преустановяване на отчитането на текущата дейност при изключване на компютъра"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr ""
 "Преустановяване на отчитането на текущата дейност, когато компютърът "
 "бездейства"
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Stop tracking on idle"
 msgstr "Преустановяване на отчитането при бездействие"
 
-#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
 msgstr "Преустановяване на отчитането при изключване на компютъра"
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "Смяна на дейността при смяна на плота"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Toggle hamster application window"
 msgstr "Показване и скриване на прозореца на програмата"
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window action"
 msgstr "Показване и скриване на главния прозорец на програмата Хамстер"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Показване и скриване на главния прозорец на програмата Хамстер"
 

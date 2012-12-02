@@ -1,6 +1,6 @@
-# Turkish translation of hamster-applet application
+# Turkish translation of hamster-time-tracker application
 # Copyright (C) 2008
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 # 
 # Baris Cicek <baris@teamforce.name.tr>, 2008, 2009.
 # Fatih Ergüven <fatih@erguven.org>, 2009.
@@ -8,9 +8,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-03-11 07:55+0000\n"
 "PO-Revision-Date: 2011-04-29 01:55+0300\n"
 "Last-Translator: Muhammet Kara <muhammet.k@gmail.com>\n"
@@ -22,12 +22,12 @@ msgstr ""
 "\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
 #| msgid "Project Hamster Website"
 msgid "Project Hamster (Gnome Time Tracker)"
 msgstr "Proje Hamster (Gnome Zaman Takipçisi)"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -35,44 +35,44 @@ msgid ""
 "part of the activity is."
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Ayrıca, hiçbir etkinlik başlatılmadığında her notify_interval dakikada bir "
 "hatırlat."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Hiçbir etkinlik ayarlanmadığında ayrıca hatırlat"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 #| msgid "Keyboard shortcut for showing the Time Tracker window."
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Zaman Takipçisi penceresini göstermek / gizlemek için klavye kısayolu."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -80,48 +80,48 @@ msgstr ""
 "Mevcut görevi belirtilen miktardaki dakikada hatırlat. 0 ya da 120'den daha "
 "büyük bir değer atayarak hatırlatıcıyı kapatabilirsiniz."
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Remind of current task every x minutes"
 msgstr "Mevcut görevi her x dakikada hatırlat"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 #| msgid "Keyboard shortcut for showing the Time Tracker window."
 msgid "Show / hide Time Tracker Window"
 msgstr "Zaman Takipçisi Penceresini Göster / Gizle"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
 msgstr "Bilgisayar kapatıldığında mevcut etkinliği takip etmeyi durdur"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Bilgisayar boşta olduğunda mevcut etkinliği takip etmeyi durdur"
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Stop tracking on idle"
 msgstr "Beklemede takibi durdur"
 
-#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
 msgstr "Kapatıldığında takibi durdur"
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Toggle hamster application window"
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window action"
 msgstr ""
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgid "Project Hamster — track your time"
 msgstr "Proje Hamster — zamanınızı takip edin"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
 #: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
@@ -153,7 +153,7 @@ msgstr "_Genel Görünüm"
 msgid "_Preferences"
 msgstr "_Tercihler"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #| msgid "Project Hamster — track your time"
 msgid "Project Hamster - track your time"

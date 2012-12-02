@@ -94,7 +94,7 @@ class DesktopIntegrations(object):
                                                     dbus_interface='org.freedesktop.Notifications')
         conn = self._notification_conn
 
-        conn.Notify("Project Hamster", 5, "hamster-applet",
+        conn.Notify("Project Hamster", 5, "hamster-time-tracker",
                     summary, details,
                     [], {"urgency": 0}, -1)
 

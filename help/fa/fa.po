@@ -1,11 +1,11 @@
-# Persian translation for hamster-applet.
-# Copyright (C) 2012 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# Persian translation for hamster-time-tracker.
+# Copyright (C) 2012 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # سید‌علی‌اکبر نجفیان <ali_njfn@yahoo.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2012-04-07 15:05+0000\n"
 "PO-Revision-Date: 2012-04-29 19:35+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
@@ -215,8 +215,8 @@ msgid "Backup"
 msgstr "پشتیبان"
 
 #: C/backup.page:10(p)
-msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-applet/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
-msgstr "فعالیت‌ها بر روی یک پایگاه داده‌ی SQLite ذخیره شده‌اند، در مسیر <file>~/.local/share/hamster-applet/hamster.db</file> قابل دستیابی می‌باشد. از این طریق پرونده می‌تواند پشتیبان‌گیری و بازیابی شود. برنامه اطلاعات پس از مدت کوتاهی مجددا بار می‌کند."
+msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
+msgstr "فعالیت‌ها بر روی یک پایگاه داده‌ی SQLite ذخیره شده‌اند، در مسیر <file>~/.local/share/hamster-time-tracker/hamster.db</file> قابل دستیابی می‌باشد. از این طریق پرونده می‌تواند پشتیبان‌گیری و بازیابی شود. برنامه اطلاعات پس از مدت کوتاهی مجددا بار می‌کند."
 
 #: C/backup.page:17(p)
 msgid "For viewing contents of the database we can suggest using the <link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</app></link> for Mozilla Firefox."

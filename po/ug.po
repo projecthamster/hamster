@@ -1,4 +1,4 @@
-# Uyghur translation for hamster-applet.
+# Uyghur translation for hamster-time-tracker.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Gheyret Kenji<gheyret@yahoo.com>,2010.
@@ -7,9 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-04-13 15:11+0000\n"
 "PO-Revision-Date: 2011-04-25 16:48+0600\n"
 "Last-Translator: Sahran <sahran.ug@gmail.com>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
 msgid "Project Hamster (Gnome Time Tracker)"
 msgstr "Hamster قۇرۇلۇشى(Gnome ۋاقىت ئىزلىغۇچى)"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -35,26 +35,26 @@ msgstr ""
 "بولىدۇ، ھەم كۆرسەتمىلەر قايسى كۈندىكى پائالىيەت ۋاقتى ئۇزۇن بولسا شۇنىڭدا "
 "كۆرسىتىلىدۇ."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "ئەگەر پائالىيەت باشلانمىغان بولسا يەنىلا ھەر قېتىملىق بەلگىلەنگەن ئەسكەرتىش "
 "ئارىلىقىدا ئەسكەرتىدۇ."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "پائالىيەت بەلگىلەنمىگەندىمۇ ئەسكەرت"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "كۈن سائەت قانچىدە باشلىنىدۇ(سۈكۈت: 5:30 چۈشتىن بۇرۇن)"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "hamster پروگرامما كۆزنىكىنىڭ كۆرۈنۈشچانلىقىنى ئالماشتۇرۇش بۇيرۇقى."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -62,13 +62,13 @@ msgstr ""
 "ئەگەر ئات بويىچە ئۆزگەرتىش قوزغىتىلسا، بۇ تىزىم ئايلاندۇرۇلىدىغان پائالىيەت "
 "ئاتى، تۈرنىڭ  ئىندېكسىنىڭ ۋەكىللىك قىلىدىغان خىزمەت رايونىنى تەڭشەيدۇ"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr ""
 "ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسىتىدىغان ياكى يوشۇرىدىغان "
 "ھەرپتاختا تېزلەتمىسى."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -79,7 +79,7 @@ msgstr ""
 "ئالدىنقى خىزمەت رايونىغا قايتقاندا ئالدىنقى قېتىملىق پائالىيەتكە "
 "ئالماشتۇرىدۇ."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -87,47 +87,47 @@ msgstr ""
 "ھازىرقى ۋەزىپىنى بەلگىلەنگەن مىنۇتتا ئەسكەرتىپ تۇرىدۇ. 0 ياكى 120 دىن چوڭ "
 "قىلىپ بېكىتىلسە ئەسكەرتىش ئىناۋەتسىز بولىدۇ."
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Remind of current task every x minutes"
 msgstr "ھازىرقى ۋەزىپىنى ھەر x مىنۇتتا ئەسكەرت"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "خىزمەت بوشلۇقى ئايلاندۇرۇش پائالىيەت ئالماشتۇرۇشنى كەلتۈرۈپ چىقىرىدۇ"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "Show / hide Time Tracker Window"
 msgstr "ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسەت/يوشۇر"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
 msgstr "تاقىغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "كومپيۇتېر بىكار بولغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Stop tracking on idle"
 msgstr "بىكار بولغاندا ئىزلاشنى توختات"
 
-#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
 msgstr "تاقىغاندا ئىزلاشنى توختات"
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "خىزمەت بوشلۇقى ئۆزگەرگەندە پائالىيەتنى ئالماشتۇر"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Toggle hamster application window"
 msgstr "hamster پروگرامما كۆزنىكىنى ئالماشتۇر"
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window action"
 msgstr "hamster پروگرامما كۆزنىكىنى مەشغۇلاتىنى ئالماشتۇر"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "hamster پروگرامما كۆزنىكىنىڭ كۆرۈنۈشچانلىقىنى ئالماشتۇرىدۇ."
 
@@ -136,7 +136,7 @@ msgid "Project Hamster — track your time"
 msgstr "Hamster قۇرۇلۇشى — ۋاقتىڭىزنى ئىزلاڭ"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
 #: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
@@ -159,7 +159,7 @@ msgstr "ئورتاق(_O)"
 msgid "_Preferences"
 msgstr "مايىللىق(_P)"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 msgid "Project Hamster - track your time"
 msgstr "Hamster قۇرۇلۇشى - ۋاقتىڭىزنى ئىزلاڭ"

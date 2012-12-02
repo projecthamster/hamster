@@ -20,15 +20,15 @@ def setup_i18n():
         locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
 
         for module in (locale,gettext):
-            module.bindtextdomain('hamster-applet', locale_dir)
-            module.textdomain('hamster-applet')
+            module.bindtextdomain('hamster-time-tracker', locale_dir)
+            module.textdomain('hamster-time-tracker')
 
-            module.bind_textdomain_codeset('hamster-applet','utf8')
+            module.bind_textdomain_codeset('hamster-time-tracker','utf8')
 
-        gettext.install("hamster-applet", locale_dir, unicode = True)
+        gettext.install("hamster-time-tracker", locale_dir, unicode = True)
 
     else:
-        gettext.install("hamster-applet-uninstalled")
+        gettext.install("hamster-time-tracker-uninstalled")
 
 
 def C_(ctx, s):

@@ -58,7 +58,7 @@ class About(object):
         for prop, val in infos.items():
             about.set_property(prop, val)
 
-        about.set_logo_icon_name("hamster-applet")
+        about.set_logo_icon_name("hamster-time-tracker")
 
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()

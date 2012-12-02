@@ -1,10 +1,10 @@
-# Hungarian translation of hamster-applet help
+# Hungarian translation of hamster-time-tracker help
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2010.
 # Copyright (C) 2010. Free Software Foundation, Inc.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet-help master\n"
+"Project-Id-Version: hamster-time-tracker-help master\n"
 "POT-Creation-Date: 2010-10-05 20:52+0000\n"
 "PO-Revision-Date: 2010-10-06 04:04+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
@@ -356,12 +356,12 @@ msgstr "Biztonsági mentés"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
 "A tevékenységek egy SQLite adatbázisban találhatók a <file>~/.local/share/"
-"hamster-applet/hamster.db</file> helyen. A fájl menet közben menthető és "
+"hamster-time-tracker/hamster.db</file> helyen. A fájl menet közben menthető és "
 "helyreállítható. Az alkalmazás egy rövid idő elteltével automatikusan "
 "újratölti az adatokat."
 

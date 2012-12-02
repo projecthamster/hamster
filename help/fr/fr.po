@@ -1,6 +1,6 @@
-# French translation for hamster-applet.
+# French translation for hamster-time-tracker.
 # Copyright (C) 2010 Listed translators
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Florent Thévenet <feuloren@free.fr>, 2010.
 # Claude Paroz <claude@2xlibre.net>, 2010.
@@ -8,7 +8,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2010-09-21 11:51+0000\n"
 "PO-Revision-Date: 2010-09-23 22:23+0200\n"
 "Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
@@ -392,12 +392,12 @@ msgstr "Sauvegarde"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
 "Les activités sont stockées dans une base de données SQLite, dans le fichier "
-"<file>~/.local/share/hamster-applet/hamster.db</file>. Ce fichier peut être "
+"<file>~/.local/share/hamster-time-tracker/hamster.db</file>. Ce fichier peut être "
 "sauvegardé et restauré à n'importe quel moment. L'application recharge "
 "automatiquement les données après un court instant."
 

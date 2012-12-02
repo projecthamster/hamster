@@ -20,7 +20,7 @@
 """Deal with trophies if there.
    For now the trophy configuration of hamster reside in gnome-achievements, in
    github:
-   http://github.com/tbaugis/gnome-achievements/blob/master/data/achievements/hamster-applet.trophies.xml
+   http://github.com/tbaugis/gnome-achievements/blob/master/data/achievements/hamster-time-tracker.trophies.xml
    Eventually they will move into hamster.
 """
 
@@ -35,15 +35,15 @@ import datetime as dt
 
 def unlock(achievement_id):
     if not storage: return
-    storage.unlock_achievement("hamster-applet", achievement_id)
+    storage.unlock_achievement("hamster-time-tracker", achievement_id)
 
 def check(achievement_id):
     if not storage: return None
-    return storage.check_achievement("hamster-applet", achievement_id)
+    return storage.check_achievement("hamster-time-tracker", achievement_id)
 
 def increment(counter_id, context = ""):
     if not storage: return 0
-    return storage.increment_counter("hamster-applet", counter_id, context)
+    return storage.increment_counter("hamster-time-tracker", counter_id, context)
 
 
 
@@ -153,7 +153,7 @@ class Checker(object):
 
         # alpha bravo charlie – used delta times to enter at least 50 activities
         if fact.start_time and fact.original_activity.startswith("-"):
-            counter = increment("hamster-applet", "alpha_bravo_charlie")
+            counter = increment("hamster-time-tracker", "alpha_bravo_charlie")
             if counter == 50:
                 unlock("alpha_bravo_charlie")
 
@@ -183,7 +183,7 @@ class Checker(object):
         #        patrys complains about who's gonna garbage collect. should think
         #        about this
         if not check("ultra_focused"):
-            activity_count = increment("hamster-applet", "focused_%s@%s" % (fact.activity, fact.category or ""))
+            activity_count = increment("hamster-time-tracker", "focused_%s@%s" % (fact.activity, fact.category or ""))
             # focused – 100 facts with single activity
             if activity_count == 100:
                 unlock("focused")

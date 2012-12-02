@@ -1,11 +1,11 @@
-# Chinese (China) translation for hamster-applet.
-# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# Chinese (China) translation for hamster-time-tracker.
+# Copyright (C) 2010 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # TeliuTe <teliute@163.com>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2010-12-07 23:55+0000\n"
 "PO-Revision-Date: 2010-12-18 00:19+0800\n"
 "Last-Translator: TeliuTe <teliute@163.com>\n"
@@ -328,11 +328,11 @@ msgstr "备份"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
-"活动存储在一个 SQLite 数据库里，位于 <file>~/.local/share/hamster-applet/"
+"活动存储在一个 SQLite 数据库里，位于 <file>~/.local/share/hamster-time-tracker/"
 "hamster.db</file>。应用程序会在一个短时间后自动重载数据。"
 
 #: C/backup.page:17(p)

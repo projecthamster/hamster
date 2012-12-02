@@ -1,4 +1,4 @@
-# Bengali translation for hamster-applet
+# Bengali translation for hamster-time-tracker
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
+"product=hamster-time-tracker&component=general\n"
 "POT-Creation-Date: 2010-01-27 16:34+0000\n"
 "PO-Revision-Date: 2010-01-28 15:35+0600\n"
 "Last-Translator: Israt Jahan <israt@ankur.org.bd>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start and today, if it is over the time. "
@@ -29,22 +29,22 @@ msgid ""
 "part of the activity is."
 msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "উপরন্তু, কোনো কাজ না আরম্ভ করা হলে প্রতি notify_interval মিনিটে সূচনা প্রদান করা "
 "হবে।"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:5
 msgid "Also remind when no activity is set"
 msgstr "উপরন্তু, কোনো কাজ নির্ধারিত না হলে সূচিত করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "At what time does the day start (defaults to 5:30AM)"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -52,11 +52,11 @@ msgstr ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "সময় নিরীক্ষণের উইন্ডো প্রদর্শনের জন্য কী-বোর্ড শর্টকাট।"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -66,7 +66,7 @@ msgstr ""
 "name defined in workspace_mapping. \"memory\" will enable switching to last "
 "activity when returning to a previous workspace."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -74,35 +74,35 @@ msgstr ""
 "মিনিটে ধার্য সুনির্দিষ্ট সময়ের অন্তরে বর্তমান কর্ম সম্বন্ধে স্মরণ করানো হবে। স্মরণ "
 "ব্যবস্থা নিষ্ক্রিয় করার জন্য ০ অথবা ১২০ থেকে অধিক কোনো সংখ্যা নির্ধারণ করুন।"
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "Remind of current task every x minutes"
 msgstr "প্রতি x মিনিট অন্তর বর্তমান কর্মের বিষয়ে স্মরণ করানো হবে"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Should workspace switch trigger activity switch"
 msgstr "Should workspace switch trigger activity switch"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Show window"
 msgstr "উইন্ডো প্রদর্শন করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "Stop tracking current activity on shutdown"
 msgstr "বন্ধ করা হলে বর্তমান কাজের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking on idle"
 msgstr "কর্মহীন অবস্থায় বর্তমান কাজে নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-applet.schemas.in.h:15 ../data/preferences.ui.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:15 ../data/preferences.ui.h:20
 msgid "Stop tracking on shutdown"
 msgstr "কম্পিউটার বন্ধ হলে"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Switch activity on workspace change"
 msgstr "Switch activity on workspace change"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&component=general\n"
+"product=hamster-time-tracker&component=general\n"
 "POT-Creation-Date: 2010-12-04 00:18+0000\n"
 "PO-Revision-Date: 2010-12-04 21:25+0200\n"
 "Last-Translator: Adi Roiban <adi@roiban.ro>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "20)) ? 1 : 2);;\n"
 "X-Generator: Virtaal 0.6.1\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
 msgid "Project Hamster (Gnome Time Tracker)"
 msgstr "Proiectul Hamster (Pontaj activități în GNOME)"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -36,26 +36,26 @@ msgstr ""
 "timpul. Activitățile care se întind pe două zile vor fi contorizate pentru "
 "ziua în care este cea mai mare parte a activității."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "De asemenea, amintește la fiecare notify_interval minute dacă nu s-a pornit "
 "o activitate."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Amintește atunci când nu există o activitate definită"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "La ce oră începe ziua (implicit 5:30AM)"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Comandă pentru comutarea vizibilității ferestrei aplicației hamster."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -64,11 +64,11 @@ msgstr ""
 "activităților la care se comută, spațiile de lucru reprezentate prin indexul "
 "elementului."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Combinație de taste pentru afișarea / ascunderea ferestrei de pontare."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -79,7 +79,7 @@ msgstr ""
 "comutarea la ultima activitate la întoarcerea într-un spațiu de lucru "
 "anterior."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -87,47 +87,47 @@ msgstr ""
 "Amintește sarcina curentă la un interval de minute specificat. Pentru "
 "dezactivare, definiți ca 0 sau mai mare de 120."
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Remind of current task every x minutes"
 msgstr "Amintește sarcina curentă la fiecare x minute"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Dacă comutarea spațiului de lucru declanșează o comutare a activității"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "Show / hide Time Tracker Window"
 msgstr "Arată / ascunde fereastra de pontare"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity on shutdown"
 msgstr "Oprește pontarea activității curente când calculatorul este oprit"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Oprește pontarea activității curente când calculatorul devine inactiv"
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Stop tracking on idle"
 msgstr "Oprește pontarea în inactivitate"
 
-#: ../data/hamster-applet.schemas.in.h:16 ../data/preferences.ui.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
 msgid "Stop tracking on shutdown"
 msgstr "Oprește pontarea când e oprit calculatorul"
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "Comută activitatea la comutarea spațiului de lucru"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Toggle hamster application window"
 msgstr "Comută fereastra aplicației hamster"
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window action"
 msgstr "Acțiune comutare fereastră aplicație hamster"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Comută vizibilitatea ferestrei aplicației hamster."
 
@@ -136,7 +136,7 @@ msgid "Project Hamster — track your time"
 msgstr "Proiectul Hamster – pontați-vă activitățile"
 
 #: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
 #: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
@@ -159,7 +159,7 @@ msgstr "P_rivire generală"
 msgid "_Preferences"
 msgstr "_Preferințe"
 
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 msgid "Project Hamster - track your time"
 msgstr "Proiectul Hamster - pontați-vă activitățile"

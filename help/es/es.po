@@ -1,12 +1,12 @@
-# translation of hamster-applet.help.master.po to Español
-# Spanish translation for hamster-applet.
-# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# translation of hamster-time-tracker.help.master.po to Español
+# Spanish translation for hamster-time-tracker.
+# Copyright (C) 2010 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Jorge González <jorgegonz@svn.gnome.org>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet.help.master\n"
+"Project-Id-Version: hamster-time-tracker.help.master\n"
 "POT-Creation-Date: 2010-08-23 15:40+0000\n"
 "PO-Revision-Date: 2010-08-24 00:02+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
@@ -425,12 +425,12 @@ msgstr "Respaldo"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
 "Las actividades se almacenan en una base de datos SQLite ubicada en <file>~/."
-"local/share/hamster-applet/hamster.db</file>. El archivo se puede respaldar "
+"local/share/hamster-time-tracker/hamster.db</file>. El archivo se puede respaldar "
 "y restaurar al vuelo. La aplicación recargará automáticamente los datos tras "
 "un corto tiempo."
 

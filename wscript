@@ -1,6 +1,6 @@
 # -*- python -*-
 VERSION = '2.91.3'
-APPNAME = 'hamster-applet'
+APPNAME = 'hamster-time-tracker'
 top = '.'
 out = 'build'
 
@@ -19,8 +19,8 @@ def configure(conf):
     conf.define('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 
     conf.define('VERSION', VERSION)
-    conf.define('GETTEXT_PACKAGE', "hamster-applet")
-    conf.define('PACKAGE', "hamster-applet")
+    conf.define('GETTEXT_PACKAGE', "hamster-time-tracker")
+    conf.define('PACKAGE', "hamster-time-tracker")
     conf.define('PYEXECDIR', conf.env["PYTHONDIR"]) # i don't know the difference
 
     # avoid case when we want to install globally (prefix=/usr) but sysconfdir
@@ -43,8 +43,8 @@ def set_options(opt):
 
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster-applet',
-                      """src/hamster-applet
+    bld.install_files('${LIBDIR}/hamster-time-tracker',
+                      """src/hamster-time-tracker
                          src/hamster-service
                          src/hamster-windows-service
                       """,
@@ -99,8 +99,8 @@ def build(bld):
 
     def post(ctx):
         # Postinstall tasks:
-        # gnome.postinstall_scrollkeeper('hamster-applet') # Installing the user docs
-        gnome.postinstall_schemas('hamster-applet') # Installing GConf schemas
+        # gnome.postinstall_scrollkeeper('hamster-time-tracker') # Installing the user docs
+        gnome.postinstall_schemas('hamster-time-tracker') # Installing GConf schemas
         gnome.postinstall_icons() # Updating the icon cache
 
 

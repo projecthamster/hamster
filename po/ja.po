@@ -1,6 +1,6 @@
-# hamster-applet ja.po.
-# Copyright (C) 2008-2012 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# hamster-time-tracker ja.po.
+# Copyright (C) 2008-2012 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2008.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009-2011.
 # Nishio Futoshi <fut_nis@d3.dion.ne.jp>, 2010.
@@ -10,8 +10,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"Project-Id-Version: hamster-time-tracker master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-18 21:33+0000\n"
 "PO-Revision-Date: 2012-08-10 23:35+0900\n"
 "Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
@@ -22,8 +22,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "タイムトラッカー"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 #, fuzzy
 #| msgid "activities"
 msgid "Show activities window"
@@ -96,89 +96,89 @@ msgstr "活動:"
 msgid "Tags:"
 msgstr "タグ:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "プロジェクト・ハムスター - 時間を記録"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "アイドル時に記録を停止する"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "コンピューターがアイドル状態になったら活動の記録を停止する"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "シャットダウン時は記録を停止する"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "シャットダウン時に記録を停止する"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "現在のタスクを x 分ごとに通知します"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
 msgstr "現在のタスクを、指定した時間(分)ごとに通知します。0または120を超える値に設定すると通知しません。"
 
-#: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "活動が設定されていない時にも通知する"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "活動が何も開始されていない場合にも、notify_interval 分毎に通知する。"
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "一日の開始時間(デフォルトは午前5:30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start; and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
 msgstr "現在の時間が一日の開始時間より前の場合、活動は昨日の集計に計上され、時間を超えたものが今日に集計されます。2日にまたがる活動は、活動の最大部分がある側から、反転します。"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "ワークスペース切り替え時に動作を切り替えます"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to the last activity when returning to a previous workspace."
 msgstr "利用可能な記録手法のリストです。\"name\"は workspace_mapping で定義されている名前で活動を切り替え可能にします。\"memory\" は、前のワークスペースに戻るときに、そこで最後の活動に変更します。"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "ワークスペースの変更時に動作を切り替えます。"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
 msgstr "名前で切り替え可能にする場合、このリストは切り替える活動の名前に設定し、ワークスペースはアイテムのインデックスで再表示されます。"
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "タイムトラッカーのウィンドウの表示/非表示"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "タイムトラッカーのウィンドウ表示・非表示を切り替えるキーボードショートカットです。"
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "ハムスターアプリケーションウィンドウのアクションをOn/Offします。"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "ハムスターアプリケーションウィンドウの表示を切り替えるコマンド。"
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "ハムスターアプリケーションウィンドウをOn/Offします。"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "ハムスターアプリケーションウィンドウの表示をOn/Offします。"
 

@@ -21,7 +21,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_action_appearance">False</property>
-                <property name="accel_path">&lt;hamster-applet&gt;/Tracking</property>
+                <property name="accel_path">&lt;hamster-time-tracker&gt;/Tracking</property>
                 <property name="label" translatable="yes">_Tracking</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -29,13 +29,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="accel_group">accelgroup</property>
-                    <property name="accel_path">&lt;hamster-applet&gt;/tracking</property>
+                    <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking</property>
                     <child>
                       <object class="GtkMenuItem" id="menu_add_earlier">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/add</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking/add</property>
                         <property name="label" translatable="yes">Add earlier activity</property>
                         <signal name="activate" handler="on_menu_add_earlier_activate" swapped="no"/>
                       </object>
@@ -45,7 +45,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/overview</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking/overview</property>
                         <property name="label" translatable="yes">Overview</property>
                         <signal name="activate" handler="on_menu_overview_activate" swapped="no"/>
                       </object>
@@ -55,7 +55,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/stats</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking/stats</property>
                         <property name="label" translatable="yes">Statistics</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_menu_statistics_activate" swapped="no"/>
@@ -73,7 +73,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/close</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking/close</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="close_window" swapped="no"/>
@@ -85,7 +85,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/tracking/quit</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/tracking/quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="quit_app" swapped="no"/>
@@ -107,14 +107,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="accel_group">accelgroup</property>
-                    <property name="accel_path">&lt;hamster-applet&gt;/edit</property>
+                    <property name="accel_path">&lt;hamster-time-tracker&gt;/edit</property>
                     <child>
                       <object class="GtkImageMenuItem" id="menu_preferences">
                         <property name="label">gtk-preferences</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/edit/prefs</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/edit/prefs</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_preferences_activate" swapped="no"/>
@@ -129,7 +129,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_action_appearance">False</property>
-                <property name="accel_path">&lt;hamster-applet&gt;/help</property>
+                <property name="accel_path">&lt;hamster-time-tracker&gt;/help</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -137,13 +137,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="accel_group">accelgroup</property>
-                    <property name="accel_path">&lt;hamster-applet&gt;/help</property>
+                    <property name="accel_path">&lt;hamster-time-tracker&gt;/help</property>
                     <child>
                       <object class="GtkMenuItem" id="menu_help_contents">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/help/contents</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/help/contents</property>
                         <property name="label" translatable="yes">Contents</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_menu_help_contents_activate" swapped="no"/>
@@ -155,7 +155,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
-                        <property name="accel_path">&lt;hamster-applet&gt;/help/about</property>
+                        <property name="accel_path">&lt;hamster-time-tracker&gt;/help/about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_about_activate" swapped="no"/>

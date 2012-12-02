@@ -1,19 +1,19 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
-bld.install_files('${DATADIR}/hamster-applet', '*.ui')
-bld.install_files('${DATADIR}/hamster-applet', 'hamster.db Hamster_Applet.xml')
-bld.install_files('${DATADIR}/hamster-applet/art', 'art/*.png')
-bld.install_files('${DATADIR}/hamster-applet', 'report_template.html')
+bld.install_files('${DATADIR}/hamster-time-tracker', '*.ui')
+bld.install_files('${DATADIR}/hamster-time-tracker', 'hamster.db Hamster_Applet.xml')
+bld.install_files('${DATADIR}/hamster-time-tracker/art', 'art/*.png')
+bld.install_files('${DATADIR}/hamster-time-tracker', 'report_template.html')
 
-bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/hamster-applet.png')
-bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/hamster-applet.png')
-bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/hamster-applet.png')
-bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/hamster-applet.png')
-bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster-applet.svg')
+bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/hamster-time-tracker.png')
+bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/hamster-time-tracker.png')
+bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/hamster-time-tracker.png')
+bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/hamster-time-tracker.png')
+bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster-time-tracker.svg')
 
 
-for filename in ["hamster-applet.desktop",
+for filename in ["hamster-time-tracker.desktop",
                  "hamster-time-tracker.desktop",
                  "hamster-time-tracker-overview.desktop",
                  "hamster-windows-service.desktop",
@@ -29,13 +29,7 @@ bld.add_group()
 
 # process .in files with intl_tool
 bld(features = 'intltool_in',
-    source   = '90-hamster-applet.xml.in',
-    install_path = '${GNOME-KEYBINDINGS_keysdir}',
-    podir    = 'art', # any valid dir will do as we don't want the translations actually in (keybinder will get them)
-    flags    = ['-x', '-u', '-c'])
-
-bld(features = 'intltool_in',
-    source   = 'hamster-applet.schemas.in',
+    source   = 'hamster-time-tracker.schemas.in',
     install_path = '${SYSCONFDIR}/gconf/schemas',
     podir    = '../po',
     flags    = ['-s', '-u', '-c'])
@@ -43,7 +37,7 @@ bld(features = 'intltool_in',
 bld(features = 'intltool_in',
     source   = """hamster-time-tracker.desktop.in
                   hamster-time-tracker-overview.desktop.in
-                  hamster-applet.desktop.in
+                  hamster-time-tracker.desktop.in
                   hamster-windows-service.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',

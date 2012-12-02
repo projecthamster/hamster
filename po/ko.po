@@ -1,5 +1,5 @@
-# hamster-applet Korean translation
-# This file is distributed under the same license as the hamster-applet package.
+# hamster-time-tracker Korean translation
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Changwoo Ryu <cwryu@debian.org>, 2008-2012.
 #
@@ -13,9 +13,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-11 13:29+0000\n"
 "PO-Revision-Date: 2012-03-10 22:55+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
@@ -26,8 +26,8 @@ msgstr ""
 "Language: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
 #: ../src/hamster/about.py:39 ../src/hamster/about.py:40
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "시간 추적"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 msgid "Show activities window"
 msgstr "활동 창 표시"
 
@@ -97,32 +97,32 @@ msgstr "활동:"
 msgid "Tags:"
 msgstr "꼬리표:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "프로젝트 햄스터 - 시간 추적"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "절전 상태에 추적 중지"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "컴퓨터가 절전 상태가 되면 현재 활동의 추적을 중지합니다"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "컴퓨터를 끄면 추적 중지"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "컴퓨터를 끄면 현재 활동의 추적을 중지합니다"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "현재 활동을 매 몇분마다 알립니다"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -130,20 +130,20 @@ msgstr ""
 "현재 활동을 지정한 분마다 알립니다. 0으로 설정하거나 120보다 큰 값으로 설정하"
 "면 알리지 않습니다."
 
-#: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "활동을 설정하지 않은 경우에도 알리기"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "활동이 시작하지 않았을 때에도 매 notify_interval 분마다 알립니다."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "하루가 시작하는 시각 (기본값은 오전 5:30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -154,11 +154,11 @@ msgstr ""
 "고, 하루의 시작 시각보다 나중이면 오늘 날짜의 활동으로 취급됩니다. 이틀에 걸"
 "쳐서 이루어진 활동의 경우 시간이 긴 쪽 날짜의 활동으로 취급됩니다."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "작업 공간을 전환하면 활동을 전환합니다"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -167,11 +167,11 @@ msgstr ""
 "사용하는 추적 방법 목록. \"name\"이면 workspace_mapping에서 정의한 활동으로 "
 "전환합니다. \"memory\"면 작업 공간으로 돌아가면 최근 활동으로 전환합니다."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "작업 공간을 바꾸면 활동 전환"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -179,27 +179,27 @@ msgstr ""
 "이름으로 전환하는 경우, 이 목록에서 전환할 활동의 이름을 설정합니다. 목록의 "
 "항목은 순서대로 해당 번호의 작업 공간에 해당하는 활동입니다."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "시간 추적 창을 보이기 / 감추기"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "시간 추적 프로그램 창을 보이고 감추는 바로 가기 키."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "햄스터 프로그램 창 토글 동작"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "햄스터 프로그램 창을 보일지 말지 토글하는 명령."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "햄스터 프로그램 창 토글"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "햄스터 프로그램 창을 표시할지 토글합니다."
 

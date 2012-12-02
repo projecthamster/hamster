@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-21 10:25+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Pierre Henry <PierreHenry73@yahoo.fr>\n"
@@ -26,8 +26,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1
@@ -37,7 +37,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "Gestionnaire de temps"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 msgid "Show activities window"
 msgstr "Afficher la fenêtre des activités"
 
@@ -98,34 +98,34 @@ msgstr "Activité :"
 msgid "Tags:"
 msgstr "Étiquettes :"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Projet Hamster - Gérez votre emploi du temps"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Arrêter le suivi en cas d'inactivité"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr ""
 "Arrêter le suivi de l'activité en cours quand l'ordinateur devient inactif"
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Arrêter le suivi à l'extinction de l'ordinateur"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Arrêter le suivi de l'activité en cours à l'extinction de l'ordinateur"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Rappeler l'activité en cours toutes les n minutes"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -133,22 +133,22 @@ msgstr ""
 "Rappeler l'activité en cours chaque nombre de minutes spécifié. Définir à 0 "
 "ou à plus de 120 pour désactiver le rappel."
 
-#: ../data/hamster-applet.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Rappeler également lorsqu'aucune activité n'est définie"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Rappeler également toutes les « notify_interval » minutes si aucune activité "
 "n'a été commencée."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Heure de début de journée (5 h 30 par défaut)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -161,13 +161,13 @@ msgstr ""
 "journées sont comptabilisées dans celle où la part la plus grande est "
 "effectuée."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
 "Indique si le changement d'espace de travail doit déclencher un changement "
 "d'activité"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -178,11 +178,11 @@ msgstr ""
 "changement vers la dernière activité en cas de retour dans un espace de "
 "travail précédent."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Changer d'activité lorsqu'on change d'espace de travail"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -191,30 +191,30 @@ msgstr ""
 "auxquelles on pourra passer, les espaces de travail sont représentés par "
 "l'indice de l'élément."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Afficher ou masquer la fenêtre du gestionnaire de temps"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr ""
 "Raccourci clavier pour afficher ou masquer la fenêtre du gestionnaire de "
 "temps."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Action pour afficher ou masquer la fenêtre de l'application de Hamster"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
 "Commande pour afficher ou masquer la fenêtre de l'application de Hamster."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Afficher ou masquer la fenêtre de l'application de Hamster"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Afficher ou masquer la fenêtre de l'application de Hamster."
 

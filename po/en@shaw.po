@@ -1,11 +1,11 @@
-# Shavian translation for hamster-applet.
+# Shavian translation for hamster-time-tracker.
 # Copyright (C) 2009 The Gnome Foundation.
 # Thomas Thurman <tthurman@gnome.org>, 2009.
 # Transliterate Hamster as ·𐑣𐑨𐑥𐑕𐑑𐑼
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"Project-Id-Version: hamster-time-tracker\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&component=general\n"
 "POT-Creation-Date: 2010-05-16 14:26+0000\n"
 "PO-Revision-Date: 2010-05-16 16:06 -0400\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -26,21 +26,21 @@ msgstr ""
 "𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛 𐑛𐑱 𐑕𐑑𐑸𐑑; 𐑯 𐑑𐑫𐑛𐑱, 𐑦𐑓 𐑦𐑑 𐑦𐑟 𐑴𐑝𐑼 𐑞 𐑑𐑲𐑥. 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦𐑟 𐑞𐑨𐑑 𐑕𐑐𐑨𐑯 𐑑𐑵 𐑛𐑱𐑟, 𐑢𐑦𐑤 "
 "𐑑𐑦𐑐 𐑴𐑝𐑼 𐑑 𐑞 𐑕𐑲𐑛 𐑢𐑺 𐑞 𐑤𐑸𐑡𐑩𐑕𐑑 𐑐𐑸𐑑 𐑝 𐑞 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑦𐑟."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "𐑷𐑤𐑕𐑴 𐑮𐑦𐑥𐑲𐑯𐑛 𐑧𐑝𐑮𐑦 notify_interval 𐑥𐑦𐑯𐑦𐑑𐑕 𐑦𐑓 𐑯𐑴 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑣𐑨𐑟 𐑚𐑰𐑯 𐑕𐑑𐑸𐑑𐑩𐑛."
 
-#: ../data/hamster-applet.schemas.in.h:3 ../data/preferences.ui.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:5
 msgid "Also remind when no activity is set"
 msgstr "𐑷𐑤𐑕𐑴 𐑮𐑦𐑥𐑲𐑯𐑛 𐑢𐑧𐑯 𐑯𐑴 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑦𐑟 𐑕𐑧𐑑"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "𐑨𐑑 𐑢𐑪𐑑 𐑑𐑲𐑥 𐑛𐑳𐑟 𐑞 𐑛𐑱 𐑕𐑑𐑸𐑑 (𐑛𐑦𐑓𐑷𐑤𐑑𐑕 𐑑 5:30AM)"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -48,11 +48,11 @@ msgstr ""
 "𐑦𐑓 𐑕𐑢𐑦𐑗𐑦𐑙 𐑚𐑲 𐑯𐑱𐑥 𐑦𐑟 𐑦𐑯𐑱𐑚𐑩𐑤𐑛, 𐑞𐑦𐑕 𐑤𐑦𐑕𐑑 𐑕𐑧𐑑𐑕 𐑞 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑯𐑱𐑥𐑟 𐑞𐑨𐑑 𐑖𐑫𐑛 𐑚𐑰 𐑕𐑢𐑦𐑗𐑑 "
 "𐑑, 𐑢𐑻𐑒𐑕𐑐𐑱𐑕𐑩𐑟 𐑮𐑧𐑐𐑮𐑩𐑟𐑧𐑯𐑑𐑩𐑛 𐑚𐑲 𐑞 𐑦𐑯𐑛𐑧𐑒𐑕 𐑝 𐑲𐑑𐑩𐑥."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "𐑒𐑰𐑚𐑪𐑮𐑛 𐑕𐑹𐑑𐑒𐑳𐑑 𐑓𐑹 𐑖𐑴𐑦𐑙 𐑞 𐑑𐑲𐑥 𐑑𐑮𐑨𐑒𐑼 𐑢𐑦𐑯𐑛𐑴."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to the "
@@ -62,7 +62,7 @@ msgstr ""
 "𐑛𐑦𐑓𐑲𐑯𐑛 𐑦𐑯 workspace_mapping. \"memory\" 𐑢𐑦𐑤 𐑦𐑯𐑱𐑚𐑩𐑤 𐑕𐑢𐑦𐑗𐑦𐑙 𐑑 𐑞 𐑤𐑭𐑕𐑑 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 "
 "𐑢𐑧𐑯 𐑮𐑦𐑑𐑻𐑯𐑦𐑙 𐑑 𐑩 𐑐𐑮𐑰𐑝𐑦𐑩𐑕 𐑢𐑻𐑒𐑕𐑐𐑱𐑕."
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or greater "
 "than 120 to disable reminder."
@@ -70,35 +70,35 @@ msgstr ""
 "𐑮𐑦𐑥𐑲𐑯𐑛 𐑝 𐑒𐑳𐑮𐑩𐑯𐑑 𐑑𐑭𐑕𐑒 𐑧𐑝𐑮𐑦 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛 𐑩𐑥𐑬𐑯𐑑 𐑝 𐑥𐑦𐑯𐑦𐑑𐑕. 𐑕𐑧𐑑 𐑑 0 𐑹 𐑜𐑮𐑱𐑑𐑼 𐑞𐑨𐑯 120 𐑑 "
 "𐑛𐑦𐑕𐑱𐑚𐑩𐑤 𐑮𐑦𐑥𐑲𐑯𐑛𐑼."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "Remind of current task every x minutes"
 msgstr "𐑮𐑦𐑥𐑲𐑯𐑛 𐑝 𐑒𐑳𐑮𐑩𐑯𐑑 𐑑𐑭𐑕𐑒 𐑧𐑝𐑮𐑦 x 𐑥𐑦𐑯𐑦𐑑𐑕"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Should workspace switch trigger activity switch"
 msgstr "𐑖𐑫𐑛 𐑢𐑻𐑒𐑕𐑐𐑱𐑕 𐑕𐑢𐑦𐑗 𐑑𐑮𐑦𐑜𐑻 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑕𐑢𐑦𐑗"
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Show window"
 msgstr "𐑖𐑴 𐑢𐑦𐑯𐑛𐑴"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "Stop tracking current activity on shutdown"
 msgstr "𐑕𐑑𐑪𐑐 𐑑𐑮𐑨𐑒𐑦𐑙 𐑒𐑳𐑮𐑩𐑯𐑑 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑪𐑯 𐑖𐑩𐑑𐑛𐑶𐑯"
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "𐑕𐑑𐑪𐑐 𐑑𐑮𐑨𐑒𐑦𐑙 𐑒𐑳𐑮𐑩𐑯𐑑 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑢𐑧𐑯 𐑒𐑩𐑥𐑐𐑿𐑑𐑼 𐑚𐑦𐑒𐑳𐑥𐑟 𐑲𐑛𐑩𐑤"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "Stop tracking on idle"
 msgstr "𐑕𐑑𐑪𐑐 𐑑𐑮𐑨𐑒𐑦𐑙 𐑪𐑯 𐑲𐑛𐑩𐑤"
 
-#: ../data/hamster-applet.schemas.in.h:15 ../data/preferences.ui.h:21
+#: ../data/hamster-time-tracker.schemas.in.h:15 ../data/preferences.ui.h:21
 msgid "Stop tracking on shutdown"
 msgstr "𐑕𐑑𐑪𐑐 𐑑𐑮𐑨𐑒𐑦𐑙 𐑪𐑯 𐑖𐑩𐑑𐑛𐑶𐑯"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Switch activity on workspace change"
 msgstr "𐑕𐑢𐑦𐑗 𐑨𐑒𐑑𐑦𐑝𐑦𐑑𐑦 𐑪𐑯 𐑢𐑻𐑒𐑕𐑐𐑱𐑕 𐑗𐑱𐑯𐑡"
 

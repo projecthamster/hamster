@@ -2,16 +2,16 @@
 # Estonian translation of Project Hamster.
 #
 # Copyright (C) 2008–2010 The GNOME Project.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Ivar Smolin <okul linux ee>, 2008–2010.
 # Mattias Põldaru <mahfiaz@gmail.com>, 2009–2010, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet MASTER\n"
+"Project-Id-Version: hamster-time-tracker MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-01 07:56+0000\n"
 "PO-Revision-Date: 2012-03-01 12:59+0200\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"

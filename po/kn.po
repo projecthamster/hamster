@@ -1,12 +1,12 @@
-# translation of hamster-applet.master.kn.po to Kannada
+# translation of hamster-time-tracker.master.kn.po to Kannada
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Shankar Prasad <svenkate@redhat.com>, 2008, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet.master.kn\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"Project-Id-Version: hamster-time-tracker.master.kn\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&component=general\n"
 "POT-Creation-Date: 2009-08-31 12:51+0000\n"
 "PO-Revision-Date: 2009-09-20 16:32+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
@@ -64,7 +64,7 @@ msgstr "ಚಟುವಟಿಕೆಯನ್ನು ತೋರಿಸು"
 msgid "Add category"
 msgstr "ಹೊಸ ವರ್ಗವನ್ನು ಸೇರಿಸು"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+#: ../data/preferences.ui.h:7 ../data/hamster-time-tracker.schemas.in.h:2
 #| msgid "Remind of current activity every:"
 msgid "Also remind when no activity is set"
 msgstr "ಯಾವುದೆ ಚಟುವಟಿಕೆಯನ್ನು ಹೊಂದಿಸದೆ ಇದ್ದಾಗ ಕೂಡ ನೆನಪಿಸು"
@@ -103,7 +103,7 @@ msgstr "ಚಟುವಟಿಕೆಯನ್ನು ತೆಗೆದು ಹಾಕು"
 msgid "Remove category"
 msgstr "ವರ್ಗವನ್ನು ತೆಗೆದು ಹಾಕು"
 
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
+#: ../data/preferences.ui.h:16 ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "ಮುಚ್ಚಿದಾಗ ಟ್ರ್ಯಾಕಿಂಗನ್ನು ನಿಲ್ಲಿಸು"
 
@@ -151,15 +151,15 @@ msgstr "ಪ್ರಗತಿಯಲ್ಲಿದೆ"
 msgid "to"
 msgstr "ಗೆ"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ಯಾವುದೆ ಚಟುವಟಿಕೆಗಳನ್ನು ಆರಂಭಿಸದೆ ಇದ್ದಲ್ಲಿ ಪ್ರತಿ ಸೂಚನಾ_ಕಾಲಾವಧಿಯಲ್ಲೂ ನೆನಪಿಸು."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "ಸಮಯ ಟ್ರ್ಯಾಕರ್ ವಿಂಡೋವನ್ನು ತೋರಿಸಲು ಕೀಲಿ ಮಣೆ ಶಾರ್ಟ್-ಕಟ್."
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 #| msgid ""
 #| "Remind of current task every specified amount of minutes. Set to 0 or "
 #| "bigger than 120 to disable reminder."
@@ -170,24 +170,24 @@ msgstr ""
 "ಪ್ರಸಕ್ತ ಕೆಲಸವನ್ನು ಪ್ರತಿ ನಿಗದಿಪಡಿಸಿದ ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸುತ್ತದೆ. ಈ ನೆನಪು ಮಾಡುವುದನ್ನು "
 "ಅಶಕ್ತಗೊಳಿಸಲು ಈ ಮೌಲ್ಯವನ್ನು ೦ ಗೆ ಅಥವ ೧೨೦ಕ್ಕಿಂತ ಹೆಚ್ಚಿನದಕ್ಕೆ ಬದಲಾಯಿಸಿ."
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ಪ್ರಸಕ್ತ ಕೆಲಸವನ್ನು x ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸುತ್ತದೆ"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Show window"
 msgstr "ವಿಂಡೋವನ್ನು ತೋರಿಸು"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "ಮುಚ್ಚಿದಾಗ ಪ್ರಸಕ್ತ ಟ್ರ್ಯಾಕಿಂಗ್ ಚಟುವಟಿಕೆಯನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 #| msgid "Stop tracking current activity, when computer becomes idle"
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "ಗಣಕವು ಜಡಗೊಂಡಾಗ ಪ್ರಸಕ್ತ ಟ್ರ್ಯಾಕಿಂಗ್ ಚಟುವಟಿಕೆಯನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "ಜಡಗೊಂಡಾಗ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ನಿಲ್ಲಿಸು"
 

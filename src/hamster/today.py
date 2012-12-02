@@ -59,7 +59,7 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
         self.manager.add_ui_from_string(menu)
         self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
 
-        self.set_from_icon_name("hamster-applet")
+        self.set_from_icon_name("hamster-time-tracker")
         self.set_name(_('Time Tracker'))
 
         self.connect('activate', self.on_activate)
@@ -112,13 +112,13 @@ class DailyView(object):
         self.accel_group = self.get_widget("accelgroup")
         self.window.add_accel_group(self.accel_group)
 
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/close", gtk.keysyms.Escape, 0)
-        gtk.accel_map_add_entry("<hamster-applet>/tracking/quit", gtk.keysyms.q, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-applet>/help/contents", gtk.keysyms.F1, 0)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/close", gtk.keysyms.Escape, 0)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/quit", gtk.keysyms.q, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
+        gtk.accel_map_add_entry("<hamster-time-tracker>/help/contents", gtk.keysyms.F1, 0)
 
 
 
@@ -137,7 +137,7 @@ class DailyView(object):
             self.window = self._gui.get_object('hamster-window')
             self.window.connect("delete_event", self.on_delete_window)
 
-            gtk.window_set_default_icon_name("hamster-applet")
+            gtk.window_set_default_icon_name("hamster-time-tracker")
 
             self.new_name = widgets.ActivityEntry()
             self.new_name.connect("value-entered", self.on_switch_activity_clicked)
@@ -338,7 +338,7 @@ class DailyView(object):
     def on_menu_preferences_activate(self, menu_item):
         dialogs.prefs.show(self.window)
     def on_menu_help_contents_activate(self, *args):
-        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet", 0L)
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-time-tracker", 0L)
         trophies.unlock("basic_instructions")
 
 
@@ -466,7 +466,7 @@ class DailyView(object):
         return self._gui.get_object(name)
 
     def on_more_info_button_clicked(self, *args):
-        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-applet#input", 0L)
+        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-time-tracker#input", 0L)
         return False
 
     def save_window_position(self):

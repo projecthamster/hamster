@@ -55,7 +55,7 @@ class RuntimeStore(Singleton):
     def __init__(self):
         try:
             import defs
-            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
             self.version = defs.VERSION
         except:
             # if defs is not there, we are running from sources
@@ -69,7 +69,7 @@ class RuntimeStore(Singleton):
         self.storage = Storage()
 
 
-        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
+        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-time-tracker"))
 
     @property
     def art_dir(self):
@@ -161,7 +161,7 @@ class GConfStore(gobject.GObject, Singleton):
     Settings implementation which stores settings in GConf
     Snatched from the conduit project (http://live.gnome.org/Conduit)
     """
-    GCONF_DIR = "/apps/hamster-applet/"
+    GCONF_DIR = "/apps/hamster-time-tracker/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
         'enable_timeout'              :   False,       # Should hamster stop tracking on idle

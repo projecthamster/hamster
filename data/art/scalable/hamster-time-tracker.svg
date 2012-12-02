@@ -15,9 +15,9 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="hamster-applet.svg"
+   sodipodi:docname="hamster-time-tracker.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/kalle/Projekt/Tango/hamster/scalable/hamster-applet.png"
+   inkscape:export-filename="/home/kalle/Projekt/Tango/hamster/scalable/hamster-time-tracker.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -2188,7 +2188,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Hamster-Applet</dc:title>
+        <dc:title>hamster-time-tracker</dc:title>
         <dc:date>20080331</dc:date>
         <dc:creator>
           <cc:Agent>

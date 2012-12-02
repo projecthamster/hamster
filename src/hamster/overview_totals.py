@@ -235,7 +235,7 @@ class TotalsBox(gtk.VBox):
 
 
 if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-applet")
+    gtk.window_set_default_icon_name("hamster-time-tracker")
     window = gtk.Window()
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)

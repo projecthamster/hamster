@@ -1,11 +1,11 @@
-# Telugu translation for hamster-applet.
-# Copyright (C) 2011 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# Telugu translation for hamster-time-tracker.
+# Copyright (C) 2011 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Praveen Illa <mail2ipn@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2011-11-26 17:03+0000\n"
 "PO-Revision-Date: 2011-11-26 22:45+0530\n"
 "Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
@@ -284,7 +284,7 @@ msgstr "బ్యాకప్"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""

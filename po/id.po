@@ -1,4 +1,4 @@
-# Translation of hamster-applet to Bahasa Indonesia
+# Translation of hamster-time-tracker to Bahasa Indonesia
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-11 13:29+0000\n"
 "PO-Revision-Date: 2012-05-15 03:45+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster.ui.h:1
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "Pelacak Waktu"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 #| msgid "activities"
 msgid "Show activities window"
 msgstr "Tampilkan jendela aktivitas"
@@ -99,90 +99,90 @@ msgstr "Aktivitas:"
 msgid "Tags:"
 msgstr "Tag:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Proyek Hamster - melacak waktu kegiatan Anda"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Berhenti melacak saat menganggur"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Berhenti melacak aktivitas ketika komputer menganggur"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 #: ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Berhenti melacak saat diamtikan"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Berhenti melacak aktivitas ketika komputer dimatikan"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Mengingatkan tugas yang berlangsung setiap x menit."
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
 msgstr "Ingatkan tugas saat ini setiap sekian menit yang dinyatakan. Tata ke 0 atau lebih dari 120 untuk mematikan pengingat."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 #: ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Juga ingatkan bila tak ada aktivitas yang ditata"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "Juga ingatkan setiap notify_interval menit bila tak ada aktivitas yang telah dimulai."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Pukul berapa hari dimulai (bawaan adalah 5:30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start; and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
 msgstr "Aktivitas akan dihitung milik kemarin bila waktu kini kurang dari awal hari yang dinyatakan; dan hari ini, bila lewat dari waktu itu. Aktivitas yang mencakup dua hari, akan jatuh ke sisi bagian terbesar aktivitas."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Mestikah bertukar ruang kerja memicu pertukaran aktivitas"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to the last activity when returning to a previous workspace."
 msgstr "Daftar metoda pelacakan yang difungsikan. \"name\" akan mengaktifkan pertukaran aktivitas berdasarkan nama yang didefinisikan dalam workspace_mapping. \"memory\" akan mengaktifkan pertukaran ke aktivitas terakhir ketika kembali ke ruang kerja sebelumnya."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Tukar aktivitas pada perubahan ruang kerja"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
 msgstr "Bila pertukaran berdasarkan nama diaktifkan, daftar ini menata nama aktivitas yang mesti dituju, ruang kerja diwakili oleh index butir."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Menampilkan/menyembunyikan Jendela Pelacak Waktu"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Tombol kombinasi pintasan untuk menampilkan/menyembunyikan jendela Pelacak Waktu."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Jungkitkan aksi jendela aplikasi hamster"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Perintah untuk menjungkit kenampakan jendela aplikasi hamster."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Jungkitkan jendela aplikasi hamster"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Jungkitkan kenampakan jendela aplikasi hamster."
 

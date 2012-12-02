@@ -1,13 +1,13 @@
-# translation of hamster-applet.master.ml.po to
-# Copyright (C) 2008 hamster-applet'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# translation of hamster-time-tracker.master.ml.po to
+# Copyright (C) 2008 hamster-time-tracker'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Jeffrey|ജെഫ്രി  Antony|ആന്റണി <jeffreyantony@gmail.com>, 2008.
 # പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>, 2008.
 # Ani Peter | അനി പീറ്റര്‍ <apeter@redhat.com>, 2009
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet.master.ml\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&component=general\n"
+"Project-Id-Version: hamster-time-tracker.master.ml\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&component=general\n"
 "POT-Creation-Date: 2009-08-31 12:51+0000\n"
 "PO-Revision-Date: 2009-09-11 16:22+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
@@ -67,7 +67,7 @@ msgstr "പ്രവര്‍ത്തനങ്ങള്‍ ചേര്‍ക�
 msgid "Add category"
 msgstr "ഇനം ചേര്‍ക്കുക"
 
-#: ../data/preferences.ui.h:7 ../data/hamster-applet.schemas.in.h:2
+#: ../data/preferences.ui.h:7 ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Also remind when no activity is set"
 msgstr "പ്രവര്‍ത്തനം സജ്ജമല്ലെങ്കില്‍ നിങ്ങളെ അറിയിക്കുകയും ചെയ്യുന്നു"
 
@@ -109,7 +109,7 @@ msgstr "പ്രവര്‍ത്തനം നീക്കം ചെയ്യ�
 msgid "Remove category"
 msgstr "ഇനം നീക്കം ചെയ്യുക"
 
-#: ../data/preferences.ui.h:16 ../data/hamster-applet.schemas.in.h:10
+#: ../data/preferences.ui.h:16 ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Stop tracking on shutdown"
 msgstr "കമ്പ്യൂട്ടര്‍ പ്രവര്‍ത്തനം നിറുത്തിക്കൊണ്ടിരിക്കുമ്പോള്‍ നിരീക്ഷണം നിര്‍ത്തുക"
 
@@ -163,15 +163,15 @@ msgstr "പുരോഗമിച്ചുകൊണ്ടിരിക്കുന
 msgid "to"
 msgstr "to"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ഒരു പ്രവര്‍ത്തനവും തുടങ്ങിയില്ലെങ്കില്‍, എല്ലാ notify_interval മിനിട്ടില്‍ ഓര്‍പ്പിക്കുക."
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr "സമയനിരീക്ഷകന്റെ ജാലകം കാണിക്കാനുള്ള കീബോര്‍ഡ് കുറുക്കുവഴി"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -179,24 +179,24 @@ msgstr ""
 "നിലവില്‍ ചെയ്യുന്ന ജോലി പറഞ്ഞിരിക്കുന്ന സമയത്തു് ഓര്‍പ്പിക്കുക. 0 അല്ലെങ്കില്‍ 120-നേക്കാള്‍ "
 "കൂടുതല്‍ നല്‍കി റിമയിണ്ടര്‍ പ്രവര്‍ത്തന രഹിതമാക്കുക."
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "നിലവിലുള്ള പ്രവര്‍ത്തനം എല്ലാ x മിനിട്ടിലും ഓര്‍പ്പിക്കുക"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Show window"
 msgstr "ജാലകം കാണിക്കുക"
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 msgid "Stop tracking current activity on shutdown"
 msgstr "കമ്പ്യൂട്ടര്‍ നിര്‍ത്തിക്കൊണ്ടിരിക്കുമ്പോള്‍ ആ സമയത്തു് നടക്കുന്ന പ്രവര്‍ത്തനങ്ങളുടെ നിരീക്ഷണം നിര്‍ത്തുക"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 #| msgid "Stop tracking current activity, when computer becomes idle"
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "കമ്പ്യൂട്ടര്‍ വെറുതെയിരിക്കുമ്പോള്‍ ആ സമയത്തു് നടക്കുന്ന പ്രവര്‍ത്തനങ്ങളുടെ നിരീക്ഷണം നിര്‍ത്തുക"
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "Stop tracking on idle"
 msgstr "വെറുതെയിരിക്കുമ്പോള്‍ നിരീക്ഷണം നിര്‍ത്തുക"
 

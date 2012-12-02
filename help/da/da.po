@@ -1,11 +1,11 @@
-# Danish translation for hamster-applet.
-# Copyright (C) 2010 hamster-applet's COPYRIGHT HOLDER.
-# This file is distributed under the same license as the hamster-applet package.
+# Danish translation for hamster-time-tracker.
+# Copyright (C) 2010 hamster-time-tracker's COPYRIGHT HOLDER.
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Joe Jansen <joedalton2@yahoo.dk>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2011-04-03 19:22+0200\n"
 "PO-Revision-Date: 2011-04-01 16:33+0000\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
@@ -354,12 +354,12 @@ msgstr "Sikkerhedskopi"
 #: ../C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
 "Aktiviteter gemmes i en SQLite-database, placeret i <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. Filen kan løbende sikkerhedskopieres og "
+"hamster-time-tracker/hamster.db</file>. Filen kan løbende sikkerhedskopieres og "
 "gendannes. Programmet vil genindlæse data automatisk efter en kort "
 "tidsperiode."
 

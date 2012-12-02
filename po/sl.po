@@ -1,13 +1,13 @@
-# Slovenian translations for hamster-applet.
+# Slovenian translations for hamster-time-tracker.
 # Copyright (C) 2005-2006 Free Software Foundation, Inc.
-# This file is distributed under the same license as the hamster-applet package.
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Matej Urbančič <mateju@svn.gnome.org>, 2008 - 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-applet&keywords=I18N+L10N&component=general\n"
+"Project-Id-Version: hamster-time-tracker master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-13 18:37+0000\n"
 "PO-Revision-Date: 2012-02-15 20:24+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
@@ -21,8 +21,8 @@ msgstr ""
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../data/90-hamster-applet.xml.in.h:1
-#: ../data/hamster-applet.desktop.in.in.h:1
+#: ../data/90-hamster-time-tracker.xml.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/Hamster_Applet.server.in.in.h:1
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster.ui.h:1
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Time Tracker"
 msgstr "Sledenje času"
 
-#: ../data/90-hamster-applet.xml.in.h:2
+#: ../data/90-hamster-time-tracker.xml.in.h:2
 msgid "Show activities window"
 msgstr "Pokaži okno dejavnosti"
 
@@ -101,91 +101,91 @@ msgstr "Dejavnost:"
 msgid "Tags:"
 msgstr "Oznake:"
 
-#: ../data/hamster-applet.desktop.in.in.h:2
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Projekt Hamster - sledenje času"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Zaustavi sledenje ob nedejavnosti"
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Zaustavi sledenje trenutne dejavnosti, kadar računalnik ni dejaven"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 #: ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Zaustavi sledenje ob izklopu računalnika"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Zaustavi sledenje trenutni dejavnosti ob izklopu računalnika"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Opomni na trenutno nalogo vsakih x minut"
 
-#: ../data/hamster-applet.schemas.in.h:6
+#: ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Remind of current task every specified amount of minutes. Set to 0 or greater than 120 to disable reminder."
 msgstr "Opomni na trenutno dejavnost vsakih toliko minut. Vrednost 0 in vrednost večja od 120 onemogoči opomnik."
 
-#: ../data/hamster-applet.schemas.in.h:7
+#: ../data/hamster-time-tracker.schemas.in.h:7
 #: ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Opozori kadar ni določenih dejavnosti"
 
-#: ../data/hamster-applet.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:8
 msgid "Also remind every notify_interval minutes if no activity has been started."
 msgstr "Opozori vsakih _nekaj minut, če ni nobene začete dejavnosti."
 
-#: ../data/hamster-applet.schemas.in.h:9
+#: ../data/hamster-time-tracker.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Ob kateri uri se dan začne (privzeto 5:30)"
 
-#: ../data/hamster-applet.schemas.in.h:10
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid "Activities will be counted as to belong to yesterday if the current time is less than the specified day start; and today, if it is over the time. Activities that span two days, will tip over to the side where the largest part of the activity is."
 msgstr "Dejavnosti bodo označene kot včerajšnje, ko je trenutni čas manjši od časa določenega za začetek novega dne, sicer bodo označene kot današnje. Dejavnosti, ki trajajo več dni bodo označene glede na večinski del trajanja dneva."
 
-#: ../data/hamster-applet.schemas.in.h:11
+#: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Ali naj preklop delovne površine preklopi dejavnosti"
 
-#: ../data/hamster-applet.schemas.in.h:12
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid "List of enabled tracking methods. \"name\" will enable switching activities by name defined in workspace_mapping. \"memory\" will enable switching to the last activity when returning to a previous workspace."
 msgstr "Seznam omogočenih načinov sledenja. \"Ime\" omogoči preklop dejavnosti po imenu določenem med možnostmi workspace_mapping, \"pomnilnik\" pa preklopi zadnjo dejavnost ob vračanju na predhodno delovno površino."
 
-#: ../data/hamster-applet.schemas.in.h:13
+#: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Preklopi dejavnost ob preklopu delovne površine"
 
-#: ../data/hamster-applet.schemas.in.h:14
+#: ../data/hamster-time-tracker.schemas.in.h:14
 msgid "If switching by name is enabled, this list sets the activity names that should be switched to, workspaces represented by the index of item."
 msgstr "V primeru, da je omogočen preklop po imenu, se s seznamom določijo imena dejavnosti, ki bodo preklopljene, delovne površine pa so predstavljene z določili predmeta."
 
-#: ../data/hamster-applet.schemas.in.h:15
+#: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Pokaži / Skrij okno sledenja časa"
 
-#: ../data/hamster-applet.schemas.in.h:16
+#: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Tipkovna bližnjica za skrivanje in prikaz okna sledenja času."
 
-#: ../data/hamster-applet.schemas.in.h:17
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Dejanje preklopa okna programa Hamster"
 
-#: ../data/hamster-applet.schemas.in.h:18
+#: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Ukaz za preklapljanje vidnosti okna programa Hamster."
 
-#: ../data/hamster-applet.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Preklopi okno programa Hamster"
 
-#: ../data/hamster-applet.schemas.in.h:20
+#: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Preklapljanje vidnosti okna programa Hamster."
 

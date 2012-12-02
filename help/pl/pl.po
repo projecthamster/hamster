@@ -6,7 +6,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet\n"
+"Project-Id-Version: hamster-time-tracker\n"
 "POT-Creation-Date: 2011-10-28 11:49+0000\n"
 "PO-Revision-Date: 2010-06-01 23:33+0100\n"
 "Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
@@ -329,12 +329,12 @@ msgstr "Kopia zapasowa"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-applet/hamster.db</file>. The file can be backed up and restored on "
+"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""
 "Czynności są zapisywanie w bazie danych SQLite, znajdującej się w pliku "
-"<file>~/.local/share/hamster-applet/hamster.db</file>. Plik ten może zostać "
+"<file>~/.local/share/hamster-time-tracker/hamster.db</file>. Plik ten może zostać "
 "skopiowany i przywrócony w trakcie pracy programu, zostanie on automatycznie "
 "wczytany."
 

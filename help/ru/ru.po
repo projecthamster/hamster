@@ -1,11 +1,11 @@
-# Russian translation for hamster-applet.
-# Copyright (C) 2011 hamster-applet's COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# Russian translation for hamster-time-tracker.
+# Copyright (C) 2011 hamster-time-tracker's COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 # Yuri Myasoedov <omerta13@yandex.ru>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet master\n"
+"Project-Id-Version: hamster-time-tracker master\n"
 "POT-Creation-Date: 2011-11-12 07:51+0000\n"
 "PO-Revision-Date: 2011-11-15 12:24+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
@@ -213,8 +213,8 @@ msgid "Backup"
 msgstr "Архивирование данных"
 
 #: C/backup.page:10(p)
-msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-applet/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
-msgstr "Информация о занятиях сохраняется в базе данных SQLite, расположенной в <file>~/.local/share/hamster-applet/hamster.db</file>. Этот файл может быть заархивирован или восстановлен в ходе работы. Приложение перезагрузит данные автоматически через какое-то время."
+msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
+msgstr "Информация о занятиях сохраняется в базе данных SQLite, расположенной в <file>~/.local/share/hamster-time-tracker/hamster.db</file>. Этот файл может быть заархивирован или восстановлен в ходе работы. Приложение перезагрузит данные автоматически через какое-то время."
 
 #: C/backup.page:17(p)
 msgid "For viewing contents of the database we can suggest using the <link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</app></link> for Mozilla Firefox."

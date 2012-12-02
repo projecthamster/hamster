@@ -1,11 +1,11 @@
-# Përkthimi i hamster-applet në shqip.
-# Copyright (C) 2008 THE hamster-applet'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the hamster-applet package.
+# Përkthimi i hamster-time-tracker në shqip.
+# Copyright (C) 2008 THE hamster-time-tracker'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the hamster-time-tracker package.
 #
 # Laurent Dhima <laurenti@alblinux.net>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-applet HEAD\n"
+"Project-Id-Version: hamster-time-tracker HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-18 14:45+0000\n"
 "PO-Revision-Date: 2008-09-20 12:38+0200\n"
@@ -56,7 +56,7 @@ msgstr "Lëviz _sipër"
 msgid "N_ew Category"
 msgstr "Kategori e r_e"
 
-#: ../data/preferences.glade.h:7 ../data/hamster-applet.schemas.in.h:6
+#: ../data/preferences.glade.h:7 ../data/hamster-time-tracker.schemas.in.h:6
 msgid "Stop tracking on shutdown"
 msgstr "Ndalon numërimin kur sistemi shuhet"
 
@@ -110,27 +110,27 @@ msgstr ""
 msgid "minutes"
 msgstr "minuta"
 
-#: ../data/hamster-applet.schemas.in.h:1
+#: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Keyboard shortcut for showing the Time Tracker window."
 msgstr ""
 "Kombinim përshpejtues nga tastiera për të shfaqur dritaren e Llogaritjes së "
 "kohës."
 
-#: ../data/hamster-applet.schemas.in.h:2
+#: ../data/hamster-time-tracker.schemas.in.h:2
 msgid "Show window"
 msgstr "Shfaq dritaren"
 
-#: ../data/hamster-applet.schemas.in.h:3
+#: ../data/hamster-time-tracker.schemas.in.h:3
 msgid "Stop tracking current activity on shutdown"
 msgstr "Ndalo llogaritjen e kohës së aktivitetit të tanishëm kur sistemi shuhet"
 
-#: ../data/hamster-applet.schemas.in.h:4
+#: ../data/hamster-time-tracker.schemas.in.h:4
 msgid "Stop tracking current activity, when computer becomes idle"
 msgstr ""
 "Ndalo llogaritjen e kohës së aktivitetit të tanishëm kur kompjuteri nuk "
 "është aktiv"
 
-#: ../data/hamster-applet.schemas.in.h:5
+#: ../data/hamster-time-tracker.schemas.in.h:5
 msgid "Stop tracking on idle"
 msgstr "Ndalo numërimin kur jo aktiv"
 

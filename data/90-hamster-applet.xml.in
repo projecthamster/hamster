@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<KeyListEntries _name="Time Tracker" package="hamster-applet">
-    <KeyListEntry name="/desktop/gnome/keybindings/hamster-applet/activate_hamster_window"
-                  _description="Show activities window" />
-</KeyListEntries>
