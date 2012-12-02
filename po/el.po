@@ -6,11 +6,12 @@
 # George Stefanakis <george.stefanakis@gmail.com>, 2011.
 # Giannis Katsampirhs <juankatsampirhs@gmail.com>, 2011.
 #
+#: ../src/hamster-cli:342
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-03 11:06+0300\n"
+"POT-Creation-Date: 2012-12-02 19:20+0100\n"
 "PO-Revision-Date: 2012-04-24 17:17+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -20,85 +21,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../data/90-hamster-time-tracker.xml.in.h:1
-msgid "Show activities window"
-msgstr "Εμφάνιση παραθύρου δραστηριοτήτων"
-
-#: ../data/90-hamster-time-tracker.xml.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:11
-#: ../data/hamster-windows-service.desktop.in.in.h:2
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:252
-#: ../src/hamster-time-tracker:569
-msgid "Time Tracker"
-msgstr "Καταγραφή χρόνου"
-
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-#: ../src/hamster-time-tracker:279
-msgid "No records today"
-msgstr "Όχι εγγραφές σήμερα"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:5
-msgid "S_witch"
-msgstr "Α_λλαγή"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "Εμφάνιση _επισκόπησης"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:7
-msgid "Start _Tracking"
-msgstr "Εκκίνηση _καταγραφής"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "Διακο_πή καταγραφής"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "Σή_μερα"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "Π_ροσθήκη προηγούμενης δραστηριότητας"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "Δραστηριότητα:"
-
-#: ../data/edit_activity.ui.h:2 ../data/hamster.ui.h:1
+#: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
 msgid "Add Earlier Activity"
 msgstr "Προσθήκη προηγούμενης δραστηριότητας"
 
+#: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
+msgid "to"
+msgstr "μέχρι"
+
 #: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "Περιγραφή:"
+msgid "in progress"
+msgstr "σε εξέλιξη"
 
 #: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "Ετικέτες:"
+msgid "Description:"
+msgstr "Περιγραφή:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
 msgstr "Χρόνος:"
 
 #: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "σε εξέλιξη"
+msgid "Activity:"
+msgstr "Δραστηριότητα:"
 
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "μέχρι"
-
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "Hamster - καταγράψτε το χρόνο σας"
+#: ../data/edit_activity.ui.h:7
+msgid "Tags:"
+msgstr "Ετικέτες:"
 
 #: ../data/hamster-time-tracker.schemas.in.h:1
+msgid "Stop tracking on idle"
+msgstr "Διακοπή καταγραφής κατά την αδρανοποίηση"
+
+#: ../data/hamster-time-tracker.schemas.in.h:2
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr ""
+"Διακοπή καταγραφής παρούσας δραστηριότητας, όταν ο υπολογιστής βρίσκεται σε "
+"αδράνεια"
+
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+msgid "Stop tracking on shutdown"
+msgstr "Διακοπή καταγραφής κατά τον τερματισμό"
+
+#: ../data/hamster-time-tracker.schemas.in.h:4
+msgid "Stop tracking current activity on shutdown"
+msgstr "Διακοπή καταγραφής παρούσας δραστηριότητας κατά τον τερματισμό"
+
+#: ../data/hamster-time-tracker.schemas.in.h:5
+msgid "Remind of current task every x minutes"
+msgstr "Υπενθύμιση τρέχουσας εργασίας κάθε x λεπτά"
+
+#: ../data/hamster-time-tracker.schemas.in.h:6
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"Υπενθύμιση της τρέχουσας δραστηριότητας σε κάθε ορισμένο αριθμό λεπτών. "
+"Ορίστε το σε 0 ή σε μεγαλύτερο από 120 για να απενεργοποιήσετε την "
+"υπενθύμιση."
+
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "Υπενθύμιση ακόμα και όταν δεν έχει οριστεί δραστηριότητα"
+
+#: ../data/hamster-time-tracker.schemas.in.h:8
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"Να γίνεται υπενθύμιση σε κάθε διάστημα_υπενθύμισης ακόμα και αν δεν έχει "
+"ξεκινήσει μια δραστηριότητα."
+
+#: ../data/hamster-time-tracker.schemas.in.h:9
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "Ποια ώρα ξεκινάει η ημέρα (προεπιλογή στις 5:30π.μ)"
+
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -110,40 +107,11 @@ msgstr ""
 "ημέρας. Οι δραστηριότητες που επεκτείνονται σε δύο ημέρες θα προσμετρούνται "
 "στην ημέρα όπου πραγματοποιήθηκε το μεγαλύτερο μέρος της εργασίας."
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr ""
-"Να γίνεται υπενθύμιση σε κάθε διάστημα_υπενθύμισης ακόμα και αν δεν έχει "
-"ξεκινήσει μια δραστηριότητα."
+#: ../data/hamster-time-tracker.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr "Αν η αλλαγή σε χώρο εργασίας θα επιφέρει και αλλαγή δραστηριότητας"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
-msgid "Also remind when no activity is set"
-msgstr "Υπενθύμιση ακόμα και όταν δεν έχει οριστεί δραστηριότητα"
-
-#: ../data/hamster-time-tracker.schemas.in.h:4
-msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr "Ποια ώρα ξεκινάει η ημέρα (προεπιλογή στις 5:30π.μ)"
-
-#: ../data/hamster-time-tracker.schemas.in.h:5
-msgid "Command for toggling visibility of the hamster application window."
-msgstr "Εντολή για εναλλαγή ορατότητας του παραθύρου της εφαρμογής hamster."
-
-#: ../data/hamster-time-tracker.schemas.in.h:6
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"Αν η αλλαγή κατά όνομα είναι ενεργή, αυτή η λίστα θα παρουσιάζει τα ονόματα "
-"των δραστηριοτήτων που θα πρέπει να μεταβείτε."
-
-#: ../data/hamster-time-tracker.schemas.in.h:7
-msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr ""
-"Συντόμευση πληκτρολογίου για εμφάνιση / απόκρυψη του παραθύρου της "
-"καταγραφής χρόνου."
-
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -154,301 +122,232 @@ msgstr ""
 "Το \"memory\" θα ενεργοποιεί την εναλλαγή στην προηγούμενη δραστηριότητα "
 "κατά την επιστροφή τον προηγούμενο χώρο εργασίας."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"Υπενθύμιση της τρέχουσας δραστηριότητας σε κάθε ορισμένο αριθμό λεπτών. "
-"Ορίστε το σε 0 ή σε μεγαλύτερο από 120 για να απενεργοποιήσετε την "
-"υπενθύμιση."
-
-#: ../data/hamster-time-tracker.schemas.in.h:10
-msgid "Remind of current task every x minutes"
-msgstr "Υπενθύμιση τρέχουσας εργασίας κάθε x λεπτά"
-
-#: ../data/hamster-time-tracker.schemas.in.h:11
-msgid "Should workspace switch trigger activity switch"
-msgstr "Αν η αλλαγή σε χώρο εργασίας θα επιφέρει και αλλαγή δραστηριότητας"
-
-#: ../data/hamster-time-tracker.schemas.in.h:12
-msgid "Show / hide Time Tracker Window"
-msgstr "Εμφάνιση / απόκρυψη παραθύρου καταγραφής χρόνου."
-
 #: ../data/hamster-time-tracker.schemas.in.h:13
-msgid "Stop tracking current activity on shutdown"
-msgstr "Διακοπή καταγραφής παρούσας δραστηριότητας κατά τον τερματισμό"
-
-#: ../data/hamster-time-tracker.schemas.in.h:14
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr ""
-"Διακοπή καταγραφής παρούσας δραστηριότητας, όταν ο υπολογιστής βρίσκεται σε "
-"αδράνεια"
-
-#: ../data/hamster-time-tracker.schemas.in.h:15
-msgid "Stop tracking on idle"
-msgstr "Διακοπή καταγραφής κατά την αδρανοποίηση"
-
-#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
-msgid "Stop tracking on shutdown"
-msgstr "Διακοπή καταγραφής κατά τον τερματισμό"
-
-#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "Αλλαγή δραστηριότητας κατά την αλλαγή χώρου εργασίας"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
-msgid "Toggle hamster application window"
-msgstr "Εναλλαγή παραθύρου εφαρμογής hamster"
+#: ../data/hamster-time-tracker.schemas.in.h:14
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"Αν η αλλαγή κατά όνομα είναι ενεργή, αυτή η λίστα θα παρουσιάζει τα ονόματα "
+"των δραστηριοτήτων που θα πρέπει να μεταβείτε."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:15
+msgid "Show / hide Time Tracker Window"
+msgstr "Εμφάνιση / απόκρυψη παραθύρου καταγραφής χρόνου."
+
+#: ../data/hamster-time-tracker.schemas.in.h:16
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr ""
+"Συντόμευση πληκτρολογίου για εμφάνιση / απόκρυψη του παραθύρου της "
+"καταγραφής χρόνου."
+
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Ενέργεια εναλλαγής παραθύρου εφαρμογής hamster"
+
+#: ../data/hamster-time-tracker.schemas.in.h:18
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "Εντολή για εναλλαγή ορατότητας του παραθύρου της εφαρμογής hamster."
+
+#: ../data/hamster-time-tracker.schemas.in.h:19
+msgid "Toggle hamster application window"
+msgstr "Εναλλαγή παραθύρου εφαρμογής hamster"
 
 #: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Εναλλαγή ορατότητας παραθύρου της εφαρμογής hamster."
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
-msgid "Project Hamster — track your time"
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../src/hamster-cli:133 ../src/hamster/about.py:39
+#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
+msgid "Time Tracker"
+msgstr "Καταγραφή χρόνου"
+
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster-windows-service.desktop.in.in.h:2
+msgid "Project Hamster - track your time"
 msgstr "Hamster - καταγράψτε το χρόνο σας"
 
-#: ../data/Hamster_Applet.xml.h:1
-msgid "_About"
-msgstr "Π_ερί"
-
-#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:14
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
-msgid "_Overview"
-msgstr "_Επισκόπηση"
-
-#: ../data/Hamster_Applet.xml.h:4
-msgid "_Preferences"
-msgstr "_Προτιμήσεις"
-
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-msgid "The overview window of hamster time tracker"
-msgstr "Το παράθυρο επισκόπησης της καταγραφής χρόνου hamster"
-
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
 msgid "Time Tracking Overview"
 msgstr "Επισκόπηση καταγραφής χρόνου"
 
-#: ../data/hamster.ui.h:2
-msgid "Add earlier activity"
-msgstr "Προσθήκη προηγούμενης δραστηριότητας"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "The overview window of hamster time tracker"
+msgstr "Το παράθυρο επισκόπησης της καταγραφής χρόνου hamster"
 
-#: ../data/hamster.ui.h:3
-msgid "Contents"
-msgstr "Περιεχόμενα"
-
-#. now add buttons
-#: ../data/hamster.ui.h:4 ../src/docky_control/2.0/hamster_control.py:79
-#: ../src/docky_control/2.0/hamster_control.py:94
-#: ../src/docky_control/2.1/hamster_control.py:79
-#: ../src/docky_control/2.1/hamster_control.py:94
-msgid "Overview"
-msgstr "Επισκόπηση"
-
-#: ../data/hamster.ui.h:6
-msgid "Show Overview"
-msgstr "Εμφάνιση επισκόπησης"
-
-#: ../data/hamster.ui.h:8
-msgid "Start new activity"
-msgstr "Έναρξη νέας δραστηριότητας"
-
-#: ../data/hamster.ui.h:9 ../data/stats.ui.h:2
-msgid "Statistics"
-msgstr "Στατιστικά"
-
-#: ../data/hamster.ui.h:10
-msgid "Sto_p tracking"
-msgstr "Διακο_πή καταγραφής"
-
-#: ../data/hamster.ui.h:12
-msgid "Today"
-msgstr "Σήμερα"
-
-#: ../data/hamster.ui.h:13
-msgid "_Edit"
-msgstr "Επε_ξεργασία"
-
-#: ../data/hamster.ui.h:15
-msgid "_Tracking"
-msgstr "Καταγρα_φή"
-
-#: ../data/hamster.ui.h:16
-msgid "totals"
-msgstr "συνολικά"
-
-#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
-msgid "Activities"
-msgstr "Δραστηριότητες"
+#: ../data/overview_totals.ui.h:1
+msgid "Show Statistics"
+msgstr "Εμφάνιση στατιστικών"
 
 #: ../data/overview_totals.ui.h:2
 msgid "Categories"
 msgstr "Κατηγορίες"
 
-#: ../data/overview_totals.ui.h:3
-msgid "No data for this interval"
-msgstr "Δεν υπάρχουν δεδομένα για αυτή την περίοδο"
+#: ../data/overview_totals.ui.h:3 ../data/overview.ui.h:9
+msgid "Activities"
+msgstr "Δραστηριότητες"
 
-#: ../data/overview_totals.ui.h:4
-msgid "Show Statistics"
-msgstr "Εμφάνιση στατιστικών"
-
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:160
+#: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
+#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:154
-msgid "Activity"
-msgstr "Δραστηριότητα"
+#: ../data/overview_totals.ui.h:5
+msgid "No data for this interval"
+msgstr "Δεν υπάρχουν δεδομένα για αυτή την περίοδο"
 
-#: ../data/overview.ui.h:3
-msgid "Add new"
-msgstr "Προσθήκη νέας"
-
-#: ../data/overview.ui.h:4
-msgid "Day"
-msgstr "Ημέρα"
-
-#: ../data/overview.ui.h:5
-msgid "Edit"
-msgstr "Επεξεργασία"
-
-#: ../data/overview.ui.h:6
-msgid "Month"
-msgstr "Μήνας"
-
-#: ../data/overview.ui.h:7
-msgid "Overview — Hamster"
-msgstr "Επισκόπηση - Hamster"
-
-#: ../data/overview.ui.h:8
-msgid "Remove"
-msgstr "Απομάκρυνση"
-
-#: ../data/overview.ui.h:9
+#: ../data/overview.ui.h:1
 msgid "Save report..."
 msgstr "Αποθήκευση αναφοράς"
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+#: ../data/overview.ui.h:2
+msgid "Day"
+msgstr "Ημέρα"
+
+#: ../data/overview.ui.h:3
+msgid "Week"
+msgstr "Εβδομάδα"
+
+#: ../data/overview.ui.h:4
+msgid "Month"
+msgstr "Μήνας"
+
+#: ../data/overview.ui.h:5
+msgid "Overview — Hamster"
+msgstr "Επισκόπηση - Hamster"
+
+#: ../data/overview.ui.h:6
+msgid "_Overview"
+msgstr "_Επισκόπηση"
+
+#: ../data/overview.ui.h:7 ../src/hamster-cli:276
+#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
+#: ../src/hamster/today.py:144
+msgid "Activity"
+msgstr "Δραστηριότητα"
+
+#: ../data/overview.ui.h:8
+msgid "_View"
+msgstr "_Προβολή"
+
+#: ../data/overview.ui.h:10 ../src/hamster/reports.py:308
 msgid "Totals"
 msgstr "Συνολικά"
 
 #: ../data/overview.ui.h:11
-msgid "Week"
-msgstr "Εβδομάδα"
+msgid "Remove"
+msgstr "Απομάκρυνση"
+
+#: ../data/overview.ui.h:12
+msgid "Add new"
+msgstr "Προσθήκη νέας"
 
 #: ../data/overview.ui.h:13
-msgid "_View"
-msgstr "_Προβολή"
+msgid "Edit"
+msgstr "Επεξεργασία"
 
 #: ../data/preferences.ui.h:1
-msgid "Activity list"
-msgstr "Λίστα δραστηριοτήτων"
-
-#: ../data/preferences.ui.h:2
-msgid "Add activity"
-msgstr "Προσθήκη δραστηριότητας"
+msgid "Time Tracker Preferences"
+msgstr "Προτιμήσεις καταγραφής χρόνου"
 
 #: ../data/preferences.ui.h:3
-msgid "Add category"
-msgstr "Προσθήκη κατηγορίας"
+msgid "Stop tracking when computer becomes idle"
+msgstr "Διακοπή καταγραφής όταν ο υπολογιστής βρίσκεται σε αδράνεια"
 
 #: ../data/preferences.ui.h:5
-msgid "Categories and Tags"
-msgstr "Κατηγορίες και ετικέτες"
-
-#: ../data/preferences.ui.h:6
-msgid "Category list"
-msgstr "Λίστα κατηγοριών"
-
-#: ../data/preferences.ui.h:7
-msgid "Edit activity"
-msgstr "Επεξεργασία δραστηριότητας"
-
-#: ../data/preferences.ui.h:8
-msgid "Edit category"
-msgstr "Επεξεργασία κατηγορίας"
-
-#: ../data/preferences.ui.h:9
-msgid "Integration"
-msgstr "Ενσωμάτωση"
-
-#: ../data/preferences.ui.h:10
-msgid "New day starts at"
-msgstr "Η νέα ημέρα αρχίζει στις"
-
-#: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
 msgstr "Υπενθύμιση των τρεχουσών δραστηριοτήτων κάθε:"
 
+#: ../data/preferences.ui.h:6
+msgid "New day starts at"
+msgstr "Η νέα ημέρα αρχίζει στις"
+
+#: ../data/preferences.ui.h:7
+msgid "Use following todo list if available:"
+msgstr "Χρήση της ακόλουθης λίστας εκκρεμοτήτων αν είναι διαθέσιμη:"
+
+#: ../data/preferences.ui.h:8
+msgid "Integration"
+msgstr "Ενσωμάτωση"
+
+#: ../data/preferences.ui.h:9
+msgid "Tracking"
+msgstr "Καταγραφή"
+
+#: ../data/preferences.ui.h:10
+msgid "_Categories"
+msgstr "Κατη_γορίες"
+
+#: ../data/preferences.ui.h:11
+msgid "Category list"
+msgstr "Λίστα κατηγοριών"
+
 #: ../data/preferences.ui.h:12
-msgid "Remove activity"
-msgstr "Αφαίρεση δραστηριότητας"
+msgid "Add category"
+msgstr "Προσθήκη κατηγορίας"
 
 #: ../data/preferences.ui.h:13
 msgid "Remove category"
 msgstr "Αφαίρεση κατηγορίας"
 
 #: ../data/preferences.ui.h:14
+msgid "Edit category"
+msgstr "Επεξεργασία κατηγορίας"
+
+#: ../data/preferences.ui.h:15
+msgid "_Activities"
+msgstr "_Δραστηριότητες"
+
+#: ../data/preferences.ui.h:16
+msgid "Activity list"
+msgstr "Λίστα δραστηριοτήτων"
+
+#: ../data/preferences.ui.h:17
+msgid "Add activity"
+msgstr "Προσθήκη δραστηριότητας"
+
+#: ../data/preferences.ui.h:18
+msgid "Remove activity"
+msgstr "Αφαίρεση δραστηριότητας"
+
+#: ../data/preferences.ui.h:19
+msgid "Edit activity"
+msgstr "Επεξεργασία δραστηριότητας"
+
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "Ετικέτες που θα εμφανίζονται στην αυτόματη συμπλήρωση"
+
+#: ../data/preferences.ui.h:21
+msgid "Categories and Tags"
+msgstr "Κατηγορίες και ετικέτες"
+
+#: ../data/preferences.ui.h:22
 msgid "Resume the last activity when returning to a workspace"
 msgstr ""
 "Συνέχιση της τελευταίας δραστηριότητας κατά την επιστροφή σε ένα χώρο "
 "εργασίας"
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:23
 msgid "Start new activity when switching workspaces:"
 msgstr "Έναρξη νέας δραστηριότητας κατά την αλλαγή χώρων εργασίας:"
 
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "Διακοπή καταγραφής όταν ο υπολογιστής βρίσκεται σε αδράνεια"
-
-#: ../data/preferences.ui.h:18
-msgid "Tags that should appear in autocomplete"
-msgstr "Ετικέτες που θα εμφανίζονται στην αυτόματη συμπλήρωση"
-
-#: ../data/preferences.ui.h:19
-msgid "Time Tracker Preferences"
-msgstr "Προτιμήσεις καταγραφής χρόνου"
-
-#: ../data/preferences.ui.h:20
-msgid "Tracking"
-msgstr "Καταγραφή"
-
-#: ../data/preferences.ui.h:21
-msgid "Use following todo list if available:"
-msgstr "Χρήση της ακόλουθης λίστας εκκρεμοτήτων αν είναι διαθέσιμη:"
-
-#: ../data/preferences.ui.h:22
+#: ../data/preferences.ui.h:24
 msgid "Workspaces"
 msgstr "Χώροι εργασίας:"
 
-#: ../data/preferences.ui.h:23
-msgid "_Activities"
-msgstr "_Δραστηριότητες"
-
-#: ../data/preferences.ui.h:24
-msgid "_Categories"
-msgstr "Κατη_γορίες"
-
 #: ../data/range_pick.ui.h:1
-msgid "Apply"
-msgstr "Εφαρμογή"
-
-#: ../data/range_pick.ui.h:2
 msgid "Day:"
 msgstr "Ημέρα:"
+
+#: ../data/range_pick.ui.h:2
+msgid "Week:"
+msgstr "Εβδομάδα:"
 
 #: ../data/range_pick.ui.h:3
 msgid "Month:"
@@ -458,31 +357,99 @@ msgstr "Μήνας:"
 msgid "Range:"
 msgstr "Εύρος ημερομηνίας:"
 
-#: ../data/range_pick.ui.h:5
-msgid "Week:"
-msgstr "Εβδομάδα:"
+#: ../data/range_pick.ui.h:6
+msgid "Apply"
+msgstr "Εφαρμογή"
 
-#: ../data/stats.ui.h:1
-msgid "Starts and ends"
-msgstr "Ξεκινάει και τελειώνει"
+#: ../data/today.ui.h:2
+msgid "_Tracking"
+msgstr "Καταγρα_φή"
 
-#: ../data/stats.ui.h:4
-msgid "Year:"
-msgstr "Έτος:"
+#: ../data/today.ui.h:3
+msgid "Add earlier activity"
+msgstr "Προσθήκη προηγούμενης δραστηριότητας"
 
-#: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
-#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
-#: ../src/hamster-time-tracker:248 ../src/hamster-time-tracker:324
+#: ../data/today.ui.h:4
+msgid "Overview"
+msgstr "Επισκόπηση"
+
+#: ../data/today.ui.h:5
+msgid "Statistics"
+msgstr "Στατιστικά"
+
+#: ../data/today.ui.h:6
+msgid "_Edit"
+msgstr "Επε_ξεργασία"
+
+#: ../data/today.ui.h:7
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../data/today.ui.h:8
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+#: ../data/today.ui.h:9
+msgid "Sto_p tracking"
+msgstr "Διακο_πή καταγραφής"
+
+#: ../data/today.ui.h:10
+msgid "S_witch"
+msgstr "Α_λλαγή"
+
+#: ../data/today.ui.h:11
+msgid "Start _Tracking"
+msgstr "Εκκίνηση _καταγραφής"
+
+#: ../data/today.ui.h:12
+msgid "Start new activity"
+msgstr "Έναρξη νέας δραστηριότητας"
+
+#: ../data/today.ui.h:13
+msgid "Today"
+msgstr "Σήμερα"
+
+#: ../data/today.ui.h:14
+msgid "totals"
+msgstr "συνολικά"
+
+#: ../data/today.ui.h:16
+msgid "Show Overview"
+msgstr "Εμφάνιση επισκόπησης"
+
+#: ../src/hamster-cli:254 ../src/hamster/today.py:289
 msgid "No activity"
 msgstr "Χωρίς δραστηριότητα"
 
-#: ../src/docky_control/2.0/hamster_control.py:81
-#: ../src/docky_control/2.0/hamster_control.py:95
-#: ../src/docky_control/2.1/hamster_control.py:81
-#: ../src/docky_control/2.1/hamster_control.py:95
-msgid "Preferences"
-msgstr "_Προτιμήσεις"
+#: ../src/hamster-cli:277 ../src/hamster/preferences.py:155
+#: ../src/hamster/reports.py:318
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: ../src/hamster-cli:279 ../src/hamster/reports.py:323
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: ../src/hamster-cli:280 ../src/hamster/reports.py:320
+msgid "Start"
+msgstr "Έναρξη"
+
+#: ../src/hamster-cli:281 ../src/hamster/reports.py:321
+msgid "End"
+msgstr "Τέλος"
+
+#: ../src/hamster-cli:282 ../src/hamster/reports.py:322
+msgid "Duration"
+msgstr "Διάρκεια"
+
+#: ../src/hamster-cli:308
+#, fuzzy
+msgid "Uncategorized"
+msgstr "κατηγορίες"
+
+#: ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Hamster - καταγράψτε το χρόνο σας"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
@@ -508,74 +475,48 @@ msgstr ""
 "\n"
 "Για περισσότερα δείτε http://www.gnome.gr/"
 
-#: ../src/hamster/applet.py:378 ../src/hamster-time-tracker:286
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s"
-
-#. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:381 ../src/hamster-time-tracker:289
-#, c-format, python-format
-msgid "%sh"
-msgstr "%sh"
-
-#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
-#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:59
-#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:310
+#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
+#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
+#: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
+#: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
+#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
 msgid "Unsorted"
 msgstr "Αταξινόμητα"
 
-#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:243
-#: ../src/hamster-time-tracker:315
-msgid "Just started"
-msgstr "Μόλις ξεκίνησε:"
-
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:470
-msgid "Changed activity"
-msgstr "Τροποποιημένη δραστηριότητα"
-
-#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:471
-#, c-format, python-format
-msgid "Switched to '%s'"
-msgstr "Άλλαξε σε  '%s'"
-
 #. defaults
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:937
 msgid "Work"
 msgstr "Εργασία"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:938
 msgid "Reading news"
 msgstr "Ανάγνωση νέων"
 
-#: ../src/hamster/db.py:952
+#: ../src/hamster/db.py:939
 msgid "Checking stocks"
 msgstr "Έλεγχος μετοχών"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:940
 msgid "Super secret project X"
 msgstr "Σούπερ μυστική εργασία Χ"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:941
 msgid "World domination"
 msgstr "Παγκόσμια κυριαρχία"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:943
 msgid "Day-to-day"
 msgstr "Από ημέρα σε ημέρα"
 
-#: ../src/hamster/db.py:957
+#: ../src/hamster/db.py:944
 msgid "Lunch"
 msgstr "Γεύμα"
 
-#: ../src/hamster/db.py:958
+#: ../src/hamster/db.py:945
 msgid "Watering flowers"
 msgstr "Πότισμα λουλουδιών"
 
-#: ../src/hamster/db.py:959
+#: ../src/hamster/db.py:946
 msgid "Doing handstands"
 msgstr "Γυμναστική"
 
@@ -655,10 +596,6 @@ msgstr "Καμία"
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/hamster/preferences.py:155 ../src/hamster/reports.py:302
-msgid "Category"
-msgstr "Κατηγορία"
-
 #: ../src/hamster/preferences.py:664
 msgid "New category"
 msgstr "Νέα κατηγορία"
@@ -681,41 +618,41 @@ msgid "Never"
 msgstr "Ποτέ"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:132
+#: ../src/hamster/reports.py:148
 msgid "activity"
 msgstr "δραστηριότητα"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:134
+#: ../src/hamster/reports.py:150
 msgid "start time"
 msgstr "ώρα εκκίνησης"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:136
+#: ../src/hamster/reports.py:152
 msgid "end time"
 msgstr "χρόνος ολοκλήρωσης"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:138
+#: ../src/hamster/reports.py:154
 msgid "duration minutes"
 msgstr "λεπτά διάρκειας"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:140
+#: ../src/hamster/reports.py:156
 msgid "category"
 msgstr "κατηγορία"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:142
+#: ../src/hamster/reports.py:158
 msgid "description"
 msgstr "περιγραφή"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+#: ../src/hamster/reports.py:160 ../src/hamster/reports.py:312
 msgid "tags"
 msgstr "ετικέτες"
 
-#: ../src/hamster/reports.py:191
+#: ../src/hamster/reports.py:207
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
@@ -724,7 +661,7 @@ msgstr ""
 "Αναφορά επισκόπησης για %(start_B)s %(start_d)s , %(start_Y)s – %(end_B)s "
 "%(end_d)s, %(end_Y)s"
 
-#: ../src/hamster/reports.py:193
+#: ../src/hamster/reports.py:209
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
@@ -732,12 +669,12 @@ msgstr ""
 "Αναφορά δραστηριότητας για %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, "
 "%(end_Y)s"
 
-#: ../src/hamster/reports.py:195
+#: ../src/hamster/reports.py:211
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Αναφορά δραστηριότητας για %(start_B)s %(start_d)s, %(start_Y)s"
 
-#: ../src/hamster/reports.py:197
+#: ../src/hamster/reports.py:213
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr ""
@@ -746,57 +683,41 @@ msgstr ""
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+#: ../src/hamster/reports.py:265 ../src/hamster/reports.py:297
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:306
 msgid "Totals by Day"
 msgstr "Σύνολα κατά ημέρα"
 
-#: ../src/hamster/reports.py:291
+#: ../src/hamster/reports.py:307
 msgid "Activity Log"
 msgstr "Αρχείο καταγραφής δραστηριοτήτων"
 
-#: ../src/hamster/reports.py:294
+#: ../src/hamster/reports.py:310
 msgid "activities"
 msgstr "δραστηριότητες"
 
-#: ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:311
 msgid "categories"
 msgstr "κατηγορίες"
 
-#: ../src/hamster/reports.py:298
+#: ../src/hamster/reports.py:314
 msgid "Distinguish:"
 msgstr "Διάκριση:"
 
-#: ../src/hamster/reports.py:300
+#: ../src/hamster/reports.py:316
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: ../src/hamster/reports.py:304
-msgid "Start"
-msgstr "Έναρξη"
-
-#: ../src/hamster/reports.py:305
-msgid "End"
-msgstr "Τέλος"
-
-#: ../src/hamster/reports.py:306
-msgid "Duration"
-msgstr "Διάρκεια"
-
-#: ../src/hamster/reports.py:307
-msgid "Description"
-msgstr "Περιγραφή"
-
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:326
 msgid "Show template"
 msgstr "Προβολή προτύπου"
 
-#: ../src/hamster/reports.py:311
+#: ../src/hamster/reports.py:327
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr ""
@@ -807,7 +728,7 @@ msgctxt "years"
 msgid "All"
 msgstr "Όλα"
 
-#: ../src/hamster/stats.py:174
+#: ../src/hamster/stats.py:177
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -815,14 +736,14 @@ msgstr ""
 "Δεν υπάρχουν αρκετά δεδομένα για την δημιουργία στατιστικών.\n"
 "Χρειάζεται τουλάχιστον μια εβδομάδα εργασίας!"
 
-#: ../src/hamster/stats.py:177
+#: ../src/hamster/stats.py:180
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Γίνεται συλλογή δεδομένων — ελέγξτε ξανά όταν ολοκληρωθεί η εβδομάδα!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:328
+#: ../src/hamster/stats.py:331
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -830,17 +751,17 @@ msgstr "%b %d, %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:333
+#: ../src/hamster/stats.py:336
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%b %d"
 
-#: ../src/hamster/stats.py:335
+#: ../src/hamster/stats.py:338
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Η πρώτη δραστηριότητα καταγράφηκε στις %s."
 
-#: ../src/hamster/stats.py:344 ../src/hamster/stats.py:348
+#: ../src/hamster/stats.py:347 ../src/hamster/stats.py:351
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -848,7 +769,7 @@ msgstr[0] "%(num)s έτος"
 msgstr[1] "%(num)s έτη"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:353
+#: ../src/hamster/stats.py:356
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or "
@@ -860,12 +781,12 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:371
+#: ../src/hamster/stats.py:374
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#: ../src/hamster/stats.py:376
+#: ../src/hamster/stats.py:379
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
@@ -878,18 +799,18 @@ msgstr[1] ""
 "και διήρκεσε %(hours)s ώρες."
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:384
+#: ../src/hamster/stats.py:387
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "Υπάρχει %s εγγραφή"
 msgstr[1] "Υπάρχουν %s εγγραφές"
 
-#: ../src/hamster/stats.py:404
+#: ../src/hamster/stats.py:407
 msgid "Hamster would like to observe you some more!"
 msgstr "Το Hamster θα ήθελε να σας παρακολουθήσει λίγο ακόμα!"
 
-#: ../src/hamster/stats.py:406
+#: ../src/hamster/stats.py:409
 #, python-format
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
@@ -898,7 +819,7 @@ msgstr ""
 "Από όλες τις εργασίες, με ποσοστό %s να έχουν ξεκινήσει πριν από τις 9πμ, "
 "φαίνεται ότι είστε πρωινός τύπος."
 
-#: ../src/hamster/stats.py:409
+#: ../src/hamster/stats.py:412
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
@@ -907,7 +828,7 @@ msgstr ""
 "Με ποσοστό %s  από όλες τις εργασίες να έχουν ξεκινήσει μετά από τις 11μμ, "
 "φαίνεται ότι είστε βραδινός τύπος."
 
-#: ../src/hamster/stats.py:412
+#: ../src/hamster/stats.py:415
 #, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
@@ -916,14 +837,24 @@ msgstr ""
 "Με ποσοστό %s  από όλες τις εργασίες να έχουν ολοκληρωθεί σε λιγότερο από 15 "
 "λεπτά,  φαίνεται ότι είστε μια πολυάσχολη μέλισσα. "
 
-#: ../src/hamster-time-tracker:241
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "Ενασχόληση με: <b>%s</b>"
+#: ../src/hamster/today.py:243
+msgid "No records today"
+msgstr "Όχι εγγραφές σήμερα"
 
-#: ../src/hamster-time-tracker:579
-msgid "Hamster time tracker. Usage:"
-msgstr "Καταγραφή χρόνου Hamster. Χρήση:"
+#: ../src/hamster/today.py:250
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/today.py:253
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#: ../src/hamster/today.py:280
+msgid "Just started"
+msgstr "Μόλις ξεκίνησε:"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
@@ -949,6 +880,48 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Καταγραφή χρόνου"
+
+#~ msgid "Show activities window"
+#~ msgstr "Εμφάνιση παραθύρου δραστηριοτήτων"
+
+#~ msgid "Show _Overview"
+#~ msgstr "Εμφάνιση _επισκόπησης"
+
+#~ msgid "Sto_p Tracking"
+#~ msgstr "Διακο_πή καταγραφής"
+
+#~ msgid "To_day"
+#~ msgstr "Σή_μερα"
+
+#~ msgid "_Add earlier activity"
+#~ msgstr "Π_ροσθήκη προηγούμενης δραστηριότητας"
+
+#~ msgid "_About"
+#~ msgstr "Π_ερί"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Προτιμήσεις"
+
+#~ msgid "Starts and ends"
+#~ msgstr "Ξεκινάει και τελειώνει"
+
+#~ msgid "Year:"
+#~ msgstr "Έτος:"
+
+#~ msgid "Preferences"
+#~ msgstr "_Προτιμήσεις"
+
+#~ msgid "Changed activity"
+#~ msgstr "Τροποποιημένη δραστηριότητα"
+
+#~ msgid "Switched to '%s'"
+#~ msgstr "Άλλαξε σε  '%s'"
+
+#~ msgid "Working on <b>%s</b>"
+#~ msgstr "Ενασχόληση με: <b>%s</b>"
+
+#~ msgid "Hamster time tracker. Usage:"
+#~ msgstr "Καταγραφή χρόνου Hamster. Χρήση:"
 
 #~ msgid "Project Hamster (GNOME Time Tracker)"
 #~ msgstr "Έργο Hamster (Καταγραφή χρόνου του GNOME)"

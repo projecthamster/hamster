@@ -4,26 +4,94 @@
 # Gheyret Kenji<gheyret@yahoo.com>,2010.
 # Sahran <sahran.ug@gmail.com>, 2010.
 # Zeper <zeper@msn.com>, 2010.
-#
+# 
+#: ../src/hamster-cli:342
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-04-13 15:11+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2011-04-25 16:48+0600\n"
 "Last-Translator: Sahran <sahran.ug@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/90-hamster-time-tracker.xml.in.h:1
-msgid "Project Hamster (Gnome Time Tracker)"
-msgstr "Hamster قۇرۇلۇشى(Gnome ۋاقىت ئىزلىغۇچى)"
+#: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
+msgid "Add Earlier Activity"
+msgstr "ئىلگىرىكى پائالىيەتنى قوش"
+
+#: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
+msgid "to"
+msgstr "غا"
+
+#: ../data/edit_activity.ui.h:3
+msgid "in progress"
+msgstr "بىر تەرەپ قىلىۋاتىدۇ"
+
+#: ../data/edit_activity.ui.h:4
+msgid "Description:"
+msgstr "چۈشەندۈرۈش:"
+
+#: ../data/edit_activity.ui.h:5
+msgid "Time:"
+msgstr "ۋاقتى:"
+
+#: ../data/edit_activity.ui.h:6
+msgid "Activity:"
+msgstr "پائالىيەت:"
+
+#: ../data/edit_activity.ui.h:7
+msgid "Tags:"
+msgstr "خەتكۈچلەر:"
 
 #: ../data/hamster-time-tracker.schemas.in.h:1
+msgid "Stop tracking on idle"
+msgstr "بىكار بولغاندا ئىزلاشنى توختات"
+
+#: ../data/hamster-time-tracker.schemas.in.h:2
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "كومپيۇتېر بىكار بولغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
+
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+msgid "Stop tracking on shutdown"
+msgstr "تاقىغاندا ئىزلاشنى توختات"
+
+#: ../data/hamster-time-tracker.schemas.in.h:4
+msgid "Stop tracking current activity on shutdown"
+msgstr "تاقىغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
+
+#: ../data/hamster-time-tracker.schemas.in.h:5
+msgid "Remind of current task every x minutes"
+msgstr "ھازىرقى ۋەزىپىنى ھەر x مىنۇتتا ئەسكەرت"
+
+#: ../data/hamster-time-tracker.schemas.in.h:6
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"ھازىرقى ۋەزىپىنى بەلگىلەنگەن مىنۇتتا ئەسكەرتىپ تۇرىدۇ. 0 ياكى 120 دىن چوڭ "
+"قىلىپ بېكىتىلسە ئەسكەرتىش ئىناۋەتسىز بولىدۇ."
+
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "پائالىيەت بەلگىلەنمىگەندىمۇ ئەسكەرت"
+
+#: ../data/hamster-time-tracker.schemas.in.h:8
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr ""
+"ئەگەر پائالىيەت باشلانمىغان بولسا يەنىلا ھەر قېتىملىق بەلگىلەنگەن ئەسكەرتىش "
+"ئارىلىقىدا ئەسكەرتىدۇ."
+
+#: ../data/hamster-time-tracker.schemas.in.h:9
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "كۈن سائەت قانچىدە باشلىنىدۇ(سۈكۈت: 5:30 چۈشتىن بۇرۇن)"
+
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -35,40 +103,11 @@ msgstr ""
 "بولىدۇ، ھەم كۆرسەتمىلەر قايسى كۈندىكى پائالىيەت ۋاقتى ئۇزۇن بولسا شۇنىڭدا "
 "كۆرسىتىلىدۇ."
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr ""
-"ئەگەر پائالىيەت باشلانمىغان بولسا يەنىلا ھەر قېتىملىق بەلگىلەنگەن ئەسكەرتىش "
-"ئارىلىقىدا ئەسكەرتىدۇ."
+#: ../data/hamster-time-tracker.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr "خىزمەت بوشلۇقى ئايلاندۇرۇش پائالىيەت ئالماشتۇرۇشنى كەلتۈرۈپ چىقىرىدۇ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
-msgid "Also remind when no activity is set"
-msgstr "پائالىيەت بەلگىلەنمىگەندىمۇ ئەسكەرت"
-
-#: ../data/hamster-time-tracker.schemas.in.h:4
-msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr "كۈن سائەت قانچىدە باشلىنىدۇ(سۈكۈت: 5:30 چۈشتىن بۇرۇن)"
-
-#: ../data/hamster-time-tracker.schemas.in.h:5
-msgid "Command for toggling visibility of the hamster application window."
-msgstr "hamster پروگرامما كۆزنىكىنىڭ كۆرۈنۈشچانلىقىنى ئالماشتۇرۇش بۇيرۇقى."
-
-#: ../data/hamster-time-tracker.schemas.in.h:6
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"ئەگەر ئات بويىچە ئۆزگەرتىش قوزغىتىلسا، بۇ تىزىم ئايلاندۇرۇلىدىغان پائالىيەت "
-"ئاتى، تۈرنىڭ  ئىندېكسىنىڭ ۋەكىللىك قىلىدىغان خىزمەت رايونىنى تەڭشەيدۇ"
-
-#: ../data/hamster-time-tracker.schemas.in.h:7
-msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr ""
-"ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسىتىدىغان ياكى يوشۇرىدىغان "
-"ھەرپتاختا تېزلەتمىسى."
-
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -79,349 +118,231 @@ msgstr ""
 "ئالدىنقى خىزمەت رايونىغا قايتقاندا ئالدىنقى قېتىملىق پائالىيەتكە "
 "ئالماشتۇرىدۇ."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"ھازىرقى ۋەزىپىنى بەلگىلەنگەن مىنۇتتا ئەسكەرتىپ تۇرىدۇ. 0 ياكى 120 دىن چوڭ "
-"قىلىپ بېكىتىلسە ئەسكەرتىش ئىناۋەتسىز بولىدۇ."
-
-#: ../data/hamster-time-tracker.schemas.in.h:10
-msgid "Remind of current task every x minutes"
-msgstr "ھازىرقى ۋەزىپىنى ھەر x مىنۇتتا ئەسكەرت"
-
-#: ../data/hamster-time-tracker.schemas.in.h:11
-msgid "Should workspace switch trigger activity switch"
-msgstr "خىزمەت بوشلۇقى ئايلاندۇرۇش پائالىيەت ئالماشتۇرۇشنى كەلتۈرۈپ چىقىرىدۇ"
-
-#: ../data/hamster-time-tracker.schemas.in.h:12
-msgid "Show / hide Time Tracker Window"
-msgstr "ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسەت/يوشۇر"
-
 #: ../data/hamster-time-tracker.schemas.in.h:13
-msgid "Stop tracking current activity on shutdown"
-msgstr "تاقىغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
-
-#: ../data/hamster-time-tracker.schemas.in.h:14
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "كومپيۇتېر بىكار بولغاندا ھازىرقى پائالىيەتنى ئىزلاشنى توختات"
-
-#: ../data/hamster-time-tracker.schemas.in.h:15
-msgid "Stop tracking on idle"
-msgstr "بىكار بولغاندا ئىزلاشنى توختات"
-
-#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
-msgid "Stop tracking on shutdown"
-msgstr "تاقىغاندا ئىزلاشنى توختات"
-
-#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "خىزمەت بوشلۇقى ئۆزگەرگەندە پائالىيەتنى ئالماشتۇر"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
-msgid "Toggle hamster application window"
-msgstr "hamster پروگرامما كۆزنىكىنى ئالماشتۇر"
+#: ../data/hamster-time-tracker.schemas.in.h:14
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"ئەگەر ئات بويىچە ئۆزگەرتىش قوزغىتىلسا، بۇ تىزىم ئايلاندۇرۇلىدىغان پائالىيەت "
+"ئاتى، تۈرنىڭ  ئىندېكسىنىڭ ۋەكىللىك قىلىدىغان خىزمەت رايونىنى تەڭشەيدۇ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:15
+msgid "Show / hide Time Tracker Window"
+msgstr "ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسەت/يوشۇر"
+
+#: ../data/hamster-time-tracker.schemas.in.h:16
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr ""
+"ۋاقىت ئىزلىغۇچى(Time Tracker) كۆزنەكنى كۆرسىتىدىغان ياكى يوشۇرىدىغان "
+"ھەرپتاختا تېزلەتمىسى."
+
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "hamster پروگرامما كۆزنىكىنى مەشغۇلاتىنى ئالماشتۇر"
+
+#: ../data/hamster-time-tracker.schemas.in.h:18
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "hamster پروگرامما كۆزنىكىنىڭ كۆرۈنۈشچانلىقىنى ئالماشتۇرۇش بۇيرۇقى."
+
+#: ../data/hamster-time-tracker.schemas.in.h:19
+msgid "Toggle hamster application window"
+msgstr "hamster پروگرامما كۆزنىكىنى ئالماشتۇر"
 
 #: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "hamster پروگرامما كۆزنىكىنىڭ كۆرۈنۈشچانلىقىنى ئالماشتۇرىدۇ."
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
-msgid "Project Hamster — track your time"
-msgstr "Hamster قۇرۇلۇشى — ۋاقتىڭىزنى ئىزلاڭ"
-
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:9
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:331 ../src/hamster-time-tracker:178
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../src/hamster-cli:133 ../src/hamster/about.py:39
+#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "ۋاقىت ئىزلىغۇچى"
 
-#: ../data/Hamster_Applet.xml.h:1
-msgid "_About"
-msgstr "ھەققىدە(_A)"
-
-#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:12
-msgid "_Help"
-msgstr "ياردەم(_H)"
-
-#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
-msgid "_Overview"
-msgstr "ئورتاق(_O)"
-
-#: ../data/Hamster_Applet.xml.h:4
-msgid "_Preferences"
-msgstr "مايىللىق(_P)"
-
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Hamster قۇرۇلۇشى - ۋاقتىڭىزنى ئىزلاڭ"
 
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:369
-msgid "No records today"
-msgstr "بۈگۈن خاتىرە يوق"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
+#, fuzzy
+msgid "Time Tracking Overview"
+msgstr "ۋاقىت ئىزلىغۇچى"
 
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:4
-msgid "S_witch"
-msgstr "ئالماشتۇر(_W)"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "The overview window of hamster time tracker"
+msgstr ""
 
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "قىسقىچە باياننى كۆرسەت(_O)"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:5
-msgid "Start _Tracking"
-msgstr "ئىزلاشنى باشلا(_T)"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "ئىزلاشنى توختات(_P)"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "بۈگۈن(_D)"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "ئىلگىرىكى پائالىيەتنى قوش(_A)"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "پائالىيەت:"
-
-#: ../data/edit_activity.ui.h:2
-msgid "Add Earlier Activity"
-msgstr "ئىلگىرىكى پائالىيەتنى قوش"
-
-#: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "چۈشەندۈرۈش:"
-
-#: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "خەتكۈچلەر:"
-
-#: ../data/edit_activity.ui.h:5
-msgid "Time:"
-msgstr "ۋاقتى:"
-
-#: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "بىر تەرەپ قىلىۋاتىدۇ"
-
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "غا"
-
-#: ../data/hamster.ui.h:1
-msgid "Add earlier activity"
-msgstr "ئىلگىرىكى پائالىيەتنى قوش"
-
-#: ../data/hamster.ui.h:2
-msgid "Contents"
-msgstr "مەزمۇن"
-
-#. now add buttons
-#: ../data/hamster.ui.h:3 ../src/docky_control/2.0/hamster_control.py:79
-#: ../src/docky_control/2.0/hamster_control.py:94
-#: ../src/docky_control/2.1/hamster_control.py:79
-#: ../src/docky_control/2.1/hamster_control.py:94
-msgid "Overview"
-msgstr "قىسقىچە بايان"
-
-#: ../data/hamster.ui.h:6
-msgid "Start new activity"
-msgstr "يېڭى پائالىيەت باشلا"
-
-#: ../data/hamster.ui.h:7 ../data/stats.ui.h:2
-msgid "Statistics"
-msgstr "ستاتىستىكا"
-
-#: ../data/hamster.ui.h:8
-msgid "Sto_p tracking"
-msgstr "ئىزلاشنى توختات(_P)"
-
-#: ../data/hamster.ui.h:10
-msgid "Today"
-msgstr "بۈگۈن"
-
-#: ../data/hamster.ui.h:11
-msgid "_Edit"
-msgstr "تەھرىر(_E)"
-
-#: ../data/hamster.ui.h:13
-msgid "_Tracking"
-msgstr "ئىزلا(_T)"
-
-#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
-msgid "Activities"
-msgstr "پائالىيەتلەر"
+#: ../data/overview_totals.ui.h:1
+msgid "Show Statistics"
+msgstr "ستاتىستىكا كۆرسەت"
 
 #: ../data/overview_totals.ui.h:2
 msgid "Categories"
 msgstr "كاتېگورىيە"
 
-#: ../data/overview_totals.ui.h:3
-msgid "No data for this interval"
-msgstr "بۇ ئارىلىقتا سانلىق-مەلۇمات يوق"
+#: ../data/overview_totals.ui.h:3 ../data/overview.ui.h:9
+msgid "Activities"
+msgstr "پائالىيەتلەر"
 
-#: ../data/overview_totals.ui.h:4
-msgid "Show Statistics"
-msgstr "ستاتىستىكا كۆرسەت"
-
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:210
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:48
+#: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
+#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
 msgid "Tags"
 msgstr "خەتكۈشلەر"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:204
-#: ../src/hamster/preferences.py:193 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:39
-msgid "Activity"
-msgstr "ئاكتىپ"
+#: ../data/overview_totals.ui.h:5
+msgid "No data for this interval"
+msgstr "بۇ ئارىلىقتا سانلىق-مەلۇمات يوق"
 
-#: ../data/overview.ui.h:3
-msgid "Add new"
-msgstr "يېڭىدىن قوش"
-
-#: ../data/overview.ui.h:4
-msgid "Day"
-msgstr "كۈن"
-
-#: ../data/overview.ui.h:5
-msgid "Edit"
-msgstr "تەھرىر"
-
-#: ../data/overview.ui.h:6
-msgid "Month"
-msgstr "ئاي"
-
-#: ../data/overview.ui.h:7
-msgid "Overview — Hamster"
-msgstr "قىسقىچە بايان—Hamster"
-
-#: ../data/overview.ui.h:8
-msgid "Remove"
-msgstr "چىقىرىۋەت"
-
-#: ../data/overview.ui.h:9
+#: ../data/overview.ui.h:1
 msgid "Save report..."
 msgstr "دوكلاتنى ساقلاش…"
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+#: ../data/overview.ui.h:2
+msgid "Day"
+msgstr "كۈن"
+
+#: ../data/overview.ui.h:3
+msgid "Week"
+msgstr "ھەپتە"
+
+#: ../data/overview.ui.h:4
+msgid "Month"
+msgstr "ئاي"
+
+#: ../data/overview.ui.h:5
+msgid "Overview — Hamster"
+msgstr "قىسقىچە بايان—Hamster"
+
+#: ../data/overview.ui.h:6
+msgid "_Overview"
+msgstr "ئورتاق(_O)"
+
+#: ../data/overview.ui.h:7 ../src/hamster-cli:276
+#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
+#: ../src/hamster/today.py:144
+msgid "Activity"
+msgstr "ئاكتىپ"
+
+#: ../data/overview.ui.h:8
+msgid "_View"
+msgstr "كۆرۈنۈش(_V)"
+
+#: ../data/overview.ui.h:10 ../src/hamster/reports.py:308
 msgid "Totals"
 msgstr "ئومۇمىي سانى"
 
 #: ../data/overview.ui.h:11
-msgid "Week"
-msgstr "ھەپتە"
+msgid "Remove"
+msgstr "چىقىرىۋەت"
+
+#: ../data/overview.ui.h:12
+msgid "Add new"
+msgstr "يېڭىدىن قوش"
 
 #: ../data/overview.ui.h:13
-msgid "_View"
-msgstr "كۆرۈنۈش(_V)"
+msgid "Edit"
+msgstr "تەھرىر"
 
 #: ../data/preferences.ui.h:1
-msgid "Activity list"
-msgstr "پائالىيەت تىزىمى"
-
-#: ../data/preferences.ui.h:2
-msgid "Add activity"
-msgstr "پائالىيەت قوش"
+msgid "Time Tracker Preferences"
+msgstr "ۋاقىت ئىزلىغۇچى مايىللىقى"
 
 #: ../data/preferences.ui.h:3
-msgid "Add category"
-msgstr "تۈر قوش"
+msgid "Stop tracking when computer becomes idle"
+msgstr "كومپيۇتېر بىكار بولغاندا ئىزلاشنى توختات"
 
 #: ../data/preferences.ui.h:5
-msgid "Categories and Tags"
-msgstr "كاتېگورىيىلەر ۋە بەتكۈچلەر"
-
-#: ../data/preferences.ui.h:6
-msgid "Category list"
-msgstr "كاتېگورىيە تىزىمى"
-
-#: ../data/preferences.ui.h:7
-msgid "Edit activity"
-msgstr "تەھرىرلەش مەشغۇلاتى"
-
-#: ../data/preferences.ui.h:8
-msgid "Edit category"
-msgstr "كاتېگورىيە تەھرىرلە"
-
-#: ../data/preferences.ui.h:9
-msgid "Integration"
-msgstr "توپلاشتۇرۇش"
-
-#: ../data/preferences.ui.h:10
-msgid "New day starts at"
-msgstr "يېڭى كۈننىڭ باشلىنىش ۋاقتى"
-
-#: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
 msgstr "ھازىرقى پائالىيەتنى ئەسكەرتىپ تۇرۇش ۋاقتى:"
 
+#: ../data/preferences.ui.h:6
+msgid "New day starts at"
+msgstr "يېڭى كۈننىڭ باشلىنىش ۋاقتى"
+
+#: ../data/preferences.ui.h:7
+msgid "Use following todo list if available:"
+msgstr "ئەگەر بار بولسا تۆۋەندىكى پىلانغا ئەگەش:"
+
+#: ../data/preferences.ui.h:8
+msgid "Integration"
+msgstr "توپلاشتۇرۇش"
+
+#: ../data/preferences.ui.h:9
+msgid "Tracking"
+msgstr "ئىزلاۋاتىدۇ"
+
+#: ../data/preferences.ui.h:10
+msgid "_Categories"
+msgstr "كاتېگورىيە(_C)"
+
+#: ../data/preferences.ui.h:11
+msgid "Category list"
+msgstr "كاتېگورىيە تىزىمى"
+
 #: ../data/preferences.ui.h:12
-msgid "Remove activity"
-msgstr "پائالىيەتنى چىقىرىۋەت"
+msgid "Add category"
+msgstr "تۈر قوش"
 
 #: ../data/preferences.ui.h:13
 msgid "Remove category"
 msgstr "كاتېگورىيىنى چىقىرىۋەت"
 
 #: ../data/preferences.ui.h:14
-msgid "Resume the last activity when returning to a workspace"
-msgstr "خىزمەت بوشلۇقىغا قايتىپ كەلگەندە ئەڭ ئاخىرقى پائالىيەتنى داۋاملاشتۇر"
+msgid "Edit category"
+msgstr "كاتېگورىيە تەھرىرلە"
 
 #: ../data/preferences.ui.h:15
-msgid "Start new activity when switching workspaces:"
-msgstr "خىزمەت بوشلۇقى ئالماشقاندا يېڭى پائالىيەت باشلا:"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "كومپيۇتېر بىكار بولغاندا ئىزلاشنى توختات"
-
-#: ../data/preferences.ui.h:18
-msgid "Tags that should appear in autocomplete"
-msgstr "ئاپتوماتىك تولۇقلاشتا كۆرۈنىدىغان خەتكۈچلەر"
-
-#: ../data/preferences.ui.h:19
-msgid "Time Tracker Preferences"
-msgstr "ۋاقىت ئىزلىغۇچى مايىللىقى"
-
-#: ../data/preferences.ui.h:20
-msgid "Tracking"
-msgstr "ئىزلاۋاتىدۇ"
-
-#: ../data/preferences.ui.h:21
-msgid "Use following todo list if available:"
-msgstr "ئەگەر بار بولسا تۆۋەندىكى پىلانغا ئەگەش:"
-
-#: ../data/preferences.ui.h:22
-msgid "Workspaces"
-msgstr "خىزمەت رايونى"
-
-#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "پائالىيەتلەر(_A)"
 
+#: ../data/preferences.ui.h:16
+msgid "Activity list"
+msgstr "پائالىيەت تىزىمى"
+
+#: ../data/preferences.ui.h:17
+msgid "Add activity"
+msgstr "پائالىيەت قوش"
+
+#: ../data/preferences.ui.h:18
+msgid "Remove activity"
+msgstr "پائالىيەتنى چىقىرىۋەت"
+
+#: ../data/preferences.ui.h:19
+msgid "Edit activity"
+msgstr "تەھرىرلەش مەشغۇلاتى"
+
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "ئاپتوماتىك تولۇقلاشتا كۆرۈنىدىغان خەتكۈچلەر"
+
+#: ../data/preferences.ui.h:21
+msgid "Categories and Tags"
+msgstr "كاتېگورىيىلەر ۋە بەتكۈچلەر"
+
+#: ../data/preferences.ui.h:22
+msgid "Resume the last activity when returning to a workspace"
+msgstr "خىزمەت بوشلۇقىغا قايتىپ كەلگەندە ئەڭ ئاخىرقى پائالىيەتنى داۋاملاشتۇر"
+
+#: ../data/preferences.ui.h:23
+msgid "Start new activity when switching workspaces:"
+msgstr "خىزمەت بوشلۇقى ئالماشقاندا يېڭى پائالىيەت باشلا:"
+
 #: ../data/preferences.ui.h:24
-msgid "_Categories"
-msgstr "كاتېگورىيە(_C)"
+msgid "Workspaces"
+msgstr "خىزمەت رايونى"
 
 #: ../data/range_pick.ui.h:1
-msgid "Apply"
-msgstr "قوللان"
-
-#: ../data/range_pick.ui.h:2
 msgid "Day:"
 msgstr "كۈن:"
+
+#: ../data/range_pick.ui.h:2
+msgid "Week:"
+msgstr "ھەپتە:"
 
 #: ../data/range_pick.ui.h:3
 msgid "Month:"
@@ -431,31 +352,101 @@ msgstr "ئاي:"
 msgid "Range:"
 msgstr "دائىرە:"
 
-#: ../data/range_pick.ui.h:5
-msgid "Week:"
-msgstr "ھەپتە:"
+#: ../data/range_pick.ui.h:6
+msgid "Apply"
+msgstr "قوللان"
 
-#: ../data/stats.ui.h:1
-msgid "Starts and ends"
-msgstr "بەشى ۋە ئاخىرى"
+#: ../data/today.ui.h:2
+msgid "_Tracking"
+msgstr "ئىزلا(_T)"
 
-#: ../data/stats.ui.h:4
-msgid "Year:"
-msgstr "يىلى:"
+#: ../data/today.ui.h:3
+msgid "Add earlier activity"
+msgstr "ئىلگىرىكى پائالىيەتنى قوش"
 
-#: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:304
-#: ../src/hamster/applet.py:327 ../src/hamster/applet.py:416
-#: ../src/hamster-time-tracker:174 ../src/hamster-time-tracker:238
+#: ../data/today.ui.h:4
+msgid "Overview"
+msgstr "قىسقىچە بايان"
+
+#: ../data/today.ui.h:5
+msgid "Statistics"
+msgstr "ستاتىستىكا"
+
+#: ../data/today.ui.h:6
+msgid "_Edit"
+msgstr "تەھرىر(_E)"
+
+#: ../data/today.ui.h:7
+msgid "_Help"
+msgstr "ياردەم(_H)"
+
+#: ../data/today.ui.h:8
+msgid "Contents"
+msgstr "مەزمۇن"
+
+#: ../data/today.ui.h:9
+msgid "Sto_p tracking"
+msgstr "ئىزلاشنى توختات(_P)"
+
+#: ../data/today.ui.h:10
+msgid "S_witch"
+msgstr "ئالماشتۇر(_W)"
+
+#: ../data/today.ui.h:11
+msgid "Start _Tracking"
+msgstr "ئىزلاشنى باشلا(_T)"
+
+#: ../data/today.ui.h:12
+msgid "Start new activity"
+msgstr "يېڭى پائالىيەت باشلا"
+
+#: ../data/today.ui.h:13
+msgid "Today"
+msgstr "بۈگۈن"
+
+#: ../data/today.ui.h:14
+#, fuzzy
+msgid "totals"
+msgstr "ئومۇمىي سانى"
+
+#: ../data/today.ui.h:16
+#, fuzzy
+msgid "Show Overview"
+msgstr "قىسقىچە باياننى كۆرسەت(_O)"
+
+#: ../src/hamster-cli:254 ../src/hamster/today.py:289
 msgid "No activity"
 msgstr "پائالىيەت يوق"
 
-#: ../src/docky_control/2.0/hamster_control.py:81
-#: ../src/docky_control/2.0/hamster_control.py:95
-#: ../src/docky_control/2.1/hamster_control.py:81
-#: ../src/docky_control/2.1/hamster_control.py:95
-msgid "Preferences"
-msgstr "مايىللىق"
+#: ../src/hamster-cli:277 ../src/hamster/preferences.py:155
+#: ../src/hamster/reports.py:318
+msgid "Category"
+msgstr "كاتېگورىيە"
+
+#: ../src/hamster-cli:279 ../src/hamster/reports.py:323
+msgid "Description"
+msgstr "چۈشەندۈرۈش"
+
+#: ../src/hamster-cli:280 ../src/hamster/reports.py:320
+msgid "Start"
+msgstr "باشلا"
+
+#: ../src/hamster-cli:281 ../src/hamster/reports.py:321
+msgid "End"
+msgstr "تامام"
+
+#: ../src/hamster-cli:282 ../src/hamster/reports.py:322
+msgid "Duration"
+msgstr "ۋاقتى"
+
+#: ../src/hamster-cli:308
+#, fuzzy
+msgid "Uncategorized"
+msgstr "كاتېگورىيىلەر"
+
+#: ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Hamster قۇرۇلۇشى — ۋاقتىڭىزنى ئىزلاڭ"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
@@ -475,356 +466,54 @@ msgstr ""
 "Gheyret Kenji <gheyret@gmail.com>\n"
 "Sahran<sahran@live.com>"
 
-#: ../src/hamster/applet.py:377
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s"
-
-#. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:380
-#, python-format
-msgid "%sh"
-msgstr "%sh"
-
-#: ../src/hamster/applet.py:401 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:668
-#: ../src/hamster/db.py:855 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:56 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:224
+#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
+#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
+#: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
+#: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
+#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
 msgid "Unsorted"
 msgstr "تەرتىپلەنمىگەن"
 
-#: ../src/hamster/applet.py:407 ../src/hamster-time-tracker:169
-#: ../src/hamster-time-tracker:229
-msgid "Just started"
-msgstr "ھازىرلا باشلانغان"
-
-#: ../src/hamster/applet.py:643 ../src/hamster-time-tracker:378
-msgid "Changed activity"
-msgstr "ئۆزگەرگەن پائالىيەتلەر"
-
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:379
-#, c-format, python-format
-msgid "Switched to '%s'"
-msgstr "«%s» غا ئالماشتى"
-
 #. defaults
-#: ../src/hamster/db.py:947
+#: ../src/hamster/db.py:937
 msgid "Work"
 msgstr "ئىش"
 
-#: ../src/hamster/db.py:948
+#: ../src/hamster/db.py:938
 msgid "Reading news"
 msgstr "خەۋەر ئوقۇۋاتىدۇ"
 
-#: ../src/hamster/db.py:949
+#: ../src/hamster/db.py:939
 msgid "Checking stocks"
 msgstr "پايچېكى تەكشۈرۈش"
 
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:940
 msgid "Super secret project X"
 msgstr "ئالاھىدە مەخپىي قۇرۇلۇش X"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:941
 msgid "World domination"
 msgstr "دۇنيانى بويسۇندۇرۇش"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:943
 msgid "Day-to-day"
 msgstr "كۈنسېرى"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:944
 msgid "Lunch"
 msgstr "چۈشلۈك تاماق"
 
-#: ../src/hamster/db.py:955
+#: ../src/hamster/db.py:945
 msgid "Watering flowers"
 msgstr "گۈلگە سۇ قويۇش"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:946
 msgid "Doing handstands"
 msgstr "قولدا تىك تۇرۇش"
 
-#: ../src/hamster/edit_activity.py:70
+#: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
 msgstr "يېڭىلاش پائالىيىتى"
-
-#: ../src/hamster/overview_activities.py:88
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%A، %b %d"
-
-#: ../src/hamster/overview_totals.py:161
-#, python-format
-msgid "%s hours tracked total"
-msgstr "جەمئىي %s سائەت ئىزلىدى"
-
-#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:103
-msgid "None"
-msgstr "يوق"
-
-#: ../src/hamster/preferences.py:118 ../src/hamster/preferences.py:189
-msgid "Name"
-msgstr "ئاتى"
-
-#: ../src/hamster/preferences.py:138 ../src/hamster/reports.py:302
-msgid "Category"
-msgstr "كاتېگورىيە"
-
-#: ../src/hamster/preferences.py:635
-msgid "New category"
-msgstr "يېڭى كاتېگورىيە"
-
-#: ../src/hamster/preferences.py:648
-msgid "New activity"
-msgstr "يېڭى پائالىيەت"
-
-#. notify interval slider value label
-#: ../src/hamster/preferences.py:699
-#, python-format
-msgid "%(interval_minutes)d minutes"
-msgstr "%(interval_minutes)d مىنۇت"
-
-#. notify interval slider value label
-#: ../src/hamster/preferences.py:702
-msgid "Never"
-msgstr "ھەرگىز"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:132
-msgid "activity"
-msgstr "پائالىيەت"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:134
-msgid "start time"
-msgstr "باشلىنىش ۋاقتى"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:136
-msgid "end time"
-msgstr "ئاخىرلىشىش ۋاقتى"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:138
-msgid "duration minutes"
-msgstr "ۋاقتى(مىنۇت)"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:140
-msgid "category"
-msgstr "كاتېگورىيە"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:142
-msgid "description"
-msgstr "چۈشەندۈرۈش"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
-msgid "tags"
-msgstr "خەتكۈش"
-
-#: ../src/hamster/reports.py:191
-#, python-format
-msgid ""
-"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
-"s, %(end_Y)s"
-msgstr ""
-"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s دىكى "
-"پائالىيەت دوكلاتى"
-
-#: ../src/hamster/reports.py:193
-#, python-format
-msgid ""
-"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr ""
-"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s دىكى پائالىيەت "
-"دوكلاتى"
-
-#: ../src/hamster/reports.py:195
-#, python-format
-msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "%(start_B)s %(start_d)s, %(start_Y)s دىكى پائالىيەت دوكلاتى"
-
-#: ../src/hamster/reports.py:197
-#, python-format
-msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s دىكى پائالىيەت دوكلاتى"
-
-#. date column format for each row in HTML report
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
-msgctxt "html report"
-msgid "%b %d, %Y"
-msgstr "%b %d، %Y"
-
-#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:290
-msgid "Totals by Day"
-msgstr "كۈنلۈك خۇلاسە"
-
-#: ../src/hamster/reports.py:291
-msgid "Activity Log"
-msgstr "پائالىيەت خاتىرىسى"
-
-#: ../src/hamster/reports.py:294
-msgid "activities"
-msgstr "پائالىيەتلەر"
-
-#: ../src/hamster/reports.py:295
-msgid "categories"
-msgstr "كاتېگورىيىلەر"
-
-#: ../src/hamster/reports.py:298
-msgid "Distinguish:"
-msgstr "پەرق:"
-
-#: ../src/hamster/reports.py:300
-msgid "Date"
-msgstr "چېسلا"
-
-#: ../src/hamster/reports.py:304
-msgid "Start"
-msgstr "باشلا"
-
-#: ../src/hamster/reports.py:305
-msgid "End"
-msgstr "تامام"
-
-#: ../src/hamster/reports.py:306
-msgid "Duration"
-msgstr "ۋاقتى"
-
-#: ../src/hamster/reports.py:307
-msgid "Description"
-msgstr "چۈشەندۈرۈش"
-
-#: ../src/hamster/reports.py:310
-msgid "Show template"
-msgstr "قېلىپ كۆرسەت"
-
-#: ../src/hamster/reports.py:311
-#, python-format
-msgid "You can override it by storing your version in %(home_folder)s"
-msgstr "ئۆزىڭىزنىڭكىنى %(home_folder)s غا ساقلاش ئارقىلىق ئۇنى قاپلىۋېتەلەيسىز"
-
-#: ../src/hamster-time-tracker:167
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "<b>%s</b> غا ئىشلەۋاتىدۇ"
-
-#: ../src/hamster-time-tracker:499
-msgid "Hamster time tracker. Usage:"
-msgstr "Hamster ۋاقىت ئىزلىغۇچى. ئىشلىتىش ئۇسۇلى:"
-
-#: ../src/hamster/stats.py:90
-msgctxt "years"
-msgid "All"
-msgstr "ھەممىسى"
-
-#: ../src/hamster/stats.py:166
-msgid ""
-"There is no data to generate statistics yet.\n"
-"A week of usage would be nice!"
-msgstr ""
-"ستاتىستىكا قىلغۇدەك سانلىق-مەلۇمات يوق.\n"
-"ھەپتىلىك ستاتىستىكا قىلىش ياخشىراق!"
-
-#: ../src/hamster/stats.py:169
-msgid "Collecting data — check back after a week has passed!"
-msgstr "سانلىق-ئاساسلارنى توپلاش—بىر ھەپتە ئۆتكەندە قايتا تەكشۈرۈڭ"
-
-#. date format for the first record if the year has not been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:320
-msgctxt "first record"
-msgid "%b %d, %Y"
-msgstr "%b %d، %Y"
-
-#. date of first record when year has been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:325
-msgctxt "first record"
-msgid "%b %d"
-msgstr "%bنىڭ %-d-كۈنى"
-
-#: ../src/hamster/stats.py:327
-#, python-format
-msgid "First activity was recorded on %s."
-msgstr "تۇنجى پائالىيەتنىڭ خاتىرىلەنگەن ۋاقتى %s."
-
-#: ../src/hamster/stats.py:336 ../src/hamster/stats.py:340
-#, python-format
-msgid "%(num)s year"
-msgid_plural "%(num)s years"
-msgstr[0] "%(num)s يىل"
-
-#. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:345
-#, python-format
-msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
-msgstr ""
-"ۋاقىت ھازىر %(human_days)s تەبىئىي كۈن (%(human_years)s) ياكى %(working_days)"
-"s خىزمەت كۈنى  (%(working_years)s) ئىزلىدى."
-
-#. How the date of the longest activity should be displayed in statistics
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:363
-msgctxt "date of the longest activity"
-msgid "%b %d, %Y"
-msgstr "%b %d، %Y"
-
-#: ../src/hamster/stats.py:368
-#, python-format
-msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] "ئەڭ ئۇزۇن ئىشلىگەن كۈن %(date)s بولۇپ جەمئىي %(hours)s."
-
-#. total records (in selected scope)
-#: ../src/hamster/stats.py:376
-#, python-format
-msgid "There is %s record."
-msgid_plural "There are %s records."
-msgstr[0] "%s دانا خاتىرە بار."
-
-#: ../src/hamster/stats.py:396
-msgid "Hamster would like to observe you some more!"
-msgstr "Hamster سىزنى كۆپرەك كۆزەتمەكچى!"
-
-#: ../src/hamster/stats.py:398
-#, python-format
-msgid ""
-"With %s percent of all facts starting before 9am, you seem to be an early "
-"bird."
-msgstr ""
-"%s نىڭ خىزمىتى ئەتىگەن سائەت 9 دىن ئىلگىرى باشلىنىدۇ، قارىغاندا سىز "
-"سەھەردىكى خوراز ئوخشايسىز."
-
-#: ../src/hamster/stats.py:401
-#, python-format
-msgid ""
-"With %s percent of all facts starting after 11pm, you seem to be a night owl."
-msgstr ""
-"%s نىڭ خىزمىتى كەچ سائەت 9 دىن كېيىن باشلىنىدۇ، قارىغاندا سىز مۈشۈكياپىلاق "
-"ئوخشايسىز."
-
-#: ../src/hamster/stats.py:404
-#, python-format
-msgid ""
-"With %s percent of all tasks being shorter than 15 minutes, you seem to be a "
-"busy bee."
-msgstr ""
-"%s نىڭ خىزمىتى 15 مىنۇت ئىچىدە، قارىغاندا سىز ئىشچان ھەسەل ھەرىسى ئوخشايسىز."
 
 #. duration in round hours
 #: ../src/hamster/lib/stuff.py:57
@@ -879,6 +568,274 @@ msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s، %(end_Y)s"
 msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_d)s، %(end_Y)s"
 
+#: ../src/hamster/overview_activities.py:88
+msgctxt "overview list"
+msgid "%A, %b %d"
+msgstr "%A، %b %d"
+
+#: ../src/hamster/overview_totals.py:161
+#, python-format
+msgid "%s hours tracked total"
+msgstr "جەمئىي %s سائەت ئىزلىدى"
+
+#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
+#: ../src/hamster/preferences.py:113
+msgid "None"
+msgstr "يوق"
+
+#: ../src/hamster/preferences.py:130 ../src/hamster/preferences.py:208
+msgid "Name"
+msgstr "ئاتى"
+
+#: ../src/hamster/preferences.py:664
+msgid "New category"
+msgstr "يېڭى كاتېگورىيە"
+
+#: ../src/hamster/preferences.py:677
+msgid "New activity"
+msgstr "يېڭى پائالىيەت"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:738
+#, fuzzy, python-format
+msgid "%(interval_minutes)d minute"
+msgid_plural "%(interval_minutes)d minutes"
+msgstr[0] "%(interval_minutes)d مىنۇت"
+
+#. notify interval slider value label
+#: ../src/hamster/preferences.py:743
+msgid "Never"
+msgstr "ھەرگىز"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:148
+msgid "activity"
+msgstr "پائالىيەت"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:150
+msgid "start time"
+msgstr "باشلىنىش ۋاقتى"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:152
+msgid "end time"
+msgstr "ئاخىرلىشىش ۋاقتى"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:154
+msgid "duration minutes"
+msgstr "ۋاقتى(مىنۇت)"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:156
+msgid "category"
+msgstr "كاتېگورىيە"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:158
+msgid "description"
+msgstr "چۈشەندۈرۈش"
+
+#. column title in the TSV export format
+#: ../src/hamster/reports.py:160 ../src/hamster/reports.py:312
+msgid "tags"
+msgstr "خەتكۈش"
+
+#: ../src/hamster/reports.py:207
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s دىكى "
+"پائالىيەت دوكلاتى"
+
+#: ../src/hamster/reports.py:209
+#, python-format
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s دىكى پائالىيەت "
+"دوكلاتى"
+
+#: ../src/hamster/reports.py:211
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
+msgstr "%(start_B)s %(start_d)s, %(start_Y)s دىكى پائالىيەت دوكلاتى"
+
+#: ../src/hamster/reports.py:213
+#, python-format
+msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s دىكى پائالىيەت دوكلاتى"
+
+#. date column format for each row in HTML report
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/reports.py:265 ../src/hamster/reports.py:297
+msgctxt "html report"
+msgid "%b %d, %Y"
+msgstr "%b %d، %Y"
+
+#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
+#: ../src/hamster/reports.py:306
+msgid "Totals by Day"
+msgstr "كۈنلۈك خۇلاسە"
+
+#: ../src/hamster/reports.py:307
+msgid "Activity Log"
+msgstr "پائالىيەت خاتىرىسى"
+
+#: ../src/hamster/reports.py:310
+msgid "activities"
+msgstr "پائالىيەتلەر"
+
+#: ../src/hamster/reports.py:311
+msgid "categories"
+msgstr "كاتېگورىيىلەر"
+
+#: ../src/hamster/reports.py:314
+msgid "Distinguish:"
+msgstr "پەرق:"
+
+#: ../src/hamster/reports.py:316
+msgid "Date"
+msgstr "چېسلا"
+
+#: ../src/hamster/reports.py:326
+msgid "Show template"
+msgstr "قېلىپ كۆرسەت"
+
+#: ../src/hamster/reports.py:327
+#, python-format
+msgid "You can override it by storing your version in %(home_folder)s"
+msgstr "ئۆزىڭىزنىڭكىنى %(home_folder)s غا ساقلاش ئارقىلىق ئۇنى قاپلىۋېتەلەيسىز"
+
+#: ../src/hamster/stats.py:147
+msgctxt "years"
+msgid "All"
+msgstr "ھەممىسى"
+
+#: ../src/hamster/stats.py:177
+msgid ""
+"There is no data to generate statistics yet.\n"
+"A week of usage would be nice!"
+msgstr ""
+"ستاتىستىكا قىلغۇدەك سانلىق-مەلۇمات يوق.\n"
+"ھەپتىلىك ستاتىستىكا قىلىش ياخشىراق!"
+
+#: ../src/hamster/stats.py:180
+msgid "Collecting data — check back after a week has passed!"
+msgstr "سانلىق-ئاساسلارنى توپلاش—بىر ھەپتە ئۆتكەندە قايتا تەكشۈرۈڭ"
+
+#. date format for the first record if the year has not been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:331
+msgctxt "first record"
+msgid "%b %d, %Y"
+msgstr "%b %d، %Y"
+
+#. date of first record when year has been selected
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:336
+msgctxt "first record"
+msgid "%b %d"
+msgstr "%bنىڭ %-d-كۈنى"
+
+#: ../src/hamster/stats.py:338
+#, python-format
+msgid "First activity was recorded on %s."
+msgstr "تۇنجى پائالىيەتنىڭ خاتىرىلەنگەن ۋاقتى %s."
+
+#: ../src/hamster/stats.py:347 ../src/hamster/stats.py:351
+#, python-format
+msgid "%(num)s year"
+msgid_plural "%(num)s years"
+msgstr[0] "%(num)s يىل"
+
+#. FIXME: difficult string to properly pluralize
+#: ../src/hamster/stats.py:356
+#, python-format
+msgid ""
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
+msgstr ""
+"ۋاقىت ھازىر %(human_days)s تەبىئىي كۈن (%(human_years)s) ياكى "
+"%(working_days)s خىزمەت كۈنى  (%(working_years)s) ئىزلىدى."
+
+#. How the date of the longest activity should be displayed in statistics
+#. Using python datetime formatting syntax. See:
+#. http://docs.python.org/library/time.html#time.strftime
+#: ../src/hamster/stats.py:374
+msgctxt "date of the longest activity"
+msgid "%b %d, %Y"
+msgstr "%b %d، %Y"
+
+#: ../src/hamster/stats.py:379
+#, python-format
+msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgstr[0] "ئەڭ ئۇزۇن ئىشلىگەن كۈن %(date)s بولۇپ جەمئىي %(hours)s."
+
+#. total records (in selected scope)
+#: ../src/hamster/stats.py:387
+#, python-format
+msgid "There is %s record."
+msgid_plural "There are %s records."
+msgstr[0] "%s دانا خاتىرە بار."
+
+#: ../src/hamster/stats.py:407
+msgid "Hamster would like to observe you some more!"
+msgstr "Hamster سىزنى كۆپرەك كۆزەتمەكچى!"
+
+#: ../src/hamster/stats.py:409
+#, fuzzy, python-format
+msgid ""
+"With %s percent of all activities starting before 9am, you seem to be an "
+"early bird."
+msgstr ""
+"%s نىڭ خىزمىتى ئەتىگەن سائەت 9 دىن ئىلگىرى باشلىنىدۇ، قارىغاندا سىز "
+"سەھەردىكى خوراز ئوخشايسىز."
+
+#: ../src/hamster/stats.py:412
+#, fuzzy, python-format
+msgid ""
+"With %s percent of all activities starting after 11pm, you seem to be a "
+"night owl."
+msgstr ""
+"%s نىڭ خىزمىتى كەچ سائەت 9 دىن كېيىن باشلىنىدۇ، قارىغاندا سىز مۈشۈكياپىلاق "
+"ئوخشايسىز."
+
+#: ../src/hamster/stats.py:415
+#, fuzzy, python-format
+msgid ""
+"With %s percent of all activities being shorter than 15 minutes, you seem to "
+"be a busy bee."
+msgstr ""
+"%s نىڭ خىزمىتى 15 مىنۇت ئىچىدە، قارىغاندا سىز ئىشچان ھەسەل ھەرىسى ئوخشايسىز."
+
+#: ../src/hamster/today.py:243
+msgid "No records today"
+msgstr "بۈگۈن خاتىرە يوق"
+
+#: ../src/hamster/today.py:250
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/today.py:253
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#: ../src/hamster/today.py:280
+msgid "Just started"
+msgstr "ھازىرلا باشلانغان"
+
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
 msgstr "مەلۇمات ساقلاش—ۋاقىت ئىزلىغۇچى"
@@ -903,3 +860,42 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "ۋاقىت ئىزلاش"
+
+#~ msgid "Project Hamster (Gnome Time Tracker)"
+#~ msgstr "Hamster قۇرۇلۇشى(Gnome ۋاقىت ئىزلىغۇچى)"
+
+#~ msgid "_About"
+#~ msgstr "ھەققىدە(_A)"
+
+#~ msgid "_Preferences"
+#~ msgstr "مايىللىق(_P)"
+
+#~ msgid "Sto_p Tracking"
+#~ msgstr "ئىزلاشنى توختات(_P)"
+
+#~ msgid "To_day"
+#~ msgstr "بۈگۈن(_D)"
+
+#~ msgid "_Add earlier activity"
+#~ msgstr "ئىلگىرىكى پائالىيەتنى قوش(_A)"
+
+#~ msgid "Starts and ends"
+#~ msgstr "بەشى ۋە ئاخىرى"
+
+#~ msgid "Year:"
+#~ msgstr "يىلى:"
+
+#~ msgid "Preferences"
+#~ msgstr "مايىللىق"
+
+#~ msgid "Changed activity"
+#~ msgstr "ئۆزگەرگەن پائالىيەتلەر"
+
+#~ msgid "Switched to '%s'"
+#~ msgstr "«%s» غا ئالماشتى"
+
+#~ msgid "Working on <b>%s</b>"
+#~ msgstr "<b>%s</b> غا ئىشلەۋاتىدۇ"
+
+#~ msgid "Hamster time tracker. Usage:"
+#~ msgstr "Hamster ۋاقىت ئىزلىغۇچى. ئىشلىتىش ئۇسۇلى:"

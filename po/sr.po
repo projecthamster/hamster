@@ -6,12 +6,12 @@
 # Translated on 2010-08-27 by: Бранко Кокановић <branko.kokanovic@gmail.com>
 # Милош Поповић <gpopac@gmail.com>, 2010.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011, 2012.
+#: ../src/hamster-cli:342
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product"
-"=hamster-time-tracker&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-11 13:29+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-02-19 15:13+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -19,55 +19,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
-#: ../data/90-hamster-time-tracker.xml.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/Hamster_Applet.server.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1 ../data/hamster.ui.h:1
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:252
-#: ../src/hamster-time-tracker:569
-msgid "Time Tracker"
-msgstr "Пратилац времена"
-
-#: ../data/90-hamster-time-tracker.xml.in.h:2
-#| msgid "activities"
-msgid "Show activities window"
-msgstr "Прикажите прозор активности"
-
-#: ../data/applet.ui.h:1
-msgid "Sto_p Tracking"
-msgstr "Заустави _праћење"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:10
-msgid "S_witch"
-msgstr "Пре_баци"
-
-#: ../data/applet.ui.h:3 ../data/hamster.ui.h:11
-msgid "Start _Tracking"
-msgstr "З_апочни праћење"
-
-#: ../data/applet.ui.h:4
-msgid "To_day"
-msgstr "_Данас"
-
-#: ../data/applet.ui.h:5 ../src/hamster/applet.py:370
-#: ../src/hamster-time-tracker:279
-msgid "No records today"
-msgstr "Данас нема записа"
-
-#: ../data/applet.ui.h:6
-msgid "_Add earlier activity"
-msgstr "Дод_ај ранију активност"
-
-#: ../data/applet.ui.h:7
-msgid "Show _Overview"
-msgstr "Прикажи _преглед"
-
-#: ../data/edit_activity.ui.h:1 ../data/hamster.ui.h:15
+#: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
 msgid "Add Earlier Activity"
 msgstr "Додај ранију активност"
 
@@ -94,11 +50,6 @@ msgstr "Активност:"
 #: ../data/edit_activity.ui.h:7
 msgid "Tags:"
 msgstr "Ознаке:"
-
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
-msgid "Project Hamster - track your time"
-msgstr "Пројекат Вредни хрчак - пратите ваше време"
 
 #: ../data/hamster-time-tracker.schemas.in.h:1
 msgid "Stop tracking on idle"
@@ -207,84 +158,25 @@ msgstr "Промена видљивости главног прозора Вре
 msgid "Toggle visibility of the hamster application window."
 msgstr "Промени видљивост главног прозора Вредног хрчка"
 
-#: ../data/Hamster_Applet.server.in.in.h:2 ../src/hamster/about.py:42
-msgid "Project Hamster — track your time"
-msgstr "Пројекат Вредни хрчак — пратите ваше време"
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../src/hamster-cli:133 ../src/hamster/about.py:39
+#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
+msgid "Time Tracker"
+msgstr "Пратилац времена"
 
-#: ../data/Hamster_Applet.xml.h:1 ../data/overview.ui.h:6
-msgid "_Overview"
-msgstr "_Преглед"
-
-#: ../data/Hamster_Applet.xml.h:2
-msgid "_Preferences"
-msgstr "_Поставке"
-
-#: ../data/Hamster_Applet.xml.h:3 ../data/hamster.ui.h:7
-msgid "_Help"
-msgstr "_Помоћ"
-
-#: ../data/Hamster_Applet.xml.h:4
-msgid "_About"
-msgstr "_О програму"
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster-windows-service.desktop.in.in.h:2
+msgid "Project Hamster - track your time"
+msgstr "Пројекат Вредни хрчак - пратите ваше време"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-#| msgid "Time Tracker"
 msgid "Time Tracking Overview"
 msgstr "Преглед праћења времена"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
 msgid "The overview window of hamster time tracker"
 msgstr "Прозор прегледа праћења времена вредног хрчка"
-
-#: ../data/hamster.ui.h:2
-msgid "_Tracking"
-msgstr "Праћ_ење"
-
-#: ../data/hamster.ui.h:3
-msgid "Add earlier activity"
-msgstr "Додај ранију активност"
-
-#. now add buttons
-#: ../data/hamster.ui.h:4 ../src/docky_control/2.0/hamster_control.py:79
-#: ../src/docky_control/2.0/hamster_control.py:94
-#: ../src/docky_control/2.1/hamster_control.py:79
-#: ../src/docky_control/2.1/hamster_control.py:94
-msgid "Overview"
-msgstr "Преглед"
-
-#: ../data/hamster.ui.h:5 ../data/stats.ui.h:1
-msgid "Statistics"
-msgstr "Статистике"
-
-#: ../data/hamster.ui.h:6
-msgid "_Edit"
-msgstr "_Уређивање"
-
-#: ../data/hamster.ui.h:8
-msgid "Contents"
-msgstr "Садржај"
-
-#: ../data/hamster.ui.h:9
-msgid "Sto_p tracking"
-msgstr "_Заустави праћење"
-
-#: ../data/hamster.ui.h:12
-msgid "Start new activity"
-msgstr "Започни нову активност"
-
-#: ../data/hamster.ui.h:13
-msgid "Today"
-msgstr "Данас"
-
-#: ../data/hamster.ui.h:14
-#| msgid "Totals"
-msgid "totals"
-msgstr "укупно"
-
-#: ../data/hamster.ui.h:16
-#| msgid "Show _Overview"
-msgid "Show Overview"
-msgstr "Прикажи преглед"
 
 #: ../data/overview_totals.ui.h:1
 msgid "Show Statistics"
@@ -298,8 +190,8 @@ msgstr "Категорије"
 msgid "Activities"
 msgstr "Активности"
 
-#: ../data/overview_totals.ui.h:4 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:160
+#: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
+#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
 msgid "Tags"
 msgstr "Ознаке"
 
@@ -327,9 +219,13 @@ msgstr "Месец"
 msgid "Overview — Hamster"
 msgstr "Преглед — Вредни хрчак"
 
-#: ../data/overview.ui.h:7 ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:197 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:154
+#: ../data/overview.ui.h:6
+msgid "_Overview"
+msgstr "_Преглед"
+
+#: ../data/overview.ui.h:7 ../src/hamster-cli:276
+#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
+#: ../src/hamster/today.py:144
 msgid "Activity"
 msgstr "Активност"
 
@@ -337,7 +233,7 @@ msgstr "Активност"
 msgid "_View"
 msgstr "П_реглед"
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:4 ../src/hamster/reports.py:292
+#: ../data/overview.ui.h:10 ../src/hamster/reports.py:308
 msgid "Totals"
 msgstr "Укупно"
 
@@ -461,27 +357,95 @@ msgstr "Временски интервал:"
 msgid "Apply"
 msgstr "Примени"
 
-#: ../data/stats.ui.h:2
-msgid "Year:"
-msgstr "Година:"
+#: ../data/today.ui.h:2
+msgid "_Tracking"
+msgstr "Праћ_ење"
 
-#: ../data/stats.ui.h:3
-msgid "Starts and ends"
-msgstr "Почетак и крај"
+#: ../data/today.ui.h:3
+msgid "Add earlier activity"
+msgstr "Додај ранију активност"
 
-#: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
-#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
-#: ../src/hamster-time-tracker:248 ../src/hamster-time-tracker:324
+#: ../data/today.ui.h:4
+msgid "Overview"
+msgstr "Преглед"
+
+#: ../data/today.ui.h:5
+msgid "Statistics"
+msgstr "Статистике"
+
+#: ../data/today.ui.h:6
+msgid "_Edit"
+msgstr "_Уређивање"
+
+#: ../data/today.ui.h:7
+msgid "_Help"
+msgstr "_Помоћ"
+
+#: ../data/today.ui.h:8
+msgid "Contents"
+msgstr "Садржај"
+
+#: ../data/today.ui.h:9
+msgid "Sto_p tracking"
+msgstr "_Заустави праћење"
+
+#: ../data/today.ui.h:10
+msgid "S_witch"
+msgstr "Пре_баци"
+
+#: ../data/today.ui.h:11
+msgid "Start _Tracking"
+msgstr "З_апочни праћење"
+
+#: ../data/today.ui.h:12
+msgid "Start new activity"
+msgstr "Започни нову активност"
+
+#: ../data/today.ui.h:13
+msgid "Today"
+msgstr "Данас"
+
+#: ../data/today.ui.h:14
+msgid "totals"
+msgstr "укупно"
+
+#: ../data/today.ui.h:16
+msgid "Show Overview"
+msgstr "Прикажи преглед"
+
+#: ../src/hamster-cli:254 ../src/hamster/today.py:289
 msgid "No activity"
 msgstr "Без активности"
 
-#: ../src/docky_control/2.0/hamster_control.py:81
-#: ../src/docky_control/2.0/hamster_control.py:95
-#: ../src/docky_control/2.1/hamster_control.py:81
-#: ../src/docky_control/2.1/hamster_control.py:95
-msgid "Preferences"
-msgstr "Поставке"
+#: ../src/hamster-cli:277 ../src/hamster/preferences.py:155
+#: ../src/hamster/reports.py:318
+msgid "Category"
+msgstr "Категорија"
+
+#: ../src/hamster-cli:279 ../src/hamster/reports.py:323
+msgid "Description"
+msgstr "Опис"
+
+#: ../src/hamster-cli:280 ../src/hamster/reports.py:320
+msgid "Start"
+msgstr "Почетак"
+
+#: ../src/hamster-cli:281 ../src/hamster/reports.py:321
+msgid "End"
+msgstr "Крај"
+
+#: ../src/hamster-cli:282 ../src/hamster/reports.py:322
+msgid "Duration"
+msgstr "Трајање"
+
+#: ../src/hamster-cli:308
+#, fuzzy
+msgid "Uncategorized"
+msgstr "категорије"
+
+#: ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Пројекат Вредни хрчак — пратите ваше време"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
@@ -503,78 +467,52 @@ msgstr ""
 "\n"
 "Превод.орг — превод на српски језик."
 
-#: ../src/hamster/applet.py:378 ../src/hamster-time-tracker:286
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s"
-
-#. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:381 ../src/hamster-time-tracker:289
-#, c-format, python-format
-msgid "%sh"
-msgstr "%sс"
-
-#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
-#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:310
+#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
+#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
+#: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
+#: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
+#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
 msgid "Unsorted"
 msgstr "Непоређано"
 
-#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:243
-#: ../src/hamster-time-tracker:315
-msgid "Just started"
-msgstr "Управо започела"
-
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:470
-msgid "Changed activity"
-msgstr "Измењена активност"
-
-#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:471
-#, c-format, python-format
-msgid "Switched to '%s'"
-msgstr "Пребачена у „%s“"
-
 #. defaults
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:937
 msgid "Work"
 msgstr "Посао"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:938
 msgid "Reading news"
 msgstr "Читање вести"
 
-#: ../src/hamster/db.py:952
+#: ../src/hamster/db.py:939
 msgid "Checking stocks"
 msgstr "Провера акција"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:940
 msgid "Super secret project X"
 msgstr "Супер тајни пројекат X"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:941
 msgid "World domination"
 msgstr "Освајање света"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:943
 msgid "Day-to-day"
 msgstr "Из дана у дан"
 
-#: ../src/hamster/db.py:957
+#: ../src/hamster/db.py:944
 msgid "Lunch"
 msgstr "Ручак"
 
-#: ../src/hamster/db.py:958
+#: ../src/hamster/db.py:945
 msgid "Watering flowers"
 msgstr "Заливање цвећа"
 
-#: ../src/hamster/db.py:959
+#: ../src/hamster/db.py:946
 msgid "Doing handstands"
 msgstr "Превођење Гнома на српски"
 
-#: ../src/hamster/edit_activity.py:70
+#: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
 msgstr "Ажурирај активност"
 
@@ -643,28 +581,24 @@ msgid "%s hours tracked total"
 msgstr "Укупно је праћено је %s сати"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:108
+#: ../src/hamster/preferences.py:113
 msgid "None"
 msgstr "Ништа"
 
-#: ../src/hamster/preferences.py:123 ../src/hamster/preferences.py:193
+#: ../src/hamster/preferences.py:130 ../src/hamster/preferences.py:208
 msgid "Name"
 msgstr "Име"
 
-#: ../src/hamster/preferences.py:143 ../src/hamster/reports.py:302
-msgid "Category"
-msgstr "Категорија"
-
-#: ../src/hamster/preferences.py:640
+#: ../src/hamster/preferences.py:664
 msgid "New category"
 msgstr "Нова категорија"
 
-#: ../src/hamster/preferences.py:653
+#: ../src/hamster/preferences.py:677
 msgid "New activity"
 msgstr "Нова активност"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:708
+#: ../src/hamster/preferences.py:738
 #, python-format
 msgid "%(interval_minutes)d minute"
 msgid_plural "%(interval_minutes)d minutes"
@@ -674,67 +608,67 @@ msgstr[2] "%(interval_minutes)d минута"
 msgstr[3] "%(interval_minutes)d минут"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:713
+#: ../src/hamster/preferences.py:743
 msgid "Never"
 msgstr "Никад"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:132
+#: ../src/hamster/reports.py:148
 msgid "activity"
 msgstr "активност"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:134
+#: ../src/hamster/reports.py:150
 msgid "start time"
 msgstr "време почетка"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:136
+#: ../src/hamster/reports.py:152
 msgid "end time"
 msgstr "време завршетка"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:138
+#: ../src/hamster/reports.py:154
 msgid "duration minutes"
 msgstr "трајање у минутима"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:140
+#: ../src/hamster/reports.py:156
 msgid "category"
 msgstr "категорија"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:142
+#: ../src/hamster/reports.py:158
 msgid "description"
 msgstr "опис"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+#: ../src/hamster/reports.py:160 ../src/hamster/reports.py:312
 msgid "tags"
 msgstr "ознаке"
 
-#: ../src/hamster/reports.py:191
+#: ../src/hamster/reports.py:207
 #, python-format
 msgid ""
-"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)"
-"s, %(end_Y)s"
+"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
+"%(end_d)s, %(end_Y)s"
 msgstr ""
-"Дневник активности за %(start_d)s.%(start_B)s.%(start_Y)s – %(end_d)s.%"
-"(end_B)s.%(end_Y)s"
+"Дневник активности за %(start_d)s.%(start_B)s.%(start_Y)s – %(end_d)s."
+"%(end_B)s.%(end_Y)s"
 
-#: ../src/hamster/reports.py:193
+#: ../src/hamster/reports.py:209
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 "Дневник активности за %(start_d)s.%(start_B)s – %(end_d)s.%(end_B)s.%(end_Y)s"
 
-#: ../src/hamster/reports.py:195
+#: ../src/hamster/reports.py:211
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "Дневник активности за %(start_d)s.%(start_B)s.%(start_Y)s"
 
-#: ../src/hamster/reports.py:197
+#: ../src/hamster/reports.py:213
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "Дневник активности за %(start_d)s - %(end_d)s.%(start_B)s.%(end_Y)s"
@@ -742,67 +676,51 @@ msgstr "Дневник активности за %(start_d)s - %(end_d)s.%(start
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+#: ../src/hamster/reports.py:265 ../src/hamster/reports.py:297
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%d.%b.%Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:306
 msgid "Totals by Day"
 msgstr "Укупно по данима"
 
-#: ../src/hamster/reports.py:291
+#: ../src/hamster/reports.py:307
 msgid "Activity Log"
 msgstr "Дневник активности"
 
-#: ../src/hamster/reports.py:294
+#: ../src/hamster/reports.py:310
 msgid "activities"
 msgstr "активности"
 
-#: ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:311
 msgid "categories"
 msgstr "категорије"
 
-#: ../src/hamster/reports.py:298
+#: ../src/hamster/reports.py:314
 msgid "Distinguish:"
 msgstr "Разликуј:"
 
-#: ../src/hamster/reports.py:300
+#: ../src/hamster/reports.py:316
 msgid "Date"
 msgstr "Датум"
 
-#: ../src/hamster/reports.py:304
-msgid "Start"
-msgstr "Почетак"
-
-#: ../src/hamster/reports.py:305
-msgid "End"
-msgstr "Крај"
-
-#: ../src/hamster/reports.py:306
-msgid "Duration"
-msgstr "Трајање"
-
-#: ../src/hamster/reports.py:307
-msgid "Description"
-msgstr "Опис"
-
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:326
 msgid "Show template"
 msgstr "Прикажи шаблон"
 
-#: ../src/hamster/reports.py:311
+#: ../src/hamster/reports.py:327
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "Можете га премостити смештањем вашу верзију у %(home_folder)s"
 
-#: ../src/hamster/stats.py:141
+#: ../src/hamster/stats.py:147
 msgctxt "years"
 msgid "All"
 msgstr "Све"
 
-#: ../src/hamster/stats.py:168
+#: ../src/hamster/stats.py:177
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -810,14 +728,14 @@ msgstr ""
 "Још нема података за израду статистике.\n"
 "Недељу дана коришћења би помогло!"
 
-#: ../src/hamster/stats.py:171
+#: ../src/hamster/stats.py:180
 msgid "Collecting data — check back after a week has passed!"
 msgstr "Сакупљам податке — проверите поново након недељу дана!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:322
+#: ../src/hamster/stats.py:331
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%d.%b.%Y"
@@ -825,17 +743,17 @@ msgstr "%d.%b.%Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:327
+#: ../src/hamster/stats.py:336
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%b. %d"
 
-#: ../src/hamster/stats.py:329
+#: ../src/hamster/stats.py:338
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr "Прва активност је забележена %s."
 
-#: ../src/hamster/stats.py:338 ../src/hamster/stats.py:342
+#: ../src/hamster/stats.py:347 ../src/hamster/stats.py:351
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -845,35 +763,37 @@ msgstr[2] "%(num)s година"
 msgstr[3] "%(num)s година"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:347
+#: ../src/hamster/stats.py:356
 #, python-format
 msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or %"
-"(working_days)s working days (%(working_years)s)."
+"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+"%(working_days)s working days (%(working_years)s)."
 msgstr ""
-"До сада праћено време износи %(human_days)s дана (%(human_years)s) или %"
-"(working_days)s радних дана (%(working_years)s)."
+"До сада праћено време износи %(human_days)s дана (%(human_years)s) или "
+"%(working_days)s радних дана (%(working_years)s)."
 
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:365
+#: ../src/hamster/stats.py:374
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%d.%b.%Y"
 
-#: ../src/hamster/stats.py:370
+#: ../src/hamster/stats.py:379
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural ""
 "Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] "Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сат."
-msgstr[1] "Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сата."
-msgstr[2] "Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сати."
+msgstr[1] ""
+"Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сата."
+msgstr[2] ""
+"Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сати."
 msgstr[3] "Најдужи непрекидни посао је био %(date)s и трајао је %(hours)s сат."
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:378
+#: ../src/hamster/stats.py:387
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
@@ -882,11 +802,11 @@ msgstr[1] "Постоји %s записа."
 msgstr[2] "Постоји %s записа."
 msgstr[3] "Постоји %s запис."
 
-#: ../src/hamster/stats.py:398
+#: ../src/hamster/stats.py:407
 msgid "Hamster would like to observe you some more!"
 msgstr "Вредни хрчак би волео да те још мало надгледа!"
 
-#: ../src/hamster/stats.py:400
+#: ../src/hamster/stats.py:409
 #, python-format
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
@@ -895,7 +815,7 @@ msgstr ""
 "Са %s процената свих ствари које сте започели пре 9 преподне, изгледа да сте "
 "раноранилац."
 
-#: ../src/hamster/stats.py:403
+#: ../src/hamster/stats.py:412
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
@@ -904,7 +824,7 @@ msgstr ""
 "Са %s процената свих ствари које сте започели после 11 увече, изгледа да сте "
 "ноћна птица."
 
-#: ../src/hamster/stats.py:406
+#: ../src/hamster/stats.py:415
 #, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
@@ -913,14 +833,24 @@ msgstr ""
 "Са %s процената свих ствари које су трајале мање од 15 минута, изгледа да "
 "сте пчелица Маја."
 
-#: ../src/hamster-time-tracker:241
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "Радим на <b>%s</b>"
+#: ../src/hamster/today.py:243
+msgid "No records today"
+msgstr "Данас нема записа"
 
-#: ../src/hamster-time-tracker:579
-msgid "Hamster time tracker. Usage:"
-msgstr "Вредни хрчак праћење времена. Коришћење:"
+#: ../src/hamster/today.py:250
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/today.py:253
+#, python-format
+msgid "%sh"
+msgstr "%sс"
+
+#: ../src/hamster/today.py:280
+msgid "Just started"
+msgstr "Управо започела"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
@@ -946,6 +876,49 @@ msgstr "иКол"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Праћење времена"
+
+#~| msgid "activities"
+#~ msgid "Show activities window"
+#~ msgstr "Прикажите прозор активности"
+
+#~ msgid "Sto_p Tracking"
+#~ msgstr "Заустави _праћење"
+
+#~ msgid "To_day"
+#~ msgstr "_Данас"
+
+#~ msgid "_Add earlier activity"
+#~ msgstr "Дод_ај ранију активност"
+
+#~ msgid "Show _Overview"
+#~ msgstr "Прикажи _преглед"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Поставке"
+
+#~ msgid "_About"
+#~ msgstr "_О програму"
+
+#~ msgid "Year:"
+#~ msgstr "Година:"
+
+#~ msgid "Starts and ends"
+#~ msgstr "Почетак и крај"
+
+#~ msgid "Preferences"
+#~ msgstr "Поставке"
+
+#~ msgid "Changed activity"
+#~ msgstr "Измењена активност"
+
+#~ msgid "Switched to '%s'"
+#~ msgstr "Пребачена у „%s“"
+
+#~ msgid "Working on <b>%s</b>"
+#~ msgstr "Радим на <b>%s</b>"
+
+#~ msgid "Hamster time tracker. Usage:"
+#~ msgstr "Вредни хрчак праћење времена. Коришћење:"
 
 #~ msgid "Project Hamster (GNOME Time Tracker)"
 #~ msgstr "Вредни хрчак (Праћење времена за Гном)"

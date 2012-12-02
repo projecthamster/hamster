@@ -11,11 +11,12 @@
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
 # Dr.T.Vasudevan <agnihot3@gmail.com>, 2009, 2010, 2011, 2012.
 # Dr,T,Vasudevan <agnihot3@gmail.com>, 2009, 2010, 2011.
+#: ../src/hamster-cli:342
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-28 17:20+0530\n"
+"POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-02-28 17:27+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -24,91 +25,81 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.1\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
 "\n"
 "\n"
 "\n"
-"\n"
 
-#: ../data/90-hamster-time-tracker.xml.in.h:1
-msgid "Show activities window"
-msgstr "செயல்கள் சாளரத்தைக் காட்டவும்"
-
-#: ../data/90-hamster-time-tracker.xml.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/Hamster_Applet.server.in.in.h:2
-#: ../data/hamster-time-tracker.desktop.in.in.h:2 ../data/hamster.ui.h:11
-#: ../data/hamster-windows-service.desktop.in.in.h:2
-#: ../src/hamster/about.py:39 ../src/hamster/about.py:40
-#: ../src/hamster/applet.py:332 ../src/hamster-time-tracker:252
-#: ../src/hamster-time-tracker:569
-msgid "Time Tracker"
-msgstr "நேரத் தடம் தேடல்"
-
-#: ../data/applet.ui.h:1 ../src/hamster/applet.py:370
-#: ../src/hamster-time-tracker:279
-msgid "No records today"
-msgstr "இன்று பதிவுக் குறிப்புகள் எதுவும் இல்லை"
-
-#: ../data/applet.ui.h:2 ../data/hamster.ui.h:5
-msgid "S_witch"
-msgstr "(_w)மாற்றி"
-
-#: ../data/applet.ui.h:3
-msgid "Show _Overview"
-msgstr "மேலோட்டத் தோற்றம் காட்டவும் (_O)"
-
-#: ../data/applet.ui.h:4 ../data/hamster.ui.h:7
-msgid "Start _Tracking"
-msgstr "தொடர்வதை துவக்கவும் (_T)"
-
-#: ../data/applet.ui.h:5
-msgid "Sto_p Tracking"
-msgstr "தொடர்வதை நிறுத்தவும் (_p)"
-
-#: ../data/applet.ui.h:6
-msgid "To_day"
-msgstr "_d இன்று"
-
-#: ../data/applet.ui.h:7
-msgid "_Add earlier activity"
-msgstr "_A முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
-
-#: ../data/edit_activity.ui.h:1
-msgid "Activity:"
-msgstr "செயல்பாடு:"
-
-#: ../data/edit_activity.ui.h:2 ../data/hamster.ui.h:1
+#: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
 msgid "Add Earlier Activity"
 msgstr "முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
 
+#: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
+msgid "to"
+msgstr "வரை"
+
 #: ../data/edit_activity.ui.h:3
-msgid "Description:"
-msgstr "விவரம்:"
+msgid "in progress"
+msgstr "முன்னேற்றத்தில் உள்ளது"
 
 #: ../data/edit_activity.ui.h:4
-msgid "Tags:"
-msgstr "குறிகள்:"
+msgid "Description:"
+msgstr "விவரம்:"
 
 #: ../data/edit_activity.ui.h:5
 msgid "Time:"
 msgstr "நேரம்:"
 
 #: ../data/edit_activity.ui.h:6
-msgid "in progress"
-msgstr "முன்னேற்றத்தில் உள்ளது"
+msgid "Activity:"
+msgstr "செயல்பாடு:"
 
-#: ../data/edit_activity.ui.h:7 ../data/range_pick.ui.h:6
-msgid "to"
-msgstr "வரை"
-
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1
-msgid "Project Hamster - track your time"
-msgstr "ஹாம்ஸ்டர் திட்டம் - உங்கள் நேரத்தை கண்காணிக்க"
+#: ../data/edit_activity.ui.h:7
+msgid "Tags:"
+msgstr "குறிகள்:"
 
 #: ../data/hamster-time-tracker.schemas.in.h:1
+msgid "Stop tracking on idle"
+msgstr "இயக்கமற்ற நிலையில் தடத்தொடர்தல்  நிறுத்தவும்"
+
+#: ../data/hamster-time-tracker.schemas.in.h:2
+msgid "Stop tracking current activity when computer becomes idle"
+msgstr "கணினி வெறுமையாக இருக்கும் போது தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
+
+#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+msgid "Stop tracking on shutdown"
+msgstr "முடித்து வைத்ததும் தடத்தொடர்தல்  நிறுத்தவும்"
+
+#: ../data/hamster-time-tracker.schemas.in.h:4
+msgid "Stop tracking current activity on shutdown"
+msgstr "முடித்து வைத்ததும் தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
+
+#: ../data/hamster-time-tracker.schemas.in.h:5
+msgid "Remind of current task every x minutes"
+msgstr "ஒவ்வொரு x நிமிடங்களும் நடப்பு வேலையை நினைவுறுத்துக"
+
+#: ../data/hamster-time-tracker.schemas.in.h:6
+msgid ""
+"Remind of current task every specified amount of minutes. Set to 0 or "
+"greater than 120 to disable reminder."
+msgstr ""
+"நடப்பு பணியின் நினைவூட்டல் ஒவ்வொரு குறிப்பிட்ட அளவு நிமிடங்களுக்கு. 0 அல்லது 120 "
+"அதிகமாக அமைத்து நினைவூட்டலை செயல்நீக்கவும்."
+
+#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+msgid "Also remind when no activity is set"
+msgstr "செயல் அமைக்காத போதும் நினைவுறுத்துக"
+
+#: ../data/hamster-time-tracker.schemas.in.h:8
+msgid ""
+"Also remind every notify_interval minutes if no activity has been started."
+msgstr "செயல் துவக்கப்படாத போதும் நினைவுறுத்த வேண்டிய இடைவெளியில் நினைவுறுத்துக (_i)"
+
+#: ../data/hamster-time-tracker.schemas.in.h:9
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "நாளில் எந்த நேரத்தில் துவங்க வேண்டும்? (முன்னிருப்பு காலை ஐந்தரை)"
+
+#: ../data/hamster-time-tracker.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -119,35 +110,11 @@ msgstr ""
 "கொள்ளப்படும். அதிகமாக இருப்பின் இன்றையதாக கொள்ளப்படும். இரு நாட்களில் வியாபிக்கும் செய்ல்கள் "
 "அதிக நேரம் இருக்கும் நாளுக்கு தள்ளப்படும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
-msgid "Also remind every notify_interval minutes if no activity has been started."
-msgstr "செயல் துவக்கப்படாத போதும் நினைவுறுத்த வேண்டிய இடைவெளியில் நினைவுறுத்துக (_i)"
+#: ../data/hamster-time-tracker.schemas.in.h:11
+msgid "Should workspace switch trigger activity switch"
+msgstr "வேலைக்களம் மாற்றுவது செயலையும் பாதிக்க வேண்டுமா?"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:4
-msgid "Also remind when no activity is set"
-msgstr "செயல் அமைக்காத போதும் நினைவுறுத்துக"
-
-#: ../data/hamster-time-tracker.schemas.in.h:4
-msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr "நாளில் எந்த நேரத்தில் துவங்க வேண்டும்? (முன்னிருப்பு காலை ஐந்தரை)"
-
-#: ../data/hamster-time-tracker.schemas.in.h:5
-msgid "Command for toggling visibility of the hamster application window."
-msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்ற கட்டளை"
-
-#: ../data/hamster-time-tracker.schemas.in.h:6
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"பெயரால் மாற்றுவது செயலில் உள்ளது. இந்த பட்டியல் மாற்ற வேண்டிய செயல் பெயரை அமைக்கிறது. "
-"வேலைக்களங்கள் உருப்படியின் அட்டவணையால் காட்டப்படும்."
-
-#: ../data/hamster-time-tracker.schemas.in.h:7
-msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டுவதற்கான /மூடுவதற்கான விசைப் பலகைக் குறுக்கு வழி"
-
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -157,296 +124,228 @@ msgstr ""
 "இல் அறுதியான பெயரால் மாற்றும் செயல்களை நடத்தும். \"நினைவகம்\"என்பது முந்தைய "
 "வேலைக்களத்தின் கடைசி  மாற்றும்  செயலுக்கு செயலாக்கும். "
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"நடப்பு பணியின் நினைவூட்டல் ஒவ்வொரு குறிப்பிட்ட அளவு நிமிடங்களுக்கு. 0 அல்லது 120 "
-"அதிகமாக அமைத்து நினைவூட்டலை செயல்நீக்கவும்."
-
-#: ../data/hamster-time-tracker.schemas.in.h:10
-msgid "Remind of current task every x minutes"
-msgstr "ஒவ்வொரு x நிமிடங்களும் நடப்பு வேலையை நினைவுறுத்துக"
-
-#: ../data/hamster-time-tracker.schemas.in.h:11
-msgid "Should workspace switch trigger activity switch"
-msgstr "வேலைக்களம் மாற்றுவது செயலையும் பாதிக்க வேண்டுமா?"
-
-#: ../data/hamster-time-tracker.schemas.in.h:12
-msgid "Show / hide Time Tracker Window"
-msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டு / மறை"
-
 #: ../data/hamster-time-tracker.schemas.in.h:13
-msgid "Stop tracking current activity on shutdown"
-msgstr "முடித்து வைத்ததும் தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
-
-#: ../data/hamster-time-tracker.schemas.in.h:14
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "கணினி வெறுமையாக இருக்கும் போது தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
-
-#: ../data/hamster-time-tracker.schemas.in.h:15
-msgid "Stop tracking on idle"
-msgstr "இயக்கமற்ற நிலையில் தடத்தொடர்தல்  நிறுத்தவும்"
-
-#: ../data/hamster-time-tracker.schemas.in.h:16 ../data/preferences.ui.h:16
-msgid "Stop tracking on shutdown"
-msgstr "முடித்து வைத்ததும் தடத்தொடர்தல்  நிறுத்தவும்"
-
-#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Switch activity on workspace change"
 msgstr "செயலை வேலைக்கள் மாற்றத்துக்கு மாற்றவும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
-msgid "Toggle hamster application window"
-msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தை நிலை மாற்றுக"
+#: ../data/hamster-time-tracker.schemas.in.h:14
+msgid ""
+"If switching by name is enabled, this list sets the activity names that "
+"should be switched to, workspaces represented by the index of item."
+msgstr ""
+"பெயரால் மாற்றுவது செயலில் உள்ளது. இந்த பட்டியல் மாற்ற வேண்டிய செயல் பெயரை அமைக்கிறது. "
+"வேலைக்களங்கள் உருப்படியின் அட்டவணையால் காட்டப்படும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster-time-tracker.schemas.in.h:15
+msgid "Show / hide Time Tracker Window"
+msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டு / மறை"
+
+#: ../data/hamster-time-tracker.schemas.in.h:16
+msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டுவதற்கான /மூடுவதற்கான விசைப் பலகைக் குறுக்கு வழி"
+
+#: ../data/hamster-time-tracker.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளர செயலை நிலை மாற்றுக"
+
+#: ../data/hamster-time-tracker.schemas.in.h:18
+msgid "Command for toggling visibility of the hamster application window."
+msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்ற கட்டளை"
+
+#: ../data/hamster-time-tracker.schemas.in.h:19
+msgid "Toggle hamster application window"
+msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தை நிலை மாற்றுக"
 
 #: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்றுக"
 
-#: ../data/Hamster_Applet.server.in.in.h:1 ../src/hamster/about.py:42
-msgid "Project Hamster — track your time"
-msgstr "Project Hamster — உங்கள் நேரத்தை கண்காணிக்க"
+#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../src/hamster-cli:133 ../src/hamster/about.py:39
+#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
+msgid "Time Tracker"
+msgstr "நேரத் தடம் தேடல்"
 
-#: ../data/Hamster_Applet.xml.h:1
-msgid "_About"
-msgstr "பற்றி (_A)"
-
-#: ../data/Hamster_Applet.xml.h:2 ../data/hamster.ui.h:14
-msgid "_Help"
-msgstr "_H உதவி"
-
-#: ../data/Hamster_Applet.xml.h:3 ../data/overview.ui.h:12
-msgid "_Overview"
-msgstr "(_O) மேல்பார்வை"
-
-#: ../data/Hamster_Applet.xml.h:4
-msgid "_Preferences"
-msgstr "முன்னுரிமைகள் (_P)"
+#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster-windows-service.desktop.in.in.h:2
+msgid "Project Hamster - track your time"
+msgstr "ஹாம்ஸ்டர் திட்டம் - உங்கள் நேரத்தை கண்காணிக்க"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-msgid "The overview window of hamster time tracker"
-msgstr "ஹாம்ஸ்டர் நேரத்தட தொடர்வியின் மேலோட்ட சாளரம்"
-
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
 msgid "Time Tracking Overview"
 msgstr "நேரத் தடம் தொடர்வி மேலோட்டம்"
 
-#: ../data/hamster.ui.h:2
-msgid "Add earlier activity"
-msgstr "முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
+#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
+msgid "The overview window of hamster time tracker"
+msgstr "ஹாம்ஸ்டர் நேரத்தட தொடர்வியின் மேலோட்ட சாளரம்"
 
-#: ../data/hamster.ui.h:3
-msgid "Contents"
-msgstr "உள்ளடக்கங்கள்"
-
-#. now add buttons
-#: ../data/hamster.ui.h:4 ../src/docky_control/2.0/hamster_control.py:79
-#: ../src/docky_control/2.0/hamster_control.py:94
-#: ../src/docky_control/2.1/hamster_control.py:79
-#: ../src/docky_control/2.1/hamster_control.py:94
-msgid "Overview"
-msgstr "கண்ணோட்டம்"
-
-#: ../data/hamster.ui.h:6
-msgid "Show Overview"
-msgstr "மேலோட்டத் தோற்றம் காட்டவும்"
-
-#: ../data/hamster.ui.h:8
-msgid "Start new activity"
-msgstr "புதிய செயல்பாடு துவக்கு"
-
-#: ../data/hamster.ui.h:9 ../data/stats.ui.h:2
-msgid "Statistics"
-msgstr "புள்ளி விவரம்"
-
-#: ../data/hamster.ui.h:10
-msgid "Sto_p tracking"
-msgstr "தொடர்வதை நிறுத்தவும் (_p)"
-
-#: ../data/hamster.ui.h:12
-msgid "Today"
-msgstr "இன்று"
-
-#: ../data/hamster.ui.h:13
-msgid "_Edit"
-msgstr "_E திருத்து"
-
-#: ../data/hamster.ui.h:15
-msgid "_Tracking"
-msgstr "தொடர்வது (_T)"
-
-#: ../data/hamster.ui.h:16
-msgid "totals"
-msgstr "மொத்தங்கள்"
-
-#: ../data/overview_totals.ui.h:1 ../data/overview.ui.h:1
-msgid "Activities"
-msgstr "செயல்பாடுகள்"
+#: ../data/overview_totals.ui.h:1
+msgid "Show Statistics"
+msgstr "புள்ளிவிவரங்களை காட்டு"
 
 #: ../data/overview_totals.ui.h:2
 msgid "Categories"
 msgstr "வகைகள்"
 
-#: ../data/overview_totals.ui.h:3
-msgid "No data for this interval"
-msgstr "இந்த இடைவெளிக்கு தரவு ஏதும் இல்லை."
+#: ../data/overview_totals.ui.h:3 ../data/overview.ui.h:9
+msgid "Activities"
+msgstr "செயல்பாடுகள்"
 
-#: ../data/overview_totals.ui.h:4
-msgid "Show Statistics"
-msgstr "புள்ளிவிவரங்களை காட்டு"
-
-#: ../data/overview_totals.ui.h:5 ../src/hamster/applet.py:211
-#: ../src/hamster/reports.py:303 ../src/hamster-time-tracker:160
+#: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
+#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
 msgid "Tags"
 msgstr "குறிகள் (Tags)"
 
-#: ../data/overview.ui.h:2 ../src/hamster/applet.py:205
-#: ../src/hamster/preferences.py:197 ../src/hamster/reports.py:301
-#: ../src/hamster-time-tracker:154
-msgid "Activity"
-msgstr "செயல்பாடு"
+#: ../data/overview_totals.ui.h:5
+msgid "No data for this interval"
+msgstr "இந்த இடைவெளிக்கு தரவு ஏதும் இல்லை."
 
-#: ../data/overview.ui.h:3
-msgid "Add new"
-msgstr "புதியதை சேர்"
-
-#: ../data/overview.ui.h:4
-msgid "Day"
-msgstr "நாள்"
-
-#: ../data/overview.ui.h:5
-msgid "Edit"
-msgstr "திருத்து"
-
-#: ../data/overview.ui.h:6
-msgid "Month"
-msgstr "மாதம்"
-
-#: ../data/overview.ui.h:7
-msgid "Overview — Hamster"
-msgstr "கண்ணோட்டம் — ஹாம்ஸ்டர்"
-
-#: ../data/overview.ui.h:8
-msgid "Remove"
-msgstr "நீக்கு"
-
-#: ../data/overview.ui.h:9
+#: ../data/overview.ui.h:1
 msgid "Save report..."
 msgstr "அறிக்கையை சேமி..."
 
-#: ../data/overview.ui.h:10 ../data/stats.ui.h:3 ../src/hamster/reports.py:292
+#: ../data/overview.ui.h:2
+msgid "Day"
+msgstr "நாள்"
+
+#: ../data/overview.ui.h:3
+msgid "Week"
+msgstr "வாரம்"
+
+#: ../data/overview.ui.h:4
+msgid "Month"
+msgstr "மாதம்"
+
+#: ../data/overview.ui.h:5
+msgid "Overview — Hamster"
+msgstr "கண்ணோட்டம் — ஹாம்ஸ்டர்"
+
+#: ../data/overview.ui.h:6
+msgid "_Overview"
+msgstr "(_O) மேல்பார்வை"
+
+#: ../data/overview.ui.h:7 ../src/hamster-cli:276
+#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
+#: ../src/hamster/today.py:144
+msgid "Activity"
+msgstr "செயல்பாடு"
+
+#: ../data/overview.ui.h:8
+msgid "_View"
+msgstr "பார்வை (_V)"
+
+#: ../data/overview.ui.h:10 ../src/hamster/reports.py:308
 msgid "Totals"
 msgstr "மொத்தங்கள்"
 
 #: ../data/overview.ui.h:11
-msgid "Week"
-msgstr "வாரம்"
+msgid "Remove"
+msgstr "நீக்கு"
+
+#: ../data/overview.ui.h:12
+msgid "Add new"
+msgstr "புதியதை சேர்"
 
 #: ../data/overview.ui.h:13
-msgid "_View"
-msgstr "பார்வை (_V)"
+msgid "Edit"
+msgstr "திருத்து"
 
 #: ../data/preferences.ui.h:1
-msgid "Activity list"
-msgstr "செயல்பாடு பட்டியல்"
-
-#: ../data/preferences.ui.h:2
-msgid "Add activity"
-msgstr "செயல்பாட்டைச் சேர்க்கவும்"
+msgid "Time Tracker Preferences"
+msgstr "நேரத் தடம் தேடல் முன்னுரிமைகள்"
 
 #: ../data/preferences.ui.h:3
-msgid "Add category"
-msgstr "வகை சேர் "
+msgid "Stop tracking when computer becomes idle"
+msgstr "கணினி இயக்கம் நின்றதும் தடத்தொடர்தலை நிறுத்தவும்"
 
 #: ../data/preferences.ui.h:5
-msgid "Categories and Tags"
-msgstr "வகைகள் மற்றும் குறிகள்"
-
-#: ../data/preferences.ui.h:6
-msgid "Category list"
-msgstr "வகை பட்டியல்"
-
-#: ../data/preferences.ui.h:7
-msgid "Edit activity"
-msgstr "செயல்பாட்டைத் திருத்தி அமைக்கவும்"
-
-#: ../data/preferences.ui.h:8
-msgid "Edit category"
-msgstr "வகை திருத்தி அமைக்கவும்"
-
-#: ../data/preferences.ui.h:9
-msgid "Integration"
-msgstr "ஒருங்கிணைப்பு"
-
-#: ../data/preferences.ui.h:10
-msgid "New day starts at"
-msgstr "புதிய நாள் துவங்குவது"
-
-#: ../data/preferences.ui.h:11
 msgid "Remind of current activity every:"
 msgstr "தற்போதைய செயலை நினைவுறுத்த இடைவெளி:"
 
+#: ../data/preferences.ui.h:6
+msgid "New day starts at"
+msgstr "புதிய நாள் துவங்குவது"
+
+#: ../data/preferences.ui.h:7
+msgid "Use following todo list if available:"
+msgstr "பின்வரும் செய்ய வேண்டியன பட்டியலை கிடத்தால் பயன்படுத்துக:"
+
+#: ../data/preferences.ui.h:8
+msgid "Integration"
+msgstr "ஒருங்கிணைப்பு"
+
+#: ../data/preferences.ui.h:9
+msgid "Tracking"
+msgstr "தொடர்வது"
+
+#: ../data/preferences.ui.h:10
+msgid "_Categories"
+msgstr "வகைகள் (_C)"
+
+#: ../data/preferences.ui.h:11
+msgid "Category list"
+msgstr "வகை பட்டியல்"
+
 #: ../data/preferences.ui.h:12
-msgid "Remove activity"
-msgstr "செயலை நீக்கு"
+msgid "Add category"
+msgstr "வகை சேர் "
 
 #: ../data/preferences.ui.h:13
 msgid "Remove category"
 msgstr "வகையை நீக்கு"
 
 #: ../data/preferences.ui.h:14
-msgid "Resume the last activity when returning to a workspace"
-msgstr "வேலைக்களத்துக்கு திரும்பினால் கடைசி செயலை மீள் துவக்குக."
+msgid "Edit category"
+msgstr "வகை திருத்தி அமைக்கவும்"
 
 #: ../data/preferences.ui.h:15
-msgid "Start new activity when switching workspaces:"
-msgstr "வேலைக்களத்தை மாற்றினால் புதிய செயலை துவக்குக"
-
-#: ../data/preferences.ui.h:17
-msgid "Stop tracking when computer becomes idle"
-msgstr "கணினி இயக்கம் நின்றதும் தடத்தொடர்தலை நிறுத்தவும்"
-
-#: ../data/preferences.ui.h:18
-msgid "Tags that should appear in autocomplete"
-msgstr "தானியங்கிபூர்த்தியில் காண வேண்டிய குறி ஒட்டுக்கள்"
-
-#: ../data/preferences.ui.h:19
-msgid "Time Tracker Preferences"
-msgstr "நேரத் தடம் தேடல் முன்னுரிமைகள்"
-
-#: ../data/preferences.ui.h:20
-msgid "Tracking"
-msgstr "தொடர்வது"
-
-#: ../data/preferences.ui.h:21
-msgid "Use following todo list if available:"
-msgstr "பின்வரும் செய்ய வேண்டியன பட்டியலை கிடத்தால் பயன்படுத்துக:"
-
-#: ../data/preferences.ui.h:22
-msgid "Workspaces"
-msgstr "வேலைக்களங்கள்"
-
-#: ../data/preferences.ui.h:23
 msgid "_Activities"
 msgstr "செயல்பாடுகள் (_A)"
 
+#: ../data/preferences.ui.h:16
+msgid "Activity list"
+msgstr "செயல்பாடு பட்டியல்"
+
+#: ../data/preferences.ui.h:17
+msgid "Add activity"
+msgstr "செயல்பாட்டைச் சேர்க்கவும்"
+
+#: ../data/preferences.ui.h:18
+msgid "Remove activity"
+msgstr "செயலை நீக்கு"
+
+#: ../data/preferences.ui.h:19
+msgid "Edit activity"
+msgstr "செயல்பாட்டைத் திருத்தி அமைக்கவும்"
+
+#: ../data/preferences.ui.h:20
+msgid "Tags that should appear in autocomplete"
+msgstr "தானியங்கிபூர்த்தியில் காண வேண்டிய குறி ஒட்டுக்கள்"
+
+#: ../data/preferences.ui.h:21
+msgid "Categories and Tags"
+msgstr "வகைகள் மற்றும் குறிகள்"
+
+#: ../data/preferences.ui.h:22
+msgid "Resume the last activity when returning to a workspace"
+msgstr "வேலைக்களத்துக்கு திரும்பினால் கடைசி செயலை மீள் துவக்குக."
+
+#: ../data/preferences.ui.h:23
+msgid "Start new activity when switching workspaces:"
+msgstr "வேலைக்களத்தை மாற்றினால் புதிய செயலை துவக்குக"
+
 #: ../data/preferences.ui.h:24
-msgid "_Categories"
-msgstr "வகைகள் (_C)"
+msgid "Workspaces"
+msgstr "வேலைக்களங்கள்"
 
 #: ../data/range_pick.ui.h:1
-msgid "Apply"
-msgstr "செயல்படுத்துக"
-
-#: ../data/range_pick.ui.h:2
 msgid "Day:"
 msgstr "நாள்:"
+
+#: ../data/range_pick.ui.h:2
+msgid "Week:"
+msgstr "வாரம்:"
 
 #: ../data/range_pick.ui.h:3
 msgid "Month:"
@@ -456,31 +355,99 @@ msgstr "மாதம்:"
 msgid "Range:"
 msgstr "வீச்சு:"
 
-#: ../data/range_pick.ui.h:5
-msgid "Week:"
-msgstr "வாரம்:"
+#: ../data/range_pick.ui.h:6
+msgid "Apply"
+msgstr "செயல்படுத்துக"
 
-#: ../data/stats.ui.h:1
-msgid "Starts and ends"
-msgstr "துவக்கம் மற்றும் நிறுத்தம்"
+#: ../data/today.ui.h:2
+msgid "_Tracking"
+msgstr "தொடர்வது (_T)"
 
-#: ../data/stats.ui.h:4
-msgid "Year:"
-msgstr "வருடம்:"
+#: ../data/today.ui.h:3
+msgid "Add earlier activity"
+msgstr "முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
 
-#: ../src/docky_control/2.0/hamster_control.py:71
-#: ../src/docky_control/2.1/hamster_control.py:75 ../src/hamster/applet.py:305
-#: ../src/hamster/applet.py:328 ../src/hamster/applet.py:417
-#: ../src/hamster-time-tracker:248 ../src/hamster-time-tracker:324
+#: ../data/today.ui.h:4
+msgid "Overview"
+msgstr "கண்ணோட்டம்"
+
+#: ../data/today.ui.h:5
+msgid "Statistics"
+msgstr "புள்ளி விவரம்"
+
+#: ../data/today.ui.h:6
+msgid "_Edit"
+msgstr "_E திருத்து"
+
+#: ../data/today.ui.h:7
+msgid "_Help"
+msgstr "_H உதவி"
+
+#: ../data/today.ui.h:8
+msgid "Contents"
+msgstr "உள்ளடக்கங்கள்"
+
+#: ../data/today.ui.h:9
+msgid "Sto_p tracking"
+msgstr "தொடர்வதை நிறுத்தவும் (_p)"
+
+#: ../data/today.ui.h:10
+msgid "S_witch"
+msgstr "(_w)மாற்றி"
+
+#: ../data/today.ui.h:11
+msgid "Start _Tracking"
+msgstr "தொடர்வதை துவக்கவும் (_T)"
+
+#: ../data/today.ui.h:12
+msgid "Start new activity"
+msgstr "புதிய செயல்பாடு துவக்கு"
+
+#: ../data/today.ui.h:13
+msgid "Today"
+msgstr "இன்று"
+
+#: ../data/today.ui.h:14
+msgid "totals"
+msgstr "மொத்தங்கள்"
+
+#: ../data/today.ui.h:16
+msgid "Show Overview"
+msgstr "மேலோட்டத் தோற்றம் காட்டவும்"
+
+#: ../src/hamster-cli:254 ../src/hamster/today.py:289
 msgid "No activity"
 msgstr "செயல்பாடு இல்லை"
 
-#: ../src/docky_control/2.0/hamster_control.py:81
-#: ../src/docky_control/2.0/hamster_control.py:95
-#: ../src/docky_control/2.1/hamster_control.py:81
-#: ../src/docky_control/2.1/hamster_control.py:95
-msgid "Preferences"
-msgstr "முன்னுரிமைகள்"
+#: ../src/hamster-cli:277 ../src/hamster/preferences.py:155
+#: ../src/hamster/reports.py:318
+msgid "Category"
+msgstr "வகை"
+
+#: ../src/hamster-cli:279 ../src/hamster/reports.py:323
+msgid "Description"
+msgstr "விவரணம்"
+
+#: ../src/hamster-cli:280 ../src/hamster/reports.py:320
+msgid "Start"
+msgstr "துவக்கம்"
+
+#: ../src/hamster-cli:281 ../src/hamster/reports.py:321
+msgid "End"
+msgstr "முடிவு"
+
+#: ../src/hamster-cli:282 ../src/hamster/reports.py:322
+msgid "Duration"
+msgstr "காலஅளவு"
+
+#: ../src/hamster-cli:308
+#, fuzzy
+msgid "Uncategorized"
+msgstr "வகைகள்"
+
+#: ../src/hamster/about.py:42
+msgid "Project Hamster — track your time"
+msgstr "Project Hamster — உங்கள் நேரத்தை கண்காணிக்க"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
@@ -501,78 +468,52 @@ msgstr ""
 "kannan, <shakthimaan@gmail.com> 2008-2009, Dr. T. Vasudevan <agnihot3@gmail."
 "com> 2010"
 
-#: ../src/hamster/applet.py:378 ../src/hamster-time-tracker:286
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s"
-
-#. duration in main drop-down per category in hours
-#: ../src/hamster/applet.py:381 ../src/hamster-time-tracker:289
-#, c-format, python-format
-msgid "%sh"
-msgstr "%sh"
-
-#: ../src/hamster/applet.py:402 ../src/hamster/db.py:288
-#: ../src/hamster/db.py:298 ../src/hamster/db.py:354 ../src/hamster/db.py:671
-#: ../src/hamster/db.py:858 ../src/hamster/edit_activity.py:54
-#: ../src/hamster/preferences.py:58 ../src/hamster/reports.py:73
-#: ../src/hamster/reports.py:111 ../src/hamster/reports.py:240
-#: ../src/hamster-time-tracker:310
+#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
+#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
+#: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
+#: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
+#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
 msgid "Unsorted"
 msgstr "இனம் பிரிக்கப்படாதவை"
 
-#: ../src/hamster/applet.py:408 ../src/hamster-time-tracker:243
-#: ../src/hamster-time-tracker:315
-msgid "Just started"
-msgstr "இப்போதுதான் துவக்கியது"
-
-#: ../src/hamster/applet.py:644 ../src/hamster-time-tracker:470
-msgid "Changed activity"
-msgstr "செயல்பாட்டை மாற்றவும்"
-
-#: ../src/hamster/applet.py:645 ../src/hamster-time-tracker:471
-#, c-format, python-format
-msgid "Switched to '%s'"
-msgstr " '%s' க்கு மாற்றப்பட்டது"
-
 #. defaults
-#: ../src/hamster/db.py:950
+#: ../src/hamster/db.py:937
 msgid "Work"
 msgstr "பணி"
 
-#: ../src/hamster/db.py:951
+#: ../src/hamster/db.py:938
 msgid "Reading news"
 msgstr "செய்திகள் வாசிப்பு"
 
-#: ../src/hamster/db.py:952
+#: ../src/hamster/db.py:939
 msgid "Checking stocks"
 msgstr "வணிகப் பங்குகள் சரிபார்த்தல்"
 
-#: ../src/hamster/db.py:953
+#: ../src/hamster/db.py:940
 msgid "Super secret project X"
 msgstr "மிக ரகசியத் திட்டம் எக்ஸ்"
 
-#: ../src/hamster/db.py:954
+#: ../src/hamster/db.py:941
 msgid "World domination"
 msgstr "உலக ஆதிக்கம்"
 
-#: ../src/hamster/db.py:956
+#: ../src/hamster/db.py:943
 msgid "Day-to-day"
 msgstr "அன்றாடம்"
 
-#: ../src/hamster/db.py:957
+#: ../src/hamster/db.py:944
 msgid "Lunch"
 msgstr "மதிய உணவு"
 
-#: ../src/hamster/db.py:958
+#: ../src/hamster/db.py:945
 msgid "Watering flowers"
 msgstr "பூக்களுக்குத் தண்ணீர் பாய்ச்சுதல்"
 
-#: ../src/hamster/db.py:959
+#: ../src/hamster/db.py:946
 msgid "Doing handstands"
 msgstr "தலைகீழாய் நிற்றல்"
 
-#: ../src/hamster/edit_activity.py:70
+#: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
 msgstr "செயல்பாட்டை நிகழ்நிலைப்படுத்தவும்"
 
@@ -640,28 +581,24 @@ msgid "%s hours tracked total"
 msgstr " '%s' மணிகள் மொத்தம் தடத்தொடர்வு செய்யப்பட்டது."
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:108
+#: ../src/hamster/preferences.py:113
 msgid "None"
 msgstr "எதுவுமில்லை"
 
-#: ../src/hamster/preferences.py:123 ../src/hamster/preferences.py:193
+#: ../src/hamster/preferences.py:130 ../src/hamster/preferences.py:208
 msgid "Name"
 msgstr "பெயர்"
 
-#: ../src/hamster/preferences.py:143 ../src/hamster/reports.py:302
-msgid "Category"
-msgstr "வகை"
-
-#: ../src/hamster/preferences.py:640
+#: ../src/hamster/preferences.py:664
 msgid "New category"
 msgstr "புதிய வகை"
 
-#: ../src/hamster/preferences.py:653
+#: ../src/hamster/preferences.py:677
 msgid "New activity"
 msgstr "புதிய செயல்பாடு"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:708
+#: ../src/hamster/preferences.py:738
 #, python-format
 msgid "%(interval_minutes)d minute"
 msgid_plural "%(interval_minutes)d minutes"
@@ -669,46 +606,46 @@ msgstr[0] "%(interval_minutes)d minute"
 msgstr[1] "%(interval_minutes)d minutes"
 
 #. notify interval slider value label
-#: ../src/hamster/preferences.py:713
+#: ../src/hamster/preferences.py:743
 msgid "Never"
 msgstr "எப்போதுமில்லை"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:132
+#: ../src/hamster/reports.py:148
 msgid "activity"
 msgstr "செயல்பாடு"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:134
+#: ../src/hamster/reports.py:150
 msgid "start time"
 msgstr "துவக்க நேரம்"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:136
+#: ../src/hamster/reports.py:152
 msgid "end time"
 msgstr "முடிவு நேரம்"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:138
+#: ../src/hamster/reports.py:154
 msgid "duration minutes"
 msgstr "காலஅளவு நிமிடங்களில்"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:140
+#: ../src/hamster/reports.py:156
 msgid "category"
 msgstr "வகை"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:142
+#: ../src/hamster/reports.py:158
 msgid "description"
 msgstr "விவரணம்"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:144 ../src/hamster/reports.py:296
+#: ../src/hamster/reports.py:160 ../src/hamster/reports.py:312
 msgid "tags"
 msgstr "குறிகள் (Tags)"
 
-#: ../src/hamster/reports.py:191
+#: ../src/hamster/reports.py:207
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
@@ -717,17 +654,19 @@ msgstr ""
 " %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s க்கு  "
 "செயல் பதிவேடு"
 
-#: ../src/hamster/reports.py:193
+#: ../src/hamster/reports.py:209
 #, python-format
-msgid "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s க்கு செயல் பதிவேடு"
+msgid ""
+"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+msgstr ""
+"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s க்கு செயல் பதிவேடு"
 
-#: ../src/hamster/reports.py:195
+#: ../src/hamster/reports.py:211
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "%(start_B)s %(start_d)s, %(start_Y)s க்கு செயல் பதிவேடு"
 
-#: ../src/hamster/reports.py:197
+#: ../src/hamster/reports.py:213
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s க்கு செயல் பதிவேடு"
@@ -735,67 +674,51 @@ msgstr "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s க்கு செய�
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:249 ../src/hamster/reports.py:281
+#: ../src/hamster/reports.py:265 ../src/hamster/reports.py:297
 msgctxt "html report"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
 #. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:290
+#: ../src/hamster/reports.py:306
 msgid "Totals by Day"
 msgstr "மொத்தங்கள் நாள் கணக்கில்"
 
-#: ../src/hamster/reports.py:291
+#: ../src/hamster/reports.py:307
 msgid "Activity Log"
 msgstr "செயல்பாடு பதிவேடு"
 
-#: ../src/hamster/reports.py:294
+#: ../src/hamster/reports.py:310
 msgid "activities"
 msgstr "செயல்பாடுகள்"
 
-#: ../src/hamster/reports.py:295
+#: ../src/hamster/reports.py:311
 msgid "categories"
 msgstr "வகைகள்"
 
-#: ../src/hamster/reports.py:298
+#: ../src/hamster/reports.py:314
 msgid "Distinguish:"
 msgstr "பாகுபடுத்து"
 
-#: ../src/hamster/reports.py:300
+#: ../src/hamster/reports.py:316
 msgid "Date"
 msgstr "தேதி"
 
-#: ../src/hamster/reports.py:304
-msgid "Start"
-msgstr "துவக்கம்"
-
-#: ../src/hamster/reports.py:305
-msgid "End"
-msgstr "முடிவு"
-
-#: ../src/hamster/reports.py:306
-msgid "Duration"
-msgstr "காலஅளவு"
-
-#: ../src/hamster/reports.py:307
-msgid "Description"
-msgstr "விவரணம்"
-
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:326
 msgid "Show template"
 msgstr "வார்ப்புருவை காட்டு"
 
-#: ../src/hamster/reports.py:311
+#: ../src/hamster/reports.py:327
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "உங்கள் பதிப்பை %(home_folder)s இல் சேமித்து அதை வற்புறுத்தி மேல் செயலாக்கலாம்."
 
-#: ../src/hamster/stats.py:141
+#: ../src/hamster/stats.py:147
 msgctxt "years"
 msgid "All"
 msgstr "எல்லாம்"
 
-#: ../src/hamster/stats.py:168
+#: ../src/hamster/stats.py:177
 msgid ""
 "There is no data to generate statistics yet.\n"
 "A week of usage would be nice!"
@@ -803,14 +726,14 @@ msgstr ""
 "புள்ளி விவரம் தர இன்னும் தரவு இல்லை.\n"
 "ஒரு வார பயன்பாடு நல்லா இருக்கும்!"
 
-#: ../src/hamster/stats.py:171
+#: ../src/hamster/stats.py:180
 msgid "Collecting data — check back after a week has passed!"
 msgstr "தரவை சேமிக்கிறது. - இன்னும் ஒரு வாரம் கழித்து வாங்க!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:322
+#: ../src/hamster/stats.py:331
 msgctxt "first record"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
@@ -818,17 +741,17 @@ msgstr "%b %d, %Y"
 #. date of first record when year has been selected
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:327
+#: ../src/hamster/stats.py:336
 msgctxt "first record"
 msgid "%b %d"
 msgstr "%b %d"
 
-#: ../src/hamster/stats.py:329
+#: ../src/hamster/stats.py:338
 #, python-format
 msgid "First activity was recorded on %s."
 msgstr " %s இல் பதிவு செய்த முதல் செயல்பாடு"
 
-#: ../src/hamster/stats.py:338 ../src/hamster/stats.py:342
+#: ../src/hamster/stats.py:347 ../src/hamster/stats.py:351
 #, python-format
 msgid "%(num)s year"
 msgid_plural "%(num)s years"
@@ -836,7 +759,7 @@ msgstr[0] "%(num)s வருடம்"
 msgstr[1] "%(num)s வருடங்கள்"
 
 #. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:347
+#: ../src/hamster/stats.py:356
 #, python-format
 msgid ""
 "Time tracked so far is %(human_days)s human days (%(human_years)s) or "
@@ -848,31 +771,32 @@ msgstr ""
 #. How the date of the longest activity should be displayed in statistics
 #. Using python datetime formatting syntax. See:
 #. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:365
+#: ../src/hamster/stats.py:374
 msgctxt "date of the longest activity"
 msgid "%b %d, %Y"
 msgstr "%b %d, %Y"
 
-#: ../src/hamster/stats.py:370
+#: ../src/hamster/stats.py:379
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
+msgid_plural ""
+"Longest continuous work happened on %(date)s and was %(hours)s hours."
 msgstr[0] "நீண்ட தொடர்ச்சியாக வேலை நடந்தது %(date)s மற்றும் %(hours)s மணி."
 msgstr[1] "நீண்ட தொடர்ச்சியாக வேலை நடந்தது %(date)s மற்றும் %(hours)s மணிகள்."
 
 #. total records (in selected scope)
-#: ../src/hamster/stats.py:378
+#: ../src/hamster/stats.py:387
 #, python-format
 msgid "There is %s record."
 msgid_plural "There are %s records."
 msgstr[0] "%s பதிவு உள்ளது"
 msgstr[1] "%s பதிவுகள் உள்ளன"
 
-#: ../src/hamster/stats.py:398
+#: ../src/hamster/stats.py:407
 msgid "Hamster would like to observe you some more!"
 msgstr "ஹாம்ஸ்டர் உங்களை இன்னும் கவனிக்க விரும்புகிறது!"
 
-#: ../src/hamster/stats.py:400
+#: ../src/hamster/stats.py:409
 #, python-format
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
@@ -880,28 +804,38 @@ msgid ""
 msgstr ""
 " %s சதவிகித செயல்கள்  காலை 9 மணிக்கு முன் ஆரம்பிக்கின்றன. நீங்க ரொம்ப சுறுசுறுப்புதான்."
 
-#: ../src/hamster/stats.py:403
+#: ../src/hamster/stats.py:412
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
 "night owl."
 msgstr " %s சதவிகித செயல்கள்  இரவு 11 மணிக்கு பின் ஆரம்பிக்கின்றன. நீங்க ஆந்தை போல."
 
-#: ../src/hamster/stats.py:406
+#: ../src/hamster/stats.py:415
 #, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
 "be a busy bee."
 msgstr " %s சதவிகித வேலைகள்  15 நிமிடங்களுக்கும் குறைவு. நீங்க ரொம்ப சுறுசுறுப்புதான்."
 
-#: ../src/hamster-time-tracker:241
-#, c-format
-msgid "Working on <b>%s</b>"
-msgstr "வேலை செய்வது இதில்<b>%s</b>"
+#: ../src/hamster/today.py:243
+msgid "No records today"
+msgstr "இன்று பதிவுக் குறிப்புகள் எதுவும் இல்லை"
 
-#: ../src/hamster-time-tracker:579
-msgid "Hamster time tracker. Usage:"
-msgstr "ஹாம்ஸ்டர்  நேர தொடர்வி பயன்பாடு:"
+#: ../src/hamster/today.py:250
+#, python-format
+msgid "%(category)s: %(duration)s"
+msgstr "%(category)s: %(duration)s"
+
+#. duration in main drop-down per category in hours
+#: ../src/hamster/today.py:253
+#, python-format
+msgid "%sh"
+msgstr "%sh"
+
+#: ../src/hamster/today.py:280
+msgid "Just started"
+msgstr "இப்போதுதான் துவக்கியது"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
@@ -927,6 +861,48 @@ msgstr "ஐகால்"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "நேரத் தடம் தேடல்"
+
+#~ msgid "Show activities window"
+#~ msgstr "செயல்கள் சாளரத்தைக் காட்டவும்"
+
+#~ msgid "Show _Overview"
+#~ msgstr "மேலோட்டத் தோற்றம் காட்டவும் (_O)"
+
+#~ msgid "Sto_p Tracking"
+#~ msgstr "தொடர்வதை நிறுத்தவும் (_p)"
+
+#~ msgid "To_day"
+#~ msgstr "_d இன்று"
+
+#~ msgid "_Add earlier activity"
+#~ msgstr "_A முந்தைய செயல்பாட்டைச் சேர்க்கவும்"
+
+#~ msgid "_About"
+#~ msgstr "பற்றி (_A)"
+
+#~ msgid "_Preferences"
+#~ msgstr "முன்னுரிமைகள் (_P)"
+
+#~ msgid "Starts and ends"
+#~ msgstr "துவக்கம் மற்றும் நிறுத்தம்"
+
+#~ msgid "Year:"
+#~ msgstr "வருடம்:"
+
+#~ msgid "Preferences"
+#~ msgstr "முன்னுரிமைகள்"
+
+#~ msgid "Changed activity"
+#~ msgstr "செயல்பாட்டை மாற்றவும்"
+
+#~ msgid "Switched to '%s'"
+#~ msgstr " '%s' க்கு மாற்றப்பட்டது"
+
+#~ msgid "Working on <b>%s</b>"
+#~ msgstr "வேலை செய்வது இதில்<b>%s</b>"
+
+#~ msgid "Hamster time tracker. Usage:"
+#~ msgstr "ஹாம்ஸ்டர்  நேர தொடர்வி பயன்பாடு:"
 
 #~ msgid "Project Hamster (GNOME Time Tracker)"
 #~ msgstr "ஹாம்ஸ்டர் திட்டம்  (க்னோம் நேர தொடர்வி)"
