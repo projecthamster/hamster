@@ -44,8 +44,7 @@ def set_options(opt):
 
 def build(bld):
     bld.install_files('${LIBDIR}/hamster-time-tracker',
-                      """src/hamster-time-tracker
-                         src/hamster-service
+                      """src/hamster-service
                          src/hamster-windows-service
                       """,
                       chmod = 0755)
@@ -67,19 +66,6 @@ def build(bld):
     bld.install_files('${PYTHONDIR}/hamster', 'src/hamster/*.py')
     bld.install_files('${PYTHONDIR}/hamster/widgets', 'src/hamster/widgets/*.py')
     bld.install_files('${PYTHONDIR}/hamster/lib', 'src/hamster/lib/*.py')
-
-    bld.install_files('${DATADIR}/docky/helpers',
-                      'src/docky_control/2.0/hamster_control.py',
-                      chmod = 0755)
-    bld.install_files('${DATADIR}/docky/helpers/metadata',
-                      'src/docky_control/2.0/hamster_control.py.info')
-
-    # docky 2.1+ changes python API, folder and other things (how amusing)
-    bld.install_files('${DATADIR}/dockmanager/scripts',
-                      'src/docky_control/2.1/hamster_control.py',
-                      chmod = 0755)
-    bld.install_files('${DATADIR}/dockmanager/metadata',
-                      'src/docky_control/2.1/hamster_control.py.info')
 
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",
