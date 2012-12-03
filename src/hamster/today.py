@@ -32,6 +32,12 @@ from hamster.configuration import runtime, dialogs, conf, load_ui_file
 from hamster import widgets
 from hamster.lib import stuff, trophies
 
+try:
+    import wnck
+except:
+    logging.warning("Could not import wnck - workspace tracking will be disabled")
+    wnck = None
+
 
 class ProjectHamsterStatusIcon(gtk.StatusIcon):
     def __init__(self, project):
