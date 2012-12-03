@@ -23,6 +23,7 @@ import logging
 import datetime as dt
 
 import gtk, gobject
+import wnck
 import glib
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
