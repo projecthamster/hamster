@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:20+0100\n"
-"PO-Revision-Date: 2011-03-28 22:02+0200\n"
-"Last-Translator: F Wolff <friedel@translate.org.za>\n"
+"PO-Revision-Date: 2012-12-04 13:22+0200\n"
+"Last-Translator: JC Brand <jc@opkode.com>\n"
 "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
 "Language: af\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,8 @@ msgstr "Herinner aan die huidige taak elke x minute"
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
-msgstr ""
+msgstr "Herinner my aan die taak elke gespesifiseerde hoeveelheid minute."
+"Stel na 0 of groter as 120 om herinnerings af te skakel"
 
 #: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
@@ -104,14 +105,17 @@ msgstr ""
 
 #: ../data/hamster-time-tracker.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
-msgstr ""
+msgstr "Moet 'n wisseling van werkruimte ook 'n taakverandering teweegbring?"
 
 #: ../data/hamster-time-tracker.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
-msgstr ""
+msgstr "Lys van aktiewe tydregistrasie metodes. \"name\" bemoontlik die wisseling van "
+"take volgens naam, soos in die workspace_mapping gedefinieer. \"memory\" "
+"bemoontlik die wisseling na die vorige taak sodra daar na 'n werkruimte "
+"teruggekeer word."
 
 #: ../data/hamster-time-tracker.schemas.in.h:13
 msgid "Switch activity on workspace change"
@@ -128,51 +132,49 @@ msgstr ""
 
 #: ../data/hamster-time-tracker.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
-msgstr "Wys / versteek die Tydregistreerder-venster"
+msgstr "Wys / verskuil die Tydregister-venster"
 
 #: ../data/hamster-time-tracker.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr "Sleutelbordkortpad om die Tydregistreerder venster te wys / versteek."
+msgstr "Sleutelbordkortpad om die Tydregister venster te wys / verskuil."
 
 #: ../data/hamster-time-tracker.schemas.in.h:17
-#, fuzzy
 msgid "Toggle hamster application window action"
-msgstr "Aksie om hamster toepassingsvenster te wissel"
+msgstr "Wissel hamster toepassing-venster"
 
 #: ../data/hamster-time-tracker.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
-"Bevel om die sigbaarheid van Hamster se toepassingsvenster aan of af te "
+"Bevel om die sigbaarheid van Hamster se toepassing-venster aan of af te "
 "skakel."
 
 #: ../data/hamster-time-tracker.schemas.in.h:19
 msgid "Toggle hamster application window"
-msgstr "Wissel hamster toepassingsvenster"
+msgstr "Wissel hamster toepassing-venster"
 
 #: ../data/hamster-time-tracker.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
-msgstr "Wissel sigbaarheid van hamster se toepassingsvenster."
+msgstr "Wissel sigbaarheid van hamster se toepassing-venster."
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
-msgstr "Tydregistreerder"
+msgstr "Tydregister"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
-msgstr "Projek Hamster - Tydregistreerder"
+msgstr "Projek Hamster - Tydregister"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-#, fuzzy
 msgid "Time Tracking Overview"
-msgstr "Tydregistreerder"
+msgstr "Tydregistrasie Oorsig"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
 msgid "The overview window of hamster time tracker"
-msgstr ""
+msgstr "Oorsigblad van die hamster tydregister"
 
 #: ../data/overview_totals.ui.h:1
 msgid "Show Statistics"
@@ -247,7 +249,7 @@ msgstr "Redigeer"
 
 #: ../data/preferences.ui.h:1
 msgid "Time Tracker Preferences"
-msgstr "Voorkeure vir Tydregistreerder"
+msgstr "Voorkeure vir Tydregister"
 
 #: ../data/preferences.ui.h:3
 msgid "Stop tracking when computer becomes idle"
@@ -355,7 +357,7 @@ msgstr "Pas toe"
 
 #: ../data/today.ui.h:2
 msgid "_Tracking"
-msgstr "_Registrasie"
+msgstr "_Tydregistrasie"
 
 #: ../data/today.ui.h:3
 msgid "Add earlier activity"
@@ -383,7 +385,7 @@ msgstr "Inhoud"
 
 #: ../data/today.ui.h:9
 msgid "Sto_p tracking"
-msgstr "Sto_p registrasie"
+msgstr "Sto_p tydregistrasie"
 
 #: ../data/today.ui.h:10
 msgid "S_witch"
@@ -402,14 +404,12 @@ msgid "Today"
 msgstr "Vandag"
 
 #: ../data/today.ui.h:14
-#, fuzzy
 msgid "totals"
 msgstr "Totale"
 
 #: ../data/today.ui.h:16
-#, fuzzy
 msgid "Show Overview"
-msgstr "Wys _oorsig"
+msgstr "Wys Oorsig"
 
 #: ../src/hamster-cli:254 ../src/hamster/today.py:289
 msgid "No activity"
@@ -437,14 +437,12 @@ msgid "Duration"
 msgstr "Duur"
 
 #: ../src/hamster-cli:308
-#, fuzzy
 msgid "Uncategorized"
-msgstr "kategorieë"
+msgstr "Ongekategoriseerd"
 
 #: ../src/hamster/about.py:42
-#, fuzzy
 msgid "Project Hamster — track your time"
-msgstr "Projek Hamster — Tydregistreerder"
+msgstr "Projek Hamster — hou die tyd dop"
 
 #: ../src/hamster/about.py:43
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
@@ -456,11 +454,12 @@ msgstr "Projek Hamster Webwerf"
 
 #: ../src/hamster/about.py:46
 msgid "About Time Tracker"
-msgstr "Aangaande Hamster-tydregistreerder"
+msgstr "Aangaande"
 
 #: ../src/hamster/about.py:56
 msgid "translator-credits"
-msgstr "Jan-Carel Brand"
+msgstr "J-C Brand\n"
+"F Wolff"
 
 #: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
 #: ../src/hamster/db.py:658 ../src/hamster/db.py:845
@@ -485,7 +484,7 @@ msgstr "Beloer aandele"
 
 #: ../src/hamster/db.py:940
 msgid "Super secret project X"
-msgstr "Super geheime projek X"
+msgstr "Uiters geheime projek X"
 
 #: ../src/hamster/db.py:941
 msgid "World domination"
@@ -505,11 +504,11 @@ msgstr "Gee die blommetjies water"
 
 #: ../src/hamster/db.py:946
 msgid "Doing handstands"
-msgstr "Doen bollemakiesie"
+msgstr "Doen bollemakiesies"
 
 #: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
-msgstr "Dateer taak op"
+msgstr "Redigeer taak"
 
 #. duration in round hours
 #: ../src/hamster/lib/stuff.py:57
@@ -593,10 +592,10 @@ msgstr "Nuwe taak"
 
 #. notify interval slider value label
 #: ../src/hamster/preferences.py:738
-#, fuzzy, python-format
+#, python-format
 msgid "%(interval_minutes)d minute"
 msgid_plural "%(interval_minutes)d minutes"
-msgstr[0] "%(interval_minutes)d minute"
+msgstr[0] "%(interval_minutes)d minuut"
 msgstr[1] "%(interval_minutes)d minute"
 
 #. notify interval slider value label
@@ -706,7 +705,7 @@ msgstr "Wys sjabloon"
 #: ../src/hamster/reports.py:327
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
-msgstr ""
+msgstr "Dit kan oorskryf word met 'n eie weergawe in %(home_folder)s"
 
 #: ../src/hamster/stats.py:147
 msgctxt "years"
@@ -796,7 +795,7 @@ msgid "Hamster would like to observe you some more!"
 msgstr "Hamster wil u graag nog 'n bietjie langer dophou!"
 
 #: ../src/hamster/stats.py:409
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an "
 "early bird."
@@ -805,14 +804,14 @@ msgstr ""
 "werk."
 
 #: ../src/hamster/stats.py:412
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a "
 "night owl."
 msgstr "Met %s persent van alle take wat na 23:00 begin, lyk u na 'n naguil."
 
 #: ../src/hamster/stats.py:415
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "With %s percent of all activities being shorter than 15 minutes, you seem to "
 "be a busy bee."
@@ -832,7 +831,7 @@ msgstr "%(category)s: %(duration)s"
 #: ../src/hamster/today.py:253
 #, python-format
 msgid "%sh"
-msgstr ""
+msgstr "%su"
 
 #: ../src/hamster/today.py:280
 msgid "Just started"
@@ -840,7 +839,7 @@ msgstr "Sopas begin"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:39
 msgid "Save Report — Time Tracker"
-msgstr "Stoor verslag — Tydregistreerder"
+msgstr "Stoor verslag — Tydregister"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:57
 msgid "HTML Report"
@@ -848,7 +847,7 @@ msgstr "HTML-verslag"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:65
 msgid "Tab-Separated Values (TSV)"
-msgstr ""
+msgstr "Tab-geskeide waardes (TSV)"
 
 #: ../src/hamster/widgets/reportchooserdialog.py:73
 msgid "XML"
@@ -861,7 +860,7 @@ msgstr "iCal"
 #. title in the report file name
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
-msgstr "Tydsregister"
+msgstr "Tydregister"
 
 #~ msgid "Project Hamster (Gnome Time Tracker)"
 #~ msgstr "Projek Hamster (GNOME-tydregistreerder)"
