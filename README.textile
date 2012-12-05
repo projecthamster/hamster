@@ -1,8 +1,23 @@
 Hamster can be found packaged in most distributions. The instructions below
 are for installing from sources for testing and development purposes.
 
-The instructions are mix between Gnome 2 and Gnome 3, so, errm, just bear with
-us.
+h1. GNOME 2.x support
+
+GNOME 3 has now been around for almost 3 years now and in order to be able
+to move forward, I am getting rid of all the cruft. That includes dropping the
+applet (sorely missed, there are no applets in gnome 3) as i can't test anymore
+and preferring the
+"shell-extension":https://github.com/projecthamster/shell-extension instead.
+
+If you are running GNOME 2.x, this branch is the last good state before
+the start of cleanup: https://github.com/projecthamster/hamster/tree/gnome_2x
+Switch to it in your github client and proceed with the instructions.
+I have no plans to maintain the branch just now and am suggesting that everybody
+bites the bullet and moves on :)
+The good news is that there aren't that many new things in hamster as the most
+energy has been spent trying to get something that works just like the applet
+back to the desktop (~60% there with the extension).
+
 
 h1. Dependencies
 
