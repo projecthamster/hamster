@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:20+0100\n"
-"PO-Revision-Date: 2012-12-04 15:20+0200\n"
+"PO-Revision-Date: 2012-12-07 09:56+0200\n"
 "Last-Translator: JC Brand <jc@opkode.com>\n"
 "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
 "Language: af\n"
@@ -385,7 +385,7 @@ msgstr "Inhoud"
 
 #: ../data/today.ui.h:9
 msgid "Sto_p tracking"
-msgstr "Sto_p tydregistrasie"
+msgstr "Sto_p taak"
 
 #: ../data/today.ui.h:10
 msgid "S_witch"
@@ -393,7 +393,7 @@ msgstr "_Wissel"
 
 #: ../data/today.ui.h:11
 msgid "Start _Tracking"
-msgstr "Begin regis_treer"
+msgstr "Begin _taak"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"
