@@ -1,4 +1,23 @@
 ===============
+Version 1.02
+===============
+ This is the first release targetting GNOME v3+. The applet has been removed
+ and recommended hamster remote is the shell extension, available on
+ extensions.gnome.org (also ).
+
+ * Project Hamster has detached from Gnome and thus we are resetting the
+   versioning. The program name also has changed from hamster-applet to
+   a more generic hamster-time-tracker
+ * Improvements in the command line. hamster-cli has been renamed to
+   simply "hamster" and without parameters launches the day view. Run
+   "hamster --help" to get help on available commands. The executable also
+   supports tab-completion to suggest actions as well as to look up activities
+   and categories
+ * desktop notifications are back
+ * the notification tray interaction has been slightly improved (click to toggle)
+ * ~20 bug fixes https://github.com/projecthamster/hamster/issues?state=closed
+
+===============
 Version 2.91.2
 ===============
   * experimental trophy support (to try out need to install the achievement
