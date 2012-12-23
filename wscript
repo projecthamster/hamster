@@ -1,5 +1,5 @@
 # -*- python -*-
-VERSION = '1.02'
+VERSION = '1.02.1'
 APPNAME = 'hamster-time-tracker'
 top = '.'
 out = 'build'
@@ -13,7 +13,6 @@ def configure(conf):
     conf.check_python_version((2,4,2))
 
     conf.check_tool('gnome intltool dbus')
-    conf.check_cfg(package='gnome-keybindings', variables='keysdir', mandatory=True)
 
     conf.define('ENABLE_NLS', 1)
     conf.define('HAVE_BIND_TEXTDOMAIN_CODESET', 1)

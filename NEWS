@@ -1,4 +1,9 @@
 ===============
+Version 1.02.1
+===============
+ * Drop gnome-keybindings as a dependency - not used anymore
+
+===============
 Version 1.02
 ===============
  This is the first release targetting GNOME v3+. The applet has been removed
