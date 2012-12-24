@@ -41,15 +41,18 @@ import datetime as dt
 import gio
 from xdg.BaseDirectory import xdg_data_home
 
-from lib import stuff, trophies
+from lib import Fact, trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
-    def __init__(self):
+    def __init__(self, unsorted_localized = "Unsorted"):
         """
+        XXX - you have to pass in name for the uncategorized category
         Delayed setup so we don't do everything at the same time
         """
         storage.Storage.__init__(self)
+
+        self._unsorted_localized = unsorted_localized
 
         self.__con = None
         self.__cur = None
@@ -285,7 +288,7 @@ class Storage(storage.Storage):
                         LIMIT 1
             """
 
-            res = self.fetchone(query, (_("Unsorted"), name, category_id))
+            res = self.fetchone(query, (self._unsorted_localized, name, category_id))
         else:
             query = """
                        SELECT a.id, a.name, a.deleted, coalesce(b.name, ?) as category
@@ -295,7 +298,7 @@ class Storage(storage.Storage):
                      ORDER BY a.deleted, a.id desc
                         LIMIT 1
             """
-            res = self.fetchone(query, (_("Unsorted"), name, ))
+            res = self.fetchone(query, (self._unsorted_localized, name, ))
 
         if res:
             keys = ('id', 'name', 'deleted', 'category')
@@ -351,7 +354,7 @@ class Storage(storage.Storage):
                  ORDER BY e.name
         """
 
-        return self.__group_tags(self.fetchall(query, (_("Unsorted"), id)))[0]
+        return self.__group_tags(self.fetchall(query, (self._unsorted_localized, id)))[0]
 
     def __group_tags(self, facts):
         """put the fact back together and move all the unique tags to an array"""
@@ -466,10 +469,9 @@ class Storage(storage.Storage):
                 fact_name = fact["name"]
 
                 # create new fact for the end
-                new_fact = stuff.Fact(fact["name"],
-                    category = fact["category"],
-                    description = fact["description"],
-                )
+                new_fact = Fact(fact["name"],
+                                category = fact["category"],
+                                description = fact["description"])
                 new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact["end_time"])
 
                 # copy tags
@@ -495,9 +497,9 @@ class Storage(storage.Storage):
 
 
     def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
-        fact = stuff.Fact(serialized_fact,
-                          start_time = start_time,
-                          end_time = end_time)
+        fact = Fact(serialized_fact,
+                    start_time = start_time,
+                    end_time = end_time)
 
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
@@ -655,7 +657,7 @@ class Storage(storage.Storage):
 
         query += " ORDER BY a.start_time, e.name"
 
-        facts = self.fetchall(query, (_("Unsorted"),
+        facts = self.fetchall(query, (self._unsorted_localized,
                                       datetime_from,
                                       datetime_to))
 
@@ -842,7 +844,7 @@ class Storage(storage.Storage):
                      ORDER BY a.id
             """ % rebuild_ids
 
-            facts = self.__group_tags(self.fetchall(query, (_("Unsorted"), )))
+            facts = self.__group_tags(self.fetchall(query, (self._unsorted_localized, )))
 
             insert = """INSERT INTO fact_index (id, name, category, description, tag)
                              VALUES (?, ?, ?, ?, ?)"""
@@ -933,211 +935,9 @@ class Storage(storage.Storage):
     def run_fixtures(self):
         self.start_transaction()
 
-        # defaults
-        work_category = {"name": _("Work"),
-                         "entries": [_("Reading news"),
-                                     _("Checking stocks"),
-                                     _("Super secret project X"),
-                                     _("World domination")]}
-
-        nonwork_category = {"name": _("Day-to-day"),
-                            "entries": [_("Lunch"),
-                                        _("Watering flowers"),
-                                        _("Doing handstands")]}
-
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
         current_version = 9
-
-        if version < 2:
-            """moving from fact_date, fact_time to start_time, end_time"""
-
-            self.execute("""
-                               CREATE TABLE facts_new
-                                            (id integer primary key,
-                                             activity_id integer,
-                                             start_time varchar2(12),
-                                             end_time varchar2(12))
-            """)
-
-            self.execute("""
-                               INSERT INTO facts_new
-                                           (id, activity_id, start_time)
-                                    SELECT id, activity_id, fact_date || fact_time
-                                      FROM facts
-            """)
-
-            self.execute("DROP TABLE facts")
-            self.execute("ALTER TABLE facts_new RENAME TO facts")
-
-            # run through all facts and set the end time
-            # if previous fact is not on the same date, then it means that it was the
-            # last one in previous, so remove it
-            # this logic saves our last entry from being deleted, which is good
-            facts = self.fetchall("""
-                                        SELECT id, activity_id, start_time,
-                                               substr(start_time,1, 8) start_date
-                                          FROM facts
-                                      ORDER BY start_time
-            """)
-            prev_fact = None
-
-            for fact in facts:
-                if prev_fact:
-                    if prev_fact['start_date'] == fact['start_date']:
-                        self.execute("UPDATE facts SET end_time = ? where id = ?",
-                                   (fact['start_time'], prev_fact['id']))
-                    else:
-                        #otherwise that's the last entry of the day - remove it
-                        self.execute("DELETE FROM facts WHERE id = ?", (prev_fact["id"],))
-
-                prev_fact = fact
-
-        #it was kind of silly not to have datetimes in first place
-        if version < 3:
-            self.execute("""
-                               CREATE TABLE facts_new
-                                            (id integer primary key,
-                                             activity_id integer,
-                                             start_time timestamp,
-                                             end_time timestamp)
-            """)
-
-            self.execute("""
-                               INSERT INTO facts_new
-                                           (id, activity_id, start_time, end_time)
-                                    SELECT id, activity_id,
-                                           substr(start_time,1,4) || "-"
-                                           || substr(start_time, 5, 2) || "-"
-                                           || substr(start_time, 7, 2) || " "
-                                           || substr(start_time, 9, 2) || ":"
-                                           || substr(start_time, 11, 2) || ":00",
-                                           substr(end_time,1,4) || "-"
-                                           || substr(end_time, 5, 2) || "-"
-                                           || substr(end_time, 7, 2) || " "
-                                           || substr(end_time, 9, 2) || ":"
-                                           || substr(end_time, 11, 2) || ":00"
-                                      FROM facts;
-               """)
-
-            self.execute("DROP TABLE facts")
-            self.execute("ALTER TABLE facts_new RENAME TO facts")
-
-
-        #adding categories table to categorize activities
-        if version < 4:
-            #adding the categories table
-            self.execute("""
-                               CREATE TABLE categories
-                                            (id integer primary key,
-                                             name varchar2(500),
-                                             color_code varchar2(50),
-                                             category_order integer)
-            """)
-
-            # adding default categories, and make sure that uncategorized stays on bottom for starters
-            # set order to 2 in case, if we get work in next lines
-            self.execute("""
-                               INSERT INTO categories
-                                           (id, name, category_order)
-                                    VALUES (1, ?, 2);
-               """, (nonwork_category["name"],))
-
-            #check if we have to create work category - consider work everything that has been determined so, and is not deleted
-            work_activities = self.fetchone("""
-                                    SELECT count(*) as work_activities
-                                      FROM activities
-                                     WHERE deleted is null and work=1;
-               """)['work_activities']
-
-            if work_activities > 0:
-                self.execute("""
-                               INSERT INTO categories
-                                           (id, name, category_order)
-                                    VALUES (2, ?, 1);
-                  """, (work_category["name"],))
-
-            # now add category field to activities, before starting the move
-            self.execute("""   ALTER TABLE activities
-                                ADD COLUMN category_id integer;
-               """)
-
-
-            # starting the move
-
-            # first remove all deleted activities with no instances in facts
-            self.execute("""
-                               DELETE FROM activities
-                                     WHERE deleted = 1
-                                       AND id not in(select activity_id from facts);
-             """)
-
-
-            # moving work / non-work to appropriate categories
-            # exploit false/true = 0/1 thing
-            self.execute("""       UPDATE activities
-                                      SET category_id = work + 1
-                                    WHERE deleted is null
-               """)
-
-            #finally, set category to -1 where there is none
-            self.execute("""       UPDATE activities
-                                      SET category_id = -1
-                                    WHERE category_id is null
-               """)
-
-            # drop work column and forget value of deleted
-            # previously deleted records are now unsorted ones
-            # user will be able to mark them as deleted again, in which case
-            # they won't appear in autocomplete, or in categories
-            # resurrection happens, when user enters the exact same name
-            self.execute("""
-                               CREATE TABLE activities_new (id integer primary key,
-                                                            name varchar2(500),
-                                                            activity_order integer,
-                                                            deleted integer,
-                                                            category_id integer);
-            """)
-
-            self.execute("""
-                               INSERT INTO activities_new
-                                           (id, name, activity_order, category_id)
-                                    SELECT id, name, activity_order, category_id
-                                      FROM activities;
-               """)
-
-            self.execute("DROP TABLE activities")
-            self.execute("ALTER TABLE activities_new RENAME TO activities")
-
-        if version < 5:
-            self.execute("ALTER TABLE facts add column description varchar2")
-
-        if version < 6:
-            # facts table could use an index
-            self.execute("CREATE INDEX idx_facts_start_end ON facts(start_time, end_time)")
-            self.execute("CREATE INDEX idx_facts_start_end_activity ON facts(start_time, end_time, activity_id)")
-
-            # adding tags
-            self.execute("""CREATE TABLE tags (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                                               name TEXT NOT NULL,
-                                               autocomplete BOOL DEFAULT true)""")
-            self.execute("CREATE INDEX idx_tags_name ON tags(name)")
-
-            self.execute("CREATE TABLE fact_tags(fact_id integer, tag_id integer)")
-            self.execute("CREATE INDEX idx_fact_tags_fact ON fact_tags(fact_id)")
-            self.execute("CREATE INDEX idx_fact_tags_tag ON fact_tags(tag_id)")
-
-
-        if version < 7:
-            self.execute("""CREATE TABLE increment_facts (id integer primary key autoincrement,
-                                                          activity_id integer,
-                                                          start_time timestamp,
-                                                          end_time timestamp,
-                                                          description varchar2)""")
-            self.execute("""INSERT INTO increment_facts(id, activity_id, start_time, end_time, description)
-                                 SELECT id, activity_id, start_time, end_time, description from facts""")
-            self.execute("DROP table facts")
-            self.execute("ALTER TABLE increment_facts RENAME TO facts")
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -1168,23 +968,7 @@ class Storage(storage.Storage):
             self.execute("UPDATE version SET version = %d" % current_version)
             print "updated database from version %d to %d" % (version, current_version)
 
-            # oldtimer – database version structure had been performed on startup (thus we know that he has been on at least 2 versions)
+            # oldtimer – database version structure had been performed on startup (thus we know that user has been on at least 2 versions)
             trophies.unlock("oldtimer")
-
-
-        """we start with an empty database and then populate with default
-           values. This way defaults can be localized!"""
-
-        category_count = self.fetchone("select count(*) from categories")[0]
-
-        if category_count == 0:
-            work_cat_id = self.__add_category(work_category["name"])
-            for entry in work_category["entries"]:
-                self.__add_activity(entry, work_cat_id)
-
-            nonwork_cat_id = self.__add_category(nonwork_category["name"])
-            for entry in nonwork_category["entries"]:
-                self.__add_activity(entry, nonwork_cat_id)
-
 
         self.end_transaction()
