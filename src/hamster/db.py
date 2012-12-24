@@ -45,11 +45,11 @@ from lib import stuff, trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
-    def __init__(self, loop):
+    def __init__(self):
         """
         Delayed setup so we don't do everything at the same time
         """
-        storage.Storage.__init__(self, loop)
+        storage.Storage.__init__(self)
 
         self.__con = None
         self.__cur = None
