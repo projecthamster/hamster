@@ -21,7 +21,7 @@ import gtk, gobject, pango
 import datetime as dt
 
 from ..configuration import runtime
-from ..lib import stuff, graphics
+from ..lib import Fact, stuff, graphics
 from .. import external
 
 class ActivityEntry(gtk.Entry):
@@ -144,7 +144,7 @@ class ActivityEntry(gtk.Entry):
         if not self._parent_click_watcher:
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
-        fact = stuff.Fact(self.filter)
+        fact = Fact(self.filter)
         time = ''
         if fact.start_time:
             time = fact.start_time.strftime("%H:%M")
@@ -228,7 +228,7 @@ class ActivityEntry(gtk.Entry):
             return #same thing, no need to repopulate
 
         self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
-        fact = stuff.Fact(self.filter)
+        fact = Fact(self.filter)
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_activities(fact.activity)

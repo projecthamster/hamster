@@ -28,7 +28,7 @@ import re
 import datetime as dt
 
 from hamster import client, reports
-from hamster.lib import stuff
+from hamster.lib import Fact, stuff
 
 
 def word_wrap(line, max_len):
@@ -184,7 +184,7 @@ class HamsterClient(object):
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
         start_time = start_time or dt.datetime.now()
 
-        self.storage.add_fact(stuff.Fact(activity,
+        self.storage.add_fact(Fact(activity,
                                          start_time = start_time,
                                          end_time = end_time))
 

@@ -29,8 +29,8 @@ import locale
 
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
-from hamster import widgets
-from hamster.lib import stuff, trophies
+from hamster import widgets, Fact
+from hamster.lib import trophies
 
 try:
     import wnck
@@ -318,7 +318,7 @@ class DailyView(object):
 
     def on_today_row_activated(self, tree, path, column):
         fact = tree.get_selected_fact()
-        fact = stuff.Fact(fact.activity,
+        fact = Fact(fact.activity,
                           category = fact.category,
                           description = fact.description,
                           tags = ", ".join(fact.tags))
@@ -383,7 +383,7 @@ class DailyView(object):
 
             fact = None
             if new < len(mapping):
-                fact = stuff.Fact(mapping[new])
+                fact = Fact(mapping[new])
 
                 if fact.activity:
                     category_id = None
@@ -419,7 +419,7 @@ class DailyView(object):
             return
 
         # ok, switch
-        fact = stuff.Fact(activity.name,
+        fact = Fact(activity.name,
                           tags = ", ".join(activity.tags),
                           category = activity.category,
                           description = activity.description);
@@ -448,7 +448,7 @@ class DailyView(object):
     def on_switch_activity_clicked(self, widget):
         activity, temporary = self.new_name.get_value()
 
-        fact = stuff.Fact(activity,
+        fact = Fact(activity,
                           tags = self.new_tags.get_text().decode("utf8", "replace"))
         if not fact.activity:
             return

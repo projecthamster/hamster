@@ -30,6 +30,7 @@ try:
 except:
     storage = None
 
+from ..lib import Fact
 import stuff
 import datetime as dt
 
@@ -107,7 +108,7 @@ class Checker(object):
             return
 
         # full plate - use all elements of syntax parsing
-        derived_fact = stuff.Fact(fact.original_activity)
+        derived_fact = Fact(fact.original_activity)
         if all((derived_fact.category, derived_fact.description,
                 derived_fact.tags, derived_fact.start_time, derived_fact.end_time)):
             unlock("full_plate")

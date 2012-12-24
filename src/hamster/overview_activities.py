@@ -36,7 +36,7 @@ from collections import defaultdict
 
 import widgets
 from configuration import runtime, dialogs
-from lib import stuff, trophies
+from lib import Fact, trophies
 from lib.i18n import C_
 
 
@@ -165,7 +165,7 @@ class OverviewBox(gtk.VBox):
         else:
             selected_date = fact.date
 
-        fact = stuff.Fact(text.decode("utf-8"))
+        fact = Fact(text.decode("utf-8"))
 
         if not all((fact.activity, fact.start_time, fact.end_time)):
             return

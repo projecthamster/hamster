@@ -23,22 +23,23 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 import gobject
-from lib import stuff, trophies
+from lib import Fact
+from lib import trophies
 
 
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
-    return stuff.Fact(fact[4],
-                      start_time  = dt.datetime.utcfromtimestamp(fact[1]),
-                      end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
-                      description = fact[3],
-                      activity_id = fact[5],
-                      category = fact[6],
-                      tags = fact[7],
-                      date = dt.datetime.utcfromtimestamp(fact[8]).date(),
-                      delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
-                                           seconds = fact[9] % (24 * 60 * 60)),
+    return Fact(fact[4],
+                start_time  = dt.datetime.utcfromtimestamp(fact[1]),
+                end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
+                description = fact[3],
+                activity_id = fact[5],
+                category = fact[6],
+                tags = fact[7],
+                date = dt.datetime.utcfromtimestamp(fact[8]).date(),
+                delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
+                                     seconds = fact[9] % (24 * 60 * 60)),
             id = fact[0]
             )
 

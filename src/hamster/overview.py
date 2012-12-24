@@ -31,6 +31,7 @@ import pango
 
 import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
+from lib import Fact
 from lib import stuff, trophies
 from lib.i18n import C_
 
@@ -192,7 +193,7 @@ class Overview(gtk.Object):
     def on_fact_selection_changed(self, tree):
         """ enables and disables action buttons depending on selected item """
         fact = tree.get_selected_fact()
-        real_fact = fact is not None and isinstance(fact, stuff.Fact)
+        real_fact = fact is not None and isinstance(fact, Fact)
 
         self.get_widget('remove').set_sensitive(real_fact)
         self.get_widget('edit').set_sensitive(real_fact)

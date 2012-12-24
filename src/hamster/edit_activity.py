@@ -26,7 +26,7 @@ import datetime as dt
 """
 import widgets
 from configuration import runtime, conf, load_ui_file
-from lib import stuff
+from lib import Fact
 
 class CustomFactController(gtk.Object):
     __gsignals__ = {
@@ -197,11 +197,11 @@ class CustomFactController(gtk.Object):
         else:
             end_time = self._get_datetime("end")
 
-        fact = stuff.Fact(activity_name,
-                          description = self.figure_description(),
-                          tags = self.new_tags.get_text().decode('utf8'),
-                          start_time = self._get_datetime("start"),
-                          end_time = end_time)
+        fact = Fact(activity_name,
+                    description = self.figure_description(),
+                    tags = self.new_tags.get_text().decode('utf8'),
+                    start_time = self._get_datetime("start"),
+                    end_time = end_time)
         if not fact.activity:
             return False
 
