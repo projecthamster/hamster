@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2012 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
 
 # This file is part of Project Hamster.
