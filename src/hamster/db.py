@@ -38,14 +38,21 @@ import storage
 from shutil import copy as copyfile
 import itertools
 import datetime as dt
-import gio
-from xdg.BaseDirectory import xdg_data_home
+try:
+    import gio
+except ImportError:
+    print "Could not import gio - requires pygobject. File monitoring will be disabled"
+    gio = None
 
-from lib import Fact, trophies
+from lib import Fact
+try:
+    from lib import trophies
+except:
+    trophies = None
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
-    def __init__(self, unsorted_localized = "Unsorted"):
+    def __init__(self, unsorted_localized="Unsorted", database_dir=None):
         """
         XXX - you have to pass in name for the uncategorized category
         Delayed setup so we don't do everything at the same time
@@ -59,50 +66,57 @@ class Storage(storage.Storage):
         self.__last_etag = None
 
 
-        self.db_path = self.__init_db_file()
+        self.db_path = self.__init_db_file(database_dir)
 
-        # add file monitoring so the app does not have to be restarted
-        # when db file is rewritten
-        def on_db_file_change(monitor, gio_file, event_uri, event):
-            if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-                if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
-                    # ours
-                    return
-            elif event == gio.FILE_MONITOR_EVENT_CREATED:
-                # treat case when instead of a move, a remove and create has been performed
-                self.con = None
+        if gio:
+            # add file monitoring so the app does not have to be restarted
+            # when db file is rewritten
+            def on_db_file_change(monitor, gio_file, event_uri, event):
+                if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+                    if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
+                        # ours
+                        return
+                elif event == gio.FILE_MONITOR_EVENT_CREATED:
+                    # treat case when instead of a move, a remove and create has been performed
+                    self.con = None
 
-            if event in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, gio.FILE_MONITOR_EVENT_CREATED):
-                print "DB file has been modified externally. Calling all stations"
-                self.dispatch_overwrite()
+                if event in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, gio.FILE_MONITOR_EVENT_CREATED):
+                    print "DB file has been modified externally. Calling all stations"
+                    self.dispatch_overwrite()
 
-                # plan "b" – synchronize the time tracker's database from external source while the tracker is running
-                trophies.unlock("plan_b")
+                    # plan "b" – synchronize the time tracker's database from external source while the tracker is running
+                    if trophies:
+                        trophies.unlock("plan_b")
 
 
-        self.__database_file = gio.File(self.db_path)
-        self.__db_monitor = self.__database_file.monitor_file()
-        self.__db_monitor.connect("changed", on_db_file_change)
+            self.__database_file = gio.File(self.db_path)
+            self.__db_monitor = self.__database_file.monitor_file()
+            self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
 
-    def __init_db_file(self):
-        home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
-        if not os.path.exists(home_data_dir):
-            os.makedirs(home_data_dir, 0744)
+    def __init_db_file(self, database_dir):
+        if not database_dir:
+            try:
+                from xdg.BaseDirectory import xdg_data_home
+                database_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
+            except ImportError:
+                print "Could not import xdg - will store hamster.db in home folder"
+                database_dir = os.path.realpath(os.path.expanduser("~"))
+
+        if not os.path.exists(database_dir):
+            os.makedirs(database_dir, 0744)
 
         # handle the move to xdg_data_home
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
-        new_db_file = os.path.join(home_data_dir, "hamster.db")
+        new_db_file = os.path.join(database_dir, "hamster.db")
         if os.path.exists(old_db_file):
             if os.path.exists(new_db_file):
                 logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
             else:
                 os.rename(old_db_file, new_db_file)
 
-
-        db_path = os.path.join(home_data_dir, "hamster.db")
-
+        db_path = os.path.join(database_dir, "hamster.db")
 
         # check if we have a database at all
         if not os.path.exists(db_path):
@@ -113,7 +127,11 @@ class Storage(storage.Storage):
             except:
                 # if defs is not there, we are running from sources
                 module_dir = os.path.dirname(os.path.realpath(__file__))
-                data_dir = os.path.join(module_dir, '..', '..', 'data')
+                if os.path.exists(os.path.join(module_dir, "data")):
+                    # running as flask app. XXX - detangle
+                    data_dir = os.path.join(module_dir, "data")
+                else:
+                    data_dir = os.path.join(module_dir, '..', '..', 'data')
 
             data_dir = os.path.realpath(data_dir)
 
@@ -127,9 +145,10 @@ class Storage(storage.Storage):
 
 
     def register_modification(self):
-        # db.execute calls this so we know that we were the ones
-        # that modified the DB and no extra refesh is not needed
-        self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
+        if gio:
+            # db.execute calls this so we know that we were the ones
+            # that modified the DB and no extra refesh is not needed
+            self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
 
     #tags, here we come!
     def __get_tags(self, only_autocomplete = False):
@@ -481,7 +500,8 @@ class Storage(storage.Storage):
                                       WHERE fact_id = ?"""
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
-                trophies.unlock("split")
+                if trophies:
+                    trophies.unlock("split")
 
             # overlap start
             elif start_time < fact["start_time"] < end_time:
@@ -520,7 +540,8 @@ class Storage(storage.Storage):
             if not category_id:
                 category_id = self.__add_category(fact.category)
 
-                trophies.unlock("no_hands")
+                if trophies:
+                    trophies.unlock("no_hands")
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,
@@ -765,7 +786,7 @@ class Storage(storage.Storage):
             self.execute("delete from activities where id = ?", (id,))
 
         # Finished! - deleted an activity with more than 50 facts on it
-        if bound_facts >= 50:
+        if trophies and bound_facts >= 50:
             trophies.unlock("finished")
 
     def __remove_category(self, id):
@@ -969,6 +990,7 @@ class Storage(storage.Storage):
             print "updated database from version %d to %d" % (version, current_version)
 
             # oldtimer – database version structure had been performed on startup (thus we know that user has been on at least 2 versions)
-            trophies.unlock("oldtimer")
+            if trophies:
+                trophies.unlock("oldtimer")
 
         self.end_transaction()
