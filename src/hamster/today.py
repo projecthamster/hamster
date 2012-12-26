@@ -29,8 +29,8 @@ import locale
 
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
-from hamster import widgets, Fact
-from hamster.lib import trophies
+from hamster import widgets
+from hamster.lib import Fact, trophies
 
 try:
     import wnck
