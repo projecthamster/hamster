@@ -529,9 +529,7 @@ class Storage(storage.Storage):
 
 
         # get tags from database - this will create any missing tags too
-        tags = [dict(zip(('id', 'name', 'autocomplete'), row))
-                                           for row in self.GetTagIds(fact.tags)]
-
+        tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
 
         # now check if maybe there is also a category
         category_id = None

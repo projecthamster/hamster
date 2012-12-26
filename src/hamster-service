@@ -286,8 +286,7 @@ class Storage(db.Storage, dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='a(isb)')
     def GetTagIds(self, tags):
-        tags, new_added = self.get_tag_ids(tags)
-        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in tags]
+        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(tags)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s')
