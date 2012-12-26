@@ -30,7 +30,7 @@ import locale
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
 from hamster import widgets
-from hamster.lib import Fact, trophies
+from hamster.lib import Fact, trophies, stuff
 
 try:
     import wnck

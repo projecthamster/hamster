@@ -1,3 +1,6 @@
+import re
+import datetime as dt
+
 def figure_time(str_time):
     if not str_time or not str_time.strip():
         return None
@@ -133,4 +136,3 @@ class Fact(object):
         if self.end_time:
             time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
         return "%s %s" % (time, self.serialized_name())
-
