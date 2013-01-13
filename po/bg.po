@@ -1,8 +1,8 @@
 # Bulgarian translation of hamster-time-tracker po-file.
-# Copyright (C) 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc.
+# Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013 Free Software Foundation, Inc.
 # Copyright (C) 2010 Damyan Ivanov.
 # This file is distributed under the same license as the hamster-time-tracker package.
-# Alexander Shopov <ash@kambanaria.org>, 2008, 2009, 2010, 2011, 2012.
+# Alexander Shopov <ash@kambanaria.org>, 2008, 2009, 2010, 2011, 2012, 2013.
 # Damyan Ivanov <dmn@debian.org>, 2010.
 #
 #: ../src/hamster-cli:342
@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-02 19:20+0100\n"
-"PO-Revision-Date: 2012-02-22 20:27+0200\n"
+"POT-Creation-Date: 2013-01-13 22:13+0200\n"
+"PO-Revision-Date: 2013-01-13 22:15+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
 msgid "Add Earlier Activity"
@@ -162,7 +162,7 @@ msgstr "Показване и скриване на главния прозор�
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
-#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
+#: ../src/hamster/about.py:40 ../src/hamster/today.py:69
 msgid "Time Tracker"
 msgstr "Отчитане на времето"
 
@@ -192,7 +192,7 @@ msgid "Activities"
 msgstr "Дейности"
 
 #: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
-#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
+#: ../src/hamster/reports.py:319 ../src/hamster/today.py:156
 msgid "Tags"
 msgstr "Етикети"
 
@@ -226,7 +226,7 @@ msgstr "_Преглед"
 
 #: ../data/overview.ui.h:7 ../src/hamster-cli:276
 #: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
-#: ../src/hamster/today.py:144
+#: ../src/hamster/today.py:150
 msgid "Activity"
 msgstr "Дейност"
 
@@ -414,7 +414,7 @@ msgstr "общо"
 msgid "Show Overview"
 msgstr "Показване на прегледа"
 
-#: ../src/hamster-cli:254 ../src/hamster/today.py:289
+#: ../src/hamster-cli:254 ../src/hamster/today.py:295
 msgid "No activity"
 msgstr "Без дейност"
 
@@ -440,9 +440,8 @@ msgid "Duration"
 msgstr "Продължителност"
 
 #: ../src/hamster-cli:308
-#, fuzzy
 msgid "Uncategorized"
-msgstr "категории"
+msgstr "Без категория"
 
 #: ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
@@ -466,53 +465,14 @@ msgstr ""
 "Александър Шопов <ash@kambanaria.org>\n"
 "\n"
 "Проектът за превод на GNOME има нужда от подкрепа.\n"
-"Научете повече за нас на http://gnome.cult.bg\n"
-"Докладвайте за грешки на http://gnome.cult.bg/bugs"
+"Научете повече за нас на <a href=\"http://gnome.cult.bg\">http://gnome.cult.bg</a>\n"
+"Докладвайте за грешки на <a href=\"http://gnome.cult.bg/bugs\">http://gnome.cult.bg/bugs</a>"
 
-#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
-#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
 #: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
 #: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
-#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
+#: ../src/hamster/reports.py:256 ../src/hamster/today.py:281
 msgid "Unsorted"
 msgstr "Без подредба"
-
-#. defaults
-#: ../src/hamster/db.py:937
-msgid "Work"
-msgstr "Работа"
-
-#: ../src/hamster/db.py:938
-msgid "Reading news"
-msgstr "Четене на новини"
-
-#: ../src/hamster/db.py:939
-msgid "Checking stocks"
-msgstr "Проверка на фондовата борса"
-
-#: ../src/hamster/db.py:940
-msgid "Super secret project X"
-msgstr "Супер тайния проект „Ь“"
-
-#: ../src/hamster/db.py:941
-msgid "World domination"
-msgstr "Световно господство"
-
-#: ../src/hamster/db.py:943
-msgid "Day-to-day"
-msgstr "Ежедневни"
-
-#: ../src/hamster/db.py:944
-msgid "Lunch"
-msgstr "Обяд"
-
-#: ../src/hamster/db.py:945
-msgid "Watering flowers"
-msgstr "Поливане на цветя"
-
-#: ../src/hamster/db.py:946
-msgid "Doing handstands"
-msgstr "На челна стойка"
 
 #: ../src/hamster/edit_activity.py:75
 msgid "Update activity"
@@ -824,22 +784,22 @@ msgid ""
 "be a busy bee."
 msgstr "%s %% от всички записи са под 15 минути. Много сте заети!"
 
-#: ../src/hamster/today.py:243
+#: ../src/hamster/today.py:249
 msgid "No records today"
 msgstr "Няма записи за днес"
 
-#: ../src/hamster/today.py:250
+#: ../src/hamster/today.py:256
 #, python-format
 msgid "%(category)s: %(duration)s"
 msgstr "%(category)s: %(duration)s, "
 
 #. duration in main drop-down per category in hours
-#: ../src/hamster/today.py:253
+#: ../src/hamster/today.py:259
 #, python-format
 msgid "%sh"
 msgstr "%s ч."
 
-#: ../src/hamster/today.py:280
+#: ../src/hamster/today.py:286
 msgid "Just started"
 msgstr "Започнато току що"
 
@@ -867,45 +827,3 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Отчитане на времето"
-
-#~ msgid "Show activities window"
-#~ msgstr "Показване на прозореца с дейностите"
-
-#~ msgid "Show _Overview"
-#~ msgstr "_Показване на прегледа"
-
-#~ msgid "Sto_p Tracking"
-#~ msgstr "_Преустановяване на отчитането"
-
-#~ msgid "To_day"
-#~ msgstr "_Днес"
-
-#~ msgid "_Add earlier activity"
-#~ msgstr "Доб_авяне на предишна дейност"
-
-#~ msgid "_About"
-#~ msgstr "_Относно"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Настройки"
-
-#~ msgid "Starts and ends"
-#~ msgstr "Периоди"
-
-#~ msgid "Year:"
-#~ msgstr "Година:"
-
-#~ msgid "Preferences"
-#~ msgstr "Настройки"
-
-#~ msgid "Changed activity"
-#~ msgstr "Смяна на дейност"
-
-#~ msgid "Switched to '%s'"
-#~ msgstr "Смяна към „%s“"
-
-#~ msgid "Working on <b>%s</b>"
-#~ msgstr "Работа над <b>%s</b>"
-
-#~ msgid "Hamster time tracker. Usage:"
-#~ msgstr "Отчитане на времето с Хамстер. Употреба:"
