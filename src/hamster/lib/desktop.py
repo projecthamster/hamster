@@ -73,7 +73,7 @@ class DesktopIntegrations(object):
         last_activity = todays_facts[-1] if todays_facts else None
 
         # update duration of current task
-        if last_activity:
+        if last_activity and not last_activity['end_time']:
             delta = now - last_activity['start_time']
             duration = delta.seconds /  60
 
