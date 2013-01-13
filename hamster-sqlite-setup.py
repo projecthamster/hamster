@@ -6,8 +6,8 @@ import distutils
 data_dir = os.path.join(distutils.sysconfig.get_python_lib(), "hamster", "data")
 
 setup(name='hamster-sqlite',
-      version='0.1',
-      description='Just the sqlite backend for hamster time tracker',
+      version='0.2',
+      description='The sqlite backend of hamster time tracker (can be used as a good start for any front-end work)',
       author='Toms Baugis',
       author_email='toms.baugis@gmail.com',
       url='https://github.com/projecthamster/hamster',
