@@ -123,7 +123,7 @@ class Storage(storage.Storage):
             # if not there, copy from the defaults
             try:
                 import defs
-                data_dir = os.path.join(defs.DATA_DIR, "hamster-applet")
+                data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
             except:
                 # if defs is not there, we are running from sources
                 module_dir = os.path.dirname(os.path.realpath(__file__))
