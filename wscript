@@ -1,5 +1,5 @@
 # -*- python -*-
-VERSION = '1.03.1'
+VERSION = '1.03.2'
 APPNAME = 'hamster-time-tracker'
 top = '.'
 out = 'build'
