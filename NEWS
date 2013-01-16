@@ -1,4 +1,14 @@
 ===============
+Version 1.03
+===============
+ * fix issue #61 - installation was missing initial database for fresh installs
+ * loosen backend dependencies so that hamster.client can be used outside the
+   project see http://pypi.python.org/pypi/hamster-sqlite/ for details
+ * desktop notification now once again correctly notifies of "No activity"
+
+ * updated Bulgarian translation
+
+===============
 Version 1.02.1
 ===============
  * Drop gnome-keybindings as a dependency - not used anymore
