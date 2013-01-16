@@ -617,7 +617,7 @@ class Storage(storage.Storage):
 
         #now link tags
         insert = ["insert into fact_tags(fact_id, tag_id) values(?, ?)"] * len(tags)
-        params = [(fact_id, tag["id"]) for tag in tags]
+        params = [(fact_id, tag[0]) for tag in tags]
         self.execute(insert, params)
 
         self.__remove_index([fact_id])
