@@ -1,4 +1,9 @@
 ===============
+Version 1.03.1
+===============
+ * fix silly bug with path
+
+===============
 Version 1.03
 ===============
  * fix issue #61 - installation was missing initial database for fresh installs
