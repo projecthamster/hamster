@@ -178,13 +178,14 @@ class Storage(db.Storage, dbus.service.Object):
         return self.remove_fact(fact_id)
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature='uus', out_signature='a(iiissisasii)')
-    def GetFacts(self, start_date, end_date, search_terms):
+    @dbus.service.method("org.gnome.Hamster", in_signature='uusb', out_signature='a(iiissisasii)')
+    def GetFacts(self, start_date, end_date, search_terms, reverse_search_terms=False):
         """Gets facts between the day of start_date and the day of end_date.
         Parameters:
         i start_date: Seconds since epoch (timestamp). Use 0 for today
         i end_date: Seconds since epoch (timestamp). Use 0 for today
         s search_terms: Bleh
+        b reverse_search_terms: Reverse the behaviour of the search terms (ie.. NOT search_terms)
         Returns Array of fact where fact is struct of:
             i  id
             i  start_time
@@ -206,7 +207,7 @@ class Storage(db.Storage, dbus.service.Object):
         if end_date:
             end = dt.datetime.utcfromtimestamp(end_date).date()
 
-        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms)]
+        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms, reverse_search_terms)]
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='a(iiissisasii)')
