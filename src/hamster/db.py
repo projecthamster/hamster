@@ -680,9 +680,6 @@ class Storage(storage.Storage):
 
         query += " ORDER BY a.start_time, e.name"
 
-        f = open('/tmp/hamster.log', 'wa')
-        f.write(query)
-
         facts = self.fetchall(query, (self._unsorted_localized,
                                       datetime_from,
                                       datetime_to))
