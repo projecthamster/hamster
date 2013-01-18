@@ -1,4 +1,9 @@
 ===============
+Version 1.03.3
+===============
+ * fix exporting entries to file
+
+===============
 Version 1.03.2
 ===============
  * fix bug when trying to enter an activity with tags (mea culpa)
