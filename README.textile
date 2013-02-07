@@ -33,7 +33,7 @@ Now restart your panels/dockies and you should be able to add hamster to your pa
 h2. Required
 
 pre. sudo apt-get install python-pip
-sudo pip install requests
+sudo pip install requests beaker
 
 
 
