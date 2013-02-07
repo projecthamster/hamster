@@ -29,3 +29,11 @@ After that make sure that the old daemons aren't roaming around:
 pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
+
+h2. Required
+
+pre. sudo apt-get install python-pip
+sudo pip install requests
+
+
+
