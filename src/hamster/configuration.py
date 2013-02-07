@@ -177,6 +177,9 @@ class GConfStore(gobject.GObject, Singleton):
         'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
+        'rt_url'                      :   "",          # 
+        'rt_user'                     :   "",          # 
+        'rt_pass'                     :   "",          # 
     }
 
     __gsignals__ = {
