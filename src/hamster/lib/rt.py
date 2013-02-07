@@ -45,6 +45,17 @@ __authors__ = [
 import re
 import os
 import requests
+import logging
+from beaker.cache import cache_regions, cache_region
+
+# configure regions
+cache_regions.update({
+    'short_term':{
+        'expire': 60,
+        'type': 'memory',
+        'key_length': 250
+    }
+})
 
 DEFAULT_QUEUE = 'General'
 """ Default queue used. """
@@ -78,7 +89,7 @@ class Rt:
                 proxy = {"https": proxy}
             else:
                 proxy = {"http": proxy}
-        self.session = requests.session(proxies=proxy)
+        self.session = requests.session()
         self.login_result = None
 
     def __request(self, selector, post_data={}, files=[], without_login=False):
@@ -254,13 +265,32 @@ class Rt:
                   as in :py:meth:`~Rt.get_ticket`.
         :raises Exception: Unexpected format of returned message.
         """
-        query = (Queue=\'%s\')' % (Queue,)
+        query = '(Queue=\'%s\')' % (Queue,)
         for key in kwargs:
             if key[:3] != 'CF_':
                 query += "+AND+(%s=\'%s\')" % (key, kwargs[key])
             else:
                 query += "+AND+(CF.{%s}=\'%s\')" % (key[3:], kwargs[key])
         return search_raw(query)
+
+    @cache_region('short_term', 'search_simple')
+    def search_simple(self, user_query):
+        logging.warn('szukanie')
+        query = 'search/ticket?query=' + user_query + "&format=s"
+        msgs = self.__request(query)
+        msgs = msgs.split('\n')
+        try:
+            items = []
+            for line in msgs:
+                if ': ' in line:
+                    pairs = {}
+                    msg = line.split(': ', 2)
+                    pairs['id'] = msg[0]
+                    pairs['Subject'] = msg[1]
+                    items.append(pairs)
+            return items
+        except:
+            return []
 
     def search_raw(self, user_query):
         query = 'search/ticket?query=' + user_query + "&format=l"
