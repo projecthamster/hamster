@@ -32,6 +32,7 @@ except:
 
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
+        logging.debug('external init')
         gobject.GObject.__init__(self)
         self.source = conf.get("activities_source")
         self.__gtg_connection = None

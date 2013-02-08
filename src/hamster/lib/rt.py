@@ -275,7 +275,7 @@ class Rt:
 
     @cache_region('short_term', 'search_simple')
     def search_simple(self, user_query):
-        logging.warn('szukanie')
+        logging.debug('searching')
         query = 'search/ticket?query=' + user_query + "&format=s"
         msgs = self.__request(query)
         msgs = msgs.split('\n')
