@@ -180,6 +180,7 @@ class GConfStore(gobject.GObject, Singleton):
         'rt_url'                      :   "",          # 
         'rt_user'                     :   "",          # 
         'rt_pass'                     :   "",          # 
+        'rt_query'                    :   "",          # 
     }
 
     __gsignals__ = {

@@ -22,6 +22,7 @@ import logging
 from configuration import conf
 import gobject
 import dbus, dbus.mainloop.glib
+from lib import rt
 
 try:
     import evolution
@@ -40,6 +41,20 @@ class ActivitiesSource(gobject.GObject):
         elif self.source == "gtg":
             gobject.GObject.__init__(self)
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        elif self.source == "rt":
+            self.rt_url = conf.get("rt_url")
+            self.rt_user = conf.get("rt_user")
+            self.rt_pass = conf.get("rt_pass")
+            self.rt_query = conf.get("rt_query")
+            if self.rt_url and self.rt_user and self.rt_pass:
+                try:
+                    self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
+                    self.tracker.login()
+                except:
+                    self.source = ""
+            else:
+                self.source = ""
+            
 
     def get_activities(self, query = None):
         if not self.source:

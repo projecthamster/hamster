@@ -120,6 +120,23 @@ class PreferencesEditor(gtk.Object):
         self.todo_combo.connect("changed", self.on_todo_combo_changed)
         self.get_widget("todo_pick").add(self.todo_combo)
 
+        # RT prefs
+        self.rt_url = gtk.Entry()
+        self.rt_url.connect("changed", self.on_rt_url_changed)
+        self.get_widget('rt_url').add(self.rt_url)
+        
+        self.rt_user = gtk.Entry()
+        self.rt_user.connect("changed", self.on_rt_user_changed)
+        self.get_widget('rt_user').add(self.rt_user)
+        
+        self.rt_pass = gtk.Entry()
+        self.rt_pass.set_visibility(False)
+        self.rt_pass.connect("changed", self.on_rt_pass_changed)
+        self.get_widget('rt_pass').add(self.rt_pass)
+        
+        self.rt_query = gtk.Entry()
+        self.rt_query.connect("changed", self.on_rt_query_changed)
+        self.get_widget('rt_query').add(self.rt_query)
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -264,6 +281,17 @@ class PreferencesEditor(gtk.Object):
         self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
 
+    def on_rt_url_changed(self, entry):
+        conf.set('rt_url', self.rt_url.get_text())
+
+    def on_rt_user_changed(self, entry):
+        conf.set('rt_user', self.rt_user.get_text())
+
+    def on_rt_pass_changed(self, entry):
+        conf.set('rt_pass', self.rt_pass.get_text())
+
+    def on_rt_query_changed(self, entry):
+        conf.set('rt_query', self.rt_query.get_text())
 
     def on_todo_combo_changed(self, combo):
         conf.set("activities_source", self.activities_sources[combo.get_active()][0])
@@ -326,6 +354,11 @@ class PreferencesEditor(gtk.Object):
         for i, (code, label) in enumerate(self.activities_sources):
             if code == current_source:
                 self.todo_combo.set_active(i)
+        
+        self.rt_url.set_text(conf.get('rt_url'))
+        self.rt_user.set_text(conf.get('rt_user'))
+        self.rt_pass.set_text(conf.get('rt_pass'))
+        self.rt_query.set_text(conf.get('rt_query'))
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
