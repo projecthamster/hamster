@@ -19,6 +19,7 @@
 
 import gtk, gobject, pango
 import datetime as dt
+import re
 
 from ..configuration import runtime
 from ..lib import Fact, stuff, graphics
@@ -233,6 +234,22 @@ class ActivityEntry(gtk.Entry):
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_activities(fact.activity)
         self.external_activities = self.external.get_activities(fact.activity)
+        new_activities = []
+        for activity in self.activities:
+            match = re.match("^(#\d+: )", activity['name'])
+            if match and self.external_activities:
+                ticket_prefix = match.group(1)
+                delete = False
+                for external_activity in self.external_activities:
+                    if external_activity['name'].startswith(ticket_prefix):
+                        delete = True
+                if not delete:
+                    new_activities.append(activity)
+            elif not self.external_activities:
+                new_activities.append(activity)
+                
+        self.activities = new_activities
+                    
         self.activities.extend(self.external_activities)
 
         self.categories = self.categories or runtime.storage.get_categories()

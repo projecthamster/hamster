@@ -63,7 +63,23 @@ class ActivitiesSource(gobject.GObject):
         if self.source == "evo":
             return [activity for activity in get_eds_tasks()
                          if query is None or activity['name'].startswith(query)]
-
+        elif self.source == "rt":
+            activities = []
+            results = self.tracker.search_simple(self.rt_query)
+            #name = '#'+ticket['id']+': '+ticket['Subject']
+            #category = ticket['CF.{Projekt}']
+            #tickets.append({"name": name, "category": category})
+            
+            for ticket in results:
+                name = '#'+ticket['id']+': '+ticket['Subject']
+                category = ""
+                if 'Queue' in ticket:
+                    category = ticket['Queue']
+                if 'CF.{Projekt}' in ticket:
+                    category = ticket['CF.{Projekt}']
+                if query is None or query.lower() in name.lower():
+                    activities.append({"name": name, "category": category})
+            return activities
         elif self.source == "gtg":
             conn = self.__get_gtg_connection()
             if not conn:
