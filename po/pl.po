@@ -643,6 +643,11 @@ msgid "category"
 msgstr "kategoria"
 
 #. column title in the TSV export format
+#: ../src/hamster/reports.py:156
+msgid "days"
+msgstr "dni"
+
+#. column title in the TSV export format
 #: ../src/hamster/reports.py:158
 msgid "description"
 msgstr "opis"
