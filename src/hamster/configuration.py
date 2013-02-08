@@ -177,10 +177,10 @@ class GConfStore(gobject.GObject, Singleton):
         'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
-        'rt_url'                      :   "",          # 
+        'rt_url'                      :   "https://rt.contium.pl/REST/1.0/",          # RT REST url
         'rt_user'                     :   "",          # 
         'rt_pass'                     :   "",          # 
-        'rt_query'                    :   "",          # 
+        'rt_query'                    :   "Owner='__CurrentUser__' AND (Status='new' OR Status='open')",          # RT query for autocomplete
     }
 
     __gsignals__ = {
