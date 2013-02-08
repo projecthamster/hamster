@@ -35,5 +35,9 @@ h2. Required
 pre. sudo apt-get install python-pip
 sudo pip install requests beaker
 
+h1. Screenshots
 
+!https://raw.github.com/gsobczyk/hamster/master/entry.png!
+
+!https://raw.github.com/gsobczyk/hamster/master/settings.png!
 
