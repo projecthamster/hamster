@@ -772,7 +772,7 @@ class Storage(storage.Storage):
         """
         search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, (u'%s%%' % search, ))
+        activities = self.fetchall(query, (u'%%%s%%' % search, ))
 
         return activities
 

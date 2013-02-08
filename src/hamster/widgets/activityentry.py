@@ -137,7 +137,7 @@ class ActivityEntry(gtk.Entry):
 
     def show_popup(self):
         result_count = self.tree.get_model().iter_n_children(None)
-        if result_count <= 1:
+        if result_count < 1:
             self.hide_popup()
             return
 
@@ -304,8 +304,8 @@ class ActivityEntry(gtk.Entry):
             self.populate_suggestions()
             self.show_popup()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
-                self.complete_inline()
+            #if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+            #    self.complete_inline()
 
 
 
