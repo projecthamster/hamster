@@ -55,8 +55,7 @@ class ActivitiesSource(gobject.GObject):
                     self.source = ""
             else:
                 self.source = ""
-            
-
+        
     def get_activities(self, query = None):
         if not self.source:
             return []
@@ -65,21 +64,14 @@ class ActivitiesSource(gobject.GObject):
             return [activity for activity in get_eds_tasks()
                          if query is None or activity['name'].startswith(query)]
         elif self.source == "rt":
-            activities = []
-            results = self.tracker.search_simple(self.rt_query)
-            #name = '#'+ticket['id']+': '+ticket['Subject']
-            #category = ticket['CF.{Projekt}']
-            #tickets.append({"name": name, "category": category})
-            
-            for ticket in results:
-                name = '#'+ticket['id']+': '+ticket['Subject']
-                category = ""
-                if 'Queue' in ticket:
-                    category = ticket['Queue']
-                if 'CF.{Projekt}' in ticket:
-                    category = ticket['CF.{Projekt}']
-                if query is None or query.lower() in name.lower():
-                    activities.append({"name": name, "category": category})
+            activities = self.__extract_from_rt(query, self.rt_query)
+            if len(activities) <= 2:
+                if activities:
+                    activities.append({"name": "---------------------", "category": ""})
+                li = query.split(' ')
+                rt_query = " AND ".join(["Subject LIKE '%s'" % (q) for q in li]) + " AND (Status='new' OR Status='open')"
+                second_activities = self.__extract_from_rt(query, rt_query)
+                activities.extend(second_activities)
             return activities
         elif self.source == "gtg":
             conn = self.__get_gtg_connection()
@@ -102,10 +94,23 @@ class ActivitiesSource(gobject.GObject):
                     if len(task['tags']):
                         name = "%s, %s" % (name, " ".join([tag.replace("@", "#") for tag in task['tags']]))
 
-                    activities.append({"name": name,
-                                       "category": ""})
+                    activities.append({"name": name, "category": ""})
 
             return activities
+            
+    def __extract_from_rt(self, query = None, rt_query = None):
+        activities = []
+        results = self.tracker.search_simple(rt_query)
+        for ticket in results:
+            name = '#'+ticket['id']+': '+ticket['Subject']
+            category = "RT"
+            if 'Queue' in ticket:
+                category = ticket['Queue']
+            if 'CF.{Projekt}' in ticket:
+                category = ticket['CF.{Projekt}']
+            if query is None or all(item in name.lower() for item in query.lower().split(' ')):
+                activities.append({"name": name, "category": category})
+        return activities
 
     def __get_gtg_connection(self):
         bus = dbus.SessionBus()
