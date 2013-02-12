@@ -245,7 +245,7 @@ class ActivityEntry(gtk.Entry):
                         delete = True
                 if not delete:
                     new_activities.append(activity)
-            elif not self.external_activities:
+            else:
                 new_activities.append(activity)
                 
         self.activities = new_activities
