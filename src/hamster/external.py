@@ -21,6 +21,7 @@
 import logging
 from configuration import conf
 import gobject
+import re
 import dbus, dbus.mainloop.glib
 from lib import rt
 
@@ -65,13 +66,21 @@ class ActivitiesSource(gobject.GObject):
                          if query is None or activity['name'].startswith(query)]
         elif self.source == "rt":
             activities = self.__extract_from_rt(query, self.rt_query)
-            if len(activities) <= 2:
-                if activities:
-                    activities.append({"name": "---------------------", "category": ""})
+            direct_ticket = None
+            if query and re.match("^[0-9]+$", query):
+                ticket = self.tracker.get_ticket(query)
+                if ticket:
+                    category = self.__extract_cat_from_ticket(ticket)
+                    direct_ticket = {"name":"#"+ticket['id'][7:]+" "+ticket['Subject'], "category":category}
+            if direct_ticket:
+                activities.append(direct_ticket)
+            if len(activities) <= 2 and not direct_ticket:
                 li = query.split(' ')
                 rt_query = " AND ".join(["Subject LIKE '%s'" % (q) for q in li]) + " AND (Status='new' OR Status='open')"
-                second_activities = self.__extract_from_rt(query, rt_query)
-                activities.extend(second_activities)
+                third_activities = self.__extract_from_rt(query, rt_query)
+                if activities and third_activities:
+                    activities.append({"name": "---------------------", "category": "other open"})
+                activities.extend(third_activities)
             return activities
         elif self.source == "gtg":
             conn = self.__get_gtg_connection()
@@ -103,14 +112,18 @@ class ActivitiesSource(gobject.GObject):
         results = self.tracker.search_simple(rt_query)
         for ticket in results:
             name = '#'+ticket['id']+': '+ticket['Subject']
-            category = "RT"
-            if 'Queue' in ticket:
-                category = ticket['Queue']
-            if 'CF.{Projekt}' in ticket:
-                category = ticket['CF.{Projekt}']
+            category = self.__extract_cat_from_ticket(ticket)
             if query is None or all(item in name.lower() for item in query.lower().split(' ')):
                 activities.append({"name": name, "category": category})
         return activities
+        
+    def __extract_cat_from_ticket(self, ticket):
+        category = "RT"
+        if 'Queue' in ticket:
+            category = ticket['Queue']
+        if 'CF.{Projekt}' in ticket:
+            category = ticket['CF.{Projekt}']
+        return category
 
     def __get_gtg_connection(self):
         bus = dbus.SessionBus()
