@@ -74,9 +74,10 @@ class ActivitiesSource(gobject.GObject):
                     direct_ticket = {"name":"#"+ticket['id'][7:]+" "+ticket['Subject'], "category":category}
             if direct_ticket:
                 activities.append(direct_ticket)
-            if len(activities) <= 2 and not direct_ticket:
+            if len(activities) <= 2 and not direct_ticket and len(query) > 4:
                 li = query.split(' ')
                 rt_query = " AND ".join(["Subject LIKE '%s'" % (q) for q in li]) + " AND (Status='new' OR Status='open')"
+                #logging.warn(rt_query)
                 third_activities = self.__extract_from_rt(query, rt_query)
                 if activities and third_activities:
                     activities.append({"name": "---------------------", "category": "other open"})
@@ -106,23 +107,40 @@ class ActivitiesSource(gobject.GObject):
                     activities.append({"name": name, "category": ""})
 
             return activities
-            
+    
+    def __extract_activity_from_ticket(self, ticket):
+        #activity = {}
+        ticket_id = ticket['id']
+        #logging.warn(ticket)
+        if 'ticket/' in ticket_id:
+            ticket_id = ticket_id[7:]
+        ticket['name'] = '#'+ticket_id+': '+ticket['Subject']
+        if 'Owner' in ticket and ticket['Owner']!=self.rt_user:
+            ticket['name'] += " (%s)" % ticket['Owner'] 
+        ticket['category'] = self.__extract_cat_from_ticket(ticket)
+        ticket['rt_id']=ticket_id;
+        return ticket
+    
     def __extract_from_rt(self, query = None, rt_query = None):
         activities = []
         results = self.tracker.search_simple(rt_query)
         for ticket in results:
-            name = '#'+ticket['id']+': '+ticket['Subject']
-            category = self.__extract_cat_from_ticket(ticket)
-            if query is None or all(item in name.lower() for item in query.lower().split(' ')):
-                activities.append({"name": name, "category": category})
+            activity = self.__extract_activity_from_ticket(ticket)
+            if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
+                activities.append(activity)
         return activities
         
     def __extract_cat_from_ticket(self, ticket):
         category = "RT"
+        owner = None
         if 'Queue' in ticket:
             category = ticket['Queue']
         if 'CF.{Projekt}' in ticket:
             category = ticket['CF.{Projekt}']
+#        if 'Owner' in ticket:
+#            owner = ticket['Owner']
+#        if owner and owner!=self.rt_user:
+#            category += ":"+owner
         return category
 
     def __get_gtg_connection(self):

@@ -355,6 +355,9 @@ class ActivityEntry(gtk.Entry):
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
+        match = re.match("^#(\d+): ", value)
+        #if match:
+        #    value += "RTRTRTRTRTRT"#rt.get_citket
         self.set_text(value)
         self.hide_popup()
         self.set_position(len(self.get_text()))

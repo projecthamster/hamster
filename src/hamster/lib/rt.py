@@ -284,7 +284,7 @@ class Rt:
             for line in msgs:
                 if ': ' in line:
                     pairs = {}
-                    msg = line.split(': ', 2)
+                    msg = line.split(': ', 1)
                     pairs['id'] = msg[0]
                     pairs['Subject'] = msg[1]
                     items.append(pairs)
@@ -293,8 +293,7 @@ class Rt:
             return []
 
     def search_raw(self, user_query):
-        query = 'search/ticket?query=' + user_query + "&format=l"
-
+        query = 'search/ticket?query=' + user_query + "&format=l&fields=id,Subject,Owner,CF.{Projekt},Requestors"
         msgs = self.__request(query)
         msgs = msgs.split('\n--\n')
         items = []
