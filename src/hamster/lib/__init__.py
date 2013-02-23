@@ -106,7 +106,7 @@ class Fact(object):
 
     def __iter__(self):
         keys = {
-            'id': int(self.id),
+            'id': int(self.id) if self.id else "",
             'activity': self.activity,
             'category': self.category,
             'description': self.description,
