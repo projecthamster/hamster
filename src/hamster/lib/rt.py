@@ -292,6 +292,7 @@ class Rt:
         except:
             return []
 
+    @cache_region('short_term', 'search_raw')
     def search_raw(self, user_query):
         query = 'search/ticket?query=' + user_query + "&format=l&fields=id,Subject,Owner,CF.{Projekt},Requestors"
         msgs = self.__request(query)
