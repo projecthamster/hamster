@@ -106,15 +106,15 @@ class Fact(object):
 
     def __iter__(self):
         keys = {
-            'id': int(self.id),
+            'id': int(self.id) if self.id else "",
             'activity': self.activity,
             'category': self.category,
             'description': self.description,
-            'tags': [tag.encode("utf-8").strip() for tag in self.tags.split(",")],
-            'date': calendar.timegm(self.date.timetuple()),
+            'tags': [tag.encode("utf-8").strip() for tag in self.tags],
+            'date': calendar.timegm(self.date.timetuple()) if self.date else "",
             'start_time': self.start_time if isinstance(self.start_time, basestring) else calendar.timegm(self.start_time.timetuple()),
             'end_time': self.end_time if isinstance(self.end_time, basestring) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
-            'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 #duration in seconds
+            'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 if self.delta else "" #duration in seconds
         }
         return iter(keys.items())
 
@@ -133,7 +133,7 @@ class Fact(object):
     def __str__(self):
         time = ""
         if self.start_time:
-            self.start_time.strftime("%d-%m-%Y %H:%M")
+            time = self.start_time.strftime("%d-%m-%Y %H:%M")
         if self.end_time:
             time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
         return "%s %s" % (time, self.serialized_name())
