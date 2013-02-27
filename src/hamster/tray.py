@@ -52,7 +52,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
 #        applet = FakeApplet()
 
         self.indicator = appindicator.Indicator ("hamster-applet",
-                                  "indicator-messages",
+                                  "hamster-applet-inactive",
                                   appindicator.CATEGORY_SYSTEM_SERVICES)
 
         self.indicator.set_status (appindicator.STATUS_ACTIVE)
@@ -115,6 +115,12 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         self.quit_item.connect("activate", gtk.main_quit, None)
         # show the items
         self.quit_item.show()
+        
+        self.last_activity = None
+        self.todays_facts = None
+#        runtime.storage.connect('activities-changed', self.after_activity_update)
+#        runtime.storage.connect('facts-changed', self.after_fact_update)
+#        runtime.storage.connect('toggle-called', self.on_toggle_called)
 
 
     def on_activate(self, data):
@@ -140,9 +146,9 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
     def _set_attention_icon(self):
         '''Set the attention icon as per the gconf key'''
         if self._use_icon_glow:
-            self.indicator.set_attention_icon('indicator-messages-new')
+            self.indicator.set_attention_icon('hamster-applet-active')
         else:
-            self.indicator.set_attention_icon('indicator-messages')
+            self.indicator.set_attention_icon('hamster-applet-inactive')
 
     def _get_no_activity_label(self):
         '''Get the indicator label set to "No activity"'''
@@ -231,6 +237,39 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         # Update the menu or the new activity text won't show up
         self.refresh_menu()
 
+    def _set_activity_status(self, is_active):
+        if is_active:
+            # There's an active task
+            self.indicator.set_status (appindicator.STATUS_ATTENTION)
+        else:
+            # There's no active task
+            self.indicator.set_status (appindicator.STATUS_ACTIVE)
+        self.stop_activity_item.set_sensitive(is_active)
+
+    def set_activity_text(self, activity, duration):
+        '''This adds a method which belongs to hamster.applet.PanelButton'''
+#        activity = stuff.escape_pango(activity)
+#        if len(activity) > 25:  #ellipsize at some random length
+#            activity = "%s%s" % (activity[:25], "&#8230;")
+        activity = self._clamp_text(activity)
+
+        self.activity = activity
+        self.duration = duration
+        self.reformat_label()
+        
+    def reformat_label(self):
+        '''This adds a method which belongs to hamster.applet.PanelButton'''
+        label = self.activity
+        if self.duration:
+            label = "%s %s" % (self.activity, self.duration)
+        label = '<span gravity="south">%s</span>' % label
+        if self.activity_label:
+            self.activity_label.set_markup("") #clear - seems to fix the warning
+            self.activity_label.set_markup(label)
+
+    def refresh_menu(self):
+        '''Update the menu so that the new activity text is visible'''
+        self.indicator.set_menu(self.menu)
 
     def show_indicator(self):
 #        self.ind = appindicator.Indicator ("example-simple-client",
@@ -240,3 +279,17 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
 #        self.ind.set_attention_icon ("indicator-messages-new")
         self.indicator.set_menu(self.menu)
 #        self.ind.set_label("label indykatora")
+
+    """signals"""
+    def after_activity_update(self, widget):
+#        self.new_name.refresh_activities()
+        self.project.load_day()
+        self.update_label()
+
+    def after_fact_update(self, event):
+        self.project.load_day()
+        self.update_label()
+        
+    def on_toggle_called(self, client):
+#        self.__show_toggle(not self.button.get_active())
+        pass
