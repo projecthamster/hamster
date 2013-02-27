@@ -5,6 +5,7 @@ import os.path
 import appindicator
 import gtk
 import datetime as dt
+import gobject
 from hamster.lib import stuff
 from hamster.configuration import dialogs, runtime
 
@@ -13,22 +14,6 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
     def __init__(self, project):
         self.project = project
 
-        # create a menu
-#        __hamster_indicator()
-        
-#        self.menu = gtk.Menu()
-#        
-#        showi = gtk.MenuItem("Show")
-#        self.menu.append(showi)
-#        showi.connect("activate", self.on_activate)
-#        showi.show()
-#        
-#        exiti = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-#        exiti.connect("activate", gtk.main_quit)
-#        self.menu.append(exiti)
-#        exiti.show()
-    
-#    def __hamster_indicator(self):
         # Gconf settings
         self._settings = gconf.client_get_default()
         self._settings.add_dir(self.BASE_KEY, gconf.CLIENT_PRELOAD_NONE)
@@ -52,7 +37,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
 #        applet = FakeApplet()
 
         self.indicator = appindicator.Indicator ("hamster-applet",
-                                  "hamster-applet-inactive",
+                                  "indicator-messages",
                                   appindicator.CATEGORY_SYSTEM_SERVICES)
 
         self.indicator.set_status (appindicator.STATUS_ACTIVE)
@@ -116,12 +101,13 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         # show the items
         self.quit_item.show()
         
-        self.last_activity = None
+        self.project.last_activity = None
         self.todays_facts = None
-#        runtime.storage.connect('activities-changed', self.after_activity_update)
-#        runtime.storage.connect('facts-changed', self.after_fact_update)
-#        runtime.storage.connect('toggle-called', self.on_toggle_called)
-
+        runtime.storage.connect('activities-changed', self.after_activity_update)
+        runtime.storage.connect('facts-changed', self.after_fact_update)
+        runtime.storage.connect('toggle-called', self.on_toggle_called)
+        
+        gobject.timeout_add_seconds(20, self.refresh_tray) # refresh hamster every 60 seconds to update duration
 
     def on_activate(self, data):
         self.project.toggle_hamster_window()
@@ -146,9 +132,9 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
     def _set_attention_icon(self):
         '''Set the attention icon as per the gconf key'''
         if self._use_icon_glow:
-            self.indicator.set_attention_icon('hamster-applet-active')
+            self.indicator.set_attention_icon('indicator-messages-new')
         else:
-            self.indicator.set_attention_icon('hamster-applet-inactive')
+            self.indicator.set_attention_icon('indicator-messages')
 
     def _get_no_activity_label(self):
         '''Get the indicator label set to "No activity"'''
@@ -195,22 +181,22 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         
     def update_label(self):
         '''Override for menu items sensitivity and to update the menu'''
-        if self.last_activity:
+        if self.project.last_activity:
             # Let's see if activity is an attribute and cache the result.
             # This is only required for backwards compatibility
             if self._activity_as_attribute == None:
-                self._activity_as_attribute = hasattr(self.last_activity,
+                self._activity_as_attribute = hasattr(self.project.last_activity,
                                                       'activity')
             if self._activity_as_attribute:
-                start_time = self.last_activity.start_time
-                end_time = self.last_activity.end_time
-                last_activity_name = self.last_activity.activity
+                start_time = self.project.last_activity.start_time
+                end_time = self.project.last_activity.end_time
+                last_activity_name = self.project.last_activity.activity
             else:
-                start_time = self.last_activity['start_time']
-                end_time = self.last_activity['end_time']
-                last_activity_name = self.last_activity['name']
+                start_time = self.project.last_activity['start_time']
+                end_time = self.project.last_activity['end_time']
+                last_activity_name = self.project.last_activity['name']
 
-        if self.last_activity and end_time is None:
+        if self.project.last_activity and end_time is None:
             self._set_activity_status(1)
             delta = dt.datetime.now() - start_time
             duration = delta.seconds /  60
@@ -272,13 +258,13 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         self.indicator.set_menu(self.menu)
 
     def show_indicator(self):
-#        self.ind = appindicator.Indicator ("example-simple-client",
-#                                    "indicator-messages",
-#                                    appindicator.CATEGORY_APPLICATION_STATUS)
-#        self.ind.set_status (appindicator.STATUS_ACTIVE)
-#        self.ind.set_attention_icon ("indicator-messages-new")
         self.indicator.set_menu(self.menu)
-#        self.ind.set_label("label indykatora")
+        self.refresh_tray()
+
+    def refresh_tray(self):
+        """refresh hamster every x secs - load today, check last activity etc."""
+        self.update_label()
+        return True
 
     """signals"""
     def after_activity_update(self, widget):
