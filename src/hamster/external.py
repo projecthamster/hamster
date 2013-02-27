@@ -51,7 +51,8 @@ class ActivitiesSource(gobject.GObject):
             if self.rt_url and self.rt_user and self.rt_pass:
                 try:
                     self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
-                    self.tracker.login()
+                    if not self.tracker.login():
+                        self.source = ""
                 except:
                     self.source = ""
             else:
