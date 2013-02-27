@@ -71,7 +71,7 @@ class ActivitiesSource(gobject.GObject):
                 ticket = self.tracker.get_ticket(query)
                 if ticket:
                     category = self.__extract_cat_from_ticket(ticket)
-                    direct_ticket = {"name":"#"+ticket['id'][7:]+" "+ticket['Subject'], "category":category}
+                    direct_ticket = self.__extract_activity_from_ticket(ticket)
             if direct_ticket:
                 activities.append(direct_ticket)
             if len(activities) <= 2 and not direct_ticket and len(query) > 4:
