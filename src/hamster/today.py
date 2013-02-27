@@ -18,67 +18,22 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-import sys
 import logging
 import datetime as dt
 
 import gtk, gobject
-import glib
-import dbus, dbus.service, dbus.mainloop.glib
 import locale
-
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
 from hamster import widgets
 from hamster.lib import Fact, trophies, stuff
+from hamster.tray import ProjectHamsterStatusIcon
 
 try:
     import wnck
 except:
     logging.warning("Could not import wnck - workspace tracking will be disabled")
     wnck = None
-
-
-class ProjectHamsterStatusIcon(gtk.StatusIcon):
-    def __init__(self, project):
-        gtk.StatusIcon.__init__(self)
-
-        self.project = project
-
-        menu = '''
-            <ui>
-             <menubar name="Menubar">
-              <menu action="Menu">
-               <separator/>
-               <menuitem action="Quit"/>
-              </menu>
-             </menubar>
-            </ui>
-        '''
-        actions = [
-            ('Menu',  None, 'Menu'),
-            ('Quit', gtk.STOCK_QUIT, '_Quit...', None, 'Quit Time Tracker', self.on_quit)]
-        ag = gtk.ActionGroup('Actions')
-        ag.add_actions(actions)
-        self.manager = gtk.UIManager()
-        self.manager.insert_action_group(ag, 0)
-        self.manager.add_ui_from_string(menu)
-        self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
-
-        self.set_from_icon_name("hamster-time-tracker")
-        self.set_name(_('Time Tracker'))
-
-        self.connect('activate', self.on_activate)
-        self.connect('popup-menu', self.on_popup_menu)
-
-    def on_activate(self, data):
-        self.project.toggle_hamster_window()
-
-    def on_popup_menu(self, status, button, time):
-        self.menu.popup(None, None, None, button, time)
-
-    def on_quit(self, data):
-        gtk.main_quit()
 
 
 
@@ -134,7 +89,7 @@ class DailyView(object):
 
         self.reposition_hamster_window()
         self.show_hamster_window()
-        self.show_in_tray()
+        self.statusicon.show_indicator()
 
     def create_hamster_window(self):
         if self.window is None:
@@ -501,9 +456,8 @@ class DailyView(object):
         self.save_window_position()
         self.window.destroy()
         self.window = None
-
-    def show_in_tray(self):
-        # show the status tray icon
-        activity = self.get_widget("last_activity_name").get_text()
-        self.statusicon.set_tooltip(activity)
-        self.statusicon.set_visible(True)
+        
+#        # show the status tray icon
+#        activity = self.get_widget("last_activity_name").get_text()
+#        self.statusicon.set_tooltip(activity)
+#        self.statusicon.set_visible(True)
