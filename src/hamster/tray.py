@@ -37,7 +37,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
 #        applet = FakeApplet()
 
         self.indicator = appindicator.Indicator ("hamster-applet",
-                                  "indicator-messages",
+                                  "hamster-applet-inactive",
                                   appindicator.CATEGORY_SYSTEM_SERVICES)
 
         self.indicator.set_status (appindicator.STATUS_ACTIVE)
@@ -132,9 +132,9 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
     def _set_attention_icon(self):
         '''Set the attention icon as per the gconf key'''
         if self._use_icon_glow:
-            self.indicator.set_attention_icon('indicator-messages-new')
+            self.indicator.set_attention_icon('hamster-applet-active')
         else:
-            self.indicator.set_attention_icon('indicator-messages')
+            self.indicator.set_attention_icon('hamster-applet-inactive')
 
     def _get_no_activity_label(self):
         '''Get the indicator label set to "No activity"'''
