@@ -1,4 +1,4 @@
-
+# coding: utf-8
 #from hamster indicator
 import gconf
 import os.path
@@ -149,7 +149,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
                 if is_indicator:
                     text = "%s%s" % (text[:length], "...")
                 else:
-                    text = "%s%s" % (text[:length], "&#8230;")
+                    text = "%s%s" % (text[:length], "…")
             else:
                 text = "%s" % (text[:length])
         return text
