@@ -32,6 +32,7 @@ import dbus
 class DesktopIntegrations(object):
     def __init__(self, storage):
         self.storage = storage # can't use client as then we get in a dbus loop
+        self._last_notification = None
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
@@ -94,9 +95,15 @@ class DesktopIntegrations(object):
                                                     dbus_interface='org.freedesktop.Notifications')
         conn = self._notification_conn
 
-        conn.Notify("Project Hamster", 5, "hamster-time-tracker",
-                    summary, details,
-                    [], {"urgency": 0}, -1)
+        notification = conn.Notify("Project Hamster",
+                                   self._last_notification or 0,
+                                   "hamster-time-tracker",
+                                   summary,
+                                   details,
+                                   [],
+                                   {"urgency": 0, "transient" : True},
+                                   -1)
+        self._last_notification = notification
 
 
     def on_idle_changed(self, event, state):
