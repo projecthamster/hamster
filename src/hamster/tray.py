@@ -237,7 +237,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
 #        activity = stuff.escape_pango(activity)
 #        if len(activity) > 25:  #ellipsize at some random length
 #            activity = "%s%s" % (activity[:25], "&#8230;")
-        activity = self._clamp_text(activity)
+        activity = self._clamp_text(activity, self._label_length)
 
         self.activity = activity
         self.duration = duration
