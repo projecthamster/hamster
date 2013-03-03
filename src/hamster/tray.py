@@ -10,7 +10,7 @@ from hamster.lib import stuff
 from hamster.configuration import dialogs, runtime
 
 class ProjectHamsterStatusIcon():#gtk.StatusIcon):
-    BASE_KEY = "/apps/hamster-indicator"
+    BASE_KEY = "/apps/hamster-time-tracker"
     def __init__(self, project):
         self.project = project
 

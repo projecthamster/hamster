@@ -177,6 +177,9 @@ class GConfStore(gobject.GObject, Singleton):
         'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
+        'icon_glow'                   :   True,
+        'show_label'                  :   False,
+        'label_length'                :   20,
         'rt_url'                      :   "https://rt.contium.pl/REST/1.0/",          # RT REST url
         'rt_user'                     :   "",          # 
         'rt_pass'                     :   "",          # 

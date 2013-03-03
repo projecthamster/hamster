@@ -139,5 +139,48 @@
                 <long>Toggle visibility of the hamster application window.</long>
             </locale>
         </schema>
+        
+        
+        <schema>
+            <key>/schemas/apps/hamster-time-tracker/icon_glow</key>
+            <applyto>/apps/hamster-time-tracker/icon_glow</applyto>
+            <owner>hamster-time-tracker</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Make the icon glow when a task is active</short>
+                <long>
+                    Make the indicator icon glow when a task is active.
+                    The glow will go away when the hamster is idle.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-time-tracker/show_label</key>
+            <applyto>/apps/hamster-time-tracker/show_label</applyto>
+            <owner>hamster-time-tracker</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Show a label with current task</short>
+                <long>
+                    Show a label with current task beside the icon.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/hamster-time-tracker/label_length</key>
+            <applyto>/apps/hamster-time-tracker/label_length</applyto>
+            <owner>hamster-time-tracker</owner>
+            <type>int</type>
+            <default>20</default>
+            <locale name="C">
+                <short>Set the label's length</short>
+                <long>
+                    Set the length of the label with the current task
+                    beside the icon.
+                </long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>

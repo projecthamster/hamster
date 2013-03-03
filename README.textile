@@ -44,14 +44,14 @@ h1. Additional settings
 
 To enable/disable the icon glow: 
 
-pre. $ gconftool-2 --set "/apps/hamster-indicator/icon_glow" --type bool "false"
-$ gconftool-2 --set "/apps/hamster-indicator/icon_glow" --type bool "true"
+pre. $ gconftool-2 --set "/apps/hamster-time-tracker/icon_glow" --type bool "false"
+$ gconftool-2 --set "/apps/hamster-time-tracker/icon_glow" --type bool "true"
 
 To enable/disable the activity label:
 
-pre. $ gconftool-2 --set "/apps/hamster-indicator/show_label" --type bool "true"
-$ gconftool-2 --set "/apps/hamster-indicator/show_label" --type bool "false"
+pre. $ gconftool-2 --set "/apps/hamster-time-tracker/show_label" --type bool "true"
+$ gconftool-2 --set "/apps/hamster-time-tracker/show_label" --type bool "false"
 
 To set the maximum label length:
 
-pre. $ gconftool-2 --set "/apps/hamster-indicator/label_length" --type int "20"
+pre. $ gconftool-2 --set "/apps/hamster-time-tracker/label_length" --type int "20"
