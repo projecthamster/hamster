@@ -890,44 +890,44 @@ msgstr "iCal"
 msgid "Time track"
 msgstr "Zarządzanie czasem"
 
-#~ msgid "Show activities window"
-#~ msgstr "Wyświetlanie okna czynności"
+msgid "Show activities window"
+msgstr "Wyświetlanie okna czynności"
 
-#~ msgid "Sto_p Tracking"
-#~ msgstr "_Zatrzymaj śledzenie"
+msgid "Sto_p Tracking"
+msgstr "_Zatrzymaj śledzenie"
 
-#~ msgid "To_day"
-#~ msgstr "_Dzisiaj"
+msgid "To_day"
+msgstr "_Dzisiaj"
 
-#~ msgid "_Add earlier activity"
-#~ msgstr "Dod_aj wcześniejszą czynność"
+msgid "_Add earlier activity"
+msgstr "Dod_aj wcześniejszą czynność"
 
-#~ msgid "Show _Overview"
-#~ msgstr "Wyświetl p_odgląd"
+msgid "Show _Overview"
+msgstr "Wyświetl p_odgląd"
 
-#~ msgid "_Preferences"
-#~ msgstr "P_referencje"
+msgid "_Preferences"
+msgstr "P_referencje"
 
-#~ msgid "_About"
-#~ msgstr "_O programie"
+msgid "_About"
+msgstr "_O programie"
 
-#~ msgid "Year:"
-#~ msgstr "Rok:"
+msgid "Year:"
+msgstr "Rok:"
 
-#~ msgid "Starts and ends"
-#~ msgstr "Rozpoczęcia i zakończenia"
+msgid "Starts and ends"
+msgstr "Rozpoczęcia i zakończenia"
 
-#~ msgid "Preferences"
-#~ msgstr "Preferencje"
+msgid "Preferences"
+msgstr "Preferencje"
 
-#~ msgid "Changed activity"
-#~ msgstr "Zmieniono czynność"
+msgid "Changed activity"
+msgstr "Zmieniono czynność"
 
-#~ msgid "Switched to '%s'"
-#~ msgstr "Przełączono na \"%s\""
+msgid "Switched to '%s'"
+msgstr "Przełączono na \"%s\""
 
-#~ msgid "Working on <b>%s</b>"
-#~ msgstr "Wykonywana czynność: <b>%s</b>"
+msgid "Working on <b>%s</b>"
+msgstr "Wykonywana czynność: <b>%s</b>"
 
-#~ msgid "Hamster time tracker. Usage:"
-#~ msgstr "Program do zarządzania czasem Hamster. Użycie:"
+msgid "Hamster time tracker. Usage:"
+msgstr "Program do zarządzania czasem Hamster. Użycie:"

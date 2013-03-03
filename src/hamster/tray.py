@@ -111,7 +111,7 @@ class ProjectHamsterStatusIconUnity():
         # show the items
         self.activity_item.show()
 
-        self.stop_activity_item = gtk.MenuItem(_(u"Sto_p Tracking"))
+        self.stop_activity_item = gtk.MenuItem(_(u"Sto_p tracking"))
         self.menu.append(self.stop_activity_item)
         # this is where you would connect your menu item up with a function:
         self.stop_activity_item.connect("activate", self.on_stop_activity_activated, None)
@@ -127,7 +127,7 @@ class ProjectHamsterStatusIconUnity():
         # show the items
         self.earlier_activity_item.show()
 
-        self.overview_show_item = gtk.MenuItem(_(u"Show _Overview"))
+        self.overview_show_item = gtk.MenuItem(_(u"Show Overview"))
         self.menu.append(self.overview_show_item)
         # this is where you would connect your menu item up with a function:
         self.overview_show_item.connect("activate", self.on_overview_show_activated, None)
@@ -136,7 +136,7 @@ class ProjectHamsterStatusIconUnity():
 
         self.append_separator(self.menu)
 
-        self.preferences_show_item = gtk.MenuItem(_(u"Preferences"))
+        self.preferences_show_item = gtk.MenuItem(_(u"_Preferences"))
         self.menu.append(self.preferences_show_item)
         # this is where you would connect your menu item up with a function:
         self.preferences_show_item.connect("activate", self.on_show_preferences_activated, None)
