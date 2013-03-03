@@ -27,7 +27,7 @@ import locale
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
 from hamster import widgets
 from hamster.lib import Fact, trophies, stuff
-from hamster.tray import ProjectHamsterStatusIcon
+import hamster.tray as tray
 
 try:
     import wnck
@@ -84,12 +84,11 @@ class DailyView(object):
 
 
         # create the status icon
-        self.statusicon = ProjectHamsterStatusIcon(self)
-
+        self.statusicon = tray.get_status_icon(self)
 
         self.reposition_hamster_window()
         self.show_hamster_window()
-        self.statusicon.show_indicator()
+        self.statusicon.show()
 
     def create_hamster_window(self):
         if self.window is None:

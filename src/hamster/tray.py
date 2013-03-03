@@ -2,35 +2,86 @@
 #from hamster indicator
 import gconf
 import os.path
-import appindicator
 import gtk
 import datetime as dt
 import gobject
 from hamster.lib import stuff
-from hamster.configuration import dialogs, runtime
+from hamster.configuration import dialogs, runtime, conf
 
-class ProjectHamsterStatusIcon():#gtk.StatusIcon):
+have_appindicator = True
+try:
+    import appindicator
+except:
+    have_appindicator = False
+
+    
+def get_status_icon(project):
+    if have_appindicator:
+        return ProjectHamsterStatusIconUnity(project)
+    else:
+        return ProjectHamsterStatusIconGnome(project)
+
+class ProjectHamsterStatusIconGnome(gtk.StatusIcon):
+    def __init__(self, project):
+        gtk.StatusIcon.__init__(self)
+
+        self.project = project
+
+        menu = '''
+            <ui>
+             <menubar name="Menubar">
+              <menu action="Menu">
+               <separator/>
+               <menuitem action="Quit"/>
+              </menu>
+             </menubar>
+            </ui>
+        '''
+        actions = [
+            ('Menu',  None, 'Menu'),
+            ('Quit', gtk.STOCK_QUIT, '_Quit...', None, 'Quit Time Tracker', self.on_quit)]
+        ag = gtk.ActionGroup('Actions')
+        ag.add_actions(actions)
+        self.manager = gtk.UIManager()
+        self.manager.insert_action_group(ag, 0)
+        self.manager.add_ui_from_string(menu)
+        self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
+
+        self.set_from_icon_name("hamster-time-tracker")
+        self.set_name(_('Time Tracker'))
+
+        self.connect('activate', self.on_activate)
+        self.connect('popup-menu', self.on_popup_menu)
+
+    def on_activate(self, data):
+        self.project.toggle_hamster_window()
+
+    def on_popup_menu(self, status, button, time):
+        self.menu.popup(None, None, None, button, time)
+
+    def on_quit(self, data):
+        gtk.main_quit()
+        
+    def show(self):
+        # show the status tray icon
+        activity = self.project.get_widget("last_activity_name").get_text()
+        self.set_tooltip(activity)
+        self.set_visible(True)
+
+
+class ProjectHamsterStatusIconUnity():
     BASE_KEY = "/apps/hamster-time-tracker"
     def __init__(self, project):
         self.project = project
 
         # Gconf settings
-        self._settings = gconf.client_get_default()
-        self._settings.add_dir(self.BASE_KEY, gconf.CLIENT_PRELOAD_NONE)
+#        self._settings = gconf.client_get_default()
+#        self._settings.add_dir(self.BASE_KEY, gconf.CLIENT_PRELOAD_NONE)
         # Key to enable/disable icon glow
-        self._icon_glow_path = os.path.join(self.BASE_KEY, "icon_glow")
-        self._use_icon_glow = self._settings.get_bool(self._icon_glow_path)
-        self._settings.notify_add(self._icon_glow_path, self._on_icon_glow_changed)
-
-        # Key to show/hide the indicator label
-        self._show_label_path = os.path.join(self.BASE_KEY, "show_label")
-        self._show_label = self._settings.get_bool(self._show_label_path)
-        self._settings.notify_add(self._show_label_path, self._on_show_label_changed)
-
-        # Key to set the length of indicator label
-        self._label_length_path = os.path.join(self.BASE_KEY, "label_length")
-        self._label_length = self._settings.get_int(self._label_length_path)
-        self._settings.notify_add(self._label_length_path, self._on_label_length_changed)
+        self._use_icon_glow = conf.get("icon_glow")
+        self._show_label = conf.get("show_label")
+        self._label_length = conf.get("label_length")
+        conf.connect('conf-changed', self.on_conf_changed)
 
         self._activity_as_attribute = None
         # Create a fake applet since HamsterApplet requires one
@@ -108,24 +159,29 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         runtime.storage.connect('toggle-called', self.on_toggle_called)
         
         gobject.timeout_add_seconds(20, self.refresh_tray) # refresh hamster every 60 seconds to update duration
-
+    
+    def on_conf_changed(self, event, key, value):
+        self._on_icon_glow_changed()
+        self._on_show_label_changed()
+        self._on_label_length_changed()
+    
     def on_activate(self, data):
         self.project.toggle_hamster_window()
 
     def on_quit(self, data):
         gtk.main_quit()
         
-    def _on_show_label_changed(self, client, connection_id, entry, *args):
+    def _on_show_label_changed(self):
         '''Hide or show the indicator's label'''
-        self._show_label = self._settings.get_bool(self._show_label_path)
+        self._show_label = conf.get("show_label")
         if self._show_label:
             self.update_label()
         else:
             self.indicator.set_label("")
 
-    def _on_label_length_changed(self, client, connection_id, entry, *args):
+    def _on_label_length_changed(self):
         '''Resize the indicator's label'''
-        self._label_length = self._settings.get_int(self._label_length_path)
+        self._label_length = conf.get("label_length")
         if self._show_label:
             self.update_label()
             
@@ -154,8 +210,8 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
                 text = "%s" % (text[:length])
         return text
             
-    def _on_icon_glow_changed(self, client, connection_id, entry, *args):
-        self._use_icon_glow = self._settings.get_bool(self.BASE_KEY + "/icon_glow")
+    def _on_icon_glow_changed(self):
+        self._use_icon_glow = conf.get("icon_glow")
         self._set_attention_icon()
 
     def on_label_style_set(self, widget, something):
@@ -257,7 +313,7 @@ class ProjectHamsterStatusIcon():#gtk.StatusIcon):
         '''Update the menu so that the new activity text is visible'''
         self.indicator.set_menu(self.menu)
 
-    def show_indicator(self):
+    def show(self):
         self.indicator.set_menu(self.menu)
         self.refresh_tray()
 
