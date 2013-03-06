@@ -155,7 +155,7 @@ class DailyView(object):
 
         self.window.show_all()
         self.refresh_hamster()
-
+        self.window.present()
 
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
