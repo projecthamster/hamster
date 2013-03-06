@@ -264,7 +264,7 @@ class ActivityEntry(gtk.Entry):
 
         store = self.tree.get_model()
         if not store:
-            store = gtk.ListStore(str, str, str, str)
+            store = gtk.ListStore(str, str, str, str, str)
             self.tree.set_model(store)
         store.clear()
 
@@ -273,7 +273,7 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time])
+                    store.append([fillable, category['name'], fillable, time, activity.get('rt_id')])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             for activity in self.activities:
@@ -284,7 +284,7 @@ class ActivityEntry(gtk.Entry):
                 if time: #as we also support deltas, for the time we will grab anything up to first space
                     fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
 
-                store.append([fillable, activity['name'].lower(), activity['category'], time])
+                store.append([fillable, activity['name'].lower(), activity['category'], time, activity.get('rt_id')])
 
     def after_activity_update(self, widget):
         self.refresh_activities()
@@ -354,10 +354,15 @@ class ActivityEntry(gtk.Entry):
 
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
-        value = model.get_value(iter, 0)
-        match = re.match("^#(\d+): ", value)
-        #if match:
-        #    value += "RTRTRTRTRTRT"#rt.get_citket
+        name = model.get_value(iter, 1)
+        category = model.get_value(iter, 2)
+        rt_id = model.get_value(iter, 4)
+        match = re.match("^#(\d+): ", name)
+        if not rt_id and match:
+            rt_id = match.group(1)
+        if rt_id:
+            category = self.external.get_ticket_category(rt_id)
+        value = '@'.join([name, category])
         self.set_text(value)
         self.hide_popup()
         self.set_position(len(self.get_text()))

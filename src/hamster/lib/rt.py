@@ -293,8 +293,10 @@ class Rt:
             return []
 
     @cache_region('short_term', 'search_raw')
-    def search_raw(self, user_query):
-        query = 'search/ticket?query=' + user_query + "&format=l&fields=id,Subject,Owner,CF.{Projekt},Requestors"
+    def search_raw(self, user_query, additional_fields=[]):
+        query = 'search/ticket?query=' + user_query + "&format=l&fields=id,Subject,Owner,Requestors"
+        if additional_fields:
+            query = ','.join([query]+additional_fields)
         msgs = self.__request(query)
         msgs = msgs.split('\n--\n')
         items = []

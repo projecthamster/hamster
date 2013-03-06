@@ -166,7 +166,7 @@ class ProjectHamsterStatusIconUnity():
         self._on_label_length_changed()
     
     def on_activate(self, data):
-        self.project.toggle_hamster_window()
+        self.project.show_hamster_window()
 
     def on_quit(self, data):
         gtk.main_quit()
