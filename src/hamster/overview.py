@@ -164,6 +164,8 @@ class Overview(gtk.Object):
         self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
         self.get_widget("export").set_sensitive(len(self.facts) > 0)
+        self.get_widget("export_rt").set_sensitive(len(self.facts) > 0)
+        self.get_widget("export_rt").set_visible(conf.get("activities_source")=="rt")
 
         self.set_title()
 
@@ -216,6 +218,9 @@ class Overview(gtk.Object):
     def on_search_changed(self, widget):
         has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
+        
+    def on_export_rt_activate(self, widget):
+        pass
 
     def on_export_activate(self, widget):
         def on_report_chosen(widget, format, path):

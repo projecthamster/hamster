@@ -12,6 +12,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkAction" id="export_rt">
+        <property name="label" translatable="yes">Report to RT...</property>
+        <property name="icon_name">document-revert</property>
+        <signal name="activate" handler="on_export_rt_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkAction" id="close">
         <property name="stock_id">gtk-close</property>
         <signal name="activate" handler="on_close_activate" swapped="no"/>
@@ -65,6 +72,12 @@
                       <object class="GtkMenuItem" id="report_button">
                         <property name="visible">True</property>
                         <property name="related_action">export</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="report_rt_button">
+                        <property name="visible">True</property>
+                        <property name="related_action">export_rt</property>
                       </object>
                     </child>
                     <child>
