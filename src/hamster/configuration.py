@@ -184,6 +184,7 @@ class GConfStore(gobject.GObject, Singleton):
         'rt_user'                     :   "",          # 
         'rt_pass'                     :   "",          # 
         'rt_query'                    :   "Owner='__CurrentUser__' AND (Status='new' OR Status='open')",          # RT query for autocomplete
+        'rt_category_field'           :   "CF.{Projekt}",
     }
 
     __gsignals__ = {

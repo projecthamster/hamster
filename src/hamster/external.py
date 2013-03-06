@@ -48,6 +48,7 @@ class ActivitiesSource(gobject.GObject):
             self.rt_user = conf.get("rt_user")
             self.rt_pass = conf.get("rt_pass")
             self.rt_query = conf.get("rt_query")
+            self.rt_category = conf.get("rt_category_field")
             if self.rt_url and self.rt_user and self.rt_pass:
                 try:
                     self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
@@ -71,7 +72,6 @@ class ActivitiesSource(gobject.GObject):
             if query and re.match("^[0-9]+$", query):
                 ticket = self.tracker.get_ticket(query)
                 if ticket:
-                    category = self.__extract_cat_from_ticket(ticket)
                     direct_ticket = self.__extract_activity_from_ticket(ticket)
             if direct_ticket:
                 activities.append(direct_ticket)
@@ -108,6 +108,10 @@ class ActivitiesSource(gobject.GObject):
                     activities.append({"name": name, "category": ""})
 
             return activities
+        
+    def get_ticket_category(self, ticket_id):
+        ticket = self.tracker.get_ticket(ticket_id)
+        return self.__extract_cat_from_ticket(ticket)
     
     def __extract_activity_from_ticket(self, ticket):
         #activity = {}
@@ -133,11 +137,11 @@ class ActivitiesSource(gobject.GObject):
         
     def __extract_cat_from_ticket(self, ticket):
         category = "RT"
-        owner = None
         if 'Queue' in ticket:
             category = ticket['Queue']
-        if 'CF.{Projekt}' in ticket:
-            category = ticket['CF.{Projekt}']
+        if self.rt_category in ticket:
+            category = ticket[self.rt_category]
+#        owner = None
 #        if 'Owner' in ticket:
 #            owner = ticket['Owner']
 #        if owner and owner!=self.rt_user:
