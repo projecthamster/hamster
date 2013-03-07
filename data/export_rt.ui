@@ -2,15 +2,19 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkAction" id="on_done_activated"/>
-  <object class="GtkWindow" id="report_popup">
+  <object class="GtkAction" id="done">
+    <signal name="activate" handler="on_done_activate" swapped="no"/>
+  </object>
+  <object class="GtkAction" id="start">
+    <signal name="activate" handler="on_start_activate" swapped="no"/>
+  </object>
+  <object class="GtkWindow" id="report_rt_window">
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="window_position">mouse</property>
+    <property name="title" translatable="yes">Export to RT — Hamster</property>
+    <property name="window_position">center</property>
+    <property name="default_width">400</property>
+    <property name="default_height">300</property>
     <property name="destroy_with_parent">True</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="decorated">False</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -76,16 +80,29 @@
                   <object class="GtkHButtonBox" id="hbuttonbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="layout_style">end</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkButton" id="start_button">
+                        <property name="label" translatable="yes">Start reporting</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="related_action">start</property>
+                        <property name="use_action_appearance">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button1">
+                      <object class="GtkButton" id="done_button">
                         <property name="label" translatable="yes">Done</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="related_action">on_done_activated</property>
+                        <property name="related_action">done</property>
                         <property name="use_action_appearance">False</property>
                       </object>
                       <packing>

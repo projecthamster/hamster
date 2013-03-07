@@ -28,6 +28,7 @@ import webbrowser
 
 import gtk, gobject
 import pango
+import logging
 
 import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
@@ -220,7 +221,7 @@ class Overview(gtk.Object):
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
         
     def on_export_rt_activate(self, widget):
-        pass
+        dialogs.export_rt.show(self, facts = self.facts)
 
     def on_export_activate(self, widget):
         def on_report_chosen(widget, format, path):

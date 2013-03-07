@@ -148,6 +148,11 @@ class Dialogs(Singleton):
             return PreferencesEditor
         self.prefs = OneWindow(get_prefs_class)
 
+        def get_export_rt_class():
+            from exportrt import ExportRtController
+            return ExportRtController
+        self.export_rt = OneWindow(get_export_rt_class)
+
 dialogs = Dialogs()
 
 

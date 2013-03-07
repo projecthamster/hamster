@@ -587,7 +587,7 @@ Bcc: %s"""%(str(ticket_id), re.sub(r'\n', r'\n      ', text), cc, bcc)}
                              post_data, files)
         return self.__get_status_code(msg) == 200
 
-    def comment(self, ticket_id, text='', cc='', bcc='', files=[]):
+    def comment(self, ticket_id, text='', time_worked=0, cc='', bcc='', files=[]):
         """ Adds comment to the given ticket.
         
         Form of message according to documentation::
@@ -609,7 +609,8 @@ Bcc: %s"""%(str(ticket_id), re.sub(r'\n', r'\n      ', text), cc, bcc)}
         """
         post_data = {'content':"""id: %s
 Action: comment
-Text: %s""" % (str(ticket_id), re.sub(r'\n', r'\n      ', text))}
+TimeWorked: %s
+Text: %s""" % (str(ticket_id), time_worked, re.sub(r'\n', r'\n      ', text))}
         for file_pair in files:
             post_data['content'] += "\nAttachment: %s" % (file_pair[0],)
         msg = self.__request('ticket/%s/comment' % (str(ticket_id),),

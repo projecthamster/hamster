@@ -30,7 +30,7 @@ try:
     from evolution import ecal
 except:
     evolution = None
-
+    
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
         logging.debug('external init')
