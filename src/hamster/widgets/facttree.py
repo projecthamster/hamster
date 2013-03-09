@@ -46,7 +46,14 @@ def action_painter(column, cell, model, iter):
     else:
         cell.set_property("stock_id", "gtk-edit")
 
-
+def action_toggle(column, cell, model, iter):
+    row = model.get_value(iter, 0)
+    if isinstance(row, GroupRow):
+        cell.set_property("active", False)
+        cell.set_property("visible", False)
+    else:
+        cell.set_property("visible", True)
+        cell.set_property("active", row.selected)
 
 class GroupRow(object):
     def __init__(self, label, date, duration):
@@ -75,6 +82,7 @@ class FactRow(object):
         self.start_time = fact.start_time
         self.end_time = fact.end_time
         self.delta = fact.delta
+        self.selected = True
 
     def __eq__(self, other):
         return isinstance(other, FactRow) and other.id == self.id \
@@ -84,7 +92,8 @@ class FactRow(object):
            and other.tags == self.tags \
            and other.start_time == self.start_time \
            and other.end_time == self.end_time \
-           and other.delta == self.delta
+           and other.delta == self.delta \
+           and other.selected == self.selected
 
 
     def __hash__(self):
@@ -96,7 +105,7 @@ class FactTree(gtk.TreeView):
         "double-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
     }
 
-    def __init__(self):
+    def __init__(self, show_selection=False):
         gtk.TreeView.__init__(self)
 
         self.set_headers_visible(False)
@@ -106,6 +115,16 @@ class FactTree(gtk.TreeView):
         self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT)
         self.set_model(self.store_model)
 
+        
+        if show_selection:
+            toggle_cell = gtk.CellRendererToggle()
+            toggle_cell.set_property('activatable', True)
+            toggle_cell.connect('toggled', self._on_toggle_clicked, self.store_model)
+            
+            self.toggle_column = gtk.TreeViewColumn("Raportuj", toggle_cell)
+            self.toggle_column.set_cell_data_func(toggle_cell, action_toggle)
+            self.toggle_column.add_attribute(toggle_cell, "active", 1)
+            self.append_column(self.toggle_column)
 
         fact_cell = FactCellRenderer()
         fact_column = gtk.TreeViewColumn("", fact_cell, data=0)
@@ -348,6 +367,9 @@ class FactTree(gtk.TreeView):
         else:
             return None
 
+    def _on_toggle_clicked(self, cell, path, model):
+        row = model[path][0]
+        row.selected = not row.selected
 
     def _on_button_release_event(self, tree, event):
         # a hackish solution to make edit icon keyboard accessible

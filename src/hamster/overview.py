@@ -435,9 +435,32 @@ class Overview(gtk.Object):
             self.window = None
 
             self.emit("on-close")
-
-
-
+        
+    def on_start_activate(self, button):
+        if self.tracker:
+            for fact in self.facts:
+                match = re.match("^#(\d+): ", fact.activity)
+                if fact.end_time and match:
+                    ticket_id = match.group(1)
+                    text = self.get_text(fact)
+                    time_worked = stuff.duration_minutes(fact.delta)
+                    logging.warn(ticket_id)
+                    logging.warn(text)
+                    logging.warn("minutes: %s" % time_worked)
+#                    external.tracker.comment(ticket_id, text, time_worked)
+                else:
+                    logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
+        else:
+            logging.warn("Not connected to/logged in RT")
+            
+    def get_text(self, fact):
+        text = "%s, %s - %s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
+        if fact.description:
+            text += ": %s" % (fact.description)
+        if fact.tags:
+            text += " ("+", ".join(fact.tags)+")"
+        return text
+    
     def on_delete_window(self, window, event):
         self.close_window()
         return True

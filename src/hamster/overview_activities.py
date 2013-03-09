@@ -52,7 +52,7 @@ class OverviewBox(gtk.VBox):
         self.start_date, self.end_date = None, None
         self.facts = []
 
-        self.fact_tree = widgets.FactTree()
+        self.fact_tree = widgets.FactTree(True)
         self.fact_tree.connect("row-activated", self.on_facts_row_activated)
         self.fact_tree.connect("key-press-event", self.on_facts_keys)
         self.fact_tree.connect("edit-clicked", lambda tree, fact: self.on_edit_clicked(fact))
