@@ -363,7 +363,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -389,7 +390,7 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "activity_id", "category", "tag"]
+                    "activity_id", "category", "tag", "exported"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
 
             grouped_fact["tags"] = [ft["tag"] for ft in fact_tags if ft["tag"]]
@@ -516,10 +517,11 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
+    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False, exported = False):
         fact = Fact(serialized_fact,
                     start_time = start_time,
-                    end_time = end_time)
+                    end_time = end_time, 
+                    exported = exported)
 
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
@@ -608,10 +610,10 @@ class Storage(storage.Storage):
 
         # finally add the new entry
         insert = """
-                    INSERT INTO facts (activity_id, start_time, end_time, description)
-                               VALUES (?, ?, ?, ?)
+                    INSERT INTO facts (activity_id, start_time, end_time, description, exported)
+                               VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, fact.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description, fact.exported))
 
         fact_id = self.__last_insert_rowid()
 
@@ -660,7 +662,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -962,7 +965,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 9
+        current_version = 10
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -985,6 +988,10 @@ class Storage(storage.Storage):
             # adding full text search
             self.execute("""CREATE VIRTUAL TABLE fact_index
                                            USING fts3(id, name, category, description, tag)""")
+        if version < 10:
+            # adding exported
+            self.execute("""ALTER TABLE facts ADD COLUMN exported bool default false""")
+            self.execute("""UPDATE facts set exported=1""")
 
 
         # at the happy end, update version number

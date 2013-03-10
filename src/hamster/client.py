@@ -40,6 +40,7 @@ def from_dbus_fact(fact):
                 date = dt.datetime.utcfromtimestamp(fact[8]).date(),
                 delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
                                      seconds = fact[9] % (24 * 60 * 60)),
+                exported = fact[10],
             id = fact[0]
             )
 
@@ -202,7 +203,7 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact, temporary_activity = False):
+    def update_fact(self, fact_id, fact, temporary_activity = False, exported = False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -219,7 +220,8 @@ class Storage(gobject.GObject):
                                        fact.serialized_name(),
                                        start_time,
                                        end_time,
-                                       temporary_activity)
+                                       temporary_activity,
+                                       exported)
 
         trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id

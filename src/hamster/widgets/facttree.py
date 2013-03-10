@@ -82,7 +82,7 @@ class FactRow(object):
         self.start_time = fact.start_time
         self.end_time = fact.end_time
         self.delta = fact.delta
-        self.selected = True
+        self.selected = not fact.exported
 
     def __eq__(self, other):
         return isinstance(other, FactRow) and other.id == self.id \
