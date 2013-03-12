@@ -21,33 +21,32 @@
 
 import gtk, gobject
 import cairo
-import datetime as dt
 
 from ..lib import stuff, graphics
 from tags import Tag
 
 import pango
 
-def parent_painter(column, cell, model, iter):
-    row = model.get_value(iter, 0)
+def parent_painter(column, cell, model, it):
+    row = model.get_value(it, 0)
 
     if isinstance(row, FactRow):
         cell.set_property('data', row)
     else:
-        row.first = model.get_path(iter) == (0,) # first row
+        row.first = model.get_path(it) == (0,) # first row
         cell.set_property('data', row)
 
-def action_painter(column, cell, model, iter):
+def action_painter(column, cell, model, it):
     cell.set_property('xalign', 1)
     cell.set_property('yalign', 0)
 
-    if isinstance(model.get_value(iter, 0), GroupRow):
+    if isinstance(model.get_value(it, 0), GroupRow):
         cell.set_property("stock_id", "")
     else:
         cell.set_property("stock_id", "gtk-edit")
 
-def action_toggle(column, cell, model, iter):
-    row = model.get_value(iter, 0)
+def action_toggle(column, cell, model, it):
+    row = model.get_value(it, 0)
     if isinstance(row, GroupRow):
         cell.set_property("active", False)
         cell.set_property("visible", False)
@@ -110,21 +109,22 @@ class FactTree(gtk.TreeView):
 
         self.set_headers_visible(False)
         self.set_show_expanders(False)
+        self.show_selection = show_selection
 
         # fact (None for parent), duration, parent data (if any)
         self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT)
         self.set_model(self.store_model)
 
         
-        if show_selection:
-            toggle_cell = gtk.CellRendererToggle()
-            toggle_cell.set_property('activatable', True)
-            toggle_cell.connect('toggled', self._on_toggle_clicked, self.store_model)
-            
-            self.toggle_column = gtk.TreeViewColumn("Raportuj", toggle_cell)
-            self.toggle_column.set_cell_data_func(toggle_cell, action_toggle)
-            self.toggle_column.add_attribute(toggle_cell, "active", 1)
-            self.append_column(self.toggle_column)
+        toggle_cell = gtk.CellRendererToggle()
+        toggle_cell.set_property('activatable', True)
+        toggle_cell.connect('toggled', self._on_toggle_clicked, self.store_model)
+        
+        self.toggle_column = gtk.TreeViewColumn(_("Export to RT"), toggle_cell)
+        self.toggle_column.set_cell_data_func(toggle_cell, action_toggle)
+        self.toggle_column.add_attribute(toggle_cell, "active", 1)
+        self.toggle_column.set_visible(self.show_selection)
+        self.append_column(self.toggle_column)
 
         fact_cell = FactCellRenderer()
         fact_column = gtk.TreeViewColumn("", fact_cell, data=0)
@@ -188,17 +188,17 @@ class FactTree(gtk.TreeView):
         if fact.end_time:
             interval = "%s %s" % (interval, fact.end_time.strftime("%H:%M"))
         self._test_layout.set_markup(interval)
-        w, h = self._test_layout.get_pixel_size()
+        w = self._test_layout.get_pixel_size()[0]
         self.longest_interval = max(self.longest_interval, w + 20)
 
 
         self._test_layout.set_markup("%s - <small>%s</small> " % (stuff.escape_pango(fact.name),
                                                                   stuff.escape_pango(fact.category)))
-        w, h = self._test_layout.get_pixel_size()
+        w = self._test_layout.get_pixel_size()[0]
         self.longest_activity_category = max(self.longest_activity_category, w + 10)
 
         self._test_layout.set_markup("%s" % stuff.format_duration(fact.delta))
-        w, h = self._test_layout.get_pixel_size()
+        w = self._test_layout.get_pixel_size()[0]
         self.longest_duration = max(self.longest_duration, w)
 
 
@@ -222,7 +222,7 @@ class FactTree(gtk.TreeView):
         if path is None or path < 0: return None
 
         try: # see if path is still valid
-            iter = self.store_model.get_iter(path)
+#            it = self.store_model.get_iter(path)
             return self.store_model[path]
         except:
             return None
@@ -298,36 +298,36 @@ class FactTree(gtk.TreeView):
         if not selection:
             return
 
-        model, iter = selection.get_selected()
-        if iter:
-            path = model.get_path(iter)[0]
-            prev, cur, next = path - 1, path, path + 1
+        model, it = selection.get_selected()
+        if it:
+            path = model.get_path(it)[0]
+            prev, cur, nxt = path - 1, path, path + 1
             self.stored_selection = ((prev, self.id_or_label(prev)),
                                      (cur, self.id_or_label(cur)),
-                                     (next, self.id_or_label(next)))
+                                     (nxt, self.id_or_label(nxt)))
 
 
     def restore_selection(self):
         """the code is quite hairy, but works with all kinds of deletes
            and does not select row when it should not.
            TODO - it might be worth replacing this with something much simpler"""
-        model = self.store_model
+#        model = self.store_model
 
         new_prev_val, new_cur_val, new_next_val = None, None, None
-        prev, cur, next = self.stored_selection
+        prev, cur, nxt = self.stored_selection
 
         if cur:  new_cur_val  = self.id_or_label(cur[0])
         if prev: new_prev_val = self.id_or_label(prev[0])
-        if next: new_next_val = self.id_or_label(next[0])
+        if nxt: new_next_val = self.id_or_label(nxt[0])
 
         path = None
         values = (new_prev_val, new_cur_val, new_next_val)
-        paths = (prev, cur, next)
+        paths = (prev, cur, nxt)
 
         if cur[1] and cur[1] in values: # simple case
             # look if we can find previous current in the new threesome
             path = paths[values.index(cur[1])][0]
-        elif prev[1] and prev[1] == new_prev_val and next[1] and next[1] == new_next_val:
+        elif prev[1] and prev[1] == new_prev_val and nxt[1] and nxt[1] == new_next_val:
             # on update the ID changes so we find it by matching in between
             path = cur[0]
         elif prev[1] and prev[1] == new_prev_val: # all that's left is delete.
@@ -336,7 +336,7 @@ class FactTree(gtk.TreeView):
             else:
                 path = prev[0]
         elif not new_prev_val and not new_next_val and new_cur_val:
-            # the only record in the tree (no next no previous, but there is current)
+            # the only record in the tree (no nxt no previous, but there is current)
             path = cur[0]
 
 
@@ -357,9 +357,9 @@ class FactTree(gtk.TreeView):
 
     def get_selected_fact(self):
         selection = self.get_selection()
-        (model, iter) = selection.get_selected()
-        if iter:
-            data = model[iter][0]
+        (model, it) = selection.get_selected()
+        if it:
+            data = model[it][0]
             if isinstance(data, FactRow):
                 return data.fact
             else:
@@ -404,7 +404,7 @@ class FactTree(gtk.TreeView):
         path = view.get_path_at_pos(int(event.x), int(event.y))
 
         if path:
-            path, col, x, y = path
+            path = path[0]
 
             model = self.get_model()
             data = model[path][0]
@@ -412,7 +412,7 @@ class FactTree(gtk.TreeView):
             self.set_tooltip_text(None)
 
             if isinstance(data, FactRow):
-                renderer = view.get_column(0).get_cell_renderers()[0]
+#                renderer = view.get_column(1).get_cell_renderers()[0]
 
                 label = data.description
                 self.set_tooltip_text(label)
@@ -456,7 +456,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         self.duration_label = graphics.Label(size=self.default_size)
         self.labels.add_child(self.duration_label)
 
-        default_font = gtk.Style().font_desc.to_string()
+#        default_font = gtk.Style().font_desc.to_string()
 
         self.tag = Tag("")
 
@@ -491,9 +491,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         context = window.cairo_create()
 
         if isinstance(self.data, FactRow):
-            fact, parent = self.data, None
+            parent = None
         else:
-            parent, fact = self.data, None
+            parent= self.data
 
 
         x, y, width, height = cell_area
@@ -532,12 +532,12 @@ class FactCellRenderer(gtk.GenericCellRenderer):
     def render_cell(self, context, bounds, widget, flags, really = True):
         if not bounds:
             return -1
-        x, y, cell_width, h = bounds
+        cell_width = bounds[2]
 
         self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
         self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
 
-        g = graphics.Graphics(context)
+#        g = graphics.Graphics(context)
 
         fact = self.data
 
