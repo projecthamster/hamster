@@ -21,9 +21,12 @@
 
 import gtk, gobject
 import cairo
+import datetime as dt
+import re
 
 from ..lib import stuff, graphics
 from tags import Tag
+from ..lib.rt import TICKET_NAME_REGEX
 
 import pango
 
@@ -51,7 +54,7 @@ def action_toggle(column, cell, model, it):
         cell.set_property("active", False)
         cell.set_property("visible", False)
     else:
-        cell.set_property("visible", True)
+        cell.set_property("visible", row.end_time and re.match(TICKET_NAME_REGEX, row.name))
         cell.set_property("active", row.selected)
 
 class GroupRow(object):

@@ -20,6 +20,7 @@
 
 import pygtk
 from hamster.widgets.facttree import FactTree, GroupRow, FactRow
+from lib.rt import TICKET_NAME_REGEX
 pygtk.require('2.0')
 
 import os
@@ -224,9 +225,6 @@ class Overview(gtk.Object):
     def on_search_changed(self, widget):
         has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
-        
-    def on_export_rt_activate(self, widget):
-        dialogs.export_rt.show(self, facts = self.facts)
 
     def on_export_activate(self, widget):
         def on_report_chosen(widget, format, path):
@@ -440,28 +438,55 @@ class Overview(gtk.Object):
             self.window = None
 
             self.emit("on-close")
-            
+           
+#    UNUSED 
     def on_done_activate(self, button):
         pass
-        
+    
+#    UNUSED
+    def on_export_rt_activate(self, widget):
+        pass
+    
     def on_start_activate(self, button):
+        to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
+        to_report = [row[0].fact for row in to_report]
+        dialogs.export_rt.show(self.window, facts = to_report)
+        
+    def on_start_activate_2(self, button):
         self.start_button.set_sensitive(False)
         while gtk.events_pending(): 
             gtk.main_iteration()
 #        runtime.storage.update_fact(fact_id, fact, temporary_activity, exported)
         tree = self.fact_tree
-        self.__iterate_over_rows(tree.get_model())
+        to_report = filter(self.__is_rt_ticket, tree.get_model())
+        
+        for row in to_report:
+            self.__report(row[0])
+                
         self.search()
         while gtk.events_pending(): 
             gtk.main_iteration()
         self.start_button.set_sensitive(True)
         
-
+    def __is_rt_ticket(self, row):
+        if not self.external.tracker:
+            logging.warn("Not connected to/logged in RT")
+            return False
+        if not isinstance(row[0], FactRow):
+            return False
+#            self.__report(row[0])
+        fact = row[0].fact
+        match = re.match(TICKET_NAME_REGEX, fact.activity)
+        if row[0].selected and fact.end_time and match:
+            return True
+        else:
+            return False
+    
     def __report(self, fact_row):
         fact = fact_row.fact
         logging.warn(fact_row.name)
         if self.external.tracker:
-            match = re.match("^#(\d+): ", fact.activity)
+            match = re.match(TICKET_NAME_REGEX, fact.activity)
 #            if not fact_row.selected:
 #                logging.warn("Row not selected: %s" % fact.activity)
             if fact_row.selected and fact.end_time and match:
@@ -477,11 +502,6 @@ class Overview(gtk.Object):
                 logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
         else:
             logging.warn("Not connected to/logged in RT")
-    
-    def __iterate_over_rows(self, rows):
-        for row in rows:
-            if isinstance(row[0], FactRow):
-                self.__report(row[0])
             
     def get_text(self, fact):
         text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))

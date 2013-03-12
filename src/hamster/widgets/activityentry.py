@@ -24,6 +24,7 @@ import re
 from ..configuration import runtime
 from ..lib import Fact, stuff, graphics
 from .. import external
+from ..lib.rt import TICKET_NAME_REGEX
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {
@@ -357,7 +358,7 @@ class ActivityEntry(gtk.Entry):
         name = model.get_value(iter, 1)
         category = model.get_value(iter, 2)
         rt_id = model.get_value(iter, 4)
-        match = re.match("^#(\d+): ", name)
+        match = re.match(TICKET_NAME_REGEX, name)
         if not rt_id and match:
             rt_id = match.group(1)
         if rt_id:
