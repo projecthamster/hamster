@@ -224,9 +224,6 @@ class Overview(gtk.Object):
     def on_search_changed(self, widget):
         has_text = len(widget.get_text()) > 0
         widget.set_icon_sensitive(gtk.ENTRY_ICON_SECONDARY, has_text)
-        
-    def on_export_rt_activate(self, widget):
-        dialogs.export_rt.show(self, facts = self.facts)
 
     def on_export_activate(self, widget):
         def on_report_chosen(widget, format, path):
@@ -440,9 +437,17 @@ class Overview(gtk.Object):
             self.window = None
 
             self.emit("on-close")
-            
+           
+#    UNUSED 
     def on_done_activate(self, button):
         pass
+    
+#    UNUSED
+    def on_export_rt_activate(self, widget):
+        pass
+    
+    def on_start_activate_bak(self, button):
+        dialogs.export_rt.show(self, facts = self.facts)
         
     def on_start_activate(self, button):
         self.start_button.set_sensitive(False)
