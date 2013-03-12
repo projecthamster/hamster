@@ -113,12 +113,12 @@ class DailyView(object):
             self.tag_box = widgets.TagBox(interactive = False)
             self.get_widget("tag_box").add(self.tag_box)
 
-            self.treeview = widgets.FactTree()
-            self.treeview.connect("key-press-event", self.on_todays_keys)
-            self.treeview.connect("edit-clicked", self._open_edit_activity)
-            self.treeview.connect("row-activated", self.on_today_row_activated)
+            self.view = widgets.FactTree()
+            self.view.connect("key-press-event", self.on_todays_keys)
+            self.view.connect("edit-clicked", self._open_edit_activity)
+            self.view.connect("row-activated", self.on_today_row_activated)
 
-            self.get_widget("today_box").add(self.treeview)
+            self.get_widget("today_box").add(self.view)
 
             # connect the accelerators
             self.accel_group = self.get_widget("accelgroup")
@@ -182,7 +182,7 @@ class DailyView(object):
            returns information about last activity"""
         facts = self.todays_facts = runtime.storage.get_todays_facts()
 
-        self.treeview.detach_model()
+        self.view.detach_model()
 
         if facts and facts[-1].end_time == None:
             self.last_activity = facts[-1]
@@ -194,9 +194,9 @@ class DailyView(object):
             duration = 24 * 60 * fact.delta.days + fact.delta.seconds / 60
             by_category[fact.category] = \
                           by_category.setdefault(fact.category, 0) + duration
-            self.treeview.add_fact(fact)
+            self.view.add_fact(fact)
 
-        self.treeview.attach_model()
+        self.view.attach_model()
 
         if not facts:
             self._gui.get_object("today_box").hide()
@@ -254,7 +254,7 @@ class DailyView(object):
 
 
     def delete_selected(self):
-        fact = self.treeview.get_selected_fact()
+        fact = self.view.get_selected_fact()
         runtime.storage.remove_fact(fact.id)
 
 
@@ -416,7 +416,7 @@ class DailyView(object):
         self.last_activity = None
 
     def on_window_configure_event(self, window, event):
-        self.treeview.fix_row_heights()
+        self.view.fix_row_heights()
 
     def show(self):
         self.window.show_all()

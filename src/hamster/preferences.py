@@ -402,7 +402,7 @@ class PreferencesEditor(gtk.Object):
         self.prev_selected_category = None
         try:
             target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
-            model, source = treeview.get_selection().get_selected()
+            model, source = view.get_selection().get_selected()
 
         except:
             return
@@ -571,7 +571,7 @@ class PreferencesEditor(gtk.Object):
 
     def on_activity_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
+            # Get view path.
             path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
 
             if self.prev_selected_activity == path:
@@ -585,7 +585,7 @@ class PreferencesEditor(gtk.Object):
 
     def on_category_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
+            # Get view path.
             path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
 
             if self.prev_selected_category == path and \

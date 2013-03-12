@@ -60,6 +60,8 @@ cache_regions.update({
 DEFAULT_QUEUE = 'General'
 """ Default queue used. """
 
+TICKET_NAME_REGEX = "^#(\d+): "
+
 class Rt:
     """ :term:`API` for Request Tracker according to
     http://requesttracker.wikia.com/wiki/REST. Interface is based on
@@ -332,6 +334,7 @@ class Rt:
         except:
             return []
 
+    @cache_region('short_term', 'get_ticket')
     def get_ticket(self, ticket_id):
         """ Fetch ticket by its ID.
         
@@ -389,6 +392,7 @@ class Rt:
                 colon = msg[i].find(': ')
                 if colon > 0:
                     pairs[msg[i][:colon].strip()] = msg[i][colon+1:].strip()
+            pairs['id'] = ticket_id
             return pairs
         else:
             raise Exception('Connection error')
