@@ -125,7 +125,6 @@ class FactTree(gtk.TreeView):
         
         self.toggle_column = gtk.TreeViewColumn(_("Export to RT"), toggle_cell)
         self.toggle_column.set_cell_data_func(toggle_cell, action_toggle)
-        self.toggle_column.add_attribute(toggle_cell, "active", 1)
         self.toggle_column.set_visible(self.show_selection)
         self.append_column(self.toggle_column)
 

@@ -68,8 +68,7 @@ class TicketRow(object):
 
     def __hash__(self):
         return self.id
-
-
+    
 def id_painter(column, cell, model, iter):
     row = model.get_value(iter, 0)
     if isinstance(row, ExportRow):
@@ -82,8 +81,10 @@ def id_painter(column, cell, model, iter):
 def name_comment_painter(column, cell, model, iter):
     row = model.get_value(iter, 0)
     if isinstance(row, ExportRow):
+        cell.set_property('editable', True)
         cell.set_property('text', row.comment)
     else:
+        cell.set_property('editable', False)
         cell.set_property('text', row.name)
 
 
@@ -94,13 +95,19 @@ def time_painter(column, cell, model, iter):
         adjustment = gtk.Adjustment(row.time_worked, 0, 1000, 1, 10, 0)
         cell.set_property("editable", True)
         cell.set_property("adjustment", adjustment)
-#        cell.set_property("data", row.time_worked)
+        cell.set_property("text", row.time_worked)
     else:
-        cell.set_visible(False)
+        cell.set_visible(True)
+        
+        child_iter = model.iter_children(iter)
+        time_worked = 0
+        while child_iter:
+            time_worked += model.get_value(child_iter, 0).time_worked
+            child_iter = model.iter_next(child_iter)
+            
         cell.set_property("editable", False)
         cell.set_property("adjustment", None)
-#        cell.set_property("data", None)
-
+        cell.set_property("text", time_worked)
 
 class ExportRtController(gtk.Object):
     __gsignals__ = {
@@ -144,32 +151,40 @@ class ExportRtController(gtk.Object):
         
         
         id_cell = gtk.CellRendererText()
-        id_column = gtk.TreeViewColumn("", id_cell)
+        id_column = gtk.TreeViewColumn("", id_cell, text=0)
         id_column.set_cell_data_func(id_cell, id_painter)
-        id_column.set_expand(True)
+        id_column.set_max_width(100)
         self.view.append_column(id_column)
         
         name_comment_cell = gtk.CellRendererText()
-        name_comment_column = gtk.TreeViewColumn("", name_comment_cell)
+        name_comment_cell.connect("edited", self.on_comment_edited)
+        name_comment_column = gtk.TreeViewColumn("", name_comment_cell, text=0)
         name_comment_column.set_cell_data_func(name_comment_cell, name_comment_painter)
+        name_comment_column.set_expand(True)
         self.view.append_column(name_comment_column)
         
         time_cell = gtk.CellRendererSpin()
-        time_column = gtk.TreeViewColumn("")
-        time_column.pack_start(time_cell, True)
+        time_cell.connect("edited", self.on_time_worked_edited)
+        time_column = gtk.TreeViewColumn("", time_cell, text=0)
         time_column.set_cell_data_func(time_cell, time_painter)
-        time_column.set_min_width(100)
+        time_column.set_min_width(60)
         self.view.append_column(time_column)
+        self.view.expand_all()
         
-#        self.view.connect("key-press-event", self.on_todays_keys)
-#        self.view.connect("edit-clicked", self._open_edit_activity)
-#        self.view.connect("row-activated", self.on_today_row_activated)
         self.get_widget("activities").add(self.view)
-#        self.show_facts()
 
         self._gui.connect_signals(self)
 
         self.window.show_all()
+    
+    
+    def on_time_worked_edited(self, widget, path, value):
+        row = self.tree_store[path][0]
+        row.time_worked = int(value)
+        
+    def on_comment_edited(self, widget, path, value):
+        row = self.tree_store[path][0]
+        row.comment = value
 
     def get_widget(self, name):
         """ skip one variable (huh) """
