@@ -19,15 +19,13 @@
 
 import gtk, gobject
 import re
-from lib import rt, stuff
-from lib.rt import TICKET_NAME_REGEX
-from hamster import widgets
-from configuration import conf
+import logging
 from itertools import groupby
 from collections import defaultdict
-import logging
 
-from configuration import load_ui_file
+from lib import rt, stuff
+from lib.rt import TICKET_NAME_REGEX
+from configuration import conf, runtime, load_ui_file
 
 
 class ExportRow(object):
@@ -43,7 +41,8 @@ class ExportRow(object):
            and other.comment == self.comment \
            and other.time_worked == self.time_worked \
            and other.fact.start_time == self.fact.start_time \
-           and other.fact.end_time == self.fact.end_time
+           and other.fact.end_time == self.fact.end_time \
+           and other.fact.id == self.fact.id
 
     def get_text(self, fact):
         text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
@@ -54,7 +53,13 @@ class ExportRow(object):
         return text
 
     def __hash__(self):
-        return self.id
+        
+        return hash(self.id) \
+            ^ hash(self.comment) \
+            ^ hash(self.time_worked) \
+            ^ hash(self.fact.start_time) \
+            ^ hash(self.fact.end_time) \
+            ^ hash(self.fact.id)
     
 class TicketRow(object):
     def __init__(self, ticket):
@@ -75,17 +80,17 @@ def id_painter(column, cell, model, iter):
         cell.set_visible(False)
     else:
         cell.set_visible(True)
-        cell.set_property('text', row.id)
+        cell.set_property('text', "<b>%s</b>" % row.id)
 
 
 def name_comment_painter(column, cell, model, iter):
     row = model.get_value(iter, 0)
     if isinstance(row, ExportRow):
         cell.set_property('editable', True)
-        cell.set_property('text', row.comment)
+        cell.set_property('text', stuff.escape_pango(row.comment))
     else:
         cell.set_property('editable', False)
-        cell.set_property('text', row.name)
+        cell.set_property('text', "<b>%s</b>" % stuff.escape_pango(row.name))
 
 
 def time_painter(column, cell, model, iter):
@@ -95,7 +100,7 @@ def time_painter(column, cell, model, iter):
         adjustment = gtk.Adjustment(row.time_worked, 0, 1000, 1, 10, 0)
         cell.set_property("editable", True)
         cell.set_property("adjustment", adjustment)
-        cell.set_property("text", row.time_worked)
+        cell.set_property("text", "%s min" % row.time_worked)
     else:
         cell.set_visible(True)
         
@@ -107,7 +112,7 @@ def time_painter(column, cell, model, iter):
             
         cell.set_property("editable", False)
         cell.set_property("adjustment", None)
-        cell.set_property("text", time_worked)
+        cell.set_property("text", "<b>%s min</b>" % time_worked)
 
 class ExportRtController(gtk.Object):
     __gsignals__ = {
@@ -135,8 +140,9 @@ class ExportRtController(gtk.Object):
         
 #        Model
         self.tree_store = gtk.TreeStore(gobject.TYPE_PYOBJECT)
-        self.rows = [ExportRow(fact) for fact in facts]
-        tickets = defaultdict(list)
+        self.rows = list([ExportRow(fact) for fact in facts])
+        self.rows.sort(key = lambda row: row.id)
+        tickets = {}
         for ticket, rows in groupby(self.rows, lambda export_row: export_row.id):
             tickets[ticket] = list(rows)
         for item in tickets.keys():
@@ -148,6 +154,7 @@ class ExportRtController(gtk.Object):
             
 #        self.tree_store.append(parent, (row.comment))
         self.view = gtk.TreeView(self.tree_store);
+        self.view.set_headers_visible(False)
         
         
         id_cell = gtk.CellRendererText()
@@ -171,8 +178,12 @@ class ExportRtController(gtk.Object):
         self.view.append_column(time_column)
         self.view.expand_all()
         
+        self.start_button = self.get_widget("start_button")
         self.get_widget("activities").add(self.view)
-
+        self.aggregate_comments_checkbox = self.get_widget("aggregate_comments_checkbox")
+        self.aggregate_comments_checkbox.set_active(True)
+        self.test_checkox = self.get_widget("test_checkbox")
+        self.test_checkox.set_active(False)
         self._gui.connect_signals(self)
 
         self.window.show_all()
@@ -195,20 +206,59 @@ class ExportRtController(gtk.Object):
         
     def on_start_activate(self, button):
         if self.tracker:
-            for fact in self.facts:
-                match = re.match(TICKET_NAME_REGEX, fact.activity)
-                if fact.end_time and match:
-                    ticket_id = match.group(1)
-                    text = self.get_text(fact)
-                    time_worked = stuff.duration_minutes(fact.delta)
-                    logging.warn(ticket_id)
-                    logging.warn(text)
-                    logging.warn("minutes: %s" % time_worked)
-#                    external.tracker.comment(ticket_id, text, time_worked)
+            group_comments = self.aggregate_comments_checkbox.get_active()
+            test = self.test_checkox.get_active()
+            it = self.tree_store.get_iter_first()
+            while it:
+                ticket_row = self.tree_store.get_value(it, 0)
+                child_iter = self.tree_store.iter_children(it)
+                #get childs
+                export_rows = []
+                while child_iter:
+                    export_rows.append(self.tree_store.get_value(child_iter, 0))
+                    child_iter = self.tree_store.iter_next(child_iter)
+                #report tickets
+                if group_comments:
+                    comment = "\n".join("%s - %s min"% (row.comment, row.time_worked) for row in export_rows)
+                    time_worked = sum([row.time_worked for row in export_rows])
+                    facts = [row.fact for row in export_rows]
+                    self.__comment_ticket(ticket_row.id, comment, time_worked, facts)
                 else:
-                    logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
+                    for row in export_rows:
+                        self.__comment_ticket(ticket_row.id, "%s - %s min"% (row.comment, row.time_worked), row.time_worked, [row.fact])
+                
+                it = self.tree_store.iter_next(it)
+                
+#            for fact in self.facts:
+#                match = re.match(TICKET_NAME_REGEX, fact.activity)
+#                if fact.end_time and match:
+#                    ticket_id = match.group(1)
+#                    text = self.get_text(fact)
+#                    time_worked = stuff.duration_minutes(fact.delta)
+#                    logging.warn(ticket_id)
+#                    logging.warn(text)
+#                    logging.warn("minutes: %s" % time_worked)
+##                    external.tracker.comment(ticket_id, text, time_worked)
+#                else:
+#                    logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
         else:
             logging.warn("Not connected to/logged in RT")
+        self.start_button.set_sensitive(False)
+        #TODO only if parent is overview
+        self.parent.search()
+            
+    def __comment_ticket(self, ticket_id, text, time_worked, test, facts):
+        logging.warn("updating ticket #%s: %s min, comment: \n%s" % (ticket_id, time_worked, text))
+        if test:
+            time = time_worked
+        else:
+            time = 0
+            
+        if self.tracker.comment(ticket_id, text, time) and not test:
+            for fact in facts:
+                runtime.storage.update_fact(fact.id, fact, False,True)
+#                fact_row.selected = False
+            
 
     def get_text(self, fact):
         text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))

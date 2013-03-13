@@ -450,7 +450,7 @@ class Overview(gtk.Object):
     def on_start_activate(self, button):
         to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
         to_report = [row[0].fact for row in to_report]
-        dialogs.export_rt.show(self.window, facts = to_report)
+        dialogs.export_rt.show(self, facts = to_report)
         
     def on_start_activate_2(self, button):
         self.start_button.set_sensitive(False)
