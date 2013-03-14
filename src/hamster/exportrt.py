@@ -21,7 +21,6 @@ import gtk, gobject
 import re
 import logging
 from itertools import groupby
-from collections import defaultdict
 
 from lib import rt, stuff
 from lib.rt import TICKET_NAME_REGEX
@@ -74,37 +73,44 @@ class TicketRow(object):
     def __hash__(self):
         return self.id
     
-def id_painter(column, cell, model, iter):
-    row = model.get_value(iter, 0)
+def id_painter(column, cell, model, it):
+    row = model.get_value(it, 0)
     if isinstance(row, ExportRow):
         cell.set_visible(False)
+        cell.set_property("weight-set", False)
     else:
         cell.set_visible(True)
-        cell.set_property('text', "<b>%s</b>" % row.id)
+        cell.set_property('text', row.id)
+        cell.set_property("weight-set", True)
+        cell.set_property("weight", 700)
 
 
-def name_comment_painter(column, cell, model, iter):
-    row = model.get_value(iter, 0)
+def name_comment_painter(column, cell, model, it):
+    row = model.get_value(it, 0)
     if isinstance(row, ExportRow):
         cell.set_property('editable', True)
         cell.set_property('text', stuff.escape_pango(row.comment))
+        cell.set_property("weight-set", False)
     else:
         cell.set_property('editable', False)
-        cell.set_property('text', "<b>%s</b>" % stuff.escape_pango(row.name))
+        cell.set_property('text', row.name)
+        cell.set_property("weight-set", True)
+        cell.set_property("weight", 700)
 
 
-def time_painter(column, cell, model, iter):
-    row = model.get_value(iter, 0)
+def time_painter(column, cell, model, it):
+    row = model.get_value(it, 0)
     if isinstance(row, ExportRow):
         cell.set_visible(True)
         adjustment = gtk.Adjustment(row.time_worked, 0, 1000, 1, 10, 0)
         cell.set_property("editable", True)
         cell.set_property("adjustment", adjustment)
         cell.set_property("text", "%s min" % row.time_worked)
+        cell.set_property("weight-set", False)
     else:
         cell.set_visible(True)
         
-        child_iter = model.iter_children(iter)
+        child_iter = model.iter_children(it)
         time_worked = 0
         while child_iter:
             time_worked += model.get_value(child_iter, 0).time_worked
@@ -112,7 +118,9 @@ def time_painter(column, cell, model, iter):
             
         cell.set_property("editable", False)
         cell.set_property("adjustment", None)
-        cell.set_property("text", "<b>%s min</b>" % time_worked)
+        cell.set_property("text", "%s min" % time_worked)
+        cell.set_property("weight-set", True)
+        cell.set_property("weight", 700)
 
 class ExportRtController(gtk.Object):
     __gsignals__ = {
@@ -184,6 +192,10 @@ class ExportRtController(gtk.Object):
         self.aggregate_comments_checkbox.set_active(True)
         self.test_checkox = self.get_widget("test_checkbox")
         self.test_checkox.set_active(False)
+        self.progressbar = self.get_widget("progressbar")
+        self.progressbar.set_text("Waiting for action")
+        self.progressbar.set_orientation(gtk.PROGRESS_LEFT_TO_RIGHT)
+        
         self._gui.connect_signals(self)
 
         self.window.show_all()
@@ -207,8 +219,8 @@ class ExportRtController(gtk.Object):
     def on_start_activate(self, button):
         if self.tracker:
             group_comments = self.aggregate_comments_checkbox.get_active()
-            test = self.test_checkox.get_active()
             it = self.tree_store.get_iter_first()
+            to_report_list = []
             while it:
                 ticket_row = self.tree_store.get_value(it, 0)
                 child_iter = self.tree_store.iter_children(it)
@@ -222,13 +234,23 @@ class ExportRtController(gtk.Object):
                     comment = "\n".join("%s - %s min"% (row.comment, row.time_worked) for row in export_rows)
                     time_worked = sum([row.time_worked for row in export_rows])
                     facts = [row.fact for row in export_rows]
-                    self.__comment_ticket(ticket_row.id, comment, time_worked, facts)
+                    to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts})
                 else:
                     for row in export_rows:
-                        self.__comment_ticket(ticket_row.id, "%s - %s min"% (row.comment, row.time_worked), row.time_worked, [row.fact])
-                
+                        to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s - %s min"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact]})
+#                        self.__comment_ticket(ticket_row.id, "%s - %s min"% (row.comment, row.time_worked), row.time_worked, [row.fact])
                 it = self.tree_store.iter_next(it)
-                
+            to_report_len = len(to_report_list)
+            self.progressbar.set_fraction(0.0)
+            for i in range(to_report_len):
+                to_report = to_report_list[i]
+                self.progressbar.set_text("Reporting: #%s: %s - %smin" % (to_report['id'], to_report['name'], to_report['time']))
+                self.progressbar.set_fraction(float(i)/to_report_len)
+                while gtk.events_pending(): 
+                    gtk.main_iteration()
+                self.__comment_ticket(to_report['id'], to_report['comment'], to_report['time'], to_report['facts'])
+            self.progressbar.set_text("Done")
+            self.progressbar.set_fraction(1.0)
 #            for fact in self.facts:
 #                match = re.match(TICKET_NAME_REGEX, fact.activity)
 #                if fact.end_time and match:
@@ -247,9 +269,10 @@ class ExportRtController(gtk.Object):
         #TODO only if parent is overview
         self.parent.search()
             
-    def __comment_ticket(self, ticket_id, text, time_worked, test, facts):
+    def __comment_ticket(self, ticket_id, text, time_worked, facts):
+        test = self.test_checkox.get_active()
         logging.warn("updating ticket #%s: %s min, comment: \n%s" % (ticket_id, time_worked, text))
-        if test:
+        if not test:
             time = time_worked
         else:
             time = 0

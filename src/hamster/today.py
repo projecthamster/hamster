@@ -153,6 +153,7 @@ class DailyView(object):
             self.create_hamster_window()
             self.reposition_hamster_window()
 
+        self.window.hide_all()
         self.window.show_all()
         self.refresh_hamster()
         self.window.present()
@@ -419,6 +420,7 @@ class DailyView(object):
         self.view.fix_row_heights()
 
     def show(self):
+        self.window.hide_all()
         self.window.show_all()
         self.window.present()
 
