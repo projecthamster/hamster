@@ -510,9 +510,8 @@ msgid "Duration"
 msgstr "Czas trwania"
 
 #: ../src/hamster-cli:308
-#, fuzzy
 msgid "Uncategorized"
-msgstr "kategorie"
+msgstr "Bez kategorii"
 
 #: ../src/hamster/about.py:42
 msgid "Project Hamster — track your time"
@@ -623,9 +622,8 @@ msgid "%A, %b %d"
 msgstr "%A, %d %b"
 
 #: ../src/hamster/overview_totals.py:161
-#, fuzzy, python-format
 msgid "%s minutes tracked total"
-msgstr "Ogółem prześledzono %s godzin"
+msgstr "Ogółem prześledzono %s minut"
 
 #. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
 #: ../src/hamster/preferences.py:113
