@@ -63,7 +63,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="test_checkbox">
-                    <property name="label" translatable="yes">Dry run (don't update time_worked)</property>
+                    <property name="label" translatable="yes">Dry run (don't update time worked)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
