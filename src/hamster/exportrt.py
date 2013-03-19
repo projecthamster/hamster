@@ -193,7 +193,7 @@ class ExportRtController(gtk.Object):
         self.test_checkox = self.get_widget("test_checkbox")
         self.test_checkox.set_active(False)
         self.progressbar = self.get_widget("progressbar")
-        self.progressbar.set_text("Waiting for action")
+        self.progressbar.set_text(_("Waiting for action"))
         self.progressbar.set_orientation(gtk.PROGRESS_LEFT_TO_RIGHT)
         
         self._gui.connect_signals(self)
@@ -244,7 +244,7 @@ class ExportRtController(gtk.Object):
             self.progressbar.set_fraction(0.0)
             for i in range(to_report_len):
                 to_report = to_report_list[i]
-                self.progressbar.set_text("Reporting: #%s: %s - %smin" % (to_report['id'], to_report['name'], to_report['time']))
+                self.progressbar.set_text(_("Reporting: #%s: %s - %smin") % (to_report['id'], to_report['name'], to_report['time']))
                 self.progressbar.set_fraction(float(i)/to_report_len)
                 while gtk.events_pending(): 
                     gtk.main_iteration()
@@ -264,14 +264,14 @@ class ExportRtController(gtk.Object):
 #                else:
 #                    logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
         else:
-            logging.warn("Not connected to/logged in RT")
+            logging.warn(_("Not connected to/logged in RT"))
         self.start_button.set_sensitive(False)
         #TODO only if parent is overview
         self.parent.search()
             
     def __comment_ticket(self, ticket_id, text, time_worked, facts):
         test = self.test_checkox.get_active()
-        logging.warn("updating ticket #%s: %s min, comment: \n%s" % (ticket_id, time_worked, text))
+        logging.warn(_("updating ticket #%s: %s min, comment: \n%s") % (ticket_id, time_worked, text))
         if not test:
             time = time_worked
         else:
