@@ -210,7 +210,7 @@ msgstr "Raportowanie..."
 
 #: ../data/export_rt.ui.h:5
 msgid "Start reporting"
-msgstr "_Rozpocznij raportowanie"
+msgstr "Rozpocznij raportowanie"
 
 #: ../data/export_rt.ui.h:6
 msgid "Done"
