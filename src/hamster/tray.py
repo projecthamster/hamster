@@ -5,6 +5,7 @@ import os.path
 import gtk
 import datetime as dt
 import gobject
+import locale
 from hamster.lib import stuff
 from hamster.configuration import dialogs, runtime, conf
 
@@ -158,7 +159,7 @@ class ProjectHamsterStatusIconUnity():
         runtime.storage.connect('facts-changed', self.after_fact_update)
         runtime.storage.connect('toggle-called', self.on_toggle_called)
         
-        gobject.timeout_add_seconds(20, self.refresh_tray) # refresh hamster every 60 seconds to update duration
+        gobject.timeout_add_seconds(20, self.refresh_tray) # refresh hamster every 20 seconds to update duration
     
     def on_conf_changed(self, event, key, value):
         self._on_icon_glow_changed()
@@ -192,11 +193,14 @@ class ProjectHamsterStatusIconUnity():
         else:
             self.indicator.set_attention_icon('hamster-applet-inactive')
 
-    def _get_no_activity_label(self):
+    def _get_no_activity_label(self, today_duration=None):
         '''Get the indicator label set to "No activity"'''
-        return self._clamp_text(_(u"No activity"),
+        label = self._clamp_text(_(u"No activity"),
                                 length=self._label_length,
                                 with_ellipsis=False)
+        if today_duration:
+            label = "%s (%sh)" % (label, today_duration)
+        return label
 
     def _clamp_text(self, text, length=25, with_ellipsis=True, is_indicator=False):
         text = stuff.escape_pango(text)
@@ -251,7 +255,12 @@ class ProjectHamsterStatusIconUnity():
                 start_time = self.project.last_activity['start_time']
                 end_time = self.project.last_activity['end_time']
                 last_activity_name = self.project.last_activity['name']
-
+        facts = self.project.todays_facts
+        today_duration = 0
+        if facts:
+            for fact in facts:
+                today_duration += 24 * 60 * fact.delta.days + fact.delta.seconds / 60
+        today_duration = locale.format("%.1f", today_duration / 60.0)
         if self.project.last_activity and end_time is None:
             self._set_activity_status(1)
             delta = dt.datetime.now() - start_time
@@ -260,15 +269,16 @@ class ProjectHamsterStatusIconUnity():
                                stuff.format_duration(duration, False))
             self.set_activity_text(last_activity_name,
                                  stuff.format_duration(duration, False))
-            indicator_label = "%s %s" % (self._clamp_text(self.activity,
+            indicator_label = "%s %s / %sh" % (self._clamp_text(self.activity,
                                          length=self._label_length,
                                          with_ellipsis=False),
-                                         self.duration)
+                                         self.duration,
+                                         today_duration)
         else:
             self._set_activity_status(0)
             label = "%s" % _(u"New activity")
             self.set_activity_text(label, None)
-            indicator_label = self._get_no_activity_label()
+            indicator_label = self._get_no_activity_label(today_duration)
 
         # Update the indicator label, if needed
         if self._show_label:
