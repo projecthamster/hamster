@@ -154,7 +154,6 @@ class ProjectHamsterStatusIconUnity():
         self.quit_item.show()
         
         self.project.last_activity = None
-        self.todays_facts = None
         runtime.storage.connect('activities-changed', self.after_activity_update)
         runtime.storage.connect('facts-changed', self.after_fact_update)
         runtime.storage.connect('toggle-called', self.on_toggle_called)
@@ -255,12 +254,15 @@ class ProjectHamsterStatusIconUnity():
                 start_time = self.project.last_activity['start_time']
                 end_time = self.project.last_activity['end_time']
                 last_activity_name = self.project.last_activity['name']
+        self.project.load_day()
         facts = self.project.todays_facts
         today_duration = 0
         if facts:
             for fact in facts:
                 today_duration += 24 * 60 * fact.delta.days + fact.delta.seconds / 60
-        today_duration = locale.format("%.1f", today_duration / 60.0)
+#        if self.duration:
+#            today_duration += self.duration
+        today_duration = "%s:%02d" % (today_duration/60, today_duration%60)
         if self.project.last_activity and end_time is None:
             self._set_activity_status(1)
             delta = dt.datetime.now() - start_time
