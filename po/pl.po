@@ -736,10 +736,6 @@ msgstr "Ogółem według dni"
 msgid "Activity Log"
 msgstr "Dziennik czynności"
 
-#: ../src/hamster/reports.py:310
-msgid "days"
-msgstr "dni"
-
 #: ../src/hamster/reports.py:311
 msgid "activities"
 msgstr "czynności"

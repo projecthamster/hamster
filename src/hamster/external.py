@@ -39,7 +39,6 @@ class ActivitiesSource(gobject.GObject):
         gobject.GObject.__init__(self)
         self.source = conf.get("activities_source")
         self.__gtg_connection = None
-        logging.warn(self.source)
 
         if self.source == "evo" and not evolution:
             self.source == "" # on failure pretend that there is no evolution
@@ -73,7 +72,6 @@ class ActivitiesSource(gobject.GObject):
             if self.rt_url and self.rt_user and self.rt_pass:
                 try:
                     self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user,self.rt_pass))
-                    logging.warn(self.tracker);
                     if not self.tracker:
                         self.source = ""
                 except:
@@ -152,8 +150,11 @@ class ActivitiesSource(gobject.GObject):
         if not self.source:
             return ""
 
-        ticket = self.tracker.get_ticket(ticket_id)
-        return self.__extract_cat_from_ticket(ticket)
+        if self.source == "rt":
+            ticket = self.tracker.get_ticket(ticket_id)
+            return self.__extract_cat_from_ticket(ticket)
+        else:
+            return ""
     
     def __extract_activity_from_ticket(self, ticket):
         #activity = {}
