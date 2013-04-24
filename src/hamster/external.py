@@ -110,6 +110,9 @@ class ActivitiesSource(gobject.GObject):
             return activities
         
     def get_ticket_category(self, ticket_id):
+        if not self.source:
+            return ""
+
         ticket = self.tracker.get_ticket(ticket_id)
         return self.__extract_cat_from_ticket(ticket)
     
