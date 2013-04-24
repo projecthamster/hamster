@@ -23,7 +23,9 @@ from configuration import conf
 import gobject
 import re
 import dbus, dbus.mainloop.glib
+import json
 from lib import rt
+from lib import redmine
 
 try:
     import evolution
@@ -37,6 +39,7 @@ class ActivitiesSource(gobject.GObject):
         gobject.GObject.__init__(self)
         self.source = conf.get("activities_source")
         self.__gtg_connection = None
+        logging.warn(self.source)
 
         if self.source == "evo" and not evolution:
             self.source == "" # on failure pretend that there is no evolution
@@ -53,6 +56,25 @@ class ActivitiesSource(gobject.GObject):
                 try:
                     self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
                     if not self.tracker.login():
+                        self.source = ""
+                except:
+                    self.source = ""
+            else:
+                self.source = ""
+        elif self.source == "redmine":
+            self.rt_url = conf.get("rt_url")
+            self.rt_user = conf.get("rt_user")
+            self.rt_pass = conf.get("rt_pass")
+            self.rt_category = conf.get("rt_category_field")
+            try:
+                self.rt_query = json.loads(conf.get("rt_query"))
+            except:
+                self.rt_query = ({})
+            if self.rt_url and self.rt_user and self.rt_pass:
+                try:
+                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user,self.rt_pass))
+                    logging.warn(self.tracker);
+                    if not self.tracker:
                         self.source = ""
                 except:
                     self.source = ""
@@ -80,6 +102,23 @@ class ActivitiesSource(gobject.GObject):
                 rt_query = " AND ".join(["Subject LIKE '%s'" % (q) for q in li]) + " AND (Status='new' OR Status='open')"
                 #logging.warn(rt_query)
                 third_activities = self.__extract_from_rt(query, rt_query)
+                if activities and third_activities:
+                    activities.append({"name": "---------------------", "category": "other open"})
+                activities.extend(third_activities)
+            return activities
+        elif self.source == "redmine":
+            activities = self.__extract_from_redmine(query, self.rt_query)
+            direct_issue = None
+            if query and re.match("^[0-9]+$", query):
+                issue = self.tracker.getIssue(query)
+                if issue:
+                    direct_issue = self.__extract_activity_from_issue(issue)
+            if direct_issue:
+                activities.append(direct_issue)
+            if len(activities) <= 2 and not direct_issue and len(query) > 4:
+                rt_query = ({'status_id': 'open', 'subject': query})
+                #logging.warn(rt_query)
+                third_activities = self.__extract_from_redmine(query, rt_query)
                 if activities and third_activities:
                     activities.append({"name": "---------------------", "category": "other open"})
                 activities.extend(third_activities)
@@ -129,11 +168,28 @@ class ActivitiesSource(gobject.GObject):
         ticket['rt_id']=ticket_id;
         return ticket
     
+    def __extract_activity_from_issue(self, issue):
+        activity = {}
+        issue_id = issue.id
+        activity['name'] = '#'+str(issue_id)+': '+issue.subject
+        activity['rt_id']=issue_id;
+        activity['category']="";
+        return activity
+
     def __extract_from_rt(self, query = None, rt_query = None):
         activities = []
         results = self.tracker.search_simple(rt_query)
         for ticket in results:
             activity = self.__extract_activity_from_ticket(ticket)
+            if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
+                activities.append(activity)
+        return activities
+        
+    def __extract_from_redmine(self, query = None, rt_query = None):
+        activities = []
+        results = self.tracker.getIssues(rt_query)
+        for issue in results:
+            activity = self.__extract_activity_from_issue(issue)
             if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
                 activities.append(activity)
         return activities
