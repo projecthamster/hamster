@@ -682,6 +682,11 @@ msgid "category"
 msgstr "kategoria"
 
 #. column title in the TSV export format
+#: ../src/hamster/reports.py:156
+msgid "days"
+msgstr "dni"
+
+#. column title in the TSV export format
 #: ../src/hamster/reports.py:158
 msgid "description"
 msgstr "opis"
@@ -730,10 +735,6 @@ msgstr "Ogółem według dni"
 #: ../src/hamster/reports.py:307
 msgid "Activity Log"
 msgstr "Dziennik czynności"
-
-#: ../src/hamster/reports.py:310
-msgid "days"
-msgstr "dni"
 
 #: ../src/hamster/reports.py:311
 msgid "activities"

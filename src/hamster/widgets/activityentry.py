@@ -274,7 +274,7 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time, activity.get('rt_id')])
+                    store.append([fillable, category['name'], fillable, time, category.get('rt_id')])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             for activity in self.activities:
@@ -356,13 +356,14 @@ class ActivityEntry(gtk.Entry):
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
         name = model.get_value(iter, 1)
-        category = model.get_value(iter, 2)
         rt_id = model.get_value(iter, 4)
         match = re.match(TICKET_NAME_REGEX, name)
         if not rt_id and match:
             rt_id = match.group(1)
         if rt_id:
             category = self.external.get_ticket_category(rt_id)
+        if not category:
+            category = model.get_value(iter, 2)
         value = '@'.join([name, category])
         self.set_text(value)
         self.hide_popup()
