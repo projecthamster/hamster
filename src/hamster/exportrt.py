@@ -102,7 +102,7 @@ def time_painter(column, cell, model, it):
     row = model.get_value(it, 0)
     if isinstance(row, ExportRow):
         cell.set_visible(True)
-        adjustment = gtk.Adjustment(row.time_worked, 0, 1000, 1, 10, 0)
+        adjustment = gtk.Adjustment(row.time_worked, -1000, 1000, 1, 10, 0)
         cell.set_property("editable", True)
         cell.set_property("adjustment", adjustment)
         cell.set_property("text", "%s min" % row.time_worked)
