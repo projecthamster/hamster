@@ -71,6 +71,10 @@ class Redmine:
     def createIssue(self, data):
         r = self.session.post(self.get_issue_url(), data=json.dumps(data))
         return r
+        
+    def createTimeEntry(self, data):
+        r = self.session.post(self.get_time_entry_url(), data=json.dumps(data))
+        return r
 
     def get_project_url(self, project_id=None):
         if project_id:
@@ -84,6 +88,13 @@ class Redmine:
             url = self.url + "/issues/%s.json" % issue_id
         else:
             url = self.url + "/issues.json"
+        return url
+
+    def get_time_entry_url(self, entry_id=None):
+        if entry_id:
+            url = self.url + "/time_entries/%s.json" % entry_id
+        else:
+            url = self.url + "/time_entries.json"
         return url
 
     def get_redmine_auth(self, pass_file=None):
