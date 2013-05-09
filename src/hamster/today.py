@@ -205,16 +205,16 @@ class DailyView(object):
         else:
             self._gui.get_object("today_box").show()
             total_strings = []
-            for category in by_category:
+            for category in sorted(by_category):
                 # listing of today's categories and time spent in them
                 duration = locale.format("%.1f", (by_category[category] / 60.0))
-                total_strings.append(_("%(category)s: %(duration)s") % \
+                total_strings.append(_("%(duration)s: %(category)s") % \
                         ({'category': category,
                           #duration in main drop-down per category in hours
                           'duration': _("%sh") % duration
                           }))
 
-            total_string = ", ".join(total_strings)
+            total_string = "\n".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
 
         self.set_last_activity()
