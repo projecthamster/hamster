@@ -251,7 +251,7 @@ class ActivityEntry(gtk.Entry):
                 
         self.activities = new_activities
                     
-        self.activities.extend(self.external_activities)
+        #self.activities.extend(self.external_activities)
 
         self.categories = self.categories or runtime.storage.get_categories()
 
@@ -277,7 +277,22 @@ class ActivityEntry(gtk.Entry):
                     store.append([fillable, category['name'], fillable, time, category.get('rt_id')])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
-            for activity in self.activities:
+            activities_to_append = []
+            if not self.external_activities:
+                for a in self.activities:
+                    activities_to_append.append(a)
+            else:
+                for a in self.external_activities:
+                    activities_to_append.append(a)
+
+            filtered = []
+            names = []
+            for a in activities_to_append:
+                if not a['name'] in names:
+                    filtered.append(a)
+                    names.append(a['name'])
+            
+            for activity in filtered:
                 fillable = activity['name'].lower()
                 if activity['category']:
                     fillable += "@%s" % activity['category']
@@ -304,7 +319,9 @@ class ActivityEntry(gtk.Entry):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
-                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
+                    selected = self._get_selected_text(self.tree)
+#                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
+                    self.set_text(selected)
                 self.hide_popup()
                 self.set_position(len(self.get_text()))
             else:
@@ -354,9 +371,15 @@ class ActivityEntry(gtk.Entry):
             return False
 
     def _on_tree_button_press_event(self, tree, event):
+        self.set_text(self._get_selected_text(tree))
+        self.hide_popup()
+        self.set_position(len(self.get_text()))
+        
+    def _get_selected_text(self, tree):
         model, iter = tree.get_selection().get_selected()
         name = model.get_value(iter, 1)
         rt_id = model.get_value(iter, 4)
+        
         match = re.match(TICKET_NAME_REGEX, name)
         if not rt_id and match:
             rt_id = match.group(1)
@@ -364,10 +387,7 @@ class ActivityEntry(gtk.Entry):
             category = self.external.get_ticket_category(rt_id)
         if not category:
             category = model.get_value(iter, 2)
-        value = '@'.join([name, category])
-        self.set_text(value)
-        self.hide_popup()
-        self.set_position(len(self.get_text()))
+        return '@'.join([name, category])
 
     def _on_selected(self):
         if self.news and self.get_text().strip():
