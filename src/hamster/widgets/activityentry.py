@@ -381,6 +381,7 @@ class ActivityEntry(gtk.Entry):
         rt_id = model.get_value(iter, 4)
         
         match = re.match(TICKET_NAME_REGEX, name)
+        category = ""
         if not rt_id and match:
             rt_id = match.group(1)
         if rt_id:

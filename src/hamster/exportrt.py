@@ -21,8 +21,9 @@ import gtk, gobject
 import re
 import logging
 from itertools import groupby
+import math
 
-from lib import rt, stuff
+from lib import rt, stuff, redmine
 from lib.rt import TICKET_NAME_REGEX
 from configuration import conf, runtime, load_ui_file
 
@@ -33,6 +34,7 @@ class ExportRow(object):
         match = re.match(TICKET_NAME_REGEX, fact.activity)
         self.id = match.group(1)
         self.comment = self.get_text(fact)
+        self.date = self.get_date(fact)
         self.time_worked = stuff.duration_minutes(fact.delta)
 
     def __eq__(self, other):
@@ -50,6 +52,10 @@ class ExportRow(object):
         if fact.tags:
             text += " ("+", ".join(fact.tags)+")"
         return text
+        
+    def get_date(self, fact):
+        date = fact.date.isoformat()
+        return date
 
     def __hash__(self):
         
@@ -130,14 +136,32 @@ class ExportRtController(gtk.Object):
     def __init__(self, parent = None, facts = None):
         gtk.Object.__init__(self)
         
-#        Init RT
-        self.rt_url = conf.get("rt_url")
-        self.rt_user = conf.get("rt_user")
-        self.rt_pass = conf.get("rt_pass")
-        self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
-        if not self.tracker.login():
-            self.tracker = None
+        self.source = conf.get("activities_source")
 
+        if self.source == "rt":
+#            Init RT
+            self.rt_url = conf.get("rt_url")
+            self.rt_user = conf.get("rt_user")
+            self.rt_pass = conf.get("rt_pass")
+
+            self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
+            if not self.tracker.login():
+                self.tracker = None
+        elif self.source == "redmine":
+            self.rt_url = conf.get("rt_url")
+            self.rt_user = conf.get("rt_user")
+            self.rt_pass = conf.get("rt_pass")
+
+            if self.rt_url and self.rt_user and self.rt_pass:
+                try:
+                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user,self.rt_pass))
+                    if not self.tracker:
+                        self.source = ""
+                except:
+                    self.source = ""
+            else:
+                self.source = ""
+                
         self._gui = load_ui_file("export_rt.ui")
         self.window = self.get_widget('report_rt_window')
 
@@ -155,10 +179,18 @@ class ExportRtController(gtk.Object):
             tickets[ticket] = list(rows)
         for item in tickets.keys():
             #ściągnąć nazwę ticketa
-            ticket = self.tracker.get_ticket(item);
-            parent = self.tree_store.append( None, (TicketRow(ticket), ) )
-            for row in tickets[item]:
-                self.tree_store.append(parent, (row, ))
+            if self.source == "rt":
+                ticket = self.tracker.get_ticket(item);
+            elif self.source == "redmine":
+                issue = self.tracker.getIssue(item);
+                ticket = {};
+                ticket['id'] = issue.id
+                ticket['Subject'] = issue.subject
+
+            if ticket:
+                parent = self.tree_store.append( None, (TicketRow(ticket), ) )
+                for row in tickets[item]:
+                    self.tree_store.append(parent, (row, ))
             
 #        self.tree_store.append(parent, (row.comment))
         self.view = gtk.TreeView(self.tree_store);
@@ -234,10 +266,10 @@ class ExportRtController(gtk.Object):
                     comment = "\n".join("%s - %s min"% (row.comment, row.time_worked) for row in export_rows)
                     time_worked = sum([row.time_worked for row in export_rows])
                     facts = [row.fact for row in export_rows]
-                    to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts})
+                    to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts, 'date': row.date})
                 else:
                     for row in export_rows:
-                        to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s - %s min"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact]})
+                        to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s - %s min"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact], 'date': row.date})
 #                        self.__comment_ticket(ticket_row.id, "%s - %s min"% (row.comment, row.time_worked), row.time_worked, [row.fact])
                 it = self.tree_store.iter_next(it)
             to_report_len = len(to_report_list)
@@ -248,7 +280,10 @@ class ExportRtController(gtk.Object):
                 self.progressbar.set_fraction(float(i)/to_report_len)
                 while gtk.events_pending(): 
                     gtk.main_iteration()
-                self.__comment_ticket(to_report['id'], to_report['comment'], to_report['time'], to_report['facts'])
+                if self.source == "rt":
+                    self.__comment_ticket(to_report['id'], to_report['comment'], to_report['time'], to_report['facts'])
+                elif self.source == "redmine":
+                    self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'])
             self.progressbar.set_text("Done")
             self.progressbar.set_fraction(1.0)
 #            for fact in self.facts:
@@ -276,12 +311,29 @@ class ExportRtController(gtk.Object):
             time = time_worked
         else:
             time = 0
-            
+
         if self.tracker.comment(ticket_id, text, time) and not test:
             for fact in facts:
                 runtime.storage.update_fact(fact.id, fact, False,True)
-#                fact_row.selected = False
+                fact_row.selected = False
             
+    def __add_time_entry(self, issue_id, spent_on, hours, comments, facts):
+        test = self.test_checkox.get_active()
+        logging.warn(_("updating issue #%s: %s hrs, comment: \n%s") % (issue_id, hours, comments))
+        time_entry_data = {'time_entry': {}}
+        time_entry_data['time_entry']['issue_id'] = issue_id
+        time_entry_data['time_entry']['spent_on'] = spent_on
+        time_entry_data['time_entry']['hours'] = hours
+        time_entry_data['time_entry']['comments'] = comments
+        time_entry_data['time_entry']['activity_id'] = 9
+        
+        r = self.tracker.createTimeEntry(time_entry_data)
+        logging.warn(r.status_code)
+        logging.warn(r.content)
+        if r.status_code == 201 and not test:
+            for fact in facts:
+                runtime.storage.update_fact(fact.id, fact, False,True)
+#                fact_row.selected = False
 
     def get_text(self, fact):
         text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
@@ -314,7 +366,8 @@ class ExportRtController(gtk.Object):
         self.on_close(button, None)
 
     def on_close(self, widget, event):
-        self.tracker.logout();
+        if self.source == "rt":
+            self.tracker.logout();
         self.close_window()
 
     def close_window(self):
