@@ -271,7 +271,7 @@ class ExportRtController(gtk.Object):
             
     def __comment_ticket(self, ticket_id, text, time_worked, facts):
         test = self.test_checkox.get_active()
-        logging.warn(_("updating ticket #%s: %s min, comment: \n%s") % (ticket_id, time_worked, text))
+#        logging.warn(_("updating ticket #%s: %s min, comment: \n%s") % (ticket_id, time_worked, text))
         if not test:
             time = time_worked
         else:
