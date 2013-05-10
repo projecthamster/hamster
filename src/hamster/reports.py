@@ -26,6 +26,7 @@ import csv
 import copy
 import itertools
 import re
+import codecs
 from string import Template
 
 from configuration import runtime
@@ -74,7 +75,7 @@ def simple(facts, start_date, end_date, format, path = None):
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        self.file = open(path, "w") if path else StringIO()
+        self.file = open(path, "w") if path else codecs.getwriter("utf8")(StringIO())
         self.datetime_format = datetime_format
 
     def export(self):
