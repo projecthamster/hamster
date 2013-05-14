@@ -105,6 +105,9 @@ class DailyView(object):
             self.get_widget("new_name_box").add(self.new_name)
             self.new_name.connect("changed", self.on_activity_text_changed)
 
+            self.new_description = self.get_widget("description")
+            self.new_description.connect("key-release-event", self._description_on_key_release_event)
+            
             self.new_tags = widgets.TagsEntry()
             self.new_tags.connect("tags_selected", self.on_switch_activity_clicked)
             widgets.add_hint(self.new_tags, _("Tags"))
@@ -260,6 +263,10 @@ class DailyView(object):
 
 
     """events"""
+    def _description_on_key_release_event(self, entry, event):
+        if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
+            self.on_switch_activity_clicked(entry)
+    
     def on_todays_keys(self, tree, event):
         if (event.keyval == gtk.keysyms.Delete):
             self.delete_selected()
@@ -404,13 +411,15 @@ class DailyView(object):
         activity, temporary = self.new_name.get_value()
 
         fact = Fact(activity,
-                          tags = self.new_tags.get_text().decode("utf8", "replace"))
+                          tags = self.new_tags.get_text().decode("utf8", "replace"),
+                          description=self.new_description.get_text().decode("utf8", "replace"))
         if not fact.activity:
             return
 
         runtime.storage.add_fact(fact, temporary)
         self.new_name.set_text("")
         self.new_tags.set_text("")
+        self.new_description.set_text("")
 
     def on_stop_tracking_clicked(self, widget):
         runtime.storage.stop_tracking()
