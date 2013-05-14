@@ -315,7 +315,7 @@ class ExportRtController(gtk.Object):
         if self.tracker.comment(ticket_id, text, time) and not test:
             for fact in facts:
                 runtime.storage.update_fact(fact.id, fact, False,True)
-                fact_row.selected = False
+#                fact_row.selected = False
             
     def __add_time_entry(self, issue_id, spent_on, hours, comments, facts):
         test = self.test_checkox.get_active()
