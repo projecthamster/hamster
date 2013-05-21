@@ -39,6 +39,7 @@ class ActivityEntry(gtk.Entry):
         self.external_activities = [] # suggestions from outer space
         self.categories = None
         self.filter = None
+        self.timeout_id = None
         self.max_results = 10 # limit popup size to 10 results
         self.external = external.ActivitiesSource()
 
@@ -312,8 +313,19 @@ class ActivityEntry(gtk.Entry):
         self.news = True
 
     def _on_button_press_event(self, button, event):
+        self._populate_and_show_delayed()
+        
+    def _populate_and_show_delayed(self):
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
+        self.timeout_id = gobject.timeout_add(750, self._populate_and_show)
+        
+    def _populate_and_show(self):
         self.populate_suggestions()
         self.show_popup()
+        gobject.source_remove(self.timeout_id)
+        self.timeout_id = None
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
@@ -336,8 +348,7 @@ class ActivityEntry(gtk.Entry):
         elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
             return False
         else:
-            self.populate_suggestions()
-            self.show_popup()
+            self._populate_and_show_delayed()
 
             #if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
             #    self.complete_inline()
