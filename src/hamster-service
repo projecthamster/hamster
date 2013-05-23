@@ -104,6 +104,11 @@ class Storage(db.Storage, dbus.service.Object):
         self.ActivitiesChanged()
 
     @dbus.service.signal("org.gnome.Hamster")
+    def RedmineActivitiesChanged(self): pass
+    def redmine_activities_changed(self):
+        self.RedmineActivitiesChanged()
+
+    @dbus.service.signal("org.gnome.Hamster")
     def ToggleCalled(self): pass
     def toggle_called(self):
         self.toggle_called()
@@ -112,6 +117,7 @@ class Storage(db.Storage, dbus.service.Object):
         self.TagsChanged()
         self.FactsChanged()
         self.ActivitiesChanged()
+        self.RedmineActivitiesChanged()
 
     @dbus.service.method("org.gnome.Hamster")
     def Quit(self):
@@ -295,8 +301,17 @@ class Storage(db.Storage, dbus.service.Object):
     def SetTagsAutocomplete(self, tags):
         self.update_autocomplete_tags(tags)
 
+    #PRL
+    # redmine activities
+    @dbus.service.method("org.gnome.Hamster", in_signature='isb', out_signature = 'i')
+    def AddRedmineIssue(self, id, name, mine):
+        return self.add_redmine_issue(id, name, mine)
 
-
+    @dbus.service.method("org.gnome.Hamster", in_signature='', out_signature = 'i')
+    def GetLastRedmineIssue(self):
+        res = self.get_last_redmine_issue()
+        return res
+    #PRL
 
 if __name__ == '__main__':
     print "hamster-service up"

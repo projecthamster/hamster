@@ -151,10 +151,11 @@ class ExportRtController(gtk.Object):
             self.rt_url = conf.get("rt_url")
             self.rt_user = conf.get("rt_user")
             self.rt_pass = conf.get("rt_pass")
+            self.rt_apikey = conf.get("rt_apikey")
 
-            if self.rt_url and self.rt_user and self.rt_pass:
+            if self.rt_url and self.rt_user and (self.rt_pass or self.rt_apikey):
                 try:
-                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user,self.rt_pass))
+                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user if len(self.rt_pass) > 0 else self.rt_apikey, self.rt_pass))
                     if not self.tracker:
                         self.source = ""
                 except:

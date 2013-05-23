@@ -275,6 +275,23 @@ class Storage(storage.Storage):
         self.execute(query, (name, name.lower()))
         return self.__last_insert_rowid()
 
+    #PRL
+    def __add_redmine_issue(self, id, name, mine):
+        query = """
+                   INSERT INTO redmine_issues (id, name, mine, search_name)
+                        VALUES (?, ?, ?, ?)
+        """
+        self.execute(query, (id, name, mine, name.lower()))
+        return self.__last_insert_rowid()
+
+    def __get_last_redmine_issue(self):
+        fetch = self.fetchall("SELECT id FROM redmine_issues ORDER BY id DESC LIMIT 1")
+        if len(fetch) == 0:
+            return 0
+        else:
+            return fetch[0]['id']
+    #PRL
+
     def __update_category(self, id,  name):
         if id > -1: # Update, and ignore unsorted, if that was somehow triggered
             update = """
@@ -757,12 +774,12 @@ class Storage(storage.Storage):
 
         return self.fetchall(query, (category_id, ))
 
-
+    #PRL
     def __get_activities(self, search):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""
 
-        query = """
+        query1 = """
                    SELECT a.name AS name, b.name AS category
                      FROM activities a
                 LEFT JOIN categories b ON coalesce(b.id, -1) = a.category_id
@@ -771,13 +788,34 @@ class Storage(storage.Storage):
                       AND a.search_name LIKE ? ESCAPE '\\'
                  GROUP BY a.id
                  ORDER BY max(f.start_time) DESC, lower(a.name)
-                    LIMIT 50
+                    LIMIT 6
+        """
+        query2 = """
+                   SELECT a.name AS name, null AS category, a.mine as mine
+                     FROM redmine_issues a
+                    WHERE deleted IS NULL
+                      AND a.search_name LIKE ? ESCAPE '\\'
+                 ORDER BY a.mine DESC, a.name ASC
+                    LIMIT 10
         """
         search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, (u'%%%s%%' % search, ))
-
+        activities = self.fetchall(query1, (u'%%%s%%' % search, ))
+        redmine = self.fetchall(query2, (u'%%%s%%' % search, ));
+        if redmine:
+            limit_breaker = 3
+            activities.append({'name':'-------------------To-Do List-------------------','category':None})
+            for activity in redmine:
+                if activity['mine'] == 1:
+                    activities.append(activity)
+                    limit_breaker-=1
+                elif limit_breaker > 0:
+                    if limit_breaker != 99:
+                        activities.append({'name':'----------------Other Activities----------------','category':None})
+                        limit_breaker = 99
+                    activities.append(activity)
         return activities
+    #PRL
 
     def __remove_activity(self, id):
         """ check if we have any facts with this activity and behave accordingly
@@ -965,7 +1003,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 10
+        current_version = 11
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -992,6 +1030,10 @@ class Storage(storage.Storage):
             # adding exported
             self.execute("""ALTER TABLE facts ADD COLUMN exported bool default false""")
             self.execute("""UPDATE facts set exported=1""")
+
+        if version < 11:
+            #adding redmine_issues table
+            self.execute("""CREATE TABLE redmine_issues (id int PRIMARY KEY, name varchar2(500), mine boolean, search_name varchar2(500), deleted integer)""")
 
 
         # at the happy end, update version number

@@ -55,13 +55,9 @@ class Redmine:
         r = self.session.get(self.get_issue_url(issue_id))
         return self.Issue(json.loads(r.content))
 
-    def getIssues(self, criteria=None):
-        if criteria and not 'limit' in criteria:
-            criteria.update({'limit': 100})
-        elif not criteria:
-            criteria = ({'limit': 100})
+    def getIssues(self, criteria=({'limit': 999})):
         r = self.session.get(self.get_issue_url(),
-                       data=json.dumps(criteria))
+                       params=criteria)
         return [self.Issue(data) for data in json.loads(r.content)['issues']]
 
     def updateIssue(self, issue_id, data):

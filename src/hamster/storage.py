@@ -29,11 +29,13 @@ class Storage(object):
     def tags_changed(self): pass
     def facts_changed(self): pass
     def activities_changed(self): pass
+    def redmine_activities_changed(self): pass
 
     def dispatch_overwrite(self):
         self.tags_changed()
         self.facts_changed()
         self.activities_changed()
+        self.redmine_activities_changed()
 
 
     # facts
@@ -162,3 +164,15 @@ class Storage(object):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
             self.tags_changed()
+
+    #PRL
+    # redmine activities
+    def add_redmine_issue(self, id, name, mine):
+        res = self.__add_redmine_issue(id, name, mine)
+        self.redmine_activities_changed()
+        return res
+
+    def get_last_redmine_issue(self):
+        res = self.__get_last_redmine_issue()
+        return res
+    #PRL

@@ -49,7 +49,6 @@ class ActivitiesSource(gobject.GObject):
             self.rt_url = conf.get("rt_url")
             self.rt_user = conf.get("rt_user")
             self.rt_pass = conf.get("rt_pass")
-            self.rt_query = conf.get("rt_query")
             self.rt_category = conf.get("rt_category_field")
             if self.rt_url and self.rt_user and self.rt_pass:
                 try:
@@ -64,25 +63,23 @@ class ActivitiesSource(gobject.GObject):
             self.rt_url = conf.get("rt_url")
             self.rt_user = conf.get("rt_user")
             self.rt_pass = conf.get("rt_pass")
+            self.rt_apikey = conf.get("rt_apikey")
             self.rt_category = conf.get("rt_category_field")
-            try:
-                self.rt_query = json.loads(conf.get("rt_query"))
-            except:
-                self.rt_query = ({})
-            if self.rt_url and self.rt_user and self.rt_pass:
+            if self.rt_url and self.rt_user and (self.rt_pass or self.rt_apikey):
                 try:
-                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_user,self.rt_pass))
+                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_apikey,self.rt_pass))
                     if not self.tracker:
                         self.source = ""
+
                 except:
                     self.source = ""
             else:
                 self.source = ""
-        
+    
+    #PRL not used anymore
     def get_activities(self, query = None):
         if not self.source:
             return []
-
         if self.source == "evo":
             return [activity for activity in get_eds_tasks()
                          if query is None or activity['name'].startswith(query)]
@@ -104,8 +101,10 @@ class ActivitiesSource(gobject.GObject):
                     activities.append({"name": "---------------------", "category": "other open"})
                 activities.extend(third_activities)
             return activities
+        #######################################################################################
+        #######################################################################################
         elif self.source == "redmine":
-            activities = self.__extract_from_redmine(query, self.rt_query)
+            activities = self.__extract_from_redmine(query)
             direct_issue = None
             if query and re.match("^[0-9]+$", query):
                 issue = self.tracker.getIssue(query)
@@ -121,6 +120,8 @@ class ActivitiesSource(gobject.GObject):
                     activities.append({"name": "---------------------", "category": "other open"})
                 activities.extend(third_activities)
             return activities
+        #######################################################################################
+        #######################################################################################
         elif self.source == "gtg":
             conn = self.__get_gtg_connection()
             if not conn:
@@ -172,9 +173,10 @@ class ActivitiesSource(gobject.GObject):
     def __extract_activity_from_issue(self, issue):
         activity = {}
         issue_id = issue.id
-        activity['name'] = '#'+str(issue_id)+': '+issue.subject
-        activity['rt_id']=issue_id;
-        activity['category']="";
+        activity['name']    = '#'+str(issue_id)+': '+issue.subject
+        activity['rt_id']   = issue_id;
+        activity['category']= "";
+        activity['mine']    = 1 if issue.author['id'] == int(conf.get("rt_query")) else 0
         return activity
 
     def __extract_from_rt(self, query = None, rt_query = None):
@@ -188,13 +190,13 @@ class ActivitiesSource(gobject.GObject):
         
     def __extract_from_redmine(self, query = None, rt_query = None):
         activities = []
-        results = self.tracker.getIssues(rt_query)
+        results = self.tracker.getIssues(rt_query) #rt_query
         for issue in results:
             activity = self.__extract_activity_from_issue(issue)
             if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
                 activities.append(activity)
         return activities
-        
+
     def __extract_cat_from_ticket(self, ticket):
         category = "RT"
         if 'Queue' in ticket:
@@ -221,24 +223,38 @@ class ActivitiesSource(gobject.GObject):
             return None
 
 
+    def get_eds_tasks():
+        try:
+            sources = ecal.list_task_sources()
+            tasks = []
+            if not sources:
+                # BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
+                sources = [('default', 'default')]
 
-def get_eds_tasks():
-    try:
-        sources = ecal.list_task_sources()
-        tasks = []
-        if not sources:
-            # BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
-            sources = [('default', 'default')]
+            for source in sources:
+                category = source[0]
 
-        for source in sources:
-            category = source[0]
+                data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
+                if data:
+                    for task in data.get_all_objects():
+                        if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
+                            tasks.append({'name': task.get_summary(), 'category' : category})
+            return tasks
+        except Exception, e:
+            logging.warn(e)
+            return []
 
-            data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
-            if data:
-                for task in data.get_all_objects():
-                    if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
-                        tasks.append({'name': task.get_summary(), 'category' : category})
-        return tasks
-    except Exception, e:
-        logging.warn(e)
-        return []
+
+    def get_new_redmine_activities(self):
+        if not self.source:
+            return []
+        if self.source == "redmine":
+            activities = []
+            results = self.tracker.getIssues()
+            for issue in results:
+                activity = self.__extract_activity_from_issue(issue)
+                activities.append(activity)
+            return activities
+
+
+

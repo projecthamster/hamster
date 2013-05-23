@@ -185,10 +185,11 @@ class GConfStore(gobject.GObject, Singleton):
         'icon_glow'                   :   True,
         'show_label'                  :   False,
         'label_length'                :   20,
-        'rt_url'                      :   "https://rt.contium.pl/REST/1.0/",          # RT REST url
-        'rt_user'                     :   "",          # 
-        'rt_pass'                     :   "",          # 
-        'rt_query'                    :   "Owner='__CurrentUser__' AND (Status='new' OR Status='open')",          # RT query for autocomplete
+        'rt_url'                      :   "",                       # RT REST url
+        'rt_user'                     :   "",                                        # RT User
+        'rt_pass'                     :   "",                                           # RT Pass
+        'rt_apikey'                   :   "",   # RT API key
+        'rt_query'                    :   "",                                         # RT Redmine ID
         'rt_category_field'           :   "CF.{Projekt}",
     }
 

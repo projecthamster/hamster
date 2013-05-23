@@ -514,3 +514,13 @@ class Overview(gtk.Object):
     def on_delete_window(self, window, event):
         self.close_window()
         return True
+
+    #PRL
+    def on_get_redmine_issues(self, button):
+        last_issue = runtime.storage.get_last_redmine_issue()
+        activities = self.external.get_new_redmine_activities()
+        print last_issue
+        for activity in activities:
+            if activity['rt_id'] > last_issue:
+                runtime.storage.add_redmine_issue(activity['rt_id'], activity['name'], activity['mine'])
+                print "added issue "+str(activity['rt_id'])

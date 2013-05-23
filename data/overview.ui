@@ -49,6 +49,13 @@
     </child>
   </object>
   <object class="GtkActionGroup" id="overview">
+    <!--PRL-->
+    <child>
+      <object class="GtkAction" id="redmine_issues">
+        <signal name="activate" handler="on_get_redmine_issues" swapped="no"/>
+      </object>
+    </child>
+    <!--PRL-->
     <child>
       <object class="GtkAction" id="close">
         <property name="stock_id">gtk-close</property>
@@ -499,6 +506,24 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
+                        <!--PRL-->
+                        <child>
+                          <object class="GtkButton" id="start_redmine_issues">
+                            <property name="label" translatable="no">Get Issues</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="related_action">redmine_issues</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <!--PRL-->
                       </object>
                       <packing>
                         <property name="expand">False</property>

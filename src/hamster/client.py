@@ -61,6 +61,7 @@ class Storage(gobject.GObject):
         "tags-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "facts-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "redmine-activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "toggle-called": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
@@ -74,6 +75,7 @@ class Storage(gobject.GObject):
         self.bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_redmine_activities_changed, 'RedmineActivitiesChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
 
         self.bus.add_signal_receiver(self._on_dbus_connection_change, 'NameOwnerChanged',
@@ -101,6 +103,9 @@ class Storage(gobject.GObject):
 
     def _on_activities_changed(self):
         self.emit("activities-changed")
+
+    def _on_redmine_activities_changed(self):
+        self.emit("redmine-activities-changed")
 
     def _on_toggle_called(self):
         self.emit("toggle-called")
@@ -266,3 +271,14 @@ class Storage(gobject.GObject):
 
     def add_category(self, name):
         return self.conn.AddCategory(name)
+
+    #PRL
+    # categories
+    def add_redmine_issue(self, id, name, mine):
+        return self.conn.AddRedmineIssue(id, name, mine)
+
+    def get_last_redmine_issue(self):
+        """returns last redmine issue in DB"""
+        return self.conn.GetLastRedmineIssue()
+
+    #PRL
