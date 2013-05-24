@@ -518,9 +518,28 @@ class Overview(gtk.Object):
     #PRL
     def on_get_redmine_issues(self, button):
         last_issue = runtime.storage.get_last_redmine_issue()
-        activities = self.external.get_new_redmine_activities()
-        print last_issue
+
+        if last_issue != 0:
+            # run a normal get if it already has issues
+            activities = self.external.get_redmine_activities()
+        else:
+            # if DB is empty, get all open redmine tickets
+            activities = self.external.get_all_redmine_activities()
+            logging.warn("Running first time get")
+
+        # send redmine activities to DB
         for activity in activities:
             if activity['rt_id'] > last_issue:
                 runtime.storage.add_redmine_issue(activity['rt_id'], activity['name'], activity['mine'])
-                print "added issue "+str(activity['rt_id'])
+                logging.warn("added issue %s" % activity['rt_id'])
+
+        # check for issues assigned to user
+        activities = self.external.get_redmine_activities(({'assigned_to_id':'me'}))
+
+        # send to DB to update 'mine' column
+        if activities:
+            my_issues = []
+            for activity in activities:
+                my_issues.append(activity['rt_id'])
+            runtime.storage.update_redmine_todo_list(my_issues)
+            logging.warn("Updated To-Do List")

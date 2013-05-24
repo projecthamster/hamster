@@ -169,27 +169,24 @@ class GConfStore(gobject.GObject, Singleton):
     GCONF_DIR = "/apps/hamster-time-tracker/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
-        'enable_timeout'              :   False,       # Should hamster stop tracking on idle
-        'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
-        'notify_on_idle'              :   False,       # Remind also if no activity is set
-        'notify_interval'             :   27,          # Remind of current activity every X minutes
-        'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
-        'overview_window_box'         :   [],          # X, Y, W, H
-        'overview_window_maximized'   :   False,       # Is overview window maximized
-        'workspace_tracking'          :   [],          # Should hamster switch activities on workspace change 0,1,2
-        'workspace_mapping'           :   [],          # Mapping between workspace numbers and activities
-        'standalone_window_box'       :   [],          # X, Y, W, H
-        'standalone_window_maximized' :   False,       # Is overview window maximized
-        'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
-        'last_report_folder'          :   "~",         # Path to directory where the last report was saved
+        'enable_timeout'              :   False,                # Should hamster stop tracking on idle
+        'stop_on_shutdown'            :   False,                # Should hamster stop tracking on shutdown
+        'notify_on_idle'              :   False,                # Remind also if no activity is set
+        'notify_interval'             :   27,                   # Remind of current activity every X minutes
+        'day_start_minutes'           :   5 * 60 + 30,          # At what time does the day start (5:30AM)
+        'overview_window_box'         :   [],                   # X, Y, W, H
+        'overview_window_maximized'   :   False,                # Is overview window maximized
+        'workspace_tracking'          :   [],                   # Should hamster switch activities on workspace change 0,1,2
+        'workspace_mapping'           :   [],                   # Mapping between workspace numbers and activities
+        'standalone_window_box'       :   [],                   # X, Y, W, H
+        'standalone_window_maximized' :   False,                # Is overview window maximized
+        'activities_source'           :   "",                   # Source of TODO items ("", "evo", "gtg")
+        'last_report_folder'          :   "~",                  # Path to directory where the last report was saved
         'icon_glow'                   :   True,
         'show_label'                  :   False,
         'label_length'                :   20,
-        'rt_url'                      :   "",                       # RT REST url
-        'rt_user'                     :   "",                                        # RT User
-        'rt_pass'                     :   "",                                           # RT Pass
-        'rt_apikey'                   :   "",   # RT API key
-        'rt_query'                    :   "",                                         # RT Redmine ID
+        'rt_url'                      :   "http://",            # RT REST url
+        'rt_apikey'                   :   "<insert API Key>",   # RT API key
         'rt_category_field'           :   "CF.{Projekt}",
     }
 

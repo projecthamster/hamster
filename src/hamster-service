@@ -311,6 +311,10 @@ class Storage(db.Storage, dbus.service.Object):
     def GetLastRedmineIssue(self):
         res = self.get_last_redmine_issue()
         return res
+
+    @dbus.service.method("org.gnome.Hamster", in_signature='ai')
+    def UpdateRedmineTodoList(self, my_issues):
+        res = self.update_redmine_todo_list(my_issues)
     #PRL
 
 if __name__ == '__main__':

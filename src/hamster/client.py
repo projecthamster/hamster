@@ -281,4 +281,7 @@ class Storage(gobject.GObject):
         """returns last redmine issue in DB"""
         return self.conn.GetLastRedmineIssue()
 
+    def update_redmine_todo_list(self, my_issues):
+        """Updates To-Do List"""
+        return self.conn.UpdateRedmineTodoList(my_issues)
     #PRL

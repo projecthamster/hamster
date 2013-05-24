@@ -384,8 +384,8 @@ class ActivityEntry(gtk.Entry):
         category = ""
         if not rt_id and match:
             rt_id = match.group(1)
-        if rt_id:
-            category = self.external.get_ticket_category(rt_id)
+        #if rt_id:
+        #    category = self.external.get_ticket_category(rt_id)
         if not category:
             category = model.get_value(iter, 2)
         return '@'.join([name, category])

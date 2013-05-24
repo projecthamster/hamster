@@ -290,6 +290,21 @@ class Storage(storage.Storage):
             return 0
         else:
             return fetch[0]['id']
+
+    def __update_redmine_todo_list(self, my_issues):
+        
+        update = """UPDATE redmine_issues SET mine = ? """
+
+        where = "WHERE mine = 1"
+        self.execute(update+where, (0,))
+
+        where = "WHERE id IN ("
+        for data in my_issues:
+            where += str(data)+", "
+        where += "0)"
+        self.execute(update+where, (1,))
+        #[2895, 2894, 2893, 2892, 2884, 2845, 2808, 2807, 2679, 2602, 2601]
+        return True
     #PRL
 
     def __update_category(self, id,  name):
@@ -788,14 +803,14 @@ class Storage(storage.Storage):
                       AND a.search_name LIKE ? ESCAPE '\\'
                  GROUP BY a.id
                  ORDER BY max(f.start_time) DESC, lower(a.name)
-                    LIMIT 6
+                    LIMIT 4
         """
         query2 = """
                    SELECT a.name AS name, null AS category, a.mine as mine
                      FROM redmine_issues a
                     WHERE deleted IS NULL
                       AND a.search_name LIKE ? ESCAPE '\\'
-                 ORDER BY a.mine DESC, a.name ASC
+                 ORDER BY a.mine DESC, a.id ASC
                     LIMIT 10
         """
         search = search.lower()
@@ -804,7 +819,7 @@ class Storage(storage.Storage):
         redmine = self.fetchall(query2, (u'%%%s%%' % search, ));
         if redmine:
             limit_breaker = 3
-            activities.append({'name':'-------------------To-Do List-------------------','category':None})
+            if redmine[0]['mine'] == 1: activities.append({'name':'-------------------To-Do List-------------------','category':None})
             for activity in redmine:
                 if activity['mine'] == 1:
                     activities.append(activity)

@@ -175,4 +175,8 @@ class Storage(object):
     def get_last_redmine_issue(self):
         res = self.__get_last_redmine_issue()
         return res
+
+    def update_redmine_todo_list(self, my_issues):
+        res = self.__update_redmine_todo_list(my_issues)
+        self.redmine_activities_changed()
     #PRL
