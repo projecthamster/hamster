@@ -276,7 +276,7 @@ class ActivityEntry(gtk.Entry):
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             activities_to_append = []
-            if not conf.get("rt_activities_only"):
+            if conf.get("rt_activities_only"):
                 if not self.external_activities:
                     for a in self.activities:
                         activities_to_append.append(a)
