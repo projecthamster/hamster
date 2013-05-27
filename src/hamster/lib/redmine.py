@@ -72,6 +72,17 @@ class Redmine:
         r = self.session.post(self.get_time_entry_url(), data=json.dumps(data))
         return r
 
+    def getRedmineActivities(self, data, name=False):
+        """get dict of activities"""
+        r = self.session.get(self.url + "/enumerations/time_entry_activities.json")
+        activDict = [self.Activity(data) for data in json.loads(r.content)['time_entry_activities']]
+        for activ in activDict:
+            for tag in data:
+                if lower(activ.name) == lower(tag):
+                    return activ
+        return self.Activity({"id":-1,"name":"Unsorted"})
+
+
     def get_project_url(self, project_id=None):
         if project_id:
             url = self.url + "/projects/%s.json" % project_id
@@ -147,3 +158,6 @@ class Redmine:
         def __init__(self, data):
             super(Redmine.Issue, self).__init__(data, 'issue')
 
+    class Activity(RedmineObj):
+        def __init__(self, data):
+            super(Redmine.Activity, self).__init__(data, 'activity')

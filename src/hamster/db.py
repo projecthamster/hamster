@@ -298,12 +298,8 @@ class Storage(storage.Storage):
         where = "WHERE mine = 1"
         self.execute(update+where, (0,))
 
-        where = "WHERE id IN ("
-        for data in my_issues:
-            where += str(data)+", "
-        where += "0)"
+        where = "WHERE id IN (" + "".join("%s, "% (str(data)) for data in my_issues)[0:-2] + ")"
         self.execute(update+where, (1,))
-        #[2895, 2894, 2893, 2892, 2884, 2845, 2808, 2807, 2679, 2602, 2601]
         return True
     #PRL
 
