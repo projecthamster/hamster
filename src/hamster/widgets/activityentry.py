@@ -326,12 +326,13 @@ class ActivityEntry(gtk.Entry):
     def _populate_and_show(self):
         self.populate_suggestions()
         self.show_popup()
-        gobject.source_remove(self.timeout_id)
-        self.timeout_id = None
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
-            if self.popup.get_property("gobject.source_remove(self.timeout_id)"):
+            if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
                     selected = self._get_selected_text(self.tree)
 #                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
