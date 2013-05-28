@@ -31,7 +31,6 @@ class ActivityEntry(gtk.Entry):
         'value-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-
     def __init__(self):
         gtk.Entry.__init__(self)
         self.news = False
@@ -136,6 +135,9 @@ class ActivityEntry(gtk.Entry):
         if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
             self.get_toplevel().disconnect(self._parent_click_watcher)
             self._parent_click_watcher = None
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
         self.popup.hide()
 
     def show_popup(self):
@@ -329,7 +331,7 @@ class ActivityEntry(gtk.Entry):
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
-            if self.popup.get_property("visible"):
+            if self.popup.get_property("gobject.source_remove(self.timeout_id)"):
                 if self.tree.get_cursor()[0]:
                     selected = self._get_selected_text(self.tree)
 #                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
