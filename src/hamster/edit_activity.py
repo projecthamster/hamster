@@ -297,6 +297,8 @@ class CustomFactController(gtk.Object):
         elif event_key.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter):
             if popups:
                 return False
+            if self.get_widget('description').has_focus():
+                return False
             self.on_save_button_clicked(None)
 
 
