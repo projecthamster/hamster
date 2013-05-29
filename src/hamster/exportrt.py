@@ -223,8 +223,8 @@ class ExportRtController(gtk.Object):
         self.get_widget("activities").add(self.view)
         self.aggregate_comments_checkbox = self.get_widget("aggregate_comments_checkbox")
         self.aggregate_comments_checkbox.set_active(True)
-        self.test_checkox = self.get_widget("test_checkbox")
-        self.test_checkox.set_active(False)
+        self.test_checkbox = self.get_widget("test_checkbox")
+        self.test_checkbox.set_active(False)
         self.progressbar = self.get_widget("progressbar")
         self.progressbar.set_text(_("Waiting for action"))
         self.progressbar.set_orientation(gtk.PROGRESS_LEFT_TO_RIGHT)
@@ -283,47 +283,21 @@ class ExportRtController(gtk.Object):
                 self.progressbar.set_fraction(float(i)/to_report_len)
                 while gtk.events_pending(): 
                     gtk.main_iteration()
-                if self.source == "rt":
-                    self.__comment_ticket(to_report['id'], to_report['comment'], to_report['time'], to_report['facts'])
-                elif self.source == "redmine":
+                if self.source == "redmine":
                     #act# self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'], to_report['activity'])
                     self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'])
             self.progressbar.set_text("Done")
             self.progressbar.set_fraction(1.0)
-#            for fact in self.facts:
-#                match = re.match(TICKET_NAME_REGEX, fact.activity)
-#                if fact.end_time and match:
-#                    ticket_id = match.group(1)
-#                    text = self.get_text(fact)
-#                    time_worked = stuff.duration_minutes(fact.delta)
-#                    logging.warn(ticket_id)
-#                    logging.warn(text)
-#                    logging.warn("minutes: %s" % time_worked)
-##                    external.tracker.comment(ticket_id, text, time_worked)
-#                else:
-#                    logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
         else:
             logging.warn(_("Not connected to/logged in RT"))
         self.start_button.set_sensitive(False)
         #TODO only if parent is overview
         self.parent.search()
             
-    def __comment_ticket(self, ticket_id, text, time_worked, facts):
-        test = self.test_checkox.get_active()
-#        logging.warn(_("updating ticket #%s: %s min, comment: \n%s") % (ticket_id, time_worked, text))
-        if not test:
-            time = time_worked
-        else:
-            time = 0
-
-        if self.tracker.comment(ticket_id, text, time) and not test:
-            for fact in facts:
-                runtime.storage.update_fact(fact.id, fact, False,True)
-#                fact_row.selected = False
             
     #act# def __add_time_entry(self, issue_id, spent_on, hours, comments, facts, activity):
     def __add_time_entry(self, issue_id, spent_on, hours, comments, facts):
-        test = self.test_checkox.get_active()
+        test = self.test_checkbox.get_active()
         logging.warn(_("updating issue #%s: %s hrs, comment: \n%s") % (issue_id, hours, comments))
         time_entry_data = {'time_entry': {}}
         time_entry_data['time_entry']['issue_id'] = issue_id
@@ -332,23 +306,17 @@ class ExportRtController(gtk.Object):
         time_entry_data['time_entry']['comments'] = comments
         #act# time_entry_data['time_entry']['activity_id'] = 9 if activity == -1 else activity
         time_entry_data['time_entry']['activity_id'] = 9
-
-        
-        r = self.tracker.createTimeEntry(time_entry_data)
-        logging.warn(r.status_code)
-        logging.warn(r.content)
-        if r.status_code == 201 and not test:
-            for fact in facts:
-                runtime.storage.update_fact(fact.id, fact, False,True)
-#                fact_row.selected = False
-
-    def get_text(self, fact):
-        text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
-        if fact.description:
-            text += ": %s" % (fact.description)
-        if fact.tags:
-            text += " ("+", ".join(fact.tags)+")"
-        return text
+        for fact in facts:
+            print fact.id
+            print fact
+        if not test:
+            r = self.tracker.createTimeEntry(time_entry_data)
+            logging.warn(r.status_code)
+            logging.warn(r.content)
+            if r.status_code == 201:
+                for fact in facts:
+                    runtime.storage.update_fact(fact.id, fact, False,True)
+    #                fact_row.selected = False
 
     def on_window_key_pressed(self, tree, event_key):
         popups = self.start_date.popup.get_property("visible") or \

@@ -36,9 +36,9 @@ pre. sudo apt-get install python-requests python-beaker
 
 h1. Screenshots
 
-!https://raw.github.com/gsobczyk/hamster/master/entry.png!
+!https://raw.github.com/Americas/hamster/master/entry.png!
 
-!https://raw.github.com/gsobczyk/hamster/master/settings.png!
+!https://raw.github.com/Americas/hamster/master/settings.png!
 
 h1. Additional settings
 
