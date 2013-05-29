@@ -70,8 +70,8 @@ class DailyView(object):
         self.prev_size = None
 
         # bindings
-        self.accel_group = self.get_widget("accelgroup")
-        self.window.add_accel_group(self.accel_group)
+        #self.accel_group = self.get_widget("accelgroup")
+        #self.window.add_accel_group(self.accel_group)
 
         gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)

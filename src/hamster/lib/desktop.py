@@ -22,8 +22,7 @@ from calendar import timegm
 import logging
 import gobject
 
-
-from hamster import idle
+from hamster import idle, external
 from hamster.configuration import conf
 from hamster.lib import trophies
 import dbus
@@ -46,6 +45,7 @@ class DesktopIntegrations(object):
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
         gobject.timeout_add_seconds(60, self.check_hamster)
+        gobject.timeout_add_seconds(3600, self.check_redmine)
 
 
     def check_hamster(self):
@@ -86,6 +86,42 @@ class DesktopIntegrations(object):
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour * 60) % interval == 0:
                 self.notify_user(_(u"No activity"))
+
+
+    def check_redmine(self):
+        """verify Redmine activities every hour."""
+        self.external = external.ActivitiesSource()
+        if self.external:
+            try:
+                #PRL#TODO: send all this code to storage
+                last_issue = self.storage._Storage__get_last_redmine_issue()
+                activities = self.external.get_redmine_activities() if last_issue != 0 else self.external.get_all_redmine_activities()
+                count = 0
+                # send redmine activities to DB
+                for activity in activities:
+                    if activity['rt_id'] > last_issue:
+                        self.storage.add_redmine_issue(activity['rt_id'], activity['name'], activity['mine'])
+                        count += 1
+                # check for issues assigned to user
+                activities = self.external.get_redmine_activities(({'assigned_to_id':'me'}))
+
+                # send to DB to update 'mine' column
+                if activities:
+                    my_issues = []
+                    for activity in activities:
+                        my_issues.append(activity['rt_id'])
+                    self.storage.update_redmine_todo_list(my_issues)
+
+                message = "Issues updated"
+                if count > 0:
+                    message += "\n%s new issues added" % count
+                self.notify_user(_(u"%s") % message)
+
+            except Exception, e:
+                logging.error("Error while refreshing: %s" % e)
+            finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
+                return True
+        return True
 
 
     def notify_user(self, summary="", details=""):

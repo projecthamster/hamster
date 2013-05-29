@@ -171,8 +171,6 @@ class Overview(gtk.Object):
         self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
         self.get_widget("export").set_sensitive(len(self.facts) > 0)
-        self.get_widget("export_rt").set_sensitive(len(self.facts) > 0)
-        self.get_widget("export_rt").set_visible(conf.get("activities_source")=="rt")
 
         self.set_title()
 

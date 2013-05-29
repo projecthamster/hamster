@@ -338,8 +338,6 @@ class ExportRtController(gtk.Object):
         self.on_close(button, None)
 
     def on_close(self, widget, event):
-        if self.source == "rt":
-            self.tracker.logout();
         self.close_window()
 
     def close_window(self):

@@ -92,7 +92,7 @@ class ProjectHamsterStatusIconUnity():
                                   "hamster-applet-inactive",
                                   appindicator.CATEGORY_SYSTEM_SERVICES)
 
-        self.indicator.set_status (appindicator.STATUS_ACTIVE)
+        self.indicator.set_status(appindicator.STATUS_ACTIVE)
         # Set the attention icon as per the icon_glow gconf key
         self._set_attention_icon()
 

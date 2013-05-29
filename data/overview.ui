@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy project-wide -->
+  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-local-resource-path /home/toms/cvs/hamster/data/art -->
   <object class="GtkActionGroup" id="activity">
     <child>
-      <object class="GtkAction" id="edit">
-        <property name="label" translatable="yes">Edit</property>
-        <property name="stock_id">gtk-edit</property>
+      <object class="GtkAction" id="remove">
+        <property name="label" translatable="yes">Remove</property>
+        <property name="stock_id">gtk-remove</property>
         <property name="sensitive">False</property>
-        <signal name="activate" handler="on_edit_activate" swapped="no"/>
+        <signal name="activate" handler="on_remove_activate" swapped="no"/>
       </object>
     </child>
     <child>
@@ -20,42 +19,39 @@
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="remove">
-        <property name="label" translatable="yes">Remove</property>
-        <property name="stock_id">gtk-remove</property>
+      <object class="GtkAction" id="edit">
+        <property name="label" translatable="yes">Edit</property>
+        <property name="stock_id">gtk-edit</property>
         <property name="sensitive">False</property>
-        <signal name="activate" handler="on_remove_activate" swapped="no"/>
+        <signal name="activate" handler="on_edit_activate" swapped="no"/>
       </object>
     </child>
   </object>
   <object class="GtkActionGroup" id="go">
     <child>
-      <object class="GtkAction" id="prev">
-        <property name="stock_id">gtk-go-back</property>
-        <signal name="activate" handler="on_prev_activate" swapped="no"/>
+      <object class="GtkAction" id="next">
+        <signal name="activate" handler="on_next_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="home">
-        <property name="stock_id">gtk-home</property>
         <signal name="activate" handler="on_home_activate" swapped="no"/>
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="next">
-        <property name="stock_id">gtk-go-forward</property>
-        <signal name="activate" handler="on_next_activate" swapped="no"/>
+      <object class="GtkAction" id="prev">
+        <signal name="activate" handler="on_prev_activate" swapped="no"/>
       </object>
     </child>
   </object>
   <object class="GtkActionGroup" id="overview">
-    <!--PRL-->
     <child>
-      <object class="GtkAction" id="redmine_issues">
-        <signal name="activate" handler="on_get_redmine_issues" swapped="no"/>
+      <object class="GtkAction" id="export">
+        <property name="label" translatable="yes">Save report...</property>
+        <property name="icon_name">document-save</property>
+        <signal name="activate" handler="on_export_activate" swapped="no"/>
       </object>
     </child>
-    <!--PRL-->
     <child>
       <object class="GtkAction" id="close">
         <property name="stock_id">gtk-close</property>
@@ -64,17 +60,8 @@
       <accelerator key="w" modifiers="GDK_CONTROL_MASK"/>
     </child>
     <child>
-      <object class="GtkAction" id="export_rt">
-        <property name="label" translatable="yes">Report to RT...</property>
-        <property name="icon_name">document-revert</property>
-        <signal name="activate" handler="on_export_rt_activate" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkAction" id="export">
-        <property name="label" translatable="yes">Save report...</property>
-        <property name="icon_name">document-save</property>
-        <signal name="activate" handler="on_export_activate" swapped="no"/>
+      <object class="GtkAction" id="redmine_issues">
+        <signal name="activate" handler="on_get_redmine_issues" swapped="no"/>
       </object>
     </child>
   </object>
@@ -84,17 +71,12 @@
         <signal name="activate" handler="on_start_activate" swapped="no"/>
       </object>
     </child>
-    <child>
-      <object class="GtkAction" id="done">
-        <signal name="activate" handler="on_done_activate" swapped="no"/>
-      </object>
-    </child>
   </object>
   <object class="GtkActionGroup" id="view">
     <child>
-      <object class="GtkAction" id="month">
-        <property name="label" translatable="yes">Month</property>
-        <signal name="activate" handler="on_month_activate" swapped="no"/>
+      <object class="GtkAction" id="day">
+        <property name="label" translatable="yes">Day</property>
+        <signal name="activate" handler="on_day_activate" swapped="no"/>
       </object>
     </child>
     <child>
@@ -104,9 +86,9 @@
       </object>
     </child>
     <child>
-      <object class="GtkAction" id="day">
-        <property name="label" translatable="yes">Day</property>
-        <signal name="activate" handler="on_day_activate" swapped="no"/>
+      <object class="GtkAction" id="month">
+        <property name="label" translatable="yes">Month</property>
+        <signal name="activate" handler="on_month_activate" swapped="no"/>
       </object>
     </child>
   </object>
@@ -115,30 +97,29 @@
     <property name="can_focus">False</property>
     <child>
       <object class="GtkMenuItem" id="popup_edit">
+        <property name="related_action">edit</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="related_action">edit</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="popup_remove">
+        <property name="related_action">remove</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="related_action">remove</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="menuitem10">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="use_action_appearance">False</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="popup_add">
+        <property name="related_action">add</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="related_action">add</property>
       </object>
     </child>
   </object>
@@ -163,7 +144,6 @@
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_Overview</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -172,23 +152,16 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="report_button">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="related_action">export</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="report_rt_button">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">export_rt</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem5">
+                        <property name="related_action">close</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">close</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -201,7 +174,6 @@
               <object class="GtkMenuItem" id="menuitem14">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Activity</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -210,30 +182,29 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="menu_edit">
+                        <property name="related_action">edit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">edit</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="menu_remove">
+                        <property name="related_action">remove</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">remove</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkSeparatorMenuItem" id="menuitem2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="menu_add">
+                        <property name="related_action">add</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">add</property>
                       </object>
                     </child>
                   </object>
@@ -244,7 +215,6 @@
               <object class="GtkMenuItem" id="menu_view">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_View</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -253,23 +223,23 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="menu_view_day">
+                        <property name="related_action">day</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">day</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="menu_view_week">
+                        <property name="related_action">week</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">week</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="menu_view_month">
+                        <property name="related_action">month</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="related_action">month</property>
                       </object>
                     </child>
                   </object>
@@ -305,10 +275,10 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="button_prev">
+                            <property name="related_action">prev</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="related_action">prev</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkImage" id="image1">
@@ -326,10 +296,10 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="button_home">
+                            <property name="related_action">home</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="related_action">home</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkImage" id="image2">
@@ -347,10 +317,10 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="button_next">
+                            <property name="related_action">next</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="related_action">next</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkImage" id="image3">
@@ -367,6 +337,9 @@
                           </packing>
                         </child>
                         <child>
+                          <placeholder/>
+                        </child>
+                        <child>
                           <object class="GtkAlignment" id="range_pick_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -377,7 +350,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                       </object>
@@ -404,9 +377,7 @@
                             <property name="primary_icon_stock">gtk-find</property>
                             <property name="secondary_icon_stock">gtk-clear</property>
                             <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">True</property>
-                            <property name="primary_icon_sensitive">True</property>
-                            <property name="secondary_icon_sensitive">True</property>
+                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="on_search_changed" swapped="no"/>
                             <signal name="activate" handler="on_search_activate" swapped="no"/>
                             <signal name="icon-press" handler="on_search_icon_press" swapped="no"/>
@@ -462,8 +433,6 @@
               <object class="GtkNotebook" id="window_tabs">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tab_hborder">8</property>
-                <property name="tab_vborder">4</property>
                 <signal name="switch-page" handler="on_window_tabs_switch_page" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkVBox" id="vbox3">
@@ -487,34 +456,32 @@
                       <object class="GtkHButtonBox" id="report_buttons">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="extension_events">all</property>
                         <property name="border_width">4</property>
                         <property name="layout_style">end</property>
                         <child>
+                          <object class="GtkButton" id="start_redmine_issues">
+                            <property name="label">Get Issues</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">redmine_issues</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkButton" id="start_button">
                             <property name="label" translatable="yes">Report selected...</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="related_action">start</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <!--PRL-->
-                        <child>
-                          <object class="GtkButton" id="start_redmine_issues">
-                            <property name="label" translatable="no">Get Issues</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="related_action">redmine_issues</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -523,7 +490,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <!--PRL-->
                       </object>
                       <packing>
                         <property name="expand">False</property>

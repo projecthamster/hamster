@@ -28,6 +28,12 @@ After that make sure that the old daemons aren't roaming around:
 
 pre. killall hamster-service && killall hamster-windows-service
 
+Make sure gconf settings are owned by you and not root:
+
+pre. cd ~/.gconf/apps/
+ls -l | grep hamster-time-tracker
+sudo chown -R <user>:<group> hamster-time-tracker
+
 Now restart your panels/dockies and you should be able to add hamster to your panel!
 
 h2. Required
