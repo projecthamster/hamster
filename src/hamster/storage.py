@@ -66,6 +66,14 @@ class Storage(object):
         return result
 
 
+    def update_exported_fact(self, fact_id):
+        self.start_transaction()
+        result = self.__update_exported_fact(fact_id)
+        self.end_transaction()
+        if result:
+            self.facts_changed()
+
+
     def stop_tracking(self, end_time):
         """Stops tracking the current activity"""
         facts = self.__get_todays_facts()

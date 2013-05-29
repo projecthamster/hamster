@@ -653,6 +653,13 @@ class Storage(storage.Storage):
         self.__remove_index([fact_id])
         return fact_id
 
+
+    def __update_exported_fact(self, fact_id):
+        update = """UPDATE facts SET exported = ? WHERE id = ?"""
+        self.execute(update, (True, fact_id))
+        return self.fetchone("SELECT exported FROM facts WHERE id = ?", (fact_id,))[0]
+
+
     def __last_insert_rowid(self):
         return self.fetchone("SELECT last_insert_rowid();")[0]
 

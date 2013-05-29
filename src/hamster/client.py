@@ -231,6 +231,9 @@ class Storage(gobject.GObject):
         trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id
 
+    def update_exported_fact(self,fact_id):
+        """Updates facts that were exported"""
+        self.conn.UpdateExportedFact(fact_id)
 
     def get_category_activities(self, category_id = None):
         """Return activities for category. If category is not specified, will

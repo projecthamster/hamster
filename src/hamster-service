@@ -171,6 +171,11 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
+    def UpdateExportedFact(self, fact_id):
+        self.update_exported_fact(fact_id)
+
+
+    @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def StopTracking(self, end_time):
         """Stops tracking the current activity"""
         end_time = end_time or None

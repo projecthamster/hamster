@@ -306,16 +306,13 @@ class ExportRtController(gtk.Object):
         time_entry_data['time_entry']['comments'] = comments
         #act# time_entry_data['time_entry']['activity_id'] = 9 if activity == -1 else activity
         time_entry_data['time_entry']['activity_id'] = 9
-        for fact in facts:
-            print fact.id
-            print fact
         if not test:
             r = self.tracker.createTimeEntry(time_entry_data)
             logging.warn(r.status_code)
             logging.warn(r.content)
             if r.status_code == 201:
                 for fact in facts:
-                    runtime.storage.update_fact(fact.id, fact, False,True)
+                    runtime.storage.update_exported_fact(fact.id)
     #                fact_row.selected = False
 
     def on_window_key_pressed(self, tree, event_key):
