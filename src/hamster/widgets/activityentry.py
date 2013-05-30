@@ -174,7 +174,7 @@ class ActivityEntry(gtk.Entry):
         alloc = self.get_allocation()
 
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
-        popup_height = (alloc.height) * min([result_count, self.max_results])
+        popup_height = (alloc.height-1) * min([result_count, self.max_results])
         self.tree.parent.set_size_request(alloc.width, popup_height)
         self.popup.resize(alloc.width, popup_height)
 
@@ -319,11 +319,18 @@ class ActivityEntry(gtk.Entry):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
-#                    selected = self._get_selected_text(self.tree)
-                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
-#                    self.set_text(selected)
-                self.hide_popup()
-                self.set_position(len(self.get_text()))
+                    selected = self.tree.get_model()[self.tree.get_cursor()[0][0]][0]
+                    if '@' in selected:
+                        self.set_text(selected)
+                        self.hide_popup()
+                        self.set_position(len(self.get_text()))
+                    else:
+                        self.set_text(selected+"@")
+                        self.hide_popup()
+                        self.set_position(len(self.get_text()))
+                        self.refresh_activities()
+                        self.populate_suggestions()
+                        self.show_popup()
             else:
                 self._on_selected()
 
@@ -333,6 +340,7 @@ class ActivityEntry(gtk.Entry):
                 return True
             else:
                 return False
+
         elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
             return False
         else:
@@ -372,6 +380,7 @@ class ActivityEntry(gtk.Entry):
 
 
     def _on_tree_button_press_event(self, tree, event):
+        print "I was called!"
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
         if '@' in value:
