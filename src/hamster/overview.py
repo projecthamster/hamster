@@ -101,19 +101,21 @@ class Overview(gtk.Object):
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
                                                         minutes = self.day_start.minute)).date()
 
-        #set to monday
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
+        # #set to monday
+        # self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
 
-        # look if we need to start on sunday or monday
-        self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
+        # # look if we need to start on sunday or monday
+        # self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
 
-        # see if we have not gotten carried away too much in all these calculations
-        if (self.view_date - self.start_date) == dt.timedelta(7):
-            self.start_date += dt.timedelta(7)
+        # # see if we have not gotten carried away too much in all these calculations
+        # if (self.view_date - self.start_date) == dt.timedelta(7):
+        #     self.start_date += dt.timedelta(7)
 
-        self.end_date = self.start_date + dt.timedelta(6)
+        # self.end_date = self.start_date + dt.timedelta(6)
 
-        self.current_range = "week"
+        self.start_date = self.view_date
+        self.end_date = self.start_date + dt.timedelta(0)
+        self.current_range = "day"
 
         self.timechart.day_start = self.day_start
 
