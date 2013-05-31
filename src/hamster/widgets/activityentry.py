@@ -380,7 +380,6 @@ class ActivityEntry(gtk.Entry):
 
 
     def _on_tree_button_press_event(self, tree, event):
-        print "I was called!"
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
         if '@' in value:
