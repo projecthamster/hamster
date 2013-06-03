@@ -277,14 +277,6 @@ class Storage(gobject.GObject):
 
     #PRL
     # categories
-    def add_redmine_issue(self, id, name, mine):
-        return self.conn.AddRedmineIssue(id, name, mine)
-
-    def get_last_redmine_issue(self):
-        """returns last redmine issue in DB"""
-        return self.conn.GetLastRedmineIssue()
-
-    def update_redmine_todo_list(self, my_issues):
-        """Updates To-Do List"""
-        return self.conn.UpdateRedmineTodoList(my_issues)
+    def get_redmine_issues(self):
+        return self.conn.GetRedmineIssues()
     #PRL

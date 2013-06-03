@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import external
 import datetime as dt
 from lib import Fact
 
@@ -175,16 +176,30 @@ class Storage(object):
 
     #PRL
     # redmine activities
-    def add_redmine_issue(self, id, name, mine):
-        res = self.__add_redmine_issue(id, name, mine)
-        self.redmine_activities_changed()
-        return res
+    def get_redmine_issues(self):
+        try:
+            self.external = external.ActivitiesSource()
+            last_issue = self.__get_last_redmine_issue()
+            activities = self.external.get_redmine_activities() if last_issue != 0 else self.external.get_all_redmine_activities()
 
-    def get_last_redmine_issue(self):
-        res = self.__get_last_redmine_issue()
-        return res
+            # send redmine activities to DB
+            count = 0
+            for activity in activities:
+                if activity['rt_id'] > last_issue:
+                    self.__add_redmine_issue(activity['rt_id'], activity['name'], activity['mine'])
+                    count += 1
+                    self.redmine_activities_changed()
 
-    def update_redmine_todo_list(self, my_issues):
-        res = self.__update_redmine_todo_list(my_issues)
-        self.redmine_activities_changed()
+            # check for issues assigned to user
+            activities = self.external.get_redmine_activities(({'assigned_to_id':'me'}))
+            # send to DB to update 'mine' column
+            if activities:
+                my_issues = []
+                for activity in activities:
+                    my_issues.append(activity['rt_id'])
+                self.__update_redmine_todo_list(my_issues)
+                self.redmine_activities_changed()
+            return count
+        except Exception, e:
+            return -1
     #PRL
