@@ -384,6 +384,7 @@ class Storage(storage.Storage):
         return None
 
     def __get_fact(self, id):
+        print id
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
@@ -918,7 +919,7 @@ class Storage(storage.Storage):
                               a.description as description,
                               b.name AS name, b.id as activity_id,
                               coalesce(c.name, ?) as category,
-                              e.name as tag
+                              e.name as tag, a.exported AS exported
                          FROM facts a
                     LEFT JOIN activities b ON a.activity_id = b.id
                     LEFT JOIN categories c ON b.category_id = c.id
