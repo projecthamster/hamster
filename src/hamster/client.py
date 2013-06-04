@@ -276,7 +276,7 @@ class Storage(gobject.GObject):
         return self.conn.AddCategory(name)
 
     #PRL
-    # categories
+    # redmine
     def get_redmine_issues(self):
         return self.conn.GetRedmineIssues()
     #PRL

@@ -32,7 +32,7 @@ import re
 import gtk, gobject
 import logging
 
-import widgets, reports, external
+import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
 from lib import Fact
 from lib import stuff, trophies
@@ -83,9 +83,6 @@ class Overview(gtk.Object):
             (conf, conf.connect('conf-changed', self.on_conf_change))
         ]
         
-        
-        self.external = external.ActivitiesSource()
-        
         self.show()
 
 
@@ -99,19 +96,7 @@ class Overview(gtk.Object):
         self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
 
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
-                                                        minutes = self.day_start.minute)).date()
-
-        # #set to monday
-        # self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-
-        # # look if we need to start on sunday or monday
-        # self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-
-        # # see if we have not gotten carried away too much in all these calculations
-        # if (self.view_date - self.start_date) == dt.timedelta(7):
-        #     self.start_date += dt.timedelta(7)
-
-        # self.end_date = self.start_date + dt.timedelta(6)
+                                                            minutes = self.day_start.minute)).date()
 
         self.start_date = self.view_date
         self.end_date = self.start_date + dt.timedelta(0)
@@ -440,14 +425,14 @@ class Overview(gtk.Object):
 
 
     def on_start_activate(self, button):
-        to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
-        to_report = [row[0].fact for row in to_report]
-        dialogs.export_rt.show(self, facts = to_report)
+        if conf.get("activities_source") == "":
+            logging.warn("Not connected to an external source.")
+        else:
+            to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
+            to_report = [row[0].fact for row in to_report]
+            dialogs.export_rt.show(self, facts = to_report)
         
     def __is_rt_ticket(self, row):
-        if not self.external.tracker:
-            logging.warn("Not connected to/logged in RT")
-            return False
         if not isinstance(row[0], FactRow):
             return False
         fact = row[0].fact
@@ -485,10 +470,7 @@ class Overview(gtk.Object):
             title = "Error"
             text = "An error occured while trying to update issues"
 
-        message = gtk.MessageDialog(self.window,
-                                    gtk.DIALOG_MODAL,
-                                    message_type,
-                                    gtk.BUTTONS_OK)
+        message = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, message_type, gtk.BUTTONS_OK)
         message.set_title(title)
         message.set_markup(text)
         message.run()

@@ -40,8 +40,6 @@ class ActivityEntry(gtk.Entry):
         self.categories = None
         self.filter = None
         self.max_results = 10 # limit popup size to 10 results
-        self.external = external.ActivitiesSource()
-
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
 
         box = gtk.ScrolledWindow()
@@ -174,7 +172,7 @@ class ActivityEntry(gtk.Entry):
         alloc = self.get_allocation()
 
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
-        popup_height = (alloc.height-1) * min([result_count, self.max_results])
+        popup_height = (alloc.height-1) * min(result_count, self.max_results)
         self.tree.parent.set_size_request(alloc.width, popup_height)
         self.popup.resize(alloc.width, popup_height)
 
@@ -234,25 +232,12 @@ class ActivityEntry(gtk.Entry):
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_activities(fact.activity)
-        #PRL self.external_activities = self.external.get_activities(fact.activity)
         new_activities = []
         for activity in self.activities:
-            #PRL match = re.match("^(#\d+: )", activity['name'])
-            #if match and self.external_activities:
-            #    ticket_prefix = match.group(1)
-            #    delete = False
-            #    for external_activity in self.external_activities:
-            #        if external_activity['name'].startswith(ticket_prefix):
-            #            delete = True
-            #    if not delete:
-            #        new_activities.append(activity)
-            #else:
             new_activities.append(activity)
                 
         self.activities = new_activities
                     
-        #self.activities.extend(self.external_activities)
-
         self.categories = self.categories or runtime.storage.get_categories()
 
 
@@ -275,6 +260,7 @@ class ActivityEntry(gtk.Entry):
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
                     store.append([fillable, category['name'], fillable, time, category.get('rt_id')])
+
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             activities_to_append = []
@@ -382,7 +368,9 @@ class ActivityEntry(gtk.Entry):
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
-        if '@' in value:
+        if '----------------' in value:
+            pass
+        elif '@' in value:
             self.set_text(value)
             self.hide_popup()
             self.set_position(len(self.get_text()))
@@ -393,29 +381,6 @@ class ActivityEntry(gtk.Entry):
             self.refresh_activities()
             self.populate_suggestions()
             self.show_popup()
-
-        
-
-
-    # def _on_tree_button_press_event(self, tree, event):
-    #     self.set_text(self._get_selected_text(tree))
-    #     self.hide_popup()
-    #     self.set_position(len(self.get_text()))
-        
-    # def _get_selected_text(self, tree):
-    #     model, iter = tree.get_selection().get_selected()
-    #     name = model.get_value(iter, 1)
-    #     rt_id = model.get_value(iter, 4)
-        
-    #     match = re.match(TICKET_NAME_REGEX, name)
-    #     category = ""
-    #     if not rt_id and match:
-    #         rt_id = match.group(1)
-    #     #if rt_id:
-    #     #    category = self.external.get_ticket_category(rt_id)
-    #     if not category:
-    #         category = model.get_value(iter, 2)
-    #     return '@'.join([name, category])
 
     def _on_selected(self):
         if self.news and self.get_text().strip():
