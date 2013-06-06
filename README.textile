@@ -1,3 +1,8 @@
+NOTE: Hamster is being maintained at the moment. 
+Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-for-a-new-maintainer/
+
+
+
 Hamster can be found packaged in most distributions. The instructions below
 are for installing from sources for testing and development purposes.
 
