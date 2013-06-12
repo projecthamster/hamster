@@ -34,7 +34,15 @@ class Redmine:
                 "Error! No auth nor password file for redmine were given!"
             )
         self.session.verify = False
-        self.session.headers = {'content-type': 'application/json'}
+        r = self.session.get(self.url)
+        self.csrftoken = ""
+        split = r.content.split('<meta content="')
+        for s in split:
+            if s.find('name="csrf-token"') > 0:
+                self.csrftoken = s.split('"')[0]
+        self.session.headers = {'content-type': 'application/json', 'X-CSRF-Token': self.csrftoken}
+        
+
 
     def getProject(self, project_id=None, name=None):
         if not project_id and not name:
@@ -68,17 +76,22 @@ class Redmine:
         r = self.session.post(self.get_issue_url(), data=json.dumps(data))
         return r
         
+    #stupid JSON, raising CSRF errors and shit!
     def createTimeEntry(self, data):
-        r = self.session.post(self.get_time_entry_url(), data=json.dumps(data))
+        #r = self.session.post(self.get_time_entry_url(), data=json.dumps(data))
+        self.session.headers = {'content-type': 'application/xml', 'X-CSRF-Token': self.csrftoken}
+        r = self.session.post(self.get_time_entry_url(),
+            data="<time_entry><issue_id>"+str(data['time_entry']['issue_id'])+"</issue_id><spent_on>"+str(data['time_entry']['spent_on'])+"</spent_on><hours>"+str(data['time_entry']['hours'])+"</hours><activity_id>"+str(data['time_entry']['activity_id'])+"</activity_id><comments>"+str(data['time_entry']['comments'])+"</comments></time_entry>")
+        self.session.headers = {'content-type': 'application/json', 'X-CSRF-Token': self.csrftoken}
         return r
 
-    def getRedmineActivities(self, data, name=False):
+    def getRedmineActivities(self, tags, name=False):
         """get dict of activities"""
         r = self.session.get(self.url + "/enumerations/time_entry_activities.json")
         activDict = [self.Activity(data) for data in json.loads(r.content)['time_entry_activities']]
         for activ in activDict:
-            for tag in data:
-                if lower(activ.name) == lower(tag):
+            for item in tags:
+                if activ.name.lower() == item.lower():
                     return activ
         return self.Activity({"id":-1,"name":"Unsorted"})
 

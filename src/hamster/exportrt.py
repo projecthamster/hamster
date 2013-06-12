@@ -36,7 +36,7 @@ class ExportRow(object):
         self.comment = self.get_text(fact)
         self.date = self.get_date(fact)
         self.time_worked = stuff.duration_minutes(fact.delta)
-        #act# self.activity = self.get_activity(fact)
+        self.activity = self.get_activity(fact)
 
     def __eq__(self, other):
         return isinstance(other, ExportRow) and other.id == self.id \
@@ -62,8 +62,8 @@ class ExportRow(object):
         return date
 
     def get_activity(self, fact):
-        activity = [tag for tag in fact.tags]
-        return self.tracker.getRedmineActivities(activity);
+        activity = [str(tag) for tag in fact.tags]
+        return activity
 
     def __hash__(self):
         
@@ -91,8 +91,8 @@ def id_painter(column, cell, model, it):
     row = model.get_value(it, 0)
     if isinstance(row, ExportRow):
         cell.set_property("editable", False)
-        #act# cell.set_property("text", row.activity.name)
-        cell.set_property("text", "Development")
+        cell.set_property("text", row.activity.name)
+        #act1# cell.set_property("text", "Development")
         cell.set_property("weight-set", False)
         cell.set_property("size-set", True)
         cell.set_property("size",7500)
@@ -164,6 +164,8 @@ class ExportRtController(gtk.Object):
                     self.source = ""
             else:
                 self.source = ""
+
+        print self.source + " source"
                 
         self._gui = load_ui_file("export_rt.ui")
         self.window = self.get_widget('report_rt_window')
@@ -182,15 +184,16 @@ class ExportRtController(gtk.Object):
             tickets[ticket] = list(rows)
         for item in tickets.keys():
             #please name the ticket
+            ticket = {};
             if self.source == "redmine":
                 issue = self.tracker.getIssue(item);
-                ticket = {};
                 ticket['id'] = issue.id
                 ticket['Subject'] = issue.subject
 
             if ticket:
                 parent = self.tree_store.append( None, (TicketRow(ticket), ) )
                 for row in tickets[item]:
+                    row.activity = self.tracker.getRedmineActivities(row.activity);
                     self.tree_store.append(parent, (row, ))
             
 #        self.tree_store.append(parent, (row.comment))
@@ -267,13 +270,13 @@ class ExportRtController(gtk.Object):
                     comment = "\n".join("%s (%s min)"% (row.comment, row.time_worked) for row in export_rows)
                     time_worked = sum([row.time_worked for row in export_rows])
                     facts = [row.fact for row in export_rows]
-                    #act# activity_id = export_rows[0].activity.id if __all_same([row.activity.id for row in export_rows]) else -1
-                    #act# to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts, 'date':row.date, 'activity':activity_id})
-                    to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts, 'date':row.date})
+                    activity_id = export_rows[0].activity.id if self.__all_same([row.activity.id for row in export_rows]) else -1
+                    to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts, 'date':row.date, 'activity':activity_id})
+                    #act1# to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':comment, 'time':time_worked, 'facts':facts, 'date':row.date})
                 else:
                     for row in export_rows:
-                        #act# to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s (%s min)"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact], 'date':row.date, 'activity':row.activity.id})
-                        to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s (%s min)"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact], 'date':row.date})
+                        to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s (%s min)"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact], 'date':row.date, 'activity':row.activity.id})
+                        #act1# to_report_list.append({'id':ticket_row.id, 'name':ticket_row.name, 'comment':"%s (%s min)"% (row.comment, row.time_worked), 'time':row.time_worked, 'facts':[row.fact], 'date':row.date})
                 it = self.tree_store.iter_next(it)
             to_report_len = len(to_report_list)
             self.progressbar.set_fraction(0.0)
@@ -284,8 +287,8 @@ class ExportRtController(gtk.Object):
                 while gtk.events_pending(): 
                     gtk.main_iteration()
                 if self.source == "redmine":
-                    #act# self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'], to_report['activity'])
-                    self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'])
+                    self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'], to_report['activity'])
+                    #act1# self.__add_time_entry(to_report['id'], to_report['date'], math.ceil(to_report['time']*100/60)/100, to_report['comment'], to_report['facts'])
             self.progressbar.set_text("Done")
             self.progressbar.set_fraction(1.0)
         else:
@@ -295,17 +298,18 @@ class ExportRtController(gtk.Object):
         self.parent.search()
             
             
-    #act# def __add_time_entry(self, issue_id, spent_on, hours, comments, facts, activity):
-    def __add_time_entry(self, issue_id, spent_on, hours, comments, facts):
+    def __add_time_entry(self, issue_id, spent_on, hours, comments, facts, activity):
+    #act1# def __add_time_entry(self, issue_id, spent_on, hours, comments, facts):
         test = self.test_checkbox.get_active()
         logging.warn(_("updating issue #%s: %s hrs, comment: \n%s") % (issue_id, hours, comments))
         time_entry_data = {'time_entry': {}}
         time_entry_data['time_entry']['issue_id'] = issue_id
         time_entry_data['time_entry']['spent_on'] = spent_on
         time_entry_data['time_entry']['hours'] = hours
+        time_entry_data['time_entry']['activity_id'] = 9 if activity == -1 else activity
         time_entry_data['time_entry']['comments'] = comments
-        #act# time_entry_data['time_entry']['activity_id'] = 9 if activity == -1 else activity
-        time_entry_data['time_entry']['activity_id'] = 9
+        #act1# time_entry_data['time_entry']['activity_id'] = 9
+        print time_entry_data
         if not test:
             r = self.tracker.createTimeEntry(time_entry_data)
             logging.warn(r.status_code)
@@ -355,5 +359,5 @@ class ExportRtController(gtk.Object):
             self.view.add_fact(fact)
         self.view.attach_model()
         
-    def __all_same(items):
+    def __all_same(self, items):
         return all(x == items[0] for x in items)
