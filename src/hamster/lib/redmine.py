@@ -34,13 +34,7 @@ class Redmine:
                 "Error! No auth nor password file for redmine were given!"
             )
         self.session.verify = False
-        r = self.session.get(self.url)
-        self.csrftoken = ""
-        split = r.content.split('<meta content="')
-        for s in split:
-            if s.find('name="csrf-token"') > 0:
-                self.csrftoken = s.split('"')[0]
-        self.session.headers = {'content-type': 'application/json', 'X-CSRF-Token': self.csrftoken}
+        self.session.headers = {'content-type': 'application/json'}
         
 
 
@@ -79,10 +73,10 @@ class Redmine:
     #stupid JSON, raising CSRF errors and shit!
     def createTimeEntry(self, data):
         #r = self.session.post(self.get_time_entry_url(), data=json.dumps(data))
-        self.session.headers = {'content-type': 'application/xml', 'X-CSRF-Token': self.csrftoken}
+        self.session.headers = {'content-type': 'application/xml'}
         r = self.session.post(self.get_time_entry_url(),
             data="<time_entry><issue_id>"+str(data['time_entry']['issue_id'])+"</issue_id><spent_on>"+str(data['time_entry']['spent_on'])+"</spent_on><hours>"+str(data['time_entry']['hours'])+"</hours><activity_id>"+str(data['time_entry']['activity_id'])+"</activity_id><comments>"+str(data['time_entry']['comments'])+"</comments></time_entry>")
-        self.session.headers = {'content-type': 'application/json', 'X-CSRF-Token': self.csrftoken}
+        self.session.headers = {'content-type': 'application/json'}
         return r
 
     def getRedmineActivities(self, tags, name=False):
