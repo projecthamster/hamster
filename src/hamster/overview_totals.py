@@ -50,7 +50,7 @@ class TotalsBox(gtk.VBox):
 
         self.category_chart = charting.Chart(max_bar_width = 20,
                                              legend_width = x_offset,
-                                             value_format = "%.1f")
+                                             value_format = "%.2f")
         self.category_chart.connect("bar-clicked", self.on_category_clicked)
         self.selected_categories = []
         self.category_sums = None
@@ -59,7 +59,7 @@ class TotalsBox(gtk.VBox):
 
         self.activity_chart = charting.Chart(max_bar_width = 20,
                                              legend_width = x_offset,
-                                             value_format = "%.1f")
+                                             value_format = "%.2f")
         self.activity_chart.connect("bar-clicked", self.on_activity_clicked)
         self.selected_activities = []
         self.activity_sums = None
@@ -68,7 +68,7 @@ class TotalsBox(gtk.VBox):
 
         self.tag_chart = charting.Chart(max_bar_width = 20,
                                         legend_width = x_offset,
-                                        value_format = "%.1f")
+                                        value_format = "%.2f")
         self.tag_chart.connect("bar-clicked", self.on_tag_clicked)
         self.selected_tags = []
         self.tag_sums = None
@@ -158,18 +158,22 @@ class TotalsBox(gtk.VBox):
             for tag in fact.tags:
                 tag_sums[tag] += fact.delta
 
-        total_label = _("%s hours tracked total") % locale.format("%.1f", stuff.duration_minutes([fact.delta for fact in facts]) / 60.0)
+        total_minutes = stuff.duration_minutes([fact.delta for fact in facts])
+        total_label = _("%s hours (%s minutes) tracked total") % (locale.format("%.2f", total_minutes/60.0), locale.format("%d", total_minutes))
         self.get_widget("total_hours").set_text(total_label)
 
 
         for key in category_sums:
-            category_sums[key] = stuff.duration_minutes(category_sums[key]) / 60.0
+            category_minutes = stuff.duration_minutes(category_sums[key])
+            category_sums[key] = category_minutes / 60.0
 
         for key in activity_sums:
-            activity_sums[key] = stuff.duration_minutes(activity_sums[key]) / 60.0
+            activity_minutes = stuff.duration_minutes(activity_sums[key])
+            activity_sums[key] = activity_minutes / 60.0
 
         for key in tag_sums:
-            tag_sums[key] = stuff.duration_minutes(tag_sums[key]) / 60.0
+            tag_minutes = stuff.duration_minutes(tag_sums[key])
+            tag_sums[key] = tag_minutes / 60.0
 
 
         #category totals

@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import external
 import datetime as dt
 from lib import Fact
 
@@ -29,11 +30,13 @@ class Storage(object):
     def tags_changed(self): pass
     def facts_changed(self): pass
     def activities_changed(self): pass
+    def redmine_activities_changed(self): pass
 
     def dispatch_overwrite(self):
         self.tags_changed()
         self.facts_changed()
         self.activities_changed()
+        self.redmine_activities_changed()
 
 
     # facts
@@ -54,14 +57,22 @@ class Storage(object):
         return self.__get_fact(fact_id)
 
 
-    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False, exported = False):
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(fact, start_time, end_time, temporary)
+        result = self.__add_fact(fact, start_time, end_time, temporary, exported)
         self.end_transaction()
         if result:
             self.facts_changed()
         return result
+
+
+    def update_exported_fact(self, fact_id):
+        self.start_transaction()
+        result = self.__update_exported_fact(fact_id)
+        self.end_transaction()
+        if result:
+            self.facts_changed()
 
 
     def stop_tracking(self, end_time):
@@ -162,3 +173,33 @@ class Storage(object):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
             self.tags_changed()
+
+    #PRL
+    # redmine activities
+    def get_redmine_issues(self):
+        try:
+            self.external = external.ActivitiesSource()
+            last_issue = self.__get_last_redmine_issue()
+            activities = self.external.get_redmine_activities() if last_issue != 0 else self.external.get_all_redmine_activities()
+
+            # send redmine activities to DB
+            count = 0
+            for activity in activities:
+                if activity['rt_id'] > last_issue:
+                    self.__add_redmine_issue(activity['rt_id'], activity['name'], activity['mine'])
+                    count += 1
+                    self.redmine_activities_changed()
+
+            # check for issues assigned to user
+            activities = self.external.get_redmine_activities(({'assigned_to_id':'me'}))
+            # send to DB to update 'mine' column
+            if activities:
+                my_issues = []
+                for activity in activities:
+                    my_issues.append(activity['rt_id'])
+                self.__update_redmine_todo_list(my_issues)
+                self.redmine_activities_changed()
+            return count
+        except Exception, e:
+            return -1
+    #PRL

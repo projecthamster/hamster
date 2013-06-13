@@ -112,13 +112,22 @@ class PreferencesEditor(gtk.Object):
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
-                                   ("gtg", "Getting Things Gnome")]
+                                   ("gtg", "Getting Things Gnome"),
+                                   ("redmine", "Redmine")]
         self.todo_combo = gtk.combo_box_new_text()
         for code, label in self.activities_sources:
             self.todo_combo.append_text(label)
         self.todo_combo.connect("changed", self.on_todo_combo_changed)
         self.get_widget("todo_pick").add(self.todo_combo)
 
+        # RT prefs
+        self.rt_url = gtk.Entry()
+        self.rt_url.connect("changed", self.on_rt_url_changed)
+        self.get_widget('rt_url').add(self.rt_url)
+        
+        self.rt_apikey = gtk.Entry()
+        self.rt_apikey.connect("changed", self.on_rt_apikey_changed)
+        self.get_widget('rt_apikey').add(self.rt_apikey)
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -263,6 +272,11 @@ class PreferencesEditor(gtk.Object):
         self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
 
+    def on_rt_url_changed(self, entry):
+        conf.set('rt_url', self.rt_url.get_text())
+
+    def on_rt_apikey_changed(self, entry):
+        conf.set('rt_apikey', self.rt_apikey.get_text())
 
     def on_todo_combo_changed(self, combo):
         conf.set("activities_source", self.activities_sources[combo.get_active()][0])
@@ -325,6 +339,9 @@ class PreferencesEditor(gtk.Object):
         for i, (code, label) in enumerate(self.activities_sources):
             if code == current_source:
                 self.todo_combo.set_active(i)
+        
+        self.rt_url.set_text(conf.get('rt_url'))
+        self.rt_apikey.set_text(conf.get('rt_apikey'))
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -368,7 +385,7 @@ class PreferencesEditor(gtk.Object):
         self.prev_selected_category = None
         try:
             target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
-            model, source = treeview.get_selection().get_selected()
+            model, source = view.get_selection().get_selected()
 
         except:
             return
@@ -537,7 +554,7 @@ class PreferencesEditor(gtk.Object):
 
     def on_activity_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
+            # Get view path.
             path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
 
             if self.prev_selected_activity == path:
@@ -551,7 +568,7 @@ class PreferencesEditor(gtk.Object):
 
     def on_category_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
+            # Get view path.
             path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
 
             if self.prev_selected_category == path and \

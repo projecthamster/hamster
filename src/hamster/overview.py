@@ -19,21 +19,23 @@
 
 
 import pygtk
+from hamster.widgets.facttree import FactTree, GroupRow, FactRow
+from lib.rt import TICKET_NAME_REGEX
 pygtk.require('2.0')
 
 import os
 import datetime as dt
 import calendar
 import webbrowser
+import re
 
 import gtk, gobject
-import pango
+import logging
 
 import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
 from lib import Fact
 from lib import stuff, trophies
-from lib.i18n import C_
 
 from overview_activities import OverviewBox
 from overview_totals import TotalsBox
@@ -71,6 +73,7 @@ class Overview(gtk.Object):
         self.timechart.connect("zoom-out-clicked", self.on_timechart_zoom_out_clicked)
         self.timechart.connect("range-picked", self.on_timechart_new_range)
         self.get_widget("by_day_box").add(self.timechart)
+        self.start_button = self.get_widget("start_button")
 
         self._gui.connect_signals(self)
 
@@ -79,6 +82,7 @@ class Overview(gtk.Object):
             (runtime.storage, runtime.storage.connect('facts-changed',self.after_activity_update)),
             (conf, conf.connect('conf-changed', self.on_conf_change))
         ]
+        
         self.show()
 
 
@@ -92,21 +96,11 @@ class Overview(gtk.Object):
         self.day_start = dt.time(self.day_start / 60, self.day_start % 60)
 
         self.view_date = (dt.datetime.today() - dt.timedelta(hours = self.day_start.hour,
-                                                        minutes = self.day_start.minute)).date()
+                                                            minutes = self.day_start.minute)).date()
 
-        #set to monday
-        self.start_date = self.view_date - dt.timedelta(self.view_date.weekday() + 1)
-
-        # look if we need to start on sunday or monday
-        self.start_date = self.start_date + dt.timedelta(stuff.locale_first_weekday())
-
-        # see if we have not gotten carried away too much in all these calculations
-        if (self.view_date - self.start_date) == dt.timedelta(7):
-            self.start_date += dt.timedelta(7)
-
-        self.end_date = self.start_date + dt.timedelta(6)
-
-        self.current_range = "week"
+        self.start_date = self.view_date
+        self.end_date = self.start_date + dt.timedelta(0)
+        self.current_range = "day"
 
         self.timechart.day_start = self.day_start
 
@@ -427,11 +421,57 @@ class Overview(gtk.Object):
             self._gui = None
             self.window.destroy()
             self.window = None
-
             self.emit("on-close")
 
+
+    def on_start_activate(self, button):
+        if conf.get("activities_source") == "":
+            logging.warn("Not connected to an external source.")
+        else:
+            to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
+            to_report = [row[0].fact for row in to_report]
+            dialogs.export_rt.show(self, facts = to_report)
+        
+    def __is_rt_ticket(self, row):
+        if not isinstance(row[0], FactRow):
+            return False
+        fact = row[0].fact
+        match = re.match(TICKET_NAME_REGEX, fact.activity)
+        if row[0].selected and fact.end_time and match:
+            return True
+        else:
+            return False
+
+
+    def get_text(self, fact):
+        text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
+        if fact.description:
+            text += ": %s" % (fact.description)
+        if fact.tags:
+            text += " ("+", ".join(fact.tags)+")"
+        return text
 
 
     def on_delete_window(self, window, event):
         self.close_window()
         return True
+
+
+    #PRL
+    def on_get_redmine_issues(self, button):
+        result = runtime.storage.get_redmine_issues()
+
+        message_type = gtk.MESSAGE_INFO
+        title = "Issues updated"
+        text = "New issues: %s" % result
+
+        if result < 0:
+            message_type = gtk.MESSAGE_ERROR
+            title = "Error"
+            text = "An error occured while trying to update issues"
+
+        message = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, message_type, gtk.BUTTONS_OK)
+        message.set_title(title)
+        message.set_markup(text)
+        message.run()
+        message.destroy()

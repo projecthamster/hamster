@@ -21,16 +21,21 @@
 import logging
 from configuration import conf
 import gobject
+import re
 import dbus, dbus.mainloop.glib
+import json
+from lib import rt
+from lib import redmine
 
 try:
     import evolution
     from evolution import ecal
 except:
     evolution = None
-
+    
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
+        logging.debug('external init')
         gobject.GObject.__init__(self)
         self.source = conf.get("activities_source")
         self.__gtg_connection = None
@@ -40,15 +45,49 @@ class ActivitiesSource(gobject.GObject):
         elif self.source == "gtg":
             gobject.GObject.__init__(self)
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        elif self.source == "redmine":
+            self.rt_url = conf.get("rt_url")
+            self.rt_apikey = conf.get("rt_apikey")
+            self.rt_category = conf.get("rt_category_field")
+            if self.rt_url and self.rt_apikey:
+                try:
+                    self.tracker = redmine.Redmine(self.rt_url, auth=(self.rt_apikey,"placeholder"))
+                    if not self.tracker:
+                        self.source = ""
 
+                except:
+                    self.source = ""
+            else:
+                self.source = ""
+    
+    #PRL not used anymore
     def get_activities(self, query = None):
         if not self.source:
             return []
-
-        if self.source == "evo":
+        #######################################################################################
+        #######################################################################################
+        if self.source == "redmine":
+            activities = self.__extract_from_redmine(query)
+            direct_issue = None
+            if query and re.match("^[0-9]+$", query):
+                issue = self.tracker.getIssue(query)
+                if issue:
+                    direct_issue = self.__extract_activity_from_issue(issue)
+            if direct_issue:
+                activities.append(direct_issue)
+            if len(activities) <= 2 and not direct_issue and len(query) > 4:
+                criteria = ({'status_id': 'open', 'subject': query})
+                #logging.warn(criteria)
+                third_activities = self.__extract_from_redmine(query, criteria)
+                if activities and third_activities:
+                    activities.append({"name": "---------------------", "category": "other open"})
+                activities.extend(third_activities)
+            return activities
+        #######################################################################################
+        #######################################################################################
+        elif self.source == "evo":
             return [activity for activity in get_eds_tasks()
                          if query is None or activity['name'].startswith(query)]
-
         elif self.source == "gtg":
             conn = self.__get_gtg_connection()
             if not conn:
@@ -70,10 +109,27 @@ class ActivitiesSource(gobject.GObject):
                     if len(task['tags']):
                         name = "%s, %s" % (name, " ".join([tag.replace("@", "#") for tag in task['tags']]))
 
-                    activities.append({"name": name,
-                                       "category": ""})
+                    activities.append({"name": name, "category": ""})
 
             return activities
+    
+    def __extract_activity_from_issue(self, issue):
+        activity = {}
+        issue_id = issue.id
+        activity['name']    = '#'+str(issue_id)+': '+issue.subject
+        activity['rt_id']   = issue_id;
+        activity['category']= "";
+        activity['mine']    = 0
+        return activity
+        
+    def __extract_from_redmine(self, query = None, criteria = None):
+        activities = []
+        results = self.tracker.getIssues(criteria)
+        for issue in results:
+            activity = self.__extract_activity_from_issue(issue)
+            if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
+                activities.append(activity)
+        return activities
 
     def __get_gtg_connection(self):
         bus = dbus.SessionBus()
@@ -88,24 +144,52 @@ class ActivitiesSource(gobject.GObject):
             return None
 
 
+    def get_eds_tasks():
+        try:
+            sources = ecal.list_task_sources()
+            tasks = []
+            if not sources:
+                # BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
+                sources = [('default', 'default')]
 
-def get_eds_tasks():
-    try:
-        sources = ecal.list_task_sources()
-        tasks = []
-        if not sources:
-            # BUG - http://bugzilla.gnome.org/show_bug.cgi?id=546825
-            sources = [('default', 'default')]
+            for source in sources:
+                category = source[0]
 
-        for source in sources:
-            category = source[0]
+                data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
+                if data:
+                    for task in data.get_all_objects():
+                        if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
+                            tasks.append({'name': task.get_summary(), 'category' : category})
+            return tasks
+        except Exception, e:
+            logging.warn(e)
+            return []
 
-            data = ecal.open_calendar_source(source[1], ecal.CAL_SOURCE_TYPE_TODO)
-            if data:
-                for task in data.get_all_objects():
-                    if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
-                        tasks.append({'name': task.get_summary(), 'category' : category})
-        return tasks
-    except Exception, e:
-        logging.warn(e)
-        return []
+
+    def get_redmine_activities(self, criteria=({})):
+        if not self.source:
+            return []
+        if self.source == "redmine":
+            activities = []
+            results = self.tracker.getIssues(criteria)
+            for issue in results:
+                activity = self.__extract_activity_from_issue(issue)
+                activities.append(activity)
+            return activities
+
+    def get_all_redmine_activities(self):
+        if not self.source:
+            return []
+        activities = []
+        if self.source == "redmine":
+            keep_going = True
+            offset = 0
+            while keep_going:
+                results = self.tracker.getIssues({'offset':offset})
+                print len(results)
+                if len(results) < 100: keep_going = False
+                else: offset += 100
+                for issue in results:
+                    activity = self.__extract_activity_from_issue(issue)
+                    activities.append(activity)
+        return activities

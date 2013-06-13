@@ -40,6 +40,7 @@ def from_dbus_fact(fact):
                 date = dt.datetime.utcfromtimestamp(fact[8]).date(),
                 delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
                                      seconds = fact[9] % (24 * 60 * 60)),
+                exported = fact[10],
             id = fact[0]
             )
 
@@ -60,6 +61,7 @@ class Storage(gobject.GObject):
         "tags-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "facts-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "redmine-activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         "toggle-called": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
@@ -73,6 +75,7 @@ class Storage(gobject.GObject):
         self.bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(self._on_redmine_activities_changed, 'RedmineActivitiesChanged', 'org.gnome.Hamster')
         self.bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
 
         self.bus.add_signal_receiver(self._on_dbus_connection_change, 'NameOwnerChanged',
@@ -100,6 +103,9 @@ class Storage(gobject.GObject):
 
     def _on_activities_changed(self):
         self.emit("activities-changed")
+
+    def _on_redmine_activities_changed(self):
+        self.emit("redmine-activities-changed")
 
     def _on_toggle_called(self):
         self.emit("toggle-called")
@@ -202,7 +208,7 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact, temporary_activity = False):
+    def update_fact(self, fact_id, fact, temporary_activity = False, exported = False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -219,11 +225,15 @@ class Storage(gobject.GObject):
                                        fact.serialized_name(),
                                        start_time,
                                        end_time,
-                                       temporary_activity)
+                                       temporary_activity,
+                                       exported)
 
         trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id
 
+    def update_exported_fact(self,fact_id):
+        """Updates facts that were exported"""
+        self.conn.UpdateExportedFact(fact_id)
 
     def get_category_activities(self, category_id = None):
         """Return activities for category. If category is not specified, will
@@ -264,3 +274,9 @@ class Storage(gobject.GObject):
 
     def add_category(self, name):
         return self.conn.AddCategory(name)
+
+    #PRL
+    # redmine
+    def get_redmine_issues(self):
+        return self.conn.GetRedmineIssues()
+    #PRL

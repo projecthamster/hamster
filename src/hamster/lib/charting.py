@@ -123,6 +123,8 @@ class Chart(graphics.Scene):
         bars = dict([(bar.key, bar.normalized) for bar in self.bars])
 
         max_val = float(max(data or [0]))
+        #PRL
+        totals = sum(data)
 
         new_bars, new_labels = [], []
         for key, value in zip(keys, data):
@@ -130,7 +132,9 @@ class Chart(graphics.Scene):
                 normalized = value / max_val
             else:
                 normalized = 0
-            bar = Bar(key, locale.format(self.value_format, value), normalized, self.label_color)
+            #bar = Bar(key, locale.format(self.value_format, value), normalized, self.label_color)
+            bar = Bar(key, locale.format(self.value_format, value) + "h (%d%%)" % (100*value/totals), normalized, self.label_color)
+
             bar.interactive = self.graph_interactive
 
             if key in bars:

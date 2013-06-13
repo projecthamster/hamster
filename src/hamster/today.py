@@ -18,67 +18,22 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-import sys
 import logging
 import datetime as dt
 
 import gtk, gobject
-import glib
-import dbus, dbus.service, dbus.mainloop.glib
 import locale
-
 
 from hamster.configuration import runtime, dialogs, conf, load_ui_file
 from hamster import widgets
 from hamster.lib import Fact, trophies, stuff
+import hamster.tray as tray
 
 try:
     import wnck
 except:
     logging.warning("Could not import wnck - workspace tracking will be disabled")
     wnck = None
-
-
-class ProjectHamsterStatusIcon(gtk.StatusIcon):
-    def __init__(self, project):
-        gtk.StatusIcon.__init__(self)
-
-        self.project = project
-
-        menu = '''
-            <ui>
-             <menubar name="Menubar">
-              <menu action="Menu">
-               <separator/>
-               <menuitem action="Quit"/>
-              </menu>
-             </menubar>
-            </ui>
-        '''
-        actions = [
-            ('Menu',  None, 'Menu'),
-            ('Quit', gtk.STOCK_QUIT, '_Quit...', None, 'Quit Time Tracker', self.on_quit)]
-        ag = gtk.ActionGroup('Actions')
-        ag.add_actions(actions)
-        self.manager = gtk.UIManager()
-        self.manager.insert_action_group(ag, 0)
-        self.manager.add_ui_from_string(menu)
-        self.menu = self.manager.get_widget('/Menubar/Menu/Quit').props.parent
-
-        self.set_from_icon_name("hamster-time-tracker")
-        self.set_name(_('Time Tracker'))
-
-        self.connect('activate', self.on_activate)
-        self.connect('popup-menu', self.on_popup_menu)
-
-    def on_activate(self, data):
-        self.project.toggle_hamster_window()
-
-    def on_popup_menu(self, status, button, time):
-        self.menu.popup(None, None, None, button, time)
-
-    def on_quit(self, data):
-        gtk.main_quit()
 
 
 
@@ -115,8 +70,8 @@ class DailyView(object):
         self.prev_size = None
 
         # bindings
-        self.accel_group = self.get_widget("accelgroup")
-        self.window.add_accel_group(self.accel_group)
+        #self.accel_group = self.get_widget("accelgroup")
+        #self.window.add_accel_group(self.accel_group)
 
         gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
         gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
@@ -129,12 +84,11 @@ class DailyView(object):
 
 
         # create the status icon
-        self.statusicon = ProjectHamsterStatusIcon(self)
-
+        self.statusicon = tray.get_status_icon(self)
 
         self.reposition_hamster_window()
         self.show_hamster_window()
-        self.show_in_tray()
+        self.statusicon.show()
 
     def create_hamster_window(self):
         if self.window is None:
@@ -159,12 +113,12 @@ class DailyView(object):
             self.tag_box = widgets.TagBox(interactive = False)
             self.get_widget("tag_box").add(self.tag_box)
 
-            self.treeview = widgets.FactTree()
-            self.treeview.connect("key-press-event", self.on_todays_keys)
-            self.treeview.connect("edit-clicked", self._open_edit_activity)
-            self.treeview.connect("row-activated", self.on_today_row_activated)
+            self.view = widgets.FactTree()
+            self.view.connect("key-press-event", self.on_todays_keys)
+            self.view.connect("edit-clicked", self._open_edit_activity)
+            self.view.connect("row-activated", self.on_today_row_activated)
 
-            self.get_widget("today_box").add(self.treeview)
+            self.get_widget("today_box").add(self.view)
 
             # connect the accelerators
             self.accel_group = self.get_widget("accelgroup")
@@ -199,9 +153,10 @@ class DailyView(object):
             self.create_hamster_window()
             self.reposition_hamster_window()
 
+        self.window.hide_all()
         self.window.show_all()
         self.refresh_hamster()
-
+        self.window.present()
 
     def init_workspace_tracking(self):
         if not wnck: # can't track if we don't have the trackable
@@ -228,7 +183,7 @@ class DailyView(object):
            returns information about last activity"""
         facts = self.todays_facts = runtime.storage.get_todays_facts()
 
-        self.treeview.detach_model()
+        self.view.detach_model()
 
         if facts and facts[-1].end_time == None:
             self.last_activity = facts[-1]
@@ -240,9 +195,9 @@ class DailyView(object):
             duration = 24 * 60 * fact.delta.days + fact.delta.seconds / 60
             by_category[fact.category] = \
                           by_category.setdefault(fact.category, 0) + duration
-            self.treeview.add_fact(fact)
+            self.view.add_fact(fact)
 
-        self.treeview.attach_model()
+        self.view.attach_model()
 
         if not facts:
             self._gui.get_object("today_box").hide()
@@ -250,16 +205,16 @@ class DailyView(object):
         else:
             self._gui.get_object("today_box").show()
             total_strings = []
-            for category in by_category:
+            for category in sorted(by_category):
                 # listing of today's categories and time spent in them
                 duration = locale.format("%.1f", (by_category[category] / 60.0))
-                total_strings.append(_("%(category)s: %(duration)s") % \
+                total_strings.append(_("%(duration)s: %(category)s") % \
                         ({'category': category,
                           #duration in main drop-down per category in hours
                           'duration': _("%sh") % duration
                           }))
 
-            total_string = ", ".join(total_strings)
+            total_string = "\n".join(total_strings)
             self._gui.get_object("fact_totals").set_text(total_string)
 
         self.set_last_activity()
@@ -300,7 +255,7 @@ class DailyView(object):
 
 
     def delete_selected(self):
-        fact = self.treeview.get_selected_fact()
+        fact = self.view.get_selected_fact()
         runtime.storage.remove_fact(fact.id)
 
 
@@ -462,9 +417,10 @@ class DailyView(object):
         self.last_activity = None
 
     def on_window_configure_event(self, window, event):
-        self.treeview.fix_row_heights()
+        self.view.fix_row_heights()
 
     def show(self):
+        self.window.hide_all()
         self.window.show_all()
         self.window.present()
 
@@ -501,9 +457,8 @@ class DailyView(object):
         self.save_window_position()
         self.window.destroy()
         self.window = None
-
-    def show_in_tray(self):
-        # show the status tray icon
-        activity = self.get_widget("last_activity_name").get_text()
-        self.statusicon.set_tooltip(activity)
-        self.statusicon.set_visible(True)
+        
+#        # show the status tray icon
+#        activity = self.get_widget("last_activity_name").get_text()
+#        self.statusicon.set_tooltip(activity)
+#        self.statusicon.set_visible(True)

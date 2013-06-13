@@ -34,6 +34,8 @@ class TagsEntry(gtk.Entry):
         self.tags = None
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
+        self.filter_tag_cursor = 0
+        self.filter_tag_max = 0
 
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
         self.scroll_box = gtk.ScrolledWindow()
@@ -159,7 +161,8 @@ class TagsEntry(gtk.Entry):
         self.tag_box.selected_tags = entered_tags
 
         self.filter_tags = [tag for tag in self.tags if (tag or "").lower().startswith((self.filter or "").lower())]
-
+        self.filter_tag_max = len(self.filter_tags)-1
+        self.filter_tag_cursor = 0
         self.tag_box.draw(self.filter_tags)
 
 
@@ -188,11 +191,12 @@ class TagsEntry(gtk.Entry):
             else:
                 return False
         else:
-            self.populate_suggestions()
-            self.show_popup()
+            if event.keyval != gtk.keysyms.Tab:
+                self.populate_suggestions()
+                self.show_popup()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
-                self.complete_inline()
+                if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+                    self.complete_inline()
 
 
     def get_cursor_tag(self):
@@ -224,14 +228,18 @@ class TagsEntry(gtk.Entry):
         if event.keyval == gtk.keysyms.Tab:
             if self.popup.get_property("visible"):
                 #we have to replace
-                if self.get_text() and self.get_cursor_tag() != self.filter_tags[0]:
-                    self.replace_tag(self.get_cursor_tag(), self.filter_tags[0])
+                if self.get_text():
+                    print self.get_cursor_tag()
+                    self.replace_tag(self.get_cursor_tag(), self.filter_tags[self.filter_tag_cursor])
+                    if self.filter_tag_max > self.filter_tag_cursor:
+                        self.filter_tag_cursor+=1
+                    else: 
+                        self.filter_tag_cursor=0
                     return True
                 else:
                     return False
             else:
                 return False
-
         return False
 
 

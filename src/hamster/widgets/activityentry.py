@@ -19,10 +19,12 @@
 
 import gtk, gobject, pango
 import datetime as dt
+import re
 
 from ..configuration import runtime
 from ..lib import Fact, stuff, graphics
 from .. import external
+from ..lib.rt import TICKET_NAME_REGEX
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {
@@ -38,8 +40,6 @@ class ActivityEntry(gtk.Entry):
         self.categories = None
         self.filter = None
         self.max_results = 10 # limit popup size to 10 results
-        self.external = external.ActivitiesSource()
-
         self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
 
         box = gtk.ScrolledWindow()
@@ -137,7 +137,7 @@ class ActivityEntry(gtk.Entry):
 
     def show_popup(self):
         result_count = self.tree.get_model().iter_n_children(None)
-        if result_count <= 1:
+        if result_count < 1:
             self.hide_popup()
             return
 
@@ -172,7 +172,7 @@ class ActivityEntry(gtk.Entry):
         alloc = self.get_allocation()
 
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
-        popup_height = (alloc.height-6) * min([result_count, self.max_results])
+        popup_height = (alloc.height-1) * min(result_count, self.max_results)
         self.tree.parent.set_size_request(alloc.width, popup_height)
         self.popup.resize(alloc.width, popup_height)
 
@@ -232,9 +232,12 @@ class ActivityEntry(gtk.Entry):
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_activities(fact.activity)
-        self.external_activities = self.external.get_activities(fact.activity)
-        self.activities.extend(self.external_activities)
-
+        new_activities = []
+        for activity in self.activities:
+            new_activities.append(activity)
+                
+        self.activities = new_activities
+                    
         self.categories = self.categories or runtime.storage.get_categories()
 
 
@@ -247,7 +250,7 @@ class ActivityEntry(gtk.Entry):
 
         store = self.tree.get_model()
         if not store:
-            store = gtk.ListStore(str, str, str, str)
+            store = gtk.ListStore(str, str, str, str, str)
             self.tree.set_model(store)
         store.clear()
 
@@ -256,10 +259,26 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time])
+                    store.append([fillable, category['name'], fillable, time, category.get('rt_id')])
+
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
-            for activity in self.activities:
+            activities_to_append = []
+            if not self.external_activities:
+                for a in self.activities:
+                    activities_to_append.append(a)
+            else:
+                for a in self.external_activities:
+                    activities_to_append.append(a)
+
+            filtered = []
+            names = []
+            for a in activities_to_append:
+                if not a['name'] in names:
+                    filtered.append(a)
+                    names.append(a['name'])
+            
+            for activity in filtered:
                 fillable = activity['name'].lower()
                 if activity['category']:
                     fillable += "@%s" % activity['category']
@@ -267,7 +286,7 @@ class ActivityEntry(gtk.Entry):
                 if time: #as we also support deltas, for the time we will grab anything up to first space
                     fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
 
-                store.append([fillable, activity['name'].lower(), activity['category'], time])
+                store.append([fillable, activity['name'].lower(), activity['category'], time, activity.get('rt_id')])
 
     def after_activity_update(self, widget):
         self.refresh_activities()
@@ -286,9 +305,18 @@ class ActivityEntry(gtk.Entry):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
-                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
-                self.hide_popup()
-                self.set_position(len(self.get_text()))
+                    selected = self.tree.get_model()[self.tree.get_cursor()[0][0]][0]
+                    if '@' in selected:
+                        self.set_text(selected)
+                        self.hide_popup()
+                        self.set_position(len(self.get_text()))
+                    else:
+                        self.set_text(selected+"@")
+                        self.hide_popup()
+                        self.set_position(len(self.get_text()))
+                        self.refresh_activities()
+                        self.populate_suggestions()
+                        self.show_popup()
             else:
                 self._on_selected()
 
@@ -298,14 +326,15 @@ class ActivityEntry(gtk.Entry):
                 return True
             else:
                 return False
+
         elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
             return False
         else:
             self.populate_suggestions()
             self.show_popup()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
-                self.complete_inline()
+            #if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+            #    self.complete_inline()
 
 
 
@@ -335,12 +364,23 @@ class ActivityEntry(gtk.Entry):
         else:
             return False
 
+
     def _on_tree_button_press_event(self, tree, event):
         model, iter = tree.get_selection().get_selected()
         value = model.get_value(iter, 0)
-        self.set_text(value)
-        self.hide_popup()
-        self.set_position(len(self.get_text()))
+        if '----------------' in value:
+            pass
+        elif '@' in value:
+            self.set_text(value)
+            self.hide_popup()
+            self.set_position(len(self.get_text()))
+        else:
+            self.set_text(value+"@")
+            self.hide_popup()
+            self.set_position(len(self.get_text()))
+            self.refresh_activities()
+            self.populate_suggestions()
+            self.show_popup()
 
     def _on_selected(self):
         if self.news and self.get_text().strip():

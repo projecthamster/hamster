@@ -22,8 +22,7 @@ from calendar import timegm
 import logging
 import gobject
 
-
-from hamster import idle
+from hamster import idle, external
 from hamster.configuration import conf
 from hamster.lib import trophies
 import dbus
@@ -46,6 +45,7 @@ class DesktopIntegrations(object):
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
         gobject.timeout_add_seconds(60, self.check_hamster)
+        gobject.timeout_add_seconds(3600, self.check_redmine)
 
 
     def check_hamster(self):
@@ -86,6 +86,24 @@ class DesktopIntegrations(object):
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour * 60) % interval == 0:
                 self.notify_user(_(u"No activity"))
+
+
+    def check_redmine(self):
+        """verify Redmine activities every hour."""
+        try:
+            new_issues = self.storage.get_redmine_issues()
+
+            message = "Issues updated"
+            if new_issues < 0:
+                message = "Error fetching issues"
+            if new_issues > 0:
+                message += "\n%s new issues added" % count
+            self.notify_user(_(u"%s") % message)
+
+        except Exception, e:
+            logging.error("Error while refreshing: %s" % e)
+        finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
+            return True
 
 
     def notify_user(self, summary="", details=""):

@@ -275,6 +275,34 @@ class Storage(storage.Storage):
         self.execute(query, (name, name.lower()))
         return self.__last_insert_rowid()
 
+    #PRL
+    def __add_redmine_issue(self, id, name, mine):
+        query = """
+                   INSERT INTO redmine_issues (id, name, mine, search_name)
+                        VALUES (?, ?, ?, ?)
+        """
+        self.execute(query, (id, name, mine, name.lower()))
+        return self.__last_insert_rowid()
+
+    def __get_last_redmine_issue(self):
+        fetch = self.fetchall("SELECT id FROM redmine_issues ORDER BY id DESC LIMIT 1")
+        if len(fetch) == 0:
+            return 0
+        else:
+            return fetch[0]['id']
+
+    def __update_redmine_todo_list(self, my_issues):
+        
+        update = """UPDATE redmine_issues SET mine = ? """
+
+        where = "WHERE mine = 1"
+        self.execute(update+where, (0,))
+
+        where = "WHERE id IN (" + "".join("%s, "% (str(data)) for data in my_issues)[0:-2] + ")"
+        self.execute(update+where, (1,))
+        return True
+    #PRL
+
     def __update_category(self, id,  name):
         if id > -1: # Update, and ignore unsorted, if that was somehow triggered
             update = """
@@ -356,6 +384,7 @@ class Storage(storage.Storage):
         return None
 
     def __get_fact(self, id):
+        print id
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
@@ -363,7 +392,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -389,7 +419,7 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "activity_id", "category", "tag"]
+                    "activity_id", "category", "tag", "exported"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
 
             grouped_fact["tags"] = [ft["tag"] for ft in fact_tags if ft["tag"]]
@@ -516,10 +546,11 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
+    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False, exported = False):
         fact = Fact(serialized_fact,
                     start_time = start_time,
-                    end_time = end_time)
+                    end_time = end_time, 
+                    exported = exported)
 
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
@@ -608,10 +639,10 @@ class Storage(storage.Storage):
 
         # finally add the new entry
         insert = """
-                    INSERT INTO facts (activity_id, start_time, end_time, description)
-                               VALUES (?, ?, ?, ?)
+                    INSERT INTO facts (activity_id, start_time, end_time, description, exported)
+                               VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, fact.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description, fact.exported))
 
         fact_id = self.__last_insert_rowid()
 
@@ -622,6 +653,13 @@ class Storage(storage.Storage):
 
         self.__remove_index([fact_id])
         return fact_id
+
+
+    def __update_exported_fact(self, fact_id):
+        update = """UPDATE facts SET exported = ? WHERE id = ?"""
+        self.execute(update, (True, fact_id))
+        return self.fetchone("SELECT exported FROM facts WHERE id = ?", (fact_id,))[0]
+
 
     def __last_insert_rowid(self):
         return self.fetchone("SELECT last_insert_rowid();")[0]
@@ -660,7 +698,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -754,12 +793,12 @@ class Storage(storage.Storage):
 
         return self.fetchall(query, (category_id, ))
 
-
+    #PRL
     def __get_activities(self, search):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""
 
-        query = """
+        query1 = """
                    SELECT a.name AS name, b.name AS category
                      FROM activities a
                 LEFT JOIN categories b ON coalesce(b.id, -1) = a.category_id
@@ -768,13 +807,34 @@ class Storage(storage.Storage):
                       AND a.search_name LIKE ? ESCAPE '\\'
                  GROUP BY a.id
                  ORDER BY max(f.start_time) DESC, lower(a.name)
-                    LIMIT 50
+                    LIMIT 4
+        """
+        query2 = """
+                   SELECT a.name AS name, null AS category, a.mine as mine
+                     FROM redmine_issues a
+                    WHERE deleted IS NULL
+                      AND a.search_name LIKE ? ESCAPE '\\'
+                 ORDER BY a.mine DESC, a.id ASC
+                    LIMIT 10
         """
         search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, (u'%s%%' % search, ))
-
+        activities = self.fetchall(query1, (u'%%%s%%' % search, ))
+        redmine = self.fetchall(query2, (u'%%%s%%' % search, ));
+        if redmine:
+            limit_breaker = 3
+            if redmine[0]['mine'] == 1: activities.append({'name':'-------------------To-Do List-------------------','category':None})
+            for activity in redmine:
+                if activity['mine'] == 1:
+                    activities.append(activity)
+                    limit_breaker-=1
+                elif limit_breaker > 0:
+                    if limit_breaker != 99:
+                        activities.append({'name':'----------------Other Activities----------------','category':None})
+                        limit_breaker = 99
+                    activities.append(activity)
         return activities
+    #PRL
 
     def __remove_activity(self, id):
         """ check if we have any facts with this activity and behave accordingly
@@ -859,7 +919,7 @@ class Storage(storage.Storage):
                               a.description as description,
                               b.name AS name, b.id as activity_id,
                               coalesce(c.name, ?) as category,
-                              e.name as tag
+                              e.name as tag, a.exported AS exported
                          FROM facts a
                     LEFT JOIN activities b ON a.activity_id = b.id
                     LEFT JOIN categories c ON b.category_id = c.id
@@ -962,7 +1022,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 9
+        current_version = 11
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -985,6 +1045,14 @@ class Storage(storage.Storage):
             # adding full text search
             self.execute("""CREATE VIRTUAL TABLE fact_index
                                            USING fts3(id, name, category, description, tag)""")
+        if version < 10:
+            # adding exported
+            self.execute("""ALTER TABLE facts ADD COLUMN exported bool default false""")
+            self.execute("""UPDATE facts set exported=1""")
+
+        if version < 11:
+            #adding redmine_issues table
+            self.execute("""CREATE TABLE redmine_issues (id int PRIMARY KEY, name varchar2(500), mine boolean, search_name varchar2(500), deleted integer)""")
 
 
         # at the happy end, update version number
