@@ -244,7 +244,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="not_enough_records_label">
-                        <property name="label">Text we say when there is not enough data</property>
+                        <property name="label" translatable="yes">Text we say when there is not enough data</property>
                         <property name="wrap">True</property>
                       </object>
                       <packing>
