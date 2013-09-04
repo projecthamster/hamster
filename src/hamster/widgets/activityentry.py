@@ -232,7 +232,7 @@ class ActivityEntry(gtk.Entry):
         if self.activities and self.categories and self.filter == self.get_text().decode('utf8', 'replace')[:cursor]:
             return #same thing, no need to repopulate
 
-        self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
+        self.filter = self.get_text().decode('utf8', 'replace')#[:cursor]
         fact = Fact(self.filter)
 
         # do not cache as ordering and available options change over time

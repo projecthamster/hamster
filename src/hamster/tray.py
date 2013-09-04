@@ -118,6 +118,11 @@ class ProjectHamsterStatusIconUnity():
         self.stop_activity_item.connect("activate", self.on_stop_activity_activated, None)
         # show the items
         self.stop_activity_item.show()
+        
+        self.last_activities_item = gtk.MenuItem(_(u"_Last activities"))
+        self.menu.append(self.last_activities_item)
+        # show the items
+        self.last_activities_item.show()
 
         self.append_separator(self.menu)
 
@@ -176,6 +181,7 @@ class ProjectHamsterStatusIconUnity():
         self._show_label = conf.get("show_label")
         if self._show_label:
             self.update_label()
+            self.update_last_activities()
         else:
             self.indicator.set_label("")
 
@@ -184,6 +190,7 @@ class ProjectHamsterStatusIconUnity():
         self._label_length = conf.get("label_length")
         if self._show_label:
             self.update_label()
+            self.update_last_activities()
             
     def _set_attention_icon(self):
         '''Set the attention icon as per the gconf key'''
@@ -237,6 +244,21 @@ class ProjectHamsterStatusIconUnity():
 
     def on_show_preferences_activated(self, *args):
         dialogs.prefs.show(self.indicator)
+    
+    def update_last_activities(self):
+        self.project.load_last_facts(10)
+        last_facts = self.project.last_facts
+        self.last_activities_menu = gtk.Menu()
+        if last_facts:
+            self.last_activities_item.set_sensitive(True)
+            self.last_activities_item.set_submenu(self.last_activities_menu)
+            for fact in last_facts:
+                label = fact.serialized_name();
+                menu_item = gtk.MenuItem(label)
+                self.last_activities_menu.append(menu_item)
+                menu_item.show()
+        else:
+            self.last_activities_item.set_sensitive(False)
         
     def update_label(self):
         '''Override for menu items sensitivity and to update the menu'''
@@ -332,6 +354,7 @@ class ProjectHamsterStatusIconUnity():
     def refresh_tray(self):
         """refresh hamster every x secs - load today, check last activity etc."""
         self.update_label()
+        self.update_last_activities()
         return True
 
     """signals"""
@@ -339,10 +362,12 @@ class ProjectHamsterStatusIconUnity():
 #        self.new_name.refresh_activities()
         self.project.load_day()
         self.update_label()
+        self.update_last_activities()
 
     def after_fact_update(self, event):
         self.project.load_day()
         self.update_label()
+        self.update_last_activities()
         
     def on_toggle_called(self, client):
 #        self.__show_toggle(not self.button.get_active())
