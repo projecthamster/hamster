@@ -1,23 +1,5 @@
-NOTE: Hamster is being maintained at the moment. 
+NOTE: Hamster is kinda not being maintained at the moment. 
 Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-for-a-new-maintainer/
-
-
-
-Hamster can be found packaged in most distributions. The instructions below
-are for installing from sources for testing and development purposes.
-
-The instructions are mix between Gnome 2 and Gnome 3, so, errm, just bear with
-us.
-
-h1. hamster-applet -> hamster-time-tracker clean up
-
-Previously hamster was installed everywhere under @hamster-applet@. As
-the applet is long gone, the paths and file names have changed to
-@hamster-time-tracker@. To clean up previous install follow these steps:
-
-pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
-./waf configure build --prefix=/usr
-sudo ./waf uninstall
 
 h1. Dependencies
 
@@ -34,3 +16,15 @@ After that make sure that the old daemons aren't roaming around:
 pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
+
+
+h1. hamster-applet -> hamster-time-tracker clean up
+
+Previously hamster was installed everywhere under @hamster-applet@. As
+the applet is long gone, the paths and file names have changed to
+@hamster-time-tracker@. To clean up previous install follow these steps:
+
+pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
+./waf configure build --prefix=/usr
+sudo ./waf uninstall
+
