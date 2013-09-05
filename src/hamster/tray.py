@@ -6,7 +6,7 @@ import gtk
 import datetime as dt
 import gobject
 import locale
-from hamster.lib import stuff
+from hamster.lib import Fact, stuff
 from hamster.configuration import dialogs, runtime, conf
 
 have_appindicator = True
@@ -82,6 +82,7 @@ class ProjectHamsterStatusIconUnity():
         self._use_icon_glow = conf.get("icon_glow")
         self._show_label = conf.get("show_label")
         self._label_length = conf.get("label_length")
+        self._last_activities_size = conf.get("last_activities_size")
         conf.connect('conf-changed', self.on_conf_changed)
 
         self._activity_as_attribute = None
@@ -169,6 +170,7 @@ class ProjectHamsterStatusIconUnity():
         self._on_icon_glow_changed()
         self._on_show_label_changed()
         self._on_label_length_changed()
+        self._on_last_activities_size_changed()
     
     def on_activate(self, data):
         self.project.show_hamster_window()
@@ -190,7 +192,10 @@ class ProjectHamsterStatusIconUnity():
         self._label_length = conf.get("label_length")
         if self._show_label:
             self.update_label()
-            self.update_last_activities()
+
+    def _on_last_activities_size_changed(self):
+        self._last_activities_size = conf.get("last_activities_size")
+        self.update_last_activities()
             
     def _set_attention_icon(self):
         '''Set the attention icon as per the gconf key'''
@@ -244,21 +249,30 @@ class ProjectHamsterStatusIconUnity():
 
     def on_show_preferences_activated(self, *args):
         dialogs.prefs.show(self.indicator)
-    
+        
     def update_last_activities(self):
-        self.project.load_last_facts(10)
-        last_facts = self.project.last_facts
+        date = dt.datetime.now() - dt.timedelta(days=365)
+        last_facts = runtime.storage.get_facts(date = date, end_date = dt.datetime.now(), limit = self._last_activities_size+1, asc_by_date = False)
         self.last_activities_menu = gtk.Menu()
         if last_facts:
             self.last_activities_item.set_sensitive(True)
             self.last_activities_item.set_submenu(self.last_activities_menu)
-            for fact in last_facts:
-                label = fact.serialized_name();
-                menu_item = gtk.MenuItem(label)
-                self.last_activities_menu.append(menu_item)
-                menu_item.show()
+            for fact in last_facts[:self._last_activities_size]:
+                if fact.end_time:
+                    time = fact.start_time.strftime("%d.%m %H:%M")
+                    fact_name = fact.serialized_name();
+                    menu_item = gtk.MenuItem(' '.join([time, fact_name]))
+                    menu_item.connect("activate", self.on_last_activity_activated, fact_name)
+                    self.last_activities_menu.append(menu_item)
+                    menu_item.show()
         else:
             self.last_activities_item.set_sensitive(False)
+    
+    def on_last_activity_activated(self, widget, name):
+        fact = Fact(name)
+        if not fact.activity:
+            return
+        runtime.storage.add_fact(fact)
         
     def update_label(self):
         '''Override for menu items sensitivity and to update the menu'''

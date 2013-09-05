@@ -177,11 +177,6 @@ class DailyView(object):
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 
-
-    def load_last_facts(self, limit = 10):
-        date = dt.datetime.now() - dt.timedelta(days=365)
-        self.last_facts = runtime.storage.get_facts(date = date, end_date = dt.datetime.now(), limit = limit, asc_by_date = False)
-        
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""
