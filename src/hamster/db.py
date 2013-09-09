@@ -641,7 +641,7 @@ class Storage(storage.Storage):
         return self.__get_facts(today)
 
 
-    def __get_facts(self, date, end_date = None, search_terms = "", limit = None, asc_by_date = True):
+    def __get_facts(self, date, end_date = None, search_terms = "", limit = 0, asc_by_date = True):
         try:
             from configuration import conf
             day_start = conf.get("day_start_minutes")
@@ -687,7 +687,7 @@ class Storage(storage.Storage):
             query += " ORDER BY a.start_time, e.name"
         else:
             query += " ORDER BY a.start_time desc, e.name"
-        if limit:
+        if limit and limit > 0:
             query += " LIMIT " + str(limit)
 
         facts = self.fetchall(query, (self._unsorted_localized,
