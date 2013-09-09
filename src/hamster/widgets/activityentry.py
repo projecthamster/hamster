@@ -232,7 +232,7 @@ class ActivityEntry(gtk.Entry):
         if self.activities and self.categories and self.filter == self.get_text().decode('utf8', 'replace')[:cursor]:
             return #same thing, no need to repopulate
 
-        self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
+        self.filter = self.get_text().decode('utf8', 'replace')#[:cursor]
         fact = Fact(self.filter)
 
         # do not cache as ordering and available options change over time
@@ -268,7 +268,7 @@ class ActivityEntry(gtk.Entry):
 
         store = self.tree.get_model()
         if not store:
-            store = gtk.ListStore(str, str, str, str, str)
+            store = gtk.ListStore(str, str, str, str, str, str)
             self.tree.set_model(store)
         store.clear()
 
@@ -277,7 +277,7 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time, category.get('rt_id')])
+                    store.append([fillable, category['name'], fillable, time, category.get('rt_id')], None)
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             activities_to_append = []
@@ -297,13 +297,15 @@ class ActivityEntry(gtk.Entry):
             
             for activity in filtered:
                 fillable = activity['name'].lower()
+                minutes = None
                 if activity['category']:
                     fillable += "@%s" % activity['category']
 
                 if time: #as we also support deltas, for the time we will grab anything up to first space
-                    fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
+                    minutes = self.filter.split(" ", 1)[0]
+                    fillable = "%s %s" % (minutes, fillable)
 
-                store.append([fillable, activity['name'].lower(), activity['category'], time, activity.get('rt_id')])
+                store.append([fillable, activity['name'].lower(), activity['category'], time, activity.get('rt_id'), minutes])
 
     def after_activity_update(self, widget):
         self.refresh_activities()
@@ -393,6 +395,9 @@ class ActivityEntry(gtk.Entry):
         model, iter = tree.get_selection().get_selected()
         name = model.get_value(iter, 1)
         rt_id = model.get_value(iter, 4)
+        delta_time = model.get_value(iter, 5)
+        if delta_time:
+            name = ' '.join([delta_time, name])
         
         match = re.match(TICKET_NAME_REGEX, name)
         category = ""

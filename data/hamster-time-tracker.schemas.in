@@ -182,5 +182,18 @@
                 </long>
             </locale>
         </schema>
+        <schema>
+            <key>/schemas/apps/hamster-time-tracker/last_activities_size</key>
+            <applyto>/apps/hamster-time-tracker/last_activities_size</applyto>
+            <owner>hamster-time-tracker</owner>
+            <type>int</type>
+            <default>10</default>
+            <locale name="C">
+                <short>Set the last activities submenu size</short>
+                <long>
+                    Set the last activities submenu size.
+                </long>
+            </locale>
+        </schema>
     </schemalist>
 </gconfschemafile>

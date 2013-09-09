@@ -177,7 +177,6 @@ class DailyView(object):
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 
-
     def load_day(self):
         """sets up today's tree and fills it with records
            returns information about last activity"""

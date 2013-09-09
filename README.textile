@@ -55,3 +55,7 @@ $ gconftool-2 --set "/apps/hamster-time-tracker/show_label" --type bool "false"
 To set the maximum label length:
 
 pre. $ gconftool-2 --set "/apps/hamster-time-tracker/label_length" --type int "20"
+
+To set the last activities submenu size:
+
+pre. $ gconftool-2 --set "/apps/hamster-time-tracker/last_activities_size" --type int "10"
