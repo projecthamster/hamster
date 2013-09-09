@@ -97,9 +97,9 @@ class ActivitiesSource(gobject.GObject):
                 activities.append(direct_ticket)
             if len(activities) <= 2 and not direct_ticket and len(query) > 4:
                 li = query.split(' ')
-                rt_query = " AND ".join(["Subject LIKE '%s'" % (q) for q in li]) + " AND (Status='new' OR Status='open')"
+                rt_query = " AND ".join(["(Subject LIKE '%s' OR Owner='%s')" % (q, q) for q in li]) + " AND (Status='new' OR Status='open')"
                 #logging.warn(rt_query)
-                third_activities = self.__extract_from_rt(query, rt_query)
+                third_activities = self.__extract_from_rt(query, rt_query, False)
                 if activities and third_activities:
                     activities.append({"name": "---------------------", "category": "other open"})
                 activities.extend(third_activities)
@@ -177,12 +177,12 @@ class ActivitiesSource(gobject.GObject):
         activity['category']="";
         return activity
 
-    def __extract_from_rt(self, query = None, rt_query = None):
+    def __extract_from_rt(self, query = None, rt_query = None, checkName = True):
         activities = []
         results = self.tracker.search_simple(rt_query)
         for ticket in results:
             activity = self.__extract_activity_from_ticket(ticket)
-            if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
+            if query is None or not checkName or all(item in activity['name'].lower() for item in query.lower().split(' ')):
                 activities.append(activity)
         return activities
         
