@@ -1,0 +1,2 @@
+intltool-update --pot
+intltool-update -d pl

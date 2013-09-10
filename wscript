@@ -1,5 +1,5 @@
 # -*- python -*-
-VERSION = '1.03.3'
+VERSION = '1.04.0'
 APPNAME = 'hamster-time-tracker'
 top = '.'
 out = 'build'
@@ -105,8 +105,10 @@ def push_release(ctx):
     tarball = dist(APPNAME, VERSION)
 
     import os
-    os.system('scp %s tbaugis@master.gnome.org:/home/users/tbaugis' % tarball)
-    os.system("ssh tbaugis@master.gnome.org 'install-module %s'" % tarball)
+    os.system('git tag %s-%s' % (APPNAME, VERSION)) 
+    #os.system('cp %s /tmp/' %tarball)
+    #os.system('scp %s tbaugis@master.gnome.org:/home/users/tbaugis' % tarball)
+    #os.system("ssh tbaugis@master.gnome.org 'install-module %s'" % tarball)
 
 
 def release(ctx):

@@ -191,7 +191,7 @@
             <locale name="C">
                 <short>Set the last activities submenu size</short>
                 <long>
-                    Set the last activities submenu size.
+                    Set the last activities submenu size
                 </long>
             </locale>
         </schema>
