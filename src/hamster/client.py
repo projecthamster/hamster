@@ -115,13 +115,14 @@ class Storage(gobject.GObject):
         """
         return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
 
-    def get_facts(self, date, end_date = None, search_terms = "", limit = 10, asc_by_date = True):
+    def get_facts(self, date, end_date = None, search_terms = "", limit = None, asc_by_date = True):
         """Returns facts for the time span matching the optional filter criteria.
            In search terms comma (",") translates to boolean OR and space (" ")
            to boolean AND.
            Filter is applied to tags, categories, activity names and description
         """
         date = timegm(date.timetuple())
+        limit = limit or 0
         end_date = end_date or 0
         if end_date:
             end_date = timegm(end_date.timetuple())
