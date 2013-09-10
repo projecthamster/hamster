@@ -32,6 +32,12 @@ try:
 except:
     wnck = None
 
+try:
+    import appindicator
+except:
+    appindicator = None
+
+
 from gettext import ngettext
 
 def get_prev(selection, model):
@@ -272,7 +278,9 @@ class PreferencesEditor(gtk.Object):
             ])
         else:
             self.get_widget("workspace_tab").hide()
-
+        
+        if not appindicator:
+            self.get_widget("tray_tab").hide()
 
         self._gui.connect_signals(self)
         self.show()
