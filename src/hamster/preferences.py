@@ -360,6 +360,12 @@ class PreferencesEditor(gtk.Object):
         self.rt_user.set_text(conf.get('rt_user'))
         self.rt_pass.set_text(conf.get('rt_pass'))
         self.rt_query.set_text(conf.get('rt_query'))
+        
+        self.get_widget("icon_glow").set_active(conf.get("icon_glow"))
+        self.get_widget("show_label").set_active(conf.get("show_label"))
+        self.get_widget("label_length").set_sensitive(conf.get("show_label"))
+        self.get_widget("label_length").set_value(conf.get("label_length"))
+        self.get_widget("last_activities_size").set_value(conf.get("last_activities_size"))
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -792,6 +798,23 @@ class PreferencesEditor(gtk.Object):
         day_start = day_start.hour * 60 + day_start.minute
 
         conf.set("day_start_minutes", day_start)
+        
+    def on_icon_glow_toggled(self, checkbox):
+        conf.set("icon_glow", checkbox.get_active())
+        
+    def on_show_label_toggled(self, checkbox):
+        show_label = checkbox.get_active()
+        conf.set("show_label", show_label)
+        self.get_widget("label_length").set_sensitive(show_label)
+        
+    def on_label_length_value_changed(self, scale):
+        value = int(scale.get_value())
+        conf.set("label_length", value)
+        
+    def on_last_activities_size_value_changed(self, scale):
+        value = int(scale.get_value())
+        conf.set("last_activities_size", value)
 
     def on_preferences_window_destroy(self, window):
         self.window = None
+    
