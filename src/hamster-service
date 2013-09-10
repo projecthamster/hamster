@@ -295,7 +295,7 @@ class Storage(db.Storage, dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s')
     def SetTagsAutocomplete(self, tags):
-        self.update_autocomplete_tags(tags)
+        self.set_tags_autocomplete(tags)
 
 
 
