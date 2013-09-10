@@ -162,7 +162,7 @@ class ActivitiesSource(gobject.GObject):
         #logging.warn(ticket)
         if 'ticket/' in ticket_id:
             ticket_id = ticket_id[7:]
-        ticket['name'] = '#'+ticket_id+': '+ticket['Subject']
+        ticket['name'] = '#'+ticket_id+': '+ticket['Subject'].replace(",", " ")
         if 'Owner' in ticket and ticket['Owner']!=self.rt_user:
             ticket['name'] += " (%s)" % ticket['Owner'] 
         ticket['category'] = self.__extract_cat_from_ticket(ticket)
