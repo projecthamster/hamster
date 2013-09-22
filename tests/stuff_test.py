@@ -77,6 +77,45 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEquals(activity.category, "cat")
         self.assertEquals(activity.description, "description non-tag#ta")
         self.assertEquals(set(activity.tags), set(["bag", "tag"]))
+        
+    def test_explicit(self):
+        # testing whether explicit works
+        activity = Fact(start_time = "12:25", end_time = "13:25", activity = "case", category = "cat", description = "description non-tag#ta", tags = "tag, bag")
+        self.assertEquals(activity.start_time, "12:25")
+        self.assertEquals(activity.end_time, "13:25")
+        self.assertEquals(activity.activity, "case")
+        self.assertEquals(activity.category, "cat")
+        self.assertEquals(activity.description, "description non-tag#ta")
+        self.assertEquals(set(activity.tags), set(["bag", "tag"]))
+        
+    def test_explicitvsparse(self):
+        #testing whether explicit has precedence
+        activity = Fact("1225-1325 case@cat, description non-tag#ta #tag #bag", description = "true")
+        self.assertEquals(activity.start_time.strftime("%H:%M"), "12:25")
+        self.assertEquals(activity.end_time.strftime("%H:%M"), "13:25")
+        self.assertEquals(activity.activity, "case")
+        self.assertEquals(activity.category, "cat")
+        self.assertEquals(activity.description, "true")
+        self.assertEquals(set(activity.tags), set(["bag", "tag"]))
+    
+    def test_easteregg(self):
+        #ponies?
+        activity = Fact("bbq omg")
+        self.assertEquals(activity.activity, "bbq omg")
+        self.assertEquals(activity.ponies, True)
+        self.assertEquals(activity.description, "[ponies = 1], [rainbows = 0]")
+
+        assert activity.category is None
+        assert activity.start_time is None
+        assert activity.end_time is None
+
+    def test_iter_explicit(self):
+        #testing iter under explicit
+        activity = Fact(start_time = "12:34", end_time = "15:12", activity = "test activity", category = "test category", description = "test description", tags = "testtags")
+        activity2 = Fact(start_time = "12:34", end_time = "15:12", activity = "test activity", category = "test category", description = "test description", tags = "testtags")
+        self.assertEquals([elem for elem in activity], [elem for elem in activity2])
+        activity3 = Fact(start_time = "12:14", end_time = "15:12", activity = "test activity", category = "test category", description = "test description", tags = "testtags")
+        self.assertNotEqual([elem for elem in activity], [elem for elem in activity3])
 
 if __name__ == '__main__':
     unittest.main()
