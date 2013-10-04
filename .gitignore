@@ -1,4 +1,5 @@
 *.pyc
+*.page
 autom4te.cache/
 m4/
 config.*

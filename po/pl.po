@@ -256,6 +256,9 @@ msgstr "Czynności"
 msgid "Tags"
 msgstr "Etykiety"
 
+msgid "without tag"
+msgstr "bez etykiety"
+
 #: ../data/overview_totals.ui.h:5
 msgid "No data for this interval"
 msgstr "Brak danych dla tego przedziału czasowego"

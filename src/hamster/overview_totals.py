@@ -36,6 +36,8 @@ from lib import stuff, charting
 from lib.i18n import C_
 
 
+WITHOUT_TAG = 'without tag'
+
 class TotalsBox(gtk.VBox):
     def __init__(self):
         gtk.VBox.__init__(self)
@@ -140,24 +142,31 @@ class TotalsBox(gtk.VBox):
     def calculate_totals(self):
         if not self.facts:
             return
-        facts = self.facts
+        facts = []
 
         category_sums, activity_sums, tag_sums = defaultdict(dt.timedelta), defaultdict(dt.timedelta), defaultdict(dt.timedelta),
 
-        for fact in facts:
+        for fact in self.facts:
             if self.selected_categories and fact.category not in self.selected_categories:
                 continue
             if self.selected_activities and fact.activity not in self.selected_activities:
                 continue
-            if self.selected_tags and len(set(self.selected_tags) - set(fact.tags)) > 0:
-                continue
-
+            if self.selected_tags:
+                if fact.tags and not (set(self.selected_tags) & set(fact.tags)):
+                    continue
+                if not fact.tags and _(WITHOUT_TAG) not in self.selected_tags:
+                    continue
+            facts.append(fact)
+            
             category_sums[fact.category] += fact.delta
             activity_sums[fact.activity] += fact.delta
-
-            for tag in fact.tags:
-                tag_sums[tag] += fact.delta
-
+            
+            if fact.tags:
+                for tag in fact.tags:
+                    tag_sums[tag] += fact.delta
+            else:
+                tag_sums[_(WITHOUT_TAG)] += fact.delta
+                
         total_minutes = stuff.duration_minutes([fact.delta for fact in facts])
         total_label = _("%s hours (%s minutes) tracked total") % (locale.format("%.2f", total_minutes/60.0), locale.format("%d", total_minutes))
         self.get_widget("total_hours").set_text(total_label)

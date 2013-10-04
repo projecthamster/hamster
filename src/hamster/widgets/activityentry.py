@@ -393,6 +393,7 @@ class ActivityEntry(gtk.Entry):
         
     def _get_selected_text(self, tree):
         model, iter = tree.get_selection().get_selected()
+        #TODO tutaj jest błąd!
         name = model.get_value(iter, 1)
         rt_id = model.get_value(iter, 4)
         delta_time = model.get_value(iter, 5)
