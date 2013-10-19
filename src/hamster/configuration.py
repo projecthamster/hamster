@@ -167,6 +167,7 @@ class GConfStore(gobject.GObject, Singleton):
         'enable_timeout'              :   False,       # Should hamster stop tracking on idle
         'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
         'notify_on_idle'              :   False,       # Remind also if no activity is set
+        'lock_on_idle'                :   False,       # Lock the screen if no activity is set
         'notify_interval'             :   27,          # Remind of current activity every X minutes
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
         'overview_window_box'         :   [],          # X, Y, W, H

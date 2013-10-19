@@ -123,6 +123,28 @@
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkAlignment" id="alignment13">
+                                            <property name="visible">True</property>
+                                            <property name="top_padding">8</property>
+                                            <property name="left_padding">4</property>
+                                            <child>
+                                              <object class="GtkCheckButton" id="lock_on_idle">
+                                                <property name="label" translatable="yes">Lock the screen when no activity is set</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="on_lock_on_idle_toggled" swapped="no"/>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
+
                                       </object>
                                     </child>
                                   </object>
