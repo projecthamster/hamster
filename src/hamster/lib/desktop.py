@@ -39,6 +39,7 @@ class DesktopIntegrations(object):
 
         self.conf_enable_timeout = conf.get("enable_timeout")
         self.conf_notify_on_idle = conf.get("notify_on_idle")
+        self.conf_lock_on_idle = conf.get("lock_on_idle")
         self.conf_notify_interval = conf.get("notify_interval")
         conf.connect('conf-changed', self.on_conf_changed)
 
@@ -81,15 +82,27 @@ class DesktopIntegrations(object):
             if duration and duration % interval == 0:
                 message = _(u"Working on %s") % last_activity['name']
                 self.notify_user(message)
+        else:
+            # Determine whether we should notify the user now
+            time_to_notify = (now.minute + now.hour * 60) % interval == 0
 
-        elif self.conf_notify_on_idle:
-            #if we have no last activity, let's just calculate duration from 00:00
-            if (now.minute + now.hour * 60) % interval == 0:
-                self.notify_user(_(u"No activity"))
+            if time_to_notify:
+                if self.conf_lock_on_idle:
+                    self.lock_screen()
+                elif self.conf_notify_on_idle:
+                    self.notify_user(_(u"No activity"))
 
+    def lock_screen(self):
+        if not hasattr(self, "_screensaver_conn"):
+            proxy_for_screensaver = self.bus.get_object('org.freedesktop.ScreenSaver', '/ScreenSaver')
+            interface_screensaver = dbus.Interface(proxy_for_screensaver, 'org.freedesktop.ScreenSaver')
+            self._screensaver_conn = interface_screensaver
+
+        conn = self._screensaver_conn
+        conn.Lock()
 
     def notify_user(self, summary="", details=""):
-        if not hasattr(self, "notification_conn"):
+        if not hasattr(self, "_notification_conn"):
             self._notification_conn = dbus.Interface(self.bus.get_object('org.freedesktop.Notifications',
                                                                          '/org/freedesktop/Notifications'),
                                                     dbus_interface='org.freedesktop.Notifications')

@@ -55,6 +55,20 @@
             </locale>
         </schema>
         <schema>
+            <key>/schemas/apps/hamster-time-tracker/lock_on_idle</key>
+            <applyto>/apps/hamster-time-tracker/lock_on_idle</applyto>
+            <owner>hamster-time-tracker</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Lock the screen when no activity is set</short>
+                <long>
+                    Also check every notify_interval minutes if no activity
+                    has been started, if true, lock the screen.
+                </long>
+            </locale>
+        </schema>
+        <schema>
             <key>/schemas/apps/hamster-time-tracker/day_start_minutes</key>
             <applyto>/apps/hamster-time-tracker/day_start_minutes</applyto>
             <owner>hamster-time-tracker</owner>
