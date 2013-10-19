@@ -204,6 +204,12 @@ class PreferencesEditor(Controller):
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
 
+        self.get_widget("lock_on_idle").set_active(conf.get("lock_on_idle"))
+        self.get_widget("lock_on_idle").set_sensitive(conf.get("notify_interval") <=120)
+
+        self.get_widget("workspace_tracking_name").set_active("name" in conf.get("workspace_tracking"))
+        self.get_widget("workspace_tracking_memory").set_active("memory" in conf.get("workspace_tracking"))
+
         day_start = conf.get("day_start_minutes")
         day_start = dt.time(day_start / 60, day_start % 60)
         self.day_start.set_time(day_start)
@@ -575,6 +581,9 @@ class PreferencesEditor(Controller):
     def on_notify_on_idle_toggled(self, checkbox):
         conf.set("notify_on_idle", checkbox.get_active())
 
+    def on_lock_on_idle_toggled(self, checkbox):
+        conf.set("lock_on_idle", checkbox.get_active())
+
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
@@ -591,6 +600,7 @@ class PreferencesEditor(Controller):
         value = int(scale.get_value())
         conf.set("notify_interval", value)
         self.get_widget("notify_on_idle").set_sensitive(value <= 120)
+        self.get_widget("lock_on_idle").set_sensitive(value <= 120)
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.get_time()
