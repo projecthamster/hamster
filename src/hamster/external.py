@@ -56,7 +56,8 @@ class ActivitiesSource(gobject.GObject):
                     self.tracker = rt.Rt(self.rt_url, self.rt_user, self.rt_pass)
                     if not self.tracker.login():
                         self.source = ""
-                except:
+                except Exception as e:
+                    logging.warn('rt login failed: '+str(e))
                     self.source = ""
             else:
                 self.source = ""

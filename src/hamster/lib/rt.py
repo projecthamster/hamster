@@ -62,6 +62,8 @@ DEFAULT_QUEUE = 'General'
 
 TICKET_NAME_REGEX = "^#(\d+): "
 
+TIMEOUT = 5# seconds
+
 class Rt:
     """ :term:`API` for Request Tracker according to
     http://requesttracker.wikia.com/wiki/REST. Interface is based on
@@ -94,7 +96,7 @@ class Rt:
         self.session = requests.session()
         self.login_result = None
 
-    def __request(self, selector, post_data={}, files=[], without_login=False):
+    def __request(self, selector, post_data={}, files=[], without_login=False, timeout=None):
         """ General request for :term:`API`.
  
         :keyword selector: End part of URL which completes self.url parameter
@@ -112,19 +114,20 @@ class Rt:
         :raises Exception: In case that request is called without previous
                            login or any other connection error.
         """
+        timeout=timeout or TIMEOUT
         try:
             url = str(os.path.join(self.url, selector))
             if self.login_result or without_login:
                 if not files:
                     if post_data:
-                        response = self.session.post(url, data=post_data)
+                        response = self.session.post(url, data=post_data, timeout=timeout)
                     else:
-                        response = self.session.get(url)
+                        response = self.session.get(url, timeout=timeout)
                 else:
                     files_data = {}
                     for i in range(len(files)):
                         files_data['attachment_%d' % (i+1)] = files[i]
-                    response = self.session.post(url, data=post_data, files=files_data)
+                    response = self.session.post(url, data=post_data, files=files_data, timeout=TIMEOUT)
                 if isinstance(response.content, bytes):
                     return bytes.decode(response.content)
                 else:
@@ -194,10 +197,10 @@ class Rt:
                   Each ticket is dictionary, the same as in
                   :py:meth:`~Rt.get_ticket`.
         """
-        msgs = self.__request('search/ticket?query=Queue=\'%s\'+AND+(LastUpdatedBy!=\'%s\')&orderby=-LastUpdated&format=l' % (queue, self.default_login))
-        msgs = msgs.split('\n--\n')
         items = []
         try:
+            msgs = self.__request('search/ticket?query=Queue=\'%s\'+AND+(LastUpdatedBy!=\'%s\')&orderby=-LastUpdated&format=l' % (queue, self.default_login))
+            msgs = msgs.split('\n--\n')
             for i in range(len(msgs)):
                 pairs = {}
                 msg = msgs[i].split('\n')
@@ -222,10 +225,10 @@ class Rt:
                   Each tickets is dictionary, the same as in
                   :py:meth:`~Rt.get_ticket`.
         """
-        msgs = self.__request('search/ticket?query=(Queue=\'%s\')+AND+(LastUpdatedBy!=\'%s\')+AND+(LastUpdated>\'%s\')&orderby=-LastUpdated&format=l' % (queue, self.default_login, since))
-        msgs = msgs.split('\n--\n')
         items = []
         try:
+            msgs = self.__request('search/ticket?query=(Queue=\'%s\')+AND+(LastUpdatedBy!=\'%s\')+AND+(LastUpdated>\'%s\')&orderby=-LastUpdated&format=l' % (queue, self.default_login, since))
+            msgs = msgs.split('\n--\n')
             for i in range(len(msgs)):
                 pairs = {}
                 msg = msgs[i].split('\n')
@@ -279,9 +282,9 @@ class Rt:
     def search_simple(self, user_query):
         logging.debug('searching')
         query = 'search/ticket?query=' + user_query + "&format=s"
-        msgs = self.__request(query)
-        msgs = msgs.split('\n')
         try:
+            msgs = self.__request(query)
+            msgs = msgs.split('\n')
             items = []
             for line in msgs:
                 if ': ' in line:
@@ -299,10 +302,10 @@ class Rt:
         query = 'search/ticket?query=' + user_query + "&format=l&fields=id,Subject,Owner,Requestors"
         if additional_fields:
             query = ','.join([query]+additional_fields)
-        msgs = self.__request(query)
-        msgs = msgs.split('\n--\n')
         items = []
         try:
+            msgs = self.__request(query)
+            msgs = msgs.split('\n--\n')
             if not hasattr(self, 'requestors_pattern'):
                 self.requestors_pattern = re.compile('Requestors:')
             for i in range(len(msgs)):
@@ -500,15 +503,15 @@ class Rt:
                   of pairs (attachment_id,filename_with_size).
         :raises Exception: Unexpected format of returned message.
         """
-        if transaction_id is None:
-            # We are using "long" format to get all history items at once.
-            # Each history item is then separated by double dash.
-            msgs = self.__request('ticket/%s/history?format=l' % (str(ticket_id),))
-        else:
-            msgs = self.__request('ticket/%s/history/id/%s' % (str(ticket_id), str(transaction_id)))
-        msgs = msgs.split('\n--\n')
         items = []
         try:
+            if transaction_id is None:
+                # We are using "long" format to get all history items at once.
+                # Each history item is then separated by double dash.
+                msgs = self.__request('ticket/%s/history?format=l' % (str(ticket_id),))
+            else:
+                msgs = self.__request('ticket/%s/history/id/%s' % (str(ticket_id), str(transaction_id)))
+            msgs = msgs.split('\n--\n')
             if not hasattr(self, 'content_pattern'):
                 self.content_pattern = re.compile('Content:')
             if not hasattr(self, 'attachments_pattern'):
