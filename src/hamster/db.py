@@ -677,11 +677,19 @@ class Storage(storage.Storage):
             self.__check_index(datetime_from, datetime_to)
 
             search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
-            query += """ AND a.id in (SELECT id
+
+            # Split by NOT, but only once
+            search_terms = search_terms.split('NOT', 1)
+
+            if (search_terms[0] and search_terms[0].strip()):
+                query += """ AND a.id in (SELECT id
                                         FROM fact_index
-                                       WHERE fact_index MATCH '%s')""" % search_terms
+                                       WHERE fact_index MATCH '%s')""" % search_terms[0].strip()
 
-
+            if search_terms[1] and search_terms[1].strip():
+                query += """ AND a.id NOT in (SELECT id
+                                        FROM fact_index
+                                       WHERE fact_index MATCH '%s')""" % search_terms[1].strip()
 
         if asc_by_date:
             query += " ORDER BY a.start_time, e.name"
