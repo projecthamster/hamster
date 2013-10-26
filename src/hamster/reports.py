@@ -307,6 +307,7 @@ class HTMLWriter(ReportWriter):
             activity_log_title = _("Activity Log"),
             totals_title = _("Totals"),
 
+            days_totals_heading = _("days"),
             activity_totals_heading = _("activities"),
             category_totals_heading = _("categories"),
             tag_totals_heading = _("tags"),

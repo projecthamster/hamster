@@ -18,15 +18,16 @@ def postinstall_schemas(prog_name):
 			Utils.pprint('YELLOW','GConf schema not installed. After install, run this:')
 			Utils.pprint('YELLOW','gconftool-2 --install-schema-file=%s'%dir)
 def postinstall_icons():
-	dir=Build.bld.get_install_path('${DATADIR}/icons/hicolor')
-	if Build.bld.is_install:
-		if not Options.options.destdir:
-			Utils.pprint('YELLOW',"Updating Gtk icon cache.")
-			command='gtk-update-icon-cache -q -f -t %s'%dir
-			ret=Utils.exec_command(command)
-		else:
-			Utils.pprint('YELLOW','Icon cache not updated. After install, run this:')
-			Utils.pprint('YELLOW','gtk-update-icon-cache -q -f -t %s'%dir)
+	for dir in ['${DATADIR}/icons/hicolor', '${DATADIR}/icons/ubuntu-mono-light', '${DATADIR}/icons/ubuntu-mono-dark']:
+		dir=Build.bld.get_install_path(dir)
+		if Build.bld.is_install:
+			if not Options.options.destdir:
+				Utils.pprint('YELLOW',"Updating Gtk icon cache.")
+				command='gtk-update-icon-cache -q -f -t %s'%dir
+				ret=Utils.exec_command(command)
+			else:
+				Utils.pprint('YELLOW','Icon cache not updated. After install, run this:')
+				Utils.pprint('YELLOW','gtk-update-icon-cache -q -f -t %s'%dir)
 def postinstall_scrollkeeper(prog_name):
 	if Build.bld.is_install:
 		if os.access('/var/log/scrollkeeper.log',os.W_OK):

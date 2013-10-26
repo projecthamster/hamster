@@ -148,6 +148,11 @@ class Dialogs(Singleton):
             return PreferencesEditor
         self.prefs = OneWindow(get_prefs_class)
 
+        def get_export_rt_class():
+            from exportrt import ExportRtController
+            return ExportRtController
+        self.export_rt = OneWindow(get_export_rt_class)
+
 dialogs = Dialogs()
 
 
@@ -177,6 +182,15 @@ class GConfStore(gobject.GObject, Singleton):
         'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
+        'icon_glow'                   :   True,
+        'show_label'                  :   False,
+        'label_length'                :   20,
+        'last_activities_size'        :   10,
+        'rt_url'                      :   "https://rt.contium.pl/REST/1.0/",          # RT REST url
+        'rt_user'                     :   "",          # 
+        'rt_pass'                     :   "",          # 
+        'rt_query'                    :   "Owner='__CurrentUser__' AND (Status='new' OR Status='open')",          # RT query for autocomplete
+        'rt_category_field'           :   "CF.{Projekt}",
     }
 
     __gsignals__ = {

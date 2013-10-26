@@ -36,7 +36,7 @@ class Fact(object):
     #TODO: Change attribute name for id.
     def __init__(self, activity, category = "", description = "", tags = "",
                  start_time = None, end_time = None, id = None, delta = None,
-                 date = None, activity_id = None):
+                 date = None, activity_id = None, exported = False):
         """the category, description and tags can be either passed in explicitly
         or by using the "activity@category, description #tag #tag" syntax.
         explicitly stated values will take precedence over derived ones"""
@@ -52,6 +52,7 @@ class Fact(object):
         self.delta = delta
         self.date = date #TODO: Where is this used???
         self.activity_id = activity_id
+        self.exported = exported
 
         # parse activity
         input_parts = activity.strip().split(" ")

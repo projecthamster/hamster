@@ -54,10 +54,10 @@ class Storage(object):
         return self.__get_fact(fact_id)
 
 
-    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False, exported = False):
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(fact, start_time, end_time, temporary)
+        result = self.__add_fact(fact, start_time, end_time, temporary, exported)
         self.end_transaction()
         if result:
             self.facts_changed()
@@ -82,8 +82,8 @@ class Storage(object):
         self.end_transaction()
 
 
-    def get_facts(self, start_date, end_date, search_terms):
-        return self.__get_facts(start_date, end_date, search_terms)
+    def get_facts(self, start_date, end_date, search_terms, limit, asc_by_date):
+        return self.__get_facts(start_date, end_date, search_terms, limit, asc_by_date)
 
 
     def get_todays_facts(self):

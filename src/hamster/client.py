@@ -40,6 +40,7 @@ def from_dbus_fact(fact):
                 date = dt.datetime.utcfromtimestamp(fact[8]).date(),
                 delta = dt.timedelta(days = fact[9] // (24 * 60 * 60),
                                      seconds = fact[9] % (24 * 60 * 60)),
+                exported = fact[10],
             id = fact[0]
             )
 
@@ -114,20 +115,23 @@ class Storage(gobject.GObject):
         """
         return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
 
-    def get_facts(self, date, end_date = None, search_terms = ""):
+    def get_facts(self, date, end_date = None, search_terms = "", limit = None, asc_by_date = True):
         """Returns facts for the time span matching the optional filter criteria.
            In search terms comma (",") translates to boolean OR and space (" ")
            to boolean AND.
            Filter is applied to tags, categories, activity names and description
         """
         date = timegm(date.timetuple())
+        limit = limit or 0
         end_date = end_date or 0
         if end_date:
             end_date = timegm(end_date.timetuple())
 
         return [from_dbus_fact(fact) for fact in self.conn.GetFacts(date,
                                                                     end_date,
-                                                                    search_terms)]
+                                                                    search_terms,
+                                                                    limit,
+                                                                    asc_by_date)]
 
     def get_activities(self, search = ""):
         """returns list of activities name matching search criteria.
@@ -202,7 +206,7 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact, temporary_activity = False):
+    def update_fact(self, fact_id, fact, temporary_activity = False, exported = False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -219,7 +223,8 @@ class Storage(gobject.GObject):
                                        fact.serialized_name(),
                                        start_time,
                                        end_time,
-                                       temporary_activity)
+                                       temporary_activity,
+                                       exported)
 
         trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id
