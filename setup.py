@@ -7,8 +7,8 @@ from distutils import sysconfig
 data_dir = os.path.join(sysconfig.get_python_lib(), "hamster", "data")
 
 required_packages = [
-    Beaker,
-    requests,
+    "Beaker",
+    "requests",
 ]
 
 setup(name='hamster-sqlite',
