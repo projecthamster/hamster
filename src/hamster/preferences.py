@@ -373,7 +373,7 @@ class PreferencesEditor(gtk.Object):
         self.get_widget("show_label").set_active(conf.get("show_label"))
         self.get_widget("label_length").set_sensitive(conf.get("show_label"))
         self.get_widget("label_length").set_value(conf.get("label_length"))
-        self.get_widget("last_activities_size").set_value(conf.get("last_activities_size"))
+        self.get_widget("last_activities_days").set_value(conf.get("last_activities_days"))
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -819,9 +819,9 @@ class PreferencesEditor(gtk.Object):
         value = int(scale.get_value())
         conf.set("label_length", value)
         
-    def on_last_activities_size_value_changed(self, scale):
+    def on_last_activities_days_value_changed(self, scale):
         value = int(scale.get_value())
-        conf.set("last_activities_size", value)
+        conf.set("last_activities_days", value)
 
     def on_preferences_window_destroy(self, window):
         self.window = None

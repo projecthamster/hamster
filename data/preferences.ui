@@ -974,7 +974,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Last activities size</property>
+                        <property name="label" translatable="yes">Last activities days</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -983,13 +983,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHScale" id="last_activities_size">
+                      <object class="GtkHScale" id="last_activities_days">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="round_digits">1</property>
                         <property name="digits">0</property>
-                        <signal name="value-changed" handler="on_last_activities_size_value_changed" swapped="no"/>
+                        <signal name="value-changed" handler="on_last_activities_days_value_changed" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>

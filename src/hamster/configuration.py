@@ -185,7 +185,7 @@ class GConfStore(gobject.GObject, Singleton):
         'icon_glow'                   :   True,
         'show_label'                  :   False,
         'label_length'                :   20,
-        'last_activities_size'        :   10,
+        'last_activities_days'        :   7,
         'rt_url'                      :   "https://rt.contium.pl/REST/1.0/",          # RT REST url
         'rt_user'                     :   "",          # 
         'rt_pass'                     :   "",          # 

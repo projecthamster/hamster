@@ -3,8 +3,8 @@ Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-
 
 h1. Dependencies
 
-Debian-based: @apt-get install git-core gettext intltool python-gconf@
-RPM-based: @yum install git-core gettext intltool gnome-python2-gconf@
+Debian-based: @apt-get install git-core gettext intltool python-gconf python-requests python-beaker@
+RPM-based: @yum install git-core gettext intltool gnome-python2-gconf python-requests python-beaker@
 
 h1. Installing
 
@@ -16,10 +16,6 @@ After that make sure that the old daemons aren't roaming around:
 pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
-
-h2. Required
-
-pre. sudo apt-get install python-requests python-beaker
 
 h1. Screenshots
 
@@ -45,7 +41,7 @@ pre. $ gconftool-2 --set "/apps/hamster-time-tracker/label_length" --type int "2
 
 To set the last activities submenu size:
 
-pre. $ gconftool-2 --set "/apps/hamster-time-tracker/last_activities_size" --type int "10"
+pre. $ gconftool-2 --set "/apps/hamster-time-tracker/last_activities_days" --type int "7"
 
 h1. hamster-applet -> hamster-time-tracker clean up
 

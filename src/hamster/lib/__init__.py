@@ -130,6 +130,19 @@ class Fact(object):
             res += ",%s %s" % (self.description or "",
                                " ".join(["#%s" % tag for tag in self.tags]))
         return res
+    
+    def serialized_name_for_menu(self):
+        res = ""
+            
+        res += self.activity
+
+        if self.description or self.tags:
+            res += ",%s %s" % (self.description or "",
+                               " ".join(["#%s" % tag for tag in self.tags]))
+        
+        res += self.start_time.strftime(" (%d.%m %H:%M)")
+        
+        return res
 
     def __str__(self):
         time = ""

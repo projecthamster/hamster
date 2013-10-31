@@ -183,8 +183,8 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/last_activities_size</key>
-            <applyto>/apps/hamster-time-tracker/last_activities_size</applyto>
+            <key>/schemas/apps/hamster-time-tracker/last_activities_days</key>
+            <applyto>/apps/hamster-time-tracker/last_activities_days</applyto>
             <owner>hamster-time-tracker</owner>
             <type>int</type>
             <default>10</default>

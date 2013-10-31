@@ -8,6 +8,7 @@ import gobject
 import locale
 from hamster.lib import Fact, stuff
 from hamster.configuration import dialogs, runtime, conf
+from itertools import groupby
 
 have_appindicator = True
 try:
@@ -82,7 +83,7 @@ class ProjectHamsterStatusIconUnity():
         self._use_icon_glow = conf.get("icon_glow")
         self._show_label = conf.get("show_label")
         self._label_length = conf.get("label_length")
-        self._last_activities_size = conf.get("last_activities_size")
+        self._last_activities_days = conf.get("last_activities_days")
         conf.connect('conf-changed', self.on_conf_changed)
 
         self._activity_as_attribute = None
@@ -143,7 +144,8 @@ class ProjectHamsterStatusIconUnity():
 
         self.append_separator(self.menu)
 
-        self.preferences_show_item = gtk.MenuItem(_(u"_Preferences"))
+        self.preferences_show_item = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
+        
         self.menu.append(self.preferences_show_item)
         # this is where you would connect your menu item up with a function:
         self.preferences_show_item.connect("activate", self.on_show_preferences_activated, None)
@@ -170,7 +172,7 @@ class ProjectHamsterStatusIconUnity():
         self._on_icon_glow_changed()
         self._on_show_label_changed()
         self._on_label_length_changed()
-        self._on_last_activities_size_changed()
+        self._on_last_activities_days_changed()
     
     def on_activate(self, data):
         self.project.show_hamster_window()
@@ -193,8 +195,8 @@ class ProjectHamsterStatusIconUnity():
         if self._show_label:
             self.update_label()
 
-    def _on_last_activities_size_changed(self):
-        self._last_activities_size = conf.get("last_activities_size")
+    def _on_last_activities_days_changed(self):
+        self._last_activities_days = conf.get("last_activities_days")
         self.update_last_activities()
             
     def _set_attention_icon(self):
@@ -251,20 +253,39 @@ class ProjectHamsterStatusIconUnity():
         dialogs.prefs.show(self.indicator)
         
     def update_last_activities(self):
-        date = dt.datetime.now() - dt.timedelta(days=365)
-        last_facts = runtime.storage.get_facts(date = date, end_date = dt.datetime.now(), limit = self._last_activities_size+1, asc_by_date = False)
+        date = dt.datetime.now() - dt.timedelta(days=self._last_activities_days)
+        last_facts = runtime.storage.get_facts(date = date, end_date = dt.datetime.now(), asc_by_date = False)
         self.last_activities_menu = gtk.Menu()
         if last_facts:
             self.last_activities_item.set_sensitive(True)
             self.last_activities_item.set_submenu(self.last_activities_menu)
-            for fact in last_facts[:self._last_activities_size]:
+            
+            serialized_names = []
+            facts = []
+            for fact in last_facts:
                 if fact.end_time:
-                    time = fact.start_time.strftime("%d.%m %H:%M")
                     fact_name = fact.serialized_name();
-                    menu_item = gtk.MenuItem(' '.join([time, fact_name]))
-                    menu_item.connect("activate", self.on_last_activity_activated, fact_name)
+                    if fact_name not in serialized_names:
+                        serialized_names.append(fact_name)
+                        facts.append(fact)
+            groups = {}
+            for fact in facts:
+                cat = fact.category or 'None'
+                if cat not in groups:
+                    groups[cat] = []
+                groups[cat].append(fact)
+            
+            for category in groups.keys():
+                menu_item = gtk.MenuItem(_(category))
+                menu_item.set_sensitive(False)
+                self.last_activities_menu.append(menu_item)
+                menu_item.show()
+                for fact in groups[category]:
+                    menu_item = gtk.MenuItem(fact.serialized_name_for_menu())
+                    menu_item.connect("activate", self.on_last_activity_activated, fact.serialized_name_for_menu())
                     self.last_activities_menu.append(menu_item)
                     menu_item.show()
+                    
         else:
             self.last_activities_item.set_sensitive(False)
     
