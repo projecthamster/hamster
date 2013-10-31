@@ -17,31 +17,65 @@ pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
 
-h1. Screenshots
+h1. RT features
 
-!https://raw.github.com/gsobczyk/hamster/master/entry.png!
+h2. Settings
 
 !https://raw.github.com/gsobczyk/hamster/master/settings.png!
 
-h1. Additional settings
+h2. Search
 
-To enable/disable the icon glow: 
+h3. Simple
 
-pre. $ gconftool-2 --set "/apps/hamster-time-tracker/icon_glow" --type bool "false"
-$ gconftool-2 --set "/apps/hamster-time-tracker/icon_glow" --type bool "true"
+When typing name of new activity suggestions are generated based on whole text, even if cursor isn't at the end:
 
-To enable/disable the activity label:
+bc. lm dzp zarzą
 
-pre. $ gconftool-2 --set "/apps/hamster-time-tracker/show_label" --type bool "true"
-$ gconftool-2 --set "/apps/hamster-time-tracker/show_label" --type bool "false"
+produces: 
+* #105030: LM-DzP-GPU.OG.03 Zarządzanie użytkownikami konsolowymi
 
-To set the maximum label length:
+h3. User tickets
 
-pre. $ gconftool-2 --set "/apps/hamster-time-tracker/label_length" --type int "20"
+There is a possibility to search tickets holded by specified user. Just type user login:
 
-To set the last activities submenu size:
+bc. serwis aadamski mig 
 
-pre. $ gconftool-2 --set "/apps/hamster-time-tracker/last_activities_days" --type int "7"
+produces:
+* #103636: MIG/ Obsługa serwisowa 10/2013 (Adrian)
+* #87013: Mieloch - prace serwisowe
+* #76614: Eltron- serwis
+
+!https://raw.github.com/gsobczyk/hamster/master/entry.png!
+
+h3. Back to the future (past)
+
+If you want start activity whitch should be tracked for 17 minutes, just write:
+
+bc. -17 lm dzp zarzą
+
+h2. Tray
+
+Tray is compatible with Ubuntu. Label is configured in options (label visibility, length). When label is visible shows:
+
+@activity@ and @time@ / @total tracked today@ 
+
+Positions in menu:
+* @New Activity@
+* @Stop tracking@
+* @Last activities@ - submenu with last activities in last few days
+* @Add earlier activity@
+* @Show preview@
+* @Preferences@
+* @Quit@
+
+Last activities are grouped by category.
+
+h2. Export to RT
+
+From @Show preview@ window you can export times to RT. Simply select tickets to export (exported are not selected) and @Report selected...@. This will bring the window where you can choose to group comments and test export. There is possibility to edit comment and time amount (just double click on time entry or comment).
+
+!https://raw.github.com/gsobczyk/hamster/master/rt-export.png!
+
 
 h1. hamster-applet -> hamster-time-tracker clean up
 

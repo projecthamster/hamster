@@ -268,14 +268,14 @@ class ProjectHamsterStatusIconUnity():
                     if fact_name not in serialized_names:
                         serialized_names.append(fact_name)
                         facts.append(fact)
-            groups = {}
+            groups = stuff.ordered_dict()
             for fact in facts:
                 cat = fact.category or 'None'
                 if cat not in groups:
                     groups[cat] = []
                 groups[cat].append(fact)
             
-            for category in groups.keys():
+            for category in groups.order():
                 menu_item = gtk.MenuItem(_(category))
                 menu_item.set_sensitive(False)
                 self.last_activities_menu.append(menu_item)
