@@ -77,7 +77,7 @@ class Fact(object):
                 activity = activity[activity.find(" ")+1:]
 
         #see if we have description of activity somewhere here (delimited by comma)
-        if not description and activity.find(",") > 0:
+        if activity.find(",") > 0:
             activity, self.description = activity.split(",", 1)
 
             if " #" in self.description:
