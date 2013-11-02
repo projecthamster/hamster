@@ -373,7 +373,8 @@ class PreferencesEditor(gtk.Object):
         self.get_widget("show_label").set_active(conf.get("show_label"))
         self.get_widget("label_length").set_sensitive(conf.get("show_label"))
         self.get_widget("label_length").set_value(conf.get("label_length"))
-        self.get_widget("last_activities_size").set_value(conf.get("last_activities_size"))
+        self.get_widget("last_activities_days").set_value(conf.get("last_activities_days"))
+        self.get_widget("rt_activities_only").set_active(conf.get("rt_activities_only"))
 
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -781,6 +782,9 @@ class PreferencesEditor(gtk.Object):
     def on_notify_on_idle_toggled(self, checkbox):
         conf.set("notify_on_idle", checkbox.get_active())
 
+    def on_rt_activities_only_toggled(self, checkbox):
+        conf.set('rt_activities_only', checkbox.get_active())
+
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
@@ -819,9 +823,9 @@ class PreferencesEditor(gtk.Object):
         value = int(scale.get_value())
         conf.set("label_length", value)
         
-    def on_last_activities_size_value_changed(self, scale):
+    def on_last_activities_days_value_changed(self, scale):
         value = int(scale.get_value())
-        conf.set("last_activities_size", value)
+        conf.set("last_activities_days", value)
 
     def on_preferences_window_destroy(self, window):
         self.window = None

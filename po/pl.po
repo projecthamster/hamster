@@ -427,8 +427,8 @@ msgid "Label length"
 msgstr "Długość etykiety"
 
 #: ../data/preferences.ui.h:29
-msgid "Last activities size"
-msgstr "Liczba ostatnich aktywności"
+msgid "Last activities days"
+msgstr "Liczba aktywności z ostatnich dni"
 
 #: ../data/preferences.ui.h:30
 msgid "Tray"

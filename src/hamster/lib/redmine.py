@@ -45,14 +45,20 @@ class Redmine:
 
         project_id = project_id or name
         r = self.session.get(self.get_project_url(project_id=project_id))
+        if r.status_code != requests.codes.ok:
+            return False
         return self.Project(r.json())
 
     def getProjects(self):
         r = self.session.get(self.get_project_url(), data=json.dumps({'limit': 999}))
+        if r.status_code != requests.codes.ok:
+            return False
         return [self.Project(data) for data in json.loads(r.content)['projects']]
 
     def getIssue(self, issue_id):
         r = self.session.get(self.get_issue_url(issue_id))
+        if r.status_code != requests.codes.ok:
+            return False
         return self.Issue(json.loads(r.content))
 
     def getIssues(self, criteria=None):
@@ -62,6 +68,8 @@ class Redmine:
             criteria = ({'limit': 100})
         r = self.session.get(self.get_issue_url(),
                        data=json.dumps(criteria))
+        if r.status_code != requests.codes.ok:
+            return False
         return [self.Issue(data) for data in json.loads(r.content)['issues']]
 
     def updateIssue(self, issue_id, data):

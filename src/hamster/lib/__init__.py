@@ -77,7 +77,7 @@ class Fact(object):
                 activity = activity[activity.find(" ")+1:]
 
         #see if we have description of activity somewhere here (delimited by comma)
-        if activity.find(",") > 0:
+        if not description and activity.find(",") > 0:
             activity, self.description = activity.split(",", 1)
 
             if " #" in self.description:
@@ -135,6 +135,19 @@ class Fact(object):
             res += ",%s %s" % (self.description or "",
                                " ".join(["#%s" % tag for tag in self.tags]))
             #TODO: Fix spacing after comma in ,%s...; does not match freeform
+        return res
+    
+    def serialized_name_for_menu(self):
+        res = ""
+            
+        res += self.activity
+
+        if self.description or self.tags:
+            res += ",%s %s" % (self.description or "",
+                               " ".join(["#%s" % tag for tag in self.tags]))
+        
+        res += self.start_time.strftime(" (%d.%m %H:%M)")
+        
         return res
 
     def __str__(self):
