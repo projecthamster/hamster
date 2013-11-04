@@ -3,8 +3,8 @@ Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-
 
 h1. Dependencies
 
-Debian-based: @apt-get install git-core gettext intltool python-gconf python-requests python-beaker@
-RPM-based: @yum install git-core gettext intltool gnome-python2-gconf python-requests python-beaker@
+Debian-based: @apt-get install git-core gettext intltool python-gconf python-requests python-beaker python-wnck@
+RPM-based: @yum install git-core gettext intltool gnome-python2-gconf python-requests python-beaker python-wnck@
 
 h1. Installing
 

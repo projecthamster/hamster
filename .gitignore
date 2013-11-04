@@ -25,6 +25,7 @@ hamster-time-tracker-*.tar.gz
 org.gnome.hamster.service
 .lock-wscript
 build
+.coverage
 .project
 .pydevproject
 .settings/

@@ -21,7 +21,7 @@ import gtk, gobject, pango
 import datetime as dt
 import re
 
-from ..configuration import runtime
+from ..configuration import runtime, conf
 from ..lib import Fact, stuff, graphics
 from .. import external
 from ..lib.rt import TICKET_NAME_REGEX
@@ -73,13 +73,8 @@ class ActivityEntry(gtk.Entry):
         self.activity_column.set_expand(True)
         self.tree.append_column(self.activity_column)
 
-        self.category_cell = gtk.CellRendererText()
-        self.category_cell.set_property('alignment', pango.ALIGN_RIGHT)
-        self.category_cell.set_property('scale', pango.SCALE_SMALL)
-        self.category_cell.set_property('yalign', 0.0)
-
         self.category_column = gtk.TreeViewColumn("Category",
-                                                  self.category_cell,
+                                                  gtk.CellRendererText(),
                                                   text=2)
         self.tree.append_column(self.category_column)
 
@@ -160,7 +155,8 @@ class ActivityEntry(gtk.Entry):
         self.time_column.set_visible(fact.start_time is not None and self.filter.find("@") == -1)
 
 
-        self.category_column.set_visible(self.filter.find("@") == -1)
+        self.activity_column.set_visible(self.filter.find("@") == -1)
+        self.category_column.set_visible(self.filter.find("@") != -1)
 
 
         #set proper background color (we can do that only on a realised widget)
@@ -170,7 +166,6 @@ class ActivityEntry(gtk.Entry):
 
         text_color = self.get_style().text[gtk.STATE_NORMAL]
         category_color = graphics.Colors.contrast(text_color,  100)
-        self.category_cell.set_property('foreground-gdk', graphics.Colors.gdk(category_color))
 
 
         #move popup under the widget
@@ -277,16 +272,23 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time, category.get('rt_id')], None)
+                    store.append([fillable, self.filter[:self.filter.find("@")], category['name'], time, category.get('rt_id')])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             activities_to_append = []
-            if not self.external_activities:
+            if conf.get("rt_activities_only"):
+                if not self.external_activities:
+                    for a in self.activities:
+                        activities_to_append.append(a)
+                else:
+                    for a in self.external_activities:
+                        activities_to_append.append(a)
+            else:
                 for a in self.activities:
                     activities_to_append.append(a)
-            else:
-                for a in self.external_activities:
-                    activities_to_append.append(a)
+                if self.external_activities:
+                    for a in self.external_activities:
+                        activities_to_append.append(a)
 
             filtered = []
             names = []
