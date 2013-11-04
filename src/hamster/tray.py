@@ -1,14 +1,11 @@
 # coding: utf-8
 #from hamster indicator
-import gconf
-import os.path
 import gtk
 import datetime as dt
 import gobject
-import locale
 from hamster.lib import Fact, stuff
 from hamster.configuration import dialogs, runtime, conf
-from itertools import groupby
+from collections import OrderedDict
 
 have_appindicator = True
 try:
@@ -268,14 +265,14 @@ class ProjectHamsterStatusIconUnity():
                     if fact_name not in serialized_names:
                         serialized_names.append(fact_name)
                         facts.append(fact)
-            groups = stuff.ordered_dict()
+            groups = OrderedDict()
             for fact in facts:
                 cat = fact.category or 'None'
                 if cat not in groups:
                     groups[cat] = []
                 groups[cat].append(fact)
             
-            for category in groups.order():
+            for category in groups.keys():
                 menu_item = gtk.MenuItem(_(category))
                 menu_item.set_sensitive(False)
                 self.last_activities_menu.append(menu_item)
