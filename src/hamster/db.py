@@ -563,7 +563,7 @@ class Storage(storage.Storage):
             if previous and previous['start_time'] <= start_time:
                 # check if maybe that is the same one, in that case no need to restart
                 if previous["activity_id"] == activity_id \
-                   and set(previous["tags"]) == set([tag["name"] for tag in tags]) \
+                   and set(previous["tags"]) == set([tag[1] for tag in tags]) \
                    and (previous["description"] or "") == (fact.description or ""):
                     return None
 
@@ -579,7 +579,7 @@ class Storage(storage.Storage):
                     if len(facts) > 1 and 60 >= (start_time - facts[-2]['end_time']).seconds >= 0:
                         before = facts[-2]
                         if before["activity_id"] == activity_id \
-                           and set(before["tags"]) == set([tag["name"] for tag in tags]):
+                           and set(before["tags"]) == set([tag[1] for tag in tags]):
                             # resume and return
                             update = """
                                        UPDATE facts
