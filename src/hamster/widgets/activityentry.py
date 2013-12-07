@@ -272,7 +272,7 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, self.filter[:self.filter.find("@")], category['name'], time, category.get('rt_id')])
+                    store.append([fillable, self.filter[:self.filter.find("@")], category['name'], time, category.get('rt_id'), None])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
             activities_to_append = []
