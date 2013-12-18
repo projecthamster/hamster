@@ -36,7 +36,7 @@ from lib import stuff, charting
 from lib.i18n import C_
 
 
-WITHOUT_TAG = 'without tag'
+WITHOUT_TAG = _('without tag')
 
 class TotalsBox(gtk.VBox):
     def __init__(self):
@@ -154,7 +154,7 @@ class TotalsBox(gtk.VBox):
             if self.selected_tags:
                 if fact.tags and not (set(self.selected_tags) & set(fact.tags)):
                     continue
-                if not fact.tags and _(WITHOUT_TAG) not in self.selected_tags:
+                if not fact.tags and WITHOUT_TAG not in self.selected_tags:
                     continue
             facts.append(fact)
             
