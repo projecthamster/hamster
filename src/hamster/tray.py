@@ -279,8 +279,15 @@ class ProjectHamsterStatusIconUnity():
                 menu_item.show()
                 for fact in groups[category]:
                     menu_item = gtk.MenuItem(fact.serialized_name_for_menu())
-                    menu_item.connect("activate", self.on_last_activity_activated, fact.serialized_name())
+                    menu_item.connect("activate-item", self.on_last_activity_activated, fact.serialized_name())
                     self.last_activities_menu.append(menu_item)
+                    past_items = gtk.Menu()
+                    menu_item.set_submenu(past_items)
+                    for i in [10, 20, 30, 45, 60]:
+                        past_item = gtk.MenuItem(_('-%s minutes') % i)
+                        past_item.connect("activate", self.on_last_activity_activated, '-%s %s' % (i, fact.serialized_name))
+                        past_items.append(past_item)
+                        past_item.show()
                     menu_item.show()
                     
         else:
@@ -336,6 +343,8 @@ class ProjectHamsterStatusIconUnity():
             self.set_activity_text(label, None)
             indicator_label = self._get_no_activity_label(today_duration)
 
+        label = "%s" % _(u"New activity")
+        self.set_activity_text(label, None)
         # Update the indicator label, if needed
         if self._show_label:
             self.indicator.set_label(indicator_label)
