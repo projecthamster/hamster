@@ -101,7 +101,7 @@ class DesktopIntegrations(object):
                                    summary,
                                    details,
                                    [],
-                                   {"urgency": 0, "transient" : True},
+                                   {"urgency": dbus.Byte(0), "transient" : True},
                                    -1)
         self._last_notification = notification
 
