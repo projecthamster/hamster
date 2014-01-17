@@ -681,12 +681,12 @@ class Storage(storage.Storage):
             # Split by NOT, but only once
             search_terms = search_terms.split('NOT', 1)
 
-            if (search_terms[0] and search_terms[0].strip()):
+            if search_terms[0] and search_terms[0].strip():
                 query += """ AND a.id in (SELECT id
                                         FROM fact_index
                                        WHERE fact_index MATCH '%s')""" % search_terms[0].strip()
 
-            if search_terms[1] and search_terms[1].strip():
+            if len(search_terms)>1 and search_terms[1].strip():
                 query += """ AND a.id NOT in (SELECT id
                                         FROM fact_index
                                        WHERE fact_index MATCH '%s')""" % search_terms[1].strip()
