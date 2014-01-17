@@ -3,8 +3,8 @@ Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-
 
 h1. Dependencies
 
-Debian-based: @apt-get install git-core gettext intltool python-gconf@
-RPM-based: @yum install git-core gettext intltool gnome-python2-gconf@
+Debian-based: @apt-get install git-core gettext intltool python-gconf python-requests python-beaker python-wnck@
+RPM-based: @yum install git-core gettext intltool gnome-python2-gconf python-requests python-beaker python-wnck@
 
 h1. Installing
 
@@ -17,6 +17,65 @@ pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
 
+h1. RT features
+
+h2. Settings
+
+!https://raw.github.com/gsobczyk/hamster/master/settings.png!
+
+h2. Search
+
+h3. Simple
+
+When typing name of new activity suggestions are generated based on whole text, even if cursor isn't at the end:
+
+bc. lm dzp zarzą
+
+produces: 
+* #105030: LM-DzP-GPU.OG.03 Zarządzanie użytkownikami konsolowymi
+
+h3. User tickets
+
+There is a possibility to search tickets holded by specified user. Just type user login:
+
+bc. serwis aadamski mig 
+
+produces:
+* #103636: MIG/ Obsługa serwisowa 10/2013 (Adrian)
+* #87013: Mieloch - prace serwisowe
+* #76614: Eltron- serwis
+
+!https://raw.github.com/gsobczyk/hamster/master/entry.png!
+
+h3. Back to the future (past)
+
+If you want start activity whitch should be tracked for 17 minutes, just write:
+
+bc. -17 lm dzp zarzą
+
+h2. Tray
+
+Tray is compatible with Ubuntu. Label is configured in options (label visibility, length). When label is visible shows:
+
+@activity@ and @time@ / @total tracked today@ 
+
+Positions in menu:
+* @New Activity@
+* @Stop tracking@
+* @Last activities@ - submenu with last activities in last few days
+* @Add earlier activity@
+* @Show preview@
+* @Preferences@
+* @Quit@
+
+Last activities are grouped by category.
+
+h2. Export to RT
+
+From @Show preview@ window you can export times to RT. Simply select tickets to export (exported are not selected) and @Report selected...@. This will bring the window where you can choose to group comments and test export. There is possibility to edit comment and time amount (just double click on time entry or comment).
+
+!https://raw.github.com/gsobczyk/hamster/master/rt-export.png!
+
 
 h1. hamster-applet -> hamster-time-tracker clean up
 
@@ -27,4 +86,3 @@ the applet is long gone, the paths and file names have changed to
 pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
 ./waf configure build --prefix=/usr
 sudo ./waf uninstall
-

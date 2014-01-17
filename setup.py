@@ -6,6 +6,11 @@ from distutils import sysconfig
 
 data_dir = os.path.join(sysconfig.get_python_lib(), "hamster", "data")
 
+required_packages = [
+    "Beaker",
+    "requests",
+]
+
 setup(name='hamster-sqlite',
       version='0.3',
       description='Minimal dependency nicely abstracted sqlite backend of hamster time tracker - lets you connect to your hamster db and do stuff in python',
@@ -15,4 +20,5 @@ setup(name='hamster-sqlite',
       package_dir = {'': 'src'},
       py_modules = ['hamster.storage', 'hamster.db', 'hamster.lib.__init__'],
       data_files=[(data_dir, ['data/hamster.db'])],
+      install_requires=required_packages,
      )

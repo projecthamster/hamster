@@ -1,4 +1,5 @@
 *.pyc
+*.page
 autom4te.cache/
 m4/
 config.*
@@ -24,3 +25,7 @@ hamster-time-tracker-*.tar.gz
 org.gnome.hamster.service
 .lock-wscript
 build
+.coverage
+.project
+.pydevproject
+.settings/

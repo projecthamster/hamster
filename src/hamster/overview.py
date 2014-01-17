@@ -19,21 +19,23 @@
 
 
 import pygtk
+from hamster.widgets.facttree import FactTree, GroupRow, FactRow
+from lib.rt import TICKET_NAME_REGEX
 pygtk.require('2.0')
 
 import os
 import datetime as dt
 import calendar
 import webbrowser
+import re
 
 import gtk, gobject
-import pango
+import logging
 
-import widgets, reports
+import widgets, reports, external
 from configuration import runtime, conf, dialogs, load_ui_file
 from lib import Fact
 from lib import stuff, trophies
-from lib.i18n import C_
 
 from overview_activities import OverviewBox
 from overview_totals import TotalsBox
@@ -71,6 +73,7 @@ class Overview(gtk.Object):
         self.timechart.connect("zoom-out-clicked", self.on_timechart_zoom_out_clicked)
         self.timechart.connect("range-picked", self.on_timechart_new_range)
         self.get_widget("by_day_box").add(self.timechart)
+        self.start_button = self.get_widget("start_button")
 
         self._gui.connect_signals(self)
 
@@ -79,6 +82,10 @@ class Overview(gtk.Object):
             (runtime.storage, runtime.storage.connect('facts-changed',self.after_activity_update)),
             (conf, conf.connect('conf-changed', self.on_conf_change))
         ]
+        
+        
+        self.external = external.ActivitiesSource()
+        
         self.show()
 
 
@@ -164,6 +171,8 @@ class Overview(gtk.Object):
         self.facts = runtime.storage.get_facts(self.start_date, self.end_date, search_terms)
 
         self.get_widget("export").set_sensitive(len(self.facts) > 0)
+        self.get_widget("export_rt").set_sensitive(len(self.facts) > 0)
+        self.get_widget("export_rt").set_visible(conf.get("activities_source")=="rt")
 
         self.set_title()
 
@@ -429,9 +438,79 @@ class Overview(gtk.Object):
             self.window = None
 
             self.emit("on-close")
-
-
-
+           
+#    UNUSED 
+    def on_done_activate(self, button):
+        pass
+    
+#    UNUSED
+    def on_export_rt_activate(self, widget):
+        pass
+    
+    def on_start_activate(self, button):
+        to_report = filter(self.__is_rt_ticket, self.fact_tree.get_model())
+        to_report = [row[0].fact for row in to_report]
+        dialogs.export_rt.show(self, facts = to_report)
+        
+    def on_start_activate_2(self, button):
+        self.start_button.set_sensitive(False)
+        while gtk.events_pending(): 
+            gtk.main_iteration()
+#        runtime.storage.update_fact(fact_id, fact, temporary_activity, exported)
+        tree = self.fact_tree
+        to_report = filter(self.__is_rt_ticket, tree.get_model())
+        
+        for row in to_report:
+            self.__report(row[0])
+                
+        self.search()
+        while gtk.events_pending(): 
+            gtk.main_iteration()
+        self.start_button.set_sensitive(True)
+        
+    def __is_rt_ticket(self, row):
+        if not self.external.tracker:
+            logging.warn("Not connected to/logged in RT")
+            return False
+        if not isinstance(row[0], FactRow):
+            return False
+#            self.__report(row[0])
+        fact = row[0].fact
+        match = re.match(TICKET_NAME_REGEX, fact.activity)
+        if row[0].selected and fact.end_time and match:
+            return True
+        else:
+            return False
+    
+    def __report(self, fact_row):
+        fact = fact_row.fact
+        logging.warn(fact_row.name)
+        if self.external.tracker:
+            match = re.match(TICKET_NAME_REGEX, fact.activity)
+#            if not fact_row.selected:
+#                logging.warn("Row not selected: %s" % fact.activity)
+            if fact_row.selected and fact.end_time and match:
+                ticket_id = match.group(1)
+                text = self.get_text(fact)
+                time_worked = stuff.duration_minutes(fact.delta)
+                if self.external.tracker.comment(ticket_id, text, time_worked):
+                    logging.warn("updated ticket #%s: %s - %s min" % (ticket_id, text, time_worked))
+                    runtime.storage.update_fact(fact.id, fact, False,True)
+                    fact_row.selected = False
+                    
+            else:
+                logging.warn("Not a RT ticket or in progress: %s" % fact.activity)
+        else:
+            logging.warn("Not connected to/logged in RT")
+            
+    def get_text(self, fact):
+        text = "%s, %s-%s" % (fact.date, fact.start_time.strftime("%H:%M"), fact.end_time.strftime("%H:%M"))
+        if fact.description:
+            text += ": %s" % (fact.description)
+        if fact.tags:
+            text += " ("+", ".join(fact.tags)+")"
+        return text
+    
     def on_delete_window(self, window, event):
         self.close_window()
         return True

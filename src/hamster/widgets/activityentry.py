@@ -19,16 +19,17 @@
 
 import gtk, gobject, pango
 import datetime as dt
+import re
 
-from ..configuration import runtime
+from ..configuration import runtime, conf
 from ..lib import Fact, stuff, graphics
 from .. import external
+from ..lib.rt import TICKET_NAME_REGEX
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {
         'value-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
-
 
     def __init__(self):
         gtk.Entry.__init__(self)
@@ -37,6 +38,7 @@ class ActivityEntry(gtk.Entry):
         self.external_activities = [] # suggestions from outer space
         self.categories = None
         self.filter = None
+        self.timeout_id = None
         self.max_results = 10 # limit popup size to 10 results
         self.external = external.ActivitiesSource()
 
@@ -71,13 +73,8 @@ class ActivityEntry(gtk.Entry):
         self.activity_column.set_expand(True)
         self.tree.append_column(self.activity_column)
 
-        self.category_cell = gtk.CellRendererText()
-        self.category_cell.set_property('alignment', pango.ALIGN_RIGHT)
-        self.category_cell.set_property('scale', pango.SCALE_SMALL)
-        self.category_cell.set_property('yalign', 0.0)
-
         self.category_column = gtk.TreeViewColumn("Category",
-                                                  self.category_cell,
+                                                  gtk.CellRendererText(),
                                                   text=2)
         self.tree.append_column(self.category_column)
 
@@ -133,11 +130,14 @@ class ActivityEntry(gtk.Entry):
         if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
             self.get_toplevel().disconnect(self._parent_click_watcher)
             self._parent_click_watcher = None
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
         self.popup.hide()
 
     def show_popup(self):
         result_count = self.tree.get_model().iter_n_children(None)
-        if result_count <= 1:
+        if result_count < 1:
             self.hide_popup()
             return
 
@@ -155,7 +155,8 @@ class ActivityEntry(gtk.Entry):
         self.time_column.set_visible(fact.start_time is not None and self.filter.find("@") == -1)
 
 
-        self.category_column.set_visible(self.filter.find("@") == -1)
+        self.activity_column.set_visible(self.filter.find("@") == -1)
+        self.category_column.set_visible(self.filter.find("@") != -1)
 
 
         #set proper background color (we can do that only on a realised widget)
@@ -165,7 +166,6 @@ class ActivityEntry(gtk.Entry):
 
         text_color = self.get_style().text[gtk.STATE_NORMAL]
         category_color = graphics.Colors.contrast(text_color,  100)
-        self.category_cell.set_property('foreground-gdk', graphics.Colors.gdk(category_color))
 
 
         #move popup under the widget
@@ -227,13 +227,29 @@ class ActivityEntry(gtk.Entry):
         if self.activities and self.categories and self.filter == self.get_text().decode('utf8', 'replace')[:cursor]:
             return #same thing, no need to repopulate
 
-        self.filter = self.get_text().decode('utf8', 'replace')[:cursor]
+        self.filter = self.get_text().decode('utf8', 'replace')#[:cursor]
         fact = Fact(self.filter)
 
         # do not cache as ordering and available options change over time
         self.activities = runtime.storage.get_activities(fact.activity)
         self.external_activities = self.external.get_activities(fact.activity)
-        self.activities.extend(self.external_activities)
+        new_activities = []
+        for activity in self.activities:
+            match = re.match("^(#\d+: )", activity['name'])
+            if match and self.external_activities:
+                ticket_prefix = match.group(1)
+                delete = False
+                for external_activity in self.external_activities:
+                    if external_activity['name'].startswith(ticket_prefix):
+                        delete = True
+                if not delete:
+                    new_activities.append(activity)
+            else:
+                new_activities.append(activity)
+                
+        self.activities = new_activities
+                    
+        #self.activities.extend(self.external_activities)
 
         self.categories = self.categories or runtime.storage.get_categories()
 
@@ -247,7 +263,7 @@ class ActivityEntry(gtk.Entry):
 
         store = self.tree.get_model()
         if not store:
-            store = gtk.ListStore(str, str, str, str)
+            store = gtk.ListStore(str, str, str, str, str, str)
             self.tree.set_model(store)
         store.clear()
 
@@ -256,18 +272,42 @@ class ActivityEntry(gtk.Entry):
             for category in self.categories:
                 if key in category['name'].decode('utf8', 'replace').lower():
                     fillable = (self.filter[:self.filter.find("@") + 1] + category['name'])
-                    store.append([fillable, category['name'], fillable, time])
+                    store.append([fillable, self.filter[:self.filter.find("@")], category['name'], time, category.get('rt_id'), None])
         else:
             key = fact.activity.decode('utf8', 'replace').lower()
-            for activity in self.activities:
+            activities_to_append = []
+            if conf.get("rt_activities_only"):
+                if not self.external_activities:
+                    for a in self.activities:
+                        activities_to_append.append(a)
+                else:
+                    for a in self.external_activities:
+                        activities_to_append.append(a)
+            else:
+                for a in self.activities:
+                    activities_to_append.append(a)
+                if self.external_activities:
+                    for a in self.external_activities:
+                        activities_to_append.append(a)
+
+            filtered = []
+            names = []
+            for a in activities_to_append:
+                if not a['name'] in names:
+                    filtered.append(a)
+                    names.append(a['name'])
+            
+            for activity in filtered:
                 fillable = activity['name'].lower()
+                minutes = None
                 if activity['category']:
                     fillable += "@%s" % activity['category']
 
                 if time: #as we also support deltas, for the time we will grab anything up to first space
-                    fillable = "%s %s" % (self.filter.split(" ", 1)[0], fillable)
+                    minutes = self.filter.split(" ", 1)[0]
+                    fillable = "%s %s" % (minutes, fillable)
 
-                store.append([fillable, activity['name'].lower(), activity['category'], time])
+                store.append([fillable, activity['name'].lower(), activity['category'], time, activity.get('rt_id'), minutes])
 
     def after_activity_update(self, widget):
         self.refresh_activities()
@@ -279,14 +319,28 @@ class ActivityEntry(gtk.Entry):
         self.news = True
 
     def _on_button_press_event(self, button, event):
+        self._populate_and_show_delayed()
+        
+    def _populate_and_show_delayed(self):
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
+        self.timeout_id = gobject.timeout_add(750, self._populate_and_show)
+        
+    def _populate_and_show(self):
         self.populate_suggestions()
         self.show_popup()
+        if self.timeout_id:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = None
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
-                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
+                    selected = self._get_selected_text(self.tree)
+#                    self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
+                    self.set_text(selected)
                 self.hide_popup()
                 self.set_position(len(self.get_text()))
             else:
@@ -301,11 +355,10 @@ class ActivityEntry(gtk.Entry):
         elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
             return False
         else:
-            self.populate_suggestions()
-            self.show_popup()
+            self._populate_and_show_delayed()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
-                self.complete_inline()
+            #if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+            #    self.complete_inline()
 
 
 
@@ -336,11 +389,28 @@ class ActivityEntry(gtk.Entry):
             return False
 
     def _on_tree_button_press_event(self, tree, event):
-        model, iter = tree.get_selection().get_selected()
-        value = model.get_value(iter, 0)
-        self.set_text(value)
+        self.set_text(self._get_selected_text(tree))
         self.hide_popup()
         self.set_position(len(self.get_text()))
+        
+    def _get_selected_text(self, tree):
+        model, iter = tree.get_selection().get_selected()
+        #TODO tutaj jest błąd!
+        name = model.get_value(iter, 1)
+        rt_id = model.get_value(iter, 4)
+        delta_time = model.get_value(iter, 5)
+        if delta_time:
+            name = ' '.join([delta_time, name])
+        
+        match = re.match(TICKET_NAME_REGEX, name)
+        category = ""
+        if not rt_id and match:
+            rt_id = match.group(1)
+        if rt_id:
+            category = self.external.get_ticket_category(rt_id)
+        if not category:
+            category = model.get_value(iter, 2)
+        return '@'.join([name, category])
 
     def _on_selected(self):
         if self.news and self.get_text().strip():

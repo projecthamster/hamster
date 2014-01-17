@@ -220,3 +220,4 @@ def escape_pango(text):
     text = text.replace("<", "&lt;")
     text = text.replace(">", "&gt;")
     return text
+

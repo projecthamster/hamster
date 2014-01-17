@@ -363,7 +363,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -389,7 +390,7 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "activity_id", "category", "tag"]
+                    "activity_id", "category", "tag", "exported"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
 
             grouped_fact["tags"] = [ft["tag"] for ft in fact_tags if ft["tag"]]
@@ -516,10 +517,11 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
+    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False, exported = False):
         fact = Fact(serialized_fact,
                     start_time = start_time,
-                    end_time = end_time)
+                    end_time = end_time, 
+                    exported = exported)
 
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
@@ -608,10 +610,10 @@ class Storage(storage.Storage):
 
         # finally add the new entry
         insert = """
-                    INSERT INTO facts (activity_id, start_time, end_time, description)
-                               VALUES (?, ?, ?, ?)
+                    INSERT INTO facts (activity_id, start_time, end_time, description, exported)
+                               VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, fact.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description, fact.exported))
 
         fact_id = self.__last_insert_rowid()
 
@@ -639,7 +641,7 @@ class Storage(storage.Storage):
         return self.__get_facts(today)
 
 
-    def __get_facts(self, date, end_date = None, search_terms = ""):
+    def __get_facts(self, date, end_date = None, search_terms = "", limit = 0, asc_by_date = True):
         try:
             from configuration import conf
             day_start = conf.get("day_start_minutes")
@@ -660,7 +662,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -674,13 +677,26 @@ class Storage(storage.Storage):
             self.__check_index(datetime_from, datetime_to)
 
             search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
-            query += """ AND a.id in (SELECT id
+
+            # Split by NOT, but only once
+            search_terms = search_terms.split('NOT', 1)
+
+            if search_terms[0] and search_terms[0].strip():
+                query += """ AND a.id in (SELECT id
                                         FROM fact_index
-                                       WHERE fact_index MATCH '%s')""" % search_terms
+                                       WHERE fact_index MATCH '%s')""" % search_terms[0].strip()
 
+            if len(search_terms)>1 and search_terms[1].strip():
+                query += """ AND a.id NOT in (SELECT id
+                                        FROM fact_index
+                                       WHERE fact_index MATCH '%s')""" % search_terms[1].strip()
 
-
-        query += " ORDER BY a.start_time, e.name"
+        if asc_by_date:
+            query += " ORDER BY a.start_time, e.name"
+        else:
+            query += " ORDER BY a.start_time desc, e.name"
+        if limit and limit > 0:
+            query += " LIMIT " + str(limit)
 
         facts = self.fetchall(query, (self._unsorted_localized,
                                       datetime_from,
@@ -772,7 +788,7 @@ class Storage(storage.Storage):
         """
         search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, (u'%s%%' % search, ))
+        activities = self.fetchall(query, (u'%%%s%%' % search, ))
 
         return activities
 
@@ -859,7 +875,8 @@ class Storage(storage.Storage):
                               a.description as description,
                               b.name AS name, b.id as activity_id,
                               coalesce(c.name, ?) as category,
-                              e.name as tag
+                              e.name as tag,
+                              a.exported AS exported
                          FROM facts a
                     LEFT JOIN activities b ON a.activity_id = b.id
                     LEFT JOIN categories c ON b.category_id = c.id
@@ -962,7 +979,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 9
+        current_version = 10
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -985,6 +1002,10 @@ class Storage(storage.Storage):
             # adding full text search
             self.execute("""CREATE VIRTUAL TABLE fact_index
                                            USING fts3(id, name, category, description, tag)""")
+        if version < 10:
+            # adding exported
+            self.execute("""ALTER TABLE facts ADD COLUMN exported bool default false""")
+            self.execute("""UPDATE facts set exported=1""")
 
 
         # at the happy end, update version number

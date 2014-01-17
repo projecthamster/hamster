@@ -29,9 +29,14 @@ def figure_time(str_time):
 
 
 class Fact(object):
+    
+    STRINGFORMAT = "%d-%m-%Y %H:%M"
+    TIMESTRINGFORMAT = "%H:%M"
+    
+    #TODO: Change attribute name for id.
     def __init__(self, activity, category = "", description = "", tags = "",
                  start_time = None, end_time = None, id = None, delta = None,
-                 date = None, activity_id = None):
+                 date = None, activity_id = None, exported = False):
         """the category, description and tags can be either passed in explicitly
         or by using the "activity@category, description #tag #tag" syntax.
         explicitly stated values will take precedence over derived ones"""
@@ -45,8 +50,9 @@ class Fact(object):
         self.id = id
         self.ponies = False
         self.delta = delta
-        self.date = date
+        self.date = date #TODO: Where is this used???
         self.activity_id = activity_id
+        self.exported = exported
 
         # parse activity
         input_parts = activity.strip().split(" ")
@@ -128,12 +134,26 @@ class Fact(object):
         if self.description or self.tags:
             res += ",%s %s" % (self.description or "",
                                " ".join(["#%s" % tag for tag in self.tags]))
+            #TODO: Fix spacing after comma in ,%s...; does not match freeform
+        return res
+    
+    def serialized_name_for_menu(self):
+        res = ""
+            
+        res += self.activity
+
+        if self.description or self.tags:
+            res += ",%s %s" % (self.description or "",
+                               " ".join(["#%s" % tag for tag in self.tags]))
+        
+        res += self.start_time.strftime(" (%d.%m %H:%M)")
+        
         return res
 
     def __str__(self):
         time = ""
         if self.start_time:
-            time = self.start_time.strftime("%d-%m-%Y %H:%M")
+            time = self.start_time.strftime(self.STRINGFORMAT)
         if self.end_time:
-            time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
+            time = "%s - %s" % (time, self.end_time.strftime(self.TIMESTRINGFORMAT))
         return "%s %s" % (time, self.serialized_name())

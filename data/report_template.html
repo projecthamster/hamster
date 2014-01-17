@@ -146,7 +146,8 @@
             // turn object into a list of tuples and convert durations from seconds to hours
             var max_duration = 0;
             for (var key in data) {
-                var duration = data[key] / 60 / 60.0;
+                //var duration = data[key] / 60 / 60.0;
+                var duration = data[key] / 60;
                 totals.push([key, duration]); // hours
 
                 max_duration = Math.max(max_duration, duration);
@@ -167,7 +168,8 @@
                 row.append(label);
 
 
-                var duration = Math.round(total[1] * 10) / 10; // round to one decimal
+                //var duration = Math.round(total[1] * 10) / 10; // round to one decimal
+                var duration = Math.round(total[1]);
                 var duration_label = $("<td />");
                 duration_label.text(duration);
                 row.append(duration_label);
@@ -297,6 +299,10 @@
 
             // determine if we will be doing any internal counting
             var keys = [];
+            var show_days = false;
+            if ($("#show_days").attr("checked"))
+                show_days = true;
+
             if ($("#show_activities").attr("checked"))
                 keys.push("activity");
 
@@ -332,11 +338,15 @@
                     dateTotal += fact.delta;
                 }
 
-                dateTotal = Math.round(dateTotal / 60 / 60 * 10) / 10;
-                table.append("<tr><th>" + dateString + "</th><th>" + dateTotal +"</th></tr>");
+                //dateTotal = Math.round(dateTotal / 60 / 60 * 10) / 10;
+                dateTotal = Math.round(dateTotal / 60);
+                if (show_days){
+              		table.append("<tr><th>" + dateString + "</th><th>" + dateTotal +"</th></tr>");
+              	}
 
                 for (var key in factTotals) {
-                    keyTotal = Math.round(factTotals[key] / 60 / 60 * 10) / 10;
+                    keyTotal = Math.round(factTotals[key] / 60);
+                    //keyTotal = Math.round(factTotals[key] / 60 / 60 * 10) / 10;
                     table.append("<tr><td>" + key + "</td><td>" + keyTotal +"</td></tr>");
                 }
 
@@ -385,7 +395,7 @@
                     </td>
                     <td>
                         <!-- there is also duration_decimal and duration_minutes -->
-                        $duration
+                        $duration_minutes
                     </td>
                     <td>$description</td>
                 </tr>
@@ -403,14 +413,17 @@
 
                 <div class="by_day_controls">
                     $show_prompt
+                    <input type="checkbox" id="show_days" checked="checked"></input>
+                    <label for="show_days">$days_totals_heading</label>
+                    
                     <input type="checkbox" id="show_activities" checked="checked"></input>
-                    <label for="show_details">$activity_totals_heading</label>
+                    <label for="show_activities">$activity_totals_heading</label>
 
-                    <input type="checkbox" id="show_categories" checked="checked"></input>
-                    <label for="show_totals">$category_totals_heading</label>
+                    <input type="checkbox" id="show_categories"></input>
+                    <label for="show_categories">$category_totals_heading</label>
 
-                    <input type="checkbox" id="show_tags" checked="checked"></input>
-                    <label for="show_totals">$tag_totals_heading</label>
+                    <input type="checkbox" id="show_tags"></input>
+                    <label for="show_tags">$tag_totals_heading</label>
                 </div>
 
                 <table id="date_facts"></table>
