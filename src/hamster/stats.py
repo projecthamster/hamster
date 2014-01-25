@@ -59,7 +59,7 @@ class Stats(gtk.Object):
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
-        self.window.set_position(gtk.WIN_POS_CENTER)
+        self.window.set_position(gtk.WindowPosition.CENTER)
         self.chart_category_totals = charting.Chart(value_format = "%.1f",
                                                        max_bar_width = 20,
                                                        legend_width = 70,

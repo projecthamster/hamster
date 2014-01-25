@@ -125,7 +125,7 @@ class Overview(gtk.Object):
                 self.window.move(x, y)
                 self.window.resize(w, h)
             else:
-                self.window.set_position(gtk.WIN_POS_CENTER)
+                self.window.set_position(gtk.WindowPosition.CENTER)
 
 
     def on_fact_tree_button_press(self, treeview, event):

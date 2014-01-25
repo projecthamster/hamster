@@ -190,7 +190,7 @@ class DailyView(object):
                 self.window.move(x, y)
                 self.window.resize(w, h)
             else:
-                self.window.set_position(gtk.WIN_POS_CENTER)
+                self.window.set_position(gtk.WindowPosition.CENTER)
 
     def toggle_hamster_window(self):
         if not self.window:
