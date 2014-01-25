@@ -349,7 +349,7 @@ class Graphics(object):
             #        should explain better
             raise "Can not create layout without existing context!"
 
-        layout = pangocairo.create_layout(context)
+        layout = pangocairo.create_layout(self.context)
         font_desc = pango.FontDescription(_font_desc)
         if size: font_desc.set_absolute_size(size * pango.SCALE)
 
