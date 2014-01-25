@@ -299,7 +299,7 @@ class GConfStore(gobject.GObject, Singleton):
         elif vtype in (list, tuple):
             #Save every value as a string
             strvalues = [str(i) for i in value]
-            self._client.set_list(key, gconf.VALUE_STRING, strvalues)
+            #self._client.set_list(key, gconf.VALUE_STRING, strvalues)
 
         return True
 
