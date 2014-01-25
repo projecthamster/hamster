@@ -29,6 +29,10 @@ except: # we can also live without tweener. Scene.animate will not work
 import colorsys
 from collections import deque
 
+# lemme know if you know a better way how to get default font
+_test_label = gtk.Label("Hello")
+_font_desc = _test_label.get_style().font_desc.to_string()
+
 
 class ColorUtils(object):
     hex_color_normal = re.compile("#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})")
@@ -346,7 +350,7 @@ class Graphics(object):
             raise "Can not create layout without existing context!"
 
         layout = pangocairo.create_layout(context)
-        font_desc = pango.FontDescription(gtk.Style().font_desc.to_string())
+        font_desc = pango.FontDescription(_font_desc)
         if size: font_desc.set_absolute_size(size * pango.SCALE)
 
         layout.set_font_description(font_desc)
@@ -354,7 +358,7 @@ class Graphics(object):
 
     def show_label(self, text, size = None, color = None, font_desc = None):
         """display text. unless font_desc is provided, will use system's default font"""
-        font_desc = pango.FontDescription(font_desc or gtk.Style().font_desc.to_string())
+        font_desc = pango.FontDescription(font_desc or _font_desc)
         if color: self.set_color(color)
         if size: font_desc.set_absolute_size(size * pango.SCALE)
         self.show_layout(text, font_desc)
@@ -1330,7 +1334,7 @@ class Label(Sprite):
         self.size = size
 
         #: pango.FontDescription, defaults to system font
-        self.font_desc = pango.FontDescription(font_desc or "Sans Serif")
+        self.font_desc = pango.FontDescription(font_desc or _font_desc)
 
         #: color of label either as hex string or an (r,g,b) tuple
         self.color = color
