@@ -98,17 +98,17 @@ class Chart(graphics.Scene):
             self.connect("on-click", self.on_click)
 
     def find_colors(self):
-        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        bg_color = "#eee" #self.get_style().bg[gtk.StateType.NORMAL].to_string()
         self.bar_color = self.colors.contrast(bg_color, 30)
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
+        fg_color = "#aaa" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
         self.label_color = self.colors.contrast(fg_color,  80)
 
 
     def on_mouse_over(self, scene, bar):
         if bar.key not in self.selected_keys:
-            bar.fill = self.get_style().base[gtk.StateType.PRELIGHT].to_string()
+            bar.fill = "#999" #self.get_style().base[gtk.StateType.PRELIGHT].to_string()
 
     def on_mouse_out(self, scene, bar):
         if bar.key not in self.selected_keys:
@@ -176,16 +176,16 @@ class Chart(graphics.Scene):
             bar.width = self.plot_area.width
 
             if bar.key in self.selected_keys:
-                bar.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
+                bar.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
 
                 if bar.normalized == 0:
-                    bar.label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
-                    bar.label_background.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
+                    bar.label.color = "#666" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
+                    bar.label_background.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
                     bar.label_background.visible = True
                 else:
                     bar.label_background.visible = False
                     if bar.label.x < round(bar.width * bar.normalized):
-                        bar.label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
+                        bar.label.color = "#666" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
                     else:
                         bar.label.color = self.label_color
 
@@ -245,7 +245,7 @@ class HorizontalDayChart(graphics.Scene):
 
         # TODO - should handle the layout business in graphics
         self.layout = context.create_layout()
-        default_font = pango.FontDescription(self.get_style().font_desc.to_string())
+        default_font = "Sans Serif" #pango.FontDescription(self.get_style().font_desc.to_string())
         default_font.set_size(8 * pango.SCALE)
         self.layout.set_font_description(default_font)
 
@@ -276,7 +276,7 @@ class HorizontalDayChart(graphics.Scene):
 
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
+        fg_color = "#666" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
         label_color = self.colors.contrast(fg_color,  80)
 
         self.layout.set_alignment(pango.Alignment.RIGHT)
@@ -288,7 +288,7 @@ class HorizontalDayChart(graphics.Scene):
         factor = max_bar_size / float(end_hour - start_hour)
 
         # determine bar color
-        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        bg_color = "#eee" #self.get_style().bg[gtk.StateType.NORMAL].to_string()
         base_color = self.colors.contrast(bg_color,  30)
 
         for i, label in enumerate(keys):
@@ -322,7 +322,7 @@ class HorizontalDayChart(graphics.Scene):
         last_position = positions[keys[-1]]
 
 
-        grid_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        grid_color = "#aaa" # self.get_style().bg[gtk.StateType.NORMAL].to_string()
 
         for i in range(start_hour + 60, end_hour, pace):
             x = round((i - start_hour) * factor)

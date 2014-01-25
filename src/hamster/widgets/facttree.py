@@ -350,8 +350,8 @@ class FactTree(gtk.TreeView):
 
     def _on_button_release_event(self, tree, event):
         # a hackish solution to make edit icon keyboard accessible
-        pointer = event.window.get_pointer() # x, y, flags
-        path = self.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
+        pointer = event.window.get_pointer() # window, x, y, flags
+        path = self.get_path_at_pos(pointer[1], pointer[2]) #column, innerx, innery
 
         if path and path[1] == self.edit_column:
             self.emit("edit-clicked", self.get_selected_fact())

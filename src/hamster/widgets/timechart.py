@@ -113,7 +113,7 @@ class TimeChart(graphics.Scene):
     def on_mouse_over(self, scene, target):
         if isinstance(target, VerticalBar):
             bar = target
-            bar.fill = self.get_style().base[gtk.StateType.PRELIGHT].to_string()
+            bar.fill = "#999" #self.get_style().base[gtk.StateType.PRELIGHT].to_string()
             self.set_tooltip_text(stuff.format_duration(bar.value))
 
             self.redraw()
@@ -305,7 +305,7 @@ class TimeChart(graphics.Scene):
                     somewhere_in_middle(current_time, self.tick_color)
 
             current_time += major_step
-            
+
 
     def count_hours(self):
         # go through facts and make array of time used by our fraction
