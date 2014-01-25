@@ -18,7 +18,9 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import os  # for locale
-import gobject, gtk, pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
 
 from ..lib import graphics, stuff
 
@@ -127,7 +129,7 @@ class TimeChart(graphics.Scene):
     def on_mouse_over(self, scene, target):
         if isinstance(target, VerticalBar):
             bar = target
-            bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
+            bar.fill = self.get_style().base[gtk.StateType.PRELIGHT].to_string()
             self.set_tooltip_text(stuff.format_duration(bar.value))
 
             self.redraw()
@@ -222,14 +224,14 @@ class TimeChart(graphics.Scene):
 
 
         # figure out colors
-        bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
         self.bar_color = g.colors.contrast(bg_color,  30)
         self.tick_color = g.colors.contrast(bg_color,  50)
 
 
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
         label_color = g.colors.contrast(fg_color,  70)
 
 
@@ -266,7 +268,7 @@ class TimeChart(graphics.Scene):
         remaining_ticks = len(ticks)
 
 
-        self.text_color = self.get_style().text[gtk.STATE_NORMAL].to_string()
+        self.text_color = self.get_style().text[gtk.StateType.NORMAL].to_string()
 
         for i, bar in enumerate(self.bars):
             if bar.key in ticks:

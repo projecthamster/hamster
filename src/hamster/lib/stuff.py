@@ -22,9 +22,8 @@
 # cells, columns, trees and other
 
 import logging
-import gtk
-import pango
-from pango import ELLIPSIZE_END
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
 
 from itertools import groupby
 import datetime as dt

@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject, pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
 import datetime as dt
 
 from ..configuration import runtime
@@ -40,11 +42,11 @@ class ActivityEntry(gtk.Entry):
         self.max_results = 10 # limit popup size to 10 results
         self.external = external.ActivitiesSource()
 
-        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
 
         box = gtk.ScrolledWindow()
-        box.set_shadow_type(gtk.SHADOW_IN)
-        box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        box.set_shadow_type(gtk.ShadowType.IN)
+        box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
 
         self.tree = gtk.TreeView()
         self.tree.set_headers_visible(False)
@@ -72,8 +74,8 @@ class ActivityEntry(gtk.Entry):
         self.tree.append_column(self.activity_column)
 
         self.category_cell = gtk.CellRendererText()
-        self.category_cell.set_property('alignment', pango.ALIGN_RIGHT)
-        self.category_cell.set_property('scale', pango.SCALE_SMALL)
+        self.category_cell.set_property('alignment', pango.Alignment.RIGHT)
+        #self.category_cell.set_property('scale', pango.SCALE_SMALL)
         self.category_cell.set_property('yalign', 0.0)
 
         self.category_column = gtk.TreeViewColumn("Category",
@@ -159,11 +161,11 @@ class ActivityEntry(gtk.Entry):
 
 
         #set proper background color (we can do that only on a realised widget)
-        bgcolor = self.get_style().bg[gtk.STATE_NORMAL]
+        bgcolor = self.get_style().bg[gtk.StateType.NORMAL]
         self.time_icon_cell.set_property("cell-background-gdk", bgcolor)
         self.time_cell.set_property("cell-background-gdk", bgcolor)
 
-        text_color = self.get_style().text[gtk.STATE_NORMAL]
+        text_color = self.get_style().text[gtk.StateType.NORMAL]
         category_color = graphics.Colors.contrast(text_color,  100)
         self.category_cell.set_property('foreground-gdk', graphics.Colors.gdk(category_color))
 
@@ -283,7 +285,7 @@ class ActivityEntry(gtk.Entry):
         self.show_popup()
 
     def _on_key_release_event(self, entry, event):
-        if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
+        if (event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.tree.get_cursor()[0]:
                     self.set_text(self.tree.get_model()[self.tree.get_cursor()[0][0]][0])
@@ -292,19 +294,19 @@ class ActivityEntry(gtk.Entry):
             else:
                 self._on_selected()
 
-        elif (event.keyval == gtk.keysyms.Escape):
+        elif (event.keyval == gdk.KEY_Escape):
             if self.popup.get_property("visible"):
                 self.hide_popup()
                 return True
             else:
                 return False
-        elif event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down):
             return False
         else:
             self.populate_suggestions()
             self.show_popup()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+            if event.keyval not in (gdk.KEY_Delete, gdk.KEY_BackSpace):
                 self.complete_inline()
 
 
@@ -312,7 +314,7 @@ class ActivityEntry(gtk.Entry):
 
     def _on_key_press_event(self, entry, event):
 
-        if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down):
+        if event.keyval in (gdk.KEY_Up, gdk.KEY_Down):
             cursor = self.tree.get_cursor()
 
             if not cursor or not cursor[0]:
@@ -321,9 +323,9 @@ class ActivityEntry(gtk.Entry):
 
             i = cursor[0][0]
 
-            if event.keyval == gtk.keysyms.Up:
+            if event.keyval == gdk.KEY_Up:
                 i-=1
-            elif event.keyval == gtk.keysyms.Down:
+            elif event.keyval == gdk.KEY_Down:
                 i+=1
 
             # keep it in the sane borders

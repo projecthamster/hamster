@@ -20,10 +20,11 @@
 from ..lib import stuff
 from ..configuration import load_ui_file
 
-import gtk, gobject, pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
 import datetime as dt
 import calendar
-import gobject
 import re
 
 class RangePick(gtk.ToggleButton):
@@ -45,7 +46,7 @@ class RangePick(gtk.ToggleButton):
         self.label = gtk.Label()
         hbox.pack_start(self.label, False)
         #self.get_widget("hbox1").pack_start(gtk.VSeparator())
-        hbox.pack_start(gtk.Arrow(gtk.ARROW_DOWN, gtk.SHADOW_ETCHED_IN), False)
+        hbox.pack_start(gtk.Arrow(gtk.ArrowType.DOWN, gtk.ShadowType.ETCHED_IN), False)
         self.add(hbox)
 
         self.start_date, self.end_date, self.view_date = None, None, None
@@ -77,7 +78,7 @@ class RangePick(gtk.ToggleButton):
 
     def on_focus_out(self, window, event):
         # avoid double-toggling when focus goes from window to the toggle button
-        if gtk.STATE_PRELIGHT & self.get_state():
+        if gtk.StateType.PRELIGHT & self.get_state():
             return
 
         self.set_active(False)

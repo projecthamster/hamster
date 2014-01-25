@@ -22,7 +22,8 @@ import pygtk
 pygtk.require('2.0')
 
 import os
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
 from ..configuration import conf
 
 class ReportChooserDialog(gtk.Dialog):

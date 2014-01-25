@@ -17,11 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk
-import gobject
-
 import time
 import datetime as dt
+
+from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
 
 from ..lib import stuff, graphics, pytweener
 from ..configuration import conf
@@ -268,8 +268,8 @@ class DayLine(graphics.Scene):
             self.chosen_selection.height = self.chosen_selection.parent.height
 
             # use the oportunity to set proper colors too
-            self.chosen_selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
-            self.chosen_selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+            self.chosen_selection.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
+            self.chosen_selection.duration_label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
 
 
         self.selection.visible = self._mouse_in # TODO - think harder about the mouse_out event
@@ -317,16 +317,16 @@ class DayLine(graphics.Scene):
 
             self.selection.y = 0
 
-            self.selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
-            self.selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+            self.selection.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
+            self.selection.duration_label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
 
 
 
         #time scale
         g.set_color("#000")
 
-        background = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        text = self.get_style().text[gtk.STATE_NORMAL].to_string()
+        background = self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        text = self.get_style().text[gtk.StateType.NORMAL].to_string()
 
         tick_color = g.colors.contrast(background, 80)
 

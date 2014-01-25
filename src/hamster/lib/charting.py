@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
-import pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
 import datetime as dt
 import time
 import graphics, stuff
@@ -97,17 +98,17 @@ class Chart(graphics.Scene):
             self.connect("on-click", self.on_click)
 
     def find_colors(self):
-        bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
         self.bar_color = self.colors.contrast(bg_color, 30)
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
         self.label_color = self.colors.contrast(fg_color,  80)
 
 
     def on_mouse_over(self, scene, bar):
         if bar.key not in self.selected_keys:
-            bar.fill = self.get_style().base[gtk.STATE_PRELIGHT].to_string()
+            bar.fill = self.get_style().base[gtk.StateType.PRELIGHT].to_string()
 
     def on_mouse_out(self, scene, bar):
         if bar.key not in self.selected_keys:
@@ -138,7 +139,7 @@ class Chart(graphics.Scene):
                 self.tweener.add_tween(bar, normalized=normalized)
             new_bars.append(bar)
 
-            label = graphics.Label(stuff.escape_pango(key), size = 8, alignment = pango.ALIGN_RIGHT)
+            label = graphics.Label(stuff.escape_pango(key), size = 8, alignment = pango.Alignment.RIGHT)
             new_labels.append(label)
 
 
@@ -175,16 +176,16 @@ class Chart(graphics.Scene):
             bar.width = self.plot_area.width
 
             if bar.key in self.selected_keys:
-                bar.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
+                bar.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
 
                 if bar.normalized == 0:
-                    bar.label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
-                    bar.label_background.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
+                    bar.label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
+                    bar.label_background.fill = self.get_style().bg[gtk.StateType.SELECTED].to_string()
                     bar.label_background.visible = True
                 else:
                     bar.label_background.visible = False
                     if bar.label.x < round(bar.width * bar.normalized):
-                        bar.label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+                        bar.label.color = self.get_style().fg[gtk.StateType.SELECTED].to_string()
                     else:
                         bar.label.color = self.label_color
 
@@ -275,10 +276,10 @@ class HorizontalDayChart(graphics.Scene):
 
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
         label_color = self.colors.contrast(fg_color,  80)
 
-        self.layout.set_alignment(pango.ALIGN_RIGHT)
+        self.layout.set_alignment(pango.Alignment.RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
 
         # bars and labels
@@ -287,7 +288,7 @@ class HorizontalDayChart(graphics.Scene):
         factor = max_bar_size / float(end_hour - start_hour)
 
         # determine bar color
-        bg_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
         base_color = self.colors.contrast(bg_color,  30)
 
         for i, label in enumerate(keys):
@@ -321,7 +322,7 @@ class HorizontalDayChart(graphics.Scene):
         last_position = positions[keys[-1]]
 
 
-        grid_color = self.get_style().bg[gtk.STATE_NORMAL].to_string()
+        grid_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
 
         for i in range(start_hour + 60, end_hour, pace):
             x = round((i - start_hour) * factor)

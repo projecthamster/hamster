@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # nicked off hamster-service
 
-import gobject
+from gi.repository import GObject as gobject
 import dbus, dbus.service
 import glib
 from dbus.mainloop.glib import DBusGMainLoop

@@ -39,7 +39,7 @@ from shutil import copy as copyfile
 import itertools
 import datetime as dt
 try:
-    import gio
+    from gi.repository import Gio as gio
 except ImportError:
     print "Could not import gio - requires pygobject. File monitoring will be disabled"
     gio = None
@@ -73,7 +73,9 @@ class Storage(storage.Storage):
             # when db file is rewritten
             def on_db_file_change(monitor, gio_file, event_uri, event):
                 if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-                    if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
+                    if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
+                                           gio.FileQueryInfoFlags.NONE,
+                                           None).get_etag() == self.__last_etag:
                         # ours
                         return
                 elif event == gio.FILE_MONITOR_EVENT_CREATED:
@@ -89,8 +91,11 @@ class Storage(storage.Storage):
                         trophies.unlock("plan_b")
 
 
-            self.__database_file = gio.File(self.db_path)
-            self.__db_monitor = self.__database_file.monitor_file()
+            self.__database_file = gio.File.new_for_path(self.db_path)
+            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
+                                                                  gio.FileMonitorFlags.SEND_MOVED | \
+                                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
+                                                                  None)
             self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
@@ -148,7 +153,9 @@ class Storage(storage.Storage):
         if gio:
             # db.execute calls this so we know that we were the ones
             # that modified the DB and no extra refesh is not needed
-            self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
+            self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
+                                                               gio.FileQueryInfoFlags.NONE,
+                                                               None).get_etag()
 
     #tags, here we come!
     def __get_tags(self, only_autocomplete = False):

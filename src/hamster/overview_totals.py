@@ -27,7 +27,8 @@ import locale
 from gettext import ngettext
 
 import os
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
 from collections import defaultdict
 
 import widgets, reports
@@ -235,8 +236,8 @@ class TotalsBox(gtk.VBox):
 
 
 if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-time-tracker")
     window = gtk.Window()
+    window.set_default_icon_name("hamster-time-tracker")
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)
     reports = ReportsBox()
@@ -250,4 +251,6 @@ if __name__ == "__main__":
     reports.search(start_date, end_date, facts)
 
 
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
     gtk.main()

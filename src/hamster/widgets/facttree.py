@@ -19,16 +19,19 @@
 
 """beware, this code has some major dragons in it. i'll clean it up one day!"""
 
-import gtk, gobject
 import cairo
 import datetime as dt
+
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import Pango as pango
+from gi.repository import PangoCairo as pangocairo
 
 from ..lib import stuff, graphics
 from tags import Tag
 
-import pango
-
-def parent_painter(column, cell, model, iter):
+def parent_painter(column, cell, model, iter, data):
     row = model.get_value(iter, 0)
 
     if isinstance(row, FactRow):
@@ -37,7 +40,7 @@ def parent_painter(column, cell, model, iter):
         row.first = model.get_path(iter) == (0,) # first row
         cell.set_property('data', row)
 
-def action_painter(column, cell, model, iter):
+def action_painter(column, cell, model, iter, data):
     cell.set_property('xalign', 1)
     cell.set_property('yalign', 0)
 
@@ -115,7 +118,7 @@ class FactTree(gtk.TreeView):
 
         edit_cell = gtk.CellRendererPixbuf()
         edit_cell.set_property("ypad", 2)
-        edit_cell.set_property("mode", gtk.CELL_RENDERER_MODE_ACTIVATABLE)
+        edit_cell.set_property("mode", gtk.CellRendererMode.ACTIVATABLE)
         self.edit_column = gtk.TreeViewColumn("", edit_cell)
         self.edit_column.set_cell_data_func(edit_cell, action_painter)
         self.append_column(self.edit_column)
@@ -136,9 +139,8 @@ class FactTree(gtk.TreeView):
         self.box = None
 
 
-        pixmap = gtk.gdk.Pixmap(None, 10, 10, 1)
-        _test_context = pixmap.cairo_create()
-        self._test_layout = _test_context.create_layout()
+        self._test_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A8, 0, 0))
+        self._test_layout = pangocairo.create_layout(self._test_context)
         font = pango.FontDescription(gtk.Style().font_desc.to_string())
         self._test_layout.set_font_description(font)
         self.prev_rows = []
@@ -226,7 +228,7 @@ class FactTree(gtk.TreeView):
         # let's save selection too - maybe it will come handy
         self.store_selection()
 
-        #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+        #self.parent.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.NEVER)
 
 
         # and now do what we were asked to
@@ -369,7 +371,7 @@ class FactTree(gtk.TreeView):
 
     def _on_key_released(self, tree, event):
         # capture e keypress and pretend that user click on edit
-        if (event.keyval == gtk.keysyms.e):
+        if (event.keyval == gdk.KEY_e):
             self.emit("edit-clicked", self.get_selected_fact())
             return True
 
@@ -390,7 +392,7 @@ class FactTree(gtk.TreeView):
             self.set_tooltip_text(None)
 
             if isinstance(data, FactRow):
-                renderer = view.get_column(0).get_cell_renderers()[0]
+                renderer = view.get_column(0).get_cells()[0]
 
                 label = data.description
                 self.set_tooltip_text(label)
@@ -399,7 +401,7 @@ class FactTree(gtk.TreeView):
 
 
 
-class FactCellRenderer(gtk.GenericCellRenderer):
+class FactCellRenderer(gtk.CellRenderer):
     """ We need all kinds of wrapping and spanning and the treeview just does
         not cut it"""
 
@@ -408,7 +410,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
     }
 
     def __init__(self):
-        gtk.GenericCellRenderer.__init__(self)
+        gtk.CellRenderer.__init__(self)
         self.height = 0
         self.data = None
 
@@ -451,7 +453,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return getattr (self, pspec.name)
 
 
-    def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
+    def do_render(self, context, widget, background_area, cell_area, flags):
         if not self.data:
             return
 
@@ -463,10 +465,9 @@ class FactCellRenderer(gtk.GenericCellRenderer):
           --------------+--------------------------------------------+-------+---+
         """
         # set the colors
-        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
-        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
+        self.selected_color = "#000" # widget.get_style().text[gtk.StateType.SELECTED]
+        self.normal_color = "#000" #widget.get_style().text[gtk.StateType.NORMAL]
 
-        context = window.cairo_create()
 
         if isinstance(self.data, FactRow):
             fact, parent = self.data, None
@@ -474,10 +475,10 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             parent, fact = self.data, None
 
 
-        x, y, width, height = cell_area
+        x, y, width, height = cell_area.x, cell_area.y, cell_area.width, cell_area.height
         context.translate(x, y)
 
-        if flags & gtk.CELL_RENDERER_SELECTED:
+        if flags & gtk.CellRendererState.SELECTED:
             text_color = self.selected_color
         else:
             text_color = self.normal_color
@@ -512,14 +513,14 @@ class FactCellRenderer(gtk.GenericCellRenderer):
             return -1
         x, y, cell_width, h = bounds
 
-        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
-        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
+        self.selected_color = "#000" #widget.get_style().text[gtk.StateType.SELECTED]
+        self.normal_color = "#000" #widget.get_style().text[gtk.StateType.NORMAL]
 
         g = graphics.Graphics(context)
 
         fact = self.data
 
-        selected = flags and flags & gtk.CELL_RENDERER_SELECTED
+        selected = flags and flags & gtk.CellRendererState.SELECTED
 
         text_color = self.normal_color
         if selected:
@@ -652,7 +653,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
         return current_height
 
 
-    def on_get_size(self, widget, cell_area):
+    def do_get_size(self, widget, cell_area):
         if isinstance(self.data, GroupRow):
             if self.data.first:
                 return (0, 0, 0, int((self.default_size + 10) * 1.5))
@@ -660,7 +661,7 @@ class FactCellRenderer(gtk.GenericCellRenderer):
                 return (0, 0, 0, (self.default_size + 10) * 2)
 
 
-        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
+        context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         area = widget.get_allocation()
 
         area.width -= 40 # minus the edit column, scrollbar and padding (and the scrollbar part is quite lame)

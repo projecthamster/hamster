@@ -22,13 +22,15 @@ gconf part of this code copied from Gimmie (c) Alex Gravely via Conduit (c) John
 License: GPLv2
 """
 
-import gconf
 import os
 from client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
-import gobject, gtk
+
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import GConf as gconf
 
 import logging
 log = logging.getLogger("configuration")
@@ -184,8 +186,8 @@ class GConfStore(gobject.GObject, Singleton):
     }
     def __init__(self):
         gobject.GObject.__init__(self)
-        self._client = gconf.client_get_default()
-        self._client.add_dir(self.GCONF_DIR[:-1], gconf.CLIENT_PRELOAD_RECURSIVE)
+        self._client = gconf.Client.get_default()
+        self._client.add_dir(self.GCONF_DIR[:-1], gconf.ClientPreloadType.PRELOAD_RECURSIVE)
         self._notifications = []
 
     def _fix_key(self, key):
@@ -254,7 +256,7 @@ class GConfStore(gobject.GObject, Singleton):
         key = self._fix_key(key)
 
         if key not in self._notifications:
-            self._client.notify_add(key, self._key_changed)
+            self._client.notify_add(key, self._key_changed, None)
             self._notifications.append(key)
 
         value = self._client.get(key)

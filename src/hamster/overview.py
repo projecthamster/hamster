@@ -26,8 +26,10 @@ import datetime as dt
 import calendar
 import webbrowser
 
-import gtk, gobject
-import pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import Pango as pango
 
 import widgets, reports
 from configuration import runtime, conf, dialogs, load_ui_file
@@ -226,7 +228,7 @@ class Overview(gtk.Object):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(gtk.gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
+                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 
@@ -292,7 +294,7 @@ class Overview(gtk.Object):
 
     def on_tabs_window_state_changed(self, window, event):
         # not enough space - maximized the overview window
-        maximized = window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
+        maximized = window.get_window().get_state() & gdk.WindowState.MAXIMIZED
         if maximized:
             trophies.unlock("not_enough_space")
 
@@ -400,9 +402,9 @@ class Overview(gtk.Object):
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w
-              and event_key.state & gtk.gdk.CONTROL_MASK)):
+      if (event_key.keyval == gdk.KEY_Escape
+          or (event_key.keyval == gdk.KEY_w
+              and event_key.state & gdk.ModifierType.CONTROL_MASK)):
         self.close_window()
 
     def on_close_activate(self, action):
@@ -410,11 +412,11 @@ class Overview(gtk.Object):
 
     def close_window(self):
         # properly saving window state and position
-        maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
+        maximized = self.window.get_window().get_state() & gdk.WindowState.MAXIMIZED
         conf.set("overview_window_maximized", maximized)
 
         # make sure to remember dimensions only when in normal state
-        if maximized == False and not self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_ICONIFIED:
+        if maximized == False and not self.window.get_window().get_state() & gdk.WindowState.ICONIFIED:
             x, y = self.window.get_position()
             w, h = self.window.get_size()
             conf.set("overview_window_box", [x, y, w, h])

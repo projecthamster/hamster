@@ -20,7 +20,7 @@
 import datetime as dt
 from calendar import timegm
 import logging
-import gobject
+from gi.repository import GObject as gobject
 
 
 from hamster import idle

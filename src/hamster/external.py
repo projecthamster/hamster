@@ -20,7 +20,7 @@
 
 import logging
 from configuration import conf
-import gobject
+from gi.repository import GObject as gobject
 import dbus, dbus.mainloop.glib
 
 try:

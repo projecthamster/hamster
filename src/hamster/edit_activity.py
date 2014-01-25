@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 import time
 import datetime as dt
 
@@ -218,8 +220,8 @@ class CustomFactController(gtk.Object):
 
     def on_activity_list_key_pressed(self, entry, event):
         #treating tab as keydown to be able to cycle through available values
-        if event.keyval == gtk.keysyms.Tab:
-            event.keyval = gtk.keysyms.Down
+        if event.keyval == gdk.KEY_Tab:
+            event.keyval = gdk.KEY_Down
         return False
 
     def on_in_progress_toggled(self, check):
@@ -287,14 +289,14 @@ class CustomFactController(gtk.Object):
                  self.new_name.popup.get_property("visible") or \
                  self.new_tags.popup.get_property("visible")
 
-        if (event_key.keyval == gtk.keysyms.Escape or \
-           (event_key.keyval == gtk.keysyms.w and event_key.state & gtk.gdk.CONTROL_MASK)):
+        if (event_key.keyval == gdk.KEY_Escape or \
+           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
             if popups:
                 return False
 
             self.close_window()
 
-        elif event_key.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter):
+        elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
                 return False
             if self.get_widget('description').has_focus():

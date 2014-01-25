@@ -129,11 +129,15 @@ class HamsterClient(object):
 
     def today(self, *args):
         """launches today's view"""
-        import gtk, glib
+        from gi.repository import Gtk as gtk
+        from gi.repository import GLib as glib
+
         glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
 
         from hamster import today
         app = today.DailyView()
+        import signal
+        signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
         gtk.main()
 
     def _launch_window(self, window_name):

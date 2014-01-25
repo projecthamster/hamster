@@ -17,13 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..lib.stuff import format_duration
-import gtk
-from gtk import keysyms
 import datetime as dt
 import calendar
-import gobject
 import re
+
+from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
+
+from ..lib.stuff import format_duration
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {
@@ -39,10 +40,10 @@ class TimeInput(gtk.Entry):
         self.set_time(time)
         self.set_start_time(start_time)
 
-        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         time_box = gtk.ScrolledWindow()
-        time_box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
-        time_box.set_shadow_type(gtk.SHADOW_IN)
+        time_box.set_policy(gtk.PolicyType.NEVER, gtk.POLICY_ALWAYS)
+        time_box.set_shadow_type(gtk.ShadowType.IN)
 
         self.time_tree = gtk.TreeView()
         self.time_tree.set_headers_visible(False)
@@ -232,7 +233,7 @@ class TimeInput(gtk.Entry):
 
 
     def _on_key_press_event(self, entry, event):
-        if event.keyval not in (keysyms.Up, keysyms.Down, keysyms.Return, keysyms.KP_Enter):
+        if event.keyval not in (gdk.KEY_Up, gdk.KEY_Down, gdk.KEY_Return, gdk.KEY_KP_Enter):
             #any kind of other input
             self.hide_popup()
             return False
@@ -243,18 +244,18 @@ class TimeInput(gtk.Entry):
 
 
         i = model.get_path(iter)[0]
-        if event.keyval == gtk.keysyms.Up:
+        if event.keyval == gtk.gdk.KEY_Up:
             i-=1
-        elif event.keyval == gtk.keysyms.Down:
+        elif event.keyval == gtk.gdk.KEY_Down:
             i+=1
-        elif (event.keyval == gtk.keysyms.Return or
-              event.keyval == gtk.keysyms.KP_Enter):
+        elif (event.keyval == gtk.gdk.KEY_Return or
+              event.keyval == gtk.gdk.KEY_KP_Enter):
 
             if self.popup.get_property("visible"):
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
-        elif (event.keyval == gtk.keysyms.Escape):
+        elif (event.keyval == gtk.gdk.KEY_Escape):
             self.hide_popup()
             return
 
@@ -265,7 +266,7 @@ class TimeInput(gtk.Entry):
         self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
 
         # if popup is not visible, display it on up and down
-        if event.keyval in (gtk.keysyms.Up, gtk.keysyms.Down) and self.popup.props.visible == False:
+        if event.keyval in (gtk.gdk.KEY_Up, gtk.gdk.KEY_Down) and self.popup.props.visible == False:
             self.show_popup()
 
         return True

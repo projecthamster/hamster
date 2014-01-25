@@ -22,8 +22,10 @@ import sys
 import logging
 import datetime as dt
 
-import gtk, gobject
-import glib
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import GLib as glib
 import dbus, dbus.service, dbus.mainloop.glib
 import locale
 
@@ -118,13 +120,15 @@ class DailyView(object):
         self.accel_group = self.get_widget("accelgroup")
         self.window.add_accel_group(self.accel_group)
 
-        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/add", gtk.keysyms.n, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/overview", gtk.keysyms.o, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/stats", gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/close", gtk.keysyms.Escape, 0)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/tracking/quit", gtk.keysyms.q, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/edit/prefs", gtk.keysyms.p, gtk.gdk.CONTROL_MASK)
-        gtk.accel_map_add_entry("<hamster-time-tracker>/help/contents", gtk.keysyms.F1, 0)
+        accel_map = gtk.AccelMap.get()
+
+        accel_map.add_entry("<hamster-time-tracker>/tracking/add", gdk.KEY_n, gdk.ModifierType.CONTROL_MASK)
+        accel_map.add_entry("<hamster-time-tracker>/tracking/overview", gdk.KEY_o, gdk.ModifierType.CONTROL_MASK)
+        accel_map.add_entry("<hamster-time-tracker>/tracking/stats", gdk.KEY_i, gdk.ModifierType.CONTROL_MASK)
+        accel_map.add_entry("<hamster-time-tracker>/tracking/close", gdk.KEY_Escape, 0)
+        accel_map.add_entry("<hamster-time-tracker>/tracking/quit", gdk.KEY_q, gdk.ModifierType.CONTROL_MASK)
+        accel_map.add_entry("<hamster-time-tracker>/edit/prefs", gdk.KEY_p, gdk.ModifierType.CONTROL_MASK)
+        accel_map.add_entry("<hamster-time-tracker>/help/contents", gdk.KEY_F1, 0)
 
 
 
@@ -143,7 +147,7 @@ class DailyView(object):
             self.window = self._gui.get_object('hamster-window')
             self.window.connect("delete_event", self.on_delete_window)
 
-            gtk.window_set_default_icon_name("hamster-time-tracker")
+            self.window.set_default_icon_name("hamster-time-tracker")
 
             self.new_name = widgets.ActivityEntry()
             self.new_name.connect("value-entered", self.on_switch_activity_clicked)
@@ -306,7 +310,7 @@ class DailyView(object):
 
     """events"""
     def on_todays_keys(self, tree, event):
-        if (event.keyval == gtk.keysyms.Delete):
+        if (event.keyval == gdk.KEY_Delete):
             self.delete_selected()
             return True
 
@@ -344,7 +348,7 @@ class DailyView(object):
     def on_menu_preferences_activate(self, menu_item):
         dialogs.prefs.show(self.window)
     def on_menu_help_contents_activate(self, *args):
-        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-time-tracker", 0L)
+        gtk.show_uri(gdk.Screen(), "ghelp:hamster-time-tracker", 0L)
         trophies.unlock("basic_instructions")
 
 
@@ -472,16 +476,16 @@ class DailyView(object):
         return self._gui.get_object(name)
 
     def on_more_info_button_clicked(self, *args):
-        gtk.show_uri(gtk.gdk.Screen(), "ghelp:hamster-time-tracker#input", 0L)
+        gtk.show_uri(gdk.Screen(), "ghelp:hamster-time-tracker#input", 0L)
         return False
 
     def save_window_position(self):
         # properly saving window state and position
-        maximized = self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_MAXIMIZED
+        maximized = self.window.get_window().get_state() & gdk.WindowState.MAXIMIZED
         conf.set("standalone_window_maximized", maximized)
 
         # make sure to remember dimensions only when in normal state
-        if maximized == False and not self.window.get_window().get_state() & gtk.gdk.WINDOW_STATE_ICONIFIED:
+        if maximized == False and not self.window.get_window().get_state() & gdk.WindowState.ICONIFIED:
             x, y = self.window.get_position()
             w, h = self.window.get_size()
             conf.set("standalone_window_box", [x, y, w, h])
@@ -505,5 +509,5 @@ class DailyView(object):
     def show_in_tray(self):
         # show the status tray icon
         activity = self.get_widget("last_activity_name").get_text()
-        self.statusicon.set_tooltip(activity)
+        self.statusicon.set_tooltip_text(activity)
         self.statusicon.set_visible(True)

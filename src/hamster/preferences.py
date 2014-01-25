@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007, 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007, 2008, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,13 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-import pygtk
-pygtk.require('2.0')
-
-import os
-import gobject
-import gtk
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import GObject as gobject
 
 import datetime as dt
 
@@ -181,13 +177,13 @@ class PreferencesEditor(gtk.Object):
         self.load_config()
 
         # Allow enable drag and drop of rows including row move
-        self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
-                                                self.TARGETS,
-                                                gtk.gdk.ACTION_DEFAULT|
-                                                gtk.gdk.ACTION_MOVE)
+        self.activity_tree.enable_model_drag_source(gdk.ModifierType.BUTTON1_MASK,
+                                                    self.TARGETS,
+                                                    gdk.DragAction.DEFAULT|
+                                                    gdk.DragAction.MOVE)
 
         self.category_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_MOVE)
+                                                  gdk.DragAction.MOVE)
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
 
@@ -378,9 +374,9 @@ class PreferencesEditor(gtk.Object):
 
         if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
            drop_position != gtk.TREE_VIEW_DROP_BEFORE:
-            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
         else:
-            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
 
 
 
@@ -583,10 +579,10 @@ class PreferencesEditor(gtk.Object):
         key = event_key.keyval
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        if (event_key.keyval == gtk.keysyms.Delete):
+        if (event_key.keyval == gdk.KEY_Delete):
             self.remove_current_activity()
 
-        elif key == gtk.keysyms.F2 :
+        elif key == gdk.KEY_F2 :
             self.activityCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
@@ -621,9 +617,9 @@ class PreferencesEditor(gtk.Object):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
 
-        if  key == gtk.keysyms.Delete:
+        if  key == gdk.KEY_Delete:
             self.remove_current_category()
-        elif key == gtk.keysyms.F2:
+        elif key == gdk.KEY_F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
@@ -640,12 +636,12 @@ class PreferencesEditor(gtk.Object):
 
     def on_preferences_window_key_press(self, widget, event):
         # ctrl+w means close window
-        if (event.keyval == gtk.keysyms.w \
-            and event.state & gtk.gdk.CONTROL_MASK):
+        if (event.keyval == gdk.KEY_w \
+            and event.state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
 
         # escape can mean several things
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == gdk.KEY_Escape:
             #check, maybe we are editing stuff
             if self.activityCell.get_property("editable"):
                 self.activityCell.set_property("editable", False)

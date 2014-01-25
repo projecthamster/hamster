@@ -22,7 +22,10 @@ import pygtk
 pygtk.require('2.0')
 
 import os
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import Pango as pango
 
 import webbrowser
 
@@ -46,8 +49,8 @@ class OverviewBox(gtk.VBox):
         self.set_border_width(6)
 
         scroll = gtk.ScrolledWindow()
-        scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        scroll.set_shadow_type(gtk.SHADOW_IN)
+        scroll.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
+        scroll.set_shadow_type(gtk.ShadowType.IN)
 
         self.start_date, self.end_date = None, None
         self.facts = []
@@ -134,16 +137,16 @@ class OverviewBox(gtk.VBox):
 
 
     def on_facts_keys(self, tree, event):
-        if (event.keyval == gtk.keysyms.Delete):
+        if (event.keyval == gdk.KEY_Delete):
             self.delete_selected()
             return True
-        elif (event.keyval == gtk.keysyms.Insert):
+        elif (event.keyval == gdk.KEY_Insert):
             self.launch_edit(self.fact_tree.get_selected_fact())
             return True
-        elif event.keyval == gtk.keysyms.c and event.state & gtk.gdk.CONTROL_MASK:
+        elif event.keyval == gdk.KEY_c and event.state & gdk.ModifierType.CONTROL_MASK:
             self.copy_selected()
             return True
-        elif event.keyval == gtk.keysyms.v and event.state & gtk.gdk.CONTROL_MASK:
+        elif event.keyval == gdk.KEY_v and event.state & gdk.ModifierType.CONTROL_MASK:
             self.check_clipboard()
             return True
 
@@ -185,8 +188,8 @@ class OverviewBox(gtk.VBox):
             self.fact_tree.select_fact(new_id)
 
 if __name__ == "__main__":
-    gtk.window_set_default_icon_name("hamster-time-tracker")
     window = gtk.Window()
+    window.set_default_icon_name("hamster-time-tracker")
     window.set_title("Hamster - reports")
     window.set_size_request(800, 600)
     overview = OverviewBox()
@@ -200,4 +203,6 @@ if __name__ == "__main__":
     overview.search(start_date, end_date, facts)
 
 
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
     gtk.main()
