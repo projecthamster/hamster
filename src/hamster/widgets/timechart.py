@@ -109,22 +109,6 @@ class TimeChart(graphics.Scene):
         self.connect("on-mouse-out", self.on_mouse_out)
         self.connect("on-click", self.on_click)
 
-        self.connect("enter_notify_event", self.on_mouse_enter)
-        self.connect("leave_notify_event", self.on_mouse_leave)
-
-        self.zoom_out_icon = Icon(self.render_icon(gtk.STOCK_ZOOM_OUT, gtk.ICON_SIZE_MENU),
-                                  visible = False, z_order = 500)
-        self.add_child(self.zoom_out_icon)
-
-
-    def on_mouse_enter(self, scene, event):
-        if (self.end_time - self.start_time) < dt.timedelta(days=356):
-            self.zoom_out_icon.visible = True
-        self.redraw()
-
-    def on_mouse_leave(self, scene, event):
-        self.zoom_out_icon.visible = False
-        self.redraw()
 
     def on_mouse_over(self, scene, target):
         if isinstance(target, VerticalBar):
@@ -142,9 +126,7 @@ class TimeChart(graphics.Scene):
     def on_click(self, scene, event, target):
         if not target: return
 
-        if target == self.zoom_out_icon:
-            self.emit("zoom-out-clicked")
-        elif isinstance(target, VerticalBar):
+        if isinstance(target, VerticalBar):
             self.emit("range-picked", target.key.date(), (target.key + self.minor_tick - dt.timedelta(days=1)).date())
         else:
             self.emit("range-picked", target.parent.key.date(), (target.parent.key + dt.timedelta(days=6)).date())
@@ -211,9 +193,6 @@ class TimeChart(graphics.Scene):
 
         self.count_hours()
 
-
-        self.zoom_out_icon.visible = (self.end_time - self.start_time) < dt.timedelta(days=356)
-
         self.redraw()
 
     def on_enter_frame(self, scene, context):
@@ -222,16 +201,15 @@ class TimeChart(graphics.Scene):
 
         g = graphics.Graphics(context)
 
-
         # figure out colors
-        bg_color = self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        bg_color = "#eee" # self.get_style().bg[gtk.StateType.NORMAL].to_string()
         self.bar_color = g.colors.contrast(bg_color,  30)
         self.tick_color = g.colors.contrast(bg_color,  50)
 
 
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
+        fg_color = "#444" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
         label_color = g.colors.contrast(fg_color,  70)
 
 
@@ -268,7 +246,7 @@ class TimeChart(graphics.Scene):
         remaining_ticks = len(ticks)
 
 
-        self.text_color = self.get_style().text[gtk.StateType.NORMAL].to_string()
+        self.text_color = "#444" #self.get_style().text[gtk.StateType.NORMAL].to_string()
 
         for i, bar in enumerate(self.bars):
             if bar.key in ticks:
@@ -327,10 +305,7 @@ class TimeChart(graphics.Scene):
                     somewhere_in_middle(current_time, self.tick_color)
 
             current_time += major_step
-
-
-        self.zoom_out_icon.x = self.width - 24
-
+            
 
     def count_hours(self):
         # go through facts and make array of time used by our fraction

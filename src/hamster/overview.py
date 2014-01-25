@@ -41,13 +41,13 @@ from overview_activities import OverviewBox
 from overview_totals import TotalsBox
 
 
-class Overview(gtk.Object):
+class Overview(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
 
         self.parent = parent# determine if app should shut down on close
         self._gui = load_ui_file("overview.ui")
@@ -183,7 +183,7 @@ class Overview(gtk.Object):
 
     def set_title(self):
         self.title = stuff.format_range(self.start_date, self.end_date)
-        self.window.set_title(self.title.decode("utf-8"))
+        self.window.set_title(self.title)
 
 
     def on_conf_change(self, event, key, value):

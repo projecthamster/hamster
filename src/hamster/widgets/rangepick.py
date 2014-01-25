@@ -44,9 +44,8 @@ class RangePick(gtk.ToggleButton):
         hbox = gtk.HBox()
         hbox.set_spacing(3)
         self.label = gtk.Label()
-        hbox.pack_start(self.label, False)
-        #self.get_widget("hbox1").pack_start(gtk.VSeparator())
-        hbox.pack_start(gtk.Arrow(gtk.ArrowType.DOWN, gtk.ShadowType.ETCHED_IN), False)
+        hbox.add(self.label)
+        hbox.add(gtk.Arrow(gtk.ArrowType.DOWN, gtk.ShadowType.ETCHED_IN))
         self.add(hbox)
 
         self.start_date, self.end_date, self.view_date = None, None, None

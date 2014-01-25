@@ -87,7 +87,7 @@ from lib import stuff, trophies
 
 
 
-class PreferencesEditor(gtk.Object):
+class PreferencesEditor(gobject.GObject):
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
@@ -99,7 +99,7 @@ class PreferencesEditor(gtk.Object):
     }
 
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
         self.parent = parent
         self._gui = load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')

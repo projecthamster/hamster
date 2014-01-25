@@ -30,13 +30,13 @@ import widgets
 from configuration import runtime, conf, load_ui_file
 from lib import Fact
 
-class CustomFactController(gtk.Object):
+class CustomFactController(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')

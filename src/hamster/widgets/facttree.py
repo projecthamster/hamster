@@ -37,7 +37,7 @@ def parent_painter(column, cell, model, iter, data):
     if isinstance(row, FactRow):
         cell.set_property('data', row)
     else:
-        row.first = model.get_path(iter) == (0,) # first row
+        row.first = model.get_path(iter) == gtk.TreePath((0,)) # first row
         cell.set_property('data', row)
 
 def action_painter(column, cell, model, iter, data):
@@ -485,7 +485,7 @@ class FactCellRenderer(gtk.CellRenderer):
         self.duration_label.color = text_color
 
         if parent:
-            self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent.label)
+            self.date_label.markup = "<b>%s</b>" % stuff.escape_pango(parent.label)
             self.date_label.x = 5
 
             if self.data.first:
@@ -496,7 +496,7 @@ class FactCellRenderer(gtk.CellRenderer):
             self.date_label.y = y
 
 
-            self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent.duration)
+            self.duration_label.markup = "<b>%s</b>" % stuff.format_duration(parent.duration)
             self.duration_label.x = width - self.duration_label.width
             self.duration_label.y = y
 

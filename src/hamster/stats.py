@@ -40,13 +40,13 @@ from configuration import runtime, conf, load_ui_file
 
 from lib.i18n import C_
 
-class Stats(gtk.Object):
+class Stats(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
         self._gui = load_ui_file("stats.ui")
         self.report_chooser = None
         self.window = self.get_widget("stats_window")
