@@ -110,7 +110,8 @@ class OneWindow(object):
                 if isinstance(parent, gtk.Widget):
                     dialog.window.set_transient_for(parent.get_toplevel())
 
-                self.dialog_close_handlers[dialog] = dialog.connect("on-close", self.on_close_window)
+                if hasattr(dialog, "connect"):
+                    self.dialog_close_handlers[dialog] = dialog.connect("on-close", self.on_close_window)
             else:
                 dialog = self.get_dialog_class()(**kwargs)
 

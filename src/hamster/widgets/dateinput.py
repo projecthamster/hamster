@@ -33,6 +33,7 @@ class DateInput(gtk.Entry):
     def __init__(self, date = None):
         gtk.Entry.__init__(self)
 
+
         self.set_width_chars(len(dt.datetime.now().strftime("%x"))) # size to default format length
         self.date = date
         if date:
@@ -44,7 +45,8 @@ class DateInput(gtk.Entry):
         calendar_box = gtk.HBox()
 
         self.date_calendar = gtk.Calendar()
-        self.date_calendar.mark_day(dt.datetime.today().day)
+        # TODO - this causes pixman bug
+        #self.date_calendar.mark_day(dt.datetime.today().day)
         self.date_calendar.connect("day-selected", self._on_day_selected)
         self.date_calendar.connect("day-selected-double-click",
                                    self.__on_day_selected_double_click)
@@ -128,7 +130,7 @@ class DateInput(gtk.Entry):
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
         window = self.get_parent_window()
-        x, y = window.get_origin()
+        dummy, x, y = window.get_origin()
 
         alloc = self.get_allocation()
 

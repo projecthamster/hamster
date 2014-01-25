@@ -42,7 +42,7 @@ class TimeInput(gtk.Entry):
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         time_box = gtk.ScrolledWindow()
-        time_box.set_policy(gtk.PolicyType.NEVER, gtk.POLICY_ALWAYS)
+        time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
         time_box.set_shadow_type(gtk.ShadowType.IN)
 
         self.time_tree = gtk.TreeView()
@@ -220,7 +220,7 @@ class TimeInput(gtk.Entry):
         self.time_tree.set_size_request(w, alloc.height * 5)
 
         window = self.get_parent_window()
-        x, y= window.get_origin()
+        dmmy, x, y= window.get_origin()
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
         self.popup.show_all()

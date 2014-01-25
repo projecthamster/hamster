@@ -225,7 +225,7 @@ class FactTree(gtk.TreeView):
         # let's save selection too - maybe it will come handy
         self.store_selection()
 
-        #self.parent.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.NEVER)
+        self.get_parent().set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.NEVER)
 
 
         # and now do what we were asked to
@@ -324,7 +324,7 @@ class FactTree(gtk.TreeView):
             selection = self.get_selection()
             selection.select_path(path)
 
-            self.set_cursor_on_cell(path)
+            self.set_cursor(path)
 
     def select_fact(self, fact_id):
         i = 0

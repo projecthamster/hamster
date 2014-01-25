@@ -127,9 +127,11 @@ class TimeChart(graphics.Scene):
         if not target: return
 
         if isinstance(target, VerticalBar):
-            self.emit("range-picked", target.key.date(), (target.key + self.minor_tick - dt.timedelta(days=1)).date())
+            self.emit("range-picked", target.key.date(),
+                      (target.key + self.minor_tick - dt.timedelta(days=1)).date())
         else:
-            self.emit("range-picked", target.parent.key.date(), (target.parent.key + dt.timedelta(days=6)).date())
+            self.emit("range-picked", target.get_parent().key.date(),
+                      (target.get_parent().key + dt.timedelta(days=6)).date())
 
 
     def draw(self, durations, start_date, end_date):

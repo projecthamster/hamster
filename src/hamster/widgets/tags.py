@@ -134,7 +134,7 @@ class TagsEntry(gtk.Entry):
         height = self.tag_box.count_height(w)
 
 
-        self.tag_box.modify_bg(gtk.StateType.NORMAL, self.get_style().base[gtk.StateType.NORMAL])
+        self.tag_box.modify_bg(gtk.StateType.NORMAL, "#eee") #self.get_style().base[gtk.StateType.NORMAL])
 
         self.scroll_box.set_size_request(w, height)
         self.popup.resize(w, height)

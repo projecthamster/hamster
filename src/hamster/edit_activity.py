@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 

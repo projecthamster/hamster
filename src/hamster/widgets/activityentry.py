@@ -19,6 +19,7 @@
 
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 import datetime as dt
 
@@ -161,11 +162,11 @@ class ActivityEntry(gtk.Entry):
 
 
         #set proper background color (we can do that only on a realised widget)
-        bgcolor = self.get_style().bg[gtk.StateType.NORMAL]
-        self.time_icon_cell.set_property("cell-background-gdk", bgcolor)
-        self.time_cell.set_property("cell-background-gdk", bgcolor)
+        bgcolor = "#eee" #self.get_style().bg[gtk.StateType.NORMAL]
+        self.time_icon_cell.set_property("cell-background-gdk", gdk.Color.parse(bgcolor)[1])
+        self.time_cell.set_property("cell-background-gdk", gdk.Color.parse(bgcolor)[1])
 
-        text_color = self.get_style().text[gtk.StateType.NORMAL]
+        text_color = "#444" #self.get_style().text[gtk.StateType.NORMAL]
         category_color = graphics.Colors.contrast(text_color,  100)
         self.category_cell.set_property('foreground-gdk', graphics.Colors.gdk(category_color))
 
@@ -175,10 +176,10 @@ class ActivityEntry(gtk.Entry):
 
         #TODO - this is clearly unreliable as we calculate tree row size based on our gtk entry
         popup_height = (alloc.height-6) * min([result_count, self.max_results])
-        self.tree.parent.set_size_request(alloc.width, popup_height)
+        self.tree.get_parent().set_size_request(alloc.width, popup_height)
         self.popup.resize(alloc.width, popup_height)
 
-        x, y = self.get_parent_window().get_origin()
+        dummy, x, y = self.get_parent_window().get_origin()
         y = y + alloc.y
 
         if y + alloc.height + popup_height < self.get_screen().get_height():

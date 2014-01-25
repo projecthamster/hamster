@@ -98,7 +98,7 @@ class Stats(gobject.GObject):
 
             def on_enter_frame(self, scene, context):
                 # now for the text - we want reduced contrast for relaxed visuals
-                fg_color = self.get_style().fg[gtk.StateType.NORMAL].to_string()
+                fg_color = "#aaa" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
                 self.label.color = self.colors.contrast(fg_color,  80)
 
                 self.label.width = self.width
@@ -424,7 +424,7 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
     def on_year_changed(self, button):
         if self.bubbling: return
 
-        for child in button.parent.get_children():
+        for child in button.get_parent().get_children():
             if child != button and child.get_active():
                 self.bubbling = True
                 child.set_active(False)

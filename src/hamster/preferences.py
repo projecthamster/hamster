@@ -89,8 +89,8 @@ from lib import stuff, trophies
 
 class PreferencesEditor(gobject.GObject):
     TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
 
@@ -109,7 +109,7 @@ class PreferencesEditor(gobject.GObject):
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
                                    ("gtg", "Getting Things Gnome")]
-        self.todo_combo = gtk.combo_box_new_text()
+        self.todo_combo = gtk.ComboBoxText()
         for code, label in self.activities_sources:
             self.todo_combo.append_text(label)
         self.todo_combo.connect("changed", self.on_todo_combo_changed)
@@ -225,13 +225,6 @@ class PreferencesEditor(gobject.GObject):
         self.workspace_tree.append_column(self.wActivityColumn)
 
         self.workspace_tree.set_model(self.workspace_store)
-
-        # disable notification thing if pynotify is not available
-        try:
-            import pynotify
-        except:
-            self.get_widget("notification_preference_frame").hide()
-
 
         self.external_listeners.extend([
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
@@ -516,7 +509,7 @@ class PreferencesEditor(gobject.GObject):
         model.remove(iter)
         return removable_id
 
-    def unsorted_painter(self, column, cell, model, iter):
+    def unsorted_painter(self, column, cell, model, iter, data):
         cell_id = model.get_value(iter, 0)
         cell_text = model.get_value(iter, 1)
         if cell_id == -1:
@@ -675,10 +668,10 @@ class PreferencesEditor(gobject.GObject):
         (model, iter) = self.selection.get_selected()
 
         self.activityCell.set_property("editable", True)
-        self.activity_tree.set_cursor_on_cell(model.get_string_from_iter(new_activity),
-                                         focus_column = self.activity_tree.get_column(0),
-                                         focus_cell = None,
-                                         start_editing = True)
+        self.activity_tree.set_cursor_on_cell(model.get_path(new_activity),
+                                              focus_column = self.activity_tree.get_column(0),
+                                              focus_cell = None,
+                                              start_editing = True)
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
