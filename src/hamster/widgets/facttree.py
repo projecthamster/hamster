@@ -141,17 +141,14 @@ class FactTree(gtk.TreeView):
 
         self._test_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A8, 0, 0))
         self._test_layout = pangocairo.create_layout(self._test_context)
-        font = pango.FontDescription(gtk.Style().font_desc.to_string())
+
+        test_label = gtk.Label("Hello")
+        font_desc = test_label.get_style().font_desc.to_string()
+
+        font = pango.FontDescription(font_desc)
         self._test_layout.set_font_description(font)
         self.prev_rows = []
         self.new_rows = []
-
-        self.connect("destroy", self.on_destroy)
-
-    def on_destroy(self, widget):
-        for col in self.get_columns():
-            col.destroy()
-            self.remove_column(col)
 
 
     def fix_row_heights(self):
@@ -414,29 +411,30 @@ class FactCellRenderer(gtk.CellRenderer):
         self.height = 0
         self.data = None
 
-        font = gtk.Style().font_desc
-        self.default_size = font.get_size() / pango.SCALE
+        style_context = gtk.Widget.get_style_context(gtk.Button())
+
+        test_label = gtk.Label("Hello")
+        font_desc = test_label.get_style().font_desc.to_string()
+        self.default_size = test_label.get_style().font_desc.get_size() / pango.SCALE
 
         self.labels = graphics.Sprite()
 
-        self.date_label = graphics.Label(size = self.default_size)
+        self.date_label = graphics.Label(font_desc=font_desc)
 
-        self.interval_label = graphics.Label(size = self.default_size)
+        self.interval_label = graphics.Label(font_desc=font_desc)
         self.labels.add_child(self.interval_label)
 
-        self.activity_label = graphics.Label(size = self.default_size)
+        self.activity_label = graphics.Label(font_desc=font_desc)
         self.labels.add_child(self.activity_label)
 
-        self.category_label = graphics.Label(size = self.default_size)
+        self.category_label = graphics.Label(font_desc=font_desc)
         self.labels.add_child(self.category_label)
 
-        self.description_label = graphics.Label(size = self.default_size)
+        self.description_label = graphics.Label(font_desc=font_desc)
         self.labels.add_child(self.description_label)
 
-        self.duration_label = graphics.Label(size=self.default_size)
+        self.duration_label = graphics.Label(font_desc=font_desc)
         self.labels.add_child(self.duration_label)
-
-        default_font = gtk.Style().font_desc.to_string()
 
         self.tag = Tag("")
 
@@ -559,7 +557,7 @@ class FactCellRenderer(gtk.CellRenderer):
 
         self.category_label.text = ""
         if fact.category:
-            self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact.category)
+            self.category_label.markup = " - <small>%s</small>" % stuff.escape_pango(fact.category)
             if not selected:
                 category_color = graphics.Colors.contrast(text_color,  100)
 
@@ -665,6 +663,8 @@ class FactCellRenderer(gtk.CellRenderer):
         area = widget.get_allocation()
 
         area.width -= 40 # minus the edit column, scrollbar and padding (and the scrollbar part is quite lame)
+
+        area = (area.x, area.y, area.width, area.height)
 
         cell_height = self.render_cell(context, area, widget, None, False)
         return (0, 0, -1, cell_height)
