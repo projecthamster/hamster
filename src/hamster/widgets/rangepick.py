@@ -67,6 +67,7 @@ class RangePick(gtk.ToggleButton):
         else:
             self.hide()
 
+
     def set_range(self, start_date, end_date, view_date):
         self.start_date, self.end_date, self.view_date = start_date, end_date, view_date
         self.label.set_markup('<big><b>%s</b></big>' % stuff.format_range(start_date, end_date).encode("utf-8"))
@@ -75,13 +76,15 @@ class RangePick(gtk.ToggleButton):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-    def on_focus_out(self, window, event):
+
+    def on_focus_out(self, popup, event):
+        x, y = self.get_pointer()
+        button_w, button_h = self.get_allocation().width, self.get_allocation().height
         # avoid double-toggling when focus goes from window to the toggle button
-        if gtk.StateType.PRELIGHT & self.get_state():
+        if 0 <= x <= button_w and 0 <= y <= button_h:
             return
 
         self.set_active(False)
-
 
 
     def hide(self):
@@ -89,15 +92,15 @@ class RangePick(gtk.ToggleButton):
         self.popup.hide()
 
     def show(self):
-        x, y = self.get_window().get_origin()
+        dummy, x, y = self.get_window().get_origin()
 
         alloc = self.get_allocation()
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
 
-        self.get_widget("day_preview").set_text(stuff.format_range(self.view_date, self.view_date).decode("utf-8"))
-        self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.view_date)).decode("utf-8"))
-        self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.view_date)).decode("utf-8"))
+        self.get_widget("day_preview").set_text(stuff.format_range(self.view_date, self.view_date))
+        self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.view_date)))
+        self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.view_date)))
 
         start_cal = self.get_widget("start_calendar")
         start_cal.select_month(self.start_date.month - 1, self.start_date.year)
