@@ -88,7 +88,7 @@ class Stats(gobject.GObject):
                 graphics.Scene.__init__(self)
                 self.text = ""
                 self.label = graphics.Label(self.text, 10)
-                self.label.wrap = pango.WRAP_WORD
+                self.label.wrap = pango.WrapMode.WORD
                 self.add_child(self.label)
                 self.connect("on-enter-frame", self.on_enter_frame)
 

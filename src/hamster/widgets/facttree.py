@@ -629,7 +629,7 @@ class FactCellRenderer(gtk.CellRenderer):
         if fact.description:
             self.description_label.text = "<small>%s</small>" % stuff.escape_pango(fact.description)
             self.description_label.color = text_color
-            self.description_label.wrap = pango.WRAP_WORD
+            self.description_label.wrap = pango.WrapMode.WORD
 
             description_width = self.description_label.width
             width = cell_width - x
