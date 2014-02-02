@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2008-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2009, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,15 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..lib import stuff
-from ..configuration import load_ui_file
-
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 import datetime as dt
 import calendar
 import re
+
+
+from hamster.lib import stuff
+from hamster.lib.configuration import load_ui_file
 
 class RangePick(gtk.ToggleButton):
     """ a text entry widget with calendar popup"""
@@ -35,11 +36,14 @@ class RangePick(gtk.ToggleButton):
     }
 
 
-    def __init__(self, date = None):
+    def __init__(self, today):
         gtk.ToggleButton.__init__(self)
 
-        self._gui = load_ui_file("range_pick.ui")
+        self._ui = load_ui_file("date_range.ui")
+
         self.popup = self.get_widget("range_popup")
+
+        self.today = today
 
         hbox = gtk.HBox()
         hbox.set_spacing(3)
@@ -48,18 +52,19 @@ class RangePick(gtk.ToggleButton):
         hbox.add(gtk.Arrow(gtk.ArrowType.DOWN, gtk.ShadowType.ETCHED_IN))
         self.add(hbox)
 
-        self.start_date, self.end_date, self.view_date = None, None, None
+        self.start_date, self.end_date = None, None
+        self.current_range = None
 
         self.popup.connect("focus-out-event", self.on_focus_out)
         self.connect("toggled", self.on_toggle)
 
-        self._gui.connect_signals(self)
+        self._ui.connect_signals(self)
         self.connect("destroy", self.on_destroy)
 
     def on_destroy(self, window):
         self.popup.destroy()
         self.popup = None
-        self._gui = None
+        self._ui = None
 
     def on_toggle(self, button):
         if self.get_active():
@@ -68,13 +73,63 @@ class RangePick(gtk.ToggleButton):
             self.hide()
 
 
-    def set_range(self, start_date, end_date, view_date):
-        self.start_date, self.end_date, self.view_date = start_date, end_date, view_date
-        self.label.set_markup('<big><b>%s</b></big>' % stuff.format_range(start_date, end_date).encode("utf-8"))
+    def set_range(self, start_date, end_date=None):
+        end_date = end_date or start_date
+        self.start_date, self.end_date = start_date, end_date
+        self.label.set_markup('<b>%s</b>' % stuff.format_range(start_date, end_date).encode("utf-8"))
+
+    def get_range(self):
+        return self.start_date, self.end_date
+
+    def emit_range(self, range, start, end):
+        self.set_range(start, end)
+        self.emit("range-selected", range, start, end)
+        self.hide()
+
+
+    def prev_range(self):
+        start, end = self.start_date, self.end_date
+
+        if self.current_range == "day":
+            start, end = start - dt.timedelta(1), end - dt.timedelta(1)
+        elif self.current_range == "week":
+            start, end = start - dt.timedelta(7), end - dt.timedelta(7)
+        elif self.current_range == "month":
+            end = start - dt.timedelta(1)
+            first_weekday, days_in_month = calendar.monthrange(end.year, end.month)
+            start = end - dt.timedelta(days_in_month - 1)
+        else:
+            # manual range - just jump to the next window
+            days =  (end - start) + dt.timedelta(days = 1)
+            start = start - days
+            end = end - days
+        self.emit_range(self.current_range, start, end)
+
+
+    def next_range(self):
+        start, end = self.start_date, self.end_date
+
+        if self.current_range == "day":
+            start, end = start + dt.timedelta(1), end + dt.timedelta(1)
+        elif self.current_range == "week":
+            start, end = start + dt.timedelta(7), end + dt.timedelta(7)
+        elif self.current_range == "month":
+            start = end + dt.timedelta(1)
+            first_weekday, days_in_month = calendar.monthrange(start.year, start.month)
+            end = start + dt.timedelta(days_in_month - 1)
+        else:
+            # manual range - just jump to the next window
+            days =  (end - start) + dt.timedelta(days = 1)
+            start = start + days
+            end = end + days
+
+        self.emit_range(self.current_range, start, end)
+
+
 
     def get_widget(self, name):
         """ skip one variable (huh) """
-        return self._gui.get_object(name)
+        return self._ui.get_object(name)
 
 
     def on_focus_out(self, popup, event):
@@ -98,9 +153,9 @@ class RangePick(gtk.ToggleButton):
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
 
-        self.get_widget("day_preview").set_text(stuff.format_range(self.view_date, self.view_date))
-        self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.view_date)))
-        self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.view_date)))
+        self.get_widget("day_preview").set_text(stuff.format_range(self.today, self.today))
+        self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.today)))
+        self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.today)))
 
         start_cal = self.get_widget("start_calendar")
         start_cal.select_month(self.start_date.month - 1, self.start_date.year)
@@ -114,28 +169,28 @@ class RangePick(gtk.ToggleButton):
         self.get_widget("day").grab_focus()
         self.set_active(True)
 
-    def emit_range(self, range, start, end):
-        self.hide()
-        self.emit("range-selected", range, start, end)
 
     def on_day_clicked(self, button):
-        self.emit_range("day", self.view_date, self.view_date)
+        self.current_range = "day"
+        self.emit_range("day", self.today, self.today)
 
     def on_week_clicked(self, button):
-        self.start_date, self.end_date = stuff.week(self.view_date)
+        self.current_range = "week"
+        self.start_date, self.end_date = stuff.week(self.today)
         self.emit_range("week", self.start_date, self.end_date)
 
     def on_month_clicked(self, button):
-        self.start_date, self.end_date = stuff.month(self.view_date)
+        self.current_range = "month"
+        self.start_date, self.end_date = stuff.month(self.today)
         self.emit_range("month", self.start_date, self.end_date)
 
     def on_manual_range_apply_clicked(self, button):
         self.current_range = "manual"
         cal_date = self.get_widget("start_calendar").get_date()
-        self.start_date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
+        self.start_date = dt.datetime(cal_date[0], cal_date[1] + 1, cal_date[2])
 
         cal_date = self.get_widget("end_calendar").get_date()
-        self.end_date = dt.date(cal_date[0], cal_date[1] + 1, cal_date[2])
+        self.end_date = dt.datetime(cal_date[0], cal_date[1] + 1, cal_date[2])
 
         # make sure we always have a valid range
         if self.end_date < self.start_date:
