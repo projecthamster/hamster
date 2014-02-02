@@ -63,8 +63,9 @@ def build(bld):
                     )
 
     bld.install_files('${PYTHONDIR}/hamster', 'src/hamster/*.py')
-    bld.install_files('${PYTHONDIR}/hamster/widgets', 'src/hamster/widgets/*.py')
-    bld.install_files('${PYTHONDIR}/hamster/lib', 'src/hamster/lib/*.py')
+    for folder in ("lib", "storage", "widgets"):
+        bld.install_files('${PYTHONDIR}/hamster/%s' % folder,
+                          'src/hamster/%s/*.py' % folder)
 
     bld.new_task_gen("subst",
                      source= "org.gnome.hamster.service.in",
@@ -90,26 +91,3 @@ def build(bld):
 
 
     bld.add_post_fun(post)
-
-
-def copy_help(ctx):
-    os.system('cp -R build/default/help/ .')
-
-
-def push_release(ctx):
-    """copies generated page files to sources so that they are packaged on dist
-       then creates the tarball and pushes to git master
-       TODO - this should depend and fail if distcheck fails. also it looks
-              suspiciously non-native
-    """
-    tarball = dist(APPNAME, VERSION)
-
-    import os
-    os.system('scp %s tbaugis@master.gnome.org:/home/users/tbaugis' % tarball)
-    os.system("ssh tbaugis@master.gnome.org 'install-module %s'" % tarball)
-
-
-def release(ctx):
-    """packaging a version"""
-    import Scripting
-    Scripting.commands += ['build', 'copy_help', 'push_release']
