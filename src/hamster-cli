@@ -129,11 +129,24 @@ class HamsterClient(object):
 
 
     def _launch_window(self, window_name):
-        import dbus
-        bus = dbus.SessionBus()
-        server = bus.get_object("org.gnome.Hamster.WindowServer",
-                                "/org/gnome/Hamster/WindowServer")
-        getattr(server, window_name)()
+        try:
+            from hamster import defs
+            running_installed = True
+        except:
+            running_installed = False
+
+        if running_installed:
+            import dbus
+            bus = dbus.SessionBus()
+            server = bus.get_object("org.gnome.Hamster.WindowServer",
+                                    "/org/gnome/Hamster/WindowServer")
+            getattr(server, window_name)()
+        else:
+            print "Running in devel mode"
+            from gi.repository import Gtk as gtk
+            from hamster.lib.configuration import dialogs
+            getattr(dialogs, window_name).show()
+            gtk.main()
 
     def overview(self, *args):
         self._launch_window("overview")
@@ -143,6 +156,9 @@ class HamsterClient(object):
 
     def about(self, *args):
         self._launch_window("about")
+
+    def add(self, *args):
+        self._launch_window("edit")
 
 
     def assist(self, *args):
@@ -360,6 +376,9 @@ Example usage:
         August 2012. Will check against activity, category, description and tags
 """)
     hamster_client = HamsterClient()
+
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
 
     if len(sys.argv) < 2:
         hamster_client.overview()
