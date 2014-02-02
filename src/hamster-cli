@@ -127,18 +127,6 @@ class HamsterClient(object):
     def __init__(self):
         self.storage = client.Storage()
 
-    def today(self, *args):
-        """launches today's view"""
-        from gi.repository import Gtk as gtk
-        from gi.repository import GLib as glib
-
-        glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
-
-        from hamster import today
-        app = today.DailyView()
-        import signal
-        signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
-        gtk.main()
 
     def _launch_window(self, window_name):
         import dbus
@@ -171,7 +159,6 @@ class HamsterClient(object):
 
     def toggle(self):
         self.storage.toggle()
-
 
     def track(self, *args):
         """same as start"""
@@ -375,7 +362,7 @@ Example usage:
     hamster_client = HamsterClient()
 
     if len(sys.argv) < 2:
-        hamster_client.today()
+        hamster_client.overview()
     else:
         command, args = sys.argv[1], sys.argv[2:]
         if hasattr(hamster_client, command):
