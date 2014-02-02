@@ -39,6 +39,22 @@ class ColorUtils(object):
     hex_color_short = re.compile("#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])")
     hex_color_long = re.compile("#([a-fA-F0-9]{4})([a-fA-F0-9]{4})([a-fA-F0-9]{4})")
 
+    # d3 colors
+    category10 = ("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+                  "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+    category20 = ("#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+                  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
+                  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
+                  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5")
+    category20b = ("#393b79", "#5254a3", "#6b6ecf", "#9c9ede", "#637939",
+                   "#8ca252", "#b5cf6b", "#cedb9c", "#8c6d31", "#bd9e39",
+                   "#e7ba52", "#e7cb94", "#843c39", "#ad494a", "#d6616b",
+                   "#e7969c", "#7b4173", "#a55194", "#ce6dbd", "#de9ed6")
+    category20c = ("#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#e6550d",
+                   "#fd8d3c", "#fdae6b", "#fdd0a2", "#31a354", "#74c476",
+                   "#a1d99b", "#c7e9c0", "#756bb1", "#9e9ac8", "#bcbddc",
+                   "#dadaeb", "#636363", "#969696", "#bdbdbd", "#d9d9d9")
+
     def parse(self, color):
         """parse string or a color tuple into color usable for cairo (all values
         in the normalized (0..1) range"""
@@ -62,10 +78,13 @@ class ColorUtils(object):
                      color.green / 65535.0,
                      color.blue / 65535.0]
 
-        else:
+        elif isinstance(color, (list, tuple)):
             # otherwise we assume we have color components in 0..255 range
             if color[0] > 1 or color[1] > 1 or color[2] > 1:
                 color = [c / 255.0 for c in color]
+        else:
+            color = [color.red, color.green, color.blue]
+
 
         return color
 
@@ -325,8 +344,12 @@ class Graphics(object):
 
     def fill_area(self, x, y, width, height, color, opacity = 1):
         """fill rectangular area with specified color"""
+        self.save_context()
+        self.rectangle(x, y, width, height)
+        self._add_instruction("clip")
         self.rectangle(x, y, width, height)
         self.fill(color, opacity)
+        self.restore_context()
 
     def fill_stroke(self, fill = None, stroke = None, opacity = 1, line_width = None):
         """fill and stroke the drawn area in one go"""
@@ -847,7 +870,8 @@ class Sprite(Parent, gobject.GObject):
             getattr(type(self), name).fset(self, val)
             return
 
-        if self.__dict__.get(name, "hamster_graphics_no_value_really") == val:
+        prev = self.__dict__.get(name, "hamster_graphics_no_value_really")
+        if type(prev) == type(val) and prev == val:
             return
         self.__dict__[name] = val
 
@@ -1257,7 +1281,7 @@ class BitmapSprite(Sprite):
 
             local_context = cairo.Context(surface)
             if isinstance(self.image_data, GdkPixbuf.Pixbuf):
-                local_context.set_source_pixbuf(self.image_data, 0, 0)
+                gdk.cairo_set_source_pixbuf(local_context, self.image_data, 0, 0)
             else:
                 local_context.set_source_surface(self.image_data)
             local_context.paint()
@@ -1293,7 +1317,7 @@ class Icon(BitmapSprite):
     """Displays icon by name and size in the theme"""
     def __init__(self, name, size=24, **kwargs):
         BitmapSprite.__init__(self, **kwargs)
-        self.theme = gtk.icon_theme_get_default()
+        self.theme = gtk.IconTheme.get_default()
 
         #: icon name from theme
         self.name = name
@@ -1634,23 +1658,15 @@ class Scene(Parent, gtk.DrawingArea):
     }
 
     def __init__(self, interactive = True, framerate = 60,
-                       background_color = None, scale = False, keep_aspect = True):
+                       background_color = None, scale = False, keep_aspect = True,
+                       style_class=None):
         gtk.DrawingArea.__init__(self)
-        if interactive:
-            self.set_can_focus(True)
-            self.set_events(gdk.EventMask.POINTER_MOTION_MASK
-                            | gdk.EventMask.LEAVE_NOTIFY_MASK | gdk.EventMask.ENTER_NOTIFY_MASK
-                            | gdk.EventMask.BUTTON_PRESS_MASK | gdk.EventMask.BUTTON_RELEASE_MASK
-                            | gdk.EventMask.SCROLL_MASK
-                            | gdk.EventMask.KEY_PRESS_MASK)
-            self.connect("motion-notify-event", self.__on_mouse_move)
-            self.connect("enter-notify-event", self.__on_mouse_enter)
-            self.connect("leave-notify-event", self.__on_mouse_leave)
-            self.connect("button-press-event", self.__on_button_press)
-            self.connect("button-release-event", self.__on_button_release)
-            self.connect("scroll-event", self.__on_scroll)
-            self.connect("key-press-event", self.__on_key_press)
-            self.connect("key-release-event", self.__on_key_release)
+
+        self._style = self.get_style_context()
+
+        #: widget style. One of gtk.STYLE_CLASS_*. By default it's BACKGROUND
+        self.style_class = style_class or gtk.STYLE_CLASS_BACKGROUND
+        self._style.add_class(self.style_class) # so we know our colors
 
         #: list of sprites in scene. use :func:`add_child` to add sprites
         self.sprites = []
@@ -1738,6 +1754,23 @@ class Scene(Parent, gtk.DrawingArea):
         self.__last_mouse_move = None
         self.connect("draw", self.on_draw)
 
+        if interactive:
+            self.set_can_focus(True)
+            self.set_events(gdk.EventMask.POINTER_MOTION_MASK
+                            | gdk.EventMask.LEAVE_NOTIFY_MASK | gdk.EventMask.ENTER_NOTIFY_MASK
+                            | gdk.EventMask.BUTTON_PRESS_MASK | gdk.EventMask.BUTTON_RELEASE_MASK
+                            | gdk.EventMask.SCROLL_MASK
+                            | gdk.EventMask.KEY_PRESS_MASK)
+            self.connect("motion-notify-event", self.__on_mouse_move)
+            self.connect("enter-notify-event", self.__on_mouse_enter)
+            self.connect("leave-notify-event", self.__on_mouse_leave)
+            self.connect("button-press-event", self.__on_button_press)
+            self.connect("button-release-event", self.__on_button_release)
+            self.connect("scroll-event", self.__on_scroll)
+            self.connect("key-press-event", self.__on_key_press)
+            self.connect("key-release-event", self.__on_key_release)
+
+
 
     def __setattr__(self, name, val):
         if self.__dict__.get(name, "hamster_graphics_no_value_really") == val:
@@ -1753,6 +1786,10 @@ class Scene(Parent, gtk.DrawingArea):
             if val:
                 val.focused = True
                 val._do_focus()
+        elif name == "style_class":
+            if hasattr(self, "style_class"):
+                self._style.remove_class(self.style_class)
+            self._style.add_class(val)
 
         self.__dict__[name] = val
 
@@ -2054,6 +2091,7 @@ class Scene(Parent, gtk.DrawingArea):
                 target._do_triple_click(target_event)
 
         self.__check_mouse(event.x, event.y)
+        return True
 
 
     def __on_button_release(self, scene, event):
@@ -2084,6 +2122,7 @@ class Scene(Parent, gtk.DrawingArea):
             drag_sprite.emit("on-drag-finish", event)
             self.emit("on-drag-finish", drag_sprite, event)
         self.__check_mouse(event.x, event.y)
+        return True
 
 
     def __on_scroll(self, scene, event):
@@ -2091,6 +2130,7 @@ class Scene(Parent, gtk.DrawingArea):
         if target:
             target.emit("on-mouse-scroll", event)
         self.emit("on-mouse-scroll", event)
+        return True
 
     def __on_key_press(self, scene, event):
         handled = False
@@ -2098,6 +2138,7 @@ class Scene(Parent, gtk.DrawingArea):
             handled = self._focus_sprite._do_key_press(event)
         if not handled:
             self.emit("on-key-press", event)
+        return True
 
     def __on_key_release(self, scene, event):
         handled = False
@@ -2105,3 +2146,4 @@ class Scene(Parent, gtk.DrawingArea):
             handled = self._focus_sprite._do_key_release(event)
         if not handled:
             self.emit("on-key-release", event)
+        return True
