@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007-2009, 2012 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2012, 2014 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
 
 # This file is part of Project Hamster.
@@ -44,11 +44,8 @@ except ImportError:
     print "Could not import gio - requires pygobject. File monitoring will be disabled"
     gio = None
 
-from lib import Fact
-try:
-    from lib import trophies
-except:
-    trophies = None
+from hamster.lib import Fact
+from hamster.lib import trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -127,7 +124,7 @@ class Storage(storage.Storage):
         if not os.path.exists(db_path):
             # if not there, copy from the defaults
             try:
-                import defs
+                from hamster import defs
                 data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
             except:
                 # if defs is not there, we are running from sources
@@ -636,7 +633,7 @@ class Storage(storage.Storage):
 
     def __get_todays_facts(self):
         try:
-            from configuration import conf
+            from hamster.lib.configuration import conf
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am
@@ -648,7 +645,7 @@ class Storage(storage.Storage):
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
         try:
-            from configuration import conf
+            from hamster.lib.configuration import conf
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am

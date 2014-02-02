@@ -19,7 +19,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
-from lib import Fact
+from hamster.lib import Fact
 
 class Storage(object):
     def run_fixtures(self):
