@@ -19,7 +19,7 @@
 
 
 from os.path import join
-from configuration import runtime
+from hamster.lib.configuration import runtime
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 

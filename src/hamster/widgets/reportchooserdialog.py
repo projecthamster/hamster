@@ -24,7 +24,7 @@ pygtk.require('2.0')
 import os
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
-from ..configuration import conf
+from hamster.lib.configuration import conf
 
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {

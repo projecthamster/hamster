@@ -23,8 +23,8 @@ from gi.repository import Pango as pango
 import cairo
 from math import pi
 
-from ..lib import graphics, stuff
-from ..configuration import runtime
+from hamster.lib import graphics, stuff
+from hamster.lib.configuration import runtime
 
 class TagsEntry(gtk.Entry):
     __gsignals__ = {

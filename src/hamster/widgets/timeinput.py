@@ -24,7 +24,7 @@ import re
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
-from ..lib.stuff import format_duration
+from hamster.lib.stuff import format_duration
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {

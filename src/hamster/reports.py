@@ -28,9 +28,9 @@ import itertools
 import re
 from string import Template
 
-from configuration import runtime
-from lib import stuff, trophies
-from lib.i18n import C_
+from hamster.lib.configuration import runtime
+from hamster.lib import stuff, trophies
+from hamster.lib.i18n import C_
 try:
     import json
 except ImportError:

@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2008-2010 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2010, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -53,13 +53,13 @@ def format_duration(minutes, human = True):
     if human:
         if minutes % 60 == 0:
             # duration in round hours
-            formatted_duration += _("%dh") % (hours)
+            formatted_duration += ("%dh") % (hours)
         elif hours == 0:
             # duration less than hour
-            formatted_duration += _("%dmin") % (minutes % 60.0)
+            formatted_duration += ("%dmin") % (minutes % 60.0)
         else:
             # x hours, y minutes
-            formatted_duration += _("%dh %dmin") % (hours, minutes % 60)
+            formatted_duration += ("%dh %dmin") % (hours, minutes % 60)
     else:
         formatted_duration += "%02d:%02d" % (hours, minutes)
 
@@ -76,25 +76,25 @@ def format_range(start_date, end_date):
         # date format for overview label when only single day is visible
         # Using python datetime formatting syntax. See:
         # http://docs.python.org/library/time.html#time.strftime
-        title = start_date.strftime(_("%B %d, %Y"))
+        title = start_date.strftime(("%B %d, %Y"))
     elif start_date.year != end_date.year:
         # label of date range if start and end years don't match
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = _(u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = (u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     elif start_date.month != end_date.month:
         # label of date range if start and end month do not match
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = _(u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = (u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     else:
         # label of date range for interval in same month
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = _(u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+        title = (u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
     return title
 

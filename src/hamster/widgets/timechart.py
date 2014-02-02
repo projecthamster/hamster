@@ -22,7 +22,7 @@ from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 
-from ..lib import graphics, stuff
+from hamster.lib import graphics, stuff
 
 import time, datetime as dt
 import calendar

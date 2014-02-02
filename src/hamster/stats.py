@@ -36,7 +36,7 @@ from gi.repository import Pango as pango
 
 import widgets
 from lib import stuff, charting, graphics
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 
 from lib.i18n import C_
 

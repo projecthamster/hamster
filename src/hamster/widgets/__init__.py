@@ -39,7 +39,7 @@ from .reportchooserdialog import ReportChooserDialog
 
 from .facttree import FactTree
 
-from .rangepick import RangePick
+from .dates import RangePick
 
 
 # handy wrappers

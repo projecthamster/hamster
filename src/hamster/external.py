@@ -19,7 +19,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from configuration import conf
+from hamster.lib.configuration import conf
 from gi.repository import GObject as gobject
 import dbus, dbus.mainloop.glib
 

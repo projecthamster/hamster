@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -23,7 +23,7 @@ License: GPLv2
 """
 
 import os
-from client import Storage
+from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
@@ -42,40 +42,25 @@ class Singleton(object):
         return cls.__instance
 
 class RuntimeStore(Singleton):
-    """
-    Handles one-shot configuration that is not stored between sessions
-    """
-    database_path = ""
-    database_file = None
-    last_etag = None
+    """XXX - kill"""
     data_dir = ""
     home_data_dir = ""
     storage = None
-    conf = None
-
 
     def __init__(self):
         try:
-            import defs
+            from hamster import defs
             self.data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
             self.version = defs.VERSION
         except:
             # if defs is not there, we are running from sources
             module_dir = os.path.dirname(os.path.realpath(__file__))
-            self.data_dir = os.path.join(module_dir, '..', '..', 'data')
+            self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
             self.version = "uninstalled"
 
         self.data_dir = os.path.realpath(self.data_dir)
-
-
         self.storage = Storage()
-
-
         self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-time-tracker"))
-
-    @property
-    def art_dir(self):
-        return os.path.join(self.data_dir, "art")
 
 
 runtime = RuntimeStore()
@@ -127,27 +112,27 @@ class Dialogs(Singleton):
        sense"""
     def __init__(self):
         def get_edit_class():
-            from edit_activity import CustomFactController
+            from hamster.edit_activity import CustomFactController
             return CustomFactController
         self.edit = OneWindow(get_edit_class)
 
         def get_overview_class():
-            from overview import Overview
+            from hamster.overview import Overview
             return Overview
         self.overview = OneWindow(get_overview_class)
 
         def get_stats_class():
-            from stats import Stats
+            from hamster.stats import Stats
             return Stats
         self.stats = OneWindow(get_stats_class)
 
         def get_about_class():
-            from about import About
+            from hamster.about import About
             return About
         self.about = OneWindow(get_about_class)
 
         def get_prefs_class():
-            from preferences import PreferencesEditor
+            from hamster.preferences import PreferencesEditor
             return PreferencesEditor
         self.prefs = OneWindow(get_prefs_class)
 

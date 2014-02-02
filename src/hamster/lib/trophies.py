@@ -30,7 +30,7 @@ try:
 except:
     storage = None
 
-from ..lib import Fact
+from hamster.lib import Fact
 import stuff
 import datetime as dt
 

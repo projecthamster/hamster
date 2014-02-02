@@ -23,9 +23,9 @@ from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 import datetime as dt
 
-from ..configuration import runtime
-from ..lib import Fact, stuff, graphics
-from .. import external
+from hamster.lib.configuration import runtime
+from hamster.lib import Fact, stuff, graphics
+from hamster import external
 
 class ActivityEntry(gtk.Entry):
     __gsignals__ = {

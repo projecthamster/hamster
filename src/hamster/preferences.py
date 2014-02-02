@@ -81,7 +81,7 @@ class WorkspaceStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 import widgets
 from lib import stuff, trophies
 

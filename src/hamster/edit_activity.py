@@ -27,7 +27,7 @@ import datetime as dt
           edit fact window has dared to edit facts
 """
 import widgets
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 from lib import Fact
 
 class CustomFactController(gobject.GObject):
@@ -35,7 +35,7 @@ class CustomFactController(gobject.GObject):
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self,  parent = None, fact_date = None, fact_id = None):
+    def __init__(self,  parent=None, fact_date=None, fact_id=None):
         gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
@@ -147,10 +147,10 @@ class CustomFactController(gobject.GObject):
         self.draw_preview(start_time, end_time)
 
 
-    def draw_preview(self, start_time, end_time = None):
+    def draw_preview(self, start_time, end_time=None):
 
-        view_date = (start_time - dt.timedelta(hours = self.day_start.hour,
-                                              minutes = self.day_start.minute)).date()
+        view_date = (start_time - dt.timedelta(hours=self.day_start.hour,
+                                               minutes=self.day_start.minute)).date()
 
         day_facts = runtime.storage.get_facts(view_date)
         self.dayline.plot(view_date, day_facts, start_time, end_time)

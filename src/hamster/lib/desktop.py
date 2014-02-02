@@ -24,7 +24,7 @@ from gi.repository import GObject as gobject
 
 
 from hamster import idle
-from hamster.configuration import conf
+from hamster.lib.configuration import conf
 from hamster.lib import trophies
 import dbus
 
