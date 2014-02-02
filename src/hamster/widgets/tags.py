@@ -17,12 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
-import pango, cairo
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
+import cairo
 from math import pi
 
-from ..lib import graphics, stuff
-from ..configuration import runtime
+from hamster.lib import graphics, stuff
+from hamster.lib.configuration import runtime
 
 class TagsEntry(gtk.Entry):
     __gsignals__ = {
@@ -35,12 +37,12 @@ class TagsEntry(gtk.Entry):
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
 
-        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         self.scroll_box = gtk.ScrolledWindow()
-        self.scroll_box.set_shadow_type(gtk.SHADOW_IN)
-        self.scroll_box.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.scroll_box.set_shadow_type(gtk.ShadowType.IN)
+        self.scroll_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         viewport = gtk.Viewport()
-        viewport.set_shadow_type(gtk.SHADOW_NONE)
+        viewport.set_shadow_type(gtk.ShadowType.NONE)
 
         self.tag_box = TagBox()
         self.tag_box.connect("tag-selected", self.on_tag_selected)
@@ -132,7 +134,7 @@ class TagsEntry(gtk.Entry):
         height = self.tag_box.count_height(w)
 
 
-        self.tag_box.modify_bg(gtk.STATE_NORMAL, self.get_style().base[gtk.STATE_NORMAL])
+        self.tag_box.modify_bg(gtk.StateType.NORMAL, "#eee") #self.get_style().base[gtk.StateType.NORMAL])
 
         self.scroll_box.set_size_request(w, height)
         self.popup.resize(w, height)
@@ -172,7 +174,7 @@ class TagsEntry(gtk.Entry):
         self.show_popup()
 
     def _on_key_release_event(self, entry, event):
-        if (event.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter)):
+        if (event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter)):
             if self.popup.get_property("visible"):
                 if self.get_text():
                     self.hide_popup()
@@ -181,7 +183,7 @@ class TagsEntry(gtk.Entry):
                 if self.get_text():
                     self.emit("tags-selected")
                 return False
-        elif (event.keyval == gtk.keysyms.Escape):
+        elif (event.keyval == gdk.KEY_Escape):
             if self.popup.get_property("visible"):
                 self.hide_popup()
                 return True
@@ -191,7 +193,7 @@ class TagsEntry(gtk.Entry):
             self.populate_suggestions()
             self.show_popup()
 
-            if event.keyval not in (gtk.keysyms.Delete, gtk.keysyms.BackSpace):
+            if event.keyval not in (gdk.KEY_Delete, gdk.KEY_BackSpace):
                 self.complete_inline()
 
 
@@ -221,7 +223,7 @@ class TagsEntry(gtk.Entry):
         self.set_position(len(self.get_text()))
 
     def _on_key_press_event(self, entry, event):
-        if event.keyval == gtk.keysyms.Tab:
+        if event.keyval == gdk.KEY_Tab:
             if self.popup.get_property("visible"):
                 #we have to replace
                 if self.get_text() and self.get_cursor_tag() != self.filter_tags[0]:

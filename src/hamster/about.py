@@ -19,17 +19,9 @@
 
 
 from os.path import join
-from configuration import runtime
-import gtk
-
-def on_email(about, mail):
-    gtk.show_uri(gtk.gdk.Screen(), "mailto:%s" % mail, 0L)
-
-def on_url(about, link):
-    gtk.show_uri(gtk.gdk.Screen(), link, 0L)
-
-gtk.about_dialog_set_email_hook(on_email)
-gtk.about_dialog_set_url_hook(on_url)
+from hamster.lib.configuration import runtime
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 
 class About(object):
     def __init__(self, parent = None):

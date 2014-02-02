@@ -20,11 +20,11 @@
 import datetime as dt
 from calendar import timegm
 import logging
-import gobject
+from gi.repository import GObject as gobject
 
 
 from hamster import idle
-from hamster.configuration import conf
+from hamster.lib.configuration import conf
 from hamster.lib import trophies
 import dbus
 
@@ -90,7 +90,7 @@ class DesktopIntegrations(object):
 
     def notify_user(self, summary="", details=""):
         if not hasattr(self, "_notification_conn"):
-            self._notification_conn = dbus.Interface(self.bus.get_object( 'org.freedesktop.Notifications',
+            self._notification_conn = dbus.Interface(self.bus.get_object('org.freedesktop.Notifications',
                                                                          '/org/freedesktop/Notifications',
                                                                            follow_name_owner_changes=True),
                                                            dbus_interface='org.freedesktop.Notifications')

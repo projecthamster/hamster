@@ -29,22 +29,24 @@ from gettext import ngettext
 import locale
 import math
 
-import gtk, gobject
-import pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import Pango as pango
 
 import widgets
 from lib import stuff, charting, graphics
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 
 from lib.i18n import C_
 
-class Stats(gtk.Object):
+class Stats(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
         self._gui = load_ui_file("stats.ui")
         self.report_chooser = None
         self.window = self.get_widget("stats_window")
@@ -57,7 +59,7 @@ class Stats(gtk.Object):
         self.get_widget("explore_everything").add(self.timechart)
         self.get_widget("explore_everything").show_all()
 
-        self.window.set_position(gtk.WIN_POS_CENTER)
+        self.window.set_position(gtk.WindowPosition.CENTER)
         self.chart_category_totals = charting.Chart(value_format = "%.1f",
                                                        max_bar_width = 20,
                                                        legend_width = 70,
@@ -86,7 +88,7 @@ class Stats(gtk.Object):
                 graphics.Scene.__init__(self)
                 self.text = ""
                 self.label = graphics.Label(self.text, 10)
-                self.label.wrap = pango.WRAP_WORD
+                self.label.wrap = pango.WrapMode.WORD
                 self.add_child(self.label)
                 self.connect("on-enter-frame", self.on_enter_frame)
 
@@ -96,7 +98,7 @@ class Stats(gtk.Object):
 
             def on_enter_frame(self, scene, context):
                 # now for the text - we want reduced contrast for relaxed visuals
-                fg_color = self.get_style().fg[gtk.STATE_NORMAL].to_string()
+                fg_color = "#aaa" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
                 self.label.color = self.colors.contrast(fg_color,  80)
 
                 self.label.width = self.width
@@ -422,7 +424,7 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
     def on_year_changed(self, button):
         if self.bubbling: return
 
-        for child in button.parent.get_children():
+        for child in button.get_parent().get_children():
             if child != button and child.get_active():
                 self.bubbling = True
                 child.set_active(False)
@@ -440,9 +442,9 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
         return self._gui.get_object(name)
 
     def on_window_key_pressed(self, tree, event_key):
-      if (event_key.keyval == gtk.keysyms.Escape
-          or (event_key.keyval == gtk.keysyms.w
-              and event_key.state & gtk.gdk.CONTROL_MASK)):
+      if (event_key.keyval == gdk.KEY_Escape
+          or (event_key.keyval == gdk.KEY_w
+              and event_key.state & gdk.ModifierType.CONTROL_MASK)):
         self.close_window()
 
     def on_stats_window_deleted(self, widget, event):
@@ -463,4 +465,6 @@ than 15 minutes, you seem to be a busy bee.") % ("<b>%d</b>" % short_percent)
 
 if __name__ == "__main__":
     stats_viewer = Stats()
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
     gtk.main()

@@ -17,14 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk
-import gobject
-
 import time
 import datetime as dt
 
-from ..lib import stuff, graphics, pytweener
-from ..configuration import conf
+from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
+from gi.repository import PangoCairo as pangocairo
+
+from hamster.lib import stuff, graphics, pytweener
+from hamster.lib.configuration import conf
 
 
 class Selection(graphics.Sprite):
@@ -268,8 +269,8 @@ class DayLine(graphics.Scene):
             self.chosen_selection.height = self.chosen_selection.parent.height
 
             # use the oportunity to set proper colors too
-            self.chosen_selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
-            self.chosen_selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+            self.chosen_selection.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
+            self.chosen_selection.duration_label.color = "#444" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
 
 
         self.selection.visible = self._mouse_in # TODO - think harder about the mouse_out event
@@ -317,16 +318,16 @@ class DayLine(graphics.Scene):
 
             self.selection.y = 0
 
-            self.selection.fill = self.get_style().bg[gtk.STATE_SELECTED].to_string()
-            self.selection.duration_label.color = self.get_style().fg[gtk.STATE_SELECTED].to_string()
+            self.selection.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
+            self.selection.duration_label.color = "#444" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
 
 
 
         #time scale
         g.set_color("#000")
 
-        background = self.get_style().bg[gtk.STATE_NORMAL].to_string()
-        text = self.get_style().text[gtk.STATE_NORMAL].to_string()
+        background = "#aaa" #self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        text = "#444" #self.get_style().text[gtk.StateType.NORMAL].to_string()
 
         tick_color = g.colors.contrast(background, 80)
 
@@ -359,7 +360,7 @@ class DayLine(graphics.Scene):
                 label_w, label_h = layout.get_pixel_size()
 
                 g.move_to(round(i / minute_pixel) + 2, 0)
-                context.show_layout(layout)
+                pangocairo.show_layout(context, layout)
 
         #current time
         if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = self.scope_hours):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 import time
 import datetime as dt
 
@@ -25,16 +27,16 @@ import datetime as dt
           edit fact window has dared to edit facts
 """
 import widgets
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 from lib import Fact
 
-class CustomFactController(gtk.Object):
+class CustomFactController(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        gtk.Object.__init__(self)
+    def __init__(self,  parent=None, fact_date=None, fact_id=None):
+        gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
@@ -145,10 +147,10 @@ class CustomFactController(gtk.Object):
         self.draw_preview(start_time, end_time)
 
 
-    def draw_preview(self, start_time, end_time = None):
+    def draw_preview(self, start_time, end_time=None):
 
-        view_date = (start_time - dt.timedelta(hours = self.day_start.hour,
-                                              minutes = self.day_start.minute)).date()
+        view_date = (start_time - dt.timedelta(hours=self.day_start.hour,
+                                               minutes=self.day_start.minute)).date()
 
         day_facts = runtime.storage.get_facts(view_date)
         self.dayline.plot(view_date, day_facts, start_time, end_time)
@@ -218,8 +220,8 @@ class CustomFactController(gtk.Object):
 
     def on_activity_list_key_pressed(self, entry, event):
         #treating tab as keydown to be able to cycle through available values
-        if event.keyval == gtk.keysyms.Tab:
-            event.keyval = gtk.keysyms.Down
+        if event.keyval == gdk.KEY_Tab:
+            event.keyval = gdk.KEY_Down
         return False
 
     def on_in_progress_toggled(self, check):
@@ -287,14 +289,14 @@ class CustomFactController(gtk.Object):
                  self.new_name.popup.get_property("visible") or \
                  self.new_tags.popup.get_property("visible")
 
-        if (event_key.keyval == gtk.keysyms.Escape or \
-           (event_key.keyval == gtk.keysyms.w and event_key.state & gtk.gdk.CONTROL_MASK)):
+        if (event_key.keyval == gdk.KEY_Escape or \
+           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
             if popups:
                 return False
 
             self.close_window()
 
-        elif event_key.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter):
+        elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
                 return False
             if self.get_widget('description').has_focus():

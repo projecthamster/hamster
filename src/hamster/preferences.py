@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007, 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007, 2008, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,13 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-import pygtk
-pygtk.require('2.0')
-
-import os
-import gobject
-import gtk
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import GObject as gobject
 
 import datetime as dt
 
@@ -85,16 +81,16 @@ class WorkspaceStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 import widgets
 from lib import stuff, trophies
 
 
 
-class PreferencesEditor(gtk.Object):
+class PreferencesEditor(gobject.GObject):
     TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
 
@@ -103,7 +99,7 @@ class PreferencesEditor(gtk.Object):
     }
 
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
+        gobject.GObject.__init__(self)
         self.parent = parent
         self._gui = load_ui_file("preferences.ui")
         self.window = self.get_widget('preferences_window')
@@ -113,7 +109,7 @@ class PreferencesEditor(gtk.Object):
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
                                    ("gtg", "Getting Things Gnome")]
-        self.todo_combo = gtk.combo_box_new_text()
+        self.todo_combo = gtk.ComboBoxText()
         for code, label in self.activities_sources:
             self.todo_combo.append_text(label)
         self.todo_combo.connect("changed", self.on_todo_combo_changed)
@@ -181,13 +177,13 @@ class PreferencesEditor(gtk.Object):
         self.load_config()
 
         # Allow enable drag and drop of rows including row move
-        self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
-                                                self.TARGETS,
-                                                gtk.gdk.ACTION_DEFAULT|
-                                                gtk.gdk.ACTION_MOVE)
+        self.activity_tree.enable_model_drag_source(gdk.ModifierType.BUTTON1_MASK,
+                                                    self.TARGETS,
+                                                    gdk.DragAction.DEFAULT|
+                                                    gdk.DragAction.MOVE)
 
         self.category_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_MOVE)
+                                                  gdk.DragAction.MOVE)
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
 
@@ -229,13 +225,6 @@ class PreferencesEditor(gtk.Object):
         self.workspace_tree.append_column(self.wActivityColumn)
 
         self.workspace_tree.set_model(self.workspace_store)
-
-        # disable notification thing if pynotify is not available
-        try:
-            import pynotify
-        except:
-            self.get_widget("notification_preference_frame").hide()
-
 
         self.external_listeners.extend([
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
@@ -378,9 +367,9 @@ class PreferencesEditor(gtk.Object):
 
         if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
            drop_position != gtk.TREE_VIEW_DROP_BEFORE:
-            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
         else:
-            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
 
 
 
@@ -520,7 +509,7 @@ class PreferencesEditor(gtk.Object):
         model.remove(iter)
         return removable_id
 
-    def unsorted_painter(self, column, cell, model, iter):
+    def unsorted_painter(self, column, cell, model, iter, data):
         cell_id = model.get_value(iter, 0)
         cell_text = model.get_value(iter, 1)
         if cell_id == -1:
@@ -583,10 +572,10 @@ class PreferencesEditor(gtk.Object):
         key = event_key.keyval
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        if (event_key.keyval == gtk.keysyms.Delete):
+        if (event_key.keyval == gdk.KEY_Delete):
             self.remove_current_activity()
 
-        elif key == gtk.keysyms.F2 :
+        elif key == gdk.KEY_F2 :
             self.activityCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
@@ -621,9 +610,9 @@ class PreferencesEditor(gtk.Object):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
 
-        if  key == gtk.keysyms.Delete:
+        if  key == gdk.KEY_Delete:
             self.remove_current_category()
-        elif key == gtk.keysyms.F2:
+        elif key == gdk.KEY_F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)[0]
             tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
@@ -640,12 +629,12 @@ class PreferencesEditor(gtk.Object):
 
     def on_preferences_window_key_press(self, widget, event):
         # ctrl+w means close window
-        if (event.keyval == gtk.keysyms.w \
-            and event.state & gtk.gdk.CONTROL_MASK):
+        if (event.keyval == gdk.KEY_w \
+            and event.state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
 
         # escape can mean several things
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == gdk.KEY_Escape:
             #check, maybe we are editing stuff
             if self.activityCell.get_property("editable"):
                 self.activityCell.set_property("editable", False)
@@ -679,10 +668,10 @@ class PreferencesEditor(gtk.Object):
         (model, iter) = self.selection.get_selected()
 
         self.activityCell.set_property("editable", True)
-        self.activity_tree.set_cursor_on_cell(model.get_string_from_iter(new_activity),
-                                         focus_column = self.activity_tree.get_column(0),
-                                         focus_cell = None,
-                                         start_editing = True)
+        self.activity_tree.set_cursor_on_cell(model.get_path(new_activity),
+                                              focus_column = self.activity_tree.get_column(0),
+                                              focus_cell = None,
+                                              start_editing = True)
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)

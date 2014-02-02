@@ -22,11 +22,8 @@
 import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
-import gobject
-from lib import Fact
-from lib import trophies
-
-
+from gi.repository import GObject as gobject
+from hamster.lib import Fact
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""

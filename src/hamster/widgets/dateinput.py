@@ -16,12 +16,12 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
-
-import gtk
 import datetime as dt
 import calendar
-import gobject
 import re
+
+from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
 
 class DateInput(gtk.Entry):
     """ a text entry widget with calendar popup"""
@@ -33,6 +33,7 @@ class DateInput(gtk.Entry):
     def __init__(self, date = None):
         gtk.Entry.__init__(self)
 
+
         self.set_width_chars(len(dt.datetime.now().strftime("%x"))) # size to default format length
         self.date = date
         if date:
@@ -40,11 +41,12 @@ class DateInput(gtk.Entry):
 
         self.news = False
         self.prev_cal_day = None #workaround
-        self.popup = gtk.Window(type = gtk.WINDOW_POPUP)
+        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         calendar_box = gtk.HBox()
 
         self.date_calendar = gtk.Calendar()
-        self.date_calendar.mark_day(dt.datetime.today().day)
+        # TODO - this causes pixman bug
+        #self.date_calendar.mark_day(dt.datetime.today().day)
         self.date_calendar.connect("day-selected", self._on_day_selected)
         self.date_calendar.connect("day-selected-double-click",
                                    self.__on_day_selected_double_click)
@@ -128,7 +130,7 @@ class DateInput(gtk.Entry):
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
         window = self.get_parent_window()
-        x, y = window.get_origin()
+        dummy, x, y = window.get_origin()
 
         alloc = self.get_allocation()
 
@@ -165,16 +167,16 @@ class DateInput(gtk.Entry):
 
         enter_pressed = False
 
-        if event.keyval == gtk.keysyms.Up:
+        if event.keyval == gdk.KEY_Up:
             date = date - dt.timedelta(days=1)
-        elif event.keyval == gtk.keysyms.Down:
+        elif event.keyval == gdk.KEY_Down:
             date = date + dt.timedelta(days=1)
-        elif (event.keyval == gtk.keysyms.Return or
-              event.keyval == gtk.keysyms.KP_Enter):
+        elif (event.keyval == gdk.KEY_Return or
+              event.keyval == gdk.KEY_KP_Enter):
             enter_pressed = True
-        elif (event.keyval == gtk.keysyms.Escape):
+        elif (event.keyval == gdk.KEY_Escape):
             self.hide_popup()
-        elif event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
+        elif event.keyval in (gdk.KEY_Left, gdk.KEY_Right):
             return False #keep calendar open and allow user to walk in text
         else:
             self.hide_popup()

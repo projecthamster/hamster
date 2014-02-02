@@ -6,7 +6,7 @@ import locale, gettext
 def setup_i18n():
     #determine location of po files
     try:
-        from .. import defs
+        from hamster import defs
     except:
         defs = None
 
