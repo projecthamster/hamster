@@ -35,6 +35,7 @@ import hamster.client
 from hamster.lib import graphics
 from hamster.lib import stuff
 from hamster.lib.configuration import dialogs
+from hamster.lib.pytweener import Easing
 
 from widgets.dates import RangePick
 from widgets.facttree import FactTree
@@ -169,8 +170,31 @@ class Totals(graphics.Scene):
         self.stacked_bar = StackedBar(height=25, y=25)
         self.add_child(self.category_totals, self.stacked_bar)
 
-        self.connect("on-enter-frame", self.on_enter_frame)
         self.totals = {}
+
+        self.instructions_label = graphics.Label("Click to see stats",
+                                                 color=self._style.get_color(gtk.StateFlags.NORMAL),
+                                                 y=60,
+                                                 alignment=pango.Alignment.CENTER)
+        self.add_child(self.instructions_label)
+        self.collapsed = True
+
+        self.stub_label = graphics.Label(markup="<b>Here be stats,\ntune in laters!</b>",
+                                         color="#bbb",
+                                         size=60,
+                                         y=90,
+                                         alignment=pango.Alignment.CENTER)
+        self.add_child(self.stub_label)
+
+        # for use in animation
+        self.height_proxy = graphics.Sprite(x=0)
+        self.height_proxy.height = 70
+        self.add_child(self.height_proxy)
+
+        self.connect("on-enter-frame", self.on_enter_frame)
+        self.connect("on-click", self.on_click)
+        self.connect("enter-notify-event", self.on_mouse_enter)
+        self.connect("leave-notify-event", self.on_mouse_leave)
 
 
     def set_facts(self, facts):
@@ -185,11 +209,48 @@ class Totals(graphics.Scene):
         self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['categories']])
         self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (cat, stuff.format_duration(hours)) for cat, hours in totals['categories'])
 
+    def on_click(self, scene, sprite, event):
+        self.collapsed = not self.collapsed
+        if self.collapsed:
+            self.change_height(70)
+            self.instructions_label.animate(opacity=1, easing=Easing.Expo.ease_in)
+        else:
+            self.change_height(300)
+            self.instructions_label.animate(opacity=0, easing=Easing.Expo.ease_out)
+
+    def on_mouse_enter(self, scene, event):
+        if not self.collapsed:
+            return
+        self.change_height(100)
+
+    def on_mouse_leave(self, scene, event):
+        if not self.collapsed:
+            return
+
+        def delayed_leave(sprite):
+            self.change_height(70)
+
+        self.height_proxy.animate(x=50, delay=0.5, duration=0,
+                                  on_complete=delayed_leave,
+                                  on_update=lambda sprite: sprite.redraw())
+
+    def change_height(self, new_height):
+        self.stop_animation(self.height_proxy)
+        def on_update_dummy(sprite):
+            self.set_size_request(200, sprite.height)
+
+        self.animate(self.height_proxy,
+                     height=new_height,
+                     on_update=on_update_dummy,
+                     easing=Easing.Expo.ease_out)
+
 
     def on_enter_frame(self, scene, context):
         context.translate(10, 10)
-        self.category_totals.max_width = self.width - 15
-        self.stacked_bar.width = self.width - 15
+        for sprite in self.sprites:
+            if sprite == self.category_totals:
+                sprite.max_width = self.width - 15
+            sprite.width = self.width - 15
 
 
 class Overview(gobject.GObject):
