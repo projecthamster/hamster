@@ -72,7 +72,7 @@ class Tweener(object):
     def kill_tweens(self, obj = None):
         """Stop tweening an object, without completing the motion or firing the
         on_complete"""
-        if obj:
+        if obj is not None:
             try:
                 del self.current_tweens[obj]
             except:
