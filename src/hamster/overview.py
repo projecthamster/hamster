@@ -21,6 +21,7 @@
 import bisect
 import datetime as dt
 import itertools
+import webbrowser
 
 from collections import defaultdict
 
@@ -33,7 +34,9 @@ import cairo
 
 import hamster.client
 from hamster.lib import graphics
+from hamster import reports
 from hamster.lib import stuff
+from hamster import widgets
 from hamster.lib.configuration import dialogs
 from hamster.lib.pytweener import Easing
 
@@ -68,8 +71,6 @@ class HamsterBar(gtk.HeaderBar):
                                                                   gtk.IconSize.MENU))
         self.pack_end(self.search_button)
 
-        """
-        TODO - implement
         self.system_button = gtk.MenuButton()
         self.system_button.set_image(gtk.Image.new_from_icon_name("emblem-system-symbolic",
                                                                   gtk.IconSize.MENU))
@@ -77,15 +78,11 @@ class HamsterBar(gtk.HeaderBar):
 
         self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
-
-        menu_save = gtk.MenuItem(label="Export...")
-        self.system_menu.append(menu_save)
-        menu_prefs = gtk.MenuItem(label="Tracking Settings")
-        self.system_menu.append(menu_prefs)
-
+        self.menu_export = gtk.MenuItem(label="Export...")
+        self.system_menu.append(self.menu_export)
+        self.menu_prefs = gtk.MenuItem(label="Tracking Settings")
+        self.system_menu.append(self.menu_prefs)
         self.system_menu.show_all()
-        """
-
 
 
         time_back.connect("clicked", self.on_time_back_click)
@@ -277,10 +274,10 @@ class Overview(gobject.GObject):
         main = gtk.Box(orientation=1)
         self.window.add(main)
 
+        self.report_chooser = None
 
 
         self.search_box = gtk.Revealer()
-        #self.search_box.get_style_context().add_class(gtk.STYLE_CLASS_TROUGH)
 
         space = gtk.Box()
         space.set_border_width(5)
@@ -312,9 +309,14 @@ class Overview(gobject.GObject):
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
+        self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
+        self.header_bar.menu_export.connect("activate", self.on_export_clicked)
+
 
         self.window.connect("key-press-event", self.on_key_press)
         self.window.connect("delete-event", self.on_close)
+
+        self.facts = []
         self.find_facts()
         self.window.show_all()
 
@@ -345,9 +347,9 @@ class Overview(gobject.GObject):
         search = "" if not search_active else self.filter_entry.get_text()
         search = "%s*" % search if search else "" # search anywhere
 
-        facts = self.storage.get_facts(start, end, search_terms=search)
-        self.fact_tree.set_facts(facts)
-        self.totals.set_facts(facts)
+        self.facts = self.storage.get_facts(start, end, search_terms=search)
+        self.fact_tree.set_facts(self.facts)
+        self.totals.set_facts(self.facts)
 
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
@@ -380,6 +382,37 @@ class Overview(gobject.GObject):
         #self.search_box.set_visible(active)
         if active:
             self.filter_entry.grab_focus()
+
+    def on_prefs_clicked(self, menu):
+        dialogs.prefs.show(self)
+
+    def on_export_clicked(self, menu):
+        start, end = self.header_bar.range_pick.get_range()
+
+        def on_report_chosen(widget, format, path):
+            self.report_chooser = None
+            reports.simple(self.facts, start, end, format, path)
+
+            if format == ("html"):
+                webbrowser.open_new("file://%s" % path)
+            else:
+                try:
+                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
+                except:
+                    pass # bug 626656 - no use in capturing this one i think
+
+        def on_report_chooser_closed(widget):
+            self.report_chooser = None
+
+        if not self.report_chooser:
+            self.report_chooser = widgets.ReportChooserDialog()
+            self.report_chooser.connect("report-chosen", on_report_chosen)
+            self.report_chooser.connect("report-chooser-closed",
+                                        on_report_chooser_closed)
+            self.report_chooser.show(start, end)
+        else:
+            self.report_chooser.present()
+
 
     def show(self):
         self.window.show()

@@ -39,11 +39,11 @@ class ReportChooserDialog(gtk.Dialog):
 
         self.dialog = gtk.FileChooserDialog(title = _(u"Save Report — Time Tracker"),
                                             parent = self,
-                                            action = gtk.FILE_CHOOSER_ACTION_SAVE,
+                                            action = gtk.FileChooserAction.SAVE,
                                             buttons=(gtk.STOCK_CANCEL,
-                                                     gtk.RESPONSE_CANCEL,
+                                                     gtk.ResponseType.CANCEL,
                                                      gtk.STOCK_SAVE,
-                                                     gtk.RESPONSE_OK))
+                                                     gtk.ResponseType.OK))
 
         # try to set path to last known folder or fall back to home
         report_folder = os.path.expanduser(conf.get("last_report_folder"))
@@ -107,7 +107,7 @@ class ReportChooserDialog(gtk.Dialog):
 
         response = self.dialog.run()
 
-        if response != gtk.RESPONSE_OK:
+        if response != gtk.ResponseType.OK:
             self.emit("report-chooser-closed")
             self.dialog.destroy()
             self.dialog = None
