@@ -60,6 +60,7 @@ class RangePick(gtk.ToggleButton):
 
         self._ui.connect_signals(self)
         self.connect("destroy", self.on_destroy)
+        self._hiding = False
 
     def on_destroy(self, window):
         self.popup.destroy()
@@ -68,6 +69,12 @@ class RangePick(gtk.ToggleButton):
 
     def on_toggle(self, button):
         if self.get_active():
+            if self._hiding:
+                self._hiding = False
+                self.set_active(False)
+                return
+
+
             self.show()
         else:
             self.hide()
@@ -137,7 +144,7 @@ class RangePick(gtk.ToggleButton):
         button_w, button_h = self.get_allocation().width, self.get_allocation().height
         # avoid double-toggling when focus goes from window to the toggle button
         if 0 <= x <= button_w and 0 <= y <= button_h:
-            return
+            self._hiding = True
 
         self.set_active(False)
 
