@@ -44,7 +44,7 @@ from widgets.dates import RangePick
 from widgets.facttree import FactTree
 
 
-class HamsterBar(gtk.HeaderBar):
+class HeaderBar(gtk.HeaderBar):
     def __init__(self):
         gtk.HeaderBar.__init__(self)
         self.set_show_close_button(True)
@@ -268,7 +268,7 @@ class Overview(gobject.GObject):
         self.storage.connect("facts-changed", self.on_facts_changed)
         self.storage.connect("activities-changed", self.on_facts_changed)
 
-        self.header_bar = HamsterBar()
+        self.header_bar = HeaderBar()
         self.window.set_titlebar(self.header_bar)
 
         main = gtk.Box(orientation=1)
