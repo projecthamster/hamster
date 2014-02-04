@@ -217,7 +217,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
 
     def __init__(self):
-        graphics.Scene.__init__(self, background_color="#fefefe")
+        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
 
         self.date_label = Label(10, 3)
         fontdesc = pango.FontDescription(graphics._font_desc)
@@ -241,10 +241,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.hover_fact = None
         self.current_fact = None
 
-
-        self.style = self.get_style_context()
-        self.style.add_class(gtk.STYLE_CLASS_VIEW)
-
+        self.style = self._style
 
         self.visible_range = None
         self.set_size_request(500, 400)
