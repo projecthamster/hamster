@@ -95,7 +95,11 @@ class ColorUtils(object):
     def gdk(self, color):
         """returns gdk.Color object of the given color"""
         c = self.parse(color)
-        return gdk.Color(int(c[0] * 65535.0), int(c[1] * 65535.0), int(c[2] * 65535.0))
+        return gdk.Color.from_floats(c)
+
+    def hex(self, color):
+        c = self.parse(color)
+        return "#" + "".join(["%02x" % (color * 255) for color in c])
 
     def is_light(self, color):
         """tells you if color is dark or light, so you can up or down the
