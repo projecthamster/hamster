@@ -395,8 +395,8 @@ class DailyView(object):
                                                                     resurrect = False)
                     if activity:
                         # we need dict below
-                        activity = dict(name = activity.name,
-                                        category = activity.category,
+                        activity = dict(name = activity['name'],
+                                        category = activity['category'],
                                         description = fact.description,
                                         tags = fact.tags)
 
