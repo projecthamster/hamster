@@ -23,11 +23,6 @@ from gi.repository import GObject as gobject
 
 import datetime as dt
 
-try:
-    import wnck
-except:
-    wnck = None
-
 from gettext import ngettext
 
 def get_prev(selection, model):
@@ -72,11 +67,6 @@ class ActivityStore(gtk.ListStore):
                          activity['name'],
                          activity['category_id']])
 
-
-class WorkspaceStore(gtk.ListStore):
-    def __init__(self):
-        #id, name, color_code, order
-        gtk.ListStore.__init__(self, int, gobject.TYPE_PYOBJECT, str)
 
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
@@ -196,53 +186,9 @@ class PreferencesEditor(gobject.GObject):
         self.prev_selected_activity = None
         self.prev_selected_category = None
 
-
-        # create and fill workspace tree
-        self.workspace_tree = self.get_widget('workspace_list')
-        self.workspace_store = WorkspaceStore()
-
-        self.wNameColumn = gtk.TreeViewColumn(_("Name"))
-        self.wNameColumn.set_expand(True)
-        self.wNameCell = gtk.CellRendererText()
-        self.wNameCell.set_property('editable', False)
-        self.wActivityColumn = gtk.TreeViewColumn(_("Activity"))
-        self.wActivityColumn.set_expand(True)
-        self.wActivityCell = gtk.CellRendererText()
-        self.wActivityCell.set_property('editable', True)
-
-        self.external_listeners.extend([
-            (self.wActivityCell, self.wActivityCell.connect('edited', self.on_workspace_activity_edited))
-        ])
-
-        self.wNameColumn.pack_start(self.wNameCell, True)
-        self.wNameColumn.set_attributes(self.wNameCell)
-        self.wNameColumn.set_sort_column_id(1)
-        self.wNameColumn.set_cell_data_func(self.wNameCell, self.workspace_name_celldata)
-        self.workspace_tree.append_column(self.wNameColumn)
-        self.wActivityColumn.pack_start(self.wActivityCell, True)
-        self.wActivityColumn.set_attributes(self.wActivityCell, text=2)
-        self.wActivityColumn.set_sort_column_id(1)
-        self.workspace_tree.append_column(self.wActivityColumn)
-
-        self.workspace_tree.set_model(self.workspace_store)
-
         self.external_listeners.extend([
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
         ])
-
-        # disable workspace tracking if wnck is not there
-        if wnck:
-            self.screen = wnck.screen_get_default()
-            for workspace in self.screen.get_workspaces():
-                self.on_workspace_created(self.screen, workspace)
-
-            self.external_listeners.extend([
-                (self.screen, self.screen.connect("workspace-created", self.on_workspace_created)),
-                (self.screen, self.screen.connect("workspace-destroyed", self.on_workspace_deleted))
-            ])
-        else:
-            self.get_widget("workspace_tab").hide()
-
 
         self._gui.connect_signals(self)
         self.show()
@@ -256,37 +202,6 @@ class PreferencesEditor(gobject.GObject):
     def on_todo_combo_changed(self, combo):
         conf.set("activities_source", self.activities_sources[combo.get_active()][0])
 
-    def workspace_name_celldata(self, column, cell, model, iter, user_data=None):
-        name = model.get_value(iter, 1).get_name()
-        cell.set_property('text', str(name))
-
-    def on_workspace_created(self, screen, workspace, user_data=None):
-        workspace_number = workspace.get_number()
-        activity = ""
-        if workspace_number < len(self.workspace_mapping):
-            activity = self.workspace_mapping[workspace_number]
-
-        self.workspace_store.append([workspace_number, workspace, activity])
-
-    def on_workspace_deleted(self, screen, workspace, user_data=None):
-        row = self.workspace_store.get_iter_first()
-        while row:
-            if self.workspace_store.get_value(row, 1) == workspace:
-                if not self.workspace_store.remove(row):
-                    # row is now invalid, stop iteration
-                    break
-            else:
-                row = self.workspace_store.iter_next(row)
-
-    def on_workspace_activity_edited(self, cell, path, value):
-        index = int(path)
-        while index >= len(self.workspace_mapping):
-            self.workspace_mapping.append("")
-
-        value = value.decode("utf8", "replace")
-        self.workspace_mapping[index] = value
-        conf.set("workspace_mapping", self.workspace_mapping)
-        self.workspace_store[path][2] = value
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
@@ -296,18 +211,12 @@ class PreferencesEditor(gobject.GObject):
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
 
-        self.get_widget("workspace_tracking_name").set_active("name" in conf.get("workspace_tracking"))
-        self.get_widget("workspace_tracking_memory").set_active("memory" in conf.get("workspace_tracking"))
-
         day_start = conf.get("day_start_minutes")
         day_start = dt.time(day_start / 60, day_start % 60)
         self.day_start.set_time(day_start)
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
-
-        self.workspace_mapping = conf.get("workspace_mapping")
-        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
 
 
         current_source = conf.get("activities_source")
@@ -701,16 +610,6 @@ class PreferencesEditor(gobject.GObject):
             self.categoryColumn = None
             self.emit("on-close")
 
-    def on_workspace_tracking_toggled(self, checkbox):
-        workspace_tracking = []
-        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
-        if self.get_widget("workspace_tracking_name").get_active():
-            workspace_tracking.append("name")
-
-        if self.get_widget("workspace_tracking_memory").get_active():
-            workspace_tracking.append("memory")
-
-        conf.set("workspace_tracking", workspace_tracking)
 
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())

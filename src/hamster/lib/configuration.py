@@ -159,8 +159,6 @@ class GConfStore(gobject.GObject, Singleton):
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
         'overview_window_box'         :   [],          # X, Y, W, H
         'overview_window_maximized'   :   False,       # Is overview window maximized
-        'workspace_tracking'          :   [],          # Should hamster switch activities on workspace change 0,1,2
-        'workspace_mapping'           :   [],          # Mapping between workspace numbers and activities
         'standalone_window_box'       :   [],          # X, Y, W, H
         'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")

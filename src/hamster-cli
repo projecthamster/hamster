@@ -157,6 +157,9 @@ class HamsterClient(object):
     def about(self, *args):
         self._launch_window("about")
 
+    def prefs(self, *args):
+        self._launch_window("prefs")
+
     def add(self, *args):
         self._launch_window("edit")
 

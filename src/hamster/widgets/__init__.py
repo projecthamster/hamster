@@ -26,6 +26,7 @@ from gi.repository import Pango as pango
 from .activityentry import ActivityEntry
 
 from .timechart import TimeChart
+from .timeinput import TimeInput
 
 from .dayline import DayLine
 
