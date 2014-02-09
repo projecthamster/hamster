@@ -24,8 +24,6 @@ from gi.repository import Pango as pango
 
 # import our children
 from .activityentry import ActivityEntry
-from .dateinput import DateInput
-from .timeinput import TimeInput
 
 from .timechart import TimeChart
 
