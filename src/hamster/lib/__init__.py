@@ -48,53 +48,9 @@ class Fact(object):
         self.date = date
         self.activity_id = activity_id
 
-        # parse activity
-        input_parts = activity.strip().split(" ")
-        if len(input_parts) > 1 and re.match('^-?\d', input_parts[0]): #look for time only if there is more
-            potential_time = activity.split(" ")[0]
-            potential_end_time = None
-            if len(potential_time) > 1 and  potential_time.startswith("-"):
-                #if starts with minus, treat as minus delta minutes
-                self.start_time = dt.datetime.now() + dt.timedelta(minutes = int(potential_time))
+        for key, val in parse_fact(activity).iteritems():
+            setattr(self, key, val)
 
-            else:
-                if potential_time.find("-") > 0:
-                    potential_time, potential_end_time = potential_time.split("-", 1)
-                    self.end_time = figure_time(potential_end_time)
-
-                self.start_time = figure_time(potential_time)
-
-            #remove parts that worked
-            if self.start_time and potential_end_time and not self.end_time:
-                self.start_time = None #scramble
-            elif self.start_time:
-                activity = activity[activity.find(" ")+1:]
-
-        #see if we have description of activity somewhere here (delimited by comma)
-        if activity.find(",") > 0:
-            activity, self.description = activity.split(",", 1)
-
-            if " #" in self.description:
-                self.description, self.tags = self.description.split(" #", 1)
-                self.tags = [tag.strip(", ") for tag in self.tags.split("#") if tag.strip(", ")]
-
-            self.description = self.description.strip()
-
-        if activity.find("@") > 0:
-            activity, self.category = activity.split("@", 1)
-            self.category = self.category.strip()
-
-        #this is most essential
-        if any([b in activity for b in ("bbq", "barbeque", "barbecue")]) and "omg" in activity:
-            self.ponies = True
-            self.description = "[ponies = 1], [rainbows = 0]"
-
-        #only thing left now is the activity name itself
-        self.activity = activity.strip()
-
-        tags = tags or ""
-        if tags and isinstance(tags, basestring):
-            tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
 
         # override implicit with explicit
         self.category = category.replace(",", "") or self.category or None
@@ -126,8 +82,8 @@ class Fact(object):
             res += "@%s" % self.category
 
         if self.description or self.tags:
-            res += ",%s %s" % (self.description or "",
-                               " ".join(["#%s" % tag for tag in self.tags]))
+            res += "%s, %s" % (" ".join(["#%s" % tag for tag in self.tags]),
+                               self.description or "")
         return res
 
     def __str__(self):
@@ -137,3 +93,108 @@ class Fact(object):
         if self.end_time:
             time = "%s - %s" % (time, self.end_time.strftime("%H:%M"))
         return "%s %s" % (time, self.serialized_name())
+
+
+
+
+def parse_fact(text, phase=None):
+    """tries to extract fact fields from the string
+        the optional arguments in the syntax makes us actually try parsing
+        values and fallback to next phase
+        start -> [end] -> activity[@category] -> tags
+
+        Returns dict for the fact and achieved phase
+
+        TODO - While we are now bit cooler and going recursively, this code
+        still looks rather awfully spaghetterian. What is the real solution?
+    """
+    now = dt.datetime.now()
+
+    # determine what we can look for
+    phases = [
+        "start_time",
+        "end_time",
+        "activity",
+        "category",
+        "tags",
+    ]
+
+    phase = phase or phases[0]
+    phases = phases[phases.index(phase):]
+    res = {}
+
+    text = text.strip()
+    if not text:
+        return {}
+
+    fragment = re.split("[\s|#]", text, 1)[0].strip()
+
+    def next_phase(fragment, phase):
+        res.update(parse_fact(text[len(fragment):], phase))
+        return res
+
+    if "start_time" in phases or "end_time" in phases:
+        # looking for start or end time
+
+        delta_re = re.compile("^-[0-9]{1,3}$")
+        time_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
+        time_range_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
+
+        if delta_re.match(fragment):
+            res[phase] = now + dt.timedelta(minutes=int(fragment))
+            return next_phase(fragment, phases[phases.index(phase)+1])
+
+        elif time_re.match(fragment):
+            res[phase] = dt.datetime.combine(now.date(), dt.datetime.strptime(fragment, "%H:%M").time())
+            return next_phase(fragment, phases[phases.index(phase)+1])
+
+        elif time_range_re.match(fragment) and phase == "start_time":
+            start, end = fragment.split("-")
+            res["start_time"] = dt.datetime.combine(now.date(), dt.datetime.strptime(start, "%H:%M").time())
+            res["end_time"] = dt.datetime.combine(now.date(), dt.datetime.strptime(end, "%H:%M").time())
+            phase = "activity"
+            return next_phase(fragment, "activity")
+
+    if "activity" in phases:
+        activity = re.split("[@|#|,]", text, 1)[0]
+        if looks_like_time(activity):
+            # want meaningful activities
+            return res
+
+        res["activity"] = activity
+        return next_phase(activity, "category")
+
+    if "category" in phases:
+        category = re.split("[#|,]", text, 1)[0]
+        if category.lstrip().startswith("@"):
+            res["category"] = category.lstrip("@ ")
+            return next_phase(category, "tags")
+
+        return next_phase("", "tags")
+
+    if "tags" in phases:
+        tags, desc = text.split(",", 1) if "," in text else (text, None)
+
+        tags = [tag.strip() for tag in re.split("[#]", tags) if tag.strip()]
+        if tags:
+            res["tags"] = tags
+
+        if (desc or "").strip():
+            res["description"] = desc.strip()
+
+        return res
+
+    return {}
+
+
+_time_fragment_re = [
+    re.compile("^-$"),
+    re.compile("^([0-1]?[0-9]?|[2]?[0-3]?)$"),
+    re.compile("^([0-1]?[0-9]|[2][0-3]):?([0-5]?[0-9]?)$"),
+    re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-?([0-1]?[0-9]?|[2]?[0-3]?)$"),
+    re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):?([0-5]?[0-9]?)$"),
+]
+def looks_like_time(fragment):
+    if not fragment:
+        return False
+    return any((r.match(fragment) for r in _time_fragment_re))
