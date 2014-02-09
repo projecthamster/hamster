@@ -374,7 +374,7 @@ class Overview(gobject.GObject):
         dialogs.edit.show(self)
 
     def on_row_activated(self, tree, day, fact):
-        dialogs.edit.show(self, fact_id=fact.id)
+        dialogs.edit.show(self, fact_date=fact.date, fact_id=fact.id)
 
     def on_search_toggled(self, button):
         active = button.get_active()
