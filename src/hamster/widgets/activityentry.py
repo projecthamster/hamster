@@ -50,7 +50,7 @@ class DataRow(object):
     """want to split out visible label, description, activity data
       and activity data with time (full_data)"""
     def __init__(self, label, data=None, full_data=None, description=None):
-        self.label = stuff.escape_pango(label)
+        self.label = label
         self.data = data or label
         self.full_data = full_data or data or label
         self.description = description or ""
@@ -415,7 +415,7 @@ class ActivityEntry(gtk.Entry):
                 if fact.end_time:
                     label += fact.end_time.strftime("-%H:%M")
 
-                markup_label = label + " " + (match.replace(search, "<b>%s</b>" % search) if search else match)
+                markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
                 label += " " + match
 
                 res.append(DataRow(markup_label, match, label))
@@ -435,7 +435,7 @@ class ActivityEntry(gtk.Entry):
             if fact.tags:
                 label += " #" + " #".join(fact.tags)
 
-            res.append(DataRow(label, description="Start tracking"))
+            res.append(DataRow(stuff.escape_pango(label), description="Start tracking"))
 
         self.complete_tree.set_rows(res)
 
