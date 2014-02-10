@@ -60,7 +60,7 @@ class CustomFactController(gobject.GObject):
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
-
+        self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
             label = fact.start_time.strftime("%H:%M")
@@ -68,7 +68,6 @@ class CustomFactController(gobject.GObject):
                 label += fact.end_time.strftime(" %H:%M")
 
             label += " " + fact.serialized_name()
-            self.activity.grab_focus()
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 print len(label) - len(fact.serialized_name()), -1
