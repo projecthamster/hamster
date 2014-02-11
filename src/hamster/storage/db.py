@@ -69,17 +69,17 @@ class Storage(storage.Storage):
             # add file monitoring so the app does not have to be restarted
             # when db file is rewritten
             def on_db_file_change(monitor, gio_file, event_uri, event):
-                if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+                if event == gio.FileMontiorEvent.CHANGES_DONE_HINT:
                     if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
                                            gio.FileQueryInfoFlags.NONE,
                                            None).get_etag() == self.__last_etag:
                         # ours
                         return
-                elif event == gio.FILE_MONITOR_EVENT_CREATED:
+                elif event == gio.FileMontiorEvent.CREATED:
                     # treat case when instead of a move, a remove and create has been performed
                     self.con = None
 
-                if event in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, gio.FILE_MONITOR_EVENT_CREATED):
+                if event in (gio.FileMontiorEvent.CHANGES_DONE_HINT, gio.FileMontiorEvent.CREATED):
                     print "DB file has been modified externally. Calling all stations"
                     self.dispatch_overwrite()
 
@@ -698,10 +698,11 @@ class Storage(storage.Storage):
             # heuristics to assign tasks to proper days
 
             # if fact has no end time, set the last minute of the day,
-            # or current time if fact has happened in last 24 hours
+            # or current time if fact has happened in last 12 hours
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
-            elif (dt.date.today() - fact["start_time"].date()) <= dt.timedelta(days=1):
+            elif (dt.datetime.now().date() == fact["start_time"].date()) or \
+                 (dt.datetime.now() - fact["start_time"]) <= dt.timedelta(hours=12):
                 fact_end_time = dt.datetime.now().replace(microsecond = 0)
             else:
                 fact_end_time = fact["start_time"]
