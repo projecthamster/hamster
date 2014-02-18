@@ -1,5 +1,9 @@
-NOTE: Hamster is kinda not being maintained at the moment. 
-Details here: http://projecthamster.wordpress.com/2013/05/13/hamster-is-looking-for-a-new-maintainer/
+h1. Requires most recent stable gtk3 (3.10)
+
+Version of gtk required is 3.10 because of the use of HeaderBar and other bits. 
+Sorry and get up to date!
+
+
 
 h1. Dependencies
 
