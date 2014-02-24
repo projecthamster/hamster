@@ -1,3 +1,8 @@
+h1. Bleeding edge warning
+
+Project Hamster right now is undergoing bit of reshuffling and might not be fit
+for everyday use. For stable versions check out "releases":https://github.com/projecthamster/hamster/releases
+
 h1. Requires most recent stable gtk3 (3.10)
 
 Version of gtk required is 3.10 because of the use of HeaderBar and other bits. 
