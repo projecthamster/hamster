@@ -207,6 +207,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
         'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
 
@@ -266,6 +267,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def activate_row(self, day, fact):
         self.emit("on-activate-row", day, fact)
 
+    def delete_row(self, fact):
+        if fact:
+            self.emit("on-delete-called", fact)
 
     def on_double_click(self, scene, event):
         if self.hover_fact:
@@ -290,6 +294,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         elif event.keyval == gdk.KEY_Return:
             self.activate_row(self.hover_day, self.current_fact)
+
+        elif event.keyval == gdk.KEY_Delete:
+            self.delete_row(self.current_fact)
 
 
     def set_current_fact(self, idx):
@@ -355,6 +362,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
     def set_facts(self, facts):
+        current_fact, current_date = self.current_fact, self.hover_day
+
         self.y = 0
         self.hover_fact = None
         if self.vadjustment:
@@ -382,6 +391,17 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.set_row_heights()
 
         if self.height:
+            if current_fact:
+                fact_ids = [fact.id for fact in facts]
+                if current_fact.id in fact_ids:
+                    print "totally scroling"
+                    self.set_current_fact(fact_ids.index(current_fact.id))
+            elif current_date:
+                for i, fact in enumerate(facts):
+                    if fact.date == current_date:
+                        self.set_current_fact(i)
+                        break
+
             self.on_scroll()
 
 

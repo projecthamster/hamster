@@ -296,6 +296,7 @@ class Overview(gobject.GObject):
         window.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         self.fact_tree = FactTree()
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
+        self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
 
         window.add(self.fact_tree)
         main.pack_start(window, True, True, 1)
@@ -375,6 +376,10 @@ class Overview(gobject.GObject):
 
     def on_row_activated(self, tree, day, fact):
         dialogs.edit.show(self, fact_date=fact.date, fact_id=fact.id)
+
+    def on_row_delete_called(self, tree, fact):
+        self.storage.remove_fact(fact.id)
+        self.find_facts()
 
     def on_search_toggled(self, button):
         active = button.get_active()
