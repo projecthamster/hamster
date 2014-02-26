@@ -70,7 +70,6 @@ class CustomFactController(gobject.GObject):
             label += " " + fact.serialized_name()
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
-                print len(label) - len(fact.serialized_name()), -1
                 self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
 
 
@@ -89,6 +88,13 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
         self.window.show_all()
 
+    def on_prev_day_clicked(self, button):
+        self.date = self.date - dt.timedelta(days=1)
+        self.validate_fields()
+
+    def on_next_day_clicked(self, button):
+        self.date = self.date + dt.timedelta(days=1)
+        self.validate_fields()
 
     def draw_preview(self, start_time, end_time=None):
         day_facts = runtime.storage.get_facts(self.date)
@@ -136,13 +142,6 @@ class CustomFactController(gobject.GObject):
 
         self.close_window()
 
-    def on_delete_clicked(self, button):
-        runtime.storage.remove_fact(self.fact_id)
-        self.close_window()
-
-    def on_cancel_clicked(self, button):
-        self.close_window()
-
     def on_activity_changed(self, combo):
         self.validate_fields()
 
@@ -150,8 +149,10 @@ class CustomFactController(gobject.GObject):
         fact = self.localized_fact()
 
         now = dt.datetime.now()
+        self.get_widget("button-next-day").set_sensitive(self.date < now.date())
+
         if self.date != now.date():
-            now = dt.datetime.combine(self.date, dt.time())
+            now = dt.datetime.combine(self.date, now.time())
 
         self.draw_preview(fact.start_time or now,
                           fact.end_time or now)
@@ -159,6 +160,17 @@ class CustomFactController(gobject.GObject):
         looks_good = fact.activity is not None and fact.start_time is not None
         self.get_widget("save_button").set_sensitive(looks_good)
         return looks_good
+
+
+    def on_delete_clicked(self, button):
+        runtime.storage.remove_fact(self.fact_id)
+        self.close_window()
+
+    def on_cancel_clicked(self, button):
+        self.close_window()
+
+    def on_close(self, widget, event):
+        self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
         popups = self.activity.popup.get_property("visible");
@@ -178,9 +190,6 @@ class CustomFactController(gobject.GObject):
             self.on_save_button_clicked(None)
 
 
-
-    def on_close(self, widget, event):
-        self.close_window()
 
     def close_window(self):
         if not self.parent:
