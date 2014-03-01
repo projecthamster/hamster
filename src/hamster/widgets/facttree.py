@@ -331,6 +331,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 hover_day = rec
                 break
 
+        blank_day = hover_day and not hover_day.get('facts')
+
         if self.hover_day:
             for fact in self.hover_day.get('facts', []):
                 if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
@@ -394,8 +396,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             if current_fact:
                 fact_ids = [fact.id for fact in facts]
                 if current_fact.id in fact_ids:
-                    print "totally scroling"
                     self.set_current_fact(fact_ids.index(current_fact.id))
+
             elif current_date:
                 for i, fact in enumerate(facts):
                     if fact.date == current_date:
