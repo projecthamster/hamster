@@ -1193,6 +1193,15 @@ class Sprite(Parent, gobject.GObject):
                 color = debug_colors[depth % len(debug_colors)]
                 context.save()
                 context.identity_matrix()
+
+                scene = self.get_scene()
+                if scene:
+                    # go figure - seems like the context we are given starts
+                    # in window coords when calling identity matrix
+                    scene_alloc = self.get_scene().get_allocation()
+                    context.translate(scene_alloc.x, scene_alloc.y)
+
+
                 context.rectangle(exts.x, exts.y, exts.width, exts.height)
                 context.set_source_rgb(*Colors.parse(color))
                 context.stroke()
