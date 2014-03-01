@@ -34,6 +34,7 @@ import cairo
 
 import hamster.client
 from hamster.lib import graphics
+from hamster.lib import layout
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
@@ -105,9 +106,9 @@ class HeaderBar(gtk.HeaderBar):
         self.range_pick.next_range()
 
 
-class StackedBar(graphics.Sprite):
+class StackedBar(layout.Widget):
     def __init__(self, width=0, height=0, vertical=None, **kwargs):
-        graphics.Sprite.__init__(self, **kwargs)
+        layout.Widget.__init__(self, **kwargs)
 
         #: orientation, horizontal by default
         self.vertical = vertical or False
@@ -151,7 +152,7 @@ class StackedBar(graphics.Sprite):
             self.graphics.clear()
             return
 
-        max_width = self.width - 1 * len(self._items)
+        max_width = self.alloc_w - 1 * len(self._items)
         for i, (key, val, normalized) in enumerate(self._items):
             color = self._take_color(key)
 
@@ -161,39 +162,124 @@ class StackedBar(graphics.Sprite):
             self.graphics.translate(width + 1, 0)
 
 
+class Label(object):
+    """a much cheaper label that would be suitable for cellrenderer"""
+    def __init__(self, x=0, y=0, color=None, use_markup=False):
+        self.x = x
+        self.y = y
+        self.color = color
+        self.use_markup = use_markup
+
+    def _set_text(self, text):
+        if self.use_markup:
+            self.layout.set_markup(text)
+        else:
+            self.layout.set_text(text, -1)
+
+    def _show(self, g):
+        if self.color:
+            g.set_color(self.color)
+        pangocairo.show_layout(g.context, self.layout)
+
+    def show(self, g, text, x=0, y=0):
+        g.save_context()
+        g.move_to(x or self.x, y or self.y)
+        self._set_text(text)
+        self._show(g)
+        g.restore_context()
+
+
+class HorizontalBarChart(graphics.Sprite):
+    def __init__(self, **kwargs):
+        graphics.Sprite.__init__(self, **kwargs)
+        self.x_align = 0
+        self.y_align = 0
+        self.values = []
+
+        self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
+        self.layout = pangocairo.create_layout(self._label_context)
+        self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
+        self.layout.set_markup("Hamster") # dummy
+        self.label_height = self.layout.get_pixel_size()[1]
+
+        self._max = 0
+
+    def set_values(self, values):
+        """expects a list of 2-tuples"""
+        self.values = values
+        self.height = len(self.values) * 14
+        self._max = max(rec[1] for rec in values) if values else 0
+
+    def _draw(self, context, opacity, matrix):
+        g = graphics.Graphics(context)
+        g.save_context()
+        g.translate(self.x, self.y)
+
+        for i, (label, value) in enumerate(self.values):
+            g.set_color("#333")
+            self.layout.set_markup(label)
+            label_w, label_h = self.layout.get_pixel_size()
+
+            y = int(i * label_h * 1.5)
+            g.move_to(100 - label_w, y)
+            pangocairo.show_layout(context, self.layout)
+
+            w = (self.alloc_w - 110) * value.total_seconds() / self._max.total_seconds()
+            w = max(1, int(round(w)))
+            g.rectangle(110, y, int(w), int(label_h))
+            g.fill("#999")
+
+        g.restore_context()
+
+
 
 class Totals(graphics.Scene):
     def __init__(self):
         graphics.Scene.__init__(self)
         self.set_size_request(200, 70)
-        self.category_totals = graphics.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                              ellipsize=pango.EllipsizeMode.END)
-        self.stacked_bar = StackedBar(height=25, y=25)
-        self.add_child(self.category_totals, self.stacked_bar)
+        self.category_totals = layout.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
+                                            overflow=pango.EllipsizeMode.END,
+                                            x_align=0,
+                                            expand=False)
+        self.stacked_bar = StackedBar(height=25, x_align=0, expand=False)
+
+        box = layout.VBox(padding=10, spacing=5)
+        self.add_child(box)
+
+        box.add_child(self.category_totals, self.stacked_bar)
 
         self.totals = {}
         self.mouse_cursor = gdk.CursorType.HAND2
 
-        self.instructions_label = graphics.Label("Click to see stats",
-                                                 color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                                 y=60,
-                                                 alignment=pango.Alignment.CENTER)
-        self.add_child(self.instructions_label)
+        self.instructions_label = layout.Label("Click to see stats",
+                                               color=self._style.get_color(gtk.StateFlags.NORMAL),
+                                               padding=10,
+                                               expand=False)
+
+        box.add_child(self.instructions_label)
         self.collapsed = True
 
-        self.stub_label = graphics.Label(markup="<b>Here be stats,\ntune in laters!</b>",
-                                         color="#bbb",
-                                         size=60,
-                                         y=90,
-                                         alignment=pango.Alignment.CENTER)
-        self.add_child(self.stub_label)
+        main = layout.HBox(padding_top=10)
+        box.add_child(main)
+
+        self.stub_label = layout.Label(markup="<b>Here be stats,\ntune in laters!</b>",
+                                       color="#bbb",
+                                       size=60)
+
+        self.activities_chart = HorizontalBarChart()
+        self.categories_chart = HorizontalBarChart()
+        self.tag_chart = HorizontalBarChart()
+
+        main.add_child(self.activities_chart, self.categories_chart, self.tag_chart)
+
+
+
 
         # for use in animation
         self.height_proxy = graphics.Sprite(x=0)
         self.height_proxy.height = 70
         self.add_child(self.height_proxy)
 
-        self.connect("on-enter-frame", self.on_enter_frame)
         self.connect("on-click", self.on_click)
         self.connect("enter-notify-event", self.on_mouse_enter)
         self.connect("leave-notify-event", self.on_mouse_leave)
@@ -202,23 +288,34 @@ class Totals(graphics.Scene):
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
         for fact in facts:
-            totals['categories'][fact.category] += fact.delta
+            for key in ('category', 'activity'):
+                totals[key][getattr(fact, key)] += fact.delta
+
+            for tag in fact.tags:
+                totals["tag"][tag] += fact.delta
+
 
         for key, group in totals.iteritems():
             totals[key] = sorted(group.iteritems(), key=lambda x: x[1], reverse=True)
         self.totals = totals
 
-        self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['categories']])
-        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (cat, stuff.format_duration(hours)) for cat, hours in totals['categories'])
+        self.activities_chart.set_values(totals['activity'])
+        self.categories_chart.set_values(totals['category'])
+        self.tag_chart.set_values(totals['tag'])
+
+        self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
+        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (cat, stuff.format_duration(hours)) for cat, hours in totals['category'])
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
         if self.collapsed:
             self.change_height(70)
+            self.instructions_label.visible = True
+            self.instructions_label.opacity = 0
             self.instructions_label.animate(opacity=1, easing=Easing.Expo.ease_in)
         else:
             self.change_height(300)
-            self.instructions_label.animate(opacity=0, easing=Easing.Expo.ease_out)
+            self.instructions_label.visible = False
 
         self.mouse_cursor = gdk.CursorType.HAND2 if self.collapsed else None
 
@@ -256,12 +353,6 @@ class Totals(graphics.Scene):
                      easing=Easing.Expo.ease_out)
 
 
-    def on_enter_frame(self, scene, context):
-        context.translate(10, 10)
-        for sprite in self.sprites:
-            if sprite == self.category_totals:
-                sprite.max_width = self.width - 15
-            sprite.width = self.width - 15
 
 
 class Overview(Controller):
@@ -287,8 +378,7 @@ class Overview(Controller):
 
         self.search_box = gtk.Revealer()
 
-        space = gtk.Box()
-        space.set_border_width(5)
+        space = gtk.Box(border_width=5)
         self.search_box.add(space)
         self.filter_entry = gtk.Entry()
         self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY,
@@ -332,6 +422,7 @@ class Overview(Controller):
     def on_key_press(self, window, event):
         if self.filter_entry.has_focus():
             if event.keyval == gdk.KEY_Escape:
+                self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
             elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
@@ -364,7 +455,6 @@ class Overview(Controller):
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
 
-
     def on_search_changed(self, entry):
         if entry.get_text():
             self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
@@ -394,14 +484,19 @@ class Overview(Controller):
     def on_search_toggled(self, button):
         active = button.get_active()
         self.search_box.set_reveal_child(active)
-        #self.search_box.set_visible(active)
         if active:
             self.filter_entry.grab_focus()
+
 
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
 
+
     def on_export_clicked(self, menu):
+        if self.report_chooser:
+            self.report_chooser.present()
+            return
+
         start, end = self.header_bar.range_pick.get_range()
 
         def on_report_chosen(widget, format, path):
@@ -419,20 +514,9 @@ class Overview(Controller):
         def on_report_chooser_closed(widget):
             self.report_chooser = None
 
-        if not self.report_chooser:
-            self.report_chooser = widgets.ReportChooserDialog()
-            self.report_chooser.connect("report-chosen", on_report_chosen)
-            self.report_chooser.connect("report-chooser-closed",
-                                        on_report_chooser_closed)
-            self.report_chooser.show(start, end)
-        else:
-            self.report_chooser.present()
 
+        self.report_chooser = widgets.ReportChooserDialog()
+        self.report_chooser.connect("report-chosen", on_report_chosen)
+        self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
+        self.report_chooser.show(start, end)
 
-
-if __name__ == '__main__':
-    hamster = Overview()
-
-    import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
-    gtk.main()
