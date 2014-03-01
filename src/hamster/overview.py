@@ -37,7 +37,11 @@ from hamster.lib import graphics
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
+
 from hamster.lib.configuration import dialogs
+from hamster.lib.configuration import Controller
+
+
 from hamster.lib.pytweener import Easing
 
 from widgets.dates import RangePick
@@ -168,6 +172,7 @@ class Totals(graphics.Scene):
         self.add_child(self.category_totals, self.stacked_bar)
 
         self.totals = {}
+        self.mouse_cursor = gdk.CursorType.HAND2
 
         self.instructions_label = graphics.Label("Click to see stats",
                                                  color=self._style.get_color(gtk.StateFlags.NORMAL),
@@ -215,10 +220,19 @@ class Totals(graphics.Scene):
             self.change_height(300)
             self.instructions_label.animate(opacity=0, easing=Easing.Expo.ease_out)
 
+        self.mouse_cursor = gdk.CursorType.HAND2 if self.collapsed else None
+
     def on_mouse_enter(self, scene, event):
         if not self.collapsed:
             return
-        self.change_height(100)
+
+        def delayed_leave(sprite):
+            self.change_height(100)
+
+        self.height_proxy.animate(x=50, delay=0.5, duration=0,
+                                  on_complete=delayed_leave,
+                                  on_update=lambda sprite: sprite.redraw())
+
 
     def on_mouse_leave(self, scene, event):
         if not self.collapsed:
@@ -250,16 +264,10 @@ class Totals(graphics.Scene):
             sprite.width = self.width - 15
 
 
-class Overview(gobject.GObject):
-    __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
+class Overview(Controller):
     def __init__(self, parent = None):
-        gobject.GObject.__init__(self)
-        self.parent = parent
+        Controller.__init__(self, parent)
 
-        self.window = gtk.Window()
         self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("hamster-time-tracker")
         self.window.set_default_size(700, 500)
@@ -315,11 +323,11 @@ class Overview(gobject.GObject):
 
 
         self.window.connect("key-press-event", self.on_key_press)
-        self.window.connect("delete-event", self.on_close)
 
         self.facts = []
         self.find_facts()
         self.window.show_all()
+
 
     def on_key_press(self, window, event):
         if self.filter_entry.has_focus():
@@ -352,8 +360,10 @@ class Overview(gobject.GObject):
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
 
+
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
+
 
     def on_search_changed(self, entry):
         if entry.get_text():
@@ -418,24 +428,6 @@ class Overview(gobject.GObject):
         else:
             self.report_chooser.present()
 
-
-    def show(self):
-        self.window.show()
-
-    def on_close(self, widget, event):
-        self.close_window()
-
-    def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            """
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-            """
-            self.window.destroy()
-            self.window = None
-            self.emit("on-close")
 
 
 if __name__ == '__main__':

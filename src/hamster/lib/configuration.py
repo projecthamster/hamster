@@ -35,6 +35,62 @@ from gi.repository import GConf as gconf
 import logging
 log = logging.getLogger("configuration")
 
+
+
+class Controller(gobject.GObject):
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
+    def __init__(self, parent=None, ui_file=""):
+        gobject.GObject.__init__(self)
+
+        self.parent = parent
+
+        if ui_file:
+            self._gui = load_ui_file(ui_file)
+            self.window = self.get_widget('window')
+        else:
+            self._gui = None
+            self.window = gtk.Window()
+
+        self.window.connect("delete-event", self.window_delete_event)
+        if self._gui:
+            self._gui.connect_signals(self)
+
+
+    def get_widget(self, name):
+        """ skip one variable (huh) """
+        return self._gui.get_object(name)
+
+
+    def window_delete_event(self, widget, event):
+        self.close_window()
+
+    def close_window(self):
+        if not self.parent:
+            gtk.main_quit()
+        else:
+            """
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+            """
+            self.window.destroy()
+            self.window = None
+            self.emit("on-close")
+
+    def show(self):
+        self.window.show()
+
+
+def load_ui_file(name):
+    """loads interface from the glade file; sorts out the path business"""
+    ui = gtk.Builder()
+    ui.add_from_file(os.path.join(runtime.data_dir, name))
+    return ui
+
+
+
 class Singleton(object):
     def __new__(cls, *args, **kwargs):
         if '__instance' not in vars(cls):
@@ -121,11 +177,6 @@ class Dialogs(Singleton):
             return Overview
         self.overview = OneWindow(get_overview_class)
 
-        def get_stats_class():
-            from hamster.stats import Stats
-            return Stats
-        self.stats = OneWindow(get_stats_class)
-
         def get_about_class():
             from hamster.about import About
             return About
@@ -138,11 +189,6 @@ class Dialogs(Singleton):
 
 dialogs = Dialogs()
 
-
-def load_ui_file(name):
-    ui = gtk.Builder()
-    ui.add_from_file(os.path.join(runtime.data_dir, name))
-    return ui
 
 class GConfStore(gobject.GObject, Singleton):
     """

@@ -25,6 +25,9 @@ import datetime as dt
 
 from gettext import ngettext
 
+from hamster.lib.configuration import Controller
+
+
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
 
@@ -71,30 +74,21 @@ class ActivityStore(gtk.ListStore):
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from hamster.lib.configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf
 import widgets
 from lib import stuff, trophies
 
 
 
-class PreferencesEditor(gobject.GObject):
+class PreferencesEditor(Controller):
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
 
-    __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
     def __init__(self, parent = None):
-        gobject.GObject.__init__(self)
-        self.parent = parent
-        self._gui = load_ui_file("preferences.ui")
-        self.window = self.get_widget('preferences_window')
-        self.window.connect("delete_event", self.on_delete_window)
-
+        Controller.__init__(self, parent, ui_file="preferences.ui")
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
@@ -190,7 +184,6 @@ class PreferencesEditor(gobject.GObject):
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
         ])
 
-        self._gui.connect_signals(self)
         self.show()
 
 
@@ -299,18 +292,9 @@ class PreferencesEditor(gobject.GObject):
 
         return
 
-
-    def get_widget(self, name):
-        """ skip one variable (huh) """
-        return self._gui.get_object(name)
-
-    def get_store(self):
-        """returns store, so we can add some watchers in case if anything changes"""
-        return self.activity_store
-
-
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
+        new_text = new_text.decode("utf-8")
         id = model[path][0]
         if id == -1:
             return False #ignoring unsorted category
@@ -325,15 +309,17 @@ class PreferencesEditor(gobject.GObject):
                 return False
 
         if id == -2: #new category
-            id = runtime.storage.add_category(new_text.decode("utf-8"))
+            id = runtime.storage.add_category(new_text)
             model[path][0] = id
         else:
-            runtime.storage.update_category(id, new_text.decode("utf-8"))
+            runtime.storage.update_category(id, new_text)
 
         model[path][1] = new_text
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
+        new_text = new_text.decode("utf-8")
+
         id = model[path][0]
         category_id = model[path][2]
 
@@ -351,9 +337,9 @@ class PreferencesEditor(gobject.GObject):
                     return False
 
         if id == -1: #new activity -> add
-            model[path][0] = runtime.storage.add_activity(new_text.decode("utf-8"), category_id)
+            model[path][0] = runtime.storage.add_activity(new_text, category_id)
         else: #existing activity -> update
-            new = new_text.decode("utf-8")
+            new = new_text
             runtime.storage.update_activity(id, new, category_id)
             # size matters - when editing activity name just changed the case (bar -> Bar)
             if prev != new and prev.lower() == new.lower():
@@ -385,10 +371,7 @@ class PreferencesEditor(gobject.GObject):
         selection = self.get_widget('category_list').get_selection()
         (model, iter) = selection.get_selected()
 
-        if iter:
-            return model[iter][0]
-        else:
-            return None
+        return model[iter][0] if iter else None
 
 
     def activity_changed(self, selection, model):
@@ -440,7 +423,7 @@ class PreferencesEditor(gobject.GObject):
 
             if self.prev_selected_activity == path:
                 self.activityCell.set_property("editable", True)
-                tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+                tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
 
             self.prev_selected_activity = path
 
@@ -455,7 +438,7 @@ class PreferencesEditor(gobject.GObject):
             if self.prev_selected_category == path and \
                self._get_selected_category() != -1: #do not allow to edit unsorted
                 self.categoryCell.set_property("editable", True)
-                tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+                tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
             else:
                 self.categoryCell.set_property("editable", False)
 
@@ -472,7 +455,7 @@ class PreferencesEditor(gobject.GObject):
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)[0]
-        self.activity_tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+        self.activity_tree.set_cursor_on_cell(path, focus_column = self.activityColumn, start_editing = True)
 
 
 
@@ -487,9 +470,7 @@ class PreferencesEditor(gobject.GObject):
         elif key == gdk.KEY_F2 :
             self.activityCell.set_property("editable", True)
             path = model.get_path(iter)[0]
-            tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
-            #tree.grab_focus()
-            #tree.set_cursor(path, start_editing = True)
+            tree.set_cursor_on_cell(path, focus_column = self.activityColumn, start_editing = True)
 
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
@@ -507,7 +488,7 @@ class PreferencesEditor(gobject.GObject):
         selection = self.category_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)[0]
-        self.category_tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+        self.category_tree.set_cursor_on_cell(path, focus_column = self.categoryColumn, start_editing = True)
 
 
     def on_category_list_key_pressed(self, tree, event_key):
@@ -524,9 +505,7 @@ class PreferencesEditor(gobject.GObject):
         elif key == gdk.KEY_F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)[0]
-            tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
-            #tree.grab_focus()
-            #tree.set_cursor(path, start_editing = True)
+            tree.set_cursor_on_cell(path, focus_column = self.categoryColumn, start_editing = True)
 
     def remove_current_category(self):
         selection = self.category_tree.get_selection()
@@ -587,30 +566,6 @@ class PreferencesEditor(gobject.GObject):
         runtime.storage.remove_activity(removable_id)
 
 
-    def on_close_button_clicked(self, button):
-        self.close_window()
-
-    def on_close(self, widget, event):
-        self.close_window()
-
-    def on_delete_window(self, window, event):
-        self.close_window()
-        return True
-
-    def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-            self.window.destroy()
-            self.window = None
-            self._gui = None
-            self.wNameColumn = None
-            self.categoryColumn = None
-            self.emit("on-close")
-
-
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
 
@@ -646,5 +601,19 @@ class PreferencesEditor(gobject.GObject):
 
         conf.set("day_start_minutes", day_start)
 
-    def on_preferences_window_destroy(self, window):
-        self.window = None
+
+
+    def on_close_button_clicked(self, button):
+        self.close_window()
+
+
+    def close_window(self):
+        if self.parent:
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+
+            self._gui = None
+            self.wNameColumn = None
+            self.categoryColumn = None
+
+        Controller.close_window(self)
