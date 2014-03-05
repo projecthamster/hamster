@@ -51,7 +51,7 @@ class ActionRow(graphics.Sprite):
 
 class Label(object):
     """a much cheaper label that would be suitable for cellrenderer"""
-    def __init__(self, x=0, y=0, color=None, use_markup=False):
+    def __init__(self, x=0, y=0, color=None):
         self.x = x
         self.y = y
         self.color = color
@@ -60,13 +60,9 @@ class Label(object):
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
         self.layout.set_markup("Hamster") # dummy
         self.height = self.layout.get_pixel_size()[1]
-        self.use_markup = use_markup
 
     def _set_text(self, text):
-        if self.use_markup:
-            self.layout.set_markup(text)
-        else:
-            self.layout.set_text(text, -1)
+        self.layout.set_markup(text)
 
     def _show(self, g):
         if self.color:
@@ -84,7 +80,7 @@ class Label(object):
 
 class FactRow(object):
     def __init__(self):
-        self.time_label = Label(use_markup=True)
+        self.time_label = Label()
         self.activity_label = Label(x=100)
 
         self.category_label = Label()
@@ -93,12 +89,12 @@ class FactRow(object):
         self.category_label.layout.set_font_description(fontdesc)
 
 
-        self.description_label = Label(use_markup=True)
+        self.description_label = Label()
         fontdesc = pango.FontDescription(graphics._font_desc)
         fontdesc.set_style(pango.Style.ITALIC)
         self.description_label.layout.set_font_description(fontdesc)
 
-        self.tag_label = Label(use_markup=True)
+        self.tag_label = Label()
         fontdesc = pango.FontDescription(graphics._font_desc)
         fontdesc.set_size(8 * pango.SCALE)
         self.tag_label.layout.set_font_description(fontdesc)
@@ -131,7 +127,7 @@ class FactRow(object):
             label._set_text(tag)
             w, h = label.layout.get_pixel_size()
             g.rectangle(0, 0, w + 6, h + 5, 2)
-            g.fill(color)
+            g.fill(color, 0.5)
             g.move_to(3, 2)
             label._show(g)
 
@@ -158,12 +154,12 @@ class FactRow(object):
         g.set_color(color)
         self.time_label.show(g, time_label)
 
-        self.activity_label.show(g, fact.activity)
+        self.activity_label.show(g, stuff.escape_pango(fact.activity))
         if fact.category:
             g.save_context()
             g.set_color(color if current else "#999")
             x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
-            self.category_label.show(g, "  - %s" % fact.category, x=x, y=2)
+            self.category_label.show(g, "  - %s" % stuff.escape_pango(fact.category), x=x, y=2)
             g.restore_context()
 
         if fact.description or fact.tags:
@@ -531,14 +527,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
             g.set_color(colors["normal"])
-            self.date_label.show(g, "%s\n%s %s" % (rec['day'].strftime("%A"),
-                                                   rec['day'].strftime("%b"),
-                                                   rec['day'].strftime("%d")))
+            self.date_label.show(g, rec['day'].strftime("%A\n%b %d"))
 
             g.translate(105, 0)
             for fact in rec['facts']:
                 self.fact_row.show(g, colors, fact, fact==self.current_fact)
-                g.translate(0, 25)
+                g.translate(0, self.fact_row.height(fact))
 
 
             g.restore_context()
