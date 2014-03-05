@@ -144,7 +144,7 @@ class StackedBar(layout.Widget):
         else:
             self._seen_keys.append(key)
             index = len(self._seen_keys) - 1
-        return self.colors[index % (len(self.colors) + 1)]
+        return self.colors[index % len(self.colors)]
 
 
     def on_render(self, sprite):
@@ -217,7 +217,7 @@ class HorizontalBarChart(graphics.Sprite):
 
         for i, (label, value) in enumerate(self.values):
             g.set_color("#333")
-            self.layout.set_markup(label)
+            self.layout.set_markup(stuff.escape_pango(label))
             label_w, label_h = self.layout.get_pixel_size()
 
             y = int(i * label_h * 1.5)
@@ -304,7 +304,7 @@ class Totals(graphics.Scene):
         self.tag_chart.set_values(totals['tag'])
 
         self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
-        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (cat, stuff.format_duration(hours)) for cat, hours in totals['category'])
+        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
@@ -519,4 +519,3 @@ class Overview(Controller):
         self.report_chooser.connect("report-chosen", on_report_chosen)
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
-
