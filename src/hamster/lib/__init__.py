@@ -54,7 +54,7 @@ class Fact(object):
 
         # override implicit with explicit
         self.category = category.replace(",", "") or self.category or None
-        self.description = (description or "").replace(" #", " ") or self.description or None
+        self.description = (description or self.description or "").strip() or None
         self.tags =  tags or self.tags or []
         self.start_time = start_time or self.start_time or None
         self.end_time = end_time or self.end_time or None
