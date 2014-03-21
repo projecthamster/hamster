@@ -89,7 +89,7 @@ class DesktopIntegrations(object):
 
 
     def notify_user(self, summary="", details=""):
-        if not hasattr(self, "notification_conn"):
+        if not hasattr(self, "_notification_conn"):
             self._notification_conn = dbus.Interface(self.bus.get_object('org.freedesktop.Notifications',
                                                                          '/org/freedesktop/Notifications'),
                                                     dbus_interface='org.freedesktop.Notifications')

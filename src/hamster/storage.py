@@ -158,7 +158,7 @@ class Storage(object):
             self.tags_changed()
         return tags
 
-    def set_tags_autocomplete(self, tags):
+    def update_autocomplete_tags(self, tags):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
             self.tags_changed()
