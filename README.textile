@@ -12,7 +12,7 @@ Sorry and get up to date!
 
 h1. Dependencies
 
-Debian-based: @apt-get install git-core gettext intltool python-gconf@
+Debian-based: @apt-get install git-core gettext intltool python-gconf python-xdg@
 RPM-based: @yum install git-core gettext intltool gnome-python2-gconf@
 
 h1. Installing
