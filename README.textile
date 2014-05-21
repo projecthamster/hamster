@@ -8,6 +8,8 @@ RPM-based: @yum install git-core gettext intltool gnome-python2-gconf python-req
 
 h1. Installing
 
+*WARNING* It's preffered to uninstall other hamsters from system
+
 pre. ./waf configure build --prefix=/usr
 sudo ./waf install
 
