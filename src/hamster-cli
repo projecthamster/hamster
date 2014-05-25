@@ -22,14 +22,14 @@
 
 '''A script to control the applet from the command line.'''
 
-import sys, os
+import sys, os, tempfile, fcntl
 import optparse
 import re
 import datetime as dt
 
 from hamster import client, reports
 from hamster.lib import Fact, stuff
-
+from hamster import dbus_services
 
 def word_wrap(line, max_len):
     """primitive word wrapper"""
@@ -126,32 +126,44 @@ class HamsterClient(object):
     '''The main application.'''
     def __init__(self):
         self.storage = client.Storage()
+        self.instance = SingleInstance()
 
     def today(self, *args):
         """launches today's view"""
-        import gtk, glib
-        glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
+        
+        # Invoke the main window if an instance of the client is already
+        # running; otherwise initialise new instance.
+        if hamster_client.instance.running:
+            self.call_frontend_dbus("show_main_window")
+        else:
+            import gtk, glib
+            glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
+            from hamster import today
+            app = today.DailyView()
+            self.dbus_service = dbus_services.FrontendDbusService(app)
+            gtk.main()
 
-        from hamster import today
-        app = today.DailyView()
-        gtk.main()
-
-    def _launch_window(self, window_name):
+    def call_frontend_dbus(self, method):
         import dbus
         bus = dbus.SessionBus()
-        server = bus.get_object("org.gnome.Hamster.WindowServer",
-                                "/org/gnome/Hamster/WindowServer")
-        getattr(server, window_name)()
+        server = bus.get_object("org.gnome.Hamster.Frontend",
+                                "/org/gnome/Hamster/Frontend")
+        getattr(server, method)()
 
-    def overview(self, *args):
-        self._launch_window("overview")
+    def main(self, *args):
+        self.call_frontend_dbus('show_main_window')
 
     def statistics(self, *args):
-        self._launch_window("statistics")
+        self.call_frontend_dbus('show_statistics_window')
+
+    def preferences(self, *args):
+        self.call_frontend_dbus('show_preferences_window')
+
+    def overview(self, *args):
+        self.call_frontend_dbus('show_overview_window')
 
     def about(self, *args):
-        self._launch_window("about")
-
+        self.call_frontend_dbus('show_about_window')
 
     def assist(self, *args):
         assist_command = args[0] if args else ""
@@ -332,7 +344,40 @@ class HamsterClient(object):
         print
 
 
+class SingleInstance:
+    def __init__(self):
+        self.file = os.path.join(tempfile.gettempdir(), 'hamster.pid')
 
+        try:
+            # Open file, write our PID and lock it for exclusive access.
+            self.handle = open(self.file, 'w')
+            self.handle.write(str(os.getpid()))
+            self.handle.flush()
+            fcntl.lockf(self.handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError:
+            # File is already open exclusively which means we're already
+            # running.
+            self.running = True
+            return
+
+        self.running = False
+
+    def __del__(self):
+        # Do not remove the pid file if an instance was found to be already
+        # running
+        if not self.running:
+            try:
+                import os   # Oddly we need to import the os module again or an
+                            # exception is raised and the pid file isn't
+                            # deleted.
+                
+                # Clean up by freeing up the file handle and deleting the actual
+                # file.
+                self.handle.close()
+                os.remove(self.file)
+            except OSError:
+                print 'exception occurred'
+            
 
 if __name__ == '__main__':
     from hamster.lib import i18n
@@ -352,7 +397,7 @@ Actions:
     * activities: List all the activities names, one per line.
     * categories: List all the categories names, one per line.
 
-    * overview / statistics / about: launch specific window
+    * main / overview / statistics / preferences / about: launch specific window
 
 Time formats:
     * 'YYYY-MM-DD hh:mm:ss': If date is missing, it will default to today.
