@@ -161,14 +161,13 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்றுக"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "நேரத் தடம் தேடல்"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "ஹாம்ஸ்டர் திட்டம் - உங்கள் நேரத்தை கண்காணிக்க"
 

@@ -4,7 +4,6 @@
 data/hamster-time-tracker.schemas.in
 data/hamster-time-tracker.desktop.in.in
 data/hamster-time-tracker-overview.desktop.in.in
-data/hamster-windows-service.desktop.in.in
 [type: gettext/glade]data/overview_totals.ui
 [type: gettext/glade]data/overview.ui
 [type: gettext/glade]data/preferences.ui

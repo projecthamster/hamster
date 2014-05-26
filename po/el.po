@@ -161,14 +161,13 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "Εναλλαγή ορατότητας παραθύρου της εφαρμογής hamster."
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "Καταγραφή χρόνου"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Hamster - καταγράψτε το χρόνο σας"
 

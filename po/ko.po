@@ -156,14 +156,13 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "햄스터 프로그램 창을 표시할지 토글합니다."
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "시간 추적"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "프로젝트 햄스터 - 시간 추적"
 

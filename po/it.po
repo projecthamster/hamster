@@ -166,7 +166,7 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "Mostra/Nasconde la finestra dell'applicazione."
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
@@ -174,7 +174,6 @@ msgstr "Conteggio tempo"
 
 # (ndt) sarebbe l'unica applet ad avere il suo nome nella descrizione quando viene selezionata. Lunga, molto molto libera, ma che palle...
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Tiene traccia del tempo trascorso nello svolgere delle attività"
 

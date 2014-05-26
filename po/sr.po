@@ -159,14 +159,13 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "Промени видљивост главног прозора Вредног хрчка"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "Пратилац времена"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Пројекат Вредни хрчак - пратите ваше време"
 

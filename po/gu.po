@@ -147,14 +147,13 @@ msgid "Toggle visibility of the hamster application window."
 msgstr "હેમસ્ટર કાર્યક્રમ વિન્ડોની ટૉગલ દૃશ્યતા"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
+#: ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "સમય શોધનાર"
 
 #: ../data/hamster-time-tracker.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "પ્રોજેક્ટ Hamster — તમારો સમય શોધો"
 
