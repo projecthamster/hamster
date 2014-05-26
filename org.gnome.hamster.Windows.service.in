@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.gnome.Hamster.WindowServer
-Exec=@LIBDIR@/hamster-time-tracker/hamster-windows-service
