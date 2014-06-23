@@ -18,26 +18,26 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
-import gtk, pango
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import Pango as pango
 
 # import our children
-from .activityentry import ActivityEntry
-from .dateinput import DateInput
-from .timeinput import TimeInput
+from activityentry import ActivityEntry
 
-from .timechart import TimeChart
+from timeinput import TimeInput
 
-from .dayline import DayLine
+from dayline import DayLine
 
-from .tags import Tag
-from .tags import TagBox
-from .tags import TagsEntry
+from tags import Tag
+from tags import TagBox
+from tags import TagsEntry
 
-from .reportchooserdialog import ReportChooserDialog
+from reportchooserdialog import ReportChooserDialog
 
-from .facttree import FactTree
+from facttree import FactTree
 
-from .rangepick import RangePick
+from dates import RangePick
 
 
 # handy wrappers
@@ -55,17 +55,17 @@ def add_hint(entry, hint):
         if self.get_text(): # do not mess with user entered text
             return
 
-        self.modify_text(gtk.STATE_NORMAL, gtk.gdk.Color("gray"))
+        self.modify_text(gtk.StateType.NORMAL, gdk.Color.parse("gray")[1])
         hint_font = pango.FontDescription(self.get_style().font_desc.to_string())
-        hint_font.set_style(pango.STYLE_ITALIC)
+        hint_font.set_style(pango.Style.ITALIC)
         self.modify_font(hint_font)
 
         self.set_text(self.hint)
 
     def _set_normal(self, widget, event):
-        self.modify_text(gtk.STATE_NORMAL, self.get_style().fg[gtk.STATE_NORMAL])
+        #self.modify_text(gtk.StateType.NORMAL, self.get_style().fg[gtk.StateType.NORMAL])
         hint_font = pango.FontDescription(self.get_style().font_desc.to_string())
-        hint_font.set_style(pango.STYLE_NORMAL)
+        hint_font.set_style(pango.Style.NORMAL)
         self.modify_font(hint_font)
 
         if self.real_get_text() == self.hint:

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import gtk, gobject
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 import time
 import datetime as dt
 
@@ -25,47 +27,51 @@ import datetime as dt
           edit fact window has dared to edit facts
 """
 import widgets
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf, load_ui_file
 from lib import Fact
 
-class CustomFactController(gtk.Object):
+class CustomFactController(gobject.GObject):
     __gsignals__ = {
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self,  parent = None, fact_date = None, fact_id = None):
-        gtk.Object.__init__(self)
+    def __init__(self,  parent=None, fact_date=None, fact_id=None):
+        gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
-
+        self.window.set_size_request(600, 200)
         self.parent, self.fact_id = parent, fact_id
-        start_date, end_date = None, None
 
         #TODO - should somehow hint that time is not welcome here
-        self.new_name = widgets.ActivityEntry()
-        self.get_widget("activity_box").add(self.new_name)
-
-        self.new_tags = widgets.TagsEntry()
-        self.get_widget("tags_box").add(self.new_tags)
+        self.activity = widgets.ActivityEntry()
+        self.activity.connect("changed", self.on_activity_changed)
+        self.get_widget("activity_box").add(self.activity)
 
         day_start = conf.get("day_start_minutes")
         self.day_start = dt.time(day_start / 60, day_start % 60)
 
+        self.date = fact_date
+        if not self.date:
+            self.date = (dt.datetime.now() - dt.timedelta(hours=self.day_start.hour,
+                                                          minutes=self.day_start.minute)).date()
+
+
+        self.dayline = widgets.DayLine()
+        self._gui.get_object("day_preview").add(self.dayline)
+
+        self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
+            label = fact.start_time.strftime("%H:%M")
+            if fact.end_time:
+                label += fact.end_time.strftime(" %H:%M")
 
-            label = fact.activity
-            if fact.category != _("Unsorted"):
-                label += "@%s" %  fact.category
+            label += " " + fact.serialized_name()
+            with self.activity.handler_block(self.activity.checker):
+                self.activity.set_text(label)
+                self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
 
-            self.new_name.set_text(label)
-
-            self.new_tags.set_text(", ".join(fact.tags))
-
-
-            start_date = fact.start_time
-            end_date = fact.end_time
 
             buf = gtk.TextBuffer()
             buf.set_text(fact.description or "")
@@ -73,85 +79,27 @@ class CustomFactController(gtk.Object):
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
+
         else:
             self.get_widget("delete_button").set_sensitive(False)
 
-            # if there is previous activity with end time - attach to it
-            # otherwise let's start at 8am (unless it is today - in that case
-            # we will assume that the user wants to start from this moment)
-            fact_date = fact_date or dt.date.today()
 
-            last_activity = runtime.storage.get_facts(fact_date)
-            if last_activity and last_activity[-1].end_time:
-                start_date = last_activity[-1].end_time
-
-                if fact_date != dt.date.today():
-                    end_date = start_date + dt.timedelta(minutes=30)
-            else:
-                if fact_date == dt.date.today():
-                    start_date = dt.datetime.now()
-                else:
-                    start_date = dt.datetime(fact_date.year, fact_date.month,
-                                             fact_date.day, 8)
-
-
-        if not end_date:
-            self.get_widget("in_progress").set_active(True)
-            if (dt.datetime.now() - start_date).days == 0:
-                end_date = dt.datetime.now()
-
-
-        start_date = start_date or dt.datetime.now()
-        end_date = end_date or start_date + dt.timedelta(minutes = 30)
-
-
-        self.start_date = widgets.DateInput(start_date)
-        self.get_widget("start_date_placeholder").add(self.start_date)
-
-        self.start_time = widgets.TimeInput(start_date)
-        self.get_widget("start_time_placeholder").add(self.start_time)
-
-        self.end_time = widgets.TimeInput(end_date, start_date)
-        self.get_widget("end_time_placeholder").add(self.end_time)
-        self.set_end_date_label(end_date)
-
-
-        self.dayline = widgets.DayLine()
-        self.dayline.connect("on-time-chosen", self.update_time)
-        self._gui.get_object("day_preview").add(self.dayline)
-
-        self.on_in_progress_toggled(self.get_widget("in_progress"))
-
-        self.start_date.connect("date-entered", self.on_start_date_entered)
-        self.start_time.connect("time-entered", self.on_start_time_entered)
-        self.new_name.connect("changed", self.on_new_name_changed)
-        self.end_time.connect("time-entered", self.on_end_time_entered)
         self._gui.connect_signals(self)
-
+        self.validate_fields()
         self.window.show_all()
 
-    def update_time(self, widget, start_time, end_time):
-        self.start_time.set_time(start_time)
-        self.on_start_time_entered(None)
+    def on_prev_day_clicked(self, button):
+        self.date = self.date - dt.timedelta(days=1)
+        self.validate_fields()
 
-        self.start_date.set_date(start_time)
+    def on_next_day_clicked(self, button):
+        self.date = self.date + dt.timedelta(days=1)
+        self.validate_fields()
 
-        now = dt.datetime.now()
+    def draw_preview(self, start_time, end_time=None):
+        day_facts = runtime.storage.get_facts(self.date)
+        self.dayline.plot(self.date, day_facts, start_time, end_time)
 
-        if end_time:
-            self.end_time.set_time(end_time)
-            self.set_end_date_label(end_time)
-
-        self.draw_preview(start_time, end_time)
-
-
-    def draw_preview(self, start_time, end_time = None):
-
-        view_date = (start_time - dt.timedelta(hours = self.day_start.hour,
-                                              minutes = self.day_start.minute)).date()
-
-        day_facts = runtime.storage.get_facts(view_date)
-        self.dayline.plot(view_date, day_facts, start_time, end_time)
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -168,141 +116,80 @@ class CustomFactController(gtk.Object):
         return description.strip()
 
 
-    def _get_datetime(self, prefix):
-        start_time = self.start_time.get_time()
-        start_date = self.start_date.get_date()
+    def localized_fact(self):
+        """makes sure fact is in our date"""
+        fact = Fact(self.activity.get_text())
+        if fact.start_time:
+            fact.start_time = dt.datetime.combine(self.date, fact.start_time.time())
 
-        if prefix == "end":
-            end_time = self.end_time.get_time()
-            end_date = start_date
-            if end_time < start_time:
-                end_date = start_date + dt.timedelta(days=1)
+        if fact.end_time:
+            fact.end_time = dt.datetime.combine(self.date, fact.end_time.time())
 
-            if end_date:
-                self.set_end_date_label(end_date)
-            time, date = end_time, end_date
-        else:
-            time, date = start_time, start_date
+        return fact
 
-        if time is not None and date:
-            return dt.datetime.combine(date, time)
-        else:
-            return None
+
 
     def on_save_button_clicked(self, button):
-        activity_name, temporary = self.new_name.get_value()
-
-        if self.get_widget("in_progress").get_active():
-            end_time = None
-        else:
-            end_time = self._get_datetime("end")
-
-        fact = Fact(activity_name,
-                    description = self.figure_description(),
-                    tags = self.new_tags.get_text().decode('utf8'),
-                    start_time = self._get_datetime("start"),
-                    end_time = end_time)
+        fact = self.localized_fact()
+        fact.description = self.figure_description()
         if not fact.activity:
             return False
 
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, fact, temporary)
+            runtime.storage.update_fact(self.fact_id, fact)
         else:
-            runtime.storage.add_fact(fact, temporary)
+            runtime.storage.add_fact(fact)
 
         self.close_window()
+
+    def on_activity_changed(self, combo):
+        self.validate_fields()
+
+    def validate_fields(self, widget = None):
+        fact = self.localized_fact()
+
+        now = dt.datetime.now()
+        self.get_widget("button-next-day").set_sensitive(self.date < now.date())
+
+        if self.date != now.date():
+            now = dt.datetime.combine(self.date, now.time())
+
+        self.draw_preview(fact.start_time or now,
+                          fact.end_time or now)
+
+        looks_good = fact.activity is not None and fact.start_time is not None
+        self.get_widget("save_button").set_sensitive(looks_good)
+        return looks_good
+
 
     def on_delete_clicked(self, button):
         runtime.storage.remove_fact(self.fact_id)
         self.close_window()
 
-    def on_activity_list_key_pressed(self, entry, event):
-        #treating tab as keydown to be able to cycle through available values
-        if event.keyval == gtk.keysyms.Tab:
-            event.keyval = gtk.keysyms.Down
-        return False
-
-    def on_in_progress_toggled(self, check):
-        sensitive = not check.get_active()
-        self.end_time.set_sensitive(sensitive)
-        self.get_widget("end_label").set_sensitive(sensitive)
-        self.get_widget("end_date_label").set_sensitive(sensitive)
-        self.validate_fields()
-
     def on_cancel_clicked(self, button):
         self.close_window()
 
-    def on_new_name_changed(self, combo):
-        self.validate_fields()
-
-    def on_start_date_entered(self, widget):
-        self.validate_fields()
-
-    def on_start_time_entered(self, widget):
-        start_time = self.start_time.get_time()
-
-        if not start_time:
-            return
-
-        self.end_time.set_start_time(start_time)
-        self.validate_fields()
-
-    def on_end_time_entered(self, widget):
-        self.validate_fields()
-
-    def set_end_date_label(self, some_date):
-        self.get_widget("end_date_label").set_text(some_date.strftime("%x"))
-
-    def validate_fields(self, widget = None):
-        activity_text, temporary = self.new_name.get_value()
-        start_time = self._get_datetime("start")
-        now = dt.datetime.now()
-
-        if self.get_widget("in_progress").get_active() and start_time < now:
-            end_time = None
-        else:
-            end_time = self._get_datetime("end")
-
-            # make sure we are within 24 hours of start time
-            end_time -= dt.timedelta(days=(end_time - start_time).days)
-
-            self.end_time.set_time(end_time)
-
-        now = dt.datetime.now()
-        self.get_widget("in_progress").set_active(end_time is None and start_time < now)
-
-        self.draw_preview(start_time, end_time)
-
-        looks_good = activity_text is not None and start_time \
-                     and (not end_time or (end_time - start_time).days == 0)
-
-
-        self.get_widget("save_button").set_sensitive(looks_good)
-        return looks_good
+    def on_close(self, widget, event):
+        self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
-        popups = self.start_date.popup.get_property("visible") or \
-                 self.start_time.popup.get_property("visible") or \
-                 self.end_time.popup.get_property("visible") or \
-                 self.new_name.popup.get_property("visible") or \
-                 self.new_tags.popup.get_property("visible")
+        popups = self.activity.popup.get_property("visible");
 
-        if (event_key.keyval == gtk.keysyms.Escape or \
-           (event_key.keyval == gtk.keysyms.w and event_key.state & gtk.gdk.CONTROL_MASK)):
+        if (event_key.keyval == gdk.KEY_Escape or \
+           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
             if popups:
                 return False
 
             self.close_window()
 
-        elif event_key.keyval in (gtk.keysyms.Return, gtk.keysyms.KP_Enter):
+        elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
+                return False
+            if self.get_widget('description').has_focus():
                 return False
             self.on_save_button_clicked(None)
 
 
-
-    def on_close(self, widget, event):
-        self.close_window()
 
     def close_window(self):
         if not self.parent:

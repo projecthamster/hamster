@@ -1,4 +1,20 @@
 ===============
+Version 1.04
+===============
+ This version just packs all the contributed bugfixes of last 12 month (there
+ were just a few)
+
+ * bugfixes around talking to the notifications daemon
+ * updating tags list in prefs wasn't doing anything
+ * in some cases activity updates were failing when tags where provided
+
+
+===============
+Version 1.03.3
+===============
+ * fix exporting entries to file
+
+===============
 Version 1.03.2
 ===============
  * fix bug when trying to enter an activity with tags (mea culpa)

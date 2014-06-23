@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # nicked off gwibber
 
-import gobject, dbus, dbus.service
+from gi.repository import GObject as gobject
+
+import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 import datetime as dt
 from calendar import timegm
-import gio
+from gi.repository import Gio as gio
 
 DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
@@ -17,7 +19,7 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
 from hamster.lib import i18n
 i18n.setup_i18n()
 
-from hamster import db
+from hamster.storage import db
 from hamster.lib import stuff, desktop
 
 
@@ -50,8 +52,11 @@ class Storage(db.Storage, dbus.service.Object):
 
         self.mainloop = loop
 
-        self.__file = gio.File(__file__)
-        self.__monitor = self.__file.monitor_file()
+        self.__file = gio.File.new_for_path(__file__)
+        self.__monitor = self.__file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
+                                                  gio.FileMonitorFlags.SEND_MOVED | \
+                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
+                                                  None)
         self.__monitor.connect("changed", self._on_us_change)
 
         # central place were we plug in all the notifications and such
@@ -83,7 +88,7 @@ class Storage(db.Storage, dbus.service.Object):
     # stop service when we have been updated (will be brought back in next call)
     # anyway. should make updating simpler
     def _on_us_change(self, monitor, gio_file, event_uri, event):
-        if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+        if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
             print "`%s` has changed. Quitting!" % __file__
             self.Quit()
 

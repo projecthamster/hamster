@@ -20,11 +20,11 @@
 import datetime as dt
 from calendar import timegm
 import logging
-import gobject
+from gi.repository import GObject as gobject
 
 
 from hamster import idle
-from hamster.configuration import conf
+from hamster.lib.configuration import conf
 from hamster.lib import trophies
 import dbus
 
@@ -32,6 +32,7 @@ import dbus
 class DesktopIntegrations(object):
     def __init__(self, storage):
         self.storage = storage # can't use client as then we get in a dbus loop
+        self._last_notification = None
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
@@ -88,15 +89,22 @@ class DesktopIntegrations(object):
 
 
     def notify_user(self, summary="", details=""):
-        if not hasattr(self, "notification_conn"):
+        if not hasattr(self, "_notification_conn"):
             self._notification_conn = dbus.Interface(self.bus.get_object('org.freedesktop.Notifications',
-                                                                         '/org/freedesktop/Notifications'),
-                                                    dbus_interface='org.freedesktop.Notifications')
+                                                                         '/org/freedesktop/Notifications',
+                                                                           follow_name_owner_changes=True),
+                                                           dbus_interface='org.freedesktop.Notifications')
         conn = self._notification_conn
 
-        conn.Notify("Project Hamster", 5, "hamster-time-tracker",
-                    summary, details,
-                    [], {"urgency": 0}, -1)
+        notification = conn.Notify("Project Hamster",
+                                   self._last_notification or 0,
+                                   "hamster-time-tracker",
+                                   summary,
+                                   details,
+                                   [],
+                                   {"urgency": dbus.Byte(0), "transient" : True},
+                                   -1)
+        self._last_notification = notification
 
 
     def on_idle_changed(self, event, state):

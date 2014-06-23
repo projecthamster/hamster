@@ -1,22 +1,18 @@
-Hamster can be found packaged in most distributions. The instructions below
-are for installing from sources for testing and development purposes.
+h1. Bleeding edge warning
 
-The instructions are mix between Gnome 2 and Gnome 3, so, errm, just bear with
-us.
+Project Hamster right now is undergoing bit of reshuffling and might not be fit
+for everyday use. For stable versions check out "releases":https://github.com/projecthamster/hamster/releases
 
-h1. hamster-applet -> hamster-time-tracker clean up
+h1. Requires most recent stable gtk3 (3.10)
 
-Previously hamster was installed everywhere under @hamster-applet@. As
-the applet is long gone, the paths and file names have changed to
-@hamster-time-tracker@. To clean up previous install follow these steps:
+Version of gtk required is 3.10 because of the use of HeaderBar and other bits. 
+Sorry and get up to date!
 
-pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
-./waf configure build --prefix=/usr
-sudo ./waf uninstall
+
 
 h1. Dependencies
 
-Debian-based: @apt-get install git-core gettext intltool python-gconf@
+Debian-based: @apt-get install git-core gettext intltool python-gconf python-xdg@
 RPM-based: @yum install git-core gettext intltool gnome-python2-gconf@
 
 h1. Installing
@@ -29,3 +25,15 @@ After that make sure that the old daemons aren't roaming around:
 pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
+
+
+h1. hamster-applet -> hamster-time-tracker clean up
+
+Previously hamster was installed everywhere under @hamster-applet@. As
+the applet is long gone, the paths and file names have changed to
+@hamster-time-tracker@. To clean up previous install follow these steps:
+
+pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
+./waf configure build --prefix=/usr
+sudo ./waf uninstall
+

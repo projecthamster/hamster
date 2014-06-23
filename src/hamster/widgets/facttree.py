@@ -1,6 +1,6 @@
-# - coding: utf-8 -
+# -*- coding: utf-8 -*-
 
-# Copyright (C) 2008-2009 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2008-2009, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,653 +17,522 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-"""beware, this code has some major dragons in it. i'll clean it up one day!"""
-
-import gtk, gobject
+import bisect
 import cairo
 import datetime as dt
 
-from ..lib import stuff, graphics
-from tags import Tag
+from collections import defaultdict
 
-import pango
+from gi.repository import GObject as gobject
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import PangoCairo as pangocairo
+from gi.repository import Pango as pango
 
-def parent_painter(column, cell, model, iter):
-    row = model.get_value(iter, 0)
-
-    if isinstance(row, FactRow):
-        cell.set_property('data', row)
-    else:
-        row.first = model.get_path(iter) == (0,) # first row
-        cell.set_property('data', row)
-
-def action_painter(column, cell, model, iter):
-    cell.set_property('xalign', 1)
-    cell.set_property('yalign', 0)
-
-    if isinstance(model.get_value(iter, 0), GroupRow):
-        cell.set_property("stock_id", "")
-    else:
-        cell.set_property("stock_id", "gtk-edit")
+from hamster.lib import graphics
+from hamster.lib import stuff
 
 
 
-class GroupRow(object):
-    def __init__(self, label, date, duration):
-        self.label = label
-        self.duration = duration
-        self.date = date
-        self.first = False # will be set by the painter, used
+class ActionRow(graphics.Sprite):
+    def __init__(self):
+        graphics.Sprite.__init__(self)
+        self.visible = False
 
-    def __eq__(self, other):
-        return isinstance(other, GroupRow) \
-           and self.label == other.label \
-           and self.duration == other.duration \
-           and self.date == other.date
+        self.restart = graphics.Icon("view-refresh-symbolic", size=18,
+                                     interactive=True,
+                                     mouse_cursor=gdk.CursorType.HAND1,
+                                     y=4)
+        self.add_child(self.restart)
 
-    def __hash__(self):
-        return 1
+        self.width = 50 # Simon says
+
+
+
+class Label(object):
+    """a much cheaper label that would be suitable for cellrenderer"""
+    def __init__(self, x=0, y=0, color=None):
+        self.x = x
+        self.y = y
+        self.color = color
+        self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
+        self.layout = pangocairo.create_layout(self._label_context)
+        self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
+        self.layout.set_markup("Hamster") # dummy
+        self.height = self.layout.get_pixel_size()[1]
+
+    def _set_text(self, text):
+        self.layout.set_markup(text)
+
+    def _show(self, g):
+        if self.color:
+            g.set_color(self.color)
+        pangocairo.show_layout(g.context, self.layout)
+
+    def show(self, g, text, x=0, y=0):
+        g.save_context()
+        g.move_to(x or self.x, y or self.y)
+        self._set_text(text)
+        self._show(g)
+        g.restore_context()
+
+
 
 class FactRow(object):
-    def __init__(self, fact):
-        self.fact = fact
-        self.id = fact.id
-        self.name = fact.activity
-        self.category = fact.category
-        self.description = fact.description
-        self.tags = fact.tags
-        self.start_time = fact.start_time
-        self.end_time = fact.end_time
-        self.delta = fact.delta
-
-    def __eq__(self, other):
-        return isinstance(other, FactRow) and other.id == self.id \
-           and other.name == self.name \
-           and other.category == self.category \
-           and other.description == self.description \
-           and other.tags == self.tags \
-           and other.start_time == self.start_time \
-           and other.end_time == self.end_time \
-           and other.delta == self.delta
-
-
-    def __hash__(self):
-        return self.id
-
-class FactTree(gtk.TreeView):
-    __gsignals__ = {
-        "edit-clicked": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        "double-click": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
-    }
-
     def __init__(self):
-        gtk.TreeView.__init__(self)
+        self.time_label = Label()
+        self.activity_label = Label(x=100)
 
-        self.set_headers_visible(False)
-        self.set_show_expanders(False)
-
-        # fact (None for parent), duration, parent data (if any)
-        self.store_model = gtk.ListStore(gobject.TYPE_PYOBJECT)
-        self.set_model(self.store_model)
-
-
-        fact_cell = FactCellRenderer()
-        fact_column = gtk.TreeViewColumn("", fact_cell, data=0)
-        fact_column.set_cell_data_func(fact_cell, parent_painter)
-        fact_column.set_expand(True)
-        self.append_column(fact_column)
-
-        edit_cell = gtk.CellRendererPixbuf()
-        edit_cell.set_property("ypad", 2)
-        edit_cell.set_property("mode", gtk.CELL_RENDERER_MODE_ACTIVATABLE)
-        self.edit_column = gtk.TreeViewColumn("", edit_cell)
-        self.edit_column.set_cell_data_func(edit_cell, action_painter)
-        self.append_column(self.edit_column)
-
-        self.connect("row-activated", self._on_row_activated)
-        self.connect("button-release-event", self._on_button_release_event)
-        self.connect("key-release-event", self._on_key_released)
-        self.connect("configure-event", lambda *args: self.fix_row_heights())
-        self.connect("motion-notify-event", self._on_motion)
-
-        self.show()
-
-        self.longest_activity_category = 0 # we will need this for the cell renderer
-        self.longest_interval = 0 # we will need this for the cell renderer
-        self.longest_duration = 0 # we will need this for the cell renderer
-        self.stored_selection = []
-
-        self.box = None
+        self.category_label = Label()
+        fontdesc = pango.FontDescription(graphics._font_desc)
+        fontdesc.set_size(10 * pango.SCALE)
+        self.category_label.layout.set_font_description(fontdesc)
 
 
-        pixmap = gtk.gdk.Pixmap(None, 10, 10, 1)
-        _test_context = pixmap.cairo_create()
-        self._test_layout = _test_context.create_layout()
-        font = pango.FontDescription(gtk.Style().font_desc.to_string())
-        self._test_layout.set_font_description(font)
-        self.prev_rows = []
-        self.new_rows = []
+        self.description_label = Label()
+        fontdesc = pango.FontDescription(graphics._font_desc)
+        fontdesc.set_style(pango.Style.ITALIC)
+        self.description_label.layout.set_font_description(fontdesc)
 
-        self.connect("destroy", self.on_destroy)
+        self.tag_label = Label()
+        fontdesc = pango.FontDescription(graphics._font_desc)
+        fontdesc.set_size(8 * pango.SCALE)
+        self.tag_label.layout.set_font_description(fontdesc)
 
-    def on_destroy(self, widget):
-        for col in self.get_columns():
-            col.destroy()
-            self.remove_column(col)
+        self.duration_label = Label()
+        self.duration_label.layout.set_alignment(pango.Alignment.RIGHT)
+        self.duration_label.layout.set_width(90 * pango.SCALE)
+
+        self.width = 0
 
 
-    def fix_row_heights(self):
-        alloc = self.get_allocation()
-        if alloc != self.box:
-            self.box = alloc
-            self.columns_autosize()
+    def height(self, fact):
+        res = self.activity_label.height + 2 * 3
+        if fact.description:
+            res += self.description_label.height
 
-    def clear(self):
-        #self.store_model.clear()
-        self.longest_activity_category = 0
-        self.longest_interval = 0
-        self.longest_duration = 0
+        if fact.tags:
+            res += self.tag_label.height + 5
 
-    def update_longest_dimensions(self, fact):
-        interval = "%s -" % fact.start_time.strftime("%H:%M")
+        return res
+
+
+    def _show_tags(self, g, tags, color, bg):
+        label = self.tag_label
+        label.color = bg
+
+        g.save_context()
+        g.translate(2.5, 2.5)
+        for tag in tags:
+            label._set_text(tag)
+            w, h = label.layout.get_pixel_size()
+            g.rectangle(0, 0, w + 6, h + 5, 2)
+            g.fill(color, 0.5)
+            g.move_to(3, 2)
+            label._show(g)
+
+            g.translate(w + 10, 0)
+
+        g.restore_context()
+
+
+
+    def show(self, g, colors, fact, current=False):
+        g.save_context()
+
+        color, bg = colors["normal"], colors["normal_bg"]
+        if current:
+            color, bg = colors["selected"], colors["selected_bg"]
+            g.fill_area(0, 0, self.width, self.height(fact), bg)
+
+        g.translate(5, 2)
+
+        time_label = fact.start_time.strftime("%H:%M -")
         if fact.end_time:
-            interval = "%s %s" % (interval, fact.end_time.strftime("%H:%M"))
-        self._test_layout.set_markup(interval)
-        w, h = self._test_layout.get_pixel_size()
-        self.longest_interval = max(self.longest_interval, w + 20)
+            time_label += fact.end_time.strftime(" %H:%M")
 
+        g.set_color(color)
+        self.time_label.show(g, time_label)
 
-        self._test_layout.set_markup("%s - <small>%s</small> " % (stuff.escape_pango(fact.name),
-                                                                  stuff.escape_pango(fact.category)))
-        w, h = self._test_layout.get_pixel_size()
-        self.longest_activity_category = max(self.longest_activity_category, w + 10)
+        self.activity_label.show(g, stuff.escape_pango(fact.activity))
+        if fact.category:
+            g.save_context()
+            g.set_color(color if current else "#999")
+            x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
+            self.category_label.show(g, "  - %s" % stuff.escape_pango(fact.category), x=x, y=2)
+            g.restore_context()
 
-        self._test_layout.set_markup("%s" % stuff.format_duration(fact.delta))
-        w, h = self._test_layout.get_pixel_size()
-        self.longest_duration = max(self.longest_duration, w)
+        if fact.description or fact.tags:
+            g.save_context()
+            g.translate(self.activity_label.x, self.activity_label.height + 3)
 
+            if fact.tags:
+                self._show_tags(g, fact.tags, color, bg)
+                g.translate(0, self.tag_label.height + 5)
 
-    def add_fact(self, fact):
-        fact = FactRow(fact)
-        self.update_longest_dimensions(fact)
-        self.new_rows.append(fact)
+            if fact.description:
+                self.description_label.show(g, "<small>%s</small>" % fact.description)
+            g.restore_context()
 
+        self.duration_label.show(g, stuff.format_duration(fact.delta), x=self.width - 105)
 
-    def add_group(self, group_label, group_date, facts):
-        total_duration = stuff.duration_minutes([fact.delta for fact in facts])
+        g.restore_context()
 
-        self.new_rows.append(GroupRow(group_label, group_date, total_duration))
 
-        for fact in facts:
-            self.add_fact(fact)
 
 
-    def get_row(self, path):
-        """checks if the path is valid and if so, returns the model row"""
-        if path is None or path < 0: return None
+class FactTree(graphics.Scene, gtk.Scrollable):
+    """
+    The fact tree is a painter - it maintains scroll state and shows what we can
+    see. That means it does not show all the facts there are, but rather only
+    those tht you can see.
+    It's also painter as it reuses labels. Caching is futile, we do all the painting
+    every tie
 
-        try: # see if path is still valid
-            iter = self.store_model.get_iter(path)
-            return self.store_model[path]
-        except:
-            return None
 
-    def id_or_label(self, path):
-        """returns id or date, id if it is a fact row or date if it is a group row"""
-        row = self.get_row(path)
-        if not row: return None
 
-        if isinstance(row[0], FactRow):
-            return row[0].id
-        else:
-            return row[0].label
+    ASCII Art!
+    | Weekday    | Start - End | Activity - category   [actions]| Duration |
+    | Month, Day |             | tags, description              |          |
+    |            | Start - End | Activity - category            | Duration |
 
+    Inline edit?
 
-    def detach_model(self):
-        self.prev_rows = list(self.new_rows)
-        self.new_rows = []
-        # ooh, somebody is going for refresh!
-        # let's save selection too - maybe it will come handy
-        self.store_selection()
+    """
 
-        #self.parent.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
-
-
-        # and now do what we were asked to
-        #self.set_model()
-        self.clear()
-
-
-    def attach_model(self):
-        prev_rows = set(self.prev_rows)
-        new_rows = set(self.new_rows)
-        common = set(prev_rows) & set(new_rows)
-
-        if common: # do full refresh only if we don't recognize any rows
-            gone = prev_rows - new_rows
-            if gone:
-                all_rows = len(self.store_model)
-                rows = list(self.store_model)
-                rows.reverse()
-
-                for i, row in enumerate(rows):
-                    if row[0] in gone:
-                        self.store_model.remove(self.store_model.get_iter(all_rows - i-1))
-
-                self.prev_rows = [row[0] for row in self.store_model]
-
-            new = new_rows - prev_rows
-            if new:
-                for i, row in enumerate(self.new_rows):
-                    if i <= len(self.store_model) - 1:
-                        if row == self.store_model[i][0]:
-                            continue
-
-                        self.store_model.insert_before(self.store_model.get_iter(i), (row,))
-                    else:
-                        self.store_model.append((row, ))
-
-
-        else:
-            self.store_model.clear()
-            for row in self.new_rows:
-                self.store_model.append((row, ))
-
-        if self.stored_selection:
-            self.restore_selection()
-
-
-    def store_selection(self):
-        self.stored_selection = None
-        selection = self.get_selection()
-        if not selection:
-            return
-
-        model, iter = selection.get_selected()
-        if iter:
-            path = model.get_path(iter)[0]
-            prev, cur, next = path - 1, path, path + 1
-            self.stored_selection = ((prev, self.id_or_label(prev)),
-                                     (cur, self.id_or_label(cur)),
-                                     (next, self.id_or_label(next)))
-
-
-    def restore_selection(self):
-        """the code is quite hairy, but works with all kinds of deletes
-           and does not select row when it should not.
-           TODO - it might be worth replacing this with something much simpler"""
-        model = self.store_model
-
-        new_prev_val, new_cur_val, new_next_val = None, None, None
-        prev, cur, next = self.stored_selection
-
-        if cur:  new_cur_val  = self.id_or_label(cur[0])
-        if prev: new_prev_val = self.id_or_label(prev[0])
-        if next: new_next_val = self.id_or_label(next[0])
-
-        path = None
-        values = (new_prev_val, new_cur_val, new_next_val)
-        paths = (prev, cur, next)
-
-        if cur[1] and cur[1] in values: # simple case
-            # look if we can find previous current in the new threesome
-            path = paths[values.index(cur[1])][0]
-        elif prev[1] and prev[1] == new_prev_val and next[1] and next[1] == new_next_val:
-            # on update the ID changes so we find it by matching in between
-            path = cur[0]
-        elif prev[1] and prev[1] == new_prev_val: # all that's left is delete.
-            if new_cur_val:
-                path = cur[0]
-            else:
-                path = prev[0]
-        elif not new_prev_val and not new_next_val and new_cur_val:
-            # the only record in the tree (no next no previous, but there is current)
-            path = cur[0]
-
-
-        if path is not None:
-            selection = self.get_selection()
-            selection.select_path(path)
-
-            self.set_cursor_on_cell(path)
-
-    def select_fact(self, fact_id):
-        i = 0
-        while self.id_or_label(i) and self.id_or_label(i) != fact_id:
-            i +=1
-
-        if self.id_or_label(i) == fact_id:
-            selection = self.get_selection()
-            selection.select_path(i)
-
-    def get_selected_fact(self):
-        selection = self.get_selection()
-        (model, iter) = selection.get_selected()
-        if iter:
-            data = model[iter][0]
-            if isinstance(data, FactRow):
-                return data.fact
-            else:
-                return data.date
-        else:
-            return None
-
-
-    def _on_button_release_event(self, tree, event):
-        # a hackish solution to make edit icon keyboard accessible
-        pointer = event.window.get_pointer() # x, y, flags
-        path = self.get_path_at_pos(pointer[0], pointer[1]) #column, innerx, innery
-
-        if path and path[1] == self.edit_column:
-            self.emit("edit-clicked", self.get_selected_fact())
-            return True
-
-        return False
-
-    def _on_row_activated(self, tree, path, column):
-        if column == self.edit_column:
-            self.emit_stop_by_name ('row-activated')
-            self.emit("edit-clicked", self.get_selected_fact())
-            return True
-
-
-    def _on_key_released(self, tree, event):
-        # capture e keypress and pretend that user click on edit
-        if (event.keyval == gtk.keysyms.e):
-            self.emit("edit-clicked", self.get_selected_fact())
-            return True
-
-        return False
-
-
-    def _on_motion(self, view, event):
-        'As the pointer moves across the view, show a tooltip.'
-
-        path = view.get_path_at_pos(int(event.x), int(event.y))
-
-        if path:
-            path, col, x, y = path
-
-            model = self.get_model()
-            data = model[path][0]
-
-            self.set_tooltip_text(None)
-
-            if isinstance(data, FactRow):
-                renderer = view.get_column(0).get_cell_renderers()[0]
-
-                label = data.description
-                self.set_tooltip_text(label)
-
-            self.trigger_tooltip_query()
-
-
-
-class FactCellRenderer(gtk.GenericCellRenderer):
-    """ We need all kinds of wrapping and spanning and the treeview just does
-        not cut it"""
-
-    __gproperties__ = {
-        "data": (gobject.TYPE_PYOBJECT, "Data", "Data", gobject.PARAM_READWRITE),
+    __gsignals__ = {
+        # enter or double-click, passes in current day and fact
+        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
+
+
+    hadjustment = gobject.property(type=gtk.Adjustment, default=None)
+    hscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
+    vadjustment = gobject.property(type=gtk.Adjustment, default=None)
+    vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
+
     def __init__(self):
-        gtk.GenericCellRenderer.__init__(self)
-        self.height = 0
-        self.data = None
+        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
 
-        font = gtk.Style().font_desc
-        self.default_size = font.get_size() / pango.SCALE
+        self.date_label = Label(10, 3)
+        fontdesc = pango.FontDescription(graphics._font_desc)
+        fontdesc.set_weight(pango.Weight.BOLD)
+        self.date_label.layout.set_alignment(pango.Alignment.RIGHT)
+        self.date_label.layout.set_width(80 * pango.SCALE)
+        self.date_label.layout.set_font_description(fontdesc)
 
-        self.labels = graphics.Sprite()
+        self.fact_row = FactRow()
 
-        self.date_label = graphics.Label(size = self.default_size)
+        self.action_row = ActionRow()
+        #self.add_child(self.action_row)
 
-        self.interval_label = graphics.Label(size = self.default_size)
-        self.labels.add_child(self.interval_label)
+        self.row_positions = []
+        self.row_heights = []
 
-        self.activity_label = graphics.Label(size = self.default_size)
-        self.labels.add_child(self.activity_label)
+        self.y = 0
+        self.day_padding = 20
 
-        self.category_label = graphics.Label(size = self.default_size)
-        self.labels.add_child(self.category_label)
+        self.hover_day = None
+        self.hover_fact = None
+        self.current_fact = None
 
-        self.description_label = graphics.Label(size = self.default_size)
-        self.labels.add_child(self.description_label)
+        self.style = self._style
 
-        self.duration_label = graphics.Label(size=self.default_size)
-        self.labels.add_child(self.duration_label)
+        self.visible_range = None
+        self.set_size_request(500, 400)
 
-        default_font = gtk.Style().font_desc.to_string()
+        self.connect("on-mouse-scroll", self.on_scroll)
+        self.connect("on-mouse-move", self.on_mouse_move)
+        self.connect("on-mouse-down", self.on_mouse_down)
 
-        self.tag = Tag("")
-
-        self.selected_color = None
-        self.normal_color = None
-
-        self.col_padding = 10
-        self.row_padding = 4
-
-    def do_set_property (self, pspec, value):
-        setattr(self, pspec.name, value)
-
-    def do_get_property(self, pspec):
-        return getattr (self, pspec.name)
+        self.connect("on-resize", self.on_resize)
+        self.connect("on-key-press", self.on_key_press)
+        self.connect("notify::vadjustment", self._on_vadjustment_change)
+        self.connect("on-enter-frame", self.on_enter_frame)
+        self.connect("on-double-click", self.on_double_click)
 
 
-    def on_render (self, window, widget, background_area, cell_area, expose_area, flags):
-        if not self.data:
+    def on_mouse_down(self, scene, event):
+        self.grab_focus()
+        if self.hover_fact:
+            self.set_current_fact(self.facts.index(self.hover_fact))
+
+
+    def activate_row(self, day, fact):
+        self.emit("on-activate-row", day, fact)
+
+    def delete_row(self, fact):
+        if fact:
+            self.emit("on-delete-called", fact)
+
+    def on_double_click(self, scene, event):
+        if self.hover_fact:
+            self.activate_row(self.hover_day, self.hover_fact)
+
+    def on_key_press(self, scene, event):
+        if event.keyval == gdk.KEY_Up:
+            idx = self.facts.index(self.current_fact) if self.current_fact else 1
+            self.set_current_fact(idx - 1)
+
+        elif event.keyval == gdk.KEY_Down:
+            idx = self.facts.index(self.current_fact) if self.current_fact else -1
+            self.set_current_fact(idx + 1)
+
+        elif event.keyval == gdk.KEY_Page_Down:
+            self.y += self.height * 0.8
+            self.on_scroll()
+
+        elif event.keyval == gdk.KEY_Page_Up:
+            self.y -= self.height * 0.8
+            self.on_scroll()
+
+        elif event.keyval == gdk.KEY_Return:
+            self.activate_row(self.hover_day, self.current_fact)
+
+        elif event.keyval == gdk.KEY_Delete:
+            self.delete_row(self.current_fact)
+
+
+    def set_current_fact(self, idx):
+        idx = max(0, min(len(self.facts) - 1, idx))
+        fact = self.facts[idx]
+        self.current_fact = fact
+
+        if fact.y < self.y:
+            self.y = fact.y
+        if (fact.y + 25) > (self.y + self.height):
+            self.y = fact.y - self.height + 25
+
+        self.on_scroll()
+
+
+    def get_visible_range(self):
+        start, end = (bisect.bisect(self.row_positions, self.y) - 1,
+                      bisect.bisect(self.row_positions, self.y + self.height))
+
+        y = self.y
+        return [{"i": start + i, "y": pos - y, "h": height, "day": day, "facts": facts}
+                    for i, (pos, height, (day, facts)) in enumerate(zip(self.row_positions[start:end],
+                                                                        self.row_heights[start:end],
+                                                                        self.days[start:end]))]
+
+
+    def on_mouse_move(self, tree, event):
+        hover_day, hover_fact = None, None
+
+        for rec in self.visible_range:
+            if rec['y'] <= event.y <= (rec['y'] + rec['h']):
+                hover_day = rec
+                break
+
+        blank_day = hover_day and not hover_day.get('facts')
+
+        if self.hover_day:
+            for fact in self.hover_day.get('facts', []):
+                if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
+                    hover_fact = fact
+                    break
+
+        if hover_day != self.hover_day:
+            self.hover_day = hover_day
+            self.redraw()
+
+        if hover_fact != self.hover_fact:
+            self.hover_fact = hover_fact
+            self.move_actions()
+
+    def move_actions(self):
+        if self.hover_fact:
+            self.action_row.visible = True
+            self.action_row.x = self.width - 80 - self.action_row.width
+            self.action_row.y = self.hover_fact.y - self.y
+        else:
+            self.action_row.visible = False
+
+
+    def _on_vadjustment_change(self, scene, vadjustment):
+        if not self.vadjustment:
+            return
+        self.vadjustment.connect("value_changed", self.on_scroll_value_changed)
+        self.set_size_request(500, 300)
+
+
+    def set_facts(self, facts):
+        current_fact, current_date = self.current_fact, self.hover_day
+
+        self.y = 0
+        self.hover_fact = None
+        if self.vadjustment:
+            self.vadjustment.set_value(0)
+
+        if facts:
+            start, end = facts[0].date, facts[-1].date
+            self.current_fact = facts[0]
+        else:
+            start = end = dt.datetime.now()
+            self.current_fact = None
+
+        by_date = defaultdict(list)
+        for fact in facts:
+            by_date[fact.date].append(fact)
+
+        days = []
+        for i in range((end-start).days + 1):
+            current_date = start + dt.timedelta(days=i)
+            days.append((current_date, by_date[current_date]))
+
+        self.days = days
+        self.facts = facts
+
+        self.set_row_heights()
+
+        if self.height:
+            if current_fact:
+                fact_ids = [fact.id for fact in facts]
+                if current_fact.id in fact_ids:
+                    self.set_current_fact(fact_ids.index(current_fact.id))
+
+            elif current_date:
+                for i, fact in enumerate(facts):
+                    if fact.date == current_date:
+                        self.set_current_fact(i)
+                        break
+
+            self.on_scroll()
+
+
+    def set_row_heights(self):
+        """
+            the row height is defined by following factors:
+                * how many facts are there in the day
+                * does the fact have description / tags
+
+            This func creates a list of row start positions to be able to
+            quickly determine what to display
+        """
+        if not self.height:
             return
 
-        """
-          ASCII Art
-          --------------+--------------------------------------------+-------+---+
-          13:12 - 17:18 | Some activity - category  tag, tag, tag,   | 14:44 | E |
-                        | tag, tag, some description                 |       |   |
-          --------------+--------------------------------------------+-------+---+
-        """
-        # set the colors
-        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
-        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
+        y, pos, heights = 0, [], []
 
-        context = window.cairo_create()
+        for date, facts in self.days:
+            height = 0
+            for fact in facts:
+                fact_height = self.fact_row.height(fact)
+                fact.y = y + height
+                fact.height = fact_height
 
-        if isinstance(self.data, FactRow):
-            fact, parent = self.data, None
-        else:
-            parent, fact = self.data, None
+                height += fact.height
 
+            height += self.day_padding
 
-        x, y, width, height = cell_area
-        context.translate(x, y)
-
-        if flags & gtk.CELL_RENDERER_SELECTED:
-            text_color = self.selected_color
-        else:
-            text_color = self.normal_color
-
-        self.date_label.color = text_color
-        self.duration_label.color = text_color
-
-        if parent:
-            self.date_label.text = "<b>%s</b>" % stuff.escape_pango(parent.label)
-            self.date_label.x = 5
-
-            if self.data.first:
-                y = 5
+            if not facts:
+                height = 10
             else:
-                y = 20
+                height = max(height, 60)
 
-            self.date_label.y = y
+            pos.append(y)
+            heights.append(height)
+            y += height
 
 
-            self.duration_label.text = "<b>%s</b>" % stuff.format_duration(parent.duration)
-            self.duration_label.x = width - self.duration_label.width
-            self.duration_label.y = y
+        self.row_positions, self.row_heights = pos, heights
 
-            self.date_label._draw(context)
-            self.duration_label._draw(context)
+        maxy = max(y, 1)
+
+        self.vadjustment.set_lower(0)
+        self.vadjustment.set_upper(max(maxy, self.height))
+        self.vadjustment.set_page_size(self.height)
+
+
+    def on_resize(self, scene, event):
+        self.set_row_heights()
+        self.fact_row.width = self.width - 105
+        self.on_scroll()
+
+
+    def on_scroll_value_changed(self, scroll):
+        self.y = int(scroll.get_value())
+        self.on_scroll()
+
+
+    def on_scroll(self, scene=None, event=None):
+        y_pos = self.y
+        direction = 0
+        if event and event.direction == gdk.ScrollDirection.UP:
+            direction = -1
+        elif event and event.direction == gdk.ScrollDirection.DOWN:
+            direction = 1
+
+        y_pos += 15 * direction
+        y_pos = max(0, min(self.vadjustment.get_upper() - self.height, y_pos))
+        self.vadjustment.set_value(y_pos)
+        self.y = y_pos
+
+        self.move_actions()
+        self.redraw()
+
+        self.visible_range = self.get_visible_range()
+
+
+    def on_enter_frame(self, scene, context):
+        has_focus = self.get_toplevel().has_toplevel_focus()
+        if has_focus:
+            colors = {
+                "normal": self.style.get_color(gtk.StateFlags.NORMAL),
+                "normal_bg": self.style.get_background_color(gtk.StateFlags.NORMAL),
+                "selected": self.style.get_color(gtk.StateFlags.SELECTED),
+                "selected_bg": self.style.get_background_color(gtk.StateFlags.SELECTED),
+            }
         else:
-            self.render_cell(context, (x,y,width,height), widget, flags)
+            colors = {
+                "normal": self.style.get_color(gtk.StateFlags.BACKDROP),
+                "normal_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
+                "selected": self.style.get_color(gtk.StateFlags.BACKDROP),
+                "selected_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
+            }
 
 
-    def render_cell(self, context, bounds, widget, flags, really = True):
-        if not bounds:
-            return -1
-        x, y, cell_width, h = bounds
-
-        self.selected_color = widget.get_style().text[gtk.STATE_SELECTED]
-        self.normal_color = widget.get_style().text[gtk.STATE_NORMAL]
+        if not self.height:
+            return
 
         g = graphics.Graphics(context)
 
-        fact = self.data
+        g.set_line_style(1)
+        g.translate(0.5, 0.5)
 
-        selected = flags and flags & gtk.CELL_RENDERER_SELECTED
-
-        text_color = self.normal_color
-        if selected:
-            text_color = self.selected_color
+        g.fill_area(0, 0, 105, self.height, "#dfdfdf")
 
 
+        y = int(self.y)
 
-        """ start time and end time at beginning of column """
-        interval = fact.start_time.strftime("%H:%M -")
-        if fact.end_time:
-            interval = "%s %s" % (interval, fact.end_time.strftime("%H:%M"))
+        for rec in self.visible_range:
+            g.save_context()
+            g.translate(0, rec['y'])
 
-        self.interval_label.text = interval
-        self.interval_label.color = text_color
-        self.interval_label.x = self.col_padding
-        self.interval_label.y = 2
+            if not rec['facts']:
+                "do a collapsy thing"
+                g.rectangle(0, 0, self.width, 10)
+                g.clip()
+                g.rectangle(0, 0, self.width, 10)
+                g.fill("#eee")
 
-
-        """ duration at the end """
-        self.duration_label.text = stuff.format_duration(fact.delta)
-        self.duration_label.color = text_color
-        self.duration_label.x = cell_width - self.duration_label.width
-        self.duration_label.y = 2
-
-
-        """ activity, category, tags, description in middle """
-        # we want our columns look aligned, so we will do fixed offset from
-        # both sides, in letter length
-
-        cell_start = widget.longest_interval
-        cell_width = cell_width - widget.longest_interval - widget.longest_duration
+                g.move_to(0, 0)
+                g.line_to(self.width, 0)
+                g.stroke("#ccc")
+                g.restore_context()
+                continue
 
 
-        # align activity and category (ellipsize activity if it does not fit)
-        category_width = 0
+            g.set_color(colors["normal"])
+            self.date_label.show(g, rec['day'].strftime("%A\n%b %d"))
 
-        self.category_label.text = ""
-        if fact.category:
-            self.category_label.text = " - <small>%s</small>" % stuff.escape_pango(fact.category)
-            if not selected:
-                category_color = graphics.Colors.contrast(text_color,  100)
-
-                self.category_label.color = category_color
-            else:
-                self.category_label.color = text_color
-            category_width = self.category_label.width
+            g.translate(105, 0)
+            for fact in rec['facts']:
+                self.fact_row.show(g, colors, fact, fact==self.current_fact)
+                g.translate(0, self.fact_row.height(fact))
 
 
-        self.activity_label.color = text_color
-        self.activity_label.width = None
-        self.activity_label.text = stuff.escape_pango(fact.name)
-
-        # if activity label does not fit, we will shrink it
-        if self.activity_label.width > cell_width - category_width:
-            self.activity_label.width = (cell_width - category_width - self.col_padding)
-            self.activity_label.ellipsize = pango.ELLIPSIZE_END
-        else:
-            self.activity_label.width = None
-            #self.activity_label.ellipsize = None
-
-        activity_width = self.activity_label.width
-
-        y = 2
-
-        self.activity_label.x = cell_start
-        self.activity_label.y = y
-
-
-        self.category_label.x = cell_start + activity_width
-        self.category_label.y = y
-
-
-        x = cell_start + activity_width + category_width + 12
-
-        current_height = 0
-        if fact.tags:
-            # try putting tags on same line if they fit
-            # otherwise move to the next line
-            tags_end = cell_start + cell_width
-
-            if x + self.tag.width > tags_end:
-                x = cell_start
-                y = self.activity_label.height + 4
-
-
-            for i, tag in enumerate(fact.tags):
-                self.tag.text = tag
-
-                if x + self.tag.width >= tags_end:
-                    x = cell_start
-                    y += self.tag.height + 4
-
-                self.tag.x, self.tag.y = x, y
-                if really:
-                    self.tag._draw(context)
-
-                x += self.tag.width + 4
-
-            current_height = y + self.tag.height + 4
-
-
-        current_height = max(self.activity_label.height + 2, current_height)
-
-
-        # see if we can fit in single line
-        # if not, put description under activity
-        self.description_label.text = ""
-        if fact.description:
-            self.description_label.text = "<small>%s</small>" % stuff.escape_pango(fact.description)
-            self.description_label.color = text_color
-            self.description_label.wrap = pango.WRAP_WORD
-
-            description_width = self.description_label.width
-            width = cell_width - x
-
-            if description_width > width:
-                x = cell_start
-                y = current_height
-                self.description_label.width = cell_width
-            else:
-                self.description_label.width = None
-
-            self.description_label.x = x
-            self.description_label.y = y
-
-            current_height = max(current_height, self.description_label.y + self.description_label.height + 5)
-
-        self.labels._draw(context)
-
-        return current_height
-
-
-    def on_get_size(self, widget, cell_area):
-        if isinstance(self.data, GroupRow):
-            if self.data.first:
-                return (0, 0, 0, int((self.default_size + 10) * 1.5))
-            else:
-                return (0, 0, 0, (self.default_size + 10) * 2)
-
-
-        context = gtk.gdk.CairoContext(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
-        area = widget.get_allocation()
-
-        area.width -= 40 # minus the edit column, scrollbar and padding (and the scrollbar part is quite lame)
-
-        cell_height = self.render_cell(context, area, widget, None, False)
-        return (0, 0, -1, cell_height)
+            g.restore_context()

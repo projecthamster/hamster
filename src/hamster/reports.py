@@ -28,9 +28,9 @@ import itertools
 import re
 from string import Template
 
-from configuration import runtime
-from lib import stuff, trophies
-from lib.i18n import C_
+from hamster.lib.configuration import runtime
+from hamster.lib import stuff, trophies
+from hamster.lib.i18n import C_
 try:
     import json
 except ImportError:
@@ -83,9 +83,9 @@ class ReportWriter(object):
     def write_report(self, facts):
         try:
             for fact in facts:
-                fact.activity= fact.activity.encode('utf-8')
-                fact.description = (fact.description or u"").encode('utf-8')
-                fact.category = (fact.category or _("Unsorted")).encode('utf-8')
+                fact.activity= fact.activity
+                fact.description = (fact.description or u"")
+                fact.category = (fact.category or _("Unsorted"))
 
                 if self.datetime_format:
                     fact.start_time = fact.start_time.strftime(self.datetime_format)
@@ -158,7 +158,7 @@ class TSVWriter(ReportWriter):
                    _("description"),
                    # column title in the TSV export format
                    _("tags")]
-        self.csv_writer.writerow([h.encode('utf-8') for h in headers])
+        self.csv_writer.writerow([h for h in headers])
 
     def _write_fact(self, fact):
         fact.delta = stuff.duration_minutes(fact.delta)
@@ -301,7 +301,6 @@ class HTMLWriter(ReportWriter):
 
         data = dict(
             title = self.title,
-            #grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
 
             totals_by_day_title = _("Totals by Day"),
             activity_log_title = _("Activity Log"),
@@ -333,6 +332,11 @@ class HTMLWriter(ReportWriter):
 
             all_activities_rows = "\n".join(self.fact_rows)
         )
+
+        for key, val in data.iteritems():
+            if isinstance(val, basestring):
+                data[key] = val.encode("utf-8")
+
         self.file.write(Template(self.main_template).safe_substitute(data))
 
         if self.override:

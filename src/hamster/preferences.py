@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2007, 2008 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007, 2008, 2014 Toms Bauģis <toms.baugis at gmail.com>
 
 # This file is part of Project Hamster.
 
@@ -17,22 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-import pygtk
-pygtk.require('2.0')
-
-import os
-import gobject
-import gtk
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
+from gi.repository import GObject as gobject
 
 import datetime as dt
 
-try:
-    import wnck
-except:
-    wnck = None
-
 from gettext import ngettext
+
+from hamster.lib.configuration import Controller
+
 
 def get_prev(selection, model):
     (model, iter) = selection.get_selected()
@@ -77,43 +71,29 @@ class ActivityStore(gtk.ListStore):
                          activity['category_id']])
 
 
-class WorkspaceStore(gtk.ListStore):
-    def __init__(self):
-        #id, name, color_code, order
-        gtk.ListStore.__init__(self, int, gobject.TYPE_PYOBJECT, str)
-
 formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
-from configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import runtime, conf
 import widgets
 from lib import stuff, trophies
 
 
 
-class PreferencesEditor(gtk.Object):
+class PreferencesEditor(Controller):
     TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
 
-    __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
     def __init__(self, parent = None):
-        gtk.Object.__init__(self)
-        self.parent = parent
-        self._gui = load_ui_file("preferences.ui")
-        self.window = self.get_widget('preferences_window')
-        self.window.connect("delete_event", self.on_delete_window)
-
+        Controller.__init__(self, parent, ui_file="preferences.ui")
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
                                    ("gtg", "Getting Things Gnome")]
-        self.todo_combo = gtk.combo_box_new_text()
+        self.todo_combo = gtk.ComboBoxText()
         for code, label in self.activities_sources:
             self.todo_combo.append_text(label)
         self.todo_combo.connect("changed", self.on_todo_combo_changed)
@@ -181,13 +161,13 @@ class PreferencesEditor(gtk.Object):
         self.load_config()
 
         # Allow enable drag and drop of rows including row move
-        self.activity_tree.enable_model_drag_source( gtk.gdk.BUTTON1_MASK,
-                                                self.TARGETS,
-                                                gtk.gdk.ACTION_DEFAULT|
-                                                gtk.gdk.ACTION_MOVE)
+        self.activity_tree.enable_model_drag_source(gdk.ModifierType.BUTTON1_MASK,
+                                                    self.TARGETS,
+                                                    gdk.DragAction.DEFAULT|
+                                                    gdk.DragAction.MOVE)
 
         self.category_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gtk.gdk.ACTION_MOVE)
+                                                  gdk.DragAction.MOVE)
 
         self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
 
@@ -200,62 +180,10 @@ class PreferencesEditor(gtk.Object):
         self.prev_selected_activity = None
         self.prev_selected_category = None
 
-
-        # create and fill workspace tree
-        self.workspace_tree = self.get_widget('workspace_list')
-        self.workspace_store = WorkspaceStore()
-
-        self.wNameColumn = gtk.TreeViewColumn(_("Name"))
-        self.wNameColumn.set_expand(True)
-        self.wNameCell = gtk.CellRendererText()
-        self.wNameCell.set_property('editable', False)
-        self.wActivityColumn = gtk.TreeViewColumn(_("Activity"))
-        self.wActivityColumn.set_expand(True)
-        self.wActivityCell = gtk.CellRendererText()
-        self.wActivityCell.set_property('editable', True)
-
-        self.external_listeners.extend([
-            (self.wActivityCell, self.wActivityCell.connect('edited', self.on_workspace_activity_edited))
-        ])
-
-        self.wNameColumn.pack_start(self.wNameCell, True)
-        self.wNameColumn.set_attributes(self.wNameCell)
-        self.wNameColumn.set_sort_column_id(1)
-        self.wNameColumn.set_cell_data_func(self.wNameCell, self.workspace_name_celldata)
-        self.workspace_tree.append_column(self.wNameColumn)
-        self.wActivityColumn.pack_start(self.wActivityCell, True)
-        self.wActivityColumn.set_attributes(self.wActivityCell, text=2)
-        self.wActivityColumn.set_sort_column_id(1)
-        self.workspace_tree.append_column(self.wActivityColumn)
-
-        self.workspace_tree.set_model(self.workspace_store)
-
-        # disable notification thing if pynotify is not available
-        try:
-            import pynotify
-        except:
-            self.get_widget("notification_preference_frame").hide()
-
-
         self.external_listeners.extend([
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
         ])
 
-        # disable workspace tracking if wnck is not there
-        if wnck:
-            self.screen = wnck.screen_get_default()
-            for workspace in self.screen.get_workspaces():
-                self.on_workspace_created(self.screen, workspace)
-
-            self.external_listeners.extend([
-                (self.screen, self.screen.connect("workspace-created", self.on_workspace_created)),
-                (self.screen, self.screen.connect("workspace-destroyed", self.on_workspace_deleted))
-            ])
-        else:
-            self.get_widget("workspace_tab").hide()
-
-
-        self._gui.connect_signals(self)
         self.show()
 
 
@@ -267,37 +195,6 @@ class PreferencesEditor(gtk.Object):
     def on_todo_combo_changed(self, combo):
         conf.set("activities_source", self.activities_sources[combo.get_active()][0])
 
-    def workspace_name_celldata(self, column, cell, model, iter, user_data=None):
-        name = model.get_value(iter, 1).get_name()
-        cell.set_property('text', str(name))
-
-    def on_workspace_created(self, screen, workspace, user_data=None):
-        workspace_number = workspace.get_number()
-        activity = ""
-        if workspace_number < len(self.workspace_mapping):
-            activity = self.workspace_mapping[workspace_number]
-
-        self.workspace_store.append([workspace_number, workspace, activity])
-
-    def on_workspace_deleted(self, screen, workspace, user_data=None):
-        row = self.workspace_store.get_iter_first()
-        while row:
-            if self.workspace_store.get_value(row, 1) == workspace:
-                if not self.workspace_store.remove(row):
-                    # row is now invalid, stop iteration
-                    break
-            else:
-                row = self.workspace_store.iter_next(row)
-
-    def on_workspace_activity_edited(self, cell, path, value):
-        index = int(path)
-        while index >= len(self.workspace_mapping):
-            self.workspace_mapping.append("")
-
-        value = value.decode("utf8", "replace")
-        self.workspace_mapping[index] = value
-        conf.set("workspace_mapping", self.workspace_mapping)
-        self.workspace_store[path][2] = value
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
@@ -307,18 +204,12 @@ class PreferencesEditor(gtk.Object):
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
 
-        self.get_widget("workspace_tracking_name").set_active("name" in conf.get("workspace_tracking"))
-        self.get_widget("workspace_tracking_memory").set_active("memory" in conf.get("workspace_tracking"))
-
         day_start = conf.get("day_start_minutes")
         day_start = dt.time(day_start / 60, day_start % 60)
         self.day_start.set_time(day_start)
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
-
-        self.workspace_mapping = conf.get("workspace_mapping")
-        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
 
 
         current_source = conf.get("activities_source")
@@ -378,9 +269,9 @@ class PreferencesEditor(gtk.Object):
 
         if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
            drop_position != gtk.TREE_VIEW_DROP_BEFORE:
-            treeview.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
         else:
-            treeview.enable_model_drag_dest([drop_no], gtk.gdk.ACTION_MOVE)
+            treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
 
 
 
@@ -401,18 +292,9 @@ class PreferencesEditor(gtk.Object):
 
         return
 
-
-    def get_widget(self, name):
-        """ skip one variable (huh) """
-        return self._gui.get_object(name)
-
-    def get_store(self):
-        """returns store, so we can add some watchers in case if anything changes"""
-        return self.activity_store
-
-
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
+        new_text = new_text.decode("utf-8")
         id = model[path][0]
         if id == -1:
             return False #ignoring unsorted category
@@ -427,15 +309,17 @@ class PreferencesEditor(gtk.Object):
                 return False
 
         if id == -2: #new category
-            id = runtime.storage.add_category(new_text.decode("utf-8"))
+            id = runtime.storage.add_category(new_text)
             model[path][0] = id
         else:
-            runtime.storage.update_category(id, new_text.decode("utf-8"))
+            runtime.storage.update_category(id, new_text)
 
         model[path][1] = new_text
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
+        new_text = new_text.decode("utf-8")
+
         id = model[path][0]
         category_id = model[path][2]
 
@@ -453,9 +337,9 @@ class PreferencesEditor(gtk.Object):
                     return False
 
         if id == -1: #new activity -> add
-            model[path][0] = runtime.storage.add_activity(new_text.decode("utf-8"), category_id)
+            model[path][0] = runtime.storage.add_activity(new_text, category_id)
         else: #existing activity -> update
-            new = new_text.decode("utf-8")
+            new = new_text
             runtime.storage.update_activity(id, new, category_id)
             # size matters - when editing activity name just changed the case (bar -> Bar)
             if prev != new and prev.lower() == new.lower():
@@ -487,10 +371,7 @@ class PreferencesEditor(gtk.Object):
         selection = self.get_widget('category_list').get_selection()
         (model, iter) = selection.get_selected()
 
-        if iter:
-            return model[iter][0]
-        else:
-            return None
+        return model[iter][0] if iter else None
 
 
     def activity_changed(self, selection, model):
@@ -520,7 +401,7 @@ class PreferencesEditor(gtk.Object):
         model.remove(iter)
         return removable_id
 
-    def unsorted_painter(self, column, cell, model, iter):
+    def unsorted_painter(self, column, cell, model, iter, data):
         cell_id = model.get_value(iter, 0)
         cell_text = model.get_value(iter, 1)
         if cell_id == -1:
@@ -542,7 +423,7 @@ class PreferencesEditor(gtk.Object):
 
             if self.prev_selected_activity == path:
                 self.activityCell.set_property("editable", True)
-                tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+                tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
 
             self.prev_selected_activity = path
 
@@ -557,7 +438,7 @@ class PreferencesEditor(gtk.Object):
             if self.prev_selected_category == path and \
                self._get_selected_category() != -1: #do not allow to edit unsorted
                 self.categoryCell.set_property("editable", True)
-                tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+                tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
             else:
                 self.categoryCell.set_property("editable", False)
 
@@ -574,7 +455,7 @@ class PreferencesEditor(gtk.Object):
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)[0]
-        self.activity_tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
+        self.activity_tree.set_cursor_on_cell(path, focus_column = self.activityColumn, start_editing = True)
 
 
 
@@ -583,15 +464,13 @@ class PreferencesEditor(gtk.Object):
         key = event_key.keyval
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        if (event_key.keyval == gtk.keysyms.Delete):
+        if (event_key.keyval == gdk.KEY_Delete):
             self.remove_current_activity()
 
-        elif key == gtk.keysyms.F2 :
+        elif key == gdk.KEY_F2 :
             self.activityCell.set_property("editable", True)
             path = model.get_path(iter)[0]
-            tree.set_cursor(path, focus_column = self.activityColumn, start_editing = True)
-            #tree.grab_focus()
-            #tree.set_cursor(path, start_editing = True)
+            tree.set_cursor_on_cell(path, focus_column = self.activityColumn, start_editing = True)
 
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
@@ -609,7 +488,7 @@ class PreferencesEditor(gtk.Object):
         selection = self.category_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)[0]
-        self.category_tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
+        self.category_tree.set_cursor_on_cell(path, focus_column = self.categoryColumn, start_editing = True)
 
 
     def on_category_list_key_pressed(self, tree, event_key):
@@ -621,14 +500,12 @@ class PreferencesEditor(gtk.Object):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
 
-        if  key == gtk.keysyms.Delete:
+        if  key == gdk.KEY_Delete:
             self.remove_current_category()
-        elif key == gtk.keysyms.F2:
+        elif key == gdk.KEY_F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)[0]
-            tree.set_cursor(path, focus_column = self.categoryColumn, start_editing = True)
-            #tree.grab_focus()
-            #tree.set_cursor(path, start_editing = True)
+            tree.set_cursor_on_cell(path, focus_column = self.categoryColumn, start_editing = True)
 
     def remove_current_category(self):
         selection = self.category_tree.get_selection()
@@ -640,12 +517,12 @@ class PreferencesEditor(gtk.Object):
 
     def on_preferences_window_key_press(self, widget, event):
         # ctrl+w means close window
-        if (event.keyval == gtk.keysyms.w \
-            and event.state & gtk.gdk.CONTROL_MASK):
+        if (event.keyval == gdk.KEY_w \
+            and event.state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
 
         # escape can mean several things
-        if event.keyval == gtk.keysyms.Escape:
+        if event.keyval == gdk.KEY_Escape:
             #check, maybe we are editing stuff
             if self.activityCell.get_property("editable"):
                 self.activityCell.set_property("editable", False)
@@ -679,49 +556,15 @@ class PreferencesEditor(gtk.Object):
         (model, iter) = self.selection.get_selected()
 
         self.activityCell.set_property("editable", True)
-        self.activity_tree.set_cursor_on_cell(model.get_string_from_iter(new_activity),
-                                         focus_column = self.activity_tree.get_column(0),
-                                         focus_cell = None,
-                                         start_editing = True)
+        self.activity_tree.set_cursor_on_cell(model.get_path(new_activity),
+                                              focus_column = self.activity_tree.get_column(0),
+                                              focus_cell = None,
+                                              start_editing = True)
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
         runtime.storage.remove_activity(removable_id)
 
-
-    def on_close_button_clicked(self, button):
-        self.close_window()
-
-    def on_close(self, widget, event):
-        self.close_window()
-
-    def on_delete_window(self, window, event):
-        self.close_window()
-        return True
-
-    def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-            self.window.destroy()
-            self.window = None
-            self._gui = None
-            self.wNameColumn = None
-            self.categoryColumn = None
-            self.emit("on-close")
-
-    def on_workspace_tracking_toggled(self, checkbox):
-        workspace_tracking = []
-        self.get_widget("workspace_list").set_sensitive(self.get_widget("workspace_tracking_name").get_active())
-        if self.get_widget("workspace_tracking_name").get_active():
-            workspace_tracking.append("name")
-
-        if self.get_widget("workspace_tracking_memory").get_active():
-            workspace_tracking.append("memory")
-
-        conf.set("workspace_tracking", workspace_tracking)
 
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
@@ -758,5 +601,19 @@ class PreferencesEditor(gtk.Object):
 
         conf.set("day_start_minutes", day_start)
 
-    def on_preferences_window_destroy(self, window):
-        self.window = None
+
+
+    def on_close_button_clicked(self, button):
+        self.close_window()
+
+
+    def close_window(self):
+        if self.parent:
+            for obj, handler in self.external_listeners:
+                obj.disconnect(handler)
+
+            self._gui = None
+            self.wNameColumn = None
+            self.categoryColumn = None
+
+        Controller.close_window(self)

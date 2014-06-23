@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime as dt
 import logging
 import dbus
 from dbus.lowlevel import Message
-import gconf
-import datetime as dt
-import gobject
+from gi.repository import GConf as gconf
+from gi.repository import GObject as gobject
 
 class DbusIdleListener(gobject.GObject):
     """
@@ -96,7 +96,7 @@ class DbusIdleListener(gobject.GObject):
                 else:
                     delay_key = "/desktop/gnome/session/idle_delay"
 
-                client = gconf.client_get_default()
+                client = gconf.Client.get_default()
                 self.timeout_minutes = client.get_int(delay_key)
 
             else:

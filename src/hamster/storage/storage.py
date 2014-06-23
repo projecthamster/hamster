@@ -19,7 +19,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
-from lib import Fact
+from hamster.lib import Fact
 
 class Storage(object):
     def run_fixtures(self):
@@ -158,7 +158,7 @@ class Storage(object):
             self.tags_changed()
         return tags
 
-    def set_tags_autocomplete(self, tags):
+    def update_autocomplete_tags(self, tags):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
             self.tags_changed()

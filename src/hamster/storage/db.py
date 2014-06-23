@@ -1,6 +1,6 @@
 # - coding: utf-8 -
 
-# Copyright (C) 2007-2009, 2012 Toms Bauģis <toms.baugis at gmail.com>
+# Copyright (C) 2007-2009, 2012, 2014 Toms Bauģis <toms.baugis at gmail.com>
 # Copyright (C) 2007 Patryk Zawadzki <patrys at pld-linux.org>
 
 # This file is part of Project Hamster.
@@ -39,16 +39,13 @@ from shutil import copy as copyfile
 import itertools
 import datetime as dt
 try:
-    import gio
+    from gi.repository import Gio as gio
 except ImportError:
     print "Could not import gio - requires pygobject. File monitoring will be disabled"
     gio = None
 
-from lib import Fact
-try:
-    from lib import trophies
-except:
-    trophies = None
+from hamster.lib import Fact
+from hamster.lib import trophies
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -72,15 +69,17 @@ class Storage(storage.Storage):
             # add file monitoring so the app does not have to be restarted
             # when db file is rewritten
             def on_db_file_change(monitor, gio_file, event_uri, event):
-                if event == gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-                    if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag() == self.__last_etag:
+                if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
+                    if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
+                                           gio.FileQueryInfoFlags.NONE,
+                                           None).get_etag() == self.__last_etag:
                         # ours
                         return
-                elif event == gio.FILE_MONITOR_EVENT_CREATED:
+                elif event == gio.FileMonitorEvent.CREATED:
                     # treat case when instead of a move, a remove and create has been performed
                     self.con = None
 
-                if event in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, gio.FILE_MONITOR_EVENT_CREATED):
+                if event in (gio.FileMonitorEvent.CHANGES_DONE_HINT, gio.FileMonitorEvent.CREATED):
                     print "DB file has been modified externally. Calling all stations"
                     self.dispatch_overwrite()
 
@@ -89,8 +88,11 @@ class Storage(storage.Storage):
                         trophies.unlock("plan_b")
 
 
-            self.__database_file = gio.File(self.db_path)
-            self.__db_monitor = self.__database_file.monitor_file()
+            self.__database_file = gio.File.new_for_path(self.db_path)
+            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
+                                                                  gio.FileMonitorFlags.SEND_MOVED | \
+                                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
+                                                                  None)
             self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
@@ -122,7 +124,7 @@ class Storage(storage.Storage):
         if not os.path.exists(db_path):
             # if not there, copy from the defaults
             try:
-                import defs
+                from hamster import defs
                 data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
             except:
                 # if defs is not there, we are running from sources
@@ -148,7 +150,9 @@ class Storage(storage.Storage):
         if gio:
             # db.execute calls this so we know that we were the ones
             # that modified the DB and no extra refesh is not needed
-            self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE).get_etag()
+            self.__last_etag = self.__database_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
+                                                               gio.FileQueryInfoFlags.NONE,
+                                                               None).get_etag()
 
     #tags, here we come!
     def __get_tags(self, only_autocomplete = False):
@@ -563,7 +567,7 @@ class Storage(storage.Storage):
             if previous and previous['start_time'] <= start_time:
                 # check if maybe that is the same one, in that case no need to restart
                 if previous["activity_id"] == activity_id \
-                   and set(previous["tags"]) == set([tag["name"] for tag in tags]) \
+                   and set(previous["tags"]) == set([tag[1] for tag in tags]) \
                    and (previous["description"] or "") == (fact.description or ""):
                     return None
 
@@ -579,7 +583,7 @@ class Storage(storage.Storage):
                     if len(facts) > 1 and 60 >= (start_time - facts[-2]['end_time']).seconds >= 0:
                         before = facts[-2]
                         if before["activity_id"] == activity_id \
-                           and set(before["tags"]) == set([tag["name"] for tag in tags]):
+                           and set(before["tags"]) == set([tag[1] for tag in tags]):
                             # resume and return
                             update = """
                                        UPDATE facts
@@ -629,7 +633,7 @@ class Storage(storage.Storage):
 
     def __get_todays_facts(self):
         try:
-            from configuration import conf
+            from hamster.lib.configuration import conf
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am
@@ -641,7 +645,7 @@ class Storage(storage.Storage):
 
     def __get_facts(self, date, end_date = None, search_terms = "", reverse_search_terms=False):
         try:
-            from configuration import conf
+            from hamster.lib.configuration import conf
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am
@@ -692,10 +696,11 @@ class Storage(storage.Storage):
             # heuristics to assign tasks to proper days
 
             # if fact has no end time, set the last minute of the day,
-            # or current time if fact has happened in last 24 hours
+            # or current time if fact has happened in last 12 hours
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
-            elif (dt.date.today() - fact["start_time"].date()) <= dt.timedelta(days=1):
+            elif (dt.datetime.now().date() == fact["start_time"].date()) or \
+                 (dt.datetime.now() - fact["start_time"]) <= dt.timedelta(hours=12):
                 fact_end_time = dt.datetime.now().replace(microsecond = 0)
             else:
                 fact_end_time = fact["start_time"]
