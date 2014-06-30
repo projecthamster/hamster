@@ -92,7 +92,8 @@ class PreferencesEditor(Controller):
         # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
         self.activities_sources = [("", _("None")),
                                    ("evo", "Evolution"),
-                                   ("gtg", "Getting Things Gnome")]
+                                   ("gtg", "Getting Things Gnome"),
+                                   ("task", "Taskwarrior")]
         self.todo_combo = gtk.ComboBoxText()
         for code, label in self.activities_sources:
             self.todo_combo.append_text(label)
