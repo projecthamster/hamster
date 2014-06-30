@@ -21,6 +21,7 @@
 import logging
 from hamster.lib.configuration import conf
 from gi.repository import GObject as gobject
+from taskw import TaskWarrior
 import dbus, dbus.mainloop.glib
 
 try:
@@ -40,6 +41,7 @@ class ActivitiesSource(gobject.GObject):
         elif self.source == "gtg":
             gobject.GObject.__init__(self)
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
 
     def get_activities(self, query = None):
         if not self.source:
@@ -72,6 +74,30 @@ class ActivitiesSource(gobject.GObject):
 
                     activities.append({"name": name,
                                        "category": ""})
+
+            return activities
+
+        elif self.source == "task":
+            conn = TaskWarrior ()
+            if not conn:
+                return []
+
+            activities = []
+            tasks = []
+
+            task_filter = {'status':'pending'}
+            tasks = conn.filter_tasks(task_filter)
+
+            for task in tasks:
+                name = task['description'].replace(",","")  # replace comma
+                category = ""
+                if 'tags' in task:
+                    name = "%s, %s " % (name, " ".join(task['tags']))
+
+                if 'project' in task:
+                    category = task['project']
+
+                activities.append({"name":name,"category":category})
 
             return activities
 
