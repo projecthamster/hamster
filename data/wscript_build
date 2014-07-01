@@ -9,8 +9,8 @@ bld.install_files('${DATADIR}/gconf/schemas', '*.schemas')
 
 bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/hicolor/16x16/hamster-time-tracker.png')
 bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/hicolor/22x22/hamster-time-tracker.png')
-bld.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/hicolor/24x24/hamster-applet-active.png')
-bld.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/hicolor/24x24/hamster-applet-inactive.png')
+bld.install_files('${DATADIR}/icons/hicolor/24x24/status',   'art/hicolor/24x24/hamster-applet-active.png')
+bld.install_files('${DATADIR}/icons/hicolor/24x24/status',   'art/hicolor/24x24/hamster-applet-inactive.png')
 bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/hicolor/32x32/hamster-time-tracker.png')
 bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/hicolor/scalable/hamster-time-tracker.png')
 
