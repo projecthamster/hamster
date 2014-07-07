@@ -10,14 +10,17 @@
 <p>
     To start tracking, type in the activity name in the input box and hit the
     <key>Enter</key> key.
-    There are a few tricks that will allow you to specify more detail on
-    the fly:
+    To specify more detail on the fly, use this syntax: 
+    `time_info activity name @category, some description #tag #other tag with spaces`.
 </p>
 
 <steps>
-    <item><p>Use the @ symbol to add a category</p></item>
-    <item><p>Everything after a comma (,) will be stored in the description field</p></item>
-    <item><p>To specify time on the fly, enter it first in the input box</p></item>
+    <item><p>Specify specific times as `13:10-13:45`, and "started 5 minutes ago" as `-5`.</p></item>
+    <item><p>Next comes the activity name</p></item>
+    <item><p>Place the category after the activity name, and start it with an at sign `@`, e.g. `@garden`</p></item>
+    <item><p>If you want to add a description and/or tags, add a comma `,`.
+    <item><p>The description is just freeform text immediately after the comma, and runs until the end of the string or until the first tag.</p></item>
+    <item><p>Place tags at the end, and start each tag with a hash mark `#`.</p></item>
 </steps>
 
 <p>
