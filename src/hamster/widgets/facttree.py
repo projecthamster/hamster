@@ -386,9 +386,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.days = days
         self.facts = facts
 
-        self.set_row_heights()
-
         if self.height:
+            self.set_row_heights()
             if current_fact:
                 fact_ids = [fact.id for fact in facts]
                 if current_fact.id in fact_ids:

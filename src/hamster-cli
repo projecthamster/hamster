@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # - coding: utf-8 -
 
 # Copyright (C) 2010 Matías Ribecky <matias at mribecky.com.ar>
@@ -205,6 +205,7 @@ class HamsterClient(object):
 
 
     def export(self, *args):
+        # TODO(kazeevn) fix
         args = args or []
         export_format, start_time, end_time = "html", None, None
         if args:

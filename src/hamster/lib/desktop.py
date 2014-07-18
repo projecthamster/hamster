@@ -20,7 +20,7 @@
 import datetime as dt
 from calendar import timegm
 import logging
-from gi.repository import GObject as gobject
+from gi.repository import GLib
 
 
 from hamster import idle
@@ -45,7 +45,7 @@ class DesktopIntegrations(object):
         self.idle_listener = idle.DbusIdleListener()
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
-        gobject.timeout_add_seconds(60, self.check_hamster)
+        GLib.timeout_add_seconds(60, self.check_hamster)
 
 
     def check_hamster(self):
@@ -58,7 +58,9 @@ class DesktopIntegrations(object):
             trophies.check_ongoing(todays_facts)
         except Exception as e:
             logging.error("Error while refreshing: %s" % e)
-        finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
+        finally:
+            # we want to go on no matter what,
+            # so in case of any error we find out about it sooner
             return True
 
 

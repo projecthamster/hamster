@@ -637,7 +637,7 @@ class Storage(storage.Storage):
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am
-        day_start = dt.time(day_start / 60, day_start % 60)
+        day_start = dt.time(day_start // 60, day_start % 60)
         today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
                                                   minutes = day_start.minute)).date()
         return self.__get_facts(today)
@@ -649,7 +649,7 @@ class Storage(storage.Storage):
             day_start = conf.get("day_start_minutes")
         except:
             day_start = 5 * 60 # default day start to 5am
-        day_start = dt.time(day_start / 60, day_start % 60)
+        day_start = dt.time(day_start // 60, day_start % 60)
 
         split_time = day_start
         datetime_from = dt.datetime.combine(date, split_time)

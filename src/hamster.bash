@@ -18,7 +18,7 @@ _hamster()
     #
     #  The basic options we'll complete.
     #
-    opts="activities categories current export list search start stop "
+    opts="activities categories current export list search start stop add overview"
 
 
     #

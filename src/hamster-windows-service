@@ -1,6 +1,4 @@
-#!/usr/bin/python
-# nicked off hamster-service
-
+#!/usr/bin/python3
 from gi.repository import GObject as gobject
 import dbus, dbus.service
 from gi.repository import GLib
