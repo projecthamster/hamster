@@ -82,8 +82,8 @@ class Storage(object):
         self.end_transaction()
 
 
-    def get_facts(self, start_date, end_date, search_terms, reverse_search_terms=False):
-        return self.__get_facts(start_date, end_date, search_terms, reverse_search_terms)
+    def get_facts(self, start_date, end_date, search_terms):
+        return self.__get_facts(start_date, end_date, search_terms)
 
 
     def get_todays_facts(self):

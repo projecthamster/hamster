@@ -112,7 +112,7 @@ class Storage(gobject.GObject):
         """
         return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
 
-    def get_facts(self, date, end_date = None, search_terms = "", reverse_search_terms=False):
+    def get_facts(self, date, end_date = None, search_terms = ""):
         """Returns facts for the time span matching the optional filter criteria.
            In search terms comma (",") translates to boolean OR and space (" ")
            to boolean AND.
@@ -125,8 +125,7 @@ class Storage(gobject.GObject):
 
         return [from_dbus_fact(fact) for fact in self.conn.GetFacts(date,
                                                                     end_date,
-                                                                    search_terms,
-                                                                    reverse_search_terms)]
+                                                                    search_terms)]
 
     def get_activities(self, search = ""):
         """returns list of activities name matching search criteria.
