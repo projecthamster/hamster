@@ -5,7 +5,7 @@ for everyday use. For stable versions check out "releases":https://github.com/pr
 
 h1. Requires most recent stable gtk3 (3.10)
 
-Version of gtk required is 3.10 because of the use of HeaderBar and other bits. 
+Version of gtk required is 3.10 because of the use of HeaderBar and other bits.
 Sorry and get up to date!
 
 
@@ -26,6 +26,9 @@ pre. killall hamster-service && killall hamster-windows-service
 
 Now restart your panels/dockies and you should be able to add hamster to your panel!
 
+To allow immidiate focus on hamster window, in Ubuntu go to
+CompizConfig->General->Focus & Raise Behavior and add hamster to exceprions:
+!(class=Polkit-gnome-authentication-agent-1 | class=Hamster-windows-service)
 
 h1. hamster-applet -> hamster-time-tracker clean up
 
@@ -36,4 +39,3 @@ the applet is long gone, the paths and file names have changed to
 pre. git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
 ./waf configure build --prefix=/usr
 sudo ./waf uninstall
-

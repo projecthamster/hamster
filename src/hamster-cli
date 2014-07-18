@@ -363,7 +363,7 @@ Actions:
     * activities: List all the activities names, one per line.
     * categories: List all the categories names, one per line.
 
-    * overview / statistics / about: launch specific window
+    * overview / statistics / about / add : launch specific window
 
 Time formats:
     * 'YYYY-MM-DD hh:mm:ss': If date is missing, it will default to today.
