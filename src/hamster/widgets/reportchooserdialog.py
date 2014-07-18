@@ -18,32 +18,32 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import pygtk
-pygtk.require('2.0')
+import gi
+gi.require_version('Gtk', '3.0')
 
 import os
-from gi.repository import GObject as gobject
-from gi.repository import Gtk as gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 from hamster.lib.configuration import conf
 
-class ReportChooserDialog(gtk.Dialog):
+class ReportChooserDialog(Gtk.Dialog):
     __gsignals__ = {
         # format, path, start_date, end_date
-        'report-chosen': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-                          (gobject.TYPE_STRING, gobject.TYPE_STRING)),
-        'report-chooser-closed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        'report-chosen': (GObject.SignalFlags.RUN_LAST, None,
+                          (GObject.TYPE_STRING, GObject.TYPE_STRING)),
+        'report-chooser-closed': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
     def __init__(self):
-        gtk.Dialog.__init__(self)
+        GObject.GObject.__init__(self)
 
 
-        self.dialog = gtk.FileChooserDialog(title = _("Save Report — Time Tracker"),
+        self.dialog = Gtk.FileChooserDialog(title = _("Save Report — Time Tracker"),
                                             parent = self,
-                                            action = gtk.FileChooserAction.SAVE,
-                                            buttons=(gtk.STOCK_CANCEL,
-                                                     gtk.ResponseType.CANCEL,
-                                                     gtk.STOCK_SAVE,
-                                                     gtk.ResponseType.OK))
+                                            action = Gtk.FileChooserAction.SAVE,
+                                            buttons=(Gtk.STOCK_CANCEL,
+                                                     Gtk.ResponseType.CANCEL,
+                                                     Gtk.STOCK_SAVE,
+                                                     Gtk.ResponseType.OK))
 
         # try to set path to last known folder or fall back to home
         report_folder = os.path.expanduser(conf.get("last_report_folder"))
@@ -54,7 +54,7 @@ class ReportChooserDialog(gtk.Dialog):
 
         self.filters = {}
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_("HTML Report"))
         filter.add_mime_type("text/html")
         filter.add_pattern("*.html")
@@ -62,7 +62,7 @@ class ReportChooserDialog(gtk.Dialog):
         self.filters[filter] = "html"
         self.dialog.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_("Tab-Separated Values (TSV)"))
         filter.add_mime_type("text/plain")
         filter.add_pattern("*.tsv")
@@ -70,21 +70,21 @@ class ReportChooserDialog(gtk.Dialog):
         self.filters[filter] = "tsv"
         self.dialog.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_("XML"))
         filter.add_mime_type("text/xml")
         filter.add_pattern("*.xml")
         self.filters[filter] = "xml"
         self.dialog.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name(_("iCal"))
         filter.add_mime_type("text/calendar")
         filter.add_pattern("*.ics")
         self.filters[filter] = "ical"
         self.dialog.add_filter(filter)
 
-        filter = gtk.FileFilter()
+        filter = Gtk.FileFilter()
         filter.set_name("All files")
         filter.add_pattern("*")
         self.dialog.add_filter(filter)
@@ -107,7 +107,7 @@ class ReportChooserDialog(gtk.Dialog):
 
         response = self.dialog.run()
 
-        if response != gtk.ResponseType.OK:
+        if response != Gtk.ResponseType.OK:
             self.emit("report-chooser-closed")
             self.dialog.destroy()
             self.dialog = None

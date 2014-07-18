@@ -71,8 +71,8 @@ def format_range(start_date, end_date):
     dates_dict = dateDict(start_date, "start_")
     dates_dict.update(dateDict(end_date, "end_"))
 
-    import pydb
-    pydb.debugger()
+    # import pdb
+    # pdb.set_trace()
 
     if start_date == end_date:
         # label of date range if looking on single day

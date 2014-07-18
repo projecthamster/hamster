@@ -73,13 +73,13 @@ class Selection(graphics.Sprite):
 
 
             duration = self.end_time - self.start_time
-            duration = int(duration.seconds / 60)
-            self.duration_label.text =  "%02d:%02d" % (duration / 60, duration % 60)
+            duration = duration.seconds // 60
+            self.duration_label.text =  "%02d:%02d" % (duration // 60, duration % 60)
 
             self.duration_label.visible = self.duration_label.width < self.width
             if self.duration_label.visible:
-                self.duration_label.y = (self.height - self.duration_label.height) / 2
-                self.duration_label.x = (self.width - self.duration_label.width) / 2
+                self.duration_label.y = (self.height - self.duration_label.height) // 2
+                self.duration_label.x = (self.width - self.duration_label.width) // 2
         else:
             self.duration_label.visible = False
 
@@ -91,7 +91,7 @@ class DayLine(graphics.Scene):
         self.set_can_focus(False) # no interaction
 
         day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(day_start / 60, day_start % 60)
+        self.day_start = dt.time(day_start // 60, day_start % 60)
 
         start_time = start_time or dt.datetime.now()
 
@@ -156,8 +156,8 @@ class DayLine(graphics.Scene):
         self.plot_area.height = self.height - 30
 
 
-        vertical = min(self.plot_area.height / 5, 7)
-        minute_pixel = (self.scope_hours * 60.0 - 15) / self.width
+        vertical = min(self.plot_area.height // 5, 7)
+        minute_pixel = (self.scope_hours * 60.0 - 15) // self.width
 
         g.set_line_style(width=1)
         g.translate(0.5, 0.5)
@@ -177,7 +177,7 @@ class DayLine(graphics.Scene):
             bar.height = vertical
 
             bar_start_time = bar.fact.start_time - self.view_time
-            minutes = bar_start_time.seconds / 60 + bar_start_time.days * self.scope_hours  * 60
+            minutes = bar_start_time.seconds // 60 + bar_start_time.days * self.scope_hours  * 60
 
             bar.x = round(minutes / minute_pixel) + 0.5
             bar.width = round((bar.fact.delta).seconds / 60 / minute_pixel)
@@ -185,10 +185,13 @@ class DayLine(graphics.Scene):
 
         if self.chosen_selection.start_time and self.chosen_selection.width is None:
             # we have time but no pixels
-            minutes = round((self.chosen_selection.start_time - self.view_time).seconds / 60 / minute_pixel) + 0.5
+            minutes = round((self.chosen_selection.start_time - self.view_time).seconds
+                             / 60 / minute_pixel) + 0.5
             self.chosen_selection.x = minutes
             if self.chosen_selection.end_time:
-                self.chosen_selection.width = round((self.chosen_selection.end_time - self.chosen_selection.start_time).seconds / 60 / minute_pixel)
+                self.chosen_selection.width = round((
+                    self.chosen_selection.end_time - self.chosen_selection.start_time).seconds /
+                     60 / minute_pixel)
             else:
                 self.chosen_selection.width = 0
             self.chosen_selection.height = self.chosen_selection.parent.height
