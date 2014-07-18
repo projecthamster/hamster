@@ -643,7 +643,7 @@ class Storage(storage.Storage):
         return self.__get_facts(today)
 
 
-    def __get_facts(self, date, end_date = None, search_terms = "", reverse_search_terms=False):
+    def __get_facts(self, date, end_date = None, search_terms = ""):
         try:
             from hamster.lib.configuration import conf
             day_start = conf.get("day_start_minutes")
@@ -677,10 +677,16 @@ class Storage(storage.Storage):
             # check if we need changes to the index
             self.__check_index(datetime_from, datetime_to)
 
+            # flip the query around when it starts with "not "
+            reverse_search_terms = search_terms.lower().startswith("not ")
+            if reverse_search_terms:
+                search_terms = search_terms[4:]
+
             search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
-            query += """ AND a.id %sIN (SELECT id
-                                        FROM fact_index
-                                       WHERE fact_index MATCH '%s')""" % (' NOT ' if reverse_search_terms else '', search_terms)
+            query += """ AND a.id %s IN (SELECT id
+                                         FROM fact_index
+                                         WHERE fact_index MATCH '%s')""" % ('NOT' if reverse_search_terms else '',
+                                                                            search_terms)
 
         query += " ORDER BY a.start_time, e.name"
 
