@@ -142,6 +142,7 @@ class OneWindow(object):
 
         if params in self.dialogs:
             window = self.dialogs[params].window
+            #TODO(kazeevn) fix about
             self.dialogs[params].show()
             window.present()
         else:
@@ -152,7 +153,8 @@ class OneWindow(object):
                     dialog.window.set_transient_for(parent.get_toplevel())
 
                 if hasattr(dialog, "connect"):
-                    self.dialog_close_handlers[dialog] = dialog.connect("on-close", self.on_close_window)
+                    self.dialog_close_handlers[dialog] = dialog.connect(
+                        "on-close", self.on_close_window)
             else:
                 dialog = self.get_dialog_class()(**kwargs)
 
