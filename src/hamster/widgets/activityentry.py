@@ -22,11 +22,10 @@ import cairo
 import datetime as dt
 import re
 
-from gi.repository import Gdk as gdk
-from gi.repository import Gtk as gtk
-from gi.repository import GObject as gobject
-from gi.repository import PangoCairo as pangocairo
-from gi.repository import Pango as pango
+from gi.repository import Gdk, Gtk, GLib
+from gi.repository import GObject
+from gi.repository import PangoCairo
+from gi.repository import Pango
 from collections import defaultdict
 
 from hamster import client
@@ -60,8 +59,8 @@ class Label(object):
     def __init__(self, x=0, y=0):
         self.x, self.y = x, y
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
-        self.layout = pangocairo.create_layout(self._label_context)
-        self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
+        self.layout = PangoCairo.create_layout(self._label_context)
+        self.layout.set_font_description(Pango.FontDescription(graphics._font_desc))
         self.layout.set_markup("Hamster") # dummy
         self.height = self.layout.get_pixel_size()[1]
 
@@ -72,7 +71,7 @@ class Label(object):
         g.save_context()
         if color:
             g.set_color(color)
-        pangocairo.show_layout(g.context, self.layout)
+        PangoCairo.show_layout(g.context, self.layout)
         g.restore_context()
 
 
@@ -86,12 +85,12 @@ class CompleteTree(graphics.Scene):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-select-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'on-select-row': (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
     }
 
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        graphics.Scene.__init__(self, style_class=Gtk.STYLE_CLASS_VIEW)
 
         self.set_can_focus(False)
 
@@ -130,11 +129,11 @@ class CompleteTree(graphics.Scene):
             self.set_current_row(self.rows.index(row))
 
     def on_key_press(self, scene, event):
-        if event.keyval == gdk.KEY_Up:
+        if event.keyval == Gdk.KEY_Up:
             idx = self.rows.index(self.current_row) if self.current_row else 1
             self.set_current_row(idx - 1)
 
-        elif event.keyval == gdk.KEY_Down:
+        elif event.keyval == Gdk.KEY_Down:
             idx = self.rows.index(self.current_row) if self.current_row else -1
             self.set_current_row(idx + 1)
 
@@ -160,10 +159,10 @@ class CompleteTree(graphics.Scene):
             return
 
         colors = {
-            "normal": self.style.get_color(gtk.StateFlags.NORMAL),
-            "normal_bg": self.style.get_background_color(gtk.StateFlags.NORMAL),
-            "selected": self.style.get_color(gtk.StateFlags.SELECTED),
-            "selected_bg": self.style.get_background_color(gtk.StateFlags.SELECTED),
+            "normal": self.style.get_color(Gtk.StateFlags.NORMAL),
+            "normal_bg": self.style.get_background_color(Gtk.StateFlags.NORMAL),
+            "selected": self.style.get_color(Gtk.StateFlags.SELECTED),
+            "selected_bg": self.style.get_background_color(Gtk.StateFlags.SELECTED),
         }
 
         g = graphics.Graphics(context)
@@ -193,13 +192,13 @@ class CompleteTree(graphics.Scene):
 
 
 
-class ActivityEntry(gtk.Entry):
+class ActivityEntry(Gtk.Entry):
     def __init__(self, **kwargs):
-        gtk.Entry.__init__(self)
+        GObject.GObject.__init__(self)
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        box = gtk.Frame()
-        box.set_shadow_type(gtk.ShadowType.IN)
+        self.popup = Gtk.Window(type = Gtk.WindowType.POPUP)
+        box = Gtk.Frame()
+        box.set_shadow_type(Gtk.ShadowType.IN)
         self.popup.add(box)
 
         self.complete_tree = CompleteTree()
@@ -211,7 +210,7 @@ class ActivityEntry(gtk.Entry):
         self.load_suggestions()
         self.ignore_stroke = False
 
-        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
+        self.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.checker = self.connect("changed", self.on_changed)
         self.connect("key-press-event", self.on_key_press)
@@ -239,7 +238,7 @@ class ActivityEntry(gtk.Entry):
                 with self.handler_block(self.checker):
                     self.update_entry("%s%s" % (text, suffix))
                     self.select_region(len(text), -1)
-        gobject.timeout_add(0, complete)
+        GLib.timeout_add(0, complete)
 
     def on_focus_out(self, entry, event):
         self.popup.hide()
@@ -248,14 +247,14 @@ class ActivityEntry(gtk.Entry):
         self.show_suggestions("")
 
     def on_key_press(self, entry, event=None):
-        if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
+        if event.keyval in (Gdk.KEY_BackSpace, Gdk.KEY_Delete):
             self.ignore_stroke = True
 
-        elif event.keyval in (gdk.KEY_Return, gdk.KEY_Escape):
+        elif event.keyval in (Gdk.KEY_Return, Gdk.KEY_Escape):
             self.popup.hide()
             self.set_position(-1)
 
-        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down):
+        elif event.keyval in (Gdk.KEY_Up, Gdk.KEY_Down):
             if not self.popup.get_visible():
                 self.show_suggestions(self.get_text())
             self.complete_tree.on_key_press(self, event)

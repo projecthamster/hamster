@@ -3,11 +3,11 @@
 
 from gi.repository import GObject as gobject
 import dbus, dbus.service
-from gi.repository import GLib as glib
+from gi.repository import GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
-loop = gobject.MainLoop()
+loop = GLib.MainLoop()
 
 if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
     print("Found hamster-window-service already running, exiting")
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     from hamster.lib import i18n
     i18n.setup_i18n()
 
-    glib.set_prgname("hamster-windows-service")
+    GLib.set_prgname("hamster-windows-service")
 
     from hamster.lib.configuration import runtime, dialogs, conf, load_ui_file
     window_server = WindowServer(loop)

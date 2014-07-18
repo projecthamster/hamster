@@ -111,8 +111,7 @@ class CustomFactController(gobject.GObject):
 
     def figure_description(self):
         buf = self.get_widget('description').get_buffer()
-        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
-                         .decode("utf-8")
+        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
 
