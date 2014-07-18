@@ -45,8 +45,8 @@ from hamster.lib.configuration import Controller
 
 from hamster.lib.pytweener import Easing
 
-from widgets.dates import RangePick
-from widgets.facttree import FactTree
+from .widgets.dates import RangePick
+from .widgets.facttree import FactTree
 
 
 class HeaderBar(gtk.HeaderBar):
@@ -295,8 +295,8 @@ class Totals(graphics.Scene):
                 totals["tag"][tag] += fact.delta
 
 
-        for key, group in totals.iteritems():
-            totals[key] = sorted(group.iteritems(), key=lambda x: x[1], reverse=True)
+        for key, group in totals.items():
+            totals[key] = sorted(iter(group.items()), key=lambda x: x[1], reverse=True)
         self.totals = totals
 
         self.activities_chart.set_values(totals['activity'])
@@ -507,7 +507,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
+                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 

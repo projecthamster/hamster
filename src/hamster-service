@@ -13,7 +13,7 @@ DBusGMainLoop(set_as_default=True)
 loop = gobject.MainLoop()
 
 if "org.gnome.Hamster" in dbus.SessionBus().list_names():
-    print "Found hamster-service already running, exiting"
+    print("Found hamster-service already running, exiting")
     quit()
 
 from hamster.lib import i18n
@@ -89,7 +89,7 @@ class Storage(db.Storage, dbus.service.Object):
     # anyway. should make updating simpler
     def _on_us_change(self, monitor, gio_file, event_uri, event):
         if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
-            print "`%s` has changed. Quitting!" % __file__
+            print("`%s` has changed. Quitting!" % __file__)
             self.Quit()
 
     @dbus.service.signal("org.gnome.Hamster")
@@ -303,6 +303,6 @@ class Storage(db.Storage, dbus.service.Object):
 
 
 if __name__ == '__main__':
-    print "hamster-service up"
+    print("hamster-service up")
     storage = Storage(loop)
     loop.run()

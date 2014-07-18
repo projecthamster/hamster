@@ -41,7 +41,7 @@ else:
 
 from calendar import timegm
 
-from StringIO import StringIO
+from io import StringIO
 
 def simple(facts, start_date, end_date, format, path = None):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
@@ -84,7 +84,7 @@ class ReportWriter(object):
         try:
             for fact in facts:
                 fact.activity= fact.activity
-                fact.description = (fact.description or u"")
+                fact.description = (fact.description or "")
                 fact.category = (fact.category or _("Unsorted"))
 
                 if self.datetime_format:
@@ -204,13 +204,13 @@ class HTMLWriter(ReportWriter):
         dates_dict.update(stuff.dateDict(end_date, "end_"))
 
         if start_date.year != end_date.year:
-            self.title = _(u"Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _("Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif start_date.month != end_date.month:
-            self.title = _(u"Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _("Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
         elif start_date == end_date:
-            self.title = _(u"Activity report for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
+            self.title = _("Activity report for %(start_B)s %(start_d)s, %(start_Y)s") % dates_dict
         else:
-            self.title = _(u"Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+            self.title = _("Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
 
         # read the template, allow override
@@ -333,8 +333,8 @@ class HTMLWriter(ReportWriter):
             all_activities_rows = "\n".join(self.fact_rows)
         )
 
-        for key, val in data.iteritems():
-            if isinstance(val, basestring):
+        for key, val in data.items():
+            if isinstance(val, str):
                 data[key] = val.encode("utf-8")
 
         self.file.write(Template(self.main_template).safe_substitute(data))

@@ -23,21 +23,21 @@ from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 
 # import our children
-from activityentry import ActivityEntry
+from .activityentry import ActivityEntry
 
-from timeinput import TimeInput
+from .timeinput import TimeInput
 
-from dayline import DayLine
+from .dayline import DayLine
 
-from tags import Tag
-from tags import TagBox
-from tags import TagsEntry
+from .tags import Tag
+from .tags import TagBox
+from .tags import TagsEntry
 
-from reportchooserdialog import ReportChooserDialog
+from .reportchooserdialog import ReportChooserDialog
 
-from facttree import FactTree
+from .facttree import FactTree
 
-from dates import RangePick
+from .dates import RangePick
 
 
 # handy wrappers

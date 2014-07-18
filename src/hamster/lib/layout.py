@@ -12,7 +12,7 @@ from gi.repository import GObject as gobject
 from gi.repository import Pango as pango
 from collections import defaultdict
 
-import graphics
+from . import graphics
 
 
 class Widget(graphics.Sprite):

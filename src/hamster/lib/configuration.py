@@ -129,7 +129,7 @@ class OneWindow(object):
         self.dialog_close_handlers = {}
 
     def on_close_window(self, dialog):
-        for key, assoc_dialog in list(self.dialogs.iteritems()):
+        for key, assoc_dialog in list(self.dialogs.items()):
             if dialog == assoc_dialog:
                 del self.dialogs[key]
 

@@ -31,7 +31,7 @@ except:
     storage = None
 
 from hamster.lib import Fact
-import stuff
+from . import stuff
 import datetime as dt
 
 def unlock(achievement_id):

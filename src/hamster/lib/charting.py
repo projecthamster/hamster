@@ -22,7 +22,7 @@ from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 import datetime as dt
 import time
-import graphics, stuff
+from . import graphics, stuff
 import locale
 
 class Bar(graphics.Sprite):

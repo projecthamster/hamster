@@ -75,8 +75,8 @@ formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
 from hamster.lib.configuration import runtime, conf
-import widgets
-from lib import stuff, trophies
+from . import widgets
+from .lib import stuff, trophies
 
 
 
@@ -538,7 +538,7 @@ class PreferencesEditor(Controller):
         """ appends row, jumps to it and allows user to input name """
 
         new_category = self.category_store.insert_before(self.category_store.unsorted_category,
-                                                         [-2, _(u"New category")])
+                                                         [-2, _("New category")])
 
         self.categoryCell.set_property("editable", True)
         self.category_tree.set_cursor_on_cell((len(self.category_tree.get_model()) - 2, ),
@@ -551,7 +551,7 @@ class PreferencesEditor(Controller):
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
 
-        new_activity = self.activity_store.append([-1, _(u"New activity"), category_id])
+        new_activity = self.activity_store.append([-1, _("New activity"), category_id])
 
         (model, iter) = self.selection.get_selected()
 
@@ -583,7 +583,7 @@ class PreferencesEditor(Controller):
                              value) % {'interval_minutes': value}
         else:
             # notify interval slider value label
-            label = _(u"Never")
+            label = _("Never")
 
         return label
 

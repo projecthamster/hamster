@@ -26,9 +26,9 @@ import datetime as dt
 """ TODO: hook into notifications and refresh our days if some evil neighbour
           edit fact window has dared to edit facts
 """
-import widgets
+from . import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from lib import Fact
+from .lib import Fact
 
 class CustomFactController(gobject.GObject):
     __gsignals__ = {

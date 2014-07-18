@@ -71,6 +71,9 @@ def format_range(start_date, end_date):
     dates_dict = dateDict(start_date, "start_")
     dates_dict.update(dateDict(end_date, "end_"))
 
+    import pydb
+    pydb.debugger()
+
     if start_date == end_date:
         # label of date range if looking on single day
         # date format for overview label when only single day is visible
@@ -82,19 +85,19 @@ def format_range(start_date, end_date):
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = ("%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     elif start_date.month != end_date.month:
         # label of date range if start and end month do not match
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = ("%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     else:
         # label of date range for interval in same month
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
+        title = ("%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
     return title
 
@@ -137,14 +140,14 @@ def zero_hour(date):
 # see bug 562298
 def locale_from_utf8(utf8_str):
     try:
-        retval = unicode (utf8_str, "utf-8").encode(locale.getpreferredencoding())
+        retval = str (utf8_str, "utf-8").encode(locale.getpreferredencoding())
     except:
         retval = utf8_str
     return retval
 
 def locale_to_utf8(locale_str):
     try:
-        retval = unicode (locale_str, locale.getpreferredencoding()).encode("utf-8")
+        retval = str (locale_str, locale.getpreferredencoding()).encode("utf-8")
     except:
         retval = locale_str
     return retval
@@ -206,7 +209,7 @@ def dateDict(date, prefix = ""):
     res[prefix+"Y"] = date.strftime("%Y")
     res[prefix+"Z"] = date.strftime("%Z")
 
-    for i, value in res.items():
+    for i, value in list(res.items()):
         res[i] = locale_to_utf8(value)
 
     return res

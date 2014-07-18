@@ -77,7 +77,7 @@ class Storage(gobject.GObject):
                                      'org.freedesktop.DBus', arg0='org.gnome.Hamster')
     @staticmethod
     def _to_dict(columns, result_list):
-        return [dict(zip(columns, row)) for row in result_list]
+        return [dict(list(zip(columns, row))) for row in result_list]
 
     @property
     def conn(self):

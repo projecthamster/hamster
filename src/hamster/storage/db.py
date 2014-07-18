@@ -34,14 +34,14 @@ except ImportError:
 
 import os, time
 import datetime
-import storage
+from . import storage
 from shutil import copy as copyfile
 import itertools
 import datetime as dt
 try:
     from gi.repository import Gio as gio
 except ImportError:
-    print "Could not import gio - requires pygobject. File monitoring will be disabled"
+    print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
 from hamster.lib import Fact
@@ -80,7 +80,7 @@ class Storage(storage.Storage):
                     self.con = None
 
                 if event in (gio.FileMonitorEvent.CHANGES_DONE_HINT, gio.FileMonitorEvent.CREATED):
-                    print "DB file has been modified externally. Calling all stations"
+                    print("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
 
                     # plan "b" – synchronize the time tracker's database from external source while the tracker is running
@@ -103,11 +103,11 @@ class Storage(storage.Storage):
                 from xdg.BaseDirectory import xdg_data_home
                 database_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
             except ImportError:
-                print "Could not import xdg - will store hamster.db in home folder"
+                print("Could not import xdg - will store hamster.db in home folder")
                 database_dir = os.path.realpath(os.path.expanduser("~"))
 
         if not os.path.exists(database_dir):
-            os.makedirs(database_dir, 0744)
+            os.makedirs(database_dir, 0o744)
 
         # handle the move to xdg_data_home
         old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
@@ -141,7 +141,7 @@ class Storage(storage.Storage):
             copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
-            os.chmod(db_path, 0664)
+            os.chmod(db_path, 0o664)
 
         return db_path
 
@@ -775,7 +775,7 @@ class Storage(storage.Storage):
         """
         search = search.lower()
         search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, (u'%s%%' % search, ))
+        activities = self.fetchall(query, ('%s%%' % search, ))
 
         return activities
 
@@ -994,7 +994,7 @@ class Storage(storage.Storage):
         if version < current_version:
             #lock down current version
             self.execute("UPDATE version SET version = %d" % current_version)
-            print "updated database from version %d to %d" % (version, current_version)
+            print("updated database from version %d to %d" % (version, current_version))
 
             # oldtimer – database version structure had been performed on startup (thus we know that user has been on at least 2 versions)
             if trophies:
