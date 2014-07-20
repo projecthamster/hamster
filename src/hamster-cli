@@ -240,7 +240,7 @@ class HamsterClient(object):
             print('%s@%s' % (activity['name'], activity['category']))
 
     def categories(self, *args):
-        '''print the names of all the categories.'''
+        '''Print the names of all the categories.'''
         for category in self.storage.get_categories():
             print(category['name'])
 
