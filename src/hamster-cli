@@ -32,7 +32,7 @@ from hamster.lib import Fact, stuff
 
 
 def word_wrap(line, max_len):
-    """primitive word wrapper"""
+    """A primitive word wrapper."""
     lines = []
     cur_line, cur_len = "", 0
     for word in line.split():
@@ -84,7 +84,7 @@ _DATETIME_PATTERN = ('^((?P<relative>-\d.+)?|('
                      '(?P<rest>\D.+)?$')
 _DATETIME_REGEX = re.compile(_DATETIME_PATTERN)
 def parse_datetime_range(arg):
-    '''Parse a date and time.'''
+    '''Parse a date and a time.'''
     match = _DATETIME_REGEX.match(arg)
     if not match:
         return None, None
@@ -180,23 +180,22 @@ class HamsterClient(object):
         self.storage.toggle()
 
     def track(self, *args):
-        """Same as start"""
+        """Same as start."""
         self.start(*args)
 
 
     def start(self, *args):
         '''Start a new activity.'''
         if not args:
-            print("error: please specify activity")
+            print("Error: please specify an activity.")
             return
 
         activity = args[0]
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
         start_time = start_time or dt.datetime.now()
 
-        self.storage.add_fact(fact(activity,
-                                         start_time = start_time,
-                                         end_time = end_time))
+        self.storage.add_fact(
+            Fact(activity, start_time = start_time, end_time = end_time))
 
 
     def stop(self, *args):
