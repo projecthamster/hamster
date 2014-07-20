@@ -297,7 +297,7 @@ class Totals(graphics.Scene):
 
 
         for key, group in totals.items():
-            totals[key] = sorted(iter(group.items()), key=lambda x: x[1], reverse=True)
+            totals[key] = sorted(group.items(), key=lambda x: x[1], reverse=True)
         self.totals = totals
 
         self.activities_chart.set_values(totals['activity'])
