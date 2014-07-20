@@ -724,7 +724,7 @@ class Parent(object):
         return "<%s %s>" % (self.__class__.__name__, getattr(self, "id", None) or str(id(self)))
 
 
-class Sprite(Parent, gobject.gobject):
+class Sprite(Parent, gobject.GObject):
     """The Sprite class is a basic display list building block: a display list
        node that can display graphics and can also contain children.
        Once you have created the sprite, use Scene's add_child to add it to
@@ -774,7 +774,7 @@ class Sprite(Parent, gobject.gobject):
                  mouse_cursor = None, cache_as_bitmap = False,
                  snap_to_pixel = True, debug = False, id = None,
                  can_focus = False):
-        gobject.gobject.__init__(self)
+        gobject.GObject.__init__(self)
 
         # a place where to store child handlers
         self.__dict__['_child_handlers'] = defaultdict(list)
@@ -1674,7 +1674,7 @@ class Scene(Parent, gtk.DrawingArea):
     def __init__(self, interactive = True, framerate = 60,
                        background_color = None, scale = False, keep_aspect = True,
                        style_class=None):
-        gobject.gobject.__init__(self)
+        gobject.GObject.__init__(self)
 
         self._style = self.get_style_context()
 
