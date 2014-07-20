@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # - coding: utf-8 -
 
 # Copyright (C) 2010 Matías Ribecky <matias at mribecky.com.ar>
@@ -180,12 +180,12 @@ class HamsterClient(object):
         self.storage.toggle()
 
     def track(self, *args):
-        """same as start"""
+        """Same as start"""
         self.start(*args)
 
 
     def start(self, *args):
-        '''start a new activity.'''
+        '''Start a new activity.'''
         if not args:
             print("error: please specify activity")
             return
