@@ -135,7 +135,7 @@ class Tween(object):
 
         # list of (property, start_value, delta)
         self.tweenables = set()
-        for key, value in list(kwargs.items()):
+        for key, value in kwargs.items():
             self.tweenables.add((key, Tweenable(getattr(self.target, key), value)))
 
         self.delta = 0

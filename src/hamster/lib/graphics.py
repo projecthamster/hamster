@@ -1101,7 +1101,7 @@ class Sprite(Parent, gobject.GObject):
             return scene.animate(self, duration, easing, on_complete,
                                  on_update, round, **kwargs)
         else:
-            for key, val in list(kwargs.items()):
+            for key, val in kwargs.items():
                 setattr(self, key, val)
             return None
 

@@ -25,7 +25,8 @@ import webbrowser
 
 from collections import defaultdict
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
@@ -47,43 +48,43 @@ from .widgets.dates import RangePick
 from .widgets.facttree import FactTree
 
 
-class HeaderBar(Gtk.HeaderBar):
+class HeaderBar(gtk.HeaderBar):
     def __init__(self):
-        Gtk.HeaderBar.__init__(self)
+        gtk.HeaderBar.__init__(self)
         self.set_show_close_button(True)
 
-        box = Gtk.Box(False)
-        time_back = Gtk.Button.new_from_icon_name("go-previous-symbolic", Gtk.IconSize.MENU)
-        time_forth = Gtk.Button.new_from_icon_name("go-next-symbolic", Gtk.IconSize.MENU)
+        box = gtk.Box(False)
+        time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
+        time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
 
         box.add(time_back)
         box.add(time_forth)
-        Gtk.StyleContext.add_class(box.get_style_context(), "linked")
+        gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
         self.range_pick = RangePick(dt.datetime.today()) # TODO - use hamster day
         self.pack_start(self.range_pick)
 
-        self.add_activity_button = Gtk.Button()
-        self.add_activity_button.set_image(Gtk.Image.new_from_icon_name("list-add-symbolic",
-                                                                        Gtk.IconSize.MENU))
+        self.add_activity_button = gtk.Button()
+        self.add_activity_button.set_image(gtk.Image.new_from_icon_name("list-add-symbolic",
+                                                                        gtk.IconSize.MENU))
         self.pack_end(self.add_activity_button)
 
-        self.search_button = Gtk.ToggleButton()
-        self.search_button.set_image(Gtk.Image.new_from_icon_name("edit-find-symbolic",
-                                                                  Gtk.IconSize.MENU))
+        self.search_button = gtk.ToggleButton()
+        self.search_button.set_image(gtk.Image.new_from_icon_name("edit-find-symbolic",
+                                                                  gtk.IconSize.MENU))
         self.pack_end(self.search_button)
 
-        self.system_button = Gtk.MenuButton()
-        self.system_button.set_image(Gtk.Image.new_from_icon_name("emblem-system-symbolic",
-                                                                  Gtk.IconSize.MENU))
+        self.system_button = gtk.MenuButton()
+        self.system_button.set_image(gtk.Image.new_from_icon_name("emblem-system-symbolic",
+                                                                  gtk.IconSize.MENU))
         self.pack_end(self.system_button)
 
-        self.system_menu = Gtk.Menu()
+        self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
-        self.menu_export = Gtk.MenuItem(label="Export...")
+        self.menu_export = gtk.MenuItem(label="Export...")
         self.system_menu.append(self.menu_export)
-        self.menu_prefs = Gtk.MenuItem(label="Tracking Settings")
+        self.menu_prefs = gtk.MenuItem(label="Tracking Settings")
         self.system_menu.append(self.menu_prefs)
         self.system_menu.show_all()
 
@@ -236,7 +237,7 @@ class Totals(graphics.Scene):
         graphics.Scene.__init__(self)
         self.set_size_request(200, 70)
         # TODO(kazeevn) match colors with the style
-        self.category_totals = layout.Label(#color=self._style.get_color(Gtk.StateFlags.NORMAL),
+        self.category_totals = layout.Label(#color=self._style.get_color(gtk.StateFlags.NORMAL),
                                             overflow=pango.EllipsizeMode.END,
                                             x_align=0,
                                             expand=False)
@@ -248,11 +249,11 @@ class Totals(graphics.Scene):
         box.add_child(self.category_totals, self.stacked_bar)
 
         self.totals = {}
-        self.mouse_cursor = Gdk.CursorType.HAND2
+        self.mouse_cursor = gdk.CursorType.HAND2
 
         # TODO(kazeevn) match colors with the style
         self.instructions_label = layout.Label("Click to see stats",
-                                               #color=self._style.get_color(Gtk.StateFlags.NORMAL),
+                                               #color=self._style.get_color(gtk.StateFlags.NORMAL),
                                                padding=10,
                                                expand=False)
 
@@ -319,7 +320,7 @@ class Totals(graphics.Scene):
             self.change_height(300)
             self.instructions_label.visible = False
 
-        self.mouse_cursor = Gdk.CursorType.HAND2 if self.collapsed else None
+        self.mouse_cursor = gdk.CursorType.HAND2 if self.collapsed else None
 
     def on_mouse_enter(self, scene, event):
         if not self.collapsed:
@@ -361,7 +362,7 @@ class Overview(Controller):
     def __init__(self, parent = None):
         Controller.__init__(self, parent)
 
-        self.window.set_position(Gtk.WindowPosition.CENTER)
+        self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("hamster-time-tracker")
         self.window.set_default_size(700, 500)
 
@@ -372,18 +373,18 @@ class Overview(Controller):
         self.header_bar = HeaderBar()
         self.window.set_titlebar(self.header_bar)
 
-        main = Gtk.Box(orientation=1)
+        main = gtk.Box(orientation=1)
         self.window.add(main)
 
         self.report_chooser = None
 
 
-        self.search_box = Gtk.Revealer()
+        self.search_box = gtk.Revealer()
 
-        space = Gtk.Box(border_width=5)
+        space = gtk.Box(border_width=5)
         self.search_box.add(space)
-        self.filter_entry = Gtk.Entry()
-        self.filter_entry.set_icon_from_icon_name(Gtk.EntryIconPosition.PRIMARY,
+        self.filter_entry = gtk.Entry()
+        self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY,
                                                   "edit-find-symbolic")
         self.filter_entry.connect("changed", self.on_search_changed)
         self.filter_entry.connect("icon-press", self.on_search_icon_press)
@@ -392,8 +393,8 @@ class Overview(Controller):
         main.pack_start(self.search_box, False, True, 0)
 
 
-        window = Gtk.ScrolledWindow()
-        window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        window = gtk.ScrolledWindow()
+        window.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         self.fact_tree = FactTree()
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
         self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
@@ -423,23 +424,23 @@ class Overview(Controller):
 
     def on_key_press(self, window, event):
         if self.filter_entry.has_focus():
-            if event.keyval == Gdk.KEY_Escape:
+            if event.keyval == gdk.KEY_Escape:
                 self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
-            elif event.keyval in (Gdk.KEY_Up, Gdk.KEY_Down,
-                                  Gdk.KEY_Page_Up, Gdk.KEY_Page_Down,
-                                  Gdk.KEY_Return):
+            elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
+                                  gdk.KEY_Page_Up, gdk.KEY_Page_Down,
+                                  gdk.KEY_Return):
                 self.fact_tree.on_key_press(self, event)
                 return True
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
-            if event.keyval == Gdk.KEY_Tab:
+            if event.keyval == gdk.KEY_Tab:
                 pass # TODO - deal with tab as our scenes eat up navigation
 
-        if event.state & Gdk.ModifierType.CONTROL_MASK:
+        if event.state & gdk.ModifierType.CONTROL_MASK:
             # the ctrl+things
-            if event.keyval == Gdk.KEY_f:
+            if event.keyval == gdk.KEY_f:
                 self.header_bar.search_button.set_active(True)
 
 
@@ -459,15 +460,15 @@ class Overview(Controller):
 
     def on_search_changed(self, entry):
         if entry.get_text():
-            self.filter_entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY,
+            self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
                                                       "edit-clear-symbolic")
         else:
-            self.filter_entry.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY,
+            self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
                                                       None)
         self.find_facts()
 
     def on_search_icon_press(self, entry, position, event):
-        if position == Gtk.EntryIconPosition.SECONDARY:
+        if position == gtk.EntryIconPosition.SECONDARY:
             self.filter_entry.set_text("")
 
     def on_facts_changed(self, event):
@@ -509,7 +510,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    Gtk.show_uri(Gdk.Screen(), "file://%s" % os.path.split(path)[0], 0)
+                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 

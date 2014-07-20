@@ -71,9 +71,6 @@ def format_range(start_date, end_date):
     dates_dict = dateDict(start_date, "start_")
     dates_dict.update(dateDict(end_date, "end_"))
 
-    # import pdb
-    # pdb.set_trace()
-
     if start_date == end_date:
         # label of date range if looking on single day
         # date format for overview label when only single day is visible
@@ -209,7 +206,7 @@ def dateDict(date, prefix = ""):
     res[prefix+"Y"] = date.strftime("%Y")
     res[prefix+"Z"] = date.strftime("%Z")
 
-    for i, value in list(res.items()):
+    for i, value in res.items():
         res[i] = locale_to_utf8(value)
 
     return res
