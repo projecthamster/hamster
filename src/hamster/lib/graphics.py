@@ -13,9 +13,9 @@ import datetime as dt
 from gi.repository import Gtk as gtk
 from gi.repository import GLib as glib
 from gi.repository import Gdk as gdk
-from gi.repository import GObject
-from gi.repository import Pango
-from gi.repository import PangoCairo
+from gi.repository import GObject as gobject
+from gi.repository import Pango as pango
+from gi.repository import PangoCairo as pangocairo
 
 import cairo
 from gi.repository import GdkPixbuf
@@ -371,24 +371,24 @@ class Graphics(object):
     def create_layout(self, size = None):
         """utility function to create layout with the default font. Size and
         alignment parameters are shortcuts to according functions of the
-        Pango.Layout"""
+        pango.Layout"""
         if not self.context:
             # TODO - this is rather sloppy as far as exception goes
             #        should explain better
             raise "Can not create layout without existing context!"
 
-        layout = PangoCairo.create_layout(self.context)
-        font_desc = Pango.FontDescription(_font_desc)
-        if size: font_desc.set_absolute_size(size * Pango.SCALE)
+        layout = pangocairo.create_layout(self.context)
+        font_desc = pango.FontDescription(_font_desc)
+        if size: font_desc.set_absolute_size(size * pango.SCALE)
 
         layout.set_font_description(font_desc)
         return layout
 
     def show_label(self, text, size = None, color = None, font_desc = None):
         """display text. unless font_desc is provided, will use system's default font"""
-        font_desc = Pango.FontDescription(font_desc or _font_desc)
+        font_desc = pango.FontDescription(font_desc or _font_desc)
         if color: self.set_color(color)
-        if size: font_desc.set_absolute_size(size * Pango.SCALE)
+        if size: font_desc.set_absolute_size(size * pango.SCALE)
         self.show_layout(text, font_desc)
 
     def show_text(self, text):
@@ -411,19 +411,19 @@ class Graphics(object):
             if wrap is not None:
                 layout.set_wrap(wrap)
             else:
-                layout.set_ellipsize(ellipsize or Pango.EllipsizeMode.END)
+                layout.set_ellipsize(ellipsize or pango.EllipsizeMode.END)
 
-        PangoCairo.show_layout(context, layout)
+        pangocairo.show_layout(context, layout)
 
 
-    def show_layout(self, text, font_desc, alignment = Pango.Alignment.LEFT,
+    def show_layout(self, text, font_desc, alignment = pango.Alignment.LEFT,
                     width = -1, wrap = None, ellipsize = None,
                     single_paragraph_mode = False):
         """display text. font_desc is string of pango font description
            often handier than calling this function directly, is to create
            a class:Label object
         """
-        layout = self._cache_layout = self._cache_layout or PangoCairo.create_layout(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
+        layout = self._cache_layout = self._cache_layout or pangocairo.create_layout(cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0)))
         self._add_instruction("show_layout", layout, text, font_desc,
                               alignment, width, wrap, ellipsize, single_paragraph_mode)
 
@@ -724,7 +724,7 @@ class Parent(object):
         return "<%s %s>" % (self.__class__.__name__, getattr(self, "id", None) or str(id(self)))
 
 
-class Sprite(Parent, GObject.GObject):
+class Sprite(Parent, gobject.gobject):
     """The Sprite class is a basic display list building block: a display list
        node that can display graphics and can also contain children.
        Once you have created the sprite, use Scene's add_child to add it to
@@ -732,23 +732,23 @@ class Sprite(Parent, GObject.GObject):
     """
 
     __gsignals__ = {
-        "on-mouse-over": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "on-mouse-move": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-out": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "on-mouse-down": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-double-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-triple-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-up": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-scroll": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-drag-start": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-drag": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-drag-finish": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-focus": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "on-blur": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "on-key-press": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-key-release": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-render": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "on-mouse-over": (gobject.SignalFlags.RUN_LAST, None, ()),
+        "on-mouse-move": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-out": (gobject.SignalFlags.RUN_LAST, None, ()),
+        "on-mouse-down": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-double-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-triple-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-up": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-scroll": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-drag-start": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-drag": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-drag-finish": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-focus": (gobject.SignalFlags.RUN_LAST, None, ()),
+        "on-blur": (gobject.SignalFlags.RUN_LAST, None, ()),
+        "on-key-press": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-key-release": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-render": (gobject.SignalFlags.RUN_LAST, None, ()),
     }
 
     transformation_attrs = set(('x', 'y', 'rotation', 'scale_x', 'scale_y', 'pivot_x', 'pivot_y'))
@@ -774,7 +774,7 @@ class Sprite(Parent, GObject.GObject):
                  mouse_cursor = None, cache_as_bitmap = False,
                  snap_to_pixel = True, debug = False, id = None,
                  can_focus = False):
-        GObject.GObject.__init__(self)
+        gobject.gobject.__init__(self)
 
         # a place where to store child handlers
         self.__dict__['_child_handlers'] = defaultdict(list)
@@ -1350,13 +1350,13 @@ class Icon(BitmapSprite):
 
 class Label(Sprite):
     __gsignals__ = {
-        "on-change": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "on-change": (gobject.SignalFlags.RUN_LAST, None, ()),
     }
 
     cache_attrs = Sprite.cache_attrs | set(("_letter_sizes", "__surface", "_ascent", "_bounds_width", "_measures"))
 
     def __init__(self, text = "", size = None, color = None,
-                 alignment = Pango.Alignment.LEFT, single_paragraph = False,
+                 alignment = pango.Alignment.LEFT, single_paragraph = False,
                  max_width = None, wrap = None, ellipsize = None, markup = "",
                  font_desc = None, **kwargs):
         Sprite.__init__(self, **kwargs)
@@ -1364,31 +1364,31 @@ class Label(Sprite):
 
 
         self._test_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A8, 0, 0))
-        self._test_layout = PangoCairo.create_layout(self._test_context)
+        self._test_layout = pangocairo.create_layout(self._test_context)
 
 
         #: absolute font size in pixels. this will execute set_absolute_size
         #: instead of set_size, which is fractional
         self.size = size
 
-        #: Pango.FontDescription, defaults to system font
-        self.font_desc = Pango.FontDescription(font_desc or _font_desc)
+        #: pango.FontDescription, defaults to system font
+        self.font_desc = pango.FontDescription(font_desc or _font_desc)
 
         #: color of label either as hex string or an (r,g,b) tuple
         self.color = color
 
         self._bounds_width = None
 
-        #: wrapping method. Can be set to Pango. [WRAP_WORD, WRAP_CHAR,
+        #: wrapping method. Can be set to pango. [WRAP_WORD, WRAP_CHAR,
         #: WRAP_WORD_CHAR]
         self.wrap = wrap
 
 
-        #: Ellipsize mode. Can be set to Pango.[EllipsizeMode.NONE,
+        #: Ellipsize mode. Can be set to pango.[EllipsizeMode.NONE,
         #: EllipsizeMode.START, EllipsizeMode.MIDDLE, EllipsizeMode.END]
         self.ellipsize = ellipsize
 
-        #: alignment. one of Pango.[Alignment.LEFT, Alignment.RIGHT, Alignment.CENTER]
+        #: alignment. one of pango.[Alignment.LEFT, Alignment.RIGHT, Alignment.CENTER]
         self.alignment = alignment
 
         #: If setting is True, do not treat newlines and similar characters as
@@ -1420,12 +1420,12 @@ class Label(Sprite):
     def __setattr__(self, name, val):
         if name == "font_desc":
             if isinstance(val, str):
-                val = Pango.FontDescription(val)
-            elif isinstance(val, Pango.FontDescription):
+                val = pango.FontDescription(val)
+            elif isinstance(val, pango.FontDescription):
                 val = val.copy()
 
         if self.__dict__.get(name, "hamster_graphics_no_value_really") != val:
-            if name == "width" and val and self.__dict__.get('_bounds_width') and val * Pango.SCALE == self.__dict__['_bounds_width']:
+            if name == "width" and val and self.__dict__.get('_bounds_width') and val * pango.SCALE == self.__dict__['_bounds_width']:
                 return
 
             Sprite.__setattr__(self, name, val)
@@ -1436,7 +1436,7 @@ class Label(Sprite):
                 if val is None or val == -1:
                     self.__dict__['_bounds_width'] = None
                 else:
-                    self.__dict__['_bounds_width'] = val * Pango.SCALE
+                    self.__dict__['_bounds_width'] = val * pango.SCALE
 
 
             if name in ("width", "text", "markup", "size", "font_desc", "wrap", "ellipsize", "max_width"):
@@ -1444,7 +1444,7 @@ class Label(Sprite):
                 # avoid chicken and egg
                 if hasattr(self, "size") and (hasattr(self, "text") or hasattr(self, "markup")):
                     if self.size:
-                        self.font_desc.set_absolute_size(self.size * Pango.SCALE)
+                        self.font_desc.set_absolute_size(self.size * pango.SCALE)
                     markup = getattr(self, "markup", "")
                     self.__dict__['width'], self.__dict__['height'] = self.measure(markup or getattr(self, "text", ""), escape = len(markup) == 0)
 
@@ -1485,15 +1485,15 @@ class Label(Sprite):
 
         if self.wrap is not None:
             layout.set_wrap(self.wrap)
-            layout.set_ellipsize(Pango.EllipsizeMode.NONE)
+            layout.set_ellipsize(pango.EllipsizeMode.NONE)
         else:
-            layout.set_ellipsize(self.ellipsize or Pango.EllipsizeMode.END)
+            layout.set_ellipsize(self.ellipsize or pango.EllipsizeMode.END)
 
         if max_width is not None:
-            layout.set_width(max_width * Pango.SCALE)
+            layout.set_width(max_width * pango.SCALE)
         else:
             if self.max_width:
-                max_width = self.max_width * Pango.SCALE
+                max_width = self.max_width * pango.SCALE
 
             layout.set_width(int(self._bounds_width or max_width or -1))
 
@@ -1514,12 +1514,12 @@ class Label(Sprite):
 
         max_width = 0
         if self.max_width:
-            max_width = self.max_width * Pango.SCALE
+            max_width = self.max_width * pango.SCALE
 
             # when max width is specified and we are told to align in center
             # do that (the pango instruction takes care of aligning within
             # the lines of the text)
-            if self.alignment == Pango.Alignment.CENTER:
+            if self.alignment == pango.Alignment.CENTER:
                 self.graphics.move_to(-(self.max_width - self.width)/2, 0)
 
         bounds_width = max_width or self._bounds_width or -1
@@ -1539,7 +1539,7 @@ class Label(Sprite):
                                   self.single_paragraph)
 
         if self._bounds_width:
-            rect_width = self._bounds_width / Pango.SCALE
+            rect_width = self._bounds_width / pango.SCALE
 
         self.graphics.rectangle(0, 0, rect_width, self.height)
         self.graphics.clip()
@@ -1649,32 +1649,32 @@ class Scene(Parent, gtk.DrawingArea):
     __gsignals__ = {
        # "draw": "override",
        # "configure_event": "override",
-        "on-enter-frame": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, )),
-        "on-finish-frame": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, )),
-        "on-resize": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, )),
+        "on-enter-frame": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, )),
+        "on-finish-frame": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, )),
+        "on-resize": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, )),
 
-        "on-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT)),
-        "on-drag": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT)),
-        "on-drag-start": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT)),
-        "on-drag-finish": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, GObject.TYPE_PYOBJECT)),
+        "on-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        "on-drag": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        "on-drag-start": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        "on-drag-finish": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
 
-        "on-mouse-move": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-down": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-double-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-triple-click": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-up": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-over": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-out": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-mouse-scroll": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
+        "on-mouse-move": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-down": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-double-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-triple-click": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-up": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-over": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-out": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-mouse-scroll": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
 
-        "on-key-press": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
-        "on-key-release": (GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,)),
+        "on-key-press": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
+        "on-key-release": (gobject.SignalFlags.RUN_LAST, None, (gobject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, interactive = True, framerate = 60,
                        background_color = None, scale = False, keep_aspect = True,
                        style_class=None):
-        GObject.GObject.__init__(self)
+        gobject.gobject.__init__(self)
 
         self._style = self.get_style_context()
 
