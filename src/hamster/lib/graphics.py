@@ -10,13 +10,15 @@ import math
 import datetime as dt
 
 
-from gi.repository import Gtk, GLib, Gdk
+from gi.repository import gtk as gtk
+from gi.repository import GLib as glib
+from gi.repository import Gdk as gdk
 from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import PangoCairo
 
 import cairo
-from gi.repository import GdkPixbuf
+from gi.repository import gdkPixbuf
 
 import re
 
@@ -29,7 +31,7 @@ import colorsys
 from collections import deque
 
 # lemme know if you know a better way how to get default font
-_test_label = Gtk.Label(label="Hello")
+_test_label = gtk.Label(label="Hello")
 _font_desc = _test_label.get_style().font_desc.to_string()
 
 
@@ -72,7 +74,7 @@ class ColorUtils(object):
                     match = self.hex_color_short.match(color)
                     color = [int(color + color, 16) / 255.0 for color in match.groups()]
 
-        elif isinstance(color, Gdk.Color):
+        elif isinstance(color, gdk.Color):
             color = [color.red / 65535.0,
                      color.green / 65535.0,
                      color.blue / 65535.0]
@@ -92,9 +94,9 @@ class ColorUtils(object):
         return [c * 255 for c in self.parse(color)]
 
     def gdk(self, color):
-        """returns Gdk.Color object of the given color"""
+        """returns gdk.Color object of the given color"""
         c = self.parse(color)
-        return Gdk.Color.from_floats(c)
+        return gdk.Color.from_floats(c)
 
     def hex(self, color):
         c = self.parse(color)
@@ -517,7 +519,7 @@ class Graphics(object):
                 exts = get_gdk_rectangle(int(exts[0]), int(exts[1]),
                                          int(exts[2]-exts[0]), int(exts[3]-exts[1]))
                 if extents.width and extents.height:
-                    extents = Gdk.rectangle_union(extents, exts)
+                    extents = gdk.rectangle_union(extents, exts)
                 else:
                     extents = exts
             elif instruction in ("save", "restore", "translate", "scale", "rotate"):
@@ -927,15 +929,15 @@ class Sprite(Parent, GObject.GObject):
     def _get_mouse_cursor(self):
         """Determine mouse cursor.
         By default look for self.mouse_cursor is defined and take that.
-        Otherwise use Gdk.CursorType.FLEUR for draggable sprites and Gdk.CursorType.HAND2 for
+        Otherwise use gdk.CursorType.FLEUR for draggable sprites and gdk.CursorType.HAND2 for
         interactive sprites. Defaults to scenes cursor.
         """
         if self.mouse_cursor is not None:
             return self.mouse_cursor
         elif self.interactive and self.draggable:
-            return Gdk.CursorType.FLEUR
+            return gdk.CursorType.FLEUR
         elif self.interactive:
-            return Gdk.CursorType.HAND2
+            return gdk.CursorType.HAND2
 
     def bring_to_front(self):
         """adjusts sprite's z-order so that the sprite is on top of it's
@@ -1026,7 +1028,7 @@ class Sprite(Parent, GObject.GObject):
 
                 for ext in clip_regions:
                     ext = get_gdk_rectangle(int(ext[0]), int(ext[1]), int(ext[2] - ext[0]), int(ext[3] - ext[1]))
-                    intersect, clip_extents = Gdk.rectangle_intersect((clip_extents or ext), ext)
+                    intersect, clip_extents = gdk.rectangle_intersect((clip_extents or ext), ext)
 
         context.transform(self.get_local_matrix())
 
@@ -1043,7 +1045,7 @@ class Sprite(Parent, GObject.GObject):
         ext = get_gdk_rectangle(int(ext[0]), int(ext[1]),
                                 int(ext[2] - ext[0]), int(ext[3] - ext[1]))
         if clip_extents:
-            intersect, ext = Gdk.rectangle_intersect(clip_extents, ext)
+            intersect, ext = gdk.rectangle_intersect(clip_extents, ext)
 
         if not ext.width and not ext.height:
             ext = None
@@ -1242,7 +1244,7 @@ class Sprite(Parent, GObject.GObject):
 class BitmapSprite(Sprite):
     """Caches given image data in a surface similar to targets, which ensures
        that drawing it will be quick and low on CPU.
-       Image data can be either :class:`cairo.ImageSurface` or :class:`GdkPixbuf.Pixbuf`
+       Image data can be either :class:`cairo.ImageSurface` or :class:`gdkPixbuf.Pixbuf`
     """
     def __init__(self, image_data = None, cache_mode = None, **kwargs):
         Sprite.__init__(self, **kwargs)
@@ -1292,8 +1294,8 @@ class BitmapSprite(Sprite):
                                                           self.height)
 
             local_context = cairo.Context(surface)
-            if isinstance(self.image_data, GdkPixbuf.Pixbuf):
-                Gdk.cairo_set_source_pixbuf(local_context, self.image_data, 0, 0)
+            if isinstance(self.image_data, gdkPixbuf.Pixbuf):
+                gdk.cairo_set_source_pixbuf(local_context, self.image_data, 0, 0)
             else:
                 local_context.set_source_surface(self.image_data)
             local_context.paint()
@@ -1329,7 +1331,7 @@ class Icon(BitmapSprite):
     """Displays icon by name and size in the theme"""
     def __init__(self, name, size=24, **kwargs):
         BitmapSprite.__init__(self, **kwargs)
-        self.theme = Gtk.IconTheme.get_default()
+        self.theme = gtk.IconTheme.get_default()
 
         #: icon name from theme
         self.name = name
@@ -1637,10 +1639,10 @@ class Circle(Sprite):
         self.graphics.fill_stroke(self.fill, self.stroke, line_width = self.line_width)
 
 
-class Scene(Parent, Gtk.DrawingArea):
+class Scene(Parent, gtk.DrawingArea):
     """ Drawing area for displaying sprites.
         Add sprites to the Scene by calling :func:`add_child`.
-        Scene is descendant of `Gtk.DrawingArea <http://www.pyGtk.org/docs/pygtk/class-gtkdrawingarea.html>`_
+        Scene is descendant of `gtk.DrawingArea <http://www.pygtk.org/docs/pygtk/class-gtkdrawingarea.html>`_
         and thus inherits all it's methods and everything.
     """
 
@@ -1676,8 +1678,8 @@ class Scene(Parent, Gtk.DrawingArea):
 
         self._style = self.get_style_context()
 
-        #: widget style. One of Gtk.STYLE_CLASS_*. By default it's BACKGROUND
-        self.style_class = style_class or Gtk.STYLE_CLASS_BACKGROUND
+        #: widget style. One of gtk.STYLE_CLASS_*. By default it's BACKGROUND
+        self.style_class = style_class or gtk.STYLE_CLASS_BACKGROUND
         self._style.add_class(self.style_class) # so we know our colors
 
         #: list of sprites in scene. use :func:`add_child` to add sprites
@@ -1731,7 +1733,7 @@ class Scene(Parent, Gtk.DrawingArea):
         #: can be overidden by child sprites
         self.default_mouse_cursor = None
 
-        self._blank_cursor = Gdk.Cursor.new(Gdk.CursorType.BLANK_CURSOR)
+        self._blank_cursor = gdk.Cursor.new(gdk.CursorType.BLANK_CURSOR)
 
         self.__previous_mouse_signal_time = None
 
@@ -1768,11 +1770,11 @@ class Scene(Parent, Gtk.DrawingArea):
 
         if interactive:
             self.set_can_focus(True)
-            self.set_events(Gdk.EventMask.POINTER_MOTION_MASK
-                            | Gdk.EventMask.LEAVE_NOTIFY_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK
-                            | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK
-                            | Gdk.EventMask.SCROLL_MASK
-                            | Gdk.EventMask.KEY_PRESS_MASK)
+            self.set_events(gdk.EventMask.POINTER_MOTION_MASK
+                            | gdk.EventMask.LEAVE_NOTIFY_MASK | gdk.EventMask.ENTER_NOTIFY_MASK
+                            | gdk.EventMask.BUTTON_PRESS_MASK | gdk.EventMask.BUTTON_RELEASE_MASK
+                            | gdk.EventMask.SCROLL_MASK
+                            | gdk.EventMask.KEY_PRESS_MASK)
             self.connect("motion-notify-event", self.__on_mouse_move)
             self.connect("enter-notify-event", self.__on_mouse_enter)
             self.connect("leave-notify-event", self.__on_mouse_leave)
@@ -1855,7 +1857,7 @@ class Scene(Parent, Gtk.DrawingArea):
         if self.__drawing_queued == False: #if we are moving, then there is a timeout somewhere already
             self.__drawing_queued = True
             self._last_frame_time = dt.datetime.now()
-            GLib.timeout_add(1000 / self.framerate, self.__redraw_loop)
+            glib.timeout_add(1000 / self.framerate, self.__redraw_loop)
 
     def __redraw_loop(self):
         """loop until there is nothing more to tween"""
@@ -1980,15 +1982,15 @@ class Scene(Parent, Gtk.DrawingArea):
             self._mouse_sprite = over
 
         if cursor is None:
-            cursor = self.default_mouse_cursor or Gdk.CursorType.ARROW # default
+            cursor = self.default_mouse_cursor or gdk.CursorType.ARROW # default
         elif cursor is False:
             cursor = self._blank_cursor
 
         if self.__last_cursor is None or cursor != self.__last_cursor:
-            if isinstance(cursor, Gdk.Cursor):
+            if isinstance(cursor, gdk.Cursor):
                 self.get_window().set_cursor(cursor)
             else:
-                self.get_window().set_cursor(Gdk.Cursor.new(cursor))
+                self.get_window().set_cursor(gdk.Cursor.new(cursor))
 
             self.__last_cursor = cursor
 
@@ -1996,7 +1998,7 @@ class Scene(Parent, Gtk.DrawingArea):
     """ mouse events """
     def __on_mouse_move(self, scene, event):
         if self.__last_mouse_move:
-            GLib.source_remove(self.__last_mouse_move)
+            glib.source_remove(self.__last_mouse_move)
             self.__last_mouse_move = None
 
         self.mouse_x, self.mouse_y = event.x, event.y
@@ -2006,7 +2008,7 @@ class Scene(Parent, Gtk.DrawingArea):
         if self.__previous_mouse_signal_time and dt.datetime.now() - \
             self.__previous_mouse_signal_time < timeout:
 
-            self.__last_mouse_move = GLib.timeout_add(
+            self.__last_mouse_move = glib.timeout_add(
                 (timeout - (dt.datetime.now() - self.__previous_mouse_signal_time)).microseconds
                 // 1000, self.__on_mouse_move, scene, event.copy())
             return
@@ -2015,7 +2017,7 @@ class Scene(Parent, Gtk.DrawingArea):
 
 
         if self._mouse_down_sprite and self._mouse_down_sprite.interactive \
-           and self._mouse_down_sprite.draggable and Gdk.ModifierType.BUTTON1_MASK & event.get_state():
+           and self._mouse_down_sprite.draggable and gdk.ModifierType.BUTTON1_MASK & event.get_state():
             # dragging around
             if not self.__drag_started:
                 drag_started = (self.__drag_start_x is not None and \
@@ -2046,7 +2048,7 @@ class Scene(Parent, Gtk.DrawingArea):
             self.emit("on-drag", self._drag_sprite, event)
 
         if self._mouse_sprite:
-            sprite_event = Gdk.Event.copy(event)
+            sprite_event = gdk.Event.copy(event)
             sprite_event.x, sprite_event.y = self._mouse_sprite.from_scene_coords(event.x, event.y)
             self._mouse_sprite._do_mouse_move(sprite_event)
 
@@ -2083,24 +2085,24 @@ class Scene(Parent, Gtk.DrawingArea):
         self._mouse_down_sprite = target
 
         # differentiate between the click count!
-        if event.type == Gdk.EventType.BUTTON_PRESS:
+        if event.type == gdk.EventType.BUTTON_PRESS:
             self.emit("on-mouse-down", event)
             if target:
-                target_event = Gdk.Event.copy(event)
+                target_event = gdk.Event.copy(event)
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_mouse_down(target_event)
             else:
                 scene._focus_sprite = None  # lose focus if mouse ends up nowhere
-        elif event.type == Gdk.EventType._2BUTTON_PRESS:
+        elif event.type == gdk.EventType._2BUTTON_PRESS:
             self.emit("on-double-click", event)
             if target:
-                target_event = Gdk.Event.copy(event)
+                target_event = gdk.Event.copy(event)
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_double_click(target_event)
-        elif event.type == Gdk.EventType._3BUTTON_PRESS:
+        elif event.type == gdk.EventType._3BUTTON_PRESS:
             self.emit("on-triple-click", event)
             if target:
-                target_event = Gdk.Event.copy(event)
+                target_event = gdk.Event.copy(event)
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_triple_click(target_event)
 
@@ -2120,7 +2122,7 @@ class Scene(Parent, Gtk.DrawingArea):
                                            (event.y - self.__drag_start_y) ** 2 < self.drag_distance
         if (click and self.__drag_started == False) or not self._drag_sprite:
             if target and target == self._mouse_down_sprite:
-                target_event = Gdk.Event.copy(event)
+                target_event = gdk.Event.copy(event)
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_click(target_event)
 

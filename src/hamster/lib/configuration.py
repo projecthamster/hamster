@@ -6,7 +6,7 @@
 
 # Project Hamster is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free oftware Foundation, either version 3 of the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
 # Project Hamster is distributed in the hope that it will be useful,
@@ -143,7 +143,7 @@ class OneWindow(object):
         if params in self.dialogs:
             window = self.dialogs[params].window
             # TODO(kazeevn) shall we remove self.dialogs altogether
-            # or at least fix about repeated call
+            # or at least fix about repeated call?
             self.dialogs[params].show()
             window.present()
         else:

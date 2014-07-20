@@ -32,7 +32,7 @@ class About(object):
             "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
             "version" : runtime.version,
             "comments" : _("Project Hamster — track your time"),
-            "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),
+            "copyright" : _("Copyright © 2007–2014 Toms Bauģis and others"),
             "website" : "http://projecthamster.wordpress.com/",
             "website-label" : _("Project Hamster Website"),
             "title": _("About Time Tracker"),
@@ -47,10 +47,10 @@ class About(object):
 
         about.set_translator_credits(_("translator-credits"))
 
-        for prop, val in list(infos.items()):
+        for prop, val in infos.items():
             about.set_property(prop, val)
 
         about.set_logo_icon_name("hamster-time-tracker")
 
         about.connect("response", lambda self, *args: self.destroy())
-        about.show_all()\
+        about.show_all()

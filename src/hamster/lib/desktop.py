@@ -20,7 +20,7 @@
 import datetime as dt
 from calendar import timegm
 import logging
-from gi.repository import GLib
+from gi.repository import GLib as glib
 
 
 from hamster import idle
@@ -45,7 +45,7 @@ class DesktopIntegrations(object):
         self.idle_listener = idle.DbusIdleListener()
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
-        GLib.timeout_add_seconds(60, self.check_hamster)
+        glib.timeout_add_seconds(60, self.check_hamster)
 
 
     def check_hamster(self):

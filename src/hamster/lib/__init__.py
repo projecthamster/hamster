@@ -9,7 +9,7 @@ def figure_time(str_time):
     # strip everything non-numeric and consider hours to be first number
     # and minutes - second number
     numbers = re.split("\D", str_time)
-    numbers = [x for x in numbers if x!=""]
+    numbers = [x for x in numbers if x != ""]
 
     hours, minutes = None, None
 
@@ -72,7 +72,7 @@ class Fact(object):
             'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
             'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 if self.delta else "" #duration in seconds
         }
-        return iter(list(keys.items()))
+        return keys.items()
 
 
     def serialized_name(self):
