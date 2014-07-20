@@ -53,4 +53,4 @@ class About(object):
         about.set_logo_icon_name("hamster-time-tracker")
 
         about.connect("response", lambda self, *args: self.destroy())
-        about.show_all()
+        about.show_all()\

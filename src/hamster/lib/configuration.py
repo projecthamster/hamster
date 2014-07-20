@@ -129,7 +129,7 @@ class OneWindow(object):
         self.dialog_close_handlers = {}
 
     def on_close_window(self, dialog):
-        for key, assoc_dialog in list(self.dialogs.items()):
+        for key, assoc_dialog in tuple(self.dialogs.items()):
             if dialog == assoc_dialog:
                 del self.dialogs[key]
 
@@ -142,7 +142,8 @@ class OneWindow(object):
 
         if params in self.dialogs:
             window = self.dialogs[params].window
-            #TODO(kazeevn) fix about
+            # TODO(kazeevn) shall we remove self.dialogs altogether
+            # or at least fix about repeated call
             self.dialogs[params].show()
             window.present()
         else:
@@ -162,8 +163,8 @@ class OneWindow(object):
                 dialog.window.connect("destroy",
                                       lambda window, params: gtk.main_quit(),
                                       params)
-
             self.dialogs[params] = dialog
+
 
 class Dialogs(Singleton):
     """makes sure that we have single instance open for windows where it makes
