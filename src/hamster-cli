@@ -200,14 +200,14 @@ class HamsterClient(object):
 
 
     def stop(self, *args):
-        '''stop tracking the current activity.'''
+        '''Stop tracking the current activity.'''
         self.storage.stop_tracking()
 
 
     def export(self, *args):
-        # todo(kazeevn) fix
+        # TODO(kazeevn) fix
         args = args or []
-        export_format, start_time, end_time = "html", none, none
+        export_format, start_time, end_time = "html", None, None
         if args:
             export_format = args[0]
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
@@ -221,12 +221,12 @@ class HamsterClient(object):
 
 
     def _activities(self, search=""):
-        '''print the names of all the activities.'''
+        '''Print the names of all the activities.'''
         if "@" in search:
             activity, category = search.split("@")
             for cat in self.storage.get_categories():
                 if not category or cat['name'].lower().startswith(category.lower()):
-                    print("%s@%s" % (activity.encode("utf8"), cat['name']))
+                    print("%s@%s" % (activity, cat['name']))
         else:
             for activity in self.storage.get_activities(search):
                 print(activity['name'])
@@ -235,7 +235,7 @@ class HamsterClient(object):
 
 
     def activities(self, *args):
-        '''print the names of all the activities.'''
+        '''Print the names of all the activities.'''
         search = args[0] if args else ""
         for activity in self.storage.get_activities(search):
             print('%s@%s' % (activity['name'], activity['category']))
@@ -308,7 +308,7 @@ class HamsterClient(object):
         cols = ["{{{col}: <{len}}}".format(col=col, len=widths[col]) for col in cols]
         fact_line = " | ".join(cols)
 
-        row_width = sum([val + 3 for val in list(widths.values())])
+        row_width = sum([val + 3 for val in widths.values()])
 
         print()
         print(fact_line.format(**headers))
@@ -334,7 +334,7 @@ class HamsterClient(object):
         print("-" * min(row_width, 80))
 
         cats = []
-        for cat, duration in sorted(iter(by_cat.items()), key=lambda x: x[1], reverse=True):
+        for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
             cats.append("%s: %s" % (cat, "%.1fh" % (stuff.duration_minutes(duration) / 60.0)))
 
         for line in word_wrap(", ".join(cats), 80):

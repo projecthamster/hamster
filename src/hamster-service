@@ -1,6 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-from gi.repository import GObject, GLib, Gio
+from gi.repository import GObject as gobject
+from gi.repository import GLib as glib
+from gi.repository import Gio as gio
 
 import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
@@ -8,7 +10,7 @@ import datetime as dt
 from calendar import timegm
 
 DBusGMainLoop(set_as_default=True)
-loop = GLib.MainLoop()
+loop = glib.MainLoop()
 
 if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     print("Found hamster-service already running, exiting")
@@ -50,10 +52,10 @@ class Storage(db.Storage, dbus.service.Object):
 
         self.mainloop = loop
 
-        self.__file = Gio.File.new_for_path(__file__)
-        self.__monitor = self.__file.monitor_file(Gio.FileMonitorFlags.WATCH_MOUNTS | \
-                                                  Gio.FileMonitorFlags.SEND_MOVED | \
-                                                  Gio.FileMonitorFlags.WATCH_HARD_LINKS,
+        self.__file = gio.File.new_for_path(__file__)
+        self.__monitor = self.__file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
+                                                  gio.FileMonitorFlags.SEND_MOVED | \
+                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
                                                   None)
         self.__monitor.connect("changed", self._on_us_change)
 
@@ -85,8 +87,8 @@ class Storage(db.Storage, dbus.service.Object):
 
     # stop service when we have been updated (will be brought back in next call)
     # anyway. should make updating simpler
-    def _on_us_change(self, monitor, Gio_file, event_uri, event):
-        if event == Gio.FileMonitorEvent.CHANGES_DONE_HINT:
+    def _on_us_change(self, monitor, gio_file, event_uri, event):
+        if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
             print("`%s` has changed. Quitting!" % __file__)
             self.Quit()
 
