@@ -10,7 +10,7 @@ import math
 import datetime as dt
 
 
-from gi.repository import gtk as gtk
+from gi.repository import Gtk as gtk
 from gi.repository import GLib as glib
 from gi.repository import Gdk as gdk
 from gi.repository import GObject
@@ -18,7 +18,7 @@ from gi.repository import Pango
 from gi.repository import PangoCairo
 
 import cairo
-from gi.repository import gdkPixbuf
+from gi.repository import GdkPixbuf
 
 import re
 
@@ -1244,7 +1244,7 @@ class Sprite(Parent, GObject.GObject):
 class BitmapSprite(Sprite):
     """Caches given image data in a surface similar to targets, which ensures
        that drawing it will be quick and low on CPU.
-       Image data can be either :class:`cairo.ImageSurface` or :class:`gdkPixbuf.Pixbuf`
+       Image data can be either :class:`cairo.ImageSurface` or :class:`GdkPixbuf.Pixbuf`
     """
     def __init__(self, image_data = None, cache_mode = None, **kwargs):
         Sprite.__init__(self, **kwargs)
@@ -1294,7 +1294,7 @@ class BitmapSprite(Sprite):
                                                           self.height)
 
             local_context = cairo.Context(surface)
-            if isinstance(self.image_data, gdkPixbuf.Pixbuf):
+            if isinstance(self.image_data, GdkPixbuf.Pixbuf):
                 gdk.cairo_set_source_pixbuf(local_context, self.image_data, 0, 0)
             else:
                 local_context.set_source_surface(self.image_data)
