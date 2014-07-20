@@ -28,6 +28,7 @@ from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict
+from gi.repository import GLib as glib
 
 from hamster import client
 from hamster.lib import Fact, looks_like_time
@@ -237,7 +238,7 @@ class ActivityEntry(gtk.Entry):
                 with self.handler_block(self.checker):
                     self.update_entry("%s%s" % (text, suffix))
                     self.select_region(len(text), -1)
-        GLib.timeout_add(0, complete)
+        glib.timeout_add(0, complete)
 
     def on_focus_out(self, entry, event):
         self.popup.hide()
