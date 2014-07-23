@@ -43,15 +43,15 @@ from calendar import timegm
 
 from io import StringIO, IOBase
 
-def simple(facts, start_date, end_date, format, path = None):
+def simple(facts, start_date, end_date, format_, path = None):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
 
-    if format == "tsv":
+    if format_ == "tsv":
         writer = TSVWriter(report_path)
-    elif format == "xml":
+    elif format_ == "xml":
         writer = XMLWriter(report_path)
-    elif format == "ical":
+    elif format_ == "ical":
         writer = ICalWriter(report_path)
     else: #default to HTML
         writer = HTMLWriter(report_path, start_date, end_date)
@@ -72,7 +72,7 @@ def simple(facts, start_date, end_date, format, path = None):
 
 
 class ReportWriter(object):
-    #a tiny bit better than repeating the code all the time
+    # a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
         self.file = open(path, "w") if path else StringIO()
         self.datetime_format = datetime_format
@@ -101,7 +101,7 @@ class ReportWriter(object):
 
             self._finish(facts)
         finally:
-            if isinstance(self.file, IOBase):
+            if isinstance(self.file, IOBase) and not isinstance(self.file, StringIO):
                 self.file.close()
 
     def _start(self, facts):

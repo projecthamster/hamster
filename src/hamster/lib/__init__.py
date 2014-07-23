@@ -66,7 +66,7 @@ class Fact(object):
             'activity': self.activity,
             'category': self.category,
             'description': self.description,
-            'tags': [tag.encode("utf-8").strip() for tag in self.tags],
+            'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(self.date.timetuple()) if self.date else "",
             'start_time': self.start_time if isinstance(self.start_time, str) else calendar.timegm(self.start_time.timetuple()),
             'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",

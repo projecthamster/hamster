@@ -204,7 +204,6 @@ class HamsterClient(object):
 
 
     def export(self, *args):
-        # TODO(kazeevn) fix
         args = args or []
         export_format, start_time, end_time = "html", None, None
         if args:
