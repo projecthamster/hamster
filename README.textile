@@ -1,3 +1,10 @@
+h1. Fork at will (Aug 18, 2014)
+
+My priorities have shifted quite a bit and hamster is not on the list, sorry.
+While there might be spurious spontaneous commits ever now and then, that would
+scratch my personal itch, it's safe to assume that the project is dead.
+
+
 h1. Bleeding edge warning
 
 Project Hamster right now is undergoing bit of reshuffling and might not be fit
