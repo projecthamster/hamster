@@ -2,8 +2,8 @@
 # nicked off hamster-service
 
 from gi.repository import GObject as gobject
+from gi.repository import GLib as glib
 import dbus, dbus.service
-import glib
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
