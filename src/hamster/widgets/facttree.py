@@ -171,7 +171,7 @@ class FactRow(object):
                 g.translate(0, self.tag_label.height + 5)
 
             if fact.description:
-                self.description_label.show(g, "<small>%s</small>" % fact.description)
+                self.description_label.show(g, "<small>%s</small>" % stuff.escape_pango(fact.description))
             g.restore_context()
 
         self.duration_label.show(g, stuff.format_duration(fact.delta), x=self.width - 105)
@@ -442,9 +442,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         maxy = max(y, 1)
 
-        self.vadjustment.set_lower(0)
-        self.vadjustment.set_upper(max(maxy, self.height))
-        self.vadjustment.set_page_size(self.height)
+        if self.vadjustment:
+            self.vadjustment.set_lower(0)
+            self.vadjustment.set_upper(max(maxy, self.height))
+            self.vadjustment.set_page_size(self.height)
 
 
     def on_resize(self, scene, event):
@@ -467,8 +468,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             direction = 1
 
         y_pos += 15 * direction
-        y_pos = max(0, min(self.vadjustment.get_upper() - self.height, y_pos))
-        self.vadjustment.set_value(y_pos)
+        if self.vadjustment:
+            y_pos = max(0, min(self.vadjustment.get_upper() - self.height, y_pos))
+            self.vadjustment.set_value(y_pos)
         self.y = y_pos
 
         self.move_actions()

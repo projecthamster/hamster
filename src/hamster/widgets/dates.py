@@ -83,7 +83,7 @@ class RangePick(gtk.ToggleButton):
     def set_range(self, start_date, end_date=None):
         end_date = end_date or start_date
         self.start_date, self.end_date = start_date, end_date
-        self.label.set_markup('<b>%s</b>' % stuff.format_range(start_date, end_date).encode("utf-8"))
+        self.label.set_markup('<b>%s</b>' % stuff.format_range(start_date, end_date))
 
     def get_range(self):
         return self.start_date, self.end_date
