@@ -171,7 +171,7 @@ class FactRow(object):
                 g.translate(0, self.tag_label.height + 5)
 
             if fact.description:
-                self.description_label.show(g, "<small>%s</small>" % fact.description)
+                self.description_label.show(g, "<small>%s</small>" % stuff.escape_pango(fact.description))
             g.restore_context()
 
         self.duration_label.show(g, stuff.format_duration(fact.delta), x=self.width - 105)
