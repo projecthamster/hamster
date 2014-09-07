@@ -21,7 +21,6 @@
 import logging
 from hamster.lib.configuration import conf
 from gi.repository import GObject as gobject
-from taskw import TaskWarrior
 import dbus, dbus.mainloop.glib
 
 try:
@@ -30,6 +29,12 @@ try:
 except:
     evolution = None
 
+try:
+    import taskw
+    from taskw import TaskWarrior
+except:
+    taskw = None
+
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
@@ -37,10 +42,12 @@ class ActivitiesSource(gobject.GObject):
         self.__gtg_connection = None
 
         if self.source == "evo" and not evolution:
-            self.source == "" # on failure pretend that there is no evolution
+            self.source = "" # on failure pretend that there is no evolution
         elif self.source == "gtg":
             gobject.GObject.__init__(self)
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        elif self.source == "task" and not taskw:
+            self.source = ""
 
 
     def get_activities(self, query = None):
