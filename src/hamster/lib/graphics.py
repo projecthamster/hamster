@@ -128,6 +128,56 @@ def get_gdk_rectangle(x, y, w, h):
     return rect
 
 
+
+
+def chain(*steps):
+    """chains the given list of functions and object animations into a callback string.
+
+        Expects an interlaced list of object and params, something like:
+            object, {params},
+            callable, {params},
+            object, {},
+            object, {params}
+    Assumes that all callees accept on_complete named param.
+    The last item in the list can omit that.
+    XXX - figure out where to place these guys as they are quite useful
+    """
+    if not steps:
+        return
+
+    def on_done(sprite=None):
+        chain(*steps[2:])
+
+    obj, params = steps[:2]
+
+    if len(steps) > 2:
+        params['on_complete'] = on_done
+    if callable(obj):
+        obj(**params)
+    else:
+        obj.animate(**params)
+
+def full_pixels(space, data, gap_pixels=1):
+    """returns the given data distributed in the space ensuring it's full pixels
+    and with the given gap.
+    this will result in minor sub-pixel inaccuracies.
+    XXX - figure out where to place these guys as they are quite useful
+    """
+    available = space - (len(data) - 1) * gap_pixels # 8 recs 7 gaps
+
+    res = []
+    for i, val in enumerate(data):
+        # convert data to 0..1 scale so we deal with fractions
+        data_sum = sum(data[i:])
+        norm = val * 1.0 / data_sum
+
+
+        w = max(int(round(available * norm)), 1)
+        res.append(w)
+        available -= w
+    return res
+
+
 class Graphics(object):
     """If context is given upon contruction, will perform drawing
        operations on context instantly. Otherwise queues up the drawing
@@ -314,6 +364,12 @@ class Graphics(object):
         """draw arc going clockwise from start_angle to end_angle"""
         self._add_instruction("arc_negative", x, y, radius, start_angle, end_angle)
 
+    def triangle(self, x, y, width, height):
+        self.move_to(x, y)
+        self.line_to(width/2 + x, height + y)
+        self.line_to(width + x, y)
+        self.line_to(x, y)
+
     def rectangle(self, x, y, width, height, corner_radius = 0):
         """draw a rectangle. if corner_radius is specified, will draw
         rounded corners. corner_radius can be either a number or a tuple of
@@ -345,6 +401,18 @@ class Graphics(object):
         self._add_instruction("line_to", x, y + corner_radius[0])
         self._add_instruction("curve_to", x, y + corner_radius[0] / 2, x + corner_radius[0] / 2, y, x + corner_radius[0], y)
 
+    def hexagon(self, x, y, height):
+        side = height * 0.5
+        angle_x = side * 0.5
+        angle_y = side * 0.8660254
+        self.move_to(x, y)
+        self.line_to(x + side, y)
+        self.line_to(x + side + angle_x, y + angle_y)
+        self.line_to(x + side, y + 2*angle_y)
+        self.line_to(x, y + 2*angle_y)
+        self.line_to(x - angle_x, y + angle_y)
+        self.line_to(x, y)
+        self.close_path()
 
     def fill_area(self, x, y, width, height, color, opacity = 1):
         """fill rectangular area with specified color"""
@@ -586,6 +654,9 @@ class Parent(object):
             found = sprite.find(id)
             if found:
                 return found
+
+    def __getitem__(self, i):
+        return self.sprites[i]
 
     def traverse(self, attr_name = None, attr_value = None):
         """traverse the whole sprite tree and return child sprites which have the
@@ -1648,6 +1719,7 @@ class Scene(Parent, gtk.DrawingArea):
     __gsignals__ = {
        # "draw": "override",
        # "configure_event": "override",
+        "on-first-frame": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "on-enter-frame": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "on-finish-frame": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         "on-resize": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
@@ -1712,7 +1784,9 @@ class Scene(Parent, gtk.DrawingArea):
         self.colors = Colors
 
         #: read only info about current framerate (frames per second)
-        self.fps = 0 # inner frames per second counter
+        self.fps = None # inner frames per second counter
+
+        self._window = None # scenes don't really get reparented
 
         #: Last known x position of the mouse (set on expose event)
         self.mouse_x = None
@@ -1765,7 +1839,6 @@ class Scene(Parent, gtk.DrawingArea):
         self._focus_sprite = None # our internal focus management
 
         self.__last_mouse_move = None
-        self.connect("draw", self.on_draw)
 
         if interactive:
             self.set_can_focus(True)
@@ -1803,6 +1876,12 @@ class Scene(Parent, gtk.DrawingArea):
             if hasattr(self, "style_class"):
                 self._style.remove_class(self.style_class)
             self._style.add_class(val)
+        elif name == "background_color":
+            if val:
+                self.override_background_color(gtk.StateType.NORMAL,
+                                               gdk.RGBA(*Colors.parse(val)))
+            else:
+                self.override_background_color(gtk.StateType.NORMAL, None)
 
         self.__dict__[name] = val
 
@@ -1866,16 +1945,7 @@ class Scene(Parent, gtk.DrawingArea):
         return self.__drawing_queued
 
 
-    def on_draw(self, scene, context):
-        w, h = self.get_allocated_width(), self.get_allocated_height()
-
-        # clip to the visible part
-        if self.background_color:
-            context.rectangle(0, 0, w, h)
-            color = self.colors.parse(self.background_color)
-            context.set_source_rgb(*color)
-            context.fill_preserve()
-
+    def do_draw(self, context):
         if self.scale:
             aspect_x = self.width / self._original_width
             aspect_y = self.height / self._original_height
@@ -1883,18 +1953,21 @@ class Scene(Parent, gtk.DrawingArea):
                 aspect_x = aspect_y = min(aspect_x, aspect_y)
             context.scale(aspect_x, aspect_y)
 
-        cursor, self.mouse_x, self.mouse_y, mods = self.get_window().get_pointer()
+        if self.fps is None:
+            self._window = self.get_window()
+            self.emit("on-first-frame", context)
+
+        cursor, self.mouse_x, self.mouse_y, mods = self._window.get_pointer()
+
 
         # update tweens
         now = dt.datetime.now()
-        delta = (now - (self._last_frame_time or dt.datetime.now()))
-        delta = delta.seconds + delta.microseconds / 1000000.0
+        delta = (now - (self._last_frame_time or dt.datetime.now())).total_seconds()
         self._last_frame_time = now
         if self.tweener:
             self.tweener.update(delta)
 
         self.fps = 1 / delta
-
 
         # start drawing
         self.emit("on-enter-frame", context)
@@ -1987,9 +2060,9 @@ class Scene(Parent, gtk.DrawingArea):
 
         if self.__last_cursor is None or cursor != self.__last_cursor:
             if isinstance(cursor, gdk.Cursor):
-                self.get_window().set_cursor(cursor)
+                self._window.set_cursor(cursor)
             else:
-                self.get_window().set_cursor(gdk.Cursor(cursor))
+                self._window.set_cursor(gdk.Cursor(cursor))
 
             self.__last_cursor = cursor
 
@@ -1998,6 +2071,7 @@ class Scene(Parent, gtk.DrawingArea):
     def __on_mouse_move(self, scene, event):
         if self.__last_mouse_move:
             gobject.source_remove(self.__last_mouse_move)
+            self.__last_mouse_move = None
 
         self.mouse_x, self.mouse_y = event.x, event.y
 
@@ -2045,7 +2119,8 @@ class Scene(Parent, gtk.DrawingArea):
             self.emit("on-drag", self._drag_sprite, event)
 
         if self._mouse_sprite:
-            sprite_event = gdk.Event.copy(event)
+            sprite_event = event.copy()
+
             sprite_event.x, sprite_event.y = self._mouse_sprite.from_scene_coords(event.x, event.y)
             self._mouse_sprite._do_mouse_move(sprite_event)
 
@@ -2085,7 +2160,7 @@ class Scene(Parent, gtk.DrawingArea):
         if event.type == gdk.EventType.BUTTON_PRESS:
             self.emit("on-mouse-down", event)
             if target:
-                target_event = gdk.Event.copy(event)
+                target_event = event.copy()
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_mouse_down(target_event)
             else:
@@ -2093,13 +2168,13 @@ class Scene(Parent, gtk.DrawingArea):
         elif event.type == gdk.EventType._2BUTTON_PRESS:
             self.emit("on-double-click", event)
             if target:
-                target_event = gdk.Event.copy(event)
+                target_event = event.copy()
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_double_click(target_event)
         elif event.type == gdk.EventType._3BUTTON_PRESS:
             self.emit("on-triple-click", event)
             if target:
-                target_event = gdk.Event.copy(event)
+                target_event = event.copy()
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_triple_click(target_event)
 
@@ -2119,7 +2194,7 @@ class Scene(Parent, gtk.DrawingArea):
                                            (event.y - self.__drag_start_y) ** 2 < self.drag_distance
         if (click and self.__drag_started == False) or not self._drag_sprite:
             if target and target == self._mouse_down_sprite:
-                target_event = gdk.Event.copy(event)
+                target_event = event.copy()
                 target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
                 target._do_click(target_event)
 
