@@ -1734,7 +1734,7 @@ class Scene(Parent, gtk.DrawingArea):
 
         self._blank_cursor = gdk.Cursor(gdk.CursorType.BLANK_CURSOR)
 
-        self.__previous_mouse_signal_time = 0
+        self.__previous_mouse_signal_time = None
 
 
         #: Miminum distance in pixels for a drag to occur
@@ -1996,9 +1996,8 @@ class Scene(Parent, gtk.DrawingArea):
 
     """ mouse events """
     def __on_mouse_move(self, scene, event):
-        if self.__last_mouse_move > 0:
+        if self.__last_mouse_move:
             gobject.source_remove(self.__last_mouse_move)
-            self.__last_mouse_move = 0
 
         self.mouse_x, self.mouse_y = event.x, event.y
 
