@@ -540,8 +540,10 @@ class PreferencesEditor(Controller):
         new_category = self.category_store.insert_before(self.category_store.unsorted_category,
                                                          [-2, _(u"New category")])
 
+        model = self.category_tree.get_model()
+
         self.categoryCell.set_property("editable", True)
-        self.category_tree.set_cursor_on_cell((len(self.category_tree.get_model()) - 2, ),
+        self.category_tree.set_cursor_on_cell(model.get_path(new_category),
                                          focus_column = self.category_tree.get_column(0),
                                          focus_cell = None,
                                          start_editing = True)
