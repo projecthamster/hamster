@@ -1,52 +1,55 @@
-# Fork at will (Aug 18, 2014)
+# Project Hamster - The Gnome Time Tracker
 
-My priorities have shifted quite a bit and hamster is not on the list, sorry.
-While there might be spurious spontaneous commits ever now and then, that would
-scratch my personal itch, it's safe to assume that the project is dead.
-[Advertise your fork here](https://github.com/projecthamster/hamster/wiki)
+Project Hamster is time tracking for individuals. It helps you to keep track of
+how much time you have spent during the day on activities you choose to track.
 
+# Installation
 
-# Bleeding edge warning
+**Bleeding edge warning**: Project Hamster right now is undergoing bit of
+reshuffling and might not be fit for everyday use. For stable versions check out
+[releases](https://github.com/projecthamster/hamster/releases).
 
-Project Hamster right now is undergoing bit of reshuffling and might not be fit
-for everyday use. For stable versions check out [releases](https://github.com/projecthamster/hamster/releases)
+## Dependencies
 
-# Requires most recent stable gtk3 (3.10)
-
-Version of gtk required is 3.10 because of the use of HeaderBar and other bits. 
-Sorry and get up to date!
-
-
-
-# Dependencies
+**Requires recent GTK+:** Version of GTK+ required is 3.10 because of the use of
+HeaderBar and other bits. Sorry and get up to date!
 
 Debian-based: `apt-get install git-core gettext intltool python-gconf python-xdg`
 RPM-based: `yum install git-core gettext intltool gnome-python2-gconf`
 
-# Installing
+## Installing
 
-```
-./waf configure build --prefix=/usr
+```bash
+./waf configure build --prefix=/usr/local
 sudo ./waf install
 ```
 
-After that make sure that the old daemons aren't roaming around:
+If you upgraded from an existing installation make sure to kill the running
+daemons:
 
+```bash
+killall hamster-service hamster-windows-service
 ```
-killall hamster-service && killall hamster-windows-service
-```
 
-Now restart your panels/dockies and you should be able to add hamster to your panel!
+Now restart your panels/docks and you should be able to add Hamster!
 
 
-# hamster-applet -> hamster-time-tracker clean up
+### Migrating from hamster-applet
 
-Previously hamster was installed everywhere under `hamster-applet`. As
+Previously Hamster was installed everywhere under `hamster-applet`. As
 the applet is long gone, the paths and file names have changed to
-`hamster-time-tracker`. To clean up previous install follow these steps:
+`hamster-time-tracker`. To clean up previous installs follow these steps:
 
-```
+```bash
 git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
 ./waf configure build --prefix=/usr
 sudo ./waf uninstall
 ```
+
+# Contributing
+
+1. [Fork](http://help.github.com/forking/) Hamster
+2. Create a topic branch - `git checkout -b my_branch`
+3. Push to your branch - `git push origin my_branch`
+4. Submit a [Pull Request](https://github.com/projecthamster/hamster/pulls) with your branch
+5. That's it!
