@@ -83,9 +83,9 @@ class HeaderBar(gtk.HeaderBar):
 
         self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
-        self.menu_export = gtk.MenuItem(label="Export...")
+        self.menu_export = gtk.MenuItem(label=_("Export..."))
         self.system_menu.append(self.menu_export)
-        self.menu_prefs = gtk.MenuItem(label="Tracking Settings")
+        self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
         self.system_menu.append(self.menu_prefs)
         self.system_menu.show_all()
 
@@ -251,7 +251,7 @@ class Totals(graphics.Scene):
         self.totals = {}
         self.mouse_cursor = gdk.CursorType.HAND2
 
-        self.instructions_label = layout.Label("Click to see stats",
+        self.instructions_label = layout.Label(_("Click to see stats"),
                                                color=self._style.get_color(gtk.StateFlags.NORMAL),
                                                padding=10,
                                                expand=False)
