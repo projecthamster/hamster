@@ -439,7 +439,11 @@ class Overview(Controller):
             # the ctrl+things
             if event.keyval == gdk.KEY_f:
                 self.header_bar.search_button.set_active(True)
+            elif event.keyval == gdk.KEY_n:
+                dialogs.edit.show(self)
 
+        if event.keyval == gdk.KEY_Escape:
+            self.close_window()
 
     def find_facts(self):
         start, end = self.header_bar.range_pick.get_range()
@@ -519,3 +523,9 @@ class Overview(Controller):
         self.report_chooser.connect("report-chosen", on_report_chosen)
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
+
+    def close_window(self):
+        self.window.destroy()
+        self.window = None
+        self._gui = None
+        self.emit("on-close")
