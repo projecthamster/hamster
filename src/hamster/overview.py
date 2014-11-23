@@ -382,7 +382,7 @@ class Overview(gtk.Object):
         elif isinstance(fact, dt.date):
             selected_date = fact
         else:
-            selected_date = fact["date"]
+            selected_date = fact.date
 
         dialogs.edit.show(self, fact_date = selected_date)
 
