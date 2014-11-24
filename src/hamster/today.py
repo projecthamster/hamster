@@ -442,6 +442,9 @@ class DailyView(object):
     def on_switch_activity_clicked(self, widget):
         activity, temporary = self.new_name.get_value()
 
+        if not activity:
+            return
+
         fact = stuff.Fact(activity,
                           tags = self.new_tags.get_text().decode("utf8", "replace"))
         if not fact.activity:
