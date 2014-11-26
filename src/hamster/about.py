@@ -20,6 +20,7 @@
 
 from os.path import join
 from configuration import runtime
+import gobject
 import gtk
 
 def on_email(about, mail):
@@ -31,8 +32,15 @@ def on_url(about, link):
 gtk.about_dialog_set_email_hook(on_email)
 gtk.about_dialog_set_url_hook(on_url)
 
-class About(object):
+
+class About(gtk.Object):
+    __gsignals__ = {
+        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
     def __init__(self, parent = None):
+        gtk.Object.__init__(self)
+
         about = gtk.AboutDialog()
         self.window = about
         infos = {
@@ -60,5 +68,9 @@ class About(object):
 
         about.set_logo_icon_name("hamster-applet")
 
-        about.connect("response", lambda self, *args: self.destroy())
+        about.connect("response", self.on_about_response)
         about.show_all()
+
+    def on_about_response(self, dialog, response_id, *args):
+        dialog.destroy()
+        self.emit('on-close')
