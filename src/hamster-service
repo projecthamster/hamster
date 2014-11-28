@@ -197,7 +197,7 @@ class Storage(db.Storage, dbus.service.Object):
             s  description
             s  activity name
             i  activity id
-            i  category name
+            s  category name
             as List of fact tags
             i  date
             i  delta
