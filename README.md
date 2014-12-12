@@ -3,13 +3,13 @@
 Project Hamster is time tracking for individuals. It helps you to keep track of
 how much time you have spent during the day on activities you choose to track.
 
-# Installation
+## Installation
 
 **Bleeding edge warning**: Project Hamster right now is undergoing bit of
 reshuffling and might not be fit for everyday use. For stable versions check out
 [releases](https://github.com/projecthamster/hamster/releases).
 
-## Dependencies
+#### Dependencies
 
 **Requires recent GTK+:** Version of GTK+ required is 3.10 because of the use of
 HeaderBar and other bits. Sorry and get up to date!
@@ -17,7 +17,7 @@ HeaderBar and other bits. Sorry and get up to date!
 Debian-based: `apt-get install git-core gettext intltool python-gconf python-xdg`
 RPM-based: `yum install git-core gettext intltool gnome-python2-gconf`
 
-## Installing
+#### Installing
 
 ```bash
 ./waf configure build --prefix=/usr/local
@@ -33,8 +33,7 @@ killall hamster-service hamster-windows-service
 
 Now restart your panels/docks and you should be able to add Hamster!
 
-
-### Migrating from hamster-applet
+#### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
 the applet is long gone, the paths and file names have changed to
@@ -46,7 +45,7 @@ git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
 sudo ./waf uninstall
 ```
 
-# Contributing
+## Contributing
 
 1. [Fork](http://help.github.com/forking/) Hamster
 2. Create a topic branch - `git checkout -b my_branch`
