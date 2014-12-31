@@ -14,7 +14,7 @@ reshuffling and might not be fit for everyday use. For stable versions check out
 **Requires recent GTK+:** Version of GTK+ required is 3.10 because of the use of
 HeaderBar and other bits. Sorry and get up to date!
 
-Debian-based: `apt-get install git-core gettext intltool python-gconf python-xdg`
+Debian-based: `apt-get install git-core gettext intltool python-gconf python-xdg gir1.2-gconf-2.0`
 RPM-based: `yum install git-core gettext intltool gnome-python2-gconf`
 
 #### Installing
