@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2
 # encoding: utf-8
 
 import os,sys,imp,string,errno,traceback,inspect,re,shutil,datetime,gc

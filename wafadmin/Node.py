@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2
 # encoding: utf-8
 import sys
 if sys.hexversion < 0x020400f0: from sets import Set as set
