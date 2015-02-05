@@ -44,6 +44,10 @@ from calendar import timegm
 
 from StringIO import StringIO
 
+# fix encoding on export
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 def simple(facts, start_date, end_date, format, path = None):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
     report_path = stuff.locale_from_utf8(path)
