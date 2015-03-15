@@ -404,7 +404,7 @@ msgstr "स्विच (_w)"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "ट्रैंकिंग रोकें (_S)"
 
 #: ../data/today.ui.h:12

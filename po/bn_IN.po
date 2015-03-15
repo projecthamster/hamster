@@ -399,7 +399,7 @@ msgstr "কর্ম পরিবর্তন"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "অনুসরণ বন্ধ করা হবে (_S)"
 
 #: ../data/today.ui.h:12

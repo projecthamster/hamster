@@ -384,7 +384,7 @@ msgid "S_witch"
 msgstr "Ge_çiş Yap"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Takibi Başlat"
 
 #: ../data/today.ui.h:12

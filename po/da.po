@@ -394,7 +394,7 @@ msgid "S_witch"
 msgstr "S_kift"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Start _måling"
 
 #: ../data/today.ui.h:12

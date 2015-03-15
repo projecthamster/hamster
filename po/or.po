@@ -389,7 +389,7 @@ msgid "S_witch"
 msgstr "ପରିବର୍ତ୍ତନ କରନ୍ତୁ (_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "ଅନୁସରଣ ଆରମ୍ଭ କରନ୍ତୁ (_T)"
 
 #: ../data/today.ui.h:12

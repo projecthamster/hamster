@@ -391,7 +391,7 @@ msgid "S_witch"
 msgstr "切り替え(_W)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "記録の開始(_T)"
 
 #: ../data/today.ui.h:12

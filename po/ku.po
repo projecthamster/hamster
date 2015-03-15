@@ -396,7 +396,7 @@ msgstr ""
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Şopandinê Bi_sekinîne"
 
 #: ../data/today.ui.h:12

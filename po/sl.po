@@ -391,7 +391,7 @@ msgid "S_witch"
 msgstr "_Preklopi"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Začni s _sledenjem"
 
 #: ../data/today.ui.h:12
