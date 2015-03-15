@@ -396,8 +396,8 @@ msgid "S_witch"
 msgstr "(_w)மாற்றி"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "தொடர்வதை துவக்கவும் (_T)"
+msgid "_Start Tracking"
+msgstr "தொடர்வதை துவக்கவும் (_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

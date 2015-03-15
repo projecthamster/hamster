@@ -399,8 +399,8 @@ msgid "S_witch"
 msgstr "পরিবর্তন (_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "অনুসরণ বন্ধ করা হবে (_T)"
+msgid "_Start Tracking"
+msgstr "অনুসরণ বন্ধ করা হবে (_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

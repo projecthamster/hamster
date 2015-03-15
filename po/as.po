@@ -385,8 +385,8 @@ msgid "S_witch"
 msgstr "কাম পৰিবৰ্তন (_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "অনুসৰণ আৰম্ভ কৰক (_T)"
+msgid "_Start Tracking"
+msgstr "অনুসৰণ আৰম্ভ কৰক (_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

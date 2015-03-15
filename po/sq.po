@@ -411,7 +411,7 @@ msgstr ""
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Ndalo numërimin"
 
 #: ../data/today.ui.h:12

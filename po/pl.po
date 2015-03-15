@@ -401,7 +401,7 @@ msgid "S_witch"
 msgstr "_Przełącz"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Rozpocznij śledzenie"
 
 #: ../data/today.ui.h:12

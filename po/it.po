@@ -412,7 +412,7 @@ msgstr "Ca_mbia"
 
 # (ndt) pulsante
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "A_vvia conteggio"
 
 #: ../data/today.ui.h:12

@@ -384,8 +384,8 @@ msgid "S_witch"
 msgstr "ਬਦਲੋ(_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "ਟਰੈਕਿੰਗ ਰੋਕੋ(_T)"
+msgid "_Start Tracking"
+msgstr "ਟਰੈਕਿੰਗ ਰੋਕੋ(_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

@@ -404,7 +404,7 @@ msgstr ""
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Tracking නවතන්න (_S)"
 
 #: ../data/today.ui.h:12

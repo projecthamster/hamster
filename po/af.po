@@ -392,8 +392,8 @@ msgid "S_witch"
 msgstr "_Wissel"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Begin _taak"
+msgid "_Start Tracking"
+msgstr "_Begin taak"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

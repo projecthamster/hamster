@@ -393,7 +393,7 @@ msgid "S_witch"
 msgstr "П_ремини"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Почни со следење"
 
 #: ../data/today.ui.h:12

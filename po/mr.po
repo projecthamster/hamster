@@ -397,7 +397,7 @@ msgstr "बदलवा"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "मार्गनिर्देशन थांबवा (_S)"
 
 #: ../data/today.ui.h:12

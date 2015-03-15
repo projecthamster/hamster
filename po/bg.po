@@ -395,7 +395,7 @@ msgid "S_witch"
 msgstr "_Смяна"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Начало на отчитането"
 
 #: ../data/today.ui.h:12

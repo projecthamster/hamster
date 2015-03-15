@@ -398,7 +398,7 @@ msgid "S_witch"
 msgstr "Α_λλαγή"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Εκκίνηση _καταγραφής"
 
 #: ../data/today.ui.h:12

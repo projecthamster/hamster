@@ -386,8 +386,8 @@ msgid "S_witch"
 msgstr "切换(_W)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "开始跟踪(_T)"
+msgid "_Start Tracking"
+msgstr "开始跟踪(_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"
