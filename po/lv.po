@@ -389,7 +389,7 @@ msgid "S_witch"
 msgstr "Pār_slēgties"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Sāk_t uzskaiti"
 
 #: ../data/today.ui.h:12

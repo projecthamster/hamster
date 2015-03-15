@@ -393,7 +393,7 @@ msgid "S_witch"
 msgstr "మారు(_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "జాడపట్టుట మొదలుపెట్టు (_T)"
 
 #: ../data/today.ui.h:12

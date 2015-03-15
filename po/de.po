@@ -402,7 +402,7 @@ msgid "S_witch"
 msgstr "_Wechseln"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Erfassung s_tarten"
 
 #: ../data/today.ui.h:12

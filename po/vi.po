@@ -407,7 +407,7 @@ msgstr "Chuyển đổi"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Dừng theo dõi"
 
 #: ../data/today.ui.h:12

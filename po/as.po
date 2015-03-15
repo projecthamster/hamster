@@ -385,7 +385,7 @@ msgid "S_witch"
 msgstr "কাম পৰিবৰ্তন (_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "অনুসৰণ আৰম্ভ কৰক (_T)"
 
 #: ../data/today.ui.h:12

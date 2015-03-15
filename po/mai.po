@@ -385,7 +385,7 @@ msgid "S_witch"
 msgstr "बदलू"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr ""
 
 #: ../data/today.ui.h:12

@@ -395,7 +395,7 @@ msgid "S_witch"
 msgstr "_Váltás"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Nyilvántartás _megkezdése"
 
 #: ../data/today.ui.h:12

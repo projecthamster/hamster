@@ -396,7 +396,7 @@ msgstr "ಬದಲಾಯಿಸು"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ನಿಲ್ಲಿಸು(_S)"
 
 #: ../data/today.ui.h:12

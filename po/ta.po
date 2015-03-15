@@ -396,7 +396,7 @@ msgid "S_witch"
 msgstr "(_w)மாற்றி"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "தொடர்வதை துவக்கவும் (_T)"
 
 #: ../data/today.ui.h:12
