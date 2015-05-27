@@ -261,7 +261,7 @@ class Storage(db.Storage, dbus.service.Object):
         return [(row['id'],
                  row['name'],
                  row['category_id'],
-                 row['name'] or '') for row in
+                 row['category'] or '') for row in
                       self.get_category_activities(category_id = category_id)]
 
 

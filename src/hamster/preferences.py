@@ -342,7 +342,7 @@ class PreferencesEditor(Controller):
             new = new_text
             runtime.storage.update_activity(id, new, category_id)
             # size matters - when editing activity name just changed the case (bar -> Bar)
-            if prev != new and prev.lower() == new.lower():
+            if prev != new and None != prev and prev.lower() == new.lower():
                 trophies.unlock("size_matters")
 
         model[path][1] = new_text
