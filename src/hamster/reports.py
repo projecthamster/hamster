@@ -96,8 +96,6 @@ class ReportWriter(object):
                     else:
                         fact.end_time = ""
 
-                fact.tags = ", ".join(fact.tags)
-
                 self._write_fact(fact)
 
             self._finish(facts)
@@ -169,7 +167,7 @@ class TSVWriter(ReportWriter):
                                   fact.delta,
                                   fact.category,
                                   fact.description,
-                                  fact.tags])
+                                  ", ".join(fact.tags)])
     def _finish(self, facts):
         pass
 
@@ -187,7 +185,7 @@ class XMLWriter(ReportWriter):
         activity.setAttribute("duration_minutes", str(stuff.duration_minutes(fact.delta)))
         activity.setAttribute("category", fact.category)
         activity.setAttribute("description", fact.description)
-        activity.setAttribute("tags", fact.tags)
+        activity.setAttribute("tags", ", ".join(fact.tags))
         self.activity_list.appendChild(activity)
 
     def _finish(self, facts):
@@ -267,7 +265,7 @@ class HTMLWriter(ReportWriter):
             date_iso = fact.date.isoformat(),
             activity = fact.activity,
             category = category,
-            tags = fact.tags,
+            tags = ", ".join(fact.tags),
             start = fact.start_time.strftime('%H:%M'),
             start_iso = fact.start_time.isoformat(),
             end = end_time_str,
