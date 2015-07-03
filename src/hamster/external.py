@@ -29,6 +29,12 @@ try:
 except:
     evolution = None
 
+try:
+    import taskw
+    from taskw import TaskWarrior
+except:
+    taskw = None
+
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
@@ -36,10 +42,13 @@ class ActivitiesSource(gobject.GObject):
         self.__gtg_connection = None
 
         if self.source == "evo" and not evolution:
-            self.source == "" # on failure pretend that there is no evolution
+            self.source = "" # on failure pretend that there is no evolution
         elif self.source == "gtg":
             gobject.GObject.__init__(self)
             dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        elif self.source == "task" and not taskw:
+            self.source = ""
+
 
     def get_activities(self, query = None):
         if not self.source:
@@ -72,6 +81,30 @@ class ActivitiesSource(gobject.GObject):
 
                     activities.append({"name": name,
                                        "category": ""})
+
+            return activities
+
+        elif self.source == "task":
+            conn = TaskWarrior ()
+            if not conn:
+                return []
+
+            activities = []
+            tasks = []
+
+            task_filter = {'status':'pending'}
+            tasks = conn.filter_tasks(task_filter)
+
+            for task in tasks:
+                name = task['description'].replace(",","")  # replace comma
+                category = ""
+                if 'tags' in task:
+                    name = "%s, %s " % (name, " ".join(task['tags']))
+
+                if 'project' in task:
+                    category = task['project']
+
+                activities.append({"name":name,"category":category})
 
             return activities
 
