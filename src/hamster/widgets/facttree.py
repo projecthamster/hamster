@@ -185,9 +185,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     """
     The fact tree is a painter - it maintains scroll state and shows what we can
     see. That means it does not show all the facts there are, but rather only
-    those tht you can see.
+    those that you can see.
     It's also painter as it reuses labels. Caching is futile, we do all the painting
-    every tie
+    every time
 
 
 
@@ -287,6 +287,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         elif event.keyval == gdk.KEY_Page_Up:
             self.y -= self.height * 0.8
             self.on_scroll()
+
+        elif event.keyval == gdk.KEY_Home:
+            self.set_current_fact(0)
+
+        elif event.keyval == gdk.KEY_End:
+            self.set_current_fact(len(self.facts) - 1)
 
         elif event.keyval == gdk.KEY_Return:
             self.activate_row(self.hover_day, self.current_fact)
