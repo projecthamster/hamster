@@ -393,7 +393,7 @@ msgid "S_witch"
 msgstr "Ca_mbiar"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Iniciar el seguimiento"
 
 #: ../data/today.ui.h:12

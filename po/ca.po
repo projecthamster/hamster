@@ -393,7 +393,7 @@ msgid "S_witch"
 msgstr "_Canvia"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "C_omença a comptar"
 
 #: ../data/today.ui.h:12

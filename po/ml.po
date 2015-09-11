@@ -399,7 +399,7 @@ msgstr "മാറുക"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_നിരീക്ഷണം നിര്‍ത്തുക"
 
 #: ../data/today.ui.h:12

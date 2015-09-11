@@ -389,8 +389,8 @@ msgid "S_witch"
 msgstr "Pār_slēgties"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Sāk_t uzskaiti"
+msgid "_Start Tracking"
+msgstr "_Sākt uzskaiti"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

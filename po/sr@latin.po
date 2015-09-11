@@ -394,7 +394,7 @@ msgid "S_witch"
 msgstr "Pre_baci"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "Z_apočni praćenje"
 
 #: ../data/today.ui.h:12

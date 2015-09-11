@@ -402,8 +402,8 @@ msgid "S_witch"
 msgstr "_Wechseln"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Erfassung s_tarten"
+msgid "_Start Tracking"
+msgstr "Erfassung _starten"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

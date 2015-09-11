@@ -383,8 +383,8 @@ msgid "S_witch"
 msgstr "બદલો (_w)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "શોધવાનું શરૂ કરો (_T)"
+msgid "_Start Tracking"
+msgstr "શોધવાનું શરૂ કરો (_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

@@ -391,7 +391,7 @@ msgid "S_witch"
 msgstr "Př_epnout"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Spustit sledování"
 
 #: ../data/today.ui.h:12

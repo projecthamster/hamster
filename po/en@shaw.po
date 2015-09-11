@@ -392,8 +392,8 @@ msgid "S_witch"
 msgstr "_𐑕𐑢𐑦𐑗"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "𐑕𐑑𐑸𐑑 _𐑑𐑮𐑨𐑒𐑦𐑙"
+msgid "_Start Tracking"
+msgstr "_𐑕𐑑𐑸𐑑 𐑑𐑮𐑨𐑒𐑦𐑙"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

@@ -389,8 +389,8 @@ msgid "S_witch"
 msgstr "Vä_xla"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Starta _tidmätning"
+msgid "_Start Tracking"
+msgstr "_Starta tidmätning"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

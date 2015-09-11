@@ -390,7 +390,7 @@ msgid "S_witch"
 msgstr "Пера_ключыць"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Пачаць адсочванне"
 
 #: ../data/today.ui.h:12

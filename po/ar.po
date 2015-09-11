@@ -379,7 +379,7 @@ msgid "S_witch"
 msgstr "ب_دّل"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "ا_بدأ التتبع"
 
 #: ../data/today.ui.h:12

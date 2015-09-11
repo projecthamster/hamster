@@ -378,8 +378,8 @@ msgid "S_witch"
 msgstr "B_ytt"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Star_t sporing"
+msgid "_Start Tracking"
+msgstr "_Start sporing"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

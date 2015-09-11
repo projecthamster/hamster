@@ -392,8 +392,8 @@ msgid "S_witch"
 msgstr "Com_utare"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "Porneș_te pontarea"
+msgid "_Start Tracking"
+msgstr "Porne_ște pontarea"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

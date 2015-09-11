@@ -387,7 +387,7 @@ msgid "S_witch"
 msgstr "Pe_rjungti"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
+msgid "_Start Tracking"
 msgstr "_Pradėti sekimą"
 
 #: ../data/today.ui.h:12

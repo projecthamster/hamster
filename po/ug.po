@@ -393,8 +393,8 @@ msgid "S_witch"
 msgstr "ئالماشتۇر(_W)"
 
 #: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "ئىزلاشنى باشلا(_T)"
+msgid "_Start Tracking"
+msgstr "ئىزلاشنى باشلا(_S)"
 
 #: ../data/today.ui.h:12
 msgid "Start new activity"

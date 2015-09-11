@@ -413,8 +413,8 @@ msgstr "Wisselen"
 
 #: ../data/today.ui.h:11
 #, fuzzy
-msgid "Start _Tracking"
-msgstr "Registratie _stoppen"
+msgid "_Start Tracking"
+msgstr "Registratie _start"
 
 #: ../data/today.ui.h:12
 #, fuzzy
