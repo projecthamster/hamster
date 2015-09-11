@@ -1,23 +1,18 @@
-# Project Hamster - The Gnome Time Tracker
+# Hamster - The Gnome Time Tracker
 
-Project Hamster is time tracking for individuals. It helps you to keep track of
-how much time you have spent during the day on activities you choose to track.
+Hamster is time tracking for individuals. It helps you to keep track of how
+much time you have spent during the day on activities you choose to track.
 
 ## Installation
 
-**Bleeding edge warning**: Project Hamster right now is undergoing bit of
-reshuffling and might not be fit for everyday use. For stable versions check out
-[releases](https://github.com/projecthamster/hamster/releases).
+You can use the usually stable `master` or [download stable releases](https://github.com/projecthamster/hamster/releases).
 
 #### Dependencies
 
-**Requires recent GTK+:** Version of GTK+ required is 3.10 because of the use of
-HeaderBar and other bits. Sorry and get up to date!
+Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0`
+RPM-based: `yum install gettext intltool gnome-python2-gconf`
 
-Debian-based: `apt-get install git-core gettext intltool python-gconf python-xdg gir1.2-gconf-2.0`
-RPM-based: `yum install git-core gettext intltool gnome-python2-gconf`
-
-#### Installing
+#### Building
 
 ```bash
 ./waf configure build --prefix=/usr/local

@@ -1,4 +1,13 @@
 ===============
+Version 2.0
+===============
+ This release marks the transition to Gtk3, and includes all the other
+ feature additions and bugfixes that have been submitted since then and
+ are too countless to list here. Thanks to all the contributors!
+
+ Please check README.md for the current dependencies.
+
+===============
 Version 1.04
 ===============
  This version just packs all the contributed bugfixes of last 12 month (there
