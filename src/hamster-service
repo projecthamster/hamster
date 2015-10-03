@@ -54,8 +54,7 @@ class Storage(db.Storage, dbus.service.Object):
 
         self.__file = gio.File.new_for_path(__file__)
         self.__monitor = self.__file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
-                                                  gio.FileMonitorFlags.SEND_MOVED | \
-                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
+                                                  gio.FileMonitorFlags.SEND_MOVED,
                                                   None)
         self.__monitor.connect("changed", self._on_us_change)
 

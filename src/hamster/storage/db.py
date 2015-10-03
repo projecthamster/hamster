@@ -90,8 +90,7 @@ class Storage(storage.Storage):
 
             self.__database_file = gio.File.new_for_path(self.db_path)
             self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
-                                                                  gio.FileMonitorFlags.SEND_MOVED | \
-                                                                  gio.FileMonitorFlags.WATCH_HARD_LINKS,
+                                                                  gio.FileMonitorFlags.SEND_MOVED,
                                                                   None)
             self.__db_monitor.connect("changed", on_db_file_change)
 
