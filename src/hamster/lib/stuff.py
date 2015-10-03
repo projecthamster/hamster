@@ -21,7 +21,10 @@
 # some widgets that repeat all over the place
 # cells, columns, trees and other
 
+import gi
 import logging
+
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 

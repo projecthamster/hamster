@@ -17,10 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime as dt
-import logging
 import dbus
+import datetime as dt
+import gi
+import logging
+
 from dbus.lowlevel import Message
+
+gi.require_version('GConf', '2.0')
 from gi.repository import GConf as gconf
 from gi.repository import GObject as gobject
 
