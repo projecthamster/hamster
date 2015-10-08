@@ -24,6 +24,7 @@ from gi.repository import GObject as gobject
 
 
 from hamster import idle
+from hamster import workspace
 from hamster.lib.configuration import conf
 from hamster.lib import trophies
 import dbus
@@ -47,6 +48,10 @@ class DesktopIntegrations(object):
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
         gobject.timeout_add_seconds(60, self.check_hamster)
+
+        self.use_workspace_changes = True # TODO: should be a proper setting
+        self.workspace_listener = workspace.WnckWatcher()
+        self.workspace_listener.connect('workspace-changed', self.on_workspace_changed)
 
 
     def check_hamster(self):
@@ -124,6 +129,15 @@ class DesktopIntegrations(object):
             self.restore('__paused__', delete=True)
 
 
+    def on_workspace_changed(self, event, previous_workspace, current_workspace):
+        if not self.use_workspace_changes:
+            return
+        
+        if previous_workspace is not None:
+            self.save_current( previous_workspace )
+        self.restore(current_workspace)
+
+
     def on_conf_changed(self, event, key, value):
         if hasattr(self, "conf_%s" % key):
             setattr(self, "conf_%s" % key, value)
@@ -141,7 +155,7 @@ class DesktopIntegrations(object):
 
     def save_current(self, key):
         current = self.get_current()
-        if current:
+        if current is not None:
             self._saved[key] = current
         elif key in self._saved:
             del self._saved[key]
