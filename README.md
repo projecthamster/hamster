@@ -23,7 +23,8 @@ If you upgraded from an existing installation make sure to kill the running
 daemons:
 
 ```bash
-killall hamster-service hamster-windows-service
+pkill -f hamster-service
+pkill -f hamster-windows-service
 ```
 
 Now restart your panels/docks and you should be able to add Hamster!
