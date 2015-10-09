@@ -42,6 +42,7 @@ class DesktopIntegrations(object):
         self.conf_enable_timeout = conf.get("enable_timeout")
         self.conf_notify_on_idle = conf.get("notify_on_idle")
         self.conf_notify_interval = conf.get("notify_interval")
+        self.conf_workspace_tracking = conf.get("workspace_tracking")
         conf.connect('conf-changed', self.on_conf_changed)
 
         self.idle_listener = idle.DbusIdleListener()
@@ -49,7 +50,6 @@ class DesktopIntegrations(object):
 
         gobject.timeout_add_seconds(60, self.check_hamster)
 
-        self.use_workspace_changes = True # TODO: should be a proper setting
         self.workspace_listener = workspace.WnckWatcher()
         self.workspace_listener.connect('workspace-changed', self.on_workspace_changed)
 
@@ -130,7 +130,7 @@ class DesktopIntegrations(object):
 
 
     def on_workspace_changed(self, event, previous_workspace, current_workspace):
-        if not self.use_workspace_changes:
+        if 'memory' not in self.conf_workspace_tracking:
             return
         
         if previous_workspace is not None:
