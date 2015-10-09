@@ -32,20 +32,14 @@ class WnckWatcher(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
-        try:
-            self.bus = dbus.SessionBus()
-        except:
-            return 0
+        self.bus = dbus.SessionBus()
         wnck.Screen.get_default().connect("active-workspace-changed", self.on_workspace_changed)
 
 
     def on_workspace_changed(self, screen, previous_workspace):
-        try:
-            workspace_id = screen.get_active_workspace().get_number()
-            if previous_workspace:
-                previous_workspace = previous_workspace.get_number()
-        except:
-            return
+        workspace_id = screen.get_active_workspace().get_number()
+        if previous_workspace:
+            previous_workspace = previous_workspace.get_number()
         
         self.emit('workspace-changed', previous_workspace, workspace_id)
 

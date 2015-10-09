@@ -54,10 +54,7 @@ class DbusIdleListener(gobject.GObject):
         self.timeout_minutes = 0 # minutes after session is considered idle
         self.idle_was_there = False # a workaround variable for pre 2.26
 
-        try:
-            self.bus = dbus.SessionBus()
-        except:
-            return 0
+        self.bus = dbus.SessionBus()
         # Listen for chatter on the screensaver interface.
         # We cannot just add additional match strings to narrow down
         # what we hear because match strings are ORed together.
