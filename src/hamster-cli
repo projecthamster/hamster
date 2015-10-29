@@ -133,7 +133,11 @@ class HamsterClient(object):
         glib.set_prgname(unicode(_("Time Tracker")).encode("utf-8"))
 
         from hamster import today
-        app = today.DailyView()
+        if args:
+            hidden = args[0]
+        else:
+            hidden = False
+        app = today.DailyView(hidden)
         gtk.main()
 
     def _launch_window(self, window_name):
@@ -164,6 +168,8 @@ class HamsterClient(object):
             formats = [f for f in formats if not chosen or f.startswith(chosen)]
             print "\n".join(formats)
 
+    def hidden(self):
+        self.today(True)
 
     def toggle(self):
         self.storage.toggle()

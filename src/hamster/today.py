@@ -83,7 +83,7 @@ class ProjectHamsterStatusIcon(gtk.StatusIcon):
 
 
 class DailyView(object):
-    def __init__(self):
+    def __init__(self, start_hidden=False):
         # initialize the window.  explicitly set it to None first, so that the
         # creator knows it doesn't yet exist.
         self.window = None
@@ -134,6 +134,10 @@ class DailyView(object):
 
         self.reposition_hamster_window()
         self.show_hamster_window()
+
+        if start_hidden is True:
+            self.close_window()
+
         self.show_in_tray()
 
     def create_hamster_window(self):
