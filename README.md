@@ -48,3 +48,5 @@ sudo ./waf uninstall
 3. Push to your branch - `git push origin my_branch`
 4. Submit a [Pull Request](https://github.com/projecthamster/hamster/pulls) with your branch
 5. That's it!
+
+Also check out our [mailing list](http://lists.denkeninechtzeit.net/listinfo.cgi/hamster-dev-denkeninechtzeit.net) for technical discussions.
