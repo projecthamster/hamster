@@ -28,6 +28,11 @@ from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
 
+# This fixes PyGIWarning: GConf was imported without specifying a version first.
+
+import gi
+gi.require_version('GConf', '2.0')
+
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import GConf as gconf
