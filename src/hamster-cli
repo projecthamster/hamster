@@ -305,7 +305,7 @@ class HamsterClient(object):
                 widths[col] = max(widths[col], len(fact[col]))
 
         cols = ["{{{col}: <{len}}}".format(col=col, len=widths[col]) for col in cols]
-        fact_line = " | ".join(cols)
+        fact_line = u" | ".join(cols)
 
         row_width = sum([val + 3 for val in widths.values()])
 
