@@ -219,6 +219,88 @@ class HamsterClient(object):
         print writer.export()
 
 
+    def merge(self, *args):
+        '''Import facts from xml'''
+        from xml.etree import ElementTree
+        def get_serialized_name(**kwargs):
+            ''' It is prevent incorect handling by Fact.serialized_name method'''
+            res = unicode(kwargs['name']) #activity
+            if 'category' in kwargs:
+                res += "@{0}".format(kwargs['category'])
+            res += ', '
+            if kwargs['description']:
+                res += kwargs['description']
+            if 'tags' in kwargs:
+                res += ' ' + " ".join(["#{0}".format(tag) for tag in kwargs['tags']])
+            return res
+
+        def check_overlaping(new_fact, old_fact):
+            '''check for duplications and overlaps'''
+            f = old_fact
+            try:
+                now = dt.datetime.now()
+                if new_fact.start_time == f.start_time or new_fact.end_time == f.end_time:
+                    raise ValueError(u'The same start/end time in both facts. Old one: "{old}"')
+                elif new_fact.start_time > f.start_time and (new_fact.end_time or now) < (f.end_time or now):
+                    raise ValueError(u'Whole new fact period in old one("{old}")')
+                elif new_fact.start_time < f.start_time and (new_fact.end_time or now) > (f.end_time or now):
+                    raise ValueError(u'Whole old fact period ("{old}") in new fact period')
+                elif new_fact.start_time > f.start_time and (new_fact.end_time or now) < (f.end_time or now):
+                    raise ValueError(u'Periods overlap(1): old fact is "{old}"')
+                elif new_fact.start_time < f.start_time and (new_fact.end_time or now) > (f.end_time or now):
+                    raise ValueError(u'Periods overlap(2): old fact is "{old}"')
+            except ValueError as e:
+                return u'Skip new fact "{0}". REASON: {1}'.format(new_fact, e.args[0].format(old=f))
+
+        #preparations
+        args = args or []
+        if len(args) >= 2:
+            if args[0] != 'xml':
+                sys.exit('This format does not supported')
+            else:
+                f_format = 'xml'
+                f_name = args[1]
+            start_time, end_time = parse_datetime_range(" ".join(args[2:]))
+            start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
+            end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
+            current_facts = self.storage.get_facts(start_time, end_time)
+        else:
+            raise ValueError('There are not needed arguments')
+
+        with open(f_name, 'rt') as f:
+            tree = ElementTree.parse(f)
+
+        for node in tree.iter():
+            if node.tag == 'activity':
+                fact_params = node.attrib
+            else:
+                continue
+
+            if fact_params['tags']:
+                fact_params['tags'] = [tag.strip() for tag in fact_params['tags'].split(',')]
+            serialized_name = get_serialized_name(**fact_params)
+
+            new_fact_p = dict(start_time=dt.datetime.strptime(fact_params['start_time'], "%Y-%m-%d %H:%M:%S"))
+            if fact_params['end_time']:
+                new_fact_p['end_time'] = dt.datetime.strptime(fact_params['end_time'], "%Y-%m-%d %H:%M:%S")
+            else:
+                new_fact_p['delta'] = dt.timedelta(seconds = 60*int(fact_params['duration_minutes']))
+            new_fact = Fact(activity=serialized_name, **new_fact_p)
+            if new_fact.start_time < start_time or (new_fact.end_time or dt.datetime.now()) > end_time:
+                continue
+
+            #check overlapping and add to DB if not.
+            for fact in current_facts:
+                is_overlapped = check_overlaping(new_fact, fact)
+                if is_overlapped:
+                    print is_overlapped.encode("utf8")
+                    break
+            else:
+                self.storage.add_fact(new_fact)
+                print u'Activity {0} with time ({1} - {2}) added to database'.format(serialized_name,
+                                                new_fact.start_time, new_fact.end_time or u'ongoing')
+
+
     def _activities(self, search=""):
         '''Print the names of all the activities.'''
         if "@" in search:
@@ -358,6 +440,7 @@ Actions:
       term
     * export [html|tsv|ical|xml] [start-time] [end-time]: Export activities with
       the specified format
+    * merge [xml] [file] [start-time] [end-time] Import activities from the specified format file
     * current: Print current activity
     * activities: List all the activities names, one per line.
     * categories: List all the categories names, one per line.
