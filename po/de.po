@@ -30,7 +30,7 @@ msgstr "Neue Tätigkeit hinzufügen"
 
 #: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
 msgid "to"
-msgstr "zu"
+msgstr "bis"
 
 #: ../data/edit_activity.ui.h:3
 msgid "in progress"
