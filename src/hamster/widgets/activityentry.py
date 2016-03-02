@@ -44,6 +44,12 @@ def extract_search(text):
         search += "@%s" % fact.category
     if fact.tags:
         search += " #%s" % (" #".join(fact.tags))
+    # Add back any start of a category or tag as the Fact parser will
+    # strip off anything incomplete
+    if text.endswith("@"):
+        search += "@"
+    elif text.endswith("#"):
+        search += "#"
     return search
 
 class DataRow(object):
@@ -280,26 +286,38 @@ class ActivityEntry(gtk.Entry):
 
         # naive recency and frequency rank
         # score is as simple as you get 30-days_ago points for each occurence
-        suggestions = defaultdict(int)
+        activities = defaultdict(int)
+        categories = defaultdict(int)
+        tags = defaultdict(int)
         for fact in last_month:
             days = 30 - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds() / 60 / 60 / 24
             label = fact.activity
             if fact.category:
                 label += "@%s" % fact.category
+                categories[fact.category] += days
 
-            suggestions[label] += days
+            activities[label] += days
 
             if fact.tags:
-                label += " #%s" % (" #".join(fact.tags))
-                suggestions[label] += days
+                for tag in fact.tags:
+                    label += " #%s" % tag
+                    tags[tag] += days
+                activities[label] += days
 
         for rec in self.storage.get_activities():
             label = rec["name"]
             if rec["category"]:
                 label += "@%s" % rec["category"]
-            suggestions[label] += 0
+            activities[label] += 0
 
-        self.suggestions = sorted(suggestions.iteritems(), key=lambda x: x[1], reverse=True)
+        activities = sorted(activities.iteritems(), key=lambda x: x[1], reverse=True)
+        categories = sorted(categories.iteritems(), key=lambda x: x[1], reverse=True)
+        tags = sorted(tags.iteritems(), key=lambda x: x[1], reverse=True)
+
+        self.suggestions = {
+            "activities": activities,
+            "categories": categories,
+            "tags": tags }
 
     def complete_first(self):
         text = self.get_text()
@@ -374,10 +392,17 @@ class ActivityEntry(gtk.Entry):
         for field in reversed(fields):
             if getattr(fact, field, None):
                 looking_for = field
-                if text[-1] == " ":
-                    looking_for = fields[fields.index(field)+1]
                 break
 
+        # Some delimiter confusion that we need to adjust for
+        if text.endswith(','):
+            looking_for = "description"
+        elif text.endswith('#') and (looking_for not in ("description",)):
+            looking_for = "tags"
+        elif text.endswith('@') and (looking_for not in ("tags", "description",)):
+            looking_for = "category"
+        elif text.endswith(' ') and (looking_for in ("start_time", "end_time")):
+            looking_for = fields[fields.index(field)+1]
 
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
@@ -397,12 +422,12 @@ class ActivityEntry(gtk.Entry):
 
         # regular activity
         if (looking_for in ("start_time", "end_time") and not looks_like_time(text.split(" ")[-1])) or \
-            looking_for in ("activity", "category"):
+            looking_for == "activity":
 
             search = extract_search(text)
 
             matches = []
-            for match, score in self.suggestions:
+            for match, score in self.suggestions["activities"]:
                 if search in match:
                     if match.startswith(search):
                         score += 10**8 # boost beginnings
@@ -419,6 +444,72 @@ class ActivityEntry(gtk.Entry):
                 label += " " + match
 
                 res.append(DataRow(markup_label, match, label))
+        elif looking_for == "category":
+            if text.endswith('@'):
+                search = ""
+            else:
+                search = fact.category
+
+            matches = []
+            for match, score in self.suggestions["categories"]:
+                if search in match:
+                    if match.startswith(search):
+                        score += 10**8 # boost beginnings
+                    matches.append((match, score))
+
+            matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7] # need to limit these guys, sorry
+
+            for match, score in matches:
+                time_data = (fact.start_time or now).strftime("%H:%M")
+                if fact.end_time:
+                    time_data += fact.end_time.strftime("-%H:%M")
+
+                label = time_data + " " + stuff.escape_pango(fact.activity)
+                label += "@" + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+
+                data = fact.activity + "@" + match
+                full_data = time_data + " " + data
+
+                res.append(DataRow(label, data, full_data))
+        elif looking_for == "tags":
+            if text.endswith('#'):
+                search = ""
+                tags = fact.tags
+            else:
+                search = fact.tags[-1]
+                tags = fact.tags[:-1]
+
+            matches = []
+            for match, score in self.suggestions["tags"]:
+                if search in match:
+                    if match.startswith(search):
+                        score += 10**8 # boost beginnings
+                    matches.append((match, score))
+
+            matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7] # need to limit these guys, sorry
+
+            for match, score in matches:
+                time_data = (fact.start_time or now).strftime("%H:%M")
+                if fact.end_time:
+                    time_data += fact.end_time.strftime("-%H:%M")
+
+                label = time_data + " " + stuff.escape_pango(fact.activity)
+                if fact.category:
+                    label += "@" + stuff.escape_pango(fact.category)
+                for tag in tags:
+                    label += " #" + stuff.escape_pango(tag)
+
+                label += " #" + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+
+                data = fact.activity
+                if fact.category:
+                    data += "@" + fact.category
+                for tag in tags:
+                    data += " #" + tag
+                data += " #" + match
+                full_data = time_data + " " + data
+
+                res.append(DataRow(label, data, full_data))
 
         if not res:
             # in case of nothing to show, add preview so that the user doesn't
