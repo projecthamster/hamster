@@ -265,8 +265,8 @@ class PreferencesEditor(Controller):
         except:
             return
 
-        drop_yes = ("drop_yes", gtk.TARGET_SAME_APP, 0)
-        drop_no = ("drop_no", gtk.TARGET_SAME_APP, 0)
+        drop_yes = ("drop_yes", gtk.TargetFlags.SAME_APP, 0)
+        drop_no = ("drop_no", gtk.TargetFlags.SAME_APP, 0)
 
         if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
            drop_position != gtk.TREE_VIEW_DROP_BEFORE:
