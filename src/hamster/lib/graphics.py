@@ -8,7 +8,8 @@
 from collections import defaultdict
 import math
 import datetime as dt
-
+# needed to print accented characters in console when in debug mode
+from locale import getdefaultlocale, getpreferredencoding
 
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -675,10 +676,13 @@ class Parent(object):
     def log(self, *lines):
         """will print out the lines in console if debug is enabled for the
            specific sprite"""
+
         if getattr(self, "debug", False):
+            # get system default console encoding
+            consoleEncoding = getpreferredencoding(getdefaultlocale())
             print dt.datetime.now().time(),
-            for line in lines:
-                print line,
+            for line in [unicode(l) for l in lines]:
+                print line.encode(consoleEncoding),
             print
 
     def _add(self, sprite, index = None):

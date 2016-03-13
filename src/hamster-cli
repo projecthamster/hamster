@@ -27,6 +27,8 @@ import optparse
 import re
 import datetime as dt
 
+from locale import getdefaultlocale, getpreferredencoding
+
 from hamster import client, reports
 from hamster.lib import Fact, stuff
 
@@ -36,8 +38,8 @@ def word_wrap(line, max_len):
     lines = []
     cur_line, cur_len = "", 0
     for word in line.split():
-        if len("%s %s" % (cur_line, word)) < max_len:
-            cur_line = ("%s %s" % (cur_line, word)).strip()
+        if len(u"%s %s" % (cur_line, word)) < max_len:
+            cur_line = (u"%s %s" % (cur_line, word)).strip()
         else:
             if cur_line:
                 lines.append(cur_line)
@@ -50,9 +52,9 @@ def word_wrap(line, max_len):
 def fact_dict(fact_data, with_date):
     fact = {}
     if with_date:
-        fmt = '%Y-%m-%d %H:%M'
+        fmt = u'%Y-%m-%d %H:%M'
     else:
-        fmt = '%H:%M'
+        fmt = u'%H:%M'
 
     fact['start'] = fact_data.start_time.strftime(fmt)
     if fact_data.end_time:
@@ -75,13 +77,13 @@ def fact_dict(fact_data, with_date):
     return fact
 
 
-_DATETIME_PATTERN = ('^((?P<relative>-\d.+)?|('
-                     '(?P<date1>\d{4}-\d{2}-\d{2})?'
-                     '(?P<time1> ?\d{2}:\d{2})?'
-                     '(?P<dash> ?-)?'
-                     '(?P<date2> ?\d{4}-\d{2}-\d{2})?'
-                     '(?P<time2> ?\d{2}:\d{2})?)?)'
-                     '(?P<rest>\D.+)?$')
+_DATETIME_PATTERN = (u'^((?P<relative>-\d.+)?|('
+                     u'(?P<date1>\d{4}-\d{2}-\d{2})?'
+                     u'(?P<time1> ?\d{2}:\d{2})?'
+                     u'(?P<dash> ?-)?'
+                     u'(?P<date2> ?\d{4}-\d{2}-\d{2})?'
+                     u'(?P<time2> ?\d{2}:\d{2})?)?)'
+                     u'(?P<rest>\D.+)?$')
 _DATETIME_REGEX = re.compile(_DATETIME_PATTERN)
 def parse_datetime_range(arg):
     '''Parse a date and time.'''
@@ -102,10 +104,10 @@ def parse_datetime_range(arg):
     def to_time(timestr):
         timestr = (timestr or "").strip()
         try:
-            return dt.datetime.strptime(timestr, "%Y-%m-%d").date()
+            return dt.datetime.strptime(timestr, u"%Y-%m-%d").date()
         except ValueError:
             try:
-                return dt.datetime.strptime(timestr, "%H:%M").time()
+                return dt.datetime.strptime(timestr, u"%H:%M").time()
             except ValueError:
                 pass
         return None
@@ -126,6 +128,7 @@ class HamsterClient(object):
     '''The main application.'''
     def __init__(self):
         self.storage = client.Storage()
+        self.consoleEncoding = getpreferredencoding(getdefaultlocale())
 
 
     def _launch_window(self, window_name):
@@ -225,24 +228,24 @@ class HamsterClient(object):
             activity, category = search.split("@")
             for cat in self.storage.get_categories():
                 if not category or cat['name'].lower().startswith(category.lower()):
-                    print "%s@%s" % (activity.encode("utf8"), cat['name'].encode("utf8"))
+                    print (u"%s@%s" % (activity, cat['name'])).encode(self.consoleEncoding)
         else:
             for activity in self.storage.get_activities(search):
                 print activity['name'].encode('utf8')
                 if activity['category']:
-                    print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
+                    print (u'%s@%s' % (activity['name'], activity['category'])).encode(self.consoleEncoding)
 
 
     def activities(self, *args):
         '''Print the names of all the activities.'''
         search = args[0] if args else ""
         for activity in self.storage.get_activities(search):
-            print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
+            print (u'%s@%s' % (activity['name'], activity['category'])).encode(self.consoleEncoding)
 
     def categories(self, *args):
         '''Print the names of all the categories.'''
         for category in self.storage.get_categories():
-            print category['name'].encode('utf8')
+            print category['name'].encode(self.consoleEncoding)
 
 
     def list(self, *times):
@@ -258,8 +261,8 @@ class HamsterClient(object):
         """prints current activity. kinda minimal right now"""
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
-            print "%s %s" % (unicode(facts[-1]).encode("utf-8").strip(),
-                             stuff.format_duration(facts[-1].delta, human=False))
+            print ("%s %s" % ( unicode(facts[-1]).strip(),
+                             stuff.format_duration(facts[-1].delta, human=False))).encode(self.consoleEncoding)
         else:
             print _("No activity")
 
@@ -304,13 +307,13 @@ class HamsterClient(object):
             for col in cols:
                 widths[col] = max(widths[col], len(fact[col]))
 
-        cols = ["{{{col}: <{len}}}".format(col=col, len=widths[col]) for col in cols]
+        cols = [u"{{{col}: <{len}}}".format(col=col, len=widths[col]) for col in cols]
         fact_line = " | ".join(cols)
 
         row_width = sum([val + 3 for val in widths.values()])
 
         print
-        print fact_line.format(**headers)
+        print fact_line.format(**headers).encode(self.consoleEncoding)
         print "-" * min(row_width, 80)
 
         by_cat = {}
@@ -324,20 +327,20 @@ class HamsterClient(object):
 
             if pretty_fact['description']:
                 for line in word_wrap(pretty_fact['description'], 76):
-                    print "    %s" % line
+                    print ("    %s" % line).encode(self.consoleEncoding)
 
             if pretty_fact['tags']:
                 for line in word_wrap(pretty_fact['tags'], 76):
-                    print "    %s" % line
+                    print ("    %s" % line).encode(self.consoleEncoding)
 
         print "-" * min(row_width, 80)
 
         cats = []
         for cat, duration in sorted(by_cat.iteritems(), key=lambda x: x[1], reverse=True):
-            cats.append("%s: %s" % (cat, "%.1fh" % (stuff.duration_minutes(duration) / 60.0)))
+            cats.append(u"%s: %s" % (cat, u"%.1fh" % (stuff.duration_minutes(duration) / 60.0)))
 
-        for line in word_wrap(", ".join(cats), 80):
-            print line
+        for line in word_wrap(u", ".join(cats), 80):
+            print line.encode(self.consoleEncoding)
 
         print
 
@@ -386,7 +389,16 @@ Example usage:
     if len(sys.argv) < 2:
         hamster_client.overview()
     else:
-        command, args = sys.argv[1], sys.argv[2:]
+        consoleEncoding = getpreferredencoding(getdefaultlocale())
+        command = sys.argv[1]
+        args = []
+        for arg in sys.argv[2:]:
+            try:
+                args.append (arg.decode(consoleEncoding))
+            except UnicodeDecodeError,e:
+                # fallback: input is not in system preferred encoding and arg will be string, not unicode
+                args.append(arg)
+        
         if hasattr(hamster_client, command):
             getattr(hamster_client, command)(*args)
         else:

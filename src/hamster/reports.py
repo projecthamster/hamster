@@ -29,6 +29,9 @@ import re
 import codecs
 from string import Template
 
+# console print and file write encoding
+from locale import getdefaultlocale, getpreferredencoding
+
 from hamster.lib.configuration import runtime
 from hamster.lib import stuff, trophies
 from hamster.lib.i18n import C_
@@ -75,7 +78,8 @@ def simple(facts, start_date, end_date, format, path = None):
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        self.file = open(path, "w") if path else codecs.getwriter("utf8")(StringIO())
+        self.outputEncoding = getpreferredencoding(getdefaultlocale())
+        self.file = open(path, "w") if path else self.codecs.getwriter(self.outputEncoding)(StringIO())
         self.datetime_format = datetime_format
 
     def export(self):
@@ -126,14 +130,17 @@ class ICalWriter(ReportWriter):
         if fact.category == _("Unsorted"):
             fact.category = None
 
-        self.file.write("""BEGIN:VEVENT
+        factText = u"""BEGIN:VEVENT
 CATEGORIES:%(category)s
 DTSTART:%(start_time)s
 DTEND:%(end_time)s
 SUMMARY:%(activity)s
 DESCRIPTION:%(description)s
 END:VEVENT
-""" % dict(fact))
+""" % dict(fact)
+        
+        # ical is, by default, encoded as utf-8
+        self.file.write(factText.encode('utf-8'))
 
     def _finish(self, facts):
         self.file.write("END:VCALENDAR\n")
@@ -161,13 +168,15 @@ class TSVWriter(ReportWriter):
 
     def _write_fact(self, fact):
         fact.delta = stuff.duration_minutes(fact.delta)
-        self.csv_writer.writerow([fact.activity,
-                                  fact.start_time,
-                                  fact.end_time,
-                                  fact.delta,
-                                  fact.category,
-                                  fact.description,
-                                  ", ".join(fact.tags)])
+        factData = [fact.activity,
+                    fact.start_time,
+                    fact.end_time,
+                    fact.delta,
+                    fact.category,
+                    fact.description,
+                    u", ".join(fact.tags)]
+        self.csv_writer.writerow([ unicode(field).encode(self.outputEncoding) for field in factData ])
+        
     def _finish(self, facts):
         pass
 
@@ -179,18 +188,18 @@ class XMLWriter(ReportWriter):
 
     def _write_fact(self, fact):
         activity = self.doc.createElement("activity")
-        activity.setAttribute("name", fact.activity)
-        activity.setAttribute("start_time", fact.start_time)
-        activity.setAttribute("end_time", fact.end_time)
-        activity.setAttribute("duration_minutes", str(stuff.duration_minutes(fact.delta)))
-        activity.setAttribute("category", fact.category)
-        activity.setAttribute("description", fact.description)
-        activity.setAttribute("tags", ", ".join(fact.tags))
+        activity.setAttribute("name", unicode(fact.activity))
+        activity.setAttribute("start_time", unicode(fact.start_time))
+        activity.setAttribute("end_time", unicode(fact.end_time))
+        activity.setAttribute("duration_minutes", unicode(stuff.duration_minutes(fact.delta)))
+        activity.setAttribute("category", unicode(fact.category))
+        activity.setAttribute("description", unicode(fact.description))
+        activity.setAttribute("tags", u", ".join(fact.tags))
         self.activity_list.appendChild(activity)
 
     def _finish(self, facts):
         self.doc.appendChild(self.activity_list)
-        self.file.write(self.doc.toxml())
+        self.file.write(self.doc.toxml(encoding=self.outputEncoding))
 
 
 
