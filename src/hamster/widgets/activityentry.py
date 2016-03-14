@@ -21,6 +21,7 @@ import bisect
 import cairo
 import datetime as dt
 import re
+import locale
 
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
@@ -39,11 +40,11 @@ from hamster.lib import graphics
 
 def extract_search(text):
     fact = Fact(text)
-    search = fact.activity or ""
+    search = fact.activity or u""
     if fact.category:
-        search += "@%s" % fact.category
+        search += u"@%s" % fact.category
     if fact.tags:
-        search += " #%s" % (" #".join(fact.tags))
+        search += u" #%s" % (" #".join(fact.tags))
     return search
 
 class DataRow(object):
@@ -221,7 +222,7 @@ class ActivityEntry(gtk.Entry):
 
 
     def on_changed(self, entry):
-        text = self.get_text()
+        text = self.get_text().decode(locale.getpreferredencoding())
 
         with self.complete_tree.handler_block(self.tree_checker):
             self.show_suggestions(text)
@@ -257,7 +258,7 @@ class ActivityEntry(gtk.Entry):
 
         elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down):
             if not self.popup.get_visible():
-                self.show_suggestions(self.get_text())
+                self.show_suggestions(self.get_text().decode(locale.getpreferredencoding()))
             self.complete_tree.on_key_press(self, event)
             return True
 
@@ -302,7 +303,7 @@ class ActivityEntry(gtk.Entry):
         self.suggestions = sorted(suggestions.iteritems(), key=lambda x: x[1], reverse=True)
 
     def complete_first(self):
-        text = self.get_text()
+        text = self.get_text().decode(locale.getpreferredencoding())
         fact, search = Fact(text), extract_search(text)
         if not self.complete_tree.rows or not fact.activity:
             return text, None
