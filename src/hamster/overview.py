@@ -205,13 +205,13 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout.set_markup("Hamster") # dummy
         self.label_height = self.layout.get_pixel_size()[1]
 
-        self._max = 0
+        self._max = dt.timedelta(0)
 
     def set_values(self, values):
         """expects a list of 2-tuples"""
         self.values = values
         self.height = len(self.values) * 14
-        self._max = max(rec[1] for rec in values) if values else 0
+        self._max = max(rec[1] for rec in values) if values else dt.timedelta(0)
 
     def _draw(self, context, opacity, matrix):
         g = graphics.Graphics(context)
