@@ -15,7 +15,7 @@ RPM-based: `yum install gettext intltool gnome-python2-gconf`
 #### Building
 
 ```bash
-./waf configure build --prefix=/usr/local
+./waf configure build --prefix=/usr
 sudo ./waf install
 ```
 
