@@ -32,16 +32,20 @@ class WindowServer(dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def edit(self, id=None): dialogs.edit.show(self.app, fact_id = id)
+    def edit(self, id=None):
+        dialogs.edit.show(self.app, fact_id = id)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def overview(self): dialogs.overview.show(self.app)
+    def overview(self):
+        dialogs.overview.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def about(self): dialogs.about.show(self.app)
+    def about(self):
+        dialogs.about.show(self.app)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def preferences(self): dialogs.prefs.show(self.app)
+    def preferences(self):
+        dialogs.prefs.show(self.app)
 
 
 
