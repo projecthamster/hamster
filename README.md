@@ -3,6 +3,15 @@
 Hamster is time tracking for individuals. It helps you to keep track of how
 much time you have spent during the day on activities you choose to track.
 
+**IMPORTANT**
+Project Hamster is undergoing a period of major transition. Unless someone
+steps up to the task, this repository will remain unmaintained as the
+majority of our resources are directed to a rewrite (repositories: 
+``hamster-lib/dbus/cli/gtk``). Whilst you may leave bug reports and feature
+request with the issue tracker, please be warned that fixes at the current
+codebase will most likely stay unfixed and PR unmerged. Feature request will
+be reevaluated once the new codebase takes though.
+
 ## Installation
 
 You can use the usually stable `master` or [download stable releases](https://github.com/projecthamster/hamster/releases).
