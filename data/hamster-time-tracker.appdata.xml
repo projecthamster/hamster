@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+    <id type="desktop">hamster-time-tracker.desktop</id>
+    <license>CC0-1.0</license>
+    <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
+    <name>Project Hamster</name>
+    <summary>A time tracker for GNOME</summary>
+    <description>
+        <p>
+            Project Hamster is time tracking for individuals. It helps you to keep track on
+            how much time you have spent during the day on activities you choose to track. 
+        </p>
+        <p>
+            Whenever you change from doing one task to other, you change your current
+            activity in Hamster. After a while you can see how many hours you have spent on
+            what. Maybe print it out, or export to some suitable format, if time reporting
+            is a request of your employee. 
+        </p>
+    </description>
+    <url type="homepage">http://projecthamster.org/</url>
+    <screenshots>
+        <screenshot>
+            <image>https://i1.wp.com/farm5.static.flickr.com/4046/5160499613_576efc8441.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image>https://i2.wp.com/farm5.static.flickr.com/4043/5160499617_6ef85fdeb8.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image>https://i1.wp.com/farm5.static.flickr.com/4005/5160499621_1282ff8c7b.jpg</image>
+        </screenshot>
+    </screenshots>
+    <updatecontact>toms.baugis@gmail.com</updatecontact>
+</application>
+
