@@ -18,6 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime as dt
+from ..lib import gi_versions
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango

@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # nicked off gwibber
 
+from hamster.lib import gi_versions
 from gi.repository import GObject as gobject
 
 import dbus, dbus.service

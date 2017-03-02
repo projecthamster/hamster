@@ -22,6 +22,7 @@
 import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
+from .lib import gi_versions
 from gi.repository import GObject as gobject
 from hamster.lib import Fact
 from hamster.lib import trophies

@@ -24,7 +24,7 @@ import logging
 
 from dbus.lowlevel import Message
 
-gi.require_version('GConf', '2.0')
+from .lib import gi_versions
 from gi.repository import GConf as gconf
 from gi.repository import GObject as gobject
 

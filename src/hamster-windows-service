@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # nicked off hamster-service
 
+from hamster.lib import gi_versions
 from gi.repository import GObject as gobject
 from gi.repository import GLib as glib
 import dbus, dbus.service

@@ -20,6 +20,7 @@
 import datetime as dt
 from calendar import timegm
 import logging
+from . import gi_versions
 from gi.repository import GObject as gobject
 
 

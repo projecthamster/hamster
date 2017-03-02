@@ -20,6 +20,7 @@
 import time
 import datetime as dt
 
+from ..lib import gi_versions
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo

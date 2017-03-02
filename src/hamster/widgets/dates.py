@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+from ..lib import gi_versions
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango

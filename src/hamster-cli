@@ -143,6 +143,7 @@ class HamsterClient(object):
             getattr(server, window_name)()
         else:
             print "Running in devel mode"
+            from hamster.lib import gi_versions
             from gi.repository import Gtk as gtk
             from hamster.lib.configuration import dialogs
             getattr(dialogs, window_name).show()

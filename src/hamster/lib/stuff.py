@@ -24,7 +24,7 @@
 import gi
 import logging
 
-gi.require_version('Gtk', '3.0')
+from . import gi_versions
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 

@@ -38,6 +38,7 @@ import storage
 from shutil import copy as copyfile
 import itertools
 import datetime as dt
+from ..lib import gi_versions
 try:
     from gi.repository import Gio as gio
 except ImportError:

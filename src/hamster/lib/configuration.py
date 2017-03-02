@@ -28,6 +28,7 @@ from xdg.BaseDirectory import xdg_data_home
 import logging
 import datetime as dt
 
+from . import gi_versions
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import GConf as gconf
