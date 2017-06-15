@@ -224,7 +224,7 @@ class HorizontalBarChart(graphics.Sprite):
             g.move_to(100 - label_w, y)
             pangocairo.show_layout(context, self.layout)
 
-            w = (self.alloc_w - 110) * value.total_seconds() / self._max.total_seconds()
+            w = self._max.total_seconds() and (self.alloc_w - 110) * value.total_seconds() / self._max.total_seconds()
             w = max(1, int(round(w)))
             g.rectangle(110, y, int(w), int(label_h))
             g.fill("#999")
