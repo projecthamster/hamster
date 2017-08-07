@@ -202,6 +202,7 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout.set_markup("Hamster") # dummy
         self.label_height = self.layout.get_pixel_size()[1]
 
+        self._total = dt.timedelta()
         self._max = 0
 
     def set_values(self, values):
@@ -210,23 +211,31 @@ class HorizontalBarChart(graphics.Sprite):
         self.height = len(self.values) * 14
         self._max = max(rec[1] for rec in values) if values else 0
 
+    def set_total(self, total):
+        self._total = total
+
     def _draw(self, context, opacity, matrix):
         g = graphics.Graphics(context)
         g.save_context()
         g.translate(self.x, self.y)
 
+        hours = [(value.days * 24.0 + value.seconds / 3600.0 ) for _,value in self.values]
+        total = self._total.days * 24.0 + self._total.seconds / 3600.0
+
         for i, (label, value) in enumerate(self.values):
+            percent = 100.0 * hours[i] / total
+            label += " (%3.2fh; %3.1f%%)" % (hours[i], percent)
             g.set_color("#333")
             self.layout.set_markup(stuff.escape_pango(label))
             label_w, label_h = self.layout.get_pixel_size()
 
             y = int(i * label_h * 1.5)
-            g.move_to(100 - label_w, y)
+            g.move_to(180 - label_w, y)
             pangocairo.show_layout(context, self.layout)
 
-            w = (self.alloc_w - 110) * value.total_seconds() / self._max.total_seconds()
+            w = (self.alloc_w - 200) * value.total_seconds() / self._max.total_seconds()
             w = max(1, int(round(w)))
-            g.rectangle(110, y, int(w), int(label_h))
+            g.rectangle(190, y, int(w), int(label_h))
             g.fill("#999")
 
         g.restore_context()
@@ -287,12 +296,15 @@ class Totals(graphics.Scene):
 
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
+        total_sums = defaultdict(lambda: dt.timedelta())
         for fact in facts:
             for key in ('category', 'activity'):
                 totals[key][getattr(fact, key)] += fact.delta
+                total_sums[key] += fact.delta
 
             for tag in fact.tags:
                 totals["tag"][tag] += fact.delta
+                total_sums["tag"] += fact.delta
 
 
         for key, group in totals.iteritems():
@@ -300,8 +312,13 @@ class Totals(graphics.Scene):
         self.totals = totals
 
         self.activities_chart.set_values(totals['activity'])
+        self.activities_chart.set_total(total_sums['activity'])
+
         self.categories_chart.set_values(totals['category'])
+        self.categories_chart.set_total(total_sums['category'])
+
         self.tag_chart.set_values(totals['tag'])
+        self.tag_chart.set_total(total_sums['tag'])
 
         self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
         self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
