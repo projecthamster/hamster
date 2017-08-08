@@ -299,11 +299,11 @@ class Totals(graphics.Scene):
         total_sums = defaultdict(lambda: dt.timedelta())
         for fact in facts:
             for key in ('category', 'activity'):
-                totals[key][getattr(fact, key)] += fact.delta
+                totals[key][getattr(fact, key).strip()] += fact.delta
                 total_sums[key] += fact.delta
 
             for tag in fact.tags:
-                totals["tag"][tag] += fact.delta
+                totals["tag"][tag.strip()] += fact.delta
                 total_sums["tag"] += fact.delta
 
 
