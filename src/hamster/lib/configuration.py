@@ -30,6 +30,9 @@ import datetime as dt
 
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
+
+import gi
+gi.require_version('GConf', '2.0')
 from gi.repository import GConf as gconf
 
 import logging
