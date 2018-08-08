@@ -283,13 +283,13 @@ class HamsterClient(object):
         facts = self.storage.get_facts(start_time, end_time, search)
 
 
-        headers = {'activity': _("Activity"),
-                   'category': _("Category"),
-                   'tags': _("Tags"),
-                   'description': _("Description"),
-                   'start': _("Start"),
-                   'end': _("End"),
-                   'duration': _("Duration")}
+        headers = {'activity': _("Activity").encode("utf-8"),
+                   'category': _("Category").encode("utf-8"),
+                   'tags': _("Tags").encode("utf-8"),
+                   'description': _("Description").encode("utf-8"),
+                   'start': _("Start").encode("utf-8"),
+                   'end': _("End").encode("utf-8"),
+                   'duration': _("Duration").encode("utf-8")}
 
 
         # print date if it is not the same day
