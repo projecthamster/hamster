@@ -339,17 +339,6 @@ class ActivityEntry(gtk.Entry):
 
         text = text.lstrip()
 
-        time_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-        time_range_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-        delta_re = re.compile("^-[0-9]{1,3}$")
-
-        # when the time is filled, we need to make sure that the chunks parse correctly
-
-
-
-        delta_fragment_re = re.compile("^-[0-9]{0,3}$")
-
-
         templates = {
             "start_time": "",
             "start_delta": ("start activity -n minutes ago", "-"),
