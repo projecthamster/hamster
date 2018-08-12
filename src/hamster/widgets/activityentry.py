@@ -372,8 +372,7 @@ class ActivityEntry(gtk.Entry):
         current_fragment = fragments[-1] if fragments else ""
 
         if not text.strip():
-            variants = [templates[name] for name in ("start_time",
-                                                     "start_delta") if templates[name]]
+            variants = [templates[name] for name in templates if templates[name]]
         elif looking_for == "start_time" and text == "-":
             if len(current_fragment) > 1: # avoid blank "-"
                 templates["start_delta"] = ("%s minutes ago" % (-int(current_fragment)), current_fragment)
