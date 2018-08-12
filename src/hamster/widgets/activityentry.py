@@ -337,7 +337,7 @@ class ActivityEntry(gtk.Entry):
         """
         now = dt.datetime.now()
 
-        text = text.lstrip()
+        text = text.strip()
 
         templates = {
             "start_time": "",
@@ -371,7 +371,7 @@ class ActivityEntry(gtk.Entry):
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
 
-        if not text.strip():
+        if not text:
             variants = [templates[name] for name in templates if templates[name]]
         elif looking_for == "start_time" and text == "-":
             if len(current_fragment) > 1: # avoid blank "-"
