@@ -87,10 +87,12 @@ class Fact(object):
         return res
 
 
-    def serialized_time(self):
+    def serialized_time(self, prepend_date=True):
         time = ""
         if self.start_time:
-            time = self.start_time.strftime("%d-%m-%Y %H:%M")
+            if prepend_date:
+                time += self.start_time.strftime("%d-%m-%Y ")
+            time += self.start_time.strftime("%H:%M")
         if self.end_time:
             time = "%s-%s" % (time, self.end_time.strftime("%H:%M"))
         return time
