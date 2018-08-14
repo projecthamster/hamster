@@ -48,8 +48,7 @@ class CustomFactController(gobject.GObject):
         self.activity.connect("changed", self.on_activity_changed)
         self.get_widget("activity_box").add(self.activity)
 
-        day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(day_start / 60, day_start % 60)
+        self.day_start = conf.day_start
 
         self.date = fact_date
         if not self.date:

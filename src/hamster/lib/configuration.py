@@ -335,5 +335,12 @@ class GConfStore(gobject.GObject, Singleton):
 
         return True
 
+    @property
+    def day_start(self):
+        """Start of the hamster day."""
+        day_start_minutes = self.get("day_start_minutes")
+        hours, minutes = divmod(day_start_minutes, 60)
+        return dt.time(hours, minutes)
+
 
 conf = GConfStore()

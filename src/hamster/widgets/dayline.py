@@ -90,8 +90,7 @@ class DayLine(graphics.Scene):
         graphics.Scene.__init__(self)
         self.set_can_focus(False) # no interaction
 
-        day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(day_start / 60, day_start % 60)
+        self.day_start = conf.day_start
 
         start_time = start_time or dt.datetime.now()
 

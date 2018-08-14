@@ -633,10 +633,9 @@ class Storage(storage.Storage):
     def __get_todays_facts(self):
         try:
             from hamster.lib.configuration import conf
-            day_start = conf.get("day_start_minutes")
+            day_start = conf.day_start
         except:
-            day_start = 5 * 60 # default day start to 5am
-        day_start = dt.time(day_start / 60, day_start % 60)
+            day_start = dt.time(5, 0)  # default: 5:00
         today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
                                                   minutes = day_start.minute)).date()
         return self.__get_facts(today)
