@@ -63,11 +63,7 @@ class CustomFactController(gobject.GObject):
         self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
-            label = fact.start_time.strftime("%H:%M")
-            if fact.end_time:
-                label += fact.end_time.strftime(" %H:%M")
-
-            label += " " + fact.serialized_name()
+            label = str(fact)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 self.activity.select_region(len(label) - len(fact.serialized_name()), -1)

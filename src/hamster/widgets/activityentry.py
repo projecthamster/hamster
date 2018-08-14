@@ -28,13 +28,14 @@ from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict
+from copy import deepcopy
 
 from hamster import client
 from hamster.lib import Fact, looks_like_time
 from hamster.lib import stuff
 from hamster.lib import graphics
 
-
+import logging
 
 
 def extract_search(text):
@@ -245,7 +246,7 @@ class ActivityEntry(gtk.Entry):
         self.popup.hide()
 
     def on_icon_press(self, entry, icon, event):
-        self.show_suggestions("")
+        self.show_suggestions(self.get_text())
 
     def on_key_press(self, entry, event=None):
         if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
@@ -354,6 +355,14 @@ class ActivityEntry(gtk.Entry):
 
         fact = Fact(text)
 
+        if fact.end_time is None and fact.start_time is not None:
+            variant_fact = Fact(initial_fact=fact, end_time=now)
+            description = "stop now"
+            time_str = variant_fact.serialized_time(prepend_date=False)
+            data_str = variant_fact.serialized_name()
+            variant = "%s %s" % (time_str, data_str)
+            variants.append((description, variant))
+
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description
         # presence of each next attribute means that we are not looking for the previous one
@@ -367,12 +376,11 @@ class ActivityEntry(gtk.Entry):
                     looking_for = fields[fields.index(field)+1]
                 break
 
-
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
 
         if not text:
-            variants = [templates[name] for name in templates if templates[name]]
+            variants.extend([templates[name] for name in templates if templates[name]])
         elif looking_for == "start_time" and text == "-":
             if len(current_fragment) > 1: # avoid blank "-"
                 templates["start_delta"] = ("%s minutes ago" % (-int(current_fragment)), current_fragment)
