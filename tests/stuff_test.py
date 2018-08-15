@@ -7,6 +7,28 @@ from hamster.lib import Fact
 
 
 class TestActivityInputParsing(unittest.TestCase):
+    def test_datetime_to_hamsterday(self):
+        import datetime as dt
+        from hamster.lib import datetime_to_hamsterday
+        date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
+        expected = dt.date(2018, 8, 13)
+        self.assertEquals(datetime_to_hamsterday(date_time), expected)
+        date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
+        expected = dt.date(2018, 8, 13)
+        self.assertEquals(datetime_to_hamsterday(date_time), expected)
+
+    def test_hamsterday_time_to_datetime(self):
+        import datetime as dt
+        from hamster.lib import hamsterday_time_to_datetime
+        hamsterday = dt.date(2018, 8, 13)
+        time = dt.time(23, 10)
+        expected = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
+        self.assertEquals(hamsterday_time_to_datetime(hamsterday, time), expected)
+        hamsterday = dt.date(2018, 8, 13)
+        time = dt.time(0, 10)
+        expected = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 00:10
+        self.assertEquals(hamsterday_time_to_datetime(hamsterday, time), expected)
+
     def test_plain_name(self):
         # plain activity name
         activity = Fact("just a simple case")
