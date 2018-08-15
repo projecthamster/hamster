@@ -23,6 +23,8 @@
 
 import gi
 import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+import datetime as dt
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
@@ -35,6 +37,44 @@ import time
 import re
 import locale
 import os
+
+
+def datetime_to_hamsterday(civil_date_time):
+    """Return the hamster day corresponding to a given civil datetime.
+    
+    The hamster day start is taken into account.
+    """
+    
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+
+    if civil_date_time.time() < conf.day_start:
+        # early morning, between midnight and day_start
+        # => the hamster day is the previous civil day
+        hamster_date_time = civil_date_time - dt.timedelta(days=1)
+    else:
+        hamster_date_time = civil_date_time
+    # return only the date
+    return hamster_date_time.date()
+
+
+def hamsterday_time_to_datetime(hamsterday, time):
+    """Return the civil datetime corresponding to a given hamster day and time.
+    
+    The hamster day start is taken into account.
+    """
+    
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+
+    if time < conf.day_start:
+        # early morning, between midnight and day_start
+        # => the hamster day is the previous civil day
+        civil_date = hamsterday + dt.timedelta(days=1)
+    else:
+        civil_date = hamsterday
+    return dt.datetime.combine(civil_date, time)
+
 
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.

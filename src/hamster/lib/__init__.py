@@ -3,6 +3,12 @@ import datetime as dt
 import logging
 import re
 
+from hamster.lib.stuff import (
+    datetime_to_hamsterday,
+    hamsterday_time_to_datetime,
+)
+
+
 DATE_FMT = "%d-%m-%Y"
 TIME_FMT = "%H:%M"
 
@@ -54,7 +60,7 @@ class Fact(object):
         # Note: currently, the genuine activity (before the @)
         #       is the same as in the original fact
         if initial_fact:
-            activity = str(initial_fact)
+            activity = initial_fact.serialized()
 
         self.original_activity = activity # unparsed version, mainly for trophies right now
         self.activity = None
@@ -68,9 +74,9 @@ class Fact(object):
         self.delta = delta
         self.activity_id = activity_id
 
-        for key, val in parse_fact(activity).iteritems():
+        phase = "start_time" if date else "date"
+        for key, val in parse_fact(activity, phase, {}, date).iteritems():
             setattr(self, key, val)
-
 
         # override implicit with explicit
         self.category = category.replace(",", "") or self.category or None
@@ -99,11 +105,22 @@ class Fact(object):
 
     @property
     def date(self):
-        """hamster day."""
-        # FIXME: should take into account the day start. cf. db.py, __get_todays_facts
-        #        there should be a common function in lib
-        return self.start_time.date()
+        """hamster day, determined from start_time.
 
+        Note: Setting date is a one-shot modification of
+              the start_time and end_time (if defined),
+              to match the given value.
+              Any subsequent modification of start_time
+              can result in different self.date.
+        """
+        return datetime_to_hamsterday(self.start_time)
+
+    @date.setter
+    def date(self, value):
+        if self.start_time:
+            self.start_time = hamsterday_time_to_datetime(value, self.start_time.time())
+        if self.end_time:
+            self.end_time = hamsterday_time_to_datetime(value, self.end_time.time())
 
     def serialized_name(self):
         res = self.activity
@@ -126,10 +143,17 @@ class Fact(object):
         if self.end_time:
             time = "%s-%s" % (time, self.end_time.strftime(TIME_FMT))
         return time
-    
+
+
+    def serialized(self, prepend_date=True):
+        """Return a string fully representing the fact."""
+        name = self.serialized_name()
+        datetime = self.serialized_time(prepend_date)
+        return "%s %s" % (datetime, name)
+
 
     def __str__(self):
-        return "%s %s" % (self.serialized_time(), self.serialized_name())
+        return self.serialized_time(prepend_date=True)
 
 
 
@@ -144,7 +168,7 @@ def parse_fact(text, phase=None, res=None, date=None):
 
         TODO - While we are now bit cooler and going recursively, this code
         still looks rather awfully spaghetterian. What is the real solution?
-        
+
         Tentative syntax:
         [date] start_time[-end_time] activity[@category][, description]{ #tag}
     """
@@ -152,7 +176,7 @@ def parse_fact(text, phase=None, res=None, date=None):
 
     # determine what we can look for
     phases = [
-        "date",
+        "date",  # hamster day
         "start_time",
         "end_time",
         "activity",
@@ -201,15 +225,17 @@ def parse_fact(text, phase=None, res=None, date=None):
             return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
 
         elif time_re.match(fragment):
-            res[phase] = dt.datetime.combine(date, dt.datetime.strptime(fragment, TIME_FMT).time())
+            time = dt.datetime.strptime(fragment, TIME_FMT).time()
+            res[phase] = hamsterday_time_to_datetime(date, time)
             remaining_text = remove_fragment(text, fragment)
             return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
 
         elif time_range_re.match(fragment) and phase == "start_time":
             start, end = fragment.split("-")
-            # FIXME: both should take into account the day start. cf. db.py, __get_todays_facts
-            res["start_time"] = dt.datetime.combine(date, dt.datetime.strptime(start, TIME_FMT).time())
-            res["end_time"] = dt.datetime.combine(date, dt.datetime.strptime(end, TIME_FMT).time())
+            start_time = dt.datetime.strptime(start, TIME_FMT).time()
+            end_time = dt.datetime.strptime(end, TIME_FMT).time()
+            res["start_time"] = hamsterday_time_to_datetime(date, start_time)
+            res["end_time"] = hamsterday_time_to_datetime(date, end_time)
             remaining_text = remove_fragment(text, fragment)
             return parse_fact(remaining_text, "activity", res, date)
 

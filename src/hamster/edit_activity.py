@@ -28,6 +28,7 @@ import datetime as dt
 """
 import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
+from hamster.lib.stuff import datetime_to_hamsterday
 from lib import Fact
 
 class CustomFactController(gobject.GObject):
@@ -52,9 +53,7 @@ class CustomFactController(gobject.GObject):
 
         self.date = fact_date
         if not self.date:
-            self.date = (dt.datetime.now() - dt.timedelta(hours=self.day_start.hour,
-                                                          minutes=self.day_start.minute)).date()
-
+            self.date = datetime_to_hamsterday(dt.datetime.now())
 
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
@@ -62,7 +61,7 @@ class CustomFactController(gobject.GObject):
         self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
-            label = str(fact)
+            label = fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
@@ -114,12 +113,7 @@ class CustomFactController(gobject.GObject):
     def localized_fact(self):
         """makes sure fact is in our date"""
         fact = Fact(self.activity.get_text())
-        if fact.start_time:
-            fact.start_time = dt.datetime.combine(self.date, fact.start_time.time())
-
-        if fact.end_time:
-            fact.end_time = dt.datetime.combine(self.date, fact.end_time.time())
-
+        fact.date = self.date
         return fact
 
 
