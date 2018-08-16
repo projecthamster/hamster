@@ -79,7 +79,8 @@ class Fact(object):
             setattr(self, key, val)
 
         # override implicit with explicit
-        self.category = category.replace(",", "") or self.category or None
+        self.category = (category.replace(",", "").strip() or
+                         (self.category and self.category.strip()))
         self.description = (description or self.description or "").strip() or None
         self.tags =  tags or self.tags or []
         self.start_time = start_time or self.start_time or None
@@ -129,7 +130,7 @@ class Fact(object):
             res += "@%s" % self.category
 
         if self.description or self.tags:
-            res += "%s, %s" % (" ".join(["#%s" % tag for tag in self.tags]),
+            res += " %s, %s" % (" ".join(["#%s" % tag for tag in self.tags]),
                                self.description or "")
         return res
 
