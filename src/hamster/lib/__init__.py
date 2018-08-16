@@ -141,9 +141,11 @@ class Fact(object):
         if self.category:
             res += "@%s" % self.category
 
-        if self.description or self.tags:
-            res += " %s, %s" % (" ".join(["#%s" % tag for tag in self.tags]),
-                               self.description or "")
+        if self.description:
+            res += ", %s" % self.description
+
+        if self.tags:
+            res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
 
