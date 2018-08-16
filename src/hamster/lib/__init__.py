@@ -12,6 +12,18 @@ from hamster.lib.stuff import (
 DATE_FMT = "%d-%m-%Y"
 TIME_FMT = "%H:%M"
 
+
+# match #tag followed by any space or # that will be ignored
+# tag must not contain #, comma, or any space character
+tag_re = re.compile(r"""
+    [\s,]*     # any spaces or commas (or nothing)
+    \#          # hash character
+    ([^#\s]+)  # the tag (anything but # or spaces)
+    [\s#,]*    # any spaces, #, or commas (or nothing)
+    $           # end of text
+""", flags=re.UNICODE | re.VERBOSE)
+
+
 def figure_time(str_time):
     if not str_time or not str_time.strip():
         return None
@@ -171,7 +183,8 @@ def parse_fact(text, phase=None, res=None, date=None):
         still looks rather awfully spaghetterian. What is the real solution?
 
         Tentative syntax:
-        [date] start_time[-end_time] activity[@category][, description]{ #tag}
+        [date] start_time[-end_time] activity[@category][, description]{[,] { })#tag}
+        According to the legacy tests, # were allowed in the description
     """
     now = dt.datetime.now()
 
@@ -180,9 +193,9 @@ def parse_fact(text, phase=None, res=None, date=None):
         "date",  # hamster day
         "start_time",
         "end_time",
+        "tags",
         "activity",
         "category",
-        "tags",
     ]
 
     phase = phase or phases[0]
@@ -238,7 +251,23 @@ def parse_fact(text, phase=None, res=None, date=None):
             res["start_time"] = hamsterday_time_to_datetime(date, start_time)
             res["end_time"] = hamsterday_time_to_datetime(date, end_time)
             remaining_text = remove_fragment(text, fragment)
-            return parse_fact(remaining_text, "activity", res, date)
+            return parse_fact(remaining_text, "tags", res, date)
+
+    if "tags" in phases:
+        # Need to start from the end, because
+        # the description can hold some '#' characters
+        tags = []
+        remaining_text = text
+        while True:
+            m = re.search(tag_re, remaining_text)
+            if not m:
+                break
+            tag = m.group(1)
+            tags.append(tag)
+            # strip the matched string (including #)
+            remaining_text = remaining_text[:m.start()]
+        res["tags"] = tags
+        return parse_fact(remaining_text, "activity", res, date)
 
     if "activity" in phases:
         activity = re.split("[@|#|,]", text, 1)[0]
@@ -251,24 +280,9 @@ def parse_fact(text, phase=None, res=None, date=None):
         return parse_fact(remaining_text, "category", res, date)
 
     if "category" in phases:
-        category = re.split("[#|,]", text, 1)[0]
-        if category.lstrip().startswith("@"):
-            res["category"] = category.lstrip("@ ")
-            remaining_text = remove_fragment(text, category)
-            return parse_fact(remaining_text, "tags", res, date)
-
-        return parse_fact(text, "tags", res, date)
-
-    if "tags" in phases:
-        tags, desc = text.split(",", 1) if "," in text else (text, None)
-
-        tags = [tag.strip() for tag in re.split("[#]", tags) if tag.strip()]
-        if tags:
-            res["tags"] = tags
-
-        if (desc or "").strip():
-            res["description"] = desc.strip()
-
+        category, _, description = text.partition(",")
+        res["category"] = category.lstrip("@").strip() or None
+        res["description"] = description.strip() or None
         return res
 
     return {}
