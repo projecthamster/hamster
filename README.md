@@ -3,7 +3,33 @@
 Hamster is time tracking for individuals. It helps you to keep track of how
 much time you have spent during the day on activities you choose to track.
 
-**IMPORTANT**
+
+
+hamster-time-tracker v1.04 was not usable under openSUSE Leap-15,
+where python2-gconf is not available any longer.
+The [rewrite of hamster](https://github.com/projecthamster/hamster-gtk)
+is progressing well,
+but the current hamster.db is not importable there yet, IIUC.
+
+This repo is a fork from
+[hamster](https://github.com/projecthamster/hamster) project,
+that still used hamster.db, already migrated to Gtk3 and did not
+depend on python-gconf.
+
+Lots of the gui ease of use has been lost, especially for tags handling,
+start/restart of activities, and the stats display is minimal now.
+But at least backward compatibility seems good.
+Seems enough to wait for the rewrite.
+
+The fork base commit is [the latest one from master branch](https://github.com/projecthamster/hamster/commit/c3e5fb761c88fdecfd1566cac8b6836228a27cce).
+
+After a little tweaking, it works now,
+but has not been thouroughly tested.
+Backup `hamster.db` first,
+and keep track of activities on a text file too for some days !
+
+
+**IMPORTANT [note from the original repo]**
 Project Hamster is undergoing a period of major transition. Unless someone
 steps up to the task, this repository will remain unmaintained as the
 majority of our resources are directed to a rewrite (repositories: 
