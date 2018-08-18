@@ -42,9 +42,9 @@ class CustomFactController(gobject.GObject):
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
-        self.parent, self.fact_id = parent, fact_id
+        self.parent = parent
+        self.fact_id = fact_id
 
-        #TODO - should somehow hint that time is not welcome here
         self.activity = widgets.ActivityEntry()
         self.activity.connect("changed", self.on_activity_changed)
         self.get_widget("activity_box").add(self.activity)
@@ -61,6 +61,7 @@ class CustomFactController(gobject.GObject):
         self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
+            self.activity.original_fact = fact
             label = fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
