@@ -135,7 +135,7 @@ class StackedBar(layout.Widget):
     def set_items(self, items):
         """expects a list of key, value to work with"""
         res = []
-        max_value = sum((rec[1] for rec in items))
+        max_value = max(sum((rec[1] for rec in items)), 1)
         for key, val in items:
             res.append((key, val, val * 1.0 / max_value))
         self._items = res
