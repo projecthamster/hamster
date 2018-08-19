@@ -220,7 +220,7 @@ class HorizontalBarChart(graphics.Sprite):
 
         for i, (label, value) in enumerate(self.values):
             g.set_color("#333")
-            self.layout.set_markup(stuff.escape_pango(label))
+            self.layout.set_markup(stuff.escape_pango('{} ({})'.format(label, value)))
             label_w, label_h = self.layout.get_pixel_size()
 
             y = int(i * label_h * 1.5)
