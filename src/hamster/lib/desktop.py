@@ -56,7 +56,7 @@ class DesktopIntegrations(object):
             todays_facts = self.storage._Storage__get_todays_facts()
             self.check_user(todays_facts)
             trophies.check_ongoing(todays_facts)
-        except Exception, e:
+        except Exception as e:
             logging.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
@@ -79,13 +79,13 @@ class DesktopIntegrations(object):
             duration = delta.seconds /  60
 
             if duration and duration % interval == 0:
-                message = _(u"Working on %s") % last_activity['name']
+                message = _("Working on %s") % last_activity['name']
                 self.notify_user(message)
 
         elif self.conf_notify_on_idle:
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour * 60) % interval == 0:
-                self.notify_user(_(u"No activity"))
+                self.notify_user(_("No activity"))
 
 
     def notify_user(self, summary="", details=""):

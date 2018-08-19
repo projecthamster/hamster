@@ -25,7 +25,7 @@ def setup_i18n():
 
             module.bind_textdomain_codeset('hamster-time-tracker','utf8')
 
-        gettext.install("hamster-time-tracker", locale_dir, unicode = True)
+        gettext.install("hamster-time-tracker", locale_dir)
 
     else:
         gettext.install("hamster-time-tracker-uninstalled")

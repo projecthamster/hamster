@@ -28,8 +28,28 @@ but has not been thouroughly tested.
 Backup `hamster.db` first,
 and keep track of activities on a text file too for some days !
 
+To use the development version:
+```
+pkill -f hamster-service
+pkill -f hamster-windows-service
+src/hamster-service &
+src/hamster-windows-service &
+src/hamster-cli
+```
 
-**IMPORTANT [note from the original repo]**
+To install, python2 is still necessary (for waf).
+Adapt the paths below to your system,
+`sudo rm/mv` commands, beware !
+```
+./waf configure build --prefix=/usr && sudo ./waf install
+sudo rm -rf /usr/lib/python3.6/site-packages/hamster
+sudo mv /usr/lib/python2.7/site-packages/hamster /usr/lib/python3.6/site-packages/
+```
+
+
+*[README from the original repo below]*
+
+**IMPORTANT**
 Project Hamster is undergoing a period of major transition. Unless someone
 steps up to the task, this repository will remain unmaintained as the
 majority of our resources are directed to a rewrite (repositories: 

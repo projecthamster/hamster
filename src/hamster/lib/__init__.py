@@ -31,7 +31,7 @@ def figure_time(str_time):
     # strip everything non-numeric and consider hours to be first number
     # and minutes - second number
     numbers = re.split("\D", str_time)
-    numbers = filter(lambda x: x!="", numbers)
+    numbers = [x for x in numbers if x!=""]
 
     hours, minutes = None, None
 
@@ -87,7 +87,7 @@ class Fact(object):
         self.activity_id = activity_id
 
         phase = "start_time" if date else "date"
-        for key, val in parse_fact(activity, phase, {}, date).iteritems():
+        for key, val in parse_fact(activity, phase, {}, date).items():
             setattr(self, key, val)
 
         # override implicit with explicit
@@ -109,11 +109,11 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.encode("utf-8").strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.start_time if isinstance(self.start_time, basestring) else calendar.timegm(self.start_time.timetuple()),
-            'end_time': self.end_time if isinstance(self.end_time, basestring) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
+            'start_time': self.start_time if isinstance(self.start_time, str) else calendar.timegm(self.start_time.timetuple()),
+            'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
             'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 if self.delta else "" #duration in seconds
         }
-        return iter(keys.items())
+        return keys.items()
 
 
     @property

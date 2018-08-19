@@ -42,7 +42,7 @@ log = logging.getLogger("configuration")
 
 class Controller(gobject.GObject):
     __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, parent=None, ui_file=""):
@@ -132,7 +132,7 @@ class OneWindow(object):
         self.dialog_close_handlers = {}
 
     def on_close_window(self, dialog):
-        for key, assoc_dialog in list(self.dialogs.iteritems()):
+        for key, assoc_dialog in list(self.dialogs.items()):
             if dialog == assoc_dialog:
                 del self.dialogs[key]
 
@@ -215,7 +215,7 @@ class GConfStore(gobject.GObject, Singleton):
     }
 
     __gsignals__ = {
-        "conf-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
+        "conf-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
     }
     def __init__(self):
         gobject.GObject.__init__(self)

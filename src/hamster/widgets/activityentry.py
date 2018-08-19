@@ -304,7 +304,7 @@ class ActivityEntry(gtk.Entry):
             suggestions[label] += 0
 
         # list of (label, score), higher scores first
-        self.suggestions = sorted(suggestions.iteritems(), key=lambda x: x[1], reverse=True)
+        self.suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
 
     def complete_first(self):
         text = self.get_text()
