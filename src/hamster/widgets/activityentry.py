@@ -186,7 +186,7 @@ class CompleteTree(graphics.Scene):
                 description_color = graphics.Colors.contrast(color, 50)
                 description_color = graphics.Colors.hex(description_color)
 
-                label += '<span color="%s"> - %s</span>' % (description_color, row.description)
+                label += '<span color="%s">  [%s]</span>' % (description_color, row.description)
 
             self.label.show(g, label, color=color)
 
