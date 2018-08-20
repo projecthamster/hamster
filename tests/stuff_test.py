@@ -103,5 +103,15 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.description, "description #ta non-tag")
         self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
+    def test_initial_fact(self):
+        fact = Fact("12:25-13:25 case@cat, description #tag #bäg")
+        fact_copy = Fact(initial_fact=fact)
+        self.assertEqual(fact_copy.start_time.strftime("%H:%M"), "12:25")
+        self.assertEqual(fact_copy.end_time.strftime("%H:%M"), "13:25")
+        self.assertEqual(fact_copy.activity, "case")
+        self.assertEqual(fact_copy.category, "cat")
+        self.assertEqual(fact_copy.description, "description")
+        self.assertEqual(set(fact_copy.tags), set(["bäg", "tag"]))
+
 if __name__ == '__main__':
     unittest.main()
