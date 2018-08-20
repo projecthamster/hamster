@@ -353,7 +353,9 @@ class ActivityEntry(gtk.Entry):
             else:
                 # FIXME: that one should be available only for the last entry
                 description = "keep up (caveat: is it the last entry ?)"
-                variant_fact = Fact(initial_fact=self.original_fact, end_time=None)
+                # Do not use Fact(..., end_time=None): it would be a no-op
+                variant_fact = Fact(initial_fact=self.original_fact)
+                variant_fact.end_time = None
             variant = variant_fact.serialized(prepend_date=False)
             variants.append((description, variant))
 

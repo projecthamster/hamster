@@ -60,9 +60,16 @@ class Fact(object):
         "activity@category, description #tag #tag"
         syntax as the first argument (activity), for historical reasons.
         Explicitly stated values will take precedence over derived ones.
+        Note: this works only if the new values are not None or "" !
+              In this case, one should separately state e.g.
+              fact = Fact(initial_fact=<initial_fact>)
+              fact.end_time = None
+              TODO: should rework that,
+                    but the new hamster-* should be ready in few years...
         initial_fact (Fact or str): optional starting point.
                                     This is the same as calling
                                     Fact(str(initial_fact), ...)
+
         """
 
         # Previously the "activity" argument could only be a string,
