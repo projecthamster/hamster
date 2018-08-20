@@ -31,8 +31,8 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_plain_name(self):
         # plain activity name
-        activity = Fact("just a simple case")
-        self.assertEqual(activity.activity, "just a simple case")
+        activity = Fact("just a simple case with ütf-8")
+        self.assertEqual(activity.activity, "just a simple case with ütf-8")
 
         assert activity.category is None
         assert activity.start_time is None
@@ -64,18 +64,18 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_category(self):
         # plain activity name
-        activity = Fact("just a simple case@hamster")
+        activity = Fact("just a simple case@hämster")
         self.assertEqual(activity.activity, "just a simple case")
-        self.assertEqual(activity.category, "hamster")
+        self.assertEqual(activity.category, "hämster")
         assert activity.start_time is None
         assert activity.end_time is None
         assert activity.description is None
 
     def test_description(self):
         # plain activity name
-        activity = Fact("case, with added description")
+        activity = Fact("case, with added descriptiön")
         self.assertEqual(activity.activity, "case")
-        self.assertEqual(activity.description, "with added description")
+        self.assertEqual(activity.description, "with added descriptiön")
         assert activity.category is None
         assert activity.start_time is None
         assert activity.end_time is None
@@ -83,10 +83,10 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_tags(self):
         # plain activity name
-        activity = Fact("case, with added #de description #and, #some #tags")
+        activity = Fact("case, with added #de description #and, #some #tägs")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added #de description")
-        self.assertEqual(set(activity.tags), set(["and", "some", "tags"]))
+        self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
         assert activity.category is None
         assert activity.start_time is None
         assert activity.end_time is None
@@ -95,13 +95,13 @@ class TestActivityInputParsing(unittest.TestCase):
         # plain activity name
         #  FIXME: the original string did not require the colon for time:
         # activity = Fact("1225-1325 case@cat, description #ta non-tag #tag #bag")
-        activity = Fact("12:25-13:25 case@cat, description #ta non-tag #tag #bag")
+        activity = Fact("12:25-13:25 case@cat, description #ta non-tag #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.category, "cat")
         self.assertEqual(activity.description, "description #ta non-tag")
-        self.assertEqual(set(activity.tags), set(["bag", "tag"]))
+        self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
 if __name__ == '__main__':
     unittest.main()
