@@ -429,6 +429,9 @@ class Overview(Controller):
 
         self.facts = []
         self.find_facts()
+
+        # update every minute (necessary if an activity is running)
+        gobject.timeout_add_seconds(60, self.on_timeout)
         self.window.show_all()
 
 
@@ -468,7 +471,6 @@ class Overview(Controller):
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
 
-
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
 
@@ -504,6 +506,11 @@ class Overview(Controller):
         if active:
             self.filter_entry.grab_focus()
 
+    def on_timeout(self):
+        # TODO: should update only the running FactTree row (if any), and totals
+        self.find_facts()
+        # The timeout will stop if returning False
+        return True
 
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
