@@ -93,9 +93,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_full(self):
         # plain activity name
-        #  FIXME: the original string did not require the colon for time:
-        # activity = Fact("1225-1325 case@cat, description #ta non-tag #tag #bag")
-        activity = Fact("12:25-13:25 case@cat, description #ta non-tag #tag #bäg")
+        activity = Fact("1225-1325 case@cat, description #ta non-tag #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")

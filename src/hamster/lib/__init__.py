@@ -21,7 +21,25 @@ tag_re = re.compile(r"""
     ([^#\s]+)  # the tag (anything but # or spaces)
     [\s#,]*    # any spaces, #, or commas (or nothing)
     $           # end of text
-""", flags=re.UNICODE | re.VERBOSE)
+""", flags=re.VERBOSE)
+
+
+# match time, such as "01:32", "13.56" or "0116"
+time_re = re.compile(r"""
+    ^                                 # start of string
+    (?P<hour>[0-1]?[0-9] | [2][0-3])  # hour (2 digits, between 00 and 23)
+    [:,\.]?                           # separator can be colon,
+                                      #  dot, comma, or nothing
+    (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
+    $                                 # end of string
+""", flags=re.VERBOSE)
+
+
+def extract_time(match):
+    """extract time from a time_re match."""
+    hour = int(match.group('hour'))
+    minute = int(match.group('minute'))
+    return dt.time(hour, minute)
 
 
 def figure_time(str_time):
@@ -232,12 +250,9 @@ def parse_fact(text, phase=None, res=None, date=None):
         return parse_fact(remaining_text, "start_time", res, date)
 
     if "start_time" in phases or "end_time" in phases:
-        # looking for start or end time
 
+        # -delta ?
         delta_re = re.compile("^-[0-9]{1,3}$")
-        time_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-        time_range_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-
         if delta_re.match(fragment):
             # TODO untested
             # delta_re was probably thought to be used
@@ -247,16 +262,21 @@ def parse_fact(text, phase=None, res=None, date=None):
             remaining_text = remove_fragment(text, fragment)
             return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
 
-        elif time_re.match(fragment):
-            time = dt.datetime.strptime(fragment, TIME_FMT).time()
+        # only starting time ?
+        m = re.search(time_re, fragment)
+        if m:
+            time = extract_time(m)
             res[phase] = hamsterday_time_to_datetime(date, time)
             remaining_text = remove_fragment(text, fragment)
             return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
 
-        elif time_range_re.match(fragment) and phase == "start_time":
-            start, end = fragment.split("-")
-            start_time = dt.datetime.strptime(start, TIME_FMT).time()
-            end_time = dt.datetime.strptime(end, TIME_FMT).time()
+        # start-end ?
+        start, __, end = fragment.partition("-")
+        m_start = re.search(time_re, start)
+        m_end = re.search(time_re, end)
+        if m_start and m_end:
+            start_time = extract_time(m_start)
+            end_time = extract_time(m_end)
             res["start_time"] = hamsterday_time_to_datetime(date, start_time)
             res["end_time"] = hamsterday_time_to_datetime(date, end_time)
             remaining_text = remove_fragment(text, fragment)
