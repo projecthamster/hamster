@@ -416,7 +416,8 @@ class Overview(Controller):
         main.pack_start(self.totals, False, True, 1)
 
         # FIXME: should store and recall date_range from hamster.lib.configuration.conf
-        self.header_bar.range_pick.set_range(dt.datetime.today())
+        hamster_day = stuff.datetime_to_hamsterday(dt.datetime.today())
+        self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
