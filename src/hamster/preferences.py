@@ -205,7 +205,7 @@ class PreferencesEditor(Controller):
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
 
-        self.day_start = conf.day_start
+        self.day_start.set_time(conf.day_start)
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
