@@ -24,6 +24,7 @@ import itertools
 import webbrowser
 
 from collections import defaultdict
+from math import ceil
 
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -231,8 +232,11 @@ class HorizontalBarChart(graphics.Sprite):
             g.move_to(bar_start_x - margin - label_w, y)
             pangocairo.show_layout(context, self.layout)
 
-            w = (self.alloc_w - bar_start_x) * value.total_seconds() / self._max.total_seconds()
-            w = max(1, int(round(w)))
+            if self._max > dt.timedelta(0):
+                w = ceil((self.alloc_w - bar_start_x) * value.total_seconds() /
+                         self._max.total_seconds())
+            else:
+                w = 1
             g.rectangle(bar_start_x, y, int(w), int(label_h))
             g.fill("#999")
 
