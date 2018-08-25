@@ -41,10 +41,10 @@ import os
 
 def datetime_to_hamsterday(civil_date_time):
     """Return the hamster day corresponding to a given civil datetime.
-    
+
     The hamster day start is taken into account.
     """
-    
+
     # work around cyclic imports
     from hamster.lib.configuration import conf
 
@@ -60,10 +60,10 @@ def datetime_to_hamsterday(civil_date_time):
 
 def hamsterday_time_to_datetime(hamsterday, time):
     """Return the civil datetime corresponding to a given hamster day and time.
-    
+
     The hamster day start is taken into account.
     """
-    
+
     # work around cyclic imports
     from hamster.lib.configuration import conf
 
@@ -88,6 +88,11 @@ def format_duration(minutes, human = True):
             return ""
         else:
             return "00:00"
+
+    if minutes < 0:
+        # format_duration did not work for negative values anyway
+        # return a warning
+        return "NEGATIVE"
 
     hours = minutes / 60
     minutes = minutes % 60
