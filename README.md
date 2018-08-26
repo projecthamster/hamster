@@ -8,8 +8,7 @@ much time you have spent during the day on activities you choose to track.
 hamster-time-tracker v1.04 was not usable under openSUSE Leap-15,
 where python2-gconf is not available any longer.
 The [rewrite of hamster](https://github.com/projecthamster/hamster-gtk)
-is progressing well,
-but the current hamster.db is not importable there yet, IIUC.
+is progressing well, but it is still listed as alpha.
 
 This repo is a fork from
 [hamster](https://github.com/projecthamster/hamster) project,
