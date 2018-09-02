@@ -42,7 +42,7 @@ else:
 
 from calendar import timegm
 
-from io import StringIO
+from io import StringIO, IOBase
 
 def simple(facts, start_date, end_date, format, path = None):
     facts = copy.deepcopy(facts) # dont want to do anything bad to the input
@@ -100,7 +100,7 @@ class ReportWriter(object):
 
             self._finish(facts)
         finally:
-            if isinstance(self.file, file):
+            if isinstance(self.file, IOBase):
                 self.file.close()
 
     def _start(self, facts):
