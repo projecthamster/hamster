@@ -334,7 +334,7 @@ class HTMLWriter(ReportWriter):
 
         for key, val in data.items():
             if isinstance(val, str):
-                data[key] = val.encode("utf-8")
+                data[key] = val
 
         self.file.write(Template(self.main_template).safe_substitute(data))
 
