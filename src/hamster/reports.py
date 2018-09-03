@@ -283,7 +283,7 @@ class HTMLWriter(ReportWriter):
         # group by date
         by_date = []
         for date, date_facts in itertools.groupby(facts, lambda fact:fact.date):
-            by_date.append((date, [dict(fact) for fact in date_facts]))
+            by_date.append((date, [fact.as_dict() for fact in date_facts]))
         by_date = dict(by_date)
 
         date_facts = []
@@ -326,7 +326,7 @@ class HTMLWriter(ReportWriter):
 
             start_date = timegm(self.start_date.timetuple()),
             end_date = timegm(self.end_date.timetuple()),
-            facts = json_dumps([dict(fact) for fact in facts]),
+            facts = json_dumps([fact.as_dict() for fact in facts]),
             date_facts = json_dumps(date_facts),
 
             all_activities_rows = "\n".join(self.fact_rows)
