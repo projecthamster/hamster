@@ -427,7 +427,7 @@ class DailyView(object):
 
 
     def on_toggle_called(self, client):
-        self.window.present()
+        self.toggle_hamster_window()
 
     def on_conf_changed(self, event, key, value):
         if key == "day_start_minutes":
