@@ -18,7 +18,7 @@ You can use the usually stable `master` or [download stable releases](https://gi
 
 #### Dependencies
 
-Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus`
+Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus python-gi-cairo`
 
 RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
 
