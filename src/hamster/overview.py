@@ -287,13 +287,14 @@ class Totals(graphics.Scene):
 
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
+        total_time = dt.timedelta(0)
         for fact in facts:
+            total_time += fact.delta
             for key in ('category', 'activity'):
                 totals[key][getattr(fact, key)] += fact.delta
 
             for tag in fact.tags:
                 totals["tag"][tag] += fact.delta
-
 
         for key, group in totals.iteritems():
             totals[key] = sorted(group.iteritems(), key=lambda x: x[1], reverse=True)
@@ -304,7 +305,7 @@ class Totals(graphics.Scene):
         self.tag_chart.set_values(totals['tag'])
 
         self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
-        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
+        self.category_totals.markup = "<b>Total:</b> %s - " % (stuff.format_duration(total_time)) + ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
