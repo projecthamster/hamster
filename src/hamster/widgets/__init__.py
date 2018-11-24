@@ -23,21 +23,13 @@ from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 
 # import our children
-from activityentry import ActivityEntry
-
-from timeinput import TimeInput
-
-from dayline import DayLine
-
-from tags import Tag
-from tags import TagBox
-from tags import TagsEntry
-
-from reportchooserdialog import ReportChooserDialog
-
-from facttree import FactTree
-
-from dates import RangePick
+from hamster.widgets.activityentry import ActivityEntry
+from hamster.widgets.timeinput import TimeInput
+from hamster.widgets.dayline import DayLine
+from hamster.widgets.tags import Tag, TagBox, TagsEntry
+from hamster.widgets.reportchooserdialog import ReportChooserDialog
+from hamster.widgets.facttree import FactTree
+from hamster.widgets.dates import RangePick
 
 
 # handy wrappers

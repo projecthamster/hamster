@@ -79,7 +79,7 @@ class TagsEntry(gtk.Entry):
 
     def get_tags(self):
         # splits the string by comma and filters out blanks
-        return [tag.strip() for tag in self.get_text().decode('utf8', 'replace').split(",") if tag.strip()]
+        return [tag.strip() for tag in self.get_text().split(",") if tag.strip()]
 
     def on_tag_selected(self, tag_box, tag):
         cursor_tag = self.get_cursor_tag()
@@ -204,7 +204,7 @@ class TagsEntry(gtk.Entry):
         else:
             cursor = self.get_position()
 
-        text = self.get_text().decode('utf8', 'replace')
+        text = self.get_text()
 
         return text[text.rfind(",", 0, cursor)+1:max(text.find(",", cursor+1)+1, len(text))].strip()
 

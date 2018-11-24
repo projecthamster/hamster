@@ -75,8 +75,8 @@ formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
 from hamster.lib.configuration import runtime, conf
-import widgets
-from lib import stuff, trophies
+from hamster import widgets
+from hamster.lib import stuff, trophies
 
 
 
@@ -205,9 +205,7 @@ class PreferencesEditor(Controller):
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
         self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
 
-        day_start = conf.get("day_start_minutes")
-        day_start = dt.time(day_start / 60, day_start % 60)
-        self.day_start.set_time(day_start)
+        self.day_start.set_time(conf.day_start)
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
@@ -221,8 +219,7 @@ class PreferencesEditor(Controller):
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
-        updated_tags = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0) \
-                          .decode("utf-8")
+        updated_tags = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         if updated_tags == self.tags:
             return
 
@@ -265,8 +262,8 @@ class PreferencesEditor(Controller):
         except:
             return
 
-        drop_yes = ("drop_yes", gtk.TARGET_SAME_APP, 0)
-        drop_no = ("drop_no", gtk.TARGET_SAME_APP, 0)
+        drop_yes = ("drop_yes", gtk.TargetFlags.SAME_APP, 0)
+        drop_no = ("drop_no", gtk.TargetFlags.SAME_APP, 0)
 
         if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
            drop_position != gtk.TREE_VIEW_DROP_BEFORE:
@@ -295,7 +292,6 @@ class PreferencesEditor(Controller):
 
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):
-        new_text = new_text.decode("utf-8")
         id = model[path][0]
         if id == -1:
             return False #ignoring unsorted category
@@ -319,8 +315,6 @@ class PreferencesEditor(Controller):
 
 
     def activity_name_edited_cb(self, cell, path, new_text, model):
-        new_text = new_text.decode("utf-8")
-
         id = model[path][0]
         category_id = model[path][2]
 
@@ -539,7 +533,7 @@ class PreferencesEditor(Controller):
         """ appends row, jumps to it and allows user to input name """
 
         new_category = self.category_store.insert_before(self.category_store.unsorted_category,
-                                                         [-2, _(u"New category")])
+                                                         [-2, _("New category")])
 
         model = self.category_tree.get_model()
 
@@ -554,7 +548,7 @@ class PreferencesEditor(Controller):
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
 
-        new_activity = self.activity_store.append([-1, _(u"New activity"), category_id])
+        new_activity = self.activity_store.append([-1, _("New activity"), category_id])
 
         (model, iter) = self.selection.get_selected()
 
@@ -586,7 +580,7 @@ class PreferencesEditor(Controller):
                              value) % {'interval_minutes': value}
         else:
             # notify interval slider value label
-            label = _(u"Never")
+            label = _("Never")
 
         return label
 

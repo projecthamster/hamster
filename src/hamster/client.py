@@ -55,10 +55,10 @@ class Storage(gobject.GObject):
        The rest is hopefully obvious. But if not, please file bug reports!
     """
     __gsignals__ = {
-        "tags-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        "facts-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        "activities-changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        "toggle-called": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "tags-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+        "facts-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+        "activities-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+        "toggle-called": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):

@@ -28,13 +28,14 @@ from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict
+from copy import deepcopy
 
 from hamster import client
 from hamster.lib import Fact, looks_like_time
 from hamster.lib import stuff
 from hamster.lib import graphics
 
-
+import logging
 
 
 def extract_search(text):
@@ -185,7 +186,7 @@ class CompleteTree(graphics.Scene):
                 description_color = graphics.Colors.contrast(color, 50)
                 description_color = graphics.Colors.hex(description_color)
 
-                label += '<span color="%s"> - %s</span>' % (description_color, row.description)
+                label += '<span color="%s">  [%s]</span>' % (description_color, row.description)
 
             self.label.show(g, label, color=color)
 
@@ -194,8 +195,11 @@ class CompleteTree(graphics.Scene):
 
 
 class ActivityEntry(gtk.Entry):
-    def __init__(self, **kwargs):
+    def __init__(self, updating=True, **kwargs):
         gtk.Entry.__init__(self)
+
+        # to be set by the caller, if editing an existing fact
+        self.original_fact = None
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         box = gtk.Frame()
@@ -245,7 +249,7 @@ class ActivityEntry(gtk.Entry):
         self.popup.hide()
 
     def on_icon_press(self, entry, icon, event):
-        self.show_suggestions("")
+        self.show_suggestions(self.get_text())
 
     def on_key_press(self, entry, event=None):
         if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
@@ -299,7 +303,8 @@ class ActivityEntry(gtk.Entry):
                 label += "@%s" % rec["category"]
             suggestions[label] += 0
 
-        self.suggestions = sorted(suggestions.iteritems(), key=lambda x: x[1], reverse=True)
+        # list of (label, score), higher scores first
+        self.suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
 
     def complete_first(self):
         text = self.get_text()
@@ -335,39 +340,59 @@ class ActivityEntry(gtk.Entry):
 
             [start_time] | [-end_time] | activity | [@category] | [#tag]
         """
-        now = dt.datetime.now()
 
-        text = text.lstrip()
-
-        time_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-        time_range_re = re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$")
-        delta_re = re.compile("^-[0-9]{1,3}$")
-
-        # when the time is filled, we need to make sure that the chunks parse correctly
-
-
-
-        delta_fragment_re = re.compile("^-[0-9]{0,3}$")
-
-
-        templates = {
-            "start_time": "",
-            "start_delta": ("start activity -n minutes ago", "-"),
-        }
-
-        # need to set the start_time template before
-        prev_fact = self.todays_facts[-1] if self.todays_facts else None
-        if prev_fact and prev_fact.end_time:
-            templates["start_time"] = ("from previous activity %s ago" % stuff.format_duration(now - prev_fact.end_time),
-                                       prev_fact.end_time.strftime("%H:%M "))
-
+        # list of tuples (description, variant)
         variants = []
+
+        if self.original_fact:
+            # editing an existing fact
+            if self.original_fact.end_time is None:
+                description = "stop now"
+                now = dt.datetime.now()
+                variant_fact = Fact(initial_fact=self.original_fact, end_time=now)
+            else:
+                # FIXME: that one should be available only for the last entry
+                description = "keep up (caveat: is it the last entry ?)"
+                # Do not use Fact(..., end_time=None): it would be a no-op
+                variant_fact = Fact(initial_fact=self.original_fact)
+                variant_fact.end_time = None
+            variant = variant_fact.serialized(prepend_date=False)
+            variants.append((description, variant))
+
+        else:
+            # brand new fact
+            description = "start now"
+            now = dt.datetime.now()
+            variant = now.strftime("%H:%M ")
+            variants.append((description, variant))
+
+            prev_fact = self.todays_facts[-1] if self.todays_facts else None
+            if prev_fact and prev_fact.end_time:
+                since = stuff.format_duration(now - prev_fact.end_time)
+                description = "from previous activity, %s ago" % since
+                variant = prev_fact.end_time.strftime("%H:%M ")
+                variants.append((description, variant))
+
+            description = "start activity -n minutes ago (1 or 3 digits allowed)"
+            variant = "-"
+            variants.append((description, variant))
+
+        text = text.strip()
+        if text:
+            description = "clear"
+            variant = ""
+            variants.append((description, variant))
+
+        res = []
+        for (description, variant) in variants:
+            res.append(DataRow(variant, description=description))
+
 
         fact = Fact(text)
 
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description
-        # presence of each next attribute means that we are not looking for the previous one
+        # presence of an attribute means that we are not looking for the previous one
         # we still might be looking for the current one though
         looking_for = "start_time"
         fields = ["start_time", "end_time", "activity", "category", "tags", "description", "done"]
@@ -382,60 +407,28 @@ class ActivityEntry(gtk.Entry):
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
 
-        if not text.strip():
-            variants = [templates[name] for name in ("start_time",
-                                                     "start_delta") if templates[name]]
-        elif looking_for == "start_time" and text == "-":
-            if len(current_fragment) > 1: # avoid blank "-"
-                templates["start_delta"] = ("%s minutes ago" % (-int(current_fragment)), current_fragment)
-            variants.append(templates["start_delta"])
 
+        search = extract_search(text)
 
-        res = []
-        for (description, variant) in variants:
-            res.append(DataRow(variant, description=description))
+        matches = []
+        for match, score in self.suggestions:
+            if search in match:
+                if match.startswith(search):
+                    score += 10**8 # boost beginnings
+                matches.append((match, score))
 
-        # regular activity
-        if (looking_for in ("start_time", "end_time") and not looks_like_time(text.split(" ")[-1])) or \
-            looking_for in ("activity", "category"):
+        # need to limit these guys, sorry
+        matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7]
 
-            search = extract_search(text)
-
-            matches = []
-            for match, score in self.suggestions:
-                if search in match:
-                    if match.startswith(search):
-                        score += 10**8 # boost beginnings
-                    matches.append((match, score))
-
-            matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7] # need to limit these guys, sorry
-
-            for match, score in matches:
-                label = (fact.start_time or now).strftime("%H:%M")
-                if fact.end_time:
-                    label += fact.end_time.strftime("-%H:%M")
-
-                markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
-                label += " " + match
-
-                res.append(DataRow(markup_label, match, label))
-
-        if not res:
-            # in case of nothing to show, add preview so that the user doesn't
-            # think they are lost
+        for match, score in matches:
             label = (fact.start_time or now).strftime("%H:%M")
             if fact.end_time:
                 label += fact.end_time.strftime("-%H:%M")
 
-            if fact.activity:
-                label += " " + fact.activity
-            if fact.category:
-                label += "@" + fact.category
+            markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+            label += " " + match
 
-            if fact.tags:
-                label += " #" + " #".join(fact.tags)
-
-            res.append(DataRow(stuff.escape_pango(label), description="Start tracking"))
+            res.append(DataRow(markup_label, match, label))
 
         self.complete_tree.set_rows(res)
 

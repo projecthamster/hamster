@@ -31,8 +31,8 @@ class About(object):
             "program-name" : _("Time Tracker"),
             "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
             "version" : runtime.version,
-            "comments" : _(u"Project Hamster — track your time"),
-            "copyright" : _(u"Copyright © 2007–2010 Toms Bauģis and others"),
+            "comments" : _("Project Hamster — track your time"),
+            "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),
             "website" : "http://projecthamster.wordpress.com/",
             "website-label" : _("Project Hamster Website"),
             "title": _("About Time Tracker"),

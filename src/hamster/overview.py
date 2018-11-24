@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2014 Toms Bauģis <toms.baugis at gmail.com>
@@ -24,10 +24,14 @@ import itertools
 import webbrowser
 
 from collections import defaultdict
+from math import ceil
 
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import GObject as gobject
+
+import gi
+gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
@@ -45,8 +49,8 @@ from hamster.lib.configuration import Controller
 
 from hamster.lib.pytweener import Easing
 
-from widgets.dates import RangePick
-from widgets.facttree import FactTree
+from hamster.widgets.dates import RangePick
+from hamster.widgets.facttree import FactTree
 
 
 class HeaderBar(gtk.HeaderBar):
@@ -132,7 +136,7 @@ class StackedBar(layout.Widget):
     def set_items(self, items):
         """expects a list of key, value to work with"""
         res = []
-        max_value = sum((rec[1] for rec in items))
+        max_value = max(sum((rec[1] for rec in items)), 1)
         for key, val in items:
             res.append((key, val, val * 1.0 / max_value))
         self._items = res
@@ -202,13 +206,13 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout.set_markup("Hamster") # dummy
         self.label_height = self.layout.get_pixel_size()[1]
 
-        self._max = 0
+        self._max = dt.timedelta(0)
 
     def set_values(self, values):
         """expects a list of 2-tuples"""
         self.values = values
         self.height = len(self.values) * 14
-        self._max = max(rec[1] for rec in values) if values else 0
+        self._max = max(rec[1] for rec in values) if values else dt.timedelta(0)
 
     def _draw(self, context, opacity, matrix):
         g = graphics.Graphics(context)
@@ -217,16 +221,23 @@ class HorizontalBarChart(graphics.Sprite):
 
         for i, (label, value) in enumerate(self.values):
             g.set_color("#333")
-            self.layout.set_markup(stuff.escape_pango(label))
+            duration_str = stuff.format_duration(value, human=False)
+            markup = stuff.escape_pango('{}, {}'.format(label, duration_str))
+            self.layout.set_markup(markup)
             label_w, label_h = self.layout.get_pixel_size()
 
+            bar_start_x = 150  # pixels
+            margin = 10  # pixels
             y = int(i * label_h * 1.5)
-            g.move_to(100 - label_w, y)
+            g.move_to(bar_start_x - margin - label_w, y)
             pangocairo.show_layout(context, self.layout)
 
-            w = (self.alloc_w - 110) * value.total_seconds() / self._max.total_seconds()
-            w = max(1, int(round(w)))
-            g.rectangle(110, y, int(w), int(label_h))
+            if self._max > dt.timedelta(0):
+                w = ceil((self.alloc_w - bar_start_x) * value.total_seconds() /
+                         self._max.total_seconds())
+            else:
+                w = 1
+            g.rectangle(bar_start_x, y, int(w), int(label_h))
             g.fill("#999")
 
         g.restore_context()
@@ -295,8 +306,8 @@ class Totals(graphics.Scene):
                 totals["tag"][tag] += fact.delta
 
 
-        for key, group in totals.iteritems():
-            totals[key] = sorted(group.iteritems(), key=lambda x: x[1], reverse=True)
+        for key, group in totals.items():
+            totals[key] = sorted(group.items(), key=lambda x: x[1], reverse=True)
         self.totals = totals
 
         self.activities_chart.set_values(totals['activity'])
@@ -304,7 +315,13 @@ class Totals(graphics.Scene):
         self.tag_chart.set_values(totals['tag'])
 
         self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
-        self.category_totals.markup = ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
+
+        grand_total = sum(delta.total_seconds() / 60
+                          for __, delta in totals['activity'])
+        self.category_totals.markup = "<b>Total: </b>%s; " % stuff.format_duration(grand_total)
+        self.category_totals.markup += ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
+
+
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
@@ -402,8 +419,9 @@ class Overview(Controller):
         self.totals = Totals()
         main.pack_start(self.totals, False, True, 1)
 
-        date_range = stuff.week(dt.datetime.today()) # TODO - do the hamster day
-        self.header_bar.range_pick.set_range(*date_range)
+        # FIXME: should store and recall date_range from hamster.lib.configuration.conf
+        hamster_day = stuff.datetime_to_hamsterday(dt.datetime.today())
+        self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
@@ -416,6 +434,9 @@ class Overview(Controller):
 
         self.facts = []
         self.find_facts()
+
+        # update every minute (necessary if an activity is running)
+        gobject.timeout_add_seconds(60, self.on_timeout)
         self.window.show_all()
 
 
@@ -455,7 +476,6 @@ class Overview(Controller):
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
 
-
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
 
@@ -491,6 +511,11 @@ class Overview(Controller):
         if active:
             self.filter_entry.grab_focus()
 
+    def on_timeout(self):
+        # TODO: should update only the running FactTree row (if any), and totals
+        self.find_facts()
+        # The timeout will stop if returning False
+        return True
 
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
@@ -511,7 +536,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0L)
+                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 

@@ -227,7 +227,7 @@ class Tweenable(object):
                 self.start_value = self.decode_func(start_value)
                 self.change = self.decode_func(target_value) - self.start_value
 
-            elif isinstance(start_value, basestring) \
+            elif isinstance(start_value, str) \
              and (self.hex_color_normal.match(start_value) or self.hex_color_short.match(start_value)):
                 self.update = color_update
                 if self.hex_color_normal.match(start_value):
@@ -357,17 +357,17 @@ if __name__ == "__main__":
     total = dt.datetime.now()
 
     t = dt.datetime.now()
-    print "Adding %d tweens..." % object_count
+    print("Adding %d tweens..." % object_count)
     for i, o in enumerate(objects):
         tweener.add_tween(o, a = i,
                              b = i,
                              c = i,
                              duration = 0.1 * update_times,
                              easing=Easing.Circ.ease_in_out)
-    print dt.datetime.now() - t
+    print(dt.datetime.now() - t)
 
     t = dt.datetime.now()
-    print "Updating %d times......" % update_times
+    print("Updating %d times......" % update_times)
     for i in range(update_times):  #update 1000 times
         tweener.update(0.1)
-    print dt.datetime.now() - t
+    print(dt.datetime.now() - t)

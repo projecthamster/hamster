@@ -23,6 +23,8 @@
 
 import gi
 import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+import datetime as dt
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
@@ -36,6 +38,44 @@ import re
 import locale
 import os
 
+
+def datetime_to_hamsterday(civil_date_time):
+    """Return the hamster day corresponding to a given civil datetime.
+
+    The hamster day start is taken into account.
+    """
+
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+
+    if civil_date_time.time() < conf.day_start:
+        # early morning, between midnight and day_start
+        # => the hamster day is the previous civil day
+        hamster_date_time = civil_date_time - dt.timedelta(days=1)
+    else:
+        hamster_date_time = civil_date_time
+    # return only the date
+    return hamster_date_time.date()
+
+
+def hamsterday_time_to_datetime(hamsterday, time):
+    """Return the civil datetime corresponding to a given hamster day and time.
+
+    The hamster day start is taken into account.
+    """
+
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+
+    if time < conf.day_start:
+        # early morning, between midnight and day_start
+        # => the hamster day is the previous civil day
+        civil_date = hamsterday + dt.timedelta(days=1)
+    else:
+        civil_date = hamsterday
+    return dt.datetime.combine(civil_date, time)
+
+
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.
     accepts either minutes or timedelta"""
@@ -48,6 +88,11 @@ def format_duration(minutes, human = True):
             return ""
         else:
             return "00:00"
+
+    if minutes < 0:
+        # format_duration did not work for negative values anyway
+        # return a warning
+        return "NEGATIVE"
 
     hours = minutes / 60
     minutes = minutes % 60
@@ -85,19 +130,19 @@ def format_range(start_date, end_date):
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s".encode('utf-8')) % dates_dict
+        title = ("%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     elif start_date.month != end_date.month:
         # label of date range if start and end month do not match
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s".encode('utf-8')) % dates_dict
+        title = ("%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
     else:
         # label of date range for interval in same month
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = (u"%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s".encode('utf-8')) % dates_dict
+        title = ("%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s") % dates_dict
 
     return title
 
@@ -140,14 +185,14 @@ def zero_hour(date):
 # see bug 562298
 def locale_from_utf8(utf8_str):
     try:
-        retval = unicode (utf8_str, "utf-8").encode(locale.getpreferredencoding())
+        retval = str (utf8_str, "utf-8").encode(locale.getpreferredencoding())
     except:
         retval = utf8_str
     return retval
 
 def locale_to_utf8(locale_str):
     try:
-        retval = unicode (locale_str, locale.getpreferredencoding()).encode("utf-8")
+        retval = str (locale_str, locale.getpreferredencoding()).encode("utf-8")
     except:
         retval = locale_str
     return retval

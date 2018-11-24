@@ -26,9 +26,10 @@ import datetime as dt
 """ TODO: hook into notifications and refresh our days if some evil neighbour
           edit fact window has dared to edit facts
 """
-import widgets
+from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from lib import Fact
+from hamster.lib.stuff import datetime_to_hamsterday
+from hamster.lib import Fact
 
 class CustomFactController(gobject.GObject):
     __gsignals__ = {
@@ -41,21 +42,18 @@ class CustomFactController(gobject.GObject):
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
-        self.parent, self.fact_id = parent, fact_id
+        self.parent = parent
+        self.fact_id = fact_id
 
-        #TODO - should somehow hint that time is not welcome here
         self.activity = widgets.ActivityEntry()
         self.activity.connect("changed", self.on_activity_changed)
         self.get_widget("activity_box").add(self.activity)
 
-        day_start = conf.get("day_start_minutes")
-        self.day_start = dt.time(day_start / 60, day_start % 60)
+        self.day_start = conf.day_start
 
         self.date = fact_date
         if not self.date:
-            self.date = (dt.datetime.now() - dt.timedelta(hours=self.day_start.hour,
-                                                          minutes=self.day_start.minute)).date()
-
+            self.date = datetime_to_hamsterday(dt.datetime.now())
 
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
@@ -63,11 +61,8 @@ class CustomFactController(gobject.GObject):
         self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
-            label = fact.start_time.strftime("%H:%M")
-            if fact.end_time:
-                label += fact.end_time.strftime(" %H:%M")
-
-            label += " " + fact.serialized_name()
+            self.activity.original_fact = fact
+            label = fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
@@ -111,20 +106,14 @@ class CustomFactController(gobject.GObject):
 
     def figure_description(self):
         buf = self.get_widget('description').get_buffer()
-        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)\
-                         .decode("utf-8")
+        description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
 
     def localized_fact(self):
         """makes sure fact is in our date"""
         fact = Fact(self.activity.get_text())
-        if fact.start_time:
-            fact.start_time = dt.datetime.combine(self.date, fact.start_time.time())
-
-        if fact.end_time:
-            fact.end_time = dt.datetime.combine(self.date, fact.end_time.time())
-
+        fact.date = self.date
         return fact
 
 

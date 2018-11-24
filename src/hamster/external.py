@@ -139,6 +139,6 @@ def get_eds_tasks():
                     if task.get_status() in [ecal.ICAL_STATUS_NONE, ecal.ICAL_STATUS_INPROCESS]:
                         tasks.append({'name': task.get_summary(), 'category' : category})
         return tasks
-    except Exception, e:
+    except Exception as e:
         logging.warn(e)
         return []

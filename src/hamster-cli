@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # - coding: utf-8 -
 
 # Copyright (C) 2010 Matías Ribecky <matias at mribecky.com.ar>
@@ -142,7 +142,7 @@ class HamsterClient(object):
                                     "/org/gnome/Hamster/WindowServer")
             getattr(server, window_name)()
         else:
-            print "Running in devel mode"
+            print("Running in devel mode")
             from gi.repository import Gtk as gtk
             from hamster.lib.configuration import dialogs
             getattr(dialogs, window_name).show()
@@ -173,7 +173,7 @@ class HamsterClient(object):
             formats = "html tsv xml ical".split()
             chosen = sys.argv[-1]
             formats = [f for f in formats if not chosen or f.startswith(chosen)]
-            print "\n".join(formats)
+            print("\n".join(formats))
 
 
     def toggle(self):
@@ -187,7 +187,7 @@ class HamsterClient(object):
     def start(self, *args):
         '''Start a new activity.'''
         if not args:
-            print "Error: please specify activity"
+            print("Error: please specify activity")
             return
 
         activity = args[0]
@@ -216,7 +216,7 @@ class HamsterClient(object):
         facts = self.storage.get_facts(start_time, end_time)
 
         writer = reports.simple(facts, start_time, end_time, export_format)
-        print writer.export()
+        print(writer.export())
 
 
     def _activities(self, search=""):
@@ -225,24 +225,24 @@ class HamsterClient(object):
             activity, category = search.split("@")
             for cat in self.storage.get_categories():
                 if not category or cat['name'].lower().startswith(category.lower()):
-                    print "%s@%s" % (activity.encode("utf8"), cat['name'].encode("utf8"))
+                    print("{}@{}".format(activity, cat['name']))
         else:
             for activity in self.storage.get_activities(search):
-                print activity['name'].encode('utf8')
+                print(activity['name'])
                 if activity['category']:
-                    print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
+                    print("{}@{}".format(activity['name'], activity['category']))
 
 
     def activities(self, *args):
         '''Print the names of all the activities.'''
         search = args[0] if args else ""
         for activity in self.storage.get_activities(search):
-            print '%s@%s' % (activity['name'].encode('utf8'), activity['category'].encode('utf8'))
+            print("{}@{}".format(activity['name'], activity['category']))
 
     def categories(self, *args):
         '''Print the names of all the categories.'''
         for category in self.storage.get_categories():
-            print category['name'].encode('utf8')
+            print(category['name'])
 
 
     def list(self, *times):
@@ -258,10 +258,10 @@ class HamsterClient(object):
         """prints current activity. kinda minimal right now"""
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
-            print "%s %s" % (unicode(facts[-1]).encode("utf-8").strip(),
-                             stuff.format_duration(facts[-1].delta, human=False))
+            print("{} {}".format(str(facts[-1]).strip(),
+                                 stuff.format_duration(facts[-1].delta, human=False)))
         else:
-            print _("No activity")
+            print((_("No activity")))
 
 
     def search(self, *args):
@@ -307,11 +307,11 @@ class HamsterClient(object):
         cols = ["{{{col}: <{len}}}".format(col=col, len=widths[col]) for col in cols]
         fact_line = " | ".join(cols)
 
-        row_width = sum([val + 3 for val in widths.values()])
+        row_width = sum(val + 3 for val in list(widths.values()))
 
-        print
-        print fact_line.format(**headers)
-        print "-" * min(row_width, 80)
+        print()
+        print(fact_line.format(**headers))
+        print("-" * min(row_width, 80))
 
         by_cat = {}
         for fact in facts:
@@ -320,26 +320,26 @@ class HamsterClient(object):
             by_cat[cat] += fact.delta
 
             pretty_fact = fact_dict(fact, print_with_date)
-            print fact_line.format(**pretty_fact)
+            print(fact_line.format(**pretty_fact))
 
             if pretty_fact['description']:
                 for line in word_wrap(pretty_fact['description'], 76):
-                    print "    %s" % line
+                    print("    {}".format(line))
 
             if pretty_fact['tags']:
                 for line in word_wrap(pretty_fact['tags'], 76):
-                    print "    %s" % line
+                    print("    {}".format(line))
 
-        print "-" * min(row_width, 80)
+        print("-" * min(row_width, 80))
 
         cats = []
-        for cat, duration in sorted(by_cat.iteritems(), key=lambda x: x[1], reverse=True):
+        for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
             cats.append("%s: %s" % (cat, "%.1fh" % (stuff.duration_minutes(duration) / 60.0)))
 
         for line in word_wrap(", ".join(cats), 80):
-            print line
+            print(line)
 
-        print
+        print()
 
 
 

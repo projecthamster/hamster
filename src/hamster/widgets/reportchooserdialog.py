@@ -18,9 +18,6 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import pygtk
-pygtk.require('2.0')
-
 import os
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
@@ -37,7 +34,7 @@ class ReportChooserDialog(gtk.Dialog):
         gtk.Dialog.__init__(self)
 
 
-        self.dialog = gtk.FileChooserDialog(title = _(u"Save Report — Time Tracker"),
+        self.dialog = gtk.FileChooserDialog(title = _("Save Report — Time Tracker"),
                                             parent = self,
                                             action = gtk.FileChooserAction.SAVE,
                                             buttons=(gtk.STOCK_CANCEL,
