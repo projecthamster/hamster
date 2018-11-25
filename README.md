@@ -3,31 +3,51 @@
 Hamster is time tracking for individuals. It helps you to keep track of how
 much time you have spent during the day on activities you choose to track.
 
-
-
-hamster-time-tracker v1.04 was not usable under openSUSE Leap-15,
-where python2-gconf is not available any longer.
 The [rewrite of hamster](https://github.com/projecthamster/hamster-gtk)
 is progressing well, but it is still listed as alpha.
 
-This repo is a fork from
-[hamster](https://github.com/projecthamster/hamster) project,
-that still used hamster.db, already migrated to Gtk3 and did not
-depend on python-gconf.
+This is the legacy repo that still use the same old `hamster.db`,
+but migrated to `Gtk3` and `python3`, and without python-gconf dependency.
+This allowed to use hamster on platforms (such as openSUSE Leap-15)
+where 1.04-based versions were completely broken.
 
-Lots of the gui ease of use has been lost, especially for tags handling,
+With respect to 1.04, lots of the gui ease of use has been lost, especially for tags handling,
 start/restart of activities, and the stats display is minimal now.
-But at least backward compatibility seems good.
-Seems enough to wait for the rewrite.
+So if you are happy with your hamster application, upgrade is not recommended yet.
 
-The fork base commit is [the latest one from master branch](https://github.com/projecthamster/hamster/commit/c3e5fb761c88fdecfd1566cac8b6836228a27cce).
+But at least backward compatibility seems good.
+It sounds usable enough to wait for the rewrite.
 
 After a little tweaking, it works now,
-but has not been thouroughly tested.
+but has not been thoroughly tested.
 Backup `hamster.db` first,
 and keep track of activities on a text file too for some days !
 
-To use the development version:
+
+## Installation
+
+You can use the usually stable `master` or [download stable releases](https://github.com/projecthamster/hamster/releases).
+
+If you upgraded from an existing installation make sure to kill the running
+daemons:
+
+```bash
+pkill -f hamster-service
+pkill -f hamster-windows-service
+```
+
+#### Dependencies
+
+Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus`
+
+RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
+
+openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
+
+
+#### Trying the development version
+
+To use the development version (backup `hamster.db` first !):
 ```
 pkill -f hamster-service
 pkill -f hamster-windows-service
@@ -36,6 +56,9 @@ src/hamster-windows-service &
 src/hamster-cli
 ```
 
+
+#### Building and installing
+
 To install, python2 is still necessary (for waf).
 Adapt the paths below to your system,
 `sudo rm/mv` commands, beware !
@@ -43,43 +66,6 @@ Adapt the paths below to your system,
 ./waf configure build --prefix=/usr && sudo ./waf install
 sudo rm -rf /usr/lib/python3.6/site-packages/hamster
 sudo mv /usr/lib/python2.7/site-packages/hamster /usr/lib/python3.6/site-packages/
-```
-
-
-*[README from the original repo below]*
-
-**IMPORTANT**
-Project Hamster is undergoing a period of major transition. Unless someone
-steps up to the task, this repository will remain unmaintained as the
-majority of our resources are directed to a rewrite (repositories: 
-``hamster-lib/dbus/cli/gtk``). Whilst you may leave bug reports and feature
-request with the issue tracker, please be warned that fixes at the current
-codebase will most likely stay unfixed and PR unmerged. Feature request will
-be reevaluated once the new codebase takes though.
-
-## Installation
-
-You can use the usually stable `master` or [download stable releases](https://github.com/projecthamster/hamster/releases).
-
-#### Dependencies
-
-Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus`
-
-RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
-
-#### Building
-
-```bash
-./waf configure build --prefix=/usr
-sudo ./waf install
-```
-
-If you upgraded from an existing installation make sure to kill the running
-daemons:
-
-```bash
-pkill -f hamster-service
-pkill -f hamster-windows-service
 ```
 
 Now restart your panels/docks and you should be able to add Hamster!
@@ -98,10 +84,16 @@ sudo ./waf uninstall
 
 ## Contributing
 
+**IMPORTANT**
+Project Hamster is undergoing a period of major transition.
+The main effort should go to the rewrite (repositories: `hamster-lib/dbus/cli/gtk`).
+[`hamster-gtk`](https://github.com/projecthamster/hamster-gtk) is a good starting point.
+
+The legacy code is hard to maintain, so changes should be minimal and straightforward
+to have a chance of being accepted.
+
 1. [Fork](https://github.com/projecthamster/hamster/fork) this project
 2. Create a topic branch - `git checkout -b my_branch`
 3. Push to your branch - `git push origin my_branch`
 4. Submit a [Pull Request](https://github.com/projecthamster/hamster/pulls) with your branch
 5. That's it!
-
-Also check out our [mailing list](http://lists.denkeninechtzeit.net/listinfo.cgi/hamster-dev-denkeninechtzeit.net) for technical discussions.
