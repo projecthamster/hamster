@@ -1,4 +1,13 @@
 ===============
+Version 2.1.1
+===============
+Migration to python3
+and minor usability fixes
+
+More details by cloning and using the following command:
+gitk --no-merges v2.0-rc1...v2.1.1
+
+===============
 Version 2.0
 ===============
  This release marks the transition to Gtk3, and includes all the other
