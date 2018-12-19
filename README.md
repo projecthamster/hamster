@@ -38,11 +38,13 @@ pkill -f hamster-windows-service
 
 #### Dependencies
 
+openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
+
+*Debian and RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
+
 Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus python-gi-cairo`
 
 RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
-
-openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
 
 
 #### Trying the development version
