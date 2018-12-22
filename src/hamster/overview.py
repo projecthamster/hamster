@@ -202,6 +202,8 @@ class HorizontalBarChart(graphics.Sprite):
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
+        self.layout.set_width(100 * pango.SCALE)
+        self.layout.set_ellipsize(pango.EllipsizeMode.END)
         self.layout.set_markup("Hamster") # dummy
         self.label_height = self.layout.get_pixel_size()[1]
 
