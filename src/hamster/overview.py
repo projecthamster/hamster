@@ -203,6 +203,11 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
         self.layout.set_markup("Hamster") # dummy
+        # ellipsize the middle because depending on the use case,
+        # the distinctive information can be either at the beginning or the end.
+        self.layout.set_ellipsize(pango.EllipsizeMode.MIDDLE)
+        self.layout.set_justify(True)
+        self.layout.set_alignment(pango.Alignment.RIGHT)
         self.label_height = self.layout.get_pixel_size()[1]
 
         self._max = dt.timedelta(0)
@@ -217,22 +222,24 @@ class HorizontalBarChart(graphics.Sprite):
         g = graphics.Graphics(context)
         g.save_context()
         g.translate(self.x, self.y)
-
+        # arbitrary 3/4 total width for label, 1/4 for histogram
+        hist_width = self.alloc_w // 4;
+        margin = 10  # pixels
+        label_width = self.alloc_w - hist_width - margin
+        self.layout.set_width(label_width * pango.SCALE)
+        label_h = self.label_height
+        bar_start_x = label_width + margin
         for i, (label, value) in enumerate(self.values):
             g.set_color("#333")
             duration_str = stuff.format_duration(value, human=False)
-            markup = stuff.escape_pango('{}, {}'.format(label, duration_str))
-            self.layout.set_markup(markup)
-            label_w, label_h = self.layout.get_pixel_size()
-
-            bar_start_x = 150  # pixels
-            margin = 10  # pixels
+            markup_label = stuff.escape_pango(str(label))
+            markup_duration = stuff.escape_pango(duration_str)
+            self.layout.set_markup("{}, <i>{}</i>".format(markup_label, markup_duration))
             y = int(i * label_h * 1.5)
-            g.move_to(bar_start_x - margin - label_w, y)
+            g.move_to(0, y)
             pangocairo.show_layout(context, self.layout)
-
             if self._max > dt.timedelta(0):
-                w = ceil((self.alloc_w - bar_start_x) * value.total_seconds() /
+                w = ceil(hist_width * value.total_seconds() /
                          self._max.total_seconds())
             else:
                 w = 1
