@@ -333,15 +333,15 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 hover_day = rec
                 break
 
+        if hover_day != self.hover_day:
+            self.hover_day = hover_day
+            self.redraw()
+
         if self.hover_day:
             for fact in self.hover_day.get('facts', []):
                 if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
                     hover_fact = fact
                     break
-
-        if hover_day != self.hover_day:
-            self.hover_day = hover_day
-            self.redraw()
 
         if hover_fact != self.hover_fact:
             self.hover_fact = hover_fact
