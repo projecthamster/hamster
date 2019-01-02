@@ -190,10 +190,8 @@ class Fact(object):
         return "%s %s" % (datetime, name)
 
 
-    def __str__(self):
-        return self.serialized_time(prepend_date=True)
-
-
+    def __repr__(self):
+        return self.serialized(prepend_date=True)
 
 
 def parse_fact(text, phase=None, res=None, date=None):
