@@ -291,7 +291,8 @@ def parse_fact(text, phase=None, res=None, date=None):
             tags.append(tag)
             # strip the matched string (including #)
             remaining_text = remaining_text[:m.start()]
-        res["tags"] = tags
+        # put tags back in input order
+        res["tags"] = list(reversed(tags))
         return parse_fact(remaining_text, "activity", res, date)
 
     if "activity" in phases:
