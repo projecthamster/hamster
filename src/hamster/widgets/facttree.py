@@ -257,7 +257,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def on_mouse_down(self, scene, event):
         self.grab_focus()
         if self.hover_fact:
-            self.set_current_fact(self.facts.index(self.hover_fact))
+            if self.hover_fact == self.current_fact:
+                self.unset_current_fact()
+            else:
+                self.set_current_fact(self.facts.index(self.hover_fact))
 
 
     def activate_row(self, day, fact):
@@ -313,6 +316,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.on_scroll()
 
+    def unset_current_fact(self):
+        """Deselect fact."""
+        self.current_fact = None
+        self.on_scroll()
 
     def get_visible_range(self):
         start, end = (bisect.bisect(self.row_positions, self.y) - 1,
