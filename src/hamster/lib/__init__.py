@@ -138,7 +138,6 @@ class Fact(object):
             'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 if self.delta else "" #duration in seconds
         }
 
-
     @property
     def date(self):
         """hamster day, determined from start_time.
@@ -171,7 +170,6 @@ class Fact(object):
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
-
     def serialized_time(self, prepend_date=True):
         time = ""
         if self.start_time:
@@ -182,18 +180,14 @@ class Fact(object):
             time = "%s-%s" % (time, self.end_time.strftime(TIME_FMT))
         return time
 
-
     def serialized(self, prepend_date=True):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
         datetime = self.serialized_time(prepend_date)
         return "%s %s" % (datetime, name)
 
-
-    def __str__(self):
-        return self.serialized_time(prepend_date=True)
-
-
+    def __repr__(self):
+        return self.serialized(prepend_date=True)
 
 
 def parse_fact(text, phase=None, res=None, date=None):
@@ -293,7 +287,8 @@ def parse_fact(text, phase=None, res=None, date=None):
             tags.append(tag)
             # strip the matched string (including #)
             remaining_text = remaining_text[:m.start()]
-        res["tags"] = tags
+        # put tags back in input order
+        res["tags"] = list(reversed(tags))
         return parse_fact(remaining_text, "activity", res, date)
 
     if "activity" in phases:
