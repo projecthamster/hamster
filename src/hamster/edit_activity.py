@@ -36,7 +36,7 @@ class CustomFactController(gobject.GObject):
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self,  parent=None, fact_date=None, fact_id=None):
+    def __init__(self,  parent=None, fact_id=None):
         gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
@@ -51,22 +51,18 @@ class CustomFactController(gobject.GObject):
 
         self.day_start = conf.day_start
 
-        self.date = fact_date
-        if not self.date:
-            self.date = datetime_to_hamsterday(dt.datetime.now())
-
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.activity.grab_focus()
         if fact_id:
             fact = runtime.storage.get_fact(fact_id)
+            self.date = fact.date
             self.activity.original_fact = fact
             label = fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
-
 
             buf = gtk.TextBuffer()
             buf.set_text(fact.description or "")
@@ -74,8 +70,8 @@ class CustomFactController(gobject.GObject):
 
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
-
         else:
+            self.date = datetime_to_hamsterday(dt.datetime.now())
             self.get_widget("delete_button").set_sensitive(False)
 
 

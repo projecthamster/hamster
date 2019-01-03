@@ -504,7 +504,7 @@ class Overview(Controller):
         dialogs.edit.show(self)
 
     def on_row_activated(self, tree, day, fact):
-        dialogs.edit.show(self, fact_date=fact.date, fact_id=fact.id)
+        dialogs.edit.show(self, fact_id=fact.id)
 
     def on_row_delete_called(self, tree, fact):
         self.storage.remove_fact(fact.id)
