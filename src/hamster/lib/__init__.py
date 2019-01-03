@@ -137,6 +137,10 @@ class Fact(object):
             'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
 
+    def copy(self, **kwds):
+        """Return an independent copy, with overrides as keyword arguments."""
+        return Fact(initial_fact=self, **kwds)
+
     @property
     def date(self):
         """hamster day, determined from start_time.
