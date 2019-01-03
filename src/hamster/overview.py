@@ -501,7 +501,7 @@ class Overview(Controller):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):
-        dialogs.edit.show(self)
+        dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
 
     def on_row_activated(self, tree, day, fact):
         dialogs.edit.show(self, fact_id=fact.id)
