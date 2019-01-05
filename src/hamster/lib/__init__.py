@@ -87,7 +87,9 @@ class Fact(object):
         initial_fact (Fact or str): optional starting point.
                                     This is the same as calling
                                     Fact(str(initial_fact), ...)
-
+        id (int): id in the database.
+                  Should be used with extreme caution, knowing exactly why.
+                  (only for very specific direct database read/write)
         """
 
         # Previously the "activity" argument could only be a string,
@@ -194,6 +196,9 @@ class Fact(object):
         name = self.serialized_name()
         datetime = self.serialized_time(prepend_date)
         return "%s %s" % (datetime, name)
+
+    def __eq__(self, other):
+        return other and self.id == other.id
 
     def __repr__(self):
         return self.serialized(prepend_date=True)
