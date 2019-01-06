@@ -160,11 +160,10 @@ class TSVWriter(ReportWriter):
         self.csv_writer.writerow([h for h in headers])
 
     def _write_fact(self, fact):
-        fact.delta = stuff.duration_minutes(fact.delta)
         self.csv_writer.writerow([fact.activity,
                                   fact.start_time,
                                   fact.end_time,
-                                  fact.delta,
+                                  str(stuff.duration_minutes(fact.delta)),
                                   fact.category,
                                   fact.description,
                                   ", ".join(fact.tags)])

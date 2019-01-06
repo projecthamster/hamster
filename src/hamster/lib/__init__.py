@@ -70,7 +70,7 @@ def figure_time(str_time):
 
 class Fact(object):
     def __init__(self, activity="", category = "", description = "", tags = "",
-                 start_time = None, end_time = None, id = None, delta = None,
+                 start_time = None, end_time = None, id = None,
                  date = None, activity_id = None, initial_fact=None):
         """Homogeneous chunk of activity.
         The category, description and tags can be either passed in explicitly
@@ -108,7 +108,6 @@ class Fact(object):
         self.end_time = None
         self.id = id
         self.ponies = False
-        self.delta = delta
         self.activity_id = activity_id
 
         phase = "start_time" if date else "date"
@@ -135,7 +134,7 @@ class Fact(object):
             'date': calendar.timegm(date.timetuple()) if date else "",
             'start_time': self.start_time if isinstance(self.start_time, str) else calendar.timegm(self.start_time.timetuple()),
             'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
-            'delta': self.delta.seconds + self.delta.days * 24 * 60 * 60 if self.delta else "" #duration in seconds
+            'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
 
     @property
@@ -156,6 +155,12 @@ class Fact(object):
             self.start_time = hamsterday_time_to_datetime(value, self.start_time.time())
         if self.end_time:
             self.end_time = hamsterday_time_to_datetime(value, self.end_time.time())
+
+    @property
+    def delta(self):
+        """Duration (datetime.timedelta)."""
+        end_time = self.end_time if self.end_time else dt.datetime.now()
+        return end_time - self.start_time
 
     def serialized_name(self):
         res = self.activity
