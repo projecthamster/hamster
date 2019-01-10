@@ -83,17 +83,8 @@ class ReportWriter(object):
     def write_report(self, facts):
         try:
             for fact in facts:
-                fact.activity= fact.activity
                 fact.description = (fact.description or "")
                 fact.category = (fact.category or _("Unsorted"))
-
-                if self.datetime_format:
-                    fact.start_time = fact.start_time.strftime(self.datetime_format)
-
-                    if fact.end_time:
-                        fact.end_time = fact.end_time.strftime(self.datetime_format)
-                    else:
-                        fact.end_time = ""
 
                 self._write_fact(fact)
 
