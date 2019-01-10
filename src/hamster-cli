@@ -215,7 +215,7 @@ class HamsterClient(object):
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
         facts = self.storage.get_facts(start_time, end_time)
 
-        writer = reports.simple(facts, start_time, end_time, export_format)
+        writer = reports.simple(facts, start_time.date(), end_time.date(), export_format)
         print(writer.export())
 
 
