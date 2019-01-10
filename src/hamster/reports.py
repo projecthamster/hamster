@@ -75,11 +75,10 @@ def simple(facts, start_date, end_date, format, path = None):
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        self.file = open(path, "w") if path else codecs.getwriter("utf8")(StringIO())
+        # if path is empty or None, print to stdout
+        self.file = open(path, "w") if path else StringIO()
+        self.path = path
         self.datetime_format = datetime_format
-
-    def export(self):
-        return self.file.getvalue()
 
     def write_report(self, facts):
         try:
@@ -100,8 +99,10 @@ class ReportWriter(object):
 
             self._finish(facts)
         finally:
-            if isinstance(self.file, IOBase):
-                self.file.close()
+            if not self.path:
+                # print the full report to stdout
+                print(self.file.getvalue())
+            self.file.close()
 
     def _start(self, facts):
         raise NotImplementedError
@@ -295,7 +296,6 @@ class HTMLWriter(ReportWriter):
                         C_("html report","%b %d, %Y"))
             date_facts.append([str_date, by_date.get(date, [])])
             date += dt.timedelta(days=1)
-
 
         data = dict(
             title = self.title,

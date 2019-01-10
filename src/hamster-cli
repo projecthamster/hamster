@@ -216,7 +216,6 @@ class HamsterClient(object):
         facts = self.storage.get_facts(start_time, end_time)
 
         writer = reports.simple(facts, start_time.date(), end_time.date(), export_format)
-        print(writer.export())
 
 
     def _activities(self, search=""):
