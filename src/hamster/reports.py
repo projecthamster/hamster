@@ -176,8 +176,8 @@ class XMLWriter(ReportWriter):
     def _write_fact(self, fact):
         activity = self.doc.createElement("activity")
         activity.setAttribute("name", fact.activity)
-        activity.setAttribute("start_time", fact.start_time)
-        activity.setAttribute("end_time", fact.end_time)
+        activity.setAttribute("start_time", str(fact.start_time))
+        activity.setAttribute("end_time", str(fact.end_time))
         activity.setAttribute("duration_minutes", str(stuff.duration_minutes(fact.delta)))
         activity.setAttribute("category", fact.category)
         activity.setAttribute("description", fact.description)
