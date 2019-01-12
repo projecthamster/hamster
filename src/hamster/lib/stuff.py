@@ -172,7 +172,7 @@ def duration_minutes(duration):
 
         return duration_minutes(res)
     elif isinstance(duration, dt.timedelta):
-        return duration.seconds / 60 + duration.days * 24 * 60
+        return duration.total_seconds() / 60
     else:
         return duration
 

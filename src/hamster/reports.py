@@ -28,6 +28,7 @@ import itertools
 import re
 import codecs
 from string import Template
+from textwrap import dedent
 
 from hamster.lib.configuration import runtime
 from hamster.lib import stuff, trophies
@@ -75,33 +76,25 @@ def simple(facts, start_date, end_date, format, path = None):
 class ReportWriter(object):
     #a tiny bit better than repeating the code all the time
     def __init__(self, path = None, datetime_format = "%Y-%m-%d %H:%M:%S"):
-        self.file = open(path, "w") if path else codecs.getwriter("utf8")(StringIO())
+        # if path is empty or None, print to stdout
+        self.file = open(path, "w") if path else StringIO()
+        self.path = path
         self.datetime_format = datetime_format
-
-    def export(self):
-        return self.file.getvalue()
 
     def write_report(self, facts):
         try:
             for fact in facts:
-                fact.activity= fact.activity
                 fact.description = (fact.description or "")
                 fact.category = (fact.category or _("Unsorted"))
-
-                if self.datetime_format:
-                    fact.start_time = fact.start_time.strftime(self.datetime_format)
-
-                    if fact.end_time:
-                        fact.end_time = fact.end_time.strftime(self.datetime_format)
-                    else:
-                        fact.end_time = ""
 
                 self._write_fact(fact)
 
             self._finish(facts)
         finally:
-            if isinstance(self.file, IOBase):
-                self.file.close()
+            if not self.path:
+                # print the full report to stdout
+                print(self.file.getvalue())
+            self.file.close()
 
     def _start(self, facts):
         raise NotImplementedError
@@ -111,6 +104,7 @@ class ReportWriter(object):
 
     def _finish(self, facts):
         raise NotImplementedError
+
 
 class ICalWriter(ReportWriter):
     """a lame ical writer, could not be bothered with finding a library"""
@@ -126,17 +120,20 @@ class ICalWriter(ReportWriter):
         if fact.category == _("Unsorted"):
             fact.category = None
 
-        self.file.write("""BEGIN:VEVENT
-CATEGORIES:%(category)s
-DTSTART:%(start_time)s
-DTEND:%(end_time)s
-SUMMARY:%(activity)s
-DESCRIPTION:%(description)s
-END:VEVENT
-""" % dict(fact))
+        event_str = f"""\
+                     BEGIN:VEVENT
+                     CATEGORIES:{fact.category}
+                     DTSTART:{fact.start_time}
+                     DTEND:{fact.end_time}
+                     SUMMARY:{fact.activity}
+                     DESCRIPTION:{fact.description}
+                     END:VEVENT
+                     """
+        self.file.write(dedent(event_str))
 
     def _finish(self, facts):
         self.file.write("END:VCALENDAR\n")
+
 
 class TSVWriter(ReportWriter):
     def __init__(self, path):
@@ -160,11 +157,10 @@ class TSVWriter(ReportWriter):
         self.csv_writer.writerow([h for h in headers])
 
     def _write_fact(self, fact):
-        fact.delta = stuff.duration_minutes(fact.delta)
         self.csv_writer.writerow([fact.activity,
                                   fact.start_time,
                                   fact.end_time,
-                                  fact.delta,
+                                  str(stuff.duration_minutes(fact.delta)),
                                   fact.category,
                                   fact.description,
                                   ", ".join(fact.tags)])
@@ -180,8 +176,8 @@ class XMLWriter(ReportWriter):
     def _write_fact(self, fact):
         activity = self.doc.createElement("activity")
         activity.setAttribute("name", fact.activity)
-        activity.setAttribute("start_time", fact.start_time)
-        activity.setAttribute("end_time", fact.end_time)
+        activity.setAttribute("start_time", str(fact.start_time))
+        activity.setAttribute("end_time", str(fact.end_time))
         activity.setAttribute("duration_minutes", str(stuff.duration_minutes(fact.delta)))
         activity.setAttribute("category", fact.category)
         activity.setAttribute("description", fact.description)
@@ -296,7 +292,6 @@ class HTMLWriter(ReportWriter):
                         C_("html report","%b %d, %Y"))
             date_facts.append([str_date, by_date.get(date, [])])
             date += dt.timedelta(days=1)
-
 
         data = dict(
             title = self.title,
