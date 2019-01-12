@@ -110,20 +110,33 @@ class Storage(gobject.GObject):
         """
         return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
 
-    def get_facts(self, date, end_date = None, search_terms = ""):
-        """Returns facts for the time span matching the optional filter criteria.
-           In search terms comma (",") translates to boolean OR and space (" ")
-           to boolean AND.
-           Filter is applied to tags, categories, activity names and description
-        """
+    def _get_facts(self, date, end_date=None, search_terms=""):
         date = timegm(date.timetuple())
         end_date = end_date or 0
         if end_date:
             end_date = timegm(end_date.timetuple())
-
         return [from_dbus_fact(fact) for fact in self.conn.GetFacts(date,
                                                                     end_date,
                                                                     search_terms)]
+
+    def get_facts(self, date, end_date=None, search_terms="", ongoing_days=0):
+        """Returns facts for the time span matching the optional filter criteria.
+           In search terms comma (",") translates to boolean OR and space (" ")
+           to boolean AND.
+           Filter is applied to tags, categories, activity names and description
+           ongoing_days (int): look into the last `ongoing_days` days
+                               for still ongoing activities
+        """
+        facts = []
+        if ongoing_days:
+            # look for still ongoing activities
+            earlier_start = date - dt.timedelta(days=ongoing_days)
+            earlier_end = date - dt.timedelta(days=1)
+            earlier_facts = self._get_facts(earlier_start, earlier_end, search_terms=search_terms)
+            facts.extend(fact for fact in earlier_facts if not fact.end_time)
+        # add facts between date and end_date
+        facts.extend(self._get_facts(date, end_date, search_terms=search_terms))
+        return facts
 
     def get_activities(self, search = ""):
         """returns list of activities name matching search criteria.

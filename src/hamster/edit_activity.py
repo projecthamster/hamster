@@ -92,7 +92,7 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
 
     def draw_preview(self, start_time, end_time=None):
-        day_facts = runtime.storage.get_facts(self.date)
+        day_facts = runtime.storage.get_facts(self.date, ongoing_days=31)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
 
