@@ -28,6 +28,7 @@ import itertools
 import re
 import codecs
 from string import Template
+from textwrap import dedent
 
 from hamster.lib.configuration import runtime
 from hamster.lib import stuff, trophies
@@ -104,6 +105,7 @@ class ReportWriter(object):
     def _finish(self, facts):
         raise NotImplementedError
 
+
 class ICalWriter(ReportWriter):
     """a lame ical writer, could not be bothered with finding a library"""
     def __init__(self, path):
@@ -118,17 +120,20 @@ class ICalWriter(ReportWriter):
         if fact.category == _("Unsorted"):
             fact.category = None
 
-        self.file.write("""BEGIN:VEVENT
-CATEGORIES:%(category)s
-DTSTART:%(start_time)s
-DTEND:%(end_time)s
-SUMMARY:%(activity)s
-DESCRIPTION:%(description)s
-END:VEVENT
-""" % dict(fact))
+        event_str = f"""\
+                     BEGIN:VEVENT
+                     CATEGORIES:{fact.category}
+                     DTSTART:{fact.start_time}
+                     DTEND:{fact.end_time}
+                     SUMMARY:{fact.activity}
+                     DESCRIPTION:{fact.description}
+                     END:VEVENT
+                     """
+        self.file.write(dedent(event_str))
 
     def _finish(self, facts):
         self.file.write("END:VCALENDAR\n")
+
 
 class TSVWriter(ReportWriter):
     def __init__(self, path):
