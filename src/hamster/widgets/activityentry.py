@@ -393,13 +393,13 @@ class ActivityEntry(gtk.Entry):
             # editing an existing fact
             if self.original_fact.end_time is None:
                 description = "stop now"
-
-                variant_fact = Fact(initial_fact=self.original_fact, end_time=now)
+                variant_fact = self.original_fact.copy()
+                variant_fact.end_time = now
             else:
                 # FIXME: that one should be available only for the last entry
                 description = "keep up (caveat: is it the last entry ?)"
                 # Do not use Fact(..., end_time=None): it would be a no-op
-                variant_fact = Fact(initial_fact=self.original_fact)
+                variant_fact = self.original_fact.copy()
                 variant_fact.end_time = None
             variant = variant_fact.serialized(prepend_date=False)
             variants.append((description, variant))
