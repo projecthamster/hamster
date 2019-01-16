@@ -121,9 +121,12 @@ class CustomFactController(gobject.GObject):
 
 
     def localized_fact(self):
-        """makes sure fact is in our date"""
+        """Make sure fact has the correct start_time."""
         fact = Fact(self.activity.get_text())
-        fact.date = self.date
+        if fact.start_time:
+            fact.date = self.date
+        else:
+            fact.start_time = dt.datetime.now()
         return fact
 
 
