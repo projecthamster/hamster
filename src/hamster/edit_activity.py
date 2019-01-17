@@ -36,13 +36,14 @@ class CustomFactController(gobject.GObject):
         "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self,  parent=None, fact_date=None, fact_id=None):
+    def __init__(self,  parent=None, fact_id=None, base_fact=None):
         gobject.GObject.__init__(self)
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
         self.parent = parent
+        # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
         self.activity = widgets.ActivityEntry()
@@ -51,33 +52,42 @@ class CustomFactController(gobject.GObject):
 
         self.day_start = conf.day_start
 
-        self.date = fact_date
-        if not self.date:
-            self.date = datetime_to_hamsterday(dt.datetime.now())
-
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.activity.grab_focus()
         if fact_id:
+            # editing
             fact = runtime.storage.get_fact(fact_id)
-            self.activity.original_fact = fact
-            label = fact.serialized(prepend_date=False)
-            with self.activity.handler_block(self.activity.checker):
-                self.activity.set_text(label)
-                self.activity.select_region(len(label) - len(fact.serialized_name()), -1)
-
-
-            buf = gtk.TextBuffer()
-            buf.set_text(fact.description or "")
-            self.get_widget('description').set_buffer(buf)
-
+            self.date = fact.date
+            original_fact = fact
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
-
         else:
+            self.date = datetime_to_hamsterday(dt.datetime.now())
             self.get_widget("delete_button").set_sensitive(False)
+            if base_fact:
+                # cloning
+                original_fact = base_fact.copy()
+                # start running now.
+                # Do not try to pass end_time=None to copy(), above;
+                # it would be discarded.
+                original_fact.start_time = dt.datetime.now()
+                original_fact.end_time = None
+            else:
+                original_fact = None
 
+        if original_fact:
+            label = original_fact.serialized(prepend_date=False)
+            with self.activity.handler_block(self.activity.checker):
+                self.activity.set_text(label)
+                time_len = len(label) - len(original_fact.serialized_name())
+                self.activity.select_region(time_len, -1)
+            buf = gtk.TextBuffer()
+            buf.set_text(original_fact.description or "")
+            self.get_widget('description').set_buffer(buf)
+
+        self.activity.original_fact = original_fact
 
         self._gui.connect_signals(self)
         self.validate_fields()
@@ -92,7 +102,7 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
 
     def draw_preview(self, start_time, end_time=None):
-        day_facts = runtime.storage.get_facts(self.date)
+        day_facts = runtime.storage.get_facts(self.date, ongoing_days=31)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
 

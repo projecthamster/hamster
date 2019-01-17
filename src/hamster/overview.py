@@ -477,8 +477,7 @@ class Overview(Controller):
         search_active = self.header_bar.search_button.get_active()
         search = "" if not search_active else self.filter_entry.get_text()
         search = "%s*" % search if search else "" # search anywhere
-
-        self.facts = self.storage.get_facts(start, end, search_terms=search)
+        self.facts = self.storage.get_facts(start, end, search_terms=search, ongoing_days=31)
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
 
@@ -502,10 +501,10 @@ class Overview(Controller):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):
-        dialogs.edit.show(self)
+        dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
 
     def on_row_activated(self, tree, day, fact):
-        dialogs.edit.show(self, fact_date=fact.date, fact_id=fact.id)
+        dialogs.edit.show(self, fact_id=fact.id)
 
     def on_row_delete_called(self, tree, fact):
         self.storage.remove_fact(fact.id)

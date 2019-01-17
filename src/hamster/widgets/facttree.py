@@ -257,7 +257,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def on_mouse_down(self, scene, event):
         self.grab_focus()
         if self.hover_fact:
-            self.set_current_fact(self.facts.index(self.hover_fact))
+            if self.hover_fact == self.current_fact:
+                self.unset_current_fact()
+            else:
+                self.set_current_fact(self.hover_fact)
 
 
     def activate_row(self, day, fact):
@@ -273,12 +276,20 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
     def on_key_press(self, scene, event):
         if event.keyval == gdk.KEY_Up:
-            idx = self.facts.index(self.current_fact) if self.current_fact else 1
-            self.set_current_fact(idx - 1)
+            if self.current_fact:
+                idx = max(0, self.facts.index(self.current_fact) - 1)
+            else:
+                # enter from below
+                idx = len(self.facts) - 1
+            self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Down:
-            idx = self.facts.index(self.current_fact) if self.current_fact else -1
-            self.set_current_fact(idx + 1)
+            if self.current_fact:
+                idx = min(len(self.facts) - 1, self.facts.index(self.current_fact) + 1)
+            else:
+                # enter from top
+                idx = 0
+            self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Page_Down:
             self.y += self.height * 0.8
@@ -289,10 +300,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.on_scroll()
 
         elif event.keyval == gdk.KEY_Home:
-            self.set_current_fact(0)
+            self.set_current_fact(self.facts[0])
 
         elif event.keyval == gdk.KEY_End:
-            self.set_current_fact(len(self.facts) - 1)
+            self.set_current_fact(self.facts[-1])
 
         elif event.keyval == gdk.KEY_Return:
             self.activate_row(self.hover_day, self.current_fact)
@@ -301,9 +312,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.delete_row(self.current_fact)
 
 
-    def set_current_fact(self, idx):
-        idx = max(0, min(len(self.facts) - 1, idx))
-        fact = self.facts[idx]
+    def set_current_fact(self, fact):
         self.current_fact = fact
 
         if fact.y < self.y:
@@ -313,6 +322,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.on_scroll()
 
+    def unset_current_fact(self):
+        """Deselect fact."""
+        self.current_fact = None
+        self.on_scroll()
 
     def get_visible_range(self):
         start, end = (bisect.bisect(self.row_positions, self.y) - 1,
@@ -333,17 +346,15 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 hover_day = rec
                 break
 
-        blank_day = hover_day and not hover_day.get('facts')
+        if hover_day != self.hover_day:
+            self.hover_day = hover_day
+            self.redraw()
 
         if self.hover_day:
             for fact in self.hover_day.get('facts', []):
                 if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
                     hover_fact = fact
                     break
-
-        if hover_day != self.hover_day:
-            self.hover_day = hover_day
-            self.redraw()
 
         if hover_fact != self.hover_fact:
             self.hover_fact = hover_fact
@@ -366,8 +377,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
     def set_facts(self, facts):
-        current_fact, current_date = self.current_fact, self.hover_day
-
         self.y = 0
         self.hover_fact = None
         if self.vadjustment:
@@ -375,10 +384,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         if facts:
             start, end = facts[0].date, facts[-1].date
-            self.current_fact = facts[0]
         else:
             start = end = dt.datetime.now()
-            self.current_fact = None
 
         by_date = defaultdict(list)
         for fact in facts:
@@ -394,20 +401,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.set_row_heights()
 
-        if self.height:
-            if current_fact:
-                fact_ids = [fact.id for fact in facts]
-                if current_fact.id in fact_ids:
-                    self.set_current_fact(fact_ids.index(current_fact.id))
-
-            elif current_date:
-                for i, fact in enumerate(facts):
-                    if fact.date == current_date:
-                        self.set_current_fact(i)
-                        break
-
+        if self.current_fact not in facts:
+            # will also trigger an on_scroll
+            self.unset_current_fact()
+        else:
             self.on_scroll()
-
 
     def set_row_heights(self):
         """
@@ -466,6 +464,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
     def on_scroll(self, scene=None, event=None):
+        if not self.height:
+            return
         y_pos = self.y
         direction = 0
         if event and event.direction == gdk.ScrollDirection.UP:
@@ -539,7 +539,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
             g.translate(105, 0)
             for fact in rec['facts']:
-                self.fact_row.show(g, colors, fact, fact==self.current_fact)
+                self.fact_row.show(g, colors, fact, fact == self.current_fact)
                 g.translate(0, self.fact_row.height(fact))
 
 
