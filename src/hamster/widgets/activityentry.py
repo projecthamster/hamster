@@ -229,8 +229,6 @@ class ActivityEntry(gtk.Entry):
 
         with self.complete_tree.handler_block(self.tree_checker):
             self.show_suggestions(text)
-            if self.complete_tree.rows:
-                self.complete_tree.set_current_row(0)
 
         if self.ignore_stroke:
             self.ignore_stroke = False
