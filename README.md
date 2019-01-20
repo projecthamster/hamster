@@ -11,8 +11,8 @@ but migrated to `Gtk3` and `python3`, and without python-gconf dependency.
 This allowed to use hamster on platforms (such as openSUSE Leap-15)
 where 1.04-based versions were completely broken.
 
-With respect to 1.04, lots of the gui ease of use has been lost, especially for tags handling,
-start/restart of activities, and the stats display is minimal now.
+With respect to 1.04, some of the gui ease of use has been lost, especially for tags handling,
+and the stats display is minimal now.
 So if you are happy with your hamster application, upgrade is not recommended yet.
 
 But at least backward compatibility seems good.
