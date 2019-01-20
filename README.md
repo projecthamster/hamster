@@ -34,6 +34,8 @@ daemons:
 ```bash
 pkill -f hamster-service
 pkill -f hamster-windows-service
+# check (should be empty)
+pgrep -af hamster
 ```
 
 #### Dependencies
@@ -51,8 +53,11 @@ RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
 
 To use the development version (backup `hamster.db` first !):
 ```
-pkill -f hamster-service
-pkill -f hamster-windows-service
+# either
+pgrep -af hamster
+# and kill them one by one
+# or be bold and kill all process with "hamster" in their command line
+pkill -ef hamster
 src/hamster-service &
 src/hamster-windows-service &
 src/hamster-cli
