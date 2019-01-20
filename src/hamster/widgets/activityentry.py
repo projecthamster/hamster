@@ -247,7 +247,10 @@ class ActivityEntry(gtk.Entry):
         self.popup.hide()
 
     def on_icon_press(self, entry, icon, event):
-        self.show_suggestions(self.get_text())
+        if self.popup.get_visible():
+            self.popup.hide()
+        else:
+            self.show_suggestions(self.get_text())
 
     def on_key_press(self, entry, event=None):
         if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
