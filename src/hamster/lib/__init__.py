@@ -198,7 +198,16 @@ class Fact(object):
         return "%s %s" % (datetime, name)
 
     def __eq__(self, other):
-        return other and self.id == other.id
+        return (id(self) == id(other)
+                or (isinstance(other, Fact)
+                    and self.activity == other.activity
+                    and self.category == other.category
+                    and self.description == other.description
+                    and self.end_time == other.end_time
+                    and self.start_time == other.start_time
+                    and self.tags == other.tags
+                   )
+                )
 
     def __repr__(self):
         return self.serialized(prepend_date=True)
