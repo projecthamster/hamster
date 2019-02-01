@@ -254,6 +254,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.connect("on-double-click", self.on_double_click)
 
 
+    @property
+    def current_fact_index(self):
+        """Current fact index in the self.facts list."""
+        facts_ids = [fact.id for fact in self.facts]
+        return facts_ids.index(self.current_fact.id)
+
     def on_mouse_down(self, scene, event):
         self.grab_focus()
         if self.hover_fact:
@@ -277,7 +283,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def on_key_press(self, scene, event):
         if event.keyval == gdk.KEY_Up:
             if self.current_fact:
-                idx = max(0, self.facts.index(self.current_fact) - 1)
+                idx = max(0, self.current_fact_index - 1)
             else:
                 # enter from below
                 idx = len(self.facts) - 1
@@ -285,7 +291,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         elif event.keyval == gdk.KEY_Down:
             if self.current_fact:
-                idx = min(len(self.facts) - 1, self.facts.index(self.current_fact) + 1)
+                idx = min(len(self.facts) - 1, self.current_fact_index + 1)
             else:
                 # enter from top
                 idx = 0
