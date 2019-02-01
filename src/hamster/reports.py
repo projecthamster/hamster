@@ -284,7 +284,7 @@ class HTMLWriter(ReportWriter):
 
         date_facts = []
         date = min(by_date.keys())
-        while date <= self.end_date:
+        while date <= self.end_date.date():
             str_date = date.strftime(
                         # date column format for each row in HTML report
                         # Using python datetime formatting syntax. See:
