@@ -140,7 +140,11 @@ class Fact(object):
         }
 
     def copy(self, **kwds):
-        """Return an independent copy, with overrides as keyword arguments."""
+        """Return an independent copy, with overrides as keyword arguments.
+
+        By default, only copy user-visible attributes.
+        To also copy the id, use fact.copy(id=fact.id)
+        """
         return Fact(initial_fact=self, **kwds)
 
     @property
