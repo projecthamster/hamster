@@ -393,12 +393,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         if self.vadjustment:
             self.vadjustment.set_value(0)
 
-        # FIXME: should not mix fact.date (hamster day) and datetime.
         if self.facts:
             start = self.facts[0].date
             end = self.facts[-1].date
         else:
-            start = end = dt.datetime.now()
+            start = end = stuff.hamster_today()
 
         by_date = defaultdict(list)
         for fact in self.facts:

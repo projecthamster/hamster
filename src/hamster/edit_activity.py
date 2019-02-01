@@ -28,8 +28,9 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import datetime_to_hamsterday
+from hamster.lib.stuff import hamster_today
 from hamster.lib import Fact
+
 
 class CustomFactController(gobject.GObject):
     __gsignals__ = {
@@ -64,7 +65,7 @@ class CustomFactController(gobject.GObject):
             self.get_widget("save_button").set_label("gtk-save")
             self.window.set_title(_("Update activity"))
         else:
-            self.date = datetime_to_hamsterday(dt.datetime.now())
+            self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # cloning

@@ -46,6 +46,8 @@ except ImportError:
 
 from hamster.lib import Fact
 from hamster.lib import trophies
+from hamster.lib.stuff import hamster_today
+
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -706,7 +708,7 @@ class Storage(storage.Storage):
             # or current time if fact has happened in last 12 hours
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
-            elif (dt.datetime.now().date() == fact["start_time"].date()) or \
+            elif (hamster_today() == fact["start_time"].date()) or \
                  (dt.datetime.now() - fact["start_time"]) <= dt.timedelta(hours=12):
                 fact_end_time = dt.datetime.now().replace(microsecond = 0)
             else:
