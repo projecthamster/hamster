@@ -332,14 +332,14 @@ class HamsterClient(object):
         print("-" * min(row_width, 80))
 
         cats = []
-        total_duration = 0
+        total_duration = dt.timedelta()
         for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
-            cats.append("%s: %s" % (cat, "%.1fh" % (stuff.duration_minutes(duration) / 60.0)))
-            total_duration += duration.total_seconds()
+            cats.append("{}: {}".format(cat, stuff.format_duration(duration)))
+            total_duration += duration
 
         for line in word_wrap(", ".join(cats), 80):
             print(line)
-        print("Total: %s" % ("%.1fh" % (total_duration / 3600.0)))
+        print("Total: ", stuff.format_duration(total_duration))
 
         print()
 
