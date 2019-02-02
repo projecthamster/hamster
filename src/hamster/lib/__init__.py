@@ -264,7 +264,7 @@ def parse_fact(text, phase=None, res=None, date=None):
             date = dt.datetime.strptime(fragment, DATE_FMT).date()
             remaining_text = remove_fragment(text, fragment)
         except ValueError:
-            date = now.date()
+            date = datetime_to_hamsterday(now)
             remaining_text = text
         return parse_fact(remaining_text, "start_time", res, date)
 
