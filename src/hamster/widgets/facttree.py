@@ -254,6 +254,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.connect("on-double-click", self.on_double_click)
 
 
+    @property
+    def current_fact_index(self):
+        """Current fact index in the self.facts list."""
+        facts_ids = [fact.id for fact in self.facts]
+        return facts_ids.index(self.current_fact.id)
+
     def on_mouse_down(self, scene, event):
         self.grab_focus()
         if self.hover_fact:
@@ -277,7 +283,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def on_key_press(self, scene, event):
         if event.keyval == gdk.KEY_Up:
             if self.current_fact:
-                idx = max(0, self.facts.index(self.current_fact) - 1)
+                idx = max(0, self.current_fact_index - 1)
             else:
                 # enter from below
                 idx = len(self.facts) - 1
@@ -285,7 +291,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         elif event.keyval == gdk.KEY_Down:
             if self.current_fact:
-                idx = min(len(self.facts) - 1, self.facts.index(self.current_fact) + 1)
+                idx = min(len(self.facts) - 1, self.current_fact_index + 1)
             else:
                 # enter from top
                 idx = 0
@@ -377,18 +383,24 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
     def set_facts(self, facts):
+        # FactTree adds attributes to its facts. isolate these side effects
+        # copy the id too; most of the checks are based on id here.
+        self.facts = [fact.copy(id=fact.id) for fact in facts]
+        del facts  # make sure facts is not used by inadvertance below.
+
         self.y = 0
         self.hover_fact = None
         if self.vadjustment:
             self.vadjustment.set_value(0)
 
-        if facts:
-            start, end = facts[0].date, facts[-1].date
+        if self.facts:
+            start = self.facts[0].date
+            end = self.facts[-1].date
         else:
-            start = end = dt.datetime.now()
+            start = end = stuff.hamster_today()
 
         by_date = defaultdict(list)
-        for fact in facts:
+        for fact in self.facts:
             by_date[fact.date].append(fact)
 
         days = []
@@ -397,15 +409,16 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             days.append((current_date, by_date[current_date]))
 
         self.days = days
-        self.facts = facts
 
         self.set_row_heights()
 
-        if self.current_fact not in facts:
+        if (self.current_fact
+            and self.current_fact.id in (fact.id for fact in self.facts)
+           ):
+            self.on_scroll()
+        else:
             # will also trigger an on_scroll
             self.unset_current_fact()
-        else:
-            self.on_scroll()
 
     def set_row_heights(self):
         """
@@ -539,7 +552,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
             g.translate(105, 0)
             for fact in rec['facts']:
-                self.fact_row.show(g, colors, fact, fact == self.current_fact)
+                is_selected = (self.current_fact is not None
+                               and fact.id == self.current_fact.id)
+                self.fact_row.show(g, colors, fact, is_selected)
                 g.translate(0, self.fact_row.height(fact))
 
 

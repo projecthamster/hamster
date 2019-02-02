@@ -109,7 +109,36 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(fact_copy.activity, "case")
         self.assertEqual(fact_copy.category, "cat")
         self.assertEqual(fact_copy.description, "description")
-        self.assertEqual(set(fact_copy.tags), set(["bäg", "tag"]))
+        self.assertEqual(fact_copy.tags, ["tag", "bäg"])
+
+    def test_comparison(self):
+        fact1 = Fact("12:25-13:25 case@cat, description #tag #bäg")
+        fact2 = fact1.copy()
+        self.assertEqual(fact1, fact2)
+        fact2 = fact1.copy()
+        fact2.activity = "abcd"
+        self.assertNotEqual(fact1, fact2)
+        fact2 = fact1.copy()
+        fact2.category = "abcd"
+        self.assertNotEqual(fact1, fact2)
+        fact2 = fact1.copy()
+        fact2.description = "abcd"
+        self.assertNotEqual(fact1, fact2)
+        import datetime as dt
+        fact2 = fact1.copy()
+        fact2.start_time = dt.datetime.now()
+        self.assertNotEqual(fact1, fact2)
+        fact2 = fact1.copy()
+        fact2.end_time = dt.datetime.now()
+        self.assertNotEqual(fact1, fact2)
+        # wrong order
+        fact2 = fact1.copy()
+        fact2.tags = ["bäg", "tag"]
+        self.assertNotEqual(fact1, fact2)
+        # correct order
+        fact2 = fact1.copy()
+        fact2.tags = ["tag", "bäg"]
+        self.assertEqual(fact1, fact2)
 
 if __name__ == '__main__':
     unittest.main()

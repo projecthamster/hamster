@@ -1859,7 +1859,7 @@ class Scene(Parent, gtk.DrawingArea):
 
 
     def __setattr__(self, name, val):
-        if self.__dict__.get(name, "hamster_graphics_no_value_really") == val:
+        if self.__dict__.get(name, "hamster_graphics_no_value_really") is val:
             return
 
         if name == '_focus_sprite':

@@ -193,11 +193,12 @@ class RangePick(gtk.ToggleButton):
 
     def on_manual_range_apply_clicked(self, button):
         self.current_range = "manual"
-        cal_date = self.get_widget("start_calendar").get_date()
-        self.start_date = dt.datetime(cal_date[0], cal_date[1] + 1, cal_date[2])
+        # GtkCalendar January is 0, hence the + 1
+        year, month, day = self.get_widget("start_calendar").get_date()
+        self.start_date = dt.date(year, month + 1, day)
 
-        cal_date = self.get_widget("end_calendar").get_date()
-        self.end_date = dt.datetime(cal_date[0], cal_date[1] + 1, cal_date[2])
+        year, month, day = self.get_widget("end_calendar").get_date()
+        self.end_date = dt.date(year, month + 1, day)
 
         # make sure we always have a valid range
         if self.end_date < self.start_date:

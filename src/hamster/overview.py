@@ -66,7 +66,7 @@ class HeaderBar(gtk.HeaderBar):
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
-        self.range_pick = RangePick(dt.datetime.today()) # TODO - use hamster day
+        self.range_pick = RangePick(stuff.hamster_today())
         self.pack_start(self.range_pick)
 
         self.add_activity_button = gtk.Button()
