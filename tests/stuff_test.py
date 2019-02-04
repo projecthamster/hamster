@@ -140,5 +140,17 @@ class TestActivityInputParsing(unittest.TestCase):
         fact2.tags = ["tag", "bäg"]
         self.assertEqual(fact1, fact2)
 
+    def test_decimal_in_activity(self):
+        # cf. issue #270
+        fact = Fact("12:25-13:25 10.0@ABC, Two Words #tag #bäg")
+        self.assertEqual(fact.activity, "10.0")
+        self.assertEqual(fact.category, "ABC")
+        self.assertEqual(fact.description, "Two Words")
+        # should not pick up a time here
+        fact = Fact("10.00@ABC, Two Words #tag #bäg")
+        self.assertEqual(fact.activity, "10.00")
+        self.assertEqual(fact.category, "ABC")
+        self.assertEqual(fact.description, "Two Words")
+
 if __name__ == '__main__':
     unittest.main()
