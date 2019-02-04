@@ -467,7 +467,13 @@ class Overview(Controller):
             if event.keyval == gdk.KEY_f:
                 self.header_bar.search_button.set_active(True)
             elif event.keyval == gdk.KEY_n:
-                dialogs.edit.show(self)
+                self.start_new_fact(clone_selected=False)
+            elif event.keyval == gdk.KEY_r:
+                # Resume/run; clear separation between Ctrl-R and Ctrl-N
+                self.start_new_fact(clone_selected=True, fallback=False)
+            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
+                # same as pressing the + icon
+                self.start_new_fact(clone_selected=True, fallback=True)
 
         if event.keyval == gdk.KEY_Escape:
             self.close_window()
@@ -501,7 +507,7 @@ class Overview(Controller):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):
-        dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
+        self.start_new_fact(clone_selected=True, fallback=True)
 
     def on_row_activated(self, tree, day, fact):
         dialogs.edit.show(self, fact_id=fact.id)
@@ -553,6 +559,18 @@ class Overview(Controller):
         self.report_chooser.connect("report-chosen", on_report_chosen)
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
+
+    def start_new_fact(self, clone_selected=True, fallback=True):
+        """Start now a new fact.
+        clone_selected (bool): whether to start a clone of currently
+            selected fact or to create a new fact from scratch.
+        fallback (bool): if True, fall back to creating from scratch
+                         in case of no selected fact.
+        """
+        if not clone_selected:
+            dialogs.edit.show(self, base_fact=None)
+        elif self.fact_tree.current_fact or fallback:
+            dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
 
     def close_window(self):
         self.window.destroy()
