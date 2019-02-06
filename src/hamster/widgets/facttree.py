@@ -312,7 +312,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.set_current_fact(self.facts[-1])
 
         elif event.keyval == gdk.KEY_Return:
-            self.activate_row(self.hover_day, self.current_fact)
+            if self.current_fact:
+                self.activate_row(self.hover_day, self.current_fact)
 
         elif event.keyval == gdk.KEY_Delete:
             self.delete_row(self.current_fact)
