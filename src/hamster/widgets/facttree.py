@@ -273,8 +273,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.emit("on-activate-row", day, fact)
 
     def delete_row(self, fact):
-        if fact:
-            self.emit("on-delete-called", fact)
+        self.emit("on-delete-called", fact)
 
     def on_double_click(self, scene, event):
         if self.hover_fact:
@@ -316,7 +315,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 self.activate_row(self.hover_day, self.current_fact)
 
         elif event.keyval == gdk.KEY_Delete:
-            self.delete_row(self.current_fact)
+            if self.current_fact:
+                self.delete_row(self.current_fact)
 
 
     def set_current_fact(self, fact):
