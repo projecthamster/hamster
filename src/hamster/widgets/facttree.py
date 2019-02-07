@@ -298,6 +298,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 idx = 0
             self.set_current_fact(self.facts[idx])
 
+        elif event.keyval == gdk.KEY_Home:
+            self.set_current_fact(self.facts[0])
+
+        elif event.keyval == gdk.KEY_End:
+            self.set_current_fact(self.facts[-1])
+
         elif event.keyval == gdk.KEY_Page_Down:
             self.y += self.height * 0.8
             self.on_scroll()
@@ -305,12 +311,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         elif event.keyval == gdk.KEY_Page_Up:
             self.y -= self.height * 0.8
             self.on_scroll()
-
-        elif event.keyval == gdk.KEY_Home:
-            self.set_current_fact(self.facts[0])
-
-        elif event.keyval == gdk.KEY_End:
-            self.set_current_fact(self.facts[-1])
 
         elif event.keyval == gdk.KEY_Return:
             if self.current_fact:
