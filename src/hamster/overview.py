@@ -452,11 +452,13 @@ class Overview(Controller):
                 self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
-            elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
-                                  gdk.KEY_Page_Up, gdk.KEY_Page_Down,
-                                  gdk.KEY_Return):
-                self.fact_tree.on_key_press(self, event)
-                return True
+        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
+                              gdk.KEY_Home, gdk.KEY_End,
+                              gdk.KEY_Page_Up, gdk.KEY_Page_Down,
+                              gdk.KEY_Return, gdk.KEY_Delete):
+            # These keys should work even when fact_tree does not have focus
+            self.fact_tree.on_key_press(self, event)
+            return True  # stop event propagation
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:

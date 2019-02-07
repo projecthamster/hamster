@@ -280,6 +280,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.activate_row(self.hover_day, self.hover_fact)
 
     def on_key_press(self, scene, event):
+        # all keys should appear also in the Overview.on_key_press
+        # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
             if self.current_fact:
                 idx = max(0, self.current_fact_index - 1)
