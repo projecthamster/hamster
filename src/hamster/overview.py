@@ -58,11 +58,11 @@ class HeaderBar(gtk.HeaderBar):
         self.set_show_close_button(True)
 
         box = gtk.Box(False)
-        time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
-        time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
+        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
+        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
 
-        box.add(time_back)
-        box.add(time_forth)
+        box.add(self.time_back)
+        box.add(self.time_forth)
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
@@ -93,8 +93,8 @@ class HeaderBar(gtk.HeaderBar):
         self.system_menu.show_all()
 
 
-        time_back.connect("clicked", self.on_time_back_click)
-        time_forth.connect("clicked", self.on_time_forth_click)
+        self.time_back.connect("clicked", self.on_time_back_click)
+        self.time_forth.connect("clicked", self.on_time_forth_click)
         self.connect("button-press-event", self.on_button_press)
 
     def on_button_press(self, bar, event):
@@ -459,6 +459,12 @@ class Overview(Controller):
             # These keys should work even when fact_tree does not have focus
             self.fact_tree.on_key_press(self, event)
             return True  # stop event propagation
+        elif event.keyval == gdk.KEY_Left:
+            self.header_bar.time_back.emit("clicked")
+            return True
+        elif event.keyval == gdk.KEY_Right:
+            self.header_bar.time_forth.emit("clicked")
+            return True
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:
