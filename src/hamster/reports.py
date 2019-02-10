@@ -120,15 +120,15 @@ class ICalWriter(ReportWriter):
         if fact.category == _("Unsorted"):
             fact.category = None
 
-        event_str = f"""\
-                     BEGIN:VEVENT
-                     CATEGORIES:{fact.category}
-                     DTSTART:{fact.start_time}
-                     DTEND:{fact.end_time}
-                     SUMMARY:{fact.activity}
-                     DESCRIPTION:{fact.description}
-                     END:VEVENT
-                     """
+        event_str = """\
+                    BEGIN:VEVENT
+                    CATEGORIES:{fact.category}
+                    DTSTART:{fact.start_time}
+                    DTEND:{fact.end_time}
+                    SUMMARY:{fact.activity}
+                    DESCRIPTION:{fact.description}
+                    END:VEVENT
+                    """.format(fact=fact)
         self.file.write(dedent(event_str))
 
     def _finish(self, facts):
