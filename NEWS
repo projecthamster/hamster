@@ -1,4 +1,27 @@
 ===============
+Version 2.2.1
+===============
+* Activity can contain decimal numbers.
+* Add total duration to the `hamster list` output.
+* Base Fact comparison on main attributes.
+* Small improvements to suggestions.
+* A selected fact can be resumed (start now a clone)
+  by pressing the `+` button.
+* Facts can be deselected by mouse click.
+* Still ongoing activities are shown,
+  even if they started on a previous day.
+* Several export (reports) fixes.
+* Fact.delta (duration of the fact, as a timedelta)
+  is a read-only property.
+* Tag list keeps the input order.
+* Better format of the stats area.
+
+Thanks to all contributors (either code or feedback) !
+More information by looking for milestone:2.2 or by
+cloning and using the following command:
+gitk v2.1.1...v2.2.1
+
+===============
 Version 2.1.1
 ===============
 Migration to python3
