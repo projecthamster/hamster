@@ -1,4 +1,10 @@
 ===============
+Version 2.2.2
+===============
+* Restore python3 < 3.6 compatibility.
+* Remove a PangoCairo warning.
+
+===============
 Version 2.2.1
 ===============
 * Activity can contain decimal numbers.
