@@ -479,6 +479,8 @@ class Overview(Controller):
             elif event.keyval == gdk.KEY_r:
                 # Resume/run; clear separation between Ctrl-R and Ctrl-N
                 self.start_new_fact(clone_selected=True, fallback=False)
+            elif event.keyval == gdk.KEY_space:
+                self.storage.stop_tracking()
             elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
                 # same as pressing the + icon
                 self.start_new_fact(clone_selected=True, fallback=True)
