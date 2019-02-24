@@ -273,14 +273,15 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.emit("on-activate-row", day, fact)
 
     def delete_row(self, fact):
-        if fact:
-            self.emit("on-delete-called", fact)
+        self.emit("on-delete-called", fact)
 
     def on_double_click(self, scene, event):
         if self.hover_fact:
             self.activate_row(self.hover_day, self.hover_fact)
 
     def on_key_press(self, scene, event):
+        # all keys should appear also in the Overview.on_key_press
+        # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
             if self.current_fact:
                 idx = max(0, self.current_fact_index - 1)
@@ -297,6 +298,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 idx = 0
             self.set_current_fact(self.facts[idx])
 
+        elif event.keyval == gdk.KEY_Home:
+            self.set_current_fact(self.facts[0])
+
+        elif event.keyval == gdk.KEY_End:
+            self.set_current_fact(self.facts[-1])
+
         elif event.keyval == gdk.KEY_Page_Down:
             self.y += self.height * 0.8
             self.on_scroll()
@@ -305,17 +312,13 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.y -= self.height * 0.8
             self.on_scroll()
 
-        elif event.keyval == gdk.KEY_Home:
-            self.set_current_fact(self.facts[0])
-
-        elif event.keyval == gdk.KEY_End:
-            self.set_current_fact(self.facts[-1])
-
         elif event.keyval == gdk.KEY_Return:
-            self.activate_row(self.hover_day, self.current_fact)
+            if self.current_fact:
+                self.activate_row(self.hover_day, self.current_fact)
 
         elif event.keyval == gdk.KEY_Delete:
-            self.delete_row(self.current_fact)
+            if self.current_fact:
+                self.delete_row(self.current_fact)
 
 
     def set_current_fact(self, fact):

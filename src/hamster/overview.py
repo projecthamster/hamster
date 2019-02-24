@@ -58,11 +58,11 @@ class HeaderBar(gtk.HeaderBar):
         self.set_show_close_button(True)
 
         box = gtk.Box(False)
-        time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
-        time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
+        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
+        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
 
-        box.add(time_back)
-        box.add(time_forth)
+        box.add(self.time_back)
+        box.add(self.time_forth)
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
@@ -93,8 +93,8 @@ class HeaderBar(gtk.HeaderBar):
         self.system_menu.show_all()
 
 
-        time_back.connect("clicked", self.on_time_back_click)
-        time_forth.connect("clicked", self.on_time_forth_click)
+        self.time_back.connect("clicked", self.on_time_back_click)
+        self.time_forth.connect("clicked", self.on_time_forth_click)
         self.connect("button-press-event", self.on_button_press)
 
     def on_button_press(self, bar, event):
@@ -452,11 +452,19 @@ class Overview(Controller):
                 self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
-            elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
-                                  gdk.KEY_Page_Up, gdk.KEY_Page_Down,
-                                  gdk.KEY_Return):
-                self.fact_tree.on_key_press(self, event)
-                return True
+        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
+                              gdk.KEY_Home, gdk.KEY_End,
+                              gdk.KEY_Page_Up, gdk.KEY_Page_Down,
+                              gdk.KEY_Return, gdk.KEY_Delete):
+            # These keys should work even when fact_tree does not have focus
+            self.fact_tree.on_key_press(self, event)
+            return True  # stop event propagation
+        elif event.keyval == gdk.KEY_Left:
+            self.header_bar.time_back.emit("clicked")
+            return True
+        elif event.keyval == gdk.KEY_Right:
+            self.header_bar.time_forth.emit("clicked")
+            return True
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:
@@ -467,7 +475,15 @@ class Overview(Controller):
             if event.keyval == gdk.KEY_f:
                 self.header_bar.search_button.set_active(True)
             elif event.keyval == gdk.KEY_n:
-                dialogs.edit.show(self)
+                self.start_new_fact(clone_selected=False)
+            elif event.keyval == gdk.KEY_r:
+                # Resume/run; clear separation between Ctrl-R and Ctrl-N
+                self.start_new_fact(clone_selected=True, fallback=False)
+            elif event.keyval == gdk.KEY_space:
+                self.storage.stop_tracking()
+            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
+                # same as pressing the + icon
+                self.start_new_fact(clone_selected=True, fallback=True)
 
         if event.keyval == gdk.KEY_Escape:
             self.close_window()
@@ -501,7 +517,7 @@ class Overview(Controller):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):
-        dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
+        self.start_new_fact(clone_selected=True, fallback=True)
 
     def on_row_activated(self, tree, day, fact):
         dialogs.edit.show(self, fact_id=fact.id)
@@ -553,6 +569,18 @@ class Overview(Controller):
         self.report_chooser.connect("report-chosen", on_report_chosen)
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
+
+    def start_new_fact(self, clone_selected=True, fallback=True):
+        """Start now a new fact.
+        clone_selected (bool): whether to start a clone of currently
+            selected fact or to create a new fact from scratch.
+        fallback (bool): if True, fall back to creating from scratch
+                         in case of no selected fact.
+        """
+        if not clone_selected:
+            dialogs.edit.show(self, base_fact=None)
+        elif self.fact_tree.current_fact or fallback:
+            dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
 
     def close_window(self):
         self.window.destroy()
