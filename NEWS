@@ -1,4 +1,19 @@
 ===============
+Changes since v2.2.2
+===============
+* Improved keyboard handling:
+  - Ctrl+Space to stop tracking.
+  - Left/Right arrows change date.
+  - Resume: start now a clone of the selected activity.
+    Ctrl-+: clone or fallback to new if none selected.
+            (same as pressing the + button)
+    Ctrl-R: only Resume (clone) an existing fact.
+    Ctrl-N: only new.
+  - Up, down, Home, End, Page-Up, Page-Down, Return
+    work straight from the overview (no need to click).
+  - More info on PR #387.
+
+===============
 Version 2.2.2
 ===============
 * Restore python3 < 3.6 compatibility.
