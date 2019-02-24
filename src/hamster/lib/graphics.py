@@ -120,7 +120,27 @@ class ColorUtils(object):
             return colorsys.hls_to_rgb(hls[0], hls[1] + step, hls[2])
         # returns color darker by step (where step is in range 0..255)
 
+    def mix(self, ca, cb, xb):
+        """Mix colors.
+
+        Args:
+            ca (gdk.RGBA): first color
+            cb (gdk.RGBA): second color
+            xb (float): between 0.0 and 1.0
+
+        Return:
+            gdk.RGBA: linear interpolation between ca and cb,
+                      0 or 1 return the unaltered 1st or 2nd color respectively,
+                      as in CSS.
+        """
+        r = (1 - xb) * ca.red + xb * cb.red
+        g = (1 - xb) * ca.green + xb * cb.green
+        b = (1 - xb) * ca.blue + xb * cb.blue
+        a = (1 - xb) * ca.alpha + xb * cb.alpha
+        return gdk.RGBA(red=r, green=g, blue=b, alpha=a)
+
 Colors = ColorUtils() # this is a static class, so an instance will do
+
 
 def get_gdk_rectangle(x, y, w, h):
     rect = gdk.Rectangle()

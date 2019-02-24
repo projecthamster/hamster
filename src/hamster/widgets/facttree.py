@@ -527,7 +527,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         g.set_line_style(1)
         g.translate(0.5, 0.5)
 
-        g.fill_area(0, 0, 105, self.height, "#dfdfdf")
+        date_bg_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.15)
+        g.fill_area(0, 0, 105, self.height, date_bg_color)
 
 
         y = int(self.y)
