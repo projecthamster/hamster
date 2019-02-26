@@ -300,6 +300,7 @@ class Totals(graphics.Scene):
         self.connect("on-click", self.on_click)
         self.connect("enter-notify-event", self.on_mouse_enter)
         self.connect("leave-notify-event", self.on_mouse_leave)
+        self.connect("style-updated", self.on_style_changed)
 
 
     def set_facts(self, facts):
@@ -364,6 +365,9 @@ class Totals(graphics.Scene):
         self.height_proxy.animate(x=50, delay=0.5, duration=0,
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
+
+    def on_style_changed(self, _):
+        self.instructions_label.color = self._style.get_color(self.get_state())
 
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)
