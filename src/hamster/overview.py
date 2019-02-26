@@ -254,8 +254,7 @@ class Totals(graphics.Scene):
     def __init__(self):
         graphics.Scene.__init__(self)
         self.set_size_request(200, 70)
-        self.category_totals = layout.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                            overflow=pango.EllipsizeMode.END,
+        self.category_totals = layout.Label(overflow=pango.EllipsizeMode.END,
                                             x_align=0,
                                             expand=False)
         self.stacked_bar = StackedBar(height=25, x_align=0, expand=False)
@@ -300,6 +299,7 @@ class Totals(graphics.Scene):
         self.connect("on-click", self.on_click)
         self.connect("enter-notify-event", self.on_mouse_enter)
         self.connect("leave-notify-event", self.on_mouse_leave)
+        self.connect("state-flags-changed", self.on_state_flags_changed)
         self.connect("style-updated", self.on_style_changed)
 
 
@@ -366,8 +366,11 @@ class Totals(graphics.Scene):
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
 
+    def on_state_flags_changed(self, previous_state, _):
+        self.update_colors()
+
     def on_style_changed(self, _):
-        self.instructions_label.color = self._style.get_color(self.get_state())
+        self.update_colors()
 
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)
@@ -379,7 +382,9 @@ class Totals(graphics.Scene):
                      on_update=on_update_dummy,
                      easing=Easing.Expo.ease_out)
 
-
+    def update_colors(self):
+        self.instructions_label.color = self._style.get_color(self.get_state())
+        self.category_totals.color = self._style.get_color(self.get_state())
 
 
 class Overview(Controller):
