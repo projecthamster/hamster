@@ -211,6 +211,7 @@ class HorizontalBarChart(graphics.Sprite):
         self.label_height = self.layout.get_pixel_size()[1]
         # should be updated by the parent
         self.label_color = gdk.RGBA()
+        self.bar_color = gdk.RGBA()
 
         self._max = dt.timedelta(0)
 
@@ -246,7 +247,7 @@ class HorizontalBarChart(graphics.Sprite):
             else:
                 w = 1
             g.rectangle(bar_start_x, y, int(w), int(label_h))
-            g.fill("#999")
+            g.fill(self.bar_color)
 
         g.restore_context()
 
@@ -391,6 +392,11 @@ class Totals(graphics.Scene):
         self.activities_chart.label_color = color
         self.categories_chart.label_color = color
         self.tag_chart.label_color = color
+        bg_color = self._style.get_background_color(self.get_state())
+        bar_color = self.colors.mix(bg_color, color, 0.6)
+        self.activities_chart.bar_color = bar_color
+        self.categories_chart.bar_color = bar_color
+        self.tag_chart.bar_color = bar_color
 
 
 class Overview(Controller):
