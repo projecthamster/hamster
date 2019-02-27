@@ -209,6 +209,8 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout.set_justify(True)
         self.layout.set_alignment(pango.Alignment.RIGHT)
         self.label_height = self.layout.get_pixel_size()[1]
+        # should be updated by the parent
+        self.label_color = gdk.RGBA()
 
         self._max = dt.timedelta(0)
 
@@ -230,7 +232,7 @@ class HorizontalBarChart(graphics.Sprite):
         label_h = self.label_height
         bar_start_x = label_width + margin
         for i, (label, value) in enumerate(self.values):
-            g.set_color("#333")
+            g.set_color(self.label_color)
             duration_str = stuff.format_duration(value, human=False)
             markup_label = stuff.escape_pango(str(label))
             markup_duration = stuff.escape_pango(duration_str)
@@ -383,8 +385,12 @@ class Totals(graphics.Scene):
                      easing=Easing.Expo.ease_out)
 
     def update_colors(self):
-        self.instructions_label.color = self._style.get_color(self.get_state())
-        self.category_totals.color = self._style.get_color(self.get_state())
+        color = self._style.get_color(self.get_state())
+        self.instructions_label.color = color
+        self.category_totals.color = color
+        self.activities_chart.label_color = color
+        self.categories_chart.label_color = color
+        self.tag_chart.label_color = color
 
 
 class Overview(Controller):
