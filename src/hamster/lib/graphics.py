@@ -98,8 +98,15 @@ class ColorUtils(object):
         return gdk.Color.from_floats(c)
 
     def hex(self, color):
-        c = self.parse(color)
-        return "#" + "".join("{:02x}".format(int(color) * 255) for color in c)
+        if isinstance(color, gdk.RGBA):
+            r = int(255 * color.red)
+            g = int(255 * color.green)
+            b = int(255 * color.blue)
+            a = int(255 * color.alpha)
+            return "#{:02x}{:02x}{:02x}{:02x}".format(r, g, b, a)
+        else:
+            c = self.parse(color)
+            return "#" + "".join("{:02x}".format(int(color) * 255) for color in c)
 
     def is_light(self, color):
         """tells you if color is dark or light, so you can up or down the

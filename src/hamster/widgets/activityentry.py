@@ -185,10 +185,12 @@ class CompleteTree(graphics.Scene):
 
             label = row.label
             if row.description:
-                description_color = graphics.Colors.contrast(color, 50)
-                description_color = graphics.Colors.hex(description_color)
+                description_color = graphics.Colors.mix(bg, color, 0.75)
+                description_color_str = graphics.Colors.hex(description_color)
 
-                label += '<span color="%s">  [%s]</span>' % (description_color, row.description)
+                label = '{}  <span color="{}">[{}]</span>'.format(label,
+                                                                  description_color_str,
+                                                                  row.description)
 
             self.label.show(g, label, color=color)
 
