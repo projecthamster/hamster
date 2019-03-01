@@ -542,11 +542,14 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 g.rectangle(0, 0, self.width, 10)
                 g.clip()
                 g.rectangle(0, 0, self.width, 10)
-                g.fill("#eee")
+                none_bg_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.75)
+                g.fill(none_bg_color)
 
+                # line, useful to separate consecutive days with no activity
                 g.move_to(0, 0)
                 g.line_to(self.width, 0)
-                g.stroke("#ccc")
+                none_stroke_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.25)
+                g.stroke(none_stroke_color)
                 g.restore_context()
                 continue
 
