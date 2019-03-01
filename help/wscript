@@ -27,7 +27,7 @@ def init_mallard(self):
 		print "\n".join(missing_vars)
 
 	self.bld.env.update(DOC_VAR)
-	self.default_install_path='${PREFIX}/share/gnome/help/${DOC_ID}'
+	self.default_install_path='${PREFIX}/share/help'
 
 def apply_mallard(self):
 	bld = self.bld
@@ -53,11 +53,11 @@ def apply_mallard(self):
 			src = self.path.find_resource('C/%s' % page)
 			tsk.set_inputs([node,src])
 			tsk.set_outputs(out)
-			tsk.install_path = os.path.join(self.install_path, lang)
+			tsk.install_path = os.path.join(self.install_path, lang, "${DOC_ID}")
 	if bld.is_install:
 		for page in pages:
 			out = "%s/%s" % (cnode.abspath(), page)
-			instdir = os.path.join(self.install_path, "C")
+			instdir = os.path.join(self.install_path, "C", "${DOC_ID}")
 			bld.install_files(instdir, out)
 
 Task.simple_task_type('xml2po', '${XML2PO} ${XML2POFLAGS} ${SRC} > ${TGT}',
