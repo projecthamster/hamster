@@ -90,6 +90,8 @@ class HeaderBar(gtk.HeaderBar):
         self.system_menu.append(self.menu_export)
         self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
         self.system_menu.append(self.menu_prefs)
+        self.menu_help = gtk.MenuItem(label=_("Help"))
+        self.system_menu.append(self.menu_help)
         self.system_menu.show_all()
 
 
@@ -434,6 +436,7 @@ class Overview(Controller):
 
         self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
         self.header_bar.menu_export.connect("activate", self.on_export_clicked)
+        self.header_bar.menu_help.connect("activate", self.on_help_clicked)
 
 
         self.window.connect("key-press-event", self.on_key_press)
@@ -537,6 +540,9 @@ class Overview(Controller):
         self.find_facts()
         # The timeout will stop if returning False
         return True
+
+    def on_help_clicked(self, menu):
+        gtk.show_uri(None, "help:hamster-time-tracker", gdk.CURRENT_TIME)
 
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
