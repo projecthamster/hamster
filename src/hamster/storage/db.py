@@ -134,7 +134,8 @@ class Storage(storage.Storage):
                     # running as flask app. XXX - detangle
                     data_dir = os.path.join(module_dir, "data")
                 else:
-                    data_dir = os.path.join(module_dir, '..', '..', 'data')
+                    # get ./data from ./src/hamster/storage/db.py (3 levels up)
+                    data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
 
             data_dir = os.path.realpath(data_dir)
 
