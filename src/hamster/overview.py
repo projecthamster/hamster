@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
 import bisect
 import datetime as dt
 import itertools
@@ -542,7 +543,18 @@ class Overview(Controller):
         return True
 
     def on_help_clicked(self, menu):
-        gtk.show_uri(None, "help:hamster-time-tracker", gdk.CURRENT_TIME)
+        uri = "help:hamster-time-tracker"
+        try:
+            gtk.show_uri(None, uri, gdk.CURRENT_TIME)
+        except gi.repository.GLib.Error:
+            msg = sys.exc_info()[1].args[0]
+            dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
+                                       gtk.ButtonsType.CLOSE,
+                                       _("Failed to open {}").format(uri))
+            fmt = _('Error: "{}" - is a help browser installed on this computer?')
+            dialog.format_secondary_text(fmt.format(msg))
+            dialog.run()
+            dialog.destroy()
 
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
