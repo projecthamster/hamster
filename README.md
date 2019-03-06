@@ -48,6 +48,10 @@ Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-g
 
 RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
 
+If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
+then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
+such as [yelp](https://wiki.gnome.org/Apps/Yelp/).
+
 
 #### Trying the development version
 
