@@ -53,20 +53,18 @@
 </example>
 
 <note style="info">
-    <title>Relative times</title>
-    <p>
-        Relative times work both for <var>start time</var> and <var>end time</var>,
-        provided they are <em>separated by a space</em>.
-        <code>-30 -10</code> means started 30 minutes ago and stopped 10 minutes ago.
-    </p>
-</note>
-
-<note style="info">
     <title>Time input</title>
-    <p>
-        Times can be entered with a colon (<code>hh:mm</code>),
-        with a dot (<code>hh.mm</code>) or just the 4 digits (<code>hhmm</code>).
-    </p>
+    <list>
+        <item>
+            <p>Relative times work both for <var>start time</var> and <var>end time</var>,
+            provided they are <em>separated by a space</em>.</p>
+            <p><code>-30 -10</code> means started 30 minutes ago and stopped 10 minutes ago.</p>
+        </item>
+        <item>
+            <p>Times can be entered with a colon (<code>hh:mm</code>),
+            with a dot (<code>hh.mm</code>) or just the 4 digits (<code>hhmm</code>).</p>
+        </item>    
+    </list>
 </note>
 
 </page>
