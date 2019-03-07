@@ -8,11 +8,18 @@
 <title>Input</title>
 
 <p>
-    To start tracking, type in the activity name in the input box and hit the
-    <key>Enter</key> key.
+    To start tracking, press the <gui style="button">+</gui> button,
+    type in the activity name in the entry,
+    and hit the <key>Enter</key> key.
     To specify more detail on the fly, use this syntax: 
     `time_info activity name @category, some description #tag #other tag with spaces`.
 </p>
+<note style="bug">
+    <title>Cannot add activity description</title>
+    <p>Until <link href="https://github.com/projecthamster/hamster/issues/305">issue #305</link>
+    is fixed, adding the description after the comma does not work in the gui.
+    Only the text field <em>below</em> the entry can be used to enter the description.</p>
+</note>
 
 <steps>
     <item><p>Specify specific times as `13:10-13:45`, and "started 5 minutes ago" as `-5`.</p></item>
@@ -45,11 +52,5 @@
         work for ongoing activities without an end time.
     </p>
 </example>
-
-<p>
-    On top of that you can add tags in the tag input field.
-    Tags are delimited by a comma. Press the <key>Tab</key> when the suggestion
-    box appears to complete the input to the first matching tag.
-</p>
 
 </page>
