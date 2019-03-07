@@ -18,7 +18,7 @@
     <item><p>Specify specific times as `13:10-13:45`, and "started 5 minutes ago" as `-5`.</p></item>
     <item><p>Next comes the activity name</p></item>
     <item><p>Place the category after the activity name, and start it with an at sign `@`, e.g. `@garden`</p></item>
-    <item><p>If you want to add a description and/or tags, add a comma `,`.
+    <item><p>If you want to add a description and/or tags, add a comma `,`.</p></item>
     <item><p>The description is just freeform text immediately after the comma, and runs until the end of the string or until the first tag.</p></item>
     <item><p>Place tags at the end, and start each tag with a hash mark `#`.</p></item>
 </steps>
