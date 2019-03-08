@@ -98,8 +98,15 @@ class ColorUtils(object):
         return gdk.Color.from_floats(c)
 
     def hex(self, color):
-        c = self.parse(color)
-        return "#" + "".join("{:02x}".format(int(color) * 255) for color in c)
+        if isinstance(color, gdk.RGBA):
+            r = int(255 * color.red)
+            g = int(255 * color.green)
+            b = int(255 * color.blue)
+            a = int(255 * color.alpha)
+            return "#{:02x}{:02x}{:02x}{:02x}".format(r, g, b, a)
+        else:
+            c = self.parse(color)
+            return "#" + "".join("{:02x}".format(int(color) * 255) for color in c)
 
     def is_light(self, color):
         """tells you if color is dark or light, so you can up or down the
@@ -120,7 +127,27 @@ class ColorUtils(object):
             return colorsys.hls_to_rgb(hls[0], hls[1] + step, hls[2])
         # returns color darker by step (where step is in range 0..255)
 
+    def mix(self, ca, cb, xb):
+        """Mix colors.
+
+        Args:
+            ca (gdk.RGBA): first color
+            cb (gdk.RGBA): second color
+            xb (float): between 0.0 and 1.0
+
+        Return:
+            gdk.RGBA: linear interpolation between ca and cb,
+                      0 or 1 return the unaltered 1st or 2nd color respectively,
+                      as in CSS.
+        """
+        r = (1 - xb) * ca.red + xb * cb.red
+        g = (1 - xb) * ca.green + xb * cb.green
+        b = (1 - xb) * ca.blue + xb * cb.blue
+        a = (1 - xb) * ca.alpha + xb * cb.alpha
+        return gdk.RGBA(red=r, green=g, blue=b, alpha=a)
+
 Colors = ColorUtils() # this is a static class, so an instance will do
+
 
 def get_gdk_rectangle(x, y, w, h):
     rect = gdk.Rectangle()

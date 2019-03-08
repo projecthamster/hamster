@@ -212,6 +212,9 @@ class HorizontalBarChart(graphics.Sprite):
         self.layout.set_justify(True)
         self.layout.set_alignment(pango.Alignment.RIGHT)
         self.label_height = self.layout.get_pixel_size()[1]
+        # should be updated by the parent
+        self.label_color = gdk.RGBA()
+        self.bar_color = gdk.RGBA()
 
         self._max = dt.timedelta(0)
 
@@ -233,7 +236,7 @@ class HorizontalBarChart(graphics.Sprite):
         label_h = self.label_height
         bar_start_x = label_width + margin
         for i, (label, value) in enumerate(self.values):
-            g.set_color("#333")
+            g.set_color(self.label_color)
             duration_str = stuff.format_duration(value, human=False)
             markup_label = stuff.escape_pango(str(label))
             markup_duration = stuff.escape_pango(duration_str)
@@ -247,7 +250,7 @@ class HorizontalBarChart(graphics.Sprite):
             else:
                 w = 1
             g.rectangle(bar_start_x, y, int(w), int(label_h))
-            g.fill("#999")
+            g.fill(self.bar_color)
 
         g.restore_context()
 
@@ -257,8 +260,7 @@ class Totals(graphics.Scene):
     def __init__(self):
         graphics.Scene.__init__(self)
         self.set_size_request(200, 70)
-        self.category_totals = layout.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                            overflow=pango.EllipsizeMode.END,
+        self.category_totals = layout.Label(overflow=pango.EllipsizeMode.END,
                                             x_align=0,
                                             expand=False)
         self.stacked_bar = StackedBar(height=25, x_align=0, expand=False)
@@ -303,6 +305,8 @@ class Totals(graphics.Scene):
         self.connect("on-click", self.on_click)
         self.connect("enter-notify-event", self.on_mouse_enter)
         self.connect("leave-notify-event", self.on_mouse_leave)
+        self.connect("state-flags-changed", self.on_state_flags_changed)
+        self.connect("style-updated", self.on_style_changed)
 
 
     def set_facts(self, facts):
@@ -368,6 +372,12 @@ class Totals(graphics.Scene):
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
 
+    def on_state_flags_changed(self, previous_state, _):
+        self.update_colors()
+
+    def on_style_changed(self, _):
+        self.update_colors()
+
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)
         def on_update_dummy(sprite):
@@ -378,7 +388,18 @@ class Totals(graphics.Scene):
                      on_update=on_update_dummy,
                      easing=Easing.Expo.ease_out)
 
-
+    def update_colors(self):
+        color = self._style.get_color(self.get_state())
+        self.instructions_label.color = color
+        self.category_totals.color = color
+        self.activities_chart.label_color = color
+        self.categories_chart.label_color = color
+        self.tag_chart.label_color = color
+        bg_color = self._style.get_background_color(self.get_state())
+        bar_color = self.colors.mix(bg_color, color, 0.6)
+        self.activities_chart.bar_color = bar_color
+        self.categories_chart.bar_color = bar_color
+        self.tag_chart.bar_color = bar_color
 
 
 class Overview(Controller):

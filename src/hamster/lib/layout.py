@@ -884,13 +884,13 @@ class Label(Bin):
 
     def __setattr__(self, name, val):
         if name in ("text", "markup", "color", "size"):
-            if self.display_label.__dict__.get(name, "hamster_graphics_no_value_really") == val:
+            if self.display_label.__dict__.get(name, "hamster_graphics_no_value_really") is val:
                 return
             setattr(self.display_label, name, val)
         elif name in ("spacing"):
             setattr(self.container, name, val)
         else:
-            if self.__dict__.get(name, "hamster_graphics_no_value_really") == val:
+            if self.__dict__.get(name, "hamster_graphics_no_value_really") is val:
                 return
             Bin.__setattr__(self, name, val)
 
