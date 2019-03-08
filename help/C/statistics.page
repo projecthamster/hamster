@@ -3,18 +3,14 @@
       id="statistics">
 <info>
   <link type="guide" xref="index"/>
-  <desc>Note on interpretation of statistics.</desc>
+  <desc>How to find the detailed totals.</desc>
 </info>
 <title>Statistics</title>
 
 <p>
-    The results that are accessible via the
-    <gui style="button">Show Statistics</gui> link are experimental and
-    they are an interpretation of the facts. This interpretation should be compared
-    with your own observations. Patches are welcome.
+    The totals sorted by activities, categories or tags
+    are accessible by clicking the main <gui>Totals area</gui>
+    at the bottom of the overview.
 </p>
-<p>
-    However, the "Starts and Ends" should give you some idea about your active
-    time.
-</p>
+
 </page>

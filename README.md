@@ -48,6 +48,10 @@ Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-g
 
 RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
 
+If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
+then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
+such as [yelp](https://wiki.gnome.org/Apps/Yelp/).
+
 
 #### Trying the development version
 
@@ -70,6 +74,7 @@ To install, python2 is still necessary (for waf).
 Adapt the paths below to your system,
 `sudo rm/mv` commands, beware !
 ```
+./waf configure && ./waf clean && ./waf distclean  # important for the help pages
 ./waf configure build --prefix=/usr && sudo ./waf install
 sudo rm -rf /usr/lib/python3.6/site-packages/hamster
 sudo mv /usr/lib/python2.7/site-packages/hamster /usr/lib/python3.6/site-packages/

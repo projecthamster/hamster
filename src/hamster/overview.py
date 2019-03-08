@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
 import bisect
 import datetime as dt
 import itertools
@@ -90,6 +91,8 @@ class HeaderBar(gtk.HeaderBar):
         self.system_menu.append(self.menu_export)
         self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
         self.system_menu.append(self.menu_prefs)
+        self.menu_help = gtk.MenuItem(label=_("Help"))
+        self.system_menu.append(self.menu_help)
         self.system_menu.show_all()
 
 
@@ -434,6 +437,7 @@ class Overview(Controller):
 
         self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
         self.header_bar.menu_export.connect("activate", self.on_export_clicked)
+        self.header_bar.menu_help.connect("activate", self.on_help_clicked)
 
 
         self.window.connect("key-press-event", self.on_key_press)
@@ -538,6 +542,20 @@ class Overview(Controller):
         # The timeout will stop if returning False
         return True
 
+    def on_help_clicked(self, menu):
+        uri = "help:hamster-time-tracker"
+        try:
+            gtk.show_uri(None, uri, gdk.CURRENT_TIME)
+        except gi.repository.GLib.Error:
+            msg = sys.exc_info()[1].args[0]
+            dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
+                                       gtk.ButtonsType.CLOSE,
+                                       _("Failed to open {}").format(uri))
+            fmt = _('Error: "{}" - is a help browser installed on this computer?')
+            dialog.format_secondary_text(fmt.format(msg))
+            dialog.run()
+            dialog.destroy()
+
     def on_prefs_clicked(self, menu):
         dialogs.prefs.show(self)
 
@@ -557,7 +575,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(gdk.Screen(), "file://%s" % os.path.split(path)[0], 0)
+                    gtk.show_uri(None, "file://%s" % path, gdk.CURRENT_TIME)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 
