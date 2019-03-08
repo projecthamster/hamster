@@ -8,20 +8,20 @@
 <title>Report and export</title>
 
 <p>
-    Apart from the HTML format that is offered by default in the Save report
-    dialog, the format drop-down allows you to choose TSV (Tab Separated Values, good for
-    spreadsheets), XML, and iCal formats.
-</p>
-<p>
-    For programmatic access, there is D-Bus API, that can be introspected
-    using tools like <link href="https://fedorahosted.org/d-feet/">D-Feet</link>.
+    Apart from the HTML format that is offered by default 
+    in the <guiseq><gui>Header bar</gui><gui>Tools icon</gui><gui>Export...</gui></guiseq>
+    dialog, the format drop-down allows you to choose
+    TSV (Tab Separated Values, good for spreadsheets), XML, and iCal formats.
 </p>
 
-<note style="info">
-    <p>
-        The fastest way to get the data "out" of the Time Tracker is by generating a
-        HTML report. While holding the <key>Ctrl</key> key down, select all the
-        needed cells, and then copy and paste them into the target application.
-    </p>
-</note>
+<p>
+    For programmatic access, there is a D-Bus API, that can be introspected
+    using tools like 
+    <link href="https://wiki.gnome.org/action/show/Apps/DFeet">D-Feet</link> and 
+    <link href="https://dbus.freedesktop.org/doc/dbus-monitor.1.html">dbus-monitor</link>.
+    
+    And there is also a command-line interface (try <cmd>hamster help</cmd> in a terminal),
+    that is very useful for scripting too.
+</p>
+
 </page>
