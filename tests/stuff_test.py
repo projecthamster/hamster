@@ -152,5 +152,16 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
 
+    def test_spaces(self):
+        # cf. issue #114
+        fact = Fact("11:00 12:00 BPC-261 - Task title@Project#code")
+        self.assertEqual(fact.activity, "BPC-261 - Task title")
+        self.assertEqual(fact.category, "Project")
+        self.assertEqual(fact.description, None)
+        self.assertEqual(fact.tags, ["code"])
+        # space between category and tag
+        fact2 = Fact("11:00 12:00 BPC-261 - Task title@Project #code")
+        self.assertEqual(fact.serialized(), fact2.serialized())
+
 if __name__ == '__main__':
     unittest.main()
