@@ -71,7 +71,7 @@ src/hamster-cli
 #### Building and installing
 
 To install, python2 is still necessary (for waf).
-Adapt the paths below to your system,
+[Adapt](https://github.com/projecthamster/hamster/issues/221#issuecomment-462094920) the paths below to your system,
 `sudo rm/mv` commands, beware !
 ```
 ./waf configure && ./waf clean && ./waf distclean  # important for the help pages
