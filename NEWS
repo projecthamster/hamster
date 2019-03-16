@@ -1,6 +1,10 @@
 ===============
 Changes since v2.2.2
 ===============
+* Fixed dark theme colors (PR 391).
+* The help system is back (PR 393).
+* Fixed hamster-service failure when there is no hamster.db.
+  (issue  394)
 * Improved keyboard handling:
   - Ctrl+Space to stop tracking.
   - Left/Right arrows change date.
