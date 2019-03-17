@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 import bisect
 import cairo
 import datetime as dt
@@ -36,8 +39,6 @@ from hamster import client
 from hamster.lib import Fact, looks_like_time
 from hamster.lib import stuff
 from hamster.lib import graphics
-
-import logging
 
 
 def extract_search(text):

@@ -17,9 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 import datetime as dt
 from calendar import timegm
-import logging
 from gi.repository import GObject as gobject
 
 
@@ -57,7 +59,7 @@ class DesktopIntegrations(object):
             self.check_user(todays_facts)
             trophies.check_ongoing(todays_facts)
         except Exception as e:
-            logging.error("Error while refreshing: %s" % e)
+            logger.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
             return True
 

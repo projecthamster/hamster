@@ -23,12 +23,16 @@
 '''A script to control the applet from the command line.'''
 
 import sys, os
-import optparse
+import argparse
 import re
 import datetime as dt
 
 from hamster import client, reports
-from hamster.lib import Fact, stuff
+from hamster import logger as hamster_logger
+from hamster.lib import default_logger, Fact, stuff
+
+
+logger = default_logger(__file__)
 
 
 def word_wrap(line, max_len):
@@ -384,12 +388,29 @@ Example usage:
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
+    
+    parser = argparse.ArgumentParser(
+        description="Time tracking utility",
+        epilog=usage,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
-    if len(sys.argv) < 2:
-        hamster_client.overview()
+    # cf. https://stackoverflow.com/a/28611921/3565696
+    parser.add_argument("--log", dest="log_level", 
+                        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
+                        default='WARNING',
+                        help="Set the logging level (default: %(default)s)")
+    parser.add_argument("action", nargs="?", default="overview")
+    parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
+    
+    args = parser.parse_args()
+    
+    # logger for current script
+    logger.setLevel(args.log_level)
+    # hamster_logger for the rest
+    hamster_logger.setLevel(args.log_level)
+
+    command = args.action
+    if hasattr(hamster_client, command):
+        getattr(hamster_client, command)(*args.action_args)
     else:
-        command, args = sys.argv[1], sys.argv[2:]
-        if hasattr(hamster_client, command):
-            getattr(hamster_client, command)(*args)
-        else:
-            sys.exit(usage % {'prog': sys.argv[0]})
+        sys.exit(usage % {'prog': sys.argv[0]})

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # nicked off gwibber
 
+import logging
 from gi.repository import GObject as gobject
 
 import dbus, dbus.service
@@ -16,11 +17,15 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     print("Found hamster-service already running, exiting")
     quit()
 
+from hamster import logger as hamster_logger
 from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
-from hamster.lib import stuff, desktop
+from hamster.lib import default_logger, desktop, stuff
+
+
+logger = default_logger(__file__)
 
 
 def to_dbus_fact(fact):
@@ -301,6 +306,22 @@ class Storage(db.Storage, dbus.service.Object):
 
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description="Hamster time tracker D-Bus service")
+
+    # cf. https://stackoverflow.com/a/28611921/3565696
+    parser.add_argument("--log", dest="log_level", 
+                        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
+                        default='WARNING',
+                        help="Set the logging level (default: %(default)s)")
+    
+    args = parser.parse_args()
+    
+    # logger for current script
+    logger.setLevel(args.log_level)
+    # hamster_logger for the rest
+    hamster_logger.setLevel(args.log_level)
+    
     print("hamster-service up")
     storage = Storage(loop)
     loop.run()

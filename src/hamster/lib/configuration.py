@@ -22,10 +22,12 @@ gconf part of this code copied from Gimmie (c) Alex Gravely via Conduit (c) John
 License: GPLv2
 """
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 import os
 from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
-import logging
 import datetime as dt
 
 from gi.repository import GObject as gobject
@@ -34,10 +36,6 @@ from gi.repository import Gtk as gtk
 import gi
 gi.require_version('GConf', '2.0')
 from gi.repository import GConf as gconf
-
-import logging
-log = logging.getLogger("configuration")
-
 
 
 class Controller(gobject.GObject):
@@ -278,11 +276,11 @@ class GConfStore(gobject.GObject, Singleton):
 
         #we now have a valid key and type
         if default is None:
-            log.warn("Unknown key: %s, must specify default value" % key)
+            logger.warn("Unknown key: %s, must specify default value" % key)
             return None
 
         if vtype not in self.VALID_KEY_TYPES:
-            log.warn("Invalid key type: %s" % vtype)
+            logger.warn("Invalid key type: %s" % vtype)
             return None
 
         #for gconf refer to the full key path
@@ -301,7 +299,7 @@ class GConfStore(gobject.GObject, Singleton):
         if value is not None:
             return value
 
-        log.warn("Unknown gconf key: %s" % key)
+        logger.warn("Unknown gconf key: %s" % key)
         return None
 
     def set(self, key, value):
@@ -309,14 +307,14 @@ class GConfStore(gobject.GObject, Singleton):
         Sets the key value in gconf and connects adds a signal
         which is fired if the key changes
         """
-        log.debug("Settings %s -> %s" % (key, value))
+        logger.debug("Settings %s -> %s" % (key, value))
         if key in self.DEFAULTS:
             vtype = type(self.DEFAULTS[key])
         else:
             vtype = type(value)
 
         if vtype not in self.VALID_KEY_TYPES:
-            log.warn("Invalid key type: %s" % vtype)
+            logger.warn("Invalid key type: %s" % vtype)
             return False
 
         #for gconf refer to the full key path
