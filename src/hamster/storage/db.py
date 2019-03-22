@@ -73,14 +73,14 @@ class Storage(storage.Storage):
             # add file monitoring so the app does not have to be restarted
             # when db file is rewritten
             def on_db_file_change(monitor, gio_file, event_uri, event):
+                logger.debug(event)
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
                                            gio.FileQueryInfoFlags.NONE,
                                            None).get_etag() == self.__last_etag:
                         # ours
                         return
-                elif event == gio.FileMonitorEvent.CREATED:
-                    # treat case when instead of a move, a remove and create has been performed
+                elif event == gio.FileMonitorEvent.DELETED:
                     self.con = None
 
                 if event in (gio.FileMonitorEvent.CHANGES_DONE_HINT, gio.FileMonitorEvent.CREATED):
@@ -93,9 +93,7 @@ class Storage(storage.Storage):
 
 
             self.__database_file = gio.File.new_for_path(self.db_path)
-            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
-                                                                  gio.FileMonitorFlags.SEND_MOVED,
-                                                                  None)
+            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS, None)
             self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
