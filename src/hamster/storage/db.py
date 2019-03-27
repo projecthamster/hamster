@@ -83,7 +83,7 @@ class Storage(storage.Storage):
                 elif event == gio.FileMonitorEvent.DELETED:
                     self.con = None
 
-                if event in (gio.FileMonitorEvent.CHANGES_DONE_HINT, gio.FileMonitorEvent.CREATED):
+                if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     print("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
 
