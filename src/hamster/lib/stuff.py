@@ -21,9 +21,10 @@
 # some widgets that repeat all over the place
 # cells, columns, trees and other
 
-import gi
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
+
+import gi
 import datetime as dt
 
 gi.require_version('Gtk', '3.0')
@@ -215,7 +216,7 @@ def locale_first_weekday():
         beginning = week_start + week_offset
         first_weekday = int(beginning.strftime("%w"))
     except:
-        logging.warn("WARNING - Failed to get first weekday from locale")
+        logger.warn("WARNING - Failed to get first weekday from locale")
 
     return first_weekday
 

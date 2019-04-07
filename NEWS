@@ -1,6 +1,7 @@
 ===============
 Changes since v2.2.2
 ===============
+* Fixed database file monitoring (PR 401).
 * Fixed dark theme colors (PR 391).
 * The help system is back (PR 393).
 * Fixed hamster-service failure when there is no hamster.db.

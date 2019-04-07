@@ -20,16 +20,18 @@
 
 
 """separate file for database operations"""
+
 import logging
+logger = logging.getLogger(__name__)   # noqa: E402
 
 try:
     import sqlite3 as sqlite
 except ImportError:
     try:
-        logging.warn("Using sqlite2")
+        logger.warn("Using sqlite2")
         from pysqlite2 import dbapi2 as sqlite
     except ImportError:
-        logging.error("Neither sqlite3 nor pysqlite2 found")
+        logger.error("Neither sqlite3 nor pysqlite2 found")
         raise
 
 import os, time
@@ -66,22 +68,23 @@ class Storage(storage.Storage):
 
 
         self.db_path = self.__init_db_file(database_dir)
+        logger.debug(self.db_path)
 
         if gio:
             # add file monitoring so the app does not have to be restarted
             # when db file is rewritten
             def on_db_file_change(monitor, gio_file, event_uri, event):
+                logger.debug(event)
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     if gio_file.query_info(gio.FILE_ATTRIBUTE_ETAG_VALUE,
                                            gio.FileQueryInfoFlags.NONE,
                                            None).get_etag() == self.__last_etag:
                         # ours
                         return
-                elif event == gio.FileMonitorEvent.CREATED:
-                    # treat case when instead of a move, a remove and create has been performed
+                elif event == gio.FileMonitorEvent.DELETED:
                     self.con = None
 
-                if event in (gio.FileMonitorEvent.CHANGES_DONE_HINT, gio.FileMonitorEvent.CREATED):
+                if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     print("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
 
@@ -91,9 +94,7 @@ class Storage(storage.Storage):
 
 
             self.__database_file = gio.File.new_for_path(self.db_path)
-            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
-                                                                  gio.FileMonitorFlags.SEND_MOVED,
-                                                                  None)
+            self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS, None)
             self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
@@ -115,7 +116,7 @@ class Storage(storage.Storage):
         new_db_file = os.path.join(database_dir, "hamster.db")
         if os.path.exists(old_db_file):
             if os.path.exists(new_db_file):
-                logging.info("Have two database %s and %s" % (new_db_file, old_db_file))
+                logger.info("Have two database %s and %s" % (new_db_file, old_db_file))
             else:
                 os.rename(old_db_file, new_db_file)
 
@@ -139,7 +140,7 @@ class Storage(storage.Storage):
 
             data_dir = os.path.realpath(data_dir)
 
-            logging.info("Database not found in %s - installing default from %s!" % (db_path, data_dir))
+            logger.info("Database not found in %s - installing default from %s!" % (db_path, data_dir))
             copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
@@ -486,7 +487,7 @@ class Storage(storage.Storage):
             if fact["start_time"] < start_time < fact["end_time"] and \
                fact["start_time"] < end_time < fact["end_time"]:
 
-                logging.info("splitting %s" % fact["name"])
+                logger.info("splitting %s" % fact["name"])
                 # truncate until beginning of the new entry
                 self.execute("""UPDATE facts
                                    SET end_time = ?
@@ -511,13 +512,13 @@ class Storage(storage.Storage):
 
             # overlap start
             elif start_time < fact["start_time"] < end_time:
-                logging.info("Overlapping start of %s" % fact["name"])
+                logger.info("Overlapping start of %s" % fact["name"])
                 self.execute("UPDATE facts SET start_time=? WHERE id=?",
                              (end_time, fact["id"]))
 
             # overlap end
             elif start_time < fact["end_time"] < end_time:
-                logging.info("Overlapping end of %s" % fact["name"])
+                logger.info("Overlapping end of %s" % fact["name"])
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
 
@@ -905,7 +906,7 @@ class Storage(storage.Storage):
         con = self.connection
         cur = con.cursor()
 
-        logging.debug("%s %s" % (query, params))
+        logger.debug("%s %s" % (query, params))
 
         if params:
             cur.execute(query, params)
@@ -937,7 +938,7 @@ class Storage(storage.Storage):
             params = [params]
 
         for state, param in zip(statement, params):
-            logging.debug("%s %s" % (state, param))
+            logger.debug("%s %s" % (state, param))
             cur.execute(state, param)
 
         if not self.__con:
@@ -949,7 +950,7 @@ class Storage(storage.Storage):
         con = self.__con or self.connection
         cur = self.__cur or con.cursor()
 
-        logging.debug("%s %s" % (statement, params))
+        logger.debug("%s %s" % (statement, params))
         cur.executemany(statement, params)
 
         if not self.__con:
