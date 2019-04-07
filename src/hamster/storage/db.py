@@ -68,6 +68,7 @@ class Storage(storage.Storage):
 
 
         self.db_path = self.__init_db_file(database_dir)
+        logger.debug(self.db_path)
 
         if gio:
             # add file monitoring so the app does not have to be restarted
