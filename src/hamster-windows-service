@@ -7,7 +7,7 @@ import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
-loop = gobject.MainLoop()
+loop = glib.MainLoop()
 
 if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
     print("Found hamster-window-service already running, exiting")
