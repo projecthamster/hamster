@@ -3,6 +3,7 @@
 
 import logging
 from gi.repository import GObject as gobject
+from gi.repository import GLib as glib
 
 import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
@@ -11,7 +12,7 @@ from calendar import timegm
 from gi.repository import Gio as gio
 
 DBusGMainLoop(set_as_default=True)
-loop = gobject.MainLoop()
+loop = glib.MainLoop()
 
 if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     print("Found hamster-service already running, exiting")
@@ -310,18 +311,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Hamster time tracker D-Bus service")
 
     # cf. https://stackoverflow.com/a/28611921/3565696
-    parser.add_argument("--log", dest="log_level", 
+    parser.add_argument("--log", dest="log_level",
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
-    
+
     args = parser.parse_args()
-    
+
     # logger for current script
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
-    
+
     print("hamster-service up")
     storage = Storage(loop)
     loop.run()
