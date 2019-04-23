@@ -2,7 +2,6 @@
 # nicked off gwibber
 
 import logging
-from gi.repository import GObject as gobject
 from gi.repository import GLib as glib
 
 import dbus, dbus.service
