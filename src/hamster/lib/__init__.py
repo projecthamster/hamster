@@ -103,7 +103,7 @@ class Fact(object):
         if initial_fact:
             activity = initial_fact.serialized()
 
-        self.original_activity = activity # unparsed version, mainly for trophies right now
+        self.original_activity = activity # unparsed version
         self.activity = None
         self.category = None
         self.description = None

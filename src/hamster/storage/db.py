@@ -47,7 +47,6 @@ except ImportError:
     gio = None
 
 from hamster.lib import Fact
-from hamster.lib import trophies
 from hamster.lib.stuff import hamster_today
 
 
@@ -87,11 +86,6 @@ class Storage(storage.Storage):
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     print("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
-
-                    # plan "b" – synchronize the time tracker's database from external source while the tracker is running
-                    if trophies:
-                        trophies.unlock("plan_b")
-
 
             self.__database_file = gio.File.new_for_path(self.db_path)
             self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS, None)
@@ -507,9 +501,6 @@ class Storage(storage.Storage):
                                       WHERE fact_id = ?"""
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
-                if trophies:
-                    trophies.unlock("split")
-
             # overlap start
             elif start_time < fact["start_time"] < end_time:
                 logger.info("Overlapping start of %s" % fact["name"])
@@ -544,9 +535,6 @@ class Storage(storage.Storage):
             category_id = self.__get_category_id(fact.category)
             if not category_id:
                 category_id = self.__add_category(fact.category)
-
-                if trophies:
-                    trophies.unlock("no_hands")
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,
@@ -803,9 +791,6 @@ class Storage(storage.Storage):
         else:
             self.execute("delete from activities where id = ?", (id,))
 
-        # Finished! - deleted an activity with more than 50 facts on it
-        if trophies and bound_facts >= 50:
-            trophies.unlock("finished")
 
     def __remove_category(self, id):
         """move all activities to unsorted and remove category"""
@@ -1006,9 +991,5 @@ class Storage(storage.Storage):
             #lock down current version
             self.execute("UPDATE version SET version = %d" % current_version)
             print("updated database from version %d to %d" % (version, current_version))
-
-            # oldtimer – database version structure had been performed on startup (thus we know that user has been on at least 2 versions)
-            if trophies:
-                trophies.unlock("oldtimer")
 
         self.end_transaction()

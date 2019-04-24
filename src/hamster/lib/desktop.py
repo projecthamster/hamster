@@ -27,7 +27,6 @@ from gi.repository import GObject as gobject
 
 from hamster import idle
 from hamster.lib.configuration import conf
-from hamster.lib import trophies
 import dbus
 
 
@@ -57,7 +56,6 @@ class DesktopIntegrations(object):
             # as this is initiated in storage
             todays_facts = self.storage._Storage__get_todays_facts()
             self.check_user(todays_facts)
-            trophies.check_ongoing(todays_facts)
         except Exception as e:
             logger.error("Error while refreshing: %s" % e)
         finally:  # we want to go on no matter what, so in case of any error we find out about it sooner
