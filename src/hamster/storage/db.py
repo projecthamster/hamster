@@ -479,13 +479,15 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
+            fact_end_time = fact["end_time"] or dt.datetime.now()
+
             # won't eliminate as it is better to have overlapping entries than loosing data
-            if start_time < fact["start_time"] and end_time > fact["end_time"]:
+            if start_time < fact["start_time"] and end_time > fact_end_time:
                 continue
 
             # split - truncate until beginning of new entry and create new activity for end
-            if fact["start_time"] < start_time < fact["end_time"] and \
-               fact["start_time"] < end_time < fact["end_time"]:
+            if fact["start_time"] < start_time < fact_end_time and \
+               fact["start_time"] < end_time < fact_end_time:
 
                 logger.info("splitting %s" % fact["name"])
                 # truncate until beginning of the new entry
@@ -498,7 +500,7 @@ class Storage(storage.Storage):
                 new_fact = Fact(fact["name"],
                                 category = fact["category"],
                                 description = fact["description"])
-                new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact["end_time"])
+                new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact_end_time)
 
                 # copy tags
                 tag_update = """INSERT INTO fact_tags(fact_id, tag_id)
@@ -517,7 +519,7 @@ class Storage(storage.Storage):
                              (end_time, fact["id"]))
 
             # overlap end
-            elif start_time < fact["end_time"] < end_time:
+            elif start_time < fact_end_time < end_time:
                 logger.info("Overlapping end of %s" % fact["name"])
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
