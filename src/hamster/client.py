@@ -24,7 +24,6 @@ from calendar import timegm
 import dbus, dbus.mainloop.glib
 from gi.repository import GObject as gobject
 from hamster.lib import Fact
-from hamster.lib import trophies
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
@@ -197,8 +196,6 @@ class Storage(gobject.GObject):
 
         # TODO - the parsing should happen just once and preferably here
         # we should feed (serialized_activity, start_time, end_time) into AddFact and others
-        if new_id:
-            trophies.checker.check_fact_based(fact)
         return new_id
 
     def stop_tracking(self, end_time = None):
@@ -229,8 +226,6 @@ class Storage(gobject.GObject):
                                        start_time,
                                        end_time,
                                        temporary_activity)
-
-        trophies.checker.check_update_based(fact_id, new_id, fact)
         return new_id
 
 

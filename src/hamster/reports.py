@@ -31,7 +31,7 @@ from string import Template
 from textwrap import dedent
 
 from hamster.lib.configuration import runtime
-from hamster.lib import stuff, trophies
+from hamster.lib import stuff
 from hamster.lib.i18n import C_
 try:
     import json
@@ -59,17 +59,6 @@ def simple(facts, start_date, end_date, format, path = None):
         writer = HTMLWriter(report_path, start_date, end_date)
 
     writer.write_report(facts)
-
-    # some assembly required - hidden - saved a report for single day
-    if start_date == end_date:
-        trophies.unlock("some_assembly_required")
-
-    # I want this on my desk - generated over 10 different reports
-    if trophies.check("on_my_desk") == False:
-        current = trophies.increment("reports_generated")
-        if current == 10:
-            trophies.unlock("on_my_desk")
-
     return writer
 
 
@@ -332,9 +321,5 @@ class HTMLWriter(ReportWriter):
                 data[key] = val
 
         self.file.write(Template(self.main_template).safe_substitute(data))
-
-        if self.override:
-            # my report is better than your report - overrode and ran the default report
-            trophies.unlock("my_report")
 
         return
