@@ -1,6 +1,9 @@
 ===============
 Changes since v2.2.2
 ===============
+* Removed trophies code (PR 410)
+* Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
+* Fixed update activity window to be resizable (PR 403)
 * Fixed database file monitoring (PR 401).
 * Fixed dark theme colors (PR 391).
 * The help system is back (PR 393).
