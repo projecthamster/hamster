@@ -9,14 +9,14 @@
 
 <p>
     <app>Time Tracker</app> does its best to avoid overlaps in activities.
-    If you create an activity in the middle of an existing activity, the former
-    will be split into two. In other cases of overlapping, the previous entries
-    will be shrunk.
+    If you create an activity whose start and end time both lie within an
+    existing activity, the existing activity will be split into two. In
+    other cases of overlapping, the previous entries will be shrunk.
 </p>
 <note style="bug">
-    <title>Former activity not split</title>
+    <title>Former ongoing activity not split</title>
     <p>
-        The former activity is not "split into two" actually,
+        The former ongoing activity is not "split into two" actually,
         but merely shortened to end when the new activity starts.
         Reported as <link href="https://github.com/projecthamster/hamster/issues/396">issue 396</link>.
     </p>
@@ -24,11 +24,11 @@
 <note style="info">
     <p>
         Merging can become handy when entering information for the whole
-        day. Start by entering the first activity and select the "in progress"
-        check box for the end time. For the next activity again set just the
-        start time and mark it as ongoing. Observe how the end time of the
-        previous activity gets adjusted to the start time of the new one.
-        Repeat the process until happy!
+        day. Start by entering the first activity with only a start time
+        (i.e. activity "in progress"). For the next activity again set just
+        the start time. Observe how the end time of the previous activity
+        gets adjusted to the start time of the new one. Repeat the process
+        until happy!
     </p>
 </note>
 </page>
