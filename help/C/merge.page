@@ -13,6 +13,14 @@
     existing activity, the existing activity will be split into two. In
     other cases of overlapping, the previous entries will be shrunk.
 </p>
+<note style="bug">
+    <title>Former ongoing activity not split</title>
+    <p>
+        The former ongoing activity is not "split into two" actually,
+        but merely shortened to end when the new activity starts.
+        Reported as <link href="https://github.com/projecthamster/hamster/issues/396">issue 396</link>.
+    </p>
+</note>
 <note style="info">
     <p>
         Merging can become handy when entering information for the whole
