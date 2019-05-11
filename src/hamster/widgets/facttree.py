@@ -59,7 +59,11 @@ class Label(object):
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
         self.layout.set_markup("Hamster") # dummy
-        self.height = self.layout.get_pixel_size()[1]
+
+    @property
+    def height(self):
+        """Label height in pixels."""
+        return self.layout.get_pixel_size()[1]
 
     def _set_text(self, text):
         self.layout.set_markup(text)
