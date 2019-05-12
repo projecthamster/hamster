@@ -125,6 +125,16 @@ class FactRow(object):
 
         self.width = 0
 
+        # margins (in pixels)
+        self.tag_row_margin_H = 2.5
+        self.tag_row_margin_V = 2.5
+        self.tag_inner_margin_H = 3
+        self.tag_inner_margin_V = 2
+        self.inter_tag_margin = 4
+        self.row_margin_H = 5
+        self.row_margin_V = 2
+        self.category_offset_V = 2
+
 
     @property
     def height(self):
@@ -133,7 +143,11 @@ class FactRow(object):
             res += self.description_label.height
 
         if self.fact.tags:
-            res += self.tag_label.height + 5
+            res += (self.tag_label.height
+                    + self.tag_inner_margin_V * 2
+                    + self.tag_row_margin_V * 2)
+
+        res += self.row_margin_V * 2
 
         return res
 
@@ -167,15 +181,17 @@ class FactRow(object):
         label.color = bg
 
         g.save_context()
-        g.translate(2.5, 2.5)
+        g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
         for tag in self.fact.tags:
             label.set_text(tag)
             w, h = label.layout.get_pixel_size()
-            g.rectangle(0, 0, w + 6, h + 5, 2)
+            rw = w + self.tag_inner_margin_H * 2
+            rh = h + self.tag_inner_margin_V * 2
+            g.rectangle(0, 0, rw, rh, 2)
             g.fill(color, 0.5)
-            label.show(g, x=3, y=2)
+            label.show(g, x=self.tag_inner_margin_H, y=self.tag_inner_margin_V)
 
-            g.translate(w + 10, 0)
+            g.translate(rw + self.inter_tag_margin, 0)
 
         g.restore_context()
 
@@ -196,17 +212,17 @@ class FactRow(object):
             color, bg = colors["selected"], colors["selected_bg"]
             g.fill_area(0, 0, self.width, self.height, bg)
 
-        g.translate(5, 2)
+        g.translate(self.row_margin_H, self.row_margin_V)
 
         g.set_color(color)
         self.time_label.show(g)
-
         self.activity_label.show(g)
+
         if self.fact.category:
             g.save_context()
             g.set_color(color if is_selected else "#999")
             x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
-            self.category_label.show(g, x=x, y=2)
+            self.category_label.show(g, x=x, y=self.category_offset_V)
             g.restore_context()
 
         if self.fact.description or self.fact.tags:
@@ -215,10 +231,14 @@ class FactRow(object):
 
             if self.fact.tags:
                 self._show_tags(g, color, bg)
-                g.translate(0, self.tag_label.height + 5)
+                tag_height = (self.tag_label.height
+                              + self.tag_inner_margin_V * 2
+                              + self.tag_row_margin_V * 2)
+                g.translate(0, tag_height)
 
             if self.fact.description:
                 self.description_label.show(g)
+
             g.restore_context()
 
         self.duration_label.show(g, stuff.format_duration(self.fact.delta), x=self.width - 105)
