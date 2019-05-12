@@ -173,8 +173,7 @@ class FactRow(object):
             w, h = label.layout.get_pixel_size()
             g.rectangle(0, 0, w + 6, h + 5, 2)
             g.fill(color, 0.5)
-            g.move_to(3, 2)
-            label.show(g)
+            label.show(g, x=3, y=2)
 
             g.translate(w + 10, 0)
 
