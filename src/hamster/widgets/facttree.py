@@ -220,7 +220,8 @@ class FactRow(object):
 
         if self.fact.category:
             g.save_context()
-            g.set_color(color if is_selected else "#999")
+            category_color = graphics.ColorUtils.mix(bg, color, 0.57)
+            g.set_color(category_color)
             x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
             self.category_label.show(g, x=x, y=self.category_offset_V)
             g.restore_context()

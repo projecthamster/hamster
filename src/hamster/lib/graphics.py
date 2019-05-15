@@ -127,7 +127,8 @@ class ColorUtils(object):
             return colorsys.hls_to_rgb(hls[0], hls[1] + step, hls[2])
         # returns color darker by step (where step is in range 0..255)
 
-    def mix(self, ca, cb, xb):
+    @classmethod
+    def mix(cls, ca, cb, xb):
         """Mix colors.
 
         Args:
