@@ -77,7 +77,6 @@ class Label(object):
         (self.x and self.y will not be changed)
         """
 
-
         g.save_context()
 
         # fallback to self.x
