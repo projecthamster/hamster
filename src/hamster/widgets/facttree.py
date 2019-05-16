@@ -58,28 +58,43 @@ class Label(object):
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
-        self.layout.set_markup("Hamster") # dummy
+        self.set_text("Hamster") # dummy
 
     @property
     def height(self):
         """Label height in pixels."""
         return self.layout.get_pixel_size()[1]
 
-    def _set_text(self, text):
+    def set_text(self, text):
+        self.text = text
         self.layout.set_markup(text)
 
-    def _show(self, g):
+    def show(self, g, text=None, x=None, y=None):
+        """Show the label.
+
+        If text is given, it overrides any previous set_text().
+        x and y can be passed to temporary override the position.
+        (self.x and self.y will not be changed)
+        """
+
+        g.save_context()
+
+        # fallback to self.x
+        if x is None:
+            x = self.x
+        if y is None:
+            y = self.y
+
+        g.move_to(x, y)
+
+        if text is not None:
+            self.set_text(text)
+
         if self.color:
             g.set_color(self.color)
         pangocairo.show_layout(g.context, self.layout)
 
-    def show(self, g, text, x=0, y=0):
-        g.save_context()
-        g.move_to(x or self.x, y or self.y)
-        self._set_text(text)
-        self._show(g)
         g.restore_context()
-
 
 
 class FactRow(object):
@@ -109,80 +124,126 @@ class FactRow(object):
 
         self.width = 0
 
+        # margins (in pixels)
+        self.tag_row_margin_H = 2.5
+        self.tag_row_margin_V = 2.5
+        self.tag_inner_margin_H = 3
+        self.tag_inner_margin_V = 2
+        self.inter_tag_margin = 4
+        self.row_margin_H = 5
+        self.row_margin_V = 2
+        self.category_offset_V = 2
 
-    def height(self, fact):
+
+    @property
+    def height(self):
         res = self.activity_label.height + 2 * 3
-        if fact.description:
+        if self.fact.description:
             res += self.description_label.height
 
-        if fact.tags:
-            res += self.tag_label.height + 5
+        if self.fact.tags:
+            res += (self.tag_label.height
+                    + self.tag_inner_margin_V * 2
+                    + self.tag_row_margin_V * 2)
+
+        res += self.row_margin_V * 2
 
         return res
 
 
-    def _show_tags(self, g, tags, color, bg):
-        label = self.tag_label
-        label.color = bg
+    def set_fact(self, fact):
+        """Set current fact."""
 
-        g.save_context()
-        g.translate(2.5, 2.5)
-        for tag in tags:
-            label._set_text(tag)
-            w, h = label.layout.get_pixel_size()
-            g.rectangle(0, 0, w + 6, h + 5, 2)
-            g.fill(color, 0.5)
-            g.move_to(3, 2)
-            label._show(g)
-
-            g.translate(w + 10, 0)
-
-        g.restore_context()
-
-
-
-    def show(self, g, colors, fact, current=False):
-        g.save_context()
-
-        color, bg = colors["normal"], colors["normal_bg"]
-        if current:
-            color, bg = colors["selected"], colors["selected_bg"]
-            g.fill_area(0, 0, self.width, self.height(fact), bg)
-
-        g.translate(5, 2)
+        self.fact = fact
 
         time_label = fact.start_time.strftime("%H:%M -")
         if fact.end_time:
             time_label += fact.end_time.strftime(" %H:%M")
+        self.time_label.set_text(time_label)
 
-        g.set_color(color)
-        self.time_label.show(g, time_label)
+        self.activity_label.set_text(stuff.escape_pango(fact.activity))
 
-        self.activity_label.show(g, stuff.escape_pango(fact.activity))
-        if fact.category:
-            g.save_context()
-            g.set_color(color if current else "#999")
-            x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
-            self.category_label.show(g, "  - %s" % stuff.escape_pango(fact.category), x=x, y=2)
-            g.restore_context()
+        category_text = "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
+        self.category_label.set_text(category_text)
 
-        if fact.description or fact.tags:
-            g.save_context()
-            g.translate(self.activity_label.x, self.activity_label.height + 3)
+        description_text = "<small>{}</small>".format(stuff.escape_pango(fact.description)) if fact.description else ""
+        self.description_label.set_text(description_text)
 
-            if fact.tags:
-                self._show_tags(g, fact.tags, color, bg)
-                g.translate(0, self.tag_label.height + 5)
+        if fact.tags:
+            # for now, tags are on a single line.
+            # The first one is enough to determine the height.
+            self.tag_label.set_text(fact.tags[0])
 
-            if fact.description:
-                self.description_label.show(g, "<small>%s</small>" % stuff.escape_pango(fact.description))
-            g.restore_context()
 
-        self.duration_label.show(g, stuff.format_duration(fact.delta), x=self.width - 105)
+    def _show_tags(self, g, color, bg):
+        label = self.tag_label
+        label.color = bg
+
+        g.save_context()
+        g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
+        for tag in self.fact.tags:
+            label.set_text(tag)
+            w, h = label.layout.get_pixel_size()
+            rw = w + self.tag_inner_margin_H * 2
+            rh = h + self.tag_inner_margin_V * 2
+            g.rectangle(0, 0, rw, rh, 2)
+            g.fill(color, 0.5)
+            label.show(g, x=self.tag_inner_margin_H, y=self.tag_inner_margin_V)
+
+            g.translate(rw + self.inter_tag_margin, 0)
 
         g.restore_context()
 
 
+    def show(self, g, colors, fact=None, is_selected=False):
+        """Display the fact row.
+
+        If fact is given, the fact attribute is updated.
+        """
+        g.save_context()
+
+        if fact is not None:
+            # before the selection highlight, to get the correct height
+            self.set_fact(fact)
+
+        color, bg = colors["normal"], colors["normal_bg"]
+        if is_selected:
+            color, bg = colors["selected"], colors["selected_bg"]
+            g.fill_area(0, 0, self.width, self.height, bg)
+
+        g.translate(self.row_margin_H, self.row_margin_V)
+
+        g.set_color(color)
+        self.time_label.show(g)
+        self.activity_label.show(g)
+
+        if self.fact.category:
+            g.save_context()
+            category_color = graphics.ColorUtils.mix(bg, color, 0.57)
+            g.set_color(category_color)
+            x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
+            self.category_label.show(g, x=x, y=self.category_offset_V)
+            g.restore_context()
+
+        if self.fact.description or self.fact.tags:
+            g.save_context()
+            g.translate(self.activity_label.x, self.activity_label.height + 3)
+
+            if self.fact.tags:
+                self._show_tags(g, color, bg)
+                tag_height = (self.tag_label.height
+                              + self.tag_inner_margin_V * 2
+                              + self.tag_row_margin_V * 2)
+                g.translate(0, tag_height)
+
+            if self.fact.description:
+                self.description_label.show(g)
+
+            g.restore_context()
+
+        self.duration_label.show(g, stuff.format_duration(self.fact.delta), x=self.width - 105)
+
+        g.restore_context()
 
 
 class FactTree(graphics.Scene, gtk.Scrollable):
@@ -444,7 +505,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         for date, facts in self.days:
             height = 0
             for fact in facts:
-                fact_height = self.fact_row.height(fact)
+                self.fact_row.set_fact(fact)
+                fact_height = self.fact_row.height
                 fact.y = y + height
                 fact.height = fact_height
 
@@ -565,8 +627,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             for fact in rec['facts']:
                 is_selected = (self.current_fact is not None
                                and fact.id == self.current_fact.id)
-                self.fact_row.show(g, colors, fact, is_selected)
-                g.translate(0, self.fact_row.height(fact))
+                self.fact_row.set_fact(fact)
+                self.fact_row.show(g, colors, is_selected=is_selected)
+                g.translate(0, self.fact_row.height)
 
 
             g.restore_context()
