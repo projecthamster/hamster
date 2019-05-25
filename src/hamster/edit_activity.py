@@ -83,7 +83,7 @@ class CustomFactController(gobject.GObject):
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
                 time_len = len(label) - len(original_fact.serialized_name())
-                self.activity.select_region(time_len, -1)
+                self.activity.select_region(0, time_len - 1)
             buf = gtk.TextBuffer()
             buf.set_text(original_fact.description or "")
             self.get_widget('description').set_buffer(buf)
