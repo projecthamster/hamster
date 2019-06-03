@@ -51,7 +51,8 @@ def build(bld):
     bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod = 0755)
 
 
-    bld.install_files('${SYSCONFDIR}/bash_completion.d','src/hamster.bash')
+    bld.install_files('${PREFIX}/share/bash-completion/completion',
+                      'src/hamster.bash')
 
 
     # set correct flags in defs.py
