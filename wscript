@@ -42,13 +42,15 @@ def set_options(opt):
 
 
 def build(bld):
+    from waflib import Utils
+    
     bld.install_files('${LIBDIR}/hamster-time-tracker',
                       """src/hamster-service
                          src/hamster-windows-service
                       """,
-                      chmod = 0755)
-
-    bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod = 0755)
+                      chmod=Utils.O755)
+    
+    bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod=Utils.O755)
 
 
     bld.install_files('${PREFIX}/share/bash-completion/completion',
