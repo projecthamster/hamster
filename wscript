@@ -28,6 +28,19 @@ def manage_gconf_schemas(ctx, action):
             Logs.pprint('YELLOW', 'Successfully {}ed gconf schemas'.format(action))
 
 
+def update_icon_cache(ctx):
+    """Update the gtk icon cache."""
+    if ctx.cmd == "install":
+        # adapted from the previous waf gnome.py
+        icon_dir = os.path.join(ctx.env.DATADIR, 'icons/hicolor')
+        cmd = 'gtk-update-icon-cache -q -f -t {}'.format(icon_dir)
+        err = ctx.exec_command(cmd)
+        if err:
+            Logs.warn('The following  command failed:\n{}'.format(cmd))
+        else:
+            Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
+
+
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
     conf.load('python')
@@ -113,4 +126,5 @@ def build(bld):
         #postinstall_icons() # Updating the icon cache
 
     bld.add_post_fun(lambda bld: manage_gconf_schemas(bld, "install"))
+    bld.add_post_fun(update_icon_cache)
     bld.add_pre_fun(lambda bld: manage_gconf_schemas(bld, "uninstall"))
