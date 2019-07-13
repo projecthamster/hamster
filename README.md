@@ -42,7 +42,7 @@ pgrep -af hamster
 
 openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
 
-Debian-based: [detailled instructions](https://github.com/GeraldJansen/hamster/wiki/Hamster-2.x-on-Xubuntu-18.04).
+Debian-based: [detailed instructions](https://github.com/projecthamster/hamster/wiki/Hamster-2.x-on-Xubuntu-18.04).
 
 RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
 
