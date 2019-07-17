@@ -7,39 +7,6 @@ out = 'build'
 import os
 from waflib import Logs, Utils
 
-def manage_gconf_schemas(ctx, action):
-    """Install or uninstall hamster gconf schemas.
-
-    Requires the stored hamster-time-tracker.schemas
-    (usually in /etc/gconf/schemas/) to be present.
-
-    Hence install should be a post-fun,
-    and uninstall a pre-fun.
-    """
-
-    assert action in ("install", "uninstall")
-    if ctx.cmd == action:
-        schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
-        cmd = 'GCONF_CONFIG_SOURCE=$(gconftool-2 --get-default-source) gconftool-2 --makefile-{}-rule {} 1> /dev/null'.format(action, schemas_file)
-        err = ctx.exec_command(cmd)
-        if err:
-            Logs.warn('The following  command failed:\n{}'.format(cmd))
-        else:
-            Logs.pprint('YELLOW', 'Successfully {}ed gconf schemas'.format(action))
-
-
-def update_icon_cache(ctx):
-    """Update the gtk icon cache."""
-    if ctx.cmd == "install":
-        # adapted from the previous waf gnome.py
-        icon_dir = os.path.join(ctx.env.DATADIR, 'icons/hicolor')
-        cmd = 'gtk-update-icon-cache -q -f -t {}'.format(icon_dir)
-        err = ctx.exec_command(cmd)
-        if err:
-            Logs.warn('The following  command failed:\n{}'.format(cmd))
-        else:
-            Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
-
 
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
@@ -119,11 +86,40 @@ def build(bld):
     #bld.add_subdirs("po help data")
     bld.recurse("po data")
 
-    #def post(bld):
-        # Postinstall tasks:
-        # gnome.postinstall_scrollkeeper('hamster-time-tracker') # Installing the user docs
-        #postinstall_schemas(bld) # Installing GConf schemas
-        #postinstall_icons() # Updating the icon cache
+
+    def manage_gconf_schemas(ctx, action):
+        """Install or uninstall hamster gconf schemas.
+
+        Requires the stored hamster-time-tracker.schemas
+        (usually in /etc/gconf/schemas/) to be present.
+
+        Hence install should be a post-fun,
+        and uninstall a pre-fun.
+        """
+
+        assert action in ("install", "uninstall")
+        if ctx.cmd == action:
+            schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
+            cmd = 'GCONF_CONFIG_SOURCE=$(gconftool-2 --get-default-source) gconftool-2 --makefile-{}-rule {} 1> /dev/null'.format(action, schemas_file)
+            err = ctx.exec_command(cmd)
+            if err:
+                Logs.warn('The following  command failed:\n{}'.format(cmd))
+            else:
+                Logs.pprint('YELLOW', 'Successfully {}ed gconf schemas'.format(action))
+
+
+    def update_icon_cache(ctx):
+        """Update the gtk icon cache."""
+        if ctx.cmd == "install":
+            # adapted from the previous waf gnome.py
+            icon_dir = os.path.join(ctx.env.DATADIR, 'icons/hicolor')
+            cmd = 'gtk-update-icon-cache -q -f -t {}'.format(icon_dir)
+            err = ctx.exec_command(cmd)
+            if err:
+                Logs.warn('The following  command failed:\n{}'.format(cmd))
+            else:
+                Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
+
 
     bld.add_post_fun(lambda bld: manage_gconf_schemas(bld, "install"))
     bld.add_post_fun(update_icon_cache)
