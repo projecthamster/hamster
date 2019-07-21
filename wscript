@@ -34,11 +34,13 @@ def configure(conf):
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
 
-    #conf.recurse("help")
+    if conf.options.doc_commands.lower() != "none":
+        conf.recurse("help")
 
 
 def options(opt):
     opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir', help='gconf base directory [default: /etc/gconf]')
+    opt.add_option('--docs', action='store', default='build install', dest='doc_commands', help='documentation commands [default: "build install", other valid options: "build", "install", "none"]')
 
 
 def build(bld):
