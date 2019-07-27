@@ -40,13 +40,28 @@ pgrep -af hamster
 
 #### Dependencies
 
-openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
 
-*Debian and RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
+##### Debian-based
 
-Debian-based: `apt-get install gettext intltool python-gconf python-xdg gir1.2-gconf-2.0 python-dbus python-gi-cairo`
+ubuntu-19.04:
 
-RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
+```bash
+sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 libdbus-glib-1-dev-bin python3-gi-cairo
+sudo apt install gnome-doc-utils yelp
+```
+
+##### openSUSE
+Leap-15.0: 
+```bash
+sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
+sudo zypper install gnome-doc-utils xml2po yelp
+```
+
+##### RPM-based
+
+*RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
+
+`yum install gettext intltool gnome-python2-gconf dbus-python`
 
 If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
 then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
