@@ -70,14 +70,16 @@ src/hamster-cli
 
 #### Building and installing
 
-To install, python2 is still necessary (for waf).
-[Adapt](https://github.com/projecthamster/hamster/issues/221#issuecomment-462094920) the paths below to your system,
-`sudo rm/mv` commands, beware !
+Main application
+```bash
+./waf configure build --prefix=/usr
+sudo ./waf install
 ```
-./waf configure && ./waf clean && ./waf distclean  # important for the help pages
-./waf configure build --prefix=/usr && sudo ./waf install
-sudo rm -rf /usr/lib/python3.6/site-packages/hamster
-sudo mv /usr/lib/python2.7/site-packages/hamster /usr/lib/python3.6/site-packages/
+For the documentation, same commands, 
+with the additional `--docs` option placed anywhere on the line.
+```bash
+./waf --docs configure build --prefix=/usr
+sudo ./waf --docs install
 ```
 
 Now restart your panels/docks and you should be able to add Hamster!

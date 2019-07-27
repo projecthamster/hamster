@@ -6,10 +6,23 @@ out = 'build'
 
 import os
 from waflib import Logs, Utils
+from waflib.extras import compat15
 
 
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
+    
+    # SYSCONFDIR default should not be /usr/etc, but /etc
+    # TODO: should not be necessary any longer, with the --gconf-dir option
+    if conf.env.SYSCONFDIR == '/usr/etc':
+        conf.env.SYSCONFDIR = '/etc'
+
+    conf.define('prefix', conf.env["PREFIX"]) # to keep compatibility for now
+    
+    if conf.options.docs:
+        conf.recurse("help")
+        return
+    
     conf.load('python')
     conf.check_python_version(minver=(3,4,0))
 
@@ -23,27 +36,21 @@ def configure(conf):
     conf.define('GETTEXT_PACKAGE', "hamster-time-tracker")
     conf.define('PACKAGE', "hamster-time-tracker")
     conf.define('PYEXECDIR', conf.env["PYTHONDIR"]) # i don't know the difference
-
-    # SYSCONFDIR default should not be /usr/etc, but /etc
-    # TODO: should not be necessary any longer, with the --gconf-dir option
-    if conf.env.SYSCONFDIR == '/usr/etc':
-        conf.env.SYSCONFDIR = '/etc'
-
-    conf.define('prefix', conf.env["PREFIX"]) # to keep compatibility for now
-
+    
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
-
-    if conf.options.doc_commands.lower() != "none":
-        conf.recurse("help")
 
 
 def options(opt):
     opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir', help='gconf base directory [default: /etc/gconf]')
-    opt.add_option('--docs', action='store', default='build install', dest='doc_commands', help='documentation commands [default: "build install", other valid options: "build", "install", "none"]')
+    opt.add_option('--docs', action='store_true', default=False, dest='docs', help='build or install documentation instead of the main application')
 
 
 def build(bld):
+    if bld.options.docs:
+        bld.recurse("help")
+        return
+    
     from waflib import Utils
     
     bld.install_files('${LIBDIR}/hamster-time-tracker',
