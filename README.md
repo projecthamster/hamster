@@ -44,13 +44,13 @@ pgrep -af hamster
 ##### Debian-based
 
 ubuntu-19.04:
-
 ```bash
 sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 libdbus-glib-1-dev-bin python3-gi-cairo
 sudo apt install gnome-doc-utils yelp
 ```
 
 ##### openSUSE
+
 Leap-15.0: 
 ```bash
 sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
