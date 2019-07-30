@@ -27,7 +27,6 @@ def configure(conf):
     conf.check_python_version(minver=(3,4,0))
 
     conf.load('intltool')
-    conf.load('dbus')
 
     conf.define('ENABLE_NLS', 1)
     conf.define('HAVE_BIND_TEXTDOMAIN_CODESET', 1)

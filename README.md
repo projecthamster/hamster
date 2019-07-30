@@ -45,7 +45,7 @@ pgrep -af hamster
 
 ubuntu-19.04:
 ```bash
-sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 libdbus-glib-1-dev-bin python3-gi-cairo
+sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 python3-gi-cairo
 sudo apt install gnome-doc-utils yelp
 ```
 
