@@ -43,11 +43,12 @@ pgrep -af hamster
 
 ##### Debian-based
 
-ubuntu-19.04:
+ubuntu (tested in 19.04 and 18.04):
 ```bash
 sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 python3-gi-cairo
 sudo apt install gnome-doc-utils yelp
 ```
+
 
 ##### openSUSE
 
