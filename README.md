@@ -52,7 +52,7 @@ sudo apt install gnome-doc-utils yelp
 
 ##### openSUSE
 
-Leap-15.0: 
+Leap-15.0 and Leap-15.1: 
 ```bash
 sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
 sudo zypper install gnome-doc-utils xml2po yelp
