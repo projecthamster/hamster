@@ -41,8 +41,11 @@ def configure(conf):
 
 
 def options(opt):
-    opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir', help='gconf base directory [default: /etc/gconf]')
-    opt.add_option('--docs', action='store_true', default=False, dest='docs', help='build or install documentation instead of the main application')
+    opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir',
+                   help='gconf base directory [default: /etc/gconf]')
+    
+    opt.add_option('--docs', action='store_true', default=False, dest='docs',
+                   help='build or install documentation instead of the main application')
     
     # the waf default value is /usr/local, which causes issues (e.g. #309)
     # opt.parser.set_defaults(prefix='/usr') did not update the help string,
