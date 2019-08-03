@@ -43,6 +43,14 @@ def configure(conf):
 def options(opt):
     opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir', help='gconf base directory [default: /etc/gconf]')
     opt.add_option('--docs', action='store_true', default=False, dest='docs', help='build or install documentation instead of the main application')
+    
+    # the waf default value is /usr/local, which causes issues (e.g. #309)
+    # opt.parser.set_defaults(prefix='/usr') did not update the help string,
+    # hence need to replace the whole option
+    opt.parser.remove_option('--prefix')
+    default_prefix = '/usr'
+    opt.add_option('--prefix', dest='prefix', default=default_prefix, 
+                   help='installation prefix [default: {}]'.format(default_prefix))
 
 
 def build(bld):

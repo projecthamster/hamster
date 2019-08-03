@@ -88,13 +88,13 @@ src/hamster-cli
 
 Main application
 ```bash
-./waf configure build --prefix=/usr
+./waf configure build
 sudo ./waf install
 ```
 For the documentation, same commands, 
 with the additional `--docs` option placed anywhere on the line.
 ```bash
-./waf --docs configure build --prefix=/usr
+./waf --docs configure build
 sudo ./waf --docs install
 ```
 
