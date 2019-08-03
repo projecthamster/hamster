@@ -99,9 +99,6 @@ def build(bld):
         install_path="${DATADIR}/dbus-1/services",
         )
     
-    bld.install_files(bld.env.schemas_destination,
-                      "data/hamster-time-tracker.schemas")
-
     #bld.add_subdirs("po help data")
     bld.recurse("po data")
 
