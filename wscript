@@ -106,6 +106,11 @@ def build(bld):
         and uninstall a pre-fun.
         """
 
+        # for some reason the post_fun keep being registered for other builds
+        # bypassing the schemas management if the --docs options was given
+        if ctx.options.docs:
+            return
+        
         assert action in ("install", "uninstall")
         if ctx.cmd == action:
             schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
