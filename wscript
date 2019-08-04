@@ -17,8 +17,6 @@ def configure(conf):
     if conf.env.SYSCONFDIR == '/usr/etc':
         conf.env.SYSCONFDIR = '/etc'
 
-    conf.define('prefix', conf.env["PREFIX"]) # to keep compatibility for now
-    
     if conf.options.docs:
         conf.recurse("help")
         return
