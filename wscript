@@ -12,11 +12,6 @@ from waflib.extras import compat15
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
     
-    # SYSCONFDIR default should not be /usr/etc, but /etc
-    # TODO: should not be necessary any longer, with the --gconf-dir option
-    if conf.env.SYSCONFDIR == '/usr/etc':
-        conf.env.SYSCONFDIR = '/etc'
-
     if conf.options.docs:
         conf.recurse("help")
         return
