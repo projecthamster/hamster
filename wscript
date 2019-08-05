@@ -52,8 +52,6 @@ def build(bld):
         bld.recurse("help")
         return
     
-    from waflib import Utils
-    
     bld.install_files('${LIBDIR}/hamster-time-tracker',
                       """src/hamster-service
                          src/hamster-windows-service
