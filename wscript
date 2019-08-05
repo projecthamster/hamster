@@ -6,7 +6,6 @@ out = 'build'
 
 import os
 from waflib import Logs, Utils
-from waflib.extras import compat15
 
 
 def configure(conf):
@@ -21,13 +20,13 @@ def configure(conf):
 
     conf.load('intltool')
 
-    conf.define('ENABLE_NLS', 1)
-    conf.define('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+    conf.env.ENABLE_NLS = 1
+    conf.env.HAVE_BIND_TEXTDOMAIN_CODESET = 1
 
-    conf.define('VERSION', VERSION)
-    conf.define('GETTEXT_PACKAGE', "hamster-time-tracker")
-    conf.define('PACKAGE', "hamster-time-tracker")
-    conf.define('PYEXECDIR', conf.env["PYTHONDIR"]) # i don't know the difference
+    conf.env.VERSION = VERSION
+    conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
+    conf.env.PACKAGE = "hamster-time-tracker"
+    conf.env.PYEXECDIR = conf.env["PYTHONDIR"] # i don't know the difference
     
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
@@ -105,6 +104,7 @@ def build(bld):
         Hence install should be a post-fun,
         and uninstall a pre-fun.
         """
+
 
         # for some reason the post_fun keep being registered for other builds
         # bypassing the schemas management if the --docs options was given
