@@ -86,16 +86,9 @@ src/hamster-cli
 
 #### Building and installing
 
-Main application
 ```bash
 ./waf configure build
 sudo ./waf install
-```
-For the documentation, same commands, 
-with the additional `--docs` option placed anywhere on the line.
-```bash
-./waf --docs configure build
-sudo ./waf --docs install
 ```
 
 Now restart your panels/docks and you should be able to add Hamster!

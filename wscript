@@ -11,10 +11,6 @@ from waflib import Logs, Utils
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
     
-    if conf.options.docs:
-        conf.recurse("help")
-        return
-    
     conf.load('python')
     conf.check_python_version(minver=(3,4,0))
 
@@ -29,14 +25,13 @@ def configure(conf):
     
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
+    
+    conf.recurse("help")
 
 
 def options(opt):
     opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir',
                    help='gconf base directory [default: /etc/gconf]')
-    
-    opt.add_option('--docs', action='store_true', default=False, dest='docs',
-                   help='build or install documentation instead of the main application')
     
     # the waf default value is /usr/local, which causes issues (e.g. #309)
     # opt.parser.set_defaults(prefix='/usr') did not update the help string,
@@ -48,10 +43,6 @@ def options(opt):
 
 
 def build(bld):
-    if bld.options.docs:
-        bld.recurse("help")
-        return
-    
     bld.install_files('${LIBDIR}/hamster-time-tracker',
                       """src/hamster-service
                          src/hamster-windows-service
@@ -88,8 +79,7 @@ def build(bld):
         install_path="${DATADIR}/dbus-1/services",
         )
     
-    #bld.add_subdirs("po help data")
-    bld.recurse("po data")
+    bld.recurse("po data help")
 
 
     def manage_gconf_schemas(ctx, action):
@@ -101,12 +91,6 @@ def build(bld):
         Hence install should be a post-fun,
         and uninstall a pre-fun.
         """
-
-
-        # for some reason the post_fun keep being registered for other builds
-        # bypassing the schemas management if the --docs options was given
-        if ctx.options.docs:
-            return
         
         assert action in ("install", "uninstall")
         if ctx.cmd == action:

@@ -6,7 +6,7 @@
 
 ## Mallard functionality definitions ##
 import os
-from waflib import TaskGen
+from waflib import Logs, TaskGen
 
 def _read_makefile_am(filename):
 	"read a Makefile.am file for DOC_* variable definitions, return a dict"
@@ -73,13 +73,19 @@ TaskGen.after('init_mallard')(apply_mallard)
 # Build Configuration
 
 
-def configure(conf):
-	xml2po = conf.find_program('xml2po', var='XML2PO')
-	conf.env['XML2POFLAGS'] = '-mmallard -p'
+def configure(ctx):
+	lookfor = "xml2po"
+	try:
+		ctx.find_program(lookfor, var='XML2PO')
+		ctx.env.docs = True
+		ctx.env.XML2POFLAGS = '-mmallard -p'
+	except ctx.errors.ConfigurationError:
+		Logs.warn("'{}' not found; documentation build disabled".format(lookfor))
+		ctx.env.docs = False
 
-def build(bld):
-	if bld.env["XML2PO"]:
-		task = bld(
+def build(ctx):
+	if ctx.env.docs:
+		task = ctx(
 			features="mallard",
 			variable_definitions="Makefile.am",
 		)
