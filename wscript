@@ -26,7 +26,6 @@ def configure(conf):
     conf.env.VERSION = VERSION
     conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
     conf.env.PACKAGE = "hamster-time-tracker"
-    conf.env.PYEXECDIR = conf.env["PYTHONDIR"] # i don't know the difference
     
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
