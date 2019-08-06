@@ -93,6 +93,15 @@ sudo ./waf install
 
 Now restart your panels/docks and you should be able to add Hamster!
 
+
+#### Uninstall
+
+```bash
+./waf configure
+sudo ./waf uninstall
+```
+
+
 #### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
