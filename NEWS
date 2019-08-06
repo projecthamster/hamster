@@ -1,6 +1,11 @@
 ===============
 Changes since v2.2.2
 ===============
+* Fixed installation process (PR 421)
+  - Updated waf.
+    No longer need python2.
+  - Default to --prefix=/usr.
+  - gconf schemas are now correctly registered.
 * Removed trophies code (PR 410)
 * Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
 * Fixed update activity window to be resizable (PR 403)
