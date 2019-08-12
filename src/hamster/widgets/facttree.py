@@ -22,7 +22,6 @@ import cairo
 import datetime as dt
 
 from collections import defaultdict
-
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -31,7 +30,6 @@ from gi.repository import Pango as pango
 
 from hamster.lib import graphics
 from hamster.lib import stuff
-
 
 
 class ActionRow(graphics.Sprite):
@@ -103,20 +101,8 @@ class FactRow(object):
         self.activity_label = Label(x=100)
 
         self.category_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_size(10 * pango.SCALE)
-        self.category_label.layout.set_font_description(fontdesc)
-
-
         self.description_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_style(pango.Style.ITALIC)
-        self.description_label.layout.set_font_description(fontdesc)
-
         self.tag_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_size(8 * pango.SCALE)
-        self.tag_label.layout.set_font_description(fontdesc)
 
         self.duration_label = Label()
         self.duration_label.layout.set_alignment(pango.Alignment.RIGHT)
@@ -132,7 +118,6 @@ class FactRow(object):
         self.inter_tag_margin = 4
         self.row_margin_H = 5
         self.row_margin_V = 2
-        self.category_offset_V = 2
 
 
     @property
@@ -172,7 +157,7 @@ class FactRow(object):
         if fact.tags:
             # for now, tags are on a single line.
             # The first one is enough to determine the height.
-            self.tag_label.set_text(fact.tags[0])
+            self.tag_label.set_text( "<small>{}</small>".format(fact.tags[0]))
 
 
     def _show_tags(self, g, color, bg):
@@ -182,7 +167,7 @@ class FactRow(object):
         g.save_context()
         g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
         for tag in self.fact.tags:
-            label.set_text(tag)
+            label.set_text("<small>{}</small>".format(tag))
             w, h = label.layout.get_pixel_size()
             rw = w + self.tag_inner_margin_H * 2
             rh = h + self.tag_inner_margin_V * 2
@@ -222,7 +207,7 @@ class FactRow(object):
             category_color = graphics.ColorUtils.mix(bg, color, 0.57)
             g.set_color(category_color)
             x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
-            self.category_label.show(g, x=x, y=self.category_offset_V)
+            self.category_label.show(g, x=x, y=0)
             g.restore_context()
 
         if self.fact.description or self.fact.tags:
