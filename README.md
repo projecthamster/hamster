@@ -88,8 +88,11 @@ src/hamster-cli
 
 ```bash
 ./waf configure build
-sudo ./waf install
+# thanks to the parentheses the umask of your shell will not be changed
+( umask 0022 && sudo ./waf install; )
 ```
+The `umask 0022` is safe for all, but important for users with more restrictive umask,
+as discussed [here](https://github.com/projecthamster/hamster/pull/421#issuecomment-520167143).
 
 Now restart your panels/docks and you should be able to add Hamster!
 
