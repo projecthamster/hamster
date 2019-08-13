@@ -167,7 +167,7 @@ class FactRow(object):
         g.save_context()
         g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
         for tag in self.fact.tags:
-            label.set_text("<small>{}</small>".format(tag))
+            label.set_text("<small>{}</small>".format(stuff.escape_pango(tag)))
             w, h = label.layout.get_pixel_size()
             rw = w + self.tag_inner_margin_H * 2
             rh = h + self.tag_inner_margin_V * 2
