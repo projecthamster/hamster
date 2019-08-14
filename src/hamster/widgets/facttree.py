@@ -22,7 +22,6 @@ import cairo
 import datetime as dt
 
 from collections import defaultdict
-
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -31,7 +30,6 @@ from gi.repository import Pango as pango
 
 from hamster.lib import graphics
 from hamster.lib import stuff
-
 
 
 class ActionRow(graphics.Sprite):
@@ -97,26 +95,20 @@ class Label(object):
         g.restore_context()
 
 
+class TagLabel(Label):
+    """Tag label, with small text."""
+    def set_text(self, text):
+        Label.set_text(self, "<small>{}</small>".format(text))
+
+
 class FactRow(object):
     def __init__(self):
         self.time_label = Label()
         self.activity_label = Label(x=100)
 
         self.category_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_size(10 * pango.SCALE)
-        self.category_label.layout.set_font_description(fontdesc)
-
-
         self.description_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_style(pango.Style.ITALIC)
-        self.description_label.layout.set_font_description(fontdesc)
-
-        self.tag_label = Label()
-        fontdesc = pango.FontDescription(graphics._font_desc)
-        fontdesc.set_size(8 * pango.SCALE)
-        self.tag_label.layout.set_font_description(fontdesc)
+        self.tag_label = TagLabel()
 
         self.duration_label = Label()
         self.duration_label.layout.set_alignment(pango.Alignment.RIGHT)
@@ -132,8 +124,7 @@ class FactRow(object):
         self.inter_tag_margin = 4
         self.row_margin_H = 5
         self.row_margin_V = 2
-        self.category_offset_V = 2
-
+        self.category_offset_V = self.category_label.height * 0.1;
 
     @property
     def height(self):
@@ -166,13 +157,14 @@ class FactRow(object):
         category_text = "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
         self.category_label.set_text(category_text)
 
-        description_text = "<small>{}</small>".format(stuff.escape_pango(fact.description)) if fact.description else ""
+        text = stuff.escape_pango(fact.description)
+        description_text = "<small><i>{}</i></small>".format(text) if fact.description else ""
         self.description_label.set_text(description_text)
 
         if fact.tags:
             # for now, tags are on a single line.
             # The first one is enough to determine the height.
-            self.tag_label.set_text(fact.tags[0])
+            self.tag_label.set_text(stuff.escape_pango(fact.tags[0]))
 
 
     def _show_tags(self, g, color, bg):
@@ -182,7 +174,7 @@ class FactRow(object):
         g.save_context()
         g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
         for tag in self.fact.tags:
-            label.set_text(tag)
+            label.set_text(stuff.escape_pango(tag))
             w, h = label.layout.get_pixel_size()
             rw = w + self.tag_inner_margin_H * 2
             rh = h + self.tag_inner_margin_V * 2
