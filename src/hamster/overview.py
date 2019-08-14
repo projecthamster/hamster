@@ -70,20 +70,26 @@ class HeaderBar(gtk.HeaderBar):
         self.range_pick = RangePick(stuff.hamster_today())
         self.pack_start(self.range_pick)
 
-        self.add_activity_button = gtk.Button()
-        self.add_activity_button.set_image(gtk.Image.new_from_icon_name("list-add-symbolic",
-                                                                        gtk.IconSize.MENU))
-        self.pack_end(self.add_activity_button)
+        self.system_button = gtk.MenuButton()
+        self.system_button.set_image(gtk.Image.new_from_icon_name(
+            "open-menu-symbolic", gtk.IconSize.MENU))
+        self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
-        self.search_button.set_image(gtk.Image.new_from_icon_name("edit-find-symbolic",
-                                                                  gtk.IconSize.MENU))
+        self.search_button.set_image(gtk.Image.new_from_icon_name(
+            "edit-find-symbolic", gtk.IconSize.MENU))
         self.pack_end(self.search_button)
 
-        self.system_button = gtk.MenuButton()
-        self.system_button.set_image(gtk.Image.new_from_icon_name("emblem-system-symbolic",
-                                                                  gtk.IconSize.MENU))
-        self.pack_end(self.system_button)
+        self.stop_button = gtk.Button()
+        self.stop_button.set_image(gtk.Image.new_from_icon_name(
+            "process-stop-symbolic", gtk.IconSize.MENU))
+        self.pack_end(self.stop_button)
+
+        self.add_activity_button = gtk.Button()
+        self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
+            "list-add-symbolic", gtk.IconSize.MENU))
+        self.pack_end(self.add_activity_button)
+
 
         self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
@@ -454,6 +460,7 @@ class Overview(Controller):
         self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
+        self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
         self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
@@ -543,6 +550,9 @@ class Overview(Controller):
 
     def on_add_activity_clicked(self, button):
         self.start_new_fact(clone_selected=True, fallback=True)
+
+    def on_stop_clicked(self, button):
+        self.storage.stop_tracking()
 
     def on_row_activated(self, tree, day, fact):
         dialogs.edit.show(self, fact_id=fact.id)
