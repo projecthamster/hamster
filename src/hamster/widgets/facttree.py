@@ -95,6 +95,12 @@ class Label(object):
         g.restore_context()
 
 
+class TagLabel(Label):
+    """Tag label, with small text."""
+    def set_text(self, text):
+        Label.set_text(self, "<small>{}</small>".format(text))
+
+
 class FactRow(object):
     def __init__(self):
         self.time_label = Label()
@@ -102,7 +108,7 @@ class FactRow(object):
 
         self.category_label = Label()
         self.description_label = Label()
-        self.tag_label = Label()
+        self.tag_label = TagLabel()
 
         self.duration_label = Label()
         self.duration_label.layout.set_alignment(pango.Alignment.RIGHT)
@@ -157,7 +163,7 @@ class FactRow(object):
         if fact.tags:
             # for now, tags are on a single line.
             # The first one is enough to determine the height.
-            self.tag_label.set_text( "<small>{}</small>".format(fact.tags[0]))
+            self.tag_label.set_text(stuff.escape_pango(fact.tags[0]))
 
 
     def _show_tags(self, g, color, bg):
@@ -167,7 +173,7 @@ class FactRow(object):
         g.save_context()
         g.translate(self.tag_row_margin_H, self.tag_row_margin_V)
         for tag in self.fact.tags:
-            label.set_text("<small>{}</small>".format(stuff.escape_pango(tag)))
+            label.set_text(stuff.escape_pango(tag))
             w, h = label.layout.get_pixel_size()
             rw = w + self.tag_inner_margin_H * 2
             rh = h + self.tag_inner_margin_V * 2
