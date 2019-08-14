@@ -157,7 +157,8 @@ class FactRow(object):
         category_text = "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
         self.category_label.set_text(category_text)
 
-        description_text = "<small>{}</small>".format(stuff.escape_pango(fact.description)) if fact.description else ""
+        text = stuff.escape_pango(fact.description)
+        description_text = "<small><i>{}</i></small>".format(text) if fact.description else ""
         self.description_label.set_text(description_text)
 
         if fact.tags:
