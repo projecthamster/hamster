@@ -124,7 +124,7 @@ class FactRow(object):
         self.inter_tag_margin = 4
         self.row_margin_H = 5
         self.row_margin_V = 2
-
+        self.category_offset_V = self.category_label.height * 0.1;
 
     @property
     def height(self):
@@ -213,7 +213,7 @@ class FactRow(object):
             category_color = graphics.ColorUtils.mix(bg, color, 0.57)
             g.set_color(category_color)
             x = self.activity_label.x + self.activity_label.layout.get_pixel_size()[0]
-            self.category_label.show(g, x=x, y=0)
+            self.category_label.show(g, x=x, y=self.category_offset_V)
             g.restore_context()
 
         if self.fact.description or self.fact.tags:
