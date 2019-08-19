@@ -114,7 +114,7 @@ def parse_datetime_range(arg):
                 pass
         return None
 
-    now = stuff.hamster_now()
+    now = stuff.hamster_now().time()
 
     if fragments['date1'] or fragments['time1']:
         start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
