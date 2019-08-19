@@ -82,10 +82,12 @@ class CustomFactController(gobject.GObject):
                 original_fact = None
 
         if original_fact:
-            label = original_fact.serialized(prepend_date=False)
+            stripped_fact = original_fact.copy()
+            stripped_fact.description = None
+            label = stripped_fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
-                time_len = len(label) - len(original_fact.serialized_name())
+                time_len = len(label) - len(stripped_fact.serialized_name())
                 self.activity.select_region(0, time_len - 1)
             buf = gtk.TextBuffer()
             buf.set_text(original_fact.description or "")
