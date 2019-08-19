@@ -133,16 +133,11 @@ class CustomFactController(gobject.GObject):
         return fact
 
     def on_save_button_clicked(self, button):
-        fact = self.localized_fact()
-        fact.description = self.figure_description()
-        if not fact.activity:
-            return False
-
+        fact = self.validate_fields()
         if self.fact_id:
             runtime.storage.update_fact(self.fact_id, fact)
         else:
             runtime.storage.add_fact(fact)
-
         self.close_window()
 
     def on_activity_changed(self, combo):
@@ -159,9 +154,11 @@ class CustomFactController(gobject.GObject):
         self.activity.set_icon_tooltip_markup(position, markup)
         self.get_widget("save_button").set_sensitive(looks_good)
 
-
     def validate_fields(self):
-        """Check entry and description validity."""
+        """Check entry and description validity.
+
+        Return the consolidated fact if successful, or None.
+        """
         fact = self.localized_fact()
 
         now = hamster_now()
@@ -175,11 +172,11 @@ class CustomFactController(gobject.GObject):
 
         if fact.start_time is None:
             self.update_status(looks_good=False, markup="Missing start time")
-            return
+            return None
 
         if fact.activity is None:
             self.update_status(looks_good=False, markup="Missing activity")
-            return
+            return None
 
         description_box_content = self.figure_description()
         if fact.description and description_box_content:
@@ -195,9 +192,13 @@ class CustomFactController(gobject.GObject):
             print(dedent(tooltip))
             self.update_status(looks_good=False,
                                markup=tooltip)
-            return
+            return None
 
+        # Good to go, no ambiguity
+        if description_box_content:
+            fact.description = description_box_content
         self.update_status(looks_good=True, markup="")
+        return fact
 
     def on_delete_clicked(self, button):
         runtime.storage.remove_fact(self.fact_id)
