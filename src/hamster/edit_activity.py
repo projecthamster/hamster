@@ -56,6 +56,8 @@ class CustomFactController(gobject.GObject):
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
+        self.description_box = self.get_widget('description')
+
         self.activity.grab_focus()
         if fact_id:
             # editing
@@ -86,7 +88,7 @@ class CustomFactController(gobject.GObject):
                 self.activity.select_region(0, time_len - 1)
             buf = gtk.TextBuffer()
             buf.set_text(original_fact.description or "")
-            self.get_widget('description').set_buffer(buf)
+            self.description_box.set_buffer(buf)
 
         self.activity.original_fact = original_fact
 
@@ -116,7 +118,7 @@ class CustomFactController(gobject.GObject):
 
 
     def figure_description(self):
-        buf = self.get_widget('description').get_buffer()
+        buf = self.description_box.get_buffer()
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
@@ -188,7 +190,7 @@ class CustomFactController(gobject.GObject):
         elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
                 return False
-            if self.get_widget('description').has_focus():
+            if self.description_box.has_focus():
                 return False
             self.on_save_button_clicked(None)
 
