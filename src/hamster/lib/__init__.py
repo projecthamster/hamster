@@ -11,7 +11,7 @@ from hamster.lib.stuff import (
 )
 
 
-DATE_FMT = "%d-%m-%Y"
+DATE_FMT = "%Y-%m-%d"
 TIME_FMT = "%H:%M"
 
 
