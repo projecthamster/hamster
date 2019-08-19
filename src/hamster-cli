@@ -99,7 +99,7 @@ def parse_datetime_range(arg):
     # bail out early on relative minutes
     if fragments['relative']:
         delta_minutes = int(fragments['relative'])
-        return dt_now() - dt.timedelta(minutes=delta_minutes), rest
+        return stuff.dt_now() - dt.timedelta(minutes=delta_minutes), rest
 
     start_time, end_time = None, None
 
