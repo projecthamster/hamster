@@ -285,7 +285,7 @@ class ActivityEntry(gtk.Entry):
         self.todays_facts = self.storage.get_todays_facts()
 
         # list of facts of last month
-        now = dt.datetime.now()
+        now = stuff.hamster_now()
         last_month = self.storage.get_facts(now - dt.timedelta(days=30), now)
 
         # naive recency and frequency rank
@@ -350,7 +350,7 @@ class ActivityEntry(gtk.Entry):
         res = []
 
         fact = Fact(text)
-        now = dt.datetime.now()
+        now = stuff.hamster_now()
 
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description

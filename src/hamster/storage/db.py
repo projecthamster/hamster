@@ -548,7 +548,7 @@ class Storage(storage.Storage):
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
-        if (dt.timedelta(days=-1) <= dt.datetime.now() - start_time <= dt.timedelta(days=1)):
+        if (dt.timedelta(days=-1) <= hamster_now() - start_time <= dt.timedelta(days=1)):
             # pull in previous facts
             facts = self.__get_todays_facts()
 
@@ -629,7 +629,7 @@ class Storage(storage.Storage):
             day_start = conf.day_start
         except:
             day_start = dt.time(5, 0)  # default: 5:00
-        today = (dt.datetime.now() - dt.timedelta(hours = day_start.hour,
+        today = (hamster_now() - dt.timedelta(hours = day_start.hour,
                                                   minutes = day_start.minute)).date()
         return self.__get_facts(today)
 
@@ -700,7 +700,7 @@ class Storage(storage.Storage):
             if fact["end_time"]:
                 fact_end_time = fact["end_time"]
             elif (hamster_today() == fact["start_time"].date()) or \
-                 (dt.datetime.now() - fact["start_time"]) <= dt.timedelta(hours=12):
+                 (hamster_now() - fact["start_time"]) <= dt.timedelta(hours=12):
                 fact_end_time = hamster_now()
             else:
                 fact_end_time = fact["start_time"]

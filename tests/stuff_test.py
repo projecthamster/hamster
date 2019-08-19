@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../
 
 import unittest
 from hamster.lib import Fact
+from hamster.lib.stuff import hamster_now
 
 
 class TestActivityInputParsing(unittest.TestCase):
@@ -126,10 +127,10 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertNotEqual(fact1, fact2)
         import datetime as dt
         fact2 = fact1.copy()
-        fact2.start_time = dt.datetime.now()
+        fact2.start_time = hamster_now()
         self.assertNotEqual(fact1, fact2)
         fact2 = fact1.copy()
-        fact2.end_time = dt.datetime.now()
+        fact2.end_time = hamster_now()
         self.assertNotEqual(fact1, fact2)
         # wrong order
         fact2 = fact1.copy()
