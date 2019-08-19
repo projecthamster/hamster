@@ -20,6 +20,7 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
+from textwrap import dedent
 import time
 import datetime as dt
 
@@ -28,7 +29,7 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import hamster_today, hamster_now
+from hamster.lib.stuff import hamster_today, hamster_now, escape_pango
 from hamster.lib import Fact
 
 
@@ -145,7 +146,20 @@ class CustomFactController(gobject.GObject):
     def on_activity_changed(self, combo):
         self.validate_fields()
 
+    def update_status(self, looks_good, markup):
+        """Set icon image and markup."""
+        if looks_good:
+            icon_name = "dialog-ok"
+        else:
+            icon_name = "dialog-error"
+        position = gtk.EntryIconPosition.SECONDARY
+        self.activity.set_icon_from_icon_name(position, icon_name)
+        self.activity.set_icon_tooltip_markup(position, markup)
+        self.get_widget("save_button").set_sensitive(looks_good)
+
+
     def validate_fields(self, widget = None):
+        """Check entry and description validity."""
         fact = self.localized_fact()
 
         now = hamster_now()
@@ -157,9 +171,31 @@ class CustomFactController(gobject.GObject):
         self.draw_preview(fact.start_time or now,
                           fact.end_time or now)
 
-        looks_good = fact.activity is not None and fact.start_time is not None
-        self.get_widget("save_button").set_sensitive(looks_good)
-        return looks_good
+        if fact.start_time is None:
+            self.update_status(looks_good=False, markup="Missing start time")
+            return
+
+        if fact.activity is None:
+            self.update_status(looks_good=False, markup="Missing activity")
+            return
+
+        description_box_content = self.figure_description()
+        if fact.description and description_box_content:
+            escaped_cmd = escape_pango(fact.description)
+            escaped_box = escape_pango(description_box_content)
+            tooltip = dedent("""\
+                             <b>Duplicate description</b>
+                             <i>command line</i>:
+                             '{}'
+                             <i>description box</i>:
+                             '''{}'''
+                             """).format(escaped_cmd, escaped_box)
+            print(dedent(tooltip))
+            self.update_status(looks_good=False,
+                               markup=tooltip)
+            return
+
+        self.update_status(looks_good=True, markup="")
 
     def on_delete_clicked(self, button):
         runtime.storage.remove_fact(self.fact_id)
