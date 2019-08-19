@@ -62,7 +62,7 @@ def fact_dict(fact_data, with_date):
     if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
-        end_date = dt.datetime.now()
+        end_date = stuff.dt_now()
         fact['end'] = ''
 
     fact['duration'] = stuff.format_duration(fact_data.delta)
@@ -99,7 +99,7 @@ def parse_datetime_range(arg):
     # bail out early on relative minutes
     if fragments['relative']:
         delta_minutes = int(fragments['relative'])
-        return dt.datetime.now() - dt.timedelta(minutes=delta_minutes), rest
+        return dt_now() - dt.timedelta(minutes=delta_minutes), rest
 
     start_time, end_time = None, None
 
@@ -114,13 +114,14 @@ def parse_datetime_range(arg):
                 pass
         return None
 
+    now = stuff.dt_now()
 
     if fragments['date1'] or fragments['time1']:
         start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
-                                         to_time(fragments['time1']) or dt.time())
+                                         to_time(fragments['time1']) or now)
     if fragments['date2'] or fragments['time2']:
         end_time = dt.datetime.combine(to_time(fragments['date2']) or start_time or dt.date.today(),
-                                       to_time(fragments['time2']) or dt.time())
+                                       to_time(fragments['time2']) or now)
 
     return start_time, end_time
 
@@ -196,7 +197,7 @@ class HamsterClient(object):
 
         activity = args[0]
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
-        start_time = start_time or dt.datetime.now()
+        start_time = start_time or stuff.dt_now()
 
         self.storage.add_fact(Fact(activity,
                                          start_time = start_time,
@@ -371,7 +372,7 @@ Actions:
     * overview / statistics / about: launch specific window
 
 Time formats:
-    * 'YYYY-MM-DD hh:mm:ss': If date is missing, it will default to today.
+    * 'YYYY-MM-DD hh:mm': If date is missing, it will default to today.
       If time is missing, it will default to 00:00 for start time and 23:59 for
       end time.
     * '-minutes': Relative time in minutes from the current date and time.
@@ -388,22 +389,22 @@ Example usage:
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
-    
+
     parser = argparse.ArgumentParser(
         description="Time tracking utility",
         epilog=usage,
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     # cf. https://stackoverflow.com/a/28611921/3565696
-    parser.add_argument("--log", dest="log_level", 
+    parser.add_argument("--log", dest="log_level",
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
-    
+
     args = parser.parse_args()
-    
+
     # logger for current script
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
