@@ -47,7 +47,7 @@ except ImportError:
     gio = None
 
 from hamster.lib import Fact
-from hamster.lib.stuff import hamster_today
+from hamster.lib.stuff import hamster_today, dt_now
 
 
 class Storage(storage.Storage):
@@ -399,12 +399,11 @@ class Storage(storage.Storage):
 
 
     def __touch_fact(self, fact, end_time = None):
-        end_time = end_time or dt.datetime.now()
+        end_time = end_time or dt_now()
         # tasks under one minute do not count
         if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
             self.__remove_fact(fact['id'])
         else:
-            end_time = end_time.replace(microsecond = 0)
             query = """
                        UPDATE facts
                           SET end_time = ?
@@ -473,7 +472,7 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
-            fact_end_time = fact["end_time"] or dt.datetime.now()
+            fact_end_time = fact["end_time"] or dt_now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
             if start_time < fact["start_time"] and end_time > fact_end_time:
@@ -702,7 +701,7 @@ class Storage(storage.Storage):
                 fact_end_time = fact["end_time"]
             elif (hamster_today() == fact["start_time"].date()) or \
                  (dt.datetime.now() - fact["start_time"]) <= dt.timedelta(hours=12):
-                fact_end_time = dt.datetime.now().replace(microsecond = 0)
+                fact_end_time = dt_now()
             else:
                 fact_end_time = fact["start_time"]
 

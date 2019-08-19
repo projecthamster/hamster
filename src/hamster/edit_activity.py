@@ -28,7 +28,7 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import hamster_today
+from hamster.lib.stuff import hamster_today, dt_now
 from hamster.lib import Fact
 
 
@@ -73,7 +73,7 @@ class CustomFactController(gobject.GObject):
                 # start running now.
                 # Do not try to pass end_time=None to copy(), above;
                 # it would be discarded.
-                original_fact.start_time = dt.datetime.now()
+                original_fact.start_time = dt_now()
                 original_fact.end_time = None
             else:
                 original_fact = None
@@ -127,7 +127,7 @@ class CustomFactController(gobject.GObject):
         if fact.start_time:
             fact.date = self.date
         else:
-            fact.start_time = dt.datetime.now()
+            fact.start_time = dt_now()
         return fact
 
 
@@ -151,7 +151,7 @@ class CustomFactController(gobject.GObject):
     def validate_fields(self, widget = None):
         fact = self.localized_fact()
 
-        now = dt.datetime.now()
+        now = dt_now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
 
         if self.date != now.date():
