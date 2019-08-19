@@ -160,7 +160,7 @@ class CustomFactController(gobject.GObject):
         self.get_widget("save_button").set_sensitive(looks_good)
 
 
-    def validate_fields(self, widget = None):
+    def validate_fields(self):
         """Check entry and description validity."""
         fact = self.localized_fact()
 
