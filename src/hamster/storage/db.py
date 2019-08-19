@@ -629,8 +629,8 @@ class Storage(storage.Storage):
             day_start = conf.day_start
         except:
             day_start = dt.time(5, 0)  # default: 5:00
-        today = (hamster_now() - dt.timedelta(hours = day_start.hour,
-                                                  minutes = day_start.minute)).date()
+        today = (hamster_now() - dt.timedelta(hours=day_start.hour,
+                                              minutes=day_start.minute)).date()
         return self.__get_facts(today)
 
 
