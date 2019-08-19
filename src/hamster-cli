@@ -62,7 +62,7 @@ def fact_dict(fact_data, with_date):
     if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
-        end_date = stuff.dt_now()
+        end_date = stuff.hamster_now()
         fact['end'] = ''
 
     fact['duration'] = stuff.format_duration(fact_data.delta)
@@ -99,7 +99,7 @@ def parse_datetime_range(arg):
     # bail out early on relative minutes
     if fragments['relative']:
         delta_minutes = int(fragments['relative'])
-        return stuff.dt_now() - dt.timedelta(minutes=delta_minutes), rest
+        return stuff.hamster_now() - dt.timedelta(minutes=delta_minutes), rest
 
     start_time, end_time = None, None
 
@@ -114,7 +114,7 @@ def parse_datetime_range(arg):
                 pass
         return None
 
-    now = stuff.dt_now()
+    now = stuff.hamster_now()
 
     if fragments['date1'] or fragments['time1']:
         start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
@@ -197,7 +197,7 @@ class HamsterClient(object):
 
         activity = args[0]
         start_time, end_time = parse_datetime_range(" ".join(args[1:]))
-        start_time = start_time or stuff.dt_now()
+        start_time = start_time or stuff.hamster_now()
 
         self.storage.add_fact(Fact(activity,
                                          start_time = start_time,

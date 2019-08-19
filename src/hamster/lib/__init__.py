@@ -8,7 +8,7 @@ import re
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamsterday_time_to_datetime,
-    dt_now,
+    hamster_now,
 )
 
 
@@ -67,7 +67,7 @@ def figure_time(str_time):
     if (hours is None or minutes is None) or hours > 24 or minutes > 60:
         return None #no can do
 
-    return dt_now()
+    return hamster_now()
 
 
 class Fact(object):
@@ -171,7 +171,7 @@ class Fact(object):
     @property
     def delta(self):
         """Duration (datetime.timedelta)."""
-        end_time = self.end_time if self.end_time else dt_now()
+        end_time = self.end_time if self.end_time else hamster_now()
         return end_time - self.start_time
 
     def serialized_name(self):
@@ -234,7 +234,7 @@ def parse_fact(text, phase=None, res=None, date=None):
         [date] start_time[-end_time] activity[@category][, description]{[,] { })#tag}
         According to the legacy tests, # were allowed in the description
     """
-    now = dt_now()
+    now = hamster_now()
 
     # determine what we can look for
     phases = [

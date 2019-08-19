@@ -59,6 +59,11 @@ def datetime_to_hamsterday(civil_date_time):
     return hamster_date_time.date()
 
 
+def hamster_now():
+    # current datetime truncated to the minute
+    return dt.datetime.now().replace(second=0, microsecond=0)
+
+
 def hamster_today():
     """Return the current hamster day."""
     return datetime_to_hamsterday(dt.datetime.now())
@@ -182,9 +187,6 @@ def duration_minutes(duration):
     else:
         return duration
 
-def dt_now():
-    # current datetime truncated to the minute
-    return dt.datetime.now().replace(second=0, microsecond=0)
 
 def zero_hour(date):
     return dt.datetime.combine(date.date(), dt.time(0,0))
