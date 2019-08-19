@@ -108,7 +108,6 @@ class CustomFactController(gobject.GObject):
         day_facts = runtime.storage.get_facts(self.date, ongoing_days=31)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
-
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
@@ -116,12 +115,10 @@ class CustomFactController(gobject.GObject):
     def show(self):
         self.window.show()
 
-
     def figure_description(self):
         buf = self.description_box.get_buffer()
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
-
 
     def localized_fact(self):
         """Make sure fact has the correct start_time."""
@@ -131,8 +128,6 @@ class CustomFactController(gobject.GObject):
         else:
             fact.start_time = hamster_now()
         return fact
-
-
 
     def on_save_button_clicked(self, button):
         fact = self.localized_fact()
@@ -166,7 +161,6 @@ class CustomFactController(gobject.GObject):
         self.get_widget("save_button").set_sensitive(looks_good)
         return looks_good
 
-
     def on_delete_clicked(self, button):
         runtime.storage.remove_fact(self.fact_id)
         self.close_window()
@@ -193,8 +187,6 @@ class CustomFactController(gobject.GObject):
             if self.description_box.has_focus():
                 return False
             self.on_save_button_clicked(None)
-
-
 
     def close_window(self):
         if not self.parent:
