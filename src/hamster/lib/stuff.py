@@ -66,7 +66,7 @@ def hamster_now():
 
 def hamster_today():
     """Return the current hamster day."""
-    return datetime_to_hamsterday(dt.datetime.now())
+    return datetime_to_hamsterday(hamster_now())
 
 
 def hamsterday_time_to_datetime(hamsterday, time):
