@@ -197,7 +197,6 @@ class CustomFactController(gobject.GObject):
                              <i>description box</i>:
                              '''{}'''
                              """).format(escaped_cmd, escaped_box)
-            print(dedent(tooltip))
             self.update_status(looks_good=False,
                                markup=tooltip)
             return None
