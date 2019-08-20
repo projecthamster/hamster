@@ -61,13 +61,15 @@ class CustomFactController(gobject.GObject):
         self.description_buffer = self.description_box.get_buffer()
         self.description_buffer.connect("changed", self.on_description_changed)
 
+        self.save_button = self.get_widget("save_button")
+
         self.activity.grab_focus()
         if fact_id:
             # editing
             fact = runtime.storage.get_fact(fact_id)
             self.date = fact.date
             original_fact = fact
-            self.get_widget("save_button").set_label("gtk-save")
+            self.save_button.set_label("gtk-save")
             self.window.set_title(_("Update activity"))
         else:
             self.date = hamster_today()
@@ -155,7 +157,7 @@ class CustomFactController(gobject.GObject):
         position = gtk.EntryIconPosition.SECONDARY
         self.activity.set_icon_from_icon_name(position, icon_name)
         self.activity.set_icon_tooltip_markup(position, markup)
-        self.get_widget("save_button").set_sensitive(looks_good)
+        self.save_button.set_sensitive(looks_good)
 
     def validate_fields(self):
         """Check fields information.
