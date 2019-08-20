@@ -167,11 +167,13 @@ class CustomFactController(gobject.GObject):
         now = hamster_now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
 
-        if self.date != now.date():
-            now = dt.datetime.combine(self.date, now.time())
+        if self.date == now.date():
+            default_dt = now
+        else:
+            default_dt = dt.datetime.combine(self.date, now.time())
 
-        self.draw_preview(fact.start_time or now,
-                          fact.end_time or now)
+        self.draw_preview(fact.start_time or default_dt,
+                          fact.end_time or default_dt)
 
         if fact.start_time is None:
             self.update_status(looks_good=False, markup="Missing start time")
