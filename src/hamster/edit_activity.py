@@ -149,14 +149,8 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
 
     def update_status(self, looks_good, markup):
-        """Set icon image and markup."""
-        if looks_good:
-            icon_name = "dialog-ok"
-        else:
-            icon_name = "dialog-error"
-        position = gtk.EntryIconPosition.SECONDARY
-        self.activity.set_icon_from_icon_name(position, icon_name)
-        self.activity.set_icon_tooltip_markup(position, markup)
+        """Set save button sensitivity and tooltip."""
+        self.save_button.set_tooltip_markup(markup)
         self.save_button.set_sensitive(looks_good)
 
     def validate_fields(self):
