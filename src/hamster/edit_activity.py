@@ -59,6 +59,7 @@ class CustomFactController(gobject.GObject):
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
+        self.description_buffer.connect("changed", self.on_description_changed)
 
         self.activity.grab_focus()
         if fact_id:
@@ -97,6 +98,9 @@ class CustomFactController(gobject.GObject):
         self._gui.connect_signals(self)
         self.validate_fields()
         self.window.show_all()
+
+    def on_description_changed(self, text):
+        self.validate_fields()
 
     def on_prev_day_clicked(self, button):
         self.date = self.date - dt.timedelta(days=1)
