@@ -158,7 +158,10 @@ class CustomFactController(gobject.GObject):
         self.get_widget("save_button").set_sensitive(looks_good)
 
     def validate_fields(self):
-        """Check entry and description validity.
+        """Check fields information.
+
+        Update gui status about entry and description validity.
+        Try to merge date, activity and description informations.
 
         Return the consolidated fact if successful, or None.
         """
