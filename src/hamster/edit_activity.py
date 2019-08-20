@@ -122,7 +122,7 @@ class CustomFactController(gobject.GObject):
         self.window.show()
 
     def figure_description(self):
-        buf = self.description_box.get_buffer()
+        buf = self.description_buffer
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
