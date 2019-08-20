@@ -58,6 +58,7 @@ class CustomFactController(gobject.GObject):
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.description_box = self.get_widget('description')
+        self.description_buffer = self.description_box.get_buffer()
 
         self.activity.grab_focus()
         if fact_id:
@@ -89,9 +90,7 @@ class CustomFactController(gobject.GObject):
                 self.activity.set_text(label)
                 time_len = len(label) - len(stripped_fact.serialized_name())
                 self.activity.select_region(0, time_len - 1)
-            buf = gtk.TextBuffer()
-            buf.set_text(original_fact.description or "")
-            self.description_box.set_buffer(buf)
+            self.description_buffer.set_text(original_fact.description or "")
 
         self.activity.original_fact = original_fact
 
