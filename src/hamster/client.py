@@ -23,7 +23,7 @@ import datetime as dt
 from calendar import timegm
 import dbus, dbus.mainloop.glib
 from gi.repository import GObject as gobject
-from hamster.lib import Fact
+from hamster.lib import Fact, hamster_now
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
@@ -183,7 +183,7 @@ class Storage(gobject.GObject):
 
         serialized = fact.serialized_name()
 
-        start_timestamp = timegm((fact.start_time or dt.datetime.now()).timetuple())
+        start_timestamp = timegm((fact.start_time or hamster_now()).timetuple())
 
         end_timestamp = fact.end_time or 0
         if end_timestamp:
@@ -201,7 +201,7 @@ class Storage(gobject.GObject):
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
         activity should have other end time than the current moment"""
-        end_time = timegm((end_time or dt.datetime.now()).timetuple())
+        end_time = timegm((end_time or hamster_now()).timetuple())
         return self.conn.StopTracking(end_time)
 
     def remove_fact(self, fact_id):
@@ -215,7 +215,7 @@ class Storage(gobject.GObject):
         from the fact dict that is returned by this function"""
 
 
-        start_time = timegm((fact.start_time or dt.datetime.now()).timetuple())
+        start_time = timegm((fact.start_time or hamster_now()).timetuple())
 
         end_time = fact.end_time or 0
         if end_time:

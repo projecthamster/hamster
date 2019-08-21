@@ -92,7 +92,7 @@ class DayLine(graphics.Scene):
 
         self.day_start = conf.day_start
 
-        start_time = start_time or dt.datetime.now()
+        start_time = start_time or stuff.hamster_now()
 
         self.view_time = start_time or dt.datetime.combine(start_time.date(), self.day_start)
 
@@ -238,8 +238,8 @@ class DayLine(graphics.Scene):
                 pangocairo.show_layout(context, layout)
 
         #current time
-        if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = self.scope_hours):
-            minutes = round((dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel)
+        if self.view_time < stuff.hamster_now() < self.view_time + dt.timedelta(hours = self.scope_hours):
+            minutes = round((stuff.hamster_now() - self.view_time).seconds / 60 / minute_pixel)
             g.rectangle(minutes, 0, self.width, self.height)
             g.fill(colors['normal_bg'], 0.7)
 
