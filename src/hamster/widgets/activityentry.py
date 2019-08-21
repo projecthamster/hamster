@@ -411,6 +411,7 @@ class ActivityEntry(gtk.Entry):
                 variant_fact.end_time = None
 
             if variant_fact:
+                variant_fact.description = None
                 variant = variant_fact.serialized(prepend_date=False)
                 variants.append((description, variant))
 
