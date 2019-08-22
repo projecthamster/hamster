@@ -67,7 +67,7 @@ class Storage(storage.Storage):
 
 
         self.db_path = self.__init_db_file(database_dir)
-        logger.debug(self.db_path)
+        logger.info("database: '{}'".format(self.db_path))
 
         if gio:
             # add file monitoring so the app does not have to be restarted
@@ -79,12 +79,13 @@ class Storage(storage.Storage):
                                            gio.FileQueryInfoFlags.NONE,
                                            None).get_etag() == self.__last_etag:
                         # ours
+                        logger.info("database updated")
                         return
                 elif event == gio.FileMonitorEvent.DELETED:
                     self.con = None
 
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
-                    print("DB file has been modified externally. Calling all stations")
+                    logger.warning("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
 
             self.__database_file = gio.File.new_for_path(self.db_path)
@@ -110,7 +111,7 @@ class Storage(storage.Storage):
         new_db_file = os.path.join(database_dir, "hamster.db")
         if os.path.exists(old_db_file):
             if os.path.exists(new_db_file):
-                logger.info("Have two database %s and %s" % (new_db_file, old_db_file))
+                logger.warning("Have two database %s and %s" % (new_db_file, old_db_file))
             else:
                 os.rename(old_db_file, new_db_file)
 
@@ -134,7 +135,7 @@ class Storage(storage.Storage):
 
             data_dir = os.path.realpath(data_dir)
 
-            logger.info("Database not found in %s - installing default from %s!" % (db_path, data_dir))
+            logger.warning("Database not found in %s - installing default from %s!" % (db_path, data_dir))
             copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
