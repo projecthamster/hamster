@@ -377,7 +377,9 @@ class Storage(storage.Storage):
 
         facts = self.fetchall(query, (self._unsorted_localized, id))
         assert len(facts) > 0, "No fact with id {}".format(id)
-        return self.__group_tags(facts)[0]
+        fact = self.__group_tags(facts)[0]
+        logger.info("got fact {}".format(fact))
+        return fact
 
     def __group_tags(self, facts):
         """put the fact back together and move all the unique tags to an array"""
