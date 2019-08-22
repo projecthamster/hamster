@@ -525,6 +525,8 @@ class Storage(storage.Storage):
                     start_time = start_time,
                     end_time = end_time)
 
+        logger.info("adding fact {}".format(fact))
+
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
 
@@ -622,6 +624,7 @@ class Storage(storage.Storage):
         self.execute(insert, params)
 
         self.__remove_index([fact_id])
+        logger.info("fact successfully added, with id #{}".format(fact_id))
         return fact_id
 
     def __last_insert_rowid(self):
@@ -742,6 +745,7 @@ class Storage(storage.Storage):
         return res
 
     def __remove_fact(self, fact_id):
+        logger.info("removing fact #{}".format(fact_id))
         statements = ["DELETE FROM fact_tags where fact_id = ?",
                       "DELETE FROM facts where id = ?"]
         self.execute(statements, [(fact_id,)] * 2)
@@ -841,8 +845,8 @@ class Storage(storage.Storage):
         """remove affected ids from the index"""
         if not ids:
             return
-
         ids = ",".join((str(id) for id in ids))
+        logger.info("removing fact #{} from index".format(ids))
         self.execute("DELETE FROM fact_index where id in (%s)" % ids)
 
 
