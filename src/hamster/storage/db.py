@@ -374,7 +374,9 @@ class Storage(storage.Storage):
                  ORDER BY e.name
         """
 
-        return self.__group_tags(self.fetchall(query, (self._unsorted_localized, id)))[0]
+        facts = self.fetchall(query, (self._unsorted_localized, id))
+        assert len(facts) > 0, "No fact with id {}".format(id)
+        return self.__group_tags(facts)[0]
 
     def __group_tags(self, facts):
         """put the fact back together and move all the unique tags to an array"""
