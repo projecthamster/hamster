@@ -240,12 +240,15 @@ class FactRow(object):
 
 class FactTree(graphics.Scene, gtk.Scrollable):
     """
-    The fact tree is a painter - it maintains scroll state and shows what we can
-    see. That means it does not show all the facts there are, but rather only
-    those that you can see.
-    It's also painter as it reuses labels. Caching is futile, we do all the painting
-    every time
+    The fact tree is a painter.
+    It does not change facts by itself, only sends signals.
+    Facts get updated only through `set_facts`.
 
+    It maintains scroll state and shows what we can see.
+    That means it does not show all the facts there are,
+    but rather only those that you can see.
+    It's also painter as it reuses labels.
+    Caching is futile, we do all the painting every time
 
 
     ASCII Art!
@@ -324,7 +327,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 self.unset_current_fact()
             else:
                 self.set_current_fact(self.hover_fact)
-
 
     def activate_row(self, day, fact):
         self.emit("on-activate-row", day, fact)
@@ -413,8 +415,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 break
 
         if hover_day != self.hover_day:
-            self.hover_day = hover_day
+            # Facts are considered equal if their content is the same,
+            # even if their id is different.
+            # redraw only cares about content, not id.
             self.redraw()
+        # make sure it is always fully updated, including facts ids.
+        self.hover_day = hover_day
 
         if self.hover_day:
             for fact in self.hover_day.get('facts', []):
@@ -423,8 +429,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     break
 
         if hover_fact != self.hover_fact:
-            self.hover_fact = hover_fact
             self.move_actions()
+        # idem, always update hover_fact, not just if they appear different
+        self.hover_fact = hover_fact
 
     def move_actions(self):
         if self.hover_fact:
