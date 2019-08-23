@@ -321,6 +321,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         return facts_ids.index(self.current_fact.id)
 
     def on_mouse_down(self, scene, event):
+        self.on_mouse_move(None, event)
         self.grab_focus()
         if self.hover_fact:
             if self.hover_fact == self.current_fact:
