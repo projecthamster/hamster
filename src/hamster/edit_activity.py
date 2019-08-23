@@ -20,6 +20,7 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
+from textwrap import dedent
 import time
 import datetime as dt
 
@@ -28,7 +29,7 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import hamster_today, hamster_now
+from hamster.lib.stuff import hamster_today, hamster_now, escape_pango
 from hamster.lib import Fact
 
 
@@ -56,13 +57,19 @@ class CustomFactController(gobject.GObject):
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
+        self.description_box = self.get_widget('description')
+        self.description_buffer = self.description_box.get_buffer()
+        self.description_buffer.connect("changed", self.on_description_changed)
+
+        self.save_button = self.get_widget("save_button")
+
         self.activity.grab_focus()
         if fact_id:
             # editing
             fact = runtime.storage.get_fact(fact_id)
             self.date = fact.date
             original_fact = fact
-            self.get_widget("save_button").set_label("gtk-save")
+            self.save_button.set_label("gtk-save")
             self.window.set_title(_("Update activity"))
         else:
             self.date = hamster_today()
@@ -79,20 +86,23 @@ class CustomFactController(gobject.GObject):
                 original_fact = None
 
         if original_fact:
-            label = original_fact.serialized(prepend_date=False)
+            stripped_fact = original_fact.copy()
+            stripped_fact.description = None
+            label = stripped_fact.serialized(prepend_date=False)
             with self.activity.handler_block(self.activity.checker):
                 self.activity.set_text(label)
-                time_len = len(label) - len(original_fact.serialized_name())
+                time_len = len(label) - len(stripped_fact.serialized_name())
                 self.activity.select_region(0, time_len - 1)
-            buf = gtk.TextBuffer()
-            buf.set_text(original_fact.description or "")
-            self.get_widget('description').set_buffer(buf)
+            self.description_buffer.set_text(original_fact.description or "")
 
         self.activity.original_fact = original_fact
 
         self._gui.connect_signals(self)
         self.validate_fields()
         self.window.show_all()
+
+    def on_description_changed(self, text):
+        self.validate_fields()
 
     def on_prev_day_clicked(self, button):
         self.date = self.date - dt.timedelta(days=1)
@@ -106,7 +116,6 @@ class CustomFactController(gobject.GObject):
         day_facts = runtime.storage.get_facts(self.date, ongoing_days=31)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
-
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
@@ -114,12 +123,10 @@ class CustomFactController(gobject.GObject):
     def show(self):
         self.window.show()
 
-
     def figure_description(self):
-        buf = self.get_widget('description').get_buffer()
+        buf = self.description_buffer
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
-
 
     def localized_fact(self):
         """Make sure fact has the correct start_time."""
@@ -130,40 +137,71 @@ class CustomFactController(gobject.GObject):
             fact.start_time = hamster_now()
         return fact
 
-
-
     def on_save_button_clicked(self, button):
-        fact = self.localized_fact()
-        fact.description = self.figure_description()
-        if not fact.activity:
-            return False
-
+        fact = self.validate_fields()
         if self.fact_id:
             runtime.storage.update_fact(self.fact_id, fact)
         else:
             runtime.storage.add_fact(fact)
-
         self.close_window()
 
     def on_activity_changed(self, combo):
         self.validate_fields()
 
-    def validate_fields(self, widget = None):
+    def update_status(self, looks_good, markup):
+        """Set save button sensitivity and tooltip."""
+        self.save_button.set_tooltip_markup(markup)
+        self.save_button.set_sensitive(looks_good)
+
+    def validate_fields(self):
+        """Check fields information.
+
+        Update gui status about entry and description validity.
+        Try to merge date, activity and description informations.
+
+        Return the consolidated fact if successful, or None.
+        """
         fact = self.localized_fact()
 
         now = hamster_now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
 
-        if self.date != now.date():
-            now = dt.datetime.combine(self.date, now.time())
+        if self.date == now.date():
+            default_dt = now
+        else:
+            default_dt = dt.datetime.combine(self.date, now.time())
 
-        self.draw_preview(fact.start_time or now,
-                          fact.end_time or now)
+        self.draw_preview(fact.start_time or default_dt,
+                          fact.end_time or default_dt)
 
-        looks_good = fact.activity is not None and fact.start_time is not None
-        self.get_widget("save_button").set_sensitive(looks_good)
-        return looks_good
+        if fact.start_time is None:
+            self.update_status(looks_good=False, markup="Missing start time")
+            return None
 
+        if fact.activity is None:
+            self.update_status(looks_good=False, markup="Missing activity")
+            return None
+
+        description_box_content = self.figure_description()
+        if fact.description and description_box_content:
+            escaped_cmd = escape_pango(fact.description)
+            escaped_box = escape_pango(description_box_content)
+            tooltip = dedent("""\
+                             <b>Duplicate description</b>
+                             <i>command line</i>:
+                             '{}'
+                             <i>description box</i>:
+                             '''{}'''
+                             """).format(escaped_cmd, escaped_box)
+            self.update_status(looks_good=False,
+                               markup=tooltip)
+            return None
+
+        # Good to go, no ambiguity
+        if description_box_content:
+            fact.description = description_box_content
+        self.update_status(looks_good=True, markup="")
+        return fact
 
     def on_delete_clicked(self, button):
         runtime.storage.remove_fact(self.fact_id)
@@ -188,11 +226,9 @@ class CustomFactController(gobject.GObject):
         elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
                 return False
-            if self.get_widget('description').has_focus():
+            if self.description_box.has_focus():
                 return False
             self.on_save_button_clicked(None)
-
-
 
     def close_window(self):
         if not self.parent:
