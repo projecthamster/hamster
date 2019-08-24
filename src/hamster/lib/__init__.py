@@ -175,7 +175,7 @@ class Fact(object):
         return end_time - self.start_time
 
     def serialized_name(self):
-        res = self.activity
+        res = self.activity or ""
 
         if self.category:
             res += "@%s" % self.category
