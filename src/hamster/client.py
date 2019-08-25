@@ -34,7 +34,6 @@ def from_dbus_fact(fact):
                 activity_id = fact[5],
                 category = fact[6],
                 tags = fact[7],
-                date = dt.datetime.utcfromtimestamp(fact[8]).date(),
             id = fact[0]
             )
 
