@@ -164,8 +164,13 @@ class Fact(object):
     @date.setter
     def date(self, value):
         if self.start_time:
+            previous_start_time = self.start_time
             self.start_time = hamsterday_time_to_datetime(value, self.start_time.time())
-        if self.end_time:
+            if self.end_time:
+                # start_time date prevails.
+                # Shift end_time to preserve the fact duration.
+                self.end_time += self.start_time - previous_start_time
+        elif self.end_time:
             self.end_time = hamsterday_time_to_datetime(value, self.end_time.time())
 
     @property
