@@ -25,17 +25,19 @@ import dbus, dbus.mainloop.glib
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
 
+
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
     return Fact(activity=fact[4],
-                start_time  = dt.datetime.utcfromtimestamp(fact[1]),
-                end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
-                description = fact[3],
-                activity_id = fact[5],
-                category = fact[6],
-                tags = fact[7],
-            id = fact[0]
-            )
+                start_time=dt.datetime.utcfromtimestamp(fact[1]),
+                end_time=dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
+                description=fact[3],
+                activity_id=fact[5],
+                category=fact[6],
+                tags=fact[7],
+                id=fact[0]
+                )
+
 
 class Storage(gobject.GObject):
     """Hamster client class, communicating to hamster storage daemon via d-bus.
