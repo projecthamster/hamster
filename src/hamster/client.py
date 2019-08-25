@@ -27,7 +27,7 @@ from hamster.lib import Fact, hamster_now
 
 def from_dbus_fact(fact):
     """unpack the struct into a proper dict"""
-    return Fact(fact[4],
+    return Fact(activity=fact[4],
                 start_time  = dt.datetime.utcfromtimestamp(fact[1]),
                 end_time = dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
                 description = fact[3],
