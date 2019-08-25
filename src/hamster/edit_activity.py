@@ -178,7 +178,7 @@ class CustomFactController(gobject.GObject):
             self.update_status(looks_good=False, markup="Missing start time")
             return None
 
-        if fact.activity is None:
+        if not fact.activity:
             self.update_status(looks_good=False, markup="Missing activity")
             return None
 
