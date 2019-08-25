@@ -74,8 +74,7 @@ def figure_time(str_time):
 
 class Fact(object):
     def __init__(self, activity="", category=None, description=None, tags=None,
-                 start_time=None, end_time=None, id=None,
-                 date=None, activity_id=None):
+                 start_time=None, end_time=None, id=None, activity_id=None):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
@@ -154,7 +153,8 @@ class Fact(object):
 
     @classmethod
     def parse(cls, string, date=None):
-        fact = Fact(date=date)
+        fact = Fact()
+        fact.date = date
         phase = "start_time" if date else "date"
         for key, val in parse_fact(string, phase, {}, date).items():
             setattr(fact, key, val)
