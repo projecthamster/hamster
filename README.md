@@ -40,11 +40,29 @@ pgrep -af hamster
 
 #### Dependencies
 
-openSUSE Leap-15: `zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk`
 
-Debian-based: [detailed instructions](https://github.com/projecthamster/hamster/wiki/Hamster-2.x-on-Xubuntu-18.04).
+##### Debian-based
 
-RPM-based: `yum install gettext intltool gnome-python2-gconf dbus-python`
+ubuntu (tested in 19.04 and 18.04):
+```bash
+sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 python3-gi-cairo
+sudo apt install gnome-doc-utils yelp
+```
+
+
+##### openSUSE
+
+Leap-15.0 and Leap-15.1: 
+```bash
+sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
+sudo zypper install gnome-doc-utils xml2po yelp
+```
+
+##### RPM-based
+
+*RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
+
+`yum install gettext intltool gnome-python2-gconf dbus-python`
 
 If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
 then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
@@ -68,17 +86,24 @@ src/hamster-cli
 
 #### Building and installing
 
-To install, python2 is still necessary (for waf).
-[Adapt](https://github.com/projecthamster/hamster/issues/221#issuecomment-462094920) the paths below to your system,
-`sudo rm/mv` commands, beware !
+```bash
+./waf configure build
+# thanks to the parentheses the umask of your shell will not be changed
+( umask 0022 && sudo ./waf install; )
 ```
-./waf configure && ./waf clean && ./waf distclean  # important for the help pages
-./waf configure build --prefix=/usr && sudo ./waf install
-sudo rm -rf /usr/lib/python3.6/site-packages/hamster
-sudo mv /usr/lib/python2.7/site-packages/hamster /usr/lib/python3.6/site-packages/
-```
+The `umask 0022` is safe for all, but important for users with more restrictive umask,
+as discussed [here](https://github.com/projecthamster/hamster/pull/421#issuecomment-520167143).
 
 Now restart your panels/docks and you should be able to add Hamster!
+
+
+#### Uninstall
+
+```bash
+./waf configure
+sudo ./waf uninstall
+```
+
 
 #### Migrating from hamster-applet
 

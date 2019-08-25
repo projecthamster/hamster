@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
-# encoding: utf-8
+# This file is meant to be included in the root wscript,
+# through the recurse("data") command
 
-bld.install_files('${DATADIR}/hamster-time-tracker', '*.ui')
+start_dir = bld.path.find_dir('.')
+bld.install_files('${DATADIR}/hamster-time-tracker', start_dir.ant_glob('*.ui'))
 bld.install_files('${DATADIR}/hamster-time-tracker', 'hamster.db')
-bld.install_files('${DATADIR}/hamster-time-tracker/art', 'art/*.png')
+bld.install_files('${DATADIR}/hamster-time-tracker/art', start_dir.ant_glob('art/*.png'))
 bld.install_files('${DATADIR}/hamster-time-tracker', 'report_template.html')
 
 bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/hamster-time-tracker.png')
@@ -28,9 +29,10 @@ bld.add_group()
 # process .in files with intl_tool
 bld(features = 'intltool_in',
     source   = 'hamster-time-tracker.schemas.in',
-    install_path = '${SYSCONFDIR}/gconf/schemas',
+    target = 'hamster-time-tracker.schemas',
+    install_path = bld.env.schemas_destination,
     podir    = '../po',
-    flags    = ['-s', '-u', '-c'])
+    flags    = ['-s', '-u'])
 
 bld(features = 'intltool_in',
     source   = """hamster-time-tracker-overview.desktop.in
@@ -38,4 +40,4 @@ bld(features = 'intltool_in',
                   hamster-windows-service.desktop.in""",
     install_path = '${DATADIR}/applications',
     podir    = '../po',
-    flags    = ['-d', '-q', '-u', '-c'])
+    flags    = ['-d', '-q', '-u'])
