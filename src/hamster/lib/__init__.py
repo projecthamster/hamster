@@ -73,60 +73,29 @@ def figure_time(str_time):
 
 
 class Fact(object):
-    def __init__(self, activity="", category = "", description = "", tags = "",
-                 start_time = None, end_time = None, id = None,
-                 date = None, activity_id = None, initial_fact=None):
+    def __init__(self, activity="", category=None, description=None, tags=None,
+                 start_time=None, end_time=None, id=None,
+                 date=None, activity_id=None):
         """Homogeneous chunk of activity.
-        The category, description and tags can be either passed in explicitly
-        or by passing a string with the
-        "activity@category, description #tag #tag"
-        syntax as the first argument (activity), for historical reasons.
-        Explicitly stated values will take precedence over derived ones.
-        Note: this works only if the new values are not None or "" !
-              In this case, one should separately state e.g.
-              fact = Fact(initial_fact=<initial_fact>)
-              fact.end_time = None
-              TODO: should rework that,
-                    but the new hamster-* should be ready in few years...
-        initial_fact (Fact or str): optional starting point.
-                                    This is the same as calling
-                                    Fact(str(initial_fact), ...)
+
+        The category, description and tags must be passed explicitly.
+
+        To provide the whole fact information as a single string,
+        please use Fact.parse(string).
+
         id (int): id in the database.
                   Should be used with extreme caution, knowing exactly why.
                   (only for very specific direct database read/write)
         """
 
-        # Previously the "activity" argument could only be a string,
-        # actually containing all the "fact" information.
-        # Now allow to pass an inital fact, that will be copied,
-        # and overridden by any given keyword argument
-        # Note: currently, the genuine activity (before the @)
-        #       is the same as in the original fact
-        if initial_fact:
-            activity = initial_fact.serialized()
-
-        self.original_activity = activity  # unparsed version (deprecated)
-        self.activity = None
-        self.category = None
-        self.description = None
-        self.tags = []
-        self.start_time = None
-        self.end_time = None
+        self.activity = activity or ""
+        self.category = category.replace(",", "").strip() if category else None
+        self.description = description.strip() if description else None
+        self.tags = tags or []
+        self.start_time = start_time
+        self.end_time = end_time
         self.id = id
-        self.ponies = False
         self.activity_id = activity_id
-
-        phase = "start_time" if date else "date"
-        for key, val in parse_fact(activity, phase, {}, date).items():
-            setattr(self, key, val)
-
-        # override implicit with explicit
-        self.category = (category.replace(",", "").strip() or
-                         (self.category and self.category.strip()))
-        self.description = (description or self.description or "").strip() or None
-        self.tags =  tags or self.tags or []
-        self.start_time = start_time or self.start_time or None
-        self.end_time = end_time or self.end_time or None
 
     # TODO: might need some cleanup
     def as_dict(self):
@@ -182,6 +151,14 @@ class Fact(object):
         """Duration (datetime.timedelta)."""
         end_time = self.end_time if self.end_time else hamster_now()
         return end_time - self.start_time
+
+    @classmethod
+    def parse(cls, string, date=None):
+        fact = Fact(date=date)
+        phase = "start_time" if date else "date"
+        for key, val in parse_fact(string, phase, {}, date).items():
+            setattr(fact, key, val)
+        return fact
 
     def serialized_name(self):
         res = self.activity or ""
