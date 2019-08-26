@@ -734,8 +734,8 @@ class Storage(storage.Storage):
                 # (in which case we give up)
                 fact_date = fact_start_date
 
-            if fact_date < date or fact_date > end_date:
-                # due to spanning we've jumped outside of given period
+            if fact["start_time"] < datetime_from - dt.timedelta(days=30):
+                # ignoring old on-going facts
                 continue
 
             fact["date"] = fact_date
