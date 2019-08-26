@@ -343,26 +343,30 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         # all keys should appear also in the Overview.on_key_press
         # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
-            if self.current_fact:
-                idx = max(0, self.current_fact_index - 1)
-            else:
-                # enter from below
-                idx = len(self.facts) - 1
-            self.set_current_fact(self.facts[idx])
+            if self.facts:
+                if self.current_fact:
+                    idx = max(0, self.current_fact_index - 1)
+                else:
+                    # enter from below
+                    idx = len(self.facts) - 1
+                self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Down:
-            if self.current_fact:
-                idx = min(len(self.facts) - 1, self.current_fact_index + 1)
-            else:
-                # enter from top
-                idx = 0
-            self.set_current_fact(self.facts[idx])
+            if self.facts:
+                if self.current_fact:
+                    idx = min(len(self.facts) - 1, self.current_fact_index + 1)
+                else:
+                    # enter from top
+                    idx = 0
+                self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Home:
-            self.set_current_fact(self.facts[0])
+            if self.facts:
+                self.set_current_fact(self.facts[0])
 
         elif event.keyval == gdk.KEY_End:
-            self.set_current_fact(self.facts[-1])
+            if self.facts:
+                self.set_current_fact(self.facts[-1])
 
         elif event.keyval == gdk.KEY_Page_Down:
             self.y += self.height * 0.8
