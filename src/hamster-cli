@@ -218,7 +218,7 @@ class HamsterClient(object):
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
-        facts = self.storage.get_facts(start_time, end_time, ongoing_days=31)
+        facts = self.storage.get_facts(start_time, end_time)
 
         writer = reports.simple(facts, start_time.date(), end_time.date(), export_format)
 
@@ -284,7 +284,7 @@ class HamsterClient(object):
 
     def _list(self, start_time, end_time, search=""):
         """Print a listing of activities"""
-        facts = self.storage.get_facts(start_time, end_time, search, ongoing_days=31)
+        facts = self.storage.get_facts(start_time, end_time, search)
 
 
         headers = {'activity': _("Activity"),
