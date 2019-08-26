@@ -659,6 +659,8 @@ class Storage(storage.Storage):
         end_date = end_date or date
         datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
 
+        logger.info("searching for facts from {} to {}".format(datetime_from, datetime_to))
+
         query = """
                    SELECT a.id AS id,
                           a.start_time AS start_time,
