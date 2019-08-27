@@ -5,6 +5,8 @@ import calendar
 import datetime as dt
 import re
 
+from copy import deepcopy
+
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamsterday_time_to_datetime,
@@ -147,7 +149,9 @@ class Fact(object):
         By default, only copy user-visible attributes.
         To also copy the id, use fact.copy(id=fact.id)
         """
-        return Fact(initial_fact=self, **kwds)
+        fact = deepcopy(self)
+        fact._set(**kwds)
+        return fact
 
     @property
     def date(self):
@@ -207,6 +211,19 @@ class Fact(object):
         name = self.serialized_name()
         datetime = self.serialized_time(prepend_date)
         return "%s %s" % (datetime, name)
+
+    def _set(self, **kwds):
+        """Modify attributes.
+
+        Private, used only in copy. It is more readable to be explicit, e.g.:
+        fact.start_time = ...
+        fact.end_time = ...
+        """
+        for attr, value in kwds.items():
+            if not hasattr(self, attr):
+                raise AttributeError(f"'{attr}' not found")
+            else:
+                setattr(self, attr, value)
 
     def __eq__(self, other):
         return (id(self) == id(other)

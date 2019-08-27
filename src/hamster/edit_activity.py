@@ -74,13 +74,9 @@ class CustomFactController(gobject.GObject):
             self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
-                # cloning
-                original_fact = base_fact.copy()
-                # start running now.
-                # Do not try to pass end_time=None to copy(), above;
-                # it would be discarded.
-                original_fact.start_time = hamster_now()
-                original_fact.end_time = None
+                # start a clone now.
+                original_fact = base_fact.copy(start_time=hamster_now(),
+                                               end_time=None)
             else:
                 original_fact = None
 
