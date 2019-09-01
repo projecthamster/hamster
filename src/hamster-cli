@@ -360,10 +360,10 @@ if __name__ == '__main__':
 Actions:
     * start / track <activity> [start-time] [end-time]: Track an activity
     * stop: Stop tracking current activity.
-    * list [start-time] [end-time]: List activities
-    * search [terms] [start-time] [end-time]: List activities matching a search
+    * list [start-date [end-date]]: List activities
+    * search [terms] [start-date [end-date]]: List activities matching a search
       term
-    * export [html|tsv|ical|xml] [start-time] [end-time]: Export activities with
+    * export [html|tsv|ical|xml] [start-date [end-date]]: Export activities with
       the specified format
     * current: Print current activity
     * activities: List all the activities names, one per line.
@@ -372,10 +372,13 @@ Actions:
     * overview / statistics / about: launch specific window
 
 Time formats:
-    * 'YYYY-MM-DD hh:mm': If date is missing, it will default to today.
-      If time is missing, it will default to 00:00 for start time and 23:59 for
-      end time.
+    * 'YYYY-MM-DD hh:mm': If start-date is missing, it will default to today.
+      If end-date is missing, it will default to start-date. 
     * '-minutes': Relative time in minutes from the current date and time.
+Note:
+    * For list/search/export a "hamster day" starts at the time set in the
+      preferences (default 05:00) and ends one minute earlier the next day.
+      Activities are reported for each "hamster day" in the interval.
 
 Example usage:
     hamster start bananas -20
