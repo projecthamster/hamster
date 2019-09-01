@@ -67,7 +67,7 @@ class Storage(storage.Storage):
 
 
         self.db_path = self.__init_db_file(database_dir)
-        logger.debug(self.db_path)
+        logger.info("database: '{}'".format(self.db_path))
 
         if gio:
             # add file monitoring so the app does not have to be restarted
@@ -79,12 +79,13 @@ class Storage(storage.Storage):
                                            gio.FileQueryInfoFlags.NONE,
                                            None).get_etag() == self.__last_etag:
                         # ours
+                        logger.info("database updated")
                         return
                 elif event == gio.FileMonitorEvent.DELETED:
                     self.con = None
 
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
-                    print("DB file has been modified externally. Calling all stations")
+                    logger.warning("DB file has been modified externally. Calling all stations")
                     self.dispatch_overwrite()
 
             self.__database_file = gio.File.new_for_path(self.db_path)
@@ -110,7 +111,7 @@ class Storage(storage.Storage):
         new_db_file = os.path.join(database_dir, "hamster.db")
         if os.path.exists(old_db_file):
             if os.path.exists(new_db_file):
-                logger.info("Have two database %s and %s" % (new_db_file, old_db_file))
+                logger.warning("Have two database %s and %s" % (new_db_file, old_db_file))
             else:
                 os.rename(old_db_file, new_db_file)
 
@@ -134,7 +135,7 @@ class Storage(storage.Storage):
 
             data_dir = os.path.realpath(data_dir)
 
-            logger.info("Database not found in %s - installing default from %s!" % (db_path, data_dir))
+            logger.warning("Database not found in %s - installing default from %s!" % (db_path, data_dir))
             copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
@@ -374,7 +375,11 @@ class Storage(storage.Storage):
                  ORDER BY e.name
         """
 
-        return self.__group_tags(self.fetchall(query, (self._unsorted_localized, id)))[0]
+        facts = self.fetchall(query, (self._unsorted_localized, id))
+        assert len(facts) > 0, "No fact with id {}".format(id)
+        fact = self.__group_tags(facts)[0]
+        logger.info("got fact {}".format(fact))
+        return fact
 
     def __group_tags(self, facts):
         """put the fact back together and move all the unique tags to an array"""
@@ -520,6 +525,8 @@ class Storage(storage.Storage):
                     start_time = start_time,
                     end_time = end_time)
 
+        logger.info("adding fact {}".format(fact))
+
         start_time = start_time or fact.start_time
         end_time = end_time or fact.end_time
 
@@ -617,6 +624,7 @@ class Storage(storage.Storage):
         self.execute(insert, params)
 
         self.__remove_index([fact_id])
+        logger.info("fact successfully added, with id #{}".format(fact_id))
         return fact_id
 
     def __last_insert_rowid(self):
@@ -737,6 +745,7 @@ class Storage(storage.Storage):
         return res
 
     def __remove_fact(self, fact_id):
+        logger.info("removing fact #{}".format(fact_id))
         statements = ["DELETE FROM fact_tags where fact_id = ?",
                       "DELETE FROM facts where id = ?"]
         self.execute(statements, [(fact_id,)] * 2)
@@ -836,8 +845,8 @@ class Storage(storage.Storage):
         """remove affected ids from the index"""
         if not ids:
             return
-
         ids = ",".join((str(id) for id in ids))
+        logger.info("removing fact #{} from index".format(ids))
         self.execute("DELETE FROM fact_index where id in (%s)" % ids)
 
 

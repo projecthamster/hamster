@@ -240,12 +240,15 @@ class FactRow(object):
 
 class FactTree(graphics.Scene, gtk.Scrollable):
     """
-    The fact tree is a painter - it maintains scroll state and shows what we can
-    see. That means it does not show all the facts there are, but rather only
-    those that you can see.
-    It's also painter as it reuses labels. Caching is futile, we do all the painting
-    every time
+    The fact tree is a painter.
+    It does not change facts by itself, only sends signals.
+    Facts get updated only through `set_facts`.
 
+    It maintains scroll state and shows what we can see.
+    That means it does not show all the facts there are,
+    but rather only those that you can see.
+    It's also painter as it reuses labels.
+    Caching is futile, we do all the painting every time
 
 
     ASCII Art!
@@ -318,13 +321,13 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         return facts_ids.index(self.current_fact.id)
 
     def on_mouse_down(self, scene, event):
+        self.on_mouse_move(None, event)
         self.grab_focus()
         if self.hover_fact:
             if self.hover_fact == self.current_fact:
                 self.unset_current_fact()
             else:
                 self.set_current_fact(self.hover_fact)
-
 
     def activate_row(self, day, fact):
         self.emit("on-activate-row", day, fact)
@@ -340,26 +343,30 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         # all keys should appear also in the Overview.on_key_press
         # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
-            if self.current_fact:
-                idx = max(0, self.current_fact_index - 1)
-            else:
-                # enter from below
-                idx = len(self.facts) - 1
-            self.set_current_fact(self.facts[idx])
+            if self.facts:
+                if self.current_fact:
+                    idx = max(0, self.current_fact_index - 1)
+                else:
+                    # enter from below
+                    idx = len(self.facts) - 1
+                self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Down:
-            if self.current_fact:
-                idx = min(len(self.facts) - 1, self.current_fact_index + 1)
-            else:
-                # enter from top
-                idx = 0
-            self.set_current_fact(self.facts[idx])
+            if self.facts:
+                if self.current_fact:
+                    idx = min(len(self.facts) - 1, self.current_fact_index + 1)
+                else:
+                    # enter from top
+                    idx = 0
+                self.set_current_fact(self.facts[idx])
 
         elif event.keyval == gdk.KEY_Home:
-            self.set_current_fact(self.facts[0])
+            if self.facts:
+                self.set_current_fact(self.facts[0])
 
         elif event.keyval == gdk.KEY_End:
-            self.set_current_fact(self.facts[-1])
+            if self.facts:
+                self.set_current_fact(self.facts[-1])
 
         elif event.keyval == gdk.KEY_Page_Down:
             self.y += self.height * 0.8
@@ -413,8 +420,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 break
 
         if hover_day != self.hover_day:
-            self.hover_day = hover_day
+            # Facts are considered equal if their content is the same,
+            # even if their id is different.
+            # redraw only cares about content, not id.
             self.redraw()
+        # make sure it is always fully updated, including facts ids.
+        self.hover_day = hover_day
 
         if self.hover_day:
             for fact in self.hover_day.get('facts', []):
@@ -423,8 +434,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     break
 
         if hover_fact != self.hover_fact:
-            self.hover_fact = hover_fact
             self.move_actions()
+        # idem, always update hover_fact, not just if they appear different
+        self.hover_fact = hover_fact
 
     def move_actions(self):
         if self.hover_fact:
