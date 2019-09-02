@@ -43,7 +43,7 @@ from hamster.lib import graphics
 
 def extract_search(text):
     fact = Fact.parse(text)
-    search = fact.activity or ""
+    search = fact.activity
     if fact.category:
         search += "@%s" % fact.category
     if fact.tags:
@@ -293,7 +293,7 @@ class ActivityEntry(gtk.Entry):
         suggestions = defaultdict(int)
         for fact in last_month:
             days = 30 - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds() / 60 / 60 / 24
-            label = fact.activity or ""
+            label = fact.activity
             if fact.category:
                 label += "@%s" % fact.category
 

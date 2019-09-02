@@ -87,7 +87,7 @@ class Fact(object):
                   (only for very specific direct database read/write)
         """
 
-        self.activity = activity or ""
+        self.activity = activity
         self.category = category.replace(",", "").strip() if category else None
         self.description = description.strip() if description else None
         self.tags = tags or []
@@ -110,6 +110,15 @@ class Fact(object):
             'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
             'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
+
+    @property
+    def activity(self):
+        """Activity name."""
+        return self._activity
+
+    @activity.setter
+    def activity(self, value):
+        self._activity = value.strip() if value else ""
 
     def copy(self, **kwds):
         """Return an independent copy, with overrides as keyword arguments.
@@ -161,7 +170,7 @@ class Fact(object):
         return fact
 
     def serialized_name(self):
-        res = self.activity or ""
+        res = self.activity
 
         if self.category:
             res += "@%s" % self.category
