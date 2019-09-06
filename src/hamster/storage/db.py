@@ -641,7 +641,7 @@ class Storage(storage.Storage):
         datetime_from = dt.datetime.combine(date, split_time)
 
         end_date = end_date or date
-        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
+        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days=1, seconds=-1)
 
         logger.info("searching for facts from {} to {}".format(datetime_from, datetime_to))
 
