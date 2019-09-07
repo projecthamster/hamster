@@ -37,7 +37,7 @@ class TestActivityInputParsing(unittest.TestCase):
         assert activity.start_time is None
         assert activity.end_time is None
         assert not activity.category
-        assert activity.description is None
+        assert not activity.description
 
     def test_with_start_time(self):
         # with time
@@ -48,7 +48,7 @@ class TestActivityInputParsing(unittest.TestCase):
         #rest must be empty
         assert not activity.category
         assert activity.end_time is None
-        assert activity.description is None
+        assert not activity.description
 
     def test_with_start_and_end_time(self):
         # with time
@@ -59,7 +59,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
         #rest must be empty
         assert not activity.category
-        assert activity.description is None
+        assert not activity.description
 
     def test_category(self):
         # plain activity name
@@ -68,7 +68,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.category, "hämster")
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.description is None
+        assert not activity.description
 
     def test_description(self):
         # plain activity name
@@ -164,7 +164,7 @@ class TestActivityInputParsing(unittest.TestCase):
         fact = Fact.parse("11:00 12:00 BPC-261 - Task title@Project#code")
         self.assertEqual(fact.activity, "BPC-261 - Task title")
         self.assertEqual(fact.category, "Project")
-        self.assertEqual(fact.description, None)
+        self.assertEqual(fact.description, "")
         self.assertEqual(fact.tags, ["code"])
         # space between category and tag
         fact2 = Fact.parse("11:00 12:00 BPC-261 - Task title@Project #code")

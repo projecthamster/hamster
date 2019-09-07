@@ -89,7 +89,7 @@ class Fact(object):
 
         self.activity = activity
         self.category = category
-        self.description = description.strip() if description else None
+        self.description = description
         self.tags = tags or []
         self.start_time = start_time
         self.end_time = end_time
@@ -167,6 +167,14 @@ class Fact(object):
         """Duration (datetime.timedelta)."""
         end_time = self.end_time if self.end_time else hamster_now()
         return end_time - self.start_time
+
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, value):
+        self._description = value.strip() if value else ""
 
     @classmethod
     def parse(cls, string, date=None):
