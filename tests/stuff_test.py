@@ -34,11 +34,9 @@ class TestActivityInputParsing(unittest.TestCase):
         # plain activity name
         activity = Fact.parse("just a simple case with ütf-8")
         self.assertEqual(activity.activity, "just a simple case with ütf-8")
-
-        assert activity.category is None
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.category is None
+        assert not activity.category
         assert activity.description is None
 
     def test_with_start_time(self):
@@ -48,7 +46,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:35")
 
         #rest must be empty
-        assert activity.category is None
+        assert not activity.category
         assert activity.end_time is None
         assert activity.description is None
 
@@ -60,7 +58,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.end_time.strftime("%H:%M"), "14:25")
 
         #rest must be empty
-        assert activity.category is None
+        assert not activity.category
         assert activity.description is None
 
     def test_category(self):
@@ -77,10 +75,10 @@ class TestActivityInputParsing(unittest.TestCase):
         activity = Fact.parse("case, with added descriptiön")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added descriptiön")
-        assert activity.category is None
+        assert not activity.category
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.category is None
+        assert not activity.category
 
     def test_tags(self):
         # plain activity name
@@ -88,7 +86,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added #de description")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
-        assert activity.category is None
+        assert not activity.category
         assert activity.start_time is None
         assert activity.end_time is None
 

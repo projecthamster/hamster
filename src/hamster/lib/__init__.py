@@ -88,7 +88,7 @@ class Fact(object):
         """
 
         self.activity = activity
-        self.category = category.replace(",", "").strip() if category else None
+        self.category = category
         self.description = description.strip() if description else None
         self.tags = tags or []
         self.start_time = start_time
@@ -119,6 +119,14 @@ class Fact(object):
     @activity.setter
     def activity(self, value):
         self._activity = value.strip() if value else ""
+
+    @property
+    def category(self):
+        return self._category
+
+    @category.setter
+    def category(self, value):
+        self._category = value.replace(",", "").strip() if value else ""
 
     def copy(self, **kwds):
         """Return an independent copy, with overrides as keyword arguments.
