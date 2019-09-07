@@ -319,7 +319,7 @@ class HamsterClient(object):
 
         by_cat = {}
         for fact in facts:
-            cat = fact.category or _("Uncategorized")
+            cat = fact.category or _("Unsorted")
             by_cat.setdefault(cat, dt.timedelta(0))
             by_cat[cat] += fact.delta
 
