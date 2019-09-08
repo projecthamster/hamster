@@ -293,7 +293,7 @@ class ActivityEntry(gtk.Entry):
         suggestions = defaultdict(int)
         for fact in last_month:
             days = 30 - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds() / 60 / 60 / 24
-            label = fact.activity
+            label = fact.activity or ""
             if fact.category:
                 label += "@%s" % fact.category
 

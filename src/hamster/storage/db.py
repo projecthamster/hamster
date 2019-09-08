@@ -47,7 +47,9 @@ except ImportError:
     gio = None
 
 from hamster.lib import Fact
+from hamster.lib.configuration import conf
 from hamster.lib.stuff import hamster_today, hamster_now
+
 
 
 class Storage(storage.Storage):
@@ -632,32 +634,16 @@ class Storage(storage.Storage):
 
 
     def __get_todays_facts(self):
-        try:
-            from hamster.lib.configuration import conf
-            day_start = conf.day_start
-        except:
-            day_start = dt.time(5, 0)  # default: 5:00
-        today = (hamster_now() - dt.timedelta(hours=day_start.hour,
-                                              minutes=day_start.minute)).date()
-        return self.__get_facts(today)
-
+        return self.__get_facts(hamster_today())
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
-        try:
-            from hamster.lib.configuration import conf
-            day_start = conf.get("day_start_minutes")
-            day_start_h, day_start_m = divmod(day_start)
-        except:
-            # default day start to 5am
-            day_start_h = 5
-            day_start_m = 0
-        day_start = dt.time(day_start_h, day_start_m)
-
-        split_time = day_start
+        split_time = conf.day_start
         datetime_from = dt.datetime.combine(date, split_time)
 
         end_date = end_date or date
-        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days = 1)
+        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days=1, seconds=-1)
+
+        logger.info("searching for facts from {} to {}".format(datetime_from, datetime_to))
 
         query = """
                    SELECT a.id AS id,
@@ -734,8 +720,8 @@ class Storage(storage.Storage):
                 # (in which case we give up)
                 fact_date = fact_start_date
 
-            if fact_date < date or fact_date > end_date:
-                # due to spanning we've jumped outside of given period
+            if fact["start_time"] < datetime_from - dt.timedelta(days=30):
+                # ignoring old on-going facts
                 continue
 
             fact["date"] = fact_date

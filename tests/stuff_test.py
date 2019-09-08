@@ -102,6 +102,24 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(activity.description, "description #ta non-tag")
         self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
+    def test_copy(self):
+        fact1 = Fact("12:25-13:25 case@cat, description #tag #bäg")
+        fact2 = fact1.copy()
+        self.assertEqual(fact1.start_time, fact2.start_time)
+        self.assertEqual(fact1.end_time, fact2.end_time)
+        self.assertEqual(fact1.activity, fact2.activity)
+        self.assertEqual(fact1.category, fact2.category)
+        self.assertEqual(fact1.description, fact2.description)
+        self.assertEqual(fact1.tags, fact2.tags)
+        fact3 = fact1.copy(activity="changed")
+        self.assertEqual(fact3.activity, "changed")
+        fact3 = fact1.copy(category="changed")
+        self.assertEqual(fact3.category, "changed")
+        fact3 = fact1.copy(description="changed")
+        self.assertEqual(fact3.description, "changed")
+        fact3 = fact1.copy(tags=["changed"])
+        self.assertEqual(fact3.tags, ["changed"])
+
     def test_initial_fact(self):
         fact = Fact("12:25-13:25 case@cat, description #tag #bäg")
         fact_copy = Fact(initial_fact=fact)

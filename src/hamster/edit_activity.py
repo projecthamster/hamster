@@ -69,19 +69,14 @@ class CustomFactController(gobject.GObject):
             fact = runtime.storage.get_fact(fact_id)
             self.date = fact.date
             original_fact = fact
-            self.save_button.set_label("gtk-save")
             self.window.set_title(_("Update activity"))
         else:
             self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
-                # cloning
-                original_fact = base_fact.copy()
-                # start running now.
-                # Do not try to pass end_time=None to copy(), above;
-                # it would be discarded.
-                original_fact.start_time = hamster_now()
-                original_fact.end_time = None
+                # start a clone now.
+                original_fact = base_fact.copy(start_time=hamster_now(),
+                                               end_time=None)
             else:
                 original_fact = None
 
@@ -113,7 +108,7 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
 
     def draw_preview(self, start_time, end_time=None):
-        day_facts = runtime.storage.get_facts(self.date, ongoing_days=31)
+        day_facts = runtime.storage.get_facts(self.date)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
     def get_widget(self, name):
@@ -148,10 +143,20 @@ class CustomFactController(gobject.GObject):
     def on_activity_changed(self, combo):
         self.validate_fields()
 
-    def update_status(self, looks_good, markup):
+    def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
         self.save_button.set_tooltip_markup(markup)
-        self.save_button.set_sensitive(looks_good)
+        if status == "looks good":
+            self.save_button.set_label("gtk-save")
+            self.save_button.set_sensitive(True)
+        elif status == "warning":
+            self.save_button.set_label("gtk-dialog-warning")
+            self.save_button.set_sensitive(True)
+        elif status == "wrong":
+            self.save_button.set_label("gtk-save")
+            self.save_button.set_sensitive(False)
+        else:
+            raise ValueError("unknown status: '{}'".format(status))
 
     def validate_fields(self):
         """Check fields information.
@@ -175,32 +180,53 @@ class CustomFactController(gobject.GObject):
                           fact.end_time or default_dt)
 
         if fact.start_time is None:
-            self.update_status(looks_good=False, markup="Missing start time")
+            self.update_status(status="wrong", markup="Missing start time")
             return None
 
-        if fact.activity is None:
-            self.update_status(looks_good=False, markup="Missing activity")
+        if not fact.activity:
+            self.update_status(status="wrong", markup="Missing activity")
             return None
 
         description_box_content = self.figure_description()
         if fact.description and description_box_content:
             escaped_cmd = escape_pango(fact.description)
             escaped_box = escape_pango(description_box_content)
-            tooltip = dedent("""\
+            markup = dedent("""\
                              <b>Duplicate description</b>
                              <i>command line</i>:
                              '{}'
                              <i>description box</i>:
                              '''{}'''
                              """).format(escaped_cmd, escaped_box)
-            self.update_status(looks_good=False,
-                               markup=tooltip)
+            self.update_status(status="wrong",
+                               markup=markup)
             return None
 
-        # Good to go, no ambiguity
+        # Good to go, no description ambiguity
         if description_box_content:
             fact.description = description_box_content
-        self.update_status(looks_good=True, markup="")
+
+        if (fact.delta < dt.timedelta(0)) and fact.end_time:
+            fact.end_time += dt.timedelta(days=1)
+            markup = dedent("""\
+                            <b>Working late ?</b>
+                            Duration would be negative.
+                            This happens when the activity crosses the
+                            hamster day start time ({:%H:%M} from tracking settings).
+
+                            Changing the end time date to the next day.
+                            Pressing the button would save
+                            an actvity going from
+                            {}
+                            to
+                            {}
+                            (in civil local time)
+                            """.format(conf.day_start, fact.start_time, fact.end_time))
+            self.update_status(status="warning", markup=markup)
+            return fact
+
+        # nothing unusual
+        self.update_status(status="looks good", markup="")
         return fact
 
     def on_delete_clicked(self, button):
