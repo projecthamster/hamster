@@ -152,7 +152,7 @@ class FactRow(object):
             time_label += fact.end_time.strftime(" %H:%M")
         self.time_label.set_text(time_label)
 
-        self.activity_label.set_text(stuff.escape_pango(fact.activity or ""))
+        self.activity_label.set_text(stuff.escape_pango(fact.activity))
 
         category_text = "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
         self.category_label.set_text(category_text)

@@ -42,8 +42,8 @@ from hamster.lib import graphics
 
 
 def extract_search(text):
-    fact = Fact(text)
-    search = fact.activity or ""
+    fact = Fact.parse(text)
+    search = fact.activity
     if fact.category:
         search += "@%s" % fact.category
     if fact.tags:
@@ -293,7 +293,7 @@ class ActivityEntry(gtk.Entry):
         suggestions = defaultdict(int)
         for fact in last_month:
             days = 30 - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds() / 60 / 60 / 24
-            label = fact.activity or ""
+            label = fact.activity
             if fact.category:
                 label += "@%s" % fact.category
 
@@ -314,7 +314,8 @@ class ActivityEntry(gtk.Entry):
 
     def complete_first(self):
         text = self.get_text()
-        fact, search = Fact(text), extract_search(text)
+        fact = Fact.parse(text)
+        search = extract_search(text)
         if not self.complete_tree.rows or not fact.activity:
             return text, None
 
@@ -349,7 +350,7 @@ class ActivityEntry(gtk.Entry):
 
         res = []
 
-        fact = Fact(text)
+        fact = Fact.parse(text)
         now = stuff.hamster_now()
 
         # figure out what we are looking for

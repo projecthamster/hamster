@@ -39,11 +39,19 @@ class Storage(object):
 
     # facts
     def add_fact(self, fact, start_time, end_time, temporary = False):
-        fact = Fact(fact, start_time = start_time, end_time = end_time)
-        start_time = fact.start_time or hamster_now()
+        """Add fact.
+
+        fact: either a Fact instance or
+              a string that can be parsed through Fact.parse.
+        """
+        if isinstance(fact, Fact):
+            fact_str = fact.serialized_name()
+        else:
+            fact_str = fact
+        start_time = start_time or hamster_now()
 
         self.start_transaction()
-        result = self.__add_fact(fact.serialized_name(), start_time, end_time, temporary)
+        result = self.__add_fact(fact_str, start_time, end_time, temporary)
         self.end_transaction()
 
         if result:

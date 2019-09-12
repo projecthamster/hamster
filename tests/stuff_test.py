@@ -32,69 +32,67 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_plain_name(self):
         # plain activity name
-        activity = Fact("just a simple case with ütf-8")
+        activity = Fact.parse("just a simple case with ütf-8")
         self.assertEqual(activity.activity, "just a simple case with ütf-8")
-
-        assert activity.category is None
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.category is None
-        assert activity.description is None
+        assert not activity.category
+        assert not activity.description
 
     def test_with_start_time(self):
         # with time
-        activity = Fact("12:35 with start time")
+        activity = Fact.parse("12:35 with start time")
         self.assertEqual(activity.activity, "with start time")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:35")
 
         #rest must be empty
-        assert activity.category is None
+        assert not activity.category
         assert activity.end_time is None
-        assert activity.description is None
+        assert not activity.description
 
     def test_with_start_and_end_time(self):
         # with time
-        activity = Fact("12:35-14:25 with start-end time")
+        activity = Fact.parse("12:35-14:25 with start-end time")
         self.assertEqual(activity.activity, "with start-end time")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:35")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "14:25")
 
         #rest must be empty
-        assert activity.category is None
-        assert activity.description is None
+        assert not activity.category
+        assert not activity.description
 
     def test_category(self):
         # plain activity name
-        activity = Fact("just a simple case@hämster")
+        activity = Fact.parse("just a simple case@hämster")
         self.assertEqual(activity.activity, "just a simple case")
         self.assertEqual(activity.category, "hämster")
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.description is None
+        assert not activity.description
 
     def test_description(self):
         # plain activity name
-        activity = Fact("case, with added descriptiön")
+        activity = Fact.parse("case, with added descriptiön")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added descriptiön")
-        assert activity.category is None
+        assert not activity.category
         assert activity.start_time is None
         assert activity.end_time is None
-        assert activity.category is None
+        assert not activity.category
 
     def test_tags(self):
         # plain activity name
-        activity = Fact("case, with added #de description #and, #some #tägs")
+        activity = Fact.parse("case, with added #de description #and, #some #tägs")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added #de description")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
-        assert activity.category is None
+        assert not activity.category
         assert activity.start_time is None
         assert activity.end_time is None
 
     def test_full(self):
         # plain activity name
-        activity = Fact("1225-1325 case@cat, description #ta non-tag #tag #bäg")
+        activity = Fact.parse("1225-1325 case@cat, description #ta non-tag #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
@@ -103,7 +101,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
     def test_copy(self):
-        fact1 = Fact("12:25-13:25 case@cat, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1.start_time, fact2.start_time)
         self.assertEqual(fact1.end_time, fact2.end_time)
@@ -120,18 +118,8 @@ class TestActivityInputParsing(unittest.TestCase):
         fact3 = fact1.copy(tags=["changed"])
         self.assertEqual(fact3.tags, ["changed"])
 
-    def test_initial_fact(self):
-        fact = Fact("12:25-13:25 case@cat, description #tag #bäg")
-        fact_copy = Fact(initial_fact=fact)
-        self.assertEqual(fact_copy.start_time.strftime("%H:%M"), "12:25")
-        self.assertEqual(fact_copy.end_time.strftime("%H:%M"), "13:25")
-        self.assertEqual(fact_copy.activity, "case")
-        self.assertEqual(fact_copy.category, "cat")
-        self.assertEqual(fact_copy.description, "description")
-        self.assertEqual(fact_copy.tags, ["tag", "bäg"])
-
     def test_comparison(self):
-        fact1 = Fact("12:25-13:25 case@cat, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1, fact2)
         fact2 = fact1.copy()
@@ -161,25 +149,25 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_decimal_in_activity(self):
         # cf. issue #270
-        fact = Fact("12:25-13:25 10.0@ABC, Two Words #tag #bäg")
+        fact = Fact.parse("12:25-13:25 10.0@ABC, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.0")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
         # should not pick up a time here
-        fact = Fact("10.00@ABC, Two Words #tag #bäg")
+        fact = Fact.parse("10.00@ABC, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.00")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
 
     def test_spaces(self):
         # cf. issue #114
-        fact = Fact("11:00 12:00 BPC-261 - Task title@Project#code")
+        fact = Fact.parse("11:00 12:00 BPC-261 - Task title@Project#code")
         self.assertEqual(fact.activity, "BPC-261 - Task title")
         self.assertEqual(fact.category, "Project")
-        self.assertEqual(fact.description, None)
+        self.assertEqual(fact.description, "")
         self.assertEqual(fact.tags, ["code"])
         # space between category and tag
-        fact2 = Fact("11:00 12:00 BPC-261 - Task title@Project #code")
+        fact2 = Fact.parse("11:00 12:00 BPC-261 - Task title@Project #code")
         self.assertEqual(fact.serialized(), fact2.serialized())
 
 if __name__ == '__main__':

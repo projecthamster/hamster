@@ -497,7 +497,7 @@ class Storage(storage.Storage):
                 fact_name = fact["name"]
 
                 # create new fact for the end
-                new_fact = Fact(fact["name"],
+                new_fact = Fact(activity=fact["name"],
                                 category = fact["category"],
                                 description = fact["description"])
                 new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact_end_time)
@@ -523,9 +523,9 @@ class Storage(storage.Storage):
 
 
     def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
-        fact = Fact(serialized_fact,
-                    start_time = start_time,
-                    end_time = end_time)
+        fact = Fact.parse(serialized_fact)
+        fact.start_time = start_time
+        fact.end_time = end_time
 
         logger.info("adding fact {}".format(fact))
 

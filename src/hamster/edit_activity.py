@@ -88,7 +88,7 @@ class CustomFactController(gobject.GObject):
                 self.activity.set_text(label)
                 time_len = len(label) - len(stripped_fact.serialized_name())
                 self.activity.select_region(0, time_len - 1)
-            self.description_buffer.set_text(original_fact.description or "")
+            self.description_buffer.set_text(original_fact.description)
 
         self.activity.original_fact = original_fact
 
@@ -125,7 +125,7 @@ class CustomFactController(gobject.GObject):
 
     def localized_fact(self):
         """Make sure fact has the correct start_time."""
-        fact = Fact(self.activity.get_text())
+        fact = Fact.parse(self.activity.get_text())
         if fact.start_time:
             fact.date = self.date
         else:
