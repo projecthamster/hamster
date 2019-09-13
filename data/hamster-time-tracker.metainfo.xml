@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>hamster-time-tracker</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
+  <name>Time Tracker</name>
+  <summary>Project Hamster - track your time</summary>
+
+  <description>
+    <p>
+      Hamster is time tracking for individuals. It helps you to keep track of how
+      much time you have spent during the day on activities you choose to track.
+    </p>
+    <p>
+      Whenever you change from doing one task to other, you change your current
+      activity in Hamster. After a while you can see how many hours you have spent on
+      what. Maybe print it out, or export to some suitable format, if time reporting
+      is a request of your employer.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Fast and easy data entry with autocompletion of recent activities</li>
+      <li>Flexible grouping with @categories and #tags</li>
+      <li>Day, week, month or custom views with tallies by groups</li>
+      <li>Generation of html reports (can be customized)</li>
+      <li>Data export in text, xml and tsv formats</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">hamster-time-tracker-overview.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The overview window</caption>
+      <image>https://github.com/projecthamster/hamster/blob/master/screenshot.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>The overview window with statistics</caption>
+      <image>https://github.com/projecthamster/hamster/blob/master/data/screenshots/overview2.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
+  <provides>
+    <binary>hamster</binary>
+  </provides>
+  <releases>
+    <release version="3.0.0" date="2019-10-01">
+      <description>
+        <p>Python3 and GTK3 version with many fixes and a few enhancements</p>
+      </description>
+    </release>
+  </releases>
+</component>
