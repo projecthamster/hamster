@@ -228,15 +228,13 @@ class Fact(object):
                 setattr(self, attr, value)
 
     def __eq__(self, other):
-        return (id(self) == id(other)
-                or (isinstance(other, Fact)
-                    and self.activity == other.activity
-                    and self.category == other.category
-                    and self.description == other.description
-                    and self.end_time == other.end_time
-                    and self.start_time == other.start_time
-                    and self.tags == other.tags
-                   )
+        return (isinstance(other, Fact)
+                and self.activity == other.activity
+                and self.category == other.category
+                and self.description == other.description
+                and self.end_time == other.end_time
+                and self.start_time == other.start_time
+                and self.tags == other.tags
                 )
 
     def __repr__(self):
