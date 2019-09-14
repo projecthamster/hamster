@@ -50,7 +50,7 @@ class CustomFactController(gobject.GObject):
 
         self.activity = widgets.ActivityEntry()
         self.activity.connect("changed", self.on_activity_changed)
-        self.get_widget("activity_box").add(self.activity)
+        self.get_widget("command line box").add(self.activity)
 
         self.day_start = conf.day_start
 
