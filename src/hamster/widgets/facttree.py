@@ -395,8 +395,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         if fact.y < self.y:
             self.y = fact.y
-        if (fact.y + 25) > (self.y + self.height):
-            self.y = fact.y - self.height + 25
+        if (fact.y + fact.height) > (self.y + self.height):
+            self.y = fact.y + fact.height - self.height
 
         self.on_scroll()
 
