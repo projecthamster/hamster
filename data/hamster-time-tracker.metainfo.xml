@@ -32,11 +32,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>The overview window</caption>
-      <image>https://github.com/projecthamster/hamster/blob/master/screenshot.png</image>
+      <image>http://dekoppel.eu/hamster/hamster-overview1.png</image>
     </screenshot>
     <screenshot>
       <caption>The overview window with statistics</caption>
-      <image>https://github.com/projecthamster/hamster/blob/master/data/screenshots/overview2.png</image>
+      <image>http://dekoppel.eu/hamster/hamster-overview2.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
@@ -44,9 +44,9 @@
     <binary>hamster</binary>
   </provides>
   <releases>
-    <release version="3.0.0" date="2019-10-01">
+    <release version="2.2.2" date="2019-02-11">
       <description>
-        <p>Python3 and GTK3 version with many fixes and a few enhancements</p>
+        <p>Python3 pre-3.6 compatibility</p>
       </description>
     </release>
   </releases>
