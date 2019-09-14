@@ -48,9 +48,9 @@ class CustomFactController(gobject.GObject):
         # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
-        self.activity = widgets.ActivityEntry()
-        self.activity.connect("changed", self.on_activity_changed)
-        self.get_widget("command line box").add(self.activity)
+        self.cmdline = widgets.ActivityEntry()
+        self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.get_widget("command line box").add(self.cmdline)
 
         self.day_start = conf.day_start
 
@@ -63,7 +63,7 @@ class CustomFactController(gobject.GObject):
 
         self.save_button = self.get_widget("save_button")
 
-        self.activity.grab_focus()
+        self.cmdline.grab_focus()
         if fact_id:
             # editing
             fact = runtime.storage.get_fact(fact_id)
@@ -84,13 +84,13 @@ class CustomFactController(gobject.GObject):
             stripped_fact = original_fact.copy()
             stripped_fact.description = None
             label = stripped_fact.serialized(prepend_date=False)
-            with self.activity.handler_block(self.activity.checker):
-                self.activity.set_text(label)
+            with self.cmdline.handler_block(self.cmdline.checker):
+                self.cmdline.set_text(label)
                 time_len = len(label) - len(stripped_fact.serialized_name())
-                self.activity.select_region(0, time_len - 1)
+                self.cmdline.select_region(0, time_len - 1)
             self.description_buffer.set_text(original_fact.description)
 
-        self.activity.original_fact = original_fact
+        self.cmdline.original_fact = original_fact
 
         self._gui.connect_signals(self)
         self.validate_fields()
@@ -125,7 +125,7 @@ class CustomFactController(gobject.GObject):
 
     def localized_fact(self):
         """Make sure fact has the correct start_time."""
-        fact = Fact.parse(self.activity.get_text())
+        fact = Fact.parse(self.cmdline.get_text())
         if fact.start_time:
             fact.date = self.date
         else:
@@ -140,7 +140,7 @@ class CustomFactController(gobject.GObject):
             runtime.storage.add_fact(fact)
         self.close_window()
 
-    def on_activity_changed(self, combo):
+    def on_cmdline_changed(self, combo):
         self.validate_fields()
 
     def update_status(self, status, markup):
@@ -240,7 +240,7 @@ class CustomFactController(gobject.GObject):
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
-        popups = self.activity.popup.get_property("visible");
+        popups = self.cmdline.popup.get_property("visible");
 
         if (event_key.keyval == gdk.KEY_Escape or \
            (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
