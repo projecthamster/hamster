@@ -49,6 +49,7 @@ class CustomFactController(gobject.GObject):
         self.fact_id = fact_id
 
         self.activity_entry = self.get_widget('activity')
+        self.category_entry = self.get_widget('category')
 
         self.cmdline = widgets.ActivityEntry()
         self.cmdline.connect("changed", self.on_cmdline_changed)
@@ -146,6 +147,7 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
         self.fact = Fact.parse(self.cmdline.get_text())
         self.activity_entry.set_text(self.fact.activity)
+        self.category_entry.set_text(self.fact.category)
 
     def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
