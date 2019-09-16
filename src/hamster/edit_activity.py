@@ -48,6 +48,8 @@ class CustomFactController(gobject.GObject):
         # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
+        self.activity_entry = self.get_widget('activity')
+
         self.cmdline = widgets.ActivityEntry()
         self.cmdline.connect("changed", self.on_cmdline_changed)
         self.get_widget("command line box").add(self.cmdline)
@@ -142,6 +144,8 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, combo):
         self.validate_fields()
+        self.fact = Fact.parse(self.cmdline.get_text())
+        self.activity_entry.set_text(self.fact.activity)
 
     def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
