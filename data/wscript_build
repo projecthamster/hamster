@@ -26,14 +26,6 @@ for filename in ["hamster-time-tracker.desktop",
 
 bld.add_group()
 
-# process .in files with intl_tool
-#bld(features = 'intltool_in',
-#    source   = 'hamster-time-tracker.schemas.in',
-#    target = 'hamster-time-tracker.schemas',
-#    install_path = bld.env.schemas_destination,
-#    podir    = '../po',
-#    flags    = ['-s', '-u'])
-
 bld(features = 'intltool_in',
     source   = """hamster-time-tracker-overview.desktop.in
                   hamster-time-tracker.desktop.in
