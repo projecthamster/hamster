@@ -52,7 +52,6 @@ class CustomFactController(gobject.GObject):
         self.category_entry = self.get_widget('category')
 
         self.cmdline = widgets.ActivityEntry()
-        self.cmdline.connect("changed", self.on_cmdline_changed)
         self.get_widget("command line box").add(self.cmdline)
 
         self.day_start = conf.day_start
@@ -94,6 +93,10 @@ class CustomFactController(gobject.GObject):
             self.description_buffer.set_text(original_fact.description)
 
         self.cmdline.original_fact = original_fact
+
+        # This signal should be emitted only after a manual modification,
+        # not at init time when cmdline might not always be fully parsable.
+        self.cmdline.connect("changed", self.on_cmdline_changed)
 
         self._gui.connect_signals(self)
         self.validate_fields()
