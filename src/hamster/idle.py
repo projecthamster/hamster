@@ -26,8 +26,6 @@ import gi
 
 from dbus.lowlevel import Message
 
-gi.require_version('GConf', '2.0')
-from gi.repository import GConf as gconf
 from gi.repository import GObject as gobject
 
 class DbusIdleListener(gobject.GObject):
@@ -37,7 +35,7 @@ class DbusIdleListener(gobject.GObject):
     Monitors org.gnome.ScreenSaver for idleness. There are two types,
     implicit (due to inactivity) and explicit (lock screen), that need to be
     handled differently. An implicit idle state should subtract the
-    time-to-become-idle (as specified in the gconf) from the last activity,
+    time-to-become-idle (as specified in the conf) from the last activity,
     but an explicit idle state should not.
 
     The signals are inspected for the "ActiveChanged" and "Lock"
@@ -102,8 +100,11 @@ class DbusIdleListener(gobject.GObject):
                 else:
                     delay_key = "/desktop/gnome/session/idle_delay"
 
-                client = gconf.Client.get_default()
-                self.timeout_minutes = client.get_int(delay_key)
+                # remove this long-broken code (GeraldJansen 2019-09-17)
+                # TODO: use dconf equivalent at some point?
+                # client = gconf.Client.get_default()
+                # self.timeout_minutes = client.get_int(delay_key)
+                self.timeout_minutes = 0
 
             else:
                 self.screen_locked = False

@@ -38,11 +38,6 @@ class DesktopIntegrations(object):
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
 
-        self.conf_enable_timeout = conf.get("enable_timeout")
-        self.conf_notify_on_idle = conf.get("notify_on_idle")
-        self.conf_notify_interval = conf.get("notify_interval")
-        conf.connect('conf-changed', self.on_conf_changed)
-
         self.idle_listener = idle.DbusIdleListener()
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
@@ -64,7 +59,7 @@ class DesktopIntegrations(object):
 
     def check_user(self, todays_facts):
         """check if we need to notify user perhaps"""
-        interval = self.conf_notify_interval
+        interval = conf.get('notify_interval')
         if interval <= 0 or interval >= 121:
             return
 
@@ -82,7 +77,7 @@ class DesktopIntegrations(object):
                 message = _("Working on %s") % last_activity['name']
                 self.notify_user(message)
 
-        elif self.conf_notify_on_idle:
+        elif conf.get('notify_on_idle'):
             #if we have no last activity, let's just calculate duration from 00:00
             if (now.minute + now.hour * 60) % interval == 0:
                 self.notify_user(_("No activity"))
@@ -109,12 +104,7 @@ class DesktopIntegrations(object):
 
     def on_idle_changed(self, event, state):
         # state values: 0 = active, 1 = idle
-        if state == 1 and self.conf_enable_timeout:
+        if state == 1 and self.conf.get('enable_timeout'):
             idle_from = self.idle_listener.getIdleFrom()
             idle_from = timegm(idle_from.timetuple())
             self.storage.StopTracking(idle_from)
-
-
-    def on_conf_changed(self, event, key, value):
-        if hasattr(self, "conf_%s" % key):
-            setattr(self, "conf_%s" % key, value)
