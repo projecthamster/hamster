@@ -53,6 +53,8 @@ class CustomFactController(gobject.GObject):
 
         self.cmdline = widgets.ActivityEntry()
         self.get_widget("command line box").add(self.cmdline)
+        self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
+        self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
         self.day_start = conf.day_start
 
@@ -68,35 +70,30 @@ class CustomFactController(gobject.GObject):
         self.cmdline.grab_focus()
         if fact_id:
             # editing
-            fact = runtime.storage.get_fact(fact_id)
-            self.date = fact.date
-            original_fact = fact
+            self.fact = runtime.storage.get_fact(fact_id)
+            self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
             self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
-                original_fact = base_fact.copy(start_time=hamster_now(),
-                                               end_time=None)
+                self.fact = base_fact.copy(start_time=hamster_now(),
+                                           end_time=None)
             else:
-                original_fact = None
+                self.fact = Fact()
 
-        if original_fact:
-            stripped_fact = original_fact.copy()
-            stripped_fact.description = None
-            label = stripped_fact.serialized(prepend_date=False)
-            with self.cmdline.handler_block(self.cmdline.checker):
-                self.cmdline.set_text(label)
-                time_len = len(label) - len(stripped_fact.serialized_name())
-                self.cmdline.select_region(0, time_len - 1)
-            self.description_buffer.set_text(original_fact.description)
+        original_fact = self.fact
+
+        self.update_fields()
+        self.update_cmdline(select=True)
 
         self.cmdline.original_fact = original_fact
 
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.activity_entry.connect("changed", self.on_activity_changed)
 
         self._gui.connect_signals(self)
         self.validate_fields()
@@ -146,11 +143,42 @@ class CustomFactController(gobject.GObject):
             runtime.storage.add_fact(fact)
         self.close_window()
 
-    def on_cmdline_changed(self, combo):
-        self.validate_fields()
-        self.fact = Fact.parse(self.cmdline.get_text())
+    def on_activity_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.activity = self.activity_entry.get_text()
+            self.update_cmdline()
+
+    def on_cmdline_changed(self, widget):
+        if self.master_is_cmdline:
+            self.validate_fields()
+            previous_description = self.fact.description
+            fact = Fact.parse(self.cmdline.get_text())
+            self.activity_entry.set_text(fact.activity)
+            self.category_entry.set_text(fact.category)
+            if not fact.description:
+                fact.description = previous_description
+            self.fact = fact
+            self.update_fields()
+
+    def on_cmdline_focus_in_event(self, widget, event):
+        self.master_is_cmdline = True
+
+    def on_cmdline_focus_out_event(self, widget, event):
+        self.master_is_cmdline = False
+
+    def update_cmdline(self, select=None):
+        stripped_fact = self.fact.copy(description=None)
+        label = stripped_fact.serialized(prepend_date=False)
+        with self.cmdline.handler_block(self.cmdline.checker):
+            self.cmdline.set_text(label)
+            if select:
+                time_len = len(label) - len(stripped_fact.serialized_name())
+                self.cmdline.select_region(0, time_len - 1)
+
+    def update_fields(self):
         self.activity_entry.set_text(self.fact.activity)
         self.category_entry.set_text(self.fact.category)
+        self.description_buffer.set_text(self.fact.description)
 
     def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
