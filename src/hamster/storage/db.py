@@ -90,48 +90,45 @@ class Storage(storage.Storage):
         if not database_dir:
             try:
                 from xdg.BaseDirectory import xdg_data_home
-                database_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-applet"))
             except ImportError:
-                print("Could not import xdg - will store hamster.db in home folder")
-                database_dir = os.path.realpath(os.path.expanduser("~"))
+                logger.warning("Could not import xdg - assuming ~/.local/share")
+                xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
+            database_dir = os.path.join(xdg_data_home, 'hamster-time-tracker')
 
         if not os.path.exists(database_dir):
             os.makedirs(database_dir, 0o744)
-
-        # handle the move to xdg_data_home
-        old_db_file = os.path.expanduser("~/.gnome2/hamster-applet/hamster.db")
-        new_db_file = os.path.join(database_dir, "hamster.db")
-        if os.path.exists(old_db_file):
-            if os.path.exists(new_db_file):
-                logger.warning("Have two database %s and %s" % (new_db_file, old_db_file))
-            else:
-                os.rename(old_db_file, new_db_file)
 
         db_path = os.path.join(database_dir, "hamster.db")
 
         # check if we have a database at all
         if not os.path.exists(db_path):
-            # if not there, copy from the defaults
-            try:
-                from hamster import defs
-                data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
-            except:
-                # if defs is not there, we are running from sources
-                module_dir = os.path.dirname(os.path.realpath(__file__))
-                if os.path.exists(os.path.join(module_dir, "data")):
-                    # running as flask app. XXX - detangle
-                    data_dir = os.path.join(module_dir, "data")
-                else:
-                    # get ./data from ./src/hamster/storage/db.py (3 levels up)
-                    data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
-
-            data_dir = os.path.realpath(data_dir)
-
-            logger.warning("Database not found in %s - installing default from %s!" % (db_path, data_dir))
-            copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
+            # handle pre-existing hamster-applet database
+            old_db_path = os.path.join(xdg_data_home, 'hamster-applet', 'hamster.db')
+            if os.path.exists(old_db_path):
+                logger.warning("Linking %s to %s" % (old_db_path, db_path))
+                os.link(old_db_path, db_path)
+            else:
+                # make a copy of the empty template hamster.db
+                try:
+                    from hamster import defs
+                    data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
+                except:
+                    # if defs is not there, we are running from sources
+                    module_dir = os.path.dirname(os.path.realpath(__file__))
+                    if os.path.exists(os.path.join(module_dir, "data")):
+                        # running as flask app. XXX - detangle
+                        data_dir = os.path.join(module_dir, "data")
+                    else:
+                        # get ./data from ./src/hamster/storage/db.py (3 levels up)
+                        data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
+                logger.warning("Database not found in %s - installing default from %s!"
+                               % (db_path, data_dir))
+                copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
             os.chmod(db_path, 0o664)
+
+        db_path = os.path.realpath(db_path) # needed for file monitoring?
 
         return db_path
 
