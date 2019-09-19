@@ -18,6 +18,7 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import GObject as gobject
+from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 import cairo
@@ -33,7 +34,7 @@ class TagsEntry(gtk.Entry):
 
     def __init__(self):
         gtk.Entry.__init__(self)
-        self.tags = None
+        self.ac_tags = None  # "autocomplete" tags
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
 
@@ -53,7 +54,9 @@ class TagsEntry(gtk.Entry):
         self.scroll_box.add(viewport)
         self.popup.add(self.scroll_box)
 
-        self.connect("button-press-event", self._on_button_press_event)
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
+
+        self.connect("icon-press", self._on_icon_press)
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
@@ -61,7 +64,7 @@ class TagsEntry(gtk.Entry):
         self._parent_click_watcher = None # bit lame but works
 
         self.external_listeners = [
-            (runtime.storage, runtime.storage.connect('tags-changed', self.refresh_tags))
+            (runtime.storage, runtime.storage.connect('tags-changed', self.refresh_ac_tags))
         ]
         self.show()
         self.populate_suggestions()
@@ -74,8 +77,8 @@ class TagsEntry(gtk.Entry):
         self.popup = None
 
 
-    def refresh_tags(self, event):
-        self.tags = None
+    def refresh_ac_tags(self, event):
+        self.ac_tags = None
 
     def get_tags(self):
         # splits the string by comma and filters out blanks
@@ -93,8 +96,8 @@ class TagsEntry(gtk.Entry):
         self.tag_box.selected_tags = tags
 
 
-        self.set_text("%s, " % ", ".join(tags))
-        self.set_position(len(self.get_text()))
+        self.set_tags(tags)
+        self.update_tagsline(add=True)
 
         self.populate_suggestions()
         self.show_popup()
@@ -106,9 +109,8 @@ class TagsEntry(gtk.Entry):
 
         self.tag_box.selected_tags = tags
 
-        self.set_text("%s, " % ", ".join(tags))
-        self.set_position(len(self.get_text()))
-
+        self.set_tags(tags)
+        self.update_tagsline(add=True)
 
     def hide_popup(self):
         self.popup.hide()
@@ -125,7 +127,7 @@ class TagsEntry(gtk.Entry):
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
         alloc = self.get_allocation()
-        x, y = self.get_parent_window().get_origin()
+        _, x, y = self.get_parent_window().get_origin()
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
 
@@ -134,7 +136,7 @@ class TagsEntry(gtk.Entry):
         height = self.tag_box.count_height(w)
 
 
-        self.tag_box.modify_bg(gtk.StateType.NORMAL, "#eee") #self.get_style().base[gtk.StateType.NORMAL])
+        #self.tag_box.modify_bg(gtk.StateType.NORMAL, "#eee") #self.get_style().base[gtk.StateType.NORMAL])
 
         self.scroll_box.set_size_request(w, height)
         self.popup.resize(w, height)
@@ -151,7 +153,7 @@ class TagsEntry(gtk.Entry):
         self.categories = None
 
     def populate_suggestions(self):
-        self.tags = self.tags or [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
+        self.ac_tags = self.ac_tags or [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
 
         cursor_tag = self.get_cursor_tag()
 
@@ -160,7 +162,8 @@ class TagsEntry(gtk.Entry):
         entered_tags = self.get_tags()
         self.tag_box.selected_tags = entered_tags
 
-        self.filter_tags = [tag for tag in self.tags if (tag or "").lower().startswith((self.filter or "").lower())]
+        self.filter_tags = [tag for tag in self.ac_tags
+                            if (tag or "").lower().startswith((self.filter or "").lower())]
 
         self.tag_box.draw(self.filter_tags)
 
@@ -169,9 +172,17 @@ class TagsEntry(gtk.Entry):
     def _on_focus_out_event(self, widget, event):
         self.hide_popup()
 
-    def _on_button_press_event(self, button, event):
-        self.populate_suggestions()
-        self.show_popup()
+    def _on_icon_press(self, entry, icon_pos, event):
+        # toggle popup
+        if self.popup.get_visible():
+            # remove trailing comma is any
+            self.update_tagsline(add=False)
+            self.hide_popup()
+        else:
+            # add trailing comma
+            self.update_tagsline(add=True)
+            self.populate_suggestions()
+            self.show_popup()
 
     def _on_key_release_event(self, entry, event):
         if (event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter)):
@@ -219,7 +230,18 @@ class TagsEntry(gtk.Entry):
         else:
             cursor = self.get_position()
 
-        self.set_text(", ".join(tags))
+        self.set_tags(tags)
+        self.set_position(len(self.get_text()))
+
+    def set_tags(self, tags):
+        self.tags = tags
+        self.update_tagsline()
+
+    def update_tagsline(self, add=False):
+        text = ", ".join(self.tags)
+        if add and text:
+            text = "{}, ".format(text)
+        self.set_text(text)
         self.set_position(len(self.get_text()))
 
     def _on_key_press_event(self, entry, event):

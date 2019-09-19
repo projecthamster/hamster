@@ -169,6 +169,9 @@ class TestActivityInputParsing(unittest.TestCase):
         # space between category and tag
         fact2 = Fact.parse("11:00 12:00 BPC-261 - Task title@Project #code")
         self.assertEqual(fact.serialized(), fact2.serialized())
+        # empty fact
+        fact3 = Fact()
+        self.assertEqual(fact3.serialized(), "")
 
 if __name__ == '__main__':
     unittest.main()

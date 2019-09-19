@@ -65,6 +65,9 @@ class CustomFactController(gobject.GObject):
         self.description_buffer = self.description_box.get_buffer()
         self.description_buffer.connect("changed", self.on_description_changed)
 
+        self.tags_entry = widgets.TagsEntry()
+        self.get_widget("tags box").add(self.tags_entry)
+
         self.save_button = self.get_widget("save_button")
 
         self.cmdline.grab_focus()
@@ -94,6 +97,7 @@ class CustomFactController(gobject.GObject):
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
         self.activity_entry.connect("changed", self.on_activity_changed)
+        self.tags_entry.connect("changed", self.on_tags_changed)
 
         self._gui.connect_signals(self)
         self.validate_fields()
@@ -166,6 +170,11 @@ class CustomFactController(gobject.GObject):
     def on_cmdline_focus_out_event(self, widget, event):
         self.master_is_cmdline = False
 
+    def on_tags_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.tags = self.tags_entry.get_tags()
+            self.update_cmdline()
+
     def update_cmdline(self, select=None):
         stripped_fact = self.fact.copy(description=None)
         label = stripped_fact.serialized(prepend_date=False)
@@ -179,6 +188,7 @@ class CustomFactController(gobject.GObject):
         self.activity_entry.set_text(self.fact.activity)
         self.category_entry.set_text(self.fact.category)
         self.description_buffer.set_text(self.fact.description)
+        self.tags_entry.set_tags(self.fact.tags)
 
     def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
