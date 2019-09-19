@@ -17,25 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-gconf part of this code copied from Gimmie (c) Alex Gravely via Conduit (c) John Stowers, 2006
-License: GPLv2
-"""
 
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os
-from hamster.client import Storage
-from xdg.BaseDirectory import xdg_data_home
+import json
 import datetime as dt
-
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
-
-import gi
-gi.require_version('GConf', '2.0')
-from gi.repository import GConf as gconf
+from xdg.BaseDirectory import xdg_data_home, xdg_config_home
+from hamster.client import Storage
 
 
 class Controller(gobject.GObject):
@@ -191,154 +183,76 @@ class Dialogs(Singleton):
 dialogs = Dialogs()
 
 
-class GConfStore(gobject.GObject, Singleton):
+class ConfStore(Singleton):
     """
-    Settings implementation which stores settings in GConf
-    Snatched from the conduit project (http://live.gnome.org/Conduit)
+    Settings implementation which stores settings as json string in hamster.db
     """
-    GCONF_DIR = "/apps/hamster-time-tracker/"
-    VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
         'enable_timeout'              :   False,       # Should hamster stop tracking on idle
         'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
         'notify_on_idle'              :   False,       # Remind also if no activity is set
         'notify_interval'             :   27,          # Remind of current activity every X minutes
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
-        'overview_window_box'         :   [],          # X, Y, W, H
-        'overview_window_maximized'   :   False,       # Is overview window maximized
-        'standalone_window_box'       :   [],          # X, Y, W, H
-        'standalone_window_maximized' :   False,       # Is overview window maximized
         'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
     }
+    #    'workspace_tracking           :   []           # ???
+    #    'workspace_mapping            :   []           # ???
+    #    'overview_window_box'         :   [],          # X, Y, W, H
+    #    'overview_window_maximized'   :   False,       # Is overview window maximized
+    #    'standalone_window_box'       :   [],          # X, Y, W, H
+    #    'standalone_window_maximized' :   False,       # Is overview window maximized
 
-    __gsignals__ = {
-        "conf-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
-    }
     def __init__(self):
-        gobject.GObject.__init__(self)
-        self._client = gconf.Client.get_default()
-        self._client.add_dir(self.GCONF_DIR[:-1], gconf.ClientPreloadType.PRELOAD_RECURSIVE)
-        self._notifications = []
-
-    def _fix_key(self, key):
-        """
-        Appends the GCONF_PREFIX to the key if needed
-
-        @param key: The key to check
-        @type key: C{string}
-        @returns: The fixed key
-        @rtype: C{string}
-        """
-        if not key.startswith(self.GCONF_DIR):
-            return self.GCONF_DIR + key
+        self.config = self.DEFAULTS
+        config_dir = os.path.join(xdg_config_home, 'hamster-time-tracker')
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)
+        self.config_file = os.path.join(config_dir, 'hamster.json')
+        if os.path.exists(self.config_file):
+            self._load_config()
         else:
-            return key
+            self._save_config()
 
-    def _key_changed(self, client, cnxn_id, entry, data=None):
+    def _save_config(self):
+        with open(self.config_file, 'w') as f:
+            json.dump(self.config, f, sort_keys=True, indent=4)
+
+    def _load_config(self):
+        with open(self.config_file, 'r') as f:
+            self.config.update(json.load(f))
+
+    def get(self, key):
         """
-        Callback when a gconf key changes
+        Returns the value of the conf key
         """
-        key = self._fix_key(entry.key)[len(self.GCONF_DIR):]
-        value = self._get_value(entry.value, self.DEFAULTS[key])
+        # for now, update from config file every time (ugh)
+        # - later update config only on external file change
+        self._load_config()
 
-        self.emit('conf-changed', key, value)
-
-
-    def _get_value(self, value, default):
-        """calls appropriate gconf function by the default value"""
-        vtype = type(default)
-
-        if vtype is bool:
-            return value.get_bool()
-        elif vtype is str:
-            return value.get_string()
-        elif vtype is int:
-            return value.get_int()
-        elif vtype in (list, tuple):
-            l = []
-            for i in value.get_list():
-                l.append(i.get_string())
-            return l
-
-        return None
-
-    def get(self, key, default=None):
-        """
-        Returns the value of the key or the default value if the key is
-        not yet in gconf
-        """
-
-        #function arguments override defaults
-        if default is None:
-            default = self.DEFAULTS.get(key, None)
-        vtype = type(default)
-
-        #we now have a valid key and type
-        if default is None:
-            logger.warn("Unknown key: %s, must specify default value" % key)
+        if key not in self.config:
+            logger.warn("Unknown config key: %s" % key)
             return None
-
-        if vtype not in self.VALID_KEY_TYPES:
-            logger.warn("Invalid key type: %s" % vtype)
-            return None
-
-        #for gconf refer to the full key path
-        key = self._fix_key(key)
-
-        if key not in self._notifications:
-            self._client.notify_add(key, self._key_changed, None)
-            self._notifications.append(key)
-
-        value = self._client.get(key)
-        if value is None:
-            self.set(key, default)
-            return default
-
-        value = self._get_value(value, default)
-        if value is not None:
-            return value
-
-        logger.warn("Unknown gconf key: %s" % key)
-        return None
+        else:
+            return self.config[key]
 
     def set(self, key, value):
         """
-        Sets the key value in gconf and connects adds a signal
-        which is fired if the key changes
+        Set the key value and save config file
         """
-        logger.debug("Settings %s -> %s" % (key, value))
-        if key in self.DEFAULTS:
-            vtype = type(self.DEFAULTS[key])
-        else:
-            vtype = type(value)
+        logger.info("Settings %s -> %s" % (key, value))
 
-        if vtype not in self.VALID_KEY_TYPES:
-            logger.warn("Invalid key type: %s" % vtype)
-            return False
-
-        #for gconf refer to the full key path
-        key = self._fix_key(key)
-
-        if vtype is bool:
-            self._client.set_bool(key, value)
-        elif vtype is str:
-            self._client.set_string(key, value)
-        elif vtype is int:
-            self._client.set_int(key, value)
-        elif vtype in (list, tuple):
-            #Save every value as a string
-            strvalues = [str(i) for i in value]
-            #self._client.set_list(key, gconf.VALUE_STRING, strvalues)
+        self.config[key] = value
+        self._save_config()
 
         return True
 
     @property
     def day_start(self):
         """Start of the hamster day."""
-        day_start_minutes = self.get("day_start_minutes")
+        day_start_minutes = self.config["day_start_minutes"]
         hours, minutes = divmod(day_start_minutes, 60)
         return dt.time(hours, minutes)
 
 
-conf = GConfStore()
+conf = ConfStore()

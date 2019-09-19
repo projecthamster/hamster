@@ -106,7 +106,7 @@ class Storage(gobject.GObject):
 
     def get_todays_facts(self):
         """returns facts of the current date, respecting hamster midnight
-           hamster midnight is stored in gconf, and presented in minutes
+           hamster midnight is stored in conf, and presented in minutes
         """
         return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
 
