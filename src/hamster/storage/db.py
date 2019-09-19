@@ -24,21 +24,11 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-try:
-    import sqlite3 as sqlite
-except ImportError:
-    try:
-        logger.warn("Using sqlite2")
-        from pysqlite2 import dbapi2 as sqlite
-    except ImportError:
-        logger.error("Neither sqlite3 nor pysqlite2 found")
-        raise
-
 import os, time
 import datetime
-from hamster.storage import storage
-from shutil import copy as copyfile
 import itertools
+import sqlite3 as sqlite
+from shutil import copy as copyfile
 import datetime as dt
 try:
     from gi.repository import Gio as gio
@@ -46,10 +36,10 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
+from hamster.storage import storage
 from hamster.lib import Fact
 from hamster.lib.configuration import conf
 from hamster.lib.stuff import hamster_today, hamster_now
-
 
 
 class Storage(storage.Storage):
