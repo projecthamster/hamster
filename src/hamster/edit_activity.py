@@ -97,6 +97,7 @@ class CustomFactController(gobject.GObject):
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
         self.activity_entry.connect("changed", self.on_activity_changed)
+        self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
 
         self._gui.connect_signals(self)
@@ -150,6 +151,11 @@ class CustomFactController(gobject.GObject):
     def on_activity_changed(self, widget):
         if not self.master_is_cmdline:
             self.fact.activity = self.activity_entry.get_text()
+            self.update_cmdline()
+
+    def on_category_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.category = self.category_entry.get_text()
             self.update_cmdline()
 
     def on_cmdline_changed(self, widget):
