@@ -2,8 +2,8 @@
 Version=1.0
 Type=Application
 Terminal=false
-_Name=Time Tracker
-_Comment=Project Hamster - track your time
+_Name=Hamster Time Tracker
+_Comment=Track your time as you wish
 Icon=hamster-time-tracker
 Exec=@BINDIR@/hamster
 Categories=GNOME;GTK;Utility;
