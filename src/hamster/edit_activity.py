@@ -56,8 +56,6 @@ class CustomFactController(gobject.GObject):
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
-        self.day_start = conf.day_start
-
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
