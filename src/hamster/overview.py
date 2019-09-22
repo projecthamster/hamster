@@ -532,6 +532,8 @@ class Overview(Controller):
         self.facts = self.storage.get_facts(start, end, search_terms=search)
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
+        self.header_bar.stop_button.set_sensitive(
+            self.facts and not self.facts[-1].end_time)
 
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
