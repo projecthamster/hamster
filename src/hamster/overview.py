@@ -73,7 +73,7 @@ class HeaderBar(gtk.HeaderBar):
         self.system_button = gtk.MenuButton()
         self.system_button.set_image(gtk.Image.new_from_icon_name(
             "open-menu-symbolic", gtk.IconSize.MENU))
-        self.search_button.set_tooltip_markup("Menu")
+        self.system_button.set_tooltip_markup("Menu")
         self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
