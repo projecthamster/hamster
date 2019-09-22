@@ -324,7 +324,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.on_mouse_move(None, event)
         self.grab_focus()
         if self.hover_fact:
-            if self.hover_fact == self.current_fact:
+            # match either content or id
+            if (self.hover_fact == self.current_fact
+                or (self.hover_fact
+                    and self.current_fact
+                    and self.hover_fact.id == self.current_fact.id)
+               ):
                 self.unset_current_fact()
             else:
                 self.set_current_fact(self.hover_fact)
@@ -433,7 +438,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     hover_fact = fact
                     break
 
-        if hover_fact != self.hover_fact:
+        if (hover_fact
+            and self.hover_fact
+            and hover_fact.id != self.hover_fact.id
+           ):
             self.move_actions()
         # idem, always update hover_fact, not just if they appear different
         self.hover_fact = hover_fact
