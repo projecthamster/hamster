@@ -193,7 +193,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCalendar">
+                  <object class="GtkCalendar" id="start date">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="year">2019</property>
@@ -248,7 +248,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCalendar">
+                  <object class="GtkCalendar" id="end date">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="year">2019</property>

@@ -63,6 +63,9 @@ class CustomFactController(gobject.GObject):
         self.description_buffer = self.description_box.get_buffer()
         self.description_buffer.connect("changed", self.on_description_changed)
 
+        self.end_date = widgets.Calendar(widget=self.get_widget("end date"))
+        self.start_date = widgets.Calendar(widget=self.get_widget("start date"))
+
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
 
@@ -161,8 +164,6 @@ class CustomFactController(gobject.GObject):
             self.validate_fields()
             previous_description = self.fact.description
             fact = Fact.parse(self.cmdline.get_text())
-            self.activity_entry.set_text(fact.activity)
-            self.category_entry.set_text(fact.category)
             if not fact.description:
                 fact.description = previous_description
             self.fact = fact
@@ -189,6 +190,8 @@ class CustomFactController(gobject.GObject):
                 self.cmdline.select_region(0, time_len - 1)
 
     def update_fields(self):
+        self.start_date.date = self.fact.start_time
+        self.end_date.date = self.fact.end_time
         self.activity_entry.set_text(self.fact.activity)
         self.category_entry.set_text(self.fact.category)
         self.description_buffer.set_text(self.fact.description)

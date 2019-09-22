@@ -28,6 +28,41 @@ import re
 from hamster.lib import stuff
 from hamster.lib.configuration import load_ui_file
 
+
+class Calendar():
+    """Python date interface to a Gtk.Calendar.
+
+    widget (Gtk.Calendar): the associated Gtk widget.
+    """
+    def __init__(self, widget):
+        self.widget = widget
+
+    @property
+    def date(self):
+        """Selected day, as datetime.date."""
+        year, month, day = self.widget.get_date()
+        # months start at 0 in Gtk.Calendar and at 1 in python date
+        month += 1
+        return dt.date(year=year, month=month, day=day) if day else None
+
+    @date.setter
+    def date(self, value):
+        """Set date.
+
+        value can be a python date or datetime.
+        """
+        if value is None:
+            # unselect day
+            self.widget.select_day(0)
+        else:
+            year = value.year
+            # months start at 0 in Gtk.Calendar and at 1 in python date
+            month = value.month - 1
+            day = value.day
+            self.widget.select_month(month, year)
+            self.widget.select_day(day)
+
+
 class RangePick(gtk.ToggleButton):
     """ a text entry widget with calendar popup"""
     __gsignals__ = {
