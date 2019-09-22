@@ -64,7 +64,14 @@ class CustomFactController(gobject.GObject):
         self.description_buffer.connect("changed", self.on_description_changed)
 
         self.end_date = widgets.Calendar(widget=self.get_widget("end date"))
+
+        self.end_time = widgets.TimeInput()
+        self.get_widget("end time box").add(self.end_time)
+
         self.start_date = widgets.Calendar(widget=self.get_widget("start date"))
+
+        self.start_time = widgets.TimeInput()
+        self.get_widget("start time box").add(self.start_time)
 
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
