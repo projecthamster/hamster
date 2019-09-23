@@ -61,7 +61,12 @@ def datetime_to_hamsterday(civil_date_time):
 
 def hamster_now():
     # current datetime truncated to the minute
-    return dt.datetime.now().replace(second=0, microsecond=0)
+    return hamster_round(dt.datetime.now())
+
+
+def hamster_round(time):
+    """Round time or datetime."""
+    return time.replace(second=0, microsecond=0)
 
 
 def hamster_today():

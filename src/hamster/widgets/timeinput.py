@@ -25,7 +25,7 @@ from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
-from hamster.lib.stuff import format_duration
+from hamster.lib.stuff import format_duration, hamster_round
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {
@@ -87,11 +87,12 @@ class TimeInput(gtk.Entry):
             will start from start time and duration will be displayed in
             brackets
         """
-        start_time = start_time or dt.time()
-        if isinstance(start_time, dt.time): # ensure that we operate with time
-            self.start_time = dt.time(start_time.hour, start_time.minute)
-        else:
-            self.start_time = dt.time(start_time.time().hour, start_time.time().minute)
+        if start_time is not None:
+            start_time = hamster_round(start_time)
+            if isinstance(start_time, dt.datetime):
+                # timeinput works on time only
+                start_time = start_time.time()
+        self.start_time = start_time
 
     def _on_text_changed(self, widget):
         self.news = True
@@ -166,41 +167,39 @@ class TimeInput(gtk.Entry):
         if not self._parent_click_watcher:
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
-        # will be going either 24 hours or from start time to start time + 12 hours
-        start_time = dt.datetime.combine(dt.date.today(), self.start_time) # we will be adding things
-        i_time = start_time # we will be adding things
+        # we will be adding things, need datetime
+        i_time_0 = dt.datetime.combine(dt.date.today(), self.start_time or dt.time())
 
-        if self.start_time:
-            end_time = i_time + dt.timedelta(hours = 12)
-            i_time += dt.timedelta(minutes = 15)
+        if self.start_time is None:
+            # full 24 hours
+            i_time = i_time_0
+            end_time = i_time_0 + dt.timedelta(days = 1)
         else:
-            end_time = i_time + dt.timedelta(days = 1)
-
+            # from start time to start time + 12 hours
+            i_time = i_time_0 + dt.timedelta(minutes = 15)
+            end_time = i_time_0 + dt.timedelta(hours = 12)
 
         focus_time = dt.datetime.combine(dt.date.today(), self.figure_time(self.get_text()))
         hours = gtk.ListStore(gobject.TYPE_STRING)
 
-
         i, focus_row = 0, None
         while i_time < end_time:
             row_text = self._format_time(i_time)
-            if self.start_time:
-                delta = (i_time - start_time).seconds / 60
-                delta_text = format_duration(delta)
+            if self.start_time is not None:
+                delta_text = format_duration(i_time - i_time_0)
 
                 row_text += " (%s)" % delta_text
 
             hours.append([row_text])
 
-
             if focus_time and i_time <= focus_time <= i_time + \
                                                      dt.timedelta(minutes = 30):
                 focus_row = i
 
-            if self.start_time:
-                i_time += dt.timedelta(minutes = 15)
-            else:
+            if self.start_time is None:
                 i_time += dt.timedelta(minutes = 30)
+            else:
+                i_time += dt.timedelta(minutes = 15)
 
             i += 1
 
@@ -216,7 +215,7 @@ class TimeInput(gtk.Entry):
         #move popup under the widget
         alloc = self.get_allocation()
         w = alloc.width
-        if self.start_time:
+        if self.start_time is not None:
             w = w * 2
         self.time_tree.set_size_request(w, alloc.height * 5)
 
