@@ -66,7 +66,10 @@ def hamster_now():
 
 def hamster_round(time):
     """Round time or datetime."""
-    return time.replace(second=0, microsecond=0)
+    if time is None:
+        return None
+    else:
+        return time.replace(second=0, microsecond=0)
 
 
 def hamster_today():
