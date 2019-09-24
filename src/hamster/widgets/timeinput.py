@@ -74,11 +74,7 @@ class TimeInput(gtk.Entry):
         self.popup = None
 
     def set_time(self, time):
-        time = time or dt.time()
-        if isinstance(time, dt.time): # ensure that we operate with time and strip seconds
-            self.time = dt.time(time.hour, time.minute)
-        else:
-            self.time = dt.time(time.time().hour, time.time().minute)
+        self.time = hamster_round(time)
 
         self.set_text(self._format_time(time))
 
@@ -87,11 +83,10 @@ class TimeInput(gtk.Entry):
             will start from start time and duration will be displayed in
             brackets
         """
-        if start_time is not None:
-            start_time = hamster_round(start_time)
-            if isinstance(start_time, dt.datetime):
-                # timeinput works on time only
-                start_time = start_time.time()
+        start_time = hamster_round(start_time)
+        if isinstance(start_time, dt.datetime):
+            # timeinput works on time only
+            start_time = start_time.time()
         self.start_time = start_time
 
     def _on_text_changed(self, widget):
@@ -99,7 +94,7 @@ class TimeInput(gtk.Entry):
 
     def figure_time(self, str_time):
         if not str_time:
-            return self.time
+            return None
 
         # strip everything non-numeric and consider hours to be first number
         # and minutes - second number
@@ -117,7 +112,7 @@ class TimeInput(gtk.Entry):
                 minutes = int(numbers[1])
 
         if (hours is None or minutes is None) or hours > 24 or minutes > 60:
-            return self.time #no can do
+            return None  # no can do
 
         return dt.time(hours, minutes)
 
@@ -179,7 +174,8 @@ class TimeInput(gtk.Entry):
             i_time = i_time_0 + dt.timedelta(minutes = 15)
             end_time = i_time_0 + dt.timedelta(hours = 12)
 
-        focus_time = dt.datetime.combine(dt.date.today(), self.figure_time(self.get_text()))
+        time = self.figure_time(self.get_text())
+        focus_time = dt.datetime.combine(dt.date.today(), time) if time else None
         hours = gtk.ListStore(gobject.TYPE_STRING)
 
         i, focus_row = 0, None
