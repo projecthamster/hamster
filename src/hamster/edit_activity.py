@@ -116,12 +116,10 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
 
     def on_prev_day_clicked(self, button):
-        self.date = self.date - dt.timedelta(days=1)
-        self.validate_fields()
+        self.increment_date(-1)
 
     def on_next_day_clicked(self, button):
-        self.date = self.date + dt.timedelta(days=1)
-        self.validate_fields()
+        self.increment_date(+1)
 
     def draw_preview(self, start_time, end_time=None):
         day_facts = runtime.storage.get_facts(self.date)
@@ -131,6 +129,15 @@ class CustomFactController(gobject.GObject):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
+    def increment_date(self, days):
+        delta = dt.timedelta(days=days)
+        self.date += delta
+        if self.fact.start_time:
+            self.fact.start_time += delta
+        if self.fact.end_time:
+            self.fact.end_time += delta
+        self.update_fields()
+
     def show(self):
         self.window.show()
 
@@ -138,15 +145,6 @@ class CustomFactController(gobject.GObject):
         buf = self.description_buffer
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
-
-    def localized_fact(self):
-        """Make sure fact has the correct start_time."""
-        fact = Fact.parse(self.cmdline.get_text())
-        if fact.start_time:
-            fact.date = self.date
-        else:
-            fact.start_time = hamster_now()
-        return fact
 
     def on_save_button_clicked(self, button):
         fact = self.validate_fields()
@@ -168,9 +166,8 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            self.validate_fields()
             previous_description = self.fact.description
-            fact = Fact.parse(self.cmdline.get_text())
+            fact = Fact.parse(self.cmdline.get_text(), date=self.date)
             if not fact.description:
                 fact.description = previous_description
             self.fact = fact
@@ -206,6 +203,7 @@ class CustomFactController(gobject.GObject):
         self.category_entry.set_text(self.fact.category)
         self.description_buffer.set_text(self.fact.description)
         self.tags_entry.set_tags(self.fact.tags)
+        self.validate_fields()
 
     def update_status(self, status, markup):
         """Set save button sensitivity and tooltip."""
@@ -230,7 +228,7 @@ class CustomFactController(gobject.GObject):
 
         Return the consolidated fact if successful, or None.
         """
-        fact = self.localized_fact()
+        fact = self.fact
 
         now = hamster_now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
