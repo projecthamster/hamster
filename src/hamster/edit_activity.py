@@ -185,6 +185,7 @@ class CustomFactController(gobject.GObject):
             self.update_cmdline()
 
     def update_cmdline(self, select=None):
+        """Update the cmdline entry content."""
         stripped_fact = self.fact.copy(description=None)
         label = stripped_fact.serialized(prepend_date=False)
         with self.cmdline.handler_block(self.cmdline.checker):
@@ -194,6 +195,7 @@ class CustomFactController(gobject.GObject):
                 self.cmdline.select_region(0, time_len - 1)
 
     def update_fields(self):
+        """Update gui fields content."""
         self.start_time.set_time(self.fact.start_time)
         self.end_time.set_time(self.fact.end_time)
         self.end_time.set_start_time(self.fact.start_time)
