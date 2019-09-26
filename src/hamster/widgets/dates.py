@@ -62,6 +62,9 @@ class Calendar():
             self.widget.select_month(month, year)
             self.widget.select_day(day)
 
+    def __getattr__(self, name):
+        return getattr(self.widget, name)
+
 
 class RangePick(gtk.ToggleButton):
     """ a text entry widget with calendar popup"""
