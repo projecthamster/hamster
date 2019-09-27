@@ -173,6 +173,8 @@ class CustomFactController(gobject.GObject):
             fact = Fact.parse(self.cmdline.get_text(), date=self.date)
             if not fact.description:
                 fact.description = previous_description
+            if fact.start_time is None:
+                fact.start_time = hamster_now()
             self.fact = fact
             self.update_fields()
 
