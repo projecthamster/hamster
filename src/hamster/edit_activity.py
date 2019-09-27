@@ -92,7 +92,7 @@ class CustomFactController(gobject.GObject):
                 self.fact = base_fact.copy(start_time=hamster_now(),
                                            end_time=None)
             else:
-                self.fact = Fact()
+                self.fact = Fact(start_time=hamster_now())
 
         original_fact = self.fact
 
