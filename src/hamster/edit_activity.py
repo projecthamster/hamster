@@ -104,6 +104,7 @@ class CustomFactController(gobject.GObject):
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.start_date.connect("day-selected", self.on_start_date_changed)
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
@@ -178,6 +179,20 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_focus_out_event(self, widget, event):
         self.master_is_cmdline = False
+
+    def on_start_date_changed(self, widget):
+        if not self.master_is_cmdline:
+            previous_date = self.fact.start_time.date()
+            new_date = self.start_date.date
+            delta = new_date - previous_date
+            self.fact.start_time += delta
+            if self.fact.end_time:
+                # preserve fact duration
+                self.fact.end_time += delta
+                self.end_date.date = self.fact.end_time
+            self.date = self.fact.date
+            self.validate_fields()
+            self.update_cmdline()
 
     def on_tags_changed(self, widget):
         if not self.master_is_cmdline:
