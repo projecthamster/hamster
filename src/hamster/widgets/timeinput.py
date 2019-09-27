@@ -38,7 +38,7 @@ class TimeInput(gtk.Entry):
         self.news = False
         self.set_width_chars(7) #7 is like 11:24pm
 
-        self.set_time(time)
+        self.time = time
         self.set_start_time(start_time)
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
@@ -69,14 +69,20 @@ class TimeInput(gtk.Entry):
         self.show()
         self.connect("destroy", self.on_destroy)
 
+    @property
+    def time(self):
+        """Displayed time (as datetime.time, or None)."""
+        return self.figure_time(self.get_text())
+
+    @time.setter
+    def time(self, value):
+        time = hamster_round(value)
+        self.set_text(self._format_time(time))
+        return time
+
     def on_destroy(self, window):
         self.popup.destroy()
         self.popup = None
-
-    def set_time(self, time):
-        self.time = hamster_round(time)
-
-        self.set_text(self._format_time(time))
 
     def set_start_time(self, start_time):
         """ set the start time. when start time is set, drop down list
@@ -128,11 +134,6 @@ class TimeInput(gtk.Entry):
         if self.news:
             self.emit("time-entered")
             self.news = False
-
-    def get_time(self):
-        self.time = self.figure_time(self.get_text())
-        self.set_text(self._format_time(self.time))
-        return self.time
 
     def _format_time(self, time):
         if time is None:
