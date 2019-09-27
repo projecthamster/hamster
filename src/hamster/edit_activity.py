@@ -105,6 +105,7 @@ class CustomFactController(gobject.GObject):
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
+        self.end_date.connect("day-selected", self.on_end_date_changed)
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
@@ -179,6 +180,13 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_focus_out_event(self, widget, event):
         self.master_is_cmdline = False
+
+    def on_end_date_changed(self, widget):
+        if self.fact.end_time and not self.master_is_cmdline:
+            time = self.fact.end_time.time()
+            self.fact.end_time = dt.datetime.combine(self.end_date.date, time)
+            self.validate_fields()
+            self.update_cmdline()
 
     def on_start_date_changed(self, widget):
         if not self.master_is_cmdline:
