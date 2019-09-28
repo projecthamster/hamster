@@ -229,8 +229,8 @@ class CustomFactController(gobject.GObject):
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_len = len(label) - len(stripped_fact.serialized_name())
-                self.cmdline.select_region(0, time_len - 1)
+                time_str = stripped_fact.serialized_time(prepend_date=False)
+                self.cmdline.select_region(0, len(time_str))
 
     def update_fields(self):
         """Update gui fields content."""
