@@ -41,6 +41,7 @@ class TimeInput(gtk.Entry):
         self.time = time
         self.set_start_time(start_time)
 
+
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
@@ -71,8 +72,28 @@ class TimeInput(gtk.Entry):
 
     @property
     def time(self):
-        """Displayed time (as datetime.time, or None)."""
-        return self.figure_time(self.get_text())
+        """Displayed time.
+
+         None,
+         or time type,
+         or datetime if start_time() was given a datetime.
+         """
+        time = self.figure_time(self.get_text())
+        if self.start_date and time:
+            # recombine (since self.start_time contains only the time part)
+            start = dt.datetime.combine(self.start_date, self.start_time)
+            new = dt.datetime.combine(self.start_date, time)
+            if new < start:
+                # a bit hackish, valid only because
+                # duration can not be negative if start_time was given,
+                # and we accept that it can not exceed 24h.
+                # For longer durations,
+                # date will have to be changed subsequently.
+                return new + dt.timedelta(days=1)
+            else:
+                return new
+        else:
+            return time
 
     @time.setter
     def time(self, value):
@@ -85,14 +106,20 @@ class TimeInput(gtk.Entry):
         self.popup = None
 
     def set_start_time(self, start_time):
-        """ set the start time. when start time is set, drop down list
-            will start from start time and duration will be displayed in
-            brackets
+        """ Set the start time.
+
+        When start time is set, drop down list will start from start time,
+        and duration will be displayed in brackets.
+
+        self.time will have the same type as start_time.
         """
         start_time = hamster_round(start_time)
         if isinstance(start_time, dt.datetime):
+            self.start_date = start_time.date()
             # timeinput works on time only
             start_time = start_time.time()
+        else:
+            self.start_date = None
         self.start_time = start_time
 
     def _on_text_changed(self, widget):
@@ -164,7 +191,8 @@ class TimeInput(gtk.Entry):
             self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
 
         # we will be adding things, need datetime
-        i_time_0 = dt.datetime.combine(dt.date.today(), self.start_time or dt.time())
+        i_time_0 = dt.datetime.combine(self.start_date or dt.date.today(),
+                                       self.start_time or dt.time())
 
         if self.start_time is None:
             # full 24 hours
