@@ -106,6 +106,7 @@ class CustomFactController(gobject.GObject):
         self.cmdline.connect("changed", self.on_cmdline_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
+        self.end_time.connect("changed", self.on_end_time_changed)
         self.end_date.connect("day-selected", self.on_end_date_changed)
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
@@ -188,6 +189,16 @@ class CustomFactController(gobject.GObject):
         if self.fact.end_time and not self.master_is_cmdline:
             time = self.fact.end_time.time()
             self.fact.end_time = dt.datetime.combine(self.end_date.date, time)
+            self.validate_fields()
+            self.update_cmdline()
+
+    def on_end_time_changed(self, widget):
+        if not self.master_is_cmdline:
+            # self.end_time.start_time() was given a datetime,
+            # so self.end_time.time is a datetime too.
+            end = self.end_time.time
+            self.fact.end_time = end
+            self.end_date.date = end.date() if end else None
             self.validate_fields()
             self.update_cmdline()
 
