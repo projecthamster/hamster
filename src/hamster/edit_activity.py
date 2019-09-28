@@ -161,11 +161,13 @@ class CustomFactController(gobject.GObject):
     def on_activity_changed(self, widget):
         if not self.master_is_cmdline:
             self.fact.activity = self.activity_entry.get_text()
+            self.validate_fields()
             self.update_cmdline()
 
     def on_category_changed(self, widget):
         if not self.master_is_cmdline:
             self.fact.category = self.category_entry.get_text()
+            self.validate_fields()
             self.update_cmdline()
 
     def on_cmdline_changed(self, widget):
