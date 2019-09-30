@@ -199,7 +199,7 @@ class CompleteTree(graphics.Scene):
 
 
 
-class ActivityEntry(gtk.Entry):
+class CmdLineEntry(gtk.Entry):
     def __init__(self, updating=True, **kwargs):
         gtk.Entry.__init__(self)
 
