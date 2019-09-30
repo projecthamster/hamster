@@ -49,7 +49,7 @@ class CustomFactController(gobject.GObject):
         self.fact_id = fact_id
 
         self.activity_entry = self.get_widget('activity')
-        self.category_entry = self.get_widget('category')
+        self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
 
         self.cmdline = widgets.CmdLineEntry()
         self.get_widget("command line box").add(self.cmdline)

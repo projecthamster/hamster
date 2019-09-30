@@ -23,7 +23,7 @@ from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 
 # import our children
-from hamster.widgets.activityentry import CmdLineEntry
+from hamster.widgets.activityentry import CategoryEntry, CmdLineEntry
 from hamster.widgets.timeinput import TimeInput
 from hamster.widgets.dayline import DayLine
 from hamster.widgets.tags import Tag, TagBox, TagsEntry

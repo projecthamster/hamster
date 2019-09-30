@@ -39,6 +39,7 @@ from hamster import client
 from hamster.lib import Fact, looks_like_time
 from hamster.lib import stuff
 from hamster.lib import graphics
+from hamster.lib.configuration import runtime
 
 
 def extract_search(text):
@@ -462,3 +463,50 @@ class CmdLineEntry(gtk.Entry):
         self.popup.move(x, y)
         self.popup.resize(entry_alloc.width, tree_h)
         self.popup.show_all()
+
+
+class CategoryEntry():
+    """Category entry widget."""
+    def __init__(self, widget=None, **kwds):
+        # widget and completion are already defined
+        # e.g. in the glade edit_activity.ui file
+        self.widget = widget
+        if not self.widget:
+            self.widget = gtk.Entry(**kwds)
+
+        self.completion = self.widget.get_completion()
+        if not self.completion:
+            self.completion = gtk.EntryCompletion()
+            self.widget.set_completion(self.completion)
+
+        self.model = gtk.ListStore(str)
+        self.completion.set_model(self.model)
+        self.completion.set_text_column(0)
+        self.completion.set_match_func(self.match_func, None)
+
+        self.widget.connect("icon-release", self.on_icon_release)
+        self.widget.connect("focus-in-event", self.on_focus_in_event)
+
+    def match_func(self, completion, key, iter, *user_data):
+        if not key.strip():
+            # show all keys if entry is empty
+            return True
+        else:
+            # return if the entered string is anywhere in the first column data
+            return key.strip() in self.model.get_value(iter, 0)
+
+    def on_focus_in_event(self, widget, event):
+        self.populate_completions()
+
+    def on_icon_release(self, entry, icon_pos, event):
+        self.widget.grab_focus()
+        self.widget.set_text("")
+        self.emit("changed")
+
+    def populate_completions(self):
+        self.model.clear()
+        for category in runtime.storage.get_categories():
+            self.model.append([category['name']])
+
+    def __getattr__(self, name):
+        return getattr(self.widget, name)
