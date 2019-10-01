@@ -2,6 +2,9 @@
 <!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkEntryCompletion" id="activity completion">
+    <property name="minimum_key_length">0</property>
+  </object>
   <object class="GtkEntryCompletion" id="category completion">
     <property name="minimum_key_length">0</property>
   </object>
@@ -314,6 +317,8 @@
                   <object class="GtkEntry" id="activity">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="secondary_icon_stock">gtk-clear</property>
+                    <property name="completion">activity completion</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>

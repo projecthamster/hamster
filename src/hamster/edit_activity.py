@@ -48,8 +48,9 @@ class CustomFactController(gobject.GObject):
         # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
-        self.activity_entry = self.get_widget('activity')
         self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
+        self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
+                                                    category_widget=self.category_entry)
 
         self.cmdline = widgets.CmdLineEntry()
         self.get_widget("command line box").add(self.cmdline)
