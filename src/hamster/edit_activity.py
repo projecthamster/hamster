@@ -117,9 +117,6 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
         self.window.show_all()
 
-    def on_description_changed(self, text):
-        self.validate_fields()
-
     def on_prev_day_clicked(self, button):
         self.increment_date(-1)
 
@@ -173,12 +170,14 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            previous_description = self.fact.description
+            previous_cmdline_fact = self.cmdline_fact
             fact = Fact.parse(self.cmdline.get_text(), date=self.date)
-            if not fact.description:
-                fact.description = previous_description
             if fact.start_time is None:
                 fact.start_time = hamster_now()
+            self.cmdline_fact = fact.copy()
+            if fact.description == previous_cmdline_fact.description:
+                # no change to description here, keep the main one
+                fact.description = self.fact.description
             self.fact = fact
             self.update_fields()
 
@@ -187,6 +186,12 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_focus_out_event(self, widget, event):
         self.master_is_cmdline = False
+
+    def on_description_changed(self, text):
+        if not self.master_is_cmdline:
+            self.fact.description = self.figure_description()
+            self.validate_fields()
+            self.update_cmdline()
 
     def on_end_date_changed(self, widget):
         if self.fact.end_time and not self.master_is_cmdline:
@@ -238,12 +243,12 @@ class CustomFactController(gobject.GObject):
 
     def update_cmdline(self, select=None):
         """Update the cmdline entry content."""
-        stripped_fact = self.fact.copy(description=None)
-        label = stripped_fact.serialized(prepend_date=False)
+        self.cmdline_fact = self.fact.copy(description=None)
+        label = self.cmdline_fact.serialized(prepend_date=False)
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_str = stripped_fact.serialized_time(prepend_date=False)
+                time_str = self.cmdline_fact.serialized_time(prepend_date=False)
                 self.cmdline.select_region(0, len(time_str))
 
     def update_fields(self):
@@ -302,25 +307,6 @@ class CustomFactController(gobject.GObject):
         if not fact.activity:
             self.update_status(status="wrong", markup="Missing activity")
             return None
-
-        description_box_content = self.figure_description()
-        if fact.description and description_box_content:
-            escaped_cmd = escape_pango(fact.description)
-            escaped_box = escape_pango(description_box_content)
-            markup = dedent("""\
-                             <b>Duplicate description</b>
-                             <i>command line</i>:
-                             '{}'
-                             <i>description box</i>:
-                             '''{}'''
-                             """).format(escaped_cmd, escaped_box)
-            self.update_status(status="wrong",
-                               markup=markup)
-            return None
-
-        # Good to go, no description ambiguity
-        if description_box_content:
-            fact.description = description_box_content
 
         if (fact.delta < dt.timedelta(0)) and fact.end_time:
             fact.end_time += dt.timedelta(days=1)
