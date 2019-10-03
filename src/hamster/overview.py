@@ -558,9 +558,9 @@ class Overview(Controller):
 
     def on_selection_changed(self, tree, fact):
         if fact:
-            markup = _("Resume/clone activity (Ctrl-R)")
+            markup = _("Resume/clone activity (Ctrl-+ or Ctrl-R)")
         else:
-            markup = _("Add new activity (Ctrl-N)")
+            markup = _("Add new activity (Ctrl-+ or Ctrl-N)")
         self.header_bar.add_activity_button.set_tooltip_markup(markup)
 
     def on_stop_clicked(self, button):
