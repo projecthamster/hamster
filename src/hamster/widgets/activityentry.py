@@ -531,7 +531,6 @@ class ActivityEntry():
         for category in runtime.storage.get_categories():
             category_name = category['name']
             category_id = category['id']
-            c_iter = self.model.append(["", category_name, "@{}".format(category_name)])
             for activity in runtime.storage.get_category_activities(category_id):
                 activity_name = activity["name"]
                 text = "{}@{}".format(activity_name, category_name)
