@@ -149,11 +149,10 @@ class CustomFactController(gobject.GObject):
         return description.strip()
 
     def on_save_button_clicked(self, button):
-        fact = self.validate_fields()
         if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, fact)
+            runtime.storage.update_fact(self.fact_id, self.fact)
         else:
-            runtime.storage.add_fact(fact)
+            runtime.storage.add_fact(self.fact)
         self.close_window()
 
     def on_activity_changed(self, widget):
