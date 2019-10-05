@@ -79,7 +79,9 @@ class CustomFactController(gobject.GObject):
 
         self.save_button = self.get_widget("save_button")
 
+        # this will set self.master_is_cmdline
         self.cmdline.grab_focus()
+
         if fact_id:
             # editing
             self.fact = runtime.storage.get_fact(fact_id)
@@ -162,11 +164,12 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            previous_cmdline_fact = self.cmdline_fact
             fact = Fact.parse(self.cmdline.get_text(), date=self.date)
+            previous_cmdline_fact = self.cmdline_fact
+            # copy the entered fact before any modification
+            self.cmdline_fact = fact.copy()
             if fact.start_time is None:
                 fact.start_time = hamster_now()
-            self.cmdline_fact = fact.copy()
             if fact.description == previous_cmdline_fact.description:
                 # no change to description here, keep the main one
                 fact.description = self.fact.description
