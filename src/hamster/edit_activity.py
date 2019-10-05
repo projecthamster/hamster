@@ -351,7 +351,10 @@ class CustomFactController(gobject.GObject):
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
-        popups = self.cmdline.popup.get_property("visible");
+        popups = (self.cmdline.popup.get_property("visible")
+                  or self.start_time.popup.get_property("visible")
+                  or self.end_time.popup.get_property("visible")
+                  or self.tags_entry.popup.get_property("visible"))
 
         if (event_key.keyval == gdk.KEY_Escape or \
            (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
