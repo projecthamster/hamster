@@ -58,7 +58,6 @@ class TagsEntry(gtk.Entry):
 
         self.connect("icon-press", self._on_icon_press)
         self.connect("key-press-event", self._on_key_press_event)
-        self.connect("key-release-event", self._on_key_release_event)
         self.connect("focus-out-event", self._on_focus_out_event)
 
         self._parent_click_watcher = None # bit lame but works
@@ -181,30 +180,6 @@ class TagsEntry(gtk.Entry):
             self.populate_suggestions()
             self.show_popup()
 
-    def _on_key_release_event(self, entry, event):
-        if (event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter)):
-            if self.popup.get_property("visible"):
-                if self.get_text():
-                    self.hide_popup()
-                return True
-            else:
-                if self.get_text():
-                    self.emit("tags-selected")
-                return False
-        elif (event.keyval == gdk.KEY_Escape):
-            if self.popup.get_property("visible"):
-                self.hide_popup()
-                return True
-            else:
-                return False
-        else:
-            self.populate_suggestions()
-            self.show_popup()
-
-            if event.keyval not in (gdk.KEY_Delete, gdk.KEY_BackSpace):
-                self.complete_inline()
-
-
     def get_cursor_tag(self):
         #returns the tag on which the cursor is on right now
         if self.get_selection_bounds():
@@ -252,6 +227,30 @@ class TagsEntry(gtk.Entry):
                     return False
             else:
                 return False
+
+        elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
+            if self.popup.get_property("visible"):
+                if self.get_text():
+                    self.hide_popup()
+                return True
+            else:
+                if self.get_text():
+                    self.emit("tags-selected")
+                return False
+
+        elif event.keyval == gdk.KEY_Escape:
+            if self.popup.get_property("visible"):
+                self.hide_popup()
+                return True
+            else:
+                return False
+
+        else:
+            self.populate_suggestions()
+            self.show_popup()
+
+            if event.keyval not in (gdk.KEY_Delete, gdk.KEY_BackSpace):
+                self.complete_inline()
 
         return False
 
