@@ -227,7 +227,8 @@ class CustomFactController(gobject.GObject):
 
     def on_start_time_changed(self, widget):
         if not self.master_is_cmdline:
-            previous_time = self.fact.start_time.time()
+            # note: resist the temptation to preserve duration here;
+            # for instance, end time might be at the beginning of next fact.
             new_time = self.start_time.time
             if new_time:
                 date = self.fact.start_time.date()
