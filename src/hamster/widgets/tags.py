@@ -138,11 +138,6 @@ class TagsEntry(gtk.Entry):
         self.popup.resize(w, height)
         self.popup.show_all()
 
-
-
-    def complete_inline(self):
-        return
-
     def refresh_activities(self):
         # scratch activities and categories so that they get repopulated on demand
         self.activities = None
@@ -256,9 +251,6 @@ class TagsEntry(gtk.Entry):
         else:
             self.populate_suggestions()
             self.show_popup()
-
-            if event.keyval not in (gdk.KEY_Delete, gdk.KEY_BackSpace):
-                self.complete_inline()
 
         return False
 
