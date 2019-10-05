@@ -189,11 +189,17 @@ class CustomFactController(gobject.GObject):
             self.update_cmdline()
 
     def on_end_date_changed(self, widget):
-        if self.fact.end_time and not self.master_is_cmdline:
-            time = self.fact.end_time.time()
-            self.fact.end_time = dt.datetime.combine(self.end_date.date, time)
-            self.validate_fields()
-            self.update_cmdline()
+        if not self.master_is_cmdline:
+            if self.fact.end_time:
+                time = self.fact.end_time.time()
+                self.fact.end_time = dt.datetime.combine(self.end_date.date, time)
+                self.validate_fields()
+                self.update_cmdline()
+            elif self.end_date.date:
+                # No end time means on-going, hence date would be meaningless.
+                # And a default end date may be provided when end time is set,
+                # so there should never be a date without time.
+                self.end_date.date = None
 
     def on_end_time_changed(self, widget):
         if not self.master_is_cmdline:
