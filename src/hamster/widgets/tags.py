@@ -149,7 +149,8 @@ class TagsEntry(gtk.Entry):
         self.categories = None
 
     def populate_suggestions(self):
-        self.ac_tags = self.ac_tags or [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
+        self.ac_tags = self.ac_tags or [tag["name"] for tag in
+                                        runtime.storage.get_tags(only_autocomplete=True)]
 
         cursor_tag = self.get_cursor_tag()
 
