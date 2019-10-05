@@ -169,6 +169,8 @@ class TagsEntry(gtk.Entry):
         self.hide_popup()
 
     def _on_icon_press(self, entry, icon_pos, event):
+        # otherwise Esc could not hide popup
+        self.grab_focus()
         # toggle popup
         if self.popup.get_visible():
             # remove trailing comma is any
