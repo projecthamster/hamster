@@ -174,7 +174,7 @@ class TagsEntry(gtk.Entry):
         self.grab_focus()
         # toggle popup
         if self.popup.get_visible():
-            # remove trailing comma is any
+            # remove trailing comma if any
             self.update_tagsline(add=False)
             self.hide_popup()
         else:
@@ -213,6 +213,11 @@ class TagsEntry(gtk.Entry):
         self.update_tagsline()
 
     def update_tagsline(self, add=False):
+        """Update tags line text.
+
+        If add is True, prepare to add tags to the list:
+        a comma is appended and the popup is displayed.
+        """
         text = ", ".join(self.tags)
         if add and text:
             text = "{}, ".format(text)
