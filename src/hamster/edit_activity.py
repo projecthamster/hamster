@@ -355,7 +355,8 @@ class CustomFactController(gobject.GObject):
                 return False
             if self.description_box.has_focus():
                 return False
-            self.on_save_button_clicked(None)
+            if self.validate_fields():
+                self.on_save_button_clicked(None)
 
     def close_window(self):
         if not self.parent:
