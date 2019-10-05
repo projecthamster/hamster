@@ -148,13 +148,6 @@ class CustomFactController(gobject.GObject):
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
-    def on_save_button_clicked(self, button):
-        if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, self.fact)
-        else:
-            runtime.storage.add_fact(self.fact)
-        self.close_window()
-
     def on_activity_changed(self, widget):
         if not self.master_is_cmdline:
             self.fact.activity = self.activity_entry.get_text()
@@ -338,6 +331,13 @@ class CustomFactController(gobject.GObject):
         self.close_window()
 
     def on_close(self, widget, event):
+        self.close_window()
+
+    def on_save_button_clicked(self, button):
+        if self.fact_id:
+            runtime.storage.update_fact(self.fact_id, self.fact)
+        else:
+            runtime.storage.add_fact(self.fact)
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
