@@ -485,13 +485,14 @@ class ActivityEntry():
             self.completion = gtk.EntryCompletion()
             self.widget.set_completion(self.completion)
 
-        # activity, category, text to display
-        self.activity_column = 0
-        self.category_column = 1
-        self.text_column = 2
+        # text to display/filter on, activity, category
+        self.text_column = 0
+        self.activity_column = 1
+        self.category_column = 2
+
         self.model = gtk.ListStore(str, str, str)
         self.completion.set_model(self.model)
-        self.completion.set_text_column(2)
+        self.completion.set_text_column(self.text_column)
         self.completion.set_match_func(self.match_func, None)
 
         self.connect("icon-release", self.on_icon_release)
@@ -539,7 +540,7 @@ class ActivityEntry():
             for activity in runtime.storage.get_category_activities(category_id):
                 activity_name = activity["name"]
                 text = "{}@{}".format(activity_name, category_name)
-                self.model.append([activity_name, category_name, text])
+                self.model.append([text, activity_name, category_name])
 
     def __getattr__(self, name):
         return getattr(self.widget, name)
