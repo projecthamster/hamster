@@ -466,9 +466,13 @@ class CmdLineEntry(gtk.Entry):
 
 
 class ActivityEntry():
-    """Category entry widget."""
+    """Activity entry widget.
+
+    widget (gtk.Entry): the associated activity entry
+    category_widget (gtk.Entry): the associated category entry
+    """
     def __init__(self, widget=None, category_widget=None, **kwds):
-        # widget and completion are already defined
+        # widget and completion may be defined already
         # e.g. in the glade edit_activity.ui file
         self.widget = widget
         if not self.widget:
@@ -499,7 +503,8 @@ class ActivityEntry():
             # show all keys if entry is empty
             return True
         else:
-            # return if the entered string is anywhere in the first column data
+            # return whether the entered string is
+            # anywhere in the first column data
             stripped_key = key.strip()
             activities = self.model.get_value(iter, self.activity_column).lower()
             categories = self.model.get_value(iter, self.category_column).lower()
@@ -541,7 +546,10 @@ class ActivityEntry():
 
 
 class CategoryEntry():
-    """Category entry widget."""
+    """Category entry widget.
+
+    widget (gtk.Entry): the associated category entry
+    """
     def __init__(self, widget=None, **kwds):
         # widget and completion are already defined
         # e.g. in the glade edit_activity.ui file
@@ -567,7 +575,8 @@ class CategoryEntry():
             # show all keys if entry is empty
             return True
         else:
-            # return if the entered string is anywhere in the first column data
+            # return whether the entered string is
+            # anywhere in the first column data
             return key.strip() in self.model.get_value(iter, 0)
 
     def on_focus_in_event(self, widget, event):
