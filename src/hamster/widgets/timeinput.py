@@ -60,6 +60,9 @@ class TimeInput(gtk.Entry):
         time_box.add(self.time_tree)
         self.popup.add(time_box)
 
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "gtk-clear")
+
+        self.connect("icon-release", self._on_icon_release)
         self.connect("button-press-event", self._on_button_press_event)
         self.connect("key-press-event", self._on_key_press_event)
         self.connect("focus-in-event", self._on_focus_in_event)
@@ -179,6 +182,11 @@ class TimeInput(gtk.Entry):
         if self.news:
             self.emit("time-entered")
             self.news = False
+
+    def _on_icon_release(self, entry, icon_pos, event):
+        self.grab_focus()
+        self.set_text("")
+        self.emit("changed")
 
     def hide_popup(self):
         if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
