@@ -29,7 +29,8 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import hamster_today, hamster_now, escape_pango
+from hamster.lib.stuff import (
+    hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
 from hamster.lib import Fact
 
 
@@ -213,15 +214,16 @@ class CustomFactController(gobject.GObject):
 
     def on_start_date_changed(self, widget):
         if not self.master_is_cmdline:
-            previous_date = self.fact.start_time.date()
-            new_date = self.start_date.date
-            delta = new_date - previous_date
-            self.fact.start_time += delta
-            if self.fact.end_time:
-                # preserve fact duration
-                self.fact.end_time += delta
-                self.end_date.date = self.fact.end_time
-            self.date = self.fact.date
+            if self.fact.start_time:
+                previous_date = self.fact.start_time.date()
+                new_date = self.start_date.date
+                delta = new_date - previous_date
+                self.fact.start_time += delta
+                if self.fact.end_time:
+                    # preserve fact duration
+                    self.fact.end_time += delta
+                    self.end_date.date = self.fact.end_time
+            self.date = self.fact.date or hamster_today()
             self.validate_fields()
             self.update_cmdline()
 
@@ -231,10 +233,18 @@ class CustomFactController(gobject.GObject):
             # for instance, end time might be at the beginning of next fact.
             new_time = self.start_time.time
             if new_time:
-                date = self.fact.start_time.date()
-                self.fact.start_time = dt.datetime.combine(date, new_time)
+                if self.fact.start_time:
+                    new_start_time = dt.datetime.combine(self.fact.start_time.date(),
+                                                         new_time)
+                else:
+                    # date not specified; result must fall in current hamster_day
+                    new_start_time = hamsterday_time_to_datetime(hamster_today(),
+                                                                 new_time)
             else:
-                self.fact.start_time = None
+                new_start_time = None
+            self.fact.start_time = new_start_time
+            # let start_date extract date or handle None
+            self.start_date.date = new_start_time
             self.validate_fields()
             self.update_cmdline()
 
