@@ -273,18 +273,18 @@ class TimeInput(gtk.Entry):
 
 
         i = model.get_path(iter)[0]
-        if event.keyval == gtk.gdk.KEY_Up:
+        if event.keyval == gdk.KEY_Up:
             i-=1
-        elif event.keyval == gtk.gdk.KEY_Down:
+        elif event.keyval == gdk.KEY_Down:
             i+=1
-        elif (event.keyval == gtk.gdk.KEY_Return or
-              event.keyval == gtk.gdk.KEY_KP_Enter):
+        elif (event.keyval == gdk.KEY_Return or
+              event.keyval == gdk.KEY_KP_Enter):
 
             if self.popup.get_property("visible"):
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
-        elif (event.keyval == gtk.gdk.KEY_Escape):
+        elif (event.keyval == gdk.KEY_Escape):
             self.hide_popup()
             return
 
@@ -295,7 +295,7 @@ class TimeInput(gtk.Entry):
         self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
 
         # if popup is not visible, display it on up and down
-        if event.keyval in (gtk.gdk.KEY_Up, gtk.gdk.KEY_Down) and self.popup.props.visible == False:
+        if event.keyval in (gdk.KEY_Up, gdk.KEY_Down) and self.popup.props.visible == False:
             self.show_popup()
 
         return True
