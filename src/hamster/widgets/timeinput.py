@@ -197,10 +197,12 @@ class TimeInput(gtk.Entry):
         if self.start_time is None:
             # full 24 hours
             i_time = i_time_0
+            interval = dt.timedelta(minutes = 15)
             end_time = i_time_0 + dt.timedelta(days = 1)
         else:
             # from start time to start time + 12 hours
-            i_time = i_time_0 + dt.timedelta(minutes = 15)
+            interval = dt.timedelta(minutes = 15)
+            i_time = i_time_0 + interval
             end_time = i_time_0 + dt.timedelta(hours = 12)
 
         time = self.figure_time(self.get_text())
@@ -217,14 +219,10 @@ class TimeInput(gtk.Entry):
 
             hours.append([row_text])
 
-            if focus_time and i_time <= focus_time <= i_time + \
-                                                     dt.timedelta(minutes = 30):
+            if focus_time and i_time <= focus_time < i_time + interval:
                 focus_row = i
 
-            if self.start_time is None:
-                i_time += dt.timedelta(minutes = 30)
-            else:
-                i_time += dt.timedelta(minutes = 15)
+            i_time += interval
 
             i += 1
 
