@@ -46,6 +46,9 @@ def datetime_to_hamsterday(civil_date_time):
     The hamster day start is taken into account.
     """
 
+    if civil_date_time is None:
+        return None
+
     # work around cyclic imports
     from hamster.lib.configuration import conf
 
