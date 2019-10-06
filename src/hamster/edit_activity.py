@@ -63,7 +63,6 @@ class CustomFactController(gobject.GObject):
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
-        self.description_buffer.connect("changed", self.on_description_changed)
 
         self.end_date = widgets.Calendar(widget=self.get_widget("end date"))
 
@@ -108,6 +107,7 @@ class CustomFactController(gobject.GObject):
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.description_buffer.connect("changed", self.on_description_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
         self.end_time.connect("changed", self.on_end_time_changed)
