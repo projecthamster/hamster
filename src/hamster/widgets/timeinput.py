@@ -236,12 +236,9 @@ class TimeInput(gtk.Entry):
             selection.select_path(focus_row)
             self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
 
-
         #move popup under the widget
         alloc = self.get_allocation()
         w = alloc.width
-        if self.start_time is not None:
-            w = w * 2
         self.time_tree.set_size_request(w, alloc.height * 5)
 
         window = self.get_parent_window()
