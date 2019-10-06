@@ -205,7 +205,7 @@ class TimeInput(gtk.Entry):
 
         time = self.figure_time(self.get_text())
         focus_time = dt.datetime.combine(dt.date.today(), time) if time else None
-        hours = gtk.ListStore(gobject.TYPE_STRING)
+        hours = gtk.ListStore(str)
 
         i, focus_row = 0, None
         while i_time < end_time:
