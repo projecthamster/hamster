@@ -4,18 +4,8 @@
 import logging
 from gi.repository import GLib as glib
 
-import dbus, dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
 import datetime as dt
-from calendar import timegm
 from gi.repository import Gio as gio
-
-DBusGMainLoop(set_as_default=True)
-loop = glib.MainLoop()
-
-if "org.gnome.Hamster" in dbus.SessionBus().list_names():
-    print("Found hamster-service already running, exiting")
-    quit()
 
 from hamster import logger as hamster_logger
 from hamster.lib import i18n
@@ -23,25 +13,17 @@ i18n.setup_i18n()
 
 from hamster.storage import db
 from hamster.lib import default_logger, desktop, stuff
-
+from hamster.lib.dbus import DBusMainLoop, dbus, to_dbus_fact
 
 logger = default_logger(__file__)
 
 
-def to_dbus_fact(fact):
-    """Perform the conversion between fact database query and
-    dbus supported data types
-    """
-    return (fact['id'],
-            timegm(fact['start_time'].timetuple()),
-            timegm(fact['end_time'].timetuple()) if fact['end_time'] else 0,
-            fact['description'] or '',
-            fact['name'] or '',
-            fact['activity_id'] or 0,
-            fact['category'] or '',
-            dbus.Array(fact['tags'], signature = 's'),
-            timegm(fact['date'].timetuple()),
-            fact['delta'].days * 24 * 60 * 60 + fact['delta'].seconds)
+DBusMainLoop(set_as_default=True)
+loop = glib.MainLoop()
+
+if "org.gnome.Hamster" in dbus.SessionBus().list_names():
+    print("Found hamster-service already running, exiting")
+    quit()
 
 
 class Storage(db.Storage, dbus.service.Object):

@@ -19,24 +19,10 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import datetime as dt
 from calendar import timegm
-import dbus, dbus.mainloop.glib
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
-
-
-def from_dbus_fact(fact):
-    """unpack the struct into a proper dict"""
-    return Fact(activity=fact[4],
-                start_time=dt.datetime.utcfromtimestamp(fact[1]),
-                end_time=dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
-                description=fact[3],
-                activity_id=fact[5],
-                category=fact[6],
-                tags=fact[7],
-                id=fact[0]
-                )
+from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact
 
 
 class Storage(gobject.GObject):
@@ -62,7 +48,7 @@ class Storage(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        DBusMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
         self._connection = None # will be initiated on demand
 
