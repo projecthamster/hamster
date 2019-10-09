@@ -9,6 +9,22 @@ from hamster.lib import Fact
 """D-Bus communication utilities."""
 
 
+"""
+dbus_fact signature (types matching the to_dbus_fact output)
+    i  id
+    i  start_time
+    i  end_time
+    s  description
+    s  activity name
+    i  activity id
+    s  category name
+    as List of fact tags
+    i  date
+    i  delta
+"""
+fact_signature = '(iiissisasii)'
+
+
 def from_dbus_fact(dbus_fact):
     """unpack the struct into a proper dict"""
     return Fact(activity=dbus_fact[4],
