@@ -145,15 +145,12 @@ class Storage(gobject.GObject):
         return from_dbus_fact(self.conn.GetFact(id))
 
     def add_fact(self, fact, temporary_activity = False):
-        """Add fact. activity name can use the
-        `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
-        syntax, or params can be stated explicitly.
-        Params will take precedence over the derived values.
-        start_time defaults to current moment.
-        """
+        """Add fact (Fact)."""
         if not fact.activity:
             return None
 
+        if not fact.start_time:
+            logger.info("Passing fact without any start_time is deprecated")
         serialized = fact.serialized_name()
 
         start_timestamp = timegm((fact.start_time or hamster_now()).timetuple())
