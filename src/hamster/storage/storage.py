@@ -44,14 +44,13 @@ class Storage(object):
         fact: either a Fact instance or
               a string that can be parsed through Fact.parse.
         """
-        if isinstance(fact, Fact):
-            fact_str = fact.serialized_name()
-        else:
-            fact_str = fact
-        start_time = start_time or hamster_now()
+        if isinstance(fact, str):
+            fact = Fact.parse(fact)
+
+        fact = fact.copy(start_time=start_time or hamster_now(), end_time=end_time)
 
         self.start_transaction()
-        result = self.__add_fact(fact_str, start_time, end_time, temporary)
+        result = self.__add_fact(fact, temporary)
         self.end_transaction()
 
         if result:
@@ -66,7 +65,11 @@ class Storage(object):
     def update_fact(self, fact_id, fact, start_time, end_time, temporary = False):
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(fact, start_time, end_time, temporary)
+        # next 3 lines to be removed once update facts use Fact directly.
+        if isinstance(fact, str):
+            fact = Fact.parse(fact)
+        fact = fact.copy(start_time=start_time, end_time=end_time)
+        result = self.__add_fact(fact, temporary)
         self.end_transaction()
         if result:
             self.facts_changed()

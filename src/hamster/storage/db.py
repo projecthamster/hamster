@@ -502,9 +502,11 @@ class Storage(storage.Storage):
 
                 # create new fact for the end
                 new_fact = Fact(activity=fact["name"],
-                                category = fact["category"],
-                                description = fact["description"])
-                new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact_end_time)
+                                category=fact["category"],
+                                description=fact["description"],
+                                start_time=end_time,
+                                end_time=fact_end_time)
+                new_fact_id = self.__add_fact(new_fact)
 
                 # copy tags
                 tag_update = """INSERT INTO fact_tags(fact_id, tag_id)
@@ -526,19 +528,14 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
-        fact = Fact.parse(serialized_fact)
-        fact.start_time = start_time
-        fact.end_time = end_time
-
+    def __add_fact(self, fact, temporary=False):
         logger.info("adding fact {}".format(fact))
 
-        start_time = start_time or fact.start_time
-        end_time = end_time or fact.end_time
-
-        if not fact.activity or start_time is None:  # sanity check
+        if not fact.activity or fact.start_time is None:  # sanity check
             return 0
 
+        start_time = fact.start_time
+        end_time = fact.end_time
 
         # get tags from database - this will create any missing tags too
         tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
