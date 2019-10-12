@@ -529,6 +529,18 @@ class Storage(storage.Storage):
 
 
     def __add_fact(self, fact, temporary=False):
+        """Add fact to database.
+
+        Args:
+            fact (Fact)
+        Returns:
+            int, the new fact id in the database (> 0) on success,
+                 0 if nothing needed to be done
+                 (e.g. if the same fact was already on-going),
+                 note: a sanity check on the given fact is performed first,
+                       that would raise an AssertionError.
+                       Other errors would also be handled through exceptions.
+        """
         logger.info("adding fact {}".format(fact))
 
         self.validate_fact(fact)  # sanity check
@@ -571,7 +583,7 @@ class Storage(storage.Storage):
                    and set(previous["tags"]) == set([tag[1] for tag in tags]) \
                    and (previous["description"] or "") == (fact.description or ""):
                     logger.info("same fact, already on-going, nothing to do")
-                    return None
+                    return 0
 
                 # if no description is added
                 # see if maybe previous was too short to qualify as an activity
