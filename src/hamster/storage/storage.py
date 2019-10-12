@@ -80,6 +80,10 @@ class Storage(object):
             self.facts_changed()
         return result
 
+    def validate_fact(self, fact):
+        """Check fact validity for inclusion into storage."""
+        assert fact.activity, "missing activity"
+        assert fact.start_time, "missing start_time"
 
     def stop_tracking(self, end_time):
         """Stops tracking the current activity"""

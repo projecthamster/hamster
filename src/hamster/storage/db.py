@@ -531,8 +531,7 @@ class Storage(storage.Storage):
     def __add_fact(self, fact, temporary=False):
         logger.info("adding fact {}".format(fact))
 
-        if not fact.activity or fact.start_time is None:  # sanity check
-            return 0
+        self.validate_fact(fact)  # sanity check
 
         start_time = fact.start_time
         end_time = fact.end_time
