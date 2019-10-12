@@ -570,6 +570,7 @@ class Storage(storage.Storage):
                 if previous["activity_id"] == activity_id \
                    and set(previous["tags"]) == set([tag[1] for tag in tags]) \
                    and (previous["description"] or "") == (fact.description or ""):
+                    logger.info("same fact, already on-going, nothing to do")
                     return None
 
                 # if no description is added
