@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 import datetime as dt
 from hamster.lib import Fact
 from hamster.lib.stuff import hamster_now
@@ -70,6 +73,8 @@ class Storage(object):
             fact = Fact.parse(fact)
         fact = fact.copy(start_time=start_time, end_time=end_time)
         result = self.__add_fact(fact, temporary)
+        if not result:
+            logger.warning("failed to update fact {} ({})".format(fact_id, fact))
         self.end_transaction()
         if result:
             self.facts_changed()
