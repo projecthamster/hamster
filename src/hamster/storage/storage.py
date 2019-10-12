@@ -41,16 +41,23 @@ class Storage(object):
 
 
     # facts
-    def add_fact(self, fact, start_time, end_time, temporary = False):
+    def add_fact(self, fact, start_time=None, end_time=None, temporary=False):
         """Add fact.
 
         fact: either a Fact instance or
               a string that can be parsed through Fact.parse.
+
+        note: start_time and end_time are used only when fact is a string,
+              for backward compatibility.
+              Passing fact as a string is deprecated
+              and will be removed in a future version.
+              Parsing should be done in the caller.
         """
         if isinstance(fact, str):
+            logger.info("Passing fact as a string is deprecated")
             fact = Fact.parse(fact)
-
-        fact = fact.copy(start_time=start_time or hamster_now(), end_time=end_time)
+            fact.start_time = start_time
+            fact.end_time = end_time
 
         self.start_transaction()
         result = self.__add_fact(fact, temporary)
