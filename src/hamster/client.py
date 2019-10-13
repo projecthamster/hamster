@@ -22,7 +22,7 @@
 from calendar import timegm
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
-from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact
+from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact_verbatim
 
 
 class Storage(gobject.GObject):
@@ -146,26 +146,15 @@ class Storage(gobject.GObject):
 
     def add_fact(self, fact, temporary_activity = False):
         """Add fact (Fact)."""
-        if not fact.activity:
-            return None
+        assert fact.activity, "missing activity"
 
         if not fact.start_time:
-            logger.info("Passing fact without any start_time is deprecated")
-        serialized = fact.serialized_name()
+            logger.info("Adding fact without any start_time is deprecated")
+            fact.start_time = hamster_now()
 
-        start_timestamp = timegm((fact.start_time or hamster_now()).timetuple())
+        dbus_fact = to_dbus_fact_verbatim(fact)
+        new_id = self.conn.AddFactVerbatim(dbus_fact)
 
-        end_timestamp = fact.end_time or 0
-        if end_timestamp:
-            end_timestamp = timegm(end_timestamp.timetuple())
-
-        new_id = self.conn.AddFact(serialized,
-                                   start_timestamp,
-                                   end_timestamp,
-                                   temporary_activity)
-
-        # TODO - the parsing should happen just once and preferably here
-        # we should feed (serialized_activity, start_time, end_time) into AddFact and others
         return new_id
 
     def stop_tracking(self, end_time = None):

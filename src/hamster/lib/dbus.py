@@ -52,3 +52,21 @@ def to_dbus_fact(fact):
             dbus.Array(fact['tags'], signature = 's'),
             timegm(fact['date'].timetuple()),
             fact['delta'].days * 24 * 60 * 60 + fact['delta'].seconds)
+
+
+# TODO: this one should replace to_dbus_fact once all calls are migrated to use Fact.
+def to_dbus_fact_verbatim(fact):
+    """Perform Fact conversion to D-Bus.
+
+    Return the corresponding dbus structure, with supported data types.
+    """
+    return (fact.id or 0,
+            timegm(fact.start_time.timetuple()),
+            timegm(fact.end_time.timetuple()) if fact.end_time else 0,
+            fact.description or '',
+            fact.activity or '',
+            fact.activity_id or 0,
+            fact.category or '',
+            dbus.Array(fact.tags, signature = 's'),
+            timegm(fact.date.timetuple()),
+            fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)

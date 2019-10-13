@@ -13,7 +13,13 @@ i18n.setup_i18n()
 
 from hamster.storage import db
 from hamster.lib import default_logger, desktop, Fact, stuff
-from hamster.lib.dbus import DBusMainLoop, dbus, fact_signature, to_dbus_fact
+from hamster.lib.dbus import (
+    DBusMainLoop,
+    dbus,
+    fact_signature,
+    from_dbus_fact,
+    to_dbus_fact
+)
 
 logger = default_logger(__file__)
 
@@ -132,6 +138,12 @@ class Storage(db.Storage, dbus.service.Object):
         fact.start_time = dt.datetime.utcfromtimestamp(start_time) if start_time else None
         fact.end_time = dt.datetime.utcfromtimestamp(end_time) if end_time else None
         
+        return self.add_fact(fact) or 0
+
+
+    @dbus.service.method("org.gnome.Hamster", in_signature=fact_signature, out_signature='i')
+    def AddFactVerbatim(self, dbus_fact):
+        fact = from_dbus_fact(dbus_fact)
         return self.add_fact(fact) or 0
 
 
