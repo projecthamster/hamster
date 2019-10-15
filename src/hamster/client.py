@@ -173,18 +173,9 @@ class Storage(gobject.GObject):
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
+        dbus_fact = to_dbus_fact_verbatim(fact)
+        new_id =  self.conn.UpdateFactVerbatim(fact_id, dbus_fact)
 
-        start_time = timegm((fact.start_time or hamster_now()).timetuple())
-
-        end_time = fact.end_time or 0
-        if end_time:
-            end_time = timegm(end_time.timetuple())
-
-        new_id =  self.conn.UpdateFact(fact_id,
-                                       fact.serialized_name(),
-                                       start_time,
-                                       end_time,
-                                       temporary_activity)
         return new_id
 
 

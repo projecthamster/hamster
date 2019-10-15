@@ -71,14 +71,13 @@ class Storage(object):
         """Get fact by id. For output format see GetFacts"""
         return self.__get_fact(fact_id)
 
-
-    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def update_fact(self, fact_id, fact, start_time=None, end_time=None, temporary=False):
         self.start_transaction()
         self.__remove_fact(fact_id)
-        # next 3 lines to be removed once update facts use Fact directly.
+        # to be removed once update facts use Fact directly.
         if isinstance(fact, str):
             fact = Fact.parse(fact)
-        fact = fact.copy(start_time=start_time, end_time=end_time)
+            fact = fact.copy(start_time=start_time, end_time=end_time)
         result = self.__add_fact(fact, temporary)
         if not result:
             logger.warning("failed to update fact {} ({})".format(fact_id, fact))

@@ -168,6 +168,14 @@ class Storage(db.Storage, dbus.service.Object):
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
         return self.update_fact(fact_id, fact, start_time, end_time, temporary) or 0
+    
+    
+    @dbus.service.method("org.gnome.Hamster",
+                         in_signature='i{}'.format(fact_signature),
+                         out_signature='i')
+    def UpdateFactVerbatim(self, fact_id, dbus_fact):
+        fact = from_dbus_fact(dbus_fact)
+        return self.update_fact(fact_id, fact) or 0
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
