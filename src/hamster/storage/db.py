@@ -381,9 +381,9 @@ class Storage(storage.Storage):
                  ORDER BY e.name
         """
 
-        facts = self.fetchall(query, (self._unsorted_localized, id))
-        assert len(facts) > 0, "No fact with id {}".format(id)
-        fact = self.__group_tags(facts)[0]
+        fact_rows = self.fetchall(query, (self._unsorted_localized, id))
+        assert len(fact_rows) > 0, "No fact with id {}".format(id)
+        fact = self.__group_tags(fact_rows)[0]
         logger.info("got fact {}".format(fact))
         return fact
 
@@ -897,6 +897,11 @@ class Storage(storage.Storage):
     connection = property(get_connection, None)
 
     def fetchall(self, query, params = None):
+        """Execute query.
+
+        Returns:
+            list(sqlite.Row)
+        """
         con = self.connection
         cur = con.cursor()
 
