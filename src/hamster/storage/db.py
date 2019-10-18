@@ -363,6 +363,17 @@ class Storage(storage.Storage):
 
         return None
 
+    def _dbfact_to_libfact(self, db_fact):
+        """Convert a db fact (coming from __group_facts) to Fact."""
+        return Fact(activity=db_fact["name"],
+                    category=db_fact["category"],
+                    description=db_fact["description"],
+                    tags=db_fact["tags"],
+                    start_time=db_fact["start_time"],
+                    end_time=db_fact["end_time"],
+                    id=db_fact["id"],
+                    activity_id=db_fact["activity_id"])
+
     def __get_fact(self, id):
         query = """
                    SELECT a.id AS id,
@@ -383,7 +394,8 @@ class Storage(storage.Storage):
 
         fact_rows = self.fetchall(query, (self._unsorted_localized, id))
         assert len(fact_rows) > 0, "No fact with id {}".format(id)
-        fact = self.__group_tags(fact_rows)[0]
+        dbfact = self.__group_tags(fact_rows)[0]
+        fact = self._dbfact_to_libfact(dbfact)
         logger.info("got fact {}".format(fact))
         return fact
 
@@ -884,7 +896,6 @@ class Storage(storage.Storage):
             params = [(fact['id'], fact['name'], fact['category'], fact['description'], " ".join(fact['tags'])) for fact in facts]
 
             self.executemany(insert, params)
-
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):

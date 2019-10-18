@@ -18,7 +18,8 @@ from hamster.lib.dbus import (
     dbus,
     fact_signature,
     from_dbus_fact,
-    to_dbus_fact
+    to_dbus_fact,
+    to_dbus_fact_verbatim
 )
 
 logger = default_logger(__file__)
@@ -152,10 +153,8 @@ class Storage(db.Storage, dbus.service.Object):
                          out_signature=fact_signature)
     def GetFact(self, fact_id):
         """Get fact by id. For output format see GetFacts"""
-        fact = dict(self.get_fact(fact_id))
-        fact['date'] = fact['start_time'].date()
-        fact['delta'] = dt.timedelta()
-        return to_dbus_fact(fact)
+        fact = self.get_fact(fact_id)
+        return to_dbus_fact_verbatim(fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
