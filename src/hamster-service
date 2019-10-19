@@ -18,7 +18,7 @@ from hamster.lib.dbus import (
     dbus,
     fact_signature,
     from_dbus_fact,
-    to_dbus_fact_verbatim
+    to_dbus_fact
 )
 
 logger = default_logger(__file__)
@@ -153,7 +153,7 @@ class Storage(db.Storage, dbus.service.Object):
     def GetFact(self, fact_id):
         """Get fact by id. For output format see GetFacts"""
         fact = self.get_fact(fact_id)
-        return to_dbus_fact_verbatim(fact)
+        return to_dbus_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
@@ -211,14 +211,14 @@ class Storage(db.Storage, dbus.service.Object):
         if end_date:
             end = dt.datetime.utcfromtimestamp(end_date).date()
 
-        return [to_dbus_fact_verbatim(fact) for fact in self.get_facts(start, end, search_terms)]
+        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms)]
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='a{}'.format(fact_signature))
     def GetTodaysFacts(self):
         """Gets facts of today, respecting hamster midnight. See GetFacts for
         return info"""
-        return [to_dbus_fact_verbatim(fact) for fact in self.get_todays_facts()]
+        return [to_dbus_fact(fact) for fact in self.get_todays_facts()]
 
 
     # categories

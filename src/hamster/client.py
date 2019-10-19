@@ -22,7 +22,7 @@
 from calendar import timegm
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
-from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact_verbatim
+from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact
 
 
 class Storage(gobject.GObject):
@@ -152,7 +152,7 @@ class Storage(gobject.GObject):
             logger.info("Adding fact without any start_time is deprecated")
             fact.start_time = hamster_now()
 
-        dbus_fact = to_dbus_fact_verbatim(fact)
+        dbus_fact = to_dbus_fact(fact)
         new_id = self.conn.AddFactVerbatim(dbus_fact)
 
         return new_id
@@ -173,7 +173,7 @@ class Storage(gobject.GObject):
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
-        dbus_fact = to_dbus_fact_verbatim(fact)
+        dbus_fact = to_dbus_fact(fact)
         new_id =  self.conn.UpdateFactVerbatim(fact_id, dbus_fact)
 
         return new_id

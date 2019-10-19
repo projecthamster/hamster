@@ -38,8 +38,7 @@ def from_dbus_fact(dbus_fact):
                 )
 
 
-# TODO: this one should replace to_dbus_fact once all calls are migrated to use Fact.
-def to_dbus_fact_verbatim(fact):
+def to_dbus_fact(fact):
     """Perform Fact conversion to D-Bus.
 
     Return the corresponding dbus structure, with supported data types.
