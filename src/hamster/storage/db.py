@@ -495,6 +495,7 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
+            # fact is a sqlite.Row, indexable by column name
             fact_end_time = fact["end_time"] or hamster_now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
