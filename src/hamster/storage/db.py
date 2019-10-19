@@ -849,11 +849,12 @@ class Storage(storage.Storage):
                      ORDER BY a.id
             """ % rebuild_ids
 
-            facts = self.__group_tags(self.fetchall(query, (self._unsorted_localized, )))
+            dbfacts = self.__group_tags(self.fetchall(query, (self._unsorted_localized, )))
+            facts = [self._dbfact_to_libfact(dbfact) for dbfact in dbfacts]
 
             insert = """INSERT INTO fact_index (id, name, category, description, tag)
                              VALUES (?, ?, ?, ?, ?)"""
-            params = [(fact['id'], fact['name'], fact['category'], fact['description'], " ".join(fact['tags'])) for fact in facts]
+            params = [(fact.id, fact.name, fact.category, fact.description, " ".join(fact.tags)) for fact in facts]
 
             self.executemany(insert, params)
 
