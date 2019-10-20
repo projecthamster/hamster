@@ -359,7 +359,8 @@
                   <object class="GtkEntry" id="category">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="secondary_icon_stock">gtk-clear</property>
+                    <property name="primary_icon_name">edit-delete</property>
+                    <property name="secondary_icon_name">go-down-symbolic</property>
                     <property name="completion">category completion</property>
                   </object>
                   <packing>

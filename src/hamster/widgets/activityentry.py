@@ -586,7 +586,9 @@ class CategoryEntry():
     def on_icon_release(self, entry, icon_pos, event):
         self.widget.grab_focus()
         self.widget.set_text("")
-        self.emit("changed")
+        # do not emit changed on the primary (clear) button
+        if icon_pos == gtk.EntryIconPosition.SECONDARY:
+            self.emit("changed")
 
     def populate_completions(self):
         self.model.clear()
