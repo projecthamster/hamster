@@ -562,6 +562,8 @@ class CategoryEntry():
         if not self.completion:
             self.completion = gtk.EntryCompletion()
             self.widget.set_completion(self.completion)
+        self.completion.insert_action_markup(0, "<i>Clear ({})</i>".format(_("Unsorted")))
+        self.unsorted_action_index = 0
 
         self.model = gtk.ListStore(str)
         self.completion.set_model(self.model)
@@ -570,6 +572,12 @@ class CategoryEntry():
 
         self.widget.connect("icon-release", self.on_icon_release)
         self.widget.connect("focus-in-event", self.on_focus_in_event)
+        self.completion.connect("action_activated", self.on_action_activated)
+
+    def clear(self, notify):
+        self.widget.set_text("")
+        if notify:
+            self.emit("changed")
 
     def match_func(self, completion, key, iter, *user_data):
         if not key.strip():
@@ -580,15 +588,19 @@ class CategoryEntry():
             # anywhere in the first column data
             return key.strip() in self.model.get_value(iter, 0)
 
+    def on_action_activated(self, completion, index):
+        if index == self.unsorted_action_index:
+            self.clear(notify=False)
+
     def on_focus_in_event(self, widget, event):
         self.populate_completions()
 
     def on_icon_release(self, entry, icon_pos, event):
         self.widget.grab_focus()
-        self.widget.set_text("")
+
         # do not emit changed on the primary (clear) button
-        if icon_pos == gtk.EntryIconPosition.SECONDARY:
-            self.emit("changed")
+        self.clear(icon_pos == gtk.EntryIconPosition.SECONDARY)
+
 
     def populate_completions(self):
         self.model.clear()
