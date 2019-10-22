@@ -60,7 +60,7 @@ class TimeInput(gtk.Entry):
         time_box.add(self.time_tree)
         self.popup.add(time_box)
 
-        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-delete")
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.connect("icon-release", self._on_icon_release)
