@@ -528,13 +528,6 @@ class ActivityEntry():
         if notify:
             self.emit("changed")
 
-    def clear_actions(self):
-        """Remove all actions from the suggestion list."""
-        while self._action_list:
-            idx_last = len(self._action_list) - 1
-            self.completion.delete_action(idx_last)
-            self._action_list.pop(idx_last)
-
     def match_func(self, completion, key, iter, *user_data):
         if not key.strip():
             # show all keys if entry is empty
@@ -594,11 +587,6 @@ class ActivityEntry():
                 activity_name = activity["name"]
                 text = "{}@{}".format(activity_name, category_name)
                 self.model.append([text, activity_name, category_name])
-
-    def remove_action(self, name):
-        idx = self._action_list.find(name)
-        self.completion.delete_action(idx)
-        del(self._action_list[idx])
 
     def __getattr__(self, name):
         return getattr(self.widget, name)
