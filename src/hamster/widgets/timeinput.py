@@ -61,7 +61,6 @@ class TimeInput(gtk.Entry):
         self.popup.add(time_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
-        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.connect("icon-release", self._on_icon_release)
         self.connect("button-press-event", self._on_button_press_event)
@@ -186,12 +185,8 @@ class TimeInput(gtk.Entry):
 
     def _on_icon_release(self, entry, icon_pos, event):
         self.grab_focus()
-        if icon_pos == gtk.EntryIconPosition.PRIMARY:
-            # "clear" button
-            self.set_text("")
-            self.emit("changed")
-        else:
-            self.toggle_popup()
+        self.set_text("")
+        self.emit("changed")
 
     def hide_popup(self):
         if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
