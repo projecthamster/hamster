@@ -46,9 +46,18 @@ UNSORTED_ID = -1
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
     def __init__(self, unsorted_localized="Unsorted", database_dir=None):
-        """
-        XXX - you have to pass in name for the uncategorized category
-        Delayed setup so we don't do everything at the same time
+        """Database storage.
+
+        Args:
+            unsorted_localized (str):
+                Default Fact.category value for returned facts
+                that were without any category in the db.
+                This is kept mainly for compatibility reasons.
+                The recommended value is an empty string.
+                How to handle empty category is now left to the caller.
+            database_dir (path):
+                Directory holding the database file,
+                or None to use the default location.
         """
         storage.Storage.__init__(self)
 
