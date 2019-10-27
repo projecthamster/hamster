@@ -73,21 +73,25 @@ class HeaderBar(gtk.HeaderBar):
         self.system_button = gtk.MenuButton()
         self.system_button.set_image(gtk.Image.new_from_icon_name(
             "open-menu-symbolic", gtk.IconSize.MENU))
+        self.system_button.set_tooltip_markup(_("Menu"))
         self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
         self.search_button.set_image(gtk.Image.new_from_icon_name(
             "edit-find-symbolic", gtk.IconSize.MENU))
+        self.search_button.set_tooltip_markup(_("Filter activities"))
         self.pack_end(self.search_button)
 
         self.stop_button = gtk.Button()
         self.stop_button.set_image(gtk.Image.new_from_icon_name(
             "process-stop-symbolic", gtk.IconSize.MENU))
+        self.stop_button.set_tooltip_markup(_("Stop tracking (Ctrl-SPACE)"))
         self.pack_end(self.stop_button)
 
         self.add_activity_button = gtk.Button()
         self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
             "list-add-symbolic", gtk.IconSize.MENU))
+        self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
 
@@ -528,6 +532,8 @@ class Overview(Controller):
         self.facts = self.storage.get_facts(start, end, search_terms=search)
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
+        self.header_bar.stop_button.set_sensitive(
+            self.facts and not self.facts[-1].end_time)
 
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
