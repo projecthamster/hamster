@@ -264,7 +264,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         # enter or double-click, passes in current day and fact
         'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
         'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-        'selection-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
 
@@ -395,13 +394,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.y = fact.y - self.height + 25
 
         self.on_scroll()
-        self.emit("selection-changed", self.current_fact)
 
     def unset_current_fact(self):
         """Deselect fact."""
         self.current_fact = None
         self.on_scroll()
-        self.emit("selection-changed", self.current_fact)
 
     def get_visible_range(self):
         start, end = (bisect.bisect(self.row_positions, self.y) - 1,

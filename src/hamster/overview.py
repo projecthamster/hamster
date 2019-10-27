@@ -91,6 +91,7 @@ class HeaderBar(gtk.HeaderBar):
         self.add_activity_button = gtk.Button()
         self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
             "list-add-symbolic", gtk.IconSize.MENU))
+        self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-N)"))
         self.pack_end(self.add_activity_button)
 
 
@@ -451,7 +452,7 @@ class Overview(Controller):
         self.fact_tree = FactTree()
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
         self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
-        self.fact_tree.connect("selection-changed", self.on_selection_changed)
+
         window.add(self.fact_tree)
         main.pack_start(window, True, True, 1)
 
@@ -555,13 +556,6 @@ class Overview(Controller):
 
     def on_add_activity_clicked(self, button):
         self.start_new_fact(clone_selected=True, fallback=True)
-
-    def on_selection_changed(self, tree, fact):
-        if fact:
-            markup = _("Resume/clone activity (Ctrl-+ or Ctrl-R)")
-        else:
-            markup = _("Add new activity (Ctrl-+ or Ctrl-N)")
-        self.header_bar.add_activity_button.set_tooltip_markup(markup)
 
     def on_stop_clicked(self, button):
         self.storage.stop_tracking()
