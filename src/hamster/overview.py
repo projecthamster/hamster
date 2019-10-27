@@ -91,7 +91,7 @@ class HeaderBar(gtk.HeaderBar):
         self.add_activity_button = gtk.Button()
         self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
             "list-add-symbolic", gtk.IconSize.MENU))
-        self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-N)"))
+        self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
 
