@@ -64,12 +64,14 @@ class CustomFactController(gobject.GObject):
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
 
-        self.end_date = widgets.Calendar(widget=self.get_widget("end date"))
+        self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
+                                         expander=self.get_widget("end date expander"))
 
         self.end_time = widgets.TimeInput()
         self.get_widget("end time box").add(self.end_time)
 
-        self.start_date = widgets.Calendar(widget=self.get_widget("start date"))
+        self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
+                                           expander=self.get_widget("start date expander"))
 
         self.start_time = widgets.TimeInput()
         self.get_widget("start time box").add(self.start_time)
@@ -110,8 +112,12 @@ class CustomFactController(gobject.GObject):
         self.description_buffer.connect("changed", self.on_description_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
+        self.start_date.expander.connect("activate",
+                                         self.on_start_date_expander_activated)
         self.end_time.connect("changed", self.on_end_time_changed)
         self.end_date.connect("day-selected", self.on_end_date_changed)
+        self.end_date.expander.connect("activate",
+                                         self.on_end_date_expander_activated)
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
@@ -202,6 +208,11 @@ class CustomFactController(gobject.GObject):
                 # so there should never be a date without time.
                 self.end_date.date = None
 
+    def on_end_date_expander_activated(self, widget):
+        # state has not changed yet, toggle also start_date calendar visibility
+        previous_state = self.end_date.expander.get_expanded()
+        self.start_date.expander.set_expanded(not previous_state)
+
     def on_end_time_changed(self, widget):
         if not self.master_is_cmdline:
             # self.end_time.start_time() was given a datetime,
@@ -226,6 +237,11 @@ class CustomFactController(gobject.GObject):
             self.date = self.fact.date or hamster_today()
             self.validate_fields()
             self.update_cmdline()
+
+    def on_start_date_expander_activated(self, widget):
+        # state has not changed yet, toggle also end_date calendar visibility
+        previous_state = self.start_date.expander.get_expanded()
+        self.end_date.expander.set_expanded(not previous_state)
 
     def on_start_time_changed(self, widget):
         if not self.master_is_cmdline:

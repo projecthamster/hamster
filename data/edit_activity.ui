@@ -202,12 +202,26 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCalendar" id="start date">
+                  <object class="GtkExpander" id="start date expander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="year">2019</property>
-                    <property name="month">8</property>
-                    <property name="day">15</property>
+                    <property name="resize_toplevel">True</property>
+                    <child>
+                      <object class="GtkCalendar" id="start date">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="year">2019</property>
+                        <property name="month">8</property>
+                        <property name="day">15</property>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">start date</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -260,12 +274,26 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCalendar" id="end date">
+                  <object class="GtkExpander" id="end date expander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="year">2019</property>
-                    <property name="month">8</property>
-                    <property name="day">15</property>
+                    <property name="resize_toplevel">True</property>
+                    <child>
+                      <object class="GtkCalendar" id="end date">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="year">2019</property>
+                        <property name="month">8</property>
+                        <property name="day">15</property>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">end date</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
