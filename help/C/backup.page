@@ -23,9 +23,10 @@
     <p>
         Previously the database was stored in
         <file>~/.local/share/hamster-applet/hamster.db</file>.
-        Recent versions of Hamster migrate this file to the new location
-        and the old file can be safely removed afterwards if desired.
+        Recent versions of Hamster create a hard link between the old and new
+        files.  Any one of these files can be removed safely (they are
+        references to the same item).  The database is lost only if both
+        references are deleted.
     </p>
 </note>
-
 </page>
