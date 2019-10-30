@@ -29,7 +29,8 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import hamster_today, hamster_now, escape_pango
+from hamster.lib.stuff import (
+    hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
 from hamster.lib import Fact
 
 
@@ -48,64 +49,88 @@ class CustomFactController(gobject.GObject):
         # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
-        self.activity = widgets.ActivityEntry()
-        self.activity.connect("changed", self.on_activity_changed)
-        self.get_widget("activity_box").add(self.activity)
+        self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
+        self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
+                                                    category_widget=self.category_entry)
 
-        self.day_start = conf.day_start
+        self.cmdline = widgets.CmdLineEntry()
+        self.get_widget("command line box").add(self.cmdline)
+        self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
+        self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
-        self.description_buffer.connect("changed", self.on_description_changed)
+
+        self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
+                                         expander=self.get_widget("end date expander"))
+
+        self.end_time = widgets.TimeInput()
+        self.get_widget("end time box").add(self.end_time)
+
+        self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
+                                           expander=self.get_widget("start date expander"))
+
+        self.start_time = widgets.TimeInput()
+        self.get_widget("start time box").add(self.start_time)
+
+        self.tags_entry = widgets.TagsEntry()
+        self.get_widget("tags box").add(self.tags_entry)
 
         self.save_button = self.get_widget("save_button")
 
-        self.activity.grab_focus()
+        # this will set self.master_is_cmdline
+        self.cmdline.grab_focus()
+
         if fact_id:
             # editing
-            fact = runtime.storage.get_fact(fact_id)
-            self.date = fact.date
-            original_fact = fact
+            self.fact = runtime.storage.get_fact(fact_id)
+            self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
             self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
-                original_fact = base_fact.copy(start_time=hamster_now(),
-                                               end_time=None)
+                self.fact = base_fact.copy(start_time=hamster_now(),
+                                           end_time=None)
             else:
-                original_fact = None
+                self.fact = Fact(start_time=hamster_now())
 
-        if original_fact:
-            stripped_fact = original_fact.copy()
-            stripped_fact.description = None
-            label = stripped_fact.serialized(prepend_date=False)
-            with self.activity.handler_block(self.activity.checker):
-                self.activity.set_text(label)
-                time_len = len(label) - len(stripped_fact.serialized_name())
-                self.activity.select_region(0, time_len - 1)
-            self.description_buffer.set_text(original_fact.description)
+        original_fact = self.fact
 
-        self.activity.original_fact = original_fact
+        self.update_fields()
+        self.update_cmdline(select=True)
+
+        self.cmdline.original_fact = original_fact
+
+        # This signal should be emitted only after a manual modification,
+        # not at init time when cmdline might not always be fully parsable.
+        self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.description_buffer.connect("changed", self.on_description_changed)
+        self.start_time.connect("changed", self.on_start_time_changed)
+        self.start_date.connect("day-selected", self.on_start_date_changed)
+        self.start_date.expander.connect("activate",
+                                         self.on_start_date_expander_activated)
+        self.end_time.connect("changed", self.on_end_time_changed)
+        self.end_date.connect("day-selected", self.on_end_date_changed)
+        self.end_date.expander.connect("activate",
+                                         self.on_end_date_expander_activated)
+        self.activity_entry.connect("changed", self.on_activity_changed)
+        self.category_entry.connect("changed", self.on_category_changed)
+        self.tags_entry.connect("changed", self.on_tags_changed)
 
         self._gui.connect_signals(self)
         self.validate_fields()
         self.window.show_all()
 
-    def on_description_changed(self, text):
-        self.validate_fields()
-
     def on_prev_day_clicked(self, button):
-        self.date = self.date - dt.timedelta(days=1)
-        self.validate_fields()
+        self.increment_date(-1)
 
     def on_next_day_clicked(self, button):
-        self.date = self.date + dt.timedelta(days=1)
-        self.validate_fields()
+        self.increment_date(+1)
 
     def draw_preview(self, start_time, end_time=None):
         day_facts = runtime.storage.get_facts(self.date)
@@ -115,6 +140,15 @@ class CustomFactController(gobject.GObject):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
+    def increment_date(self, days):
+        delta = dt.timedelta(days=days)
+        self.date += delta
+        if self.fact.start_time:
+            self.fact.start_time += delta
+        if self.fact.end_time:
+            self.fact.end_time += delta
+        self.update_fields()
+
     def show(self):
         self.window.show()
 
@@ -123,24 +157,139 @@ class CustomFactController(gobject.GObject):
         description = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), 0)
         return description.strip()
 
-    def localized_fact(self):
-        """Make sure fact has the correct start_time."""
-        fact = Fact.parse(self.activity.get_text())
-        if fact.start_time:
-            fact.date = self.date
-        else:
-            fact.start_time = hamster_now()
-        return fact
+    def on_activity_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.activity = self.activity_entry.get_text()
+            self.validate_fields()
+            self.update_cmdline()
 
-    def on_save_button_clicked(self, button):
-        fact = self.validate_fields()
-        if self.fact_id:
-            runtime.storage.update_fact(self.fact_id, fact)
-        else:
-            runtime.storage.add_fact(fact)
-        self.close_window()
+    def on_category_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.category = self.category_entry.get_text()
+            self.validate_fields()
+            self.update_cmdline()
 
-    def on_activity_changed(self, combo):
+    def on_cmdline_changed(self, widget):
+        if self.master_is_cmdline:
+            fact = Fact.parse(self.cmdline.get_text(), date=self.date)
+            previous_cmdline_fact = self.cmdline_fact
+            # copy the entered fact before any modification
+            self.cmdline_fact = fact.copy()
+            if fact.start_time is None:
+                fact.start_time = hamster_now()
+            if fact.description == previous_cmdline_fact.description:
+                # no change to description here, keep the main one
+                fact.description = self.fact.description
+            self.fact = fact
+            self.update_fields()
+
+    def on_cmdline_focus_in_event(self, widget, event):
+        self.master_is_cmdline = True
+
+    def on_cmdline_focus_out_event(self, widget, event):
+        self.master_is_cmdline = False
+
+    def on_description_changed(self, text):
+        if not self.master_is_cmdline:
+            self.fact.description = self.figure_description()
+            self.validate_fields()
+            self.update_cmdline()
+
+    def on_end_date_changed(self, widget):
+        if not self.master_is_cmdline:
+            if self.fact.end_time:
+                time = self.fact.end_time.time()
+                self.fact.end_time = dt.datetime.combine(self.end_date.date, time)
+                self.validate_fields()
+                self.update_cmdline()
+            elif self.end_date.date:
+                # No end time means on-going, hence date would be meaningless.
+                # And a default end date may be provided when end time is set,
+                # so there should never be a date without time.
+                self.end_date.date = None
+
+    def on_end_date_expander_activated(self, widget):
+        # state has not changed yet, toggle also start_date calendar visibility
+        previous_state = self.end_date.expander.get_expanded()
+        self.start_date.expander.set_expanded(not previous_state)
+
+    def on_end_time_changed(self, widget):
+        if not self.master_is_cmdline:
+            # self.end_time.start_time() was given a datetime,
+            # so self.end_time.time is a datetime too.
+            end = self.end_time.time
+            self.fact.end_time = end
+            self.end_date.date = end.date() if end else None
+            self.validate_fields()
+            self.update_cmdline()
+
+    def on_start_date_changed(self, widget):
+        if not self.master_is_cmdline:
+            if self.fact.start_time:
+                previous_date = self.fact.start_time.date()
+                new_date = self.start_date.date
+                delta = new_date - previous_date
+                self.fact.start_time += delta
+                if self.fact.end_time:
+                    # preserve fact duration
+                    self.fact.end_time += delta
+                    self.end_date.date = self.fact.end_time
+            self.date = self.fact.date or hamster_today()
+            self.validate_fields()
+            self.update_cmdline()
+
+    def on_start_date_expander_activated(self, widget):
+        # state has not changed yet, toggle also end_date calendar visibility
+        previous_state = self.start_date.expander.get_expanded()
+        self.end_date.expander.set_expanded(not previous_state)
+
+    def on_start_time_changed(self, widget):
+        if not self.master_is_cmdline:
+            # note: resist the temptation to preserve duration here;
+            # for instance, end time might be at the beginning of next fact.
+            new_time = self.start_time.time
+            if new_time:
+                if self.fact.start_time:
+                    new_start_time = dt.datetime.combine(self.fact.start_time.date(),
+                                                         new_time)
+                else:
+                    # date not specified; result must fall in current hamster_day
+                    new_start_time = hamsterday_time_to_datetime(hamster_today(),
+                                                                 new_time)
+            else:
+                new_start_time = None
+            self.fact.start_time = new_start_time
+            # let start_date extract date or handle None
+            self.start_date.date = new_start_time
+            self.validate_fields()
+            self.update_cmdline()
+
+    def on_tags_changed(self, widget):
+        if not self.master_is_cmdline:
+            self.fact.tags = self.tags_entry.get_tags()
+            self.update_cmdline()
+
+    def update_cmdline(self, select=None):
+        """Update the cmdline entry content."""
+        self.cmdline_fact = self.fact.copy(description=None)
+        label = self.cmdline_fact.serialized(prepend_date=False)
+        with self.cmdline.handler_block(self.cmdline.checker):
+            self.cmdline.set_text(label)
+            if select:
+                time_str = self.cmdline_fact.serialized_time(prepend_date=False)
+                self.cmdline.select_region(0, len(time_str))
+
+    def update_fields(self):
+        """Update gui fields content."""
+        self.start_time.time = self.fact.start_time
+        self.end_time.time = self.fact.end_time
+        self.end_time.set_start_time(self.fact.start_time)
+        self.start_date.date = self.fact.start_time
+        self.end_date.date = self.fact.end_time
+        self.activity_entry.set_text(self.fact.activity)
+        self.category_entry.set_text(self.fact.category)
+        self.description_buffer.set_text(self.fact.description)
+        self.tags_entry.set_tags(self.fact.tags)
         self.validate_fields()
 
     def update_status(self, status, markup):
@@ -166,7 +315,7 @@ class CustomFactController(gobject.GObject):
 
         Return the consolidated fact if successful, or None.
         """
-        fact = self.localized_fact()
+        fact = self.fact
 
         now = hamster_now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
@@ -186,25 +335,6 @@ class CustomFactController(gobject.GObject):
         if not fact.activity:
             self.update_status(status="wrong", markup="Missing activity")
             return None
-
-        description_box_content = self.figure_description()
-        if fact.description and description_box_content:
-            escaped_cmd = escape_pango(fact.description)
-            escaped_box = escape_pango(description_box_content)
-            markup = dedent("""\
-                             <b>Duplicate description</b>
-                             <i>command line</i>:
-                             '{}'
-                             <i>description box</i>:
-                             '''{}'''
-                             """).format(escaped_cmd, escaped_box)
-            self.update_status(status="wrong",
-                               markup=markup)
-            return None
-
-        # Good to go, no description ambiguity
-        if description_box_content:
-            fact.description = description_box_content
 
         if (fact.delta < dt.timedelta(0)) and fact.end_time:
             fact.end_time += dt.timedelta(days=1)
@@ -239,8 +369,18 @@ class CustomFactController(gobject.GObject):
     def on_close(self, widget, event):
         self.close_window()
 
+    def on_save_button_clicked(self, button):
+        if self.fact_id:
+            runtime.storage.update_fact(self.fact_id, self.fact)
+        else:
+            runtime.storage.add_fact(self.fact)
+        self.close_window()
+
     def on_window_key_pressed(self, tree, event_key):
-        popups = self.activity.popup.get_property("visible");
+        popups = (self.cmdline.popup.get_property("visible")
+                  or self.start_time.popup.get_property("visible")
+                  or self.end_time.popup.get_property("visible")
+                  or self.tags_entry.popup.get_property("visible"))
 
         if (event_key.keyval == gdk.KEY_Escape or \
            (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
@@ -254,7 +394,8 @@ class CustomFactController(gobject.GObject):
                 return False
             if self.description_box.has_focus():
                 return False
-            self.on_save_button_clicked(None)
+            if self.validate_fields():
+                self.on_save_button_clicked(None)
 
     def close_window(self):
         if not self.parent:

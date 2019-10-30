@@ -212,7 +212,9 @@ class Fact(object):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
         datetime = self.serialized_time(prepend_date)
-        return "%s %s" % (datetime, name)
+        # no need for space if name or datetime is missing
+        space = " " if name and datetime else ""
+        return "{}{}{}".format(datetime, space, name)
 
     def _set(self, **kwds):
         """Modify attributes.
