@@ -90,8 +90,10 @@ class Storage(storage.Storage):
             try:
                 from xdg.BaseDirectory import xdg_data_home
             except ImportError:
-                logger.warning("Could not import xdg - assuming ~/.local/share")
-                xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
+                xdg_data_home = os.environ.get('XDG_DATA_HOME')
+                if not xdg_data_home:
+                    xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
+                    logger.warning("No xdg_data_home - assuming ~/.local/share")
             database_dir = os.path.join(xdg_data_home, 'hamster-time-tracker')
 
         if not os.path.exists(database_dir):
