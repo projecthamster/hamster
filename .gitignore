@@ -1,3 +1,5 @@
+# backups (eg. glade)
+*~
 *.pyc
 autom4te.cache/
 m4/

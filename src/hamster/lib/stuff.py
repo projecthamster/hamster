@@ -46,6 +46,9 @@ def datetime_to_hamsterday(civil_date_time):
     The hamster day start is taken into account.
     """
 
+    if civil_date_time is None:
+        return None
+
     # work around cyclic imports
     from hamster.lib.configuration import conf
 
@@ -61,7 +64,15 @@ def datetime_to_hamsterday(civil_date_time):
 
 def hamster_now():
     # current datetime truncated to the minute
-    return dt.datetime.now().replace(second=0, microsecond=0)
+    return hamster_round(dt.datetime.now())
+
+
+def hamster_round(time):
+    """Round time or datetime."""
+    if time is None:
+        return None
+    else:
+        return time.replace(second=0, microsecond=0)
 
 
 def hamster_today():

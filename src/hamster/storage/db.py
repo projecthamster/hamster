@@ -40,6 +40,8 @@ from hamster.lib.configuration import conf
 from hamster.lib.stuff import hamster_today, hamster_now
 from hamster.storage import storage
 
+UNSORTED_ID = -1
+
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -330,6 +332,8 @@ class Storage(storage.Storage):
 
     def __get_category_id(self, name):
         """returns category by it's name"""
+        if not name:
+            return UNSORTED_ID
 
         query = """
                    SELECT id from categories
