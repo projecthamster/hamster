@@ -25,21 +25,20 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os, time
-import datetime
+import datetime as dt
 import itertools
 import sqlite3 as sqlite
 from shutil import copy as copyfile
-import datetime as dt
 try:
     from gi.repository import Gio as gio
 except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
-from hamster.storage import storage
 from hamster.lib import Fact
 from hamster.lib.configuration import conf
 from hamster.lib.stuff import hamster_today, hamster_now
+from hamster.storage import storage
 
 
 class Storage(storage.Storage):
@@ -105,7 +104,7 @@ class Storage(storage.Storage):
             # handle pre-existing hamster-applet database
             old_db_path = os.path.join(xdg_data_home, 'hamster-applet', 'hamster.db')
             if os.path.exists(old_db_path):
-                logger.warning("Linking %s to %s" % (old_db_path, db_path))
+                logger.warning("Linking {} with {}".format(old_db_path, db_path))
                 os.link(old_db_path, db_path)
             else:
                 # make a copy of the empty template hamster.db
@@ -121,14 +120,14 @@ class Storage(storage.Storage):
                     else:
                         # get ./data from ./src/hamster/storage/db.py (3 levels up)
                         data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
-                logger.warning("Database not found in %s - installing default from %s!"
-                               % (db_path, data_dir))
+                logger.warning("Database not found in {} - installing default from {}!"
+                               .format(db_path, data_dir))
                 copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
 
             #change also permissions - sometimes they are 444
             os.chmod(db_path, 0o664)
 
-        db_path = os.path.realpath(db_path) # needed for file monitoring?
+        db_path = os.path.realpath(db_path)  # needed for file monitoring?
 
         return db_path
 
@@ -395,7 +394,7 @@ class Storage(storage.Storage):
     def __touch_fact(self, fact, end_time = None):
         end_time = end_time or hamster_now()
         # tasks under one minute do not count
-        if end_time - fact['start_time'] < datetime.timedelta(minutes = 1):
+        if end_time - fact['start_time'] < dt.timedelta(minutes = 1):
             self.__remove_fact(fact['id'])
         else:
             query = """
