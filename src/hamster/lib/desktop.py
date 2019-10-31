@@ -74,12 +74,12 @@ class DesktopIntegrations(object):
         last_activity = todays_facts[-1] if todays_facts else None
 
         # update duration of current task
-        if last_activity and not last_activity['end_time']:
-            delta = now - last_activity['start_time']
+        if last_activity and not last_activity.end_time:
+            delta = now - last_activity.start_time
             duration = delta.seconds /  60
 
             if duration and duration % interval == 0:
-                message = _("Working on %s") % last_activity['name']
+                message = _("Working on %s") % last_activity.activity
                 self.notify_user(message)
 
         elif self.conf_notify_on_idle:
