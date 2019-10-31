@@ -90,6 +90,7 @@ class CustomFactController(gobject.GObject):
             self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
+            self.window.set_title(_("Add activity"))
             self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
