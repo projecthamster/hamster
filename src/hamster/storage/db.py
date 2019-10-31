@@ -92,8 +92,10 @@ class Storage(storage.Storage):
             try:
                 from xdg.BaseDirectory import xdg_data_home
             except ImportError:
-                logger.warning("Could not import xdg - assuming ~/.local/share")
-                xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
+                xdg_data_home = os.environ.get('XDG_DATA_HOME')
+                if not xdg_data_home:
+                    xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
+                    logger.warning("No xdg_data_home - assuming ~/.local/share")
             database_dir = os.path.join(xdg_data_home, 'hamster-time-tracker')
 
         if not os.path.exists(database_dir):
@@ -106,7 +108,7 @@ class Storage(storage.Storage):
             # handle pre-existing hamster-applet database
             old_db_path = os.path.join(xdg_data_home, 'hamster-applet', 'hamster.db')
             if os.path.exists(old_db_path):
-                logger.warning("Linking {} to {}".format(old_db_path, db_path))
+                logger.warning("Linking {} with {}".format(old_db_path, db_path))
                 os.link(old_db_path, db_path)
             else:
                 # make a copy of the empty template hamster.db
