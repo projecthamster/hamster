@@ -9,7 +9,7 @@
 
 <p>
     Activities are stored in an SQLite database, located at
-    <file>~/.local/share/hamster-applet/hamster.db</file>.
+    <file>~/.local/share/hamster-time-tracker/hamster.db</file>.
     The file can be backed up and restored on the go.
     The application will reload the data automatically after a short while.
 </p>
@@ -19,4 +19,15 @@
         <link href="https://sqlitebrowser.org/"><app>DB Browser for SQLite (DB4S)</app></link>.
     </p>
 </note>
+<note style="info">
+    <p>
+        Previously the database was stored in
+        <file>~/.local/share/hamster-applet/hamster.db</file>.
+        Recent versions of Hamster create a hard link between the old and new
+        files.  Any one of these files can be removed safely (they are
+        references to the same item).  The database is lost only if both
+        references are deleted.
+    </p>
+</note>
+
 </page>
