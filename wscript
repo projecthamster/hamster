@@ -23,16 +23,13 @@ def configure(conf):
     conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
     conf.env.PACKAGE = "hamster-time-tracker"
     
-    # gconf_dir is defined in options
-    conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
+    # gsettings_schema_dir is defined in options
+    conf.env.schemas_destination = '${DATADIR}/glib-2.0/schemas'
     
     conf.recurse("help")
 
 
 def options(opt):
-    opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir',
-                   help='gconf base directory [default: /etc/gconf]')
-    
     # the waf default value is /usr/local, which causes issues (e.g. #309)
     # opt.parser.set_defaults(prefix='/usr') did not update the help string,
     # hence need to replace the whole option
@@ -94,14 +91,10 @@ def build(bld):
         
         assert action in ("install", "uninstall")
         if ctx.cmd == action:
-            schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
-            cmd = 'GCONF_CONFIG_SOURCE=$(gconftool-2 --get-default-source) gconftool-2 --makefile-{}-rule {} 1> /dev/null'.format(action, schemas_file)
-            err = ctx.exec_command(cmd)
-            if err:
-                Logs.warn('The following  command failed:\n{}'.format(cmd))
-            else:
-                Logs.pprint('YELLOW', 'Successfully {}ed gconf schemas'.format(action))
-
+            schemas_file = "{}/apps.hamster-time-tracker.gschema.xml".format(ctx.env.schemas_destination)
+            bld.install_files(schemas_file, 'data/apps.hamster-time-tracker.gschema.xml')
+            cmd = 'glib-compile-schemas {}'.format(ctx.env.schemas_destination)
+            bld(rule=cmd, always=True)
 
     def update_icon_cache(ctx):
         """Update the gtk icon cache."""

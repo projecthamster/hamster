@@ -1,0 +1,96 @@
+<schemalist>
+    <schema path="/apps/hamster-time-tracker/" id="apps.HamsterTimeTracker">
+        <key type="b" name="enable-timeout">
+            <default>true</default>
+            <summary>Stop tracking on idle</summary>
+            <description>
+                Stop tracking current activity when computer becomes idle
+            </description>
+        </key>
+
+        <key type="b" name="stop-on-shutdown">
+            <default>false</default>
+            <summary>Stop tracking on shutdown</summary>
+            <description>
+                Stop tracking current activity on shutdown
+            </description>
+        </key>
+
+        <key type="u" name="notify-interval">
+            <default>27</default>
+            <summary>Remind of current task every x minutes</summary>
+            <description>
+                Remind of current task every specified amount of minutes.
+                Set to 0 or greater than 120 to disable reminder.
+            </description>
+        </key>
+
+        <key type="b" name="notify-on-idle">
+            <default>false</default>
+            <summary>Also remind when no activity is set</summary>
+            <description>
+                Also remind every notify_interval minutes if no activity
+                has been started.
+            </description>
+        </key>
+
+        <key type="s" name="activities-source">
+            <default>""</default>
+            <summary>Source for external activity information</summary>
+            <description>
+                Which external program activity information should be taken from.
+            </description>
+        </key>
+
+        <key type="u" name="day-start-minutes">
+            <default>330</default>
+            <summary>At what time does the day start (defaults to 5:30AM)</summary>
+            <description>
+                Activities will be counted as to bedescription to yesterday if
+                the current time is less than the specified day start; and
+                today, if it is over the time.
+                Activities that span two days, will tip over to the side
+                where the largest part of the activity is.
+            </description>
+        </key>
+
+        <key type="as" name="workspace-tracking">
+            <default>[]</default>
+            <summary>Should workspace switch trigger activity switch</summary>
+            <description>
+                List of enabled tracking methods. "name" will enable
+                switching activities by name defined in workspace_mapping.
+                "memory" will enable switching to the last activity when
+                returning to a previous workspace.
+            </description>
+        </key>
+
+        <key type="as" name="workspace-mapping">
+            <default>[]</default>
+            <summary>Switch activity on workspace change</summary>
+            <description>
+                If switching by name is enabled, this list sets the activity
+                names that should be switched to, workspaces represented by
+                the index of item.
+            </description>
+        </key>
+
+        <key type="s" name="active-hamster-window">
+            <default>""</default>
+            <summary>Show / hide Time Tracker Window</summary>
+            <description>Keyboard summarycut for showing / hiding the Time Tracker window.</description>
+        </key>
+
+        <key type="s" name="action">
+            <default>"hamster-time-tracker toggle"</default>
+            <summary>Toggle hamster application window action</summary>
+            <description>Command for toggling visibility of the hamster application window.</description>
+        </key>
+
+        <key type="s" name="name">
+            <default>"Toggle hamster application window"</default>
+            <summary>Toggle hamster application window</summary>
+            <description>Toggle visibility of the hamster application window.</description>
+        </key>
+    </schema>
+</schemalist>

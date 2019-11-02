@@ -38,10 +38,10 @@ class DesktopIntegrations(object):
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
 
-        self.conf_enable_timeout = conf.get("enable_timeout")
-        self.conf_notify_on_idle = conf.get("notify_on_idle")
-        self.conf_notify_interval = conf.get("notify_interval")
-        conf.connect('conf-changed', self.on_conf_changed)
+        self.conf_enable_timeout = conf.get("enable-timeout")
+        self.conf_notify_on_idle = conf.get("notify-on-idle")
+        self.conf_notify_interval = conf.get("notify-interval")
+        conf.connect('changed', self.on_conf_changed)
 
         self.idle_listener = idle.DbusIdleListener()
         self.idle_listener.connect('idle-changed', self.on_idle_changed)

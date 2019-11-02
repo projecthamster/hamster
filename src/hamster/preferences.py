@@ -194,24 +194,21 @@ class PreferencesEditor(Controller):
 
 
     def on_todo_combo_changed(self, combo):
-        conf.set("activities_source", self.activities_sources[combo.get_active()][0])
+        conf.set("activities-source", self.activities_sources[combo.get_active()][0])
 
 
     def load_config(self, *args):
-        self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
-        self.get_widget("idle_track").set_active(conf.get("enable_timeout"))
-        self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
-
-        self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
-        self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
+        conf.bind("stop-on-shutdown", self.get_widget("shutdown_track"), "active")
+        conf.bind("enable-timeout", self.get_widget("idle_track"), "active")
+        conf.bind("notify-interval", self.get_widget("notify_interval").props.adjustment, "value")
+        conf.bind("notify-on-idle", self.get_widget("notify_on_idle"), "active")
 
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
 
-
-        current_source = conf.get("activities_source")
+        current_source = conf.get("activities-source")
         for i, (code, label) in enumerate(self.activities_sources):
             if code == current_source:
                 self.todo_combo.set_active(i)
@@ -560,15 +557,6 @@ class PreferencesEditor(Controller):
         runtime.storage.remove_activity(removable_id)
 
 
-    def on_shutdown_track_toggled(self, checkbox):
-        conf.set("stop_on_shutdown", checkbox.get_active())
-
-    def on_idle_track_toggled(self, checkbox):
-        conf.set("enable_timeout", checkbox.get_active())
-
-    def on_notify_on_idle_toggled(self, checkbox):
-        conf.set("notify_on_idle", checkbox.get_active())
-
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
@@ -583,7 +571,6 @@ class PreferencesEditor(Controller):
 
     def on_notify_interval_value_changed(self, scale):
         value = int(scale.get_value())
-        conf.set("notify_interval", value)
         self.get_widget("notify_on_idle").set_sensitive(value <= 120)
 
     def on_day_start_changed(self, widget):
@@ -592,10 +579,7 @@ class PreferencesEditor(Controller):
             return
 
         day_start = day_start.hour * 60 + day_start.minute
-
-        conf.set("day_start_minutes", day_start)
-
-
+        conf.set("day-start-minutes", day_start)
 
     def on_close_button_clicked(self, button):
         self.close_window()

@@ -40,7 +40,7 @@ except:
 class ActivitiesSource(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
-        self.source = conf.get("activities_source")
+        self.source = conf.get("activities-source")
         self.__gtg_connection = None
 
         if self.source == "evo" and not evolution:

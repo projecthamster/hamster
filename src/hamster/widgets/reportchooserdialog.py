@@ -43,7 +43,7 @@ class ReportChooserDialog(gtk.Dialog):
                                                      gtk.ResponseType.OK))
 
         # try to set path to last known folder or fall back to home
-        report_folder = os.path.expanduser(conf.get("last_report_folder"))
+        report_folder = os.path.expanduser(conf.get("last-report-folder"))
         if os.path.exists(report_folder):
             self.dialog.set_current_folder(report_folder)
         else:
