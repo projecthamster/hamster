@@ -43,11 +43,4 @@
   <provides>
     <binary>hamster</binary>
   </provides>
-  <releases>
-    <release version="2.2.2" date="2019-02-11">
-      <description>
-        <p>Python3 pre-3.6 compatibility</p>
-      </description>
-    </release>
-  </releases>
 </component>
