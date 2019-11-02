@@ -27,7 +27,7 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">hamster-time-tracker-overview.desktop</launchable>
+  <launchable type="desktop-id">hamster-time-tracker.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
