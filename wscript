@@ -10,7 +10,7 @@ from waflib import Logs, Utils
 
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
-    
+    conf.load('glib2')  # for GSettings support
     conf.load('python')
     conf.check_python_version(minver=(3,4,0))
 
@@ -22,10 +22,7 @@ def configure(conf):
     conf.env.VERSION = VERSION
     conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
     conf.env.PACKAGE = "hamster-time-tracker"
-    
-    # gsettings_schema_dir is defined in options
-    conf.env.schemas_destination = '${DATADIR}/glib-2.0/schemas'
-    
+
     conf.recurse("help")
 
 
@@ -78,23 +75,8 @@ def build(bld):
     
     bld.recurse("po data help")
 
-
-    def manage_gconf_schemas(ctx, action):
-        """Install or uninstall hamster gconf schemas.
-
-        Requires the stored hamster-time-tracker.schemas
-        (usually in /etc/gconf/schemas/) to be present.
-
-        Hence install should be a post-fun,
-        and uninstall a pre-fun.
-        """
-        
-        assert action in ("install", "uninstall")
-        if ctx.cmd == action:
-            schemas_file = "{}/apps.hamster-time-tracker.gschema.xml".format(ctx.env.schemas_destination)
-            bld.install_files(schemas_file, 'data/apps.hamster-time-tracker.gschema.xml')
-            cmd = 'glib-compile-schemas {}'.format(ctx.env.schemas_destination)
-            bld(rule=cmd, always=True)
+    bld(features='glib2',
+        settings_schema_files = ['data/apps.hamster-time-tracker.gschema.xml'])
 
     def update_icon_cache(ctx):
         """Update the gtk icon cache."""
@@ -109,6 +91,4 @@ def build(bld):
                 Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
 
 
-    bld.add_post_fun(lambda bld: manage_gconf_schemas(bld, "install"))
     bld.add_post_fun(update_icon_cache)
-    bld.add_pre_fun(lambda bld: manage_gconf_schemas(bld, "uninstall"))
