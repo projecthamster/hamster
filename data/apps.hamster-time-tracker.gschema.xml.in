@@ -34,6 +34,14 @@
             </description>
         </key>
 
+        <key type="s" name="last-report-folder">
+            <default>""</default>
+            <summary>The folder the last report was saved to</summary>
+            <description>
+                The folder the last report was saved to
+            </description>
+        </key>
+
         <key type="s" name="activities-source">
             <default>""</default>
             <summary>Source for external activity information</summary>

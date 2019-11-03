@@ -131,7 +131,7 @@ class ReportChooserDialog(gtk.Dialog):
 
         categories = []
 
-        conf.set("last_report_folder", os.path.dirname(path))
+        conf.set("last-report-folder", os.path.dirname(path))
 
         # format, path, start_date, end_date
         self.emit("report-chosen", format, path)
