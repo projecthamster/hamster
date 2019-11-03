@@ -92,17 +92,8 @@ class DbusIdleListener(gobject.GObject):
             idle_state = message.get_args_list()[0]
             if idle_state:
                 self.idle_from = dt.datetime.now()
-
-                # from gnome screensaver 2.24 to 2.28 they have switched
-                # configuration keys and signal types.
-                # luckily we can determine key by signal type
-                if member == "SessionIdleChanged":
-                    delay_key = "/apps/gnome-screensaver/idle_delay"
-                else:
-                    delay_key = "/desktop/gnome/session/idle_delay"
-
-                settings = gio.Settings()
-                self.timeout_minutes = client.get_value(delay_key)
+                settings = gio.Settings("org.gnome.desktop.session")
+                self.timeout_minutes = settings.get_value("idle-delay")
 
             else:
                 self.screen_locked = False
