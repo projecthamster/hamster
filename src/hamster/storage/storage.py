@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 import datetime as dt
 from hamster.lib import Fact
 from hamster.lib.stuff import hamster_now
@@ -38,20 +41,26 @@ class Storage(object):
 
 
     # facts
-    def add_fact(self, fact, start_time, end_time, temporary = False):
+    def add_fact(self, fact, start_time=None, end_time=None, temporary=False):
         """Add fact.
 
         fact: either a Fact instance or
               a string that can be parsed through Fact.parse.
+
+        note: start_time and end_time are used only when fact is a string,
+              for backward compatibility.
+              Passing fact as a string is deprecated
+              and will be removed in a future version.
+              Parsing should be done in the caller.
         """
-        if isinstance(fact, Fact):
-            fact_str = fact.serialized_name()
-        else:
-            fact_str = fact
-        start_time = start_time or hamster_now()
+        if isinstance(fact, str):
+            logger.info("Passing fact as a string is deprecated")
+            fact = Fact.parse(fact)
+            fact.start_time = start_time
+            fact.end_time = end_time
 
         self.start_transaction()
-        result = self.__add_fact(fact_str, start_time, end_time, temporary)
+        result = self.__add_fact(fact, temporary)
         self.end_transaction()
 
         if result:
@@ -62,21 +71,30 @@ class Storage(object):
         """Get fact by id. For output format see GetFacts"""
         return self.__get_fact(fact_id)
 
-
-    def update_fact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def update_fact(self, fact_id, fact, start_time=None, end_time=None, temporary=False):
         self.start_transaction()
         self.__remove_fact(fact_id)
-        result = self.__add_fact(fact, start_time, end_time, temporary)
+        # to be removed once update facts use Fact directly.
+        if isinstance(fact, str):
+            fact = Fact.parse(fact)
+            fact = fact.copy(start_time=start_time, end_time=end_time)
+        result = self.__add_fact(fact, temporary)
+        if not result:
+            logger.warning("failed to update fact {} ({})".format(fact_id, fact))
         self.end_transaction()
         if result:
             self.facts_changed()
         return result
 
+    def validate_fact(self, fact):
+        """Check fact validity for inclusion into storage."""
+        assert fact.activity, "missing activity"
+        assert fact.start_time, "missing start_time"
 
     def stop_tracking(self, end_time):
         """Stops tracking the current activity"""
         facts = self.__get_todays_facts()
-        if facts and not facts[-1]['end_time']:
+        if facts and not facts[-1].end_time:
             self.__touch_fact(facts[-1], end_time)
             self.facts_changed()
 

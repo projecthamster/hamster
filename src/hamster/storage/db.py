@@ -351,6 +351,17 @@ class Storage(storage.Storage):
 
         return None
 
+    def _dbfact_to_libfact(self, db_fact):
+        """Convert a db fact (coming from __group_facts) to Fact."""
+        return Fact(activity=db_fact["name"],
+                    category=db_fact["category"],
+                    description=db_fact["description"],
+                    tags=db_fact["tags"],
+                    start_time=db_fact["start_time"],
+                    end_time=db_fact["end_time"],
+                    id=db_fact["id"],
+                    activity_id=db_fact["activity_id"])
+
     def __get_fact(self, id):
         query = """
                    SELECT a.id AS id,
@@ -369,9 +380,10 @@ class Storage(storage.Storage):
                  ORDER BY e.name
         """
 
-        facts = self.fetchall(query, (self._unsorted_localized, id))
-        assert len(facts) > 0, "No fact with id {}".format(id)
-        fact = self.__group_tags(facts)[0]
+        fact_rows = self.fetchall(query, (self._unsorted_localized, id))
+        assert len(fact_rows) > 0, "No fact with id {}".format(id)
+        dbfact = self.__group_tags(fact_rows)[0]
+        fact = self._dbfact_to_libfact(dbfact)
         logger.info("got fact {}".format(fact))
         return fact
 
@@ -400,15 +412,15 @@ class Storage(storage.Storage):
     def __touch_fact(self, fact, end_time = None):
         end_time = end_time or hamster_now()
         # tasks under one minute do not count
-        if end_time - fact['start_time'] < dt.timedelta(minutes = 1):
-            self.__remove_fact(fact['id'])
+        if end_time - fact.start_time < dt.timedelta(minutes = 1):
+            self.__remove_fact(fact.id)
         else:
             query = """
                        UPDATE facts
                           SET end_time = ?
                         WHERE id = ?
             """
-            self.execute(query, (end_time, fact['id']))
+            self.execute(query, (end_time, fact.id))
 
     def __squeeze_in(self, start_time):
         """ tries to put task in the given date
@@ -471,6 +483,7 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
+            # fact is a sqlite.Row, indexable by column name
             fact_end_time = fact["end_time"] or hamster_now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
@@ -490,9 +503,11 @@ class Storage(storage.Storage):
 
                 # create new fact for the end
                 new_fact = Fact(activity=fact["name"],
-                                category = fact["category"],
-                                description = fact["description"])
-                new_fact_id = self.__add_fact(new_fact.serialized_name(), end_time, fact_end_time)
+                                category=fact["category"],
+                                description=fact["description"],
+                                start_time=end_time,
+                                end_time=fact_end_time)
+                new_fact_id = self.__add_fact(new_fact)
 
                 # copy tags
                 tag_update = """INSERT INTO fact_tags(fact_id, tag_id)
@@ -514,19 +529,25 @@ class Storage(storage.Storage):
                              (start_time, fact["id"]))
 
 
-    def __add_fact(self, serialized_fact, start_time, end_time = None, temporary = False):
-        fact = Fact.parse(serialized_fact)
-        fact.start_time = start_time
-        fact.end_time = end_time
+    def __add_fact(self, fact, temporary=False):
+        """Add fact to database.
 
+        Args:
+            fact (Fact)
+        Returns:
+            int, the new fact id in the database (> 0) on success,
+                 0 if nothing needed to be done
+                 (e.g. if the same fact was already on-going),
+                 note: a sanity check on the given fact is performed first,
+                       that would raise an AssertionError.
+                       Other errors would also be handled through exceptions.
+        """
         logger.info("adding fact {}".format(fact))
 
-        start_time = start_time or fact.start_time
-        end_time = end_time or fact.end_time
+        self.validate_fact(fact)  # sanity check
 
-        if not fact.activity or start_time is None:  # sanity check
-            return 0
-
+        start_time = fact.start_time
+        end_time = fact.end_time
 
         # get tags from database - this will create any missing tags too
         tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
@@ -554,38 +575,42 @@ class Storage(storage.Storage):
             facts = self.__get_todays_facts()
 
             previous = None
-            if facts and facts[-1]["end_time"] == None:
+            if facts and facts[-1].end_time is None:
                 previous = facts[-1]
 
-            if previous and previous['start_time'] <= start_time:
+            if previous and previous.start_time <= start_time:
                 # check if maybe that is the same one, in that case no need to restart
-                if previous["activity_id"] == activity_id \
-                   and set(previous["tags"]) == set([tag[1] for tag in tags]) \
-                   and (previous["description"] or "") == (fact.description or ""):
-                    return None
+                if (previous.activity_id == activity_id
+                    and set(previous.tags) == set([tag[1] for tag in tags])
+                    and (previous.description or "") == (fact.description or "")
+                   ):
+                    logger.info("same fact, already on-going, nothing to do")
+                    return 0
 
                 # if no description is added
                 # see if maybe previous was too short to qualify as an activity
-                if not previous["description"] \
-                   and 60 >= (start_time - previous['start_time']).seconds >= 0:
-                    self.__remove_fact(previous['id'])
+                if (not previous.description
+                    and 60 >= (start_time - previous.start_time).seconds >= 0
+                   ):
+                    self.__remove_fact(previous.id)
 
                     # now that we removed the previous one, see if maybe the one
                     # before that is actually same as the one we want to start
                     # (glueing)
-                    if len(facts) > 1 and 60 >= (start_time - facts[-2]['end_time']).seconds >= 0:
+                    if len(facts) > 1 and 60 >= (start_time - facts[-2].end_time).seconds >= 0:
                         before = facts[-2]
-                        if before["activity_id"] == activity_id \
-                           and set(before["tags"]) == set([tag[1] for tag in tags]):
+                        if (before.activity_id == activity_id
+                            and set(before.tags) == set([tag[1] for tag in tags])
+                           ):
                             # resume and return
                             update = """
                                        UPDATE facts
                                           SET end_time = null
                                         WHERE id = ?
                             """
-                            self.execute(update, (before["id"],))
+                            self.execute(update, (before.id,))
 
-                            return before["id"]
+                            return before.id
                 else:
                     # otherwise stop
                     update = """
@@ -593,7 +618,7 @@ class Storage(storage.Storage):
                                   SET end_time = ?
                                 WHERE id = ?
                     """
-                    self.execute(update, (start_time, previous["id"]))
+                    self.execute(update, (start_time, previous.id))
 
 
         # done with the current activity, now we can solve overlaps
@@ -670,57 +695,14 @@ class Storage(storage.Storage):
 
         query += " ORDER BY a.start_time, e.name"
 
-        facts = self.fetchall(query, (self._unsorted_localized,
-                                      datetime_from,
-                                      datetime_to))
-
+        fact_rows = self.fetchall(query, (self._unsorted_localized,
+                                          datetime_from,
+                                          datetime_to))
         #first let's put all tags in an array
-        facts = self.__group_tags(facts)
-
-        res = []
-        for fact in facts:
-            # heuristics to assign tasks to proper days
-
-            # if fact has no end time, set the last minute of the day,
-            # or current time if fact has happened in last 12 hours
-            if fact["end_time"]:
-                fact_end_time = fact["end_time"]
-            elif (hamster_today() == fact["start_time"].date()) or \
-                 (hamster_now() - fact["start_time"]) <= dt.timedelta(hours=12):
-                fact_end_time = hamster_now()
-            else:
-                fact_end_time = fact["start_time"]
-
-            fact_start_date = fact["start_time"].date() \
-                - dt.timedelta(1 if fact["start_time"].time() < split_time else 0)
-            fact_end_date = fact_end_time.date() \
-                - dt.timedelta(1 if fact_end_time.time() < split_time else 0)
-            fact_date_span = fact_end_date - fact_start_date
-
-            # check if the task spans across two dates
-            if fact_date_span.days == 1:
-                datetime_split = dt.datetime.combine(fact_end_date, split_time)
-                start_date_duration = datetime_split - fact["start_time"]
-                end_date_duration = fact_end_time - datetime_split
-                if start_date_duration > end_date_duration:
-                    # most of the task was done during the previous day
-                    fact_date = fact_start_date
-                else:
-                    fact_date = fact_end_date
-            else:
-                # either doesn't span or more than 24 hrs tracked
-                # (in which case we give up)
-                fact_date = fact_start_date
-
-            if fact["start_time"] < datetime_from - dt.timedelta(days=30):
-                # ignoring old on-going facts
-                continue
-
-            fact["date"] = fact_date
-            fact["delta"] = fact_end_time - fact["start_time"]
-            res.append(fact)
-
-        return res
+        dbfacts = self.__group_tags(fact_rows)
+        # ignore old on-going facts
+        return [self._dbfact_to_libfact(dbfact) for dbfact in dbfacts
+                if dbfact["start_time"] >= datetime_from - dt.timedelta(days=30)]
 
     def __remove_fact(self, fact_id):
         logger.info("removing fact #{}".format(fact_id))
@@ -856,14 +838,14 @@ class Storage(storage.Storage):
                      ORDER BY a.id
             """ % rebuild_ids
 
-            facts = self.__group_tags(self.fetchall(query, (self._unsorted_localized, )))
+            dbfacts = self.__group_tags(self.fetchall(query, (self._unsorted_localized, )))
+            facts = [self._dbfact_to_libfact(dbfact) for dbfact in dbfacts]
 
             insert = """INSERT INTO fact_index (id, name, category, description, tag)
                              VALUES (?, ?, ?, ?, ?)"""
-            params = [(fact['id'], fact['name'], fact['category'], fact['description'], " ".join(fact['tags'])) for fact in facts]
+            params = [(fact.id, fact.name, fact.category, fact.description, " ".join(fact.tags)) for fact in facts]
 
             self.executemany(insert, params)
-
 
     """ Here be dragons (lame connection/cursor wrappers) """
     def get_connection(self):
@@ -876,6 +858,11 @@ class Storage(storage.Storage):
     connection = property(get_connection, None)
 
     def fetchall(self, query, params = None):
+        """Execute query.
+
+        Returns:
+            list(sqlite.Row)
+        """
         con = self.connection
         cur = con.cursor()
 

@@ -19,24 +19,10 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import datetime as dt
 from calendar import timegm
-import dbus, dbus.mainloop.glib
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
-
-
-def from_dbus_fact(fact):
-    """unpack the struct into a proper dict"""
-    return Fact(activity=fact[4],
-                start_time=dt.datetime.utcfromtimestamp(fact[1]),
-                end_time=dt.datetime.utcfromtimestamp(fact[2]) if fact[2] else None,
-                description=fact[3],
-                activity_id=fact[5],
-                category=fact[6],
-                tags=fact[7],
-                id=fact[0]
-                )
+from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact
 
 
 class Storage(gobject.GObject):
@@ -62,7 +48,7 @@ class Storage(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        DBusMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
         self._connection = None # will be initiated on demand
 
@@ -159,30 +145,16 @@ class Storage(gobject.GObject):
         return from_dbus_fact(self.conn.GetFact(id))
 
     def add_fact(self, fact, temporary_activity = False):
-        """Add fact. activity name can use the
-        `[-]start_time[-end_time] activity@category, description #tag1 #tag2`
-        syntax, or params can be stated explicitly.
-        Params will take precedence over the derived values.
-        start_time defaults to current moment.
-        """
-        if not fact.activity:
-            return None
+        """Add fact (Fact)."""
+        assert fact.activity, "missing activity"
 
-        serialized = fact.serialized_name()
+        if not fact.start_time:
+            logger.info("Adding fact without any start_time is deprecated")
+            fact.start_time = hamster_now()
 
-        start_timestamp = timegm((fact.start_time or hamster_now()).timetuple())
+        dbus_fact = to_dbus_fact(fact)
+        new_id = self.conn.AddFactVerbatim(dbus_fact)
 
-        end_timestamp = fact.end_time or 0
-        if end_timestamp:
-            end_timestamp = timegm(end_timestamp.timetuple())
-
-        new_id = self.conn.AddFact(serialized,
-                                   start_timestamp,
-                                   end_timestamp,
-                                   temporary_activity)
-
-        # TODO - the parsing should happen just once and preferably here
-        # we should feed (serialized_activity, start_time, end_time) into AddFact and others
         return new_id
 
     def stop_tracking(self, end_time = None):
@@ -201,18 +173,9 @@ class Storage(gobject.GObject):
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
+        dbus_fact = to_dbus_fact(fact)
+        new_id =  self.conn.UpdateFactVerbatim(fact_id, dbus_fact)
 
-        start_time = timegm((fact.start_time or hamster_now()).timetuple())
-
-        end_time = fact.end_time or 0
-        if end_time:
-            end_time = timegm(end_time.timetuple())
-
-        new_id =  self.conn.UpdateFact(fact_id,
-                                       fact.serialized_name(),
-                                       start_time,
-                                       end_time,
-                                       temporary_activity)
         return new_id
 
 
