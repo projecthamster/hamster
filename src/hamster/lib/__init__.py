@@ -337,15 +337,21 @@ def parse_fact(text, phase=None, res=None, date=None):
             if not m:
                 break
             tag = m.group(1)
-            tags.append(tag)
             # strip the matched string (including #)
+            backup_text = remaining_text
             remaining_text = remaining_text[:m.start()]
+            # empty remaining text means that activity is starting with a '#'
+            if remaining_text:
+                tags.append(tag)
+            else:
+                remaining_text = backup_text
+                break
         # put tags back in input order
         res["tags"] = list(reversed(tags))
         return parse_fact(remaining_text, "activity", res, date)
 
     if "activity" in phases:
-        activity = re.split("[@|#|,]", text, 1)[0]
+        activity = re.split("[@|,]", text, 1)[0]
         if looks_like_time(activity):
             # want meaningful activities
             return res
