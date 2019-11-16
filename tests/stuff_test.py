@@ -82,8 +82,8 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_tags(self):
         # plain activity name
-        activity = Fact.parse("case, with added #de description #and, #some #tägs")
-        self.assertEqual(activity.activity, "case")
+        activity = Fact.parse("#case, with added #de description #and, #some #tägs")
+        self.assertEqual(activity.activity, "#case")
         self.assertEqual(activity.description, "with added #de description")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
         assert not activity.category
