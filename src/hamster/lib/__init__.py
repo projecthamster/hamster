@@ -23,7 +23,7 @@ TIME_FMT = "%H:%M"
 tag_re = re.compile(r"""
     [\s,]*     # any spaces or commas (or nothing)
     \#          # hash character
-    ([^#\s]+)  # the tag (anything but # or spaces)
+    ([^#\s,]+)  # the tag (anything but #, spaces or comma)
     [\s#,]*    # any spaces, #, or commas (or nothing)
     $           # end of text
 """, flags=re.VERBOSE)
