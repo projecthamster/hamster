@@ -356,6 +356,11 @@ class CustomFactController(gobject.GObject):
             self.update_status(status="warning", markup=markup)
             return fact
 
+        roundtrip_fact = Fact.parse(fact.serialized())
+        if roundtrip_fact != fact:
+            self.update_status(status="wrong", markup="Fact could not be parsed back")
+            return None
+
         # nothing unusual
         self.update_status(status="looks good", markup="")
         return fact
