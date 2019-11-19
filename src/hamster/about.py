@@ -33,7 +33,7 @@ class About(object):
             "version" : runtime.version,
             "comments" : _("Project Hamster — track your time"),
             "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),
-            "website" : "http://projecthamster.wordpress.com/",
+            "website" : "https://github.com/projecthamster/hamster/wiki/",
             "website-label" : _("Project Hamster Website"),
             "title": _("About Time Tracker"),
             "wrap-license": True
