@@ -21,10 +21,12 @@ TIME_FMT = "%H:%M"
 # match #tag followed by any space or # that will be ignored
 # tag must not contain #, comma, or any space character
 tag_re = re.compile(r"""
-    [\s,]*     # any spaces or commas (or nothing)
     \#          # hash character
-    ([^#\s,]+)  # the tag (anything but #, spaces or comma)
-    [\s#,]*    # any spaces, #, or commas (or nothing)
+    ([^#,]+)    # the tag (anything but hash or comma)
+    \s*         # maybe spaces
+                # forbid double comma (that would be the left barrier of tags)
+    ,?          # single comma (or none)
+    \s*         # maybe space
     $           # end of text
 """, flags=re.VERBOSE)
 
@@ -195,6 +197,8 @@ class Fact(object):
             res += ", %s" % self.description
 
         if self.tags:
+            # double comma is a left barrier for tags
+            res += ",, "
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
@@ -336,7 +340,7 @@ def parse_fact(text, phase=None, res=None, date=None):
             m = re.search(tag_re, remaining_text)
             if not m:
                 break
-            tag = m.group(1)
+            tag = m.group(1).strip()
             # strip the matched string (including #)
             backup_text = remaining_text
             remaining_text = remaining_text[:m.start()]
@@ -363,7 +367,7 @@ def parse_fact(text, phase=None, res=None, date=None):
     if "category" in phases:
         category, _, description = text.partition(",")
         res["category"] = category.lstrip("@").strip() or None
-        res["description"] = description.strip() or None
+        res["description"] = description.strip(", ") or None
         return res
 
     return {}

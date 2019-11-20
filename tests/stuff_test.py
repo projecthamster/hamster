@@ -82,9 +82,9 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_tags(self):
         # plain activity name
-        activity = Fact.parse("#case, with added #de description #and, #some #tägs")
+        activity = Fact.parse("#case, description with #hash,, #and, #some #tägs")
         self.assertEqual(activity.activity, "#case")
-        self.assertEqual(activity.description, "with added #de description")
+        self.assertEqual(activity.description, "description with #hash")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
         assert not activity.category
         assert activity.start_time is None
@@ -92,7 +92,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_full(self):
         # plain activity name
-        activity = Fact.parse("1225-1325 case@cat, description #ta non-tag #tag #bäg")
+        activity = Fact.parse("1225-1325 case@cat, description #ta non-tag,, #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
