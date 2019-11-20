@@ -346,6 +346,9 @@ class HamsterClient(object):
         print()
 
 
+    def version(self):
+        from hamster.lib.configuration import runtime
+        print(runtime.version)
 
 
 if __name__ == '__main__':
@@ -367,6 +370,8 @@ Actions:
     * categories: List all the categories names, one per line.
 
     * overview / prefs / add / about: launch specific window
+
+    * version: Show the Hamster version
 
 Time formats:
     * 'YYYY-MM-DD hh:mm': If start-date is missing, it will default to today.

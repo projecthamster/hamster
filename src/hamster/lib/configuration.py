@@ -113,7 +113,9 @@ class RuntimeStore(Singleton):
             # if defs is not there, we are running from sources
             module_dir = os.path.dirname(os.path.realpath(__file__))
             self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
-            self.version = "uninstalled"
+            from subprocess import getstatusoutput
+            rc, output = getstatusoutput("git describe --tags --always --dirty=+")
+            self.version = "" if rc else output + " (uninstalled)"
 
         self.data_dir = os.path.realpath(self.data_dir)
         self.storage = Storage()

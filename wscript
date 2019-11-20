@@ -1,5 +1,7 @@
 # -*- python -*-
-VERSION = '2.0'
+from subprocess import getstatusoutput
+rc, output = getstatusoutput("git describe --tags --always --dirty=+")
+VERSION = '3.0.0-alpha' if rc else output
 APPNAME = 'hamster-time-tracker'
 top = '.'
 out = 'build'
@@ -10,7 +12,7 @@ from waflib import Logs, Utils
 
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
-    
+
     conf.load('python')
     conf.check_python_version(minver=(3,4,0))
 
@@ -22,23 +24,23 @@ def configure(conf):
     conf.env.VERSION = VERSION
     conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
     conf.env.PACKAGE = "hamster-time-tracker"
-    
+
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
-    
+
     conf.recurse("help")
 
 
 def options(opt):
     opt.add_option('--gconf-dir', action='store', default='/etc/gconf', dest='gconf_dir',
                    help='gconf base directory [default: /etc/gconf]')
-    
+
     # the waf default value is /usr/local, which causes issues (e.g. #309)
     # opt.parser.set_defaults(prefix='/usr') did not update the help string,
     # hence need to replace the whole option
     opt.parser.remove_option('--prefix')
     default_prefix = '/usr'
-    opt.add_option('--prefix', dest='prefix', default=default_prefix, 
+    opt.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
 
 
@@ -48,7 +50,7 @@ def build(bld):
                          src/hamster-windows-service
                       """,
                       chmod=Utils.O755)
-    
+
     bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod=Utils.O755)
 
 
@@ -78,7 +80,7 @@ def build(bld):
         target= "org.gnome.hamster.Windows.service",
         install_path="${DATADIR}/dbus-1/services",
         )
-    
+
     bld.recurse("po data help")
 
 
@@ -91,7 +93,7 @@ def build(bld):
         Hence install should be a post-fun,
         and uninstall a pre-fun.
         """
-        
+
         assert action in ("install", "uninstall")
         if ctx.cmd == action:
             schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
