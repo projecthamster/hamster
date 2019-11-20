@@ -197,8 +197,13 @@ class Fact(object):
             res += ", %s" % self.description
 
         if self.tags:
-            # double comma is a left barrier for tags
-            res += ",, "
+            # double comma is a left barrier for tags,
+            # which is useful only if previous fields contain a hash
+            if ('#' in self.activity
+                or '#' in self.category
+                or '#' in self.description
+               ):
+                res += ",, "
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
