@@ -1,0 +1,53 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="keys">
+<info>
+  <link type="guide" xref="index"/>
+  <desc>Controlling Hamster from the keyboard.</desc>
+</info>
+<title>Keyboard shortcuts</title>
+
+<p> Hamster can be used very efficiently from the keyboard if desired. You
+    may also find it useful to bind either the command <code>hamster</code>
+    or <code>hamster add</code> to a keyboard application shortcut using
+    your desktop UI settings.</p>
+
+<p> The following key combinations can be used in the overview window.</p>
+
+<p><key>Left</key> or <key>Right</key>: Same as <key>&lt;</key> or
+<key>&gt;</key> buttons. Navigate backwards or forwards in time.</p>
+
+<p><key>Down</key>/<key>Up</key>: Navigate the activity list, starting from the
+top/bottom respectively, and select a previous activity.</p>
+
+<p><key>Home</key>/<key>End</key>: Navigate to the first or last activity in the
+list, respectively, and select the activity.</p>
+
+<p><key>PageDown</key>/<key>PageUp</key>: Navigate the activity list if longer
+than one page.</p>
+
+<p><key>Ctrl</key>+<key>+</key>: Create a new activity. If an existing activity
+is selected, it will be resumed (i.e. its details will be cloned, aside from the
+start time). Same as the <key>+</key> button.</p>
+
+<p><key>Ctrl</key>+<key>N</key> or <key>Ctrl</key>+<key>R</key>: Specifically
+create a New activity from scratch or Resume an existing selected activity.</p>
+
+<p><key>Ctrl</key>+<key>Space</key>: Stop tracking the ongoing activity, if
+any. Same as the stop button in the action bar.</p>
+
+<p><key>Return</key>: Edit/update the selected activity if any. Same as double
+click.</p>
+
+<p><key>Delete</key>: Delete the selected activity if any.</p>
+
+<note style="info">
+    <title>More Ctrl combinations</title>
+
+    <p> The keys above without <key>Ctrl</key> can also be used in
+    combination with <key>Ctrl</key>, for example
+    <key>Ctrl</key>+<key>Left</key>.</p>
+
+</note>
+
+</page>
