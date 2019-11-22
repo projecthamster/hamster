@@ -275,6 +275,7 @@ def parse_fact(text, phase=None, res=None, date=None):
         "start_time",
         "end_time",
         "tags",
+        "description",
         "activity",
         "category",
     ]
@@ -357,10 +358,22 @@ def parse_fact(text, phase=None, res=None, date=None):
                 break
         # put tags back in input order
         res["tags"] = list(reversed(tags))
-        return parse_fact(remaining_text, "activity", res, date)
+        # Remove trailing comma and spaces. Any last double comma would
+        # be interpreted as a description start otherwise.
+        remaining_text = remaining_text.rstrip(" ,")
+        return parse_fact(remaining_text, "description", res, date)
+
+    if "description" in phases:
+        # first look for double comma (description hard left boundary)
+        head, sep, description = text.partition(",,")
+        if not sep:
+            # hard boundary not found, try legacy soft boundary
+            head, sep, description = text.partition(",")
+        res["description"] = description.strip()
+        return parse_fact(head, "activity", res, date)
 
     if "activity" in phases:
-        activity = re.split("[@|,]", text, 1)[0]
+        activity = re.split("@", text, 1)[0]
         if looks_like_time(activity):
             # want meaningful activities
             return res
@@ -372,7 +385,6 @@ def parse_fact(text, phase=None, res=None, date=None):
     if "category" in phases:
         category, _, description = text.partition(",")
         res["category"] = category.lstrip("@").strip() or None
-        res["description"] = description.strip(", ") or None
         return res
 
     return {}
