@@ -24,7 +24,7 @@ tag_re = re.compile(r"""
     \#          # hash character
     ([^#,]+)    # the tag (anything but hash or comma)
     \s*         # maybe spaces
-                # forbid double comma (that would be the left barrier of tags)
+                # forbid double comma (tag can not be before the tags barrier)
     ,?          # single comma (or none)
     \s*         # maybe space
     $           # end of text
