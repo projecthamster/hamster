@@ -1,5 +1,4 @@
 # bash completion for hamster
-# TODO - merge hamster-cli into hamster-time-tracker and then both into "hamster"
 
 _hamster_helper()
 {
