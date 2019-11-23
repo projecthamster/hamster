@@ -200,18 +200,11 @@ class Fact(object):
         if self.category:
             res += "@%s" % self.category
 
-        force_tag_barrier = False
-        if ',' in self.activity:
+        if self.description:
             res += ',, '
-            # otherwise the description double comma
-            # might be swallowed as a tag barrier
-            force_tag_barrier = True
-        elif self.description:
-            res += ', '
-        res += self.description
+            res += self.description
 
-        if (force_tag_barrier
-            or '#' in self.activity
+        if ('#' in self.activity
             or '#' in self.category
             or '#' in self.description
            ):
@@ -386,9 +379,6 @@ def parse_fact(text, phase=None, res=None, date=None):
     if "description" in phases:
         # first look for double comma (description hard left boundary)
         head, sep, description = text.partition(",,")
-        if not sep:
-            # hard boundary not found, try legacy soft boundary
-            head, sep, description = text.partition(",")
         res["description"] = description.strip()
         return parse_fact(head, "activity", res, date)
 

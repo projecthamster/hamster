@@ -72,7 +72,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_description(self):
         # plain activity name
-        activity = Fact.parse("case, with added descriptiön")
+        activity = Fact.parse("case,, with added descriptiön")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added descriptiön")
         assert not activity.category
@@ -82,7 +82,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_tags(self):
         # plain activity name
-        activity = Fact.parse("#case, description with #hash,, #and, #some #tägs")
+        activity = Fact.parse("#case,, description with #hash,, #and, #some #tägs")
         self.assertEqual(activity.activity, "#case")
         self.assertEqual(activity.description, "description with #hash")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
@@ -92,7 +92,7 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_full(self):
         # plain activity name
-        activity = Fact.parse("1225-1325 case@cat, description #ta non-tag,, #tag #bäg")
+        activity = Fact.parse("1225-1325 case@cat,, description #ta non-tag,, #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
@@ -101,7 +101,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
     def test_copy(self):
-        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat,, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1.start_time, fact2.start_time)
         self.assertEqual(fact1.end_time, fact2.end_time)
@@ -119,7 +119,7 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(fact3.tags, ["changed"])
 
     def test_comparison(self):
-        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat,, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1, fact2)
         fact2 = fact1.copy()
@@ -149,12 +149,12 @@ class TestActivityInputParsing(unittest.TestCase):
 
     def test_decimal_in_activity(self):
         # cf. issue #270
-        fact = Fact.parse("12:25-13:25 10.0@ABC, Two Words #tag #bäg")
+        fact = Fact.parse("12:25-13:25 10.0@ABC,, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.0")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
         # should not pick up a time here
-        fact = Fact.parse("10.00@ABC, Two Words #tag #bäg")
+        fact = Fact.parse("10.00@ABC,, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.00")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
