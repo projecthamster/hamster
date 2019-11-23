@@ -22,7 +22,9 @@ TIME_FMT = "%H:%M"
 # tag must not contain #, comma, or any space character
 tag_re = re.compile(r"""
     \#          # hash character
-    ([^#,]+)    # the tag (anything but hash or comma)
+    (?P<tag>
+        [^#,]+  # (anything but hash or comma)
+    )
     \s*         # maybe spaces
                 # forbid double comma (tag can not be before the tags barrier)
     ,?          # single comma (or none)
@@ -30,6 +32,11 @@ tag_re = re.compile(r"""
     $           # end of text
 """, flags=re.VERBOSE)
 
+tags_separator = re.compile(r"""
+    (,{0,2})    # 0, 1 or 2 commas
+    \s*         # maybe spaces
+    $           # end of text
+""", flags=re.VERBOSE)
 
 # match time, such as "01:32", "13.56" or "0116"
 time_re = re.compile(r"""
@@ -193,17 +200,27 @@ class Fact(object):
         if self.category:
             res += "@%s" % self.category
 
-        if self.description:
-            res += ", %s" % self.description
+        force_tag_barrier = False
+        if ',' in self.activity:
+            res += ',, '
+            # otherwise the description double comma
+            # might be swallowed as a tag barrier
+            force_tag_barrier = True
+        elif self.description:
+            res += ', '
+        res += self.description
+
+        if (force_tag_barrier
+            or '#' in self.activity
+            or '#' in self.category
+            or '#' in self.description
+           ):
+            # need a tag barrier
+            res += ",, "
 
         if self.tags:
             # double comma is a left barrier for tags,
             # which is useful only if previous fields contain a hash
-            if ('#' in self.activity
-                or '#' in self.category
-                or '#' in self.description
-               ):
-                res += ",, "
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
@@ -343,24 +360,27 @@ def parse_fact(text, phase=None, res=None, date=None):
         tags = []
         remaining_text = text
         while True:
-            m = re.search(tag_re, remaining_text)
-            if not m:
-                break
-            tag = m.group(1).strip()
-            # strip the matched string (including #)
-            backup_text = remaining_text
+            # look for tags separators
+            # especially the tags barrier
+            m = re.search(tags_separator, remaining_text)
             remaining_text = remaining_text[:m.start()]
-            # empty remaining text means that activity is starting with a '#'
-            if remaining_text:
+            if m.group(1) == ",,":
+                # tags  barrier found
+                break
+
+            # look for tag
+            m = re.search(tag_re, remaining_text)
+            if m:
+                tag = m.group('tag').strip()
+                # strip the matched string (including #)
+                remaining_text = remaining_text[:m.start()]
                 tags.append(tag)
             else:
-                remaining_text = backup_text
+                # no tag
                 break
+
         # put tags back in input order
         res["tags"] = list(reversed(tags))
-        # Remove trailing comma and spaces. Any last double comma would
-        # be interpreted as a description start otherwise.
-        remaining_text = remaining_text.rstrip(" ,")
         return parse_fact(remaining_text, "description", res, date)
 
     if "description" in phases:

@@ -173,5 +173,57 @@ class TestActivityInputParsing(unittest.TestCase):
         fact3 = Fact()
         self.assertEqual(fact3.serialized(), "")
 
+    def test_commas(self):
+        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma")
+        self.assertEqual(fact.activity, "activity, with comma")
+        self.assertEqual(fact.category, "category")
+        self.assertEqual(fact.description, "description, with comma")
+        self.assertEqual(fact.tags, [])
+        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma, #tag1, #tag2")
+        self.assertEqual(fact.activity, "activity, with comma")
+        self.assertEqual(fact.category, "category")
+        self.assertEqual(fact.description, "description, with comma")
+        self.assertEqual(fact.tags, ["tag1", "tag2"])
+        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma and #hash,, #tag1, #tag2")
+        self.assertEqual(fact.activity, "activity, with comma")
+        self.assertEqual(fact.category, "category")
+        self.assertEqual(fact.description, "description, with comma and #hash")
+        self.assertEqual(fact.tags, ["tag1", "tag2"])
+
+    def test_roundtrips(self):
+        for activity in (
+            "activity",
+            "#123 with two #hash",
+            "activity, with comma",
+            ):
+            for category in (
+                "",
+                "category",
+                ):
+                for description in (
+                    "",
+                    "description",
+                    "with #hash",
+                    "with, comma"
+                    ):
+                    for tags in (
+                        [],
+                        ["single"],
+                        ["with space"],
+                        ["two", "tags"],
+                        ):
+                        fact = Fact(activity=activity,
+                                    category=category,
+                                    description=description,
+                                    tags=tags)
+                        fact_str = fact.serialized()
+                        parsed = Fact.parse(fact_str)
+                        self.assertEqual(fact, parsed)
+                        self.assertEqual(parsed.activity, fact.activity)
+                        self.assertEqual(parsed.category, fact.category)
+                        self.assertEqual(parsed.description, fact.description)
+                        self.assertEqual(parsed.tags, fact.tags)
+
+
 if __name__ == '__main__':
     unittest.main()
