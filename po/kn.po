@@ -1,4 +1,4 @@
-# translation of hamster-time-tracker.master.kn.po to Kannada
+# translation of hamster.master.kn.po to Kannada
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -6,7 +6,7 @@
 #: ../src/hamster-cli:342
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-time-tracker.master.kn\n"
+"Project-Id-Version: hamster.master.kn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:20+0100\n"
 "PO-Revision-Date: 2009-09-20 16:32+0530\n"
@@ -47,27 +47,27 @@ msgstr "ಚಟುವಟಿಕೆ:"
 msgid "Tags:"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "ಜಡಗೊಂಡಾಗ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "ಗಣಕವು ಜಡಗೊಂಡಾಗ ಪ್ರಸಕ್ತ ಟ್ರ್ಯಾಕಿಂಗ್ ಚಟುವಟಿಕೆಯನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "ಮುಚ್ಚಿದಾಗ ಟ್ರ್ಯಾಕಿಂಗನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "ಮುಚ್ಚಿದಾಗ ಪ್ರಸಕ್ತ ಟ್ರ್ಯಾಕಿಂಗ್ ಚಟುವಟಿಕೆಯನ್ನು ನಿಲ್ಲಿಸು"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ಪ್ರಸಕ್ತ ಕೆಲಸವನ್ನು x ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸುತ್ತದೆ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -75,20 +75,20 @@ msgstr ""
 "ಪ್ರಸಕ್ತ ಕೆಲಸವನ್ನು ಪ್ರತಿ ನಿಗದಿಪಡಿಸಿದ ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸುತ್ತದೆ. ಈ ನೆನಪು ಮಾಡುವುದನ್ನು "
 "ಅಶಕ್ತಗೊಳಿಸಲು ಈ ಮೌಲ್ಯವನ್ನು ೦ ಗೆ ಅಥವ ೧೨೦ಕ್ಕಿಂತ ಹೆಚ್ಚಿನದಕ್ಕೆ ಬದಲಾಯಿಸಿ."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "ಯಾವುದೆ ಚಟುವಟಿಕೆಯನ್ನು ಹೊಂದಿಸದೆ ಇದ್ದಾಗ ಕೂಡ ನೆನಪಿಸು"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ಯಾವುದೆ ಚಟುವಟಿಕೆಗಳನ್ನು ಆರಂಭಿಸದೆ ಇದ್ದಲ್ಲಿ ಪ್ರತಿ ಸೂಚನಾ_ಕಾಲಾವಧಿಯಲ್ಲೂ ನೆನಪಿಸು."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -96,61 +96,61 @@ msgid ""
 "part of the activity is."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 #, fuzzy
 msgid "Show / hide Time Tracker Window"
 msgstr "ಸಮಯ ಟ್ರ್ಯಾಕರ್ ವಿಂಡೋವನ್ನು ತೋರಿಸಲು ಕೀಲಿ ಮಣೆ ಶಾರ್ಟ್-ಕಟ್."
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 #, fuzzy
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "ಸಮಯ ಟ್ರ್ಯಾಕರ್ ವಿಂಡೋವನ್ನು ತೋರಿಸಲು ಕೀಲಿ ಮಣೆ ಶಾರ್ಟ್-ಕಟ್."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr ""
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "ಸಮಯದ ಟ್ರ್ಯಾಕರ್"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 #, fuzzy
 msgid "Project Hamster - track your time"

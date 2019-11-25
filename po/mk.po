@@ -1,4 +1,4 @@
-# translation of hamster-time-tracker.HEAD.mk.po to Macedonian
+# translation of hamster.HEAD.mk.po to Macedonian
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -6,7 +6,7 @@
 #: ../src/hamster-cli:342
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-time-tracker.HEAD.mk\n"
+"Project-Id-Version: hamster.HEAD.mk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-01-14 23:13+0100\n"
@@ -47,27 +47,27 @@ msgstr "Активност:"
 msgid "Tags:"
 msgstr "Етикети:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Престани да следиш при неактивност"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Престани да ја следиш тековната активност кога компјутерот е неактивен"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Престани со следење при исклучување"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Престани со следење на тековната активност при исклучување"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Потсети ме за тековната задача на секои x минути"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -75,22 +75,22 @@ msgstr ""
 "Потсети ме за тековната задача на одреден број минути. Поставете на 0 или на "
 "повеќе од 120 за оневозможување на потсетникот."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Потсети ме кога не е стартувана некоја активност"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Исто така потсети ме на секои notify_interval минути ако не е стартувана "
 "некоја активност."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Кога започнува денот (стандардно е 5:30)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -102,12 +102,12 @@ msgstr ""
 "протегаат во два дена ќе се постават на денот каде што е најголем дел од "
 "активноста."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
 "Дали менувањето на работното место треба да предизвика менување на активноста"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -117,11 +117,11 @@ msgstr ""
 "активности дефинирани во workspace_mapping. „memory“ ќе овозможи преминување "
 "на последната активност при враќање на претходниот работен простор."
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Смени ја активноста при промена на работното место"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -130,41 +130,41 @@ msgstr ""
 "активностите кои треба да се менуваат, работните простори определени со "
 "индексот на предметот."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Покажи / скриј го прозорецот на следачот на време"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr ""
 "Кратенка на тастатурата за прикажување / криење на прозорецот на следачот на "
 "време."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Вклучи/исклучи го дејството на прозорецот на hamster"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
 "Команда за менување на видливоста на прозорецот на апликацијата hamster."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Вклучи/исклучи го прозорецот на hamster"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Вклучи/исклучи видливост на прозорецот на апликацијата hamster."
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "Следач на времето"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Проектот Hamster - следете го трошењето на Вашето време"

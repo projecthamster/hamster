@@ -53,30 +53,30 @@ msgstr "Attività:"
 msgid "Tags:"
 msgstr "Etichette:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Ferma il conteggio quando inattivo"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr ""
 "Ferma il conteggio dell'attività corrente quando il computer diventa inattivo"
 
 # (ndt) visto che è doppia, sia chiave schema che opzione
 # preferisco darle lo stile per l'opzione
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Fermare il conteggio all'arresto del sistema"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Ferma il conteggio dell'attività corrente all'arresto del sistema"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Ricorda l'attività corrente ogni X minuti"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -85,22 +85,22 @@ msgstr ""
 "maggiore di 120 per disabilitare la notifica."
 
 # (ndt) opzione
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Ricordare anche quando nessuna attività è impostata"
 
 # (ndt) non capisco se quello che indicano è un valore o un nome specifico di qualche cosa oppure solo un errore di digitazione...
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Ricorda anche ogni notify_interval se non è stata avviata alcuna attività."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Orario di inizio della giornata (predefinito alle 5.30)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -112,11 +112,11 @@ msgstr ""
 "giorno attuale se supera tale ora. Le attività che si estendono su due "
 "giorni verranno visualizzate dove si è svolta la maggior parte dell'attività."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Indica se il cambio di spazio di lavoro debba cambiare attività"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -127,12 +127,12 @@ msgstr ""
 "passaggio all'ultima attività quando si ritorna in uno spazio di lavoro "
 "precedente."
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Cambia attività al cambio dello spazio di lavoro"
 
 # (ndt) l'originale fa schifo. suggerimenti sono i benvenuti...
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -141,31 +141,31 @@ msgstr ""
 "attività a cui passare, gli spazi di lavoro sono rappresentati dall'indice "
 "dell'elemento."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Mostra/Nasconde la finestra dell'applicazione"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Scorciatoia per mostrare/nascondere la finestra di Conteggio tempo."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Abilita/Disabilita l'azione sulla finestra dell'applicazione"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Comando per mostrare/nascondere la finestra dell'applicazione."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Mostra/Nasconde la finestra dell'applicazione"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Mostra/Nasconde la finestra dell'applicazione."
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
@@ -173,7 +173,7 @@ msgid "Time Tracker"
 msgstr "Conteggio tempo"
 
 # (ndt) sarebbe l'unica applet ad avere il suo nome nella descrizione quando viene selezionata. Lunga, molto molto libera, ma che palle...
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Tiene traccia del tempo trascorso nello svolgere delle attività"
