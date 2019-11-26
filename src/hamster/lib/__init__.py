@@ -383,18 +383,12 @@ def parse_fact(text, phase=None, res=None, date=None):
         return parse_fact(head, "activity", res, date)
 
     if "activity" in phases:
-        activity = re.split("@", text, 1)[0]
+        activity, sep, category = text.partition('@')
         if looks_like_time(activity):
             # want meaningful activities
             return res
-
         res["activity"] = activity
-        remaining_text = remove_fragment(text, activity)
-        return parse_fact(remaining_text, "category", res, date)
-
-    if "category" in phases:
-        category, _, description = text.partition(",")
-        res["category"] = category.lstrip("@").strip() or None
+        res["category"] = category
         return res
 
     return {}
