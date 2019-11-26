@@ -1,6 +1,6 @@
-# translation of hamster-time-tracker.master.ta.po to Tamil
+# translation of hamster.master.ta.po to Tamil
 # translation of hamster.po to
-# translation of hamster-time-tracker.HEAD-ta.po to
+# translation of hamster.HEAD-ta.po to
 # Tamil Translation for GNOME hamster-time-tracker
 # Copyright (C) 2008 Project Hamster Team
 # This file is distributed under the same license as the hamster-time-tracker package.
@@ -14,7 +14,7 @@
 #: ../src/hamster-cli:342
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-time-tracker.master.ta\n"
+"Project-Id-Version: hamster.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-02-28 17:27+0530\n"
@@ -58,27 +58,27 @@ msgstr "செயல்பாடு:"
 msgid "Tags:"
 msgstr "குறிகள்:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "இயக்கமற்ற நிலையில் தடத்தொடர்தல்  நிறுத்தவும்"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "கணினி வெறுமையாக இருக்கும் போது தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "முடித்து வைத்ததும் தடத்தொடர்தல்  நிறுத்தவும்"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "முடித்து வைத்ததும் தற்போதைய செயல்பாட்டுத் தடத்தொடர்தல்  நிறுத்தவும்"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ஒவ்வொரு x நிமிடங்களும் நடப்பு வேலையை நினைவுறுத்துக"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -86,20 +86,20 @@ msgstr ""
 "நடப்பு பணியின் நினைவூட்டல் ஒவ்வொரு குறிப்பிட்ட அளவு நிமிடங்களுக்கு. 0 அல்லது 120 "
 "அதிகமாக அமைத்து நினைவூட்டலை செயல்நீக்கவும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "செயல் அமைக்காத போதும் நினைவுறுத்துக"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "செயல் துவக்கப்படாத போதும் நினைவுறுத்த வேண்டிய இடைவெளியில் நினைவுறுத்துக (_i)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "நாளில் எந்த நேரத்தில் துவங்க வேண்டும்? (முன்னிருப்பு காலை ஐந்தரை)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -110,11 +110,11 @@ msgstr ""
 "கொள்ளப்படும். அதிகமாக இருப்பின் இன்றையதாக கொள்ளப்படும். இரு நாட்களில் வியாபிக்கும் செய்ல்கள் "
 "அதிக நேரம் இருக்கும் நாளுக்கு தள்ளப்படும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "வேலைக்களம் மாற்றுவது செயலையும் பாதிக்க வேண்டுமா?"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -124,11 +124,11 @@ msgstr ""
 "இல் அறுதியான பெயரால் மாற்றும் செயல்களை நடத்தும். \"நினைவகம்\"என்பது முந்தைய "
 "வேலைக்களத்தின் கடைசி  மாற்றும்  செயலுக்கு செயலாக்கும். "
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "செயலை வேலைக்கள் மாற்றத்துக்கு மாற்றவும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -136,38 +136,38 @@ msgstr ""
 "பெயரால் மாற்றுவது செயலில் உள்ளது. இந்த பட்டியல் மாற்ற வேண்டிய செயல் பெயரை அமைக்கிறது. "
 "வேலைக்களங்கள் உருப்படியின் அட்டவணையால் காட்டப்படும்."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டு / மறை"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "நேரத் தடம் தேடல் சாளரத்தைக் காட்டுவதற்கான /மூடுவதற்கான விசைப் பலகைக் குறுக்கு வழி"
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளர செயலை நிலை மாற்றுக"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்ற கட்டளை"
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தை நிலை மாற்றுக"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "ஹாம்ஸ்டர் பயன்பாட்டு சாளரத்தின் வெளிப்பாட்டை நிலை மாற்றுக"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "நேரத் தடம் தேடல்"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "ஹாம்ஸ்டர் திட்டம் - உங்கள் நேரத்தை கண்காணிக்க"

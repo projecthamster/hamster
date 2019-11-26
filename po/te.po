@@ -1,4 +1,4 @@
-# translation of hamster-time-tracker.master.te.po to Telugu
+# translation of hamster.master.te.po to Telugu
 # Copyright (C) 2012 Swecha Telugu Localisation Team <localization@swecha.net>.
 # This file is distributed under the same license as the hamster-time-tracker package.
 #
@@ -11,7 +11,7 @@
 #: ../src/hamster-cli:342
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-time-tracker.master.te\n"
+"Project-Id-Version: hamster.master.te\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-09-03 00:13+0530\n"
@@ -55,27 +55,27 @@ msgstr "కార్యం:"
 msgid "Tags:"
 msgstr "కొసలు:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "నిష్క్రియగా ఉన్నప్పుడు జాడతీయకు"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "కంప్యూటర్ నిష్క్రియగా ఉన్నప్పుడు, ప్రస్తుత కార్యాన్ని జాడతీయకు"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "విద్యుత్ ఆపివేసినప్పుడు జాడతీయడం ఆపివేయి"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "విద్యుత్ ఆపివేసినప్పుడు ప్రస్తుత కార్యాన్ని జాడతీయడం ఆపివేయి"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ప్రస్తుత కర్తవ్యాన్ని ప్రతి x నిముషాలకు ఒకసారి గుర్తుచేయి"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -83,20 +83,20 @@ msgstr ""
 "తెలుపబడినన్ని నిముషాలకొకసారి ప్రస్తుత కర్తవ్యాన్ని గుర్తుచేస్తుంది. గుర్తుచేయకుండా ఉండడానికి0 లేదా 120 "
 "కన్నా ఎక్కువకు అమర్చండి."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "ఏ కార్యమూ లేకున్నా గుర్తుచేయాలి"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ఏ కార్యము ప్రారంభించకపోతే ప్రతి notify_interval నిమిషాలకొకసారి గుర్తుచేయి."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "ఏ సమయానికి రోజు మొదలవుతుంది (5:30AM అప్రమేయం)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -107,11 +107,11 @@ msgstr ""
 "చెందినవిగా గుర్తించబడతాయి.ఏవైనా కార్యకలాపాలు రెండు రోజుల పైబడి ఉంటే,  ప్రధాన భాగం ఉన్న  రోజుకిఅవి "
 "చెందుతాయి."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "కార్యస్థలం మారితే కార్యం మారినట్టు గుర్తించాలా"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -121,11 +121,11 @@ msgstr ""
 "నిర్దేశించినపేర్లను బట్టి మారవచ్చు. \"జ్ఞాపకం\" ద్వారా మునుపటి కార్యస్థలానికి తిరిగివెళ్ళినప్పుడు అక్కడి చివరి "
 "కార్యానికి మారవచ్చు."
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "కార్యస్థలం మారినప్పుడు కార్యం మార్చు"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -133,38 +133,38 @@ msgstr ""
 "పేరు ద్వారా మార్చడానికి అమర్చినట్టైతే,  మారడానికి ఉన్న ఆయా కార్యకలాపాల పేర్లను ఈ జాబితా పొందుచేస్తుంది. "
 "కార్యస్థలాలు వాటివాటి సూచీలతో గుర్తించబడతాయి."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "సమయ జాడక కిటికీని చూపు / దాచు"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "సమయ జాడక కిటికీ చూపుటకు / దాచుటకు కీబోర్డు లఘువు."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "హామ్‌స్టర్ అనువర్తన కిటికీ చూపి/దాచే చర్య"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "హామ్‌స్టర్ అనువర్తన కిటికీ దృశ్యత మార్చే ఆదేశము."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "హామ్‌స్టర్ అనువర్తన కిటికీని చూపు/దాచు"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "హామ్‌స్టర్ అనువర్తన కిటికీ దృశ్యత మార్చు."
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "సమయ జాడకము"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "ప్రోజెక్టు హామ్‌స్టర్ - మీ సమయాన్ని జాడపడుతుంది"

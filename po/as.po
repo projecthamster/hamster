@@ -1,4 +1,4 @@
-# Assamese translation for hamster-time-tracker.
+# Assamese translation for hamster.
 # Copyright (C) 2009 hamster-time-tracker's COPYRIGHT HOLDER
 # This file is distributed under the same license as the hamster-time-tracker package.
 #
@@ -47,27 +47,27 @@ msgstr "কাম:"
 msgid "Tags:"
 msgstr "টেগসমূহ:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "কামহীন অৱস্থাত বৰ্তমান কামৰ নিৰীক্ষণ বন্ধ কৰা হ'ব"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "কম্পিউটাৰ কামহীন অৱস্থাত হ'লে বৰ্তমান কামৰ নিৰীক্ষণ বন্ধ কৰা হ'ব"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "কম্পিউটাৰ বন্ধ হ'লে ট্ৰেক কৰা বন্ধ কৰক"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "বন্ধ কৰা হ'লে বৰ্তমান কামৰ নিৰীক্ষণ বন্ধ কৰা হ'ব"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "প্ৰতি x মিনিট অন্তৰ বৰ্তমান কামৰ বিষয়ে স্মৰণ কৰোৱা হ'ব"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -75,20 +75,20 @@ msgstr ""
 "মিনিটে ধাৰ্য সুনিৰ্দিষ্ট সময়ৰ অন্তৰত বৰ্তমান কাম সম্বন্ধে স্মৰণ কৰোৱা হ'ব । স্মৰণ "
 "ব্যৱস্থা নিষ্ক্ৰিয় কৰাৰ বাবে ০ বা ১২০ ৰ পৰা অধিক কোনো সংখ্যা নিৰ্ধাৰণ কৰক ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "কোনো কাম নিৰ্ধাৰিত ন'হ'লে সূচিত কৰা হ'ব"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "কোনো কাম আৰম্ভ নকৰিলে প্ৰতি notify_interval মিনিটত সূচনা প্ৰদান কৰা হ'ব ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "কি সময়ত দিনটো আৰম্ভ হয় (অবিকল্পিত ৫:৩০ লে)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -99,11 +99,11 @@ msgstr ""
 "কাৰ্য্যসমূহক যোৱাকালিৰ  বুলি ধৰি গণনা কৰা হ'ব, যদি ই সময় পাৰ কৰিছে, তেনেহলে "
 "যিসমূহ কাৰ্য্যত দুদিনৰ বেছি লাগে, সেইবোৰ সেইফালে যাব যিফালে কাৰ্য্যৰ বৃহতম ভাগ আছে।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "কৰ্মস্থানে ট্ৰিগাৰ কাৰ্য্য অদল-বদল কৰিব লাগে নে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -113,11 +113,11 @@ msgstr ""
 "বুজুৱা অদল-বদল কাৰ্য্যসমূহকসামৰ্থবান কৰিব। \"memory\" -এ পূৰৱৰ্তী কৰ্মস্থানলৈ ঘূৰী "
 "যাওতে সৰ্বশেষ কাৰ্য্যলে যোৱাটো সামৰ্থবান কৰিব।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "কৰ্মস্থান সলনি হওতে কাৰ্য্য অদল-বদল কৰা"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -125,38 +125,38 @@ msgstr ""
 "যদি নামেৰে অদল-বদল কৰা সামৰ্থবান হয়, তেনেহলে এই তালিকায় অদল-বদল হ'ব লগিয়া "
 "কাৰ্য্যৰ নামসমূহ, বস্তুৰ ইনডেক্স দি প্ৰতিৰূপন হোৱা কাৰ্য্যস্থানসমূহলে সংস্থাপন কৰে।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "সময় অনুসৰণৰ উইন্ডো দেখুৱা/লুকোৱা"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "সময় অনুসৰণৰ উইন্ডো দেখুৱাবলে/লুকাবলে কিবৰ্ড ছৰ্টকাট।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "hamster অনুপ্ৰয়োগ উইন্ডো কাৰ্য্যক অদল-বদল কৰা"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "hamster অনুপ্ৰয়োগ উইন্ডোৰ দৃশ্যমানতা অদল-বদল কৰিবৰ বাবে কমান্ড।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "hamster অনুপ্ৰয়োগ উইন্ডোক অদল-বদল কৰা"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "hamster অনুপ্ৰয়োগ উইন্ডোৰ দৃশ্যমানতাক অদল-বদল কৰা।"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "সময় অনুসৰণ"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Project Hamster - আপোনাৰ সময় অনুসৰণ কৰক"

@@ -1,6 +1,6 @@
 # -*- python -*-
 VERSION = '2.0'
-APPNAME = 'hamster-time-tracker'
+APPNAME = 'hamster'
 top = '.'
 out = 'build'
 
@@ -20,8 +20,8 @@ def configure(conf):
     conf.env.HAVE_BIND_TEXTDOMAIN_CODESET = 1
 
     conf.env.VERSION = VERSION
-    conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
-    conf.env.PACKAGE = "hamster-time-tracker"
+    conf.env.GETTEXT_PACKAGE = "hamster"
+    conf.env.PACKAGE = "hamster"
 
     conf.recurse("help")
 
@@ -32,17 +32,17 @@ def options(opt):
     # hence need to replace the whole option
     opt.parser.remove_option('--prefix')
     default_prefix = '/usr'
-    opt.add_option('--prefix', dest='prefix', default=default_prefix, 
+    opt.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
 
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster-time-tracker',
+    bld.install_files('${LIBDIR}/hamster',
                       """src/hamster-service
                          src/hamster-windows-service
                       """,
                       chmod=Utils.O755)
-    
+
     bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod=Utils.O755)
 
 
@@ -72,11 +72,11 @@ def build(bld):
         target= "org.gnome.hamster.Windows.service",
         install_path="${DATADIR}/dbus-1/services",
         )
-    
+
     bld.recurse("po data help")
 
     bld(features='glib2',
-        settings_schema_files = ['data/apps.hamster-time-tracker.gschema.xml'])
+        settings_schema_files = ['data/org.gnome.hamster.gschema.xml'])
 
     def update_icon_cache(ctx):
         """Update the gtk icon cache."""

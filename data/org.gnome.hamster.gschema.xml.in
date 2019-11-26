@@ -1,5 +1,5 @@
 <schemalist>
-    <schema path="/apps/hamster-time-tracker/" id="apps.HamsterTimeTracker">
+    <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
         <key type="b" name="enable-timeout">
             <default>true</default>
             <summary>Stop tracking on idle</summary>

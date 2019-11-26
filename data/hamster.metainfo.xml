@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>hamster-time-tracker</id>
+  <id>hamster</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
   <name>Hamster Time Tracker</name>
@@ -27,16 +27,16 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">hamster-time-tracker.desktop</launchable>
+  <launchable type="desktop-id">hamster.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
       <caption>The overview window</caption>
-      <image>http://dekoppel.eu/hamster/hamster-overview1.png</image>
+      <image>https://github.com/projecthamster/hamster/blob/master/screenshot.png</image>
     </screenshot>
     <screenshot>
       <caption>The overview window with statistics</caption>
-      <image>http://dekoppel.eu/hamster/hamster-overview2.png</image>
+      <image>https://github.com/projecthamster/hamster/blob/master/data/screenshots/overview2.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>

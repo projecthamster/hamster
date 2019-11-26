@@ -170,8 +170,8 @@ msgid "Backup"
 msgstr "備份"
 
 #: C/backup.page:10(p)
-msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
-msgstr "活動都儲存在 SQLite 資料庫中，就在 <file>~/.local/share/hamster-time-tracker/hamster.db</file>。這個檔案可以隨時備份或還原。程式會在一段時間後自動重新載入資料。"
+msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
+msgstr "活動都儲存在 SQLite 資料庫中，就在 <file>~/.local/share/hamster/hamster.db</file>。這個檔案可以隨時備份或還原。程式會在一段時間後自動重新載入資料。"
 
 #: C/backup.page:17(p)
 msgid "For viewing contents of the database we can suggest using the <link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</app></link> for Mozilla Firefox."
@@ -186,4 +186,3 @@ msgstr ""
 "community@linuxhall.org\n"
 "\n"
 "Kevin_Wei_2 <kevin_wei3@yahoo.com.tw>, 2010."
-

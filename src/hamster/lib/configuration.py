@@ -29,12 +29,10 @@ from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
 import datetime as dt
 
+from gi.repository import Gio as gio
 from gi.repository import GLib as glib
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
-
-import gi
-from gi.repository import Gio as gio
 
 
 class Controller(gobject.GObject):
@@ -106,7 +104,7 @@ class RuntimeStore(Singleton):
     def __init__(self):
         try:
             from hamster import defs
-            self.data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
+            self.data_dir = os.path.join(defs.DATA_DIR, "hamster")
             self.version = defs.VERSION
         except:
             # if defs is not there, we are running from sources
@@ -116,7 +114,7 @@ class RuntimeStore(Singleton):
 
         self.data_dir = os.path.realpath(self.data_dir)
         self.storage = Storage()
-        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster-time-tracker"))
+        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster"))
 
 
 runtime = RuntimeStore()
@@ -202,7 +200,7 @@ class GSettingsStore(gobject.GObject, Singleton):
 
     def __init__(self):
         gobject.GObject.__init__(self)
-        self._settings = gio.Settings('apps.HamsterTimeTracker')
+        self._settings = gio.Settings('org.gnome.Hamster')
 
     def _key_changed(self, client, key, data=None):
         """

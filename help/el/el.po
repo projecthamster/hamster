@@ -214,8 +214,8 @@ msgid "Backup"
 msgstr "Αντίγραφο ασφαλείας"
 
 #: C/backup.page:10(p)
-msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
-msgstr "Οι δραστηριότητες αποθηκεύονται σε μια βάση δεδομένων SQLite, που βρίσκεται στο <file>~/.local/share/hamster-time-tracker/hamster.db</file>. Μπορείτε να αντιγράψετε το αρχείο για λόγους ασφαλείας και να το επαναφέρετε ενώ δουλεύετε. Η εφαρμογή θα επαναφέρει τα δεδομένα αυτόματα μετά από ένα σύντομο χρονικό διάστημα."
+msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
+msgstr "Οι δραστηριότητες αποθηκεύονται σε μια βάση δεδομένων SQLite, που βρίσκεται στο <file>~/.local/share/hamster/hamster.db</file>. Μπορείτε να αντιγράψετε το αρχείο για λόγους ασφαλείας και να το επαναφέρετε ενώ δουλεύετε. Η εφαρμογή θα επαναφέρει τα δεδομένα αυτόματα μετά από ένα σύντομο χρονικό διάστημα."
 
 #: C/backup.page:17(p)
 msgid "For viewing contents of the database we can suggest using the <link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</app></link> for Mozilla Firefox."
@@ -253,4 +253,3 @@ msgstr "Μάριος Ζηντίλης <m.zindilis@dmajor.org>, 2010"
 #~ msgstr ""
 #~ "<media type=\"image\" mime=\"image/png\" src=\"figures/hamster-logo.png"
 #~ "\">Λογότυπο της Καταγραφής χρόνου</media>Καταγραφή χρόνου"
-
