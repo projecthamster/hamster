@@ -2,7 +2,8 @@
 from subprocess import getstatusoutput
 rc, output = getstatusoutput("git describe --tags --always --dirty=+")
 VERSION = '3.0.0-alpha' if rc else output
-APPNAME = 'hamster-time-tracker'
+APPNAME = 'hamster'
+
 top = '.'
 out = 'build'
 
@@ -22,8 +23,8 @@ def configure(conf):
     conf.env.HAVE_BIND_TEXTDOMAIN_CODESET = 1
 
     conf.env.VERSION = VERSION
-    conf.env.GETTEXT_PACKAGE = "hamster-time-tracker"
-    conf.env.PACKAGE = "hamster-time-tracker"
+    conf.env.GETTEXT_PACKAGE = "hamster"
+    conf.env.PACKAGE = "hamster"
 
     # gconf_dir is defined in options
     conf.env.schemas_destination = '{}/schemas'.format(conf.options.gconf_dir)
@@ -45,7 +46,7 @@ def options(opt):
 
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster-time-tracker',
+    bld.install_files('${LIBDIR}/hamster',
                       """src/hamster-service
                          src/hamster-windows-service
                       """,
@@ -87,7 +88,7 @@ def build(bld):
     def manage_gconf_schemas(ctx, action):
         """Install or uninstall hamster gconf schemas.
 
-        Requires the stored hamster-time-tracker.schemas
+        Requires the stored hamster.schemas
         (usually in /etc/gconf/schemas/) to be present.
 
         Hence install should be a post-fun,
@@ -96,7 +97,7 @@ def build(bld):
 
         assert action in ("install", "uninstall")
         if ctx.cmd == action:
-            schemas_file = "{}/hamster-time-tracker.schemas".format(ctx.env.schemas_destination)
+            schemas_file = "{}/hamster.schemas".format(ctx.env.schemas_destination)
             cmd = 'GCONF_CONFIG_SOURCE=$(gconftool-2 --get-default-source) gconftool-2 --makefile-{}-rule {} 1> /dev/null'.format(action, schemas_file)
             err = ctx.exec_command(cmd)
             if err:

@@ -48,27 +48,27 @@ msgstr "Užsiėmimas:"
 msgid "Tags:"
 msgstr "Žymės:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Sustabdyti sekimą, kai kompiuteris nenaudojamas"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Sustabdyti esamo užsiėmimo sekimą, kai kompiuteris nenaudojamas"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Sustabdyti sekimą išjungus"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Sustabdyti esamo užsiėmimo sekimą išjungus"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Pranešti apie esamą veiklą kas x minučių"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -76,20 +76,20 @@ msgstr ""
 "Pranešti apie esamą veiklą kas nurodytą minučių skaičių. Nustatykite į 0 "
 "arba daugiau negu 120, jei norite išjungti pranešimus."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Taip pat pranešti, kai nenustatyta veikla"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "Pranešti kas notify_interval minučių, jei joks užsiėmimas nepradėtas."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Kada prasideda diena (numatytasis nustatymas – 5:30 ryto)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -101,11 +101,11 @@ msgstr ""
 "už dienos pradžią. Veikla, trunkanti keletą dienų, bus priskirta tai dienai, "
 "kuriai priklauso didžioji veiklos trukmė."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Ar darbalaukio pakeitimas turėtų pakeisti veiklą"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -115,11 +115,11 @@ msgstr ""
 "pavadinimą, apibrėžtą rakte workspace_mapping. „memory“ – leidžia perjungti "
 "į paskutiniąją veiklą, grįžus į ankstesnį darbalaukį."
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Keisti veiklą pakeitus darbalaukį"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -127,38 +127,38 @@ msgstr ""
 "Jei perjungimas pagal pavadinimą įjungtas, šis sąrašas nustato veiklų, į "
 "kurias persijungti, pavadinimus. Darbalaukius atitinka įrašų indeksai."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Rodyti / slėpti laiko apskaitos langą"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Spartusis klavišas, parodantis / paslepiantis laiko apskaitos langą."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Perjungti programos Hamster lango veiksmą"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Komanda, perjungianti Hamster programos lango matomumą."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Perjungti programos Hamster langą"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Komanda, perjungianti Hamster programos lango matomumą."
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "Laiko apskaita"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Hamster projektas – sekite savo laiką"

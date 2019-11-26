@@ -47,27 +47,27 @@ msgstr "কর্ম:"
 msgid "Tags:"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "কর্মহীন অবস্থায় বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "কম্পিউটার কর্মহীন অবস্থায় হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "কম্পিউটার বন্ধ হলে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "বন্ধ করা হলে বর্তমান কর্মের নিরীক্ষণ বন্ধ করা হবে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "প্রতি x মিনিট অন্তর বর্তমান কর্মের বিষয়ে স্মরণ করানো হবে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -76,22 +76,22 @@ msgstr ""
 "ব্যবস্থা নিষ্ক্রিয় করার জন্য 0 (০) অথবা 120 (১২০) থেকে অধিক কোনো সংখ্যা নির্ধারণ "
 "করুন।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "উপরন্তু, কোনো কর্ম নির্ধারিত না হলে সূচিত করা হবে"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "উপরন্তু, কোনো কর্ম না আরম্ভ করা হলে প্রতি notify_interval মিনিটে সূচনা প্রদান করা "
 "হবে।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -99,61 +99,61 @@ msgid ""
 "part of the activity is."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
 "the last activity when returning to a previous workspace."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 #, fuzzy
 msgid "Show / hide Time Tracker Window"
 msgstr "সময় নিরীক্ষণের উইন্ডো প্রদর্শনের জন্য কি-বোর্ড শর্টকাট।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 #, fuzzy
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "সময় নিরীক্ষণের উইন্ডো প্রদর্শনের জন্য কি-বোর্ড শর্টকাট।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr ""
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr ""
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "সময় অনুসরণ"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 #, fuzzy
 msgid "Project Hamster - track your time"

@@ -105,7 +105,7 @@ class Storage(storage.Storage):
                 if not xdg_data_home:
                     xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
                     logger.warning("No xdg_data_home - assuming ~/.local/share")
-            database_dir = os.path.join(xdg_data_home, 'hamster-time-tracker')
+            database_dir = os.path.join(xdg_data_home, 'hamster')
 
         if not os.path.exists(database_dir):
             os.makedirs(database_dir, 0o744)
@@ -123,7 +123,7 @@ class Storage(storage.Storage):
                 # make a copy of the empty template hamster.db
                 try:
                     from hamster import defs
-                    data_dir = os.path.join(defs.DATA_DIR, "hamster-time-tracker")
+                    data_dir = os.path.join(defs.DATA_DIR, "hamster")
                 except:
                     # if defs is not there, we are running from sources
                     module_dir = os.path.dirname(os.path.realpath(__file__))

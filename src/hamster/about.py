@@ -28,7 +28,7 @@ class About(object):
         about = gtk.AboutDialog()
         self.window = about
         infos = {
-            "program-name" : _("Time Tracker"),
+            "program-name" : _("Hamster Time Tracker"),
             "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
             "version" : runtime.version,
             "comments" : _("Project Hamster — track your time"),
@@ -50,7 +50,7 @@ class About(object):
         for prop, val in infos.items():
             about.set_property(prop, val)
 
-        about.set_logo_icon_name("hamster-time-tracker")
+        about.set_logo_icon_name("hamster")
 
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()
