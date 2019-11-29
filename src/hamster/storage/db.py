@@ -206,7 +206,7 @@ class Storage(storage.Storage):
         gone = self.fetchall(query, tags)
 
         to_delete = [str(tag["id"]) for tag in gone if tag["occurences"] == 0]
-        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0 and tag["autocomplete"] == "true"]
+        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0 and tag["autocomplete"] != "false"]
 
         if to_delete:
             self.execute("delete from tags where id in (%s)" % ", ".join(to_delete))
