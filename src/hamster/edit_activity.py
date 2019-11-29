@@ -361,6 +361,15 @@ class CustomFactController(gobject.GObject):
             self.update_status(status="wrong", markup="Fact could not be parsed back")
             return None
 
+        if ',' in fact.category:
+            markup = dedent("""\
+                            Commas ',' are forbidden in category.
+                            Note: the description separator changed
+                            from single comma to double comma (',,') in v3.0.
+                            """)
+            self.update_status(status="wrong", markup=markup)
+            return None
+
         # nothing unusual
         self.update_status(status="looks good", markup="")
         return fact

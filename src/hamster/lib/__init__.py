@@ -135,7 +135,7 @@ class Fact(object):
 
     @category.setter
     def category(self, value):
-        self._category = value.replace(",", "").strip() if value else ""
+        self._category = value.strip() if value else ""
 
     def copy(self, **kwds):
         """Return an independent copy, with overrides as keyword arguments.
