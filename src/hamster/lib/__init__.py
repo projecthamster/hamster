@@ -383,7 +383,9 @@ def parse_fact(text, phase=None, res=None, date=None):
         return parse_fact(head, "activity", res, date)
 
     if "activity" in phases:
-        activity, sep, category = text.partition('@')
+        split = text.rsplit('@', maxsplit=1)
+        activity = split[0]
+        category = split[1] if len(split) > 1 else ""
         if looks_like_time(activity):
             # want meaningful activities
             return res
