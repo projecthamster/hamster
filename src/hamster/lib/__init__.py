@@ -19,7 +19,7 @@ TIME_FMT = "%H:%M"
 
 
 # match #tag followed by any space or # that will be ignored
-# tag must not contain #, comma, or any space character
+# tag must not contain '#' or ','
 tag_re = re.compile(r"""
     \#          # hash character
     (?P<tag>
