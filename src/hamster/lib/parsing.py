@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as dt
 import re
 
+from datetime import date
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamsterday_time_to_datetime,
@@ -11,8 +12,10 @@ from hamster.lib.stuff import (
 )
 
 
-DATE_FMT = "%Y-%m-%d"
+DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
+# separator between times and activity
+ACTIVITY_SEPARATOR = "\s+"
 
 
 # match #tag followed by any space or # that will be ignored
@@ -23,7 +26,7 @@ tag_re = re.compile(r"""
         [^#,]+  # (anything but hash or comma)
     )
     \s*         # maybe spaces
-                # forbid double comma (tag can not be before the tags barrier)
+                # forbid double comma (tag can not be before the tags barrier):
     ,?          # single comma (or none)
     \s*         # maybe space
     $           # end of text
@@ -36,138 +39,211 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 # match time, such as "01:32", "13.56" or "0116"
-time_re = re.compile(r"""
-    ^                                 # start of string
+time_pattern = r"""
     (?P<hour>[0-1]?[0-9] | [2][0-3])  # hour (2 digits, between 00 and 23)
     [:,\.]?                           # separator can be colon,
                                       #  dot, comma, or nothing
     (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
-    $                                 # end of string
-""", flags=re.VERBOSE)
+"""
+time_re = re.compile(time_pattern, flags=re.VERBOSE)
 
 
-def extract_time(match):
-    """extract time from a time_re match."""
-    hour = int(match.group('hour'))
-    minute = int(match.group('minute'))
-    return dt.time(hour, minute)
+date_pattern = r"""        # ISO format
+    (?P<year>\d{4})        # 4 digits
+    -                      # dash
+    (?P<month>\d{2})       # 2 digits
+    -                      # dash
+    (?P<day>\d{2})         # 2 digits
+"""
+date_re = re.compile(date_pattern, flags=re.VERBOSE)
+
+dt_pattern = r"""
+    (?P<whole>
+        (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
+                                      # (need to double the brackets for .format)
+    |                             # or
+        (?P<date>{})?                 # maybe first date
+        \s?                           # maybe one space
+        {}                            # first time
+    )
+""".format(date_pattern, time_pattern)
 
 
-def figure_time(str_time):
-    if not str_time or not str_time.strip():
+def specific_dt_pattern(n):
+    """Return a datetime pattern with all group names suffixed with n."""
+    to_replace = ("whole", "relative", "year", "month", "day", "date", "hour", "minute")
+    specifics = ["{}{}".format(s, n) for s in to_replace]
+    res = dt_pattern
+    for src, dest in zip(to_replace, specifics):
+        res = res.replace(src, dest)
+    return res
+
+
+range_pattern = r"""
+                  # start datetime,
+                  # relative1 or (date1, hour1, and minute1):
+    {}
+    (
+
+        (?P<separation>   # (only needed if end time is given)
+            \s?           # maybe one space
+            -             # dash
+            \s?           # maybe one space
+          |             # or
+            \s            # one space exactly
+        )
+                  # end datetime,
+                  # relative2 or (date2, hour2, and minute2):
+    {}
+    )?            # end time is facultative
+""".format(specific_dt_pattern(1), specific_dt_pattern(2))
+
+
+def extract_time(match, h="hour", m="minute"):
+    """Extract time from a time_re match.
+
+    h (str): name of the group containing the hour
+    m (str): name of the group containing the minute
+    """
+    h_str = match.group(h)
+    m_str = match.group(m)
+    if h_str and m_str:
+        hour = int(h_str)
+        minute = int(m_str)
+        return dt.time(hour, minute)
+    else:
         return None
 
-    # strip everything non-numeric and consider hours to be first number
-    # and minutes - second number
-    numbers = re.split("\D", str_time)
-    numbers = [x for x in numbers if x!=""]
 
-    hours, minutes = None, None
-
-    if len(numbers) == 1 and len(numbers[0]) == 4:
-        hours, minutes = int(numbers[0][:2]), int(numbers[0][2:])
-    else:
-        if len(numbers) >= 1:
-            hours = int(numbers[0])
-        if len(numbers) >= 2:
-            minutes = int(numbers[1])
-
-    if (hours is None or minutes is None) or hours > 24 or minutes > 60:
-        return None #no can do
-
-    return hamster_now()
+def parse_time(s):
+    """Extract time from string."""
+    m = time_re.search(s)
+    return extract_time(m)
 
 
-def parse_fact(text, phase=None, res=None, date=None):
-    """tries to extract fact fields from the string
-        the optional arguments in the syntax makes us actually try parsing
-        values and fallback to next phase
-        start -> [end] -> activity[@category] -> tags
+def parse_date(s):
+    """Extract ISO date (YYYY-MM-DD) from string."""
+    m = date_re.search(s)
+    return dt.date(year=int(m.group('year')),
+                   month=int(m.group('month')),
+                   day=int(m.group('day'))
+                   )
 
-        Returns dict for the fact and achieved phase
 
-        TODO - While we are now bit cooler and going recursively, this code
-        still looks rather awfully spaghetterian. What is the real solution?
+def extract_datetime(match, d="date", h="hour", m="minute", default_day=None):
+    """extract time from a time_re match.
 
-        Tentative syntax:
-        [date] start_time[-end_time] activity[@category][, description]{[,] { })#tag}
-        According to the legacy tests, # were allowed in the description
+    h (str): name of the group containing the hour
+    m (str): name of the group containing the minute
+    default_day (dt.date): the datetime will belong to this hamster day if
+                           date is missing.
     """
-    now = hamster_now()
+    time = extract_time(match, h, m)
+    if time:
+        date_str = match.group(d)
+        if date_str:
+            date = parse_date(date_str)
+            return dt.datetime.combine(date, time)
+        else:
+            return hamsterday_time_to_datetime(default_day, time)
+    else:
+        return None
 
-    # determine what we can look for
-    phases = [
-        "date",  # hamster day
-        "start_time",
-        "end_time",
-        "tags",
-        "description",
-        "activity",
-        "category",
-    ]
 
-    phase = phase or phases[0]
-    phases = phases[phases.index(phase):]
-    if res is None:
-        res = {}
+def parse_datetime_range(text, position="head", separator="", ref="now"):
+    """Parse a start-end range from text.
+
+    position (str): "head" to search only at the beginning of text, and
+                    "tail" to search only at the end.
+    separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
+                     from the rest.
+    ref (dt.datetime): reference for relative times
+                       (e.g. -15: quarter hour before ref).
+                       If any date is missing, put the corresponding
+                       datetime in the same hamster day as ref.
+    """
+
+    if ref == "now":
+        ref = hamster_now()
+
+    assert position in ("head",), "position unknown: '{}'".format(position)
+    if position == "head":
+        # require at least a space after, to avoid matching 10.00@cat
+        # .*? so rest is as little as possible
+        p = "^{}{}(?P<rest>.*?)$".format(range_pattern, separator)
+    # no need to compile, recent patterns are cached by re
+    m = re.search(p, text, flags=re.VERBOSE)
+
+    if not m:
+        return None, None, text
+
+    if isinstance(ref, dt.datetime):
+        default_day = datetime_to_hamsterday(ref)
+    else:
+        # ref is already a hamster day
+        default_day = ref
+
+    start = extract_datetime(m, d="date1", h="hour1", m="minute1",
+                             default_day=datetime_to_hamsterday(ref))
+    if not start:
+        # second chance, relative to ref
+        relative1_str = m.group('relative1')
+        if ref and relative1_str:
+            delta1 = dt.timedelta(minutes=int(relative1_str))
+            start = ref + delta1
+        else:
+            start = None
+
+    end = extract_datetime(m, d="date2", h="hour2", m="minute2",
+                       default_day=datetime_to_hamsterday(start))
+    if not end:
+        # second chance
+        relative2_str = m.group('relative2')
+        if relative2_str:
+            delta2 = dt.timedelta(minutes=int(relative2_str))
+            if start and delta2 > 0:
+                # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
+                end = start + delta2
+            elif ref and delta2 < 0:
+                end = ref + delta2
+            else:
+                end = None
+        else:
+            end = None
+
+    rest = m.group("rest")
+
+    return start, end, rest
+
+
+def parse_fact(text, default_date=None, ref="now"):
+    """Extract fact fields from the string.
+
+    Returns found fields as a dict.
+
+    Tentative syntax (not accurate):
+    start [- end_time] activity[@category][,, description][,,]{ #tag}
+    According to the legacy tests, # were allowed in the description
+    """
+
+    res = {}
 
     text = text.strip()
     if not text:
         return res
 
-    fragment = re.split("[\s|#]", text, 1)[0].strip()
+    if True:  # just to temporarily keep indentation levels
+        # datetimes
+        # force at least a space to avoid matching 10.00@cat
+        start, end, remaining_text = parse_datetime_range(text, position="head",
+                                                          separator=ACTIVITY_SEPARATOR)
+        res["start_time"] = start
+        res["end_time"] = end
 
-    # remove a fragment assumed to be at the beginning of text
-    remove_fragment = lambda text, fragment: text[len(fragment):]
-
-    if "date" in phases:
-        # if there is any date given, it must be at the front
-        try:
-            date = dt.datetime.strptime(fragment, DATE_FMT).date()
-            remaining_text = remove_fragment(text, fragment)
-        except ValueError:
-            date = datetime_to_hamsterday(now)
-            remaining_text = text
-        return parse_fact(remaining_text, "start_time", res, date)
-
-    if "start_time" in phases or "end_time" in phases:
-
-        # -delta ?
-        delta_re = re.compile("^-[0-9]{1,3}$")
-        if delta_re.match(fragment):
-            # TODO untested
-            # delta_re was probably thought to be used
-            # alone or together with a start_time
-            # but using "now" prevents the latter
-            res[phase] = now + dt.timedelta(minutes=int(fragment))
-            remaining_text = remove_fragment(text, fragment)
-            return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
-
-        # only starting time ?
-        m = re.search(time_re, fragment)
-        if m:
-            time = extract_time(m)
-            res[phase] = hamsterday_time_to_datetime(date, time)
-            remaining_text = remove_fragment(text, fragment)
-            return parse_fact(remaining_text, phases[phases.index(phase)+1], res, date)
-
-        # start-end ?
-        start, __, end = fragment.partition("-")
-        m_start = re.search(time_re, start)
-        m_end = re.search(time_re, end)
-        if m_start and m_end:
-            start_time = extract_time(m_start)
-            end_time = extract_time(m_end)
-            res["start_time"] = hamsterday_time_to_datetime(date, start_time)
-            res["end_time"] = hamsterday_time_to_datetime(date, end_time)
-            remaining_text = remove_fragment(text, fragment)
-            return parse_fact(remaining_text, "tags", res, date)
-
-    if "tags" in phases:
+        # tags
         # Need to start from the end, because
         # the description can hold some '#' characters
         tags = []
-        remaining_text = text
         while True:
             # look for tags separators
             # especially the tags barrier
@@ -190,16 +266,15 @@ def parse_fact(text, phase=None, res=None, date=None):
 
         # put tags back in input order
         res["tags"] = list(reversed(tags))
-        return parse_fact(remaining_text, "description", res, date)
 
-    if "description" in phases:
+        # description
         # first look for double comma (description hard left boundary)
-        head, sep, description = text.partition(",,")
+        head, sep, description = remaining_text.partition(",,")
         res["description"] = description.strip()
-        return parse_fact(head, "activity", res, date)
+        remaining_text = head.strip()
 
-    if "activity" in phases:
-        split = text.rsplit('@', maxsplit=1)
+        # activity
+        split = remaining_text.rsplit('@', maxsplit=1)
         activity = split[0]
         category = split[1] if len(split) > 1 else ""
         if looks_like_time(activity):
@@ -207,9 +282,8 @@ def parse_fact(text, phase=None, res=None, date=None):
             return res
         res["activity"] = activity
         res["category"] = category
-        return res
 
-    return {}
+    return res
 
 
 _time_fragment_re = [

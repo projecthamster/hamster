@@ -122,9 +122,7 @@ class Fact(object):
     @classmethod
     def parse(cls, string, date=None):
         fact = Fact()
-        fact.date = date
-        phase = "start_time" if date else "date"
-        for key, val in parse_fact(string, phase, {}, date).items():
+        for key, val in parse_fact(string, date).items():
             setattr(fact, key, val)
         return fact
 

@@ -3,8 +3,18 @@ import sys, os.path
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../src")))
 
 import unittest
+import re
 from hamster.lib import Fact
-from hamster.lib.stuff import hamster_now
+from hamster.lib.stuff import hamster_now, hamster_today
+from hamster.lib.parsing import (
+    ACTIVITY_SEPARATOR,
+    dt_pattern,
+    extract_datetime,
+    extract_time,
+    parse_time,
+    parse_datetime_range,
+    specific_dt_pattern,
+    )
 
 
 class TestActivityInputParsing(unittest.TestCase):
@@ -191,38 +201,106 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(fact.tags, ["tag1", "tag2"])
 
     def test_roundtrips(self):
-        for activity in (
-            "activity",
-            "#123 with two #hash",
-            "activity, with comma",
+        import datetime as dt
+        from hamster.lib.stuff import hamsterday_time_to_datetime, hamster_today
+        for start_time in (
+            None,
+            dt.time(12, 33),
             ):
-            for category in (
-                "",
-                "category",
+            for end_time in (
+                None,
+                dt.time(13,34),
                 ):
-                for description in (
-                    "",
-                    "description",
-                    "with #hash",
-                    "with, comma"
+                for activity in (
+                    "activity",
+                    "#123 with two #hash",
+                    "activity, with comma",
                     ):
-                    for tags in (
-                        [],
-                        ["single"],
-                        ["with space"],
-                        ["two", "tags"],
+                    for category in (
+                        "",
+                        "category",
                         ):
-                        fact = Fact(activity=activity,
-                                    category=category,
-                                    description=description,
-                                    tags=tags)
-                        fact_str = fact.serialized()
-                        parsed = Fact.parse(fact_str)
-                        self.assertEqual(fact, parsed)
-                        self.assertEqual(parsed.activity, fact.activity)
-                        self.assertEqual(parsed.category, fact.category)
-                        self.assertEqual(parsed.description, fact.description)
-                        self.assertEqual(parsed.tags, fact.tags)
+                        for description in (
+                            "",
+                            "description",
+                            "with #hash",
+                            "with, comma",
+                            "with @at",
+                            ):
+                            for tags in (
+                                [],
+                                ["single"],
+                                ["with space"],
+                                ["two", "tags"],
+                                ["with @at"],
+                                ):
+                                start = hamsterday_time_to_datetime(hamster_today(),
+                                                                    start_time
+                                                                    ) if start_time else None
+                                end = hamsterday_time_to_datetime(hamster_today(),
+                                                                  end_time
+                                                                  ) if end_time else None
+                                if end and not start:
+                                    # end without start is not parseable
+                                    continue
+                                fact = Fact(start_time=start,
+                                            end_time=end,
+                                            activity=activity,
+                                            category=category,
+                                            description=description,
+                                            tags=tags)
+                                fact_str = fact.serialized()
+                                parsed = Fact.parse(fact_str)
+                                self.assertEqual(fact, parsed)
+                                self.assertEqual(parsed.activity, fact.activity)
+                                self.assertEqual(parsed.category, fact.category)
+                                self.assertEqual(parsed.description, fact.description)
+                                self.assertEqual(parsed.tags, fact.tags)
+
+
+class TestParsers(unittest.TestCase):
+    def test_parse_time(self):
+        import datetime as dt
+        self.assertEqual(parse_time("12:01"), dt.time(12, 1))
+        self.assertEqual(parse_time("12.01"), dt.time(12, 1))
+        self.assertEqual(parse_time("1201"), dt.time(12, 1))
+
+    def test_parse_time(self):
+        time = parse_time("12:03")
+        self.assertEqual(time.strftime("%H:%M"), "12:03")
+
+    def test_dt_patterns(self):
+        import datetime as dt
+        p = specific_dt_pattern(1)
+        s = "12:03"
+        m = re.fullmatch(p, s, re.VERBOSE)
+        time = extract_datetime(m, d="date1", h="hour1", m="minute1",
+                                default_day=hamster_today())
+        self.assertEqual(time.strftime("%H:%M"), "12:03")
+        s = "2019-12-01 12:36"
+        m = re.fullmatch(p, s, re.VERBOSE)
+        time = extract_datetime(m, d="date1", h="hour1", m="minute1")
+        self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
+
+
+    def test_parse_datetime_range(self):
+        # only match clean
+        s = "10.00@cat"
+        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        self.assertEqual(start, None)
+        self.assertEqual(end, None)
+        s = "12:03 13:04"
+        start, end, rest = parse_datetime_range(s)
+        self.assertEqual(start.strftime("%H:%M"), "12:03")
+        self.assertEqual(end.strftime("%H:%M"), "13:04")
+        s = "12:35 activity"
+        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        self.assertEqual(start.strftime("%H:%M"), "12:35")
+        self.assertEqual(end, None)
+        s = "2019-12-01 12:33 activity"
+        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
+        self.assertEqual(end, None)
 
 
 if __name__ == '__main__':
