@@ -36,10 +36,11 @@ from collections import defaultdict
 from copy import deepcopy
 
 from hamster import client
-from hamster.lib import Fact, looks_like_time
+from hamster.lib import Fact
 from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime
+from hamster.lib.parsing import looks_like_time
 
 
 def extract_search(text):
