@@ -232,56 +232,55 @@ def parse_fact(text, default_date=None, ref="now"):
     if not text:
         return res
 
-    if True:  # just to temporarily keep indentation levels
-        # datetimes
-        # force at least a space to avoid matching 10.00@cat
-        start, end, remaining_text = parse_datetime_range(text, position="head",
-                                                          separator=ACTIVITY_SEPARATOR)
-        res["start_time"] = start
-        res["end_time"] = end
+    # datetimes
+    # force at least a space to avoid matching 10.00@cat
+    start, end, remaining_text = parse_datetime_range(text, position="head",
+                                                      separator=ACTIVITY_SEPARATOR)
+    res["start_time"] = start
+    res["end_time"] = end
 
-        # tags
-        # Need to start from the end, because
-        # the description can hold some '#' characters
-        tags = []
-        while True:
-            # look for tags separators
-            # especially the tags barrier
-            m = re.search(tags_separator, remaining_text)
+    # tags
+    # Need to start from the end, because
+    # the description can hold some '#' characters
+    tags = []
+    while True:
+        # look for tags separators
+        # especially the tags barrier
+        m = re.search(tags_separator, remaining_text)
+        remaining_text = remaining_text[:m.start()]
+        if m.group(1) == ",,":
+            # tags  barrier found
+            break
+
+        # look for tag
+        m = re.search(tag_re, remaining_text)
+        if m:
+            tag = m.group('tag').strip()
+            # strip the matched string (including #)
             remaining_text = remaining_text[:m.start()]
-            if m.group(1) == ",,":
-                # tags  barrier found
-                break
+            tags.append(tag)
+        else:
+            # no tag
+            break
 
-            # look for tag
-            m = re.search(tag_re, remaining_text)
-            if m:
-                tag = m.group('tag').strip()
-                # strip the matched string (including #)
-                remaining_text = remaining_text[:m.start()]
-                tags.append(tag)
-            else:
-                # no tag
-                break
+    # put tags back in input order
+    res["tags"] = list(reversed(tags))
 
-        # put tags back in input order
-        res["tags"] = list(reversed(tags))
+    # description
+    # first look for double comma (description hard left boundary)
+    head, sep, description = remaining_text.partition(",,")
+    res["description"] = description.strip()
+    remaining_text = head.strip()
 
-        # description
-        # first look for double comma (description hard left boundary)
-        head, sep, description = remaining_text.partition(",,")
-        res["description"] = description.strip()
-        remaining_text = head.strip()
-
-        # activity
-        split = remaining_text.rsplit('@', maxsplit=1)
-        activity = split[0]
-        category = split[1] if len(split) > 1 else ""
-        if looks_like_time(activity):
-            # want meaningful activities
-            return res
-        res["activity"] = activity
-        res["category"] = category
+    # activity
+    split = remaining_text.rsplit('@', maxsplit=1)
+    activity = split[0]
+    category = split[1] if len(split) > 1 else ""
+    if looks_like_time(activity):
+        # want meaningful activities
+        return res
+    res["activity"] = activity
+    res["category"] = category
 
     return res
 
