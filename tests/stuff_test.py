@@ -274,13 +274,18 @@ class TestParsers(unittest.TestCase):
         p = specific_dt_pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = extract_datetime(m, d="date1", h="hour1", m="minute1",
+        time = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                 default_day=hamster_today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = extract_datetime(m, d="date1", h="hour1", m="minute1")
+        time = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
         self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
+        s = "-25"
+        m = re.fullmatch(p, s, re.VERBOSE)
+        timedelta = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+                                default_day=hamster_today())
+        self.assertEqual(timedelta, dt.timedelta(minutes=-25))
 
 
     def test_parse_datetime_range(self):
@@ -301,6 +306,17 @@ class TestParsers(unittest.TestCase):
         start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
         self.assertEqual(end, None)
+
+        import datetime as dt
+        ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
+        s = "-25 activity"
+        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR, ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
+        self.assertEqual(end, None)
+        s = "-55 -25 activity"
+        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR, ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
 
 
 if __name__ == '__main__':

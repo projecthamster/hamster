@@ -131,7 +131,7 @@ def parse_date(s):
                    )
 
 
-def extract_datetime(match, d="date", h="hour", m="minute", default_day=None):
+def extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
     """extract time from a time_re match.
 
     h (str): name of the group containing the hour
@@ -148,7 +148,11 @@ def extract_datetime(match, d="date", h="hour", m="minute", default_day=None):
         else:
             return hamsterday_time_to_datetime(default_day, time)
     else:
-        return None
+        relative_str = match.group(r)
+        if relative_str:
+            return dt.timedelta(minutes=int(relative_str))
+        else:
+            return None
 
 
 def parse_datetime_range(text, position="head", separator="", ref="now"):
@@ -186,31 +190,23 @@ def parse_datetime_range(text, position="head", separator="", ref="now"):
         # ref is already a hamster day
         default_day = ref
 
-    start = extract_datetime(m, d="date1", h="hour1", m="minute1",
+    start = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                              default_day=datetime_to_hamsterday(ref))
-    if not start:
-        # second chance, relative to ref
-        relative1_str = m.group('relative1')
-        if ref and relative1_str:
-            delta1 = dt.timedelta(minutes=int(relative1_str))
-            start = ref + delta1
-        else:
-            start = None
+    if isinstance(start, dt.timedelta):
+        # relative to ref, actually
+        delta1 = start
+        start = ref + delta1
 
-    end = extract_datetime(m, d="date2", h="hour2", m="minute2",
-                       default_day=datetime_to_hamsterday(start))
-    if not end:
-        # second chance
-        relative2_str = m.group('relative2')
-        if relative2_str:
-            delta2 = dt.timedelta(minutes=int(relative2_str))
-            if start and delta2 > 0:
-                # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
-                end = start + delta2
-            elif ref and delta2 < 0:
-                end = ref + delta2
-            else:
-                end = None
+    end = extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
+                           default_day=datetime_to_hamsterday(start))
+    if isinstance(end, dt.timedelta):
+        # relative to start, actually
+        delta2 = end
+        if delta2 > dt.timedelta(0):
+            # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
+            end = start + delta2
+        elif ref and delta2 < dt.timedelta(0):
+            end = ref + delta2
         else:
             end = None
 
