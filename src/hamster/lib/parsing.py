@@ -69,6 +69,7 @@ dt_pattern = r"""
 """.format(date_pattern, time_pattern)
 
 
+# needed for range_pattern
 def specific_dt_pattern(n):
     """Return a datetime pattern with all group names suffixed with n."""
     to_replace = ("whole", "relative", "year", "month", "day", "date", "hour", "minute")
@@ -116,7 +117,7 @@ def extract_time(match, h="hour", m="minute"):
 
 
 def parse_time(s):
-    """Extract time from string."""
+    """Parse time from string."""
     m = time_re.search(s)
     return extract_time(m)
 
