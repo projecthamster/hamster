@@ -161,6 +161,8 @@ def parse_datetime_range(text, position="head", separator="", ref="now"):
                        (e.g. -15: quarter hour before ref).
                        If any date is missing, put the corresponding
                        datetime in the same hamster day as ref.
+    Return:
+        (start, end, rest)
     """
 
     if ref == "now":
