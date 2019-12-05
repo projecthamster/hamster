@@ -62,9 +62,9 @@ dt_pattern = r"""
         (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
                                       # (need to double the brackets for .format)
     |                             # or
-        (?P<date>{})?                 # maybe first date
+        (?P<date>{})?                 # maybe date
         \s?                           # maybe one space
-        {}                            # first time
+        {}                            # time
     )
 """.format(date_pattern, time_pattern)
 
@@ -132,10 +132,11 @@ def parse_date(s):
 
 
 def extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
-    """extract time from a time_re match.
+    """extract datetime from a dt_pattern match.
 
     h (str): name of the group containing the hour
     m (str): name of the group containing the minute
+    r (str): name of the group containing the relative time
     default_day (dt.date): the datetime will belong to this hamster day if
                            date is missing.
     """
