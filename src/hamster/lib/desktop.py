@@ -98,7 +98,7 @@ class DesktopIntegrations(object):
 
         notification = conn.Notify("Project Hamster",
                                    self._last_notification or 0,
-                                   "hamster-time-tracker",
+                                   "hamster",
                                    summary,
                                    details,
                                    [],

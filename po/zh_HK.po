@@ -1,4 +1,4 @@
-# Chinese (Hong Kong) translation of hamster-time-tracker.
+# Chinese (Hong Kong) translation of hamster.
 # Copyright (C) 2003-06 Free Software Foundation, Inc.
 # Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>, 2008.
 # Tryneeds translation team, 2009.
@@ -48,46 +48,46 @@ msgstr "活動："
 msgid "Tags:"
 msgstr "標籤："
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "閒置時停止追蹤"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "當電腦為閒置狀態時停止追蹤目前的活動"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "關機時停止追蹤"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "關機時停止追蹤目前的活動"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "每 x 分鐘提醒目前的工作"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
 msgstr "在每次指定的分鐘數後提醒目前的工作。設為 0 或大於 120 時表示停用提醒。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "當沒有設定活動時也提醒"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "如果沒有活動開始，仍在每 notify_interval 分鐘提醒我。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "這天開始的時刻 (預設為上午 5:30)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -97,11 +97,11 @@ msgstr ""
 "如果目前的時間尚未達到指定日子開始的時候，那麼活動會被算在昨天。跨越兩天的活"
 "動會跳到活動佔絕大的部分那天。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "工作區的切換是否應觸發活動的切換"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -110,11 +110,11 @@ msgstr ""
 "已啟用追蹤方法的清單。「name」(名稱) 會啟用根據 workspace_mapping 中定義的名"
 "稱切換活動。「memory」(記憶) 會啟用在返回上一個工作區時切換到上次的活動。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "工作區改變時切換活動"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -122,38 +122,38 @@ msgstr ""
 "如果啟用根據名稱切換，這個清單設定了應該被切換的活動名稱，項目的索引代表工作"
 "區。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "顯示或隱藏時間追蹤程式視窗"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "用來顯示或隱藏時間追蹤程式視窗的鍵盤捷徑鍵。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "切換 hamster 應用程式視窗動作"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "切換 hamster 應用程式視窗可見與否的指令。"
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "切換 hamster 應用程式視窗"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "切換 hamster 應用程式視窗可見與否。"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "時間追蹤程式"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Project Hamster - 追蹤你的時間"

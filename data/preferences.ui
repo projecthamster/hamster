@@ -18,7 +18,7 @@
     <property name="default_width">450</property>
     <property name="default_height">500</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon_name">hamster-time-tracker</property>
+    <property name="icon_name">hamster</property>
     <signal name="key-press-event" handler="on_preferences_window_key_press" swapped="no"/>
     <child>
       <object class="GtkVBox" id="big_box">

@@ -284,7 +284,7 @@ msgstr "బ్యాకప్"
 #: C/backup.page:10(p)
 msgid ""
 "Activities are stored in an SQLite database, located at <file>~/.local/share/"
-"hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on "
+"hamster/hamster.db</file>. The file can be backed up and restored on "
 "the go. The application will reload the data automatically after a short "
 "while."
 msgstr ""

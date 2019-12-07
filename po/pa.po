@@ -6,7 +6,7 @@
 #: ../src/hamster-cli:342
 msgid ""
 msgstr ""
-"Project-Id-Version: hamster-time-tracker.HEAD\n"
+"Project-Id-Version: hamster.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
 "PO-Revision-Date: 2012-03-20 18:36+0530\n"
@@ -47,27 +47,27 @@ msgstr "ਸਰਗਰਮੀ:"
 msgid "Tags:"
 msgstr "ਟੈਗ:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "ਵੇਹਲਾ ਹੋਵੇ ਤਾਂ ਟਰੈਕਿੰਗ ਰੋਕੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "ਜਦੋਂ ਕੰਪਿਊਟਰ ਵੇਹਲਾ ਹੋਵੇ ਤਾਂ ਮੌਜੂਦਾ ਸਰਗਰਮੀ ਲਈ ਟਰੈਕਿੰਗ ਰੋਕੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "ਬੰਦ ਕਰਨ ਸਮੇਂ ਟਰੈਕਿੰਗ ਬੰਦ ਕਰੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "ਬੰਦ ਕਰਨ ਉੱਤੇ ਮੌਜੂਦਾ ਸਰਗਰਮੀ ਲਈ ਟਰੈਕਿੰਗ ਬੰਦ ਕਰੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "ਮੌਜੂਦਾ ਟਾਸਕ ਹਰੇਕ x ਮਿੰਟਾਂ ਬਾਅਦ ਚੇਤੇ ਕਰਵਾਉ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -75,20 +75,20 @@ msgstr ""
 "ਖਾਸ ਦਿੱਤੇ ਮਿੰਟਾਂ ਦੇ ਬਾਅਦ ਮੌਜੂਦਾ ਟਾਸਕ ਚੇਤੇ ਕਰਵਾਉ। ਰੀਮਾਈਡਰ ਬੰਦ ਕਰਨ ਲਈ 0 ਜਾਂ 120 ਤੋਂ ਵੱਧ ਸੈੱਟ "
 "ਕਰੋ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "ਜਦੋਂ ਕੋਈ ਸਰਗਰਮੀ ਸੈੱਟ ਨਾ ਹੋਵੇ ਤਾਂ ਵੀ ਚੇਤੇ ਕਰਵਾਓ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr "ਜੇ ਕੋਈ ਸਰਗਰਮੀ ਸ਼ੁਰੂ ਨਾ ਹੋਵੇ ਤਾਂ ਹਰੇਕ ਸੂਚਨਾ ਅੰਤਰਾਲ ਮਿੰਟ ਦੇ ਬਾਅਦ ਚੇਤੇ ਕਰਵਾਉ(_i)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "ਸਮਾਂ, ਜਦੋਂ ਦਿਨ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ (ਮੂਲ ੫:੩੦ ਸਵੇਰੇ)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -99,11 +99,11 @@ msgstr ""
 "ਹੋਵੇਗਾ, ਜੇ ਇਹ ਸਮੇਂ ਤੋਂ ਵੱਧ ਹੈ। ਸਰਗਰਮੀਆਂ, ਜੋ ਦੋ ਦਿਨ ਲੈਂਦੀਆਂ ਹਨ, ਉੱਥੇ ਟਿੱਪ ਵਿੱਚ ਵੇਖਾਈਆਂ ਜਾਣਗੀਆਂ, ਜਿੱਥੇ "
 "ਸਰਗਰਮੀ ਦਾ ਸਭ ਤੋਂ ਵੱਡਾ ਭਾਗ ਹੁੰਦਾ ਹੈ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "ਕੀ ਵਰਕਸਪੇਸ ਬਦਲਣ ਨਾਲ ਐਕਟਿਵੀ ਬਦਲੀ ਜਾਵੇ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -112,11 +112,11 @@ msgstr ""
 "ਚਾਲੂ ਟਰੈਕਿੰਗ ਢੰਗਾਂ ਦੀ ਲਿਸਟ ਹੈ। \"ਨਾਂ\" workspace_mapping ਵਿੱਚ ਦਿੱਤੇ ਨਾਂ ਮੁਤਾਬਕ ਸਰਗਰਮੀ "
 "ਬਦਲਣਾ ਚਾਲੂ ਕਰੇਗਾ। \"ਮੈਮੋਰੀ\" ਪਿਛਲੀ ਵਰਕਸਪੇਸ ਵਿੱਚ ਜਾਣ ਸਮੇਂ ਆਖਰੀ ਸਰਗਰਮੀ ਲਈ ਬਦਲੇਗਾ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "ਵਰਕਸਪੇਸ ਬਦਲਣ ਨਾਲ ਸਰਗਰਮੀ ਬਦਲੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -124,38 +124,38 @@ msgstr ""
 "ਜੇ ਨਾਂ ਰਾਹੀਂ ਬਦਲਣਾ ਚਾਲੂ ਕੀਤਾ ਤਾਂ, ਇਹ ਲਿਸਟ ਨੂੰ ਸਰਗਰਮੀ ਨਾਲ ਲਈ ਸੈੱਟ ਕੀਤਾ ਜਾਵੇਗਾ, ਜਿਸ ਲਈ "
 "ਬਦਲਣਾ ਹੈ, ਵਰਕਸਪੇਸ ਆਈਟਮ ਦੇ ਇੰਡੈਕਸ ਨਾਲ ਦਰਸਾਇਆ ਜਾਂਦਾ ਹੈ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "ਟਾਈਮ ਟਰੈਕਰ ਵਿੰਡੋ ਵੇਖੋ / ਓਹਲੇ ਕਰੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "ਟਾਈਮ ਟਰੈਕਰ ਵਿੰਡੋ ਵੇਖਣ /ਓਹਲੇ ਕਰਨ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ ਹੈ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "ਹਮਸਟਰ ਐਪਲੀਕੇਸ਼ਨ ਵਿੰਡੋ ਕਾਰਵਾਈ ਬਦਲੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "ਹਮਸਟਰ ਐਪਲੀਕੇਸ਼ਨ ਵਿੰਡੋ ਦੀ ਦਿੱਖ ਬਦਲਣ ਵਾਲੀ ਕਮਾਂਡ ਹੈ।"
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "ਹਮਸਟਰ ਐਪਲੀਕੇਸ਼ਨ ਵਿੰਡੋ ਬਦਲੋ"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "ਹਮਸਟਰ ਐਪਲੀਕੇਸ਼ਨ ਵਿੰਡੋ ਦੀ ਦਿੱਖ ਬਦਲੋ।"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "ਟਾਈਮ ਟਰੈਕਰ"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "ਪਰੋਜੈਕਟ ਹਮਸਟਰ - ਆਪਣਾ ਸਮਾਂ ਟਰੈਕ ਕਰੋ"

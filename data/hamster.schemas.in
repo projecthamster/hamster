@@ -1,9 +1,9 @@
 <gconfschemafile>
     <schemalist>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/enable_timeout</key>
-            <applyto>/apps/hamster-time-tracker/enable_timeout</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/enable_timeout</key>
+            <applyto>/apps/hamster/enable_timeout</applyto>
+            <owner>hamster</owner>
             <type>bool</type>
             <default>true</default>
             <locale name="C">
@@ -14,9 +14,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/stop_on_shutdown</key>
-            <applyto>/apps/hamster-time-tracker/stop_on_shutdown</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/stop_on_shutdown</key>
+            <applyto>/apps/hamster/stop_on_shutdown</applyto>
+            <owner>hamster</owner>
             <type>bool</type>
             <default>false</default>
             <locale name="C">
@@ -27,9 +27,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/notify_interval</key>
-            <applyto>/apps/hamster-time-tracker/notify_interval</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/notify_interval</key>
+            <applyto>/apps/hamster/notify_interval</applyto>
+            <owner>hamster</owner>
             <type>int</type>
             <default>27</default>
             <locale name="C">
@@ -41,9 +41,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/notify_on_idle</key>
-            <applyto>/apps/hamster-time-tracker/notify_on_idle</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/notify_on_idle</key>
+            <applyto>/apps/hamster/notify_on_idle</applyto>
+            <owner>hamster</owner>
             <type>bool</type>
             <default>false</default>
             <locale name="C">
@@ -55,9 +55,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/day_start_minutes</key>
-            <applyto>/apps/hamster-time-tracker/day_start_minutes</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/day_start_minutes</key>
+            <applyto>/apps/hamster/day_start_minutes</applyto>
+            <owner>hamster</owner>
             <type>int</type>
             <default>330</default>
             <locale name="C">
@@ -72,9 +72,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/workspace_tracking</key>
-            <applyto>/apps/hamster-time-tracker/workspace_tracking</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/workspace_tracking</key>
+            <applyto>/apps/hamster/workspace_tracking</applyto>
+            <owner>hamster</owner>
             <type>list</type>
             <list_type>string</list_type>
             <default>[]</default>
@@ -89,9 +89,9 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/hamster-time-tracker/workspace_mapping</key>
-            <applyto>/apps/hamster-time-tracker/workspace_mapping</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/apps/hamster/workspace_mapping</key>
+            <applyto>/apps/hamster/workspace_mapping</applyto>
+            <owner>hamster</owner>
             <type>list</type>
             <list_type>string</list_type>
             <default>[]</default>
@@ -107,9 +107,9 @@
 
 
         <schema>
-            <key>/schemas/desktop/gnome/keybindings/hamster-time-tracker/activate_hamster_window</key>
-            <applyto>/desktop/gnome/keybindings/hamster-time-tracker/activate_hamster_window</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/desktop/gnome/keybindings/hamster/activate_hamster_window</key>
+            <applyto>/desktop/gnome/keybindings/hamster/activate_hamster_window</applyto>
+            <owner>hamster</owner>
             <type>string</type>
             <default></default>
             <locale name="C">
@@ -118,20 +118,20 @@
             </locale>
         </schema>
         <schema>
-            <key>/schemas/desktop/gnome/keybindings/hamster-time-tracker/action</key>
-            <applyto>/desktop/gnome/keybindings/hamster-time-tracker/action</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/desktop/gnome/keybindings/hamster/action</key>
+            <applyto>/desktop/gnome/keybindings/hamster/action</applyto>
+            <owner>hamster</owner>
             <type>string</type>
-            <default>hamster-time-tracker toggle</default>
+            <default>hamster toggle</default>
             <locale name="C">
                 <short>Toggle hamster application window action</short>
                 <long>Command for toggling visibility of the hamster application window.</long>
             </locale>
         </schema>
         <schema>
-            <key>/schemas/desktop/gnome/keybindings/hamster-time-tracker/name</key>
-            <applyto>/desktop/gnome/keybindings/hamster-time-tracker/name</applyto>
-            <owner>hamster-time-tracker</owner>
+            <key>/schemas/desktop/gnome/keybindings/hamster/name</key>
+            <applyto>/desktop/gnome/keybindings/hamster/name</applyto>
+            <owner>hamster</owner>
             <type>string</type>
             <default>Toggle hamster application window</default>
             <locale name="C">

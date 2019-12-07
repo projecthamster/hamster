@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=org.gnome.Hamster
-Exec=@LIBDIR@/hamster-time-tracker/hamster-service
+Exec=@LIBDIR@/hamster/hamster-service

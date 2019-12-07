@@ -50,27 +50,27 @@ msgstr "Tegevus:"
 msgid "Tags:"
 msgstr "Sildid:"
 
-#: ../data/hamster-time-tracker.schemas.in.h:1
+#: ../data/hamster.schemas.in.h:1
 msgid "Stop tracking on idle"
 msgstr "Jõudeolekul lõpetatakse jälgimine"
 
-#: ../data/hamster-time-tracker.schemas.in.h:2
+#: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
 msgstr "Jooksva tegevuse jälgimine lõpetatakse arvuti jõudeolekul"
 
-#: ../data/hamster-time-tracker.schemas.in.h:3 ../data/preferences.ui.h:2
+#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
 msgstr "Väljalülitamisel lõpetatakse jälgimine"
 
-#: ../data/hamster-time-tracker.schemas.in.h:4
+#: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
 msgstr "Jooksva tegevuse jälgimine lõpetatakse arvuti väljalülitamisel"
 
-#: ../data/hamster-time-tracker.schemas.in.h:5
+#: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
 msgstr "Jooksvast tegevusest antakse teada iga x minuti järel"
 
-#: ../data/hamster-time-tracker.schemas.in.h:6
+#: ../data/hamster.schemas.in.h:6
 msgid ""
 "Remind of current task every specified amount of minutes. Set to 0 or "
 "greater than 120 to disable reminder."
@@ -78,22 +78,22 @@ msgstr ""
 "Jooksva tegevuse kohta antakse teada kindlaksmääratud hulga minutite järel. "
 "Väärtuse 0 või 120-st suurema väärtuse korral on meeldetuletaja keelatud."
 
-#: ../data/hamster-time-tracker.schemas.in.h:7 ../data/preferences.ui.h:4
+#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
 msgid "Also remind when no activity is set"
 msgstr "Meeldetuletused ka tegevuse puudumise korral"
 
-#: ../data/hamster-time-tracker.schemas.in.h:8
+#: ../data/hamster.schemas.in.h:8
 msgid ""
 "Also remind every notify_interval minutes if no activity has been started."
 msgstr ""
 "Meeldetuletuste kuvamine ka võtmega notify_interval määratud minutite järel "
 "isegi juhul, kui tegevust pole alustatud."
 
-#: ../data/hamster-time-tracker.schemas.in.h:9
+#: ../data/hamster.schemas.in.h:9
 msgid "At what time does the day start (defaults to 5:30AM)"
 msgstr "Mis kell algab päev (vaikimisi 5:30)"
 
-#: ../data/hamster-time-tracker.schemas.in.h:10
+#: ../data/hamster.schemas.in.h:10
 msgid ""
 "Activities will be counted as to belong to yesterday if the current time is "
 "less than the specified day start; and today, if it is over the time. "
@@ -105,11 +105,11 @@ msgstr ""
 "möödunud, siis aga tänasesse päeva kuuluvatena. Kahte päeva kuuluvad "
 "tegevused ulatuvad üle selle serva, kuhu tegevuse suurim osa jääb."
 
-#: ../data/hamster-time-tracker.schemas.in.h:11
+#: ../data/hamster.schemas.in.h:11
 msgid "Should workspace switch trigger activity switch"
 msgstr "Kas tööala vahetus peaks valla päästma tegevuse vahetuse"
 
-#: ../data/hamster-time-tracker.schemas.in.h:12
+#: ../data/hamster.schemas.in.h:12
 msgid ""
 "List of enabled tracking methods. \"name\" will enable switching activities "
 "by name defined in workspace_mapping. \"memory\" will enable switching to "
@@ -119,11 +119,11 @@ msgstr ""
 "workspace_mapping väärtuses antud nime järgi. \"memory\" puhul lülitatakse "
 "eelmisele tööalale naasmisel seal toimunud tegevusele."
 
-#: ../data/hamster-time-tracker.schemas.in.h:13
+#: ../data/hamster.schemas.in.h:13
 msgid "Switch activity on workspace change"
 msgstr "Tööala vahetamisel vahetatakse tegevust"
 
-#: ../data/hamster-time-tracker.schemas.in.h:14
+#: ../data/hamster.schemas.in.h:14
 msgid ""
 "If switching by name is enabled, this list sets the activity names that "
 "should be switched to, workspaces represented by the index of item."
@@ -131,38 +131,38 @@ msgstr ""
 "Kui nime järgi lülitumine on lubatud, siis see loend määrab tegevuste nimed, "
 "millele tuleks tööala vahetamisel lülituda."
 
-#: ../data/hamster-time-tracker.schemas.in.h:15
+#: ../data/hamster.schemas.in.h:15
 msgid "Show / hide Time Tracker Window"
 msgstr "Ajakasutuse jälgija akna näitamine või peitmine"
 
-#: ../data/hamster-time-tracker.schemas.in.h:16
+#: ../data/hamster.schemas.in.h:16
 msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
 msgstr "Kiirklahv ajakasutuse jälgija akna näitamiseks või peitmiseks."
 
-#: ../data/hamster-time-tracker.schemas.in.h:17
+#: ../data/hamster.schemas.in.h:17
 msgid "Toggle hamster application window action"
 msgstr "Hamstri rakendusakna tegevuse sisse- ja väljalülitamine"
 
-#: ../data/hamster-time-tracker.schemas.in.h:18
+#: ../data/hamster.schemas.in.h:18
 msgid "Command for toggling visibility of the hamster application window."
 msgstr "Hamstri rakendusakna nähtavuse sisse- ja väljalülitamise käsk."
 
-#: ../data/hamster-time-tracker.schemas.in.h:19
+#: ../data/hamster.schemas.in.h:19
 msgid "Toggle hamster application window"
 msgstr "Hamstri rakendusakna sisse- ja väljalülitamine"
 
-#: ../data/hamster-time-tracker.schemas.in.h:20
+#: ../data/hamster.schemas.in.h:20
 msgid "Toggle visibility of the hamster application window."
 msgstr "Hamstri rakendusakna nähtavuse sisse- ja väljalülitamine"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:1
+#: ../data/hamster.desktop.in.in.h:1
 #: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
 #: ../src/hamster-cli:133 ../src/hamster/about.py:39
 #: ../src/hamster/about.py:40 ../src/hamster/today.py:63
 msgid "Time Tracker"
 msgstr "Ajajälgija"
 
-#: ../data/hamster-time-tracker.desktop.in.in.h:2
+#: ../data/hamster.desktop.in.in.h:2
 #: ../data/hamster-windows-service.desktop.in.in.h:2
 msgid "Project Hamster - track your time"
 msgstr "Projektihamster - ajajälgija"

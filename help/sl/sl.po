@@ -217,8 +217,8 @@ msgid "Backup"
 msgstr "Varnostna kopija"
 
 #: C/backup.page:10(p)
-msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster-time-tracker/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
-msgstr "Dejavnosti so shranjene v podatkovni zbirki SQLite, shranjeni v <file>~/.local/share/hamster-time-tracker/hamster.db</file>. Ustvariti je mogoče varnostno kopijo datoteke in jo po potrebi obnoviti. Program bo po kratkem času samodejno znova naložil podatke."
+msgid "Activities are stored in an SQLite database, located at <file>~/.local/share/hamster/hamster.db</file>. The file can be backed up and restored on the go. The application will reload the data automatically after a short while."
+msgstr "Dejavnosti so shranjene v podatkovni zbirki SQLite, shranjeni v <file>~/.local/share/hamster/hamster.db</file>. Ustvariti je mogoče varnostno kopijo datoteke in jo po potrebi obnoviti. Program bo po kratkem času samodejno znova naložil podatke."
 
 #: C/backup.page:17(p)
 msgid "For viewing contents of the database we can suggest using the <link href=\"https://addons.mozilla.org/en-US/firefox/addon/5817\"><app>SQLite Manager</app></link> for Mozilla Firefox."
@@ -228,4 +228,3 @@ msgstr "Za ogled vsebune podatkovne zbirke predlagamo link href=\"https://addons
 #: C/index.page:0(None)
 msgid "translator-credits"
 msgstr "Andrej Žnidaršič <andrej.znidarsic@gmail.com>"
-

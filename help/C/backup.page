@@ -9,7 +9,7 @@
 
 <p>
     Activities are stored in an SQLite database, located at
-    <file>~/.local/share/hamster-time-tracker/hamster.db</file>.
+    <file>~/.local/share/hamster/hamster.db</file>.
     The file can be backed up and restored on the go.
     The application will reload the data automatically after a short while.
 </p>
