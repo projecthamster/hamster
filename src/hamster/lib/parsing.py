@@ -7,8 +7,10 @@ import re
 from datetime import date
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
-    hamsterday_time_to_datetime,
     hamster_now,
+    hamsterday_end,
+    hamsterday_start,
+    hamsterday_time_to_datetime,
 )
 
 
@@ -38,35 +40,49 @@ tags_separator = re.compile(r"""
     $           # end of text
 """, flags=re.VERBOSE)
 
-# match time, such as "01:32", "13.56" or "0116"
-time_pattern = r"""
-    (?P<hour>[0-1]?[0-9] | [2][0-3])  # hour (2 digits, between 00 and 23)
-    [:,\.]?                           # separator can be colon,
-                                      #  dot, comma, or nothing
-    (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
-"""
-time_re = re.compile(time_pattern, flags=re.VERBOSE)
 
+# ISO format: YYYY-MM-DD
+date_basic_pattern = r"""\d{4}-\d{2}-\d{2}"""
+date_basic_re = re.compile(date_basic_pattern, flags=re.VERBOSE)
 
-date_pattern = r"""        # ISO format
+date_detailed_pattern = r"""
     (?P<year>\d{4})        # 4 digits
     -                      # dash
     (?P<month>\d{2})       # 2 digits
     -                      # dash
     (?P<day>\d{2})         # 2 digits
 """
-date_re = re.compile(date_pattern, flags=re.VERBOSE)
+date_detailed_re = re.compile(date_detailed_pattern, flags=re.VERBOSE)
+
+
+# match time, such as "01:32", "13.56" or "0116"
+time_pattern = r"""
+    (?P<hour>[0-1]?[0-9] | [2][0-3])  # hour (2 digits, between 00 and 23)
+    [:,\.]?                           # Separator can be colon,
+                                      # dot, comma, or nothing.
+    (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
+    (?!\d?-\d{2}-\d{2})               # Negative lookahead:
+                                      # avoid matching date by inadvertance.
+                                      # For instance 2019-12-05
+                                      # might be caught as 2:01.
+                                      # Requiring space or - would not work:
+                                      # 2019-2025 is the 20:19-20:25 range.
+"""
+time_re = re.compile(time_pattern, flags=re.VERBOSE)
+
 
 dt_pattern = r"""
     (?P<whole>
-        (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
                                       # (need to double the brackets for .format)
+        (?<!\d{{2}})                  # negative lookbehind,
+                                      # avoid matching 2019-12 or 2019-12-05
+        (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
     |                             # or
         (?P<date>{})?                 # maybe date
         \s?                           # maybe one space
         {}                            # time
     )
-""".format(date_pattern, time_pattern)
+""".format(date_detailed_pattern, time_pattern)
 
 
 # needed for range_pattern
@@ -81,23 +97,28 @@ def specific_dt_pattern(n):
 
 
 range_pattern = r"""
-                  # start datetime,
-                  # relative1 or (date1, hour1, and minute1):
-    {}
+    (                    # start
+      {}                 # datetime: relative1 or (date1, hour1, and minute1)
+      |                  # or
+      (?P<firstday>{})  # date without time
+    )
     (
 
         (?P<separation>   # (only needed if end time is given)
             \s?           # maybe one space
             -             # dash
             \s?           # maybe one space
-          |             # or
+          |               # or
             \s            # one space exactly
         )
-                  # end datetime,
-                  # relative2 or (date2, hour2, and minute2):
-    {}
-    )?            # end time is facultative
-""".format(specific_dt_pattern(1), specific_dt_pattern(2))
+    (                     # end
+      {}                  # datetime: relative2 or (date2, hour2, and minute2)
+      |                   # or
+      (?P<lastday>{})     # date without time
+    )
+    )?                    # end time is facultative
+""".format(specific_dt_pattern(1), date_basic_pattern,
+           specific_dt_pattern(2), date_basic_pattern)
 
 
 def extract_time(match, h="hour", m="minute"):
@@ -124,7 +145,7 @@ def parse_time(s):
 
 def parse_date(s):
     """Extract ISO date (YYYY-MM-DD) from string."""
-    m = date_re.search(s)
+    m = date_detailed_re.search(s)
     return dt.date(year=int(m.group('year')),
                    month=int(m.group('month')),
                    day=int(m.group('day'))
@@ -156,13 +177,14 @@ def extract_datetime(match, d="date", h="hour", m="minute", r="relative", defaul
             return None
 
 
-def parse_datetime_range(text, position="head", separator="", ref="now"):
+def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     """Parse a start-end range from text.
 
-    position (str): "head" to search only at the beginning of text, and
+    position (str): "exact" to match exactly the full text
+                    "head" to search only at the beginning of text, and
                     "tail" to search only at the end.
     separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
-                     from the rest.
+                     from the rest. Discarded for "exact" position.
     ref (dt.datetime): reference for relative times
                        (e.g. -15: quarter hour before ref).
                        If any date is missing, put the corresponding
@@ -174,8 +196,10 @@ def parse_datetime_range(text, position="head", separator="", ref="now"):
     if ref == "now":
         ref = hamster_now()
 
-    assert position in ("head",), "position unknown: '{}'".format(position)
-    if position == "head":
+    assert position in ("exact", "head"), "position unknown: '{}'".format(position)
+    if position == "exact":
+        p = "^{}$".format(range_pattern)
+    elif position == "head":
         # require at least a space after, to avoid matching 10.00@cat
         # .*? so rest is as little as possible
         p = "^{}{}(?P<rest>.*?)$".format(range_pattern, separator)
@@ -184,6 +208,10 @@ def parse_datetime_range(text, position="head", separator="", ref="now"):
 
     if not m:
         return None, None, text
+    elif position == "exact":
+        rest = ""
+    else:
+        rest = m.group("rest")
 
     if isinstance(ref, dt.datetime):
         default_day = datetime_to_hamsterday(ref)
@@ -191,27 +219,37 @@ def parse_datetime_range(text, position="head", separator="", ref="now"):
         # ref is already a hamster day
         default_day = ref
 
-    start = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                             default_day=datetime_to_hamsterday(ref))
-    if isinstance(start, dt.timedelta):
-        # relative to ref, actually
-        delta1 = start
-        start = ref + delta1
+    if m.group('firstday'):
+        # only day given for start
+        firstday = parse_date(m.group('firstday'))
+        start = hamsterday_start(firstday)
+    else:
+        firstday = None
+        start = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+                                 default_day=datetime_to_hamsterday(ref))
+        if isinstance(start, dt.timedelta):
+            # relative to ref, actually
+            delta1 = start
+            start = ref + delta1
 
-    end = extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
-                           default_day=datetime_to_hamsterday(start))
-    if isinstance(end, dt.timedelta):
-        # relative to start, actually
-        delta2 = end
-        if delta2 > dt.timedelta(0):
-            # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
-            end = start + delta2
-        elif ref and delta2 < dt.timedelta(0):
-            end = ref + delta2
-        else:
-            end = None
-
-    rest = m.group("rest")
+    if m.group('lastday'):
+        lastday = parse_date(m.group('lastday'))
+        end = hamsterday_end(lastday)
+    elif firstday:
+        end = hamsterday_end(firstday)
+    else:
+        end = extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
+                               default_day=datetime_to_hamsterday(start))
+        if isinstance(end, dt.timedelta):
+            # relative to start, actually
+            delta2 = end
+            if delta2 > dt.timedelta(0):
+                # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
+                end = start + delta2
+            elif ref and delta2 < dt.timedelta(0):
+                end = ref + delta2
+            else:
+                end = None
 
     return start, end, rest
 

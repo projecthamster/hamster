@@ -5,9 +5,8 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../
 import unittest
 import re
 from hamster.lib import Fact
-from hamster.lib.stuff import hamster_now, hamster_today
+from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today
 from hamster.lib.parsing import (
-    ACTIVITY_SEPARATOR,
     dt_pattern,
     extract_datetime,
     extract_time,
@@ -284,39 +283,59 @@ class TestParsers(unittest.TestCase):
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
         timedelta = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                default_day=hamster_today())
+                                     default_day=hamster_today())
         self.assertEqual(timedelta, dt.timedelta(minutes=-25))
+        s = "2019-12-05"
+        m = re.search(p, s, re.VERBOSE)
+        self.assertEqual(m, None)
 
 
     def test_parse_datetime_range(self):
         # only match clean
         s = "10.00@cat"
-        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        start, end, rest = parse_datetime_range(s, position="head")
         self.assertEqual(start, None)
+        self.assertEqual(end, None)
+        s = "12:02"
+        start, end, rest = parse_datetime_range(s)
+        self.assertEqual(start.strftime("%H:%M"), "12:02")
         self.assertEqual(end, None)
         s = "12:03 13:04"
         start, end, rest = parse_datetime_range(s)
         self.assertEqual(start.strftime("%H:%M"), "12:03")
         self.assertEqual(end.strftime("%H:%M"), "13:04")
         s = "12:35 activity"
-        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        start, end, rest = parse_datetime_range(s, position="head")
         self.assertEqual(start.strftime("%H:%M"), "12:35")
         self.assertEqual(end, None)
         s = "2019-12-01 12:33 activity"
-        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR)
+        start, end, rest = parse_datetime_range(s, position="head")
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
         self.assertEqual(end, None)
 
         import datetime as dt
         ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
         s = "-25 activity"
-        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR, ref=ref)
+        start, end, rest = parse_datetime_range(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         self.assertEqual(end, None)
         s = "-55 -25 activity"
-        start, end, rest = parse_datetime_range(s, separator=ACTIVITY_SEPARATOR, ref=ref)
+        start, end, rest = parse_datetime_range(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
+
+        s = "2019-12-05"  # single hamster day
+        start, end, rest = parse_datetime_range(s, ref=ref)
+        just_before = start - dt.timedelta(seconds=1)
+        just_after = end + dt.timedelta(seconds=1)
+        self.assertEqual(datetime_to_hamsterday(just_before), dt.date(2019, 12, 4))
+        self.assertEqual(datetime_to_hamsterday(just_after), dt.date(2019, 12, 6))
+        s = "2019-12-05 2019-12-07"  # hamster days range
+        start, end, rest = parse_datetime_range(s, ref=ref)
+        just_before = start - dt.timedelta(seconds=1)
+        just_after = end + dt.timedelta(seconds=1)
+        self.assertEqual(datetime_to_hamsterday(just_before), dt.date(2019, 12, 4))
+        self.assertEqual(datetime_to_hamsterday(just_after), dt.date(2019, 12, 8))
 
 
 if __name__ == '__main__':

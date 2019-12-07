@@ -98,6 +98,22 @@ def hamsterday_time_to_datetime(hamsterday, time):
     return dt.datetime.combine(civil_date, time)
 
 
+def hamsterday_start(hamsterday):
+    """Return the given day start, as a datetime."""
+
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+    return hamsterday_time_to_datetime(hamsterday, conf.day_start)
+
+
+def hamsterday_end(hamsterday):
+    """Return the given day end, as a datetime."""
+
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+    return hamsterday_time_to_datetime(hamsterday + dt.timedelta(days=1), conf.day_start)
+
+
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.
     accepts either minutes or timedelta"""
