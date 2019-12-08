@@ -260,13 +260,10 @@ class TestActivityInputParsing(unittest.TestCase):
 class TestParsers(unittest.TestCase):
     def test_parse_time(self):
         import datetime as dt
+        self.assertEqual(parse_time("9:01"), dt.time(9, 1))
         self.assertEqual(parse_time("12:01"), dt.time(12, 1))
         self.assertEqual(parse_time("12.01"), dt.time(12, 1))
         self.assertEqual(parse_time("1201"), dt.time(12, 1))
-
-    def test_parse_time(self):
-        time = parse_time("12:03")
-        self.assertEqual(time.strftime("%H:%M"), "12:03")
 
     def test_dt_patterns(self):
         import datetime as dt
@@ -315,6 +312,7 @@ class TestParsers(unittest.TestCase):
 
         import datetime as dt
         ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
+
         s = "-25 activity"
         start, end, rest = parse_datetime_range(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
@@ -323,6 +321,10 @@ class TestParsers(unittest.TestCase):
         start, end, rest = parse_datetime_range(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
+        s = "-55 -120 activity"
+        start, end, rest = parse_datetime_range(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 11:55")
 
         s = "2019-12-05"  # single hamster day
         start, end, rest = parse_datetime_range(s, ref=ref)

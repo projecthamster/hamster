@@ -58,8 +58,14 @@ date_detailed_re = re.compile(date_detailed_pattern, flags=re.VERBOSE)
 
 # match time, such as "01:32", "13.56" or "0116"
 time_pattern = r"""
-    (?P<hour>[0-1]?[0-9] | [2][0-3])  # hour (2 digits, between 00 and 23)
-    [:,\.]?                           # Separator can be colon,
+    (?P<hour>                         # hour
+     [0-9](?=:)                       # positive lookahead:
+                                      # allow a single digit only if
+                                      # followed by a colon
+     | [0-1][0-9]                     # 00 to 19
+     | [2][0-3]                       # 20 to 23
+    )
+    [,\.:]?                           # Separator can be colon,
                                       # dot, comma, or nothing.
     (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
     (?!\d?-\d{2}-\d{2})               # Negative lookahead:
@@ -89,7 +95,7 @@ dt_pattern = r"""
 # needed for range_pattern
 def specific_dt_pattern(n):
     """Return a datetime pattern with all group names suffixed with n."""
-    to_replace = ("whole", "relative", "year", "month", "day", "date", "hour", "minute")
+    to_replace = ("whole", "relative", "year", "month", "day", "date", "tens", "hour", "minute")
     specifics = ["{}{}".format(s, n) for s in to_replace]
     res = dt_pattern
     for src, dest in zip(to_replace, specifics):
