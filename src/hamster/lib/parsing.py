@@ -141,7 +141,7 @@ def extract_time(match, h="hour", m="minute"):
 def parse_time(s):
     """Parse time from string."""
     m = time_re.search(s)
-    return extract_time(m)
+    return extract_time(m) if m else None
 
 
 def parse_date(s):
