@@ -19,6 +19,9 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 from calendar import timegm
 from gi.repository import GObject as gobject
 from hamster.lib import Fact, hamster_now
