@@ -193,14 +193,10 @@ class HamsterClient(object):
             print("Error: please specify activity")
             return
 
-        activity = args[0]
-        start_time, end_time = parse_datetime_range_old(" ".join(args[1:]))
-        start_time = start_time or stuff.hamster_now()
-
-        self.storage.add_fact(Fact(activity,
-                                         start_time = start_time,
-                                         end_time = end_time))
-
+        fact = Fact.parse(" ".join(args), range_pos="tail")
+        if fact.start_time is None:
+            fact.start_time = stuff.hamster_now()
+        self.storage.add_fact(fact)
 
     def stop(self, *args):
         '''Stop tracking the current activity.'''

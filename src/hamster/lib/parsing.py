@@ -196,13 +196,17 @@ def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     if ref == "now":
         ref = hamster_now()
 
-    assert position in ("exact", "head"), "position unknown: '{}'".format(position)
+    assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
     if position == "exact":
         p = "^{}$".format(range_pattern)
     elif position == "head":
         # require at least a space after, to avoid matching 10.00@cat
         # .*? so rest is as little as possible
         p = "^{}{}(?P<rest>.*?)$".format(range_pattern, separator)
+    elif position == "tail":
+        # require at least a space after, to avoid matching #10.00
+        # .*? so rest is as little as possible
+        p = "^(?P<rest>.*?){}{}$".format(separator, range_pattern)
     # no need to compile, recent patterns are cached by re
     m = re.search(p, text, flags=re.VERBOSE)
 
@@ -254,7 +258,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     return start, end, rest
 
 
-def parse_fact(text, default_date=None, ref="now"):
+def parse_fact(text, range_pos="head", ref="now"):
     """Extract fact fields from the string.
 
     Returns found fields as a dict.
@@ -272,7 +276,7 @@ def parse_fact(text, default_date=None, ref="now"):
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat
-    start, end, remaining_text = parse_datetime_range(text, position="head",
+    start, end, remaining_text = parse_datetime_range(text, position=range_pos,
                                                       separator=ACTIVITY_SEPARATOR)
     res["start_time"] = start
     res["end_time"] = end
