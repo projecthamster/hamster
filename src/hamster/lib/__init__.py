@@ -120,9 +120,10 @@ class Fact(object):
         self._description = value.strip() if value else ""
 
     @classmethod
-    def parse(cls, string, range_pos="head", ref="now", date=None):
+    def parse(cls, string, range_pos="head", default_day=None, ref="now"):
         fact = Fact()
-        for key, val in parse_fact(string, range_pos=range_pos, ref=ref).items():
+        for key, val in parse_fact(string, range_pos=range_pos,
+                                   default_day=default_day, ref=ref).items():
             setattr(fact, key, val)
         return fact
 

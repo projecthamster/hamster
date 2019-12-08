@@ -8,6 +8,7 @@ from datetime import date
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamster_now,
+    hamster_today,
     hamsterday_end,
     hamsterday_start,
     hamsterday_time_to_datetime,
@@ -177,24 +178,37 @@ def extract_datetime(match, d="date", h="hour", m="minute", r="relative", defaul
             return None
 
 
-def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
+def parse_datetime_range(text, position="exact", separator="\s+", default_day=None, ref="now"):
     """Parse a start-end range from text.
 
     position (str): "exact" to match exactly the full text
                     "head" to search only at the beginning of text, and
                     "tail" to search only at the end.
+
     separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
                      from the rest. Discarded for "exact" position.
+
+    default_day (dt.date): If start is given without any date (e.g. just hh:mm),
+                           put the corresponding datetime in default_day.
+                           Defaults to hamster_today.
+                           Note: the default end day is always the start day, so
+                                 "2019-11-27 23:50 - 00:20" lasts 30 minutes.
+
     ref (dt.datetime): reference for relative times
                        (e.g. -15: quarter hour before ref).
-                       If any date is missing, put the corresponding
-                       datetime in the same hamster day as ref.
+                       For testing purposes only
+                       (note: this will be removed later on,
+                        and replaced with hamster_now mocking in pytest).
+                       For users, it should be "now".
     Return:
         (start, end, rest)
     """
 
     if ref == "now":
         ref = hamster_now()
+
+    if default_day is None:
+        default_day = hamster_today()
 
     assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
     if position == "exact":
@@ -217,12 +231,6 @@ def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     else:
         rest = m.group("rest")
 
-    if isinstance(ref, dt.datetime):
-        default_day = datetime_to_hamsterday(ref)
-    else:
-        # ref is already a hamster day
-        default_day = ref
-
     if m.group('firstday'):
         # only day given for start
         firstday = parse_date(m.group('firstday'))
@@ -230,7 +238,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     else:
         firstday = None
         start = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                 default_day=datetime_to_hamsterday(ref))
+                                 default_day=default_day)
         if isinstance(start, dt.timedelta):
             # relative to ref, actually
             delta1 = start
@@ -258,7 +266,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", ref="now"):
     return start, end, rest
 
 
-def parse_fact(text, range_pos="head", ref="now"):
+def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     """Extract fact fields from the string.
 
     Returns found fields as a dict.
@@ -277,7 +285,8 @@ def parse_fact(text, range_pos="head", ref="now"):
     # datetimes
     # force at least a space to avoid matching 10.00@cat
     start, end, remaining_text = parse_datetime_range(text, position=range_pos,
-                                                      separator=ACTIVITY_SEPARATOR)
+                                                      separator=ACTIVITY_SEPARATOR,
+                                                      default_day=default_day)
     res["start_time"] = start
     res["end_time"] = end
 

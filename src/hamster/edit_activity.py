@@ -172,7 +172,7 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            fact = Fact.parse(self.cmdline.get_text(), date=self.date)
+            fact = Fact.parse(self.cmdline.get_text(), default_day=self.date)
             previous_cmdline_fact = self.cmdline_fact
             # copy the entered fact before any modification
             self.cmdline_fact = fact.copy()
@@ -356,7 +356,7 @@ class CustomFactController(gobject.GObject):
             self.update_status(status="warning", markup=markup)
             return fact
 
-        roundtrip_fact = Fact.parse(fact.serialized())
+        roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.date)
         if roundtrip_fact != fact:
             self.update_status(status="wrong", markup="Fact could not be parsed back")
             return None
