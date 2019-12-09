@@ -7,11 +7,12 @@ import re
 
 from copy import deepcopy
 
-from hamster.lib.parsing import DATE_FMT, TIME_FMT, parse_fact
+from hamster.lib.parsing import DATE_FMT, TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamsterday_time_to_datetime,
     hamster_now,
+    hamster_today,
 )
 
 
@@ -150,20 +151,31 @@ class Fact(object):
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
-    def serialized_time(self, prepend_date=True):
-        time = ""
-        if self.start_time:
-            if prepend_date:
-                time += self.date.strftime(DATE_FMT) + " "
-            time += self.start_time.strftime(TIME_FMT)
-        if self.end_time:
-            time = "%s-%s" % (time, self.end_time.strftime(TIME_FMT))
-        return time
+    def serialized_range(self, default_day=None):
+        """Return a string representing the time range.
 
-    def serialized(self, prepend_date=True):
+        Start date is shown only if start does not belong to default_day.
+        End date is shown only if end does not belong to
+        the same hamster day as start.
+        """
+        time_str = ""
+        if self.start_time:
+            if datetime_to_hamsterday(self.start_time) != default_day:
+                time_str += self.start_time.strftime(DATETIME_FMT)
+            else:
+                time_str += self.start_time.strftime(TIME_FMT)
+        if self.end_time:
+            if datetime_to_hamsterday(self.end_time) != datetime_to_hamsterday(self.start_time):
+                end_time_str = self.end_time.strftime(DATETIME_FMT)
+            else:
+                end_time_str = self.end_time.strftime(TIME_FMT)
+            time_str = "{} - {}".format(time_str, end_time_str)
+        return time_str
+
+    def serialized(self, default_day=None):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
-        datetime = self.serialized_time(prepend_date)
+        datetime = self.serialized_range(default_day)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
         return "{}{}{}".format(datetime, space, name)
@@ -192,7 +204,7 @@ class Fact(object):
                 )
 
     def __repr__(self):
-        return self.serialized(prepend_date=True)
+        return self.serialized(default_day=None)
 
 
 def default_logger(name):

@@ -415,7 +415,7 @@ class CmdLineEntry(gtk.Entry):
 
             if variant_fact:
                 variant_fact.description = None
-                variant = variant_fact.serialized(prepend_date=False)
+                variant = variant_fact.serialized(default_day=None)
                 variants.append((description, variant))
 
         else:

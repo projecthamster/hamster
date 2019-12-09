@@ -17,6 +17,7 @@ from hamster.lib.stuff import (
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
+DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
 # separator between times and activity
 ACTIVITY_SEPARATOR = "\s+"
 
