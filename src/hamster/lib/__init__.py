@@ -172,13 +172,17 @@ class Fact(object):
             time_str = "{} - {}".format(time_str, end_time_str)
         return time_str
 
-    def serialized(self, default_day=None):
+    def serialized(self, range_pos="head", default_day=None):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
         datetime = self.serialized_range(default_day)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
-        return "{}{}{}".format(datetime, space, name)
+        assert range_pos in ("head", "tail")
+        if range_pos == "head":
+            return "{}{}{}".format(datetime, space, name)
+        else:
+            return "{}{}{}".format(name, space, datetime)
 
     def _set(self, **kwds):
         """Modify attributes.

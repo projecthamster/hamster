@@ -248,13 +248,14 @@ class TestActivityInputParsing(unittest.TestCase):
                                             category=category,
                                             description=description,
                                             tags=tags)
-                                fact_str = fact.serialized()
-                                parsed = Fact.parse(fact_str)
-                                self.assertEqual(fact, parsed)
-                                self.assertEqual(parsed.activity, fact.activity)
-                                self.assertEqual(parsed.category, fact.category)
-                                self.assertEqual(parsed.description, fact.description)
-                                self.assertEqual(parsed.tags, fact.tags)
+                                for range_pos in ("head", "tail"):
+                                    fact_str = fact.serialized(range_pos=range_pos)
+                                    parsed = Fact.parse(fact_str, range_pos=range_pos)
+                                    self.assertEqual(fact, parsed)
+                                    self.assertEqual(parsed.activity, fact.activity)
+                                    self.assertEqual(parsed.category, fact.category)
+                                    self.assertEqual(parsed.description, fact.description)
+                                    self.assertEqual(parsed.tags, fact.tags)
 
 
 class TestParsers(unittest.TestCase):
