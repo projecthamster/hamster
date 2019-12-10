@@ -26,6 +26,7 @@ from gi.repository import GObject as gobject
 
 
 from hamster import idle
+from hamster import workspace
 from hamster.lib.configuration import conf
 import dbus
 
@@ -34,6 +35,7 @@ class DesktopIntegrations(object):
     def __init__(self, storage):
         self.storage = storage # can't use client as then we get in a dbus loop
         self._last_notification = None
+        self._saved = {}
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
@@ -41,12 +43,16 @@ class DesktopIntegrations(object):
         self.conf_enable_timeout = conf.get("enable_timeout")
         self.conf_notify_on_idle = conf.get("notify_on_idle")
         self.conf_notify_interval = conf.get("notify_interval")
+        self.conf_workspace_tracking = conf.get("workspace_tracking")
         conf.connect('conf-changed', self.on_conf_changed)
 
         self.idle_listener = idle.DbusIdleListener()
         self.idle_listener.connect('idle-changed', self.on_idle_changed)
 
         gobject.timeout_add_seconds(60, self.check_hamster)
+
+        self.workspace_listener = workspace.WnckWatcher()
+        self.workspace_listener.connect('workspace-changed', self.on_workspace_changed)
 
 
     def check_hamster(self):
@@ -108,13 +114,66 @@ class DesktopIntegrations(object):
 
 
     def on_idle_changed(self, event, state):
+        if not self.conf_enable_timeout:
+            if '__paused__' in self._saved:
+                del self._saved['__paused__']
+            return
+        
         # state values: 0 = active, 1 = idle
-        if state == 1 and self.conf_enable_timeout:
+        if state == 1:
             idle_from = self.idle_listener.getIdleFrom()
             idle_from = timegm(idle_from.timetuple())
+            self.save_current('__paused__')
             self.storage.StopTracking(idle_from)
+        elif '__paused__' in self._saved:
+            self.restore('__paused__', delete=True)
+
+
+    def on_workspace_changed(self, event, previous_workspace, current_workspace):
+        if 'memory' not in self.conf_workspace_tracking:
+            return
+        
+        if previous_workspace is not None:
+            self.save_current( previous_workspace )
+        self.restore(current_workspace)
 
 
     def on_conf_changed(self, event, key, value):
         if hasattr(self, "conf_%s" % key):
             setattr(self, "conf_%s" % key, value)
+
+
+    def get_current(self):
+        facts = self.storage.get_todays_facts()
+        if facts:
+            last = facts[-1]
+            if not last['end_time']:
+                name = last['name']
+                category = last['category']
+                return name,category
+
+
+    def save_current(self, key):
+        current = self.get_current()
+        if current is not None:
+            self._saved[key] = current
+        elif key in self._saved:
+            del self._saved[key]
+
+
+    def restore(self, key, delete=False):
+        activity,category = None,None
+        if key in self._saved:
+            activity, category = self._saved[key]            
+            if delete:
+                del self._saved[key]
+        
+        if not activity:
+            self.storage.StopTracking(None)
+            return
+        
+        if category:
+            activity = '%s@%s' % (activity,category)
+        
+        self.storage.add_fact( activity, None, None)
+
