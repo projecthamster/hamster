@@ -136,34 +136,36 @@ class Storage(db.Storage, dbus.service.Object):
     def AddFact(self, fact_str, start_time, end_time, temporary=False):
         """Add fact specified by a string.
 
-        For backward compatibility, if the resulting fact.start_time is None,
-        replace it with hamster_now().
-
         Args:
             fact_str (str): string to be parsed.
             start_time (int): Start datetime timestamp.
-                              Ignored if the value is 0.
+                              For backward compatibility with the 
+                              gnome shell extension,
+                              0 is special and means hamster_now().
                               Otherwise, overrides the parsed value.
                               -1 means None.
             end_time (int): Start datetime timestamp.
-                            Ignored if the value is 0.
-                            Otherwise, overrides the parsed value.
+                            If different from 0, overrides the parsed value.
                             -1 means None.
         Returns:
             fact id (int), or 0 in case of failure.
 
         Note: see datetime.utcfromtimestamp documentation
-              for the  precise meaning of timestamps.
+              for the precise meaning of timestamps.
         """
         fact = Fact.parse(fact_str)
 
-        if start_time:
-            fact.start_time = None if start_time == -1 else dt.datetime.utcfromtimestamp(start_time)
-        if end_time:
-            fact.end_time = None if end_time == -1 else dt.datetime.utcfromtimestamp(end_time)
+        if start_time == -1:
+            fact.start_time = None
+        elif start_time == 0:
+            fact.start_time = stuff.hamster_now()
+        else:
+            fact.start_time = dt.datetime.utcfromtimestamp(start_time)
 
-        if not fact.start_time:
-            fact.start_time = hamster_now()
+        if end_time == -1:
+            fact.end_time = None
+        elif end_time != 0:
+            fact.end_time = dt.datetime.utcfromtimestamp(end_time)
 
         return self.add_fact(fact) or 0
 
