@@ -60,9 +60,9 @@ date_detailed_re = re.compile(date_detailed_pattern, flags=re.VERBOSE)
 # match time, such as "01:32", "13.56" or "0116"
 time_pattern = r"""
     (?P<hour>                         # hour
-     [0-9](?=:)                       # positive lookahead:
+     [0-9](?=[,\.:])                  # positive lookahead:
                                       # allow a single digit only if
-                                      # followed by a colon
+                                      # followed by a colon, dot or comma
      | [0-1][0-9]                     # 00 to 19
      | [2][0-3]                       # 20 to 23
     )

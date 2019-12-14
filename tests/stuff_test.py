@@ -262,6 +262,7 @@ class TestParsers(unittest.TestCase):
     def test_parse_time(self):
         import datetime as dt
         self.assertEqual(parse_time("9:01"), dt.time(9, 1))
+        self.assertEqual(parse_time("9.01"), dt.time(9, 1))
         self.assertEqual(parse_time("12:01"), dt.time(12, 1))
         self.assertEqual(parse_time("12.01"), dt.time(12, 1))
         self.assertEqual(parse_time("1201"), dt.time(12, 1))
