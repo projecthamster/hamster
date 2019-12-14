@@ -169,7 +169,7 @@ class Storage(storage.Storage):
         changes = False
 
         # check if any of tags needs resurrection
-        set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] == "false"]
+        set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] in (0, "false")]
         if set_complete:
             changes = True
             self.execute("update tags set autocomplete='true' where id in (%s)" % ", ".join(set_complete))
@@ -206,7 +206,8 @@ class Storage(storage.Storage):
         gone = self.fetchall(query, tags)
 
         to_delete = [str(tag["id"]) for tag in gone if tag["occurences"] == 0]
-        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0 and tag["autocomplete"] != "false"]
+        to_uncomplete = [str(tag["id"]) for tag in gone
+                         if tag["occurences"] > 0 and tag["autocomplete"] in (1, "true")]
 
         if to_delete:
             self.execute("delete from tags where id in (%s)" % ", ".join(to_delete))
