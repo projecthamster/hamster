@@ -89,17 +89,6 @@ class PreferencesEditor(Controller):
 
     def __init__(self, parent = None):
         Controller.__init__(self, parent, ui_file="preferences.ui")
-        # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-        self.activities_sources = [("", _("None")),
-                                   ("evo", "Evolution"),
-                                   ("gtg", "Getting Things Gnome"),
-                                   ("task", "Taskwarrior")]
-        self.todo_combo = gtk.ComboBoxText()
-        for code, label in self.activities_sources:
-            self.todo_combo.append_text(label)
-        self.todo_combo.connect("changed", self.on_todo_combo_changed)
-        self.get_widget("todo_pick").add(self.todo_combo)
-
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -187,15 +176,9 @@ class PreferencesEditor(Controller):
 
         self.show()
 
-
     def show(self):
         self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
-
-
-    def on_todo_combo_changed(self, combo):
-        conf.set("activities_source", self.activities_sources[combo.get_active()][0])
-
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
@@ -209,13 +192,6 @@ class PreferencesEditor(Controller):
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
-
-
-        current_source = conf.get("activities_source")
-        for i, (code, label) in enumerate(self.activities_sources):
-            if code == current_source:
-                self.todo_combo.set_active(i)
-
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
