@@ -23,8 +23,6 @@ from gi.repository import GObject as gobject
 
 import datetime as dt
 
-from gettext import ngettext
-
 from hamster.lib.configuration import Controller
 
 
@@ -182,7 +180,6 @@ class PreferencesEditor(Controller):
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
-        self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
@@ -533,22 +530,6 @@ class PreferencesEditor(Controller):
 
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
-
-    def on_notify_interval_format_value(self, slider, value):
-        if value <=120:
-            # notify interval slider value label
-            label = ngettext("%(interval_minutes)d minute",
-                             "%(interval_minutes)d minutes",
-                             value) % {'interval_minutes': value}
-        else:
-            # notify interval slider value label
-            label = _("Never")
-
-        return label
-
-    def on_notify_interval_value_changed(self, scale):
-        value = int(scale.get_value())
-        conf.set("notify_interval", value)
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.time
