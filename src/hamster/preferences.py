@@ -38,6 +38,7 @@ def get_prev(selection, model):
     else:
         return None
 
+
 class CategoryStore(gtk.ListStore):
     def __init__(self):
         #id, name, color_code, order
@@ -77,7 +78,6 @@ class PreferencesEditor(Controller):
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
-
     def __init__(self, parent = None):
         Controller.__init__(self, parent, ui_file="preferences.ui")
 
@@ -106,7 +106,6 @@ class PreferencesEditor(Controller):
         self.external_listeners.extend([
             (self.selection, self.selection.connect('changed', self.activity_changed, self.activity_store))
         ])
-
 
         # create and fill category tree
         self.category_tree = self.get_widget('category_list')
@@ -137,7 +136,6 @@ class PreferencesEditor(Controller):
 
         self.day_start = widgets.TimeInput(dt.time(5,30))
         self.get_widget("day_start_placeholder").add(self.day_start)
-
 
         self.load_config()
 
@@ -187,7 +185,6 @@ class PreferencesEditor(Controller):
 
         runtime.storage.update_autocomplete_tags(updated_tags)
 
-
     def drag_data_get_data(self, treeview, context, selection, target_id,
                            etime):
         treeselection = treeview.get_selection()
@@ -211,8 +208,6 @@ class PreferencesEditor(Controller):
                 self.category_tree.set_cursor((i, ))
             i += 1
 
-
-
     def on_category_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
         self.prev_selected_category = None
         try:
@@ -230,8 +225,6 @@ class PreferencesEditor(Controller):
             treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
         else:
             treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
-
-
 
     def on_category_drop(self, treeview, context, x, y, selection,
                                 info, etime):
@@ -273,7 +266,6 @@ class PreferencesEditor(Controller):
 
         model[path][1] = new_text
 
-
     def activity_name_edited_cb(self, cell, path, new_text, model):
         id = model[path][0]
         category_id = model[path][2]
@@ -300,7 +292,6 @@ class PreferencesEditor(Controller):
         model[path][1] = new_text
         return True
 
-
     def category_changed_cb(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
@@ -325,7 +316,6 @@ class PreferencesEditor(Controller):
 
         return model[iter][0] if iter else None
 
-
     def activity_changed(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
@@ -334,7 +324,6 @@ class PreferencesEditor(Controller):
         unsorted_selected = self._get_selected_category() == -1
         self.get_widget('activity_edit').set_sensitive(iter != None)
         self.get_widget('activity_remove').set_sensitive(iter != None)
-
 
     def _del_selected_row(self, tree):
         selection = tree.get_selection()
@@ -367,7 +356,6 @@ class PreferencesEditor(Controller):
     def on_activity_list_button_pressed(self, tree, event):
         self.activityCell.set_property("editable", False)
 
-
     def on_activity_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
             # Get treeview path.
@@ -397,7 +385,6 @@ class PreferencesEditor(Controller):
 
             self.prev_selected_category = path
 
-
     def on_activity_remove_clicked(self, button):
         self.remove_current_activity()
 
@@ -408,8 +395,6 @@ class PreferencesEditor(Controller):
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
         self.activity_tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
-
-
 
     """keyboard events"""
     def on_activity_list_key_pressed(self, tree, event_key):
@@ -430,7 +415,6 @@ class PreferencesEditor(Controller):
         runtime.storage.remove_activity(model[iter][0])
         self._del_selected_row(self.activity_tree)
 
-
     def on_category_remove_clicked(self, button):
         self.remove_current_category()
 
@@ -441,7 +425,6 @@ class PreferencesEditor(Controller):
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
         self.category_tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
-
 
     def on_category_list_key_pressed(self, tree, event_key):
         key = event_key.keyval
@@ -500,7 +483,6 @@ class PreferencesEditor(Controller):
                                          focus_cell = None,
                                          start_editing = True)
 
-
     def on_activity_add_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
@@ -528,11 +510,8 @@ class PreferencesEditor(Controller):
 
         conf.set("day_start_minutes", day_start)
 
-
-
     def on_close_button_clicked(self, button):
         self.close_window()
-
 
     def close_window(self):
         if self.parent:
