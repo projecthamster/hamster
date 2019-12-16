@@ -23,7 +23,9 @@ from gi.repository import GObject as gobject
 
 import datetime as dt
 
-from hamster.lib.configuration import Controller
+from hamster import widgets
+from hamster.lib import stuff
+from hamster.lib.configuration import Controller, runtime, conf
 
 
 def get_prev(selection, model):
@@ -67,12 +69,6 @@ class ActivityStore(gtk.ListStore):
             self.append([activity['id'],
                          activity['name'],
                          activity['category_id']])
-
-
-from hamster.lib.configuration import runtime, conf
-from hamster import widgets
-from hamster.lib import stuff
-
 
 
 class PreferencesEditor(Controller):
