@@ -69,7 +69,6 @@ class ActivityStore(gtk.ListStore):
                          activity['category_id']])
 
 
-formats = ["fixed", "symbolic", "minutes"]
 appearances = ["text", "icon", "both"]
 
 from hamster.lib.configuration import runtime, conf
