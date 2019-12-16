@@ -179,7 +179,6 @@ class PreferencesEditor(Controller):
         self.window.show_all()
 
     def load_config(self, *args):
-        self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
@@ -526,10 +525,6 @@ class PreferencesEditor(Controller):
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
         runtime.storage.remove_activity(removable_id)
-
-
-    def on_shutdown_track_toggled(self, checkbox):
-        conf.set("stop_on_shutdown", checkbox.get_active())
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.time

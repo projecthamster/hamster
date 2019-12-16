@@ -50,67 +50,38 @@
                         <property name="left_padding">4</property>
                         <property name="right_padding">4</property>
                         <child>
-                          <object class="GtkVBox" id="vbox7">
+                          <object class="GtkHBox" id="hbox1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">4</property>
                             <child>
-                              <object class="GtkCheckButton" id="shutdown_track">
-                                <property name="label" translatable="yes">Stop tracking on shutdown</property>
+                              <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0.5</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_shutdown_track_toggled" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">New day starts at</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="padding">4</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox1">
+                              <object class="GtkAlignment" id="day_start_placeholder">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkLabel" id="label4">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">New day starts at</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="padding">4</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="day_start_placeholder">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
                                 <child>
                                   <placeholder/>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">3</property>
+                                <property name="position">1</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>

@@ -199,7 +199,6 @@ class GConfStore(gobject.GObject, Singleton):
     GCONF_DIR = "/apps/hamster/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
-        'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
         'overview_window_box'         :   [],          # X, Y, W, H
         'overview_window_maximized'   :   False,       # Is overview window maximized
