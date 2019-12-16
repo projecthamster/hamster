@@ -200,7 +200,6 @@ class GConfStore(gobject.GObject, Singleton):
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
         'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
-        'notify_on_idle'              :   False,       # Remind also if no activity is set
         'notify_interval'             :   27,          # Remind of current activity every X minutes
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
         'overview_window_box'         :   [],          # X, Y, W, H

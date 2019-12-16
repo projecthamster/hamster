@@ -183,10 +183,6 @@ class PreferencesEditor(Controller):
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
         self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
-
-        self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
-        self.get_widget("notify_on_idle").set_sensitive(conf.get("notify_interval") <=120)
-
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
@@ -538,9 +534,6 @@ class PreferencesEditor(Controller):
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
 
-    def on_notify_on_idle_toggled(self, checkbox):
-        conf.set("notify_on_idle", checkbox.get_active())
-
     def on_notify_interval_format_value(self, slider, value):
         if value <=120:
             # notify interval slider value label
@@ -556,7 +549,6 @@ class PreferencesEditor(Controller):
     def on_notify_interval_value_changed(self, scale):
         value = int(scale.get_value())
         conf.set("notify_interval", value)
-        self.get_widget("notify_on_idle").set_sensitive(value <= 120)
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.time
