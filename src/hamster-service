@@ -12,7 +12,7 @@ from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
-from hamster.lib import default_logger, desktop, Fact, stuff
+from hamster.lib import default_logger, Fact, stuff
 from hamster.lib.dbus import (
     DBusMainLoop,
     dbus,
@@ -50,10 +50,6 @@ class Storage(db.Storage, dbus.service.Object):
                                                   gio.FileMonitorFlags.SEND_MOVED,
                                                   None)
         self.__monitor.connect("changed", self._on_us_change)
-
-        # central place were we plug in all the notifications and such
-        self.integrations = desktop.DesktopIntegrations(self)
-
 
     def run_fixtures(self):
         """we start with an empty database and then populate with default
