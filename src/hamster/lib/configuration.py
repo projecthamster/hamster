@@ -199,7 +199,6 @@ class GConfStore(gobject.GObject, Singleton):
     GCONF_DIR = "/apps/hamster/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
-        'enable_timeout'              :   False,       # Should hamster stop tracking on idle
         'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
         'notify_on_idle'              :   False,       # Remind also if no activity is set
         'notify_interval'             :   27,          # Remind of current activity every X minutes

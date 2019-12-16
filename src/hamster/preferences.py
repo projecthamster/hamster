@@ -182,7 +182,6 @@ class PreferencesEditor(Controller):
 
     def load_config(self, *args):
         self.get_widget("shutdown_track").set_active(conf.get("stop_on_shutdown"))
-        self.get_widget("idle_track").set_active(conf.get("enable_timeout"))
         self.get_widget("notify_interval").set_value(conf.get("notify_interval"))
 
         self.get_widget("notify_on_idle").set_active(conf.get("notify_on_idle"))
@@ -538,9 +537,6 @@ class PreferencesEditor(Controller):
 
     def on_shutdown_track_toggled(self, checkbox):
         conf.set("stop_on_shutdown", checkbox.get_active())
-
-    def on_idle_track_toggled(self, checkbox):
-        conf.set("enable_timeout", checkbox.get_active())
 
     def on_notify_on_idle_toggled(self, checkbox):
         conf.set("notify_on_idle", checkbox.get_active())
