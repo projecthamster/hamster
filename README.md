@@ -3,32 +3,14 @@
 Hamster is time tracking for individuals. It helps you to keep track of how
 much time you have spent during the day on activities you choose to track.
 
+This is the main repo. It is standalone (single module).  
+All other repositories -`hamster-lib/dbus/cli/gtk`- are part of the separate rewrite effort.  
+More context is given in the history section below.
+
 Some additional information is available in the
 [wiki](https://github.com/projecthamster/hamster/wiki)
 and a static copy of the user documentation is online
 [here](https://geraldjansen.github.io/hamster-doc/).
-
-During the period 2015-2017 there was a major effort to
-[rewrite hamster](https://github.com/projecthamster/hamster-gtk)
-(repositories: `hamster-lib/dbus/cli/gtk`).
-Unfortunately, after considerable initial progress the work has remained in alpha state
-for some time now. Hopefully the effort will be renewed in the future.
-
-In the meantime, this sub-project aims to revive development of the "legacy" Hamster
-code base, maintaining database compatibility with the widely installed
-[v1.04](https://github.com/projecthamster/hamster/releases/tag/hamster-time-tracker-1.04),
-but migrating to `Gtk3` and `python3`. This will allow package maintainers to provide
-new packages for recent releases of mainstream Linux distributions for which the old
-1.04-based versions are no longer provided.
-
-With respect to 1.04, some of the GUI ease of use has been lost, especially for handling
-tags, and the stats display is minimal now. So if you are happy with your hamster
-application and it is still available for your distribution, upgrade is not recommended
-yet.
-
-In the meantime recent (v2.2+) releases have good backward data compatibility and are
-reasonably usable. The aim is to provide a new stable v3.0 release in the coming
-months (i.e. late 2019).
 
 
 ## Installation
@@ -169,3 +151,29 @@ sudo ./waf uninstall
 5. That's it!
 
 See [How to contribute](https://github.com/projecthamster/hamster/wiki/How-to-contribute) for more information.
+
+
+## History
+
+During the period 2015-2017 there was a major effort to
+[rewrite hamster](https://github.com/projecthamster/hamster-gtk)
+(repositories: `hamster-lib/dbus/cli/gtk`).
+Unfortunately, after considerable initial progress the work has remained in alpha state
+for some time now. Hopefully the effort will be renewed in the future.
+
+In the meantime, this sub-project aims to pursue development of the "legacy" Hamster
+code base, maintaining database compatibility with the widely installed
+[v1.04](https://github.com/projecthamster/hamster/releases/tag/hamster-time-tracker-1.04),
+but migrating to `Gtk3` and `python3`.  
+This will allow package maintainers to provide
+new packages for recent releases of mainstream Linux distributions for which the old
+1.04-based versions are no longer provided.
+
+With respect to 1.04, some of the GUI ease of use has been lost, especially for handling
+tags, and the stats display is minimal now. So if you are happy with your hamster
+application and it is still available for your distribution, upgrade is not recommended
+yet.
+
+In the meantime recent (v2.2+) releases have good backward data compatibility and are
+reasonably usable. The aim is to provide a new stable v3.0 release in the coming
+months (i.e. early 2020).
