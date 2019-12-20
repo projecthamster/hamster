@@ -23,9 +23,9 @@ from gi.repository import GObject as gobject
 
 import datetime as dt
 
-from gettext import ngettext
-
-from hamster.lib.configuration import Controller
+from hamster import widgets
+from hamster.lib import stuff
+from hamster.lib.configuration import Controller, runtime, conf
 
 
 def get_prev(selection, model):
@@ -37,6 +37,7 @@ def get_prev(selection, model):
         return model.get_iter_from_string(str(path))
     else:
         return None
+
 
 class CategoryStore(gtk.ListStore):
     def __init__(self):
@@ -71,35 +72,14 @@ class ActivityStore(gtk.ListStore):
                          activity['category_id']])
 
 
-formats = ["fixed", "symbolic", "minutes"]
-appearances = ["text", "icon", "both"]
-
-from hamster.lib.configuration import runtime, conf
-from hamster import widgets
-from hamster.lib import stuff
-
-
-
 class PreferencesEditor(Controller):
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
-
     def __init__(self, parent = None):
         Controller.__init__(self, parent, ui_file="preferences.ui")
-        # Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-        self.activities_sources = [("", _("None")),
-                                   ("evo", "Evolution"),
-                                   ("gtg", "Getting Things Gnome"),
-                                   ("task", "Taskwarrior")]
-        self.todo_combo = gtk.ComboBoxText()
-        for code, label in self.activities_sources:
-            self.todo_combo.append_text(label)
-        self.todo_combo.connect("changed", self.on_todo_combo_changed)
-        self.get_widget("todo_pick").add(self.todo_combo)
-
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -126,7 +106,6 @@ class PreferencesEditor(Controller):
         self.external_listeners.extend([
             (self.selection, self.selection.connect('changed', self.activity_changed, self.activity_store))
         ])
-
 
         # create and fill category tree
         self.category_tree = self.get_widget('category_list')
@@ -158,7 +137,6 @@ class PreferencesEditor(Controller):
         self.day_start = widgets.TimeInput(dt.time(5,30))
         self.get_widget("day_start_placeholder").add(self.day_start)
 
-
         self.load_config()
 
         # Allow enable drag and drop of rows including row move
@@ -187,32 +165,15 @@ class PreferencesEditor(Controller):
 
         self.show()
 
-
     def show(self):
         self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
 
-
-    def on_todo_combo_changed(self, combo):
-        conf.set("activities-source", self.activities_sources[combo.get_active()][0])
-
-
     def load_config(self, *args):
-        conf.bind("stop-on-shutdown", self.get_widget("shutdown_track"), "active")
-        conf.bind("enable-timeout", self.get_widget("idle_track"), "active")
-        conf.bind("notify-interval", self.get_widget("notify_interval").props.adjustment, "value")
-        conf.bind("notify-on-idle", self.get_widget("notify_on_idle"), "active")
-
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
-
-        current_source = conf.get("activities-source")
-        for i, (code, label) in enumerate(self.activities_sources):
-            if code == current_source:
-                self.todo_combo.set_active(i)
-
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
@@ -223,7 +184,6 @@ class PreferencesEditor(Controller):
         self.tags = updated_tags
 
         runtime.storage.update_autocomplete_tags(updated_tags)
-
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
                            etime):
@@ -248,8 +208,6 @@ class PreferencesEditor(Controller):
                 self.category_tree.set_cursor((i, ))
             i += 1
 
-
-
     def on_category_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
         self.prev_selected_category = None
         try:
@@ -267,8 +225,6 @@ class PreferencesEditor(Controller):
             treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
         else:
             treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
-
-
 
     def on_category_drop(self, treeview, context, x, y, selection,
                                 info, etime):
@@ -310,7 +266,6 @@ class PreferencesEditor(Controller):
 
         model[path][1] = new_text
 
-
     def activity_name_edited_cb(self, cell, path, new_text, model):
         id = model[path][0]
         category_id = model[path][2]
@@ -337,7 +292,6 @@ class PreferencesEditor(Controller):
         model[path][1] = new_text
         return True
 
-
     def category_changed_cb(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
@@ -362,7 +316,6 @@ class PreferencesEditor(Controller):
 
         return model[iter][0] if iter else None
 
-
     def activity_changed(self, selection, model):
         """ enables and disables action buttons depending on selected item """
         (model, iter) = selection.get_selected()
@@ -371,7 +324,6 @@ class PreferencesEditor(Controller):
         unsorted_selected = self._get_selected_category() == -1
         self.get_widget('activity_edit').set_sensitive(iter != None)
         self.get_widget('activity_remove').set_sensitive(iter != None)
-
 
     def _del_selected_row(self, tree):
         selection = tree.get_selection()
@@ -404,7 +356,6 @@ class PreferencesEditor(Controller):
     def on_activity_list_button_pressed(self, tree, event):
         self.activityCell.set_property("editable", False)
 
-
     def on_activity_list_button_released(self, tree, event):
         if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
             # Get treeview path.
@@ -434,7 +385,6 @@ class PreferencesEditor(Controller):
 
             self.prev_selected_category = path
 
-
     def on_activity_remove_clicked(self, button):
         self.remove_current_activity()
 
@@ -445,8 +395,6 @@ class PreferencesEditor(Controller):
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
         self.activity_tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
-
-
 
     """keyboard events"""
     def on_activity_list_key_pressed(self, tree, event_key):
@@ -467,7 +415,6 @@ class PreferencesEditor(Controller):
         runtime.storage.remove_activity(model[iter][0])
         self._del_selected_row(self.activity_tree)
 
-
     def on_category_remove_clicked(self, button):
         self.remove_current_category()
 
@@ -478,7 +425,6 @@ class PreferencesEditor(Controller):
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
         self.category_tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
-
 
     def on_category_list_key_pressed(self, tree, event_key):
         key = event_key.keyval
@@ -537,7 +483,6 @@ class PreferencesEditor(Controller):
                                          focus_cell = None,
                                          start_editing = True)
 
-
     def on_activity_add_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
@@ -556,23 +501,6 @@ class PreferencesEditor(Controller):
         removable_id = self._del_selected_row(self.activity_tree)
         runtime.storage.remove_activity(removable_id)
 
-
-    def on_notify_interval_format_value(self, slider, value):
-        if value <=120:
-            # notify interval slider value label
-            label = ngettext("%(interval_minutes)d minute",
-                             "%(interval_minutes)d minutes",
-                             value) % {'interval_minutes': value}
-        else:
-            # notify interval slider value label
-            label = _("Never")
-
-        return label
-
-    def on_notify_interval_value_changed(self, scale):
-        value = int(scale.get_value())
-        self.get_widget("notify_on_idle").set_sensitive(value <= 120)
-
     def on_day_start_changed(self, widget):
         day_start = self.day_start.time
         if day_start is None:
@@ -580,10 +508,8 @@ class PreferencesEditor(Controller):
 
         day_start = day_start.hour * 60 + day_start.minute
         conf.set("day-start-minutes", day_start)
-
     def on_close_button_clicked(self, button):
         self.close_window()
-
 
     def close_window(self):
         if self.parent:

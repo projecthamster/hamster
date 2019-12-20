@@ -12,7 +12,7 @@ from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
-from hamster.lib import default_logger, desktop, Fact, stuff
+from hamster.lib import default_logger, Fact, stuff
 from hamster.lib.dbus import (
     DBusMainLoop,
     dbus,
@@ -50,10 +50,6 @@ class Storage(db.Storage, dbus.service.Object):
                                                   gio.FileMonitorFlags.SEND_MOVED,
                                                   None)
         self.__monitor.connect("changed", self._on_us_change)
-
-        # central place were we plug in all the notifications and such
-        self.integrations = desktop.DesktopIntegrations(self)
-
 
     def run_fixtures(self):
         """we start with an empty database and then populate with default
@@ -134,10 +130,39 @@ class Storage(db.Storage, dbus.service.Object):
     # facts
     @dbus.service.method("org.gnome.Hamster", in_signature='siib', out_signature='i')
     def AddFact(self, fact_str, start_time, end_time, temporary=False):
+        """Add fact specified by a string.
+
+        Args:
+            fact_str (str): string to be parsed.
+            start_time (int): Start datetime timestamp.
+                              For backward compatibility with the 
+                              gnome shell extension,
+                              0 is special and means hamster_now().
+                              Otherwise, overrides the parsed value.
+                              -1 means None.
+            end_time (int): Start datetime timestamp.
+                            If different from 0, overrides the parsed value.
+                            -1 means None.
+        Returns:
+            fact id (int), or 0 in case of failure.
+
+        Note: see datetime.utcfromtimestamp documentation
+              for the precise meaning of timestamps.
+        """
         fact = Fact.parse(fact_str)
-        fact.start_time = dt.datetime.utcfromtimestamp(start_time) if start_time else None
-        fact.end_time = dt.datetime.utcfromtimestamp(end_time) if end_time else None
-        
+
+        if start_time == -1:
+            fact.start_time = None
+        elif start_time == 0:
+            fact.start_time = stuff.hamster_now()
+        else:
+            fact.start_time = dt.datetime.utcfromtimestamp(start_time)
+
+        if end_time == -1:
+            fact.end_time = None
+        elif end_time != 0:
+            fact.end_time = dt.datetime.utcfromtimestamp(end_time)
+
         return self.add_fact(fact) or 0
 
 
