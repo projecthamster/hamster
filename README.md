@@ -33,17 +33,18 @@ months (i.e. late 2019).
 
 ## Installation
 
-You can use the usually stable `master` or [download stable releases](https://github.com/projecthamster/hamster/releases).
+#### Backup database
 
-If you upgraded from an existing installation make sure to kill the running
-daemons:
+This legacy hamster should be stable, and keep database compatibility with previous versions.  
+It should be possible to try a new version and smoothly roll back to the previous version if preferred.  
+Nevertheless, things can always go wrong. It is strongly advised to backup the database before any version change !
+
+##### Locate the latest db
 
 ```bash
-pkill -f hamster-service
-pkill -f hamster-windows-service
-# check (should be empty)
-pgrep -af hamster
+ls --reverse -clt ~/.local/share/hamster*/*.db
 ```
+Backup the last file in the list. 
 
 #### Dependencies
 
@@ -76,10 +77,44 @@ If the hamster help pages are not accessible ("unable to open `help:hamster-time
 then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
 such as [yelp](https://wiki.gnome.org/Apps/Yelp/).
 
+#### Download source
 
-#### Trying the development version
+##### Git clone
 
-To use the development version (backup `hamster.db` first !):
+If familiar with github, just clone the repo and `cd` into it.
+
+##### Download
+
+Otherwise, to get the `master` development branch (intended to be quite stable):
+```bash
+wget https://github.com/projecthamster/hamster/archive/master.zip
+cd hamster
+```
+or a specific [release](https://github.com/projecthamster/hamster/releases):
+```bash
+# replace 2.2.2 by the release version
+wget https://github.com/projecthamster/hamster/archive/v2.2.2.zip
+cd hamster-2.2.2
+```
+
+#### Kill hamster daemons
+
+When trying a different version, make sure to kill the running daemons:
+
+```bash
+# either step-by-step:
+pkill -f hamster-service
+pkill -f hamster-windows-service
+# check (should be empty)
+pgrep -af hamster
+
+# or be bold and kill them all at once:
+pkill -ef hamster
+```
+
+#### Try
+
+To use the development version (As explained above, backup `hamster.db` first !):
 ```
 # either
 pgrep -af hamster
