@@ -199,16 +199,11 @@ class GConfStore(gobject.GObject, Singleton):
     GCONF_DIR = "/apps/hamster/"
     VALID_KEY_TYPES = (bool, str, int, list, tuple)
     DEFAULTS = {
-        'enable_timeout'              :   False,       # Should hamster stop tracking on idle
-        'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
-        'notify_on_idle'              :   False,       # Remind also if no activity is set
-        'notify_interval'             :   27,          # Remind of current activity every X minutes
         'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
         'overview_window_box'         :   [],          # X, Y, W, H
         'overview_window_maximized'   :   False,       # Is overview window maximized
         'standalone_window_box'       :   [],          # X, Y, W, H
         'standalone_window_maximized' :   False,       # Is overview window maximized
-        'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
         'last_report_folder'          :   "~",         # Path to directory where the last report was saved
     }
 
