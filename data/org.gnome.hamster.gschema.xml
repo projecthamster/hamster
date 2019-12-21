@@ -8,14 +8,6 @@
             </description>
         </key>
 
-        <key type="s" name="activities-source">
-            <default>""</default>
-            <summary>Source for external activity information</summary>
-            <description>
-                Which external program activity information should be taken from.
-            </description>
-        </key>
-
         <key type="u" name="day-start-minutes">
             <default>330</default>
             <summary>At what time does the day start (defaults to 5:30AM)</summary>
