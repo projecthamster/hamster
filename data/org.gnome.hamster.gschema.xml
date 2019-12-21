@@ -19,11 +19,5 @@
                 where the largest part of the activity is.
             </description>
         </key>
-
-        <key type="s" name="name">
-            <default>"Toggle hamster application window"</default>
-            <summary>Toggle hamster application window</summary>
-            <description>Toggle visibility of the hamster application window.</description>
-        </key>
     </schema>
 </schemalist>
