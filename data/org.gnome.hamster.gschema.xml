@@ -20,12 +20,6 @@
             </description>
         </key>
 
-        <key type="s" name="action">
-            <default>"hamster-time-tracker toggle"</default>
-            <summary>Toggle hamster application window action</summary>
-            <description>Command for toggling visibility of the hamster application window.</description>
-        </key>
-
         <key type="s" name="name">
             <default>"Toggle hamster application window"</default>
             <summary>Toggle hamster application window</summary>
