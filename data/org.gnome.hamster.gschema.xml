@@ -1,14 +1,5 @@
 <schemalist>
     <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
-        <key type="u" name="notify-interval">
-            <default>27</default>
-            <summary>Remind of current task every x minutes</summary>
-            <description>
-                Remind of current task every specified amount of minutes.
-                Set to 0 or greater than 120 to disable reminder.
-            </description>
-        </key>
-
         <key type="b" name="notify-on-idle">
             <default>false</default>
             <summary>Also remind when no activity is set</summary>
