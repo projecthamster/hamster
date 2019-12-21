@@ -1,14 +1,5 @@
 <schemalist>
     <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
-        <key type="b" name="notify-on-idle">
-            <default>false</default>
-            <summary>Also remind when no activity is set</summary>
-            <description>
-                Also remind every notify_interval minutes if no activity
-                has been started.
-            </description>
-        </key>
-
         <key type="s" name="last-report-folder">
             <default>""</default>
             <summary>The folder the last report was saved to</summary>
