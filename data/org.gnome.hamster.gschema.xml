@@ -1,13 +1,5 @@
 <schemalist>
     <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
-        <key type="b" name="enable-timeout">
-            <default>true</default>
-            <summary>Stop tracking on idle</summary>
-            <description>
-                Stop tracking current activity when computer becomes idle
-            </description>
-        </key>
-
         <key type="b" name="stop-on-shutdown">
             <default>false</default>
             <summary>Stop tracking on shutdown</summary>
