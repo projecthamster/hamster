@@ -20,17 +20,6 @@
             </description>
         </key>
 
-        <key type="as" name="workspace-tracking">
-            <default>[]</default>
-            <summary>Should workspace switch trigger activity switch</summary>
-            <description>
-                List of enabled tracking methods. "name" will enable
-                switching activities by name defined in workspace_mapping.
-                "memory" will enable switching to the last activity when
-                returning to a previous workspace.
-            </description>
-        </key>
-
         <key type="as" name="workspace-mapping">
             <default>[]</default>
             <summary>Switch activity on workspace change</summary>
