@@ -20,16 +20,6 @@
             </description>
         </key>
 
-        <key type="as" name="workspace-mapping">
-            <default>[]</default>
-            <summary>Switch activity on workspace change</summary>
-            <description>
-                If switching by name is enabled, this list sets the activity
-                names that should be switched to, workspaces represented by
-                the index of item.
-            </description>
-        </key>
-
         <key type="s" name="active-hamster-window">
             <default>""</default>
             <summary>Show / hide Time Tracker Window</summary>
