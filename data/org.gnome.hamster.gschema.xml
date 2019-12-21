@@ -12,11 +12,10 @@
             <default>330</default>
             <summary>At what time does the day start (defaults to 5:30AM)</summary>
             <description>
-                Activities will be counted as to bedescription to yesterday if
-                the current time is less than the specified day start; and
-                today, if it is over the time.
-                Activities that span two days, will tip over to the side
-                where the largest part of the activity is.
+                The hamster day of an activity is the civil date of start time,
+                provided start time is after day-start.
+                On the contrary, if start time is earlier than day-start,
+                then the activity belongs to the previous hamster day.
             </description>
         </key>
     </schema>
