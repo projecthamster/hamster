@@ -20,12 +20,6 @@
             </description>
         </key>
 
-        <key type="s" name="active-hamster-window">
-            <default>""</default>
-            <summary>Show / hide Time Tracker Window</summary>
-            <description>Keyboard summarycut for showing / hiding the Time Tracker window.</description>
-        </key>
-
         <key type="s" name="action">
             <default>"hamster-time-tracker toggle"</default>
             <summary>Toggle hamster application window action</summary>
