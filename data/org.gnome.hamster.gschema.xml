@@ -1,13 +1,5 @@
 <schemalist>
     <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
-        <key type="b" name="stop-on-shutdown">
-            <default>false</default>
-            <summary>Stop tracking on shutdown</summary>
-            <description>
-                Stop tracking current activity on shutdown
-            </description>
-        </key>
-
         <key type="u" name="notify-interval">
             <default>27</default>
             <summary>Remind of current task every x minutes</summary>
