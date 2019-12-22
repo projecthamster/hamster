@@ -160,7 +160,7 @@ def parse_date(s):
                    )
 
 
-def extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
+def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
     """extract datetime from a dt_pattern match.
 
     h (str): name of the group containing the hour
@@ -244,7 +244,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
         start = hamsterday_start(firstday)
     else:
         firstday = None
-        start = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+        start = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                  default_day=default_day)
         if isinstance(start, dt.timedelta):
             # relative to ref, actually
@@ -257,7 +257,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
     elif firstday:
         end = hamsterday_end(firstday)
     else:
-        end = extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
+        end = _extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
                                default_day=datetime_to_hamsterday(start))
         if isinstance(end, dt.timedelta):
             # relative to start, actually

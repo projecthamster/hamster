@@ -8,7 +8,7 @@ from hamster.lib import Fact
 from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today
 from hamster.lib.parsing import (
     dt_pattern,
-    extract_datetime,
+    _extract_datetime,
     parse_time,
     parse_datetime_range,
     specific_dt_pattern,
@@ -271,16 +271,16 @@ class TestParsers(unittest.TestCase):
         p = specific_dt_pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+        time = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                 default_day=hamster_today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
+        time = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
         self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
-        timedelta = extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+        timedelta = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                      default_day=hamster_today())
         self.assertEqual(timedelta, dt.timedelta(minutes=-25))
         s = "2019-12-05"
