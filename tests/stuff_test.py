@@ -9,7 +9,6 @@ from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today
 from hamster.lib.parsing import (
     dt_pattern,
     extract_datetime,
-    extract_time,
     parse_time,
     parse_datetime_range,
     specific_dt_pattern,

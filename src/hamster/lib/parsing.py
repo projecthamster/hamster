@@ -129,7 +129,7 @@ range_pattern = r"""
            specific_dt_pattern(2), date_basic_pattern)
 
 
-def extract_time(match, h="hour", m="minute"):
+def _extract_time(match, h="hour", m="minute"):
     """Extract time from a time_re match.
 
     h (str): name of the group containing the hour
@@ -148,7 +148,7 @@ def extract_time(match, h="hour", m="minute"):
 def parse_time(s):
     """Parse time from string."""
     m = time_re.search(s)
-    return extract_time(m) if m else None
+    return _extract_time(m) if m else None
 
 
 def parse_date(s):
@@ -169,7 +169,7 @@ def extract_datetime(match, d="date", h="hour", m="minute", r="relative", defaul
     default_day (dt.date): the datetime will belong to this hamster day if
                            date is missing.
     """
-    time = extract_time(match, h, m)
+    time = _extract_time(match, h, m)
     if time:
         date_str = match.group(d)
         if date_str:
