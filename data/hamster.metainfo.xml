@@ -39,6 +39,7 @@
       <image>https://github.com/projecthamster/hamster/blob/master/data/screenshots/overview2.png</image>
     </screenshot>
   </screenshots>
+  ​<translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
   <provides>
     <binary>hamster</binary>

@@ -1,5 +1,5 @@
 <schemalist>
-    <schema path="/org/gnome/hamster/" id="org.gnome.Hamster">
+    <schema path="/org/gnome/hamster/" id="org.gnome.Hamster" gettext-domain="hamster">
         <key type="s" name="last-report-folder">
             <default>""</default>
             <summary>The folder the last report was saved to</summary>
