@@ -12,4 +12,5 @@ src/hamster/lib/stuff.py
 src/hamster/overview.py
 src/hamster/preferences.py
 src/hamster/reports.py
+src/hamster/widgets/activityentry.py
 src/hamster/widgets/reportchooserdialog.py
