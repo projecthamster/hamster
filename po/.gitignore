@@ -2,5 +2,5 @@
 POTFILES
 stamp-it
 Makefile.in.in
-hamster-time-tracker.pot
+hamster.pot
 *.gmo
