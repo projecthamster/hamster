@@ -51,12 +51,13 @@ parts:
     source: snap/local/
     organize:
       launcher.py: usr/bin/launcher
+      hamster.desktop: usr/share/applications/launcher.desktop
 
 apps:
   hamster-snap:
     command: usr/bin/launcher
     extensions: [gnome-3-28]
-    desktop: usr/share/applications/hamster.desktop
+    desktop: usr/share/applications/launcher.desktop
     plugs:
       - gsettings # For desktop theme detection under Wayland session
       - home
