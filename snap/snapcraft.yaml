@@ -51,8 +51,6 @@ parts:
     source: snap/local/
     organize:
       launcher.py: usr/bin/launcher
-    prepare: |
-      chmod +x usr/bin/launcher
 
 apps:
   hamster-snap:
