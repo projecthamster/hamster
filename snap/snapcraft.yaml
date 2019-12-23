@@ -1,0 +1,65 @@
+name: hamster-snap # you probably want to 'snapcraft register <name>'
+base: core18 # the base snap is the execution environment for this snap
+version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+description: |
+  This is my-snap's description. You have a paragraph or two to tell the
+  most important story about your snap. Keep it under 100 words though,
+  we live in tweetspace and your description wants to look good in the snap
+  store.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+slots:
+  gconf-service:
+    interface: dbus
+    bus: session
+    name: org.gnome.GConf
+#   dbus-service:
+#     interface: dbus
+#     bus: session
+#     name: org.gnome.Hamster
+#   dbus-windows-service:
+#     interface: dbus
+#     bus: session
+#     name: org.gnome.Hamster.WindowServer
+#   dbus-gnome:
+#     interface: dbus
+#     bus: session
+#     name: org.gnome.GConf.Server
+
+parts:
+  hamster:
+    stage-packages:
+      - gettext
+      - intltool
+      - python3-distutils-extra
+      - python3-gi
+      - python3-gi-cairo
+      - python3-distutils
+      - python3-dbus
+      - python3-xdg
+      - gconf2
+      - gir1.2-gconf-2.0
+    source: .
+    plugin: waf
+  lancher:
+    after: [ hamster ]
+    plugin: dump
+    source: snap/local/
+    organize:
+      launcher.py: usr/bin/launcher
+
+apps:
+  hamster-snap:
+    command: usr/bin/launcher
+    extensions: [gnome-3-28]
+    desktop: usr/share/applications/hamster.desktop
+    plugs:
+      - gsettings # For desktop theme detection under Wayland session
+      - home
+    # slots:
+    #   - dbus-service
+    #   - dbus-windows-service
+    #   - dbus-gnome

@@ -62,8 +62,8 @@ def build(bld):
 
     # set correct flags in defs.py
     bld(features="subst",
-        source="src/hamster/defs.py.in",
-        target="src/hamster/defs.py",
+        source="src/hamster/defs_comp.py.in",
+        target="src/hamster/defs_comp.py",
         install_path="${PYTHONDIR}/hamster"
         )
 

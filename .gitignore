@@ -28,3 +28,4 @@ org.gnome.hamster.service
 .lock-waf*
 build
 *.deb
+prime/
