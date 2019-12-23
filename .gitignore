@@ -29,3 +29,4 @@ org.gnome.hamster.service
 build
 *.deb
 prime/
+*.snap
