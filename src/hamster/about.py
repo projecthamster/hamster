@@ -28,8 +28,7 @@ class About(object):
         about = gtk.AboutDialog()
         self.window = about
         infos = {
-            "program-name" : _("Hamster Time Tracker"),
-            "name" : _("Time Tracker"), #this should be deprecated in gtk 2.10
+            "program-name" : "Hamster",
             "version" : runtime.version,
             "comments" : _("Project Hamster — track your time"),
             "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),

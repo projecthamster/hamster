@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-_Name=Hamster Time Tracker
+_Name=Hamster
 _Comment=Your personal time keeping tool
 Icon=hamster
 Exec=@BINDIR@/hamster
