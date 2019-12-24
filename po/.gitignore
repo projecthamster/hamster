@@ -4,3 +4,4 @@ stamp-it
 Makefile.in.in
 hamster.pot
 *.gmo
+*.mo
