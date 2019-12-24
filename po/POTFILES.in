@@ -3,7 +3,7 @@
 [type: gettext/glade]data/date_range.ui
 [type: gettext/glade]data/edit_activity.ui
 data/hamster.desktop.in.in
-data/hamster.schemas.in
+data/org.gnome.hamster.gschema.xml
 [type: gettext/glade]data/preferences.ui
 [type: gettext/python]src/hamster-cli
 src/hamster/about.py

@@ -53,7 +53,7 @@ pgrep -af hamster
 ###### Ubuntu (tested in 19.04 and 18.04)
 
 ```bash
-sudo apt install gettext intltool gconf2 gir1.2-gconf-2.0 python3-gi-cairo python3-distutils python3-dbus python3-xdg
+sudo apt install gettext intltool python3-gi-cairo python3-distutils python3-dbus python3-xdg
 # and for documentation
 sudo apt install gnome-doc-utils yelp
 ```
@@ -70,7 +70,7 @@ sudo zypper install gnome-doc-utils xml2po yelp
 
 *RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
 
-`yum install gettext intltool gnome-python2-gconf dbus-python`
+`yum install gettext intltool dbus-python`
 
 If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
 then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,

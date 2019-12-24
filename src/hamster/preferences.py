@@ -507,9 +507,7 @@ class PreferencesEditor(Controller):
             return
 
         day_start = day_start.hour * 60 + day_start.minute
-
-        conf.set("day_start_minutes", day_start)
-
+        conf.set("day-start-minutes", day_start)
     def on_close_button_clicked(self, button):
         self.close_window()
 
