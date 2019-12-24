@@ -55,6 +55,7 @@ sudo zypper install gnome-doc-utils xml2po yelp
 
 `yum install gettext intltool gnome-python2-gconf dbus-python`
 
+##### Help reader
 If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
 then a [Mallard](https://en.wikipedia.org/wiki/Mallard_(documentation))-capable help reader is required,
 such as [yelp](https://wiki.gnome.org/Apps/Yelp/).
@@ -94,22 +95,7 @@ pgrep -af hamster
 pkill -ef hamster
 ```
 
-#### Try
-
-To use the development version (As explained above, backup `hamster.db` first !):
-```
-# either
-pgrep -af hamster
-# and kill them one by one
-# or be bold and kill all process with "hamster" in their command line
-pkill -ef hamster
-src/hamster-service &
-src/hamster-windows-service &
-src/hamster-cli
-```
-
-
-#### Building and installing
+#### Build and install
 
 ```bash
 ./waf configure build
@@ -130,11 +116,29 @@ sudo ./waf uninstall
 ```
 
 
+#### Development
+
+During development (As explained above, backup `hamster.db` first !),
+if only python files are changed 
+(*deeper changes such as the migration to gsettings require a new install*)
+the changes can be quickly tested by
+```
+# either
+pgrep -af hamster
+# and kill them one by one
+# or be bold and kill all process with "hamster" in their command line
+pkill -ef hamster
+src/hamster-service &
+src/hamster-windows-service &
+src/hamster-cli
+```
+
+
 #### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
 the applet is long gone, the paths and file names have changed to
-`hamster-time-tracker`. To clean up previous installs follow these steps:
+`hamster`. To clean up previous installs follow these steps:
 
 ```bash
 git checkout d140d45f105d4ca07d4e33bcec1fae30143959fe
