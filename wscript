@@ -37,13 +37,9 @@ def options(opt):
 
 
 def build(bld):
-    bld.install_files('${LIBDIR}/hamster',
-                      """src/hamster-service
-                         src/hamster-windows-service
-                      """,
-                      chmod=Utils.O755)
-
-    bld.install_as('${BINDIR}/hamster', "src/hamster-cli", chmod=Utils.O755)
+    bld.install_as('${LIBDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
+    bld.install_as('${LIBDIR}/hamster/hamster-windows-service', "src/hamster-windows-service.py", chmod=Utils.O755)
+    bld.install_as('${BINDIR}/hamster', "src/hamster-cli.py", chmod=Utils.O755)
 
 
     bld.install_files('${PREFIX}/share/bash-completion/completion',
@@ -51,7 +47,7 @@ def build(bld):
 
 
     bld(features='py',
-        source=bld.path.ant_glob('src/**/*.py'),
+        source=bld.path.ant_glob('src/hamster/**/*.py'),
         install_from='src')
 
     # set correct flags in defs.py
