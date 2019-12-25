@@ -87,11 +87,9 @@ class CustomFactController(gobject.GObject):
         if fact_id:
             # editing
             self.fact = runtime.storage.get_fact(fact_id)
-            self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
             self.window.set_title(_("Add activity"))
-            self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
@@ -101,6 +99,7 @@ class CustomFactController(gobject.GObject):
                 self.fact = Fact(start_time=hamster_now())
 
         original_fact = self.fact
+        self.date = self.fact.date
 
         self.update_fields()
         self.update_cmdline(select=True)
