@@ -406,7 +406,7 @@ class CmdLineEntry(gtk.Entry):
                 description = "stop now"
                 variant_fact = self.original_fact.copy()
                 variant_fact.end_time = now
-            elif self.original_fact == self.todays_facts[-1]:
+            elif self.todays_facts and self.original_fact == self.todays_facts[-1]:
                 # that one is too dangerous, except for the last entry
                 description = "keep up"
                 # Do not use Fact(..., end_time=None): it would be a no-op
