@@ -205,6 +205,9 @@ class CmdLineEntry(gtk.Entry):
     def __init__(self, updating=True, **kwargs):
         gtk.Entry.__init__(self)
 
+        # default day for times without date
+        self.default_day = None
+
         # to be set by the caller, if editing an existing fact
         self.original_fact = None
 
@@ -415,7 +418,7 @@ class CmdLineEntry(gtk.Entry):
 
             if variant_fact:
                 variant_fact.description = None
-                variant = variant_fact.serialized(default_day=None)
+                variant = variant_fact.serialized(default_day=self.default_day)
                 variants.append((description, variant))
 
         else:
