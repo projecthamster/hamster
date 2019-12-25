@@ -132,7 +132,8 @@ python3 src/hamster-service.py &
 python3 src/hamster-windows-service.py &
 python3 src/hamster-cli.py
 ```
-
+Advantage: running uninstalled is detected, and windows are *not* called via
+D-Bus, so that all the traces are visible.
 
 #### Migrating from hamster-applet
 
