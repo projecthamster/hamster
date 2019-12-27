@@ -42,6 +42,8 @@ class CustomFactController(gobject.GObject):
     def __init__(self,  parent=None, fact_id=None, base_fact=None):
         gobject.GObject.__init__(self)
 
+        self._date = None  # for the date property
+
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
@@ -87,11 +89,9 @@ class CustomFactController(gobject.GObject):
         if fact_id:
             # editing
             self.fact = runtime.storage.get_fact(fact_id)
-            self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
             self.window.set_title(_("Add activity"))
-            self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
@@ -101,6 +101,7 @@ class CustomFactController(gobject.GObject):
                 self.fact = Fact(start_time=hamster_now())
 
         original_fact = self.fact
+        self.date = self.fact.date
 
         self.update_fields()
         self.update_cmdline(select=True)
@@ -127,6 +128,23 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
         self.window.show_all()
 
+    @property
+    def date(self):
+        """Default hamster day."""
+        return self._date
+
+    @date.setter
+    def date(self, value):
+        delta = value - self._date if self._date else None
+        self._date = value
+        self.cmdline.default_day = value
+        if self.fact and delta:
+            if self.fact.start_time:
+                self.fact.start_time += delta
+            if self.fact.end_time:
+                self.fact.end_time += delta
+            # self.update_fields() here would enter an infinite loop
+
     def on_prev_day_clicked(self, button):
         self.increment_date(-1)
 
@@ -144,10 +162,6 @@ class CustomFactController(gobject.GObject):
     def increment_date(self, days):
         delta = dt.timedelta(days=days)
         self.date += delta
-        if self.fact.start_time:
-            self.fact.start_time += delta
-        if self.fact.end_time:
-            self.fact.end_time += delta
         self.update_fields()
 
     def show(self):
@@ -172,7 +186,7 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            fact = Fact.parse(self.cmdline.get_text(), date=self.date)
+            fact = Fact.parse(self.cmdline.get_text(), default_day=self.date)
             previous_cmdline_fact = self.cmdline_fact
             # copy the entered fact before any modification
             self.cmdline_fact = fact.copy()
@@ -273,11 +287,11 @@ class CustomFactController(gobject.GObject):
     def update_cmdline(self, select=None):
         """Update the cmdline entry content."""
         self.cmdline_fact = self.fact.copy(description=None)
-        label = self.cmdline_fact.serialized(prepend_date=False)
+        label = self.cmdline_fact.serialized(default_day=self.date)
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_str = self.cmdline_fact.serialized_time(prepend_date=False)
+                time_str = self.cmdline_fact.serialized_range(default_day=self.date)
                 self.cmdline.select_region(0, len(time_str))
 
     def update_fields(self):
@@ -356,9 +370,18 @@ class CustomFactController(gobject.GObject):
             self.update_status(status="warning", markup=markup)
             return fact
 
-        roundtrip_fact = Fact.parse(fact.serialized())
+        roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.date)
         if roundtrip_fact != fact:
             self.update_status(status="wrong", markup="Fact could not be parsed back")
+            return None
+
+        if ',' in fact.category:
+            markup = dedent("""\
+                            Commas ',' are forbidden in category.
+                            Note: the description separator changed
+                            from single comma to double comma (',,') in v3.0.
+                            """)
+            self.update_status(status="wrong", markup=markup)
             return None
 
         # nothing unusual

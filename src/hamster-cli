@@ -30,6 +30,7 @@ import datetime as dt
 from hamster import client, reports
 from hamster import logger as hamster_logger
 from hamster.lib import default_logger, Fact, stuff
+from hamster.lib.parsing import parse_datetime_range
 
 
 logger = default_logger(__file__)
@@ -77,54 +78,6 @@ def fact_dict(fact_data, with_date):
     fact['description'] = fact_data.description
 
     return fact
-
-
-_DATETIME_PATTERN = ('^((?P<relative>-\d.+)?|('
-                     '(?P<date1>\d{4}-\d{2}-\d{2})?'
-                     '(?P<time1> ?\d{2}:\d{2})?'
-                     '(?P<dash> ?-)?'
-                     '(?P<date2> ?\d{4}-\d{2}-\d{2})?'
-                     '(?P<time2> ?\d{2}:\d{2})?)?)'
-                     '(?P<rest>\D.+)?$')
-_DATETIME_REGEX = re.compile(_DATETIME_PATTERN)
-def parse_datetime_range(arg):
-    '''Parse a date and time.'''
-    match = _DATETIME_REGEX.match(arg)
-    if not match:
-        return None, None
-
-    fragments = match.groupdict()
-    rest = (fragments['rest'] or '').strip()
-
-    # bail out early on relative minutes
-    if fragments['relative']:
-        delta_minutes = int(fragments['relative'])
-        return stuff.hamster_now() - dt.timedelta(minutes=delta_minutes), rest
-
-    start_time, end_time = None, None
-
-    def to_time(timestr):
-        timestr = (timestr or "").strip()
-        try:
-            return dt.datetime.strptime(timestr, "%Y-%m-%d").date()
-        except ValueError:
-            try:
-                return dt.datetime.strptime(timestr, "%H:%M").time()
-            except ValueError:
-                pass
-        return None
-
-    now = stuff.hamster_now().time()
-
-    if fragments['date1'] or fragments['time1']:
-        start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
-                                         to_time(fragments['time1']) or now)
-    if fragments['date2'] or fragments['time2']:
-        end_time = dt.datetime.combine(to_time(fragments['date2']) or start_time or dt.date.today(),
-                                       to_time(fragments['time2']) or now)
-
-    return start_time, end_time
-
 
 
 class HamsterClient(object):
@@ -192,14 +145,10 @@ class HamsterClient(object):
             print("Error: please specify activity")
             return
 
-        activity = args[0]
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
-        start_time = start_time or stuff.hamster_now()
-
-        self.storage.add_fact(Fact(activity,
-                                         start_time = start_time,
-                                         end_time = end_time))
-
+        fact = Fact.parse(" ".join(args), range_pos="tail")
+        if fact.start_time is None:
+            fact.start_time = stuff.hamster_now()
+        self.storage.add_fact(fact)
 
     def stop(self, *args):
         '''Stop tracking the current activity.'''
@@ -211,7 +160,7 @@ class HamsterClient(object):
         export_format, start_time, end_time = "html", None, None
         if args:
             export_format = args[0]
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
+        start_time, end_time, _ = parse_datetime_range(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -248,7 +197,7 @@ class HamsterClient(object):
 
     def list(self, *times):
         """list facts within a date range"""
-        start_time, end_time = parse_datetime_range(" ".join(times or []))
+        start_time, end_time, _ = parse_datetime_range(" ".join(times or []))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -272,7 +221,7 @@ class HamsterClient(object):
         if args:
             search = args[0]
 
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
+        start_time, end_time, _ = parse_datetime_range(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)

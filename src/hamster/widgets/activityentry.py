@@ -36,10 +36,11 @@ from collections import defaultdict
 from copy import deepcopy
 
 from hamster import client
-from hamster.lib import Fact, looks_like_time
+from hamster.lib import Fact
 from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime
+from hamster.lib.parsing import looks_like_time
 
 
 def extract_search(text):
@@ -203,6 +204,9 @@ class CompleteTree(graphics.Scene):
 class CmdLineEntry(gtk.Entry):
     def __init__(self, updating=True, **kwargs):
         gtk.Entry.__init__(self)
+
+        # default day for times without date
+        self.default_day = None
 
         # to be set by the caller, if editing an existing fact
         self.original_fact = None
@@ -405,7 +409,7 @@ class CmdLineEntry(gtk.Entry):
                 description = "stop now"
                 variant_fact = self.original_fact.copy()
                 variant_fact.end_time = now
-            elif self.original_fact == self.todays_facts[-1]:
+            elif self.todays_facts and self.original_fact == self.todays_facts[-1]:
                 # that one is too dangerous, except for the last entry
                 description = "keep up"
                 # Do not use Fact(..., end_time=None): it would be a no-op
@@ -414,7 +418,7 @@ class CmdLineEntry(gtk.Entry):
 
             if variant_fact:
                 variant_fact.description = None
-                variant = variant_fact.serialized(prepend_date=False)
+                variant = variant_fact.serialized(default_day=self.default_day)
                 variants.append((description, variant))
 
         else:
