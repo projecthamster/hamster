@@ -126,13 +126,14 @@ the changes can be quickly tested by
 # either
 pgrep -af hamster
 # and kill them one by one
-# or be bold and kill all process with "hamster" in their command line
+# or be bold and kill all processes with "hamster" in their command line
 pkill -ef hamster
-src/hamster-service &
-src/hamster-windows-service &
-src/hamster-cli
+python3 src/hamster-service.py &
+python3 src/hamster-windows-service.py &
+python3 src/hamster-cli.py
 ```
-
+Advantage: running uninstalled is detected, and windows are *not* called via
+D-Bus, so that all the traces are visible.
 
 #### Migrating from hamster-applet
 
