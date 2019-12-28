@@ -2,10 +2,16 @@ import sys, os.path
 # a convoluted line to add hamster module to absolute path
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../src")))
 
+import datetime as dt
 import unittest
 import re
-from hamster.lib import Fact
-from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today
+from hamster.lib.fact import Fact
+from hamster.lib.stuff import (
+    datetime_to_hamsterday,
+    hamsterday_time_to_datetime,
+    hamster_now,
+    hamster_today,
+    )
 from hamster.lib.parsing import (
     dt_pattern,
     _extract_datetime,
@@ -17,8 +23,6 @@ from hamster.lib.parsing import (
 
 class TestActivityInputParsing(unittest.TestCase):
     def test_datetime_to_hamsterday(self):
-        import datetime as dt
-        from hamster.lib import datetime_to_hamsterday
         date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
         expected = dt.date(2018, 8, 13)
         self.assertEqual(datetime_to_hamsterday(date_time), expected)
@@ -27,8 +31,6 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(datetime_to_hamsterday(date_time), expected)
 
     def test_hamsterday_time_to_datetime(self):
-        import datetime as dt
-        from hamster.lib import hamsterday_time_to_datetime
         hamsterday = dt.date(2018, 8, 13)
         time = dt.time(23, 10)
         expected = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
@@ -199,8 +201,6 @@ class TestActivityInputParsing(unittest.TestCase):
         self.assertEqual(fact.tags, ["tag1", "tag2"])
 
     def test_roundtrips(self):
-        import datetime as dt
-        from hamster.lib.stuff import hamsterday_time_to_datetime, hamster_today
         for start_time in (
             None,
             dt.time(12, 33),
@@ -259,7 +259,6 @@ class TestActivityInputParsing(unittest.TestCase):
 
 class TestParsers(unittest.TestCase):
     def test_parse_time(self):
-        import datetime as dt
         self.assertEqual(parse_time("9:01"), dt.time(9, 1))
         self.assertEqual(parse_time("9.01"), dt.time(9, 1))
         self.assertEqual(parse_time("12:01"), dt.time(12, 1))
@@ -267,7 +266,6 @@ class TestParsers(unittest.TestCase):
         self.assertEqual(parse_time("1201"), dt.time(12, 1))
 
     def test_dt_patterns(self):
-        import datetime as dt
         p = specific_dt_pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
@@ -311,7 +309,6 @@ class TestParsers(unittest.TestCase):
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
         self.assertEqual(end, None)
 
-        import datetime as dt
         ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
 
         s = "-25 activity"

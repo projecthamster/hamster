@@ -29,9 +29,10 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
+from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
-from hamster.lib import Fact
+
 
 
 class CustomFactController(gobject.GObject):

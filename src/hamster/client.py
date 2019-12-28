@@ -24,8 +24,9 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 from calendar import timegm
 from gi.repository import GObject as gobject
-from hamster.lib import Fact, hamster_now
 from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact
+from hamster.lib.fact import Fact
+from hamster.lib.stuff import hamster_now
 
 
 class Storage(gobject.GObject):
