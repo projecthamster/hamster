@@ -200,7 +200,7 @@ class GSettingsStore(gobject.GObject, Singleton):
 
     def __init__(self):
         gobject.GObject.__init__(self)
-        self._settings = gio.Settings('org.gnome.Hamster')
+        self._settings = gio.Settings(schema_id='org.gnome.Hamster')
 
     def _key_changed(self, client, key, data=None):
         """
