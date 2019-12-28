@@ -29,7 +29,7 @@ import datetime as dt
 """
 from hamster import widgets
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.fact import Fact
+from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
 
@@ -344,45 +344,15 @@ class CustomFactController(gobject.GObject):
         self.draw_preview(fact.start_time or default_dt,
                           fact.end_time or default_dt)
 
-        if fact.start_time is None:
-            self.update_status(status="wrong", markup="Missing start time")
+        try:
+            fact.check(default_day=self.date)
+        except FactError as error:
+            self.update_status(status="wrong", markup=str(error))
             return None
-
-        if not fact.activity:
-            self.update_status(status="wrong", markup="Missing activity")
-            return None
-
-        if (fact.delta < dt.timedelta(0)) and fact.end_time:
-            fact.end_time += dt.timedelta(days=1)
-            markup = dedent("""\
-                            <b>Working late ?</b>
-                            Duration would be negative.
-                            This happens when the activity crosses the
-                            hamster day start time ({:%H:%M} from tracking settings).
-
-                            Changing the end time date to the next day.
-                            Pressing the button would save
-                            an actvity going from
-                            {}
-                            to
-                            {}
-                            (in civil local time)
-                            """.format(conf.day_start, fact.start_time, fact.end_time))
-            self.update_status(status="warning", markup=markup)
-            return fact
 
         roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.date)
         if roundtrip_fact != fact:
             self.update_status(status="wrong", markup="Fact could not be parsed back")
-            return None
-
-        if ',' in fact.category:
-            markup = dedent("""\
-                            Commas ',' are forbidden in category.
-                            Note: the description separator changed
-                            from single comma to double comma (',,') in v3.0.
-                            """)
-            self.update_status(status="wrong", markup=markup)
             return None
 
         # nothing unusual

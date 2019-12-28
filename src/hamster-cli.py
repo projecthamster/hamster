@@ -149,6 +149,7 @@ class HamsterClient(object):
         fact = Fact.parse(" ".join(args), range_pos="tail")
         if fact.start_time is None:
             fact.start_time = stuff.hamster_now()
+        fact.check(default_day=stuff.hamster_today())
         self.storage.add_fact(fact)
 
     def stop(self, *args):
