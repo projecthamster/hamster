@@ -29,7 +29,8 @@ import datetime as dt
 
 from hamster import client, reports
 from hamster import logger as hamster_logger
-from hamster.lib import default_logger, Fact, stuff
+from hamster.lib import default_logger, stuff
+from hamster.lib.fact import Fact
 from hamster.lib.parsing import parse_datetime_range
 
 

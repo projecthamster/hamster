@@ -35,8 +35,8 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
-from hamster.lib import Fact
 from hamster.lib.configuration import conf
+from hamster.lib.fact import Fact
 from hamster.lib.stuff import hamster_today, hamster_now
 from hamster.storage import storage
 

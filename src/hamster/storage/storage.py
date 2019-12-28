@@ -22,7 +22,7 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import datetime as dt
-from hamster.lib import Fact
+from hamster.lib.fact import Fact
 from hamster.lib.stuff import hamster_now
 
 class Storage(object):

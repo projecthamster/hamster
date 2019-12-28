@@ -12,7 +12,7 @@ from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
-from hamster.lib import default_logger, Fact, stuff
+from hamster.lib import default_logger, stuff
 from hamster.lib.dbus import (
     DBusMainLoop,
     dbus,
@@ -20,6 +20,7 @@ from hamster.lib.dbus import (
     from_dbus_fact,
     to_dbus_fact
 )
+from hamster.lib.fact import Fact
 
 logger = default_logger(__file__)
 
@@ -135,7 +136,7 @@ class Storage(db.Storage, dbus.service.Object):
         Args:
             fact_str (str): string to be parsed.
             start_time (int): Start datetime timestamp.
-                              For backward compatibility with the 
+                              For backward compatibility with the
                               gnome shell extension,
                               0 is special and means hamster_now().
                               Otherwise, overrides the parsed value.
@@ -191,8 +192,8 @@ class Storage(db.Storage, dbus.service.Object):
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
         return self.update_fact(fact_id, fact, start_time, end_time, temporary) or 0
-    
-    
+
+
     @dbus.service.method("org.gnome.Hamster",
                          in_signature='i{}'.format(fact_signature),
                          out_signature='i')

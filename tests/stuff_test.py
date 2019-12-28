@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../
 import datetime as dt
 import unittest
 import re
-from hamster.lib import Fact
+from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamsterday_time_to_datetime,
