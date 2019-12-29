@@ -8,6 +8,19 @@ from hamster.lib.fact import Fact
 
 """D-Bus communication utilities."""
 
+# dates
+
+def from_dbus_date(dbus_date):
+    """Convert D-Bus timestamp (seconds since epoch) to date."""
+    return dt.date.fromtimestamp(dbus_date) if dbus_date else None
+
+
+def to_dbus_date(date):
+    """Convert date to D-Bus timestamp (seconds since epoch)."""
+    return timegm(date.timetuple()) if date else 0
+
+
+# facts
 
 """
 dbus_fact signature (types matching the to_dbus_fact output)
@@ -51,5 +64,5 @@ def to_dbus_fact(fact):
             fact.activity_id or 0,
             fact.category or '',
             dbus.Array(fact.tags, signature = 's'),
-            timegm(fact.date.timetuple()),
+            to_dbus_date(fact.date),
             fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)

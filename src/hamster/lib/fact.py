@@ -75,42 +75,6 @@ class Fact(object):
     def category(self, value):
         self._category = value.strip() if value else ""
 
-    def check(self, default_day=None):
-        """Check Fact validity for inclusion in the storage."""
-        if self.start_time is None:
-            raise FactError("Missing start time")
-
-        if self.end_time and (self.delta < dt.timedelta(0)):
-            fixed_fact = Fact(start_time=self.start_time,
-                              end_time=self.end_time + dt.timedelta(days=1))
-            suggested_range_str = fixed_fact.serialized_range(default_day=default_day)
-            # work around cyclic imports
-            from hamster.lib.configuration import conf
-            raise FactError(dedent(
-                """\
-                Duration would be negative.
-                Working late ?
-                This happens when the activity crosses the
-                hamster day start time ({:%H:%M} from tracking settings).
-
-                Suggestion: move the end to the next day; the range would become:
-                {}
-                (in civil local time)
-                """.format(conf.day_start, suggested_range_str)
-                ))
-
-        if not self.activity:
-            raise FactError("Missing activity")
-
-        if ',' in self.category:
-            raise FactError(dedent(
-                """\
-                Forbidden comma in category: '{}'
-                Note: The description separator changed
-                      from single comma to double comma ',,' (cf. PR #482).
-                """.format(self.category)
-                ))
-
     def copy(self, **kwds):
         """Return an independent copy, with overrides as keyword arguments.
 

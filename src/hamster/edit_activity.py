@@ -345,7 +345,7 @@ class CustomFactController(gobject.GObject):
                           fact.end_time or default_dt)
 
         try:
-            fact.check(default_day=self.date)
+            runtime.storage.check_fact(fact, default_day=self.date)
         except FactError as error:
             self.update_status(status="wrong", markup=str(error))
             return None
