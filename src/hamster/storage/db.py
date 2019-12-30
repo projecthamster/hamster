@@ -517,6 +517,7 @@ class Storage(storage.Storage):
                                 description=fact["description"],
                                 start_time=end_time,
                                 end_time=fact_end_time)
+                storage.Storage.check_fact(new_fact)
                 new_fact_id = self.__add_fact(new_fact)
 
                 # copy tags
@@ -553,8 +554,6 @@ class Storage(storage.Storage):
                        Other errors would also be handled through exceptions.
         """
         logger.info("adding fact {}".format(fact))
-
-        self.validate_fact(fact)  # sanity check
 
         start_time = fact.start_time
         end_time = fact.end_time

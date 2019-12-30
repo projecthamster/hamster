@@ -40,7 +40,8 @@ class Storage(object):
         self.activities_changed()
 
     # facts
-    def check_fact(self, fact, default_day=None):
+    @classmethod
+    def check_fact(cls, fact, default_day=None):
         """Check Fact validity for inclusion in the storage.
 
         Raise FactError(message) on failure.
@@ -97,6 +98,8 @@ class Storage(object):
             fact.start_time = start_time
             fact.end_time = end_time
 
+        # better fail before opening the transaction
+        self.check_fact(fact)
         self.start_transaction()
         result = self.__add_fact(fact, temporary)
         self.end_transaction()
@@ -110,6 +113,8 @@ class Storage(object):
         return self.__get_fact(fact_id)
 
     def update_fact(self, fact_id, fact, start_time=None, end_time=None, temporary=False):
+        # better fail before opening the transaction
+        self.check_fact(fact)
         self.start_transaction()
         self.__remove_fact(fact_id)
         # to be removed once update facts use Fact directly.
@@ -123,11 +128,6 @@ class Storage(object):
         if result:
             self.facts_changed()
         return result
-
-    def validate_fact(self, fact):
-        """Check fact validity for inclusion into storage."""
-        assert fact.activity, "missing activity"
-        assert fact.start_time, "missing start_time"
 
     def stop_tracking(self, end_time):
         """Stops tracking the current activity"""
