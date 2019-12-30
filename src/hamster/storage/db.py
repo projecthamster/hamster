@@ -235,6 +235,17 @@ class Storage(storage.Storage):
 
 
     def __change_category(self, id, category_id):
+        """Change the category of an activity.
+
+        If an activity already exists with the same name
+        in the target category, reuse that one.
+
+        Args:
+            id (int): id of the source activity
+            category_id (int): id of the target category
+        Returns:
+            boolean: whether the databse was changed.
+        """
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
         existing_activity = self.__get_activity_by_name(activity['name'], category_id)
@@ -298,7 +309,10 @@ class Storage(storage.Storage):
 
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
-        """get most recent, preferably not deleted activity by it's name"""
+        """Get most recent, preferably not deleted activity by it's name.
+        If category_id is None or 0, show all activities matching name.
+        Otherwise, filter on the specified category.
+        """
 
         if category_id:
             query = """
