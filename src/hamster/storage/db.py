@@ -576,11 +576,9 @@ class Storage(storage.Storage):
         tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
 
         # now check if maybe there is also a category
-        category_id = None
-        if fact.category:
-            category_id = self.__get_category_id(fact.category)
-            if not category_id:
-                category_id = self.__add_category(fact.category)
+        category_id = self.__get_category_id(fact.category)
+        if not category_id:
+            category_id = self.__add_category(fact.category)
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,
