@@ -40,8 +40,6 @@ from hamster.lib.fact import Fact
 from hamster.lib.stuff import hamster_today, hamster_now
 from hamster.storage import storage
 
-UNSORTED_ID = -1
-
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -58,6 +56,8 @@ class Storage(storage.Storage):
             database_dir (path):
                 Directory holding the database file,
                 or None to use the default location.
+
+        Note: Unsorted category id is hard-coded as -1
         """
         storage.Storage.__init__(self)
 
@@ -359,7 +359,8 @@ class Storage(storage.Storage):
     def __get_category_id(self, name):
         """returns category by it's name"""
         if not name:
-            return UNSORTED_ID
+            # Unsorted
+            return -1
 
         query = """
                    SELECT id from categories
