@@ -2,8 +2,10 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import calendar
+import datetime as dt
 
 from copy import deepcopy
+from textwrap import dedent
 
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
@@ -12,6 +14,9 @@ from hamster.lib.stuff import (
     hamster_now,
     hamster_today,
 )
+
+class FactError(Exception):
+    """Generic Fact error."""
 
 
 class Fact(object):

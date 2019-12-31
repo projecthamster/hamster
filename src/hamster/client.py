@@ -24,8 +24,14 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 from calendar import timegm
 from gi.repository import GObject as gobject
-from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact
-from hamster.lib.fact import Fact
+from hamster.lib.dbus import (
+    DBusMainLoop,
+    dbus,
+    from_dbus_fact,
+    to_dbus_date,
+    to_dbus_fact,
+    )
+from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import hamster_now
 
 
@@ -147,6 +153,25 @@ class Storage(gobject.GObject):
     def get_fact(self, id):
         """returns fact by it's ID"""
         return from_dbus_fact(self.conn.GetFact(id))
+
+    def check_fact(self, fact, default_day=None):
+        """Check Fact validity for inclusion in the storage.
+
+        default_day (date): Default hamster day,
+                            used to simplify some hint messages
+                            (remove unnecessary dates).
+                            None is safe (always show dates).
+        """
+        if not fact.start_time:
+            # Do not even try to pass fact through D-Bus as
+            # conversions would fail in this case.
+            raise FactError("Missing start time")
+        dbus_fact = to_dbus_fact(fact)
+        dbus_day = to_dbus_date(default_day)
+        success, message = self.conn.CheckFact(dbus_fact, dbus_day)
+        if not success:
+            raise FactError(message)
+        return success, message
 
     def add_fact(self, fact, temporary_activity = False):
         """Add fact (Fact)."""

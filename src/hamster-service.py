@@ -17,10 +17,11 @@ from hamster.lib.dbus import (
     DBusMainLoop,
     dbus,
     fact_signature,
+    from_dbus_date,
     from_dbus_fact,
     to_dbus_fact
 )
-from hamster.lib.fact import Fact
+from hamster.lib.fact import Fact, FactError
 
 logger = default_logger(__file__)
 
@@ -171,6 +172,22 @@ class Storage(db.Storage, dbus.service.Object):
     def AddFactVerbatim(self, dbus_fact):
         fact = from_dbus_fact(dbus_fact)
         return self.add_fact(fact) or 0
+
+
+    @dbus.service.method("org.gnome.Hamster",
+                         in_signature="{}i".format(fact_signature),
+                         out_signature='bs')
+    def CheckFact(self, dbus_fact, dbus_default_day):
+        fact = from_dbus_fact(dbus_fact)
+        dd = from_dbus_date(dbus_default_day)
+        try:
+            self.check_fact(fact, default_day=dd)
+            success = True
+            message = ""
+        except FactError as error:
+            success = False
+            message = str(error)
+        return success, message
 
 
     @dbus.service.method("org.gnome.Hamster",
