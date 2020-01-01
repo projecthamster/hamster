@@ -40,6 +40,7 @@ from hamster.lib import layout
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
+from hamster.preferences import PreferencesEditor
 
 from hamster.lib.configuration import dialogs
 from hamster.lib.configuration import Controller
@@ -414,6 +415,8 @@ class Overview(Controller):
     def __init__(self, parent = None):
         Controller.__init__(self, parent)
 
+        self.prefs_dialog = None  # preferences dialog controller
+
         self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("hamster")
         self.window.set_default_size(700, 500)
@@ -592,8 +595,10 @@ class Overview(Controller):
             dialog.destroy()
 
     def on_prefs_clicked(self, menu):
-        dialogs.prefs.show(self)
-
+        if self.prefs_dialog:
+            self.prefs_dialog.present()
+        else:
+            self.prefs_dialog = PreferencesEditor(parent=self.window)
 
     def on_export_clicked(self, menu):
         if self.report_chooser:

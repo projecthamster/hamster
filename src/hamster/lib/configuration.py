@@ -28,6 +28,7 @@ import os
 from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
 
+from gi.repository import Gdk as gdk
 from gi.repository import Gio as gio
 from gi.repository import GLib as glib
 from gi.repository import GObject as gobject
@@ -37,6 +38,10 @@ from hamster.lib import datetime as dt
 
 
 class Controller(gobject.GObject):
+    """Window creator and handler.
+
+    If parent is given, this is a dialog for parent, otherwise a toplevel.
+    """
     __gsignals__ = {
         "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
@@ -53,34 +58,48 @@ class Controller(gobject.GObject):
             self._gui = None
             self.window = gtk.Window()
 
+        if parent:
+            # Essential for positioning on wayland.
+            # This should also select the correct window type if unset yet.
+            # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
+            self.window.set_transient_for(parent.get_toplevel())
+            # this changes nothing, the dialog appears centered on the screen:
+            # self.window.set_type_hint(gdk.WindowTypeHint.DIALOG)
+
         self.window.connect("delete-event", self.window_delete_event)
         if self._gui:
             self._gui.connect_signals(self)
-
 
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-
     def window_delete_event(self, widget, event):
         self.close_window()
 
     def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            """
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-            """
-            self.window.destroy()
-            self.window = None
-            self.emit("on-close")
+        # Do not try to just hide;
+        # dialogs are populated upon instanciation anyway
+        self.window.destroy()
+        self.window = None
+        self.emit("on-close")
+
+    def present(self):
+        """Show window and bring it to the foreground."""
+        # workaround https://gitlab.gnome.org/GNOME/gtk/issues/624
+        # fixed in gtk-3.24.1 (2018-09-19)
+        # self.overview_controller.window.present()
+        self.window.present_with_time(glib.get_monotonic_time() / 1000)
 
     def show(self):
+        """Show window.
+        It might be obscurd by others though.
+        See also: presents
+        """
         self.window.show()
 
+    def __bool__(self):
+        return True if self.window else False
 
 def load_ui_file(name):
     """loads interface from the glade file; sorts out the path business"""

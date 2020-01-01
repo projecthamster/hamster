@@ -26,8 +26,15 @@ import sys, os
 import argparse
 import re
 
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk as gtk
+from gi.repository import Gio as gio
+
 from hamster import client, reports
 from hamster import logger as hamster_logger
+from hamster.overview import Overview
+from hamster.preferences import PreferencesEditor
 from hamster.lib import default_logger, stuff
 from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
@@ -80,8 +87,82 @@ def fact_dict(fact_data, with_date):
     return fact
 
 
-class HamsterClient(object):
-    '''The main application.'''
+class Hamster(gtk.Application):
+    def __init__(self):
+        # inactivity_timeout: How long (ms) the service should stay alive
+        #                     after all windows have been closed.
+        gtk.Application.__init__(self,
+                                 application_id="org.gnome.Hamster.WindowServer",
+                                 #inactivity_timeout=10000,
+                                 register_session=True)
+
+        self.overview_controller = None  # overview window controller
+        self.prefs_controller = None  # settings window controller
+
+        self.connect("startup", self.on_startup)
+        self.connect("activate", self.on_activate)
+
+        # we need them before the startup phase
+        # so register/activate_action work before the app is ran.
+        # cf. https://gitlab.gnome.org/GNOME/glib/blob/master/gio/tests/gapplication-example-actions.c
+        self.add_actions()
+
+    def add_actions(self):
+        action = gio.SimpleAction.new("overview", None)
+        action.connect("activate", self.on_activate_overview)
+        self.add_action(action)
+
+        action = gio.SimpleAction.new("prefs", None)
+        action.connect("activate", self.on_activate_prefs)
+        self.add_action(action)
+
+        action = gio.SimpleAction.new("quit", None)
+        action.connect("activate", self.on_activate_quit)
+        self.add_action(action)
+
+    def on_activate(self, data=None):
+        logger.debug("activate")
+        if not self.get_windows():
+            self.activate_action("overview")
+
+    def on_activate_overview(self, action=None, data=None):
+        self._open_window(action.get_name(), data)
+
+    def on_activate_prefs(self, action=None, data=None):
+        self._open_window(action.get_name(), data)
+
+    def on_activate_quit(self, data=None):
+        self.on_activate_quit()
+
+    def on_startup(self, data=None):
+        logger.debug("startup")
+
+    def _open_window(self, name, data=None):
+        logger.debug("opening '{}'".format(name))
+        print(self.get_windows())
+
+        if name == "overview":
+            if not self.overview_controller:
+                self.overview_controller = Overview()
+                logger.debug("new Overview")
+            controller = self.overview_controller
+        elif name == "prefs":
+            if not self.prefs_controller:
+                self.prefs_controller = PreferencesEditor()
+                logger.debug("new PreferencesEditor")
+            controller = self.prefs_controller
+
+        window = controller.window
+        if window not in self.get_windows():
+            self.add_window(window)
+            logger.debug("window added")
+        controller.present()
+        logger.debug("window presented")
+
+
+class HamsterCli(object):
+    """Command line interface."""
+
     def __init__(self):
         self.storage = client.Storage()
 
@@ -335,7 +416,10 @@ Example usage:
         look for an activity matching terms 'pancakes` between 1st and 30st
         August 2012. Will check against activity, category, description and tags
 """)
-    hamster_client = HamsterClient()
+    hamster_client = HamsterCli()
+    app = Hamster()
+    logger.debug("app instanciated")
+    #app.add_actions()
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
@@ -353,15 +437,25 @@ Example usage:
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
-    args = parser.parse_args()
+    args, unknown_args = parser.parse_known_args()
 
     # logger for current script
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
 
-    command = args.action
-    if hasattr(hamster_client, command):
-        getattr(hamster_client, command)(*args.action_args)
+    action = args.action
+
+    if action in ("about", "overview", "prefs"):
+        app.register()
+        app.activate_action(action)
+        logger.debug("run")
+        status = app.run([sys.argv[0]] + unknown_args)
+        logger.debug("app exited")
+        sys.exit(status)
+    elif action == "add":
+        pass
+    elif hasattr(hamster_client, action):
+        getattr(hamster_client, action)(*args.action_args)
     else:
         sys.exit(usage % {'prog': sys.argv[0]})
