@@ -40,8 +40,6 @@ from hamster.lib.fact import Fact
 from hamster.lib.stuff import hamster_today, hamster_now
 from hamster.storage import storage
 
-UNSORTED_ID = -1
-
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -58,6 +56,8 @@ class Storage(storage.Storage):
             database_dir (path):
                 Directory holding the database file,
                 or None to use the default location.
+
+        Note: Unsorted category id is hard-coded as -1
         """
         storage.Storage.__init__(self)
 
@@ -235,6 +235,18 @@ class Storage(storage.Storage):
 
 
     def __change_category(self, id, category_id):
+        """Change the category of an activity.
+
+        If an activity already exists with the same name
+        in the target category,
+        make all relevant facts use this target activity.
+
+        Args:
+            id (int): id of the source activity
+            category_id (int): id of the target category
+        Returns:
+            boolean: whether the database was changed.
+        """
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
         existing_activity = self.__get_activity_by_name(activity['name'], category_id)
@@ -298,7 +310,10 @@ class Storage(storage.Storage):
 
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
-        """get most recent, preferably not deleted activity by it's name"""
+        """Get most recent, preferably not deleted activity by it's name.
+        If category_id is None or 0, show all activities matching name.
+        Otherwise, filter on the specified category.
+        """
 
         if category_id:
             query = """
@@ -345,7 +360,8 @@ class Storage(storage.Storage):
     def __get_category_id(self, name):
         """returns category by it's name"""
         if not name:
-            return UNSORTED_ID
+            # Unsorted
+            return -1
 
         query = """
                    SELECT id from categories
@@ -562,11 +578,9 @@ class Storage(storage.Storage):
         tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
 
         # now check if maybe there is also a category
-        category_id = None
-        if fact.category:
-            category_id = self.__get_category_id(fact.category)
-            if not category_id:
-                category_id = self.__add_category(fact.category)
+        category_id = self.__get_category_id(fact.category)
+        if not category_id:
+            category_id = self.__add_category(fact.category)
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,

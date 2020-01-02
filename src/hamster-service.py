@@ -288,7 +288,7 @@ class Storage(db.Storage, dbus.service.Object):
 
     # activities
     @dbus.service.method("org.gnome.Hamster", in_signature='si', out_signature = 'i')
-    def AddActivity(self, name, category_id = -1):
+    def AddActivity(self, name, category_id):
         return self.add_activity(name, category_id)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isi')
@@ -300,7 +300,7 @@ class Storage(db.Storage, dbus.service.Object):
         return self.remove_activity(id)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='a(isis)')
-    def GetCategoryActivities(self, category_id = -1):
+    def GetCategoryActivities(self, category_id):
         return [(row['id'],
                  row['name'],
                  row['category_id'],
