@@ -238,13 +238,14 @@ class Storage(storage.Storage):
         """Change the category of an activity.
 
         If an activity already exists with the same name
-        in the target category, reuse that one.
+        in the target category,
+        make all relevant facts use this target activity.
 
         Args:
             id (int): id of the source activity
             category_id (int): id of the target category
         Returns:
-            boolean: whether the databse was changed.
+            boolean: whether the database was changed.
         """
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
