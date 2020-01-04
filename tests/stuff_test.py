@@ -6,6 +6,7 @@ import datetime as pdt
 import unittest
 import re
 from hamster.lib import datetime as dt
+from hamster.lib.dbus import to_dbus_fact, from_dbus_fact
 from hamster.lib.fact import Fact
 
 
@@ -386,6 +387,19 @@ class TestDatetime(unittest.TestCase):
         _sub = delta - delta
         self.assertEqual(_sub, dt.timedelta())
         self.assertEqual(type(_sub), dt.timedelta)
+
+        
+class TestDBus(unittest.TestCase):
+    def test_round_trip(self):
+        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma #and #tags")
+        dbus_fact = to_dbus_fact(fact)
+        return_fact = from_dbus_fact(dbus_fact)
+        self.assertEqual(return_fact, fact)
+
+        fact = Fact.parse("11:00 activity")
+        dbus_fact = to_dbus_fact(fact)
+        return_fact = from_dbus_fact(dbus_fact)
+        self.assertEqual(return_fact, fact)
 
 
 if __name__ == '__main__':
