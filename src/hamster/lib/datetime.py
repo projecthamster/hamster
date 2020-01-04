@@ -302,6 +302,8 @@ class datetime(pdt.datetime):
             civil_date = d
         return cls.combine(civil_date, t)
 
+    # Note: fromisoformat appears in python3.7
+
     @classmethod
     def from_pdt(cls, t):
         """Convert python datetime to hamster datetime."""
