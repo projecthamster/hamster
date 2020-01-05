@@ -28,7 +28,7 @@ class date(dt.date):
 
     Should replace the python datetime.date in any customer code.
 
-    Same a python date, with the addition of parse methods.
+    Same as python date, with the addition of parse methods.
     """
 
     FMT = "%Y-%m-%d"  # ISO format
@@ -119,7 +119,7 @@ class time(dt.time):
     def pattern(cls):
         """Return a time pattern with all group names."""
 
-        # remove the indentation => easier debugging.
+        # remove the indentation for easier debugging.
         return dedent(r"""
             (?P<hour>                         # hour
              [0-9](?=[,\.:])                  # positive lookahead:
@@ -211,7 +211,7 @@ class datetime(dt.datetime):
     def pattern(cls, n=None):
         """Return a datetime pattern with all group names.
 
-        If n is given, all groups are suffixed with n.
+        If n is given, all groups are suffixed with str(n).
         """
 
         # remove the indentation => easier debugging.
