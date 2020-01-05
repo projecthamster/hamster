@@ -43,20 +43,6 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 
-
-
-
-# needed for range_pattern
-def specific_dt_pattern(n):
-    """Return a datetime pattern with all group names suffixed with n."""
-    to_replace = ("whole", "relative", "year", "month", "day", "date", "tens", "hour", "minute")
-    specifics = ["{}{}".format(s, n) for s in to_replace]
-    res = hdt.datetime.pattern
-    for src, dest in zip(to_replace, specifics):
-        res = res.replace(src, dest)
-    return res
-
-
 range_pattern = r"""
     (                    # start
       {}                 # datetime: relative1 or (date1, hour1, and minute1)
@@ -78,8 +64,8 @@ range_pattern = r"""
       (?P<lastday>{})     # date without time
     )
     )?                    # end time is facultative
-""".format(specific_dt_pattern(1), hdt.date.basic_pattern,
-           specific_dt_pattern(2), hdt.date.basic_pattern)
+""".format(hdt.datetime.pattern(1), hdt.date.basic_pattern,
+           hdt.datetime.pattern(2), hdt.date.basic_pattern)
 
 
 def parse_datetime_range(text, position="exact", separator="\s+", default_day=None, ref="now"):

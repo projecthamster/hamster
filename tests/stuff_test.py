@@ -15,7 +15,6 @@ from hamster.lib.stuff import (
     )
 from hamster.lib.parsing import (
     parse_datetime_range,
-    specific_dt_pattern,
     )
 
 
@@ -279,7 +278,7 @@ class TestDatetime(unittest.TestCase):
 
 class TestParsers(unittest.TestCase):
     def test_dt_patterns(self):
-        p = specific_dt_pattern(1)
+        p = hdt.datetime.pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
         time = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",

@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as dt  # standard datetime
 import re
 
+from textwrap import dedent
+
 # to be replaced soon
 from hamster.lib.stuff import hamsterday_time_to_datetime
 
@@ -132,19 +134,6 @@ class datetime(dt.datetime):
     - conversion to and from string facilities
     """
 
-    pattern = r"""
-        (?P<whole>
-                                          # (need to double the brackets for .format)
-            (?<!\d{{2}})                  # negative lookbehind,
-                                          # avoid matching 2019-12 or 2019-12-05
-            (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
-        |                             # or
-            (?P<date>{})?                 # maybe date
-            \s?                           # maybe one space
-            {}                            # time
-        )
-    """.format(date.detailed_pattern, time.pattern)
-
     def __new__(cls, year, month, day,
                 hour=0, minute=0,
                 second=0, microsecond=0,
@@ -192,14 +181,52 @@ class datetime(dt.datetime):
             put the corresponding datetime in default_day.
             Defaults to hamster_today.
         """
-        m = re.search(cls.pattern, s, flags=re.VERBOSE)
+
+        # datetime.re is added below, after the class definition
+        # it will be found at runtime
+        m = datetime.re.search(s)
         return cls._extract_datetime(m, default_day=default_day) if m else None
+
+    @classmethod
+    def pattern(cls, n=None):
+        """Return a datetime pattern with all group names.
+
+        If n is given, all groups are suffixed with n.
+        """
+
+        # remove the indentation => easier debugging.
+        base_pattern = dedent(r"""
+            (?P<whole>
+                                              # (need to double the brackets for .format)
+                (?<!\d{{2}})                  # negative lookbehind,
+                                              # avoid matching 2019-12 or 2019-12-05
+                (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
+            |                             # or
+                (?P<date>{})?                 # maybe date
+                \s?                           # maybe one space
+                {}                            # time
+            )
+            """).format(date.detailed_pattern, time.pattern)
+        if n is None:
+            return base_pattern
+        else:
+            to_replace = ("whole", "relative",
+                          "year", "month", "day", "date", "tens", "hour", "minute")
+            specifics = ["{}{}".format(s, n) for s in to_replace]
+            res = base_pattern
+            for src, dest in zip(to_replace, specifics):
+                res = res.replace(src, dest)
+            return res
 
     def __str__(self):
         if self.tzinfo:
             raise NotImplementedError("Stay tuned...")
         else:
             return self.strftime(DATETIME_FMT)
+
+
+# outside class; need the class to be defined first
+datetime.re = re.compile(datetime.pattern(), flags=re.VERBOSE)
 
 
 # no need to change this one for now
