@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as dt
 import re
 
-from datetime import date
+from hamster.lib import datetime as hdt
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamster_now,
@@ -43,20 +43,6 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 
-# ISO format: YYYY-MM-DD
-date_basic_pattern = r"""\d{4}-\d{2}-\d{2}"""
-date_basic_re = re.compile(date_basic_pattern, flags=re.VERBOSE)
-
-date_detailed_pattern = r"""
-    (?P<year>\d{4})        # 4 digits
-    -                      # dash
-    (?P<month>\d{2})       # 2 digits
-    -                      # dash
-    (?P<day>\d{2})         # 2 digits
-"""
-date_detailed_re = re.compile(date_detailed_pattern, flags=re.VERBOSE)
-
-
 # match time, such as "01:32", "13.56" or "0116"
 time_pattern = r"""
     (?P<hour>                         # hour
@@ -90,7 +76,7 @@ dt_pattern = r"""
         \s?                           # maybe one space
         {}                            # time
     )
-""".format(date_detailed_pattern, time_pattern)
+""".format(hdt.date.detailed_pattern, time_pattern)
 
 
 # needed for range_pattern
@@ -125,8 +111,8 @@ range_pattern = r"""
       (?P<lastday>{})     # date without time
     )
     )?                    # end time is facultative
-""".format(specific_dt_pattern(1), date_basic_pattern,
-           specific_dt_pattern(2), date_basic_pattern)
+""".format(specific_dt_pattern(1), hdt.date.basic_pattern,
+           specific_dt_pattern(2), hdt.date.basic_pattern)
 
 
 def _extract_time(match, h="hour", m="minute"):
@@ -154,15 +140,6 @@ def parse_time(s):
     return _extract_time(m) if m else None
 
 
-def parse_date(s):
-    """Extract ISO date (YYYY-MM-DD) from string."""
-    m = date_detailed_re.search(s)
-    return dt.date(year=int(m.group('year')),
-                   month=int(m.group('month')),
-                   day=int(m.group('day'))
-                   )
-
-
 def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
     """extract datetime from a dt_pattern match.
 
@@ -179,7 +156,7 @@ def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", defau
     if time:
         date_str = match.group(d)
         if date_str:
-            date = parse_date(date_str)
+            date = hdt.date.parse(date_str)
             return dt.datetime.combine(date, time)
         else:
             return hamsterday_time_to_datetime(default_day, time)
@@ -246,7 +223,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
 
     if m.group('firstday'):
         # only day given for start
-        firstday = parse_date(m.group('firstday'))
+        firstday = hdt.date.parse(m.group('firstday'))
         start = hamsterday_start(firstday)
     else:
         firstday = None
@@ -258,7 +235,7 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
             start = ref + delta1
 
     if m.group('lastday'):
-        lastday = parse_date(m.group('lastday'))
+        lastday = hdt.date.parse(m.group('lastday'))
         end = hamsterday_end(lastday)
     elif firstday:
         end = hamsterday_end(firstday)

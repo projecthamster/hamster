@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../
 import datetime as dt
 import unittest
 import re
-import hamster.lib.datetime as hdt
+from hamster.lib import datetime as hdt
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
@@ -259,6 +259,10 @@ class TestActivityInputParsing(unittest.TestCase):
 
 
 class TestDatetime(unittest.TestCase):
+    def test_date(self):
+        date = hdt.date.parse("2020-01-05")
+        self.assertEqual(date, dt.date(2020, 1, 5))
+
     def test_rounding(self):
         dt1 = hdt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
         self.assertEqual(dt1.second, 0)

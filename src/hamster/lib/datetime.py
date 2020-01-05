@@ -1,18 +1,55 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-"""Python datetime.datetime replacement, tuned for hamster use."""
+"""Hamster datetime.
+
+Python datetime replacement, tuned for hamster use.
+"""
 
 
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import datetime as dt
+import datetime as dt  # standard datetime
+import re
 
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
 DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
+
+
+class date(dt.date):
+    """Hamster date.
+
+    Should replace the python datetime.date in any customer code.
+
+    Same a python date, with the addition of parse methods.
+    """
+
+    FMT = "%Y-%m-%d"  # ISO format
+    basic_pattern = r"""\d{4}-\d{2}-\d{2}"""
+    basic_re = re.compile(basic_pattern, flags=re.VERBOSE)
+    detailed_pattern = r"""
+        (?P<year>\d{4})        # 4 digits
+        -                      # dash
+        (?P<month>\d{2})       # 2 digits
+        -                      # dash
+        (?P<day>\d{2})         # 2 digits
+    """
+    detailed_re = re.compile(detailed_pattern, flags=re.VERBOSE)
+
+    def __new__(cls, year, month, day):
+        return dt.date.__new__(cls, year, month, day)
+
+    @classmethod
+    def parse(cls, s):
+        """Return date from string."""
+        m = cls.detailed_re.search(s)
+        return cls(year=int(m.group('year')),
+                   month=int(m.group('month')),
+                   day=int(m.group('day'))
+                   )
 
 
 class datetime(dt.datetime):
