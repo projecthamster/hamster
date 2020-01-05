@@ -1,3 +1,9 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+
+"""Fact definition."""
+
+
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
