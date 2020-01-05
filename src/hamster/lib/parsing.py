@@ -43,18 +43,7 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 
-dt_pattern = r"""
-    (?P<whole>
-                                      # (need to double the brackets for .format)
-        (?<!\d{{2}})                  # negative lookbehind,
-                                      # avoid matching 2019-12 or 2019-12-05
-        (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
-    |                             # or
-        (?P<date>{})?                 # maybe date
-        \s?                           # maybe one space
-        {}                            # time
-    )
-""".format(hdt.date.detailed_pattern, hdt.time.pattern)
+
 
 
 # needed for range_pattern
@@ -62,7 +51,7 @@ def specific_dt_pattern(n):
     """Return a datetime pattern with all group names suffixed with n."""
     to_replace = ("whole", "relative", "year", "month", "day", "date", "tens", "hour", "minute")
     specifics = ["{}{}".format(s, n) for s in to_replace]
-    res = dt_pattern
+    res = hdt.datetime.pattern
     for src, dest in zip(to_replace, specifics):
         res = res.replace(src, dest)
     return res
@@ -91,34 +80,6 @@ range_pattern = r"""
     )?                    # end time is facultative
 """.format(specific_dt_pattern(1), hdt.date.basic_pattern,
            specific_dt_pattern(2), hdt.date.basic_pattern)
-
-
-def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
-    """extract datetime from a dt_pattern match.
-
-    Custom group names allow to use the same method
-    for two datetimes in the same regexp (e.g. for range parsing)
-
-    h (str): name of the group containing the hour
-    m (str): name of the group containing the minute
-    r (str): name of the group containing the relative time
-    default_day (dt.date): the datetime will belong to this hamster day if
-                           date is missing.
-    """
-    time = hdt.time._extract_time(match, h, m)
-    if time:
-        date_str = match.group(d)
-        if date_str:
-            date = hdt.date.parse(date_str)
-            return dt.datetime.combine(date, time)
-        else:
-            return hamsterday_time_to_datetime(default_day, time)
-    else:
-        relative_str = match.group(r)
-        if relative_str:
-            return dt.timedelta(minutes=int(relative_str))
-        else:
-            return None
 
 
 def parse_datetime_range(text, position="exact", separator="\s+", default_day=None, ref="now"):
@@ -180,8 +141,8 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
         start = hamsterday_start(firstday)
     else:
         firstday = None
-        start = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                 default_day=default_day)
+        start = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+                                               default_day=default_day)
         if isinstance(start, dt.timedelta):
             # relative to ref, actually
             delta1 = start
@@ -193,8 +154,8 @@ def parse_datetime_range(text, position="exact", separator="\s+", default_day=No
     elif firstday:
         end = hamsterday_end(firstday)
     else:
-        end = _extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
-                               default_day=datetime_to_hamsterday(start))
+        end =  hdt.datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
+                                              default_day=datetime_to_hamsterday(start))
         if isinstance(end, dt.timedelta):
             # relative to start, actually
             delta2 = end

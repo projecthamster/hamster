@@ -14,8 +14,6 @@ from hamster.lib.stuff import (
     hamster_today,
     )
 from hamster.lib.parsing import (
-    dt_pattern,
-    _extract_datetime,
     parse_datetime_range,
     specific_dt_pattern,
     )
@@ -269,6 +267,9 @@ class TestDatetime(unittest.TestCase):
         self.assertEqual(hdt.time.parse("12.01"), dt.time(12, 1))
         self.assertEqual(hdt.time.parse("1201"), dt.time(12, 1))
 
+    def test_parse_datetime(self):
+        self.assertEqual(hdt.datetime.parse("2020-01-05 9:01"), dt.datetime(2020, 1, 5, 9, 1))
+
     def test_rounding(self):
         dt1 = hdt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
         self.assertEqual(dt1.second, 0)
@@ -281,18 +282,18 @@ class TestParsers(unittest.TestCase):
         p = specific_dt_pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                default_day=hamster_today())
+        time = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+                                              default_day=hamster_today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
+        time = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
         self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
-        timedelta = _extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                     default_day=hamster_today())
-        self.assertEqual(timedelta, dt.timedelta(minutes=-25))
+        relative = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+                                                  default_day=hamster_today())
+        self.assertEqual(relative, dt.timedelta(minutes=-25))
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)
         self.assertEqual(m, None)

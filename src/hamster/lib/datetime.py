@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as dt  # standard datetime
 import re
 
+# to be replaced soon
+from hamster.lib.stuff import hamsterday_time_to_datetime
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -129,6 +131,20 @@ class datetime(dt.datetime):
     - rounded to minutes
     - conversion to and from string facilities
     """
+
+    pattern = r"""
+        (?P<whole>
+                                          # (need to double the brackets for .format)
+            (?<!\d{{2}})                  # negative lookbehind,
+                                          # avoid matching 2019-12 or 2019-12-05
+            (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
+        |                             # or
+            (?P<date>{})?                 # maybe date
+            \s?                           # maybe one space
+            {}                            # time
+        )
+    """.format(date.detailed_pattern, time.pattern)
+
     def __new__(cls, year, month, day,
                 hour=0, minute=0,
                 second=0, microsecond=0,
@@ -139,8 +155,52 @@ class datetime(dt.datetime):
                                        second=0, microsecond=0,
                                        tzinfo=None, fold=fold)
 
+    @classmethod
+    def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative", default_day=None):
+        """extract datetime from a datetime.pattern match.
+
+        Custom group names allow to use the same method
+        for two datetimes in the same regexp (e.g. for range parsing)
+
+        h (str): name of the group containing the hour
+        m (str): name of the group containing the minute
+        r (str): name of the group containing the relative time
+        default_day (dt.date): the datetime will belong to this hamster day if
+                               date is missing.
+        """
+        _time = time._extract_time(match, h, m)
+        if _time:
+            date_str = match.group(d)
+            if date_str:
+                _date = date.parse(date_str)
+                return datetime.combine(_date, _time)
+            else:
+                return hamsterday_time_to_datetime(default_day, _time)
+        else:
+            relative_str = match.group(r)
+            if relative_str:
+                return timedelta(minutes=int(relative_str))
+            else:
+                return None
+
+    @classmethod
+    def parse(cls, s, default_day=None):
+        """Parse a datetime from text.
+
+        default_day (dt.date):
+            If start is given without any date (e.g. just hh:mm),
+            put the corresponding datetime in default_day.
+            Defaults to hamster_today.
+        """
+        m = re.search(cls.pattern, s, flags=re.VERBOSE)
+        return cls._extract_datetime(m, default_day=default_day) if m else None
+
     def __str__(self):
         if self.tzinfo:
             raise NotImplementedError("Stay tuned...")
         else:
             return self.strftime(DATETIME_FMT)
+
+
+# no need to change this one for now
+timedelta = dt.timedelta
