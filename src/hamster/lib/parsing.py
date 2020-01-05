@@ -43,28 +43,6 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 
-# match time, such as "01:32", "13.56" or "0116"
-time_pattern = r"""
-    (?P<hour>                         # hour
-     [0-9](?=[,\.:])                  # positive lookahead:
-                                      # allow a single digit only if
-                                      # followed by a colon, dot or comma
-     | [0-1][0-9]                     # 00 to 19
-     | [2][0-3]                       # 20 to 23
-    )
-    [,\.:]?                           # Separator can be colon,
-                                      # dot, comma, or nothing.
-    (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
-    (?!\d?-\d{2}-\d{2})               # Negative lookahead:
-                                      # avoid matching date by inadvertance.
-                                      # For instance 2019-12-05
-                                      # might be caught as 2:01.
-                                      # Requiring space or - would not work:
-                                      # 2019-2025 is the 20:19-20:25 range.
-"""
-time_re = re.compile(time_pattern, flags=re.VERBOSE)
-
-
 dt_pattern = r"""
     (?P<whole>
                                       # (need to double the brackets for .format)
@@ -76,7 +54,7 @@ dt_pattern = r"""
         \s?                           # maybe one space
         {}                            # time
     )
-""".format(hdt.date.detailed_pattern, time_pattern)
+""".format(hdt.date.detailed_pattern, hdt.time.pattern)
 
 
 # needed for range_pattern
@@ -115,31 +93,6 @@ range_pattern = r"""
            specific_dt_pattern(2), hdt.date.basic_pattern)
 
 
-def _extract_time(match, h="hour", m="minute"):
-    """Extract time from a time_re match.
-
-    Custom group names allow to use the same method
-    for two times in the same regexp (e.g. for range parsing)
-
-    h (str): name of the group containing the hour
-    m (str): name of the group containing the minute
-    """
-    h_str = match.group(h)
-    m_str = match.group(m)
-    if h_str and m_str:
-        hour = int(h_str)
-        minute = int(m_str)
-        return dt.time(hour, minute)
-    else:
-        return None
-
-
-def parse_time(s):
-    """Parse time from string."""
-    m = time_re.search(s)
-    return _extract_time(m) if m else None
-
-
 def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
     """extract datetime from a dt_pattern match.
 
@@ -152,7 +105,7 @@ def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", defau
     default_day (dt.date): the datetime will belong to this hamster day if
                            date is missing.
     """
-    time = _extract_time(match, h, m)
+    time = hdt.time._extract_time(match, h, m)
     if time:
         date_str = match.group(d)
         if date_str:

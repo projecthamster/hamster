@@ -16,7 +16,6 @@ from hamster.lib.stuff import (
 from hamster.lib.parsing import (
     dt_pattern,
     _extract_datetime,
-    parse_time,
     parse_datetime_range,
     specific_dt_pattern,
     )
@@ -259,9 +258,16 @@ class TestActivityInputParsing(unittest.TestCase):
 
 
 class TestDatetime(unittest.TestCase):
-    def test_date(self):
+    def test_parse_date(self):
         date = hdt.date.parse("2020-01-05")
         self.assertEqual(date, dt.date(2020, 1, 5))
+
+    def test_parse_time(self):
+        self.assertEqual(hdt.time.parse("9:01"), dt.time(9, 1))
+        self.assertEqual(hdt.time.parse("9.01"), dt.time(9, 1))
+        self.assertEqual(hdt.time.parse("12:01"), dt.time(12, 1))
+        self.assertEqual(hdt.time.parse("12.01"), dt.time(12, 1))
+        self.assertEqual(hdt.time.parse("1201"), dt.time(12, 1))
 
     def test_rounding(self):
         dt1 = hdt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
@@ -271,13 +277,6 @@ class TestDatetime(unittest.TestCase):
 
 
 class TestParsers(unittest.TestCase):
-    def test_parse_time(self):
-        self.assertEqual(parse_time("9:01"), dt.time(9, 1))
-        self.assertEqual(parse_time("9.01"), dt.time(9, 1))
-        self.assertEqual(parse_time("12:01"), dt.time(12, 1))
-        self.assertEqual(parse_time("12.01"), dt.time(12, 1))
-        self.assertEqual(parse_time("1201"), dt.time(12, 1))
-
     def test_dt_patterns(self):
         p = specific_dt_pattern(1)
         s = "12:03"
