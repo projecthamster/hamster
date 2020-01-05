@@ -15,7 +15,6 @@ from hamster.lib.stuff import (
 )
 
 
-# to be removed once hamster.lib/datetime is up and running
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
 DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
@@ -133,6 +132,9 @@ range_pattern = r"""
 def _extract_time(match, h="hour", m="minute"):
     """Extract time from a time_re match.
 
+    Custom group names allow to use the same method
+    for two times in the same regexp (e.g. for range parsing)
+
     h (str): name of the group containing the hour
     m (str): name of the group containing the minute
     """
@@ -163,6 +165,9 @@ def parse_date(s):
 
 def _extract_datetime(match, d="date", h="hour", m="minute", r="relative", default_day=None):
     """extract datetime from a dt_pattern match.
+
+    Custom group names allow to use the same method
+    for two datetimes in the same regexp (e.g. for range parsing)
 
     h (str): name of the group containing the hour
     m (str): name of the group containing the minute
