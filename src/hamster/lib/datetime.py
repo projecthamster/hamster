@@ -67,25 +67,6 @@ class time(dt.time):
 
     FMT = "%H:%M"  # e.g. 13:30
     # match time, such as "01:32", "13.56" or "0116"
-    pattern = r"""
-        (?P<hour>                         # hour
-         [0-9](?=[,\.:])                  # positive lookahead:
-                                          # allow a single digit only if
-                                          # followed by a colon, dot or comma
-         | [0-1][0-9]                     # 00 to 19
-         | [2][0-3]                       # 20 to 23
-        )
-        [,\.:]?                           # Separator can be colon,
-                                          # dot, comma, or nothing.
-        (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
-        (?!\d?-\d{2}-\d{2})               # Negative lookahead:
-                                          # avoid matching date by inadvertance.
-                                          # For instance 2019-12-05
-                                          # might be caught as 2:01.
-                                          # Requiring space or - would not work:
-                                          # 2019-2025 is the 20:19-20:25 range.
-    """
-    re = re.compile(pattern, flags=re.VERBOSE)
 
     def __new__(cls,
                 hour=0, minute=0,
@@ -123,6 +104,37 @@ class time(dt.time):
         """Parse time from string."""
         m = cls.re.search(s)
         return cls._extract_time(m) if m else None
+
+    # For datetime that must be a method.
+    # Same here for consistency.
+    @classmethod
+    def pattern(cls):
+        """Return a time pattern with all group names."""
+
+        # remove the indentation => easier debugging.
+        return dedent(r"""
+            (?P<hour>                         # hour
+             [0-9](?=[,\.:])                  # positive lookahead:
+                                              # allow a single digit only if
+                                              # followed by a colon, dot or comma
+             | [0-1][0-9]                     # 00 to 19
+             | [2][0-3]                       # 20 to 23
+            )
+            [,\.:]?                           # Separator can be colon,
+                                              # dot, comma, or nothing.
+            (?P<minute>[0-5][0-9])            # minute (2 digits, between 00 and 59)
+            (?!\d?-\d{2}-\d{2})               # Negative lookahead:
+                                              # avoid matching date by inadvertance.
+                                              # For instance 2019-12-05
+                                              # might be caught as 2:01.
+                                              # Requiring space or - would not work:
+                                              # 2019-2025 is the 20:19-20:25 range.
+            """)
+
+
+# For datetime that will need to be outside the class.
+# Same here for consistency
+time.re = re.compile(time.pattern(), flags=re.VERBOSE)
 
 
 class datetime(dt.datetime):
@@ -206,7 +218,7 @@ class datetime(dt.datetime):
                 \s?                           # maybe one space
                 {}                            # time
             )
-            """).format(date.detailed_pattern, time.pattern)
+            """).format(date.detailed_pattern, time.pattern())
         if n is None:
             return base_pattern
         else:
