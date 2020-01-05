@@ -15,6 +15,7 @@ from hamster.lib.stuff import (
 )
 
 
+# to be removed once hamster.lib/datetime is up and running
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
 DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
