@@ -43,119 +43,6 @@ tags_separator = re.compile(r"""
 """, flags=re.VERBOSE)
 
 
-range_pattern = r"""
-    (                    # start
-      {}                 # datetime: relative1 or (date1, hour1, and minute1)
-      |                  # or
-      (?P<firstday>{})  # date without time
-    )
-    (
-
-        (?P<separation>   # (only needed if end time is given)
-            \s?           # maybe one space
-            -             # dash
-            \s?           # maybe one space
-          |               # or
-            \s            # one space exactly
-        )
-    (                     # end
-      {}                  # datetime: relative2 or (date2, hour2, and minute2)
-      |                   # or
-      (?P<lastday>{})     # date without time
-    )
-    )?                    # end time is facultative
-""".format(hdt.datetime.pattern(1), hdt.date.pattern(detailed=False),
-           hdt.datetime.pattern(2), hdt.date.pattern(detailed=False))
-
-
-def parse_datetime_range(text, position="exact", separator="\s+", default_day=None, ref="now"):
-    """Parse a start-end range from text.
-
-    position (str): "exact" to match exactly the full text
-                    "head" to search only at the beginning of text, and
-                    "tail" to search only at the end.
-
-    separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
-                     from the rest. Discarded for "exact" position.
-
-    default_day (dt.date): If start is given without any date (e.g. just hh:mm),
-                           put the corresponding datetime in default_day.
-                           Defaults to hamster_today.
-                           Note: the default end day is always the start day, so
-                                 "2019-11-27 23:50 - 00:20" lasts 30 minutes.
-
-    ref (dt.datetime): reference for relative times
-                       (e.g. -15: quarter hour before ref).
-                       For testing purposes only
-                       (note: this will be removed later on,
-                        and replaced with hamster_now mocking in pytest).
-                       For users, it should be "now".
-    Return:
-        (start, end, rest)
-    """
-
-    if ref == "now":
-        ref = hamster_now()
-
-    if default_day is None:
-        default_day = hamster_today()
-
-    assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
-    if position == "exact":
-        p = "^{}$".format(range_pattern)
-    elif position == "head":
-        # require at least a space after, to avoid matching 10.00@cat
-        # .*? so rest is as little as possible
-        p = "^{}{}(?P<rest>.*?)$".format(range_pattern, separator)
-    elif position == "tail":
-        # require at least a space after, to avoid matching #10.00
-        # .*? so rest is as little as possible
-        p = "^(?P<rest>.*?){}{}$".format(separator, range_pattern)
-    # no need to compile, recent patterns are cached by re
-    m = re.search(p, text, flags=re.VERBOSE)
-
-    if not m:
-        return None, None, text
-    elif position == "exact":
-        rest = ""
-    else:
-        rest = m.group("rest")
-
-    if m.group('firstday'):
-        # only day given for start
-        firstday = hdt.date.parse(m.group('firstday'))
-        start = hamsterday_start(firstday)
-    else:
-        firstday = None
-        start = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                               default_day=default_day)
-        if isinstance(start, dt.timedelta):
-            # relative to ref, actually
-            delta1 = start
-            start = ref + delta1
-
-    if m.group('lastday'):
-        lastday = hdt.date.parse(m.group('lastday'))
-        end = hamsterday_end(lastday)
-    elif firstday:
-        end = hamsterday_end(firstday)
-    else:
-        end =  hdt.datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
-                                              default_day=datetime_to_hamsterday(start))
-        if isinstance(end, dt.timedelta):
-            # relative to start, actually
-            delta2 = end
-            if delta2 > dt.timedelta(0):
-                # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
-                end = start + delta2
-            elif ref and delta2 < dt.timedelta(0):
-                end = ref + delta2
-            else:
-                end = None
-
-    return start, end, rest
-
-
 def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     """Extract fact fields from the string.
 
@@ -174,9 +61,9 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat
-    start, end, remaining_text = parse_datetime_range(text, position=range_pos,
-                                                      separator=ACTIVITY_SEPARATOR,
-                                                      default_day=default_day)
+    start, end, remaining_text = hdt.Range.parse(text, position=range_pos,
+                                                 separator=ACTIVITY_SEPARATOR,
+                                                 default_day=default_day)
     res["start_time"] = start
     res["end_time"] = end
 
