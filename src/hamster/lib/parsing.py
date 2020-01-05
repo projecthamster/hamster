@@ -64,8 +64,8 @@ range_pattern = r"""
       (?P<lastday>{})     # date without time
     )
     )?                    # end time is facultative
-""".format(hdt.datetime.pattern(1), hdt.date.basic_pattern,
-           hdt.datetime.pattern(2), hdt.date.basic_pattern)
+""".format(hdt.datetime.pattern(1), hdt.date.pattern(detailed=False),
+           hdt.datetime.pattern(2), hdt.date.pattern(detailed=False))
 
 
 def parse_datetime_range(text, position="exact", separator="\s+", default_day=None, ref="now"):

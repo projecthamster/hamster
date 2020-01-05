@@ -32,16 +32,6 @@ class date(dt.date):
     """
 
     FMT = "%Y-%m-%d"  # ISO format
-    basic_pattern = r"""\d{4}-\d{2}-\d{2}"""
-    basic_re = re.compile(basic_pattern, flags=re.VERBOSE)
-    detailed_pattern = r"""
-        (?P<year>\d{4})        # 4 digits
-        -                      # dash
-        (?P<month>\d{2})       # 2 digits
-        -                      # dash
-        (?P<day>\d{2})         # 2 digits
-    """
-    detailed_re = re.compile(detailed_pattern, flags=re.VERBOSE)
 
     def __new__(cls, year, month, day):
         return dt.date.__new__(cls, year, month, day)
@@ -49,11 +39,29 @@ class date(dt.date):
     @classmethod
     def parse(cls, s):
         """Return date from string."""
-        m = cls.detailed_re.search(s)
+        m = cls.re.search(s)
         return cls(year=int(m.group('year')),
                    month=int(m.group('month')),
                    day=int(m.group('day'))
                    )
+
+    @classmethod
+    def pattern(cls, detailed=True):
+        if detailed:
+            return dedent(r"""
+                (?P<year>\d{4})        # 4 digits
+                -                      # dash
+                (?P<month>\d{2})       # 2 digits
+                -                      # dash
+                (?P<day>\d{2})         # 2 digits
+                """)
+        else:
+            return r"""\d{4}-\d{2}-\d{2}"""
+
+
+# For datetime that will need to be outside the class.
+# Same here for consistency
+date.re = re.compile(date.pattern(), flags=re.VERBOSE)
 
 
 class time(dt.time):
@@ -218,7 +226,7 @@ class datetime(dt.datetime):
                 \s?                           # maybe one space
                 {}                            # time
             )
-            """).format(date.detailed_pattern, time.pattern())
+            """).format(date.pattern(), time.pattern())
         if n is None:
             return base_pattern
         else:
