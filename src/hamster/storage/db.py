@@ -991,3 +991,25 @@ class Storage(storage.Storage):
             print("updated database from version %d to %d" % (version, current_version))
 
         self.end_transaction()
+
+
+# datetime/sql conversions
+
+DATETIME_LOCAL_FMT = "%Y-%m-%d %H:%M:%S"
+
+
+def adapt_datetime(t):
+    """Convert datetime t to the suitable sql representation."""
+    return t.isoformat(" ")
+
+
+def convert_datetime(s):
+    """Convert the sql timestamp to datetime.
+
+    s is in bytes
+    """
+    return dt.datetime.strptime(s.decode('utf-8'), DATETIME_LOCAL_FMT)
+
+
+sqlite.register_adapter(dt.datetime, adapt_datetime)
+sqlite.register_converter("timestamp", convert_datetime)
