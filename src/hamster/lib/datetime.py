@@ -15,6 +15,7 @@ import re
 
 from collections import namedtuple
 from textwrap import dedent
+from functools import lru_cache
 
 # to be replaced soon
 from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
@@ -209,6 +210,7 @@ class datetime(dt.datetime):
         return cls._extract_datetime(m, default_day=default_day) if m else None
 
     @classmethod
+    @lru_cache()
     def pattern(cls, n=None):
         """Return a datetime pattern with all group names.
 
@@ -348,6 +350,7 @@ class Range(namedtuple('Range', 'start, end')):
         return Range(start, end), rest
 
     @classmethod
+    @lru_cache()
     def pattern(cls):
         return dedent(r"""
             (                    # start
