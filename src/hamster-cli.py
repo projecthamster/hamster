@@ -162,7 +162,7 @@ class HamsterClient(object):
         export_format, start_time, end_time = "html", None, None
         if args:
             export_format = args[0]
-        start_time, end_time, _ = hdt.Range.parse(" ".join(args[1:]))
+        (start_time, end_time), __ = hdt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -199,7 +199,7 @@ class HamsterClient(object):
 
     def list(self, *times):
         """list facts within a date range"""
-        start_time, end_time, _ = hdt.Range.parse(" ".join(times or []))
+        (start_time, end_time), __ = hdt.Range.parse(" ".join(times or []))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -223,7 +223,7 @@ class HamsterClient(object):
         if args:
             search = args[0]
 
-        start_time, end_time, _ = hdt.Range.parse(" ".join(args[1:]))
+        (start_time, end_time), __ = hdt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)

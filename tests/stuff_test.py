@@ -298,49 +298,49 @@ class TestParsers(unittest.TestCase):
     def test_parse_datetime_range(self):
         # only match clean
         s = "10.00@cat"
-        start, end, rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = hdt.Range.parse(s, position="head")
         self.assertEqual(start, None)
         self.assertEqual(end, None)
         s = "12:02"
-        start, end, rest = hdt.Range.parse(s)
+        (start, end), rest = hdt.Range.parse(s)
         self.assertEqual(start.strftime("%H:%M"), "12:02")
         self.assertEqual(end, None)
         s = "12:03 13:04"
-        start, end, rest = hdt.Range.parse(s)
+        (start, end), rest = hdt.Range.parse(s)
         self.assertEqual(start.strftime("%H:%M"), "12:03")
         self.assertEqual(end.strftime("%H:%M"), "13:04")
         s = "12:35 activity"
-        start, end, rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = hdt.Range.parse(s, position="head")
         self.assertEqual(start.strftime("%H:%M"), "12:35")
         self.assertEqual(end, None)
         s = "2019-12-01 12:33 activity"
-        start, end, rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = hdt.Range.parse(s, position="head")
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
         self.assertEqual(end, None)
 
         ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
 
         s = "-25 activity"
-        start, end, rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         self.assertEqual(end, None)
         s = "-55 -25 activity"
-        start, end, rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         s = "-55 -120 activity"
-        start, end, rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 11:55")
 
         s = "2019-12-05"  # single hamster day
-        start, end, rest = hdt.Range.parse(s, ref=ref)
+        (start, end), rest = hdt.Range.parse(s, ref=ref)
         just_before = start - dt.timedelta(seconds=1)
         just_after = end + dt.timedelta(seconds=1)
         self.assertEqual(datetime_to_hamsterday(just_before), dt.date(2019, 12, 4))
         self.assertEqual(datetime_to_hamsterday(just_after), dt.date(2019, 12, 6))
         s = "2019-12-05 2019-12-07"  # hamster days range
-        start, end, rest = hdt.Range.parse(s, ref=ref)
+        (start, end), rest = hdt.Range.parse(s, ref=ref)
         just_before = start - dt.timedelta(seconds=1)
         just_after = end + dt.timedelta(seconds=1)
         self.assertEqual(datetime_to_hamsterday(just_before), dt.date(2019, 12, 4))

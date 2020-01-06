@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as dt  # standard datetime
 import re
 
+from collections import namedtuple
 from textwrap import dedent
 
 # to be replaced soon
@@ -249,12 +250,12 @@ class datetime(dt.datetime):
 datetime.re = re.compile(datetime.pattern(), flags=re.VERBOSE)
 
 
-class Range():
-    def __init__(self, start, end=None):
-        self.start = start
-        self.end = end
+class Range(namedtuple('Range', 'start, end')):
+    """Time span between two datetimes."""
 
-    # I know, that should return a Range. Let's finish the move first.
+    # slight memory optimization; no further attributes besides start or end.
+    __slots__ = ()
+
     @classmethod
     def parse(cls, text,
               position="exact", separator="\s+", default_day=None, ref="now"):
@@ -280,8 +281,10 @@ class Range():
                             and replaced with hamster_now mocking in pytest).
                            For users, it should be "now".
         Return:
-            (start, end, rest)
-            """
+            (range, rest)
+            range (Range): Range(None, None) if no match is found.
+            rest (str): remainder of the text.
+        """
 
         if ref == "now":
             ref = hamster_now()
@@ -304,7 +307,7 @@ class Range():
         m = re.search(p, text, flags=re.VERBOSE)
 
         if not m:
-            return None, None, text
+            return Range(None, None), text
         elif position == "exact":
             rest = ""
         else:
@@ -342,7 +345,7 @@ class Range():
                 else:
                     end = None
 
-        return start, end, rest
+        return Range(start, end), rest
 
     @classmethod
     def pattern(cls):
@@ -370,6 +373,7 @@ class Range():
             """.format(datetime.pattern(1), date.pattern(detailed=False),
                        datetime.pattern(2), date.pattern(detailed=False))
             )
+
 
 # no need to change this one for now
 timedelta = dt.timedelta

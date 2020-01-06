@@ -61,9 +61,9 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat
-    start, end, remaining_text = hdt.Range.parse(text, position=range_pos,
-                                                 separator=ACTIVITY_SEPARATOR,
-                                                 default_day=default_day)
+    (start, end), remaining_text = hdt.Range.parse(text, position=range_pos,
+                                                   separator=ACTIVITY_SEPARATOR,
+                                                   default_day=default_day)
     res["start_time"] = start
     res["end_time"] = end
 
