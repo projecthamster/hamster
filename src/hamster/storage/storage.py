@@ -21,9 +21,10 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import datetime as dt
+from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import hamster_now
+
 
 class Storage(object):
     def run_fixtures(self):

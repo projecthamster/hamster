@@ -8,11 +8,11 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import calendar
-import datetime as dt
 
 from copy import deepcopy
 from textwrap import dedent
 
+from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
     datetime_to_hamsterday,

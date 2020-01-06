@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 import bisect
 import cairo
-import datetime as dt
 import re
 
 from gi.repository import Gdk as gdk
@@ -36,6 +35,7 @@ from collections import defaultdict
 from copy import deepcopy
 
 from hamster import client
+from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime

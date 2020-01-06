@@ -4,7 +4,6 @@
 # Copyright (c) 2014 Toms Baugis <toms.baugis@gmail.com>
 # Dual licensed under the MIT or GPL Version 2 licenses.
 
-import datetime as dt
 import math
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -12,6 +11,7 @@ from gi.repository import GObject as gobject
 from gi.repository import Pango as pango
 from collections import defaultdict
 
+from hamster.lib import datetime as dt
 from hamster.lib import graphics
 
 

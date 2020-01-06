@@ -1,8 +1,8 @@
-import datetime as dt
 import dbus
 import dbus.service
 from calendar import timegm
 from dbus.mainloop.glib import DBusGMainLoop as DBusMainLoop
+from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 
 

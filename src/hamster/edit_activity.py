@@ -22,12 +22,12 @@ from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from textwrap import dedent
 import time
-import datetime as dt
 
 """ TODO: hook into notifications and refresh our days if some evil neighbour
           edit fact window has dared to edit facts
 """
 from hamster import widgets
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime, conf, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import (

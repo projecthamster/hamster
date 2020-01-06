@@ -25,7 +25,6 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os, time
-import datetime as dt
 import itertools
 import sqlite3 as sqlite
 from shutil import copy as copyfile
@@ -35,6 +34,7 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import hamster_today, hamster_now

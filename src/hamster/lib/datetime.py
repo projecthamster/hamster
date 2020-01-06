@@ -10,7 +10,7 @@ Python datetime replacement, tuned for hamster use.
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import datetime as dt  # standard datetime
+import datetime as pdt  # standard datetime
 import re
 
 from collections import namedtuple
@@ -25,7 +25,7 @@ TIME_FMT = "%H:%M"
 DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
 
 
-class date(dt.date):
+class date(pdt.date):
     """Hamster date.
 
     Should replace the python datetime.date in any customer code.
@@ -36,7 +36,7 @@ class date(dt.date):
     FMT = "%Y-%m-%d"  # ISO format
 
     def __new__(cls, year, month, day):
-        return dt.date.__new__(cls, year, month, day)
+        return pdt.date.__new__(cls, year, month, day)
 
     @classmethod
     def parse(cls, s):
@@ -66,7 +66,7 @@ class date(dt.date):
 date.re = re.compile(date.pattern(), flags=re.VERBOSE)
 
 
-class time(dt.time):
+class time(pdt.time):
     """Hamster time.
 
     Should replace the python datetime.time in any customer code.
@@ -83,7 +83,7 @@ class time(dt.time):
                 second=0, microsecond=0,
                 tzinfo=None, fold=0):
             # round down to zero seconds and microseconds
-            return dt.time.__new__(cls,
+            return pdt.time.__new__(cls,
                                    hour=hour, minute=minute,
                                    second=0, microsecond=0,
                                    tzinfo=None, fold=fold)
@@ -147,7 +147,7 @@ class time(dt.time):
 time.re = re.compile(time.pattern(), flags=re.VERBOSE)
 
 
-class datetime(dt.datetime):
+class datetime(pdt.datetime):
     """Hamster datetime.
 
     Should replace the python datetime.datetime in any customer code.
@@ -159,12 +159,20 @@ class datetime(dt.datetime):
     def __new__(cls, year, month, day,
                 hour=0, minute=0,
                 second=0, microsecond=0,
-                tzinfo=None, fold=0):
+                tzinfo=None, *, fold=0):
             # round down to zero seconds and microseconds
-            return dt.datetime.__new__(cls, year, month, day,
+            return pdt.datetime.__new__(cls, year, month, day,
                                        hour=hour, minute=minute,
                                        second=0, microsecond=0,
                                        tzinfo=None, fold=fold)
+
+    # similar to https://stackoverflow.com/q/51966126/3565696
+    # __getnewargs_ex__ did not work, brute force required
+    def __deepcopy__(self, memo):
+        return datetime(self.year, self.month, self.day,
+                        self.hour, self.minute,
+                        self.second, self.microsecond,
+                        self.tzinfo, fold=self.fold)
 
     @classmethod
     def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative", default_day=None):
@@ -270,13 +278,13 @@ class Range(namedtuple('Range', 'start, end')):
         separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
                          from the rest. Discarded for "exact" position.
 
-        default_day (dt.date): If start is given without any date (e.g. just hh:mm),
+        default_day (date): If start is given without any date (e.g. just hh:mm),
                                put the corresponding datetime in default_day.
                                Defaults to hamster_today.
                                Note: the default end day is always the start day, so
                                      "2019-11-27 23:50 - 00:20" lasts 30 minutes.
 
-        ref (dt.datetime): reference for relative times
+        ref (datetime): reference for relative times
                            (e.g. -15: quarter hour before ref).
                            For testing purposes only
                            (note: this will be removed later on,
@@ -323,7 +331,7 @@ class Range(namedtuple('Range', 'start, end')):
             firstday = None
             start = datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                                    default_day=default_day)
-            if isinstance(start, dt.timedelta):
+            if isinstance(start, pdt.timedelta):
                 # relative to ref, actually
                 delta1 = start
                 start = ref + delta1
@@ -336,13 +344,13 @@ class Range(namedtuple('Range', 'start, end')):
         else:
             end =  datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
                                                   default_day=datetime_to_hamsterday(start))
-            if isinstance(end, dt.timedelta):
+            if isinstance(end, pdt.timedelta):
                 # relative to start, actually
                 delta2 = end
-                if delta2 > dt.timedelta(0):
+                if delta2 > pdt.timedelta(0):
                     # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
                     end = start + delta2
-                elif ref and delta2 < dt.timedelta(0):
+                elif ref and delta2 < pdt.timedelta(0):
                     end = ref + delta2
                 else:
                     end = None
@@ -379,4 +387,4 @@ class Range(namedtuple('Range', 'start, end')):
 
 
 # no need to change this one for now
-timedelta = dt.timedelta
+timedelta = pdt.timedelta

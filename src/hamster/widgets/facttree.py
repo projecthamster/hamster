@@ -19,7 +19,6 @@
 
 import bisect
 import cairo
-import datetime as dt
 
 from collections import defaultdict
 from gi.repository import GObject as gobject
@@ -28,6 +27,7 @@ from gi.repository import Gdk as gdk
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 
+from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import stuff
 

@@ -3,8 +3,6 @@
 
 import logging
 from gi.repository import GLib as glib
-
-import datetime as dt
 from gi.repository import Gio as gio
 
 from hamster import logger as hamster_logger
@@ -12,6 +10,7 @@ from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
+from hamster.lib import datetime as dt
 from hamster.lib import default_logger, stuff
 from hamster.lib.dbus import (
     DBusMainLoop,

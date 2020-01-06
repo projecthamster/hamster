@@ -1,10 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import datetime as dt
 import re
 
-from hamster.lib import datetime as hdt
+from hamster.lib import datetime as dt
 from hamster.lib.stuff import (
     datetime_to_hamsterday,
     hamster_now,
@@ -61,7 +60,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat
-    (start, end), remaining_text = hdt.Range.parse(text, position=range_pos,
+    (start, end), remaining_text = dt.Range.parse(text, position=range_pos,
                                                    separator=ACTIVITY_SEPARATOR,
                                                    default_day=default_day)
     res["start_time"] = start

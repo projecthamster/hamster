@@ -25,19 +25,19 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import gi
-import datetime as dt
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 
 from itertools import groupby
-import datetime as dt
 import calendar
 import time
 import re
 import locale
 import os
+
+from hamster.lib import datetime as dt
 
 
 def datetime_to_hamsterday(civil_date_time):

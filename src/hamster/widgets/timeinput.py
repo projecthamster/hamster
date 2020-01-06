@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime as dt
 import calendar
 import re
 
@@ -25,6 +24,7 @@ from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
+from hamster.lib import datetime as dt
 from hamster.lib.stuff import format_duration, hamster_round
 
 class TimeInput(gtk.Entry):

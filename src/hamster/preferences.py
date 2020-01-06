@@ -21,9 +21,8 @@ from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import GObject as gobject
 
-import datetime as dt
-
 from hamster import widgets
+from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib.configuration import Controller, runtime, conf
 

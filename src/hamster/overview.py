@@ -19,7 +19,6 @@
 
 import sys
 import bisect
-import datetime as dt
 import itertools
 import webbrowser
 
@@ -37,6 +36,7 @@ from gi.repository import Pango as pango
 import cairo
 
 import hamster.client
+from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import layout
 from hamster import reports
