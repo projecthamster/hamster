@@ -189,6 +189,12 @@ class datetime(pdt.datetime):
         else:
             raise NotImplementedError("subtract {}".format(type(other)))
 
+    def __str__(self):
+        if self.tzinfo:
+            raise NotImplementedError("Stay tuned...")
+        else:
+            return self.strftime(DATETIME_FMT)
+
     @classmethod
     def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative", default_day=None):
         """extract datetime from a datetime.pattern match.
@@ -278,12 +284,6 @@ class datetime(pdt.datetime):
                             self.hour, self.minute,
                             self.second, self.microsecond,
                             self.tzinfo, fold=self.fold)
-
-    def __str__(self):
-        if self.tzinfo:
-            raise NotImplementedError("Stay tuned...")
-        else:
-            return self.strftime(DATETIME_FMT)
 
 
 # outside class; need the class to be defined first
