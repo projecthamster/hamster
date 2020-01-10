@@ -290,7 +290,7 @@ class CmdLineEntry(gtk.Entry):
         self.todays_facts = self.storage.get_todays_facts()
 
         # list of facts of last month
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
         last_month = self.storage.get_facts(now - dt.timedelta(days=30), now)
 
         # naive recency and frequency rank
@@ -356,7 +356,7 @@ class CmdLineEntry(gtk.Entry):
         res = []
 
         fact = Fact.parse(text)
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
 
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description

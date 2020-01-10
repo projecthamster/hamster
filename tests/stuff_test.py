@@ -9,7 +9,6 @@ from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime,
-    hamster_now,
     hamster_today,
     )
 
@@ -135,10 +134,10 @@ class TestActivityInputParsing(unittest.TestCase):
         fact2.description = "abcd"
         self.assertNotEqual(fact1, fact2)
         fact2 = fact1.copy()
-        fact2.start_time = hamster_now()
+        fact2.start_time = dt.datetime.now()
         self.assertNotEqual(fact1, fact2)
         fact2 = fact1.copy()
-        fact2.end_time = hamster_now()
+        fact2.end_time = dt.datetime.now()
         self.assertNotEqual(fact1, fact2)
         # wrong order
         fact2 = fact1.copy()

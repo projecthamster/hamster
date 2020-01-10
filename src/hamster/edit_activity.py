@@ -31,7 +31,7 @@ from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime, conf, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import (
-    hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
+    hamsterday_time_to_datetime, hamster_today, escape_pango)
 
 
 
@@ -96,10 +96,10 @@ class CustomFactController(gobject.GObject):
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
-                self.fact = base_fact.copy(start_time=hamster_now(),
+                self.fact = base_fact.copy(start_time=dt.datetime.now(),
                                            end_time=None)
             else:
-                self.fact = Fact(start_time=hamster_now())
+                self.fact = Fact(start_time=dt.datetime.now())
 
         original_fact = self.fact
         self.date = self.fact.date
@@ -192,7 +192,7 @@ class CustomFactController(gobject.GObject):
             # copy the entered fact before any modification
             self.cmdline_fact = fact.copy()
             if fact.start_time is None:
-                fact.start_time = hamster_now()
+                fact.start_time = dt.datetime.now()
             if fact.description == previous_cmdline_fact.description:
                 # no change to description here, keep the main one
                 fact.description = self.fact.description
@@ -333,7 +333,7 @@ class CustomFactController(gobject.GObject):
         """
         fact = self.fact
 
-        now = hamster_now()
+        now = dt.datetime.now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
 
         if self.date == now.date():

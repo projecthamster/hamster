@@ -37,7 +37,7 @@ except ImportError:
 from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
-from hamster.lib.stuff import hamster_today, hamster_now
+from hamster.lib.stuff import hamster_today
 from hamster.storage import storage
 
 
@@ -436,7 +436,7 @@ class Storage(storage.Storage):
 
 
     def __touch_fact(self, fact, end_time = None):
-        end_time = end_time or hamster_now()
+        end_time = end_time or dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact.start_time < dt.timedelta(minutes = 1):
             self.__remove_fact(fact.id)
@@ -510,7 +510,7 @@ class Storage(storage.Storage):
 
         for fact in conflicts:
             # fact is a sqlite.Row, indexable by column name
-            fact_end_time = fact["end_time"] or hamster_now()
+            fact_end_time = fact["end_time"] or dt.datetime.now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
             if start_time < fact["start_time"] and end_time > fact_end_time:
@@ -593,7 +593,7 @@ class Storage(storage.Storage):
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
-        if (dt.timedelta(days=-1) <= hamster_now() - start_time <= dt.timedelta(days=1)):
+        if (dt.timedelta(days=-1) <= dt.datetime.now() - start_time <= dt.timedelta(days=1)):
             # pull in previous facts
             facts = self.__get_todays_facts()
 

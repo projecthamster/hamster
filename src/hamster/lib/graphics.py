@@ -7,6 +7,7 @@
 
 from collections import defaultdict
 import math
+import datetime as dt  # need the original python granularity here
 
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
@@ -27,7 +28,6 @@ except: # we can also live without tweener. Scene.animate will not work
 import colorsys
 from collections import deque
 
-from hamster.lib import datetime as dt
 
 
 # lemme know if you know a better way how to get default font

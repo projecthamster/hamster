@@ -63,7 +63,7 @@ def fact_dict(fact_data, with_date):
     if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
-        end_date = stuff.hamster_now()
+        end_date = dt.datetime.now()
         fact['end'] = ''
 
     fact['duration'] = stuff.format_duration(fact_data.delta)
@@ -147,7 +147,7 @@ class HamsterClient(object):
 
         fact = Fact.parse(" ".join(args), range_pos="tail")
         if fact.start_time is None:
-            fact.start_time = stuff.hamster_now()
+            fact.start_time = dt.datetime.now()
         self.storage.check_fact(fact, default_day=stuff.hamster_today())
         self.storage.add_fact(fact)
 

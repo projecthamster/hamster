@@ -32,7 +32,7 @@ from hamster.lib.dbus import (
     to_dbus_fact,
     )
 from hamster.lib.fact import Fact, FactError
-from hamster.lib.stuff import hamster_now
+from hamster.lib import datetime as dt
 
 
 class Storage(gobject.GObject):
@@ -179,7 +179,7 @@ class Storage(gobject.GObject):
 
         if not fact.start_time:
             logger.info("Adding fact without any start_time is deprecated")
-            fact.start_time = hamster_now()
+            fact.start_time = dt.datetime.now()
 
         dbus_fact = to_dbus_fact(fact)
         new_id = self.conn.AddFactVerbatim(dbus_fact)
@@ -189,7 +189,7 @@ class Storage(gobject.GObject):
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
         activity should have other end time than the current moment"""
-        end_time = timegm((end_time or hamster_now()).timetuple())
+        end_time = timegm((end_time or dt.datetime.now()).timetuple())
         return self.conn.StopTracking(end_time)
 
     def remove_fact(self, fact_id):

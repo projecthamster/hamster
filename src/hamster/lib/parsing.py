@@ -5,7 +5,6 @@ import re
 
 from hamster.lib import datetime as dt
 from hamster.lib.stuff import (
-    hamster_now,
     hamster_today,
     hamsterday_end,
     hamsterday_start,

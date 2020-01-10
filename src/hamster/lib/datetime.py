@@ -18,7 +18,7 @@ from textwrap import dedent
 from functools import lru_cache
 
 # to be replaced soon
-from hamster.lib.stuff import hamster_now, hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
+from hamster.lib.stuff import hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -232,6 +232,11 @@ class datetime(pdt.datetime):
                    t.tzinfo, fold=t.fold)
 
     @classmethod
+    def now(cls):
+        """Current datetime."""
+        return cls.from_pdt(pdt.datetime.now())
+
+    @classmethod
     def parse(cls, s, default_day=None):
         """Parse a datetime from text.
 
@@ -318,7 +323,7 @@ class Range(namedtuple('Range', 'start, end')):
                            (e.g. -15: quarter hour before ref).
                            For testing purposes only
                            (note: this will be removed later on,
-                            and replaced with hamster_now mocking in pytest).
+                            and replaced with datetime.now mocking in pytest).
                            For users, it should be "now".
         Return:
             (range, rest)
@@ -327,7 +332,7 @@ class Range(namedtuple('Range', 'start, end')):
         """
 
         if ref == "now":
-            ref = hamster_now()
+            ref = datetime.now()
 
         if default_day is None:
             default_day = hamster_today()

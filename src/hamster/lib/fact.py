@@ -16,7 +16,6 @@ from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime,
-    hamster_now,
     hamster_today,
 )
 
@@ -117,7 +116,7 @@ class Fact(object):
     @property
     def delta(self):
         """Duration (datetime.timedelta)."""
-        end_time = self.end_time if self.end_time else hamster_now()
+        end_time = self.end_time if self.end_time else dt.datetime.now()
         return end_time - self.start_time
 
     @property
