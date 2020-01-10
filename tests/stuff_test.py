@@ -8,7 +8,6 @@ import re
 from hamster.lib import datetime as hdt
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
-    datetime_to_hamsterday,
     hamsterday_time_to_datetime,
     hamster_now,
     hamster_today,
@@ -16,13 +15,13 @@ from hamster.lib.stuff import (
 
 
 class TestActivityInputParsing(unittest.TestCase):
-    def test_datetime_to_hamsterday(self):
+    def test_get_day(self):
         date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(datetime_to_hamsterday(date_time), expected)
+        self.assertEqual(hdt.get_day(date_time), expected)
         date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(datetime_to_hamsterday(date_time), expected)
+        self.assertEqual(hdt.get_day(date_time), expected)
 
     def test_hamsterday_time_to_datetime(self):
         hamsterday = dt.date(2018, 8, 13)
@@ -359,14 +358,14 @@ class TestParsers(unittest.TestCase):
         (start, end), rest = hdt.Range.parse(s, ref=ref)
         just_before = start - hdt.timedelta(seconds=1)
         just_after = end + hdt.timedelta(seconds=1)
-        self.assertEqual(datetime_to_hamsterday(just_before), dt.date(2019, 12, 4))
-        self.assertEqual(datetime_to_hamsterday(just_after), dt.date(2019, 12, 6))
+        self.assertEqual(hdt.get_day(just_before), dt.date(2019, 12, 4))
+        self.assertEqual(hdt.get_day(just_after), dt.date(2019, 12, 6))
         s = "2019-12-05 2019-12-07"  # hamster days range
         (start, end), rest = hdt.Range.parse(s, ref=ref)
         just_before = start - hdt.timedelta(seconds=1)
         just_after = end + hdt.timedelta(seconds=1)
-        self.assertEqual(datetime_to_hamsterday(just_before), hdt.date(2019, 12, 4))
-        self.assertEqual(datetime_to_hamsterday(just_after), hdt.date(2019, 12, 8))
+        self.assertEqual(hdt.get_day(just_before), hdt.date(2019, 12, 4))
+        self.assertEqual(hdt.get_day(just_after), hdt.date(2019, 12, 8))
 
 
 if __name__ == '__main__':

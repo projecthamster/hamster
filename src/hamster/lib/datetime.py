@@ -18,7 +18,7 @@ from textwrap import dedent
 from functools import lru_cache
 
 # to be replaced soon
-from hamster.lib.stuff import datetime_to_hamsterday, hamster_now, hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
+from hamster.lib.stuff import hamster_now, hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -373,7 +373,7 @@ class Range(namedtuple('Range', 'start, end')):
             end = hamsterday_end(firstday)
         else:
             end =  datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
-                                                  default_day=datetime_to_hamsterday(start))
+                                                  default_day=get_day(start))
             if isinstance(end, pdt.timedelta):
                 # relative to start, actually
                 delta2 = end
@@ -465,3 +465,25 @@ class timedelta(pdt.timedelta):
         return pdt.timedelta(days=self.days,
                              seconds=self.seconds,
                              microseconds=self.microseconds)
+
+
+def get_day(civil_date_time):
+    """Return the hamster day corresponding to a given civil datetime.
+
+    The hamster day start is taken into account.
+    """
+
+    if civil_date_time is None:
+        return None
+
+    # work around cyclic imports
+    from hamster.lib.configuration import conf
+
+    if civil_date_time.time() < conf.day_start:
+        # early morning, between midnight and day_start
+        # => the hamster day is the previous civil day
+        hamster_date_time = civil_date_time - timedelta(days=1)
+    else:
+        hamster_date_time = civil_date_time
+    # return only the date
+    return hamster_date_time.date()

@@ -39,27 +39,7 @@ import os
 
 from hamster.lib import datetime as dt
 
-
-def datetime_to_hamsterday(civil_date_time):
-    """Return the hamster day corresponding to a given civil datetime.
-
-    The hamster day start is taken into account.
-    """
-
-    if civil_date_time is None:
-        return None
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-
-    if civil_date_time.time() < conf.day_start:
-        # early morning, between midnight and day_start
-        # => the hamster day is the previous civil day
-        hamster_date_time = civil_date_time - dt.timedelta(days=1)
-    else:
-        hamster_date_time = civil_date_time
-    # return only the date
-    return hamster_date_time.date()
+# datetime_to_hamsterday = dt.get_day
 
 
 def hamster_now():
@@ -77,7 +57,7 @@ def hamster_round(time):
 
 def hamster_today():
     """Return the current hamster day."""
-    return datetime_to_hamsterday(hamster_now())
+    return dt.get_day(hamster_now())
 
 
 def hamsterday_time_to_datetime(hamsterday, time):

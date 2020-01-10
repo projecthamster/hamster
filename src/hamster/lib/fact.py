@@ -15,7 +15,6 @@ from textwrap import dedent
 from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
-    datetime_to_hamsterday,
     hamsterday_time_to_datetime,
     hamster_now,
     hamster_today,
@@ -101,7 +100,7 @@ class Fact(object):
               Any subsequent modification of start_time
               can result in different self.date.
         """
-        return datetime_to_hamsterday(self.start_time)
+        return dt.get_day(self.start_time)
 
     @date.setter
     def date(self, value):
@@ -169,12 +168,12 @@ class Fact(object):
         """
         time_str = ""
         if self.start_time:
-            if datetime_to_hamsterday(self.start_time) != default_day:
+            if dt.get_day(self.start_time) != default_day:
                 time_str += self.start_time.strftime(DATETIME_FMT)
             else:
                 time_str += self.start_time.strftime(TIME_FMT)
         if self.end_time:
-            if datetime_to_hamsterday(self.end_time) != datetime_to_hamsterday(self.start_time):
+            if dt.get_day(self.end_time) != dt.get_day(self.start_time):
                 end_time_str = self.end_time.strftime(DATETIME_FMT)
             else:
                 end_time_str = self.end_time.strftime(TIME_FMT)
