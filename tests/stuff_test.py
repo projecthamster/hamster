@@ -7,9 +7,6 @@ import unittest
 import re
 from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
-from hamster.lib.stuff import (
-    hamsterday_time_to_datetime,
-    )
 
 
 class TestActivityInputParsing(unittest.TestCase):
@@ -20,16 +17,6 @@ class TestActivityInputParsing(unittest.TestCase):
         date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
         expected = dt.date(2018, 8, 13)
         self.assertEqual(dt.get_day(date_time), expected)
-
-    def test_hamsterday_time_to_datetime(self):
-        hamsterday = dt.date(2018, 8, 13)
-        time = dt.time(23, 10)
-        expected = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
-        self.assertEqual(hamsterday_time_to_datetime(hamsterday, time), expected)
-        hamsterday = dt.date(2018, 8, 13)
-        time = dt.time(0, 10)
-        expected = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 00:10
-        self.assertEqual(hamsterday_time_to_datetime(hamsterday, time), expected)
 
     def test_plain_name(self):
         # plain activity name
@@ -222,12 +209,12 @@ class TestActivityInputParsing(unittest.TestCase):
                                 ["two", "tags"],
                                 ["with @at"],
                                 ):
-                                start = hamsterday_time_to_datetime(dt.today(),
-                                                                    start_time
-                                                                    ) if start_time else None
-                                end = hamsterday_time_to_datetime(dt.today(),
-                                                                  end_time
-                                                                  ) if end_time else None
+                                start = dt.datetime.from_day_time(dt.today(),
+                                                                  start_time
+                                                                  ) if start_time else None
+                                end = dt.datetime.from_day_time(dt.today(),
+                                                                end_time
+                                                                ) if end_time else None
                                 if end and not start:
                                     # end without start is not parseable
                                     continue
@@ -248,6 +235,16 @@ class TestActivityInputParsing(unittest.TestCase):
 
 
 class TestDatetime(unittest.TestCase):
+    def test_datetime_from_day_time(self):
+        day = dt.date(2018, 8, 13)
+        time = dt.time(23, 10)
+        expected = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
+        self.assertEqual(dt.datetime.from_day_time(day, time), expected)
+        day = dt.date(2018, 8, 13)
+        time = dt.time(0, 10)
+        expected = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 00:10
+        self.assertEqual(dt.datetime.from_day_time(day, time), expected)
+
     def test_parse_date(self):
         date = dt.date.parse("2020-01-05")
         self.assertEqual(date, pdt.date(2020, 1, 5))

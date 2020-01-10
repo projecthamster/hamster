@@ -18,7 +18,7 @@ from textwrap import dedent
 from functools import lru_cache
 
 # to be replaced soon
-from hamster.lib.stuff import hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
+from hamster.lib.stuff import hamsterday_end, hamsterday_start
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -215,13 +215,31 @@ class datetime(pdt.datetime):
                 _date = date.parse(date_str)
                 return datetime.combine(_date, _time)
             else:
-                return hamsterday_time_to_datetime(default_day, _time)
+                return datetime.from_day_time(default_day, _time)
         else:
             relative_str = match.group(r)
             if relative_str:
                 return timedelta(minutes=int(relative_str))
             else:
                 return None
+
+    @classmethod
+    def from_day_time(cls, day, t: time):
+        """Return a datetime with time t belonging to day.
+
+        The hamster day start is taken into account.
+        """
+
+        # work around cyclic imports
+        from hamster.lib.configuration import conf
+
+        if t < conf.day_start:
+            # early morning, between midnight and day_start
+            # => the hamster day is the previous civil day
+            civil_date = day + timedelta(days=1)
+        else:
+            civil_date = day
+        return cls.combine(civil_date, t)
 
     @classmethod
     def from_pdt(cls, t):

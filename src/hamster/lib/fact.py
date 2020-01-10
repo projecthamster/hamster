@@ -14,9 +14,7 @@ from textwrap import dedent
 
 from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
-from hamster.lib.stuff import (
-    hamsterday_time_to_datetime,
-)
+
 
 class FactError(Exception):
     """Generic Fact error."""
@@ -104,13 +102,13 @@ class Fact(object):
     def date(self, value):
         if self.start_time:
             previous_start_time = self.start_time
-            self.start_time = hamsterday_time_to_datetime(value, self.start_time.time())
+            self.start_time = dt.datetime.from_day_time(value, self.start_time.time())
             if self.end_time:
                 # start_time date prevails.
                 # Shift end_time to preserve the fact duration.
                 self.end_time += self.start_time - previous_start_time
         elif self.end_time:
-            self.end_time = hamsterday_time_to_datetime(value, self.end_time.time())
+            self.end_time = dt.datetime.from_day_time(value, self.end_time.time())
 
     @property
     def delta(self):

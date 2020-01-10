@@ -42,6 +42,7 @@ from hamster.lib import datetime as dt
 # datetime_to_hamsterday = dt.get_day
 # hamster_now = dt.datetime.now
 # hamster_today = dt.today
+# hamsterday_time_to_datetime = dt.datetime.from_day_time
 
 
 def hamster_round(time):
@@ -52,30 +53,12 @@ def hamster_round(time):
         return time.replace(second=0, microsecond=0)
 
 
-def hamsterday_time_to_datetime(hamsterday, time):
-    """Return the civil datetime corresponding to a given hamster day and time.
-
-    The hamster day start is taken into account.
-    """
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-
-    if time < conf.day_start:
-        # early morning, between midnight and day_start
-        # => the hamster day is the previous civil day
-        civil_date = hamsterday + dt.timedelta(days=1)
-    else:
-        civil_date = hamsterday
-    return dt.datetime.combine(civil_date, time)
-
-
 def hamsterday_start(hamsterday):
     """Return the given day start, as a datetime."""
 
     # work around cyclic imports
     from hamster.lib.configuration import conf
-    return hamsterday_time_to_datetime(hamsterday, conf.day_start)
+    return dt.datetime.from_day_time(hamsterday, conf.day_start)
 
 
 def hamsterday_end(hamsterday):
@@ -83,7 +66,7 @@ def hamsterday_end(hamsterday):
 
     # work around cyclic imports
     from hamster.lib.configuration import conf
-    return hamsterday_time_to_datetime(hamsterday + dt.timedelta(days=1), conf.day_start)
+    return dt.datetime.from_day_time(hamsterday + dt.timedelta(days=1), conf.day_start)
 
 
 def format_duration(minutes, human = True):

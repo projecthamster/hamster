@@ -7,7 +7,6 @@ from hamster.lib import datetime as dt
 from hamster.lib.stuff import (
     hamsterday_end,
     hamsterday_start,
-    hamsterday_time_to_datetime,
 )
 
 
