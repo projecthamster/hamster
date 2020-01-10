@@ -477,7 +477,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             start = self.facts[0].date
             end = self.facts[-1].date
         else:
-            start = end = stuff.hamster_today()
+            start = end = dt.today()
 
         by_date = defaultdict(list)
         for fact in self.facts:

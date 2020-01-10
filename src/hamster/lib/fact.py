@@ -16,7 +16,6 @@ from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime,
-    hamster_today,
 )
 
 class FactError(Exception):

@@ -18,7 +18,7 @@ from textwrap import dedent
 from functools import lru_cache
 
 # to be replaced soon
-from hamster.lib.stuff import hamster_today, hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
+from hamster.lib.stuff import hamsterday_end, hamsterday_start, hamsterday_time_to_datetime
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -243,7 +243,7 @@ class datetime(pdt.datetime):
         default_day (dt.date):
             If start is given without any date (e.g. just hh:mm),
             put the corresponding datetime in default_day.
-            Defaults to hamster_today.
+            Defaults to today.
         """
 
         # datetime.re is added below, after the class definition
@@ -315,7 +315,7 @@ class Range(namedtuple('Range', 'start, end')):
 
         default_day (date): If start is given without any date (e.g. just hh:mm),
                                put the corresponding datetime in default_day.
-                               Defaults to hamster_today.
+                               Defaults to today.
                                Note: the default end day is always the start day, so
                                      "2019-11-27 23:50 - 00:20" lasts 30 minutes.
 
@@ -335,7 +335,7 @@ class Range(namedtuple('Range', 'start, end')):
             ref = datetime.now()
 
         if default_day is None:
-            default_day = hamster_today()
+            default_day = today()
 
         assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
         if position == "exact":
@@ -492,3 +492,8 @@ def get_day(civil_date_time):
         hamster_date_time = civil_date_time
     # return only the date
     return hamster_date_time.date()
+
+
+def today():
+    """Return the current day."""
+    return get_day(datetime.now())

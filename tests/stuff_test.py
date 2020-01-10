@@ -9,7 +9,6 @@ from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime,
-    hamster_today,
     )
 
 
@@ -223,10 +222,10 @@ class TestActivityInputParsing(unittest.TestCase):
                                 ["two", "tags"],
                                 ["with @at"],
                                 ):
-                                start = hamsterday_time_to_datetime(hamster_today(),
+                                start = hamsterday_time_to_datetime(dt.today(),
                                                                     start_time
                                                                     ) if start_time else None
-                                end = hamsterday_time_to_datetime(hamster_today(),
+                                end = hamsterday_time_to_datetime(dt.today(),
                                                                   end_time
                                                                   ) if end_time else None
                                 if end and not start:
@@ -298,7 +297,7 @@ class TestParsers(unittest.TestCase):
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
         time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                              default_day=hamster_today())
+                                              default_day=dt.today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
@@ -307,7 +306,7 @@ class TestParsers(unittest.TestCase):
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
         relative = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                                  default_day=hamster_today())
+                                                  default_day=dt.today())
         self.assertEqual(relative, dt.timedelta(minutes=-25))
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)

@@ -37,7 +37,6 @@ except ImportError:
 from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
-from hamster.lib.stuff import hamster_today
 from hamster.storage import storage
 
 
@@ -674,7 +673,7 @@ class Storage(storage.Storage):
 
 
     def __get_todays_facts(self):
-        return self.__get_facts(hamster_today())
+        return self.__get_facts(dt.today())
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
         split_time = conf.day_start

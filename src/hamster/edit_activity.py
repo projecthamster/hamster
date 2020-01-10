@@ -30,8 +30,7 @@ from hamster import widgets
 from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime, conf, load_ui_file
 from hamster.lib.fact import Fact, FactError
-from hamster.lib.stuff import (
-    hamsterday_time_to_datetime, hamster_today, escape_pango)
+from hamster.lib.stuff import hamsterday_time_to_datetime, escape_pango
 
 
 
@@ -250,7 +249,7 @@ class CustomFactController(gobject.GObject):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.date = self.fact.date or hamster_today()
+            self.date = self.fact.date or dt.today()
             self.validate_fields()
             self.update_cmdline()
 
@@ -270,7 +269,7 @@ class CustomFactController(gobject.GObject):
                                                          new_time)
                 else:
                     # date not specified; result must fall in current hamster_day
-                    new_start_time = hamsterday_time_to_datetime(hamster_today(),
+                    new_start_time = hamsterday_time_to_datetime(dt.today(),
                                                                  new_time)
             else:
                 new_start_time = None

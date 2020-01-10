@@ -41,7 +41,7 @@ from hamster.lib import datetime as dt
 
 # datetime_to_hamsterday = dt.get_day
 # hamster_now = dt.datetime.now
-
+# hamster_today = dt.today
 
 
 def hamster_round(time):
@@ -50,11 +50,6 @@ def hamster_round(time):
         return None
     else:
         return time.replace(second=0, microsecond=0)
-
-
-def hamster_today():
-    """Return the current hamster day."""
-    return dt.get_day(dt.datetime.now())
 
 
 def hamsterday_time_to_datetime(hamsterday, time):
