@@ -118,8 +118,7 @@ def format_duration(minutes, human = True):
     """formats duration in a human readable format.
     accepts either minutes or timedelta"""
 
-    if isinstance(minutes, dt.timedelta):
-        minutes = duration_minutes(minutes)
+    minutes = duration_minutes(minutes)
 
     if not minutes:
         if human:
@@ -203,16 +202,17 @@ def month(view_date):
 
 def duration_minutes(duration):
     """returns minutes from duration, otherwise we keep bashing in same math"""
-    if isinstance(duration, list):
+    if isinstance(duration, dt.timedelta):
+        return duration.total_seconds() / 60
+    elif isinstance(duration, (int, float)):
+        return duration
+    elif isinstance(duration, list):
         res = dt.timedelta()
         for entry in duration:
             res += entry
-
         return duration_minutes(res)
-    elif isinstance(duration, dt.timedelta):
-        return duration.total_seconds() / 60
     else:
-        return duration
+        raise NotImplementedError("received {}".format(type(duration)))
 
 
 def zero_hour(date):

@@ -166,6 +166,10 @@ class datetime(pdt.datetime):
                                        second=0, microsecond=0,
                                        tzinfo=None, fold=fold)
 
+    def __add__(self, other):
+        # python datetime.__add__ was not type stable prior to 3.8
+        return datetime.from_pdt(self.to_pdt() + other)
+
     # similar to https://stackoverflow.com/q/51966126/3565696
     # __getnewargs_ex__ did not work, brute force required
     def __deepcopy__(self, memo):
@@ -173,6 +177,17 @@ class datetime(pdt.datetime):
                         self.hour, self.minute,
                         self.second, self.microsecond,
                         self.tzinfo, fold=self.fold)
+
+    __radd__ = __add__
+
+    def __sub__(self, other):
+        # python datetime.__sub__ was not type stable prior to 3.8
+        if isinstance(other, timedelta):
+            return datetime.from_pdt(self.to_pdt() - other)
+        elif isinstance(other, datetime):
+            return timedelta.from_pdt(self.to_pdt() - other)
+        else:
+            raise NotImplementedError("subtract {}".format(type(other)))
 
     @classmethod
     def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative", default_day=None):
@@ -201,6 +216,14 @@ class datetime(pdt.datetime):
                 return timedelta(minutes=int(relative_str))
             else:
                 return None
+
+    @classmethod
+    def from_pdt(cls, t):
+        """Convert python datetime to hamster datetime."""
+        return cls(t.year, t.month, t.day,
+                   t.hour, t.minute,
+                   t.second, t.microsecond,
+                   t.tzinfo, fold=t.fold)
 
     @classmethod
     def parse(cls, s, default_day=None):
@@ -248,6 +271,13 @@ class datetime(pdt.datetime):
             for src, dest in zip(to_replace, specifics):
                 res = res.replace(src, dest)
             return res
+
+    def to_pdt(self):
+        """Convert to python datetime."""
+        return pdt.datetime(self.year, self.month, self.day,
+                            self.hour, self.minute,
+                            self.second, self.microsecond,
+                            self.tzinfo, fold=self.fold)
 
     def __str__(self):
         if self.tzinfo:
@@ -386,5 +416,52 @@ class Range(namedtuple('Range', 'start, end')):
             )
 
 
-# no need to change this one for now
-timedelta = pdt.timedelta
+
+class timedelta(pdt.timedelta):
+    """Hamster timedelta.
+
+    Should replace the python datetime.timedelta in any customer code.
+    Specificities:
+    - rounded to minutes
+    - conversion to and from string facilities
+    """
+
+    def __new__(cls, days=0, seconds=0, microseconds=0,
+                milliseconds=0, minutes=0, hours=0, weeks=0):
+            # round down to zero seconds and microseconds
+            return pdt.timedelta.__new__(cls,
+                                         days=days,
+                                         seconds=seconds,
+                                         microseconds=microseconds,
+                                         milliseconds=milliseconds,
+                                         minutes=minutes,
+                                         hours=hours,
+                                         weeks=weeks)
+
+    # timedelta subclassing is not type stable yet
+    def __add__(self, other):
+        return timedelta.from_pdt(self.to_pdt() + other)
+
+    __radd__ = __add__
+
+    def __sub__(self, other):
+        return timedelta.from_pdt(self.to_pdt() - other)
+
+    def __neg__(self):
+        return timedelta.from_pdt(-self.to_pdt())
+
+    @classmethod
+    def from_pdt(cls, delta):
+        """Convert python timedelta to hamster timedelta."""
+
+        # Only days, seconds and microseconds are stored internally
+        return cls(days=delta.days,
+                   seconds=delta.seconds,
+                   microseconds=delta.microseconds)
+
+    def to_pdt(self):
+        """Convert to python timedelta."""
+
+        return pdt.timedelta(days=self.days,
+                             seconds=self.seconds,
+                             microseconds=self.microseconds)
