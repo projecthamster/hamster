@@ -2,10 +2,10 @@ import sys, os.path
 # a convoluted line to add hamster module to absolute path
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../src")))
 
-import datetime as dt
+import datetime as pdt
 import unittest
 import re
-from hamster.lib import datetime as hdt
+from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 from hamster.lib.stuff import (
     hamsterday_time_to_datetime,
@@ -18,10 +18,10 @@ class TestActivityInputParsing(unittest.TestCase):
     def test_get_day(self):
         date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(hdt.get_day(date_time), expected)
+        self.assertEqual(dt.get_day(date_time), expected)
         date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(hdt.get_day(date_time), expected)
+        self.assertEqual(dt.get_day(date_time), expected)
 
     def test_hamsterday_time_to_datetime(self):
         hamsterday = dt.date(2018, 8, 13)
@@ -134,7 +134,6 @@ class TestActivityInputParsing(unittest.TestCase):
         fact2 = fact1.copy()
         fact2.description = "abcd"
         self.assertNotEqual(fact1, fact2)
-        import datetime as dt
         fact2 = fact1.copy()
         fact2.start_time = hamster_now()
         self.assertNotEqual(fact1, fact2)
@@ -196,11 +195,11 @@ class TestActivityInputParsing(unittest.TestCase):
     def test_roundtrips(self):
         for start_time in (
             None,
-            hdt.time(12, 33),
+            dt.time(12, 33),
             ):
             for end_time in (
                 None,
-                hdt.time(13,34),
+                dt.time(13,34),
                 ):
                 for activity in (
                     "activity",
@@ -252,65 +251,65 @@ class TestActivityInputParsing(unittest.TestCase):
 
 class TestDatetime(unittest.TestCase):
     def test_parse_date(self):
-        date = hdt.date.parse("2020-01-05")
-        self.assertEqual(date, dt.date(2020, 1, 5))
+        date = dt.date.parse("2020-01-05")
+        self.assertEqual(date, pdt.date(2020, 1, 5))
 
     def test_parse_time(self):
-        self.assertEqual(hdt.time.parse("9:01"), dt.time(9, 1))
-        self.assertEqual(hdt.time.parse("9.01"), dt.time(9, 1))
-        self.assertEqual(hdt.time.parse("12:01"), dt.time(12, 1))
-        self.assertEqual(hdt.time.parse("12.01"), dt.time(12, 1))
-        self.assertEqual(hdt.time.parse("1201"), dt.time(12, 1))
+        self.assertEqual(dt.time.parse("9:01"), pdt.time(9, 1))
+        self.assertEqual(dt.time.parse("9.01"), pdt.time(9, 1))
+        self.assertEqual(dt.time.parse("12:01"), pdt.time(12, 1))
+        self.assertEqual(dt.time.parse("12.01"), pdt.time(12, 1))
+        self.assertEqual(dt.time.parse("1201"), pdt.time(12, 1))
 
     def test_parse_datetime(self):
-        self.assertEqual(hdt.datetime.parse("2020-01-05 9:01"), dt.datetime(2020, 1, 5, 9, 1))
+        self.assertEqual(dt.datetime.parse("2020-01-05 9:01"), pdt.datetime(2020, 1, 5, 9, 1))
 
     def test_rounding(self):
-        dt1 = hdt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
+        dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
         self.assertEqual(dt1.second, 0)
         self.assertEqual(dt1.microsecond, 0)
         self.assertEqual(str(dt1), "2019-12-31 13:14")
 
     def test_type_stability(self):
-        dt1 = hdt.datetime(2020, 1, 10, hour=13, minute=30)
-        dt2 = hdt.datetime(2020, 1, 10, hour=13, minute=40)
+        dt1 = dt.datetime(2020, 1, 10, hour=13, minute=30)
+        dt2 = dt.datetime(2020, 1, 10, hour=13, minute=40)
         delta = dt2 - dt1
-        self.assertEqual(type(delta), hdt.timedelta)
+        self.assertEqual(type(delta), dt.timedelta)
         _sum = dt1 + delta
-        self.assertEqual(_sum, hdt.datetime(2020, 1, 10, hour=13, minute=40))
-        self.assertEqual(type(_sum), hdt.datetime)
+        self.assertEqual(_sum, dt.datetime(2020, 1, 10, hour=13, minute=40))
+        self.assertEqual(type(_sum), dt.datetime)
         _sub = dt1 - delta
-        self.assertEqual(_sub, hdt.datetime(2020, 1, 10, hour=13, minute=20))
-        self.assertEqual(type(_sub), hdt.datetime)
+        self.assertEqual(_sub, dt.datetime(2020, 1, 10, hour=13, minute=20))
+        self.assertEqual(type(_sub), dt.datetime)
 
         opposite = - delta
-        self.assertEqual(opposite, hdt.timedelta(minutes=-10))
-        self.assertEqual(type(opposite), hdt.timedelta)
+        self.assertEqual(opposite, dt.timedelta(minutes=-10))
+        self.assertEqual(type(opposite), dt.timedelta)
         _sum = delta + delta
-        self.assertEqual(_sum, hdt.timedelta(minutes=20))
-        self.assertEqual(type(_sum), hdt.timedelta)
+        self.assertEqual(_sum, dt.timedelta(minutes=20))
+        self.assertEqual(type(_sum), dt.timedelta)
         _sub = delta - delta
-        self.assertEqual(_sub, hdt.timedelta())
-        self.assertEqual(type(_sub), hdt.timedelta)
+        self.assertEqual(_sub, dt.timedelta())
+        self.assertEqual(type(_sub), dt.timedelta)
 
 
 class TestParsers(unittest.TestCase):
     def test_dt_patterns(self):
-        p = hdt.datetime.pattern(1)
+        p = dt.datetime.pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+        time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                               default_day=hamster_today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
+        time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
         self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
-        relative = hdt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
+        relative = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
                                                   default_day=hamster_today())
-        self.assertEqual(relative, hdt.timedelta(minutes=-25))
+        self.assertEqual(relative, dt.timedelta(minutes=-25))
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)
         self.assertEqual(m, None)
@@ -319,53 +318,53 @@ class TestParsers(unittest.TestCase):
     def test_parse_datetime_range(self):
         # only match clean
         s = "10.00@cat"
-        (start, end), rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = dt.Range.parse(s, position="head")
         self.assertEqual(start, None)
         self.assertEqual(end, None)
         s = "12:02"
-        (start, end), rest = hdt.Range.parse(s)
+        (start, end), rest = dt.Range.parse(s)
         self.assertEqual(start.strftime("%H:%M"), "12:02")
         self.assertEqual(end, None)
         s = "12:03 13:04"
-        (start, end), rest = hdt.Range.parse(s)
+        (start, end), rest = dt.Range.parse(s)
         self.assertEqual(start.strftime("%H:%M"), "12:03")
         self.assertEqual(end.strftime("%H:%M"), "13:04")
         s = "12:35 activity"
-        (start, end), rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = dt.Range.parse(s, position="head")
         self.assertEqual(start.strftime("%H:%M"), "12:35")
         self.assertEqual(end, None)
         s = "2019-12-01 12:33 activity"
-        (start, end), rest = hdt.Range.parse(s, position="head")
+        (start, end), rest = dt.Range.parse(s, position="head")
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:33")
         self.assertEqual(end, None)
 
-        ref = hdt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
+        ref = dt.datetime(2019, 11, 29, 13, 55)  # 2019-11-29 13:55
 
         s = "-25 activity"
-        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         self.assertEqual(end, None)
         s = "-55 -25 activity"
-        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         s = "-55 -120 activity"
-        (start, end), rest = hdt.Range.parse(s, position="head", ref=ref)
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 11:55")
 
         s = "2019-12-05"  # single hamster day
-        (start, end), rest = hdt.Range.parse(s, ref=ref)
-        just_before = start - hdt.timedelta(seconds=1)
-        just_after = end + hdt.timedelta(seconds=1)
-        self.assertEqual(hdt.get_day(just_before), dt.date(2019, 12, 4))
-        self.assertEqual(hdt.get_day(just_after), dt.date(2019, 12, 6))
+        (start, end), rest = dt.Range.parse(s, ref=ref)
+        just_before = start - dt.timedelta(seconds=1)
+        just_after = end + dt.timedelta(seconds=1)
+        self.assertEqual(dt.get_day(just_before), pdt.date(2019, 12, 4))
+        self.assertEqual(dt.get_day(just_after), pdt.date(2019, 12, 6))
         s = "2019-12-05 2019-12-07"  # hamster days range
-        (start, end), rest = hdt.Range.parse(s, ref=ref)
-        just_before = start - hdt.timedelta(seconds=1)
-        just_after = end + hdt.timedelta(seconds=1)
-        self.assertEqual(hdt.get_day(just_before), hdt.date(2019, 12, 4))
-        self.assertEqual(hdt.get_day(just_after), hdt.date(2019, 12, 8))
+        (start, end), rest = dt.Range.parse(s, ref=ref)
+        just_before = start - dt.timedelta(seconds=1)
+        just_after = end + dt.timedelta(seconds=1)
+        self.assertEqual(dt.get_day(just_before), dt.date(2019, 12, 4))
+        self.assertEqual(dt.get_day(just_after), dt.date(2019, 12, 8))
 
 
 if __name__ == '__main__':
