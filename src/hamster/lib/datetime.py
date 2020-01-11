@@ -17,8 +17,6 @@ from collections import namedtuple
 from textwrap import dedent
 from functools import lru_cache
 
-# to be replaced soon
-from hamster.lib.stuff import hamsterday_end
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
@@ -83,6 +81,11 @@ class day(date):
 
     def __new__(cls, year, month, day):
         return date.__new__(cls, year, month, day)
+
+    @property
+    def end(self) -> datetime:
+        """Day end."""
+        return datetime.from_day_time(self + timedelta(days=1), self.start_time())
 
     @property
     def start(self) -> datetime:
@@ -421,10 +424,10 @@ class Range(namedtuple('Range', 'start, end')):
                 start = ref + delta1
 
         if m.group('lastday'):
-            lastday = date.parse(m.group('lastday'))
-            end = hamsterday_end(lastday)
+            lastday = day.parse(m.group('lastday'))
+            end = lastday.end
         elif firstday:
-            end = hamsterday_end(firstday)
+            end = firstday.end
         else:
             end =  datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
                                                   default_day=get_day(start))

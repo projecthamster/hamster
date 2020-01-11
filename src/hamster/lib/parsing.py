@@ -4,9 +4,6 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import re
 
 from hamster.lib import datetime as dt
-from hamster.lib.stuff import (
-    hamsterday_end,
-)
 
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
