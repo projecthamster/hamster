@@ -53,14 +53,6 @@ def hamster_round(time):
         return time.replace(second=0, microsecond=0)
 
 
-def hamsterday_start(hamsterday):
-    """Return the given day start, as a datetime."""
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-    return dt.datetime.from_day_time(hamsterday, conf.day_start)
-
-
 def hamsterday_end(hamsterday):
     """Return the given day end, as a datetime."""
 

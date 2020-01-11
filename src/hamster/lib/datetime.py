@@ -18,11 +18,19 @@ from textwrap import dedent
 from functools import lru_cache
 
 # to be replaced soon
-from hamster.lib.stuff import hamsterday_end, hamsterday_start
+from hamster.lib.stuff import hamsterday_end
 
 DATE_FMT = "%Y-%m-%d"  # ISO format
 TIME_FMT = "%H:%M"
 DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
+
+
+class datetime:  # predeclaration for return type annotations
+    pass
+
+
+class time:  # predeclaration for return type annotations
+    pass
 
 
 class date(pdt.date):
@@ -64,6 +72,29 @@ class date(pdt.date):
 # For datetime that will need to be outside the class.
 # Same here for consistency
 date.re = re.compile(date.pattern(), flags=re.VERBOSE)
+
+
+class day(date):
+    """Hamster day.
+
+    Same as date, but taking into account day-start.
+    A day starts at conf.day_start and ends when the next day starts.
+    """
+
+    def __new__(cls, year, month, day):
+        return date.__new__(cls, year, month, day)
+
+    @property
+    def start(self) -> datetime:
+        """Day start."""
+        return datetime.from_day_time(self, self.start_time())
+
+    @classmethod
+    def start_time(cls) -> time:
+        """Day start time."""
+        # work around cyclic imports
+        from hamster.lib.configuration import conf
+        return conf.day_start
 
 
 class time(pdt.time):
@@ -224,7 +255,7 @@ class datetime(pdt.datetime):
                 return None
 
     @classmethod
-    def from_day_time(cls, day, t: time):
+    def from_day_time(cls, d: day, t: time):
         """Return a datetime with time t belonging to day.
 
         The hamster day start is taken into account.
@@ -236,9 +267,9 @@ class datetime(pdt.datetime):
         if t < conf.day_start:
             # early morning, between midnight and day_start
             # => the hamster day is the previous civil day
-            civil_date = day + timedelta(days=1)
+            civil_date = d + timedelta(days=1)
         else:
-            civil_date = day
+            civil_date = d
         return cls.combine(civil_date, t)
 
     @classmethod
@@ -378,8 +409,8 @@ class Range(namedtuple('Range', 'start, end')):
 
         if m.group('firstday'):
             # only day given for start
-            firstday = date.parse(m.group('firstday'))
-            start = hamsterday_start(firstday)
+            firstday = day.parse(m.group('firstday'))
+            start = firstday.start
         else:
             firstday = None
             start = datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
