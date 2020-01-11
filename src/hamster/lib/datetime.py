@@ -118,9 +118,9 @@ class time(pdt.time):
                 tzinfo=None, fold=0):
             # round down to zero seconds and microseconds
             return pdt.time.__new__(cls,
-                                   hour=hour, minute=minute,
-                                   second=0, microsecond=0,
-                                   tzinfo=None, fold=fold)
+                                    hour=hour, minute=minute,
+                                    second=0, microsecond=0,
+                                    tzinfo=None, fold=fold)
 
     @classmethod
     def _extract_time(cls, match, h="hour", m="minute"):
@@ -196,9 +196,9 @@ class datetime(pdt.datetime):
                 tzinfo=None, *, fold=0):
             # round down to zero seconds and microseconds
             return pdt.datetime.__new__(cls, year, month, day,
-                                       hour=hour, minute=minute,
-                                       second=0, microsecond=0,
-                                       tzinfo=None, fold=fold)
+                                        hour=hour, minute=minute,
+                                        second=0, microsecond=0,
+                                        tzinfo=None, fold=fold)
 
     def __add__(self, other):
         # python datetime.__add__ was not type stable prior to 3.8
@@ -230,7 +230,8 @@ class datetime(pdt.datetime):
             return self.strftime(DATETIME_FMT)
 
     @classmethod
-    def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative", default_day=None):
+    def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative",
+                          default_day=None):
         """extract datetime from a datetime.pattern match.
 
         Custom group names allow to use the same method
@@ -314,7 +315,8 @@ class datetime(pdt.datetime):
         # remove the indentation => easier debugging.
         base_pattern = dedent(r"""
             (?P<whole>
-                                              # (need to double the brackets for .format)
+                                              # note: need to double the brackets
+                                              #       for .format
                 (?<!\d{{2}})                  # negative lookbehind,
                                               # avoid matching 2019-12 or 2019-12-05
                 (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
@@ -416,8 +418,9 @@ class Range(namedtuple('Range', 'start, end')):
             start = firstday.start
         else:
             firstday = None
-            start = datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                                   default_day=default_day)
+            start = datetime._extract_datetime(m, d="date1", h="hour1",
+                                               m="minute1", r="relative1",
+                                               default_day=default_day)
             if isinstance(start, pdt.timedelta):
                 # relative to ref, actually
                 delta1 = start
@@ -429,13 +432,15 @@ class Range(namedtuple('Range', 'start, end')):
         elif firstday:
             end = firstday.end
         else:
-            end =  datetime._extract_datetime(m, d="date2", h="hour2", m="minute2", r="relative2",
-                                                  default_day=get_day(start))
+            end = datetime._extract_datetime(m, d="date2", h="hour2",
+                                             m="minute2", r="relative2",
+                                             default_day=get_day(start))
             if isinstance(end, pdt.timedelta):
                 # relative to start, actually
                 delta2 = end
                 if delta2 > pdt.timedelta(0):
-                    # wip: currently not reachable (would need [-\+]\d{1,3} in the parser).
+                    # wip: currently not reachable
+                    # (would need [-\+]\d{1,3} in the parser).
                     end = start + delta2
                 elif ref and delta2 < pdt.timedelta(0):
                     end = ref + delta2
@@ -469,9 +474,7 @@ class Range(namedtuple('Range', 'start, end')):
             )
             )?                    # end time is facultative
             """.format(datetime.pattern(1), date.pattern(detailed=False),
-                       datetime.pattern(2), date.pattern(detailed=False))
-            )
-
+                       datetime.pattern(2), date.pattern(detailed=False)))
 
 
 class timedelta(pdt.timedelta):
