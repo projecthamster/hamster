@@ -27,8 +27,6 @@ import re
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
-import gi
-gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict

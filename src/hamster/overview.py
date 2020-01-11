@@ -25,12 +25,10 @@ import webbrowser
 from collections import defaultdict
 from math import ceil
 
+from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import GObject as gobject
-
-import gi
-gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
@@ -583,7 +581,7 @@ class Overview(Controller):
         uri = "help:hamster"
         try:
             gtk.show_uri(None, uri, gdk.CURRENT_TIME)
-        except gi.repository.GLib.Error:
+        except glib.Error:
             msg = sys.exc_info()[1].args[0]
             dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
                                        gtk.ButtonsType.CLOSE,
