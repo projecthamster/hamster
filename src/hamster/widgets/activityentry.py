@@ -427,7 +427,7 @@ class CmdLineEntry(gtk.Entry):
 
             prev_fact = self.todays_facts[-1] if self.todays_facts else None
             if prev_fact and prev_fact.end_time:
-                since = stuff.format_duration(now - prev_fact.end_time)
+                since = (now - prev_fact.end_time).format()
                 description = "from previous activity, %s ago" % since
                 variant = prev_fact.end_time.strftime("%H:%M ")
                 variants.append((description, variant))

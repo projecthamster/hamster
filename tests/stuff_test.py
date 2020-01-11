@@ -245,6 +245,17 @@ class TestDatetime(unittest.TestCase):
         expected = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 00:10
         self.assertEqual(dt.datetime.from_day_time(day, time), expected)
 
+    def test_format_timedelta(self):
+        delta = dt.timedelta(minutes=10)
+        self.assertEqual(delta.format("human"), "10min")
+        delta = dt.timedelta(hours=5, minutes=0)
+        self.assertEqual(delta.format("human"), "5h")
+        delta = dt.timedelta(hours=5, minutes=10)
+        self.assertEqual(delta.format("human"), "5h 10min")
+        delta = dt.timedelta(hours=5, minutes=10)
+        self.assertEqual(delta.format("HH:MM"), "05:10")
+
+
     def test_parse_date(self):
         date = dt.date.parse("2020-01-05")
         self.assertEqual(date, pdt.date(2020, 1, 5))

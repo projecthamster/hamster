@@ -523,6 +523,34 @@ class timedelta(pdt.timedelta):
                              seconds=self.seconds,
                              microseconds=self.microseconds)
 
+    def format(self, fmt="human"):
+        """Return a string representation, according to the format string fmt."""
+        allowed = ("human", "HH:MM")
+
+        total_s = self.total_seconds()
+        if total_s < 0:
+            # return a warning
+            return "NEGATIVE"
+
+        hours = int(total_s // 3600)
+        minutes = int((total_s - 3600 * hours) // 60)
+
+        if fmt == "human":
+            if minutes % 60 == 0:
+                # duration in round hours
+                return "{}h".format(hours)
+            elif hours == 0:
+                # duration less than one hour
+                return "{}min".format(minutes)
+            else:
+                # x hours, y minutes
+                return "{}h {}min".format(hours, minutes)
+        elif fmt == "HH:MM":
+            return "{:02d}:{:02d}".format(hours, minutes)
+        else:
+            raise NotImplementedError(
+                "'{}' not in allowed formats: {}".format(fmt, allowed))
+
 
 def get_day(civil_date_time):
     """Return the hamster day corresponding to a given civil datetime.

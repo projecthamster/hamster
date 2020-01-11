@@ -43,7 +43,10 @@ from hamster.lib import datetime as dt
 
 
 def hamster_round(time):
-    """Round time or datetime."""
+    """Round time or datetime.
+
+    Deprecated: hamster.lib/datetime.time or datetime are already rounded.
+    """
     if time is None:
         return None
     else:
@@ -52,7 +55,10 @@ def hamster_round(time):
 
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.
-    accepts either minutes or timedelta"""
+    accepts either minutes or timedelta
+
+    Deprecated: use timedelta.format() instead.
+    """
 
     minutes = duration_minutes(minutes)
 

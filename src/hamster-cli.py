@@ -66,7 +66,7 @@ def fact_dict(fact_data, with_date):
         end_date = dt.datetime.now()
         fact['end'] = ''
 
-    fact['duration'] = stuff.format_duration(fact_data.delta)
+    fact['duration'] = fact_data.delta.format()
 
     fact['activity'] = fact_data.activity
     fact['category'] = fact_data.category
@@ -210,7 +210,7 @@ class HamsterClient(object):
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
             print("{} {}".format(str(facts[-1]).strip(),
-                                 stuff.format_duration(facts[-1].delta, human=False)))
+                                 facts[-1].delta.format(fmt="HH:MM")))
         else:
             print((_("No activity")))
 
@@ -286,12 +286,12 @@ class HamsterClient(object):
         cats = []
         total_duration = dt.timedelta()
         for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
-            cats.append("{}: {}".format(cat, stuff.format_duration(duration)))
+            cats.append("{}: {}".format(cat, duration.format()))
             total_duration += duration
 
         for line in word_wrap(", ".join(cats), 80):
             print(line)
-        print("Total: ", stuff.format_duration(total_duration))
+        print("Total: ", total_duration.format())
 
         print()
 

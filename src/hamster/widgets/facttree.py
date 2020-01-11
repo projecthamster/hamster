@@ -233,7 +233,7 @@ class FactRow(object):
 
             g.restore_context()
 
-        self.duration_label.show(g, stuff.format_duration(self.fact.delta), x=self.width - 105)
+        self.duration_label.show(g, self.fact.delta.format(), x=self.width - 105)
 
         g.restore_context()
 

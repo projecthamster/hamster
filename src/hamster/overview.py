@@ -245,7 +245,7 @@ class HorizontalBarChart(graphics.Sprite):
         bar_start_x = label_width + margin
         for i, (label, value) in enumerate(self.values):
             g.set_color(self.label_color)
-            duration_str = stuff.format_duration(value, human=False)
+            duration_str = value.format(fmt="HH:MM")
             markup_label = stuff.escape_pango(str(label))
             markup_duration = stuff.escape_pango(duration_str)
             self.layout.set_markup("{}, <i>{}</i>".format(markup_label, markup_duration))
