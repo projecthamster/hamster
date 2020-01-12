@@ -15,7 +15,7 @@ and a static copy of the user documentation is online
 
 ## Installation
 
-#### Backup database
+### Backup database
 
 This legacy hamster should be stable, and keep database compatibility with previous versions.  
 It should be possible to try a new version and smoothly roll back to the previous version if preferred.  
@@ -27,6 +27,17 @@ Nevertheless, things can always go wrong. It is strongly advised to backup the d
 ls --reverse -clt ~/.local/share/hamster*/*.db
 ```
 Backup the last file in the list. 
+
+### Install from packages
+
+##### OpenSUSE
+https://software.opensuse.org/package/hamster-time-tracker
+
+##### Snap
+Easy installation on any distribution supporting snap.  
+https://snapcraft.io/hamster-snap
+
+### Install from sources
 
 #### Dependencies
 
