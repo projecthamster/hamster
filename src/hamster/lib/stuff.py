@@ -36,10 +36,12 @@ import os
 
 from hamster.lib import datetime as dt
 
-# datetime_to_hamsterday = dt.get_day
-# hamster_now = dt.datetime.now
-# hamster_today = dt.today
-# hamsterday_time_to_datetime = dt.datetime.from_day_time
+
+# for pre-v3.0 backward compatibility
+datetime_to_hamsterday = dt.get_day
+hamster_now = dt.datetime.now
+hamster_today = dt.today
+hamsterday_time_to_datetime = dt.datetime.from_day_time
 
 
 def hamster_round(time):
