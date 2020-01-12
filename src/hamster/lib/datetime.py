@@ -1,3 +1,5 @@
+# This file is part of Hamster
+# Copyright (c) The Hamster time tracker developers
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
