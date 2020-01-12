@@ -270,37 +270,7 @@ class TestDatetime(unittest.TestCase):
     def test_parse_datetime(self):
         self.assertEqual(dt.datetime.parse("2020-01-05 9:01"), pdt.datetime(2020, 1, 5, 9, 1))
 
-    def test_rounding(self):
-        dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
-        self.assertEqual(dt1.second, 0)
-        self.assertEqual(dt1.microsecond, 0)
-        self.assertEqual(str(dt1), "2019-12-31 13:14")
-
-    def test_type_stability(self):
-        dt1 = dt.datetime(2020, 1, 10, hour=13, minute=30)
-        dt2 = dt.datetime(2020, 1, 10, hour=13, minute=40)
-        delta = dt2 - dt1
-        self.assertEqual(type(delta), dt.timedelta)
-        _sum = dt1 + delta
-        self.assertEqual(_sum, dt.datetime(2020, 1, 10, hour=13, minute=40))
-        self.assertEqual(type(_sum), dt.datetime)
-        _sub = dt1 - delta
-        self.assertEqual(_sub, dt.datetime(2020, 1, 10, hour=13, minute=20))
-        self.assertEqual(type(_sub), dt.datetime)
-
-        opposite = - delta
-        self.assertEqual(opposite, dt.timedelta(minutes=-10))
-        self.assertEqual(type(opposite), dt.timedelta)
-        _sum = delta + delta
-        self.assertEqual(_sum, dt.timedelta(minutes=20))
-        self.assertEqual(type(_sum), dt.timedelta)
-        _sub = delta - delta
-        self.assertEqual(_sub, dt.timedelta())
-        self.assertEqual(type(_sub), dt.timedelta)
-
-
-class TestParsers(unittest.TestCase):
-    def test_dt_patterns(self):
+    def test_datetime_patterns(self):
         p = dt.datetime.pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
@@ -319,7 +289,6 @@ class TestParsers(unittest.TestCase):
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)
         self.assertEqual(m, None)
-
 
     def test_parse_datetime_range(self):
         # only match clean
@@ -371,6 +340,34 @@ class TestParsers(unittest.TestCase):
         just_after = end + dt.timedelta(seconds=1)
         self.assertEqual(dt.get_day(just_before), dt.date(2019, 12, 4))
         self.assertEqual(dt.get_day(just_after), dt.date(2019, 12, 8))
+
+    def test_rounding(self):
+        dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
+        self.assertEqual(dt1.second, 0)
+        self.assertEqual(dt1.microsecond, 0)
+        self.assertEqual(str(dt1), "2019-12-31 13:14")
+
+    def test_type_stability(self):
+        dt1 = dt.datetime(2020, 1, 10, hour=13, minute=30)
+        dt2 = dt.datetime(2020, 1, 10, hour=13, minute=40)
+        delta = dt2 - dt1
+        self.assertEqual(type(delta), dt.timedelta)
+        _sum = dt1 + delta
+        self.assertEqual(_sum, dt.datetime(2020, 1, 10, hour=13, minute=40))
+        self.assertEqual(type(_sum), dt.datetime)
+        _sub = dt1 - delta
+        self.assertEqual(_sub, dt.datetime(2020, 1, 10, hour=13, minute=20))
+        self.assertEqual(type(_sub), dt.datetime)
+
+        opposite = - delta
+        self.assertEqual(opposite, dt.timedelta(minutes=-10))
+        self.assertEqual(type(opposite), dt.timedelta)
+        _sum = delta + delta
+        self.assertEqual(_sum, dt.timedelta(minutes=20))
+        self.assertEqual(type(_sum), dt.timedelta)
+        _sub = delta - delta
+        self.assertEqual(_sub, dt.timedelta())
+        self.assertEqual(type(_sub), dt.timedelta)
 
 
 if __name__ == '__main__':
