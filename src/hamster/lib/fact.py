@@ -98,7 +98,7 @@ class Fact(object):
               Any subsequent modification of start_time
               can result in different self.date.
         """
-        return dt.get_day(self.start_time)
+        return self.start_time.hday()
 
     @date.setter
     def date(self, value):
@@ -125,6 +125,9 @@ class Fact(object):
     @description.setter
     def description(self, value):
         self._description = value.strip() if value else ""
+
+
+
 
     @classmethod
     def parse(cls, string, range_pos="head", default_day=None, ref="now"):
@@ -166,12 +169,12 @@ class Fact(object):
         """
         time_str = ""
         if self.start_time:
-            if dt.get_day(self.start_time) != default_day:
+            if self.start_time.hday() != default_day:
                 time_str += self.start_time.strftime(DATETIME_FMT)
             else:
                 time_str += self.start_time.strftime(TIME_FMT)
         if self.end_time:
-            if dt.get_day(self.end_time) != dt.get_day(self.start_time):
+            if self.end_time.hday() != self.start_time.hday():
                 end_time_str = self.end_time.strftime(DATETIME_FMT)
             else:
                 end_time_str = self.end_time.strftime(TIME_FMT)

@@ -74,7 +74,7 @@ class date(pdt.date):
 date.re = re.compile(date.pattern(), flags=re.VERBOSE)
 
 
-class day(date):
+class hday(date):
     """Hamster day.
 
     Same as date, but taking into account day-start.
@@ -260,8 +260,27 @@ class datetime(pdt.datetime):
             else:
                 return None
 
+    # not a property, to match other extractions such as .date() or .time()
+    def hday(self) -> hday:
+        """Return the day belonged to.
+
+        The hamster day start is taken into account.
+        """
+
+        # work around cyclic imports
+        from hamster.lib.configuration import conf
+
+        _day = hday(self.year, self.month, self.day)
+        if self.time() < conf.day_start:
+            # early morning, between midnight and day_start
+            # => the hamster day is the previous civil day
+            _day -= timedelta(days=1)
+
+        # return only the date
+        return _day
+
     @classmethod
-    def from_day_time(cls, d: day, t: time):
+    def from_day_time(cls, d: hday, t: time):
         """Return a datetime with time t belonging to day.
 
         The hamster day start is taken into account.
@@ -416,7 +435,7 @@ class Range(namedtuple('Range', 'start, end')):
 
         if m.group('firstday'):
             # only day given for start
-            firstday = day.parse(m.group('firstday'))
+            firstday = hday.parse(m.group('firstday'))
             start = firstday.start
         else:
             firstday = None
@@ -429,14 +448,14 @@ class Range(namedtuple('Range', 'start, end')):
                 start = ref + delta1
 
         if m.group('lastday'):
-            lastday = day.parse(m.group('lastday'))
+            lastday = hday.parse(m.group('lastday'))
             end = lastday.end
         elif firstday:
             end = firstday.end
         else:
             end = datetime._extract_datetime(m, d="date2", h="hour2",
                                              m="minute2", r="relative2",
-                                             default_day=get_day(start))
+                                             default_day=start.hday())
             if isinstance(end, pdt.timedelta):
                 # relative to start, actually
                 delta2 = end
@@ -557,28 +576,6 @@ class timedelta(pdt.timedelta):
                 "'{}' not in allowed formats: {}".format(fmt, allowed))
 
 
-def get_day(civil_date_time):
-    """Return the hamster day corresponding to a given civil datetime.
-
-    The hamster day start is taken into account.
-    """
-
-    if civil_date_time is None:
-        return None
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-
-    if civil_date_time.time() < conf.day_start:
-        # early morning, between midnight and day_start
-        # => the hamster day is the previous civil day
-        hamster_date_time = civil_date_time - timedelta(days=1)
-    else:
-        hamster_date_time = civil_date_time
-    # return only the date
-    return hamster_date_time.date()
-
-
 def today():
     """Return the current day."""
-    return get_day(datetime.now())
+    return datetime.now().hday()

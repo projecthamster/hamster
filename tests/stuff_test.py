@@ -13,10 +13,10 @@ class TestActivityInputParsing(unittest.TestCase):
     def test_get_day(self):
         date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(dt.get_day(date_time), expected)
+        self.assertEqual(date_time.hday(), expected)
         date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
         expected = dt.date(2018, 8, 13)
-        self.assertEqual(dt.get_day(date_time), expected)
+        self.assertEqual(date_time.hday(), expected)
 
     def test_plain_name(self):
         # plain activity name
@@ -332,14 +332,14 @@ class TestDatetime(unittest.TestCase):
         (start, end), rest = dt.Range.parse(s, ref=ref)
         just_before = start - dt.timedelta(seconds=1)
         just_after = end + dt.timedelta(seconds=1)
-        self.assertEqual(dt.get_day(just_before), pdt.date(2019, 12, 4))
-        self.assertEqual(dt.get_day(just_after), pdt.date(2019, 12, 6))
+        self.assertEqual(just_before.hday(), pdt.date(2019, 12, 4))
+        self.assertEqual(just_after.hday(), pdt.date(2019, 12, 6))
         s = "2019-12-05 2019-12-07"  # hamster days range
         (start, end), rest = dt.Range.parse(s, ref=ref)
         just_before = start - dt.timedelta(seconds=1)
         just_after = end + dt.timedelta(seconds=1)
-        self.assertEqual(dt.get_day(just_before), dt.date(2019, 12, 4))
-        self.assertEqual(dt.get_day(just_after), dt.date(2019, 12, 8))
+        self.assertEqual(just_before.hday(), dt.date(2019, 12, 4))
+        self.assertEqual(just_after.hday(), dt.date(2019, 12, 8))
 
     def test_rounding(self):
         dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)

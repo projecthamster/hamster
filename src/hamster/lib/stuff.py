@@ -38,10 +38,20 @@ from hamster.lib import datetime as dt
 
 
 # for pre-v3.0 backward compatibility
-datetime_to_hamsterday = dt.get_day
 hamster_now = dt.datetime.now
 hamster_today = dt.today
 hamsterday_time_to_datetime = dt.datetime.from_day_time
+
+
+def datetime_to_hamsterday(civil_date_time):
+    """Return the hamster day corresponding to a given civil datetime.
+
+    Deprecated: use civil_date_time.hday() instead
+
+    The hamster day start is taken into account.
+    """
+
+    return civil_date_time.hday()
 
 
 def hamster_round(time):
