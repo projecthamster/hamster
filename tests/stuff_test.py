@@ -209,10 +209,10 @@ class TestActivityInputParsing(unittest.TestCase):
                                 ["two", "tags"],
                                 ["with @at"],
                                 ):
-                                start = dt.datetime.from_day_time(dt.today(),
+                                start = dt.datetime.from_day_time(dt.hday.today(),
                                                                   start_time
                                                                   ) if start_time else None
-                                end = dt.datetime.from_day_time(dt.today(),
+                                end = dt.datetime.from_day_time(dt.hday.today(),
                                                                 end_time
                                                                 ) if end_time else None
                                 if end and not start:
@@ -275,7 +275,7 @@ class TestDatetime(unittest.TestCase):
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
         time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                              default_day=dt.today())
+                                              default_day=dt.hday.today())
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
@@ -284,7 +284,7 @@ class TestDatetime(unittest.TestCase):
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
         relative = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                                  default_day=dt.today())
+                                                  default_day=dt.hday.today())
         self.assertEqual(relative, dt.timedelta(minutes=-25))
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)

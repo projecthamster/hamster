@@ -39,7 +39,7 @@ from hamster.lib import datetime as dt
 
 # for pre-v3.0 backward compatibility
 hamster_now = dt.datetime.now
-hamster_today = dt.today
+hamster_today = dt.hday.today
 hamsterday_time_to_datetime = dt.datetime.from_day_time
 
 

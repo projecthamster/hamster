@@ -101,6 +101,11 @@ class hday(date):
         from hamster.lib.configuration import conf
         return conf.day_start
 
+    @classmethod
+    def today(cls):
+        """Return the current hamster day."""
+        return datetime.now().hday()
+
 
 class time(pdt.time):
     """Hamster time.
@@ -410,7 +415,7 @@ class Range(namedtuple('Range', 'start, end')):
             ref = datetime.now()
 
         if default_day is None:
-            default_day = today()
+            default_day = hday.today()
 
         assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
         if position == "exact":
@@ -574,8 +579,3 @@ class timedelta(pdt.timedelta):
         else:
             raise NotImplementedError(
                 "'{}' not in allowed formats: {}".format(fmt, allowed))
-
-
-def today():
-    """Return the current day."""
-    return datetime.now().hday()

@@ -673,7 +673,7 @@ class Storage(storage.Storage):
 
 
     def __get_todays_facts(self):
-        return self.__get_facts(dt.today())
+        return self.__get_facts(dt.hday.today())
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
         split_time = conf.day_start

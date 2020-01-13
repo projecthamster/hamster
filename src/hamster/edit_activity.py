@@ -249,7 +249,7 @@ class CustomFactController(gobject.GObject):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.date = self.fact.date or dt.today()
+            self.date = self.fact.date or dt.hday.today()
             self.validate_fields()
             self.update_cmdline()
 
@@ -269,7 +269,7 @@ class CustomFactController(gobject.GObject):
                                                          new_time)
                 else:
                     # date not specified; result must fall in current hamster_day
-                    new_start_time = dt.datetime.from_day_time(dt.today(), new_time)
+                    new_start_time = dt.datetime.from_day_time(dt.hday.today(), new_time)
             else:
                 new_start_time = None
             self.fact.start_time = new_start_time

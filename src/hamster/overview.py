@@ -65,7 +65,7 @@ class HeaderBar(gtk.HeaderBar):
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
-        self.range_pick = RangePick(dt.today())
+        self.range_pick = RangePick(dt.hday.today())
         self.pack_start(self.range_pick)
 
         self.system_button = gtk.MenuButton()
@@ -458,7 +458,7 @@ class Overview(Controller):
         main.pack_start(self.totals, False, True, 1)
 
         # FIXME: should store and recall date_range from hamster.lib.configuration.conf
-        hamster_day = dt.today()
+        hamster_day = dt.hday.today()
         self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
