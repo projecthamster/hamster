@@ -15,7 +15,7 @@ and a static copy of the user documentation is online
 
 ## Installation
 
-#### Backup database
+### Backup database
 
 This legacy hamster should be stable, and keep database compatibility with previous versions.  
 It should be possible to try a new version and smoothly roll back to the previous version if preferred.  
@@ -27,6 +27,33 @@ Nevertheless, things can always go wrong. It is strongly advised to backup the d
 ls --reverse -clt ~/.local/share/hamster*/*.db
 ```
 Backup the last file in the list. 
+
+
+### Kill hamster daemons
+
+When trying a different version, make sure to kill the running daemons:
+
+```bash
+# either step-by-step, totally safe
+pkill -f hamster-service
+pkill -f hamster-windows-service
+# check (should be empty)
+pgrep -af hamster
+
+# or be bold and kill them all at once:
+pkill -ef hamster
+```
+
+### Install from packages
+
+##### OpenSUSE
+https://software.opensuse.org/package/hamster-time-tracker
+
+##### Snap
+Easy installation on any distribution supporting snap.  
+https://snapcraft.io/hamster-snap
+
+### Install from sources
 
 #### Dependencies
 
@@ -78,21 +105,6 @@ or a specific [release](https://github.com/projecthamster/hamster/releases):
 # replace 2.2.2 by the release version
 wget https://github.com/projecthamster/hamster/archive/v2.2.2.zip
 cd hamster-2.2.2
-```
-
-#### Kill hamster daemons
-
-When trying a different version, make sure to kill the running daemons:
-
-```bash
-# either step-by-step:
-pkill -f hamster-service
-pkill -f hamster-windows-service
-# check (should be empty)
-pgrep -af hamster
-
-# or be bold and kill them all at once:
-pkill -ef hamster
 ```
 
 #### Build and install

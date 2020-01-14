@@ -22,6 +22,9 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 from hamster.lib import datetime as dt
+
+from textwrap import dedent
+
 from hamster.lib.fact import Fact, FactError
 
 

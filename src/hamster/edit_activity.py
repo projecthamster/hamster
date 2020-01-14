@@ -20,7 +20,7 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
-from textwrap import dedent
+
 import time
 
 """ TODO: hook into notifications and refresh our days if some evil neighbour
