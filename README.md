@@ -28,6 +28,22 @@ ls --reverse -clt ~/.local/share/hamster*/*.db
 ```
 Backup the last file in the list. 
 
+
+### Kill hamster daemons
+
+When trying a different version, make sure to kill the running daemons:
+
+```bash
+# either step-by-step, totally safe
+pkill -f hamster-service
+pkill -f hamster-windows-service
+# check (should be empty)
+pgrep -af hamster
+
+# or be bold and kill them all at once:
+pkill -ef hamster
+```
+
 ### Install from packages
 
 ##### OpenSUSE
@@ -89,21 +105,6 @@ or a specific [release](https://github.com/projecthamster/hamster/releases):
 # replace 2.2.2 by the release version
 wget https://github.com/projecthamster/hamster/archive/v2.2.2.zip
 cd hamster-2.2.2
-```
-
-#### Kill hamster daemons
-
-When trying a different version, make sure to kill the running daemons:
-
-```bash
-# either step-by-step:
-pkill -f hamster-service
-pkill -f hamster-windows-service
-# check (should be empty)
-pgrep -af hamster
-
-# or be bold and kill them all at once:
-pkill -ef hamster
 ```
 
 #### Build and install
