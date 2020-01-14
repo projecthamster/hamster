@@ -375,11 +375,19 @@ class datetime(pdt.datetime):
 datetime.re = re.compile(datetime.pattern(), flags=re.VERBOSE)
 
 
-class Range(namedtuple('Range', 'start, end')):
+class Range():
     """Time span between two datetimes."""
 
     # slight memory optimization; no further attributes besides start or end.
-    __slots__ = ()
+    __slots__ = ('start', 'end')
+
+    def __init__(self, start=None, end=None):
+        self.start = start
+        self.end = end
+
+    # allow start, end = range
+    def __iter__(self):
+        return (self.start, self.end).__iter__()
 
     @classmethod
     def parse(cls, text,

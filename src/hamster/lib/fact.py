@@ -23,7 +23,7 @@ class FactError(Exception):
 
 class Fact(object):
     def __init__(self, activity="", category=None, description=None, tags=None,
-                 start_time=None, end_time=None, id=None, activity_id=None):
+                 range=None, start_time=None, end_time=None, id=None, activity_id=None):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
@@ -40,8 +40,12 @@ class Fact(object):
         self.category = category
         self.description = description
         self.tags = tags or []
-        self.start_time = start_time
-        self.end_time = end_time
+        if range:
+            assert not start_time, "range already given"
+            assert not end_time, "range already given"
+            self.range = range
+        else:
+            self.range = dt.Range(start_time, end_time)
         self.id = id
         self.activity_id = activity_id
 
@@ -125,8 +129,21 @@ class Fact(object):
     def description(self, value):
         self._description = value.strip() if value else ""
 
+    @property
+    def end_time(self):
+        return self.range.end
 
+    @end_time.setter
+    def end_time(self, value):
+        self.range.end = value
 
+    @property
+    def start_time(self):
+        return self.range.start
+
+    @start_time.setter
+    def start_time(self, value):
+        self.range.start = value
 
     @classmethod
     def parse(cls, string, range_pos="head", default_day=None, ref="now"):
