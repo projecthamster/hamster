@@ -60,7 +60,7 @@ class Fact(object):
             'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
             'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
-            'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
+            'end_time': self.range.end if isinstance(self.range.end, str) else calendar.timegm(self.range.end.timetuple()) if self.range.end else "",
             'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
 
@@ -108,17 +108,17 @@ class Fact(object):
         if self.range.start:
             previous_start_time = self.range.start
             self.range.start = dt.datetime.from_day_time(value, self.range.start.time())
-            if self.end_time:
+            if self.range.end:
                 # start_time date prevails.
                 # Shift end_time to preserve the fact duration.
-                self.end_time += self.range.start - previous_start_time
-        elif self.end_time:
-            self.end_time = dt.datetime.from_day_time(value, self.end_time.time())
+                self.range.end += self.range.start - previous_start_time
+        elif self.range.end:
+            self.range.end = dt.datetime.from_day_time(value, self.range.end.time())
 
     @property
     def delta(self):
         """Duration (datetime.timedelta)."""
-        end_time = self.end_time if self.end_time else dt.datetime.now()
+        end_time = self.range.end if self.range.end else dt.datetime.now()
         return end_time - self.range.start
 
     @property
@@ -197,11 +197,11 @@ class Fact(object):
                 time_str += self.range.start.strftime(DATETIME_FMT)
             else:
                 time_str += self.range.start.strftime(TIME_FMT)
-        if self.end_time:
-            if self.end_time.hday() != self.range.start.hday():
-                end_time_str = self.end_time.strftime(DATETIME_FMT)
+        if self.range.end:
+            if self.range.end.hday() != self.range.start.hday():
+                end_time_str = self.range.end.strftime(DATETIME_FMT)
             else:
-                end_time_str = self.end_time.strftime(TIME_FMT)
+                end_time_str = self.range.end.strftime(TIME_FMT)
             time_str = "{} - {}".format(time_str, end_time_str)
         return time_str
 
@@ -222,7 +222,7 @@ class Fact(object):
 
         Private, used only in copy. It is more readable to be explicit, e.g.:
         fact.range.start = ...
-        fact.end_time = ...
+        fact.range.end = ...
         """
         for attr, value in kwds.items():
             if not hasattr(self, attr):
@@ -235,7 +235,7 @@ class Fact(object):
                 and self.activity == other.activity
                 and self.category == other.category
                 and self.description == other.description
-                and self.end_time == other.end_time
+                and self.range.end == other.range.end
                 and self.range.start == other.range.start
                 and self.tags == other.tags
                 )
