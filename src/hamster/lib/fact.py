@@ -5,7 +5,6 @@ import calendar
 import datetime as dt
 
 from copy import deepcopy
-from textwrap import dedent
 
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
 from hamster.lib.stuff import (
