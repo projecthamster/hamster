@@ -37,6 +37,12 @@ https://software.opensuse.org/package/hamster-time-tracker
 Easy installation on any distribution supporting snap.  
 https://snapcraft.io/hamster-snap
 
+Tips:
+
+1. Make sure to **snap connect hamster-snap:system-observe** or do the equivalent in your respected software center(with snap plugin enabled) before launching the gui.
+2. If you have launched the older version or without the plug, make sure to kill the two background hamster-*-service before launching again, both services will be python processes.
+
+
 ### Install from sources
 
 #### Dependencies
