@@ -59,7 +59,7 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.start_time if isinstance(self.start_time, str) else calendar.timegm(self.start_time.timetuple()),
+            'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
             'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
             'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
@@ -101,17 +101,17 @@ class Fact(object):
               Any subsequent modification of start_time
               can result in different self.date.
         """
-        return self.start_time.hday()
+        return self.range.start.hday()
 
     @date.setter
     def date(self, value):
-        if self.start_time:
-            previous_start_time = self.start_time
-            self.start_time = dt.datetime.from_day_time(value, self.start_time.time())
+        if self.range.start:
+            previous_start_time = self.range.start
+            self.range.start = dt.datetime.from_day_time(value, self.range.start.time())
             if self.end_time:
                 # start_time date prevails.
                 # Shift end_time to preserve the fact duration.
-                self.end_time += self.start_time - previous_start_time
+                self.end_time += self.range.start - previous_start_time
         elif self.end_time:
             self.end_time = dt.datetime.from_day_time(value, self.end_time.time())
 
@@ -119,7 +119,7 @@ class Fact(object):
     def delta(self):
         """Duration (datetime.timedelta)."""
         end_time = self.end_time if self.end_time else dt.datetime.now()
-        return end_time - self.start_time
+        return end_time - self.range.start
 
     @property
     def description(self):
@@ -131,6 +131,10 @@ class Fact(object):
 
     @property
     def end_time(self):
+        """Fact range end.
+
+        Deprecated, use self.range.end instead.
+        """
         return self.range.end
 
     @end_time.setter
@@ -139,6 +143,10 @@ class Fact(object):
 
     @property
     def start_time(self):
+        """Fact range start.
+
+        Deprecated, use self.range.start instead.
+        """
         return self.range.start
 
     @start_time.setter
@@ -184,13 +192,13 @@ class Fact(object):
         the same hamster day as start.
         """
         time_str = ""
-        if self.start_time:
-            if self.start_time.hday() != default_day:
-                time_str += self.start_time.strftime(DATETIME_FMT)
+        if self.range.start:
+            if self.range.start.hday() != default_day:
+                time_str += self.range.start.strftime(DATETIME_FMT)
             else:
-                time_str += self.start_time.strftime(TIME_FMT)
+                time_str += self.range.start.strftime(TIME_FMT)
         if self.end_time:
-            if self.end_time.hday() != self.start_time.hday():
+            if self.end_time.hday() != self.range.start.hday():
                 end_time_str = self.end_time.strftime(DATETIME_FMT)
             else:
                 end_time_str = self.end_time.strftime(TIME_FMT)
@@ -213,7 +221,7 @@ class Fact(object):
         """Modify attributes.
 
         Private, used only in copy. It is more readable to be explicit, e.g.:
-        fact.start_time = ...
+        fact.range.start = ...
         fact.end_time = ...
         """
         for attr, value in kwds.items():
@@ -228,7 +236,7 @@ class Fact(object):
                 and self.category == other.category
                 and self.description == other.description
                 and self.end_time == other.end_time
-                and self.start_time == other.start_time
+                and self.range.start == other.range.start
                 and self.tags == other.tags
                 )
 
