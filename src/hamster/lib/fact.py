@@ -23,13 +23,23 @@ class FactError(Exception):
 
 class Fact(object):
     def __init__(self, activity="", category=None, description=None, tags=None,
-                 range=None, start_time=None, end_time=None, id=None, activity_id=None):
+                 range=None, start=None, end=None, start_time=None, end_time=None,
+                 id=None, activity_id=None):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
 
         To provide the whole fact information as a single string,
         please use Fact.parse(string).
+
+        range (dt.Range): time spanned by the fact. For convenience,
+                          the `start` and `end` arguments can be given instead.
+        start (dt.datetime); Start of the fact range.
+                             Mutually exclusive with `range`.
+        end (dt.datetime); End of the fact range.
+                           Mutually exclusive with `range`.
+        start_time (dt.datetime): Deprecated. Same as start.
+        end_time (dt.datetime): Deprecated. Same as end.
 
         id (int): id in the database.
                   Should be used with extreme caution, knowing exactly why.
@@ -41,11 +51,19 @@ class Fact(object):
         self.description = description
         self.tags = tags or []
         if range:
+            assert not start, "range already given"
+            assert not end, "range already given"
             assert not start_time, "range already given"
             assert not end_time, "range already given"
             self.range = range
         else:
-            self.range = dt.Range(start_time, end_time)
+            if start_time:
+                assert not start, "use only start, not start_time"
+                start = start_time
+            if end_time:
+                assert not end, "use only end, not end_time"
+                end = end_time
+            self.range = dt.Range(start, end)
         self.id = id
         self.activity_id = activity_id
 

@@ -9,7 +9,25 @@ from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 
 
-class TestActivityInputParsing(unittest.TestCase):
+class TestFact(unittest.TestCase):
+
+    def test_range(self):
+        t1 = dt.datetime(2020, 1, 15, 13, 30)
+        t2 = dt.datetime(2020, 1, 15, 15, 30)
+        range = dt.Range(t1, t2)
+        fact = Fact(range=range)
+        self.assertEqual(fact.range.start, t1)
+        self.assertEqual(fact.range.end, t2)
+        fact = Fact(start=t1, end=t2)
+        self.assertEqual(fact.range.start, t1)
+        self.assertEqual(fact.range.end, t2)
+        # backward compatibility (before v3.0)
+        fact = Fact(start_time=t1, end_time=t2)
+        self.assertEqual(fact.range.start, t1)
+        self.assertEqual(fact.range.end, t2)
+
+
+class TestFactParsing(unittest.TestCase):
 
     def test_plain_name(self):
         # plain activity name
