@@ -10,13 +10,6 @@ from hamster.lib.fact import Fact
 
 
 class TestActivityInputParsing(unittest.TestCase):
-    def test_get_day(self):
-        date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
-        expected = dt.date(2018, 8, 13)
-        self.assertEqual(date_time.hday(), expected)
-        date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
-        expected = dt.date(2018, 8, 13)
-        self.assertEqual(date_time.hday(), expected)
 
     def test_plain_name(self):
         # plain activity name
@@ -255,6 +248,13 @@ class TestDatetime(unittest.TestCase):
         delta = dt.timedelta(hours=5, minutes=10)
         self.assertEqual(delta.format("HH:MM"), "05:10")
 
+    def test_datetime_hday(self):
+        date_time = dt.datetime(2018, 8, 13, 23, 10)  # 2018-08-13 23:10
+        expected = dt.date(2018, 8, 13)
+        self.assertEqual(date_time.hday(), expected)
+        date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
+        expected = dt.date(2018, 8, 13)
+        self.assertEqual(date_time.hday(), expected)
 
     def test_parse_date(self):
         date = dt.date.parse("2020-01-05")
