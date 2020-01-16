@@ -202,31 +202,10 @@ class Fact(object):
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
-    def serialized_range(self, default_day=None):
-        """Return a string representing the time range.
-
-        Start date is shown only if start does not belong to default_day.
-        End date is shown only if end does not belong to
-        the same hamster day as start.
-        """
-        time_str = ""
-        if self.range.start:
-            if self.range.start.hday() != default_day:
-                time_str += self.range.start.strftime(DATETIME_FMT)
-            else:
-                time_str += self.range.start.strftime(TIME_FMT)
-        if self.range.end:
-            if self.range.end.hday() != self.range.start.hday():
-                end_time_str = self.range.end.strftime(DATETIME_FMT)
-            else:
-                end_time_str = self.range.end.strftime(TIME_FMT)
-            time_str = "{} - {}".format(time_str, end_time_str)
-        return time_str
-
     def serialized(self, range_pos="head", default_day=None):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
-        datetime = self.serialized_range(default_day)
+        datetime = self.range.format(default_day=default_day)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
         assert range_pos in ("head", "tail")

@@ -290,7 +290,7 @@ class CustomFactController(gobject.GObject):
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_str = self.cmdline_fact.serialized_range(default_day=self.date)
+                time_str = self.cmdline_fact.range.format(default_day=self.date)
                 self.cmdline.select_region(0, len(time_str))
 
     def update_fields(self):

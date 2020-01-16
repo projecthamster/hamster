@@ -389,6 +389,27 @@ class Range():
     def __iter__(self):
         return (self.start, self.end).__iter__()
 
+    def format(self, default_day=None):
+        """Return a string representing the time range.
+
+        Start date is shown only if start does not belong to default_day.
+        End date is shown only if end does not belong to
+        the same hamster day as start.
+        """
+        time_str = ""
+        if self.start:
+            if self.start.hday() != default_day:
+                time_str += self.start.strftime(DATETIME_FMT)
+            else:
+                time_str += self.start.strftime(TIME_FMT)
+        if self.end:
+            if self.end.hday() != self.start.hday():
+                end_time_str = self.end.strftime(DATETIME_FMT)
+            else:
+                end_time_str = self.end.strftime(TIME_FMT)
+            time_str = "{} - {}".format(time_str, end_time_str)
+        return time_str
+
     @classmethod
     def parse(cls, text,
               position="exact", separator="\s+", default_day=None, ref="now"):
