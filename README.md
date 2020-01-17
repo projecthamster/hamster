@@ -50,7 +50,7 @@ pkill -ef hamster
 https://software.opensuse.org/package/hamster-time-tracker
 
 ##### Snap
-Easy installation on any distribution supporting snap.  
+Easy installation on any distribution supporting snap:  
 https://snapcraft.io/hamster-snap
 
 ### Install from sources
