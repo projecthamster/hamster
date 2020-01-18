@@ -3,8 +3,6 @@
 
 import logging
 from gi.repository import GLib as glib
-
-import datetime as dt
 from gi.repository import Gio as gio
 
 from hamster import logger as hamster_logger
@@ -12,7 +10,8 @@ from hamster.lib import i18n
 i18n.setup_i18n()
 
 from hamster.storage import db
-from hamster.lib import default_logger, stuff
+from hamster.lib import datetime as dt
+from hamster.lib import default_logger
 from hamster.lib.dbus import (
     DBusMainLoop,
     dbus,
@@ -139,7 +138,7 @@ class Storage(db.Storage, dbus.service.Object):
             start_time (int): Start datetime timestamp.
                               For backward compatibility with the
                               gnome shell extension,
-                              0 is special and means hamster_now().
+                              0 is special and means dt.datetime.now().
                               Otherwise, overrides the parsed value.
                               -1 means None.
             end_time (int): Start datetime timestamp.
@@ -156,7 +155,7 @@ class Storage(db.Storage, dbus.service.Object):
         if start_time == -1:
             fact.start_time = None
         elif start_time == 0:
-            fact.start_time = stuff.hamster_now()
+            fact.start_time = dt.datetime.now()
         else:
             fact.start_time = dt.datetime.utcfromtimestamp(start_time)
 

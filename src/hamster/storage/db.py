@@ -25,7 +25,6 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os, time
-import datetime as dt
 import itertools
 import sqlite3 as sqlite
 from shutil import copy as copyfile
@@ -35,9 +34,9 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
-from hamster.lib.stuff import hamster_today, hamster_now
 from hamster.storage import storage
 
 
@@ -436,7 +435,7 @@ class Storage(storage.Storage):
 
 
     def __touch_fact(self, fact, end_time = None):
-        end_time = end_time or hamster_now()
+        end_time = end_time or dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact.start_time < dt.timedelta(minutes = 1):
             self.__remove_fact(fact.id)
@@ -510,7 +509,7 @@ class Storage(storage.Storage):
 
         for fact in conflicts:
             # fact is a sqlite.Row, indexable by column name
-            fact_end_time = fact["end_time"] or hamster_now()
+            fact_end_time = fact["end_time"] or dt.datetime.now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
             if start_time < fact["start_time"] and end_time > fact_end_time:
@@ -593,7 +592,7 @@ class Storage(storage.Storage):
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
-        if (dt.timedelta(days=-1) <= hamster_now() - start_time <= dt.timedelta(days=1)):
+        if (dt.timedelta(days=-1) <= dt.datetime.now() - start_time <= dt.timedelta(days=1)):
             # pull in previous facts
             facts = self.__get_todays_facts()
 
@@ -674,7 +673,7 @@ class Storage(storage.Storage):
 
 
     def __get_todays_facts(self):
-        return self.__get_facts(hamster_today())
+        return self.__get_facts(dt.hday.today())
 
     def __get_facts(self, date, end_date = None, search_terms = ""):
         split_time = conf.day_start
@@ -991,3 +990,25 @@ class Storage(storage.Storage):
             print("updated database from version %d to %d" % (version, current_version))
 
         self.end_transaction()
+
+
+# datetime/sql conversions
+
+DATETIME_LOCAL_FMT = "%Y-%m-%d %H:%M:%S"
+
+
+def adapt_datetime(t):
+    """Convert datetime t to the suitable sql representation."""
+    return t.isoformat(" ")
+
+
+def convert_datetime(s):
+    """Convert the sql timestamp to datetime.
+
+    s is in bytes
+    """
+    return dt.datetime.strptime(s.decode('utf-8'), DATETIME_LOCAL_FMT)
+
+
+sqlite.register_adapter(dt.datetime, adapt_datetime)
+sqlite.register_converter("timestamp", convert_datetime)

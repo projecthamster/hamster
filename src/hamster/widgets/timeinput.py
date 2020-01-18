@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime as dt
 import calendar
 import re
 
@@ -25,7 +24,8 @@ from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
-from hamster.lib.stuff import format_duration, hamster_round
+from hamster.lib import datetime as dt
+from hamster.lib.stuff import hamster_round
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {
@@ -221,7 +221,7 @@ class TimeInput(gtk.Entry):
         while i_time < end_time:
             row_text = self._format_time(i_time)
             if self.start_time is not None:
-                delta_text = format_duration(i_time - i_time_0)
+                delta_text = (i_time - i_time_0).format()
 
                 row_text += " (%s)" % delta_text
 

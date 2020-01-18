@@ -1,18 +1,21 @@
+# This file is part of Hamster
+# Copyright (c) The Hamster time tracker developers
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+
+"""Fact definition."""
+
+
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import calendar
-import datetime as dt
 
 from copy import deepcopy
 
+from hamster.lib import datetime as dt
 from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
-from hamster.lib.stuff import (
-    datetime_to_hamsterday,
-    hamsterday_time_to_datetime,
-    hamster_now,
-    hamster_today,
-)
+
 
 class FactError(Exception):
     """Generic Fact error."""
@@ -20,13 +23,23 @@ class FactError(Exception):
 
 class Fact(object):
     def __init__(self, activity="", category=None, description=None, tags=None,
-                 start_time=None, end_time=None, id=None, activity_id=None):
+                 range=None, start=None, end=None, start_time=None, end_time=None,
+                 id=None, activity_id=None):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
 
         To provide the whole fact information as a single string,
         please use Fact.parse(string).
+
+        range (dt.Range): time spanned by the fact. For convenience,
+                          the `start` and `end` arguments can be given instead.
+        start (dt.datetime); Start of the fact range.
+                             Mutually exclusive with `range`.
+        end (dt.datetime); End of the fact range.
+                           Mutually exclusive with `range`.
+        start_time (dt.datetime): Deprecated. Same as start.
+        end_time (dt.datetime): Deprecated. Same as end.
 
         id (int): id in the database.
                   Should be used with extreme caution, knowing exactly why.
@@ -37,8 +50,20 @@ class Fact(object):
         self.category = category
         self.description = description
         self.tags = tags or []
-        self.start_time = start_time
-        self.end_time = end_time
+        if range:
+            assert not start, "range already given"
+            assert not end, "range already given"
+            assert not start_time, "range already given"
+            assert not end_time, "range already given"
+            self.range = range
+        else:
+            if start_time:
+                assert not start, "use only start, not start_time"
+                start = start_time
+            if end_time:
+                assert not end, "use only end, not end_time"
+                end = end_time
+            self.range = dt.Range(start, end)
         self.id = id
         self.activity_id = activity_id
 
@@ -52,8 +77,8 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.start_time if isinstance(self.start_time, str) else calendar.timegm(self.start_time.timetuple()),
-            'end_time': self.end_time if isinstance(self.end_time, str) else calendar.timegm(self.end_time.timetuple()) if self.end_time else "",
+            'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
+            'end_time': self.range.end if isinstance(self.range.end, str) else calendar.timegm(self.range.end.timetuple()) if self.range.end else "",
             'delta': self.delta.total_seconds()  # ugly, but needed for report.py
         }
 
@@ -94,25 +119,25 @@ class Fact(object):
               Any subsequent modification of start_time
               can result in different self.date.
         """
-        return datetime_to_hamsterday(self.start_time)
+        return self.range.start.hday()
 
     @date.setter
     def date(self, value):
-        if self.start_time:
-            previous_start_time = self.start_time
-            self.start_time = hamsterday_time_to_datetime(value, self.start_time.time())
-            if self.end_time:
+        if self.range.start:
+            previous_start_time = self.range.start
+            self.range.start = dt.datetime.from_day_time(value, self.range.start.time())
+            if self.range.end:
                 # start_time date prevails.
                 # Shift end_time to preserve the fact duration.
-                self.end_time += self.start_time - previous_start_time
-        elif self.end_time:
-            self.end_time = hamsterday_time_to_datetime(value, self.end_time.time())
+                self.range.end += self.range.start - previous_start_time
+        elif self.range.end:
+            self.range.end = dt.datetime.from_day_time(value, self.range.end.time())
 
     @property
     def delta(self):
         """Duration (datetime.timedelta)."""
-        end_time = self.end_time if self.end_time else hamster_now()
-        return end_time - self.start_time
+        end_time = self.range.end if self.range.end else dt.datetime.now()
+        return end_time - self.range.start
 
     @property
     def description(self):
@@ -121,6 +146,30 @@ class Fact(object):
     @description.setter
     def description(self, value):
         self._description = value.strip() if value else ""
+
+    @property
+    def end_time(self):
+        """Fact range end.
+
+        Deprecated, use self.range.end instead.
+        """
+        return self.range.end
+
+    @end_time.setter
+    def end_time(self, value):
+        self.range.end = value
+
+    @property
+    def start_time(self):
+        """Fact range start.
+
+        Deprecated, use self.range.start instead.
+        """
+        return self.range.start
+
+    @start_time.setter
+    def start_time(self, value):
+        self.range.start = value
 
     @classmethod
     def parse(cls, string, range_pos="head", default_day=None, ref="now"):
@@ -153,31 +202,10 @@ class Fact(object):
             res += " %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
-    def serialized_range(self, default_day=None):
-        """Return a string representing the time range.
-
-        Start date is shown only if start does not belong to default_day.
-        End date is shown only if end does not belong to
-        the same hamster day as start.
-        """
-        time_str = ""
-        if self.start_time:
-            if datetime_to_hamsterday(self.start_time) != default_day:
-                time_str += self.start_time.strftime(DATETIME_FMT)
-            else:
-                time_str += self.start_time.strftime(TIME_FMT)
-        if self.end_time:
-            if datetime_to_hamsterday(self.end_time) != datetime_to_hamsterday(self.start_time):
-                end_time_str = self.end_time.strftime(DATETIME_FMT)
-            else:
-                end_time_str = self.end_time.strftime(TIME_FMT)
-            time_str = "{} - {}".format(time_str, end_time_str)
-        return time_str
-
     def serialized(self, range_pos="head", default_day=None):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
-        datetime = self.serialized_range(default_day)
+        datetime = self.range.format(default_day=default_day)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
         assert range_pos in ("head", "tail")
@@ -190,8 +218,8 @@ class Fact(object):
         """Modify attributes.
 
         Private, used only in copy. It is more readable to be explicit, e.g.:
-        fact.start_time = ...
-        fact.end_time = ...
+        fact.range.start = ...
+        fact.range.end = ...
         """
         for attr, value in kwds.items():
             if not hasattr(self, attr):
@@ -204,8 +232,8 @@ class Fact(object):
                 and self.activity == other.activity
                 and self.category == other.category
                 and self.description == other.description
-                and self.end_time == other.end_time
-                and self.start_time == other.start_time
+                and self.range.end == other.range.end
+                and self.range.start == other.range.start
                 and self.tags == other.tags
                 )
 

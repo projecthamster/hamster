@@ -21,12 +21,12 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import datetime as dt
+from hamster.lib import datetime as dt
 
 from textwrap import dedent
 
 from hamster.lib.fact import Fact, FactError
-from hamster.lib.stuff import hamster_now
+
 
 class Storage(object):
     def run_fixtures(self):
@@ -55,7 +55,7 @@ class Storage(object):
         if fact.end_time and (fact.delta < dt.timedelta(0)):
             fixed_fact = Fact(start_time=fact.start_time,
                               end_time=fact.end_time + dt.timedelta(days=1))
-            suggested_range_str = fixed_fact.serialized_range(default_day=default_day)
+            suggested_range_str = fixed_fact.range.format(default_day=default_day)
             # work around cyclic imports
             from hamster.lib.configuration import conf
             raise FactError(dedent(

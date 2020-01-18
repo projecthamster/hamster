@@ -22,20 +22,18 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 import bisect
 import cairo
-import datetime as dt
 import re
 
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
-import gi
-gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict
 from copy import deepcopy
 
 from hamster import client
+from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime
@@ -290,7 +288,7 @@ class CmdLineEntry(gtk.Entry):
         self.todays_facts = self.storage.get_todays_facts()
 
         # list of facts of last month
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
         last_month = self.storage.get_facts(now - dt.timedelta(days=30), now)
 
         # naive recency and frequency rank
@@ -356,7 +354,7 @@ class CmdLineEntry(gtk.Entry):
         res = []
 
         fact = Fact.parse(text)
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
 
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description
@@ -429,7 +427,7 @@ class CmdLineEntry(gtk.Entry):
 
             prev_fact = self.todays_facts[-1] if self.todays_facts else None
             if prev_fact and prev_fact.end_time:
-                since = stuff.format_duration(now - prev_fact.end_time)
+                since = (now - prev_fact.end_time).format()
                 description = "from previous activity, %s ago" % since
                 variant = prev_fact.end_time.strftime("%H:%M ")
                 variants.append((description, variant))

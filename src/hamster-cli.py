@@ -25,13 +25,12 @@
 import sys, os
 import argparse
 import re
-import datetime as dt
 
 from hamster import client, reports
 from hamster import logger as hamster_logger
 from hamster.lib import default_logger, stuff
+from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
-from hamster.lib.parsing import parse_datetime_range
 
 
 logger = default_logger(__file__)
@@ -64,10 +63,10 @@ def fact_dict(fact_data, with_date):
     if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
-        end_date = stuff.hamster_now()
+        end_date = dt.datetime.now()
         fact['end'] = ''
 
-    fact['duration'] = stuff.format_duration(fact_data.delta)
+    fact['duration'] = fact_data.delta.format()
 
     fact['activity'] = fact_data.activity
     fact['category'] = fact_data.category
@@ -148,8 +147,8 @@ class HamsterClient(object):
 
         fact = Fact.parse(" ".join(args), range_pos="tail")
         if fact.start_time is None:
-            fact.start_time = stuff.hamster_now()
-        self.storage.check_fact(fact, default_day=stuff.hamster_today())
+            fact.start_time = dt.datetime.now()
+        self.storage.check_fact(fact, default_day=dt.hday.today())
         self.storage.add_fact(fact)
 
     def stop(self, *args):
@@ -162,7 +161,7 @@ class HamsterClient(object):
         export_format, start_time, end_time = "html", None, None
         if args:
             export_format = args[0]
-        start_time, end_time, _ = parse_datetime_range(" ".join(args[1:]))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -199,7 +198,7 @@ class HamsterClient(object):
 
     def list(self, *times):
         """list facts within a date range"""
-        start_time, end_time, _ = parse_datetime_range(" ".join(times or []))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(times or []))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -211,7 +210,7 @@ class HamsterClient(object):
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
             print("{} {}".format(str(facts[-1]).strip(),
-                                 stuff.format_duration(facts[-1].delta, human=False)))
+                                 facts[-1].delta.format(fmt="HH:MM")))
         else:
             print((_("No activity")))
 
@@ -223,7 +222,7 @@ class HamsterClient(object):
         if args:
             search = args[0]
 
-        start_time, end_time, _ = parse_datetime_range(" ".join(args[1:]))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -287,12 +286,12 @@ class HamsterClient(object):
         cats = []
         total_duration = dt.timedelta()
         for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
-            cats.append("{}: {}".format(cat, stuff.format_duration(duration)))
+            cats.append("{}: {}".format(cat, duration.format()))
             total_duration += duration
 
         for line in word_wrap(", ".join(cats), 80):
             print(line)
-        print("Total: ", stuff.format_duration(total_duration))
+        print("Total: ", total_duration.format())
 
         print()
 

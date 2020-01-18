@@ -27,12 +27,13 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import os
 from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
-import datetime as dt
 
 from gi.repository import Gio as gio
 from gi.repository import GLib as glib
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
+
+from hamster.lib import datetime as dt
 
 
 class Controller(gobject.GObject):

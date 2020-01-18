@@ -20,9 +20,10 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
-import datetime as dt
+
 import time
 from hamster.lib import graphics, stuff
+from hamster.lib import datetime as dt
 import locale
 
 class Bar(graphics.Sprite):
