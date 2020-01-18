@@ -68,6 +68,10 @@ class date(pdt.date):
         else:
             return r"""\d{4}-\d{2}-\d{2}"""
 
+    @classmethod
+    def from_pdt(cls, d):
+        """Convert python date to hamster date."""
+        return cls(d.year, d.month, d.day)
 
 # For datetime that will need to be outside the class.
 # Same here for consistency
@@ -386,6 +390,12 @@ class Range():
     def __init__(self, start=None, end=None):
         self.start = start
         self.end = end
+
+    def __eq__(self, other):
+        if isinstance(other, Range):
+            return self.start == other.start and self.end == other.end
+        else:
+            return False
 
     # allow start, end = range
     def __iter__(self):

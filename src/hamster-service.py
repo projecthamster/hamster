@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # nicked off gwibber
 
+import dbus
+import dbus.service
+
 from gi.repository import GLib as glib
 from gi.repository import Gio as gio
 
@@ -13,11 +16,13 @@ from hamster.lib import datetime as dt
 from hamster.lib import default_logger
 from hamster.lib.dbus import (
     DBusMainLoop,
-    dbus,
     fact_signature,
     from_dbus_date,
     from_dbus_fact,
-    to_dbus_fact
+    from_dbus_fact_json,
+    from_dbus_range,
+    to_dbus_fact,
+    to_dbus_fact_json
 )
 from hamster.lib.fact import Fact, FactError
 
@@ -166,17 +171,17 @@ class Storage(db.Storage, dbus.service.Object):
         return self.add_fact(fact) or 0
 
 
-    @dbus.service.method("org.gnome.Hamster", in_signature=fact_signature, out_signature='i')
-    def AddFactVerbatim(self, dbus_fact):
-        fact = from_dbus_fact(dbus_fact)
+    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
+    def AddFactJSON(self, dbus_fact):
+        fact = from_dbus_fact_json(dbus_fact)
         return self.add_fact(fact) or 0
 
 
     @dbus.service.method("org.gnome.Hamster",
-                         in_signature="{}i".format(fact_signature),
+                         in_signature="si",
                          out_signature='bs')
     def CheckFact(self, dbus_fact, dbus_default_day):
-        fact = from_dbus_fact(dbus_fact)
+        fact = from_dbus_fact_json(dbus_fact)
         dd = from_dbus_date(dbus_default_day)
         try:
             self.check_fact(fact, default_day=dd)
@@ -197,6 +202,15 @@ class Storage(db.Storage, dbus.service.Object):
         return to_dbus_fact(fact)
 
 
+    @dbus.service.method("org.gnome.Hamster",
+                         in_signature='i',
+                         out_signature="s")
+    def GetFactJSON(self, fact_id):
+        """Get fact by id. For output format see GetFacts"""
+        fact = self.get_fact(fact_id)
+        return to_dbus_fact_json(fact)
+
+
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
     def UpdateFact(self, fact_id, fact, start_time, end_time, temporary = False):
         start_time = start_time or None
@@ -210,10 +224,10 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster",
-                         in_signature='i{}'.format(fact_signature),
+                         in_signature='is',
                          out_signature='i')
-    def UpdateFactVerbatim(self, fact_id, dbus_fact):
-        fact = from_dbus_fact(dbus_fact)
+    def UpdateFactJSON(self, fact_id, dbus_fact):
+        fact = from_dbus_fact_json(dbus_fact)
         return self.update_fact(fact_id, fact) or 0
 
 
@@ -242,6 +256,8 @@ class Storage(db.Storage, dbus.service.Object):
         i end_date: Seconds since epoch (timestamp). Use 0 for today
         s search_terms: Bleh. If starts with "not ", the search terms will be reversed
         Returns an array of D-Bus fact structures.
+
+        Legacy. To be superceded by GetFactsJSON at some point.
         """
         #TODO: Assert start > end ?
         start = dt.date.today()
@@ -255,11 +271,48 @@ class Storage(db.Storage, dbus.service.Object):
         return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms)]
 
 
+    @dbus.service.method("org.gnome.Hamster",
+                         in_signature='ss',
+                         out_signature='as')
+    def GetFactsJSON(self, dbus_range, search_terms):
+        """Gets facts between the day of start and the day of end.
+        Parameters:
+        s range: range string, same format as on the command line.
+        s search_terms: Bleh. If starts with "not ", the search terms will be reversed
+        Returns an array of D-Bus facts in JSON format.
+
+        Note: Currently, only whole hamster days (that might evolve).
+        This will be the preferred way to get facts.
+        """
+
+        range = from_dbus_range(dbus_range)
+        start_dt = range.start if range.start else dt.hday.today().start
+        end_dt = range.end if range.end else dt.hday.today().end
+
+        start_d = start_dt.date()
+        end_d = end_dt.date()
+
+        return [to_dbus_fact_json(fact)
+                for fact in self.get_facts(start_d, end_d, search_terms)]
+
+
     @dbus.service.method("org.gnome.Hamster", out_signature='a{}'.format(fact_signature))
     def GetTodaysFacts(self):
-        """Gets facts of today, respecting hamster midnight. See GetFacts for
-        return info"""
+        """Gets facts of today,
+           respecting hamster midnight. See GetFacts for return info.
+
+           Legacy, to be superceded by GetTodaysFactsJSON at some point.
+        """
         return [to_dbus_fact(fact) for fact in self.get_todays_facts()]
+
+
+    @dbus.service.method("org.gnome.Hamster", out_signature='as')
+    def GetTodaysFactsJSON(self):
+        """Gets facts of the current hamster day.
+
+        Return an array of facts in JSON format.
+        """
+        return [to_dbus_fact_json(fact) for fact in self.get_todays_facts()]
 
 
     # categories
