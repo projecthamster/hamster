@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # nicked off gwibber
 
-import logging
 from gi.repository import GLib as glib
 from gi.repository import Gio as gio
 
 from hamster import logger as hamster_logger
 from hamster.lib import i18n
-i18n.setup_i18n()
+i18n.setup_i18n()  # noqa: E402
 
 from hamster.storage import db
 from hamster.lib import datetime as dt
