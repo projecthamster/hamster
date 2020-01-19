@@ -543,6 +543,40 @@ class Range():
             """.format(datetime.pattern(1), date.pattern(detailed=False),
                        datetime.pattern(2), date.pattern(detailed=False)))
 
+    @classmethod
+    def from_start_end(cls, start, end=None):
+        """Return a Range from separate arguments.
+
+        Convenient to ease backward compatibility,
+        and to handle either hdays or datetimes.
+        """
+        if isinstance(start, Range):
+            assert end is None, "range and end are mutually exclusive"
+            range = start
+        else:
+            if isinstance(start, hday):
+                day = start
+                start = day.start
+                if end is None:
+                    end = day.end
+            elif isinstance(start, pdt.date):
+                # transition from legacy
+                start = hday.from_pdt(start).start
+
+            if isinstance(end, hday):
+                end = end.end
+            elif isinstance(end, pdt.date):
+                end = hday.from_pdt(end).end
+
+            range = Range(start, end)
+
+        return range
+
+    @classmethod
+    def today(cls):
+        _today = hday.today()
+        return cls(_today.start, _today.end)
+
 
 class timedelta(pdt.timedelta):
     """Hamster timedelta.

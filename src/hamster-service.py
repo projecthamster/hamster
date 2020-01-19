@@ -284,16 +284,9 @@ class Storage(db.Storage, dbus.service.Object):
         Note: Currently, only whole hamster days (that might evolve).
         This will be the preferred way to get facts.
         """
-
         range = from_dbus_range(dbus_range)
-        start_dt = range.start if range.start else dt.hday.today().start
-        end_dt = range.end if range.end else dt.hday.today().end
-
-        start_d = start_dt.date()
-        end_d = end_dt.date()
-
         return [to_dbus_fact_json(fact)
-                for fact in self.get_facts(start_d, end_d, search_terms)]
+                for fact in self.get_facts(range, search_terms=search_terms)]
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='a{}'.format(fact_signature))

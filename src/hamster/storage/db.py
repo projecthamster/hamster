@@ -673,14 +673,11 @@ class Storage(storage.Storage):
 
 
     def __get_todays_facts(self):
-        return self.__get_facts(dt.hday.today())
+        return self.__get_facts(dt.Range.today())
 
-    def __get_facts(self, date, end_date = None, search_terms = ""):
-        split_time = conf.day_start
-        datetime_from = dt.datetime.combine(date, split_time)
-
-        end_date = end_date or date
-        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days=1, seconds=-1)
+    def __get_facts(self, range, search_terms=""):
+        datetime_from = range.start
+        datetime_to = range.end
 
         logger.info("searching for facts from {} to {}".format(datetime_from, datetime_to))
 
