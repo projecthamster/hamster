@@ -6,6 +6,14 @@ import datetime as pdt
 import unittest
 import re
 from hamster.lib import datetime as dt
+from hamster.lib.dbus import (
+    to_dbus_fact,
+    to_dbus_fact_json,
+    to_dbus_range,
+    from_dbus_fact,
+    from_dbus_fact_json,
+    from_dbus_range,
+    )
 from hamster.lib.fact import Fact
 
 
@@ -386,6 +394,32 @@ class TestDatetime(unittest.TestCase):
         _sub = delta - delta
         self.assertEqual(_sub, dt.timedelta())
         self.assertEqual(type(_sub), dt.timedelta)
+
+
+class TestDBus(unittest.TestCase):
+    def test_round_trip(self):
+        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma #and #tags")
+        dbus_fact = to_dbus_fact_json(fact)
+        return_fact = from_dbus_fact_json(dbus_fact)
+        self.assertEqual(return_fact, fact)
+
+        dbus_fact = to_dbus_fact(fact)
+        return_fact = from_dbus_fact(dbus_fact)
+        self.assertEqual(return_fact, fact)
+
+        fact = Fact.parse("11:00 activity")
+        dbus_fact = to_dbus_fact_json(fact)
+        return_fact = from_dbus_fact_json(dbus_fact)
+        self.assertEqual(return_fact, fact)
+
+        dbus_fact = to_dbus_fact(fact)
+        return_fact = from_dbus_fact(dbus_fact)
+        self.assertEqual(return_fact, fact)
+
+        range, __ = dt.Range.parse("2020-01-19 11:00 - 2020-01-19 12:00")
+        dbus_range = to_dbus_range(range)
+        return_range = from_dbus_range(dbus_range)
+        self.assertEqual(return_range, range)
 
 
 if __name__ == '__main__':
