@@ -173,6 +173,19 @@ class Storage(db.Storage, dbus.service.Object):
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
     def AddFactJSON(self, dbus_fact):
+        """Add fact given in JSON format.
+
+        This is the preferred method if the fact fields are known separately,
+        as activity, category, description and tags are passed "verbatim".
+        Only datetimes are interpreted
+        (2020-01-20: JSON does not know datetimes).
+
+        Args:
+            dbus_fact (str): fact in JSON format (cf. from_dbus_fact_json).
+
+        Returns:
+            fact id (int), or 0 in case of failure.
+        """
         fact = from_dbus_fact_json(dbus_fact)
         return self.add_fact(fact) or 0
 
@@ -181,6 +194,19 @@ class Storage(db.Storage, dbus.service.Object):
                          in_signature="si",
                          out_signature='bs')
     def CheckFact(self, dbus_fact, dbus_default_day):
+        """Check fact validity.
+
+        Useful to determine in advance whether the fact
+        can be included in the database.
+
+        Args:
+            dbus_fact (str): fact in JSON format (cf. AddFactJSON)
+
+        Returns:
+            success (boolean): True upon success.
+            message (str): what's wrong.
+        """
+
         fact = from_dbus_fact_json(dbus_fact)
         dd = from_dbus_date(dbus_default_day)
         try:
@@ -206,7 +232,10 @@ class Storage(db.Storage, dbus.service.Object):
                          in_signature='i',
                          out_signature="s")
     def GetFactJSON(self, fact_id):
-        """Get fact by id. For output format see GetFacts"""
+        """Get fact by id.
+
+        Return fact in JSON format (cf. to_dbus_fact_json)
+        """
         fact = self.get_fact(fact_id)
         return to_dbus_fact_json(fact)
 
@@ -227,6 +256,14 @@ class Storage(db.Storage, dbus.service.Object):
                          in_signature='is',
                          out_signature='i')
     def UpdateFactJSON(self, fact_id, dbus_fact):
+        """Update fact.
+
+        Args:
+            fact_id (int): fact id in the database.
+            dbus_fact (str): new fact content, in JSON format.
+        Returns:
+            int: new id (0 means failure)
+        """
         fact = from_dbus_fact_json(dbus_fact)
         return self.update_fact(fact_id, fact) or 0
 
@@ -276,12 +313,16 @@ class Storage(db.Storage, dbus.service.Object):
                          out_signature='as')
     def GetFactsJSON(self, dbus_range, search_terms):
         """Gets facts between the day of start and the day of end.
-        Parameters:
-        s range: range string, same format as on the command line.
-        s search_terms: Bleh. If starts with "not ", the search terms will be reversed
-        Returns an array of D-Bus facts in JSON format.
 
-        Note: Currently, only whole hamster days (that might evolve).
+        Args:
+            dbus_range (str): same format as on the command line.
+                              (cf. dt.Range.parse)
+            search_terms (str): If starts with "not ",
+                                the search terms will be reversed
+        Return:
+            array of D-Bus facts in JSON format.
+            (cf. to_dbus_fact_json)
+
         This will be the preferred way to get facts.
         """
         range = from_dbus_range(dbus_range)
