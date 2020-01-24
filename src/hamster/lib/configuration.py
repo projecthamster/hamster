@@ -181,5 +181,19 @@ class GSettingsStore(gobject.GObject, Singleton):
         hours, minutes = divmod(day_start_minutes, 60)
         return dt.time(hours, minutes)
 
+    @property
+    def notify_interval(self):
+        """Notifications every X minutes"""
+        return self.get("notify-interval-minutes")
+
+    @property
+    def notifications_enabled(self):
+        """Enable/Disable notifications"""
+        return self.get("notifications-enabled")
+
+    @property
+    def notify_on_idle(self) -> bool:
+        """Enable/Disable notifications when no activity is set"""
+        return self.get("notify-on-idle-enabled")
 
 conf = GSettingsStore()

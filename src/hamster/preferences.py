@@ -25,6 +25,7 @@ from hamster import widgets
 from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib.configuration import Controller, runtime, conf
+from hamster.lib.notifsmanager import notifs_mgr
 
 
 def get_prev(selection, model):
@@ -133,10 +134,20 @@ class PreferencesEditor(Controller):
             (selection, selection.connect('changed', self.category_changed_cb, self.category_store))
         ])
 
+        # Tracking tab
         self.day_start = widgets.TimeInput(dt.time(5,30))
         self.get_widget("day_start_placeholder").add(self.day_start)
 
+        self.notify_scale = self.get_widget("notify-interval-scale")
+        self.notify_scale.set_range(1, 120)
+
+        self.notifs_enabled_toggle = self.get_widget("notifs-enabled-toggle")
+        self.notification_box = self.get_widget("notification-box")
+
         self.load_config()
+
+        self.notify_scale.connect("value-changed", self._notify_interval_value_changed)
+        self.notifs_enabled_toggle.connect("toggled", self._on_notifications_toggled)
 
         # Allow enable drag and drop of rows including row move
         self.activity_tree.enable_model_drag_source(gdk.ModifierType.BUTTON1_MASK,
@@ -173,6 +184,14 @@ class PreferencesEditor(Controller):
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
+
+        # enable/disable notification related settings
+        self.notifs_enabled_toggle.set_active(conf.notifications_enabled)
+        self.notification_box.set_sensitive(conf.notifications_enabled) 
+
+        self.notify_scale.set_value(conf.notify_interval)
+        self.get_widget("notify-on-idle").set_active(conf.notify_on_idle)
+
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
@@ -509,3 +528,24 @@ class PreferencesEditor(Controller):
         conf.set("day-start-minutes", day_start)
     def on_close_button_clicked(self, button):
         self.close_window()
+
+    def _on_notifications_toggled(self, checkbox):
+        # TODO: Show error message next to the widget
+        # Test only if activated
+        if checkbox.get_active():
+            if notifs_mgr.send_test():
+                self.notification_box.set_sensitive(checkbox.get_active())
+                conf.set("notifications-enabled", checkbox.get_active())
+            else:
+                checkbox.set_active(False)
+
+        self.notification_box.set_sensitive(checkbox.get_active())
+        conf.set("notifications-enabled", checkbox.get_active())
+
+    def _notify_on_idle_toggled(self, checkbox):
+        conf.set("notify-on-idle-enabled", checkbox.get_active())
+
+    def _notify_interval_value_changed(self, range):
+        notify_interval = range.get_value()
+        conf.set("notify-interval-minutes", notify_interval)
+        notifs_mgr.notify_interval_changed(notify_interval)
