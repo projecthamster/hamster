@@ -46,6 +46,21 @@ class date(pdt.date):
     def __new__(cls, year, month, day):
         return pdt.date.__new__(cls, year, month, day)
 
+    def __add__(self, other):
+        # python date.__add__ was not type stable prior to 3.8
+        return self.from_pdt(self.to_pdt() + other)
+
+    __radd__ = __add__
+
+    def __sub__(self, other):
+        # python date.__sub__ was not type stable prior to 3.8
+        if isinstance(other, timedelta):
+            return self.from_pdt(self.to_pdt() - other)
+        elif isinstance(other, date):
+            return timedelta.from_pdt(self.to_pdt() - other)
+        else:
+            raise NotImplementedError("subtract {}".format(type(other)))
+
     @classmethod
     def parse(cls, s):
         """Return date from string."""
@@ -72,6 +87,10 @@ class date(pdt.date):
     def from_pdt(cls, d):
         """Convert python date to hamster date."""
         return cls(d.year, d.month, d.day)
+
+    def to_pdt(self):
+        """Convert to python date."""
+        return pdt.date(self.year, self.month, self.day)
 
 # For datetime that will need to be outside the class.
 # Same here for consistency

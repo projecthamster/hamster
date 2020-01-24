@@ -281,6 +281,8 @@ class TestDatetime(unittest.TestCase):
         date_time = dt.datetime(2018, 8, 14, 0, 10)  # 2018-08-14 0:10
         expected = dt.date(2018, 8, 13)
         self.assertEqual(date_time.hday(), expected)
+        today = dt.hday.today()
+        self.assertEqual(type(today), dt.hday)
 
     def test_parse_date(self):
         date = dt.date.parse("2020-01-05")
