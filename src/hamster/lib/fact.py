@@ -205,7 +205,16 @@ class Fact(object):
     def serialized(self, range_pos="head", default_day=None):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
-        datetime = self.range.format(default_day=default_day)
+        if range_pos == "head":
+            # Is activity starting with a range ?
+            subfact = Fact.parse(self.activity, range_pos=range_pos,
+                                 default_day=default_day)
+            need_explicit = bool(subfact.range)
+        else:
+            # TODO: should check last tag.
+            need_explicit = False
+        datetime = self.range.format(default_day=default_day,
+                                     explicit_none=need_explicit)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
         assert range_pos in ("head", "tail")

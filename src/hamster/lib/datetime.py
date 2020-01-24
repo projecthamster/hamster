@@ -280,7 +280,7 @@ class datetime(pdt.datetime):
                 return datetime.from_day_time(default_day, _time)
         else:
             relative_str = match.group(r)
-            if relative_str:
+            if relative_str and relative_str != "--":
                 return timedelta(minutes=int(relative_str))
             else:
                 return None
@@ -367,7 +367,11 @@ class datetime(pdt.datetime):
                                               #       for .format
                 (?<!\d{{2}})                  # negative lookbehind,
                                               # avoid matching 2019-12 or 2019-12-05
-                (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
+                (?P<relative>
+                    --                        # double dash: None
+                   |                          # or
+                    -\d{{1,3}}                # minus 1, 2 or 3 digits: relative time
+                )
             |                             # or
                 (?P<date>{})?                 # maybe date
                 \s?                           # maybe one space
@@ -407,6 +411,9 @@ class Range():
         self.start = start
         self.end = end
 
+    def __bool__(self):
+        return not (self.start is None and self.end is None)
+
     def __eq__(self, other):
         if isinstance(other, Range):
             return self.start == other.start and self.end == other.end
@@ -417,26 +424,36 @@ class Range():
     def __iter__(self):
         return (self.start, self.end).__iter__()
 
-    def format(self, default_day=None):
+    def format(self, default_day=None, explicit_none=True):
         """Return a string representing the time range.
 
         Start date is shown only if start does not belong to default_day.
         End date is shown only if end does not belong to
         the same hamster day as start.
         """
-        time_str = ""
+
+        none_str = "--" if explicit_none else ""
+
         if self.start:
             if self.start.hday() != default_day:
-                time_str += self.start.strftime(datetime.FMT)
+                start_str = self.start.strftime(datetime.FMT)
             else:
-                time_str += self.start.strftime(time.FMT)
+                start_str = self.start.strftime(time.FMT)
+        else:
+            start_str = none_str
+
         if self.end:
             if self.end.hday() != self.start.hday():
-                end_time_str = self.end.strftime(datetime.FMT)
+                end_str = self.end.strftime(datetime.FMT)
             else:
-                end_time_str = self.end.strftime(time.FMT)
-            time_str = "{} - {}".format(time_str, end_time_str)
-        return time_str
+                end_str = self.end.strftime(time.FMT)
+        else:
+            end_str = none_str
+
+        if end_str:
+            return "{} - {}".format(start_str, end_str)
+        else:
+            return start_str
 
     @classmethod
     def parse(cls, text,
@@ -517,9 +534,10 @@ class Range():
         elif firstday:
             end = firstday.end
         else:
+            end_default_day = start.hday() if start else default_day
             end = datetime._extract_datetime(m, d="date2", h="hour2",
                                              m="minute2", r="relative2",
-                                             default_day=start.hday())
+                                             default_day=end_default_day)
             if isinstance(end, pdt.timedelta):
                 # relative to start, actually
                 delta2 = end
