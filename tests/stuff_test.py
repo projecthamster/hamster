@@ -220,6 +220,7 @@ class TestFactParsing(unittest.TestCase):
                             "with #hash",
                             "with, comma",
                             "with @at",
+                            "multiline\ndescription",
                             ):
                             for tags in (
                                 [],

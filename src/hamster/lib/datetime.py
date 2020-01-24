@@ -489,7 +489,9 @@ class Range():
             # .*? so rest is as little as possible
             p = "^(?P<rest>.*?){}{}$".format(separator, cls.pattern())
         # no need to compile, recent patterns are cached by re
-        m = re.search(p, text, flags=re.VERBOSE)
+        # DOTALL, so rest may contain newlines
+        # (important for multiline descriptions)
+        m = re.search(p, text, flags=re.VERBOSE | re.DOTALL)
 
         if not m:
             return Range(None, None), text
