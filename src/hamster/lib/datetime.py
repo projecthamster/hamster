@@ -370,7 +370,8 @@ class datetime(pdt.datetime):
                 (?P<relative>
                     --                        # double dash: None
                    |                          # or
-                    -\d{{1,3}}                # minus 1, 2 or 3 digits: relative time
+                    [-+]                      # minus or plus: relative to ref
+                    \d{{1,3}}                 # 1, 2 or 3 digits
                 )
             |                             # or
                 (?P<date>{})?                 # maybe date
@@ -525,8 +526,8 @@ class Range():
                                                default_day=default_day)
             if isinstance(start, pdt.timedelta):
                 # relative to ref, actually
-                delta1 = start
-                start = ref + delta1
+                assert ref, "relative start needs ref"
+                start = ref + start
 
         if m.group('lastday'):
             lastday = hday.parse(m.group('lastday'))
@@ -539,16 +540,9 @@ class Range():
                                              m="minute2", r="relative2",
                                              default_day=end_default_day)
             if isinstance(end, pdt.timedelta):
-                # relative to start, actually
-                delta2 = end
-                if delta2 > pdt.timedelta(0):
-                    # wip: currently not reachable
-                    # (would need [-\+]\d{1,3} in the parser).
-                    end = start + delta2
-                elif ref and delta2 < pdt.timedelta(0):
-                    end = ref + delta2
-                else:
-                    end = None
+                # relative to ref, actually
+                assert ref, "relative end needs ref"
+                end = ref + end
 
         return Range(start, end), rest
 

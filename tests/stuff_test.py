@@ -358,10 +358,18 @@ class TestDatetime(unittest.TestCase):
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         self.assertEqual(end, None)
+        s = "+25 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:20")
+        self.assertEqual(end, None)
         s = "-55 -25 activity"
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
+        s = "+25 +55 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:20")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:50")
         s = "-55 -120 activity"
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
