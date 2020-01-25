@@ -38,7 +38,6 @@ from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime
 from hamster.lib.fact import Fact
-from hamster.lib.parsing import looks_like_time
 
 
 def extract_search(text):
