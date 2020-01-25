@@ -14,7 +14,7 @@ import calendar
 from copy import deepcopy
 
 from hamster.lib import datetime as dt
-from hamster.lib.parsing import TIME_FMT, DATETIME_FMT, parse_fact
+from hamster.lib.parsing import parse_fact
 
 
 class FactError(Exception):

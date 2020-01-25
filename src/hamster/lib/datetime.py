@@ -20,11 +20,6 @@ from textwrap import dedent
 from functools import lru_cache
 
 
-DATE_FMT = "%Y-%m-%d"  # ISO format
-TIME_FMT = "%H:%M"
-DATETIME_FMT = "{} {}".format(DATE_FMT, TIME_FMT)
-
-
 class datetime:  # predeclaration for return type annotations
     pass
 
@@ -139,8 +134,7 @@ class time(pdt.time):
     - conversion to and from string facilities
     """
 
-    FMT = "%H:%M"  # e.g. 13:30
-    # match time, such as "01:32", "13.56" or "0116"
+    FMT = "%H:%M"  # display format, e.g. 13:30
 
     def __new__(cls,
                 hour=0, minute=0,
@@ -220,6 +214,9 @@ class datetime(pdt.datetime):
     - conversion to and from string facilities
     """
 
+    # display format, e.g. 2020-01-20 20:40
+    FMT = "{} {}".format(date.FMT, time.FMT)
+
     def __new__(cls, year, month, day,
                 hour=0, minute=0,
                 second=0, microsecond=0,
@@ -257,7 +254,7 @@ class datetime(pdt.datetime):
         if self.tzinfo:
             raise NotImplementedError("Stay tuned...")
         else:
-            return self.strftime(DATETIME_FMT)
+            return self.strftime(self.FMT)
 
     @classmethod
     def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative",
@@ -430,14 +427,14 @@ class Range():
         time_str = ""
         if self.start:
             if self.start.hday() != default_day:
-                time_str += self.start.strftime(DATETIME_FMT)
+                time_str += self.start.strftime(datetime.FMT)
             else:
-                time_str += self.start.strftime(TIME_FMT)
+                time_str += self.start.strftime(time.FMT)
         if self.end:
             if self.end.hday() != self.start.hday():
-                end_time_str = self.end.strftime(DATETIME_FMT)
+                end_time_str = self.end.strftime(datetime.FMT)
             else:
-                end_time_str = self.end.strftime(TIME_FMT)
+                end_time_str = self.end.strftime(time.FMT)
             time_str = "{} - {}".format(time_str, end_time_str)
         return time_str
 
