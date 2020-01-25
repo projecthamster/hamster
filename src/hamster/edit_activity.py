@@ -291,8 +291,9 @@ class CustomFactController(gobject.GObject):
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_str = self.cmdline_fact.range.format(default_day=self.date)
-                self.cmdline.select_region(0, len(time_str))
+                # select the range string exactly (without separator)
+                __, rest = dt.Range.parse(label, position="head", separator="")
+                self.cmdline.select_region(0, len(label) - len(rest))
 
     def update_fields(self):
         """Update gui fields content."""
