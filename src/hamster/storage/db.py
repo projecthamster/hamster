@@ -40,6 +40,10 @@ from hamster.lib.fact import Fact
 from hamster.storage import storage
 
 
+# note: "zero id means failure" is quite standard,
+#       and that kind of convention will be mandatory for the dbus interface
+#       (None cannot pass through an integer signature).
+
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
     def __init__(self, unsorted_localized="Unsorted", database_dir=None):
@@ -56,7 +60,8 @@ class Storage(storage.Storage):
                 Directory holding the database file,
                 or None to use the default location.
 
-        Note: Unsorted category id is hard-coded as -1
+        Note: Zero id means failure.
+              Unsorted category id is hard-coded as -1
         """
         storage.Storage.__init__(self)
 
@@ -357,7 +362,10 @@ class Storage(storage.Storage):
         return None
 
     def __get_category_id(self, name):
-        """returns category by it's name"""
+        """Return category id from its name.
+
+        0 means none found.
+        """
         if not name:
             # Unsorted
             return -1
@@ -374,7 +382,7 @@ class Storage(storage.Storage):
         if res:
             return res['id']
 
-        return None
+        return 0
 
     def _dbfact_to_libfact(self, db_fact):
         """Convert a db fact (coming from __group_facts) to Fact."""
@@ -669,7 +677,7 @@ class Storage(storage.Storage):
         return fact_id
 
     def __last_insert_rowid(self):
-        return self.fetchone("SELECT last_insert_rowid();")[0]
+        return self.fetchone("SELECT last_insert_rowid();")[0] or 0
 
 
     def __get_todays_facts(self):

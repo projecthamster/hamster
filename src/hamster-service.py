@@ -149,7 +149,7 @@ class Storage(db.Storage, dbus.service.Object):
                             If different from 0, overrides the parsed value.
                             -1 means None.
         Returns:
-            fact id (int), or 0 in case of failure.
+            fact id (int), 0 means failure.
 
         Note: see datetime.utcfromtimestamp documentation
               for the precise meaning of timestamps.
@@ -168,7 +168,7 @@ class Storage(db.Storage, dbus.service.Object):
         elif end_time != 0:
             fact.end_time = dt.datetime.utcfromtimestamp(end_time)
 
-        return self.add_fact(fact) or 0
+        return self.add_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
@@ -184,10 +184,10 @@ class Storage(db.Storage, dbus.service.Object):
             dbus_fact (str): fact in JSON format (cf. from_dbus_fact_json).
 
         Returns:
-            fact id (int), or 0 in case of failure.
+            fact id (int), 0 means failure.
         """
         fact = from_dbus_fact_json(dbus_fact)
-        return self.add_fact(fact) or 0
+        return self.add_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -249,7 +249,7 @@ class Storage(db.Storage, dbus.service.Object):
         end_time = end_time or None
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
-        return self.update_fact(fact_id, fact, start_time, end_time, temporary) or 0
+        return self.update_fact(fact_id, fact, start_time, end_time, temporary)
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -265,7 +265,7 @@ class Storage(db.Storage, dbus.service.Object):
             int: new id (0 means failure)
         """
         fact = from_dbus_fact_json(dbus_fact)
-        return self.update_fact(fact_id, fact) or 0
+        return self.update_fact(fact_id, fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
