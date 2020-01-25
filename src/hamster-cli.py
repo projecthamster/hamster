@@ -139,7 +139,6 @@ class Hamster(gtk.Application):
 
     def _open_window(self, name, data=None):
         logger.debug("opening '{}'".format(name))
-        print(self.get_windows())
 
         if name == "overview":
             if not self.overview_controller:
@@ -419,7 +418,6 @@ Example usage:
     hamster_client = HamsterCli()
     app = Hamster()
     logger.debug("app instanciated")
-    #app.add_actions()
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
