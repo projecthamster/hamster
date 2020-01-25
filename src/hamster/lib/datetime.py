@@ -495,14 +495,14 @@ class Range():
         if position == "exact":
             p = "^{}$".format(cls.pattern())
         elif position == "head":
-            # require at least a space after, to avoid matching 10.00@cat
+            # ( )?: require either only the range (no rest),
+            #       or separator between range and rest,
+            #       to avoid matching 10.00@cat
             # .*? so rest is as little as possible
-            p = "^{}{}(?P<rest>.*?)$".format(cls.pattern(), separator)
+            p = "^{}( {}(?P<rest>.*?) )?$".format(cls.pattern(), separator)
         elif position == "tail":
-            # require at least a space after, to avoid matching #10.00
-            # .*? so rest is as little as possible
-            p = "^(?P<rest>.*?){}{}$".format(separator, cls.pattern())
-        # no need to compile, recent patterns are cached by re
+            p = "^( (?P<rest>.*?){} )? {}$".format(separator, cls.pattern())
+        # No need to compile, recent patterns are cached by re.
         # DOTALL, so rest may contain newlines
         # (important for multiline descriptions)
         m = re.search(p, text, flags=re.VERBOSE | re.DOTALL)
@@ -512,7 +512,7 @@ class Range():
         elif position == "exact":
             rest = ""
         else:
-            rest = m.group("rest")
+            rest = m.group("rest") or ""
 
         if m.group('firstday'):
             # only day given for start

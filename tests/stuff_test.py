@@ -46,6 +46,12 @@ class TestFactParsing(unittest.TestCase):
         assert not activity.category
         assert not activity.description
 
+    def test_only_range(self):
+        fact = Fact.parse("-20")
+        assert not fact.activity
+        fact = Fact.parse("-20 -10")
+        assert not fact.activity
+
     def test_with_start_time(self):
         # with time
         activity = Fact.parse("12:35 with start time")
