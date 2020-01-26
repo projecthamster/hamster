@@ -206,7 +206,7 @@ class Fact(object):
         """Return a string fully representing the fact."""
         name = self.serialized_name()
         if range_pos == "head":
-            # Is activity starting with a range ?
+            # Is activity starting range-like ?
             subfact = Fact.parse(self.activity, range_pos=range_pos,
                                  default_day=default_day)
             need_explicit = bool(subfact.range)

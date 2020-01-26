@@ -574,7 +574,8 @@ class Range():
               |
               (?P<duration>
                   (?<![+-])       # negative lookbehind: no sign
-                  \d{{1,3}})      # 1, 2 or 3 digits
+                  \d{{1,3}}       # 1, 2 or 3 digits
+              )
             )
             )?                    # end time is facultative
             """.format(datetime.pattern(1), date.pattern(detailed=False),
