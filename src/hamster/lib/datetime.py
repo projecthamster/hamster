@@ -49,9 +49,9 @@ class date(pdt.date):
 
     def __sub__(self, other):
         # python date.__sub__ was not type stable prior to 3.8
-        if isinstance(other, timedelta):
+        if isinstance(other, pdt.timedelta):
             return self.from_pdt(self.to_pdt() - other)
-        elif isinstance(other, date):
+        elif isinstance(other, pdt.date):
             return timedelta.from_pdt(self.to_pdt() - other)
         else:
             raise NotImplementedError("subtract {}".format(type(other)))

@@ -101,6 +101,7 @@ class CustomFactController(gobject.GObject):
                 self.fact = Fact(start_time=dt.datetime.now())
 
         original_fact = self.fact
+        # TODO: should use hday, not date.
         self.date = self.fact.date
 
         self.update_fields()
