@@ -374,6 +374,10 @@ class TestDatetime(unittest.TestCase):
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 11:55")
+        s = "-50 20 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:05")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:25")
 
         s = "2019-12-05"  # single hamster day
         (start, end), rest = dt.Range.parse(s, ref=ref)

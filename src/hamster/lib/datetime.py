@@ -534,6 +534,9 @@ class Range():
             end = lastday.end
         elif firstday:
             end = firstday.end
+        elif m.group('duration'):
+            duration = int(m.group('duration'))
+            end = start + timedelta(minutes=duration)
         else:
             end_default_day = start.hday() if start else default_day
             end = datetime._extract_datetime(m, d="date2", h="hour2",
@@ -568,6 +571,10 @@ class Range():
               {}                  # datetime: relative2 or (date2, hour2, and minute2)
               |                   # or
               (?P<lastday>{})     # date without time
+              |
+              (?P<duration>
+                  (?<![+-])       # negative lookbehind: no sign
+                  \d{{1,3}})      # 1, 2 or 3 digits
             )
             )?                    # end time is facultative
             """.format(datetime.pattern(1), date.pattern(detailed=False),
