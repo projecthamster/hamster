@@ -141,7 +141,6 @@ pgrep -af hamster
 # or be bold and kill all processes with "hamster" in their command line
 pkill -ef hamster
 python3 src/hamster-service.py &
-python3 src/hamster-windows-service.py &
 python3 src/hamster-cli.py
 ```
 Advantage: running uninstalled is detected, and windows are *not* called via
