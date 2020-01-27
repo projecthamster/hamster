@@ -119,7 +119,7 @@ class Fact(object):
               Any subsequent modification of start_time
               can result in different self.date.
         """
-        return self.range.start.hday()
+        return self.range.start.hday() if self.range.start else None
 
     @date.setter
     def date(self, value):
