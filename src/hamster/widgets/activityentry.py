@@ -209,7 +209,8 @@ class CmdLineEntry(gtk.Entry):
         self.original_fact = None
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+        self.popup.set_attached_to(self)  # attributes
 
         box = gtk.Frame()
         box.set_shadow_type(gtk.ShadowType.IN)
