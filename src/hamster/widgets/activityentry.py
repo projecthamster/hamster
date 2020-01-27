@@ -200,7 +200,7 @@ class CompleteTree(graphics.Scene):
 
 class CmdLineEntry(gtk.Entry):
     def __init__(self, updating=True, **kwargs):
-        gtk.Entry.__init__(self)
+        gtk.Entry.__init__(self, **kwargs)
 
         # default day for times without date
         self.default_day = None
@@ -209,6 +209,10 @@ class CmdLineEntry(gtk.Entry):
         self.original_fact = None
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
+        self.popup.set_attached_to(self)  # attributes
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+
         box = gtk.Frame()
         box.set_shadow_type(gtk.ShadowType.IN)
         self.popup.add(box)

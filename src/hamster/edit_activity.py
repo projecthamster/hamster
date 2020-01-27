@@ -55,8 +55,7 @@ class CustomFactController(gobject.GObject):
         self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
                                                     category_widget=self.category_entry)
 
-        self.cmdline = widgets.CmdLineEntry()
-        self.get_widget("command line box").add(self.cmdline)
+        self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("command line box"))
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
@@ -69,14 +68,12 @@ class CustomFactController(gobject.GObject):
         self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
                                          expander=self.get_widget("end date expander"))
 
-        self.end_time = widgets.TimeInput()
-        self.get_widget("end time box").add(self.end_time)
+        self.end_time = widgets.TimeInput(parent=self.get_widget("end time box"))
 
         self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
                                            expander=self.get_widget("start date expander"))
 
-        self.start_time = widgets.TimeInput()
-        self.get_widget("start time box").add(self.start_time)
+        self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
