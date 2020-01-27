@@ -33,8 +33,8 @@ class TimeInput(gtk.Entry):
     }
 
 
-    def __init__(self, time = None, start_time = None):
-        gtk.Entry.__init__(self)
+    def __init__(self, time=None, start_time=None, **kwargs):
+        gtk.Entry.__init__(self, **kwargs)
         self.news = False
         self.set_width_chars(7) #7 is like 11:24pm
 
@@ -43,6 +43,10 @@ class TimeInput(gtk.Entry):
 
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
+        self.popup.set_attached_to(self)  # attributes
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
         time_box.set_shadow_type(gtk.ShadowType.IN)

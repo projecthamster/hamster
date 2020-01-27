@@ -68,14 +68,12 @@ class CustomFactController(gobject.GObject):
         self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
                                          expander=self.get_widget("end date expander"))
 
-        self.end_time = widgets.TimeInput()
-        self.get_widget("end time box").add(self.end_time)
+        self.end_time = widgets.TimeInput(parent=self.get_widget("end time box"))
 
         self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
                                            expander=self.get_widget("start date expander"))
 
-        self.start_time = widgets.TimeInput()
-        self.get_widget("start time box").add(self.start_time)
+        self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
