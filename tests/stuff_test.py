@@ -46,6 +46,12 @@ class TestFactParsing(unittest.TestCase):
         assert not activity.category
         assert not activity.description
 
+    def test_only_range(self):
+        fact = Fact.parse("-20")
+        assert not fact.activity
+        fact = Fact.parse("-20 -10")
+        assert not fact.activity
+
     def test_with_start_time(self):
         # with time
         activity = Fact.parse("12:35 with start time")
@@ -139,10 +145,10 @@ class TestFactParsing(unittest.TestCase):
         fact2.description = "abcd"
         self.assertNotEqual(fact1, fact2)
         fact2 = fact1.copy()
-        fact2.start_time = dt.datetime.now()
+        fact2.range.start = fact1.range.start + dt.timedelta(minutes=1)
         self.assertNotEqual(fact1, fact2)
         fact2 = fact1.copy()
-        fact2.end_time = dt.datetime.now()
+        fact2.range.end = fact1.range.end + dt.timedelta(minutes=1)
         self.assertNotEqual(fact1, fact2)
         # wrong order
         fact2 = fact1.copy()
@@ -196,6 +202,7 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(fact.description, "description, with comma and #hash")
         self.assertEqual(fact.tags, ["tag1", "tag2"])
 
+    # ugly. Really need pytest
     def test_roundtrips(self):
         for start_time in (
             None,
@@ -203,12 +210,13 @@ class TestFactParsing(unittest.TestCase):
             ):
             for end_time in (
                 None,
-                dt.time(13,34),
+                dt.time(13, 34),
                 ):
                 for activity in (
                     "activity",
                     "#123 with two #hash",
                     "activity, with comma",
+                    "17.00 tea",
                     ):
                     for category in (
                         "",
@@ -248,6 +256,8 @@ class TestFactParsing(unittest.TestCase):
                                     fact_str = fact.serialized(range_pos=range_pos)
                                     parsed = Fact.parse(fact_str, range_pos=range_pos)
                                     self.assertEqual(fact, parsed)
+                                    self.assertEqual(parsed.range.start, fact.range.start)
+                                    self.assertEqual(parsed.range.end, fact.range.end)
                                     self.assertEqual(parsed.activity, fact.activity)
                                     self.assertEqual(parsed.category, fact.category)
                                     self.assertEqual(parsed.description, fact.description)
@@ -348,14 +358,26 @@ class TestDatetime(unittest.TestCase):
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
         self.assertEqual(end, None)
+        s = "+25 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:20")
+        self.assertEqual(end, None)
         s = "-55 -25 activity"
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:30")
+        s = "+25 +55 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:20")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 14:50")
         s = "-55 -120 activity"
         (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
         self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:00")
         self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 11:55")
+        s = "-50 20 activity"
+        (start, end), rest = dt.Range.parse(s, position="head", ref=ref)
+        self.assertEqual(start.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:05")
+        self.assertEqual(end.strftime("%Y-%m-%d %H:%M"), "2019-11-29 13:25")
 
         s = "2019-12-05"  # single hamster day
         (start, end), rest = dt.Range.parse(s, ref=ref)
@@ -369,6 +391,11 @@ class TestDatetime(unittest.TestCase):
         just_after = end + dt.timedelta(seconds=1)
         self.assertEqual(just_before.hday(), dt.date(2019, 12, 4))
         self.assertEqual(just_after.hday(), dt.date(2019, 12, 8))
+
+        s = "14:30 - --"
+        (start, end), rest = dt.Range.parse(s, ref=ref)
+        self.assertEqual(start.strftime("%H:%M"), "14:30")
+        self.assertEqual(end, None)
 
     def test_rounding(self):
         dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)

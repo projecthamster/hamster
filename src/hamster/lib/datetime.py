@@ -280,7 +280,7 @@ class datetime(pdt.datetime):
                 return datetime.from_day_time(default_day, _time)
         else:
             relative_str = match.group(r)
-            if relative_str:
+            if relative_str and relative_str != "--":
                 return timedelta(minutes=int(relative_str))
             else:
                 return None
@@ -367,7 +367,12 @@ class datetime(pdt.datetime):
                                               #       for .format
                 (?<!\d{{2}})                  # negative lookbehind,
                                               # avoid matching 2019-12 or 2019-12-05
-                (?P<relative>-\d{{1,3}})      # minus 1, 2 or 3 digits: relative time
+                (?P<relative>
+                    --                        # double dash: None
+                   |                          # or
+                    [-+]                      # minus or plus: relative to ref
+                    \d{{1,3}}                 # 1, 2 or 3 digits
+                )
             |                             # or
                 (?P<date>{})?                 # maybe date
                 \s?                           # maybe one space
@@ -407,6 +412,9 @@ class Range():
         self.start = start
         self.end = end
 
+    def __bool__(self):
+        return not (self.start is None and self.end is None)
+
     def __eq__(self, other):
         if isinstance(other, Range):
             return self.start == other.start and self.end == other.end
@@ -417,26 +425,36 @@ class Range():
     def __iter__(self):
         return (self.start, self.end).__iter__()
 
-    def format(self, default_day=None):
+    def format(self, default_day=None, explicit_none=True):
         """Return a string representing the time range.
 
         Start date is shown only if start does not belong to default_day.
         End date is shown only if end does not belong to
         the same hamster day as start.
         """
-        time_str = ""
+
+        none_str = "--" if explicit_none else ""
+
         if self.start:
             if self.start.hday() != default_day:
-                time_str += self.start.strftime(datetime.FMT)
+                start_str = self.start.strftime(datetime.FMT)
             else:
-                time_str += self.start.strftime(time.FMT)
+                start_str = self.start.strftime(time.FMT)
+        else:
+            start_str = none_str
+
         if self.end:
             if self.end.hday() != self.start.hday():
-                end_time_str = self.end.strftime(datetime.FMT)
+                end_str = self.end.strftime(datetime.FMT)
             else:
-                end_time_str = self.end.strftime(time.FMT)
-            time_str = "{} - {}".format(time_str, end_time_str)
-        return time_str
+                end_str = self.end.strftime(time.FMT)
+        else:
+            end_str = none_str
+
+        if end_str:
+            return "{} - {}".format(start_str, end_str)
+        else:
+            return start_str
 
     @classmethod
     def parse(cls, text,
@@ -478,14 +496,14 @@ class Range():
         if position == "exact":
             p = "^{}$".format(cls.pattern())
         elif position == "head":
-            # require at least a space after, to avoid matching 10.00@cat
+            # ( )?: require either only the range (no rest),
+            #       or separator between range and rest,
+            #       to avoid matching 10.00@cat
             # .*? so rest is as little as possible
-            p = "^{}{}(?P<rest>.*?)$".format(cls.pattern(), separator)
+            p = "^{}( {}(?P<rest>.*?) )?$".format(cls.pattern(), separator)
         elif position == "tail":
-            # require at least a space after, to avoid matching #10.00
-            # .*? so rest is as little as possible
-            p = "^(?P<rest>.*?){}{}$".format(separator, cls.pattern())
-        # no need to compile, recent patterns are cached by re
+            p = "^( (?P<rest>.*?){} )? {}$".format(separator, cls.pattern())
+        # No need to compile, recent patterns are cached by re.
         # DOTALL, so rest may contain newlines
         # (important for multiline descriptions)
         m = re.search(p, text, flags=re.VERBOSE | re.DOTALL)
@@ -495,7 +513,7 @@ class Range():
         elif position == "exact":
             rest = ""
         else:
-            rest = m.group("rest")
+            rest = m.group("rest") or ""
 
         if m.group('firstday'):
             # only day given for start
@@ -508,29 +526,26 @@ class Range():
                                                default_day=default_day)
             if isinstance(start, pdt.timedelta):
                 # relative to ref, actually
-                delta1 = start
-                start = ref + delta1
+                assert ref, "relative start needs ref"
+                start = ref + start
 
         if m.group('lastday'):
             lastday = hday.parse(m.group('lastday'))
             end = lastday.end
         elif firstday:
             end = firstday.end
+        elif m.group('duration'):
+            duration = int(m.group('duration'))
+            end = start + timedelta(minutes=duration)
         else:
+            end_default_day = start.hday() if start else default_day
             end = datetime._extract_datetime(m, d="date2", h="hour2",
                                              m="minute2", r="relative2",
-                                             default_day=start.hday())
+                                             default_day=end_default_day)
             if isinstance(end, pdt.timedelta):
-                # relative to start, actually
-                delta2 = end
-                if delta2 > pdt.timedelta(0):
-                    # wip: currently not reachable
-                    # (would need [-\+]\d{1,3} in the parser).
-                    end = start + delta2
-                elif ref and delta2 < pdt.timedelta(0):
-                    end = ref + delta2
-                else:
-                    end = None
+                # relative to ref, actually
+                assert ref, "relative end needs ref"
+                end = ref + end
 
         return Range(start, end), rest
 
@@ -556,6 +571,11 @@ class Range():
               {}                  # datetime: relative2 or (date2, hour2, and minute2)
               |                   # or
               (?P<lastday>{})     # date without time
+              |
+              (?P<duration>
+                  (?<![+-])       # negative lookbehind: no sign
+                  \d{{1,3}}       # 1, 2 or 3 digits
+              )
             )
             )?                    # end time is facultative
             """.format(datetime.pattern(1), date.pattern(detailed=False),

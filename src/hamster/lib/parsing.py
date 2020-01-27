@@ -92,23 +92,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     split = remaining_text.rsplit('@', maxsplit=1)
     activity = split[0]
     category = split[1] if len(split) > 1 else ""
-    if looks_like_time(activity):
-        # want meaningful activities
-        return res
     res["activity"] = activity
     res["category"] = category
 
     return res
-
-
-_time_fragment_re = [
-    re.compile("^-$"),
-    re.compile("^([0-1]?[0-9]?|[2]?[0-3]?)$"),
-    re.compile("^([0-1]?[0-9]|[2][0-3]):?([0-5]?[0-9]?)$"),
-    re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-?([0-1]?[0-9]?|[2]?[0-3]?)$"),
-    re.compile("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])-([0-1]?[0-9]|[2][0-3]):?([0-5]?[0-9]?)$"),
-]
-def looks_like_time(fragment):
-    if not fragment:
-        return False
-    return any((r.match(fragment) for r in _time_fragment_re))
