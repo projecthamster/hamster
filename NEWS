@@ -1,6 +1,5 @@
-===============
-Changes since v2.2.2
-===============
+Changes since 2.2.2
+
 * Fixed installation process (PR 421)
   - Updated waf.
     No longer need python2.
@@ -26,15 +25,15 @@ Changes since v2.2.2
     work straight from the overview (no need to click).
   - More info on PR #387.
 
-===============
-Version 2.2.2
-===============
+
+Changes in 2.2.2
+
 * Restore python3 < 3.6 compatibility.
 * Remove a PangoCairo warning.
 
-===============
-Version 2.2.1
-===============
+
+Changes in 2.2.1
+
 * Activity can contain decimal numbers.
 * Add total duration to the `hamster list` output.
 * Base Fact comparison on main attributes.
@@ -55,27 +54,27 @@ More information by looking for milestone:2.2 or by
 cloning and using the following command:
 gitk v2.1.1...v2.2.1
 
-===============
-Version 2.1.1
-===============
+
+Changes in 2.1.1
+
 Migration to python3
 and minor usability fixes
 
 More details by cloning and using the following command:
 gitk --no-merges v2.0-rc1...v2.1.1
 
-===============
-Version 2.0
-===============
+
+Changes in 2.0
+
  This release marks the transition to Gtk3, and includes all the other
  feature additions and bugfixes that have been submitted since then and
  are too countless to list here. Thanks to all the contributors!
 
  Please check README.md for the current dependencies.
 
-===============
-Version 1.04
-===============
+
+Changes in 1.04
+
  This version just packs all the contributed bugfixes of last 12 month (there
  were just a few)
 
@@ -84,24 +83,24 @@ Version 1.04
  * in some cases activity updates were failing when tags where provided
 
 
-===============
-Version 1.03.3
-===============
+
+Changes in 1.03.3
+
  * fix exporting entries to file
 
-===============
-Version 1.03.2
-===============
+
+Changes in 1.03.2
+
  * fix bug when trying to enter an activity with tags (mea culpa)
 
-===============
-Version 1.03.1
-===============
+
+Changes in 1.03.1
+
  * fix silly bug with path
 
-===============
-Version 1.03
-===============
+
+Changes in 1.03
+
  * fix issue #61 - installation was missing initial database for fresh installs
  * loosen backend dependencies so that hamster.client can be used outside the
    project see http://pypi.python.org/pypi/hamster-sqlite/ for details
@@ -109,14 +108,14 @@ Version 1.03
 
  * updated Bulgarian translation
 
-===============
-Version 1.02.1
-===============
+
+Changes in 1.02.1
+
  * Drop gnome-keybindings as a dependency - not used anymore
 
-===============
-Version 1.02
-===============
+
+Changes in 1.02
+
  This is the first release targetting GNOME v3+. The applet has been removed
  and recommended hamster remote is the shell extension, available on
  extensions.gnome.org (also ).
@@ -133,9 +132,9 @@ Version 1.02
  * the notification tray interaction has been slightly improved (click to toggle)
  * ~20 bug fixes https://github.com/projecthamster/hamster/issues?state=closed
 
-===============
-Version 2.91.2
-===============
+
+Changes in 2.91.2
+
   * experimental trophy support (to try out need to install the achievement
     service from https://github.com/tbaugis/gnome-achievements)
   * improvements in HTML reports
@@ -166,9 +165,9 @@ Version 2.91.2
     * sl (Andrej Žnidaršič)
     * sr (Милош Поповић)
 
-===============
-Version 2.31.90
-===============
+
+Changes in 2.31.90
+
   * maintaining selection on refresh in a more sane manner
   * self-monitor the database not only for updates but also for remove/create
     (solves problems with some synchronization tools)
@@ -181,9 +180,9 @@ Version 2.31.90
     * nb (Kjartan Maraas)
     * ro (Lucian Adrian Grijincu)
 
-===============
-Version 2.31.6
-===============
+
+Changes in 2.31.6
+
   * the top graph in overview is now interactive and allows zooming in and out
   * sqlite utf-8 case sensitivity workarounds for queries
   * hamster's docky helper installed together with hamster
@@ -203,9 +202,9 @@ Version 2.31.6
     * nb (Kjartan Maraas)
 
 
-===============
-Version 2.31.5
-===============
+
+Changes in 2.31.5
+
   * adjustments for custom widgets to better work with themes
   * if dialog windows are called from commandline, make sure they shut down
     properly
@@ -219,9 +218,9 @@ Version 2.31.5
   Updated documentation translations
     * zh_CN (TeliuTe)
 
-===============
-Version 2.31.4
-===============
+
+Changes in 2.31.4
+
   * overview gets a menu, drops toolbars and now supports date range browsing
   * adjustments to starts and ends graph in statistics (should be more accurate)
   * performance updates in graphics
@@ -235,21 +234,21 @@ Version 2.31.4
     * lv (Anita Reitere)
     * nb (Kjartan Maraas)
 
-===============
-Version 2.31.3.2
-===============
+
+Changes in 2.31.3.2
+
   * respecting SYSCONFDIR environment variable to determine where to store
     gconf schema (bug 620965)
 
-===============
-Version 2.31.3.1
-===============
+
+Changes in 2.31.3.1
+
   * including generated help pages in the tarball so that they appear in
     library.gnome.org
 
-===============
-Version 2.31.3
-===============
+
+Changes in 2.31.3
+
   * dropped in-house global hotkey management in favour to Gnome's global
     hotkeys
   * HTML report template now can be overridden from $HOME folder. instructions
@@ -267,9 +266,9 @@ Version 2.31.3
     * sl (Matej Urbančič)
     * zh_CN (Ray Wang)
 
-===============
-Version 2.31.2
-===============
+
+Changes in 2.31.2
+
   * optional integration with gtg (via preferences)
   * all kinds of bugfixes
 
@@ -278,19 +277,19 @@ Version 2.31.2
     * en@shaw (Thomas Thurman)
     * es (Jorge González)
 
-===============
-Version 2.31.1.2
-===============
+
+Changes in 2.31.1.2
+
   * hamster-service had not been packed in the tarball
 
-===============
-Version 2.31.1.1
-===============
+
+Changes in 2.31.1.1
+
   * forgot to pull in translations
 
-===============
-Version 2.31.1
-===============
+
+Changes in 2.31.1
+
   * application has been split up in back-end d-bus daemon and clients
   * edit activity preview widget got some love
   * minor bugfixes from 2.30 release
@@ -301,9 +300,9 @@ Version 2.31.1
     * gl (Fran Diéguez)
 
 
-===============
-Version 2.30.0
-===============
+
+Changes in 2.30.0
+
   Updated translations
     * ca (Gil Forcada)
     * da (Kenneth Nielsen)
@@ -326,9 +325,9 @@ Version 2.30.0
     * zh_TW (Chao-Hsiung Liao)
 
 
-===============
-Version 2.29.92
-===============
+
+Changes in 2.29.92
+
   Bug fixes
     * depend on gnome-python-desktop to fulfill wnck-python dependency
     * minor bug with screen refresh after deletion
@@ -347,9 +346,9 @@ Version 2.29.92
     * en (Bruce Cowan, Milo Casagrande)
     * es (Jorge González)
 
-===============
-Version 2.29.91
-===============
+
+Changes in 2.29.91
+
   * bug fixes - avoiding blank entries, not reusing fact ids; other details
 
   Updated translations
@@ -370,9 +369,9 @@ Version 2.29.91
     * de (Christian Kirbach)
 
 
-===============
-Version 2.29.90
-===============
+
+Changes in 2.29.90
+
   Updated translations
     * bn (Israt Jahan)
     * es (Jorge González)
@@ -382,9 +381,9 @@ Version 2.29.90
   Updated documentation translations
     * es (Jorge González)
 
-===============
-Version 2.29.6
-===============
+
+Changes in 2.29.6
+
   * workspace tracking - switch activity, when switching desktops
     (Ludwig Ortmann, Toms Baugis, Patryk Zawadzki)
   * chart improvements - theme friendly and less noisier
@@ -404,9 +403,9 @@ Version 2.29.6
     * zh_CN (Tao Wei)
 
 
-===============
-Version 2.29.5
-===============
+
+Changes in 2.29.5
+
   * searching
   * simplified save report dialog, thanks to the what you see is what you report
     revamp
@@ -424,9 +423,9 @@ Version 2.29.5
    * sv (Daniel Nylander)
    * uk (Maxim V. Dziumanenko)
 
-===============
-Version 2.29.4
-===============
+
+Changes in 2.29.4
+
   * overview window overhaul(still in progress)
   * more progress on tag front (now showing in lists)
 
@@ -437,9 +436,9 @@ Version 2.29.4
    * sl (Matej Urbančič)
    * zh_CN (Funda Wang)
 
-===============
-Version 2.29.3
-===============
+
+Changes in 2.29.3
+
   * partial tag support (adding to a fact and editing autocomplete list,
     no reports yet)
   * fixed glitches when editing ongoing task
@@ -453,9 +452,9 @@ Version 2.29.3
   * sl (Matej Urbančič)
   * zh_CN (Ray Wang)
 
-===============
-Version 2.29.2
-===============
+
+Changes in 2.29.2
+
   * fixed bug 599343 - the charts are now back again (for those who had lost them)
   * hamster midnight is now a preference
   * when in panel, printing uncaugt errors to .xsession-errors
@@ -484,9 +483,9 @@ Version 2.29.2
   * zh_CN (Ray Wang)
 
 
-===============
-Version 2.28.0
-===============
+
+Changes in 2.28.0
+
  Updated translations:
   * as (Amitakhya Phukan)
   * bg (Alexander Shopov)
@@ -518,9 +517,9 @@ Version 2.28.0
   * uk (Maxim Dziumanenko)
   * zh_HK (Chao-Hsiung Liao)
 
-===============
-Version 2.27.92
-===============
+
+Changes in 2.27.92
+
  Updated translations:
   * ar (Khaled Hosny)
   * be (Alexander Nyakhaychyk)
@@ -548,9 +547,9 @@ Version 2.27.92
   * zh_HK (Chao-Hsiung Liao)
 
 
-===============
-Version 2.27.90
-===============
+
+Changes in 2.27.90
+
   * Fixes to idle detection (now works with gnome screensaver 2.27+)
   * return of the day view
   * UI layout fixes to match HIG
@@ -565,9 +564,9 @@ Version 2.27.90
     * sv (Daniel Nylander)
 
 
-===============
-Version 2.27.5
-===============
+
+Changes in 2.27.5
+
   * Better autocomplete
   * More skeptic on parsing time
   * Legend in overview is sized proportionally to screen size,
@@ -578,9 +577,9 @@ Version 2.27.5
     * es (Jorge González)
     * pa (Amanpreet Singh Alam)
 
-===============
-Version 2.27.4
-===============
+
+Changes in 2.27.4
+
   * Now it is possible to copy/paste activities in the overview
   * mostly polishing and bug fixing the new stuff brought in in 2.27 cycle
 
@@ -592,9 +591,9 @@ Version 2.27.4
     * sv (Daniel Nylander)
     * uk (Maxim V. Dziumanenko)
 
-===============
-Version 2.27.3
-===============
+
+Changes in 2.27.3
+
   * A much better DBUS support (Felix Ontanon)
   * Switch days at 5am because humans tend to work late. Overlapping activities
     fall in day where the largest part of it is (Patryk Zawadski)
@@ -607,9 +606,9 @@ Version 2.27.3
   Updated translations:
     * ta.po (Dr.T.Vasudevan)
 
-===============
-Version 2.27.2
-===============
+
+Changes in 2.27.2
+
   * Now a reminder is displayed every configured amount of time also when no
     activity is being tracked. (Can be disabled in preferences)
   * Allow to switch to same task if description differs
@@ -627,9 +626,9 @@ Version 2.27.2
     * ca@valencia.po (Gil Forcada/Miquel Esplà)
 
 
-===============
-Version 2.27.1
-===============
+
+Changes in 2.27.1
+
   * Overview window graphs have been redone and now are less noisy
   * Tasks now can span over midnight, showing correct per-day totals in overview
   * Add earlier activity / edit activity has been overhauled and now is much
@@ -667,9 +666,9 @@ Version 2.27.1
     * zh_CN.po (Aron Xu)
 
 
-===============
-Version 2.25.3
-===============
+
+Changes in 2.25.3
+
   We were late for 2.25.1 and 2.25.2, so here we go - changes since 2.24.0!
 
   Applet - changes
@@ -702,9 +701,9 @@ Version 2.25.3
 
 
 
-===============
-Version 2.24.0
-===============
+
+Changes in 2.24.0
+
   Applet
     * some more strings available for translation, but the main changes are
       the updated translations
@@ -755,9 +754,9 @@ Version 2.24.0
     * zh_HK (Chao-Hsiung Liao)
     * zh_TW (Chao-Hsiung Liao)
 
-===============
-Version 2.23.92
-===============
+
+Changes in 2.23.92
+
   Applet
     * fixed code so that it works also with Python 2.4
     * Fixed bug with tasks falling into unsorted category (bug #548914)
@@ -796,9 +795,9 @@ Version 2.23.92
     * zh_HK (Chao-Hsiung Liao)
     * zh_TW (Chao-Hsiung Liao)
 
-===============
-Version 2.23.91
-===============
+
+Changes in 2.23.91
+
   Applet
 	* When adding earlier activity in current day, set default end time to now
 	* In overview start week with monday/sunday depending on locale (bug 548102)
@@ -832,9 +831,9 @@ Version 2.23.91
     * zh_HK (Chao-Hsiung Liao)
     * zh_TW (Chao-Hsiung Liao)
 
-===============
-Version 2.23.90
-===============
+
+Changes in 2.23.90
+
   Applet
 	* Changing name from "Hamster" to "Time Tracker"
 	* Information on when computer becomes idle is now determined from
@@ -858,9 +857,9 @@ Version 2.23.90
 	* sv (Daniel Nylander)
 
 
-==============
-Version 2.23.6
-==============
+
+Changes in 2.23.6
+
   Applet
 	* Follow GNOME version scheme
 	* Properly integrate with Keyboard Shortcuts in gnome-control-center
@@ -875,9 +874,9 @@ Version 2.23.6
 	* ru (Sasha Shveik)
 	* sv (Kalle Persson)
 
-=============
-Version 0.6.2
-=============
+
+Changes in 0.6.2
+
   Applet
 	* Fixed the header info and updated the Spanish translations
 	* Updated the Dutch translation by Wouter Bolsterlee (#544975)
@@ -900,9 +899,9 @@ Version 0.6.2
 	* ru (Sasha Shveik)
 	* sv (Kalle Persson)
 
-=============
-Version 0.6.1
-=============
+
+Changes in 0.6.1
+
   Applet
 	* Do not eat up middle-click
 	* Fixed fact pushing on overlap
@@ -916,9 +915,9 @@ Version 0.6.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===========
-Version 0.6
-===========
+
+Changes in 0.6
+
   Applet
 	* Simple reporting via Overview dialog
 
@@ -930,9 +929,9 @@ Version 0.6
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===========
-Version 0.5
-===========
+
+Changes in 0.5
+
   Applet
 	* Preferences are now editable via user interface
 	* Added option to stop tracking on shutdown
@@ -944,9 +943,9 @@ Version 0.5
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-=============
-Version 0.4.1
-=============
+
+Changes in 0.4.1
+
   Applet
 	* Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :)
 	* Fixed rules as per bug 532711. Patch by Juanje Ojeda.
@@ -957,9 +956,9 @@ Version 0.4.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-=============
-Version 0.4.1
-=============
+
+Changes in 0.4.1
+
   Miscellanous
 	* Fixed usage of spanish and italian translations
 
@@ -969,9 +968,9 @@ Version 0.4.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===========
-Version 0.4
-===========
+
+Changes in 0.4
+
   Applet
 	* Fact editing!
 
@@ -981,9 +980,9 @@ Version 0.4
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===========
-Version 0.3
-===========
+
+Changes in 0.3
+
   Applet
 	* Many small fixes to activity editing window (setting, focus, F2 for
 	  renames and others you would expect)
@@ -994,9 +993,9 @@ Version 0.3
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===========
-Version 0.2
-===========
+
+Changes in 0.2
+
   Applet
 	* change days on midnight also when there is no current activity
 	* option to stop tracking after certain minutes of idle
@@ -1007,9 +1006,9 @@ Version 0.2
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.7.5
-===============
+
+Changes in 0.1.7.5
+
   Applet
 	* Fixed midnight crasher
 
@@ -1018,9 +1017,9 @@ Version 0.1.7.5
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.7.4
-===============
+
+Changes in 0.1.7.4
+
   Applet
 	* Fixed licensing issues
 
@@ -1032,9 +1031,9 @@ Version 0.1.7.4
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.7.3
-===============
+
+Changes in 0.1.7.3
+
   Applet
 	* In stats the top caption shows what can be actually seen
 	  (day / week / month) - geekout
@@ -1052,9 +1051,9 @@ Version 0.1.7.3
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.7.2
-===============
+
+Changes in 0.1.7.2
+
   Applet
 	* Fixed focus issues with global hotkeys
 
@@ -1062,9 +1061,9 @@ Version 0.1.7.2
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.7.1
-===============
+
+Changes in 0.1.7.1
+
   Applet
 	* Fixed regression with keys ignored in applet window
 
@@ -1072,9 +1071,9 @@ Version 0.1.7.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-=============
-Version 0.1.7
-=============
+
+Changes in 0.1.7
+
   Applet
 	* Fixed applet vertical sizing issues
 	* Showing Evolution's active TODO's in activity lists
@@ -1086,9 +1085,9 @@ Version 0.1.7
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.6.2
-===============
+
+Changes in 0.1.6.2
+
   Applet
 	* Stop at 12 different activities a day, 12th being total of others
 	* Give more space to activity stats
@@ -1098,9 +1097,9 @@ Version 0.1.6.2
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.6.1
-===============
+
+Changes in 0.1.6.1
+
   Applet
 	* Kind of fixed problem with gconf schema not appearing
 
@@ -1108,9 +1107,9 @@ Version 0.1.6.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-=============
-Version 0.1.6
-=============
+
+Changes in 0.1.6
+
   Applet
 	* Enhanced drag and drop behaviour in edit activities window
 	* Added labels, tooltips, spacings, and other flags to enhance experience
@@ -1119,9 +1118,9 @@ Version 0.1.6
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.5.5
-===============
+
+Changes in 0.1.5.5
+
   Applet
 	* Fixed pysqlite dependency
 	* Fixed area chart color
@@ -1130,9 +1129,9 @@ Version 0.1.5.5
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.5.4
-===============
+
+Changes in 0.1.5.4
+
   Applet
 	* Hamster now has a process name for killall, which enables us to
 	  kill it on install!
@@ -1141,9 +1140,9 @@ Version 0.1.5.4
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.5.3
-===============
+
+Changes in 0.1.5.3
+
   Applet
 	* Fixed antialiasing problems in bar chart
 
@@ -1151,9 +1150,9 @@ Version 0.1.5.3
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.5.2
-===============
+
+Changes in 0.1.5.2
+
   Applet
 	* Minor changes and slight adjustments to Swedish translation
 
@@ -1161,9 +1160,9 @@ Version 0.1.5.2
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-===============
-Version 0.1.5.1
-===============
+
+Changes in 0.1.5.1
+
   Applet
 	* Fixed window icons
 
@@ -1171,8 +1170,8 @@ Version 0.1.5.1
 	* lv (Toms Baugis)
 	* sv (Kalle Persson)
 
-=============
-Version 0.1.5
-=============
+
+Changes in 0.1.5
+
   Applet
 	* Initial release
