@@ -34,6 +34,8 @@ from gi.repository import GLib as glib
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 
+import hamster
+
 from hamster.lib import datetime as dt
 
 
@@ -122,17 +124,14 @@ class RuntimeStore(Singleton):
     storage = None
 
     def __init__(self):
-        try:
-            from hamster import defs
+        self.version = hamster.__version__
+        if hamster.installed:
+            from hamster import defs  # only available when running installed
             self.data_dir = os.path.join(defs.DATA_DIR, "hamster")
-            self.version = defs.VERSION
-        except:
-            # if defs is not there, we are running from sources
+        else:
+            # running from sources
             module_dir = os.path.dirname(os.path.realpath(__file__))
             self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
-            from subprocess import getstatusoutput
-            rc, output = getstatusoutput("git describe --tags --always --dirty=+")
-            self.version = "" if rc else output + " (uninstalled)"
 
         self.data_dir = os.path.realpath(self.data_dir)
         self.storage = Storage()

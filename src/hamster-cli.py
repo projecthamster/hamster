@@ -31,6 +31,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
 
+import hamster
+
 from hamster import client, reports
 from hamster import logger as hamster_logger
 from hamster.overview import Overview
@@ -165,15 +167,9 @@ class HamsterCli(object):
     def __init__(self):
         self.storage = client.Storage()
 
-
+    # TODO: no longer used (should remove overview, about, prefs, add)
     def _launch_window(self, window_name):
-        try:
-            from hamster import defs
-            running_installed = True
-        except:
-            running_installed = False
-
-        if running_installed:
+        if hamster.installed:
             import dbus
             bus = dbus.SessionBus()
             server = bus.get_object("org.gnome.Hamster.WindowServer",
@@ -377,8 +373,7 @@ class HamsterCli(object):
 
 
     def version(self):
-        from hamster.lib.configuration import runtime
-        print(runtime.version)
+        print(hamster.__version__)
 
 
 if __name__ == '__main__':
@@ -420,6 +415,7 @@ Example usage:
         look for an activity matching terms 'pancakes` between 1st and 30st
         August 2012. Will check against activity, category, description and tags
 """)
+
     hamster_client = HamsterCli()
     app = Hamster()
     logger.debug("app instanciated")
@@ -446,6 +442,9 @@ Example usage:
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
+
+    if not hamster.installed:
+        logger.info("Running in devel mode")
 
     action = args.action
 
