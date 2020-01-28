@@ -119,11 +119,17 @@ class Storage(storage.Storage):
         # check if we have a database at all
         if not os.path.exists(db_path):
             # handle pre-existing hamster-applet database
-            old_db_path = os.path.join(xdg_data_home, 'hamster-applet', 'hamster.db')
-            if os.path.exists(old_db_path):
-                logger.warning("Linking {} with {}".format(old_db_path, db_path))
-                os.link(old_db_path, db_path)
-            else:
+            # try most recent directories first
+            # change from hamster-applet to hamster-time-tracker:
+            # 9f345e5e (2019-09-19)
+            old_dirs = ['hamster-time-tracker', 'hamster-applet']
+            for old_dir in old_dirs:
+                old_db_path = os.path.join(xdg_data_home, old_dir, 'hamster.db')
+                if os.path.exists(old_db_path):
+                    logger.warning("Linking {} with {}".format(old_db_path, db_path))
+                    os.link(old_db_path, db_path)
+                    break
+            if not os.path.exists(db_path):
                 # make a copy of the empty template hamster.db
                 try:
                     from hamster import defs
