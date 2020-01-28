@@ -348,6 +348,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="primary_icon_name">edit-clear-all-symbolic</property>
+                    <property name="placeholder_text" translatable="yes">Unsorted</property>
                     <property name="completion">activity completion</property>
                   </object>
                   <packing>

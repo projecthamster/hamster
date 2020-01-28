@@ -24,86 +24,55 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-import gi
-import datetime as dt
-
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
 
 from itertools import groupby
-import datetime as dt
 import calendar
 import time
 import re
 import locale
 import os
 
+from hamster.lib import datetime as dt
+
+
+# for pre-v3.0 backward compatibility
+hamster_now = dt.datetime.now
+hamster_today = dt.hday.today
+hamsterday_time_to_datetime = dt.datetime.from_day_time
+
 
 def datetime_to_hamsterday(civil_date_time):
     """Return the hamster day corresponding to a given civil datetime.
 
+    Deprecated: use civil_date_time.hday() instead
+
     The hamster day start is taken into account.
     """
 
-    if civil_date_time is None:
-        return None
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-
-    if civil_date_time.time() < conf.day_start:
-        # early morning, between midnight and day_start
-        # => the hamster day is the previous civil day
-        hamster_date_time = civil_date_time - dt.timedelta(days=1)
-    else:
-        hamster_date_time = civil_date_time
-    # return only the date
-    return hamster_date_time.date()
-
-
-def hamster_now():
-    # current datetime truncated to the minute
-    return hamster_round(dt.datetime.now())
+    return civil_date_time.hday()
 
 
 def hamster_round(time):
-    """Round time or datetime."""
+    """Round time or datetime.
+
+    Deprecated: hamster.lib/datetime.time or datetime are already rounded.
+    """
     if time is None:
         return None
     else:
         return time.replace(second=0, microsecond=0)
 
 
-def hamster_today():
-    """Return the current hamster day."""
-    return datetime_to_hamsterday(hamster_now())
-
-
-def hamsterday_time_to_datetime(hamsterday, time):
-    """Return the civil datetime corresponding to a given hamster day and time.
-
-    The hamster day start is taken into account.
-    """
-
-    # work around cyclic imports
-    from hamster.lib.configuration import conf
-
-    if time < conf.day_start:
-        # early morning, between midnight and day_start
-        # => the hamster day is the previous civil day
-        civil_date = hamsterday + dt.timedelta(days=1)
-    else:
-        civil_date = hamsterday
-    return dt.datetime.combine(civil_date, time)
-
-
 def format_duration(minutes, human = True):
     """formats duration in a human readable format.
-    accepts either minutes or timedelta"""
+    accepts either minutes or timedelta
 
-    if isinstance(minutes, dt.timedelta):
-        minutes = duration_minutes(minutes)
+    Deprecated: use timedelta.format() instead.
+    """
+
+    minutes = duration_minutes(minutes)
 
     if not minutes:
         if human:
@@ -187,16 +156,17 @@ def month(view_date):
 
 def duration_minutes(duration):
     """returns minutes from duration, otherwise we keep bashing in same math"""
-    if isinstance(duration, list):
+    if isinstance(duration, dt.timedelta):
+        return duration.total_seconds() / 60
+    elif isinstance(duration, (int, float)):
+        return duration
+    elif isinstance(duration, list):
         res = dt.timedelta()
         for entry in duration:
             res += entry
-
         return duration_minutes(res)
-    elif isinstance(duration, dt.timedelta):
-        return duration.total_seconds() / 60
     else:
-        return duration
+        raise NotImplementedError("received {}".format(type(duration)))
 
 
 def zero_hour(date):

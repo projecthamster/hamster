@@ -25,7 +25,6 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os, time
-import datetime as dt
 import itertools
 import sqlite3 as sqlite
 from shutil import copy as copyfile
@@ -35,13 +34,15 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
-from hamster.lib import Fact
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
-from hamster.lib.stuff import hamster_today, hamster_now
+from hamster.lib.fact import Fact
 from hamster.storage import storage
 
-UNSORTED_ID = -1
 
+# note: "zero id means failure" is quite standard,
+#       and that kind of convention will be mandatory for the dbus interface
+#       (None cannot pass through an integer signature).
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
@@ -58,6 +59,9 @@ class Storage(storage.Storage):
             database_dir (path):
                 Directory holding the database file,
                 or None to use the default location.
+
+        Note: Zero id means failure.
+              Unsorted category id is hard-coded as -1
         """
         storage.Storage.__init__(self)
 
@@ -115,11 +119,17 @@ class Storage(storage.Storage):
         # check if we have a database at all
         if not os.path.exists(db_path):
             # handle pre-existing hamster-applet database
-            old_db_path = os.path.join(xdg_data_home, 'hamster-applet', 'hamster.db')
-            if os.path.exists(old_db_path):
-                logger.warning("Linking {} with {}".format(old_db_path, db_path))
-                os.link(old_db_path, db_path)
-            else:
+            # try most recent directories first
+            # change from hamster-applet to hamster-time-tracker:
+            # 9f345e5e (2019-09-19)
+            old_dirs = ['hamster-time-tracker', 'hamster-applet']
+            for old_dir in old_dirs:
+                old_db_path = os.path.join(xdg_data_home, old_dir, 'hamster.db')
+                if os.path.exists(old_db_path):
+                    logger.warning("Linking {} with {}".format(old_db_path, db_path))
+                    os.link(old_db_path, db_path)
+                    break
+            if not os.path.exists(db_path):
                 # make a copy of the empty template hamster.db
                 try:
                     from hamster import defs
@@ -169,7 +179,7 @@ class Storage(storage.Storage):
         changes = False
 
         # check if any of tags needs resurrection
-        set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] == "false"]
+        set_complete = [str(tag["id"]) for tag in db_tags if tag["autocomplete"] in (0, "false")]
         if set_complete:
             changes = True
             self.execute("update tags set autocomplete='true' where id in (%s)" % ", ".join(set_complete))
@@ -206,7 +216,8 @@ class Storage(storage.Storage):
         gone = self.fetchall(query, tags)
 
         to_delete = [str(tag["id"]) for tag in gone if tag["occurences"] == 0]
-        to_uncomplete = [str(tag["id"]) for tag in gone if tag["occurences"] > 0 and tag["autocomplete"] == "true"]
+        to_uncomplete = [str(tag["id"]) for tag in gone
+                         if tag["occurences"] > 0 and tag["autocomplete"] in (1, "true")]
 
         if to_delete:
             self.execute("delete from tags where id in (%s)" % ", ".join(to_delete))
@@ -234,6 +245,18 @@ class Storage(storage.Storage):
 
 
     def __change_category(self, id, category_id):
+        """Change the category of an activity.
+
+        If an activity already exists with the same name
+        in the target category,
+        make all relevant facts use this target activity.
+
+        Args:
+            id (int): id of the source activity
+            category_id (int): id of the target category
+        Returns:
+            boolean: whether the database was changed.
+        """
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id, ))
         existing_activity = self.__get_activity_by_name(activity['name'], category_id)
@@ -297,7 +320,10 @@ class Storage(storage.Storage):
 
 
     def __get_activity_by_name(self, name, category_id = None, resurrect = True):
-        """get most recent, preferably not deleted activity by it's name"""
+        """Get most recent, preferably not deleted activity by it's name.
+        If category_id is None or 0, show all activities matching name.
+        Otherwise, filter on the specified category.
+        """
 
         if category_id:
             query = """
@@ -342,9 +368,13 @@ class Storage(storage.Storage):
         return None
 
     def __get_category_id(self, name):
-        """returns category by it's name"""
+        """Return category id from its name.
+
+        0 means none found.
+        """
         if not name:
-            return UNSORTED_ID
+            # Unsorted
+            return -1
 
         query = """
                    SELECT id from categories
@@ -358,7 +388,7 @@ class Storage(storage.Storage):
         if res:
             return res['id']
 
-        return None
+        return 0
 
     def _dbfact_to_libfact(self, db_fact):
         """Convert a db fact (coming from __group_facts) to Fact."""
@@ -419,7 +449,7 @@ class Storage(storage.Storage):
 
 
     def __touch_fact(self, fact, end_time = None):
-        end_time = end_time or hamster_now()
+        end_time = end_time or dt.datetime.now()
         # tasks under one minute do not count
         if end_time - fact.start_time < dt.timedelta(minutes = 1):
             self.__remove_fact(fact.id)
@@ -493,7 +523,7 @@ class Storage(storage.Storage):
 
         for fact in conflicts:
             # fact is a sqlite.Row, indexable by column name
-            fact_end_time = fact["end_time"] or hamster_now()
+            fact_end_time = fact["end_time"] or dt.datetime.now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
             if start_time < fact["start_time"] and end_time > fact_end_time:
@@ -516,6 +546,7 @@ class Storage(storage.Storage):
                                 description=fact["description"],
                                 start_time=end_time,
                                 end_time=fact_end_time)
+                storage.Storage.check_fact(new_fact)
                 new_fact_id = self.__add_fact(new_fact)
 
                 # copy tags
@@ -553,8 +584,6 @@ class Storage(storage.Storage):
         """
         logger.info("adding fact {}".format(fact))
 
-        self.validate_fact(fact)  # sanity check
-
         start_time = fact.start_time
         end_time = fact.end_time
 
@@ -562,11 +591,9 @@ class Storage(storage.Storage):
         tags = [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(fact.tags)]
 
         # now check if maybe there is also a category
-        category_id = None
-        if fact.category:
-            category_id = self.__get_category_id(fact.category)
-            if not category_id:
-                category_id = self.__add_category(fact.category)
+        category_id = self.__get_category_id(fact.category)
+        if not category_id:
+            category_id = self.__add_category(fact.category)
 
         # try to find activity, resurrect if not temporary
         activity_id = self.__get_activity_by_name(fact.activity,
@@ -579,7 +606,7 @@ class Storage(storage.Storage):
             activity_id = activity_id['id']
 
         # if we are working on +/- current day - check the last_activity
-        if (dt.timedelta(days=-1) <= hamster_now() - start_time <= dt.timedelta(days=1)):
+        if (dt.timedelta(days=-1) <= dt.datetime.now() - start_time <= dt.timedelta(days=1)):
             # pull in previous facts
             facts = self.__get_todays_facts()
 
@@ -656,18 +683,15 @@ class Storage(storage.Storage):
         return fact_id
 
     def __last_insert_rowid(self):
-        return self.fetchone("SELECT last_insert_rowid();")[0]
+        return self.fetchone("SELECT last_insert_rowid();")[0] or 0
 
 
     def __get_todays_facts(self):
-        return self.__get_facts(hamster_today())
+        return self.__get_facts(dt.Range.today())
 
-    def __get_facts(self, date, end_date = None, search_terms = ""):
-        split_time = conf.day_start
-        datetime_from = dt.datetime.combine(date, split_time)
-
-        end_date = end_date or date
-        datetime_to = dt.datetime.combine(end_date, split_time) + dt.timedelta(days=1, seconds=-1)
+    def __get_facts(self, range, search_terms=""):
+        datetime_from = range.start
+        datetime_to = range.end
 
         logger.info("searching for facts from {} to {}".format(datetime_from, datetime_to))
 
@@ -977,3 +1001,25 @@ class Storage(storage.Storage):
             print("updated database from version %d to %d" % (version, current_version))
 
         self.end_transaction()
+
+
+# datetime/sql conversions
+
+DATETIME_LOCAL_FMT = "%Y-%m-%d %H:%M:%S"
+
+
+def adapt_datetime(t):
+    """Convert datetime t to the suitable sql representation."""
+    return t.isoformat(" ")
+
+
+def convert_datetime(s):
+    """Convert the sql timestamp to datetime.
+
+    s is in bytes
+    """
+    return dt.datetime.strptime(s.decode('utf-8'), DATETIME_LOCAL_FMT)
+
+
+sqlite.register_adapter(dt.datetime, adapt_datetime)
+sqlite.register_converter("timestamp", convert_datetime)

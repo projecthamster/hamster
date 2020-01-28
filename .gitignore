@@ -15,6 +15,7 @@ intltool-merge.in
 intltool-update.in
 libtool
 ltmain.sh
+messages
 missing
 mkinstalldirs
 py-compile

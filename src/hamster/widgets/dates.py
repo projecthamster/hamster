@@ -20,11 +20,11 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
-import datetime as dt
+
 import calendar
 import re
 
-
+from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib.configuration import load_ui_file
 

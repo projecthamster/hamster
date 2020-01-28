@@ -19,7 +19,6 @@
 
 import bisect
 import cairo
-import datetime as dt
 
 from collections import defaultdict
 from gi.repository import GObject as gobject
@@ -28,6 +27,7 @@ from gi.repository import Gdk as gdk
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 
+from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import stuff
 
@@ -233,7 +233,7 @@ class FactRow(object):
 
             g.restore_context()
 
-        self.duration_label.show(g, stuff.format_duration(self.fact.delta), x=self.width - 105)
+        self.duration_label.show(g, self.fact.delta.format(), x=self.width - 105)
 
         g.restore_context()
 
@@ -477,7 +477,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             start = self.facts[0].date
             end = self.facts[-1].date
         else:
-            start = end = stuff.hamster_today()
+            start = end = dt.hday.today()
 
         by_date = defaultdict(list)
         for fact in self.facts:

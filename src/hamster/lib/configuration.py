@@ -18,7 +18,6 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-gconf part of this code copied from Gimmie (c) Alex Gravely via Conduit (c) John Stowers, 2006
 License: GPLv2
 """
 
@@ -28,17 +27,21 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import os
 from hamster.client import Storage
 from xdg.BaseDirectory import xdg_data_home
-import datetime as dt
 
+from gi.repository import Gdk as gdk
+from gi.repository import Gio as gio
+from gi.repository import GLib as glib
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 
-import gi
-gi.require_version('GConf', '2.0')
-from gi.repository import GConf as gconf
+from hamster.lib import datetime as dt
 
 
 class Controller(gobject.GObject):
+    """Window creator and handler.
+
+    If parent is given, this is a dialog for parent, otherwise a toplevel.
+    """
     __gsignals__ = {
         "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
@@ -55,34 +58,48 @@ class Controller(gobject.GObject):
             self._gui = None
             self.window = gtk.Window()
 
+        if parent:
+            # Essential for positioning on wayland.
+            # This should also select the correct window type if unset yet.
+            # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
+            self.window.set_transient_for(parent.get_toplevel())
+            # this changes nothing, the dialog appears centered on the screen:
+            # self.window.set_type_hint(gdk.WindowTypeHint.DIALOG)
+
         self.window.connect("delete-event", self.window_delete_event)
         if self._gui:
             self._gui.connect_signals(self)
-
 
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-
     def window_delete_event(self, widget, event):
         self.close_window()
 
     def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            """
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-            """
-            self.window.destroy()
-            self.window = None
-            self.emit("on-close")
+        # Do not try to just hide;
+        # dialogs are populated upon instanciation anyway
+        self.window.destroy()
+        self.window = None
+        self.emit("on-close")
+
+    def present(self):
+        """Show window and bring it to the foreground."""
+        # workaround https://gitlab.gnome.org/GNOME/gtk/issues/624
+        # fixed in gtk-3.24.1 (2018-09-19)
+        # self.overview_controller.window.present()
+        self.window.present_with_time(glib.get_monotonic_time() / 1000)
 
     def show(self):
+        """Show window.
+        It might be obscurd by others though.
+        See also: presents
+        """
         self.window.show()
 
+    def __bool__(self):
+        return True if self.window else False
 
 def load_ui_file(name):
     """loads interface from the glade file; sorts out the path business"""
@@ -193,154 +210,58 @@ class Dialogs(Singleton):
 dialogs = Dialogs()
 
 
-class GConfStore(gobject.GObject, Singleton):
+class GSettingsStore(gobject.GObject, Singleton):
     """
-    Settings implementation which stores settings in GConf
+    Settings implementation which stores settings in GSettings
     Snatched from the conduit project (http://live.gnome.org/Conduit)
     """
-    GCONF_DIR = "/apps/hamster/"
-    VALID_KEY_TYPES = (bool, str, int, list, tuple)
-    DEFAULTS = {
-        'enable_timeout'              :   False,       # Should hamster stop tracking on idle
-        'stop_on_shutdown'            :   False,       # Should hamster stop tracking on shutdown
-        'notify_on_idle'              :   False,       # Remind also if no activity is set
-        'notify_interval'             :   27,          # Remind of current activity every X minutes
-        'day_start_minutes'           :   5 * 60 + 30, # At what time does the day start (5:30AM)
-        'overview_window_box'         :   [],          # X, Y, W, H
-        'overview_window_maximized'   :   False,       # Is overview window maximized
-        'standalone_window_box'       :   [],          # X, Y, W, H
-        'standalone_window_maximized' :   False,       # Is overview window maximized
-        'activities_source'           :   "",          # Source of TODO items ("", "evo", "gtg")
-        'last_report_folder'          :   "~",         # Path to directory where the last report was saved
-    }
 
     __gsignals__ = {
-        "conf-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
+        "changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
     }
+
     def __init__(self):
         gobject.GObject.__init__(self)
-        self._client = gconf.Client.get_default()
-        self._client.add_dir(self.GCONF_DIR[:-1], gconf.ClientPreloadType.PRELOAD_RECURSIVE)
-        self._notifications = []
+        self._settings = gio.Settings(schema_id='org.gnome.Hamster')
 
-    def _fix_key(self, key):
+    def _key_changed(self, client, key, data=None):
         """
-        Appends the GCONF_PREFIX to the key if needed
-
-        @param key: The key to check
-        @type key: C{string}
-        @returns: The fixed key
-        @rtype: C{string}
+        Callback when a GSettings key changes
         """
-        if not key.startswith(self.GCONF_DIR):
-            return self.GCONF_DIR + key
-        else:
-            return key
-
-    def _key_changed(self, client, cnxn_id, entry, data=None):
-        """
-        Callback when a gconf key changes
-        """
-        key = self._fix_key(entry.key)[len(self.GCONF_DIR):]
-        value = self._get_value(entry.value, self.DEFAULTS[key])
-
-        self.emit('conf-changed', key, value)
-
-
-    def _get_value(self, value, default):
-        """calls appropriate gconf function by the default value"""
-        vtype = type(default)
-
-        if vtype is bool:
-            return value.get_bool()
-        elif vtype is str:
-            return value.get_string()
-        elif vtype is int:
-            return value.get_int()
-        elif vtype in (list, tuple):
-            l = []
-            for i in value.get_list():
-                l.append(i.get_string())
-            return l
-
-        return None
+        value = self._settings.get_value(key)
+        self.emit('changed', key, value)
 
     def get(self, key, default=None):
         """
         Returns the value of the key or the default value if the key is
-        not yet in gconf
+        not yet in GSettings
         """
-
-        #function arguments override defaults
-        if default is None:
-            default = self.DEFAULTS.get(key, None)
-        vtype = type(default)
-
-        #we now have a valid key and type
-        if default is None:
-            logger.warn("Unknown key: %s, must specify default value" % key)
-            return None
-
-        if vtype not in self.VALID_KEY_TYPES:
-            logger.warn("Invalid key type: %s" % vtype)
-            return None
-
-        #for gconf refer to the full key path
-        key = self._fix_key(key)
-
-        if key not in self._notifications:
-            self._client.notify_add(key, self._key_changed, None)
-            self._notifications.append(key)
-
-        value = self._client.get(key)
+        value = self._settings.get_value(key)
         if value is None:
-            self.set(key, default)
-            return default
+            logger.warn("Unknown GSettings key: %s" % key)
 
-        value = self._get_value(value, default)
-        if value is not None:
-            return value
-
-        logger.warn("Unknown gconf key: %s" % key)
-        return None
+        return value.unpack()
 
     def set(self, key, value):
         """
-        Sets the key value in gconf and connects adds a signal
+        Sets the key value in GSettings and connects adds a signal
         which is fired if the key changes
         """
         logger.debug("Settings %s -> %s" % (key, value))
-        if key in self.DEFAULTS:
-            vtype = type(self.DEFAULTS[key])
-        else:
-            vtype = type(value)
-
-        if vtype not in self.VALID_KEY_TYPES:
-            logger.warn("Invalid key type: %s" % vtype)
-            return False
-
-        #for gconf refer to the full key path
-        key = self._fix_key(key)
-
-        if vtype is bool:
-            self._client.set_bool(key, value)
-        elif vtype is str:
-            self._client.set_string(key, value)
-        elif vtype is int:
-            self._client.set_int(key, value)
-        elif vtype in (list, tuple):
-            #Save every value as a string
-            strvalues = [str(i) for i in value]
-            #self._client.set_list(key, gconf.VALUE_STRING, strvalues)
-
+        default = self._settings.get_default_value(key)
+        assert default is not None
+        self._settings.set_value(key, glib.Variant(default.get_type().dup_string(), value))
         return True
+
+    def bind(self, key, obj, prop):
+        self._settings.bind(key, obj, prop, gio.SettingsBindFlags.DEFAULT)
 
     @property
     def day_start(self):
         """Start of the hamster day."""
-        day_start_minutes = self.get("day_start_minutes")
+        day_start_minutes = self.get("day-start-minutes")
         hours, minutes = divmod(day_start_minutes, 60)
         return dt.time(hours, minutes)
 
 
-conf = GConfStore()
+conf = GSettingsStore()

@@ -22,24 +22,22 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 import bisect
 import cairo
-import datetime as dt
 import re
 
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
-import gi
-gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 from collections import defaultdict
 from copy import deepcopy
 
 from hamster import client
-from hamster.lib import Fact, looks_like_time
+from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib import graphics
 from hamster.lib.configuration import runtime
+from hamster.lib.fact import Fact
 
 
 def extract_search(text):
@@ -202,12 +200,19 @@ class CompleteTree(graphics.Scene):
 
 class CmdLineEntry(gtk.Entry):
     def __init__(self, updating=True, **kwargs):
-        gtk.Entry.__init__(self)
+        gtk.Entry.__init__(self, **kwargs)
+
+        # default day for times without date
+        self.default_day = None
 
         # to be set by the caller, if editing an existing fact
         self.original_fact = None
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
+        self.popup.set_attached_to(self)  # attributes
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+
         box = gtk.Frame()
         box.set_shadow_type(gtk.ShadowType.IN)
         self.popup.add(box)
@@ -286,7 +291,7 @@ class CmdLineEntry(gtk.Entry):
         self.todays_facts = self.storage.get_todays_facts()
 
         # list of facts of last month
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
         last_month = self.storage.get_facts(now - dt.timedelta(days=30), now)
 
         # naive recency and frequency rank
@@ -352,7 +357,7 @@ class CmdLineEntry(gtk.Entry):
         res = []
 
         fact = Fact.parse(text)
-        now = stuff.hamster_now()
+        now = dt.datetime.now()
 
         # figure out what we are looking for
         # time -> activity[@category] -> tags -> description
@@ -405,7 +410,7 @@ class CmdLineEntry(gtk.Entry):
                 description = "stop now"
                 variant_fact = self.original_fact.copy()
                 variant_fact.end_time = now
-            elif self.original_fact == self.todays_facts[-1]:
+            elif self.todays_facts and self.original_fact == self.todays_facts[-1]:
                 # that one is too dangerous, except for the last entry
                 description = "keep up"
                 # Do not use Fact(..., end_time=None): it would be a no-op
@@ -414,7 +419,7 @@ class CmdLineEntry(gtk.Entry):
 
             if variant_fact:
                 variant_fact.description = None
-                variant = variant_fact.serialized(prepend_date=False)
+                variant = variant_fact.serialized(default_day=self.default_day)
                 variants.append((description, variant))
 
         else:
@@ -425,7 +430,7 @@ class CmdLineEntry(gtk.Entry):
 
             prev_fact = self.todays_facts[-1] if self.todays_facts else None
             if prev_fact and prev_fact.end_time:
-                since = stuff.format_duration(now - prev_fact.end_time)
+                since = (now - prev_fact.end_time).format()
                 description = "from previous activity, %s ago" % since
                 variant = prev_fact.end_time.strftime("%H:%M ")
                 variants.append((description, variant))

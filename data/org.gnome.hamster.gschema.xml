@@ -1,0 +1,22 @@
+<schemalist>
+    <schema path="/org/gnome/hamster/" id="org.gnome.Hamster" gettext-domain="hamster">
+        <key type="s" name="last-report-folder">
+            <default>""</default>
+            <summary>The folder the last report was saved to</summary>
+            <description>
+                The folder the last report was saved to
+            </description>
+        </key>
+
+        <key type="u" name="day-start-minutes">
+            <default>330</default>
+            <summary>At what time does the day start (defaults to 5:30AM)</summary>
+            <description>
+                The hamster day of an activity is the civil date of start time,
+                provided start time is after day-start.
+                On the contrary, if start time is earlier than day-start,
+                then the activity belongs to the previous hamster day.
+            </description>
+        </key>
+    </schema>
+</schemalist>

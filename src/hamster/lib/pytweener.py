@@ -9,9 +9,10 @@
 # All kinds of slashing and dashing by Toms Baugis 2010, 2014
 import math
 import collections
-import datetime as dt
 import time
 import re
+
+from hamster.lib import datetime as dt
 
 class Tweener(object):
     def __init__(self, default_duration = None, tween = None):

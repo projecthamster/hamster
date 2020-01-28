@@ -20,18 +20,18 @@
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
-from textwrap import dedent
+
 import time
-import datetime as dt
 
 """ TODO: hook into notifications and refresh our days if some evil neighbour
           edit fact window has dared to edit facts
 """
 from hamster import widgets
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime, conf, load_ui_file
-from hamster.lib.stuff import (
-    hamsterday_time_to_datetime, hamster_today, hamster_now, escape_pango)
-from hamster.lib import Fact
+from hamster.lib.fact import Fact, FactError
+from hamster.lib.stuff import escape_pango
+
 
 
 class CustomFactController(gobject.GObject):
@@ -41,6 +41,8 @@ class CustomFactController(gobject.GObject):
 
     def __init__(self,  parent=None, fact_id=None, base_fact=None):
         gobject.GObject.__init__(self)
+
+        self._date = None  # for the date property
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
@@ -53,8 +55,7 @@ class CustomFactController(gobject.GObject):
         self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
                                                     category_widget=self.category_entry)
 
-        self.cmdline = widgets.CmdLineEntry()
-        self.get_widget("command line box").add(self.cmdline)
+        self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("command line box"))
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
@@ -67,14 +68,12 @@ class CustomFactController(gobject.GObject):
         self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
                                          expander=self.get_widget("end date expander"))
 
-        self.end_time = widgets.TimeInput()
-        self.get_widget("end time box").add(self.end_time)
+        self.end_time = widgets.TimeInput(parent=self.get_widget("end time box"))
 
         self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
                                            expander=self.get_widget("start date expander"))
 
-        self.start_time = widgets.TimeInput()
-        self.get_widget("start time box").add(self.start_time)
+        self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
@@ -87,20 +86,20 @@ class CustomFactController(gobject.GObject):
         if fact_id:
             # editing
             self.fact = runtime.storage.get_fact(fact_id)
-            self.date = self.fact.date
             self.window.set_title(_("Update activity"))
         else:
             self.window.set_title(_("Add activity"))
-            self.date = hamster_today()
             self.get_widget("delete_button").set_sensitive(False)
             if base_fact:
                 # start a clone now.
-                self.fact = base_fact.copy(start_time=hamster_now(),
+                self.fact = base_fact.copy(start_time=dt.datetime.now(),
                                            end_time=None)
             else:
-                self.fact = Fact(start_time=hamster_now())
+                self.fact = Fact(start_time=dt.datetime.now())
 
         original_fact = self.fact
+        # TODO: should use hday, not date.
+        self.date = self.fact.date
 
         self.update_fields()
         self.update_cmdline(select=True)
@@ -127,6 +126,23 @@ class CustomFactController(gobject.GObject):
         self.validate_fields()
         self.window.show_all()
 
+    @property
+    def date(self):
+        """Default hamster day."""
+        return self._date
+
+    @date.setter
+    def date(self, value):
+        delta = value - self._date if self._date else None
+        self._date = value
+        self.cmdline.default_day = value
+        if self.fact and delta:
+            if self.fact.start_time:
+                self.fact.start_time += delta
+            if self.fact.end_time:
+                self.fact.end_time += delta
+            # self.update_fields() here would enter an infinite loop
+
     def on_prev_day_clicked(self, button):
         self.increment_date(-1)
 
@@ -144,10 +160,6 @@ class CustomFactController(gobject.GObject):
     def increment_date(self, days):
         delta = dt.timedelta(days=days)
         self.date += delta
-        if self.fact.start_time:
-            self.fact.start_time += delta
-        if self.fact.end_time:
-            self.fact.end_time += delta
         self.update_fields()
 
     def show(self):
@@ -172,12 +184,12 @@ class CustomFactController(gobject.GObject):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            fact = Fact.parse(self.cmdline.get_text(), date=self.date)
+            fact = Fact.parse(self.cmdline.get_text(), default_day=self.date)
             previous_cmdline_fact = self.cmdline_fact
             # copy the entered fact before any modification
             self.cmdline_fact = fact.copy()
             if fact.start_time is None:
-                fact.start_time = hamster_now()
+                fact.start_time = dt.datetime.now()
             if fact.description == previous_cmdline_fact.description:
                 # no change to description here, keep the main one
                 fact.description = self.fact.description
@@ -235,7 +247,7 @@ class CustomFactController(gobject.GObject):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.date = self.fact.date or hamster_today()
+            self.date = self.fact.date or dt.hday.today()
             self.validate_fields()
             self.update_cmdline()
 
@@ -255,8 +267,7 @@ class CustomFactController(gobject.GObject):
                                                          new_time)
                 else:
                     # date not specified; result must fall in current hamster_day
-                    new_start_time = hamsterday_time_to_datetime(hamster_today(),
-                                                                 new_time)
+                    new_start_time = dt.datetime.from_day_time(dt.hday.today(), new_time)
             else:
                 new_start_time = None
             self.fact.start_time = new_start_time
@@ -273,12 +284,13 @@ class CustomFactController(gobject.GObject):
     def update_cmdline(self, select=None):
         """Update the cmdline entry content."""
         self.cmdline_fact = self.fact.copy(description=None)
-        label = self.cmdline_fact.serialized(prepend_date=False)
+        label = self.cmdline_fact.serialized(default_day=self.date)
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
-                time_str = self.cmdline_fact.serialized_time(prepend_date=False)
-                self.cmdline.select_region(0, len(time_str))
+                # select the range string exactly (without separator)
+                __, rest = dt.Range.parse(label, position="head", separator="")
+                self.cmdline.select_region(0, len(label) - len(rest))
 
     def update_fields(self):
         """Update gui fields content."""
@@ -318,7 +330,7 @@ class CustomFactController(gobject.GObject):
         """
         fact = self.fact
 
-        now = hamster_now()
+        now = dt.datetime.now()
         self.get_widget("button-next-day").set_sensitive(self.date < now.date())
 
         if self.date == now.date():
@@ -329,34 +341,13 @@ class CustomFactController(gobject.GObject):
         self.draw_preview(fact.start_time or default_dt,
                           fact.end_time or default_dt)
 
-        if fact.start_time is None:
-            self.update_status(status="wrong", markup="Missing start time")
+        try:
+            runtime.storage.check_fact(fact, default_day=self.date)
+        except FactError as error:
+            self.update_status(status="wrong", markup=str(error))
             return None
 
-        if not fact.activity:
-            self.update_status(status="wrong", markup="Missing activity")
-            return None
-
-        if (fact.delta < dt.timedelta(0)) and fact.end_time:
-            fact.end_time += dt.timedelta(days=1)
-            markup = dedent("""\
-                            <b>Working late ?</b>
-                            Duration would be negative.
-                            This happens when the activity crosses the
-                            hamster day start time ({:%H:%M} from tracking settings).
-
-                            Changing the end time date to the next day.
-                            Pressing the button would save
-                            an actvity going from
-                            {}
-                            to
-                            {}
-                            (in civil local time)
-                            """.format(conf.day_start, fact.start_time, fact.end_time))
-            self.update_status(status="warning", markup=markup)
-            return fact
-
-        roundtrip_fact = Fact.parse(fact.serialized())
+        roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.date)
         if roundtrip_fact != fact:
             self.update_status(status="wrong", markup="Fact could not be parsed back")
             return None

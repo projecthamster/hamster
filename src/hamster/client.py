@@ -19,10 +19,23 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import dbus
+import logging
+logger = logging.getLogger(__name__)   # noqa: E402
+
 from calendar import timegm
 from gi.repository import GObject as gobject
-from hamster.lib import Fact, hamster_now
-from hamster.lib.dbus import DBusMainLoop, dbus, from_dbus_fact, to_dbus_fact
+
+from hamster.lib.dbus import (
+    DBusMainLoop,
+    from_dbus_fact_json,
+    to_dbus_date,
+    to_dbus_fact,
+    to_dbus_fact_json,
+    to_dbus_range,
+    )
+from hamster.lib.fact import Fact, FactError
+from hamster.lib import datetime as dt
 
 
 class Storage(gobject.GObject):
@@ -94,21 +107,18 @@ class Storage(gobject.GObject):
         """returns facts of the current date, respecting hamster midnight
            hamster midnight is stored in gconf, and presented in minutes
         """
-        return [from_dbus_fact(fact) for fact in self.conn.GetTodaysFacts()]
+        return [from_dbus_fact_json(fact) for fact in self.conn.GetTodaysFactsJSON()]
 
-    def get_facts(self, date, end_date=None, search_terms=""):
+    def get_facts(self, start, end=None, search_terms=""):
         """Returns facts for the time span matching the optional filter criteria.
            In search terms comma (",") translates to boolean OR and space (" ")
            to boolean AND.
            Filter is applied to tags, categories, activity names and description
         """
-        date = timegm(date.timetuple())
-        end_date = end_date or 0
-        if end_date:
-            end_date = timegm(end_date.timetuple())
-        return [from_dbus_fact(fact) for fact in self.conn.GetFacts(date,
-                                                                    end_date,
-                                                                    search_terms)]
+        range = dt.Range.from_start_end(start, end)
+        dbus_range = to_dbus_range(range)
+        return [from_dbus_fact_json(fact)
+                for fact in self.conn.GetFactsJSON(dbus_range, search_terms)]
 
     def get_activities(self, search = ""):
         """returns list of activities name matching search criteria.
@@ -142,7 +152,26 @@ class Storage(gobject.GObject):
 
     def get_fact(self, id):
         """returns fact by it's ID"""
-        return from_dbus_fact(self.conn.GetFact(id))
+        return from_dbus_fact_json(self.conn.GetFactJSON(id))
+
+    def check_fact(self, fact, default_day=None):
+        """Check Fact validity for inclusion in the storage.
+
+        default_day (date): Default hamster day,
+                            used to simplify some hint messages
+                            (remove unnecessary dates).
+                            None is safe (always show dates).
+        """
+        if not fact.start_time:
+            # Do not even try to pass fact through D-Bus as
+            # conversions would fail in this case.
+            raise FactError("Missing start time")
+        dbus_fact = to_dbus_fact_json(fact)
+        dbus_day = to_dbus_date(default_day)
+        success, message = self.conn.CheckFact(dbus_fact, dbus_day)
+        if not success:
+            raise FactError(message)
+        return success, message
 
     def add_fact(self, fact, temporary_activity = False):
         """Add fact (Fact)."""
@@ -150,17 +179,17 @@ class Storage(gobject.GObject):
 
         if not fact.start_time:
             logger.info("Adding fact without any start_time is deprecated")
-            fact.start_time = hamster_now()
+            fact.start_time = dt.datetime.now()
 
-        dbus_fact = to_dbus_fact(fact)
-        new_id = self.conn.AddFactVerbatim(dbus_fact)
+        dbus_fact = to_dbus_fact_json(fact)
+        new_id = self.conn.AddFactJSON(dbus_fact)
 
         return new_id
 
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
         activity should have other end time than the current moment"""
-        end_time = timegm((end_time or hamster_now()).timetuple())
+        end_time = timegm((end_time or dt.datetime.now()).timetuple())
         return self.conn.StopTracking(end_time)
 
     def remove_fact(self, fact_id):
@@ -173,8 +202,8 @@ class Storage(gobject.GObject):
         fact_id after update should not be used anymore. Instead use the ID
         from the fact dict that is returned by this function"""
 
-        dbus_fact = to_dbus_fact(fact)
-        new_id =  self.conn.UpdateFactVerbatim(fact_id, dbus_fact)
+        dbus_fact = to_dbus_fact_json(fact)
+        new_id = self.conn.UpdateFactJSON(fact_id, dbus_fact)
 
         return new_id
 

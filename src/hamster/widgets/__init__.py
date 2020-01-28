@@ -17,11 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime as dt
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 
+from hamster.lib import datetime as dt
 # import our children
 from hamster.widgets.activityentry import (
     ActivityEntry,

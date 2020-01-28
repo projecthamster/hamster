@@ -25,11 +25,19 @@
 import sys, os
 import argparse
 import re
-import datetime as dt
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk as gtk
+from gi.repository import Gio as gio
 
 from hamster import client, reports
 from hamster import logger as hamster_logger
-from hamster.lib import default_logger, Fact, stuff
+from hamster.overview import Overview
+from hamster.preferences import PreferencesEditor
+from hamster.lib import default_logger, stuff
+from hamster.lib import datetime as dt
+from hamster.lib.fact import Fact
 
 
 logger = default_logger(__file__)
@@ -62,10 +70,10 @@ def fact_dict(fact_data, with_date):
     if fact_data.end_time:
         fact['end'] = fact_data.end_time.strftime(fmt)
     else:
-        end_date = stuff.hamster_now()
+        end_date = dt.datetime.now()
         fact['end'] = ''
 
-    fact['duration'] = stuff.format_duration(fact_data.delta)
+    fact['duration'] = fact_data.delta.format()
 
     fact['activity'] = fact_data.activity
     fact['category'] = fact_data.category
@@ -79,56 +87,81 @@ def fact_dict(fact_data, with_date):
     return fact
 
 
-_DATETIME_PATTERN = ('^((?P<relative>-\d.+)?|('
-                     '(?P<date1>\d{4}-\d{2}-\d{2})?'
-                     '(?P<time1> ?\d{2}:\d{2})?'
-                     '(?P<dash> ?-)?'
-                     '(?P<date2> ?\d{4}-\d{2}-\d{2})?'
-                     '(?P<time2> ?\d{2}:\d{2})?)?)'
-                     '(?P<rest>\D.+)?$')
-_DATETIME_REGEX = re.compile(_DATETIME_PATTERN)
-def parse_datetime_range(arg):
-    '''Parse a date and time.'''
-    match = _DATETIME_REGEX.match(arg)
-    if not match:
-        return None, None
+class Hamster(gtk.Application):
+    def __init__(self):
+        # inactivity_timeout: How long (ms) the service should stay alive
+        #                     after all windows have been closed.
+        gtk.Application.__init__(self,
+                                 application_id="org.gnome.Hamster.WindowServer",
+                                 #inactivity_timeout=10000,
+                                 register_session=True)
 
-    fragments = match.groupdict()
-    rest = (fragments['rest'] or '').strip()
+        self.overview_controller = None  # overview window controller
+        self.prefs_controller = None  # settings window controller
 
-    # bail out early on relative minutes
-    if fragments['relative']:
-        delta_minutes = int(fragments['relative'])
-        return stuff.hamster_now() - dt.timedelta(minutes=delta_minutes), rest
+        self.connect("startup", self.on_startup)
+        self.connect("activate", self.on_activate)
 
-    start_time, end_time = None, None
+        # we need them before the startup phase
+        # so register/activate_action work before the app is ran.
+        # cf. https://gitlab.gnome.org/GNOME/glib/blob/master/gio/tests/gapplication-example-actions.c
+        self.add_actions()
 
-    def to_time(timestr):
-        timestr = (timestr or "").strip()
-        try:
-            return dt.datetime.strptime(timestr, "%Y-%m-%d").date()
-        except ValueError:
-            try:
-                return dt.datetime.strptime(timestr, "%H:%M").time()
-            except ValueError:
-                pass
-        return None
+    def add_actions(self):
+        action = gio.SimpleAction.new("overview", None)
+        action.connect("activate", self.on_activate_overview)
+        self.add_action(action)
 
-    now = stuff.hamster_now().time()
+        action = gio.SimpleAction.new("prefs", None)
+        action.connect("activate", self.on_activate_prefs)
+        self.add_action(action)
 
-    if fragments['date1'] or fragments['time1']:
-        start_time = dt.datetime.combine(to_time(fragments['date1']) or dt.date.today(),
-                                         to_time(fragments['time1']) or now)
-    if fragments['date2'] or fragments['time2']:
-        end_time = dt.datetime.combine(to_time(fragments['date2']) or start_time or dt.date.today(),
-                                       to_time(fragments['time2']) or now)
+        action = gio.SimpleAction.new("quit", None)
+        action.connect("activate", self.on_activate_quit)
+        self.add_action(action)
 
-    return start_time, end_time
+    def on_activate(self, data=None):
+        logger.debug("activate")
+        if not self.get_windows():
+            self.activate_action("overview")
+
+    def on_activate_overview(self, action=None, data=None):
+        self._open_window(action.get_name(), data)
+
+    def on_activate_prefs(self, action=None, data=None):
+        self._open_window(action.get_name(), data)
+
+    def on_activate_quit(self, data=None):
+        self.on_activate_quit()
+
+    def on_startup(self, data=None):
+        logger.debug("startup")
+
+    def _open_window(self, name, data=None):
+        logger.debug("opening '{}'".format(name))
+
+        if name == "overview":
+            if not self.overview_controller:
+                self.overview_controller = Overview()
+                logger.debug("new Overview")
+            controller = self.overview_controller
+        elif name == "prefs":
+            if not self.prefs_controller:
+                self.prefs_controller = PreferencesEditor()
+                logger.debug("new PreferencesEditor")
+            controller = self.prefs_controller
+
+        window = controller.window
+        if window not in self.get_windows():
+            self.add_window(window)
+            logger.debug("window added")
+        controller.present()
+        logger.debug("window presented")
 
 
+class HamsterCli(object):
+    """Command line interface."""
 
-class HamsterClient(object):
-    '''The main application.'''
     def __init__(self):
         self.storage = client.Storage()
 
@@ -192,14 +225,11 @@ class HamsterClient(object):
             print("Error: please specify activity")
             return
 
-        activity = args[0]
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
-        start_time = start_time or stuff.hamster_now()
-
-        self.storage.add_fact(Fact(activity,
-                                         start_time = start_time,
-                                         end_time = end_time))
-
+        fact = Fact.parse(" ".join(args), range_pos="tail")
+        if fact.start_time is None:
+            fact.start_time = dt.datetime.now()
+        self.storage.check_fact(fact, default_day=dt.hday.today())
+        self.storage.add_fact(fact)
 
     def stop(self, *args):
         '''Stop tracking the current activity.'''
@@ -211,7 +241,7 @@ class HamsterClient(object):
         export_format, start_time, end_time = "html", None, None
         if args:
             export_format = args[0]
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -248,7 +278,7 @@ class HamsterClient(object):
 
     def list(self, *times):
         """list facts within a date range"""
-        start_time, end_time = parse_datetime_range(" ".join(times or []))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(times or []))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -260,7 +290,7 @@ class HamsterClient(object):
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
             print("{} {}".format(str(facts[-1]).strip(),
-                                 stuff.format_duration(facts[-1].delta, human=False)))
+                                 facts[-1].delta.format(fmt="HH:MM")))
         else:
             print((_("No activity")))
 
@@ -272,7 +302,7 @@ class HamsterClient(object):
         if args:
             search = args[0]
 
-        start_time, end_time = parse_datetime_range(" ".join(args[1:]))
+        (start_time, end_time), __ = dt.Range.parse(" ".join(args[1:]))
 
         start_time = start_time or dt.datetime.combine(dt.date.today(), dt.time())
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
@@ -336,12 +366,12 @@ class HamsterClient(object):
         cats = []
         total_duration = dt.timedelta()
         for cat, duration in sorted(by_cat.items(), key=lambda x: x[1], reverse=True):
-            cats.append("{}: {}".format(cat, stuff.format_duration(duration)))
+            cats.append("{}: {}".format(cat, duration.format()))
             total_duration += duration
 
         for line in word_wrap(", ".join(cats), 80):
             print(line)
-        print("Total: ", stuff.format_duration(total_duration))
+        print("Total: ", total_duration.format())
 
         print()
 
@@ -390,7 +420,9 @@ Example usage:
         look for an activity matching terms 'pancakes` between 1st and 30st
         August 2012. Will check against activity, category, description and tags
 """)
-    hamster_client = HamsterClient()
+    hamster_client = HamsterCli()
+    app = Hamster()
+    logger.debug("app instanciated")
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
@@ -408,15 +440,25 @@ Example usage:
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
-    args = parser.parse_args()
+    args, unknown_args = parser.parse_known_args()
 
     # logger for current script
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
 
-    command = args.action
-    if hasattr(hamster_client, command):
-        getattr(hamster_client, command)(*args.action_args)
+    action = args.action
+
+    if action in ("about", "overview", "prefs"):
+        app.register()
+        app.activate_action(action)
+        logger.debug("run")
+        status = app.run([sys.argv[0]] + unknown_args)
+        logger.debug("app exited")
+        sys.exit(status)
+    elif action == "add":
+        pass
+    elif hasattr(hamster_client, action):
+        getattr(hamster_client, action)(*args.action_args)
     else:
         sys.exit(usage % {'prog': sys.argv[0]})

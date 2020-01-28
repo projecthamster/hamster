@@ -1,15 +1,16 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-[type: gettext/glade]data/date_range.ui
-[type: gettext/glade]data/edit_activity.ui
-data/hamster.desktop.in.in
-data/hamster.schemas.in
-[type: gettext/glade]data/preferences.ui
-[type: gettext/python]src/hamster-cli
+data/date_range.ui
+data/edit_activity.ui
+data/preferences.ui
+data/hamster.desktop.in
+data/org.gnome.hamster.gschema.xml
+src/hamster-cli.py
 src/hamster/about.py
 src/hamster/edit_activity.py
 src/hamster/lib/stuff.py
 src/hamster/overview.py
 src/hamster/preferences.py
 src/hamster/reports.py
+src/hamster/widgets/activityentry.py
 src/hamster/widgets/reportchooserdialog.py

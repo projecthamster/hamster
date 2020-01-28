@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 import os, sys
-import datetime as dt
 from xml.dom.minidom import Document
 import csv
 import copy
@@ -30,6 +29,7 @@ import codecs
 from string import Template
 from textwrap import dedent
 
+from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime
 from hamster.lib import stuff
 from hamster.lib.i18n import C_
@@ -255,7 +255,7 @@ class HTMLWriter(ReportWriter):
             start_iso = fact.start_time.isoformat(),
             end = end_time_str,
             end_iso = end_time_iso_str,
-            duration = stuff.format_duration(fact.delta) or "",
+            duration = fact.delta.format(),
             duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
             duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
             description = fact.description or ""

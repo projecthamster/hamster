@@ -19,29 +19,28 @@
 
 import sys
 import bisect
-import datetime as dt
 import itertools
 import webbrowser
 
 from collections import defaultdict
 from math import ceil
 
+from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 from gi.repository import GObject as gobject
-
-import gi
-gi.require_version('PangoCairo', '1.0')
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
 
 import hamster.client
+from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import layout
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
+from hamster.preferences import PreferencesEditor
 
 from hamster.lib.configuration import dialogs
 from hamster.lib.configuration import Controller
@@ -67,7 +66,7 @@ class HeaderBar(gtk.HeaderBar):
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
-        self.range_pick = RangePick(stuff.hamster_today())
+        self.range_pick = RangePick(dt.hday.today())
         self.pack_start(self.range_pick)
 
         self.system_button = gtk.MenuButton()
@@ -247,7 +246,7 @@ class HorizontalBarChart(graphics.Sprite):
         bar_start_x = label_width + margin
         for i, (label, value) in enumerate(self.values):
             g.set_color(self.label_color)
-            duration_str = stuff.format_duration(value, human=False)
+            duration_str = value.format(fmt="HH:MM")
             markup_label = stuff.escape_pango(str(label))
             markup_duration = stuff.escape_pango(duration_str)
             self.layout.set_markup("{}, <i>{}</i>".format(markup_label, markup_duration))
@@ -416,6 +415,8 @@ class Overview(Controller):
     def __init__(self, parent = None):
         Controller.__init__(self, parent)
 
+        self.prefs_dialog = None  # preferences dialog controller
+
         self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("hamster")
         self.window.set_default_size(700, 500)
@@ -460,7 +461,7 @@ class Overview(Controller):
         main.pack_start(self.totals, False, True, 1)
 
         # FIXME: should store and recall date_range from hamster.lib.configuration.conf
-        hamster_day = stuff.datetime_to_hamsterday(dt.datetime.today())
+        hamster_day = dt.hday.today()
         self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
         self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
@@ -583,7 +584,7 @@ class Overview(Controller):
         uri = "help:hamster"
         try:
             gtk.show_uri(None, uri, gdk.CURRENT_TIME)
-        except gi.repository.GLib.Error:
+        except glib.Error:
             msg = sys.exc_info()[1].args[0]
             dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
                                        gtk.ButtonsType.CLOSE,
@@ -594,8 +595,10 @@ class Overview(Controller):
             dialog.destroy()
 
     def on_prefs_clicked(self, menu):
-        dialogs.prefs.show(self)
-
+        if self.prefs_dialog:
+            self.prefs_dialog.present()
+        else:
+            self.prefs_dialog = PreferencesEditor(parent=self.window)
 
     def on_export_clicked(self, menu):
         if self.report_chooser:

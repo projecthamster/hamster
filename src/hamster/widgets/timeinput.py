@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime as dt
 import calendar
 import re
 
@@ -25,7 +24,8 @@ from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 
-from hamster.lib.stuff import format_duration, hamster_round
+from hamster.lib import datetime as dt
+from hamster.lib.stuff import hamster_round
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {
@@ -33,8 +33,8 @@ class TimeInput(gtk.Entry):
     }
 
 
-    def __init__(self, time = None, start_time = None):
-        gtk.Entry.__init__(self)
+    def __init__(self, time=None, start_time=None, **kwargs):
+        gtk.Entry.__init__(self, **kwargs)
         self.news = False
         self.set_width_chars(7) #7 is like 11:24pm
 
@@ -43,6 +43,10 @@ class TimeInput(gtk.Entry):
 
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
+        self.popup.set_attached_to(self)  # attributes
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
         time_box.set_shadow_type(gtk.ShadowType.IN)
@@ -221,7 +225,7 @@ class TimeInput(gtk.Entry):
         while i_time < end_time:
             row_text = self._format_time(i_time)
             if self.start_time is not None:
-                delta_text = format_duration(i_time - i_time_0)
+                delta_text = (i_time - i_time_0).format()
 
                 row_text += " (%s)" % delta_text
 
