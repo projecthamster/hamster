@@ -25,7 +25,9 @@ logger = logging.getLogger(__name__)   # noqa: E402
 
 from calendar import timegm
 from gi.repository import GObject as gobject
+from textwrap import dedent
 
+import hamster
 from hamster.lib.dbus import (
     DBusMainLoop,
     from_dbus_fact_json,
@@ -80,8 +82,29 @@ class Storage(gobject.GObject):
     def conn(self):
         if not self._connection:
             self._connection = dbus.Interface(self.bus.get_object('org.gnome.Hamster',
-                                                              '/org/gnome/Hamster'),
+                                                                  '/org/gnome/Hamster'),
                                               dbus_interface='org.gnome.Hamster')
+            server_version = self._connection.Version()
+            client_version = hamster.__version__
+            if server_version != client_version:
+                logger.warning(dedent(
+                    """\
+                    Server and client version mismatch:
+                        server: {}
+                        client: {}
+
+                        This is sometimes used during bisections,
+                        but generally calls for trouble.
+
+                        Remember to kill hamster daemons after any version change
+                        (this is safe):
+                        pkill -f hamster-service
+                        pkill -f hamster-windows-service
+                        see also:
+                        https://github.com/projecthamster/hamster#kill-hamster-daemons
+                    """.format(server_version, client_version)
+                    )
+                )
         return self._connection
 
     def _on_dbus_connection_change(self, name, old, new):
