@@ -7,6 +7,7 @@ import dbus.service
 from gi.repository import GLib as glib
 from gi.repository import Gio as gio
 
+import hamster
 from hamster import logger as hamster_logger
 from hamster.lib import i18n
 i18n.setup_i18n()  # noqa: E402
@@ -427,6 +428,9 @@ class Storage(db.Storage, dbus.service.Object):
         self.update_autocomplete_tags(tags)
 
 
+    @dbus.service.method("org.gnome.Hamster", out_signature='s')
+    def Version(self):
+        return hamster.__version__
 
 
 if __name__ == '__main__':
