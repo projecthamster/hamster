@@ -34,6 +34,7 @@ except ImportError:
     print("Could not import gio - requires pygobject. File monitoring will be disabled")
     gio = None
 
+import hamster
 from hamster.lib import datetime as dt
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
@@ -131,11 +132,11 @@ class Storage(storage.Storage):
                     break
             if not os.path.exists(db_path):
                 # make a copy of the empty template hamster.db
-                try:
-                    from hamster import defs
+                if hamster.installed:
+                    from hamster import defs  # only available when running installed
                     data_dir = os.path.join(defs.DATA_DIR, "hamster")
-                except:
-                    # if defs is not there, we are running from sources
+                else:
+                    # running from sources
                     module_dir = os.path.dirname(os.path.realpath(__file__))
                     if os.path.exists(os.path.join(module_dir, "data")):
                         # running as flask app. XXX - detangle

@@ -2,21 +2,19 @@
 import os
 import locale, gettext
 
+import hamster
+
 
 def setup_i18n():
     #determine location of po files
-    try:
-        from hamster import defs
-    except:
-        defs = None
-
 
     # to avoid confusion, we won't translate unless running installed
     # reason for that is that bindtextdomain is expecting
     # localedir/language/LC_MESSAGES/domain.mo format, but we have
     # localedir/language.mo at it's best (after build)
     # and there does not seem to be any way to run straight from sources
-    if defs:
+    if hamster.installed:
+        from hamster import defs  # only available when running installed
         locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
 
         for module in (locale,gettext):

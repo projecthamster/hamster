@@ -1,6 +1,12 @@
 # -*- python -*-
-VERSION = '2.0'
+
+# slight code duplication with hamster/__init__.py, but this is finally cleaner.
+from subprocess import getstatusoutput
+rc, output = getstatusoutput("git describe --tags --always --dirty=+")
+VERSION = "2.2.2" if rc else output
+
 APPNAME = 'hamster'
+
 top = '.'
 out = 'build'
 
