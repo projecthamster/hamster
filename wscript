@@ -43,8 +43,8 @@ def options(opt):
 
 
 def build(bld):
-    bld.install_as('${LIBDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
-    bld.install_as('${LIBDIR}/hamster/hamster-windows-service', "src/hamster-windows-service.py", chmod=Utils.O755)
+    bld.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
+    bld.install_as('${LIBEXECDIR}/hamster/hamster-windows-service', "src/hamster-windows-service.py", chmod=Utils.O755)
     bld.install_as('${BINDIR}/hamster', "src/hamster-cli.py", chmod=Utils.O755)
 
 
