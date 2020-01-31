@@ -19,5 +19,6 @@ for filename in ["hamster.desktop"]:
     bld(features = "subst",
         source= "%s.in" % filename,
         target= "%s" % filename,
-        dict = bld.env
+        dict = bld.env,
+        install_path = "${DATADIR}/applications"
        )
