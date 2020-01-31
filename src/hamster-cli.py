@@ -35,6 +35,7 @@ import hamster
 
 from hamster import client, reports
 from hamster import logger as hamster_logger
+from hamster.about import About
 from hamster.edit_activity import CustomFactController
 from hamster.overview import Overview
 from hamster.preferences import PreferencesEditor
@@ -99,6 +100,7 @@ class Hamster(gtk.Application):
                                  #inactivity_timeout=10000,
                                  register_session=True)
 
+        self.about_controller = None  # 'about' window controller
         self.add_controller = None  # "add activity" window controller
         self.overview_controller = None  # overview window controller
         self.prefs_controller = None  # settings window controller
@@ -112,7 +114,7 @@ class Hamster(gtk.Application):
         self.add_actions()
 
     def add_actions(self):
-        for name in ("add", "overview", "prefs"):
+        for name in ("about", "add", "overview", "prefs"):
             action = gio.SimpleAction.new(name, None)
             action.connect("activate", self.on_activate_window)
             self.add_action(action)
@@ -138,7 +140,15 @@ class Hamster(gtk.Application):
     def _open_window(self, name, data=None):
         logger.debug("opening '{}'".format(name))
 
-        if name == "add":
+        if name == "about":
+            if not self.about_controller:
+                # silence warning "GtkDialog mapped without a transient parent"
+                # https://stackoverflow.com/a/38408127/3565696
+                _dummy = gtk.Window()
+                self.about_controller = About(parent=_dummy)
+                logger.debug("new About")
+            controller = self.about_controller
+        elif name == "add":
             if not self.add_controller:
                 self.add_controller = CustomFactController(parent=self)
                 logger.debug("new CustomFactController")

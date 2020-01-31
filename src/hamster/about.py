@@ -24,8 +24,8 @@ from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 
 class About(object):
-    def __init__(self, parent = None):
-        about = gtk.AboutDialog()
+    def __init__(self, parent=None):
+        about = gtk.AboutDialog(parent=parent)
         self.window = about
         infos = {
             "program-name" : "Hamster",
@@ -53,3 +53,6 @@ class About(object):
 
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()
+
+    def present(self):
+        self.window.present()
