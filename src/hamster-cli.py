@@ -112,17 +112,10 @@ class Hamster(gtk.Application):
         self.add_actions()
 
     def add_actions(self):
-        action = gio.SimpleAction.new("add", None)
-        action.connect("activate", self.on_activate_add)
-        self.add_action(action)
-
-        action = gio.SimpleAction.new("overview", None)
-        action.connect("activate", self.on_activate_overview)
-        self.add_action(action)
-
-        action = gio.SimpleAction.new("prefs", None)
-        action.connect("activate", self.on_activate_prefs)
-        self.add_action(action)
+        for name in ("add", "overview", "prefs"):
+            action = gio.SimpleAction.new(name, None)
+            action.connect("activate", self.on_activate_window)
+            self.add_action(action)
 
         action = gio.SimpleAction.new("quit", None)
         action.connect("activate", self.on_activate_quit)
@@ -133,13 +126,7 @@ class Hamster(gtk.Application):
         if not self.get_windows():
             self.activate_action("overview")
 
-    def on_activate_add(self, action=None, data=None):
-        self._open_window(action.get_name(), data)
-
-    def on_activate_overview(self, action=None, data=None):
-        self._open_window(action.get_name(), data)
-
-    def on_activate_prefs(self, action=None, data=None):
+    def on_activate_window(self, action=None, data=None):
         self._open_window(action.get_name(), data)
 
     def on_activate_quit(self, data=None):
