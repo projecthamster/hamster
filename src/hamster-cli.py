@@ -178,33 +178,6 @@ class HamsterCli(object):
     def __init__(self):
         self.storage = client.Storage()
 
-    # TODO: no longer used (should remove overview, about, prefs, add)
-    def _launch_window(self, window_name):
-        if hamster.installed:
-            import dbus
-            bus = dbus.SessionBus()
-            server = bus.get_object("org.gnome.Hamster.WindowServer",
-                                    "/org/gnome/Hamster/WindowServer")
-            getattr(server, window_name)()
-        else:
-            print("Running in devel mode")
-            from gi.repository import Gtk as gtk
-            from hamster.lib.configuration import dialogs
-            getattr(dialogs, window_name).show()
-            gtk.main()
-
-    def overview(self, *args):
-        self._launch_window("overview")
-
-    def about(self, *args):
-        self._launch_window("about")
-
-    def prefs(self, *args):
-        self._launch_window("prefs")
-
-    def add(self, *args):
-        self._launch_window("edit")
-
 
     def assist(self, *args):
         assist_command = args[0] if args else ""
@@ -220,10 +193,6 @@ class HamsterCli(object):
 
     def toggle(self):
         self.storage.toggle()
-
-    def track(self, *args):
-        """same as start"""
-        self.start(*args)
 
 
     def start(self, *args):
