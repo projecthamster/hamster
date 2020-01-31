@@ -33,6 +33,8 @@ def configure(conf):
 
 
 def options(opt):
+    opt.load('gnu_dirs')
+
     # the waf default value is /usr/local, which causes issues (e.g. #309)
     # opt.parser.set_defaults(prefix='/usr') did not update the help string,
     # hence need to replace the whole option
