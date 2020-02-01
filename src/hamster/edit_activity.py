@@ -281,6 +281,9 @@ class CustomFactController(gobject.GObject):
             self.fact.tags = self.tags_entry.get_tags()
             self.update_cmdline()
 
+    def present(self):
+        self.window.present()
+
     def update_cmdline(self, select=None):
         """Update the cmdline entry content."""
         self.cmdline_fact = self.fact.copy(description=None)
