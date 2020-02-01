@@ -841,7 +841,7 @@ class Storage(storage.Storage):
             return
         ids = ",".join((str(id) for id in ids))
         logger.info("removing fact #{} from index".format(ids))
-        self.execute(["DELETE FROM fact_index where id = ?"], ids)
+        self.execute("DELETE FROM fact_index where id in (%s)" % ids)
 
 
     def __check_index(self, start_date, end_date):
