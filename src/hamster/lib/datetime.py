@@ -621,21 +621,22 @@ class timedelta(pdt.timedelta):
 
     Should replace the python datetime.timedelta in any customer code.
     Specificities:
-    - rounded to minutes
     - conversion to and from string facilities
+    Note: granularity is the same as the original python timedelta
+          (only datetimes should be truncated).
     """
 
     def __new__(cls, days=0, seconds=0, microseconds=0,
                 milliseconds=0, minutes=0, hours=0, weeks=0):
-            # round down to zero seconds and microseconds
-            return pdt.timedelta.__new__(cls,
-                                         days=days,
-                                         seconds=seconds,
-                                         microseconds=microseconds,
-                                         milliseconds=milliseconds,
-                                         minutes=minutes,
-                                         hours=hours,
-                                         weeks=weeks)
+        # Tempted to round down ? Resist. Not so useful + issues down the line.
+        return pdt.timedelta.__new__(cls,
+                                     days=days,
+                                     seconds=seconds,
+                                     microseconds=microseconds,
+                                     milliseconds=milliseconds,
+                                     minutes=minutes,
+                                     hours=hours,
+                                     weeks=weeks)
 
     # timedelta subclassing is not type stable yet
     def __add__(self, other):
