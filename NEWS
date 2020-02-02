@@ -1,18 +1,70 @@
 Changes since 2.2.2
 
+* Fixed numpad Enter now works in the GUI cmdline (PR 540).
+* Fixed popups position in wayland (issue 339)
+* Fixed permissions in the source tree.
+* Fixed "Unsorted": no category (PR 502).
+* Fixed removal of tags from autocomplete (issue 238)
+* Fixed hamster-cli windows calls (PR 480)
+* Fixed font sizes on high DPI screens (PR 426)
 * Fixed installation process (PR 421)
   - Updated waf.
     No longer need python2.
   - Default to --prefix=/usr.
-  - gconf schemas are now correctly registered.
-* Removed trophies code (PR 410)
-* Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
+* Fixed category color and tags spillout (PR 414)
+* Fixed multiline description height (PR 412)
+* Fixed adding overlapping activity (PR 410)
 * Fixed update activity window to be resizable (PR 403)
 * Fixed database file monitoring (PR 401).
 * Fixed dark theme colors (PR 391).
-* The help system is back (PR 393).
 * Fixed hamster-service failure when there is no hamster.db.
   (issue  394)
+* New 'version' or 'Version' command/methods available (PR 528).
+* New Gui is a Gtk.Application (PR 516)
+* New *JSON dbus methods to pass facts verbatim (PR 514).
+* New hamster.lib.datetime, customized replacement for python datetime (PR 510).
+* New CheckFact and check_fact methods available (PR 500).
+  Check a fact validity, with detailed error messages.
+* New AddFact accepts -1 as start or end, to mean explicit None (PR 492).
+* Moved Fact to new fact.py
+* Changed i18n from from intltools to pure gettext (PR 497).
+* Removed non-working stuff that will be developed elsewhere (issue 493):
+  external, idle, ...
+* Changed from GConf to GSettings (PR 470)
+* Changed directory names from hamster-time-tracker to hamster (PR 485).
+* Changed parser:
+  - Use Fact.parse()
+  - Accept activity starting with hash '#' (issue ?)
+  - Accept comma in activity (issue ?)
+  - Breaking (sorry, really needed):
+    Description delimiter is a double comma ',,' instead of a single comma.
+  - Comma is forbidden in category (instead of silently swallowed)
+  - Same parser for terminal, gui and D-Bus interface.
+    Range is still searched at tail (terminal) or head position (gui, D-Bus).
+  - Fact.range start/end are always datetimes
+    any time given without date is attributed to a default hamster day.
+    The default hamster day is usually today.
+    In the gui, the default day is the day selected in the timeline.
+  - start/end can be entered as +mmm or -mmm (<sign><1-3 digits>),
+    relative to a reference. The reference is usually now.
+  - The fact duration can be given as mmm (<1-3 digits>, no sign),
+    instead of the end.
+  - hour/minutes separator can be colon, comma, dot, e.g. 9.30.
+    No separator is allowed, but only with 4 digits: hhmm.
+* Improved Add/Update activity window
+  - fixed description input (PR 430)
+* Improved consistency in date/time handling (PR 429) by
+    - switching to ISO date format (%Y-%m-%d) in lib/* 
+      to be consistent with hamster-cli usage
+    - rounding (i.e. truncating) all activity start/end timestamps
+      to the minute
+    ** note that this only affects new and/or edited activities in the database
+* Changed install bash completion to /usr/share (PR 417)
+* Changed preselect time instead of activity (PR 415)
+* Removed trophies code (PR 408)
+* Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
+* Added stop tracking button to header bar (PR 427)
+* The help system is back (PR 393).
 * Improved keyboard handling:
   - Ctrl+Space to stop tracking.
   - Left/Right arrows change date.
