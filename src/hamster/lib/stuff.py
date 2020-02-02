@@ -155,7 +155,9 @@ def month(view_date):
 
 
 def duration_minutes(duration):
-    """returns minutes from duration, otherwise we keep bashing in same math"""
+    """Returns minutes from duration, otherwise we keep bashing in same math.
+    Deprecated, use dt.timedelta.total_minutes instead.
+    """
     if isinstance(duration, dt.timedelta):
         return duration.total_seconds() / 60
     elif isinstance(duration, (int, float)):

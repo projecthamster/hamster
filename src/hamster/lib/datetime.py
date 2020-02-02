@@ -670,6 +670,7 @@ class timedelta(pdt.timedelta):
         """Return a string representation, according to the format string fmt."""
         allowed = ("human", "HH:MM")
 
+        # TODO: should use total_minutes
         total_s = self.total_seconds()
         if total_s < 0:
             # return a warning
@@ -693,3 +694,8 @@ class timedelta(pdt.timedelta):
         else:
             raise NotImplementedError(
                 "'{}' not in allowed formats: {}".format(fmt, allowed))
+
+    def total_minutes(self):
+        """Return the duration in minutes (float)."""
+        return self.total_seconds() / 60
+
