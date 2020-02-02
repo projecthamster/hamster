@@ -443,8 +443,9 @@ Example usage:
         else:
             app.register()
             app.activate_action(action)
-            logger.debug("run")
-            status = app.run([sys.argv[0]] + unknown_args)
+            run_args = [sys.argv[0]] + unknown_args
+            logger.debug("run {}".format(run_args))
+            status = app.run(run_args)
             logger.debug("app exited")
             sys.exit(status)
     elif hasattr(hamster_client, action):
