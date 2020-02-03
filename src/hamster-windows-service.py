@@ -41,12 +41,6 @@ class WindowServer(dbus.service.Object):
         subprocess.run("hamster {} &".format(name),
                        shell=True)
 
-    # Shell extension is not using it, so probably no-one is.
-    # To be removed.
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
-    def edit(self, id=None):
-        dialogs.edit.show(self.app, fact_id = id)
-
     @dbus.service.method("org.gnome.Hamster.WindowServer")
     def overview(self):
         self._open_window("overview")
