@@ -24,7 +24,6 @@ autom4te.cache
 m4
 gnome-doc-utils.make
 hamster-time-tracker-*.tar.gz
-org.gnome.hamster.service
 .lock-wscript
 .lock-waf*
 build

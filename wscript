@@ -66,14 +66,20 @@ def build(bld):
         )
 
     bld(features="subst",
-        source= "org.gnome.hamster.service.in",
-        target= "org.gnome.hamster.service",
+        source= "org.gnome.Hamster.service.in",
+        target= "org.gnome.Hamster.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 
     bld(features="subst",
-        source= "org.gnome.hamster.Windows.service.in",
-        target= "org.gnome.hamster.Windows.service",
+        source= "org.gnome.Hamster.GUI.service.in",
+        target= "org.gnome.Hamster.GUI.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
+    bld(features="subst",
+        source= "org.gnome.Hamster.WindowServer.service.in",
+        target= "org.gnome.Hamster.WindowServer.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 

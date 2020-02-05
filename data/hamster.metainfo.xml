@@ -27,7 +27,7 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">hamster.desktop</launchable>
+  <launchable type="desktop-id">org.gnome.Hamster.GUI.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
