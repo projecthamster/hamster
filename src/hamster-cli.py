@@ -108,7 +108,7 @@ class Hamster(gtk.Application):
         self.about_controller = None  # 'about' window controller
         self.add_controller = None  # "add activity" window controller
         self.overview_controller = None  # overview window controller
-        self.prefs_controller = None  # settings window controller
+        self.preferences_controller = None  # settings window controller
 
         self.connect("startup", self.on_startup)
         self.connect("activate", self.on_activate)
@@ -119,7 +119,7 @@ class Hamster(gtk.Application):
         self.add_actions()
 
     def add_actions(self):
-        for name in ("about", "add", "overview", "prefs"):
+        for name in ("about", "add", "overview", "preferences"):
             action = gio.SimpleAction.new(name, None)
             action.connect("activate", self.on_activate_window)
             self.add_action(action)
@@ -163,11 +163,11 @@ class Hamster(gtk.Application):
                 self.overview_controller = Overview()
                 logger.debug("new Overview")
             controller = self.overview_controller
-        elif name == "prefs":
-            if not self.prefs_controller:
-                self.prefs_controller = PreferencesEditor()
+        elif name == "preferences":
+            if not self.preferences_controller:
+                self.preferences_controller = PreferencesEditor()
                 logger.debug("new PreferencesEditor")
-            controller = self.prefs_controller
+            controller = self.preferences_controller
 
         window = controller.window
         if window not in self.get_windows():
@@ -381,7 +381,7 @@ Actions:
     * activities: List all the activities names, one per line.
     * categories: List all the categories names, one per line.
 
-    * overview / prefs / add / about: launch specific window
+    * overview / preferences / add / about: launch specific window
 
     * version: Show the Hamster version
 
@@ -435,10 +435,13 @@ Example usage:
 
     if args.action in ("start", "track"):
         action = "add"  # alias
+    elif args.action == "prefs":
+        # for backward compatibility
+        action = "preferences"
     else:
         action = args.action
 
-    if action in ("about", "add", "overview", "prefs"):
+    if action in ("about", "add", "overview", "preferences"):
         if action == "add" and args.action_args:
             assert not unknown_args, "unknown options: {}".format(unknown_args)
             # directly add fact from arguments
