@@ -94,14 +94,14 @@ def fact_dict(fact_data, with_date):
 class Hamster(gtk.Application):
     """Hamster gui.
 
-    Can be accessed across D-Bus with the 'org.gnome.Hamster.GtkApp' id.
+    Can be accessed across D-Bus with the 'org.gnome.Hamster.GUI' id.
     """
 
     def __init__(self):
         # inactivity_timeout: How long (ms) the service should stay alive
         #                     after all windows have been closed.
         gtk.Application.__init__(self,
-                                 application_id="org.gnome.Hamster.GtkApp",
+                                 application_id="org.gnome.Hamster.GUI",
                                  #inactivity_timeout=10000,
                                  register_session=True)
 

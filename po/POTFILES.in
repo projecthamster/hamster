@@ -3,7 +3,7 @@
 data/date_range.ui
 data/edit_activity.ui
 data/preferences.ui
-data/org.gnome.Hamster.GtkApp.desktop.in
+data/org.gnome.Hamster.GUI.desktop.in
 data/org.gnome.hamster.gschema.xml
 src/hamster-cli.py
 src/hamster/about.py

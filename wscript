@@ -72,8 +72,8 @@ def build(bld):
         )
 
     bld(features="subst",
-        source= "org.gnome.Hamster.GtkApp.service.in",
-        target= "org.gnome.Hamster.GtkApp.service.service",
+        source= "org.gnome.Hamster.GUI.service.in",
+        target= "org.gnome.Hamster.GUI.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 
