@@ -1006,7 +1006,7 @@ class Storage(storage.Storage):
 
 # datetime/sql conversions
 
-DATETIME_LOCAL_FMT = "%Y-%m-%d %H:%M:%S.%f"
+DATETIME_LOCAL_FMT = "%Y-%m-%d %H:%M:%S"
 
 
 def adapt_datetime(t):
@@ -1017,13 +1017,15 @@ def adapt_datetime(t):
 def convert_datetime(s):
     """Convert the sql timestamp to datetime.
 
-    s is in bytes
+    s is in bytes.
     """
-    date_string = s.decode('utf-8')
-    if '.' not in date_string:
-        date_string = date_string + '.0'
 
-    return dt.datetime.strptime(date_string, DATETIME_LOCAL_FMT)
+    # convert s from bytes to utf-8, and keep only data up to seconds
+    # 10 chars for YYYY-MM-DD, 1 space, 8 chars for HH:MM:SS
+    # note: let's leave any further rounding to dt.datetime.
+    datetime_string = s.decode('utf-8')[0:19]
+
+    return dt.datetime.strptime(datetime_string, DATETIME_LOCAL_FMT)
 
 
 sqlite.register_adapter(dt.datetime, adapt_datetime)
