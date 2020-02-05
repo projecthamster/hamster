@@ -425,6 +425,10 @@ class TestDatetime(unittest.TestCase):
         self.assertEqual(_sub, dt.timedelta())
         self.assertEqual(type(_sub), dt.timedelta)
 
+    def test_timedelta(self):
+        delta = dt.timedelta(seconds=90)
+        self.assertEqual(delta.total_minutes(), 1.5)
+
 
 class TestDBus(unittest.TestCase):
     def test_round_trip(self):
