@@ -267,7 +267,7 @@ class CmdLineEntry(gtk.Entry):
         if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
             self.ignore_stroke = True
 
-        elif event.keyval in (gdk.KEY_Return, gdk.KEY_Escape):
+        elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter, gdk.KEY_Escape):
             self.popup.hide()
             self.set_position(-1)
 
