@@ -55,7 +55,7 @@ class CustomFactController(gobject.GObject):
         self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
                                                     category_widget=self.category_entry)
 
-        self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("command line box"))
+        self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
