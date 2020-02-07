@@ -261,6 +261,7 @@ class CmdLineEntry(gtk.Entry):
         if self.popup.get_visible():
             self.popup.hide()
         else:
+            self.grab_focus()
             self.show_suggestions(self.get_text())
 
     def on_key_press(self, entry, event=None):
