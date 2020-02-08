@@ -9,7 +9,7 @@
     <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">550</property>
-    <property name="icon_name">hamster</property>
+    <property name="icon_name">org.gnome.Hamster.GUI</property>
     <signal name="key_press_event" handler="on_window_key_pressed"/>
     <signal name="delete_event" handler="on_stats_window_deleted"/>
     <child>

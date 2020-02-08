@@ -418,7 +418,7 @@ class Overview(Controller):
         self.prefs_dialog = None  # preferences dialog controller
 
         self.window.set_position(gtk.WindowPosition.CENTER)
-        self.window.set_default_icon_name("hamster")
+        self.window.set_default_icon_name("org.gnome.Hamster.GUI")
         self.window.set_default_size(700, 500)
 
         self.storage = hamster.client.Storage()
