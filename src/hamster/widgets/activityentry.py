@@ -261,13 +261,14 @@ class CmdLineEntry(gtk.Entry):
         if self.popup.get_visible():
             self.popup.hide()
         else:
+            self.grab_focus()
             self.show_suggestions(self.get_text())
 
     def on_key_press(self, entry, event=None):
         if event.keyval in (gdk.KEY_BackSpace, gdk.KEY_Delete):
             self.ignore_stroke = True
 
-        elif event.keyval in (gdk.KEY_Return, gdk.KEY_Escape):
+        elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter, gdk.KEY_Escape):
             self.popup.hide()
             self.set_position(-1)
 
