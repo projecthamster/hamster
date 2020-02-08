@@ -430,7 +430,7 @@ class Range():
 
         Start date is shown only if start does not belong to default_day.
         End date is shown only if end does not belong to
-        the same hamster day as start.
+        the same hamster day as start (or to default_day if start is None).
         """
 
         none_str = "--" if explicit_none else ""
@@ -440,11 +440,13 @@ class Range():
                 start_str = self.start.strftime(datetime.FMT)
             else:
                 start_str = self.start.strftime(time.FMT)
+            default_end_day = self.start.hday()
         else:
             start_str = none_str
+            default_end_day = default_day
 
         if self.end:
-            if self.end.hday() != self.start.hday():
+            if self.end.hday() != default_end_day:
                 end_str = self.end.strftime(datetime.FMT)
             else:
                 end_str = self.end.strftime(time.FMT)
