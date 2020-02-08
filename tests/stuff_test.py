@@ -397,6 +397,17 @@ class TestDatetime(unittest.TestCase):
         self.assertEqual(start.strftime("%H:%M"), "14:30")
         self.assertEqual(end, None)
 
+    def test_range(self):
+        day = dt.hday(2020, 2, 2)
+        time = dt.time(21, 20)
+        base = dt.datetime.from_day_time(day, time)
+        range = dt.Range(base, base + dt.timedelta(minutes=30))
+        range_str = range.format(default_day=day)
+        self.assertEqual(range_str, "21:20 - 21:50")
+        range = dt.Range(None, base)
+        range_str = range.format(default_day=day)
+        self.assertEqual(range_str, "-- - 21:20")
+
     def test_rounding(self):
         dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
         self.assertEqual(dt1.second, 0)
