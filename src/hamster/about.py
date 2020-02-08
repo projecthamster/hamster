@@ -49,7 +49,7 @@ class About(object):
         for prop, val in infos.items():
             about.set_property(prop, val)
 
-        about.set_logo_icon_name("hamster")
+        about.set_logo_icon_name("org.gnome.Hamster.GUI")
 
         about.connect("response", lambda self, *args: self.destroy())
         about.show_all()

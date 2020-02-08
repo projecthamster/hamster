@@ -7,11 +7,12 @@ bld.install_files('${DATADIR}/hamster', 'hamster.db')
 bld.install_files('${DATADIR}/hamster/art', start_dir.ant_glob('art/*.png'))
 bld.install_files('${DATADIR}/hamster', 'report_template.html')
 
-bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/hamster.png')
-bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/hamster.png')
-bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/hamster.png')
-bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/hamster.png')
-bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/hamster.svg')
+bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/org.gnome.Hamster.GUI.png')
+bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/org.gnome.Hamster.GUI.png')
+bld.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/24x24/org.gnome.Hamster.GUI.png')
+bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/org.gnome.Hamster.GUI.png')
+bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/org.gnome.Hamster.GUI.png')
+bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/org.gnome.Hamster.GUI.svg')
 
 bld.install_files('${DATADIR}/metainfo', 'hamster.metainfo.xml')
 
