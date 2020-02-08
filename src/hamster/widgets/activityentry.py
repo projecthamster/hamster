@@ -403,19 +403,19 @@ class CmdLineEntry(gtk.Entry):
         # list of tuples (description, variant)
         variants = []
 
-        if self.original_fact:
-            # editing an existing fact
+        # preserve indentation in this commit
+        if True:
 
             variant_fact = None
-            if self.original_fact.end_time is None:
+            if fact.end_time is None:
                 description = "stop now"
-                variant_fact = self.original_fact.copy()
+                variant_fact = fact.copy()
                 variant_fact.end_time = now
-            elif self.todays_facts and self.original_fact == self.todays_facts[-1]:
+            elif self.todays_facts and fact == self.todays_facts[-1]:
                 # that one is too dangerous, except for the last entry
                 description = "keep up"
                 # Do not use Fact(..., end_time=None): it would be a no-op
-                variant_fact = self.original_fact.copy()
+                variant_fact = fact.copy()
                 variant_fact.end_time = None
 
             if variant_fact:
@@ -423,8 +423,8 @@ class CmdLineEntry(gtk.Entry):
                 variant = variant_fact.serialized(default_day=self.default_day)
                 variants.append((description, variant))
 
-        else:
-            # brand new fact
+        if fact.start_time is None:
+
             description = "start now"
             variant = now.strftime("%H:%M ")
             variants.append((description, variant))
