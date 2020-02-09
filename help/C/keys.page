@@ -14,8 +14,9 @@
 
 <p> The following key combinations can be used in the overview window.</p>
 
-<p><key>Left</key> or <key>Right</key>: Same as <key>&lt;</key> or
-<key>&gt;</key> buttons. Navigate backwards or forwards in time.</p>
+<p><key>Left</key>/<key>Right</key>:
+Same as <key>&lt;</key>/<key>&gt;</key> buttons.
+Navigate backwards or forwards in time.</p>
 
 <p><key>Down</key>/<key>Up</key>: Navigate the activity list, starting from the
 top/bottom respectively, and select a previous activity.</p>
@@ -26,12 +27,19 @@ list, respectively, and select the activity.</p>
 <p><key>PageDown</key>/<key>PageUp</key>: Navigate the activity list if longer
 than one page.</p>
 
-<p><key>Ctrl</key>+<key>+</key>: Create a new activity. If an existing activity
-is selected, it will be resumed (i.e. its details will be cloned, aside from the
-start time). Same as the <key>+</key> button.</p>
+<p><key>Ctrl</key>+<key>N</key>: Create a New activity from scratch.</p>
 
-<p><key>Ctrl</key>+<key>N</key> or <key>Ctrl</key>+<key>R</key>: Specifically
-create a New activity from scratch or Resume an existing selected activity.</p>
+<p><key>Ctrl</key>+<key>R</key>: Resume an existing activity.
+(if an activity is selected, of course, otherwise do nothing).
+All details of the selected activity, except start/end, are copied to the new activity.</p>
+
+<p><key>Ctrl</key>+<key>+</key>: Same as the <key>+</key> button.
+Create a new activity. 
+If an existing activity is selected, 
+it will be resumed (same as <key>Ctrl</key>+<key>R</key>), 
+otherwise, new from stratch (same as <key>Ctrl</key>+<key>N</key>).</p>
+
+
 
 <p><key>Ctrl</key>+<key>Space</key>: Stop tracking the ongoing activity, if
 any. Same as the stop button in the action bar.</p>
