@@ -51,9 +51,18 @@
     <title>Time input</title>
     <list>
         <item>
-            <p>Relative times work both for <var>start time</var> and <var>end time</var>,
-            provided they are <em>separated by a space</em>.</p>
+            <p>Relative times work both for <var>start</var> and <var>end</var>,
+            provided they are preceded by an explicit sign, 
+            and <em>separated by a space</em>.</p>
             <p><code>-30 -10</code> means started 30 minutes ago and stopped 10 minutes ago.</p>
+            <p><code>-5 +30</code> means started 5 minutes ago and will stop in 30 minutes
+            (duration of 35 minutes).</p>
+        </item>
+        <item>
+            <p>Duration can be given instead of <var>end</var>, 
+            as 1, 2 or 3 digits without any sign.</p>
+            <p><code>-50 30</code> means started 50 minutes ago and lasted 30 minutes
+            (so it ended 20 minutes ago).</p>
         </item>
         <item>
             <p>Times can be entered with a colon (<code>hh:mm</code>),
