@@ -9,6 +9,7 @@ DOC_PAGES = \
         backup.page \
         index.page \
         input.page \
+        keys.page \
         merge.page \
         reports.page \
         statistics.page \
