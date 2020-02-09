@@ -3,8 +3,9 @@
       id="index">
 
   <info>
-    <title type="text">Time Tracking</title>
-    <title type="link">Time Tracking</title>
+    <title type="text">Hamster Manual</title>
+    <title type="link">Hamster Manual</title>
+    <desc>Your personal time keeping tool.</desc>
     <credit type="author">
       <name>Milo Casagrande</name>
       <email>milo@ubuntu.com</email>
@@ -14,5 +15,4 @@
     </license>
   </info>
 
-  <title>Time Tracking</title>
 </page>
