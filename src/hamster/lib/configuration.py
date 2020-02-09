@@ -141,6 +141,7 @@ class RuntimeStore(Singleton):
 runtime = RuntimeStore()
 
 
+# to be removed soon (dialogs still used in overview)
 class OneWindow(object):
     def __init__(self, get_dialog_class):
         self.dialogs = {}

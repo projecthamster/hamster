@@ -29,6 +29,12 @@ from hamster.lib.fact import Fact, FactError
 
 
 class Storage(object):
+    """Abstract storage.
+
+    Concrete instances should implement the required private methods,
+    such as __get_facts.
+    """
+
     def run_fixtures(self):
         pass
 

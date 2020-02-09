@@ -40,6 +40,10 @@ from hamster.lib.configuration import runtime
 from hamster.lib.fact import Fact
 
 
+# note: Still experimenting in this module.
+#       Code redundancy to be removed later.
+
+
 def extract_search(text):
     fact = Fact.parse(text)
     search = fact.activity
