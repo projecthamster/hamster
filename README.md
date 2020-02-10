@@ -122,11 +122,16 @@ Now restart your panels/docks and you should be able to add Hamster!
 
 #### Uninstall
 
+To undo the last install, just
 ```bash
-./waf configure
 sudo ./waf uninstall
 ```
+Afterwards `find /usr -iname hamster` should only list unrelated files (if any).
+Otherwise, please see the [wiki section](https://github.com/projecthamster/hamster/wiki/Tips-and-Tricks#uninstall)
 
+#### Troubleshooting
+
+[wiki section](https://github.com/projecthamster/hamster/wiki/Tips-and-Tricks#troubleshooting)
 
 #### Development
 
