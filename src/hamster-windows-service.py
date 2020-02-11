@@ -42,6 +42,14 @@ class WindowServer(dbus.service.Object):
                        shell=True)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
+    def edit(self, id=None):
+        if id:
+            # Need an edit <id> command in cli
+            raise NotImplementedError()
+        else:
+            self._open_window("add")
+
+    @dbus.service.method("org.gnome.Hamster.WindowServer")
     def overview(self):
         self._open_window("overview")
 
