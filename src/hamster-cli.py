@@ -30,6 +30,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
+from gi.repository import GLib as glib
 
 import hamster
 
@@ -97,11 +98,13 @@ class Hamster(gtk.Application):
     Can be accessed across D-Bus with the 'org.gnome.Hamster.GUI' id.
     """
 
+    __app_id__ = "org.gnome.Hamster.GUI"
+
     def __init__(self):
         # inactivity_timeout: How long (ms) the service should stay alive
         #                     after all windows have been closed.
         gtk.Application.__init__(self,
-                                 application_id="org.gnome.Hamster.GUI",
+                                 application_id=self.__app_id__,
                                  #inactivity_timeout=10000,
                                  register_session=True)
 
@@ -141,6 +144,8 @@ class Hamster(gtk.Application):
 
     def on_startup(self, data=None):
         logger.debug("startup")
+        glib.set_application_name(self.__app_id__)
+        glib.set_prgname(self.__app_id__)
 
     def _open_window(self, name, data=None):
         logger.debug("opening '{}'".format(name))
