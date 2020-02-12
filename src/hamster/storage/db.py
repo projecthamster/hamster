@@ -877,7 +877,7 @@ class Storage(storage.Storage):
 
             insert = """INSERT INTO fact_index (id, name, category, description, tag)
                              VALUES (?, ?, ?, ?, ?)"""
-            params = [(fact.id, fact.name, fact.category, fact.description, " ".join(fact.tags)) for fact in facts]
+            params = [(fact.id, fact.activity, fact.category, fact.description, " ".join(fact.tags)) for fact in facts]
 
             self.executemany(insert, params)
 
