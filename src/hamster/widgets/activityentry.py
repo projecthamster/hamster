@@ -637,7 +637,7 @@ class CategoryEntry():
         else:
             # return whether the entered string is
             # anywhere in the first column data
-            return key.strip() in self.model.get_value(iter, 0)
+            return key.strip() in self.model.get_value(iter, 0).lower()
 
     def on_action_activated(self, completion, index):
         if index == self.unsorted_action_index:
