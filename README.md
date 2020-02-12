@@ -151,6 +151,9 @@ python3 src/hamster-cli.py
 Advantage: running uninstalled is detected, and windows are *not* called via
 D-Bus, so that all the traces are visible.
 
+Note: You'll need recent version of hamster installed on your system (or 
+[this workaround](https://github.com/projecthamster/hamster/issues/552#issuecomment-585166000)).
+
 #### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
