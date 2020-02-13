@@ -28,6 +28,7 @@ import re
 
 import gi
 gi.require_version('Gtk', '3.0')
+from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
 
@@ -106,7 +107,7 @@ class Hamster(gtk.Application):
                                  register_session=True)
 
         self.about_controller = None  # 'about' window controller
-        self.add_controller = None  # "add activity" window controller
+        self.fact_controller = None  # fact window controller
         self.overview_controller = None  # overview window controller
         self.preferences_controller = None  # settings window controller
 
@@ -119,8 +120,11 @@ class Hamster(gtk.Application):
         self.add_actions()
 
     def add_actions(self):
-        for name in ("about", "add", "overview", "preferences"):
-            action = gio.SimpleAction.new(name, None)
+        # most actions have no parameters
+        # for type "i", use Variant.new_int32() and .get_int32() to pack/unpack
+        for name in ("about", "add", "edit", "overview", "preferences"):
+            data_type = glib.VariantType("i") if name == "edit" else None
+            action = gio.SimpleAction.new(name, data_type)
             action.connect("activate", self.on_activate_window)
             self.add_action(action)
 
@@ -154,10 +158,16 @@ class Hamster(gtk.Application):
                 logger.debug("new About")
             controller = self.about_controller
         elif name == "add":
-            if not self.add_controller:
-                self.add_controller = CustomFactController(parent=self)
+            if not self.fact_controller:
+                self.fact_controller = CustomFactController(parent=self)
                 logger.debug("new CustomFactController")
-            controller = self.add_controller
+            controller = self.fact_controller
+        elif name == "edit":
+            if not self.fact_controller:
+                id_ = data.get_int32()
+                self.fact_controller = CustomFactController(parent=self, fact_id=id_)
+                logger.debug("new CustomFactController")
+            controller = self.fact_controller
         elif name == "overview":
             if not self.overview_controller:
                 self.overview_controller = Overview()
@@ -441,7 +451,7 @@ Example usage:
     else:
         action = args.action
 
-    if action in ("about", "add", "overview", "preferences"):
+    if action in ("about", "add", "edit", "overview", "preferences"):
         if action == "add" and args.action_args:
             assert not unknown_args, "unknown options: {}".format(unknown_args)
             # directly add fact from arguments
@@ -450,7 +460,14 @@ Example usage:
             sys.exit(0)
         else:
             app.register()
-            app.activate_action(action)
+            if action == "edit":
+                assert len(args.action_args) == 1, (
+                       "edit requires exactly one argument, got {}"
+                       .format(args.action_args))
+                action_data = glib.Variant.new_int32(int(args.action_args[0]))
+            else:
+                action_data = None
+            app.activate_action(action, action_data)
             run_args = [sys.argv[0]] + unknown_args
             logger.debug("run {}".format(run_args))
             status = app.run(run_args)
