@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>hamster</id>
+  <id>org.gnome.Hamster.GUI</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
   <name>Hamster</name>
@@ -28,6 +28,9 @@
   </description>
 
   <launchable type="desktop-id">org.gnome.Hamster.GUI.desktop</launchable>
+  <provides>
+    <id>hamster.desktop</id>
+  </provides>
 
   <screenshots>
     <screenshot type="default">
