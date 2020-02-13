@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # nicked off hamster-service
 
+import os.path
 import dbus
 import dbus.service
 import subprocess
+import hamster
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
@@ -38,8 +40,12 @@ class WindowServer(dbus.service.Object):
         self.mainloop.quit()
 
     def _open_window(self, name):
-        subprocess.run("hamster {} &".format(name),
-                       shell=True)
+        if hamster.installed:
+            subprocess.run("hamster {} &".format(name),
+                           shell=True)
+        else:
+            subprocess.run("python3 {}/hamster-cli.py {} &".format(
+                os.path.dirname(__file__), name), shell=True)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
     def edit(self, id=0):
