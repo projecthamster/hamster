@@ -19,7 +19,15 @@ bld.install_files('${DATADIR}/metainfo', 'hamster.metainfo.xml')
 for filename in ["org.gnome.Hamster.GUI.desktop"]:
     bld(features = "subst",
         source= "%s.in" % filename,
+        target= "%s.tmp" % filename,
+	dict = bld.env
+       )
+
+bld.add_group()
+# MSGFMT is set by the intltool module, so conf.load('intltool') is required.
+for filename in ["org.gnome.Hamster.GUI.desktop"]:
+    bld(rule = '${MSGFMT} --desktop -d ../po --template ${SRC} -o ${TGT}',
+        source= "%s.tmp" % filename,
         target= "%s" % filename,
-        dict = bld.env,
         install_path = "${DATADIR}/applications"
        )
