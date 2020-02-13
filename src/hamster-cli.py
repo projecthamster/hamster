@@ -98,13 +98,11 @@ class Hamster(gtk.Application):
     Can be accessed across D-Bus with the 'org.gnome.Hamster.GUI' id.
     """
 
-    __app_id__ = "org.gnome.Hamster.GUI"
-
     def __init__(self):
         # inactivity_timeout: How long (ms) the service should stay alive
         #                     after all windows have been closed.
         gtk.Application.__init__(self,
-                                 application_id=self.__app_id__,
+                                 application_id="org.gnome.Hamster.GUI",
                                  #inactivity_timeout=10000,
                                  register_session=True)
 
@@ -144,8 +142,10 @@ class Hamster(gtk.Application):
 
     def on_startup(self, data=None):
         logger.debug("startup")
-        glib.set_application_name(self.__app_id__)
-        glib.set_prgname(self.__app_id__)
+        # Must be the same as application_id. Won't be required with gtk4.
+        glib.set_prgname(self.get_application_id())
+        # localized name, but let's keep it simple.
+        glib.set_application_name("Hamster")
 
     def _open_window(self, name, data=None):
         logger.debug("opening '{}'".format(name))
