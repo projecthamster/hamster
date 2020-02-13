@@ -31,6 +31,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
+from gi.repository import GLib as glib
 
 import hamster
 
@@ -145,6 +146,10 @@ class Hamster(gtk.Application):
 
     def on_startup(self, data=None):
         logger.debug("startup")
+        # Must be the same as application_id. Won't be required with gtk4.
+        glib.set_prgname(self.get_application_id())
+        # localized name, but let's keep it simple.
+        glib.set_application_name("Hamster")
 
     def _open_window(self, name, data=None):
         logger.debug("opening '{}'".format(name))
