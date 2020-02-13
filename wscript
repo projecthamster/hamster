@@ -29,6 +29,10 @@ def configure(conf):
     conf.env.GETTEXT_PACKAGE = "hamster"
     conf.env.PACKAGE = "hamster"
 
+    conf.env.build_i18n = conf.options.build_i18n
+    conf.find_program('xgettext', var='XGETTEXT')
+    conf.find_program('msgmerge', var='MSGMERGE')
+
     conf.recurse("help")
 
 
@@ -42,7 +46,35 @@ def options(opt):
     default_prefix = '/usr'
     opt.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
+    opt.add_option('--build-i18n', dest='build_i18n',
+                   action='store_true', default=False,
+                   help='rebuild .po template and files')
 
+
+def build_i18n(bld):
+    # 1. Generate the .pot template from the sources using xgettext
+    #    We must prepend "../" to the paths in POTFILES.in to help
+    #    xgettext find them
+    p_in = bld.path.find_node('po/POTFILES.in')
+    i18n_sources = [ p for p in p_in.read().split("\n")
+                     if p != "" and not p.startswith('#') ]
+    bld(rule='${XGETTEXT} -o ${TGT} --from-code=UTF-8 --add-comments %s'
+        % ' '.join([ os.path.join("..", x) for x in i18n_sources]),
+        source='po/POTFILES.in', target='po/hamster.pot')
+    for f in i18n_sources:
+        r = bld.path.find_resource(f)
+        bld.add_manual_dependency(bld.path.find_resource('po/POTFILES.in'), r)
+
+    # 2. Update the .po files with the new template using msgmerge
+    #    Tell waf to build the template first (dependency is not enough)
+    bld.add_group()
+    for po in bld.path.ant_glob('po/*.po'):
+        bld(rule='${MSGMERGE} --quiet -o ${TGT} ${SRC} po/hamster.pot',
+            target=po.srcpath(), source=po.bldpath())
+        # Tell waf that the generated .po files depend on the template
+        bld.add_manual_dependency(po, bld.path.find_or_declare('po/hamster.pot'))
+        # Tell waf to regenerate .mo files if .po files are changed
+        bld.add_manual_dependency(po.change_ext('.mo'), po)
 
 def build(bld):
     bld.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
@@ -53,6 +85,8 @@ def build(bld):
     bld.install_files('${PREFIX}/share/bash-completion/completions',
                       'src/hamster.bash')
 
+    if bld.env.build_i18n:
+        build_i18n(bld)
 
     bld(features='py',
         source=bld.path.ant_glob('src/hamster/**/*.py'),
