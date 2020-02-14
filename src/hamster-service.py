@@ -135,7 +135,7 @@ class Storage(db.Storage, dbus.service.Object):
 
     # facts
     @dbus.service.method("org.gnome.Hamster", in_signature='siib', out_signature='i')
-    def AddFact(self, fact_str, start_time, end_time, temporary=False):
+    def AddFact(self, fact_str, start_time, end_time, temporary):
         """Add fact specified by a string.
 
         To fully use the hamster fact parser, as on the cmdline,
@@ -151,6 +151,9 @@ class Storage(db.Storage, dbus.service.Object):
             end_time (int): Start datetime timestamp.
                             If different from 0, overrides the parsed value.
                             -1 means None.
+            temporary (boolean): historical, ignored, but needed to
+                                 keep the method signature stable.
+                                 Do not forget to pass something (e.g. False)!
         Returns:
             fact id (int), 0 means failure.
 
@@ -242,7 +245,7 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
-    def UpdateFact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def UpdateFact(self, fact_id, fact, start_time, end_time, temporary):
         start_time = start_time or None
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
