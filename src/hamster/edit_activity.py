@@ -28,7 +28,7 @@ import time
 """
 from hamster import widgets
 from hamster.lib import datetime as dt
-from hamster.lib.configuration import Controller, runtime, conf, load_ui_file
+from hamster.lib.configuration import Controller, runtime, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import escape_pango
 
