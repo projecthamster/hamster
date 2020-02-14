@@ -138,20 +138,17 @@ class Storage(db.Storage, dbus.service.Object):
     def AddFact(self, fact_str, start_time, end_time, temporary):
         """Add fact specified by a string.
 
+        If the parsed fact has no start, then now is used.
         To fully use the hamster fact parser, as on the cmdline,
         just pass 0 for start_time and end_time.
 
         Args:
             fact_str (str): string to be parsed.
-            start_time (int): Start datetime timestamp.
-                              For backward compatibility with the
-                              gnome shell extension,
-                              If different from 0, overrides the parsed value.
+            start_time (int): Start datetime ovveride timestamp (ignored if 0).
                               -1 means None.
-            end_time (int): Start datetime timestamp.
-                            If different from 0, overrides the parsed value.
+            end_time (int): datetime ovveride timestamp (ignored if 0).
                             -1 means None.
-            temporary (boolean): historical, ignored, but needed to
+            #temporary (boolean): historical mystery, ignored, but needed to
                                  keep the method signature stable.
                                  Do not forget to pass something (e.g. False)!
         Returns:
@@ -161,6 +158,10 @@ class Storage(db.Storage, dbus.service.Object):
               for the precise meaning of timestamps.
         """
         fact = Fact.parse(fact_str)
+
+        # default value if none found
+        if not fact.start_time:
+            fact.start_time = dt.datetime.now()
 
         if start_time == -1:
             fact.start_time = None
