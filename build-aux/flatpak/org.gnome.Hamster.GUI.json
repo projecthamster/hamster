@@ -1,0 +1,64 @@
+{
+  "id": "org.gnome.Hamster.GUI",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.34",
+  "sdk": "org.gnome.Sdk",
+  "command": "hamster",
+  "finish-args": [
+    "--socket=x11",
+    "--socket=wayland",
+    "--own-name=org.gnome.Hamster"
+  ],
+  "modules": [
+    "shared-modules/intltool/intltool-0.51.json",
+    {
+      "name": "dbus-python",
+      "buildsystem": "simple",
+      "build-commands": [
+        "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+      ],
+      "cleanup": [
+        "*.la"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://files.pythonhosted.org/packages/source/d/dbus-python/dbus-python-1.2.16.tar.gz",
+          "sha256": "11238f1d86c995d8aed2e22f04a1e3779f0d70e587caffeab4857f3c662ed5a4"
+        }
+      ]
+    },
+    {
+      "name": "pyxdg",
+      "buildsystem": "simple",
+      "build-commands": [
+        "pip3 install --no-deps --no-use-pep517 --prefix=${FLATPAK_DEST} ."
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://files.pythonhosted.org/packages/source/p/pyxdg/pyxdg-0.26.tar.gz",
+          "sha256": "fe2928d3f532ed32b39c32a482b54136fe766d19936afc96c8f00645f9da1a06"
+        }
+      ]
+    },
+    {
+      "name": "hamster",
+      "buildsystem": "simple",
+      "build-commands": [
+        "./waf configure -vv --prefix=${FLATPAK_DEST}",
+        "./waf build -vv",
+        "./waf install"
+      ],
+      "post-install": [
+        "rm -f ${FLATPAK_DEST}/share/icons/hicolor/icon-theme.cache"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../.."
+        }
+      ]
+    }
+  ]
+}
