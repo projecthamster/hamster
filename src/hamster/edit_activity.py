@@ -28,19 +28,15 @@ import time
 """
 from hamster import widgets
 from hamster.lib import datetime as dt
-from hamster.lib.configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import Controller, runtime, conf, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import escape_pango
 
 
 
-class CustomFactController(gobject.GObject):
-    __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
+class CustomFactController(Controller):
     def __init__(self,  parent=None, fact_id=None, base_fact=None):
-        gobject.GObject.__init__(self)
+        Controller.__init__(self, parent)
 
         self._date = None  # for the date property
 

@@ -60,11 +60,13 @@ class Controller(gobject.GObject):
             self._gui = None
             self.window = gtk.Window()
 
-        if parent:
+        if True:  # keep indentation
+            # if parent is None or the Application, then the window is toplevel
+            transient_for = parent if isinstance(parent, gtk.Window) else None
             # Essential for positioning on wayland.
             # This should also select the correct window type if unset yet.
             # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
-            self.window.set_transient_for(parent.get_toplevel())
+            self.window.set_transient_for(transient_for)
             # this changes nothing, the dialog appears centered on the screen:
             # self.window.set_type_hint(gdk.WindowTypeHint.DIALOG)
 
