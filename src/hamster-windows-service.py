@@ -74,7 +74,6 @@ if __name__ == '__main__':
 
     glib.set_prgname(str(_("hamster-windows-service")))
 
-    from hamster.lib.configuration import runtime, dialogs, conf, load_ui_file
     window_server = WindowServer(loop)
 
     print("hamster-window-service up")

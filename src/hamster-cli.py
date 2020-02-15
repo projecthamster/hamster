@@ -27,8 +27,10 @@ import argparse
 import re
 
 import gi
-gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')  # noqa: E402
+gi.require_version('Gtk', '3.0')  # noqa: E402
 from gi.repository import GLib as glib
+from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
 from gi.repository import GLib as glib
@@ -123,8 +125,8 @@ class Hamster(gtk.Application):
     def add_actions(self):
         # most actions have no parameters
         # for type "i", use Variant.new_int32() and .get_int32() to pack/unpack
-        for name in ("about", "add", "edit", "overview", "preferences"):
-            data_type = glib.VariantType("i") if name == "edit" else None
+        for name in ("about", "add", "clone", "edit", "overview", "preferences"):
+            data_type = glib.VariantType("i") if name in ("edit", "clone") else None
             action = gio.SimpleAction.new(name, data_type)
             action.connect("activate", self.on_activate_window)
             self.add_action(action)
@@ -162,15 +164,14 @@ class Hamster(gtk.Application):
                 self.about_controller = About(parent=_dummy)
                 logger.debug("new About")
             controller = self.about_controller
-        elif name == "add":
-            if not self.fact_controller:
-                self.fact_controller = CustomFactController(parent=self)
-                logger.debug("new CustomFactController")
-            controller = self.fact_controller
-        elif name == "edit":
-            if not self.fact_controller:
-                id_ = data.get_int32()
-                self.fact_controller = CustomFactController(parent=self, fact_id=id_)
+        elif name in ("add", "clone", "edit"):
+            if self.fact_controller:
+                # Something is already going on, with other arguments, present it.
+                # Or should we just discard the forgotten one ?
+                logger.warning("Fact controller already active. Please close first.")
+            else:
+                fact_id = data.get_int32() if data else None
+                self.fact_controller = CustomFactController(name, fact_id=fact_id)
                 logger.debug("new CustomFactController")
             controller = self.fact_controller
         elif name == "overview":
@@ -188,9 +189,35 @@ class Hamster(gtk.Application):
         if window not in self.get_windows():
             self.add_window(window)
             logger.debug("window added")
+
+        # Essential for positioning on wayland.
+        # This should also select the correct window type if unset yet.
+        # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
+        if name != "overview" and self.overview_controller:
+            window.set_transient_for(self.overview_controller.window)
+            # so the dialog appears on top of the transient-for:
+            window.set_type_hint(gdk.WindowTypeHint.DIALOG)
+        else:
+            # toplevel
+            window.set_transient_for(None)
+
         controller.present()
         logger.debug("window presented")
 
+    def present_fact_controller(self, action, fact_id=0):
+        """Present the fact controller window to add, clone or edit a fact.
+
+        Args:
+            action (str): "add", "clone" or "edit"
+        """
+        assert action in ("add", "clone", "edit")
+        if action in ("clone", "edit"):
+            action_data = glib.Variant.new_int32(int(fact_id))
+        else:
+            action_data = None
+        # always open dialogs through actions,
+        # both for consistency, and to reduce the paths to test.
+        app.activate_action(action, action_data)
 
 class HamsterCli(object):
     """Command line interface."""

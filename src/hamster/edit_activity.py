@@ -28,27 +28,31 @@ import time
 """
 from hamster import widgets
 from hamster.lib import datetime as dt
-from hamster.lib.configuration import runtime, conf, load_ui_file
+from hamster.lib.configuration import Controller, runtime, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import escape_pango
 
 
 
-class CustomFactController(gobject.GObject):
-    __gsignals__ = {
-        "on-close": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-    }
+class CustomFactController(Controller):
+    """Controller for a Fact edition window.
 
-    def __init__(self,  parent=None, fact_id=None, base_fact=None):
-        gobject.GObject.__init__(self)
+    Args:
+        action (str): "add", "clone", "edit"
+        fact_id (int): used for "clone" and "edit"
+    """
+
+    def __init__(self, action, fact_id=None):
+        Controller.__init__(self)
 
         self._date = None  # for the date property
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
-        self.parent = parent
-        # None if creating a new fact, instead of editing one
+
+
+        self.action = action
         self.fact_id = fact_id
 
         self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
@@ -83,19 +87,17 @@ class CustomFactController(gobject.GObject):
         # this will set self.master_is_cmdline
         self.cmdline.grab_focus()
 
-        if fact_id:
-            # editing
+        title = _("Update activity") if action == "edit" else _("Add activity")
+        self.window.set_title(title)
+        self.get_widget("delete_button").set_sensitive(action == "edit")
+        if action == "edit":
             self.fact = runtime.storage.get_fact(fact_id)
-            self.window.set_title(_("Update activity"))
+        elif action == "clone":
+            base_fact = runtime.storage.get_fact(fact_id)
+            self.fact = base_fact.copy(start_time=dt.datetime.now(),
+                                       end_time=None)
         else:
-            self.window.set_title(_("Add activity"))
-            self.get_widget("delete_button").set_sensitive(False)
-            if base_fact:
-                # start a clone now.
-                self.fact = base_fact.copy(start_time=dt.datetime.now(),
-                                           end_time=None)
-            else:
-                self.fact = Fact(start_time=dt.datetime.now())
+            self.fact = Fact(start_time=dt.datetime.now())
 
         original_fact = self.fact
         # TODO: should use hday, not date.
@@ -370,7 +372,7 @@ class CustomFactController(gobject.GObject):
         self.close_window()
 
     def on_save_button_clicked(self, button):
-        if self.fact_id:
+        if self.action == "edit":
             runtime.storage.update_fact(self.fact_id, self.fact)
         else:
             runtime.storage.add_fact(self.fact)
@@ -396,12 +398,3 @@ class CustomFactController(gobject.GObject):
                 return False
             if self.validate_fields():
                 self.on_save_button_clicked(None)
-
-    def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            self.window.destroy()
-            self.window = None
-            self._gui = None
-            self.emit("on-close")
