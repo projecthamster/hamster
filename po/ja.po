@@ -8,12 +8,11 @@
 # Hideki Yamane <henrich@debian.org>, 2011.
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2012.
 #
-#: ../src/hamster-cli:342
 msgid ""
 msgstr ""
 "Project-Id-Version: hamster-time-tracker master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-02 19:20+0100\n"
+"POT-Creation-Date: 2020-02-13 18:24+0100\n"
 "PO-Revision-Date: 2012-08-10 23:35+0900\n"
 "Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -23,442 +22,276 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/edit_activity.ui.h:1 ../data/today.ui.h:15
-msgid "Add Earlier Activity"
-msgstr "以前の活動を追加"
-
-#: ../data/edit_activity.ui.h:2 ../data/range_pick.ui.h:5
-msgid "to"
-msgstr "〜"
-
-#: ../data/edit_activity.ui.h:3
-msgid "in progress"
-msgstr "進行中..."
-
-#: ../data/edit_activity.ui.h:4
-msgid "Description:"
-msgstr "説明:"
-
-#: ../data/edit_activity.ui.h:5
-msgid "Time:"
-msgstr "時間:"
-
-#: ../data/edit_activity.ui.h:6
-msgid "Activity:"
-msgstr "活動:"
-
-#: ../data/edit_activity.ui.h:7
-msgid "Tags:"
-msgstr "タグ:"
-
-#: ../data/hamster.schemas.in.h:1
-msgid "Stop tracking on idle"
-msgstr "アイドル時に記録を停止する"
-
-#: ../data/hamster.schemas.in.h:2
-msgid "Stop tracking current activity when computer becomes idle"
-msgstr "コンピューターがアイドル状態になったら活動の記録を停止する"
-
-#: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
-msgid "Stop tracking on shutdown"
-msgstr "シャットダウン時は記録を停止する"
-
-#: ../data/hamster.schemas.in.h:4
-msgid "Stop tracking current activity on shutdown"
-msgstr "シャットダウン時に記録を停止する"
-
-#: ../data/hamster.schemas.in.h:5
-msgid "Remind of current task every x minutes"
-msgstr "現在のタスクを x 分ごとに通知します"
-
-#: ../data/hamster.schemas.in.h:6
-msgid ""
-"Remind of current task every specified amount of minutes. Set to 0 or "
-"greater than 120 to disable reminder."
-msgstr ""
-"現在のタスクを、指定した時間(分)ごとに通知します。0または120を超える値に設定"
-"すると通知しません。"
-
-#: ../data/hamster.schemas.in.h:7 ../data/preferences.ui.h:4
-msgid "Also remind when no activity is set"
-msgstr "活動が設定されていない時にも通知する"
-
-#: ../data/hamster.schemas.in.h:8
-msgid ""
-"Also remind every notify_interval minutes if no activity has been started."
-msgstr "活動が何も開始されていない場合にも、notify_interval 分毎に通知する。"
-
-#: ../data/hamster.schemas.in.h:9
-msgid "At what time does the day start (defaults to 5:30AM)"
-msgstr "一日の開始時間(デフォルトは午前5:30)"
-
-#: ../data/hamster.schemas.in.h:10
-msgid ""
-"Activities will be counted as to belong to yesterday if the current time is "
-"less than the specified day start; and today, if it is over the time. "
-"Activities that span two days, will tip over to the side where the largest "
-"part of the activity is."
-msgstr ""
-"現在の時間が一日の開始時間より前の場合、活動は昨日の集計に計上され、時間を超"
-"えたものが今日に集計されます。2日にまたがる活動は、活動の最大部分がある側か"
-"ら、反転します。"
-
-#: ../data/hamster.schemas.in.h:11
-msgid "Should workspace switch trigger activity switch"
-msgstr "ワークスペース切り替え時に動作を切り替えます"
-
-#: ../data/hamster.schemas.in.h:12
-msgid ""
-"List of enabled tracking methods. \"name\" will enable switching activities "
-"by name defined in workspace_mapping. \"memory\" will enable switching to "
-"the last activity when returning to a previous workspace."
-msgstr ""
-"利用可能な記録手法のリストです。\"name\"は workspace_mapping で定義されている"
-"名前で活動を切り替え可能にします。\"memory\" は、前のワークスペースに戻るとき"
-"に、そこで最後の活動に変更します。"
-
-#: ../data/hamster.schemas.in.h:13
-msgid "Switch activity on workspace change"
-msgstr "ワークスペースの変更時に動作を切り替えます。"
-
-#: ../data/hamster.schemas.in.h:14
-msgid ""
-"If switching by name is enabled, this list sets the activity names that "
-"should be switched to, workspaces represented by the index of item."
-msgstr ""
-"名前で切り替え可能にする場合、このリストは切り替える活動の名前に設定し、ワー"
-"クスペースはアイテムのインデックスで再表示されます。"
-
-#: ../data/hamster.schemas.in.h:15
-msgid "Show / hide Time Tracker Window"
-msgstr "タイムトラッカーのウィンドウの表示/非表示"
-
-#: ../data/hamster.schemas.in.h:16
-msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
-msgstr ""
-"タイムトラッカーのウィンドウ表示・非表示を切り替えるキーボードショートカット"
-"です。"
-
-#: ../data/hamster.schemas.in.h:17
-msgid "Toggle hamster application window action"
-msgstr "ハムスターアプリケーションウィンドウのアクションをOn/Offします。"
-
-#: ../data/hamster.schemas.in.h:18
-msgid "Command for toggling visibility of the hamster application window."
-msgstr "ハムスターアプリケーションウィンドウの表示を切り替えるコマンド。"
-
-#: ../data/hamster.schemas.in.h:19
-msgid "Toggle hamster application window"
-msgstr "ハムスターアプリケーションウィンドウをOn/Offします。"
-
-#: ../data/hamster.schemas.in.h:20
-msgid "Toggle visibility of the hamster application window."
-msgstr "ハムスターアプリケーションウィンドウの表示をOn/Offします。"
-
-#: ../data/hamster.desktop.in.in.h:1
-#: ../data/hamster-windows-service.desktop.in.in.h:1 ../data/today.ui.h:1
-#: ../src/hamster-cli:133 ../src/hamster/about.py:39
-#: ../src/hamster/about.py:40 ../src/hamster/today.py:63
-msgid "Time Tracker"
-msgstr "タイムトラッカー"
-
-#: ../data/hamster.desktop.in.in.h:2
-#: ../data/hamster-windows-service.desktop.in.in.h:2
-msgid "Project Hamster - track your time"
-msgstr "プロジェクト・ハムスター - 時間を記録"
-
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:1
-msgid "Time Tracking Overview"
-msgstr "タイムトラッカーの概要"
-
-#: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
-msgid "The overview window of hamster time tracker"
-msgstr "ハムスター・タイムトラッカーの概要ウィンドウ"
-
-#: ../data/overview_totals.ui.h:1
-msgid "Show Statistics"
-msgstr "統計の表示"
-
-#: ../data/overview_totals.ui.h:2
-msgid "Categories"
-msgstr "カテゴリ"
-
-#: ../data/overview_totals.ui.h:3 ../data/overview.ui.h:9
-msgid "Activities"
-msgstr "活動"
-
-#: ../data/overview_totals.ui.h:4 ../src/hamster-cli:278
-#: ../src/hamster/reports.py:319 ../src/hamster/today.py:150
-msgid "Tags"
-msgstr "タグ"
-
-#: ../data/overview_totals.ui.h:5
-msgid "No data for this interval"
-msgstr "この期間のデータはありません"
-
-#: ../data/overview.ui.h:1
-msgid "Save report..."
-msgstr "レポートの保存..."
-
-#: ../data/overview.ui.h:2
-msgid "Day"
-msgstr "日間"
-
-#: ../data/overview.ui.h:3
-msgid "Week"
-msgstr "週間"
-
-#: ../data/overview.ui.h:4
-msgid "Month"
-msgstr "月間"
-
-#: ../data/overview.ui.h:5
-msgid "Overview — Hamster"
-msgstr "概要 — ハムスター"
-
-#: ../data/overview.ui.h:6
-msgid "_Overview"
-msgstr "概要(_O)"
-
-#: ../data/overview.ui.h:7 ../src/hamster-cli:276
-#: ../src/hamster/preferences.py:212 ../src/hamster/reports.py:317
-#: ../src/hamster/today.py:144
-msgid "Activity"
-msgstr "活動"
-
-#: ../data/overview.ui.h:8
-msgid "_View"
-msgstr "表示(_V)"
-
-#: ../data/overview.ui.h:10 ../src/hamster/reports.py:308
-msgid "Totals"
-msgstr "合計"
-
-#: ../data/overview.ui.h:11
-msgid "Remove"
-msgstr "削除"
-
-#: ../data/overview.ui.h:12
-msgid "Add new"
-msgstr "新規追加"
-
-#: ../data/overview.ui.h:13
-msgid "Edit"
-msgstr "編集"
-
-#: ../data/preferences.ui.h:1
-msgid "Time Tracker Preferences"
-msgstr "タイムトラッカーの設定"
-
-#: ../data/preferences.ui.h:3
-msgid "Stop tracking when computer becomes idle"
-msgstr "コンピューターがアイドル状態になったら記録を停止する"
-
-#: ../data/preferences.ui.h:5
-msgid "Remind of current activity every:"
-msgstr "現在の活動を通知する間隔:"
-
-#: ../data/preferences.ui.h:6
-msgid "New day starts at"
-msgstr "一日の開始時間"
-
-#: ../data/preferences.ui.h:7
-msgid "Use following todo list if available:"
-msgstr "可能であれば、以下のTODOリストを使用する:"
-
-#: ../data/preferences.ui.h:8
-msgid "Integration"
-msgstr "集計"
-
-#: ../data/preferences.ui.h:9
-msgid "Tracking"
-msgstr "記録"
-
-#: ../data/preferences.ui.h:10
-msgid "_Categories"
-msgstr "カテゴリ(_C)"
-
-#: ../data/preferences.ui.h:11
-msgid "Category list"
-msgstr "カテゴリ一覧"
-
-#: ../data/preferences.ui.h:12
-msgid "Add category"
-msgstr "新しいカテゴリを追加します"
-
-#: ../data/preferences.ui.h:13
-msgid "Remove category"
-msgstr "カテゴリを削除します"
-
-#: ../data/preferences.ui.h:14
-msgid "Edit category"
-msgstr "カテゴリを編集します"
-
-#: ../data/preferences.ui.h:15
-msgid "_Activities"
-msgstr "活動(_A)"
-
-#: ../data/preferences.ui.h:16
-msgid "Activity list"
-msgstr "活動一覧"
-
-#: ../data/preferences.ui.h:17
-msgid "Add activity"
-msgstr "活動を追加します"
-
-#: ../data/preferences.ui.h:18
-msgid "Remove activity"
-msgstr "活動を削除します"
-
-#: ../data/preferences.ui.h:19
-msgid "Edit activity"
-msgstr "活動を編集します"
-
-#: ../data/preferences.ui.h:20
-msgid "Tags that should appear in autocomplete"
-msgstr "自動的に完了するものに表示すべきタグ"
-
-#: ../data/preferences.ui.h:21
-msgid "Categories and Tags"
-msgstr "カテゴリとタグ"
-
-#: ../data/preferences.ui.h:22
-msgid "Resume the last activity when returning to a workspace"
-msgstr "ワークスペースに戻ると、そこでの直近の活動に戻す"
-
-#: ../data/preferences.ui.h:23
-msgid "Start new activity when switching workspaces:"
-msgstr "ワークスペース切り替え時に開始する新規活動を指定:"
-
-#: ../data/preferences.ui.h:24
-msgid "Workspaces"
-msgstr "ワークスペース"
-
-#: ../data/range_pick.ui.h:1
-msgid "Day:"
-msgstr "日間:"
-
-#: ../data/range_pick.ui.h:2
+#: ../data/date_range.ui:50
+#, fuzzy
+msgid "Today:"
+msgstr "今日"
+
+#: ../data/date_range.ui:99
 msgid "Week:"
 msgstr "週間:"
 
-#: ../data/range_pick.ui.h:3
+#: ../data/date_range.ui:148
 msgid "Month:"
 msgstr "月間:"
 
-#: ../data/range_pick.ui.h:4
+#: ../data/date_range.ui:196
 msgid "Range:"
 msgstr "期間:"
 
-#: ../data/range_pick.ui.h:6
+#: ../data/date_range.ui:242
+msgid "to"
+msgstr "〜"
+
+#: ../data/date_range.ui:288
 msgid "Apply"
 msgstr "適用"
 
-#: ../data/today.ui.h:2
-msgid "_Tracking"
-msgstr "記録(_T)"
-
-#: ../data/today.ui.h:3
-msgid "Add earlier activity"
+#: ../data/edit_activity.ui:15
+msgid "Add Earlier Activity"
 msgstr "以前の活動を追加"
 
-#: ../data/today.ui.h:4
-msgid "Overview"
-msgstr "概要"
+#: ../data/edit_activity.ui:107
+msgid "cmdline"
+msgstr ""
 
-#: ../data/today.ui.h:5
-msgid "Statistics"
-msgstr "統計"
+#. column title in the TSV export format
+#: ../data/edit_activity.ui:139 ../src/hamster/reports.py:143
+msgid "description"
+msgstr "説明"
 
-#: ../data/today.ui.h:6
-msgid "_Edit"
-msgstr "編集(_E)"
-
-#: ../data/today.ui.h:7
-msgid "_Help"
-msgstr "ヘルプ(_H)"
-
-#: ../data/today.ui.h:8
-msgid "Contents"
-msgstr "目次"
-
-#: ../data/today.ui.h:9
-msgid "Sto_p tracking"
-msgstr "記録の停止(_P)"
-
-#: ../data/today.ui.h:10
-msgid "S_witch"
-msgstr "切り替え(_W)"
-
-#: ../data/today.ui.h:11
-msgid "Start _Tracking"
-msgstr "記録の開始(_T)"
-
-#: ../data/today.ui.h:12
-msgid "Start new activity"
-msgstr "新しい活動の開始"
-
-#: ../data/today.ui.h:13
-msgid "Today"
-msgstr "今日"
-
-#: ../data/today.ui.h:14
+#: ../data/edit_activity.ui:196
 #, fuzzy
-msgid "totals"
-msgstr "合計"
+msgid "start"
+msgstr "開始"
 
-#: ../data/today.ui.h:16
+#: ../data/edit_activity.ui:242
 #, fuzzy
-msgid "Show Overview"
-msgstr "概要を表示(_O)"
+msgid "start date"
+msgstr "開始時間"
 
-#: ../src/hamster-cli:254 ../src/hamster/today.py:289
+#: ../data/edit_activity.ui:269
+#, fuzzy
+msgid "end"
+msgstr "終了"
+
+#: ../data/edit_activity.ui:315
+#, fuzzy
+msgid "end date"
+msgstr "終了時間"
+
+#. column title in the TSV export format
+#: ../data/edit_activity.ui:353 ../src/hamster/reports.py:141
+msgid "category"
+msgstr "カテゴリ"
+
+#: ../data/edit_activity.ui:370 ../src/hamster-cli.py:337
+#: ../src/hamster/preferences.py:52 ../src/hamster/reports.py:77
+#: ../src/hamster/reports.py:109 ../src/hamster/reports.py:240
+#: ../src/hamster/widgets/activityentry.py:617
+msgid "Unsorted"
+msgstr "未分類のもの"
+
+#. column title in the TSV export format
+#: ../data/edit_activity.ui:396 ../src/hamster/reports.py:133
+msgid "activity"
+msgstr "活動"
+
+#. column title in the TSV export format
+#: ../data/edit_activity.ui:444 ../src/hamster/reports.py:145
+#: ../src/hamster/reports.py:294
+msgid "tags"
+msgstr "タグ"
+
+#: ../data/preferences.ui:10
+msgid "Time Tracker Preferences"
+msgstr "タイムトラッカーの設定"
+
+#: ../data/preferences.ui:51
+msgid "New day starts at"
+msgstr "一日の開始時間"
+
+#: ../data/preferences.ui:89
+msgid "Tracking"
+msgstr "記録"
+
+#: ../data/preferences.ui:132
+msgid "_Categories"
+msgstr "カテゴリ(_C)"
+
+#: ../data/preferences.ui:165
+msgid "Category list"
+msgstr "カテゴリ一覧"
+
+#: ../data/preferences.ui:197
+msgid "Add category"
+msgstr "新しいカテゴリを追加します"
+
+#: ../data/preferences.ui:222
+msgid "Remove category"
+msgstr "カテゴリを削除します"
+
+#: ../data/preferences.ui:247
+msgid "Edit category"
+msgstr "カテゴリを編集します"
+
+#: ../data/preferences.ui:285
+msgid "_Activities"
+msgstr "活動(_A)"
+
+#: ../data/preferences.ui:323
+msgid "Activity list"
+msgstr "活動一覧"
+
+#: ../data/preferences.ui:357 ../data/org.gnome.Hamster.GUI.desktop.in:18
+#: ../src/hamster/edit_activity.py:91
+msgid "Add activity"
+msgstr "活動を追加します"
+
+#: ../data/preferences.ui:382
+msgid "Remove activity"
+msgstr "活動を削除します"
+
+#: ../data/preferences.ui:407
+msgid "Edit activity"
+msgstr "活動を編集します"
+
+#: ../data/preferences.ui:479
+msgid "Tags that should appear in autocomplete"
+msgstr "自動的に完了するものに表示すべきタグ"
+
+#: ../data/preferences.ui:503
+msgid "Categories and Tags"
+msgstr "カテゴリとタグ"
+
+#: ../data/org.gnome.Hamster.GUI.desktop.in:6
+msgid "Hamster"
+msgstr ""
+
+#: ../data/org.gnome.Hamster.GUI.desktop.in:7
+msgid "Time Tracker"
+msgstr "タイムトラッカー"
+
+#: ../data/org.gnome.Hamster.GUI.desktop.in:8
+msgid "Your personal time keeping tool"
+msgstr ""
+
+#: ../data/org.gnome.Hamster.GUI.desktop.in:9
+msgid "org.gnome.Hamster.GUI"
+msgstr ""
+
+#: ../data/org.gnome.Hamster.GUI.desktop.in:15
+msgid "Time Tracking Overview"
+msgstr "タイムトラッカーの概要"
+
+#: ../data/org.gnome.hamster.gschema.xml:5
+#: ../data/org.gnome.hamster.gschema.xml:6
+msgid "The folder the last report was saved to"
+msgstr ""
+
+#: ../data/org.gnome.hamster.gschema.xml:13
+msgid "At what time does the day start (defaults to 5:30AM)"
+msgstr "一日の開始時間(デフォルトは午前5:30)"
+
+#: ../data/org.gnome.hamster.gschema.xml:14
+msgid ""
+"The hamster day of an activity is the civil date of start time, provided "
+"start time is after day-start. On the contrary, if start time is earlier "
+"than day-start, then the activity belongs to the previous hamster day."
+msgstr ""
+
+#: ../src/hamster-cli.py:283
 msgid "No activity"
 msgstr "活動なし"
 
-#: ../src/hamster-cli:277 ../src/hamster/preferences.py:155
-#: ../src/hamster/reports.py:318
+#: ../src/hamster-cli.py:305 ../src/hamster/reports.py:299
+msgid "Activity"
+msgstr "活動"
+
+#: ../src/hamster-cli.py:306 ../src/hamster/preferences.py:114
+#: ../src/hamster/reports.py:300
 msgid "Category"
 msgstr "カテゴリ"
 
-#: ../src/hamster-cli:279 ../src/hamster/reports.py:323
+#: ../src/hamster-cli.py:307 ../src/hamster/reports.py:301
+msgid "Tags"
+msgstr "タグ"
+
+#: ../src/hamster-cli.py:308 ../src/hamster/reports.py:305
 msgid "Description"
 msgstr "説明"
 
-#: ../src/hamster-cli:280 ../src/hamster/reports.py:320
+#: ../src/hamster-cli.py:309 ../src/hamster/reports.py:302
 msgid "Start"
 msgstr "開始"
 
-#: ../src/hamster-cli:281 ../src/hamster/reports.py:321
+#: ../src/hamster-cli.py:310 ../src/hamster/reports.py:303
 msgid "End"
 msgstr "終了"
 
-#: ../src/hamster-cli:282 ../src/hamster/reports.py:322
+#: ../src/hamster-cli.py:311 ../src/hamster/reports.py:304
 msgid "Duration"
 msgstr "経過時間"
 
-#: ../src/hamster-cli:308
-#, fuzzy
-msgid "Uncategorized"
-msgstr "カテゴリ"
+#: ../src/hamster-cli.py:376
+msgid ""
+"\n"
+"Actions:\n"
+"    * add [activity [start-time [end-time]]]: Add an activity\n"
+"    * stop: Stop tracking current activity.\n"
+"    * list [start-date [end-date]]: List activities\n"
+"    * search [terms] [start-date [end-date]]: List activities matching a "
+"search\n"
+"      term\n"
+"    * export [html|tsv|ical|xml] [start-date [end-date]]: Export activities "
+"with\n"
+"      the specified format\n"
+"    * current: Print current activity\n"
+"    * activities: List all the activities names, one per line.\n"
+"    * categories: List all the categories names, one per line.\n"
+"\n"
+"    * overview / preferences / add / about: launch specific window\n"
+"\n"
+"    * version: Show the Hamster version\n"
+"\n"
+"Time formats:\n"
+"    * 'YYYY-MM-DD hh:mm': If start-date is missing, it will default to "
+"today.\n"
+"      If end-date is missing, it will default to start-date.\n"
+"    * '-minutes': Relative time in minutes from the current date and time.\n"
+"Note:\n"
+"    * For list/search/export a \"hamster day\" starts at the time set in "
+"the\n"
+"      preferences (default 05:00) and ends one minute earlier the next day.\n"
+"      Activities are reported for each \"hamster day\" in the interval.\n"
+"\n"
+"Example usage:\n"
+"    hamster start bananas -20\n"
+"        start activity 'bananas' with start time 20 minutes ago\n"
+"\n"
+"    hamster search pancakes 2012-08-01 2012-08-30\n"
+"        look for an activity matching terms 'pancakes` between 1st and 30st\n"
+"        August 2012. Will check against activity, category, description and "
+"tags\n"
+msgstr ""
 
-#: ../src/hamster/about.py:42
+#: ../src/hamster/about.py:33
 msgid "Project Hamster — track your time"
 msgstr "プロジェクト・ハムスター - 時間を記録"
 
-#: ../src/hamster/about.py:43
+#: ../src/hamster/about.py:34
 msgid "Copyright © 2007–2010 Toms Bauģis and others"
 msgstr "Copyright © 2007–2010 Toms Bauģis とその他大勢の方々"
 
-#: ../src/hamster/about.py:45
+#: ../src/hamster/about.py:36
 msgid "Project Hamster Website"
 msgstr "プロジェクト・ハムスターのウェブサイト"
 
-#: ../src/hamster/about.py:46
+#: ../src/hamster/about.py:37
 msgid "About Time Tracker"
 msgstr "このアプリケーションについて"
 
-#: ../src/hamster/about.py:56
+#: ../src/hamster/about.py:47
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <takeshi.aihana@gmail.com>\n"
@@ -467,185 +300,84 @@ msgstr ""
 "やまねひでき <henrich@debian.org>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp/>"
 
-#: ../src/hamster/db.py:288 ../src/hamster/db.py:298 ../src/hamster/db.py:354
-#: ../src/hamster/db.py:658 ../src/hamster/db.py:845
-#: ../src/hamster/edit_activity.py:59 ../src/hamster/preferences.py:58
-#: ../src/hamster/reports.py:88 ../src/hamster/reports.py:127
-#: ../src/hamster/reports.py:256 ../src/hamster/today.py:275
-msgid "Unsorted"
-msgstr "未分類のもの"
-
-#. defaults
-#: ../src/hamster/db.py:937
-msgid "Work"
-msgstr "仕事"
-
-#: ../src/hamster/db.py:938
-msgid "Reading news"
-msgstr "新聞を読む"
-
-#: ../src/hamster/db.py:939
-msgid "Checking stocks"
-msgstr "株価をチェックする"
-
-#: ../src/hamster/db.py:940
-msgid "Super secret project X"
-msgstr "超極秘プロジェクトX"
-
-#: ../src/hamster/db.py:941
-msgid "World domination"
-msgstr "世界征服"
-
-#: ../src/hamster/db.py:943
-msgid "Day-to-day"
-msgstr "日課"
-
-#: ../src/hamster/db.py:944
-msgid "Lunch"
-msgstr "昼食"
-
-#: ../src/hamster/db.py:945
-msgid "Watering flowers"
-msgstr "花に水をやる"
-
-#: ../src/hamster/db.py:946
-msgid "Doing handstands"
-msgstr "逆立ちをする"
-
-#: ../src/hamster/edit_activity.py:75
+#: ../src/hamster/edit_activity.py:89
 msgid "Update activity"
 msgstr "活動の更新"
 
-#. duration in round hours
-#: ../src/hamster/lib/stuff.py:57
-#, python-format
-msgid "%dh"
-msgstr "%d時間"
-
-#. duration less than hour
-#: ../src/hamster/lib/stuff.py:60
-#, python-format
-msgid "%dmin"
-msgstr "%d分間"
-
-#. x hours, y minutes
-#: ../src/hamster/lib/stuff.py:63
-#, python-format
-msgid "%dh %dmin"
-msgstr "%d時間 %d分"
-
-#. label of date range if looking on single day
-#. date format for overview label when only single day is visible
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:80
-msgid "%B %d, %Y"
-msgstr "%Y年%m月%d日"
-
-#. label of date range if start and end years don't match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:86
-#, python-format
-msgid "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+#: ../src/hamster/overview.py:75
+msgid "Menu"
 msgstr ""
-"%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の集計"
-"結果"
 
-#. label of date range if start and end month do not match
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:92
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
-msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_B)s%(end_d)s日"
+#: ../src/hamster/overview.py:81
+#, fuzzy
+msgid "Filter activities"
+msgstr "活動"
 
-#. label of date range for interval in same month
-#. letter after prefixes (start_, end_) is the one of
-#. standard python date formatting ones- you can use all of them
-#. see http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/lib/stuff.py:98
-#, python-format
-msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_d)s日"
+#: ../src/hamster/overview.py:87
+#, fuzzy
+msgid "Stop tracking (Ctrl-SPACE)"
+msgstr "記録の停止(_P)"
 
-#: ../src/hamster/overview_activities.py:88
-msgctxt "overview list"
-msgid "%A, %b %d"
-msgstr "%m月%d日 (%a)"
+#: ../src/hamster/overview.py:93
+#, fuzzy
+msgid "Add activity (Ctrl-+)"
+msgstr "活動を追加します"
 
-#: ../src/hamster/overview_totals.py:161
-#, python-format
-msgid "%s hours tracked total"
-msgstr "%s 時間分を記録しました"
+#: ../src/hamster/overview.py:99
+#, fuzzy
+msgid "Export..."
+msgstr "レポートの保存..."
 
-#. Translators: 'None' refers here to the Todo list choice in Hamster preferences (Tracking tab)
-#: ../src/hamster/preferences.py:113
-msgid "None"
-msgstr "何もしない"
+#: ../src/hamster/overview.py:101
+#, fuzzy
+msgid "Tracking Settings"
+msgstr "記録"
 
-#: ../src/hamster/preferences.py:130 ../src/hamster/preferences.py:208
+#: ../src/hamster/overview.py:103
+#, fuzzy
+msgid "Help"
+msgstr "ヘルプ(_H)"
+
+#: ../src/hamster/overview.py:285
+msgid "Click to see stats"
+msgstr ""
+
+#: ../src/hamster/overview.py:591
+msgid "Failed to open {}"
+msgstr ""
+
+#: ../src/hamster/overview.py:592
+msgid "Error: \"{}\" - is a help browser installed on this computer?"
+msgstr ""
+
+#: ../src/hamster/preferences.py:90
 msgid "Name"
 msgstr "名前"
 
-#: ../src/hamster/preferences.py:664
+#: ../src/hamster/preferences.py:475
 msgid "New category"
 msgstr "新しいカテゴリ"
 
-#: ../src/hamster/preferences.py:677
+#: ../src/hamster/preferences.py:489
 msgid "New activity"
 msgstr "新しい活動"
 
-#. notify interval slider value label
-#: ../src/hamster/preferences.py:738
-#, python-format
-msgid "%(interval_minutes)d minute"
-msgid_plural "%(interval_minutes)d minutes"
-msgstr[0] "%(interval_minutes)d 分"
-
-#. notify interval slider value label
-#: ../src/hamster/preferences.py:743
-msgid "Never"
-msgstr "しない"
-
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:148
-msgid "activity"
-msgstr "活動"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:150
+#: ../src/hamster/reports.py:135
 msgid "start time"
 msgstr "開始時間"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:152
+#: ../src/hamster/reports.py:137
 msgid "end time"
 msgstr "終了時間"
 
 #. column title in the TSV export format
-#: ../src/hamster/reports.py:154
+#: ../src/hamster/reports.py:139
 msgid "duration minutes"
 msgstr "要した時間(分)"
 
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:156
-msgid "category"
-msgstr "カテゴリ"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:158
-msgid "description"
-msgstr "説明"
-
-#. column title in the TSV export format
-#: ../src/hamster/reports.py:160 ../src/hamster/reports.py:312
-msgid "tags"
-msgstr "タグ"
-
-#: ../src/hamster/reports.py:207
+#: ../src/hamster/reports.py:191
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s "
@@ -654,209 +386,458 @@ msgstr ""
 "%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の活動"
 "レポート"
 
-#: ../src/hamster/reports.py:209
+#: ../src/hamster/reports.py:193
 #, python-format
 msgid ""
 "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
 "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_B)s%(end_d)s日の活動レポート"
 
-#: ../src/hamster/reports.py:211
+#: ../src/hamster/reports.py:195
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
 msgstr "%(start_Y)s年%(start_B)s%(start_d)s日の活動レポート"
 
-#: ../src/hamster/reports.py:213
+#: ../src/hamster/reports.py:197
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
 msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_d)s日の活動レポート"
 
-#. date column format for each row in HTML report
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/reports.py:265 ../src/hamster/reports.py:297
-msgctxt "html report"
-msgid "%b %d, %Y"
-msgstr "%Y年%m月%d日 "
-
-#. grand_total = _("%s hours") % ("%.1f" % (total_duration.seconds / 60.0 / 60 + total_duration.days * 24)),
-#: ../src/hamster/reports.py:306
+#: ../src/hamster/reports.py:288
 msgid "Totals by Day"
 msgstr "一日の集計"
 
-#: ../src/hamster/reports.py:307
+#: ../src/hamster/reports.py:289
 msgid "Activity Log"
 msgstr "活動記録"
 
-#: ../src/hamster/reports.py:310
+#: ../src/hamster/reports.py:290
+msgid "Totals"
+msgstr "合計"
+
+#: ../src/hamster/reports.py:292
 msgid "activities"
 msgstr "活動"
 
-#: ../src/hamster/reports.py:311
+#: ../src/hamster/reports.py:293
 msgid "categories"
 msgstr "カテゴリ"
 
-#: ../src/hamster/reports.py:314
+#: ../src/hamster/reports.py:296
 msgid "Distinguish:"
 msgstr "区分:"
 
-#: ../src/hamster/reports.py:316
+#: ../src/hamster/reports.py:298
 msgid "Date"
 msgstr "日付"
 
-#: ../src/hamster/reports.py:326
+#: ../src/hamster/reports.py:308
 msgid "Show template"
 msgstr "テンプレート表示"
 
-#: ../src/hamster/reports.py:327
+#: ../src/hamster/reports.py:309
 #, python-format
 msgid "You can override it by storing your version in %(home_folder)s"
 msgstr "%(home_folder)sに保存しているものを優先させることが可能です"
 
-#: ../src/hamster/stats.py:147
-msgctxt "years"
-msgid "All"
-msgstr "すべて"
-
-#: ../src/hamster/stats.py:177
-msgid ""
-"There is no data to generate statistics yet.\n"
-"A week of usage would be nice!"
-msgstr ""
-"統計情報を生成するデータがまだありません。\n"
-"1週間使ってみませんか!"
-
-#: ../src/hamster/stats.py:180
-msgid "Collecting data — check back after a week has passed!"
-msgstr "データを集めています — 一週間後に調査してください!"
-
-#. date format for the first record if the year has not been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:331
-msgctxt "first record"
-msgid "%b %d, %Y"
-msgstr "%Y年%m月%d日"
-
-#. date of first record when year has been selected
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:336
-msgctxt "first record"
-msgid "%b %d"
-msgstr "%m月%d日"
-
-#: ../src/hamster/stats.py:338
-#, python-format
-msgid "First activity was recorded on %s."
-msgstr "最初の活動は%sに記録されました。"
-
-#: ../src/hamster/stats.py:347 ../src/hamster/stats.py:351
-#, python-format
-msgid "%(num)s year"
-msgid_plural "%(num)s years"
-msgstr[0] "%(num)s年間"
-
-#. FIXME: difficult string to properly pluralize
-#: ../src/hamster/stats.py:356
-#, python-format
-msgid ""
-"Time tracked so far is %(human_days)s human days (%(human_years)s) or "
-"%(working_days)s working days (%(working_years)s)."
-msgstr ""
-"これまでの記録時間は、%(human_days)s日(%(human_years)s)または%(working_days)s"
-"作業日(%(working_years)s)。"
-
-#. How the date of the longest activity should be displayed in statistics
-#. Using python datetime formatting syntax. See:
-#. http://docs.python.org/library/time.html#time.strftime
-#: ../src/hamster/stats.py:374
-msgctxt "date of the longest activity"
-msgid "%b %d, %Y"
-msgstr "%Y年%m月%d日"
-
-#: ../src/hamster/stats.py:379
-#, python-format
-msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
-msgid_plural ""
-"Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] "%(date)s日の最長継続作業は、%(hours)s時間です。"
-
-#. total records (in selected scope)
-#: ../src/hamster/stats.py:387
-#, python-format
-msgid "There is %s record."
-msgid_plural "There are %s records."
-msgstr[0] "%sレコードあります。"
-
-#: ../src/hamster/stats.py:407
-msgid "Hamster would like to observe you some more!"
-msgstr "ハムスターは、もう少し観察したがってます!"
-
-#: ../src/hamster/stats.py:409
-#, python-format
-msgid ""
-"With %s percent of all activities starting before 9am, you seem to be an "
-"early bird."
-msgstr "午前9時以前に開始した活動は%sパーセントなので、早起きですね。"
-
-#: ../src/hamster/stats.py:412
-#, python-format
-msgid ""
-"With %s percent of all activities starting after 11pm, you seem to be a "
-"night owl."
-msgstr "午後11時以降に開始した活動は%sパーセントなので、宵っ張りですね。"
-
-#: ../src/hamster/stats.py:415
-#, python-format
-msgid ""
-"With %s percent of all activities being shorter than 15 minutes, you seem to "
-"be a busy bee."
-msgstr "15分未満の活動が%sパーセントなので、忙しそうですね。"
-
-#: ../src/hamster/today.py:243
-msgid "No records today"
-msgstr "今日の記録はありません"
-
-#: ../src/hamster/today.py:250
-#, python-format
-msgid "%(category)s: %(duration)s"
-msgstr "%(category)s: %(duration)s"
-
-#. duration in main drop-down per category in hours
-#: ../src/hamster/today.py:253
-#, python-format
-msgid "%sh"
-msgstr "%s時間"
-
-#: ../src/hamster/today.py:280
-msgid "Just started"
-msgstr "只今開始"
-
-#: ../src/hamster/widgets/reportchooserdialog.py:39
+#: ../src/hamster/widgets/reportchooserdialog.py:37
 msgid "Save Report — Time Tracker"
 msgstr "レポートを保存 — タイムトラッカー"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:57
+#: ../src/hamster/widgets/reportchooserdialog.py:55
 msgid "HTML Report"
 msgstr "HTML レポート"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:65
+#: ../src/hamster/widgets/reportchooserdialog.py:63
 msgid "Tab-Separated Values (TSV)"
 msgstr "タブ区切り値 (TSV)"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:73
+#: ../src/hamster/widgets/reportchooserdialog.py:71
 msgid "XML"
 msgstr "XML"
 
-#: ../src/hamster/widgets/reportchooserdialog.py:80
+#: ../src/hamster/widgets/reportchooserdialog.py:78
 msgid "iCal"
 msgstr "iCal"
 
 #. title in the report file name
-#: ../src/hamster/widgets/reportchooserdialog.py:97
+#: ../src/hamster/widgets/reportchooserdialog.py:95
 msgid "Time track"
 msgstr "タイムトラッカー"
+
+#~ msgid "in progress"
+#~ msgstr "進行中..."
+
+#~ msgid "Description:"
+#~ msgstr "説明:"
+
+#~ msgid "Time:"
+#~ msgstr "時間:"
+
+#~ msgid "Activity:"
+#~ msgstr "活動:"
+
+#~ msgid "Tags:"
+#~ msgstr "タグ:"
+
+#~ msgid "Stop tracking on idle"
+#~ msgstr "アイドル時に記録を停止する"
+
+#~ msgid "Stop tracking current activity when computer becomes idle"
+#~ msgstr "コンピューターがアイドル状態になったら活動の記録を停止する"
+
+#~ msgid "Stop tracking on shutdown"
+#~ msgstr "シャットダウン時は記録を停止する"
+
+#~ msgid "Stop tracking current activity on shutdown"
+#~ msgstr "シャットダウン時に記録を停止する"
+
+#~ msgid "Remind of current task every x minutes"
+#~ msgstr "現在のタスクを x 分ごとに通知します"
+
+#~ msgid ""
+#~ "Remind of current task every specified amount of minutes. Set to 0 or "
+#~ "greater than 120 to disable reminder."
+#~ msgstr ""
+#~ "現在のタスクを、指定した時間(分)ごとに通知します。0または120を超える値に設"
+#~ "定すると通知しません。"
+
+#~ msgid "Also remind when no activity is set"
+#~ msgstr "活動が設定されていない時にも通知する"
+
+#~ msgid ""
+#~ "Also remind every notify_interval minutes if no activity has been started."
+#~ msgstr ""
+#~ "活動が何も開始されていない場合にも、notify_interval 分毎に通知する。"
+
+#~ msgid ""
+#~ "Activities will be counted as to belong to yesterday if the current time "
+#~ "is less than the specified day start; and today, if it is over the time. "
+#~ "Activities that span two days, will tip over to the side where the "
+#~ "largest part of the activity is."
+#~ msgstr ""
+#~ "現在の時間が一日の開始時間より前の場合、活動は昨日の集計に計上され、時間を"
+#~ "超えたものが今日に集計されます。2日にまたがる活動は、活動の最大部分がある"
+#~ "側から、反転します。"
+
+#~ msgid "Should workspace switch trigger activity switch"
+#~ msgstr "ワークスペース切り替え時に動作を切り替えます"
+
+#~ msgid ""
+#~ "List of enabled tracking methods. \"name\" will enable switching "
+#~ "activities by name defined in workspace_mapping. \"memory\" will enable "
+#~ "switching to the last activity when returning to a previous workspace."
+#~ msgstr ""
+#~ "利用可能な記録手法のリストです。\"name\"は workspace_mapping で定義されて"
+#~ "いる名前で活動を切り替え可能にします。\"memory\" は、前のワークスペースに"
+#~ "戻るときに、そこで最後の活動に変更します。"
+
+#~ msgid "Switch activity on workspace change"
+#~ msgstr "ワークスペースの変更時に動作を切り替えます。"
+
+#~ msgid ""
+#~ "If switching by name is enabled, this list sets the activity names that "
+#~ "should be switched to, workspaces represented by the index of item."
+#~ msgstr ""
+#~ "名前で切り替え可能にする場合、このリストは切り替える活動の名前に設定し、"
+#~ "ワークスペースはアイテムのインデックスで再表示されます。"
+
+#~ msgid "Show / hide Time Tracker Window"
+#~ msgstr "タイムトラッカーのウィンドウの表示/非表示"
+
+#~ msgid "Keyboard shortcut for showing / hiding the Time Tracker window."
+#~ msgstr ""
+#~ "タイムトラッカーのウィンドウ表示・非表示を切り替えるキーボードショートカッ"
+#~ "トです。"
+
+#~ msgid "Toggle hamster application window action"
+#~ msgstr "ハムスターアプリケーションウィンドウのアクションをOn/Offします。"
+
+#~ msgid "Command for toggling visibility of the hamster application window."
+#~ msgstr "ハムスターアプリケーションウィンドウの表示を切り替えるコマンド。"
+
+#~ msgid "Toggle hamster application window"
+#~ msgstr "ハムスターアプリケーションウィンドウをOn/Offします。"
+
+#~ msgid "Toggle visibility of the hamster application window."
+#~ msgstr "ハムスターアプリケーションウィンドウの表示をOn/Offします。"
+
+#~ msgid "Project Hamster - track your time"
+#~ msgstr "プロジェクト・ハムスター - 時間を記録"
+
+#~ msgid "The overview window of hamster time tracker"
+#~ msgstr "ハムスター・タイムトラッカーの概要ウィンドウ"
+
+#~ msgid "Show Statistics"
+#~ msgstr "統計の表示"
+
+#~ msgid "Categories"
+#~ msgstr "カテゴリ"
+
+#~ msgid "Activities"
+#~ msgstr "活動"
+
+#~ msgid "No data for this interval"
+#~ msgstr "この期間のデータはありません"
+
+#~ msgid "Day"
+#~ msgstr "日間"
+
+#~ msgid "Week"
+#~ msgstr "週間"
+
+#~ msgid "Month"
+#~ msgstr "月間"
+
+#~ msgid "Overview — Hamster"
+#~ msgstr "概要 — ハムスター"
+
+#~ msgid "_Overview"
+#~ msgstr "概要(_O)"
+
+#~ msgid "_View"
+#~ msgstr "表示(_V)"
+
+#~ msgid "Remove"
+#~ msgstr "削除"
+
+#~ msgid "Add new"
+#~ msgstr "新規追加"
+
+#~ msgid "Edit"
+#~ msgstr "編集"
+
+#~ msgid "Stop tracking when computer becomes idle"
+#~ msgstr "コンピューターがアイドル状態になったら記録を停止する"
+
+#~ msgid "Remind of current activity every:"
+#~ msgstr "現在の活動を通知する間隔:"
+
+#~ msgid "Use following todo list if available:"
+#~ msgstr "可能であれば、以下のTODOリストを使用する:"
+
+#~ msgid "Integration"
+#~ msgstr "集計"
+
+#~ msgid "Resume the last activity when returning to a workspace"
+#~ msgstr "ワークスペースに戻ると、そこでの直近の活動に戻す"
+
+#~ msgid "Start new activity when switching workspaces:"
+#~ msgstr "ワークスペース切り替え時に開始する新規活動を指定:"
+
+#~ msgid "Workspaces"
+#~ msgstr "ワークスペース"
+
+#~ msgid "Day:"
+#~ msgstr "日間:"
+
+#~ msgid "_Tracking"
+#~ msgstr "記録(_T)"
+
+#~ msgid "Add earlier activity"
+#~ msgstr "以前の活動を追加"
+
+#~ msgid "Overview"
+#~ msgstr "概要"
+
+#~ msgid "Statistics"
+#~ msgstr "統計"
+
+#~ msgid "_Edit"
+#~ msgstr "編集(_E)"
+
+#~ msgid "Contents"
+#~ msgstr "目次"
+
+#~ msgid "S_witch"
+#~ msgstr "切り替え(_W)"
+
+#~ msgid "Start _Tracking"
+#~ msgstr "記録の開始(_T)"
+
+#~ msgid "Start new activity"
+#~ msgstr "新しい活動の開始"
+
+#, fuzzy
+#~ msgid "totals"
+#~ msgstr "合計"
+
+#, fuzzy
+#~ msgid "Show Overview"
+#~ msgstr "概要を表示(_O)"
+
+#, fuzzy
+#~ msgid "Uncategorized"
+#~ msgstr "カテゴリ"
+
+#~ msgid "Work"
+#~ msgstr "仕事"
+
+#~ msgid "Reading news"
+#~ msgstr "新聞を読む"
+
+#~ msgid "Checking stocks"
+#~ msgstr "株価をチェックする"
+
+#~ msgid "Super secret project X"
+#~ msgstr "超極秘プロジェクトX"
+
+#~ msgid "World domination"
+#~ msgstr "世界征服"
+
+#~ msgid "Day-to-day"
+#~ msgstr "日課"
+
+#~ msgid "Lunch"
+#~ msgstr "昼食"
+
+#~ msgid "Watering flowers"
+#~ msgstr "花に水をやる"
+
+#~ msgid "Doing handstands"
+#~ msgstr "逆立ちをする"
+
+#, python-format
+#~ msgid "%dh"
+#~ msgstr "%d時間"
+
+#, python-format
+#~ msgid "%dmin"
+#~ msgstr "%d分間"
+
+#, python-format
+#~ msgid "%dh %dmin"
+#~ msgstr "%d時間 %d分"
+
+#~ msgid "%B %d, %Y"
+#~ msgstr "%Y年%m月%d日"
+
+#, python-format
+#~ msgid ""
+#~ "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+#~ msgstr ""
+#~ "%(start_Y)s年%(start_B)s%(start_d)s日〜%(end_Y)s年%(end_B)s%(end_d)s日の集"
+#~ "計結果"
+
+#, python-format
+#~ msgid "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+#~ msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_B)s%(end_d)s日"
+
+#, python-format
+#~ msgid "%(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
+#~ msgstr "%(end_Y)s年%(start_B)s%(start_d)s日〜%(end_d)s日"
+
+#~ msgctxt "overview list"
+#~ msgid "%A, %b %d"
+#~ msgstr "%m月%d日 (%a)"
+
+#, python-format
+#~ msgid "%s hours tracked total"
+#~ msgstr "%s 時間分を記録しました"
+
+#~ msgid "None"
+#~ msgstr "何もしない"
+
+#, python-format
+#~ msgid "%(interval_minutes)d minute"
+#~ msgid_plural "%(interval_minutes)d minutes"
+#~ msgstr[0] "%(interval_minutes)d 分"
+
+#~ msgid "Never"
+#~ msgstr "しない"
+
+#~ msgctxt "html report"
+#~ msgid "%b %d, %Y"
+#~ msgstr "%Y年%m月%d日 "
+
+#~ msgctxt "years"
+#~ msgid "All"
+#~ msgstr "すべて"
+
+#~ msgid ""
+#~ "There is no data to generate statistics yet.\n"
+#~ "A week of usage would be nice!"
+#~ msgstr ""
+#~ "統計情報を生成するデータがまだありません。\n"
+#~ "1週間使ってみませんか!"
+
+#~ msgid "Collecting data — check back after a week has passed!"
+#~ msgstr "データを集めています — 一週間後に調査してください!"
+
+#~ msgctxt "first record"
+#~ msgid "%b %d, %Y"
+#~ msgstr "%Y年%m月%d日"
+
+#~ msgctxt "first record"
+#~ msgid "%b %d"
+#~ msgstr "%m月%d日"
+
+#, python-format
+#~ msgid "First activity was recorded on %s."
+#~ msgstr "最初の活動は%sに記録されました。"
+
+#, python-format
+#~ msgid "%(num)s year"
+#~ msgid_plural "%(num)s years"
+#~ msgstr[0] "%(num)s年間"
+
+#, python-format
+#~ msgid ""
+#~ "Time tracked so far is %(human_days)s human days (%(human_years)s) or "
+#~ "%(working_days)s working days (%(working_years)s)."
+#~ msgstr ""
+#~ "これまでの記録時間は、%(human_days)s日(%(human_years)s)また"
+#~ "は%(working_days)s作業日(%(working_years)s)。"
+
+#~ msgctxt "date of the longest activity"
+#~ msgid "%b %d, %Y"
+#~ msgstr "%Y年%m月%d日"
+
+#, python-format
+#~ msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
+#~ msgid_plural ""
+#~ "Longest continuous work happened on %(date)s and was %(hours)s hours."
+#~ msgstr[0] "%(date)s日の最長継続作業は、%(hours)s時間です。"
+
+#, python-format
+#~ msgid "There is %s record."
+#~ msgid_plural "There are %s records."
+#~ msgstr[0] "%sレコードあります。"
+
+#~ msgid "Hamster would like to observe you some more!"
+#~ msgstr "ハムスターは、もう少し観察したがってます!"
+
+#, python-format
+#~ msgid ""
+#~ "With %s percent of all activities starting before 9am, you seem to be an "
+#~ "early bird."
+#~ msgstr "午前9時以前に開始した活動は%sパーセントなので、早起きですね。"
+
+#, python-format
+#~ msgid ""
+#~ "With %s percent of all activities starting after 11pm, you seem to be a "
+#~ "night owl."
+#~ msgstr "午後11時以降に開始した活動は%sパーセントなので、宵っ張りですね。"
+
+#, python-format
+#~ msgid ""
+#~ "With %s percent of all activities being shorter than 15 minutes, you seem "
+#~ "to be a busy bee."
+#~ msgstr "15分未満の活動が%sパーセントなので、忙しそうですね。"
+
+#~ msgid "No records today"
+#~ msgstr "今日の記録はありません"
+
+#, python-format
+#~ msgid "%(category)s: %(duration)s"
+#~ msgstr "%(category)s: %(duration)s"
+
+#, python-format
+#~ msgid "%sh"
+#~ msgstr "%s時間"
+
+#~ msgid "Just started"
+#~ msgstr "只今開始"
 
 #, fuzzy
 #~| msgid "activities"

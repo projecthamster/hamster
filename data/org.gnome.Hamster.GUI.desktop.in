@@ -3,6 +3,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Hamster
+GenericName=Time Tracker
 Comment=Your personal time keeping tool
 Icon=org.gnome.Hamster.GUI
 DBusActivatable=true
@@ -12,8 +13,8 @@ Actions=overview;add;
 
 [Desktop Action overview]
 Exec= @BINDIR@/hamster overview
-Name=overview
+Name=Time Tracking Overview
 
 [Desktop Action add]
 Exec= @BINDIR@/hamster add
-Name=add
+Name=Add activity
