@@ -19,7 +19,8 @@ if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
 
 
 # Legacy server. Still used by the shell-extension.
-# new code could access the org.gnome.Hamster.GUI actions directly
+# New code _could_ access the org.gnome.Hamster.GUI actions directly,
+# although the exact action names/data are subject to change.
 # http://lazka.github.io/pgi-docs/Gio-2.0/classes/Application.html#Gio.Application
 # > The actions are also exported on the session bus,
 #   and GIO provides the Gio.DBusActionGroup wrapper
