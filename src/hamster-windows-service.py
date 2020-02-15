@@ -49,7 +49,7 @@ class WindowServer(dbus.service.Object):
         cmd = "{} {} &".format(base_cmd, name)
         subprocess.run(cmd, shell=True)
 
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
+    @dbus.service.method("org.gnome.Hamster.WindowServer", in_signature='i')
     def edit(self, id=0):
         """Edit fact, given its id (int) in the database.
 
