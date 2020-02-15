@@ -135,20 +135,22 @@ class Storage(db.Storage, dbus.service.Object):
 
     # facts
     @dbus.service.method("org.gnome.Hamster", in_signature='siib', out_signature='i')
-    def AddFact(self, fact_str, start_time, end_time, temporary=False):
+    def AddFact(self, fact_str, start_time, end_time, temporary):
         """Add fact specified by a string.
+
+        If the parsed fact has no start, then now is used.
+        To fully use the hamster fact parser, as on the cmdline,
+        just pass 0 for start_time and end_time.
 
         Args:
             fact_str (str): string to be parsed.
-            start_time (int): Start datetime timestamp.
-                              For backward compatibility with the
-                              gnome shell extension,
-                              0 is special and means dt.datetime.now().
-                              Otherwise, overrides the parsed value.
+            start_time (int): Start datetime ovveride timestamp (ignored if 0).
                               -1 means None.
-            end_time (int): Start datetime timestamp.
-                            If different from 0, overrides the parsed value.
+            end_time (int): datetime ovveride timestamp (ignored if 0).
                             -1 means None.
+            #temporary (boolean): historical mystery, ignored, but needed to
+                                 keep the method signature stable.
+                                 Do not forget to pass something (e.g. False)!
         Returns:
             fact id (int), 0 means failure.
 
@@ -157,11 +159,13 @@ class Storage(db.Storage, dbus.service.Object):
         """
         fact = Fact.parse(fact_str)
 
+        # default value if none found
+        if not fact.start_time:
+            fact.start_time = dt.datetime.now()
+
         if start_time == -1:
             fact.start_time = None
-        elif start_time == 0:
-            fact.start_time = dt.datetime.now()
-        else:
+        elif start_time != 0:
             fact.start_time = dt.datetime.utcfromtimestamp(start_time)
 
         if end_time == -1:
@@ -242,7 +246,7 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isiib', out_signature='i')
-    def UpdateFact(self, fact_id, fact, start_time, end_time, temporary = False):
+    def UpdateFact(self, fact_id, fact, start_time, end_time, temporary):
         start_time = start_time or None
         if start_time:
             start_time = dt.datetime.utcfromtimestamp(start_time)
