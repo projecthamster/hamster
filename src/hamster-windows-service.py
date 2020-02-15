@@ -41,11 +41,13 @@ class WindowServer(dbus.service.Object):
 
     def _open_window(self, name):
         if hamster.installed:
-            subprocess.run("hamster {} &".format(name),
-                           shell=True)
+            base_cmd = "hamster"
         else:
-            subprocess.run("python3 {}/hamster-cli.py {} &".format(
-                os.path.dirname(__file__), name), shell=True)
+            # both scripts are at the same place in the source tree
+            cwd = os.path.dirname(__file__)
+            base_cmd = "python3 {}/hamster-cli.py".format(cwd)
+        cmd = "{} {} &".format(base_cmd, name)
+        subprocess.run(cmd, shell=True)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
     def edit(self, id=0):
