@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # nicked off hamster-service
 
+import os.path
 import dbus
 import dbus.service
 import subprocess
+import hamster
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
@@ -17,7 +19,8 @@ if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
 
 
 # Legacy server. Still used by the shell-extension.
-# new code could access the org.gnome.Hamster.GUI actions directly
+# New code _could_ access the org.gnome.Hamster.GUI actions directly,
+# although the exact action names/data are subject to change.
 # http://lazka.github.io/pgi-docs/Gio-2.0/classes/Application.html#Gio.Application
 # > The actions are also exported on the session bus,
 #   and GIO provides the Gio.DBusActionGroup wrapper
@@ -38,10 +41,16 @@ class WindowServer(dbus.service.Object):
         self.mainloop.quit()
 
     def _open_window(self, name):
-        subprocess.run("hamster {} &".format(name),
-                       shell=True)
+        if hamster.installed:
+            base_cmd = "hamster"
+        else:
+            # both scripts are at the same place in the source tree
+            cwd = os.path.dirname(__file__)
+            base_cmd = "python3 {}/hamster-cli.py".format(cwd)
+        cmd = "{} {} &".format(base_cmd, name)
+        subprocess.run(cmd, shell=True)
 
-    @dbus.service.method("org.gnome.Hamster.WindowServer")
+    @dbus.service.method("org.gnome.Hamster.WindowServer", in_signature='i')
     def edit(self, id=0):
         """Edit fact, given its id (int) in the database.
 
