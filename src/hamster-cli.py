@@ -123,8 +123,8 @@ class Hamster(gtk.Application):
     def add_actions(self):
         # most actions have no parameters
         # for type "i", use Variant.new_int32() and .get_int32() to pack/unpack
-        for name in ("about", "add", "edit", "overview", "preferences"):
-            data_type = glib.VariantType("i") if name == "edit" else None
+        for name in ("about", "add", "clone", "edit", "overview", "preferences"):
+            data_type = glib.VariantType("i") if name in ("edit", "clone") else None
             action = gio.SimpleAction.new(name, data_type)
             action.connect("activate", self.on_activate_window)
             self.add_action(action)
@@ -162,15 +162,15 @@ class Hamster(gtk.Application):
                 self.about_controller = About(parent=_dummy)
                 logger.debug("new About")
             controller = self.about_controller
-        elif name == "add":
-            if not self.fact_controller:
-                self.fact_controller = CustomFactController(parent=self)
-                logger.debug("new CustomFactController")
-            controller = self.fact_controller
-        elif name == "edit":
-            if not self.fact_controller:
-                id_ = data.get_int32()
-                self.fact_controller = CustomFactController(parent=self, fact_id=id_)
+        elif name in ("add", "clone", "edit"):
+            if self.fact_controller:
+                # Something is already going on, with other arguments, present it.
+                # Or should we just discard the forgotten one ?
+                logger.warning("Fact controller already active. Please close first.")
+            else:
+                fact_id = data.get_int32() if data else None
+                self.fact_controller = CustomFactController(name, fact_id=fact_id,
+                                                            parent=self)
                 logger.debug("new CustomFactController")
             controller = self.fact_controller
         elif name == "overview":
@@ -191,6 +191,20 @@ class Hamster(gtk.Application):
         controller.present()
         logger.debug("window presented")
 
+    def present_fact_controller(self, action, fact_id=0):
+        """Present the fact controller window to add, clone or edit a fact.
+
+        Args:
+            action (str): "add", "clone" or "edit"
+        """
+        assert action in ("add", "clone", "edit")
+        if action in ("clone", "edit"):
+            action_data = glib.Variant.new_int32(int(fact_id))
+        else:
+            action_data = None
+        # always open dialogs through actions,
+        # both for consistency, and to reduce the paths to test.
+        app.activate_action(action, action_data)
 
 class HamsterCli(object):
     """Command line interface."""

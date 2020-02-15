@@ -42,7 +42,6 @@ from hamster.lib import stuff
 from hamster import widgets
 from hamster.preferences import PreferencesEditor
 
-from hamster.lib.configuration import dialogs
 from hamster.lib.configuration import Controller
 
 
@@ -562,7 +561,7 @@ class Overview(Controller):
         self.storage.stop_tracking()
 
     def on_row_activated(self, tree, day, fact):
-        dialogs.edit.show(self, fact_id=fact.id)
+        self.present_fact_controller("edit", fact_id=fact.id)
 
     def on_row_delete_called(self, tree, fact):
         self.storage.remove_fact(fact.id)
@@ -628,6 +627,10 @@ class Overview(Controller):
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
 
+    def present_fact_controller(self, action, fact_id=0):
+        app = self.window.get_property("application")
+        app.present_fact_controller(action, fact_id=fact_id)
+
     def start_new_fact(self, clone_selected=True, fallback=True):
         """Start now a new fact.
         clone_selected (bool): whether to start a clone of currently
@@ -636,9 +639,12 @@ class Overview(Controller):
                          in case of no selected fact.
         """
         if not clone_selected:
-            dialogs.edit.show(self, base_fact=None)
-        elif self.fact_tree.current_fact or fallback:
-            dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
+            self.present_fact_controller("add")
+        elif self.fact_tree.current_fact:
+            self.present_fact_controller("clone",
+                                         fact_id=self.fact_tree.current_fact.id)
+        elif fallback:
+            self.present_fact_controller("add")
 
     def close_window(self):
         self.window.destroy()

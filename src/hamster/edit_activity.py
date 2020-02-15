@@ -35,7 +35,15 @@ from hamster.lib.stuff import escape_pango
 
 
 class CustomFactController(Controller):
-    def __init__(self,  parent=None, fact_id=None, base_fact=None):
+    """Controller for a Fact edition window.
+
+    Args:
+        action (str): "add", "clone", "edit"
+        fact_id (int): used for "clone" and "edit"
+        parent: inherited from Controller
+    """
+
+    def __init__(self, action, fact_id=None, parent=None):
         Controller.__init__(self, parent)
 
         self._date = None  # for the date property
@@ -79,19 +87,17 @@ class CustomFactController(Controller):
         # this will set self.master_is_cmdline
         self.cmdline.grab_focus()
 
-        if fact_id:
-            # editing
+        title = _("Update activity") if action == "edit" else _("Add activity")
+        self.window.set_title(title)
+        self.get_widget("delete_button").set_sensitive(action == "edit")
+        if action == "edit":
             self.fact = runtime.storage.get_fact(fact_id)
-            self.window.set_title(_("Update activity"))
+        elif action == "clone":
+            base_fact = runtime.storage.get_fact(fact_id)
+            self.fact = base_fact.copy(start_time=dt.datetime.now(),
+                                       end_time=None)
         else:
-            self.window.set_title(_("Add activity"))
-            self.get_widget("delete_button").set_sensitive(False)
-            if base_fact:
-                # start a clone now.
-                self.fact = base_fact.copy(start_time=dt.datetime.now(),
-                                           end_time=None)
-            else:
-                self.fact = Fact(start_time=dt.datetime.now())
+            self.fact = Fact(start_time=dt.datetime.now())
 
         original_fact = self.fact
         # TODO: should use hday, not date.
