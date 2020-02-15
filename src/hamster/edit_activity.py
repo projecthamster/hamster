@@ -51,7 +51,8 @@ class CustomFactController(Controller):
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
 
-        # None if creating a new fact, instead of editing one
+
+        self.action = action
         self.fact_id = fact_id
 
         self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
@@ -371,7 +372,7 @@ class CustomFactController(Controller):
         self.close_window()
 
     def on_save_button_clicked(self, button):
-        if self.fact_id:
+        if self.action == "edit":
             runtime.storage.update_fact(self.fact_id, self.fact)
         else:
             runtime.storage.add_fact(self.fact)
