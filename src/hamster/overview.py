@@ -40,7 +40,6 @@ from hamster.lib import layout
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
-from hamster.preferences import PreferencesEditor
 
 from hamster.lib.configuration import Controller
 
@@ -411,8 +410,8 @@ class Totals(graphics.Scene):
 
 
 class Overview(Controller):
-    def __init__(self, parent = None):
-        Controller.__init__(self, parent)
+    def __init__(self):
+        Controller.__init__(self)
 
         self.prefs_dialog = None  # preferences dialog controller
 
@@ -594,10 +593,8 @@ class Overview(Controller):
             dialog.destroy()
 
     def on_prefs_clicked(self, menu):
-        if self.prefs_dialog:
-            self.prefs_dialog.present()
-        else:
-            self.prefs_dialog = PreferencesEditor(parent=self.window)
+        app = self.window.get_property("application")
+        app.activate_action("preferences")
 
     def on_export_clicked(self, menu):
         if self.report_chooser:
@@ -620,7 +617,6 @@ class Overview(Controller):
 
         def on_report_chooser_closed(widget):
             self.report_chooser = None
-
 
         self.report_chooser = widgets.ReportChooserDialog()
         self.report_chooser.connect("report-chosen", on_report_chosen)

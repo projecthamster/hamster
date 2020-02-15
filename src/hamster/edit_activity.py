@@ -40,18 +40,17 @@ class CustomFactController(Controller):
     Args:
         action (str): "add", "clone", "edit"
         fact_id (int): used for "clone" and "edit"
-        parent: inherited from Controller
     """
 
-    def __init__(self, action, fact_id=None, parent=None):
-        Controller.__init__(self, parent)
+    def __init__(self, action, fact_id=None):
+        Controller.__init__(self)
 
         self._date = None  # for the date property
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
-        self.parent = parent
+
         # None if creating a new fact, instead of editing one
         self.fact_id = fact_id
 
@@ -398,12 +397,3 @@ class CustomFactController(Controller):
                 return False
             if self.validate_fields():
                 self.on_save_button_clicked(None)
-
-    def close_window(self):
-        if not self.parent:
-            gtk.main_quit()
-        else:
-            self.window.destroy()
-            self.window = None
-            self._gui = None
-            self.emit("on-close")

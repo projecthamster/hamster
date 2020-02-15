@@ -40,18 +40,13 @@ from hamster.lib import datetime as dt
 
 
 class Controller(gobject.GObject):
-    """Window creator and handler.
-
-    If parent is given, this is a dialog for parent, otherwise a toplevel.
-    """
+    """Window creator and handler."""
     __gsignals__ = {
         "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self, parent=None, ui_file=""):
+    def __init__(self, ui_file=""):
         gobject.GObject.__init__(self)
-
-        self.parent = parent
 
         if ui_file:
             self._gui = load_ui_file(ui_file)
@@ -59,16 +54,6 @@ class Controller(gobject.GObject):
         else:
             self._gui = None
             self.window = gtk.Window()
-
-        if True:  # keep indentation
-            # if parent is None or the Application, then the window is toplevel
-            transient_for = parent if isinstance(parent, gtk.Window) else None
-            # Essential for positioning on wayland.
-            # This should also select the correct window type if unset yet.
-            # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
-            self.window.set_transient_for(transient_for)
-            # this changes nothing, the dialog appears centered on the screen:
-            # self.window.set_type_hint(gdk.WindowTypeHint.DIALOG)
 
         self.window.connect("delete-event", self.window_delete_event)
         if self._gui:
