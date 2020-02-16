@@ -32,16 +32,17 @@ def configure(conf):
     conf.recurse("help")
 
 
-def options(opt):
-    opt.load('gnu_dirs')
+def options(ctx):
+    ctx.load('gnu_dirs')
 
     # the waf default value is /usr/local, which causes issues (e.g. #309)
-    # opt.parser.set_defaults(prefix='/usr') did not update the help string,
+    # ctx.parser.set_defaults(prefix='/usr') did not update the help string,
     # hence need to replace the whole option
-    opt.parser.remove_option('--prefix')
+    ctx.parser.remove_option('--prefix')
     default_prefix = '/usr'
-    opt.add_option('--prefix', dest='prefix', default=default_prefix,
+    ctx.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
+
 
 
 def build(bld):
