@@ -1,7 +1,12 @@
 # -*- python -*-
 
-# slight code duplication with hamster/__init__.py, but this is finally cleaner.
+
 from subprocess import getstatusoutput
+
+from waflib import Utils
+
+
+# slight code duplication with hamster/__init__.py, but this is finally cleaner.
 rc, output = getstatusoutput("git describe --tags --always --dirty=+")
 VERSION = "3.0-beta" if rc else output
 
@@ -9,9 +14,6 @@ APPNAME = 'hamster'
 
 top = '.'
 out = 'build'
-
-import os
-from waflib import Logs, Utils
 
 
 def configure(conf):
@@ -40,7 +42,7 @@ def configure(conf):
     # it can be hard to remember the exact options used at the install step.
     # So from now on, options have to be given at the configure step only.
     # copy the options to the persistent env:
-    for name in ('prefix', 'skip_gsettings'):
+    for name in ('prefix', 'skip_gsettings', 'skip_icon_cache_update'):
         value = getattr(conf.options, name)
         setattr(conf.env, name, value)
 
@@ -60,6 +62,9 @@ def options(ctx):
     
     ctx.add_option('--skip-gsettings', dest='skip_gsettings', action='store_true',
                    help='skip gsettings schemas build and installation (for packagers)')
+    
+    ctx.add_option('--skip-icon-cache-update', dest='skip_icon_cache_update', action='store_true',
+                   help='skip icon cache update (for packagers)')
     
 
 def build(bld):
@@ -101,23 +106,5 @@ def build(bld):
         install_path="${DATADIR}/dbus-1/services",
         )
 
+    # look for wscript into further directories
     bld.recurse("po data help")
-
-    if not bld.env.skip_gsettings:
-        bld(features='glib2',
-            settings_schema_files=['data/org.gnome.hamster.gschema.xml'])
-
-    def update_icon_cache(ctx):
-        """Update the gtk icon cache."""
-        if ctx.cmd == "install":
-            # adapted from the previous waf gnome.py
-            icon_dir = os.path.join(ctx.env.DATADIR, 'icons/hicolor')
-            cmd = 'gtk-update-icon-cache -q -f -t {}'.format(icon_dir)
-            err = ctx.exec_command(cmd)
-            if err:
-                Logs.warn('The following  command failed:\n{}'.format(cmd))
-            else:
-                Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
-
-
-    bld.add_post_fun(update_icon_cache)
