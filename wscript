@@ -16,7 +16,10 @@ from waflib import Logs, Utils
 
 def configure(conf):
     conf.load('gnu_dirs')  # for DATADIR
-    conf.load('glib2')  # for GSettings support
+    
+    if not conf.options.skip_gsettings:
+        conf.load('glib2')  # for GSettings support
+    
     conf.load('python')
     conf.check_python_version(minver=(3,4,0))
 
@@ -28,10 +31,21 @@ def configure(conf):
     conf.env.VERSION = VERSION
     conf.env.GETTEXT_PACKAGE = "hamster"
     conf.env.PACKAGE = "hamster"
-
+    
     conf.recurse("help")
+    
+    # options are tied to a specific ./waf invocation (one terminal line),
+    # and woud have to be given again at any other ./waf invocation
+    # that is trouble when one wants to ./waf uninstall much later;
+    # it can be hard to remember the exact options used at the install step.
+    # So from now on, options have to be given at the configure step only.
+    # copy the options to the persistent env:
+    for name in ('prefix', 'skip_gsettings'):
+        value = getattr(conf.options, name)
+        setattr(conf.env, name, value)
 
 
+# used first, should be at the top
 def options(ctx):
     ctx.load('gnu_dirs')
 
@@ -40,10 +54,13 @@ def options(ctx):
     # hence need to replace the whole option
     ctx.parser.remove_option('--prefix')
     default_prefix = '/usr'
+    
     ctx.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
-
-
+    
+    ctx.add_option('--skip-gsettings', dest='skip_gsettings', action='store_true',
+                   help='skip gsettings schemas build and installation (for packagers)')
+    
 
 def build(bld):
     bld.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
@@ -86,8 +103,9 @@ def build(bld):
 
     bld.recurse("po data help")
 
-    bld(features='glib2',
-        settings_schema_files = ['data/org.gnome.hamster.gschema.xml'])
+    if not bld.env.skip_gsettings:
+        bld(features='glib2',
+            settings_schema_files=['data/org.gnome.hamster.gschema.xml'])
 
     def update_icon_cache(ctx):
         """Update the gtk icon cache."""
