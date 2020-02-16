@@ -16,25 +16,25 @@ top = '.'
 out = 'build'
 
 
-def configure(conf):
-    conf.load('gnu_dirs')  # for DATADIR
+def configure(ctx):
+    ctx.load('gnu_dirs')  # for DATADIR
     
-    if not conf.options.skip_gsettings:
-        conf.load('glib2')  # for GSettings support
+    if not ctx.options.skip_gsettings:
+        ctx.load('glib2')  # for GSettings support
     
-    conf.load('python')
-    conf.check_python_version(minver=(3,4,0))
+    ctx.load('python')
+    ctx.check_python_version(minver=(3,4,0))
 
-    conf.load('intltool')
+    ctx.load('intltool')
 
-    conf.env.ENABLE_NLS = 1
-    conf.env.HAVE_BIND_TEXTDOMAIN_CODESET = 1
+    ctx.env.ENABLE_NLS = 1
+    ctx.env.HAVE_BIND_TEXTDOMAIN_CODESET = 1
 
-    conf.env.VERSION = VERSION
-    conf.env.GETTEXT_PACKAGE = "hamster"
-    conf.env.PACKAGE = "hamster"
+    ctx.env.VERSION = VERSION
+    ctx.env.GETTEXT_PACKAGE = "hamster"
+    ctx.env.PACKAGE = "hamster"
     
-    conf.recurse("help")
+    ctx.recurse("help")
     
     # options are tied to a specific ./waf invocation (one terminal line),
     # and woud have to be given again at any other ./waf invocation
@@ -43,8 +43,8 @@ def configure(conf):
     # So from now on, options have to be given at the configure step only.
     # copy the options to the persistent env:
     for name in ('prefix', 'skip_gsettings', 'skip_icon_cache_update'):
-        value = getattr(conf.options, name)
-        setattr(conf.env, name, value)
+        value = getattr(ctx.options, name)
+        setattr(ctx.env, name, value)
 
 
 # used first, should be at the top
@@ -67,44 +67,44 @@ def options(ctx):
                    help='skip icon cache update (for packagers)')
     
 
-def build(bld):
-    bld.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
-    bld.install_as('${LIBEXECDIR}/hamster/hamster-windows-service', "src/hamster-windows-service.py", chmod=Utils.O755)
-    bld.install_as('${BINDIR}/hamster', "src/hamster-cli.py", chmod=Utils.O755)
+def build(ctx):
+    ctx.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
+    ctx.install_as('${LIBEXECDIR}/hamster/hamster-windows-service', "src/hamster-windows-service.py", chmod=Utils.O755)
+    ctx.install_as('${BINDIR}/hamster', "src/hamster-cli.py", chmod=Utils.O755)
 
 
-    bld.install_files('${PREFIX}/share/bash-completion/completions',
+    ctx.install_files('${PREFIX}/share/bash-completion/completions',
                       'src/hamster.bash')
 
 
-    bld(features='py',
-        source=bld.path.ant_glob('src/hamster/**/*.py'),
+    ctx(features='py',
+        source=ctx.path.ant_glob('src/hamster/**/*.py'),
         install_from='src')
 
     # set correct flags in defs.py
-    bld(features="subst",
+    ctx(features="subst",
         source="src/hamster/defs.py.in",
         target="src/hamster/defs.py",
         install_path="${PYTHONDIR}/hamster"
         )
 
-    bld(features="subst",
+    ctx(features="subst",
         source= "org.gnome.Hamster.service.in",
         target= "org.gnome.Hamster.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 
-    bld(features="subst",
+    ctx(features="subst",
         source= "org.gnome.Hamster.GUI.service.in",
         target= "org.gnome.Hamster.GUI.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 
-    bld(features="subst",
+    ctx(features="subst",
         source= "org.gnome.Hamster.WindowServer.service.in",
         target= "org.gnome.Hamster.WindowServer.service",
         install_path="${DATADIR}/dbus-1/services",
         )
 
     # look for wscript into further directories
-    bld.recurse("po data help")
+    ctx.recurse("po data help")

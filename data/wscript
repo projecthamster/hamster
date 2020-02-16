@@ -10,40 +10,40 @@ import os
 from waflib import Logs
 
 
-def build(bld):
-    if not bld.env.skip_gsettings:
-        bld(features='glib2',
+def build(ctx):
+    if not ctx.env.skip_gsettings:
+        ctx(features='glib2',
             settings_schema_files=['org.gnome.hamster.gschema.xml'])
 
-    bld.install_files('${DATADIR}/metainfo', 'org.gnome.Hamster.GUI.metainfo.xml')
+    ctx.install_files('${DATADIR}/metainfo', 'org.gnome.Hamster.GUI.metainfo.xml')
 
     filename = "org.gnome.Hamster.GUI.desktop"
-    bld(features = "subst",
+    ctx(features = "subst",
         source= "%s.in" % filename,
         target= "%s" % filename,
-        dict = bld.env,
+        dict = ctx.env,
         install_path = "${DATADIR}/applications"
        )
     
-    start_dir = bld.path.find_dir('.')
+    start_dir = ctx.path.find_dir('.')
     
     # glade builder files
-    bld.install_files('${DATADIR}/hamster', start_dir.ant_glob('*.ui'))
+    ctx.install_files('${DATADIR}/hamster', start_dir.ant_glob('*.ui'))
     # default files
-    bld.install_files('${DATADIR}/hamster', 'hamster.db')
-    bld.install_files('${DATADIR}/hamster', 'report_template.html')
+    ctx.install_files('${DATADIR}/hamster', 'hamster.db')
+    ctx.install_files('${DATADIR}/hamster', 'report_template.html')
     
     # icons
-    bld.install_files('${DATADIR}/hamster/art', start_dir.ant_glob('art/*.png'))
-    bld.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/org.gnome.Hamster.GUI.png')
-    bld.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/org.gnome.Hamster.GUI.png')
-    bld.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/24x24/org.gnome.Hamster.GUI.png')
-    bld.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/org.gnome.Hamster.GUI.png')
-    bld.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/org.gnome.Hamster.GUI.png')
-    bld.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/org.gnome.Hamster.GUI.svg')
+    ctx.install_files('${DATADIR}/hamster/art', start_dir.ant_glob('art/*.png'))
+    ctx.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/24x24/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/org.gnome.Hamster.GUI.svg')
 
-    if not bld.env.skip_icon_cache_update:
-        bld.add_post_fun(update_icon_cache)
+    if not ctx.env.skip_icon_cache_update:
+        ctx.add_post_fun(update_icon_cache)
 
 
 # icon cache update
