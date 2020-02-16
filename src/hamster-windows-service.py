@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # nicked off hamster-service
 
-import os.path
 import dbus
 import dbus.service
+import os.path
 import subprocess
-import hamster
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
+
+import hamster
+
 
 DBusGMainLoop(set_as_default=True)
 loop = glib.MainLoop()
