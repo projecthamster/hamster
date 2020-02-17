@@ -98,7 +98,12 @@ def fact_dict(fact_data, with_date):
 class Hamster(gtk.Application):
     """Hamster gui.
 
-    Can be accessed across D-Bus with the 'org.gnome.Hamster.GUI' id.
+    Actions should eventually be accessible via Gio.DBusActionGroup
+    with the 'org.gnome.Hamster.GUI' id.
+    but that is still experimental, the actions API is subject to change.
+    Discussion with "external" developpers welcome !
+    The separate dbus org.gnome.Hamster.WindowServer
+    is still the stable recommended way to show windows for now.
     """
 
     def __init__(self):
