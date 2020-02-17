@@ -53,12 +53,15 @@ class WindowServer(dbus.service.Object):
         subprocess.run(cmd, shell=True)
 
     @dbus.service.method("org.gnome.Hamster.WindowServer", in_signature='i')
-    def edit(self, id=0):
+    def edit(self, id):
         """Edit fact, given its id (int) in the database.
 
         For backward compatibility, if id is 0, create a brand new fact.
         """
-        self._open_window("edit {}".format(id))
+        if id:
+            self._open_window("edit {}".format(id))
+        else:
+            self._open_window("add")
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
     def overview(self):

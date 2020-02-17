@@ -496,7 +496,9 @@ Example usage:
                 assert len(args.action_args) == 1, (
                        "edit requires exactly one argument, got {}"
                        .format(args.action_args))
-                action_data = glib.Variant.new_int32(int(args.action_args[0]))
+                id_ = int(args.action_args[0])
+                assert id_ > 0, "received non-positive id : {}".format(id_)
+                action_data = glib.Variant.new_int32(id_)
             else:
                 action_data = None
             app.activate_action(action, action_data)
