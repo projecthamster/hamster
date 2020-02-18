@@ -40,9 +40,7 @@ from hamster.lib import layout
 from hamster import reports
 from hamster.lib import stuff
 from hamster import widgets
-from hamster.preferences import PreferencesEditor
 
-from hamster.lib.configuration import dialogs
 from hamster.lib.configuration import Controller
 
 
@@ -412,8 +410,8 @@ class Totals(graphics.Scene):
 
 
 class Overview(Controller):
-    def __init__(self, parent = None):
-        Controller.__init__(self, parent)
+    def __init__(self):
+        Controller.__init__(self)
 
         self.prefs_dialog = None  # preferences dialog controller
 
@@ -562,7 +560,7 @@ class Overview(Controller):
         self.storage.stop_tracking()
 
     def on_row_activated(self, tree, day, fact):
-        dialogs.edit.show(self, fact_id=fact.id)
+        self.present_fact_controller("edit", fact_id=fact.id)
 
     def on_row_delete_called(self, tree, fact):
         self.storage.remove_fact(fact.id)
@@ -595,10 +593,8 @@ class Overview(Controller):
             dialog.destroy()
 
     def on_prefs_clicked(self, menu):
-        if self.prefs_dialog:
-            self.prefs_dialog.present()
-        else:
-            self.prefs_dialog = PreferencesEditor(parent=self.window)
+        app = self.window.get_property("application")
+        app.activate_action("preferences")
 
     def on_export_clicked(self, menu):
         if self.report_chooser:
@@ -622,11 +618,14 @@ class Overview(Controller):
         def on_report_chooser_closed(widget):
             self.report_chooser = None
 
-
         self.report_chooser = widgets.ReportChooserDialog()
         self.report_chooser.connect("report-chosen", on_report_chosen)
         self.report_chooser.connect("report-chooser-closed", on_report_chooser_closed)
         self.report_chooser.show(start, end)
+
+    def present_fact_controller(self, action, fact_id=0):
+        app = self.window.get_property("application")
+        app.present_fact_controller(action, fact_id=fact_id)
 
     def start_new_fact(self, clone_selected=True, fallback=True):
         """Start now a new fact.
@@ -636,9 +635,12 @@ class Overview(Controller):
                          in case of no selected fact.
         """
         if not clone_selected:
-            dialogs.edit.show(self, base_fact=None)
-        elif self.fact_tree.current_fact or fallback:
-            dialogs.edit.show(self, base_fact=self.fact_tree.current_fact)
+            self.present_fact_controller("add")
+        elif self.fact_tree.current_fact:
+            self.present_fact_controller("clone",
+                                         fact_id=self.fact_tree.current_fact.id)
+        elif fallback:
+            self.present_fact_controller("add")
 
     def close_window(self):
         self.window.destroy()

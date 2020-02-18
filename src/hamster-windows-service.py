@@ -3,10 +3,14 @@
 
 import dbus
 import dbus.service
+import os.path
 import subprocess
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
+
+import hamster
+
 
 DBusGMainLoop(set_as_default=True)
 loop = glib.MainLoop()
@@ -17,7 +21,8 @@ if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
 
 
 # Legacy server. Still used by the shell-extension.
-# new code could access the org.gnome.Hamster.GUI actions directly
+# New code _could_ access the org.gnome.Hamster.GUI actions directly,
+# although the exact action names/data are subject to change.
 # http://lazka.github.io/pgi-docs/Gio-2.0/classes/Application.html#Gio.Application
 # > The actions are also exported on the session bus,
 #   and GIO provides the Gio.DBusActionGroup wrapper
@@ -38,8 +43,26 @@ class WindowServer(dbus.service.Object):
         self.mainloop.quit()
 
     def _open_window(self, name):
-        subprocess.run("hamster {} &".format(name),
-                       shell=True)
+        if hamster.installed:
+            base_cmd = "hamster"
+        else:
+            # both scripts are at the same place in the source tree
+            cwd = os.path.dirname(__file__)
+            base_cmd = "python3 {}/hamster-cli.py".format(cwd)
+        cmd = "{} {} &".format(base_cmd, name)
+        subprocess.run(cmd, shell=True)
+
+    @dbus.service.method("org.gnome.Hamster.WindowServer")
+    def edit(self, id: int = 0):
+        """Edit fact, given its id (int) in the database.
+
+        For backward compatibility, if id is 0, create a brand new fact.
+        """
+        if id:
+            # {:d} restrict the string format. Too many safeguards cannot hurt.
+            self._open_window("edit {:d}".format(id))
+        else:
+            self._open_window("add")
 
     @dbus.service.method("org.gnome.Hamster.WindowServer")
     def overview(self):
@@ -60,7 +83,6 @@ if __name__ == '__main__':
 
     glib.set_prgname(str(_("hamster-windows-service")))
 
-    from hamster.lib.configuration import runtime, dialogs, conf, load_ui_file
     window_server = WindowServer(loop)
 
     print("hamster-window-service up")

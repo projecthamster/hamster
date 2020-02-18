@@ -40,18 +40,13 @@ from hamster.lib import datetime as dt
 
 
 class Controller(gobject.GObject):
-    """Window creator and handler.
-
-    If parent is given, this is a dialog for parent, otherwise a toplevel.
-    """
+    """Window creator and handler."""
     __gsignals__ = {
         "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self, parent=None, ui_file=""):
+    def __init__(self, ui_file=""):
         gobject.GObject.__init__(self)
-
-        self.parent = parent
 
         if ui_file:
             self._gui = load_ui_file(ui_file)
@@ -59,14 +54,6 @@ class Controller(gobject.GObject):
         else:
             self._gui = None
             self.window = gtk.Window()
-
-        if parent:
-            # Essential for positioning on wayland.
-            # This should also select the correct window type if unset yet.
-            # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
-            self.window.set_transient_for(parent.get_toplevel())
-            # this changes nothing, the dialog appears centered on the screen:
-            # self.window.set_type_hint(gdk.WindowTypeHint.DIALOG)
 
         self.window.connect("delete-event", self.window_delete_event)
         if self._gui:
@@ -103,12 +90,12 @@ class Controller(gobject.GObject):
     def __bool__(self):
         return True if self.window else False
 
+
 def load_ui_file(name):
     """loads interface from the glade file; sorts out the path business"""
     ui = gtk.Builder()
     ui.add_from_file(os.path.join(runtime.data_dir, name))
     return ui
-
 
 
 class Singleton(object):
@@ -139,75 +126,6 @@ class RuntimeStore(Singleton):
 
 
 runtime = RuntimeStore()
-
-
-# to be removed soon (dialogs still used in overview)
-class OneWindow(object):
-    def __init__(self, get_dialog_class):
-        self.dialogs = {}
-        self.get_dialog_class = get_dialog_class
-        self.dialog_close_handlers = {}
-
-    def on_close_window(self, dialog):
-        for key, assoc_dialog in list(self.dialogs.items()):
-            if dialog == assoc_dialog:
-                del self.dialogs[key]
-
-        handler = self.dialog_close_handlers.pop(dialog)
-        dialog.disconnect(handler)
-
-
-    def show(self, parent = None, **kwargs):
-        params = str(sorted(kwargs.items())) #this is not too safe but will work for most cases
-
-        if params in self.dialogs:
-            window = self.dialogs[params].window
-            self.dialogs[params].show()
-            window.present()
-        else:
-            if parent:
-                dialog = self.get_dialog_class()(parent, **kwargs)
-
-                if isinstance(parent, gtk.Widget):
-                    dialog.window.set_transient_for(parent.get_toplevel())
-
-                if hasattr(dialog, "connect"):
-                    self.dialog_close_handlers[dialog] = dialog.connect("on-close", self.on_close_window)
-            else:
-                dialog = self.get_dialog_class()(**kwargs)
-
-                # no parent means we close on window close
-                dialog.window.connect("destroy",
-                                      lambda window, params: gtk.main_quit(),
-                                      params)
-
-            self.dialogs[params] = dialog
-
-class Dialogs(Singleton):
-    """makes sure that we have single instance open for windows where it makes
-       sense"""
-    def __init__(self):
-        def get_edit_class():
-            from hamster.edit_activity import CustomFactController
-            return CustomFactController
-        self.edit = OneWindow(get_edit_class)
-
-        def get_overview_class():
-            from hamster.overview import Overview
-            return Overview
-        self.overview = OneWindow(get_overview_class)
-
-        def get_about_class():
-            from hamster.about import About
-            return About
-        self.about = OneWindow(get_about_class)
-
-        def get_prefs_class():
-            from hamster.preferences import PreferencesEditor
-            return PreferencesEditor
-        self.prefs = OneWindow(get_prefs_class)
-
-dialogs = Dialogs()
 
 
 class GSettingsStore(gobject.GObject, Singleton):

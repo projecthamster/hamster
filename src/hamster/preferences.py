@@ -77,8 +77,8 @@ class PreferencesEditor(Controller):
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
-    def __init__(self, parent = None):
-        Controller.__init__(self, parent, ui_file="preferences.ui")
+    def __init__(self):
+        Controller.__init__(self, ui_file="preferences.ui")
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -509,14 +509,3 @@ class PreferencesEditor(Controller):
         conf.set("day-start-minutes", day_start)
     def on_close_button_clicked(self, button):
         self.close_window()
-
-    def close_window(self):
-        if self.parent:
-            for obj, handler in self.external_listeners:
-                obj.disconnect(handler)
-
-            self._gui = None
-            self.wNameColumn = None
-            self.categoryColumn = None
-
-        Controller.close_window(self)
