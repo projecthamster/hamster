@@ -101,7 +101,7 @@ class Hamster(gtk.Application):
     Actions should eventually be accessible via Gio.DBusActionGroup
     with the 'org.gnome.Hamster.GUI' id.
     but that is still experimental, the actions API is subject to change.
-    Discussion with "external" developpers welcome !
+    Discussion with "external" developers welcome !
     The separate dbus org.gnome.Hamster.WindowServer
     is still the stable recommended way to show windows for now.
     """
