@@ -1,0 +1,60 @@
+# This file is meant to be included in the root wscript,
+# through the recurse("data") command.
+# An advantage of keeping it there
+# instead of blending it in the root wscript build() 
+# is that the files are looked for in the same folder
+# (no need to prepend data/ everywhere)
+
+import os
+
+from waflib import Logs
+
+
+def build(ctx):
+    if not ctx.env.skip_gsettings:
+        ctx(features='glib2',
+            settings_schema_files=['org.gnome.hamster.gschema.xml'])
+
+    ctx.install_files('${DATADIR}/metainfo', 'org.gnome.Hamster.GUI.metainfo.xml')
+
+    filename = "org.gnome.Hamster.GUI.desktop"
+    ctx(features = "subst",
+        source= "%s.in" % filename,
+        target= "%s" % filename,
+        dict = ctx.env,
+        install_path = "${DATADIR}/applications"
+       )
+    
+    start_dir = ctx.path.find_dir('.')
+    
+    # glade builder files
+    ctx.install_files('${DATADIR}/hamster', start_dir.ant_glob('*.ui'))
+    # default files
+    ctx.install_files('${DATADIR}/hamster', 'hamster.db')
+    ctx.install_files('${DATADIR}/hamster', 'report_template.html')
+    
+    # icons
+    ctx.install_files('${DATADIR}/hamster/art', start_dir.ant_glob('art/*.png'))
+    ctx.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/22x22/apps',   'art/22x22/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/24x24/apps',   'art/24x24/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/32x32/apps',   'art/32x32/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/48x48/apps',   'art/scalable/org.gnome.Hamster.GUI.png')
+    ctx.install_files('${DATADIR}/icons/hicolor/scalable/apps','art/scalable/org.gnome.Hamster.GUI.svg')
+
+    if not ctx.env.skip_icon_cache_update:
+        ctx.add_post_fun(update_icon_cache)
+
+
+# icon cache update
+def update_icon_cache(ctx):
+    """Update the gtk icon cache."""
+    if ctx.cmd == "install":
+        # adapted from the previous waf gnome.py
+        icon_dir = os.path.join(ctx.env.DATADIR, 'icons/hicolor')
+        cmd = 'gtk-update-icon-cache -q -f -t {}'.format(icon_dir)
+        err = ctx.exec_command(cmd)
+        if err:
+            Logs.warn('The following  command failed:\n{}'.format(cmd))
+        else:
+            Logs.pprint('YELLOW', 'Successfully updated GTK icon cache')
