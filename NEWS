@@ -1,5 +1,9 @@
 Changes since 2.2.2
 
+* Fixed dialogs placement (PR 549):
+  - dialogs appear above their parent (the overview, if opened).
+  - the window manager/compositer chooses the dialog position.
+* Fixed gnome window/application association (issue 242)
 * Fixed numpad Enter now works in the GUI cmdline (PR 540).
 * Fixed popups position in wayland (issue 339)
 * Fixed permissions in the source tree.
@@ -17,8 +21,8 @@ Changes since 2.2.2
 * Fixed update activity window to be resizable (PR 403)
 * Fixed database file monitoring (PR 401).
 * Fixed dark theme colors (PR 391).
-* Fixed hamster-service failure when there is no hamster.db.
-  (issue  394)
+* Fixed hamster-service failure when there is no hamster.db (issue  394).
+* New options for packagers (PR 565)
 * New 'version' or 'Version' command/methods available (PR 528).
 * New Gui is a Gtk.Application (PR 516)
 * New *JSON dbus methods to pass facts verbatim (PR 514).
@@ -27,9 +31,10 @@ Changes since 2.2.2
   Check a fact validity, with detailed error messages.
 * New AddFact accepts -1 as start or end, to mean explicit None (PR 492).
 * Moved Fact to new fact.py
+* Changed basenames from hamster to org.gnome.Hamster.GUI (issue 547)
+  - metainfo.xml (PR 558)
+  - hamster.png icons (PR 542)
 * Changed i18n from from intltools to pure gettext (PR 497).
-* Removed non-working stuff that will be developed elsewhere (issue 493):
-  external, idle, ...
 * Changed from GConf to GSettings (PR 470)
 * Changed directory names from hamster-time-tracker to hamster (PR 485).
 * Changed parser:
@@ -51,6 +56,12 @@ Changes since 2.2.2
     instead of the end.
   - hour/minutes separator can be colon, comma, dot, e.g. 9.30.
     No separator is allowed, but only with 4 digits: hhmm.
+* Changed install bash completion to /usr/share (PR 417)
+* Changed preselect time instead of activity (PR 415)
+* Removed trophies code (PR 408)
+* Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
+* Added stop tracking button to header bar (PR 427)
+* Brought back the help system (PR 393).
 * Improved Add/Update activity window
   - fixed description input (PR 430)
 * Improved consistency in date/time handling (PR 429) by
@@ -59,12 +70,6 @@ Changes since 2.2.2
     - rounding (i.e. truncating) all activity start/end timestamps
       to the minute
     ** note that this only affects new and/or edited activities in the database
-* Changed install bash completion to /usr/share (PR 417)
-* Changed preselect time instead of activity (PR 415)
-* Removed trophies code (PR 408)
-* Used GLib.MainLoop instead of GObject.MainLoop (PR 404)
-* Added stop tracking button to header bar (PR 427)
-* The help system is back (PR 393).
 * Improved keyboard handling:
   - Ctrl+Space to stop tracking.
   - Left/Right arrows change date.
@@ -76,6 +81,8 @@ Changes since 2.2.2
   - Up, down, Home, End, Page-Up, Page-Down, Return
     work straight from the overview (no need to click).
   - More info on PR #387.
+* Removed non-working stuff that will be developed elsewhere (issue 493):
+  external, idle, ...
 
 
 Changes in 2.2.2
