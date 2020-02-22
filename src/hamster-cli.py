@@ -37,9 +37,10 @@ from gi.repository import GLib as glib
 
 import hamster
 
-from hamster import client, reports
+from hamster import reports
 from hamster import logger as hamster_logger
 from hamster.about import About
+from hamster.dbus import client
 from hamster.edit_activity import CustomFactController
 from hamster.overview import Overview
 from hamster.preferences import PreferencesEditor

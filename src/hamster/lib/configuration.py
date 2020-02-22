@@ -25,7 +25,7 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os
-from hamster.client import Storage
+from hamster.dbus.client import Storage
 from xdg.BaseDirectory import xdg_data_home
 
 from gi.repository import Gdk as gdk

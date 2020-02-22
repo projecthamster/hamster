@@ -33,7 +33,7 @@ from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
 
-import hamster.client
+from hamster.dbus import client
 from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import layout
@@ -419,7 +419,7 @@ class Overview(Controller):
         self.window.set_default_icon_name("org.gnome.Hamster.GUI")
         self.window.set_default_size(700, 500)
 
-        self.storage = hamster.client.Storage()
+        self.storage = client.Storage()
         self.storage.connect("facts-changed", self.on_facts_changed)
         self.storage.connect("activities-changed", self.on_facts_changed)
 

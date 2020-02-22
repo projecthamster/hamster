@@ -32,7 +32,7 @@ from gi.repository import Pango as pango
 from collections import defaultdict
 from copy import deepcopy
 
-from hamster import client
+from hamster.dbus import client
 from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib import graphics
