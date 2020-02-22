@@ -15,7 +15,7 @@ i18n.setup_i18n()  # noqa: E402
 from hamster.storage import db
 from hamster.lib import datetime as dt
 from hamster.lib import default_logger
-from hamster.lib.dbus import (
+from hamster.dbus.utilities import (
     DBusMainLoop,
     fact_signature,
     from_dbus_date,

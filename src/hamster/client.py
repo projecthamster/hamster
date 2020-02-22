@@ -30,7 +30,7 @@ from gi.repository import GObject as gobject
 from textwrap import dedent
 
 import hamster
-from hamster.lib.dbus import (
+from hamster.dbus.utilities import (
     DBusMainLoop,
     from_dbus_fact_json,
     to_dbus_date,

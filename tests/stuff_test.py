@@ -6,7 +6,7 @@ import datetime as pdt
 import unittest
 import re
 from hamster.lib import datetime as dt
-from hamster.lib.dbus import (
+from hamster.dbus.utilities import (
     to_dbus_fact,
     to_dbus_fact_json,
     to_dbus_range,
