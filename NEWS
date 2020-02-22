@@ -12,9 +12,10 @@ Changes since 2.2.2
 * Fixed hamster-cli windows calls (PR 480)
 * Fixed font sizes on high DPI screens (PR 426)
 * Fixed installation process (PR 421)
-  - Updated waf.
+  - Updated waf to 2.0.17.
     No longer need python2.
   - Default to --prefix=/usr.
+  - Removed binary footer, to ease debian packaging (PR 569)
 * Fixed category color and tags spillout (PR 414)
 * Fixed multiline description height (PR 412)
 * Fixed adding overlapping activity (PR 410)
