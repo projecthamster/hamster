@@ -239,7 +239,7 @@ class HamsterCLI(object):
         assist_command = args[0] if args else ""
 
         if assist_command == "start":
-            hamster_client._activities(sys.argv[-1])
+            self._activities(sys.argv[-1])
         elif assist_command == "export":
             formats = "html tsv xml ical".split()
             chosen = sys.argv[-1]
@@ -454,7 +454,7 @@ Example usage:
         August 2012. Will check against activity, category, description and tags
 """)
 
-    hamster_client = HamsterCLI()
+    hamster_cli = HamsterCLI()
     app = HamsterGUI()
     logger.debug("app instanciated")
 
@@ -496,7 +496,7 @@ Example usage:
         if action == "add" and args.action_args:
             assert not unknown_args, "unknown options: {}".format(unknown_args)
             # directly add fact from arguments
-            id_ = hamster_client.start(*args.action_args)
+            id_ = hamster_cli.start(*args.action_args)
             assert id_ > 0, "failed to add fact"
             sys.exit(0)
         else:
@@ -516,7 +516,7 @@ Example usage:
             status = app.run(run_args)
             logger.debug("app exited")
             sys.exit(status)
-    elif hasattr(hamster_client, action):
-        getattr(hamster_client, action)(*args.action_args)
+    elif hasattr(hamster_cli, action):
+        getattr(hamster_cli, action)(*args.action_args)
     else:
         sys.exit(usage % {'prog': sys.argv[0]})
