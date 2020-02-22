@@ -95,7 +95,7 @@ def fact_dict(fact_data, with_date):
     return fact
 
 
-class Hamster(gtk.Application):
+class HamsterGUI(gtk.Application):
     """Hamster gui.
 
     Actions should eventually be accessible via Gio.DBusActionGroup
@@ -451,7 +451,7 @@ Example usage:
 """)
 
     hamster_client = HamsterCli()
-    app = Hamster()
+    app = HamsterGUI()
     logger.debug("app instanciated")
 
     import signal
