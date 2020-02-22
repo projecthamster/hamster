@@ -224,7 +224,8 @@ class HamsterGUI(gtk.Application):
         # both for consistency, and to reduce the paths to test.
         app.activate_action(action, action_data)
 
-class HamsterCli(object):
+
+class HamsterCLI(object):
     """Command line interface."""
 
     def __init__(self):
@@ -450,7 +451,7 @@ Example usage:
         August 2012. Will check against activity, category, description and tags
 """)
 
-    hamster_client = HamsterCli()
+    hamster_client = HamsterCLI()
     app = HamsterGUI()
     logger.debug("app instanciated")
 
