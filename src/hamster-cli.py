@@ -95,6 +95,9 @@ def fact_dict(fact_data, with_date):
     return fact
 
 
+# keep both HamsterGUI and HamsterCLI in this file because they
+# should not be reused elsewhere.
+
 class HamsterGUI(gtk.Application):
     """Hamster gui.
 
