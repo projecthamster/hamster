@@ -478,8 +478,10 @@ class HamsterCLI(object):
         print(hamster.__version__)
 
 
-# mark usage for as translatable with
+# https://docs.python.org/3.7/library/gettext.html#deferred-translations
+# mark usage as translatable with
 # xgettext ... --keyword=N_ ...
+
 def N_(message):
     return message
 
