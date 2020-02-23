@@ -25,6 +25,7 @@
 import sys, os
 import argparse
 import re
+import signal
 
 import gi
 gi.require_version('Gdk', '3.0')  # noqa: E402
@@ -46,6 +47,7 @@ from hamster.overview import Overview
 from hamster.preferences import PreferencesEditor
 from hamster.lib import default_logger, stuff
 from hamster.lib import datetime as dt
+from hamster.lib import i18n
 from hamster.lib.fact import Fact
 
 
@@ -226,7 +228,7 @@ class HamsterGUI(gtk.Application):
             action_data = None
         # always open dialogs through actions,
         # both for consistency, and to reduce the paths to test.
-        app.activate_action(action, action_data)
+        self.activate_action(action, action_data)
 
 
 class HamsterCLI(object):
@@ -234,7 +236,68 @@ class HamsterCLI(object):
 
     def __init__(self):
         self.storage = client.Storage()
+        self.app = HamsterGUI()
+        logger.debug("app instanciated")
 
+        parser = argparse.ArgumentParser(
+            description="Time tracking utility",
+            epilog=usage,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
+
+        # cf. https://stackoverflow.com/a/28611921/3565696
+        parser.add_argument("--log", dest="log_level",
+                            choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
+                            default='WARNING',
+                            help="Set the logging level (default: %(default)s)")
+        parser.add_argument("action", nargs="?", default="overview")
+        parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
+
+        args, unknown_args = parser.parse_known_args()
+
+        # logger for current script
+        logger.setLevel(args.log_level)
+        # hamster_logger for the rest
+        hamster_logger.setLevel(args.log_level)
+
+        if not hamster.installed:
+            logger.info("Running in devel mode")
+
+        if args.action in ("start", "track"):
+            action = "add"  # alias
+        elif args.action == "prefs":
+            # for backward compatibility
+            action = "preferences"
+        else:
+            action = args.action
+
+        if action in ("about", "add", "edit", "overview", "preferences"):
+            if action == "add" and args.action_args:
+                assert not unknown_args, "unknown options: {}".format(unknown_args)
+                # directly add fact from arguments
+                id_ = self.start(*args.action_args)
+                assert id_ > 0, "failed to add fact"
+                sys.exit(0)
+            else:
+                self.app.register()
+                if action == "edit":
+                    assert len(args.action_args) == 1, (
+                           "edit requires exactly one argument, got {}"
+                           .format(args.action_args))
+                    id_ = int(args.action_args[0])
+                    assert id_ > 0, "received non-positive id : {}".format(id_)
+                    action_data = glib.Variant.new_int32(id_)
+                else:
+                    action_data = None
+                self.app.activate_action(action, action_data)
+                run_args = [sys.argv[0]] + unknown_args
+                logger.debug("run {}".format(run_args))
+                status = self.app.run(run_args)
+                logger.debug("app exited")
+                sys.exit(status)
+        elif hasattr(self, action):
+            getattr(self, action)(*args.action_args)
+        else:
+            sys.exit(usage % {'prog': sys.argv[0]})
 
     def assist(self, *args):
         assist_command = args[0] if args else ""
@@ -459,72 +522,8 @@ Example usage:
 
 
 if __name__ == '__main__':
-    from hamster.lib import i18n
     i18n.setup_i18n()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)  # gtk3 screws up ctrl+c
 
-    hamster_cli = HamsterCLI()
-    app = HamsterGUI()
-    logger.debug("app instanciated")
+    cli = HamsterCLI()
 
-    import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
-
-    parser = argparse.ArgumentParser(
-        description="Time tracking utility",
-        epilog=usage,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-
-    # cf. https://stackoverflow.com/a/28611921/3565696
-    parser.add_argument("--log", dest="log_level",
-                        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
-                        default='WARNING',
-                        help="Set the logging level (default: %(default)s)")
-    parser.add_argument("action", nargs="?", default="overview")
-    parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
-
-    args, unknown_args = parser.parse_known_args()
-
-    # logger for current script
-    logger.setLevel(args.log_level)
-    # hamster_logger for the rest
-    hamster_logger.setLevel(args.log_level)
-
-    if not hamster.installed:
-        logger.info("Running in devel mode")
-
-    if args.action in ("start", "track"):
-        action = "add"  # alias
-    elif args.action == "prefs":
-        # for backward compatibility
-        action = "preferences"
-    else:
-        action = args.action
-
-    if action in ("about", "add", "edit", "overview", "preferences"):
-        if action == "add" and args.action_args:
-            assert not unknown_args, "unknown options: {}".format(unknown_args)
-            # directly add fact from arguments
-            id_ = hamster_cli.start(*args.action_args)
-            assert id_ > 0, "failed to add fact"
-            sys.exit(0)
-        else:
-            app.register()
-            if action == "edit":
-                assert len(args.action_args) == 1, (
-                       "edit requires exactly one argument, got {}"
-                       .format(args.action_args))
-                id_ = int(args.action_args[0])
-                assert id_ > 0, "received non-positive id : {}".format(id_)
-                action_data = glib.Variant.new_int32(id_)
-            else:
-                action_data = None
-            app.activate_action(action, action_data)
-            run_args = [sys.argv[0]] + unknown_args
-            logger.debug("run {}".format(run_args))
-            status = app.run(run_args)
-            logger.debug("app exited")
-            sys.exit(status)
-    elif hasattr(hamster_cli, action):
-        getattr(hamster_cli, action)(*args.action_args)
-    else:
-        sys.exit(usage % {'prog': sys.argv[0]})
