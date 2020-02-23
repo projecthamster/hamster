@@ -236,8 +236,6 @@ class HamsterCLI(object):
 
     def __init__(self):
         self.storage = client.Storage()
-        self.app = HamsterGUI()
-        logger.debug("app instanciated")
 
         parser = argparse.ArgumentParser(
             description="Time tracking utility",
@@ -278,6 +276,8 @@ class HamsterCLI(object):
                 assert id_ > 0, "failed to add fact"
                 sys.exit(0)
             else:
+                self.app = HamsterGUI()
+                logger.debug("app instanciated")
                 self.app.register()
                 if action == "edit":
                     assert len(args.action_args) == 1, (
