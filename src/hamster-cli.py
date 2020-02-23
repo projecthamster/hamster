@@ -415,11 +415,13 @@ class HamsterCLI(object):
         print(hamster.__version__)
 
 
-if __name__ == '__main__':
-    from hamster.lib import i18n
-    i18n.setup_i18n()
+# mark usage for as translatable with
+# xgettext ... --keyword=N_ ...
+def N_(message):
+    return message
 
-    usage = _(
+
+usage = N_(
 """
 Actions:
     * add [activity [start-time [end-time]]]: Add an activity
@@ -454,6 +456,11 @@ Example usage:
         look for an activity matching terms 'pancakes` between 1st and 30st
         August 2012. Will check against activity, category, description and tags
 """)
+
+
+if __name__ == '__main__':
+    from hamster.lib import i18n
+    i18n.setup_i18n()
 
     hamster_cli = HamsterCLI()
     app = HamsterGUI()
