@@ -17,6 +17,24 @@ from hamster.dbus.utilities import (
 from hamster.lib.fact import Fact
 
 
+class TestCompatibility(unittest.TestCase):
+    def test_imports(self):
+        # moved just after v3.0 (2020-02-23)
+        import hamster.client
+        from hamster.lib.dbus import (
+             DBusMainLoop,
+             fact_signature,
+             from_dbus_date,
+             from_dbus_fact,
+             from_dbus_fact_json,
+             from_dbus_range,
+             to_dbus_date,
+             to_dbus_fact,
+             to_dbus_fact_json,
+             to_dbus_range,
+             )
+
+
 class TestFact(unittest.TestCase):
 
     def test_range(self):
