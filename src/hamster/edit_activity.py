@@ -59,8 +59,10 @@ class CustomFactController(Controller):
         self.storage = storage
         self.fact_id = fact_id
 
-        self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
-        self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
+        self.category_entry = widgets.CategoryEntry(self.storage,
+                                                    widget=self.get_widget('category'))
+        self.activity_entry = widgets.ActivityEntry(self.storage,
+                                                    widget=self.get_widget('activity'),
                                                     category_widget=self.category_entry)
 
         self.cmdline = widgets.CmdLineEntry(self.storage, parent=self.get_widget("cmdline box"))
@@ -83,7 +85,7 @@ class CustomFactController(Controller):
 
         self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
-        self.tags_entry = widgets.TagsEntry()
+        self.tags_entry = widgets.TagsEntry(self.storage)
         self.get_widget("tags box").add(self.tags_entry)
 
         self.save_button = self.get_widget("save_button")

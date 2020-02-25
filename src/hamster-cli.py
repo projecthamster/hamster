@@ -193,7 +193,7 @@ class HamsterGUI(gtk.Application):
             controller = self.overview_controller
         elif name == "preferences":
             if not self.preferences_controller:
-                self.preferences_controller = PreferencesEditor()
+                self.preferences_controller = PreferencesEditor(self.storage)
                 logger.debug("new PreferencesEditor")
             controller = self.preferences_controller
 

@@ -35,7 +35,6 @@ from copy import deepcopy
 from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib import graphics
-from hamster.lib.configuration import runtime
 from hamster.lib.fact import Fact
 
 
@@ -483,10 +482,14 @@ class CmdLineEntry(gtk.Entry):
 class ActivityEntry():
     """Activity entry widget.
 
-    widget (gtk.Entry): the associated activity entry
-    category_widget (gtk.Entry): the associated category entry
+    Args:
+        storage (Storage): concrete Storage instance
+        widget (gtk.Entry): the associated activity entry
+        category_widget (gtk.Entry): the associated category entry
     """
-    def __init__(self, widget=None, category_widget=None, **kwds):
+    def __init__(self, storage, widget=None, category_widget=None, **kwds):
+        self.storage = storage
+
         # widget and completion may be defined already
         # e.g. in the glade edit_activity.ui file
         self.widget = widget
@@ -594,10 +597,10 @@ class ActivityEntry():
             category_names = [self.category_widget.get_text()]
         else:
             category_names = [category['name']
-                              for category in runtime.storage.get_categories()]
+                              for category in self.storage.get_categories()]
         for category_name in category_names:
-            category_id = runtime.storage.get_category_id(category_name)
-            activities = runtime.storage.get_category_activities(category_id)
+            category_id = self.storage.get_category_id(category_name)
+            activities = self.storage.get_category_activities(category_id)
             for activity in activities:
                 activity_name = activity["name"]
                 text = "{}@{}".format(activity_name, category_name)
@@ -610,9 +613,13 @@ class ActivityEntry():
 class CategoryEntry():
     """Category entry widget.
 
-    widget (gtk.Entry): the associated category entry
+    Args:
+        storage (Storage): concrete Storage instance
+        widget (gtk.Entry): the associated category entry
     """
-    def __init__(self, widget=None, **kwds):
+    def __init__(self, storage, widget=None, **kwds):
+        self.storage = storage
+
         # widget and completion are already defined
         # e.g. in the glade edit_activity.ui file
         self.widget = widget
@@ -663,7 +670,7 @@ class CategoryEntry():
 
     def populate_completions(self):
         self.model.clear()
-        for category in runtime.storage.get_categories():
+        for category in self.storage.get_categories():
             self.model.append([category['name']])
 
     def __getattr__(self, name):

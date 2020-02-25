@@ -25,15 +25,24 @@ import cairo
 from math import pi
 
 from hamster.lib import graphics, stuff
-from hamster.lib.configuration import runtime
+
 
 class TagsEntry(gtk.Entry):
+    """Tags entry widget.
+
+    Args:
+        storage (Storage): concrete Storage instance
+    """
+
     __gsignals__ = {
         'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self):
+    def __init__(self, storage):
         gtk.Entry.__init__(self)
+
+        self.storage = storage
+
         self.ac_tags = None  # "autocomplete" tags
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
@@ -63,7 +72,7 @@ class TagsEntry(gtk.Entry):
         self._parent_click_watcher = None # bit lame but works
 
         self.external_listeners = [
-            (runtime.storage, runtime.storage.connect('tags-changed', self.refresh_ac_tags))
+            (self.storage, self.storage.connect('tags-changed', self.refresh_ac_tags))
         ]
         self.show()
         self.populate_suggestions()
@@ -145,7 +154,7 @@ class TagsEntry(gtk.Entry):
 
     def populate_suggestions(self):
         self.ac_tags = self.ac_tags or [tag["name"] for tag in
-                                        runtime.storage.get_tags(only_autocomplete=True)]
+                                        self.storage.get_tags(only_autocomplete=True)]
 
         cursor_tag = self.get_cursor_tag()
 
