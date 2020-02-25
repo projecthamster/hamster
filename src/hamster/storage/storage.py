@@ -21,23 +21,34 @@
 import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
-from hamster.lib import datetime as dt
-
 from textwrap import dedent
 
+from gi.repository import GObject as gobject
+
+from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact, FactError
 
 
-class Storage(object):
+class Storage(gobject.GObject):
     """Abstract storage.
 
     Concrete instances should implement the required private methods,
     such as __get_facts.
     """
 
+    __gsignals__ = {
+        "tags-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+        "facts-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+        "activities-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
+    }
+
+    def __init__(self):
+        gobject.GObject.__init__(self)
+
     def run_fixtures(self):
         pass
 
+    # WIP: the following should be replaced with emit(signal) now:
     # signals that are called upon changes
     def tags_changed(self): pass
     def facts_changed(self): pass

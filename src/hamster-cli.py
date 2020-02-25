@@ -34,14 +34,12 @@ from gi.repository import GLib as glib
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import Gio as gio
-from gi.repository import GLib as glib
 
 import hamster
 
 from hamster import reports
 from hamster import logger as hamster_logger
 from hamster.about import About
-from hamster.dbus import client
 from hamster.edit_activity import CustomFactController
 from hamster.overview import Overview
 from hamster.preferences import PreferencesEditor
@@ -112,13 +110,15 @@ class HamsterGUI(gtk.Application):
     is still the stable recommended way to show windows for now.
     """
 
-    def __init__(self):
+    def __init__(self, storage):
         # inactivity_timeout: How long (ms) the service should stay alive
         #                     after all windows have been closed.
         gtk.Application.__init__(self,
                                  application_id="org.gnome.Hamster.GUI",
                                  #inactivity_timeout=10000,
                                  register_session=True)
+
+        self.storage = storage
 
         self.about_controller = None  # 'about' window controller
         self.fact_controller = None  # fact window controller
@@ -182,12 +182,13 @@ class HamsterGUI(gtk.Application):
                 logger.warning("Fact controller already active. Please close first.")
             else:
                 fact_id = data.get_int32() if data else None
-                self.fact_controller = CustomFactController(name, fact_id=fact_id)
+                self.fact_controller = CustomFactController(name, self.storage,
+                                                            fact_id=fact_id)
                 logger.debug("new CustomFactController")
             controller = self.fact_controller
         elif name == "overview":
             if not self.overview_controller:
-                self.overview_controller = Overview()
+                self.overview_controller = Overview(self.storage)
                 logger.debug("new Overview")
             controller = self.overview_controller
         elif name == "preferences":
@@ -235,7 +236,7 @@ class HamsterCLI(object):
     """Command line interface."""
 
     def __init__(self):
-        self.storage = client.Storage()
+
 
         parser = argparse.ArgumentParser(
             description="Time tracking utility",
@@ -247,6 +248,9 @@ class HamsterCLI(object):
                             choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                             default='WARNING',
                             help="Set the logging level (default: %(default)s)")
+        parser.add_argument("--no-dbus", dest="no_dbus", action="store_true",
+                            help="Direct access to the database. "
+                            "Risky if another process tries to write at the same time.")
         parser.add_argument("action", nargs="?", default="overview")
         parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -259,6 +263,12 @@ class HamsterCLI(object):
 
         if not hamster.installed:
             logger.info("Running in devel mode")
+
+        if args.no_dbus:
+            from hamster.storage.db import Storage
+        else:
+            from hamster.dbus.client import Storage
+        self.storage = Storage()
 
         if args.action in ("start", "track"):
             action = "add"  # alias
@@ -276,7 +286,7 @@ class HamsterCLI(object):
                 assert id_ > 0, "failed to add fact"
                 sys.exit(0)
             else:
-                self.app = HamsterGUI()
+                self.app = HamsterGUI(self.storage)
                 logger.debug("app instanciated")
                 self.app.register()
                 if action == "edit":

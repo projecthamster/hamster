@@ -28,10 +28,9 @@ import time
 """
 from hamster import widgets
 from hamster.lib import datetime as dt
-from hamster.lib.configuration import Controller, runtime, load_ui_file
+from hamster.lib.configuration import Controller, load_ui_file
 from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import escape_pango
-
 
 
 class CustomFactController(Controller):
@@ -39,10 +38,14 @@ class CustomFactController(Controller):
 
     Args:
         action (str): "add", "clone", "edit"
+        storage (storage.Storage):
+            A concrete storage instance,
+            usually a dbus.client.Storage,
+            sometimes a storage.db.Storage directly.
         fact_id (int): used for "clone" and "edit"
     """
 
-    def __init__(self, action, fact_id=None):
+    def __init__(self, action, storage, fact_id=None):
         Controller.__init__(self)
 
         self._date = None  # for the date property
@@ -53,13 +56,14 @@ class CustomFactController(Controller):
 
 
         self.action = action
+        self.storage = storage
         self.fact_id = fact_id
 
         self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
         self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
                                                     category_widget=self.category_entry)
 
-        self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
+        self.cmdline = widgets.CmdLineEntry(self.storage, parent=self.get_widget("cmdline box"))
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
@@ -91,9 +95,9 @@ class CustomFactController(Controller):
         self.window.set_title(title)
         self.get_widget("delete_button").set_sensitive(action == "edit")
         if action == "edit":
-            self.fact = runtime.storage.get_fact(fact_id)
+            self.fact = self.storage.get_fact(fact_id)
         elif action == "clone":
-            base_fact = runtime.storage.get_fact(fact_id)
+            base_fact = self.storage.get_fact(fact_id)
             self.fact = base_fact.copy(start_time=dt.datetime.now(),
                                        end_time=None)
         else:
@@ -152,7 +156,7 @@ class CustomFactController(Controller):
         self.increment_date(+1)
 
     def draw_preview(self, start_time, end_time=None):
-        day_facts = runtime.storage.get_facts(self.date)
+        day_facts = self.storage.get_facts(self.date)
         self.dayline.plot(self.date, day_facts, start_time, end_time)
 
     def get_widget(self, name):
@@ -347,7 +351,7 @@ class CustomFactController(Controller):
                           fact.end_time or default_dt)
 
         try:
-            runtime.storage.check_fact(fact, default_day=self.date)
+            self.storage.check_fact(fact, default_day=self.date)
         except FactError as error:
             self.update_status(status="wrong", markup=str(error))
             return None
@@ -362,7 +366,7 @@ class CustomFactController(Controller):
         return fact
 
     def on_delete_clicked(self, button):
-        runtime.storage.remove_fact(self.fact_id)
+        self.storage.remove_fact(self.fact_id)
         self.close_window()
 
     def on_cancel_clicked(self, button):
@@ -373,9 +377,9 @@ class CustomFactController(Controller):
 
     def on_save_button_clicked(self, button):
         if self.action == "edit":
-            runtime.storage.update_fact(self.fact_id, self.fact)
+            self.storage.update_fact(self.fact_id, self.fact)
         else:
-            runtime.storage.add_fact(self.fact)
+            self.storage.add_fact(self.fact)
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):

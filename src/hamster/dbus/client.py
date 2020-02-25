@@ -40,6 +40,7 @@ from hamster.dbus.utilities import (
     )
 from hamster.lib.fact import Fact, FactError
 from hamster.lib import datetime as dt
+from hamster.storage import storage
 
 
 # bug fixed in dbus-python 1.2.14 (released on 2019-11-25)
@@ -52,7 +53,7 @@ assert not (
     """
 
 
-class Storage(gobject.GObject):
+class Storage(storage.Storage):
     """Hamster client class, communicating to hamster storage daemon via d-bus.
        Subscribe to the `tags-changed`, `facts-changed` and `activities-changed`
        signals to be notified when an appropriate factoid of interest has been
@@ -65,15 +66,15 @@ class Storage(gobject.GObject):
        The relationship is - one activity can be used in several facts.
        The rest is hopefully obvious. But if not, please file bug reports!
     """
+
+    # add signal to the "tags-changed", "facts-changed", "activities-changed"
+    # inherited from storage.Storage
     __gsignals__ = {
-        "tags-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
-        "facts-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
-        "activities-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
         "toggle-called": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        storage.Storage.__init__(self)
 
         DBusMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
