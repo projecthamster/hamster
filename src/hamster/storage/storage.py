@@ -149,13 +149,14 @@ class Storage(gobject.GObject):
             self.facts_changed()
         return result
 
-    def stop_tracking(self, end_time):
-        """Stops tracking the current activity"""
+    def stop_tracking(self, end_time=None):
+        """Stop tracking the current activity."""
         facts = self.__get_todays_facts()
         if facts and not facts[-1].end_time:
+            if end_time is None:
+                end_time = dt.datetime.now()
             self.__touch_fact(facts[-1], end_time)
             self.facts_changed()
-
 
     def remove_fact(self, fact_id):
         """Remove fact from storage by it's ID"""
