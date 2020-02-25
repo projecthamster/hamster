@@ -19,9 +19,10 @@
 
 
 from os.path import join
-from hamster.lib.configuration import runtime
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
+
+import hamster
 
 class About(object):
     def __init__(self, parent=None):
@@ -29,7 +30,7 @@ class About(object):
         self.window = about
         infos = {
             "program-name" : "Hamster",
-            "version" : runtime.version,
+            "version" : hamster.__version__,
             "comments" : _("Project Hamster — track your time"),
             "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),
             "website" : "https://github.com/projecthamster/hamster/wiki/",
