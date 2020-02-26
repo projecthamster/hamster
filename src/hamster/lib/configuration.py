@@ -82,7 +82,7 @@ class Controller(gobject.GObject):
 
     def show(self):
         """Show window.
-        It might be obscurd by others though.
+        It might be obscured by others though.
         See also: presents
         """
         self.window.show()
