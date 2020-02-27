@@ -36,28 +36,36 @@ class Storage(gobject.GObject):
     such as __get_facts.
     """
 
-    __gsignals__ = {
-        "tags-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
-        "facts-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
-        "activities-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
-    }
-
     def __init__(self):
         gobject.GObject.__init__(self)
 
     def run_fixtures(self):
         pass
 
-    # WIP: the following should be replaced with emit(signal) now:
-    # signals that are called upon changes
-    def tags_changed(self): pass
-    def facts_changed(self): pass
-    def activities_changed(self): pass
+    # do not use tags_changed directly: just call .emit("tags-changed")
+    # Let's use the dash, to be consistent with the Gnome convention.
 
+    @gobject.Signal(name="tags-changed")
+    def tags_changed(self):
+        """Handle signal."""
+        logger.debug("tags-changed signal")
+
+    @gobject.Signal
+    def facts_changed(self):
+        """Handle signal."""
+        logger.debug("facts-changed signal")
+
+    @gobject.Signal(name="activities-changed")
+    def activities_changed(self):
+        """Handle signal."""
+        logger.debug("activities-changed")
+
+    # Deprecated method (2020-02-27): just call .emit(signal)
+    # What about a master "changed" signal ? Later.
     def dispatch_overwrite(self):
-        self.tags_changed()
-        self.facts_changed()
-        self.activities_changed()
+        self.emit("tags-changed")
+        self.emit("facts-changed")
+        self.emit("activities-changed")
 
     # facts
     @classmethod
@@ -125,7 +133,7 @@ class Storage(gobject.GObject):
         self.end_transaction()
 
         if result:
-            self.facts_changed()
+            self.emit("facts-changed")
         return result
 
     def get_fact(self, fact_id):
@@ -146,7 +154,7 @@ class Storage(gobject.GObject):
             logger.warning("failed to update fact {} ({})".format(fact_id, fact))
         self.end_transaction()
         if result:
-            self.facts_changed()
+            self.emit("facts-changed")
         return result
 
     def stop_tracking(self, end_time=None):
@@ -156,7 +164,7 @@ class Storage(gobject.GObject):
             if end_time is None:
                 end_time = dt.datetime.now()
             self.__touch_fact(facts[-1], end_time)
-            self.facts_changed()
+            self.emit("facts-changed")
 
     def remove_fact(self, fact_id):
         """Remove fact from storage by it's ID"""
@@ -164,7 +172,7 @@ class Storage(gobject.GObject):
         fact = self.__get_fact(fact_id)
         if fact:
             self.__remove_fact(fact_id)
-            self.facts_changed()
+            self.emit("facts-changed")
         self.end_transaction()
 
 
@@ -182,7 +190,7 @@ class Storage(gobject.GObject):
     # categories
     def add_category(self, name):
         res = self.__add_category(name)
-        self.activities_changed()
+        self.emit("activities-changed")
         return res
 
     def get_category_id(self, category):
@@ -190,11 +198,11 @@ class Storage(gobject.GObject):
 
     def update_category(self, id, name):
         self.__update_category(id, name)
-        self.activities_changed()
+        self.emit("activities-changed")
 
     def remove_category(self, id):
         self.__remove_category(id)
-        self.activities_changed()
+        self.emit("activities-changed")
 
 
     def get_categories(self):
@@ -204,16 +212,16 @@ class Storage(gobject.GObject):
     # activities
     def add_activity(self, name, category_id = -1):
         new_id = self.__add_activity(name, category_id)
-        self.activities_changed()
+        self.emit("activities-changed")
         return new_id
 
     def update_activity(self, id, name, category_id):
         self.__update_activity(id, name, category_id)
-        self.activities_changed()
+        self.emit("activities-changed")
 
     def remove_activity(self, id):
         result = self.__remove_activity(id)
-        self.activities_changed()
+        self.emit("activities-changed")
         return result
 
     def get_category_activities(self, category_id = -1):
@@ -225,7 +233,7 @@ class Storage(gobject.GObject):
     def change_category(self, id, category_id):
         changed = self.__change_category(id, category_id)
         if changed:
-            self.activities_changed()
+            self.emit("activities-changed")
         return changed
 
     def get_activity_by_name(self, activity, category_id, resurrect = True):
@@ -242,10 +250,10 @@ class Storage(gobject.GObject):
     def get_tag_ids(self, tags):
         tags, new_added = self.__get_tag_ids(tags)
         if new_added:
-            self.tags_changed()
+            self.emit("tags-changed")
         return tags
 
     def update_autocomplete_tags(self, tags):
         changes = self.__update_autocomplete_tags(tags)
         if changes:
-            self.tags_changed()
+            self.emit("tags-changed")

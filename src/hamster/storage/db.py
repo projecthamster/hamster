@@ -93,7 +93,9 @@ class Storage(storage.Storage):
 
                 if event == gio.FileMonitorEvent.CHANGES_DONE_HINT:
                     logger.warning("DB file has been modified externally. Calling all stations")
-                    self.dispatch_overwrite()
+                    self.emit("tags-changed")
+                    self.emit("facts-changed")
+                    self.emit("activities-changed")
 
             self.__database_file = gio.File.new_for_path(self.db_path)
             self.__db_monitor = self.__database_file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS, None)

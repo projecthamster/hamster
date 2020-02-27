@@ -557,7 +557,7 @@ class Overview(Controller):
         if position == gtk.EntryIconPosition.SECONDARY:
             self.filter_entry.set_text("")
 
-    def on_facts_changed(self, event):
+    def on_facts_changed(self, storage):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):
