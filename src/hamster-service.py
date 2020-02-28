@@ -38,16 +38,18 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     quit()
 
 
-class Storage(db.Storage, dbus.service.Object):
+class Storage(dbus.service.Object):
     __dbus_object_path__ = "/org/gnome/Hamster"
 
     def __init__(self, loop):
         self.bus = dbus.SessionBus()
         bus_name = dbus.service.BusName("org.gnome.Hamster", bus=self.bus)
 
-
         dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
-        db.Storage.__init__(self, unsorted_localized="")
+
+        self.storage = db.Storage(unsorted_localized="")
+        # append our own fixtures to the database
+        self.run_fixtures()
 
         self.mainloop = loop
 
@@ -57,10 +59,13 @@ class Storage(db.Storage, dbus.service.Object):
                                                   None)
         self.__monitor.connect("changed", self._on_us_change)
 
+        self.storage.connect("tags-changed", self._on_storage_tags_changed)
+        self.storage.connect("facts-changed", self._on_storage_facts_changed)
+        self.storage.connect("activities-changed", self._on_storage_activities_changed)
+
     def run_fixtures(self):
         """we start with an empty database and then populate with default
            values. This way defaults can be localized!"""
-        super(Storage, self).run_fixtures()
 
         # defaults
         defaults = [
@@ -72,12 +77,21 @@ class Storage(db.Storage, dbus.service.Object):
                                _("Watering flowers"),
                                _("Doing handstands")])
         ]
-        if not self.get_categories():
+        if not self.storage.get_categories():
             for category, activities in defaults:
-                cat_id = self.add_category(category)
+                cat_id = self.storage.add_category(category)
                 for activity in activities:
-                    self.add_activity(activity, cat_id)
+                    self.storage.add_activity(activity, cat_id)
 
+    # wrappers needed because GObject signals always pass their owner
+    def _on_storage_tags_changed(self, storage):
+        self.TagsChanged()
+
+    def _on_storage_facts_changed(self, storage):
+        self.FactsChanged()
+
+    def _on_storage_activities_changed(self, storage):
+        self.ActivitiesChanged()
 
     # stop service when we have been updated (will be brought back in next call)
     # anyway. should make updating simpler
@@ -87,29 +101,23 @@ class Storage(db.Storage, dbus.service.Object):
             self.Quit()
 
     @dbus.service.signal("org.gnome.Hamster")
-    def TagsChanged(self): pass
-    def tags_changed(self):
-        self.TagsChanged()
+    def TagsChanged(self):
+        logger.info("tags changed")
 
     @dbus.service.signal("org.gnome.Hamster")
-    def FactsChanged(self): pass
-    def facts_changed(self):
-        self.FactsChanged()
+    def FactsChanged(self):
+        logger.info("facts changed")
 
     @dbus.service.signal("org.gnome.Hamster")
-    def ActivitiesChanged(self): pass
-    def activities_changed(self):
-        self.ActivitiesChanged()
+    def ActivitiesChanged(self):
+        logger.info("activities changed")
 
+    # Fate undecided. Is anybody using that ? Not in hamster anyway, as of 2020-02-27.
+    # But note the recursive loop. That one has not been fired for a long while...
     @dbus.service.signal("org.gnome.Hamster")
     def ToggleCalled(self): pass
     def toggle_called(self):
         self.toggle_called()
-
-    def dispatch_overwrite(self):
-        self.TagsChanged()
-        self.FactsChanged()
-        self.ActivitiesChanged()
 
     @dbus.service.method("org.gnome.Hamster")
     def Quit(self):
@@ -173,7 +181,7 @@ class Storage(db.Storage, dbus.service.Object):
         elif end_time != 0:
             fact.end_time = dt.datetime.utcfromtimestamp(end_time)
 
-        return self.add_fact(fact)
+        return self.storage.add_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
@@ -192,7 +200,7 @@ class Storage(db.Storage, dbus.service.Object):
             fact id (int), 0 means failure.
         """
         fact = from_dbus_fact_json(dbus_fact)
-        return self.add_fact(fact)
+        return self.storage.add_fact(fact)
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -215,7 +223,7 @@ class Storage(db.Storage, dbus.service.Object):
         fact = from_dbus_fact_json(dbus_fact)
         dd = from_dbus_date(dbus_default_day)
         try:
-            self.check_fact(fact, default_day=dd)
+            self.storage.check_fact(fact, default_day=dd)
             success = True
             message = ""
         except FactError as error:
@@ -229,7 +237,7 @@ class Storage(db.Storage, dbus.service.Object):
                          out_signature=fact_signature)
     def GetFact(self, fact_id):
         """Get fact by id. For output format see GetFacts"""
-        fact = self.get_fact(fact_id)
+        fact = self.storage.get_fact(fact_id)
         return to_dbus_fact(fact)
 
 
@@ -241,7 +249,7 @@ class Storage(db.Storage, dbus.service.Object):
 
         Return fact in JSON format (cf. to_dbus_fact_json)
         """
-        fact = self.get_fact(fact_id)
+        fact = self.storage.get_fact(fact_id)
         return to_dbus_fact_json(fact)
 
 
@@ -254,7 +262,7 @@ class Storage(db.Storage, dbus.service.Object):
         end_time = end_time or None
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
-        return self.update_fact(fact_id, fact, start_time, end_time, temporary)
+        return self.storage.update_fact(fact_id, fact, start_time, end_time, temporary)
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -270,7 +278,7 @@ class Storage(db.Storage, dbus.service.Object):
             int: new id (0 means failure)
         """
         fact = from_dbus_fact_json(dbus_fact)
-        return self.update_fact(fact_id, fact)
+        return self.storage.update_fact(fact_id, fact)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
@@ -279,13 +287,13 @@ class Storage(db.Storage, dbus.service.Object):
         end_time = end_time or None
         if end_time:
             end_time = dt.datetime.utcfromtimestamp(end_time)
-        return self.stop_tracking(end_time)
+        return self.storage.stop_tracking(end_time)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def RemoveFact(self, fact_id):
         """Remove fact from storage by it's ID"""
-        return self.remove_fact(fact_id)
+        return self.storage.remove_fact(fact_id)
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -310,7 +318,7 @@ class Storage(db.Storage, dbus.service.Object):
         if end_date:
             end = dt.datetime.utcfromtimestamp(end_date).date()
 
-        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms)]
+        return [to_dbus_fact(fact) for fact in self.storage.get_facts(start, end, search_terms)]
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -332,7 +340,7 @@ class Storage(db.Storage, dbus.service.Object):
         """
         range = from_dbus_range(dbus_range)
         return [to_dbus_fact_json(fact)
-                for fact in self.get_facts(range, search_terms=search_terms)]
+                for fact in self.storage.get_facts(range, search_terms=search_terms)]
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='a{}'.format(fact_signature))
@@ -342,7 +350,7 @@ class Storage(db.Storage, dbus.service.Object):
 
            Legacy, to be superceded by GetTodaysFactsJSON at some point.
         """
-        return [to_dbus_fact(fact) for fact in self.get_todays_facts()]
+        return [to_dbus_fact(fact) for fact in self.storage.get_todays_facts()]
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='as')
@@ -351,43 +359,43 @@ class Storage(db.Storage, dbus.service.Object):
 
         Return an array of facts in JSON format.
         """
-        return [to_dbus_fact_json(fact) for fact in self.get_todays_facts()]
+        return [to_dbus_fact_json(fact) for fact in self.storage.get_todays_facts()]
 
 
     # categories
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature = 'i')
     def AddCategory(self, name):
-        return self.add_category(name)
+        return self.storage.add_category(name)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='i')
     def GetCategoryId(self, category):
-        return self.get_category_id(category)
+        return self.storage.get_category_id(category)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='is')
     def UpdateCategory(self, id, name):
-        self.update_category(id, name)
+        self.storage.update_category(id, name)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def RemoveCategory(self, id):
-        self.remove_category(id)
+        self.storage.remove_category(id)
 
     @dbus.service.method("org.gnome.Hamster", out_signature='a(is)')
     def GetCategories(self):
-        return [(category['id'], category['name']) for category in self.get_categories()]
+        return [(category['id'], category['name']) for category in self.storage.get_categories()]
 
 
     # activities
     @dbus.service.method("org.gnome.Hamster", in_signature='si', out_signature = 'i')
     def AddActivity(self, name, category_id):
-        return self.add_activity(name, category_id)
+        return self.storage.add_activity(name, category_id)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='isi')
     def UpdateActivity(self, id, name, category_id):
-        self.update_activity(id, name, category_id)
+        self.storage.update_activity(id, name, category_id)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def RemoveActivity(self, id):
-        return self.remove_activity(id)
+        return self.storage.remove_activity(id)
 
     @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='a(isis)')
     def GetCategoryActivities(self, category_id):
@@ -395,41 +403,41 @@ class Storage(db.Storage, dbus.service.Object):
                  row['name'],
                  row['category_id'],
                  row['category'] or '') for row in
-                      self.get_category_activities(category_id = category_id)]
+                      self.storage.get_category_activities(category_id = category_id)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
     def GetActivities(self, search = ""):
-        return [(row['name'], row['category'] or '') for row in self.get_activities(search)]
+        return [(row['name'], row['category'] or '') for row in self.storage.get_activities(search)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')
     def ChangeCategory(self, id, category_id):
-        return self.change_category(id, category_id)
+        return self.storage.change_category(id, category_id)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='sib', out_signature='a{sv}')
     def GetActivityByName(self, activity, category_id, resurrect = True):
         category_id = category_id or None
         if activity:
-            return dict(self.get_activity_by_name(activity, category_id, resurrect) or {})
+            return dict(self.storage.get_activity_by_name(activity, category_id, resurrect) or {})
         else:
             return {}
 
     # tags
     @dbus.service.method("org.gnome.Hamster", in_signature='b', out_signature='a(isb)')
     def GetTags(self, only_autocomplete):
-        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tags(only_autocomplete)]
+        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.storage.get_tags(only_autocomplete)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='as', out_signature='a(isb)')
     def GetTagIds(self, tags):
-        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.get_tag_ids(tags)]
+        return [(tag['id'], tag['name'], tag['autocomplete']) for tag in self.storage.get_tag_ids(tags)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s')
     def SetTagsAutocomplete(self, tags):
-        self.update_autocomplete_tags(tags)
+        self.storage.update_autocomplete_tags(tags)
 
 
     @dbus.service.method("org.gnome.Hamster", out_signature='s')
