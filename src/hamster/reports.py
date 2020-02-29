@@ -30,7 +30,7 @@ from string import Template
 from textwrap import dedent
 
 from hamster.lib import datetime as dt
-from hamster.lib.configuration import runtime
+from hamster.lib.configuration import conf
 from hamster.lib import stuff
 from hamster.lib.i18n import C_
 try:
@@ -198,11 +198,11 @@ class HTMLWriter(ReportWriter):
 
 
         # read the template, allow override
-        self.override = os.path.exists(os.path.join(runtime.home_data_dir, "report_template.html"))
+        self.override = os.path.exists(os.path.join(conf.home_data_dir, "report_template.html"))
         if self.override:
-            template = os.path.join(runtime.home_data_dir, "report_template.html")
+            template = os.path.join(conf.home_data_dir, "report_template.html")
         else:
-            template = os.path.join(runtime.data_dir, "report_template.html")
+            template = os.path.join(conf.data_dir, "report_template.html")
 
         self.main_template = ""
         with open(template, 'r') as f:
@@ -304,9 +304,9 @@ class HTMLWriter(ReportWriter):
             header_duration = _("Duration"),
             header_description = _("Description"),
 
-            data_dir = runtime.data_dir,
+            data_dir = conf.data_dir,
             show_template = _("Show template"),
-            template_instructions = _("You can override it by storing your version in %(home_folder)s") % {'home_folder': runtime.home_data_dir},
+            template_instructions = _("You can override it by storing your version in %(home_folder)s") % {'home_folder': conf.home_data_dir},
 
             start_date = timegm(self.start_date.timetuple()),
             end_date = timegm(self.end_date.timetuple()),
