@@ -104,29 +104,6 @@ class Singleton(object):
             cls.__instance = object.__new__(cls, *args, **kwargs)
         return cls.__instance
 
-class RuntimeStore(Singleton):
-    """XXX - kill"""
-    data_dir = ""
-    home_data_dir = ""
-    storage = None
-
-    def __init__(self):
-        self.version = hamster.__version__
-        if hamster.installed:
-            from hamster import defs  # only available when running installed
-            self.data_dir = os.path.join(defs.DATA_DIR, "hamster")
-        else:
-            # running from sources
-            module_dir = os.path.dirname(os.path.realpath(__file__))
-            self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
-
-        self.data_dir = os.path.realpath(self.data_dir)
-        self.storage = Storage()
-        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster"))
-
-
-runtime = RuntimeStore()
-
 
 class GSettingsStore(gobject.GObject, Singleton):
     """
@@ -141,6 +118,18 @@ class GSettingsStore(gobject.GObject, Singleton):
     def __init__(self):
         gobject.GObject.__init__(self)
         self._settings = gio.Settings(schema_id='org.gnome.Hamster')
+
+        # directory holding general data (for instance .ui files)
+        if hamster.installed:
+            from hamster import defs  # only available when running installed
+            self.data_dir = os.path.join(defs.DATA_DIR, "hamster")
+        else:
+            # running from sources
+            module_dir = os.path.dirname(os.path.realpath(__file__))
+            self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
+
+        # directory holding user data
+        self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster"))
 
     def _key_changed(self, client, key, data=None):
         """
@@ -183,3 +172,29 @@ class GSettingsStore(gobject.GObject, Singleton):
 
 
 conf = GSettingsStore()
+
+
+class RuntimeStore(Singleton):
+    """XXX - kill
+
+    Deprecated. Use directly
+    from hamster.dbus.client import Storage
+    self.storage = Storage()
+    and
+    from hamster.lib.configuration import conf
+    conf.data_dir
+    conf.home_data_dir
+    """
+    data_dir = ""
+    home_data_dir = ""
+    storage = None
+
+    def __init__(self):
+        self.version = hamster.__version__
+        self.storage = Storage()
+        self.data_dir = conf.data_dir
+        self.home_data_dir = conf.home_data_dir
+
+
+#: Deprecated (see RuntimeStore)
+runtime = RuntimeStore()
