@@ -249,8 +249,8 @@ class HamsterCLI(object):
                             default='WARNING',
                             help="Set the logging level (default: %(default)s)")
         parser.add_argument("--no-dbus", dest="no_dbus", action="store_true",
-                            help="Direct access to the database. "
-                            "Risky if another process tries to write at the same time.")
+                            help="(experimental) Direct access to the database. "
+                            "Another process trying to write at the same time is untested yet.")
         parser.add_argument("action", nargs="?", default="overview")
         parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
