@@ -1,4 +1,9 @@
-Changes since 2.2.2
+Changes in 3.0.1
+
+* Fixed a rare crash in hamster-window-server (Issue 571).
+
+
+Changes in 3.0
 
 * Fixed dialogs placement (PR 549):
   - dialogs appear above their parent (the overview, if opened).
