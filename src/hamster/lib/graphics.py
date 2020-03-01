@@ -1869,6 +1869,8 @@ class Scene(Parent, gtk.DrawingArea):
 
         self.__last_mouse_move = None
 
+        self.connect("realize", self.__on_realize)
+
         if interactive:
             self.set_can_focus(True)
             self.set_events(gdk.EventMask.POINTER_MOTION_MASK
@@ -1983,7 +1985,6 @@ class Scene(Parent, gtk.DrawingArea):
             context.scale(aspect_x, aspect_y)
 
         if self.fps is None:
-            self._window = self.get_window()
             self.emit("on-first-frame", context)
 
         cursor, self.mouse_x, self.mouse_y, mods = self._window.get_pointer()
@@ -2241,6 +2242,10 @@ class Scene(Parent, gtk.DrawingArea):
         self.__check_mouse(event.x, event.y)
         return True
 
+    def __on_realize(self, widget):
+        # Store as soon as available. Maybe for performance reasons,
+        # to avoid get_window() calls in __on_mouse_move ?
+        self._window = self.get_window()
 
     def __on_scroll(self, scene, event):
         target = self.get_sprite_at_position(event.x, event.y)
