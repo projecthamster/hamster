@@ -25,7 +25,7 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os
-from hamster.dbus.client import Storage
+
 from xdg.BaseDirectory import xdg_data_home
 
 from gi.repository import Gdk as gdk
@@ -185,15 +185,23 @@ class RuntimeStore(Singleton):
     conf.data_dir
     conf.home_data_dir
     """
-    data_dir = ""
-    home_data_dir = ""
-    storage = None
 
     def __init__(self):
         self.version = hamster.__version__
-        self.storage = Storage()
+        self._storage = None
         self.data_dir = conf.data_dir
         self.home_data_dir = conf.home_data_dir
+
+    @property
+    def storage(self):
+        """D-Bus storage interface.
+
+        Deprecated, see the `RuntimeStore` docstring.
+        """
+        if not self._storage:
+            from hamster.dbus.client import Storage
+            self._storage = Storage()
+        return self._storage
 
 
 #: Deprecated (see RuntimeStore)
