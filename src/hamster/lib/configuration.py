@@ -175,7 +175,7 @@ conf = GSettingsStore()
 
 
 class RuntimeStore(Singleton):
-    """XXX - kill
+    """Legacy data and storage centralization.
 
     Deprecated. Use directly
     from hamster.dbus.client import Storage
