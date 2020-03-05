@@ -150,7 +150,10 @@ class Storage(gobject.GObject):
            to boolean AND.
            Filter is applied to tags, categories, activity names and description
         """
-        range = dt.Range.from_start_end(start, end)
+        if isinstance(start, dt.hday) or isinstance(start, dt.date):
+            range = dt.Range.from_start_end(start, end)
+        else:
+            range = dt.Range(start, end)
         dbus_range = to_dbus_range(range)
         return [from_dbus_fact_json(fact)
                 for fact in self.conn.GetFactsJSON(dbus_range, search_terms)]
