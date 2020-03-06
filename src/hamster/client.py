@@ -153,6 +153,7 @@ class Storage(gobject.GObject):
         if isinstance(start, dt.hday) or isinstance(start, dt.date):
             range = dt.Range.from_start_end(start, end)
         else:
+            # workaround for https://github.com/projecthamster/hamster/pull/577
             range = dt.Range(start, end)
         dbus_range = to_dbus_range(range)
         return [from_dbus_fact_json(fact)
