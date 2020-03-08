@@ -590,27 +590,35 @@ class Range():
         Convenient to ease backward compatibility,
         and to handle either hdays or datetimes.
         """
+
         if isinstance(start, Range):
-            assert end is None, "range and end are mutually exclusive"
-            range = start
-        else:
-            if isinstance(start, hday):
-                day = start
-                start = day.start
-                if end is None:
-                    end = day.end
-            elif isinstance(start, pdt.date):
-                # transition from legacy
-                start = hday.from_pdt(start).start
+            assert end is None, "end cannot be passed together with a Range"
+            return cls(start.start, start.end)
+        elif isinstance(start, datetime):
+            # This one must come first,
+            # because inheritance order is datetime < date < pdt.date.
+            pass
+        elif isinstance(start, hday):
+            # Idem, beware of the inheritance order;
+            # hday < date < pdt.date.
+            day = start
+            start = day.start
+            if end is None:
+                end = day.end
+        elif isinstance(start, pdt.date):
+            # transition from legacy
+            start = hday.from_pdt(start).start
 
-            if isinstance(end, hday):
-                end = end.end
-            elif isinstance(end, pdt.date):
-                end = hday.from_pdt(end).end
+        if isinstance(end, datetime):
+            # same as above
+            pass
+        elif isinstance(end, hday):
+            end = end.end
+        elif isinstance(end, pdt.date):
+            # transition from legacy
+            end = hday.from_pdt(end).end
 
-            range = Range(start, end)
-
-        return range
+        return cls(start, end)
 
     @classmethod
     def today(cls):
