@@ -9,50 +9,56 @@ import os
 from waflib import Logs, TaskGen
 
 def _read_makefile_am(filename):
-	"read a Makefile.am file for DOC_* variable definitions, return a dict"
+	"read a Makefile.am file for HELP_* variable definitions, return a dict"
 	varstring = open(filename).read()
 	varstring = varstring.replace("\\\n", " ")
-	varlines = [L for L in varstring.splitlines() if L.startswith("DOC")]
+	varlines = [L for L in varstring.splitlines() if L.startswith("HELP")]
 	return dict(tuple(map(str.strip, var.split("=", 1))) for var in varlines)
 
 def init_mallard(self):
 	mf_am = self.path.find_resource(self.variable_definitions)
-	DOC_VAR = _read_makefile_am(mf_am.abspath())
+	HELP_VAR = _read_makefile_am(mf_am.abspath())
 
-	require_vars = "DOC_ID DOC_LINGUAS DOC_PAGES".split()
-	have_vars = set(var for var in DOC_VAR if DOC_VAR[var])
+	require_vars = "HELP_ID HELP_LINGUAS HELP_FILES".split()
+	have_vars = set(var for var in HELP_VAR if HELP_VAR[var])
 	missing_vars = set(require_vars).difference(have_vars)
 	if missing_vars:
-		print("Missing DOC variable declarations in {}:".format(mf_am.abspath()))
+		print("Missing HELP variable declarations in {}:".format(mf_am.abspath()))
 		print("\n".join(missing_vars))
 
-	self.bld.env.update(DOC_VAR)
+	self.bld.env.update(HELP_VAR)
 	self.default_install_path='${PREFIX}/share/help'
 
 def apply_mallard(self):
 	bld = self.bld
-	lst = self.to_list(bld.env["DOC_LINGUAS"])
+	lst = self.to_list(bld.env["HELP_LINGUAS"])
 	cnode = self.path.find_dir("C")
 
 	pages = [p.name for p in cnode.ant_glob("*.page")]
 
 	# Check if the declared page list is consistent
-	declared_pages = self.to_list(bld.env["DOC_PAGES"])
+	declared_pages = self.to_list(bld.env["HELP_FILES"])
 	missing_pages = set(pages).difference(declared_pages)
 	if missing_pages:
 		print("Warning: Some pages not declared:")
 		print("\n".join(missing_pages))
 
-	install_path = lambda lang: os.path.join(bld.env.DATADIR, "help", lang, "${DOC_ID}")
+	install_path = lambda lang: os.path.join(bld.env.DATADIR, "help", lang, "${HELP_ID}")
 
 	for lang in lst:
 		node = self.path.find_resource("%s/%s.po" % (lang, lang))
+		mo = self.path.find_or_declare("%s/%s.mo" % (lang, lang))
+		bld(name='msgfmt', color='BLUE',
+		    rule='${MSGFMT} ${SRC} -o ${TGT}',
+		    source=node,
+		    target=mo,
+		    )
 		for page in pages:
-			out = self.path.find_or_declare('%s/%s' % (lang, page))
 			src = self.path.find_resource('C/%s' % page)
-			bld(name='xml2po', color='BLUE',
-			    rule='${XML2PO} ${XML2POFLAGS} ${SRC} > ${TGT}',
-			    source=[node, src],
+			out = self.path.find_or_declare('%s/%s' % (lang, page))
+			bld(name='itstool', color='BLUE',
+			    rule='${ITSTOOL} ${ITSTOOLFLAGS} ${SRC} -o ${TGT}',
+			    source=[mo, src],
 			    target=out,
 			    install_path=install_path(lang)
 			    )
@@ -74,11 +80,12 @@ TaskGen.after('init_mallard')(apply_mallard)
 
 
 def configure(ctx):
-	lookfor = "xml2po"
+	lookfor = "itstool"
 	try:
-		ctx.find_program(lookfor, var='XML2PO')
+		ctx.find_program('msgfmt', var='MSGFMT')
+		ctx.find_program(lookfor, var='ITSTOOL')
 		ctx.env.docs = True
-		ctx.env.XML2POFLAGS = '-mmallard -p'
+		ctx.env.ITSTOOLFLAGS = '-m'
 	except ctx.errors.ConfigurationError:
 		Logs.warn("'{}' not found; documentation build disabled".format(lookfor))
 		ctx.env.docs = False

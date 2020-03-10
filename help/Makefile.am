@@ -1,11 +1,8 @@
-include $(top_srcdir)/gnome-doc-utils.make
-dist-hook: doc-dist-hook
+@YELP_HELP_RULES@
 
-DOC_ID = hamster
-DOC_INCLUDES = legal.xml
-DOC_LINGUAS = cs da de el es fa fr gl hu pl pt_BR ro ru sl te zh_CN zh_HK zh_TW
+HELP_ID = hamster
 
-DOC_PAGES = \
+HELP_FILES = \
         backup.page \
         index.page \
         input.page \
@@ -13,4 +10,7 @@ DOC_PAGES = \
         merge.page \
         reports.page \
         statistics.page \
-        tracking.page
+        tracking.page \
+        legal.xml
+
+HELP_LINGUAS = cs da de el es fa fr gl hu pl pt_BR ro ru sl te zh_CN zh_HK zh_TW
