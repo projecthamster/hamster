@@ -34,7 +34,7 @@ def apply_mallard(self):
 	lst = self.to_list(bld.env["HELP_LINGUAS"])
 	cnode = self.path.find_dir("C")
 
-	pages = [p.name for p in cnode.ant_glob("*.page")]
+	pages = [p.name for p in cnode.ant_glob(["*.page", "*.xml"])]
 
 	# Check if the declared page list is consistent
 	declared_pages = self.to_list(bld.env["HELP_FILES"])
@@ -54,10 +54,10 @@ def apply_mallard(self):
 		    target=mo,
 		    )
 		for page in pages:
-			src = self.path.find_resource('C/%s' % page)
 			out = self.path.find_or_declare('%s/%s' % (lang, page))
+			src = self.path.find_resource('C/%s' % page)
 			bld(name='itstool', color='BLUE',
-			    rule='${ITSTOOL} ${ITSTOOLFLAGS} ${SRC} -o ${TGT}',
+			    rule='${ITSTOOL} -m ${SRC} -o ${TGT}',
 			    source=[mo, src],
 			    target=out,
 			    install_path=install_path(lang)
@@ -85,7 +85,6 @@ def configure(ctx):
 		ctx.find_program('msgfmt', var='MSGFMT')
 		ctx.find_program(lookfor, var='ITSTOOL')
 		ctx.env.docs = True
-		ctx.env.ITSTOOLFLAGS = '-m'
 	except ctx.errors.ConfigurationError:
 		Logs.warn("'{}' not found; documentation build disabled".format(lookfor))
 		ctx.env.docs = False

@@ -1,6 +1,7 @@
 @YELP_HELP_RULES@
 
 HELP_ID = hamster
+HELP_LINGUAS = cs da de el es fa fr gl hu pl pt_BR ro ru sl te zh_CN zh_HK zh_TW
 
 HELP_FILES = \
         backup.page \
@@ -12,5 +13,3 @@ HELP_FILES = \
         statistics.page \
         tracking.page \
         legal.xml
-
-HELP_LINGUAS = cs da de el es fa fr gl hu pl pt_BR ro ru sl te zh_CN zh_HK zh_TW
