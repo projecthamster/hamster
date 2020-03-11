@@ -65,7 +65,7 @@ https://snapcraft.io/hamster-snap
 ```bash
 sudo apt install gettext intltool python3-gi-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev
 # and for documentation
-sudo apt install gnome-doc-utils yelp
+sudo apt install itstool yelp
 ```
 
 ##### openSUSE
@@ -73,7 +73,7 @@ sudo apt install gnome-doc-utils yelp
 Leap-15.0 and Leap-15.1:
 ```bash
 sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
-sudo zypper install gnome-doc-utils xml2po yelp
+sudo zypper install itstool yelp
 ```
 
 ##### RPM-based
