@@ -590,11 +590,10 @@ class Range():
         Convenient to ease backward compatibility,
         and to handle either hdays or datetimes.
         """
-
         if isinstance(start, Range):
             assert end is None, "end cannot be passed together with a Range"
             return cls(start.start, start.end)
-        elif isinstance(start, datetime):
+        elif (start is None) or isinstance(start, datetime):
             # This one must come first,
             # because inheritance order is datetime < date < pdt.date.
             pass
@@ -608,8 +607,13 @@ class Range():
         elif isinstance(start, pdt.date):
             # transition from legacy
             start = hday.from_pdt(start).start
+        else:
+            raise TypeError(
+                "\n    First argument should be either Range, None, datetime or hday;"
+                "\n    received {}".format(type(start))
+                )
 
-        if isinstance(end, datetime):
+        if (end is None) or isinstance(end, datetime):
             # same as above
             pass
         elif isinstance(end, hday):
@@ -617,6 +621,10 @@ class Range():
         elif isinstance(end, pdt.date):
             # transition from legacy
             end = hday.from_pdt(end).end
+        else:
+            raise TypeError(
+                "\n    Second argument should be either None, datetime or hday;"
+                "\n    received {}".format(type(start)))
 
         return cls(start, end)
 
