@@ -595,7 +595,7 @@ class Range():
             return cls(start.start, start.end)
         elif (start is None) or isinstance(start, datetime):
             # This one must come first,
-            # because inheritance order is datetime < date < pdt.date.
+            # because inheritance order is datetime < pdt.datetime < pdt.date.
             pass
         elif isinstance(start, hday):
             # Idem, beware of the inheritance order;
@@ -716,4 +716,3 @@ class timedelta(pdt.timedelta):
     def total_minutes(self):
         """Return the duration in minutes (float)."""
         return self.total_seconds() / 60
-
