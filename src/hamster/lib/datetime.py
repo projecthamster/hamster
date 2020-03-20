@@ -591,26 +591,42 @@ class Range():
         and to handle either hdays or datetimes.
         """
         if isinstance(start, Range):
-            assert end is None, "range and end are mutually exclusive"
-            range = start
+            assert end is None, "end cannot be passed together with a Range"
+            return cls(start.start, start.end)
+        elif (start is None) or isinstance(start, datetime):
+            # This one must come first,
+            # because inheritance order is datetime < pdt.datetime < pdt.date.
+            pass
+        elif isinstance(start, hday):
+            # Idem, beware of the inheritance order;
+            # hday < date < pdt.date.
+            day = start
+            start = day.start
+            if end is None:
+                end = day.end
+        elif isinstance(start, pdt.date):
+            # transition from legacy
+            start = hday.from_pdt(start).start
         else:
-            if isinstance(start, hday):
-                day = start
-                start = day.start
-                if end is None:
-                    end = day.end
-            elif isinstance(start, pdt.date):
-                # transition from legacy
-                start = hday.from_pdt(start).start
+            raise TypeError(
+                "\n    First argument should be either Range, None, datetime or hday;"
+                "\n    received {}".format(type(start))
+                )
 
-            if isinstance(end, hday):
-                end = end.end
-            elif isinstance(end, pdt.date):
-                end = hday.from_pdt(end).end
+        if (end is None) or isinstance(end, datetime):
+            # same as above
+            pass
+        elif isinstance(end, hday):
+            end = end.end
+        elif isinstance(end, pdt.date):
+            # transition from legacy
+            end = hday.from_pdt(end).end
+        else:
+            raise TypeError(
+                "\n    Second argument should be either None, datetime or hday;"
+                "\n    received {}".format(type(start)))
 
-            range = Range(start, end)
-
-        return range
+        return cls(start, end)
 
     @classmethod
     def today(cls):
@@ -700,4 +716,3 @@ class timedelta(pdt.timedelta):
     def total_minutes(self):
         """Return the duration in minutes (float)."""
         return self.total_seconds() / 60
-

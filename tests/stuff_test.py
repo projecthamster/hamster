@@ -425,6 +425,16 @@ class TestDatetime(unittest.TestCase):
         range = dt.Range(None, base)
         range_str = range.format(default_day=day)
         self.assertEqual(range_str, "-- - 21:20")
+        # issue #576
+        start = dt.datetime(2020, 3, 8, 17, 7)
+        end = dt.datetime(2020, 3, 8, 18, 6)
+        range = dt.Range.from_start_end(start, end)
+        self.assertEqual(range.start, start)
+        self.assertEqual(range.end, end)
+        # check passthrough
+        range2 = dt.Range.from_start_end(range)
+        self.assertEqual(range2.start, range.start)
+        self.assertEqual(range2.end, range.end)
 
     def test_rounding(self):
         dt1 = dt.datetime(2019, 12, 31, hour=13, minute=14, second=10, microsecond=11)
