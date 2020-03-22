@@ -109,6 +109,7 @@ class Fact(object):
         fact._set(**kwds)
         return fact
 
+    # TODO: rename "date" to "day" or "hday"
     @property
     def date(self):
         """hamster day, determined from start_time.
