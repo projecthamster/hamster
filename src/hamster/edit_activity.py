@@ -101,7 +101,7 @@ class CustomFactController(Controller):
 
         original_fact = self.fact
         # TODO: should use hday, not date.
-        self.date = self.fact.date
+        self.day = self.fact.date
 
         self.update_fields()
         self.update_cmdline(select=True)
@@ -129,12 +129,12 @@ class CustomFactController(Controller):
         self.window.show_all()
 
     @property
-    def date(self):
+    def day(self):
         """Default hamster day."""
         return self._day
 
-    @date.setter
-    def date(self, value):
+    @day.setter
+    def day(self, value):
         delta = value - self._day if self._day else None
         self._day = value
         self.cmdline.default_day = value
@@ -152,8 +152,8 @@ class CustomFactController(Controller):
         self.increment_date(+1)
 
     def draw_preview(self, start_time, end_time=None):
-        day_facts = runtime.storage.get_facts(self.date)
-        self.dayline.plot(self.date, day_facts, start_time, end_time)
+        day_facts = runtime.storage.get_facts(self.day)
+        self.dayline.plot(self.day, day_facts, start_time, end_time)
 
     def get_widget(self, name):
         """ skip one variable (huh) """
@@ -161,7 +161,7 @@ class CustomFactController(Controller):
 
     def increment_date(self, days):
         delta = dt.timedelta(days=days)
-        self.date += delta
+        self.day += delta
         self.update_fields()
 
     def show(self):
@@ -186,7 +186,7 @@ class CustomFactController(Controller):
 
     def on_cmdline_changed(self, widget):
         if self.master_is_cmdline:
-            fact = Fact.parse(self.cmdline.get_text(), default_day=self.date)
+            fact = Fact.parse(self.cmdline.get_text(), default_day=self.day)
             previous_cmdline_fact = self.cmdline_fact
             # copy the entered fact before any modification
             self.cmdline_fact = fact.copy()
@@ -249,7 +249,7 @@ class CustomFactController(Controller):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.date = self.fact.date or dt.hday.today()
+            self.day = self.fact.date or dt.hday.today()
             self.validate_fields()
             self.update_cmdline()
 
@@ -289,7 +289,7 @@ class CustomFactController(Controller):
     def update_cmdline(self, select=None):
         """Update the cmdline entry content."""
         self.cmdline_fact = self.fact.copy(description=None)
-        label = self.cmdline_fact.serialized(default_day=self.date)
+        label = self.cmdline_fact.serialized(default_day=self.day)
         with self.cmdline.handler_block(self.cmdline.checker):
             self.cmdline.set_text(label)
             if select:
@@ -329,30 +329,30 @@ class CustomFactController(Controller):
         """Check fields information.
 
         Update gui status about entry and description validity.
-        Try to merge date, activity and description informations.
+        Try to merge day, activity and description informations.
 
         Return the consolidated fact if successful, or None.
         """
         fact = self.fact
 
         now = dt.datetime.now()
-        self.get_widget("button-next-day").set_sensitive(self.date < now.date())
+        self.get_widget("button-next-day").set_sensitive(self.day < now.date())
 
-        if self.date == now.date():
+        if self.day == now.date():
             default_dt = now
         else:
-            default_dt = dt.datetime.combine(self.date, now.time())
+            default_dt = dt.datetime.combine(self.day, now.time())
 
         self.draw_preview(fact.start_time or default_dt,
                           fact.end_time or default_dt)
 
         try:
-            runtime.storage.check_fact(fact, default_day=self.date)
+            runtime.storage.check_fact(fact, default_day=self.day)
         except FactError as error:
             self.update_status(status="wrong", markup=str(error))
             return None
 
-        roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.date)
+        roundtrip_fact = Fact.parse(fact.serialized(), default_day=self.day)
         if roundtrip_fact != fact:
             self.update_status(status="wrong", markup="Fact could not be parsed back")
             return None
