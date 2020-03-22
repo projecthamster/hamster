@@ -335,12 +335,13 @@ class CustomFactController(Controller):
         fact = self.fact
 
         now = dt.datetime.now()
-        self.get_widget("button-next-day").set_sensitive(self.day < now.date())
+        today = now.hday()
+        self.get_widget("button-next-day").set_sensitive(self.day < today)
 
-        if self.day == now.date():
+        if self.day == today:
             default_dt = now
         else:
-            default_dt = dt.datetime.combine(self.day, now.time())
+            default_dt = dt.datetime.from_day_time(self.day, now.time())
 
         self.draw_preview(fact.start_time or default_dt,
                           fact.end_time or default_dt)
