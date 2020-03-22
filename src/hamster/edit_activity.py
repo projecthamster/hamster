@@ -146,10 +146,10 @@ class CustomFactController(Controller):
             # self.update_fields() here would enter an infinite loop
 
     def on_prev_day_clicked(self, button):
-        self.increment_date(-1)
+        self.increment_day(-1)
 
     def on_next_day_clicked(self, button):
-        self.increment_date(+1)
+        self.increment_day(+1)
 
     def draw_preview(self, start_time, end_time=None):
         day_facts = runtime.storage.get_facts(self.day)
@@ -159,7 +159,7 @@ class CustomFactController(Controller):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-    def increment_date(self, days):
+    def increment_day(self, days):
         delta = dt.timedelta(days=days)
         self.day += delta
         self.update_fields()
