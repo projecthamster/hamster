@@ -45,7 +45,7 @@ class CustomFactController(Controller):
     def __init__(self, action, fact_id=None):
         Controller.__init__(self)
 
-        self._date = None  # for the date property
+        self._day = None  # for the day property
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
@@ -131,12 +131,12 @@ class CustomFactController(Controller):
     @property
     def date(self):
         """Default hamster day."""
-        return self._date
+        return self._day
 
     @date.setter
     def date(self, value):
-        delta = value - self._date if self._date else None
-        self._date = value
+        delta = value - self._day if self._day else None
+        self._day = value
         self.cmdline.default_day = value
         if self.fact and delta:
             if self.fact.start_time:
