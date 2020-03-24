@@ -8,10 +8,7 @@ All other repositories -`hamster-lib/dbus/cli/gtk`- are part of the separate rew
 More context is given in the history section below.
 
 Some additional information is available in the
-[wiki](https://github.com/projecthamster/hamster/wiki)
-and a static copy of the user documentation is online
-[here](https://geraldjansen.github.io/hamster-doc/).
-
+[wiki](https://github.com/projecthamster/hamster/wiki).
 
 ## Installation
 
