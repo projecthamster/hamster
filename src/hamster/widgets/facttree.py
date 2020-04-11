@@ -30,6 +30,7 @@ from gi.repository import Pango as pango
 from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import stuff
+from hamster.lib.fact import Fact
 
 
 class ActionRow(graphics.Sprite):
@@ -45,6 +46,20 @@ class ActionRow(graphics.Sprite):
 
         self.width = 50 # Simon says
 
+class TotalFact(Fact):
+   """An extension of Fact that is used for daily totals.
+   Instances of this class are rendered differently than instances
+   of Fact.
+   A TotalFact doesn't have a meaningful  start and an end, but a 
+   total duration (delta).
+   """
+   def __init__(self, activity, duration):
+        super().__init__(activity=activity, start=dt.datetime.now(), end=dt.datetime.now())
+        self.duration = duration
+
+   @property
+   def delta(self):
+        return self.duration
 
 
 class Label(object):
@@ -66,6 +81,9 @@ class Label(object):
     def set_text(self, text):
         self.text = text
         self.layout.set_markup(text)
+
+    def get_text(self):
+        return self.text
 
     def show(self, g, text=None, x=None, y=None):
         """Show the label.
@@ -206,8 +224,11 @@ class FactRow(object):
         g.translate(self.row_margin_H, self.row_margin_V)
 
         g.set_color(color)
-        self.time_label.show(g)
-        self.activity_label.show(g)
+
+        #Do not show the start/end time for Totals
+        if not isinstance(self.fact, TotalFact):
+            self.time_label.show(g)
+        self.activity_label.show(g, self.activity_label.get_text() if not isinstance(self.fact, TotalFact) else "<b>{}</b>".format(self.activity_label.get_text()))
 
         if self.fact.category:
             g.save_context()
@@ -233,7 +254,7 @@ class FactRow(object):
 
             g.restore_context()
 
-        self.duration_label.show(g, self.fact.delta.format(), x=self.width - 105)
+        self.duration_label.show(g, self.fact.delta.format() if not isinstance(self.fact, TotalFact) else "<b>{}</b>".format(self.fact.delta.format()), x=self.width - 105)
 
         g.restore_context()
 
@@ -252,9 +273,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
 
     ASCII Art!
-    | Weekday    | Start - End | Activity - category   [actions]| Duration |
-    | Month, Day |             | tags, description              |          |
-    |            | Start - End | Activity - category            | Duration |
+    | Weekday    | Start - End | Activity - category   [actions]| Duration       |
+    | Month, Day |             | tags, description              |                |
+    |            | Start - End | Activity - category            | Duration       |
+    |            |             | Total                          | Total Duration |
 
     Inline edit?
 
@@ -331,7 +353,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     and self.hover_fact.id == self.current_fact.id)
                ):
                 self.unset_current_fact()
-            else:
+            #Totals can't be selected
+            elif not isinstance(self.hover_fact,TotalFact):
                 self.set_current_fact(self.hover_fact)
 
     def activate_row(self, day, fact):
@@ -341,7 +364,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.emit("on-delete-called", fact)
 
     def on_double_click(self, scene, event):
-        if self.hover_fact:
+        if self.hover_fact and not isinstance(self.hover_fact,TotalFact):
             self.activate_row(self.hover_day, self.hover_fact)
 
     def on_key_press(self, scene, event):
@@ -480,8 +503,17 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             start = end = dt.hday.today()
 
         by_date = defaultdict(list)
+        delta_by_date = defaultdict(dt.timedelta)
         for fact in self.facts:
             by_date[fact.date].append(fact)
+            delta_by_date[fact.date] += fact.delta
+
+        #Add a TotalFact at the end of each day if we are 
+        #displaying more than one day.
+        if len(by_date) > 1 :
+            for key in by_date:
+                total_by_date = TotalFact(_("Total"), delta_by_date[key])
+                by_date[key].append(total_by_date)
 
         days = []
         for i in range((end-start).days + 1):
