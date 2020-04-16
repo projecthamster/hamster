@@ -52,6 +52,8 @@ class TotalFact(Fact):
    of Fact.
    A TotalFact doesn't have a meaningful  start and an end, but a 
    total duration (delta).
+   FIXME: Ideally, we should have a common parent for Fact and Total Fact
+   so we don't need to have nonsensical start and end properties here.
    """
    def __init__(self, activity, duration):
         super().__init__(activity=activity, start=dt.datetime.now(), end=dt.datetime.now())
