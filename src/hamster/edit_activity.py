@@ -248,7 +248,9 @@ class CustomFactController(Controller):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.day = self.fact.date or dt.hday.today()
+            if self.fact.date:
+                # change default day only if date is set
+                self.day = self.fact.date
             self.validate_fields()
             self.update_cmdline()
 
@@ -268,7 +270,7 @@ class CustomFactController(Controller):
                                                          new_time)
                 else:
                     # date not specified; result must fall in current hamster_day
-                    new_start_time = dt.datetime.from_day_time(dt.hday.today(), new_time)
+                    new_start_time = dt.datetime.from_day_time(self.day, new_time)
             else:
                 new_start_time = None
             self.fact.start_time = new_start_time
