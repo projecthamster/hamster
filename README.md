@@ -152,6 +152,24 @@ D-Bus, so that all the traces are visible.
 Note: You'll need recent version of hamster installed on your system (or 
 [this workaround](https://github.com/projecthamster/hamster/issues/552#issuecomment-585166000)).
 
+#### Running tests
+
+Hamster has a limited test suite, that can be run using Python's builtin
+unittest module. From the top-level directory, just run:
+
+    python3 -m unittest
+
+This will let unittest automatically find all testcases in all files
+called `test_*.py`, and runs them.
+
+To run a subset of tests, specify the import path towards it. For
+example, to run just a single test file, class or method respectively
+run:
+
+    python3 -m unittest tests.test_stuff
+    python3 -m unittest tests.test_stuff.TestFactParsing
+    python3 -m unittest tests.test_stuff.TestFactParsing.test_plain_name
+
 #### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
