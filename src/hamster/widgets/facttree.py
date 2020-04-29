@@ -37,18 +37,21 @@ class ActionRow(graphics.Sprite):
         graphics.Sprite.__init__(self)
         self.visible = False
 
-        self.restart = graphics.Icon("view-refresh-symbolic", size=18,
-                                     interactive=True,
-                                     mouse_cursor=gdk.CursorType.HAND1,
-                                     y=4)
+        self.restart = graphics.Icon(
+            "view-refresh-symbolic",
+            size=18,
+            interactive=True,
+            mouse_cursor=gdk.CursorType.HAND1,
+            y=4,
+        )
         self.add_child(self.restart)
 
-        self.width = 50 # Simon says
-
+        self.width = 50  # Simon says
 
 
 class Label(object):
     """a much cheaper label that would be suitable for cellrenderer"""
+
     def __init__(self, x=0, y=0, color=None):
         self.x = x
         self.y = y
@@ -56,7 +59,7 @@ class Label(object):
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
-        self.set_text("Hamster") # dummy
+        self.set_text("Hamster")  # dummy
 
     @property
     def height(self):
@@ -97,6 +100,7 @@ class Label(object):
 
 class TagLabel(Label):
     """Tag label, with small text."""
+
     def set_text(self, text):
         Label.set_text(self, "<small>{}</small>".format(text))
 
@@ -124,7 +128,7 @@ class FactRow(object):
         self.inter_tag_margin = 4
         self.row_margin_H = 5
         self.row_margin_V = 2
-        self.category_offset_V = self.category_label.height * 0.1;
+        self.category_offset_V = self.category_label.height * 0.1
 
     @property
     def height(self):
@@ -133,14 +137,15 @@ class FactRow(object):
             res += self.description_label.height
 
         if self.fact.tags:
-            res += (self.tag_label.height
-                    + self.tag_inner_margin_V * 2
-                    + self.tag_row_margin_V * 2)
+            res += (
+                self.tag_label.height
+                + self.tag_inner_margin_V * 2
+                + self.tag_row_margin_V * 2
+            )
 
         res += self.row_margin_V * 2
 
         return res
-
 
     def set_fact(self, fact):
         """Set current fact."""
@@ -154,18 +159,21 @@ class FactRow(object):
 
         self.activity_label.set_text(stuff.escape_pango(fact.activity))
 
-        category_text = "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
+        category_text = (
+            "  - {}".format(stuff.escape_pango(fact.category)) if fact.category else ""
+        )
         self.category_label.set_text(category_text)
 
         text = stuff.escape_pango(fact.description)
-        description_text = "<small><i>{}</i></small>".format(text) if fact.description else ""
+        description_text = (
+            "<small><i>{}</i></small>".format(text) if fact.description else ""
+        )
         self.description_label.set_text(description_text)
 
         if fact.tags:
             # for now, tags are on a single line.
             # The first one is enough to determine the height.
             self.tag_label.set_text(stuff.escape_pango(fact.tags[0]))
-
 
     def _show_tags(self, g, color, bg):
         label = self.tag_label
@@ -185,7 +193,6 @@ class FactRow(object):
             g.translate(rw + self.inter_tag_margin, 0)
 
         g.restore_context()
-
 
     def show(self, g, colors, fact=None, is_selected=False):
         """Display the fact row.
@@ -223,9 +230,11 @@ class FactRow(object):
 
             if self.fact.tags:
                 self._show_tags(g, color, bg)
-                tag_height = (self.tag_label.height
-                              + self.tag_inner_margin_V * 2
-                              + self.tag_row_margin_V * 2)
+                tag_height = (
+                    self.tag_label.height
+                    + self.tag_inner_margin_V * 2
+                    + self.tag_row_margin_V * 2
+                )
                 g.translate(0, tag_height)
 
             if self.fact.description:
@@ -262,16 +271,26 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
-        'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'on-activate-row': (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT),
+        ),
+        'on-delete-called': (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,),
+        ),
     }
 
-
-
     hadjustment = gobject.property(type=gtk.Adjustment, default=None)
-    hscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
+    hscroll_policy = gobject.property(
+        type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM
+    )
     vadjustment = gobject.property(type=gtk.Adjustment, default=None)
-    vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
+    vscroll_policy = gobject.property(
+        type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM
+    )
 
     def __init__(self):
         graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
@@ -286,7 +305,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.fact_row = FactRow()
 
         self.action_row = ActionRow()
-        #self.add_child(self.action_row)
+        # self.add_child(self.action_row)
 
         self.row_positions = []
         self.row_heights = []
@@ -313,7 +332,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.connect("on-enter-frame", self.on_enter_frame)
         self.connect("on-double-click", self.on_double_click)
 
-
     @property
     def current_fact_index(self):
         """Current fact index in the self.facts list."""
@@ -325,11 +343,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.grab_focus()
         if self.hover_fact:
             # match either content or id
-            if (self.hover_fact == self.current_fact
-                or (self.hover_fact
-                    and self.current_fact
-                    and self.hover_fact.id == self.current_fact.id)
-               ):
+            if self.hover_fact == self.current_fact or (
+                self.hover_fact
+                and self.current_fact
+                and self.hover_fact.id == self.current_fact.id
+            ):
                 self.unset_current_fact()
             else:
                 self.set_current_fact(self.hover_fact)
@@ -389,7 +407,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             if self.current_fact:
                 self.delete_row(self.current_fact)
 
-
     def set_current_fact(self, fact):
         self.current_fact = fact
 
@@ -406,15 +423,22 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.on_scroll()
 
     def get_visible_range(self):
-        start, end = (bisect.bisect(self.row_positions, self.y) - 1,
-                      bisect.bisect(self.row_positions, self.y + self.height))
+        start, end = (
+            bisect.bisect(self.row_positions, self.y) - 1,
+            bisect.bisect(self.row_positions, self.y + self.height),
+        )
 
         y = self.y
-        return [{"i": start + i, "y": pos - y, "h": height, "day": day, "facts": facts}
-                    for i, (pos, height, (day, facts)) in enumerate(zip(self.row_positions[start:end],
-                                                                        self.row_heights[start:end],
-                                                                        self.days[start:end]))]
-
+        return [
+            {"i": start + i, "y": pos - y, "h": height, "day": day, "facts": facts}
+            for i, (pos, height, (day, facts)) in enumerate(
+                zip(
+                    self.row_positions[start:end],
+                    self.row_heights[start:end],
+                    self.days[start:end],
+                )
+            )
+        ]
 
     def on_mouse_move(self, tree, event):
         hover_day, hover_fact = None, None
@@ -438,10 +462,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     hover_fact = fact
                     break
 
-        if (hover_fact
-            and self.hover_fact
-            and hover_fact.id != self.hover_fact.id
-           ):
+        if hover_fact and self.hover_fact and hover_fact.id != self.hover_fact.id:
             self.move_actions()
         # idem, always update hover_fact, not just if they appear different
         self.hover_fact = hover_fact
@@ -454,13 +475,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         else:
             self.action_row.visible = False
 
-
     def _on_vadjustment_change(self, scene, vadjustment):
         if not self.vadjustment:
             return
         self.vadjustment.connect("value_changed", self.on_scroll_value_changed)
         self.set_size_request(500, 300)
-
 
     def set_facts(self, facts):
         # FactTree adds attributes to its facts. isolate these side effects
@@ -484,7 +503,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             by_date[fact.date].append(fact)
 
         days = []
-        for i in range((end-start).days + 1):
+        for i in range((end - start).days + 1):
             current_date = start + dt.timedelta(days=i)
             days.append((current_date, by_date[current_date]))
 
@@ -492,9 +511,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.set_row_heights()
 
-        if (self.current_fact
-            and self.current_fact.id in (fact.id for fact in self.facts)
-           ):
+        if self.current_fact and self.current_fact.id in (
+            fact.id for fact in self.facts
+        ):
             self.on_scroll()
         else:
             # will also trigger an on_scroll
@@ -535,7 +554,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             heights.append(height)
             y += height
 
-
         self.row_positions, self.row_heights = pos, heights
 
         maxy = max(y, 1)
@@ -545,17 +563,14 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.vadjustment.set_upper(max(maxy, self.height))
             self.vadjustment.set_page_size(self.height)
 
-
     def on_resize(self, scene, event):
         self.set_row_heights()
         self.fact_row.width = self.width - 105
         self.on_scroll()
 
-
     def on_scroll_value_changed(self, scroll):
         self.y = int(scroll.get_value())
         self.on_scroll()
-
 
     def on_scroll(self, scene=None, event=None):
         if not self.height:
@@ -578,7 +593,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.visible_range = self.get_visible_range()
 
-
     def on_enter_frame(self, scene, context):
         has_focus = self.get_toplevel().has_toplevel_focus()
         if has_focus:
@@ -596,7 +610,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 "selected_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
             }
 
-
         if not self.height:
             return
 
@@ -607,7 +620,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         date_bg_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.15)
         g.fill_area(0, 0, 105, self.height, date_bg_color)
-
 
         y = int(self.y)
 
@@ -620,28 +632,31 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 g.rectangle(0, 0, self.width, 10)
                 g.clip()
                 g.rectangle(0, 0, self.width, 10)
-                none_bg_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.75)
+                none_bg_color = self.colors.mix(
+                    colors["normal_bg"], colors["normal"], 0.75
+                )
                 g.fill(none_bg_color)
 
                 # line, useful to separate consecutive days with no activity
                 g.move_to(0, 0)
                 g.line_to(self.width, 0)
-                none_stroke_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.25)
+                none_stroke_color = self.colors.mix(
+                    colors["normal_bg"], colors["normal"], 0.25
+                )
                 g.stroke(none_stroke_color)
                 g.restore_context()
                 continue
-
 
             g.set_color(colors["normal"])
             self.date_label.show(g, rec['day'].strftime("%A\n%b %d"))
 
             g.translate(105, 0)
             for fact in rec['facts']:
-                is_selected = (self.current_fact is not None
-                               and fact.id == self.current_fact.id)
+                is_selected = (
+                    self.current_fact is not None and fact.id == self.current_fact.id
+                )
                 self.fact_row.set_fact(fact)
                 self.fact_row.show(g, colors, is_selected=is_selected)
                 g.translate(0, self.fact_row.height)
-
 
             g.restore_context()

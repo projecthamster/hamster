@@ -7,7 +7,8 @@
 
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 import calendar
 
@@ -22,9 +23,20 @@ class FactError(Exception):
 
 
 class Fact(object):
-    def __init__(self, activity="", category=None, description=None, tags=None,
-                 range=None, start=None, end=None, start_time=None, end_time=None,
-                 id=None, activity_id=None):
+    def __init__(
+        self,
+        activity="",
+        category=None,
+        description=None,
+        tags=None,
+        range=None,
+        start=None,
+        end=None,
+        start_time=None,
+        end_time=None,
+        id=None,
+        activity_id=None,
+    ):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
@@ -77,9 +89,15 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
-            'end_time': self.range.end if isinstance(self.range.end, str) else calendar.timegm(self.range.end.timetuple()) if self.range.end else "",
-            'delta': self.delta.total_seconds()  # ugly, but needed for report.py
+            'start_time': self.range.start
+            if isinstance(self.range.start, str)
+            else calendar.timegm(self.range.start.timetuple()),
+            'end_time': self.range.end
+            if isinstance(self.range.end, str)
+            else calendar.timegm(self.range.end.timetuple())
+            if self.range.end
+            else "",
+            'delta': self.delta.total_seconds(),  # ugly, but needed for report.py
         }
 
     @property
@@ -174,8 +192,9 @@ class Fact(object):
     @classmethod
     def parse(cls, string, range_pos="head", default_day=None, ref="now"):
         fact = Fact()
-        for key, val in parse_fact(string, range_pos=range_pos,
-                                   default_day=default_day, ref=ref).items():
+        for key, val in parse_fact(
+            string, range_pos=range_pos, default_day=default_day, ref=ref
+        ).items():
             setattr(fact, key, val)
         return fact
 
@@ -189,10 +208,7 @@ class Fact(object):
             res += ',, '
             res += self.description
 
-        if ('#' in self.activity
-            or '#' in self.category
-            or '#' in self.description
-           ):
+        if '#' in self.activity or '#' in self.category or '#' in self.description:
             # need a tag barrier
             res += ",, "
 
@@ -207,14 +223,16 @@ class Fact(object):
         name = self.serialized_name()
         if range_pos == "head":
             # Is activity starting range-like ?
-            subfact = Fact.parse(self.activity, range_pos=range_pos,
-                                 default_day=default_day)
+            subfact = Fact.parse(
+                self.activity, range_pos=range_pos, default_day=default_day
+            )
             need_explicit = bool(subfact.range)
         else:
             # TODO: should check last tag.
             need_explicit = False
-        datetime = self.range.format(default_day=default_day,
-                                     explicit_none=need_explicit)
+        datetime = self.range.format(
+            default_day=default_day, explicit_none=need_explicit
+        )
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
         assert range_pos in ("head", "tail")
@@ -237,14 +255,15 @@ class Fact(object):
                 setattr(self, attr, value)
 
     def __eq__(self, other):
-        return (isinstance(other, Fact)
-                and self.activity == other.activity
-                and self.category == other.category
-                and self.description == other.description
-                and self.range.end == other.range.end
-                and self.range.start == other.range.start
-                and self.tags == other.tags
-                )
+        return (
+            isinstance(other, Fact)
+            and self.activity == other.activity
+            and self.category == other.category
+            and self.description == other.description
+            and self.range.end == other.range.end
+            and self.range.start == other.range.start
+            and self.tags == other.tags
+        )
 
     def __repr__(self):
         return self.serialized(default_day=None)

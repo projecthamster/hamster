@@ -10,7 +10,8 @@ Python datetime replacement, tuned for hamster use.
 
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 import datetime as pdt  # standard datetime
 import re
@@ -60,21 +61,24 @@ class date(pdt.date):
     def parse(cls, s):
         """Return date from string."""
         m = cls.re.search(s)
-        return cls(year=int(m.group('year')),
-                   month=int(m.group('month')),
-                   day=int(m.group('day'))
-                   )
+        return cls(
+            year=int(m.group('year')),
+            month=int(m.group('month')),
+            day=int(m.group('day')),
+        )
 
     @classmethod
     def pattern(cls, detailed=True):
         if detailed:
-            return dedent(r"""
+            return dedent(
+                r"""
                 (?P<year>\d{4})        # 4 digits
                 -                      # dash
                 (?P<month>\d{2})       # 2 digits
                 -                      # dash
                 (?P<day>\d{2})         # 2 digits
-                """)
+                """
+            )
         else:
             return r"""\d{4}-\d{2}-\d{2}"""
 
@@ -86,6 +90,7 @@ class date(pdt.date):
     def to_pdt(self):
         """Convert to python date."""
         return pdt.date(self.year, self.month, self.day)
+
 
 # For datetime that will need to be outside the class.
 # Same here for consistency
@@ -117,6 +122,7 @@ class hday(date):
         """Day start time."""
         # work around cyclic imports
         from hamster.lib.configuration import conf
+
         return conf.day_start
 
     @classmethod
@@ -136,15 +142,17 @@ class time(pdt.time):
 
     FMT = "%H:%M"  # display format, e.g. 13:30
 
-    def __new__(cls,
-                hour=0, minute=0,
-                second=0, microsecond=0,
-                tzinfo=None, fold=0):
-            # round down to zero seconds and microseconds
-            return pdt.time.__new__(cls,
-                                    hour=hour, minute=minute,
-                                    second=0, microsecond=0,
-                                    tzinfo=None, fold=fold)
+    def __new__(cls, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, fold=0):
+        # round down to zero seconds and microseconds
+        return pdt.time.__new__(
+            cls,
+            hour=hour,
+            minute=minute,
+            second=0,
+            microsecond=0,
+            tzinfo=None,
+            fold=fold,
+        )
 
     @classmethod
     def _extract_time(cls, match, h="hour", m="minute"):
@@ -180,7 +188,8 @@ class time(pdt.time):
         """Return a time pattern with all group names."""
 
         # remove the indentation for easier debugging.
-        return dedent(r"""
+        return dedent(
+            r"""
             (?P<hour>                         # hour
              [0-9](?=[,\.:])                  # positive lookahead:
                                               # allow a single digit only if
@@ -197,7 +206,8 @@ class time(pdt.time):
                                               # might be caught as 2:01.
                                               # Requiring space or - would not work:
                                               # 2019-2025 is the 20:19-20:25 range.
-            """)
+            """
+        )
 
 
 # For datetime that will need to be outside the class.
@@ -217,15 +227,32 @@ class datetime(pdt.datetime):
     # display format, e.g. 2020-01-20 20:40
     FMT = "{} {}".format(date.FMT, time.FMT)
 
-    def __new__(cls, year, month, day,
-                hour=0, minute=0,
-                second=0, microsecond=0,
-                tzinfo=None, *, fold=0):
-            # round down to zero seconds and microseconds
-            return pdt.datetime.__new__(cls, year, month, day,
-                                        hour=hour, minute=minute,
-                                        second=0, microsecond=0,
-                                        tzinfo=None, fold=fold)
+    def __new__(
+        cls,
+        year,
+        month,
+        day,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+        tzinfo=None,
+        *,
+        fold=0
+    ):
+        # round down to zero seconds and microseconds
+        return pdt.datetime.__new__(
+            cls,
+            year,
+            month,
+            day,
+            hour=hour,
+            minute=minute,
+            second=0,
+            microsecond=0,
+            tzinfo=None,
+            fold=fold,
+        )
 
     def __add__(self, other):
         # python datetime.__add__ was not type stable prior to 3.8
@@ -234,10 +261,17 @@ class datetime(pdt.datetime):
     # similar to https://stackoverflow.com/q/51966126/3565696
     # __getnewargs_ex__ did not work, brute force required
     def __deepcopy__(self, memo):
-        return datetime(self.year, self.month, self.day,
-                        self.hour, self.minute,
-                        self.second, self.microsecond,
-                        self.tzinfo, fold=self.fold)
+        return datetime(
+            self.year,
+            self.month,
+            self.day,
+            self.hour,
+            self.minute,
+            self.second,
+            self.microsecond,
+            self.tzinfo,
+            fold=self.fold,
+        )
 
     __radd__ = __add__
 
@@ -257,8 +291,9 @@ class datetime(pdt.datetime):
             return self.strftime(self.FMT)
 
     @classmethod
-    def _extract_datetime(cls, match, d="date", h="hour", m="minute", r="relative",
-                          default_day=None):
+    def _extract_datetime(
+        cls, match, d="date", h="hour", m="minute", r="relative", default_day=None
+    ):
         """extract datetime from a datetime.pattern match.
 
         Custom group names allow to use the same method
@@ -327,10 +362,17 @@ class datetime(pdt.datetime):
     @classmethod
     def from_pdt(cls, t):
         """Convert python datetime to hamster datetime."""
-        return cls(t.year, t.month, t.day,
-                   t.hour, t.minute,
-                   t.second, t.microsecond,
-                   t.tzinfo, fold=t.fold)
+        return cls(
+            t.year,
+            t.month,
+            t.day,
+            t.hour,
+            t.minute,
+            t.second,
+            t.microsecond,
+            t.tzinfo,
+            fold=t.fold,
+        )
 
     @classmethod
     def now(cls):
@@ -361,7 +403,8 @@ class datetime(pdt.datetime):
         """
 
         # remove the indentation => easier debugging.
-        base_pattern = dedent(r"""
+        base_pattern = dedent(
+            r"""
             (?P<whole>
                                               # note: need to double the brackets
                                               #       for .format
@@ -378,12 +421,22 @@ class datetime(pdt.datetime):
                 \s?                           # maybe one space
                 {}                            # time
             )
-            """).format(date.pattern(), time.pattern())
+            """
+        ).format(date.pattern(), time.pattern())
         if n is None:
             return base_pattern
         else:
-            to_replace = ("whole", "relative",
-                          "year", "month", "day", "date", "tens", "hour", "minute")
+            to_replace = (
+                "whole",
+                "relative",
+                "year",
+                "month",
+                "day",
+                "date",
+                "tens",
+                "hour",
+                "minute",
+            )
             specifics = ["{}{}".format(s, n) for s in to_replace]
             res = base_pattern
             for src, dest in zip(to_replace, specifics):
@@ -392,17 +445,24 @@ class datetime(pdt.datetime):
 
     def to_pdt(self):
         """Convert to python datetime."""
-        return pdt.datetime(self.year, self.month, self.day,
-                            self.hour, self.minute,
-                            self.second, self.microsecond,
-                            self.tzinfo, fold=self.fold)
+        return pdt.datetime(
+            self.year,
+            self.month,
+            self.day,
+            self.hour,
+            self.minute,
+            self.second,
+            self.microsecond,
+            self.tzinfo,
+            fold=self.fold,
+        )
 
 
 # outside class; need the class to be defined first
 datetime.re = re.compile(datetime.pattern(), flags=re.VERBOSE)
 
 
-class Range():
+class Range:
     """Time span between two datetimes."""
 
     # slight memory optimization; no further attributes besides start or end.
@@ -459,8 +519,9 @@ class Range():
             return start_str
 
     @classmethod
-    def parse(cls, text,
-              position="exact", separator="\s+", default_day=None, ref="now"):
+    def parse(
+        cls, text, position="exact", separator="\s+", default_day=None, ref="now"
+    ):
         """Parse a start-end range from text.
 
         position (str): "exact" to match exactly the full text
@@ -494,7 +555,9 @@ class Range():
         if default_day is None:
             default_day = hday.today()
 
-        assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(position)
+        assert position in ("exact", "head", "tail"), "position unknown: '{}'".format(
+            position
+        )
         if position == "exact":
             p = "^{}$".format(cls.pattern())
         elif position == "head":
@@ -523,9 +586,14 @@ class Range():
             start = firstday.start
         else:
             firstday = None
-            start = datetime._extract_datetime(m, d="date1", h="hour1",
-                                               m="minute1", r="relative1",
-                                               default_day=default_day)
+            start = datetime._extract_datetime(
+                m,
+                d="date1",
+                h="hour1",
+                m="minute1",
+                r="relative1",
+                default_day=default_day,
+            )
             if isinstance(start, pdt.timedelta):
                 # relative to ref, actually
                 assert ref, "relative start needs ref"
@@ -541,9 +609,14 @@ class Range():
             end = start + timedelta(minutes=duration)
         else:
             end_default_day = start.hday() if start else default_day
-            end = datetime._extract_datetime(m, d="date2", h="hour2",
-                                             m="minute2", r="relative2",
-                                             default_day=end_default_day)
+            end = datetime._extract_datetime(
+                m,
+                d="date2",
+                h="hour2",
+                m="minute2",
+                r="relative2",
+                default_day=end_default_day,
+            )
             if isinstance(end, pdt.timedelta):
                 # relative to ref, actually
                 assert ref, "relative end needs ref"
@@ -554,7 +627,8 @@ class Range():
     @classmethod
     @lru_cache()
     def pattern(cls):
-        return dedent(r"""
+        return dedent(
+            r"""
             (                    # start
               {}                 # datetime: relative1 or (date1, hour1, and minute1)
               |                  # or
@@ -580,8 +654,13 @@ class Range():
               )
             )
             )?                    # end time is facultative
-            """.format(datetime.pattern(1), date.pattern(detailed=False),
-                       datetime.pattern(2), date.pattern(detailed=False)))
+            """.format(
+                datetime.pattern(1),
+                date.pattern(detailed=False),
+                datetime.pattern(2),
+                date.pattern(detailed=False),
+            )
+        )
 
     @classmethod
     def from_start_end(cls, start, end=None):
@@ -611,7 +690,7 @@ class Range():
             raise TypeError(
                 "\n    First argument should be either Range, None, datetime or hday;"
                 "\n    received {}".format(type(start))
-                )
+            )
 
         if (end is None) or isinstance(end, datetime):
             # same as above
@@ -624,7 +703,8 @@ class Range():
         else:
             raise TypeError(
                 "\n    Second argument should be either None, datetime or hday;"
-                "\n    received {}".format(type(start)))
+                "\n    received {}".format(type(start))
+            )
 
         return cls(start, end)
 
@@ -644,17 +724,27 @@ class timedelta(pdt.timedelta):
           (only datetimes should be truncated).
     """
 
-    def __new__(cls, days=0, seconds=0, microseconds=0,
-                milliseconds=0, minutes=0, hours=0, weeks=0):
+    def __new__(
+        cls,
+        days=0,
+        seconds=0,
+        microseconds=0,
+        milliseconds=0,
+        minutes=0,
+        hours=0,
+        weeks=0,
+    ):
         # Tempted to round down ? Resist. Not so useful + issues down the line.
-        return pdt.timedelta.__new__(cls,
-                                     days=days,
-                                     seconds=seconds,
-                                     microseconds=microseconds,
-                                     milliseconds=milliseconds,
-                                     minutes=minutes,
-                                     hours=hours,
-                                     weeks=weeks)
+        return pdt.timedelta.__new__(
+            cls,
+            days=days,
+            seconds=seconds,
+            microseconds=microseconds,
+            milliseconds=milliseconds,
+            minutes=minutes,
+            hours=hours,
+            weeks=weeks,
+        )
 
     # timedelta subclassing is not type stable yet
     def __add__(self, other):
@@ -673,16 +763,16 @@ class timedelta(pdt.timedelta):
         """Convert python timedelta to hamster timedelta."""
 
         # Only days, seconds and microseconds are stored internally
-        return cls(days=delta.days,
-                   seconds=delta.seconds,
-                   microseconds=delta.microseconds)
+        return cls(
+            days=delta.days, seconds=delta.seconds, microseconds=delta.microseconds
+        )
 
     def to_pdt(self):
         """Convert to python timedelta."""
 
-        return pdt.timedelta(days=self.days,
-                             seconds=self.seconds,
-                             microseconds=self.microseconds)
+        return pdt.timedelta(
+            days=self.days, seconds=self.seconds, microseconds=self.microseconds
+        )
 
     def format(self, fmt="human"):
         """Return a string representation, according to the format string fmt."""
@@ -711,7 +801,8 @@ class timedelta(pdt.timedelta):
             return "{:02d}:{:02d}".format(hours, minutes)
         else:
             raise NotImplementedError(
-                "'{}' not in allowed formats: {}".format(fmt, allowed))
+                "'{}' not in allowed formats: {}".format(fmt, allowed)
+            )
 
     def total_minutes(self):
         """Return the duration in minutes (float)."""

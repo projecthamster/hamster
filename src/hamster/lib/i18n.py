@@ -6,7 +6,7 @@ import hamster
 
 
 def setup_i18n():
-    #determine location of po files
+    # determine location of po files
 
     # to avoid confusion, we won't translate unless running installed
     # reason for that is that bindtextdomain is expecting
@@ -15,13 +15,14 @@ def setup_i18n():
     # and there does not seem to be any way to run straight from sources
     if hamster.installed:
         from hamster import defs  # only available when running installed
+
         locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
 
-        for module in (locale,gettext):
+        for module in (locale, gettext):
             module.bindtextdomain('hamster', locale_dir)
             module.textdomain('hamster')
 
-            module.bind_textdomain_codeset('hamster','utf8')
+            module.bind_textdomain_codeset('hamster', 'utf8')
 
         gettext.install("hamster", locale_dir)
 

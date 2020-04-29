@@ -19,7 +19,8 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 from hamster.lib import datetime as dt
 
@@ -39,9 +40,14 @@ class Storage(object):
         pass
 
     # signals that are called upon changes
-    def tags_changed(self): pass
-    def facts_changed(self): pass
-    def activities_changed(self): pass
+    def tags_changed(self):
+        pass
+
+    def facts_changed(self):
+        pass
+
+    def activities_changed(self):
+        pass
 
     def dispatch_overwrite(self):
         self.tags_changed()
@@ -59,13 +65,17 @@ class Storage(object):
             raise FactError("Missing start time")
 
         if fact.end_time and (fact.delta < dt.timedelta(0)):
-            fixed_fact = Fact(start_time=fact.start_time,
-                              end_time=fact.end_time + dt.timedelta(days=1))
+            fixed_fact = Fact(
+                start_time=fact.start_time,
+                end_time=fact.end_time + dt.timedelta(days=1),
+            )
             suggested_range_str = fixed_fact.range.format(default_day=default_day)
             # work around cyclic imports
             from hamster.lib.configuration import conf
-            raise FactError(dedent(
-                """\
+
+            raise FactError(
+                dedent(
+                    """\
                 Duration would be negative.
                 Working late ?
                 This happens when the activity crosses the
@@ -74,20 +84,27 @@ class Storage(object):
                 Suggestion: move the end to the next day; the range would become:
                 {}
                 (in civil local time)
-                """.format(conf.day_start, suggested_range_str)
-                ))
+                """.format(
+                        conf.day_start, suggested_range_str
+                    )
+                )
+            )
 
         if not fact.activity:
             raise FactError("Missing activity")
 
         if ',' in fact.category:
-            raise FactError(dedent(
-                """\
+            raise FactError(
+                dedent(
+                    """\
                 Forbidden comma in category: '{}'
                 Note: The description separator changed
                       from single comma to double comma ',,' (cf. PR #482).
-                """.format(fact.category)
-                ))
+                """.format(
+                        fact.category
+                    )
+                )
+            )
 
     def add_fact(self, fact, start_time=None, end_time=None, temporary=False):
         """Add fact.
@@ -121,7 +138,9 @@ class Storage(object):
         """Get fact by id. For output format see GetFacts"""
         return self.__get_fact(fact_id)
 
-    def update_fact(self, fact_id, fact, start_time=None, end_time=None, temporary=False):
+    def update_fact(
+        self, fact_id, fact, start_time=None, end_time=None, temporary=False
+    ):
         # better fail before opening the transaction
         self.check_fact(fact)
         self.start_transaction()
@@ -145,7 +164,6 @@ class Storage(object):
             self.__touch_fact(facts[-1], end_time)
             self.facts_changed()
 
-
     def remove_fact(self, fact_id):
         """Remove fact from storage by it's ID"""
         self.start_transaction()
@@ -155,17 +173,14 @@ class Storage(object):
             self.facts_changed()
         self.end_transaction()
 
-
     def get_facts(self, start, end=None, search_terms=""):
         range = dt.Range.from_start_end(start, end)
         return self.__get_facts(range, search_terms)
-
 
     def get_todays_facts(self):
         """Gets facts of today, respecting hamster midnight. See GetFacts for
         return info"""
         return self.__get_todays_facts()
-
 
     # categories
     def add_category(self, name):
@@ -184,13 +199,11 @@ class Storage(object):
         self.__remove_category(id)
         self.activities_changed()
 
-
     def get_categories(self):
         return self.__get_categories()
 
-
     # activities
-    def add_activity(self, name, category_id = -1):
+    def add_activity(self, name, category_id=-1):
         new_id = self.__add_activity(name, category_id)
         self.activities_changed()
         return new_id
@@ -204,10 +217,10 @@ class Storage(object):
         self.activities_changed()
         return result
 
-    def get_category_activities(self, category_id = -1):
-        return self.__get_category_activities(category_id = category_id)
+    def get_category_activities(self, category_id=-1):
+        return self.__get_category_activities(category_id=category_id)
 
-    def get_activities(self, search = ""):
+    def get_activities(self, search=""):
         return self.__get_activities(search)
 
     def change_category(self, id, category_id):
@@ -216,10 +229,12 @@ class Storage(object):
             self.activities_changed()
         return changed
 
-    def get_activity_by_name(self, activity, category_id, resurrect = True):
+    def get_activity_by_name(self, activity, category_id, resurrect=True):
         category_id = category_id or None
         if activity:
-            return dict(self.__get_activity_by_name(activity, category_id, resurrect) or {})
+            return dict(
+                self.__get_activity_by_name(activity, category_id, resurrect) or {}
+            )
         else:
             return {}
 

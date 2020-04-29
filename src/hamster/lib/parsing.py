@@ -1,5 +1,6 @@
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 import re
 
@@ -12,7 +13,8 @@ ACTIVITY_SEPARATOR = "\s+"
 
 # match #tag followed by any space or # that will be ignored
 # tag must not contain '#' or ','
-tag_re = re.compile(r"""
+tag_re = re.compile(
+    r"""
     \#          # hash character
     (?P<tag>
         [^#,]+  # (anything but hash or comma)
@@ -22,13 +24,18 @@ tag_re = re.compile(r"""
     ,?          # single comma (or none)
     \s*         # maybe space
     $           # end of text
-""", flags=re.VERBOSE)
+""",
+    flags=re.VERBOSE,
+)
 
-tags_separator = re.compile(r"""
+tags_separator = re.compile(
+    r"""
     (,{0,2})    # 0, 1 or 2 commas
     \s*         # maybe spaces
     $           # end of text
-""", flags=re.VERBOSE)
+""",
+    flags=re.VERBOSE,
+)
 
 
 def parse_fact(text, range_pos="head", default_day=None, ref="now"):
@@ -49,9 +56,9 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat
-    (start, end), remaining_text = dt.Range.parse(text, position=range_pos,
-                                                   separator=ACTIVITY_SEPARATOR,
-                                                   default_day=default_day)
+    (start, end), remaining_text = dt.Range.parse(
+        text, position=range_pos, separator=ACTIVITY_SEPARATOR, default_day=default_day
+    )
     res["start_time"] = start
     res["end_time"] = end
 
@@ -63,7 +70,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
         # look for tags separators
         # especially the tags barrier
         m = re.search(tags_separator, remaining_text)
-        remaining_text = remaining_text[:m.start()]
+        remaining_text = remaining_text[: m.start()]
         if m.group(1) == ",,":
             # tags  barrier found
             break
@@ -73,7 +80,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
         if m:
             tag = m.group('tag').strip()
             # strip the matched string (including #)
-            remaining_text = remaining_text[:m.start()]
+            remaining_text = remaining_text[: m.start()]
             tags.append(tag)
         else:
             # no tag

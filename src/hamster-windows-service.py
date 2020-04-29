@@ -79,6 +79,7 @@ class WindowServer(dbus.service.Object):
 
 if __name__ == '__main__':
     from hamster.lib import i18n
+
     i18n.setup_i18n()
 
     glib.set_prgname(str(_("hamster-windows-service")))

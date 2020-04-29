@@ -16,6 +16,7 @@ from hamster.lib.fact import Fact
 
 # dates
 
+
 def from_dbus_date(dbus_date):
     """Convert D-Bus timestamp (seconds since epoch) to date."""
     return dt.date.fromtimestamp(dbus_date) if dbus_date else None
@@ -28,6 +29,7 @@ def to_dbus_date(date):
 
 # facts
 
+
 def from_dbus_fact_json(dbus_fact):
     """Convert D-Bus JSON to Fact."""
     d = loads(dbus_fact)
@@ -36,8 +38,10 @@ def from_dbus_fact_json(dbus_fact):
     # but that appears only in python3.7, nevermind
     start_s = range_d['start']
     end_s = range_d['end']
-    range = dt.Range(start=dt.datetime.parse(start_s) if start_s else None,
-                     end=dt.datetime.parse(end_s) if end_s else None)
+    range = dt.Range(
+        start=dt.datetime.parse(start_s) if start_s else None,
+        end=dt.datetime.parse(end_s) if end_s else None,
+    )
     d['range'] = range
     return Fact(**d)
 
@@ -57,6 +61,7 @@ def to_dbus_fact_json(fact):
 
 
 # Range
+
 
 def from_dbus_range(dbus_range):
     """Convert from D-Bus string to dt.Range."""
@@ -94,15 +99,16 @@ def from_dbus_fact(dbus_fact):
 
     Legacy: to besuperceded by from_dbus_fact_json at some point.
     """
-    return Fact(activity=dbus_fact[4],
-                start_time=dt.datetime.utcfromtimestamp(dbus_fact[1]),
-                end_time=dt.datetime.utcfromtimestamp(dbus_fact[2]) if dbus_fact[2] else None,
-                description=dbus_fact[3],
-                activity_id=dbus_fact[5],
-                category=dbus_fact[6],
-                tags=dbus_fact[7],
-                id=dbus_fact[0]
-                )
+    return Fact(
+        activity=dbus_fact[4],
+        start_time=dt.datetime.utcfromtimestamp(dbus_fact[1]),
+        end_time=dt.datetime.utcfromtimestamp(dbus_fact[2]) if dbus_fact[2] else None,
+        description=dbus_fact[3],
+        activity_id=dbus_fact[5],
+        category=dbus_fact[6],
+        tags=dbus_fact[7],
+        id=dbus_fact[0],
+    )
 
 
 def to_dbus_fact(fact):
@@ -111,13 +117,15 @@ def to_dbus_fact(fact):
     Return the corresponding dbus structure, with supported data types.
     Legacy: to besuperceded by to_dbus_fact_json at some point.
     """
-    return (fact.id or 0,
-            timegm(fact.start_time.timetuple()),
-            timegm(fact.end_time.timetuple()) if fact.end_time else 0,
-            fact.description or '',
-            fact.activity or '',
-            fact.activity_id or 0,
-            fact.category or '',
-            dbus.Array(fact.tags, signature = 's'),
-            to_dbus_date(fact.date),
-            fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)
+    return (
+        fact.id or 0,
+        timegm(fact.start_time.timetuple()),
+        timegm(fact.end_time.timetuple()) if fact.end_time else 0,
+        fact.description or '',
+        fact.activity or '',
+        fact.activity_id or 0,
+        fact.category or '',
+        dbus.Array(fact.tags, signature='s'),
+        to_dbus_date(fact.date),
+        fact.delta.days * 24 * 60 * 60 + fact.delta.seconds,
+    )

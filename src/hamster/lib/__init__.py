@@ -1,5 +1,6 @@
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 
 from hamster.lib.fact import Fact  # for backward compatibility with v2

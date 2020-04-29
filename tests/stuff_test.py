@@ -1,4 +1,5 @@
 import sys, os.path
+
 # a convoluted line to add hamster module to absolute path
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "../src")))
 
@@ -13,12 +14,11 @@ from hamster.lib.dbus import (
     from_dbus_fact,
     from_dbus_fact_json,
     from_dbus_range,
-    )
+)
 from hamster.lib.fact import Fact
 
 
 class TestFact(unittest.TestCase):
-
     def test_range(self):
         t1 = dt.datetime(2020, 1, 15, 13, 30)
         t2 = dt.datetime(2020, 1, 15, 15, 30)
@@ -36,7 +36,6 @@ class TestFact(unittest.TestCase):
 
 
 class TestFactParsing(unittest.TestCase):
-
     def test_plain_name(self):
         # plain activity name
         activity = Fact.parse("just a simple case with ütf-8")
@@ -58,7 +57,7 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(activity.activity, "with start time")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:35")
 
-        #rest must be empty
+        # rest must be empty
         assert not activity.category
         assert activity.end_time is None
         assert not activity.description
@@ -70,7 +69,7 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:35")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "14:25")
 
-        #rest must be empty
+        # rest must be empty
         assert not activity.category
         assert not activity.description
 
@@ -105,7 +104,9 @@ class TestFactParsing(unittest.TestCase):
 
     def test_full(self):
         # plain activity name
-        activity = Fact.parse("1225-1325 case@cat,, description #ta non-tag,, #tag #bäg")
+        activity = Fact.parse(
+            "1225-1325 case@cat,, description #ta non-tag,, #tag #bäg"
+        )
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
@@ -186,17 +187,23 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(fact3.serialized(), "")
 
     def test_commas(self):
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma")
+        fact = Fact.parse(
+            "11:00 12:00 activity, with comma@category,, description, with comma"
+        )
         self.assertEqual(fact.activity, "activity, with comma")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma")
         self.assertEqual(fact.tags, [])
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma, #tag1, #tag2")
+        fact = Fact.parse(
+            "11:00 12:00 activity, with comma@category,, description, with comma, #tag1, #tag2"
+        )
         self.assertEqual(fact.activity, "activity, with comma")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma")
         self.assertEqual(fact.tags, ["tag1", "tag2"])
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma and #hash,, #tag1, #tag2")
+        fact = Fact.parse(
+            "11:00 12:00 activity, with comma@category,, description, with comma and #hash,, #tag1, #tag2"
+        )
         self.assertEqual(fact.activity, "activity, with comma")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma and #hash")
@@ -207,21 +214,21 @@ class TestFactParsing(unittest.TestCase):
         for start_time in (
             None,
             dt.time(12, 33),
-            ):
+        ):
             for end_time in (
                 None,
                 dt.time(13, 34),
-                ):
+            ):
                 for activity in (
                     "activity",
                     "#123 with two #hash",
                     "activity, with comma",
                     "17.00 tea",
-                    ):
+                ):
                     for category in (
                         "",
                         "category",
-                        ):
+                    ):
                         for description in (
                             "",
                             "description",
@@ -229,38 +236,50 @@ class TestFactParsing(unittest.TestCase):
                             "with, comma",
                             "with @at",
                             "multiline\ndescription",
-                            ):
+                        ):
                             for tags in (
                                 [],
                                 ["single"],
                                 ["with space"],
                                 ["two", "tags"],
                                 ["with @at"],
-                                ):
-                                start = dt.datetime.from_day_time(dt.hday.today(),
-                                                                  start_time
-                                                                  ) if start_time else None
-                                end = dt.datetime.from_day_time(dt.hday.today(),
-                                                                end_time
-                                                                ) if end_time else None
+                            ):
+                                start = (
+                                    dt.datetime.from_day_time(
+                                        dt.hday.today(), start_time
+                                    )
+                                    if start_time
+                                    else None
+                                )
+                                end = (
+                                    dt.datetime.from_day_time(dt.hday.today(), end_time)
+                                    if end_time
+                                    else None
+                                )
                                 if end and not start:
                                     # end without start is not parseable
                                     continue
-                                fact = Fact(start_time=start,
-                                            end_time=end,
-                                            activity=activity,
-                                            category=category,
-                                            description=description,
-                                            tags=tags)
+                                fact = Fact(
+                                    start_time=start,
+                                    end_time=end,
+                                    activity=activity,
+                                    category=category,
+                                    description=description,
+                                    tags=tags,
+                                )
                                 for range_pos in ("head", "tail"):
                                     fact_str = fact.serialized(range_pos=range_pos)
                                     parsed = Fact.parse(fact_str, range_pos=range_pos)
                                     self.assertEqual(fact, parsed)
-                                    self.assertEqual(parsed.range.start, fact.range.start)
+                                    self.assertEqual(
+                                        parsed.range.start, fact.range.start
+                                    )
                                     self.assertEqual(parsed.range.end, fact.range.end)
                                     self.assertEqual(parsed.activity, fact.activity)
                                     self.assertEqual(parsed.category, fact.category)
-                                    self.assertEqual(parsed.description, fact.description)
+                                    self.assertEqual(
+                                        parsed.description, fact.description
+                                    )
                                     self.assertEqual(parsed.tags, fact.tags)
 
 
@@ -307,23 +326,39 @@ class TestDatetime(unittest.TestCase):
         self.assertEqual(dt.time.parse("1201"), pdt.time(12, 1))
 
     def test_parse_datetime(self):
-        self.assertEqual(dt.datetime.parse("2020-01-05 9:01"), pdt.datetime(2020, 1, 5, 9, 1))
+        self.assertEqual(
+            dt.datetime.parse("2020-01-05 9:01"), pdt.datetime(2020, 1, 5, 9, 1)
+        )
 
     def test_datetime_patterns(self):
         p = dt.datetime.pattern(1)
         s = "12:03"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                              default_day=dt.hday.today())
+        time = dt.datetime._extract_datetime(
+            m,
+            d="date1",
+            h="hour1",
+            m="minute1",
+            r="relative1",
+            default_day=dt.hday.today(),
+        )
         self.assertEqual(time.strftime("%H:%M"), "12:03")
         s = "2019-12-01 12:36"
         m = re.fullmatch(p, s, re.VERBOSE)
-        time = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1")
+        time = dt.datetime._extract_datetime(
+            m, d="date1", h="hour1", m="minute1", r="relative1"
+        )
         self.assertEqual(time.strftime("%Y-%m-%d %H:%M"), "2019-12-01 12:36")
         s = "-25"
         m = re.fullmatch(p, s, re.VERBOSE)
-        relative = dt.datetime._extract_datetime(m, d="date1", h="hour1", m="minute1", r="relative1",
-                                                  default_day=dt.hday.today())
+        relative = dt.datetime._extract_datetime(
+            m,
+            d="date1",
+            h="hour1",
+            m="minute1",
+            r="relative1",
+            default_day=dt.hday.today(),
+        )
         self.assertEqual(relative, dt.timedelta(minutes=-25))
         s = "2019-12-05"
         m = re.search(p, s, re.VERBOSE)
@@ -436,7 +471,7 @@ class TestDatetime(unittest.TestCase):
         self.assertEqual(_sub, dt.datetime(2020, 1, 10, hour=13, minute=20))
         self.assertEqual(type(_sub), dt.datetime)
 
-        opposite = - delta
+        opposite = -delta
         self.assertEqual(opposite, dt.timedelta(minutes=-10))
         self.assertEqual(type(opposite), dt.timedelta)
         _sum = delta + delta
@@ -453,7 +488,9 @@ class TestDatetime(unittest.TestCase):
 
 class TestDBus(unittest.TestCase):
     def test_round_trip(self):
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma #and #tags")
+        fact = Fact.parse(
+            "11:00 12:00 activity, with comma@category,, description, with comma #and #tags"
+        )
         dbus_fact = to_dbus_fact_json(fact)
         return_fact = from_dbus_fact_json(dbus_fact)
         self.assertEqual(return_fact, fact)

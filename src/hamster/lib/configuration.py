@@ -22,7 +22,8 @@ License: GPLv2
 """
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 import os
 from hamster.client import Storage
@@ -41,6 +42,7 @@ from hamster.lib import datetime as dt
 
 class Controller(gobject.GObject):
     """Window creator and handler."""
+
     __gsignals__ = {
         "on-close": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
     }
@@ -104,8 +106,10 @@ class Singleton(object):
             cls.__instance = object.__new__(cls, *args, **kwargs)
         return cls.__instance
 
+
 class RuntimeStore(Singleton):
     """XXX - kill"""
+
     data_dir = ""
     home_data_dir = ""
     storage = None
@@ -114,6 +118,7 @@ class RuntimeStore(Singleton):
         self.version = hamster.__version__
         if hamster.installed:
             from hamster import defs  # only available when running installed
+
             self.data_dir = os.path.join(defs.DATA_DIR, "hamster")
         else:
             # running from sources
@@ -135,7 +140,11 @@ class GSettingsStore(gobject.GObject, Singleton):
     """
 
     __gsignals__ = {
-        "changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT))
+        "changed": (
+            gobject.SignalFlags.RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT),
+        )
     }
 
     def __init__(self):
@@ -168,7 +177,9 @@ class GSettingsStore(gobject.GObject, Singleton):
         logger.debug("Settings %s -> %s" % (key, value))
         default = self._settings.get_default_value(key)
         assert default is not None
-        self._settings.set_value(key, glib.Variant(default.get_type().dup_string(), value))
+        self._settings.set_value(
+            key, glib.Variant(default.get_type().dup_string(), value)
+        )
         return True
 
     def bind(self, key, obj, prop):

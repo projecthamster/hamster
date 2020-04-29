@@ -21,7 +21,8 @@
 
 import dbus
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 import sys
 
 from calendar import timegm
@@ -37,7 +38,7 @@ from hamster.lib.dbus import (
     to_dbus_fact,
     to_dbus_fact_json,
     to_dbus_range,
-    )
+)
 from hamster.lib.fact import Fact, FactError
 from hamster.lib import datetime as dt
 
@@ -46,7 +47,7 @@ from hamster.lib import datetime as dt
 assert not (
     sys.version_info >= (3, 8)
     and LooseVersion(dbus.__version__) < LooseVersion("1.2.14")
-    ), """python3.8 changed str(<dbus integers>).
+), """python3.8 changed str(<dbus integers>).
        That broke hamster (https://github.com/projecthamster/hamster/issues/477).
        Please upgrade to dbus-python >= 1.2.14.
     """
@@ -65,6 +66,7 @@ class Storage(gobject.GObject):
        The relationship is - one activity can be used in several facts.
        The rest is hopefully obvious. But if not, please file bug reports!
     """
+
     __gsignals__ = {
         "tags-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
         "facts-changed": (gobject.SignalFlags.RUN_LAST, gobject.TYPE_NONE, ()),
@@ -77,15 +79,28 @@ class Storage(gobject.GObject):
 
         DBusMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
-        self._connection = None # will be initiated on demand
+        self._connection = None  # will be initiated on demand
 
-        self.bus.add_signal_receiver(self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster')
-        self.bus.add_signal_receiver(self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster')
-        self.bus.add_signal_receiver(self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster')
-        self.bus.add_signal_receiver(self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster')
+        self.bus.add_signal_receiver(
+            self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster'
+        )
+        self.bus.add_signal_receiver(
+            self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster'
+        )
+        self.bus.add_signal_receiver(
+            self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster'
+        )
+        self.bus.add_signal_receiver(
+            self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster'
+        )
 
-        self.bus.add_signal_receiver(self._on_dbus_connection_change, 'NameOwnerChanged',
-                                     'org.freedesktop.DBus', arg0='org.gnome.Hamster')
+        self.bus.add_signal_receiver(
+            self._on_dbus_connection_change,
+            'NameOwnerChanged',
+            'org.freedesktop.DBus',
+            arg0='org.gnome.Hamster',
+        )
+
     @staticmethod
     def _to_dict(columns, result_list):
         return [dict(zip(columns, row)) for row in result_list]
@@ -93,14 +108,16 @@ class Storage(gobject.GObject):
     @property
     def conn(self):
         if not self._connection:
-            self._connection = dbus.Interface(self.bus.get_object('org.gnome.Hamster',
-                                                                  '/org/gnome/Hamster'),
-                                              dbus_interface='org.gnome.Hamster')
+            self._connection = dbus.Interface(
+                self.bus.get_object('org.gnome.Hamster', '/org/gnome/Hamster'),
+                dbus_interface='org.gnome.Hamster',
+            )
             server_version = self._connection.Version()
             client_version = hamster.__version__
             if server_version != client_version:
-                logger.warning(dedent(
-                    """\
+                logger.warning(
+                    dedent(
+                        """\
                     Server and client version mismatch:
                         server: {}
                         client: {}
@@ -114,7 +131,9 @@ class Storage(gobject.GObject):
                         pkill -f hamster-windows-service
                         see also:
                         https://github.com/projecthamster/hamster#kill-hamster-daemons
-                    """.format(server_version, client_version)
+                    """.format(
+                            server_version, client_version
+                        )
                     )
                 )
         return self._connection
@@ -152,10 +171,12 @@ class Storage(gobject.GObject):
         """
         range = dt.Range.from_start_end(start, end)
         dbus_range = to_dbus_range(range)
-        return [from_dbus_fact_json(fact)
-                for fact in self.conn.GetFactsJSON(dbus_range, search_terms)]
+        return [
+            from_dbus_fact_json(fact)
+            for fact in self.conn.GetFactsJSON(dbus_range, search_terms)
+        ]
 
-    def get_activities(self, search = ""):
+    def get_activities(self, search=""):
         """returns list of activities name matching search criteria.
            results are sorted by most recent usage.
            search is case insensitive
@@ -166,10 +187,11 @@ class Storage(gobject.GObject):
         """returns list of categories"""
         return self._to_dict(('id', 'name'), self.conn.GetCategories())
 
-    def get_tags(self, only_autocomplete = False):
+    def get_tags(self, only_autocomplete=False):
         """returns list of all tags. by default only those that have been set for autocomplete"""
-        return self._to_dict(('id', 'name', 'autocomplete'), self.conn.GetTags(only_autocomplete))
-
+        return self._to_dict(
+            ('id', 'name', 'autocomplete'), self.conn.GetTags(only_autocomplete)
+        )
 
     def get_tag_ids(self, tags):
         """find tag IDs by name. tags should be a list of labels
@@ -208,7 +230,7 @@ class Storage(gobject.GObject):
             raise FactError(message)
         return success, message
 
-    def add_fact(self, fact, temporary_activity = False):
+    def add_fact(self, fact, temporary_activity=False):
         """Add fact (Fact)."""
         assert fact.activity, "missing activity"
 
@@ -221,7 +243,7 @@ class Storage(gobject.GObject):
 
         return new_id
 
-    def stop_tracking(self, end_time = None):
+    def stop_tracking(self, end_time=None):
         """Stop tracking current activity. end_time can be passed in if the
         activity should have other end time than the current moment"""
         end_time = timegm((end_time or dt.datetime.now()).timetuple())
@@ -231,7 +253,7 @@ class Storage(gobject.GObject):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
 
-    def update_fact(self, fact_id, fact, temporary_activity = False):
+    def update_fact(self, fact_id, fact, temporary_activity=False):
         """Update fact values. See add_fact for rules.
         Update is performed via remove/insert, so the
         fact_id after update should not be used anymore. Instead use the ID
@@ -242,18 +264,20 @@ class Storage(gobject.GObject):
 
         return new_id
 
-
-    def get_category_activities(self, category_id = None):
+    def get_category_activities(self, category_id=None):
         """Return activities for category. If category is not specified, will
         return activities that have no category"""
         category_id = category_id or -1
-        return self._to_dict(('id', 'name', 'category_id', 'category'), self.conn.GetCategoryActivities(category_id))
+        return self._to_dict(
+            ('id', 'name', 'category_id', 'category'),
+            self.conn.GetCategoryActivities(category_id),
+        )
 
     def get_category_id(self, category_name):
         """returns category id by name"""
         return self.conn.GetCategoryId(category_name)
 
-    def get_activity_by_name(self, activity, category_id = None, resurrect = True):
+    def get_activity_by_name(self, activity, category_id=None, resurrect=True):
         """returns activity dict by name and optionally filtering by category.
            if activity is found but is marked as deleted, it will be resurrected
            unless told otherwise in the resurrect param
@@ -274,7 +298,7 @@ class Storage(gobject.GObject):
     def update_activity(self, id, name, category_id):
         return self.conn.UpdateActivity(id, name, category_id)
 
-    def add_activity(self, name, category_id = -1):
+    def add_activity(self, name, category_id=-1):
         return self.conn.AddActivity(name, category_id)
 
     def update_category(self, id, name):

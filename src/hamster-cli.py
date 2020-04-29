@@ -27,6 +27,7 @@ import argparse
 import re
 
 import gi
+
 gi.require_version('Gdk', '3.0')  # noqa: E402
 gi.require_version('Gtk', '3.0')  # noqa: E402
 from gi.repository import GLib as glib
@@ -109,10 +110,12 @@ class Hamster(gtk.Application):
     def __init__(self):
         # inactivity_timeout: How long (ms) the service should stay alive
         #                     after all windows have been closed.
-        gtk.Application.__init__(self,
-                                 application_id="org.gnome.Hamster.GUI",
-                                 #inactivity_timeout=10000,
-                                 register_session=True)
+        gtk.Application.__init__(
+            self,
+            application_id="org.gnome.Hamster.GUI",
+            # inactivity_timeout=10000,
+            register_session=True,
+        )
 
         self.about_controller = None  # 'about' window controller
         self.fact_controller = None  # fact window controller
@@ -224,12 +227,12 @@ class Hamster(gtk.Application):
         # both for consistency, and to reduce the paths to test.
         app.activate_action(action, action_data)
 
+
 class HamsterCli(object):
     """Command line interface."""
 
     def __init__(self):
         self.storage = client.Storage()
-
 
     def assist(self, *args):
         assist_command = args[0] if args else ""
@@ -242,10 +245,8 @@ class HamsterCli(object):
             formats = [f for f in formats if not chosen or f.startswith(chosen)]
             print("\n".join(formats))
 
-
     def toggle(self):
         self.storage.toggle()
-
 
     def start(self, *args):
         '''Start a new activity.'''
@@ -260,11 +261,9 @@ class HamsterCli(object):
         id_ = self.storage.add_fact(fact)
         return id_
 
-
     def stop(self, *args):
         '''Stop tracking the current activity.'''
         self.storage.stop_tracking()
-
 
     def export(self, *args):
         args = args or []
@@ -277,8 +276,9 @@ class HamsterCli(object):
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
         facts = self.storage.get_facts(start_time, end_time)
 
-        writer = reports.simple(facts, start_time.date(), end_time.date(), export_format)
-
+        writer = reports.simple(
+            facts, start_time.date(), end_time.date(), export_format
+        )
 
     def _activities(self, search=""):
         '''Print the names of all the activities.'''
@@ -293,7 +293,6 @@ class HamsterCli(object):
                 if activity['category']:
                     print("{}@{}".format(activity['name'], activity['category']))
 
-
     def activities(self, *args):
         '''Print the names of all the activities.'''
         search = args[0] if args else ""
@@ -305,7 +304,6 @@ class HamsterCli(object):
         for category in self.storage.get_categories():
             print(category['name'])
 
-
     def list(self, *times):
         """list facts within a date range"""
         (start_time, end_time), __ = dt.Range.parse(" ".join(times or []))
@@ -314,16 +312,17 @@ class HamsterCli(object):
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
         self._list(start_time, end_time)
 
-
     def current(self, *args):
         """prints current activity. kinda minimal right now"""
         facts = self.storage.get_todays_facts()
         if facts and not facts[-1].end_time:
-            print("{} {}".format(str(facts[-1]).strip(),
-                                 facts[-1].delta.format(fmt="HH:MM")))
+            print(
+                "{} {}".format(
+                    str(facts[-1]).strip(), facts[-1].delta.format(fmt="HH:MM")
+                )
+            )
         else:
             print((_("No activity")))
-
 
     def search(self, *args):
         """search for activities by name and optionally within a date range"""
@@ -338,26 +337,24 @@ class HamsterCli(object):
         end_time = end_time or start_time.replace(hour=23, minute=59, second=59)
         self._list(start_time, end_time, search)
 
-
     def _list(self, start_time, end_time, search=""):
         """Print a listing of activities"""
         facts = self.storage.get_facts(start_time, end_time, search)
 
-
-        headers = {'activity': _("Activity"),
-                   'category': _("Category"),
-                   'tags': _("Tags"),
-                   'description': _("Description"),
-                   'start': _("Start"),
-                   'end': _("End"),
-                   'duration': _("Duration")}
-
+        headers = {
+            'activity': _("Activity"),
+            'category': _("Category"),
+            'tags': _("Tags"),
+            'description': _("Description"),
+            'start': _("Start"),
+            'end': _("End"),
+            'duration': _("Duration"),
+        }
 
         # print date if it is not the same day
         print_with_date = start_time.date() != end_time.date()
 
         cols = 'start', 'end', 'duration', 'activity', 'category'
-
 
         widths = dict([(col, len(headers[col])) for col in cols])
         for fact in facts:
@@ -405,17 +402,17 @@ class HamsterCli(object):
 
         print()
 
-
     def version(self):
         print(hamster.__version__)
 
 
 if __name__ == '__main__':
     from hamster.lib import i18n
+
     i18n.setup_i18n()
 
     usage = _(
-"""
+        """
 Actions:
     * add [activity [start-time [end-time]]]: Add an activity
     * stop: Stop tracking current activity.
@@ -448,25 +445,31 @@ Example usage:
     hamster search pancakes 2012-08-01 2012-08-30
         look for an activity matching terms 'pancakes` between 1st and 30st
         August 2012. Will check against activity, category, description and tags
-""")
+"""
+    )
 
     hamster_client = HamsterCli()
     app = Hamster()
     logger.debug("app instanciated")
 
     import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
+
+    signal.signal(signal.SIGINT, signal.SIG_DFL)  # gtk3 screws up ctrl+c
 
     parser = argparse.ArgumentParser(
         description="Time tracking utility",
         epilog=usage,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
 
     # cf. https://stackoverflow.com/a/28611921/3565696
-    parser.add_argument("--log", dest="log_level",
-                        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
-                        default='WARNING',
-                        help="Set the logging level (default: %(default)s)")
+    parser.add_argument(
+        "--log",
+        dest="log_level",
+        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
+        default='WARNING',
+        help="Set the logging level (default: %(default)s)",
+    )
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -498,9 +501,9 @@ Example usage:
         else:
             app.register()
             if action == "edit":
-                assert len(args.action_args) == 1, (
-                       "edit requires exactly one argument, got {}"
-                       .format(args.action_args))
+                assert (
+                    len(args.action_args) == 1
+                ), "edit requires exactly one argument, got {}".format(args.action_args)
                 id_ = int(args.action_args[0])
                 assert id_ > 0, "received non-positive id : {}".format(id_)
                 action_data = glib.Variant.new_int32(id_)

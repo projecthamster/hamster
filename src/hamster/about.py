@@ -23,25 +23,30 @@ from hamster.lib.configuration import runtime
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
 
+
 class About(object):
     def __init__(self, parent=None):
         about = gtk.AboutDialog(parent=parent)
         self.window = about
         infos = {
-            "program-name" : "Hamster",
-            "version" : runtime.version,
-            "comments" : _("Project Hamster — track your time"),
-            "copyright" : _("Copyright © 2007–2010 Toms Bauģis and others"),
-            "website" : "https://github.com/projecthamster/hamster/wiki/",
-            "website-label" : _("Project Hamster Website"),
+            "program-name": "Hamster",
+            "version": runtime.version,
+            "comments": _("Project Hamster — track your time"),
+            "copyright": _("Copyright © 2007–2010 Toms Bauģis and others"),
+            "website": "https://github.com/projecthamster/hamster/wiki/",
+            "website-label": _("Project Hamster Website"),
             "title": _("About Time Tracker"),
-            "wrap-license": True
+            "wrap-license": True,
         }
 
-        about.set_authors(["Toms Bauģis <toms.baugis@gmail.com>",
-                           "Patryk Zawadzki <patrys@pld-linux.org>",
-                           "Pēteris Caune <cuu508@gmail.com>",
-                           "Juanje Ojeda <jojeda@emergya.es>"])
+        about.set_authors(
+            [
+                "Toms Bauģis <toms.baugis@gmail.com>",
+                "Patryk Zawadzki <patrys@pld-linux.org>",
+                "Pēteris Caune <cuu508@gmail.com>",
+                "Juanje Ojeda <jojeda@emergya.es>",
+            ]
+        )
         about.set_artists(["Kalle Persson <kalle@kallepersson.se>"])
 
         about.set_translator_credits(_("translator-credits"))

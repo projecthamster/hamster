@@ -56,8 +56,12 @@ class HeaderBar(gtk.HeaderBar):
         self.set_show_close_button(True)
 
         box = gtk.Box(False)
-        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
-        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
+        self.time_back = gtk.Button.new_from_icon_name(
+            "go-previous-symbolic", gtk.IconSize.MENU
+        )
+        self.time_forth = gtk.Button.new_from_icon_name(
+            "go-next-symbolic", gtk.IconSize.MENU
+        )
 
         box.add(self.time_back)
         box.add(self.time_forth)
@@ -68,29 +72,32 @@ class HeaderBar(gtk.HeaderBar):
         self.pack_start(self.range_pick)
 
         self.system_button = gtk.MenuButton()
-        self.system_button.set_image(gtk.Image.new_from_icon_name(
-            "open-menu-symbolic", gtk.IconSize.MENU))
+        self.system_button.set_image(
+            gtk.Image.new_from_icon_name("open-menu-symbolic", gtk.IconSize.MENU)
+        )
         self.system_button.set_tooltip_markup(_("Menu"))
         self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
-        self.search_button.set_image(gtk.Image.new_from_icon_name(
-            "edit-find-symbolic", gtk.IconSize.MENU))
+        self.search_button.set_image(
+            gtk.Image.new_from_icon_name("edit-find-symbolic", gtk.IconSize.MENU)
+        )
         self.search_button.set_tooltip_markup(_("Filter activities"))
         self.pack_end(self.search_button)
 
         self.stop_button = gtk.Button()
-        self.stop_button.set_image(gtk.Image.new_from_icon_name(
-            "process-stop-symbolic", gtk.IconSize.MENU))
+        self.stop_button.set_image(
+            gtk.Image.new_from_icon_name("process-stop-symbolic", gtk.IconSize.MENU)
+        )
         self.stop_button.set_tooltip_markup(_("Stop tracking (Ctrl-SPACE)"))
         self.pack_end(self.stop_button)
 
         self.add_activity_button = gtk.Button()
-        self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
-            "list-add-symbolic", gtk.IconSize.MENU))
+        self.add_activity_button.set_image(
+            gtk.Image.new_from_icon_name("list-add-symbolic", gtk.IconSize.MENU)
+        )
         self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
-
 
         self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
@@ -101,7 +108,6 @@ class HeaderBar(gtk.HeaderBar):
         self.menu_help = gtk.MenuItem(label=_("Help"))
         self.system_menu.append(self.menu_help)
         self.system_menu.show_all()
-
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
@@ -141,7 +147,6 @@ class StackedBar(layout.Widget):
 
         self._seen_keys = []
 
-
     def set_items(self, items):
         """expects a list of key, value to work with"""
         res = []
@@ -150,7 +155,6 @@ class StackedBar(layout.Widget):
             res.append((key, val, val * 1.0 / max_value))
         self._items = res
 
-
     def _take_color(self, key):
         if key in self._seen_keys:
             index = self._seen_keys.index(key)
@@ -158,7 +162,6 @@ class StackedBar(layout.Widget):
             self._seen_keys.append(key)
             index = len(self._seen_keys) - 1
         return self.colors[index % len(self.colors)]
-
 
     def on_render(self, sprite):
         if not self._items:
@@ -177,6 +180,7 @@ class StackedBar(layout.Widget):
 
 class Label(object):
     """a much cheaper label that would be suitable for cellrenderer"""
+
     def __init__(self, x=0, y=0, color=None, use_markup=False):
         self.x = x
         self.y = y
@@ -212,7 +216,7 @@ class HorizontalBarChart(graphics.Sprite):
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
-        self.layout.set_markup("Hamster") # dummy
+        self.layout.set_markup("Hamster")  # dummy
         # ellipsize the middle because depending on the use case,
         # the distinctive information can be either at the beginning or the end.
         self.layout.set_ellipsize(pango.EllipsizeMode.MIDDLE)
@@ -236,7 +240,7 @@ class HorizontalBarChart(graphics.Sprite):
         g.save_context()
         g.translate(self.x, self.y)
         # arbitrary 3/4 total width for label, 1/4 for histogram
-        hist_width = self.alloc_w // 4;
+        hist_width = self.alloc_w // 4
         margin = 10  # pixels
         label_width = self.alloc_w - hist_width - margin
         self.layout.set_width(label_width * pango.SCALE)
@@ -247,13 +251,14 @@ class HorizontalBarChart(graphics.Sprite):
             duration_str = value.format(fmt="HH:MM")
             markup_label = stuff.escape_pango(str(label))
             markup_duration = stuff.escape_pango(duration_str)
-            self.layout.set_markup("{}, <i>{}</i>".format(markup_label, markup_duration))
+            self.layout.set_markup(
+                "{}, <i>{}</i>".format(markup_label, markup_duration)
+            )
             y = int(i * label_h * 1.5)
             g.move_to(0, y)
             pangocairo.show_layout(context, self.layout)
             if self._max > dt.timedelta(0):
-                w = ceil(hist_width * value.total_seconds() /
-                         self._max.total_seconds())
+                w = ceil(hist_width * value.total_seconds() / self._max.total_seconds())
             else:
                 w = 1
             g.rectangle(bar_start_x, y, int(w), int(label_h))
@@ -262,14 +267,13 @@ class HorizontalBarChart(graphics.Sprite):
         g.restore_context()
 
 
-
 class Totals(graphics.Scene):
     def __init__(self):
         graphics.Scene.__init__(self)
         self.set_size_request(200, 70)
-        self.category_totals = layout.Label(overflow=pango.EllipsizeMode.END,
-                                            x_align=0,
-                                            expand=False)
+        self.category_totals = layout.Label(
+            overflow=pango.EllipsizeMode.END, x_align=0, expand=False
+        )
         self.stacked_bar = StackedBar(height=25, x_align=0, expand=False)
 
         box = layout.VBox(padding=10, spacing=5)
@@ -280,10 +284,12 @@ class Totals(graphics.Scene):
         self.totals = {}
         self.mouse_cursor = gdk.CursorType.HAND2
 
-        self.instructions_label = layout.Label(_("Click to see stats"),
-                                               color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                               padding=10,
-                                               expand=False)
+        self.instructions_label = layout.Label(
+            _("Click to see stats"),
+            color=self._style.get_color(gtk.StateFlags.NORMAL),
+            padding=10,
+            expand=False,
+        )
 
         box.add_child(self.instructions_label)
         self.collapsed = True
@@ -291,18 +297,15 @@ class Totals(graphics.Scene):
         main = layout.HBox(padding_top=10)
         box.add_child(main)
 
-        self.stub_label = layout.Label(markup="<b>Here be stats,\ntune in laters!</b>",
-                                       color="#bbb",
-                                       size=60)
+        self.stub_label = layout.Label(
+            markup="<b>Here be stats,\ntune in laters!</b>", color="#bbb", size=60
+        )
 
         self.activities_chart = HorizontalBarChart()
         self.categories_chart = HorizontalBarChart()
         self.tag_chart = HorizontalBarChart()
 
         main.add_child(self.activities_chart, self.categories_chart, self.tag_chart)
-
-
-
 
         # for use in animation
         self.height_proxy = graphics.Sprite(x=0)
@@ -315,7 +318,6 @@ class Totals(graphics.Scene):
         self.connect("state-flags-changed", self.on_state_flags_changed)
         self.connect("style-updated", self.on_style_changed)
 
-
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
         for fact in facts:
@@ -325,7 +327,6 @@ class Totals(graphics.Scene):
             for tag in fact.tags:
                 totals["tag"][tag] += fact.delta
 
-
         for key, group in totals.items():
             totals[key] = sorted(group.items(), key=lambda x: x[1], reverse=True)
         self.totals = totals
@@ -334,14 +335,20 @@ class Totals(graphics.Scene):
         self.categories_chart.set_values(totals['category'])
         self.tag_chart.set_values(totals['tag'])
 
-        self.stacked_bar.set_items([(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']])
+        self.stacked_bar.set_items(
+            [(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']]
+        )
 
-        grand_total = sum(delta.total_seconds() / 60
-                          for __, delta in totals['activity'])
-        self.category_totals.markup = "<b>Total: </b>%s; " % stuff.format_duration(grand_total)
-        self.category_totals.markup += ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
-
-
+        grand_total = sum(
+            delta.total_seconds() / 60 for __, delta in totals['activity']
+        )
+        self.category_totals.markup = "<b>Total: </b>%s; " % stuff.format_duration(
+            grand_total
+        )
+        self.category_totals.markup += ", ".join(
+            "<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours))
+            for cat, hours in totals['category']
+        )
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
@@ -363,10 +370,13 @@ class Totals(graphics.Scene):
         def delayed_leave(sprite):
             self.change_height(100)
 
-        self.height_proxy.animate(x=50, delay=0.5, duration=0,
-                                  on_complete=delayed_leave,
-                                  on_update=lambda sprite: sprite.redraw())
-
+        self.height_proxy.animate(
+            x=50,
+            delay=0.5,
+            duration=0,
+            on_complete=delayed_leave,
+            on_update=lambda sprite: sprite.redraw(),
+        )
 
     def on_mouse_leave(self, scene, event):
         if not self.collapsed:
@@ -375,9 +385,13 @@ class Totals(graphics.Scene):
         def delayed_leave(sprite):
             self.change_height(70)
 
-        self.height_proxy.animate(x=50, delay=0.5, duration=0,
-                                  on_complete=delayed_leave,
-                                  on_update=lambda sprite: sprite.redraw())
+        self.height_proxy.animate(
+            x=50,
+            delay=0.5,
+            duration=0,
+            on_complete=delayed_leave,
+            on_update=lambda sprite: sprite.redraw(),
+        )
 
     def on_state_flags_changed(self, previous_state, _):
         self.update_colors()
@@ -387,13 +401,16 @@ class Totals(graphics.Scene):
 
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)
+
         def on_update_dummy(sprite):
             self.set_size_request(200, sprite.height)
 
-        self.animate(self.height_proxy,
-                     height=new_height,
-                     on_update=on_update_dummy,
-                     easing=Easing.Expo.ease_out)
+        self.animate(
+            self.height_proxy,
+            height=new_height,
+            on_update=on_update_dummy,
+            easing=Easing.Expo.ease_out,
+        )
 
     def update_colors(self):
         color = self._style.get_color(self.get_state())
@@ -431,20 +448,19 @@ class Overview(Controller):
 
         self.report_chooser = None
 
-
         self.search_box = gtk.Revealer()
 
         space = gtk.Box(border_width=5)
         self.search_box.add(space)
         self.filter_entry = gtk.Entry()
-        self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY,
-                                                  "edit-find-symbolic")
+        self.filter_entry.set_icon_from_icon_name(
+            gtk.EntryIconPosition.PRIMARY, "edit-find-symbolic"
+        )
         self.filter_entry.connect("changed", self.on_search_changed)
         self.filter_entry.connect("icon-press", self.on_search_icon_press)
 
         space.pack_start(self.filter_entry, True, True, 0)
         main.pack_start(self.search_box, False, True, 0)
-
 
         window = gtk.ScrolledWindow()
         window.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
@@ -462,14 +478,15 @@ class Overview(Controller):
         hamster_day = dt.hday.today()
         self.header_bar.range_pick.set_range(hamster_day)
         self.header_bar.range_pick.connect("range-selected", self.on_range_selected)
-        self.header_bar.add_activity_button.connect("clicked", self.on_add_activity_clicked)
+        self.header_bar.add_activity_button.connect(
+            "clicked", self.on_add_activity_clicked
+        )
         self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
         self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
         self.header_bar.menu_export.connect("activate", self.on_export_clicked)
         self.header_bar.menu_help.connect("activate", self.on_help_clicked)
-
 
         self.window.connect("key-press-event", self.on_key_press)
 
@@ -480,17 +497,22 @@ class Overview(Controller):
         gobject.timeout_add_seconds(60, self.on_timeout)
         self.window.show_all()
 
-
     def on_key_press(self, window, event):
         if self.filter_entry.has_focus():
             if event.keyval == gdk.KEY_Escape:
                 self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
-        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
-                              gdk.KEY_Home, gdk.KEY_End,
-                              gdk.KEY_Page_Up, gdk.KEY_Page_Down,
-                              gdk.KEY_Return, gdk.KEY_Delete):
+        elif event.keyval in (
+            gdk.KEY_Up,
+            gdk.KEY_Down,
+            gdk.KEY_Home,
+            gdk.KEY_End,
+            gdk.KEY_Page_Up,
+            gdk.KEY_Page_Down,
+            gdk.KEY_Return,
+            gdk.KEY_Delete,
+        ):
             # These keys should work even when fact_tree does not have focus
             self.fact_tree.on_key_press(self, event)
             return True  # stop event propagation
@@ -503,7 +525,7 @@ class Overview(Controller):
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:
-                pass # TODO - deal with tab as our scenes eat up navigation
+                pass  # TODO - deal with tab as our scenes eat up navigation
 
         if event.state & gdk.ModifierType.CONTROL_MASK:
             # the ctrl+things
@@ -527,23 +549,26 @@ class Overview(Controller):
         start, end = self.header_bar.range_pick.get_range()
         search_active = self.header_bar.search_button.get_active()
         search = "" if not search_active else self.filter_entry.get_text()
-        search = "%s*" % search if search else "" # search anywhere
+        search = "%s*" % search if search else ""  # search anywhere
         self.facts = self.storage.get_facts(start, end, search_terms=search)
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
         self.header_bar.stop_button.set_sensitive(
-            self.facts and not self.facts[-1].end_time)
+            self.facts and not self.facts[-1].end_time
+        )
 
     def on_range_selected(self, button, range_type, start, end):
         self.find_facts()
 
     def on_search_changed(self, entry):
         if entry.get_text():
-            self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
-                                                      "edit-clear-symbolic")
+            self.filter_entry.set_icon_from_icon_name(
+                gtk.EntryIconPosition.SECONDARY, "edit-clear-symbolic"
+            )
         else:
-            self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
-                                                      None)
+            self.filter_entry.set_icon_from_icon_name(
+                gtk.EntryIconPosition.SECONDARY, None
+            )
         self.find_facts()
 
     def on_search_icon_press(self, entry, position, event):
@@ -584,9 +609,13 @@ class Overview(Controller):
             gtk.show_uri(None, uri, gdk.CURRENT_TIME)
         except glib.Error:
             msg = sys.exc_info()[1].args[0]
-            dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
-                                       gtk.ButtonsType.CLOSE,
-                                       _("Failed to open {}").format(uri))
+            dialog = gtk.MessageDialog(
+                self.window,
+                0,
+                gtk.MessageType.ERROR,
+                gtk.ButtonsType.CLOSE,
+                _("Failed to open {}").format(uri),
+            )
             fmt = _('Error: "{}" - is a help browser installed on this computer?')
             dialog.format_secondary_text(fmt.format(msg))
             dialog.run()
@@ -613,7 +642,7 @@ class Overview(Controller):
                 try:
                     gtk.show_uri(None, "file://%s" % path, gdk.CURRENT_TIME)
                 except:
-                    pass # bug 626656 - no use in capturing this one i think
+                    pass  # bug 626656 - no use in capturing this one i think
 
         def on_report_chooser_closed(widget):
             self.report_chooser = None
@@ -637,8 +666,9 @@ class Overview(Controller):
         if not clone_selected:
             self.present_fact_controller("add")
         elif self.fact_tree.current_fact:
-            self.present_fact_controller("clone",
-                                         fact_id=self.fact_tree.current_fact.id)
+            self.present_fact_controller(
+                "clone", fact_id=self.fact_tree.current_fact.id
+            )
         elif fallback:
             self.present_fact_controller("add")
 

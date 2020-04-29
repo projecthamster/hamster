@@ -22,12 +22,13 @@ from gi.repository import Gdk as gdk
 from gi.repository import Pango as pango
 
 from hamster.lib import datetime as dt
+
 # import our children
 from hamster.widgets.activityentry import (
     ActivityEntry,
     CategoryEntry,
     CmdLineEntry,
-    )
+)
 from hamster.widgets.timeinput import TimeInput
 from hamster.widgets.dayline import DayLine
 from hamster.widgets.tags import Tag, TagBox, TagsEntry
@@ -41,14 +42,14 @@ def add_hint(entry, hint):
     entry.hint = hint
 
     def override_get_text(self):
-        #override get text so it does not return true when hint is in!
+        # override get text so it does not return true when hint is in!
         if self.real_get_text() == self.hint:
             return ""
         else:
             return self.real_get_text()
 
     def _set_hint(self, widget, event):
-        if self.get_text(): # do not mess with user entered text
+        if self.get_text():  # do not mess with user entered text
             return
 
         self.modify_text(gtk.StateType.NORMAL, gdk.Color.parse("gray")[1])
@@ -59,7 +60,7 @@ def add_hint(entry, hint):
         self.set_text(self.hint)
 
     def _set_normal(self, widget, event):
-        #self.modify_text(gtk.StateType.NORMAL, self.get_style().fg[gtk.StateType.NORMAL])
+        # self.modify_text(gtk.StateType.NORMAL, self.get_style().fg[gtk.StateType.NORMAL])
         hint_font = pango.FontDescription(self.get_style().font_desc.to_string())
         hint_font.set_style(pango.Style.NORMAL)
         self.modify_font(hint_font)
@@ -72,6 +73,7 @@ def add_hint(entry, hint):
             self._set_hint(widget, None)
 
     import types
+
     instancemethod = types.MethodType
 
     entry._set_hint = instancemethod(_set_hint, entry, gtk.Entry)

@@ -22,7 +22,8 @@
 # cells, columns, trees and other
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 from gi.repository import Gtk as gtk
 from gi.repository import Pango as pango
@@ -65,7 +66,7 @@ def hamster_round(time):
         return time.replace(second=0, microsecond=0)
 
 
-def format_duration(minutes, human = True):
+def format_duration(minutes, human=True):
     """formats duration in a human readable format.
     accepts either minutes or timedelta
 
@@ -102,7 +103,6 @@ def format_duration(minutes, human = True):
     else:
         formatted_duration += "%02d:%02d" % (hours, minutes)
 
-
     return formatted_duration
 
 
@@ -121,13 +121,17 @@ def format_range(start_date, end_date):
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = ("%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = (
+            "%(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, %(end_Y)s"
+        ) % dates_dict
     elif start_date.month != end_date.month:
         # label of date range if start and end month do not match
         # letter after prefixes (start_, end_) is the one of
         # standard python date formatting ones- you can use all of them
         # see http://docs.python.org/library/time.html#time.strftime
-        title = ("%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s") % dates_dict
+        title = (
+            "%(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
+        ) % dates_dict
     else:
         # label of date range for interval in same month
         # letter after prefixes (start_, end_) is the one of
@@ -138,7 +142,6 @@ def format_range(start_date, end_date):
     return title
 
 
-
 def week(view_date):
     # aligns start and end date to week
     start_date = view_date - dt.timedelta(view_date.weekday() + 1)
@@ -146,9 +149,12 @@ def week(view_date):
     end_date = start_date + dt.timedelta(6)
     return start_date, end_date
 
+
 def month(view_date):
     # aligns start and end date to month
-    start_date = view_date - dt.timedelta(view_date.day - 1) #set to beginning of month
+    start_date = view_date - dt.timedelta(
+        view_date.day - 1
+    )  # set to beginning of month
     first_weekday, days_in_month = calendar.monthrange(view_date.year, view_date.month)
     end_date = start_date + dt.timedelta(days_in_month - 1)
     return start_date, end_date
@@ -172,28 +178,31 @@ def duration_minutes(duration):
 
 
 def zero_hour(date):
-    return dt.datetime.combine(date.date(), dt.time(0,0))
+    return dt.datetime.combine(date.date(), dt.time(0, 0))
+
 
 # it seems that python or something has bug of sorts, that breaks stuff for
 # japanese locale, so we have this locale from and to ut8 magic in some places
 # see bug 562298
 def locale_from_utf8(utf8_str):
     try:
-        retval = str (utf8_str, "utf-8").encode(locale.getpreferredencoding())
+        retval = str(utf8_str, "utf-8").encode(locale.getpreferredencoding())
     except:
         retval = utf8_str
     return retval
 
+
 def locale_to_utf8(locale_str):
     try:
-        retval = str (locale_str, locale.getpreferredencoding()).encode("utf-8")
+        retval = str(locale_str, locale.getpreferredencoding()).encode("utf-8")
     except:
         retval = locale_str
     return retval
 
+
 def locale_first_weekday():
     """figure if week starts on monday or sunday"""
-    first_weekday = 6 #by default settle on monday
+    first_weekday = 6  # by default settle on monday
 
     try:
         process = os.popen("locale first_weekday week-1stday")
@@ -222,42 +231,43 @@ def totals(iter, keyfunc, sumfunc):
     return res
 
 
-def dateDict(date, prefix = ""):
+def dateDict(date, prefix=""):
     """converts date into dictionary, having prefix for all the keys"""
     res = {}
 
-    res[prefix+"a"] = date.strftime("%a")
-    res[prefix+"A"] = date.strftime("%A")
-    res[prefix+"b"] = date.strftime("%b")
-    res[prefix+"B"] = date.strftime("%B")
-    res[prefix+"c"] = date.strftime("%c")
-    res[prefix+"d"] = date.strftime("%d")
-    res[prefix+"H"] = date.strftime("%H")
-    res[prefix+"I"] = date.strftime("%I")
-    res[prefix+"j"] = date.strftime("%j")
-    res[prefix+"m"] = date.strftime("%m")
-    res[prefix+"M"] = date.strftime("%M")
-    res[prefix+"p"] = date.strftime("%p")
-    res[prefix+"S"] = date.strftime("%S")
-    res[prefix+"U"] = date.strftime("%U")
-    res[prefix+"w"] = date.strftime("%w")
-    res[prefix+"W"] = date.strftime("%W")
-    res[prefix+"x"] = date.strftime("%x")
-    res[prefix+"X"] = date.strftime("%X")
-    res[prefix+"y"] = date.strftime("%y")
-    res[prefix+"Y"] = date.strftime("%Y")
-    res[prefix+"Z"] = date.strftime("%Z")
+    res[prefix + "a"] = date.strftime("%a")
+    res[prefix + "A"] = date.strftime("%A")
+    res[prefix + "b"] = date.strftime("%b")
+    res[prefix + "B"] = date.strftime("%B")
+    res[prefix + "c"] = date.strftime("%c")
+    res[prefix + "d"] = date.strftime("%d")
+    res[prefix + "H"] = date.strftime("%H")
+    res[prefix + "I"] = date.strftime("%I")
+    res[prefix + "j"] = date.strftime("%j")
+    res[prefix + "m"] = date.strftime("%m")
+    res[prefix + "M"] = date.strftime("%M")
+    res[prefix + "p"] = date.strftime("%p")
+    res[prefix + "S"] = date.strftime("%S")
+    res[prefix + "U"] = date.strftime("%U")
+    res[prefix + "w"] = date.strftime("%w")
+    res[prefix + "W"] = date.strftime("%W")
+    res[prefix + "x"] = date.strftime("%x")
+    res[prefix + "X"] = date.strftime("%X")
+    res[prefix + "y"] = date.strftime("%y")
+    res[prefix + "Y"] = date.strftime("%Y")
+    res[prefix + "Z"] = date.strftime("%Z")
 
     for i, value in res.items():
         res[i] = locale_to_utf8(value)
 
     return res
 
+
 def escape_pango(text):
     if not text:
         return text
 
-    text = text.replace ("&", "&amp;")
+    text = text.replace("&", "&amp;")
     text = text.replace("<", "&lt;")
     text = text.replace(">", "&gt;")
     return text

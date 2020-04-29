@@ -29,32 +29,32 @@ from hamster.lib.configuration import conf
 
 
 class Selection(graphics.Sprite):
-    def __init__(self, start_time = None, end_time = None):
-        graphics.Sprite.__init__(self, z_order = 100)
-        self.start_time, self.end_time  = None, None
+    def __init__(self, start_time=None, end_time=None):
+        graphics.Sprite.__init__(self, z_order=100)
+        self.start_time, self.end_time = None, None
         self.width, self.height = None, None
-        self.fill = None # will be set to proper theme color on render
+        self.fill = None  # will be set to proper theme color on render
         self.fixed = False
 
-        self.start_label = graphics.Label("", 11, "#333", visible = False)
-        self.end_label = graphics.Label("", 11, "#333", visible = False)
-        self.duration_label = graphics.Label("", 11, "#FFF", visible = False)
+        self.start_label = graphics.Label("", 11, "#333", visible=False)
+        self.end_label = graphics.Label("", 11, "#333", visible=False)
+        self.duration_label = graphics.Label("", 11, "#FFF", visible=False)
 
         self.add_child(self.start_label, self.end_label, self.duration_label)
         self.connect("on-render", self.on_render)
 
-
     def on_render(self, sprite):
-        if not self.fill: # not ready yet
+        if not self.fill:  # not ready yet
             return
 
         self.graphics.rectangle(0, 0, self.width, self.height)
         self.graphics.fill_preserve(self.fill, 0.3)
         self.graphics.stroke(self.fill)
 
-
         # adjust labels
-        self.start_label.visible = self.start_time is not None and self.start_time != self.end_time
+        self.start_label.visible = (
+            self.start_time is not None and self.start_time != self.end_time
+        )
         if self.start_label.visible:
             self.start_label.text = self.start_time.strftime("%H:%M")
             if self.x - self.start_label.width - 5 > 0:
@@ -64,17 +64,17 @@ class Selection(graphics.Sprite):
 
             self.start_label.y = self.height + 2
 
-        self.end_label.visible = self.end_time is not None and self.start_time != self.end_time
+        self.end_label.visible = (
+            self.end_time is not None and self.start_time != self.end_time
+        )
         if self.end_label.visible:
             self.end_label.text = self.end_time.strftime("%H:%M")
             self.end_label.x = self.width + 5
             self.end_label.y = self.height + 2
 
-
-
             duration = self.end_time - self.start_time
             duration = int(duration.seconds / 60)
-            self.duration_label.text =  "%02d:%02d" % (duration / 60, duration % 60)
+            self.duration_label.text = "%02d:%02d" % (duration / 60, duration % 60)
 
             self.duration_label.visible = self.duration_label.width < self.width
             if self.duration_label.visible:
@@ -84,20 +84,20 @@ class Selection(graphics.Sprite):
             self.duration_label.visible = False
 
 
-
 class DayLine(graphics.Scene):
-    def __init__(self, start_time = None):
+    def __init__(self, start_time=None):
         graphics.Scene.__init__(self)
-        self.set_can_focus(False) # no interaction
+        self.set_can_focus(False)  # no interaction
 
         self.day_start = conf.day_start
 
         start_time = start_time or dt.datetime.now()
 
-        self.view_time = start_time or dt.datetime.combine(start_time.date(), self.day_start)
+        self.view_time = start_time or dt.datetime.combine(
+            start_time.date(), self.day_start
+        )
 
         self.scope_hours = 24
-
 
         self.fact_bars = []
         self.categories = []
@@ -112,19 +112,21 @@ class DayLine(graphics.Scene):
         self.drag_start = None
         self.current_x = None
 
-        self.date_label = graphics.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
-                                         x=5, y=16)
+        self.date_label = graphics.Label(
+            color=self._style.get_color(gtk.StateFlags.NORMAL), x=5, y=16
+        )
 
         self.add_child(self.plot_area, self.date_label)
 
-
-    def plot(self, date, facts, select_start, select_end = None):
+    def plot(self, date, facts, select_start, select_end=None):
         for bar in self.fact_bars:
             self.plot_area.sprites.remove(bar)
 
         self.fact_bars = []
         for fact in facts:
-            fact_bar = graphics.Rectangle(0, 0, fill="#aaa", stroke="#aaa") # dimensions will depend on screen situation
+            fact_bar = graphics.Rectangle(
+                0, 0, fill="#aaa", stroke="#aaa"
+            )  # dimensions will depend on screen situation
             fact_bar.fact = fact
 
             if fact.category in self.categories:
@@ -148,19 +150,16 @@ class DayLine(graphics.Scene):
 
         self.redraw()
 
-
     def on_enter_frame(self, scene, context):
         g = graphics.Graphics(context)
 
         self.plot_area.height = self.height - 30
-
 
         vertical = min(self.plot_area.height / 5, 7)
         minute_pixel = (self.scope_hours * 60.0 - 15) / self.width
 
         g.set_line_style(width=1)
         g.translate(0.5, 0.5)
-
 
         colors = {
             "normal": self._style.get_color(gtk.StateFlags.NORMAL),
@@ -176,18 +175,34 @@ class DayLine(graphics.Scene):
             bar.height = vertical
 
             bar_start_time = bar.fact.start_time - self.view_time
-            minutes = bar_start_time.seconds / 60 + bar_start_time.days * self.scope_hours  * 60
+            minutes = (
+                bar_start_time.seconds / 60
+                + bar_start_time.days * self.scope_hours * 60
+            )
 
             bar.x = round(minutes / minute_pixel) + 0.5
             bar.width = round((bar.fact.delta).seconds / 60 / minute_pixel)
 
-
         if self.chosen_selection.start_time and self.chosen_selection.width is None:
             # we have time but no pixels
-            minutes = round((self.chosen_selection.start_time - self.view_time).seconds / 60 / minute_pixel) + 0.5
+            minutes = (
+                round(
+                    (self.chosen_selection.start_time - self.view_time).seconds
+                    / 60
+                    / minute_pixel
+                )
+                + 0.5
+            )
             self.chosen_selection.x = minutes
             if self.chosen_selection.end_time:
-                self.chosen_selection.width = round((self.chosen_selection.end_time - self.chosen_selection.start_time).seconds / 60 / minute_pixel)
+                self.chosen_selection.width = round(
+                    (
+                        self.chosen_selection.end_time
+                        - self.chosen_selection.start_time
+                    ).seconds
+                    / 60
+                    / minute_pixel
+                )
             else:
                 self.chosen_selection.width = 0
             self.chosen_selection.height = self.chosen_selection.parent.height
@@ -196,10 +211,7 @@ class DayLine(graphics.Scene):
             self.chosen_selection.fill = colors['selected_bg']
             self.chosen_selection.duration_label.color = colors['selected']
 
-
-
-
-        #time scale
+        # time scale
         g.set_color("#000")
 
         background = colors["normal_bg"]
@@ -207,9 +219,9 @@ class DayLine(graphics.Scene):
 
         tick_color = g.colors.contrast(background, 80)
 
-        layout = g.create_layout(size = 10)
+        layout = g.create_layout(size=10)
         for i in range(self.scope_hours * 60):
-            time = (self.view_time + dt.timedelta(minutes=i))
+            time = self.view_time + dt.timedelta(minutes=i)
 
             g.set_color(tick_color)
             if time.minute == 0:
@@ -220,8 +232,6 @@ class DayLine(graphics.Scene):
                 g.move_to(round(i / minute_pixel), bottom - 5)
                 g.line_to(round(i / minute_pixel), bottom)
                 g.stroke()
-
-
 
             if time.minute == 0 and time.hour % 4 == 0:
                 if time.hour == 0:
@@ -237,9 +247,15 @@ class DayLine(graphics.Scene):
                 g.move_to(round(i / minute_pixel) + 2, 0)
                 pangocairo.show_layout(context, layout)
 
-        #current time
-        if self.view_time < dt.datetime.now() < self.view_time + dt.timedelta(hours = self.scope_hours):
-            minutes = round((dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel)
+        # current time
+        if (
+            self.view_time
+            < dt.datetime.now()
+            < self.view_time + dt.timedelta(hours=self.scope_hours)
+        ):
+            minutes = round(
+                (dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel
+            )
             g.rectangle(minutes, 0, self.width, self.height)
             g.fill(colors['normal_bg'], 0.7)
 

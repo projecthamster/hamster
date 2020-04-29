@@ -33,7 +33,6 @@ from hamster.lib.fact import Fact, FactError
 from hamster.lib.stuff import escape_pango
 
 
-
 class CustomFactController(Controller):
     """Controller for a Fact edition window.
 
@@ -51,13 +50,13 @@ class CustomFactController(Controller):
         self.window = self.get_widget('custom_fact_window')
         self.window.set_size_request(600, 200)
 
-
         self.action = action
         self.fact_id = fact_id
 
         self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
-        self.activity_entry = widgets.ActivityEntry(widget=self.get_widget('activity'),
-                                                    category_widget=self.category_entry)
+        self.activity_entry = widgets.ActivityEntry(
+            widget=self.get_widget('activity'), category_widget=self.category_entry
+        )
 
         self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
         self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
@@ -69,13 +68,17 @@ class CustomFactController(Controller):
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
 
-        self.end_date = widgets.Calendar(widget=self.get_widget("end date"),
-                                         expander=self.get_widget("end date expander"))
+        self.end_date = widgets.Calendar(
+            widget=self.get_widget("end date"),
+            expander=self.get_widget("end date expander"),
+        )
 
         self.end_time = widgets.TimeInput(parent=self.get_widget("end time box"))
 
-        self.start_date = widgets.Calendar(widget=self.get_widget("start date"),
-                                           expander=self.get_widget("start date expander"))
+        self.start_date = widgets.Calendar(
+            widget=self.get_widget("start date"),
+            expander=self.get_widget("start date expander"),
+        )
 
         self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
@@ -94,8 +97,7 @@ class CustomFactController(Controller):
             self.fact = runtime.storage.get_fact(fact_id)
         elif action == "clone":
             base_fact = runtime.storage.get_fact(fact_id)
-            self.fact = base_fact.copy(start_time=dt.datetime.now(),
-                                       end_time=None)
+            self.fact = base_fact.copy(start_time=dt.datetime.now(), end_time=None)
         else:
             self.fact = Fact(start_time=dt.datetime.now())
 
@@ -114,12 +116,12 @@ class CustomFactController(Controller):
         self.description_buffer.connect("changed", self.on_description_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
-        self.start_date.expander.connect("activate",
-                                         self.on_start_date_expander_activated)
+        self.start_date.expander.connect(
+            "activate", self.on_start_date_expander_activated
+        )
         self.end_time.connect("changed", self.on_end_time_changed)
         self.end_date.connect("day-selected", self.on_end_date_changed)
-        self.end_date.expander.connect("activate",
-                                         self.on_end_date_expander_activated)
+        self.end_date.expander.connect("activate", self.on_end_date_expander_activated)
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
@@ -265,11 +267,14 @@ class CustomFactController(Controller):
             new_time = self.start_time.time
             if new_time:
                 if self.fact.start_time:
-                    new_start_time = dt.datetime.combine(self.fact.start_time.date(),
-                                                         new_time)
+                    new_start_time = dt.datetime.combine(
+                        self.fact.start_time.date(), new_time
+                    )
                 else:
                     # date not specified; result must fall in current hamster_day
-                    new_start_time = dt.datetime.from_day_time(dt.hday.today(), new_time)
+                    new_start_time = dt.datetime.from_day_time(
+                        dt.hday.today(), new_time
+                    )
             else:
                 new_start_time = None
             self.fact.start_time = new_start_time
@@ -343,8 +348,7 @@ class CustomFactController(Controller):
         else:
             default_dt = dt.datetime.combine(self.date, now.time())
 
-        self.draw_preview(fact.start_time or default_dt,
-                          fact.end_time or default_dt)
+        self.draw_preview(fact.start_time or default_dt, fact.end_time or default_dt)
 
         try:
             runtime.storage.check_fact(fact, default_day=self.date)
@@ -379,13 +383,17 @@ class CustomFactController(Controller):
         self.close_window()
 
     def on_window_key_pressed(self, tree, event_key):
-        popups = (self.cmdline.popup.get_property("visible")
-                  or self.start_time.popup.get_property("visible")
-                  or self.end_time.popup.get_property("visible")
-                  or self.tags_entry.popup.get_property("visible"))
+        popups = (
+            self.cmdline.popup.get_property("visible")
+            or self.start_time.popup.get_property("visible")
+            or self.end_time.popup.get_property("visible")
+            or self.tags_entry.popup.get_property("visible")
+        )
 
-        if (event_key.keyval == gdk.KEY_Escape or \
-           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
+        if event_key.keyval == gdk.KEY_Escape or (
+            event_key.keyval == gdk.KEY_w
+            and event_key.state & gdk.ModifierType.CONTROL_MASK
+        ):
             if popups:
                 return False
 

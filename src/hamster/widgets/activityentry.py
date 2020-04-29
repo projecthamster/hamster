@@ -18,7 +18,8 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-logger = logging.getLogger(__name__)   # noqa: E402
+
+logger = logging.getLogger(__name__)  # noqa: E402
 
 import bisect
 import cairo
@@ -53,23 +54,27 @@ def extract_search(text):
         search += " #%s" % (" #".join(fact.tags))
     return search
 
+
 class DataRow(object):
     """want to split out visible label, description, activity data
       and activity data with time (full_data)"""
+
     def __init__(self, label, data=None, full_data=None, description=None):
         self.label = label
         self.data = data or label
         self.full_data = full_data or data or label
         self.description = description or ""
 
+
 class Label(object):
     """a much cheaper label that would be suitable for cellrenderer"""
+
     def __init__(self, x=0, y=0):
         self.x, self.y = x, y
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
-        self.layout.set_markup("Hamster") # dummy
+        self.layout.set_markup("Hamster")  # dummy
         self.height = self.layout.get_pixel_size()[1]
 
     def show(self, g, text, color=None):
@@ -93,9 +98,12 @@ class CompleteTree(graphics.Scene):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-select-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'on-select-row': (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,),
+        ),
     }
-
 
     def __init__(self):
         graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
@@ -160,7 +168,9 @@ class CompleteTree(graphics.Scene):
     def set_row_positions(self):
         """creates a list of row positions for simpler manipulation"""
         self.row_positions = [i * self.row_height for i in range(len(self.rows))]
-        self.set_size_request(0, self.row_positions[-1] + self.row_height if self.row_positions else 0)
+        self.set_size_request(
+            0, self.row_positions[-1] + self.row_height if self.row_positions else 0
+        )
 
     def on_enter_frame(self, scene, context):
         if not self.height:
@@ -177,7 +187,6 @@ class CompleteTree(graphics.Scene):
         g.set_line_style(1)
         g.translate(0.5, 0.5)
 
-
         for row, y in zip(self.rows, self.row_positions):
             g.save_context()
             g.translate(0, y)
@@ -192,14 +201,13 @@ class CompleteTree(graphics.Scene):
                 description_color = graphics.Colors.mix(bg, color, 0.75)
                 description_color_str = graphics.Colors.hex(description_color)
 
-                label = '{}  <span color="{}">[{}]</span>'.format(label,
-                                                                  description_color_str,
-                                                                  row.description)
+                label = '{}  <span color="{}">[{}]</span>'.format(
+                    label, description_color_str, row.description
+                )
 
             self.label.show(g, label, color=color)
 
             g.restore_context()
-
 
 
 class CmdLineEntry(gtk.Entry):
@@ -212,7 +220,7 @@ class CmdLineEntry(gtk.Entry):
         # to be set by the caller, if editing an existing fact
         self.original_fact = None
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup = gtk.Window(type=gtk.WindowType.POPUP)
         self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
         self.popup.set_attached_to(self)  # attributes
         self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
@@ -222,7 +230,9 @@ class CmdLineEntry(gtk.Entry):
         self.popup.add(box)
 
         self.complete_tree = CompleteTree()
-        self.tree_checker = self.complete_tree.connect("on-select-row", self.on_tree_select_row)
+        self.tree_checker = self.complete_tree.connect(
+            "on-select-row", self.on_tree_select_row
+        )
         self.complete_tree.connect("on-click", self.on_tree_click)
         box.add(self.complete_tree)
 
@@ -230,14 +240,14 @@ class CmdLineEntry(gtk.Entry):
         self.load_suggestions()
         self.ignore_stroke = False
 
-        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
+        self.set_icon_from_icon_name(
+            gtk.EntryIconPosition.SECONDARY, "go-down-symbolic"
+        )
 
         self.checker = self.connect("changed", self.on_changed)
         self.connect("key-press-event", self.on_key_press)
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("icon-press", self.on_icon_press)
-
-
 
     def on_changed(self, entry):
         text = self.get_text()
@@ -252,10 +262,11 @@ class CmdLineEntry(gtk.Entry):
         def complete():
             text, suffix = self.complete_first()
             if suffix:
-                #self.ignore_stroke = True
+                # self.ignore_stroke = True
                 with self.handler_block(self.checker):
                     self.update_entry("%s%s" % (text, suffix))
                     self.select_region(len(text), -1)
+
         gobject.timeout_add(0, complete)
 
     def on_focus_out(self, entry, event):
@@ -291,7 +302,6 @@ class CmdLineEntry(gtk.Entry):
             self.update_entry(label)
             self.set_position(-1)
 
-
     def load_suggestions(self):
         self.todays_facts = self.storage.get_todays_facts()
 
@@ -303,7 +313,13 @@ class CmdLineEntry(gtk.Entry):
         # score is as simple as you get 30-days_ago points for each occurence
         suggestions = defaultdict(int)
         for fact in last_month:
-            days = 30 - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds() / 60 / 60 / 24
+            days = (
+                30
+                - (now - dt.datetime.combine(fact.date, dt.time())).total_seconds()
+                / 60
+                / 60
+                / 24
+            )
             label = fact.activity
             if fact.category:
                 label += "@%s" % fact.category
@@ -332,14 +348,12 @@ class CmdLineEntry(gtk.Entry):
 
         label = self.complete_tree.rows[0].data
         if label.startswith(search):
-            return text, label[len(search):]
+            return text, label[len(search) :]
 
         return text, None
 
-
     def update_entry(self, text):
         self.set_text(text or "")
-
 
     def update_suggestions(self, text=""):
         """
@@ -369,18 +383,24 @@ class CmdLineEntry(gtk.Entry):
         # presence of an attribute means that we are not looking for the previous one
         # we still might be looking for the current one though
         looking_for = "start_time"
-        fields = ["start_time", "end_time", "activity", "category", "tags", "description", "done"]
+        fields = [
+            "start_time",
+            "end_time",
+            "activity",
+            "category",
+            "tags",
+            "description",
+            "done",
+        ]
         for field in reversed(fields):
             if getattr(fact, field, None):
                 looking_for = field
                 if text[-1] == " ":
-                    looking_for = fields[fields.index(field)+1]
+                    looking_for = fields[fields.index(field) + 1]
                 break
-
 
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
-
 
         search = extract_search(text)
 
@@ -388,7 +408,7 @@ class CmdLineEntry(gtk.Entry):
         for match, score in self.suggestions:
             if search in match:
                 if match.startswith(search):
-                    score += 10**8 # boost beginnings
+                    score += 10 ** 8  # boost beginnings
                 matches.append((match, score))
 
         # need to limit these guys, sorry
@@ -399,7 +419,15 @@ class CmdLineEntry(gtk.Entry):
             if fact.end_time:
                 label += fact.end_time.strftime("-%H:%M")
 
-            markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+            markup_label = (
+                label
+                + " "
+                + (
+                    stuff.escape_pango(match).replace(search, "<b>%s</b>" % search)
+                    if search
+                    else match
+                )
+            )
             label += " " + match
 
             res.append(DataRow(markup_label, match, label))
@@ -451,7 +479,6 @@ class CmdLineEntry(gtk.Entry):
 
         self.complete_tree.set_rows(res)
 
-
     def show_suggestions(self, text):
         if not self.get_window():
             return
@@ -471,12 +498,13 @@ class CmdLineEntry(gtk.Entry):
         self.popup.show_all()
 
 
-class ActivityEntry():
+class ActivityEntry:
     """Activity entry widget.
 
     widget (gtk.Entry): the associated activity entry
     category_widget (gtk.Entry): the associated category entry
     """
+
     def __init__(self, widget=None, category_widget=None, **kwds):
         # widget and completion may be defined already
         # e.g. in the glade edit_activity.ui file
@@ -584,8 +612,9 @@ class ActivityEntry():
         if self.filter_on_category:
             category_names = [self.category_widget.get_text()]
         else:
-            category_names = [category['name']
-                              for category in runtime.storage.get_categories()]
+            category_names = [
+                category['name'] for category in runtime.storage.get_categories()
+            ]
         for category_name in category_names:
             category_id = runtime.storage.get_category_id(category_name)
             activities = runtime.storage.get_category_activities(category_id)
@@ -598,11 +627,12 @@ class ActivityEntry():
         return getattr(self.widget, name)
 
 
-class CategoryEntry():
+class CategoryEntry:
     """Category entry widget.
 
     widget (gtk.Entry): the associated category entry
     """
+
     def __init__(self, widget=None, **kwds):
         # widget and completion are already defined
         # e.g. in the glade edit_activity.ui file
@@ -614,7 +644,9 @@ class CategoryEntry():
         if not self.completion:
             self.completion = gtk.EntryCompletion()
             self.widget.set_completion(self.completion)
-        self.completion.insert_action_markup(0, "<i>Clear ({})</i>".format(_("Unsorted")))
+        self.completion.insert_action_markup(
+            0, "<i>Clear ({})</i>".format(_("Unsorted"))
+        )
         self.unsorted_action_index = 0
 
         self.model = gtk.ListStore(str)
