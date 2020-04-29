@@ -77,7 +77,7 @@ class WindowServer(dbus.service.Object):
         self._open_window("prefs")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from hamster.lib import i18n
 
     i18n.setup_i18n()

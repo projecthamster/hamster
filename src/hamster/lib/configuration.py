@@ -52,7 +52,7 @@ class Controller(gobject.GObject):
 
         if ui_file:
             self._gui = load_ui_file(ui_file)
-            self.window = self.get_widget('window')
+            self.window = self.get_widget("window")
         else:
             self._gui = None
             self.window = gtk.Window()
@@ -102,7 +102,7 @@ def load_ui_file(name):
 
 class Singleton(object):
     def __new__(cls, *args, **kwargs):
-        if '__instance' not in vars(cls):
+        if "__instance" not in vars(cls):
             cls.__instance = object.__new__(cls, *args, **kwargs)
         return cls.__instance
 
@@ -123,7 +123,7 @@ class RuntimeStore(Singleton):
         else:
             # running from sources
             module_dir = os.path.dirname(os.path.realpath(__file__))
-            self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
+            self.data_dir = os.path.join(module_dir, "..", "..", "..", "data")
 
         self.data_dir = os.path.realpath(self.data_dir)
         self.storage = Storage()
@@ -149,14 +149,14 @@ class GSettingsStore(gobject.GObject, Singleton):
 
     def __init__(self):
         gobject.GObject.__init__(self)
-        self._settings = gio.Settings(schema_id='org.gnome.Hamster')
+        self._settings = gio.Settings(schema_id="org.gnome.Hamster")
 
     def _key_changed(self, client, key, data=None):
         """
         Callback when a GSettings key changes
         """
         value = self._settings.get_value(key)
-        self.emit('changed', key, value)
+        self.emit("changed", key, value)
 
     def get(self, key, default=None):
         """

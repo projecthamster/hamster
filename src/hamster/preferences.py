@@ -47,7 +47,7 @@ class CategoryStore(gtk.ListStore):
         category_list = runtime.storage.get_categories()
 
         for category in category_list:
-            self.append([category['id'], category['name']])
+            self.append([category["id"], category["name"]])
 
         self.unsorted_category = self.append(
             [-1, _("Unsorted")]
@@ -68,20 +68,20 @@ class ActivityStore(gtk.ListStore):
         activity_list = runtime.storage.get_category_activities(category_id)
 
         for activity in activity_list:
-            self.append([activity['id'], activity['name'], activity['category_id']])
+            self.append([activity["id"], activity["name"], activity["category_id"]])
 
 
 class PreferencesEditor(Controller):
     TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
-        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
+        ("MY_TREE_MODEL_ROW", gtk.TargetFlags.SAME_WIDGET, 0),
+        ("MY_TREE_MODEL_ROW", gtk.TargetFlags.SAME_APP, 0),
     ]
 
     def __init__(self):
         Controller.__init__(self, ui_file="preferences.ui")
 
         # create and fill activity tree
-        self.activity_tree = self.get_widget('activity_list')
+        self.activity_tree = self.get_widget("activity_list")
         self.get_widget("activities_label").set_mnemonic_widget(self.activity_tree)
         self.activity_store = ActivityStore()
 
@@ -95,7 +95,7 @@ class PreferencesEditor(Controller):
                 (
                     self.activityCell,
                     self.activityCell.connect(
-                        'edited', self.activity_name_edited_cb, self.activity_store
+                        "edited", self.activity_name_edited_cb, self.activity_store
                     ),
                 )
             ]
@@ -114,14 +114,14 @@ class PreferencesEditor(Controller):
                 (
                     self.selection,
                     self.selection.connect(
-                        'changed', self.activity_changed, self.activity_store
+                        "changed", self.activity_changed, self.activity_store
                     ),
                 )
             ]
         )
 
         # create and fill category tree
-        self.category_tree = self.get_widget('category_list')
+        self.category_tree = self.get_widget("category_list")
         self.get_widget("categories_label").set_mnemonic_widget(self.category_tree)
         self.category_store = CategoryStore()
 
@@ -134,7 +134,7 @@ class PreferencesEditor(Controller):
                 (
                     self.categoryCell,
                     self.categoryCell.connect(
-                        'edited', self.category_edited_cb, self.category_store
+                        "edited", self.category_edited_cb, self.category_store
                     ),
                 )
             ]
@@ -155,7 +155,7 @@ class PreferencesEditor(Controller):
                 (
                     selection,
                     selection.connect(
-                        'changed', self.category_changed_cb, self.category_store
+                        "changed", self.category_changed_cb, self.category_store
                     ),
                 )
             ]
@@ -286,10 +286,10 @@ class PreferencesEditor(Controller):
         # look for dupes
         categories = runtime.storage.get_categories()
         for category in categories:
-            if category['name'].lower() == new_text.lower():
+            if category["name"].lower() == new_text.lower():
                 if id == -2:  # that was a new category
                     self.category_store.remove(model.get_iter(path))
-                self.select_category(category['id'])
+                self.select_category(category["id"])
                 return False
 
         if id == -2:  # new category
@@ -307,14 +307,14 @@ class PreferencesEditor(Controller):
         activities = runtime.storage.get_category_activities(category_id)
         prev = None
         for activity in activities:
-            if id == activity['id']:
-                prev = activity['name']
+            if id == activity["id"]:
+                prev = activity["name"]
             else:
                 # avoid two activities in same category with same name
-                if activity['name'].lower() == new_text.lower():
+                if activity["name"].lower() == new_text.lower():
                     if id == -1:  # that was a new activity
                         self.activity_store.remove(model.get_iter(path))
-                    self.select_activity(activity['id'])
+                    self.select_activity(activity["id"])
                     return False
 
         if id == -1:  # new activity -> add
@@ -339,13 +339,13 @@ class PreferencesEditor(Controller):
             self.activity_store.load(model[iter][0])
 
         # start with nothing
-        self.get_widget('activity_edit').set_sensitive(False)
-        self.get_widget('activity_remove').set_sensitive(False)
+        self.get_widget("activity_edit").set_sensitive(False)
+        self.get_widget("activity_remove").set_sensitive(False)
 
         return True
 
     def _get_selected_category(self):
-        selection = self.get_widget('category_list').get_selection()
+        selection = self.get_widget("category_list").get_selection()
         (model, iter) = selection.get_selected()
 
         return model[iter][0] if iter else None
@@ -356,8 +356,8 @@ class PreferencesEditor(Controller):
 
         # treat any selected case
         unsorted_selected = self._get_selected_category() == -1
-        self.get_widget('activity_edit').set_sensitive(iter != None)
-        self.get_widget('activity_remove').set_sensitive(iter != None)
+        self.get_widget("activity_edit").set_sensitive(iter != None)
+        self.get_widget("activity_remove").set_sensitive(iter != None)
 
     def _del_selected_row(self, tree):
         selection = tree.get_selection()
@@ -383,9 +383,9 @@ class PreferencesEditor(Controller):
             text = (
                 '<span color="#555" style="italic">%s</span>' % cell_text
             )  # TODO - should get color from theme
-            cell.set_property('markup', text)
+            cell.set_property("markup", text)
         else:
-            cell.set_property('text', cell_text)
+            cell.set_property("text", cell_text)
 
         return
 

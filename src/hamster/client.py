@@ -82,23 +82,23 @@ class Storage(gobject.GObject):
         self._connection = None  # will be initiated on demand
 
         self.bus.add_signal_receiver(
-            self._on_tags_changed, 'TagsChanged', 'org.gnome.Hamster'
+            self._on_tags_changed, "TagsChanged", "org.gnome.Hamster"
         )
         self.bus.add_signal_receiver(
-            self._on_facts_changed, 'FactsChanged', 'org.gnome.Hamster'
+            self._on_facts_changed, "FactsChanged", "org.gnome.Hamster"
         )
         self.bus.add_signal_receiver(
-            self._on_activities_changed, 'ActivitiesChanged', 'org.gnome.Hamster'
+            self._on_activities_changed, "ActivitiesChanged", "org.gnome.Hamster"
         )
         self.bus.add_signal_receiver(
-            self._on_toggle_called, 'ToggleCalled', 'org.gnome.Hamster'
+            self._on_toggle_called, "ToggleCalled", "org.gnome.Hamster"
         )
 
         self.bus.add_signal_receiver(
             self._on_dbus_connection_change,
-            'NameOwnerChanged',
-            'org.freedesktop.DBus',
-            arg0='org.gnome.Hamster',
+            "NameOwnerChanged",
+            "org.freedesktop.DBus",
+            arg0="org.gnome.Hamster",
         )
 
     @staticmethod
@@ -109,8 +109,8 @@ class Storage(gobject.GObject):
     def conn(self):
         if not self._connection:
             self._connection = dbus.Interface(
-                self.bus.get_object('org.gnome.Hamster', '/org/gnome/Hamster'),
-                dbus_interface='org.gnome.Hamster',
+                self.bus.get_object("org.gnome.Hamster", "/org/gnome/Hamster"),
+                dbus_interface="org.gnome.Hamster",
             )
             server_version = self._connection.Version()
             client_version = hamster.__version__
@@ -181,16 +181,16 @@ class Storage(gobject.GObject):
            results are sorted by most recent usage.
            search is case insensitive
         """
-        return self._to_dict(('name', 'category'), self.conn.GetActivities(search))
+        return self._to_dict(("name", "category"), self.conn.GetActivities(search))
 
     def get_categories(self):
         """returns list of categories"""
-        return self._to_dict(('id', 'name'), self.conn.GetCategories())
+        return self._to_dict(("id", "name"), self.conn.GetCategories())
 
     def get_tags(self, only_autocomplete=False):
         """returns list of all tags. by default only those that have been set for autocomplete"""
         return self._to_dict(
-            ('id', 'name', 'autocomplete'), self.conn.GetTags(only_autocomplete)
+            ("id", "name", "autocomplete"), self.conn.GetTags(only_autocomplete)
         )
 
     def get_tag_ids(self, tags):
@@ -200,7 +200,7 @@ class Storage(gobject.GObject):
            be created.
            on database changes the `tags-changed` signal is emitted.
         """
-        return self._to_dict(('id', 'name', 'autocomplete'), self.conn.GetTagIds(tags))
+        return self._to_dict(("id", "name", "autocomplete"), self.conn.GetTagIds(tags))
 
     def update_autocomplete_tags(self, tags):
         """update list of tags that should autocomplete. this list replaces
@@ -269,7 +269,7 @@ class Storage(gobject.GObject):
         return activities that have no category"""
         category_id = category_id or -1
         return self._to_dict(
-            ('id', 'name', 'category_id', 'category'),
+            ("id", "name", "category_id", "category"),
             self.conn.GetCategoryActivities(category_id),
         )
 

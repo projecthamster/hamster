@@ -206,7 +206,7 @@ def locale_first_weekday():
 
     try:
         process = os.popen("locale first_weekday week-1stday")
-        week_offset, week_start = process.read().split('\n')[:2]
+        week_offset, week_start = process.read().split("\n")[:2]
         process.close()
         week_start = dt.date(*time.strptime(week_start, "%Y%m%d")[:3])
         week_offset = dt.timedelta(int(week_offset) - 1)

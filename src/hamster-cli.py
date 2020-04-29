@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-'''A script to control the applet from the command line.'''
+"""A script to control the applet from the command line."""
 
 import sys, os
 import argparse
@@ -28,8 +28,8 @@ import re
 
 import gi
 
-gi.require_version('Gdk', '3.0')  # noqa: E402
-gi.require_version('Gtk', '3.0')  # noqa: E402
+gi.require_version("Gdk", "3.0")  # noqa: E402
+gi.require_version("Gtk", "3.0")  # noqa: E402
 from gi.repository import GLib as glib
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
@@ -71,27 +71,27 @@ def word_wrap(line, max_len):
 def fact_dict(fact_data, with_date):
     fact = {}
     if with_date:
-        fmt = '%Y-%m-%d %H:%M'
+        fmt = "%Y-%m-%d %H:%M"
     else:
-        fmt = '%H:%M'
+        fmt = "%H:%M"
 
-    fact['start'] = fact_data.start_time.strftime(fmt)
+    fact["start"] = fact_data.start_time.strftime(fmt)
     if fact_data.end_time:
-        fact['end'] = fact_data.end_time.strftime(fmt)
+        fact["end"] = fact_data.end_time.strftime(fmt)
     else:
         end_date = dt.datetime.now()
-        fact['end'] = ''
+        fact["end"] = ""
 
-    fact['duration'] = fact_data.delta.format()
+    fact["duration"] = fact_data.delta.format()
 
-    fact['activity'] = fact_data.activity
-    fact['category'] = fact_data.category
+    fact["activity"] = fact_data.activity
+    fact["category"] = fact_data.category
     if fact_data.tags:
-        fact['tags'] = ' '.join('#%s' % tag for tag in fact_data.tags)
+        fact["tags"] = " ".join("#%s" % tag for tag in fact_data.tags)
     else:
-        fact['tags'] = ''
+        fact["tags"] = ""
 
-    fact['description'] = fact_data.description
+    fact["description"] = fact_data.description
 
     return fact
 
@@ -249,7 +249,7 @@ class HamsterCli(object):
         self.storage.toggle()
 
     def start(self, *args):
-        '''Start a new activity.'''
+        """Start a new activity."""
         if not args:
             print("Error: please specify activity")
             return 0
@@ -262,7 +262,7 @@ class HamsterCli(object):
         return id_
 
     def stop(self, *args):
-        '''Stop tracking the current activity.'''
+        """Stop tracking the current activity."""
         self.storage.stop_tracking()
 
     def export(self, *args):
@@ -281,28 +281,28 @@ class HamsterCli(object):
         )
 
     def _activities(self, search=""):
-        '''Print the names of all the activities.'''
+        """Print the names of all the activities."""
         if "@" in search:
             activity, category = search.split("@")
             for cat in self.storage.get_categories():
-                if not category or cat['name'].lower().startswith(category.lower()):
-                    print("{}@{}".format(activity, cat['name']))
+                if not category or cat["name"].lower().startswith(category.lower()):
+                    print("{}@{}".format(activity, cat["name"]))
         else:
             for activity in self.storage.get_activities(search):
-                print(activity['name'])
-                if activity['category']:
-                    print("{}@{}".format(activity['name'], activity['category']))
+                print(activity["name"])
+                if activity["category"]:
+                    print("{}@{}".format(activity["name"], activity["category"]))
 
     def activities(self, *args):
-        '''Print the names of all the activities.'''
+        """Print the names of all the activities."""
         search = args[0] if args else ""
         for activity in self.storage.get_activities(search):
-            print("{}@{}".format(activity['name'], activity['category']))
+            print("{}@{}".format(activity["name"], activity["category"]))
 
     def categories(self, *args):
-        '''Print the names of all the categories.'''
+        """Print the names of all the categories."""
         for category in self.storage.get_categories():
-            print(category['name'])
+            print(category["name"])
 
     def list(self, *times):
         """list facts within a date range"""
@@ -342,19 +342,19 @@ class HamsterCli(object):
         facts = self.storage.get_facts(start_time, end_time, search)
 
         headers = {
-            'activity': _("Activity"),
-            'category': _("Category"),
-            'tags': _("Tags"),
-            'description': _("Description"),
-            'start': _("Start"),
-            'end': _("End"),
-            'duration': _("Duration"),
+            "activity": _("Activity"),
+            "category": _("Category"),
+            "tags": _("Tags"),
+            "description": _("Description"),
+            "start": _("Start"),
+            "end": _("End"),
+            "duration": _("Duration"),
         }
 
         # print date if it is not the same day
         print_with_date = start_time.date() != end_time.date()
 
-        cols = 'start', 'end', 'duration', 'activity', 'category'
+        cols = "start", "end", "duration", "activity", "category"
 
         widths = dict([(col, len(headers[col])) for col in cols])
         for fact in facts:
@@ -380,12 +380,12 @@ class HamsterCli(object):
             pretty_fact = fact_dict(fact, print_with_date)
             print(fact_line.format(**pretty_fact))
 
-            if pretty_fact['description']:
-                for line in word_wrap(pretty_fact['description'], 76):
+            if pretty_fact["description"]:
+                for line in word_wrap(pretty_fact["description"], 76):
                     print("    {}".format(line))
 
-            if pretty_fact['tags']:
-                for line in word_wrap(pretty_fact['tags'], 76):
+            if pretty_fact["tags"]:
+                for line in word_wrap(pretty_fact["tags"], 76):
                     print("    {}".format(line))
 
         print("-" * min(row_width, 80))
@@ -406,7 +406,7 @@ class HamsterCli(object):
         print(hamster.__version__)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from hamster.lib import i18n
 
     i18n.setup_i18n()
@@ -466,12 +466,12 @@ Example usage:
     parser.add_argument(
         "--log",
         dest="log_level",
-        choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
-        default='WARNING',
+        choices=("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"),
+        default="WARNING",
         help="Set the logging level (default: %(default)s)",
     )
     parser.add_argument("action", nargs="?", default="overview")
-    parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
+    parser.add_argument("action_args", nargs=argparse.REMAINDER, default=[])
 
     args, unknown_args = parser.parse_known_args()
 
@@ -518,4 +518,4 @@ Example usage:
     elif hasattr(hamster_client, action):
         getattr(hamster_client, action)(*args.action_args)
     else:
-        sys.exit(usage % {'prog': sys.argv[0]})
+        sys.exit(usage % {"prog": sys.argv[0]})

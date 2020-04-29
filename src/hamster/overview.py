@@ -321,7 +321,7 @@ class Totals(graphics.Scene):
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
         for fact in facts:
-            for key in ('category', 'activity'):
+            for key in ("category", "activity"):
                 totals[key][getattr(fact, key)] += fact.delta
 
             for tag in fact.tags:
@@ -331,23 +331,23 @@ class Totals(graphics.Scene):
             totals[key] = sorted(group.items(), key=lambda x: x[1], reverse=True)
         self.totals = totals
 
-        self.activities_chart.set_values(totals['activity'])
-        self.categories_chart.set_values(totals['category'])
-        self.tag_chart.set_values(totals['tag'])
+        self.activities_chart.set_values(totals["activity"])
+        self.categories_chart.set_values(totals["category"])
+        self.tag_chart.set_values(totals["tag"])
 
         self.stacked_bar.set_items(
-            [(cat, delta.total_seconds() / 60.0) for cat, delta in totals['category']]
+            [(cat, delta.total_seconds() / 60.0) for cat, delta in totals["category"]]
         )
 
         grand_total = sum(
-            delta.total_seconds() / 60 for __, delta in totals['activity']
+            delta.total_seconds() / 60 for __, delta in totals["activity"]
         )
         self.category_totals.markup = "<b>Total: </b>%s; " % stuff.format_duration(
             grand_total
         )
         self.category_totals.markup += ", ".join(
             "<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours))
-            for cat, hours in totals['category']
+            for cat, hours in totals["category"]
         )
 
     def on_click(self, scene, sprite, event):

@@ -28,7 +28,7 @@ def default_logger(name):
 
     # this is a basic handler, with output to stderr
     logger_handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
     logger_handler.setFormatter(formatter)
     logger.addHandler(logger_handler)
 

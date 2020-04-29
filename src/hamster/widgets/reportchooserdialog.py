@@ -27,12 +27,12 @@ from hamster.lib.configuration import conf
 class ReportChooserDialog(gtk.Dialog):
     __gsignals__ = {
         # format, path, start_date, end_date
-        'report-chosen': (
+        "report-chosen": (
             gobject.SIGNAL_RUN_LAST,
             gobject.TYPE_NONE,
             (gobject.TYPE_STRING, gobject.TYPE_STRING),
         ),
-        'report-chooser-closed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "report-chooser-closed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):

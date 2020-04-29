@@ -98,7 +98,7 @@ class CompleteTree(graphics.Scene):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-select-row': (
+        "on-select-row": (
             gobject.SIGNAL_RUN_LAST,
             gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT,),
@@ -543,7 +543,7 @@ class ActivityEntry:
 
         self.connect("icon-release", self.on_icon_release)
         self.connect("focus-in-event", self.on_focus_in_event)
-        self.completion.connect('match-selected', self.on_match_selected)
+        self.completion.connect("match-selected", self.on_match_selected)
         self.completion.connect("action_activated", self.on_action_activated)
 
     def add_action(self, name, text):
@@ -613,7 +613,7 @@ class ActivityEntry:
             category_names = [self.category_widget.get_text()]
         else:
             category_names = [
-                category['name'] for category in runtime.storage.get_categories()
+                category["name"] for category in runtime.storage.get_categories()
             ]
         for category_name in category_names:
             category_id = runtime.storage.get_category_id(category_name)
@@ -687,7 +687,7 @@ class CategoryEntry:
     def populate_completions(self):
         self.model.clear()
         for category in runtime.storage.get_categories():
-            self.model.append([category['name']])
+            self.model.append([category["name"]])
 
     def __getattr__(self, name):
         return getattr(self.widget, name)

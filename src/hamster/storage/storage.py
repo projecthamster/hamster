@@ -93,7 +93,7 @@ class Storage(object):
         if not fact.activity:
             raise FactError("Missing activity")
 
-        if ',' in fact.category:
+        if "," in fact.category:
             raise FactError(
                 dedent(
                     """\

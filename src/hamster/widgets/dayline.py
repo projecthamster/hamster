@@ -208,8 +208,8 @@ class DayLine(graphics.Scene):
             self.chosen_selection.height = self.chosen_selection.parent.height
 
             # use the oportunity to set proper colors too
-            self.chosen_selection.fill = colors['selected_bg']
-            self.chosen_selection.duration_label.color = colors['selected']
+            self.chosen_selection.fill = colors["selected_bg"]
+            self.chosen_selection.duration_label.color = colors["selected"]
 
         # time scale
         g.set_color("#000")
@@ -257,7 +257,7 @@ class DayLine(graphics.Scene):
                 (dt.datetime.now() - self.view_time).seconds / 60 / minute_pixel
             )
             g.rectangle(minutes, 0, self.width, self.height)
-            g.fill(colors['normal_bg'], 0.7)
+            g.fill(colors["normal_bg"], 0.7)
 
             g.move_to(minutes, self.plot_area.y)
             g.line_to(minutes, bottom)

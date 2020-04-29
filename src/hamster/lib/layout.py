@@ -168,8 +168,8 @@ class Widget(graphics.Sprite):
             name = "min_width"
         elif name == "height":
             name = "min_height"
-        elif name == 'enabled':
-            name = '_enabled'
+        elif name == "enabled":
+            name = "_enabled"
         elif name == "padding":
             val = val or 0
             if isinstance(val, int):
@@ -228,13 +228,13 @@ class Widget(graphics.Sprite):
 
         # in widget case visibility affects placement and everything so request repositioning from parent
         if (
-            name == 'visible'
+            name == "visible"
             and getattr(self, "parent", None)
             and getattr(self.parent, "resize_children", None)
         ):
             self.parent.resize_children()
 
-        elif name == '_enabled' and getattr(self, "sprites", None):
+        elif name == "_enabled" and getattr(self, "sprites", None):
             self._propagate_enabledness()
 
         if name in self._sizing_attributes:
@@ -467,9 +467,9 @@ class Container(Widget):
        for allocated. So use that when making rendering decisions.
     """
 
-    cache_attrs = Widget.cache_attrs | set(('_cached_w', '_cached_h'))
+    cache_attrs = Widget.cache_attrs | set(("_cached_w", "_cached_h"))
     _sizing_attributes = Widget._sizing_attributes | set(
-        ('padding_top', 'padding_right', 'padding_bottom', 'padding_left')
+        ("padding_top", "padding_right", "padding_bottom", "padding_left")
     )
 
     def __init__(self, contents=None, **kwargs):
@@ -484,7 +484,7 @@ class Container(Widget):
             return
 
         Widget.__setattr__(self, name, val)
-        if name == 'contents':
+        if name == "contents":
             if val:
                 if isinstance(val, graphics.Sprite):
                     val = [val]
@@ -493,7 +493,7 @@ class Container(Widget):
                 self.remove_child(*list(set(self.sprites) ^ set(val or [])))
 
         if name in ("alloc_w", "alloc_h") and val:
-            self.__dict__['_cached_w'], self.__dict__['_cached_h'] = None, None
+            self.__dict__["_cached_w"], self.__dict__["_cached_h"] = None, None
             self._children_resize_queued = True
 
     @property
@@ -503,7 +503,7 @@ class Container(Widget):
     def _Widget__on_render(self, sprite):
         if self._children_resize_queued:
             self.resize_children()
-            self.__dict__['_children_resize_queued'] = False
+            self.__dict__["_children_resize_queued"] = False
         Widget._Widget__on_render(self, sprite)
 
     def _add(self, *sprites):
@@ -515,7 +515,7 @@ class Container(Widget):
         self.queue_resize()
 
     def queue_resize(self):
-        self.__dict__['_cached_w'], self.__dict__['_cached_h'] = None, None
+        self.__dict__["_cached_w"], self.__dict__["_cached_h"] = None, None
         Widget.queue_resize(self)
 
     def get_min_size(self):
@@ -574,7 +574,7 @@ class Container(Widget):
                 * getattr(sprite, "y_align", 0)
             )
 
-        self.__dict__['_children_resize_queued'] = False
+        self.__dict__["_children_resize_queued"] = False
 
 
 class Bin(Container):
@@ -777,9 +777,9 @@ class Box(Container):
 
         if self.orient_horizontal:
             for sprite, props in sprites:
-                sprite.__dict__['alloc_h'] = actual_h
+                sprite.__dict__["alloc_h"] = actual_h
 
-        self.__dict__['_children_resize_queued'] = False
+        self.__dict__["_children_resize_queued"] = False
 
     def get_height_for_width_size(self):
         if self._children_resize_queued:
@@ -870,7 +870,7 @@ class VBox(Box):
 
 
 class _DisplayLabel(graphics.Label):
-    cache_attrs = Box.cache_attrs | set(('_cached_w', '_cached_h'))
+    cache_attrs = Box.cache_attrs | set(("_cached_w", "_cached_h"))
 
     def __init__(self, text="", **kwargs):
         graphics.Label.__init__(self, text, **kwargs)
@@ -1017,7 +1017,7 @@ class Label(Bin):
                 return
             Bin.__setattr__(self, name, val)
 
-        if name in ('x_align', 'y_align') and hasattr(self, "container"):
+        if name in ("x_align", "y_align") and hasattr(self, "container"):
             setattr(self.container, name, val)
 
         elif (

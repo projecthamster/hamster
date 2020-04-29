@@ -30,7 +30,7 @@ from hamster.lib.stuff import hamster_round
 
 class TimeInput(gtk.Entry):
     __gsignals__ = {
-        'time-entered': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "time-entered": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, time=None, start_time=None, **kwargs):

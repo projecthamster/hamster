@@ -118,13 +118,13 @@ class Storage(storage.Storage):
             try:
                 from xdg.BaseDirectory import xdg_data_home
             except ImportError:
-                xdg_data_home = os.environ.get('XDG_DATA_HOME')
+                xdg_data_home = os.environ.get("XDG_DATA_HOME")
                 if not xdg_data_home:
                     xdg_data_home = os.path.join(
-                        os.path.expanduser('~'), '.local', 'share'
+                        os.path.expanduser("~"), ".local", "share"
                     )
                     logger.warning("No xdg_data_home - assuming ~/.local/share")
-            database_dir = os.path.join(xdg_data_home, 'hamster')
+            database_dir = os.path.join(xdg_data_home, "hamster")
 
         if not os.path.exists(database_dir):
             os.makedirs(database_dir, 0o744)
@@ -137,9 +137,9 @@ class Storage(storage.Storage):
             # try most recent directories first
             # change from hamster-applet to hamster-time-tracker:
             # 9f345e5e (2019-09-19)
-            old_dirs = ['hamster-time-tracker', 'hamster-applet']
+            old_dirs = ["hamster-time-tracker", "hamster-applet"]
             for old_dir in old_dirs:
-                old_db_path = os.path.join(xdg_data_home, old_dir, 'hamster.db')
+                old_db_path = os.path.join(xdg_data_home, old_dir, "hamster.db")
                 if os.path.exists(old_db_path):
                     logger.warning("Linking {} with {}".format(old_db_path, db_path))
                     os.link(old_db_path, db_path)
@@ -158,13 +158,13 @@ class Storage(storage.Storage):
                         data_dir = os.path.join(module_dir, "data")
                     else:
                         # get ./data from ./src/hamster/storage/db.py (3 levels up)
-                        data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
+                        data_dir = os.path.join(module_dir, "..", "..", "..", "data")
                 logger.warning(
                     "Database not found in {} - installing default from {}!".format(
                         db_path, data_dir
                     )
                 )
-                copyfile(os.path.join(data_dir, 'hamster.db'), db_path)
+                copyfile(os.path.join(data_dir, "hamster.db"), db_path)
 
             # change also permissions - sometimes they are 444
             os.chmod(db_path, 0o664)
@@ -296,10 +296,10 @@ class Storage(storage.Storage):
         """
         # first check if we don't have an activity with same name before us
         activity = self.fetchone("select name from activities where id = ?", (id,))
-        existing_activity = self.__get_activity_by_name(activity['name'], category_id)
+        existing_activity = self.__get_activity_by_name(activity["name"], category_id)
 
         if (
-            existing_activity and id == existing_activity['id']
+            existing_activity and id == existing_activity["id"]
         ):  # we are already there, go home
             return False
 
@@ -311,7 +311,7 @@ class Storage(storage.Storage):
                         WHERE activity_id = ?
             """
 
-            self.execute(update, (existing_activity['id'], id))
+            self.execute(update, (existing_activity["id"], id))
 
             # and now get rid of our friend
             self.__remove_activity(id)
@@ -337,7 +337,7 @@ class Storage(storage.Storage):
                     res[0]
                     for res in self.fetchall(
                         "select id from facts where activity_id = ?",
-                        (existing_activity['id'],),
+                        (existing_activity["id"],),
                     )
                 ]
             )
@@ -400,19 +400,19 @@ class Storage(storage.Storage):
             res = self.fetchone(query, (self._unsorted_localized, name,))
 
         if res:
-            keys = ('id', 'name', 'deleted', 'category')
+            keys = ("id", "name", "deleted", "category")
             res = dict([(key, res[key]) for key in keys])
-            res['deleted'] = res['deleted'] or False
+            res["deleted"] = res["deleted"] or False
 
             # if the activity was marked as deleted, resurrect on first call
             # and put in the unsorted category
-            if res['deleted'] and resurrect:
+            if res["deleted"] and resurrect:
                 update = """
                             UPDATE activities
                                SET deleted = null, category_id = -1
                              WHERE id = ?
                         """
-                self.execute(update, (res['id'],))
+                self.execute(update, (res["id"],))
 
             return res
 
@@ -437,7 +437,7 @@ class Storage(storage.Storage):
         res = self.fetchone(query, (name,))
 
         if res:
-            return res['id']
+            return res["id"]
 
         return 0
 
@@ -666,7 +666,7 @@ class Storage(storage.Storage):
 
         # get tags from database - this will create any missing tags too
         tags = [
-            (tag['id'], tag['name'], tag['autocomplete'])
+            (tag["id"], tag["name"], tag["autocomplete"])
             for tag in self.get_tag_ids(fact.tags)
         ]
 
@@ -682,7 +682,7 @@ class Storage(storage.Storage):
         if not activity_id:
             activity_id = self.__add_activity(fact.activity, category_id, temporary)
         else:
-            activity_id = activity_id['id']
+            activity_id = activity_id["id"]
 
         # if we are working on +/- current day - check the last_activity
         if (
@@ -808,15 +808,15 @@ class Storage(storage.Storage):
                 search_terms = search_terms[4:]
 
             search_terms = (
-                search_terms.replace('\\', '\\\\')
-                .replace('%', '\\%')
-                .replace('_', '\\_')
+                search_terms.replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_")
                 .replace("'", "''")
             )
             query += """ AND a.id %s IN (SELECT id
                                          FROM fact_index
                                          WHERE fact_index MATCH '%s')""" % (
-                'NOT' if reverse_search_terms else '',
+                "NOT" if reverse_search_terms else "",
                 search_terms,
             )
 
@@ -874,8 +874,8 @@ class Storage(storage.Storage):
                     LIMIT 50
         """
         search = search.lower()
-        search = search.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-        activities = self.fetchall(query, ('%s%%' % search,))
+        search = search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        activities = self.fetchall(query, ("%s%%" % search,))
 
         return activities
 
@@ -885,7 +885,7 @@ class Storage(storage.Storage):
             else, just remove it"""
 
         query = "select count(*) as count from facts where activity_id = ?"
-        bound_facts = self.fetchone(query, (id,))['count']
+        bound_facts = self.fetchone(query, (id,))["count"]
 
         if bound_facts > 0:
             self.execute("UPDATE activities SET deleted = 1 WHERE id = ?", (id,))
@@ -913,7 +913,7 @@ class Storage(storage.Storage):
         # first check that we don't have anything like that yet
         activity = self.__get_activity_by_name(name, category_id)
         if activity:
-            return activity['id']
+            return activity["id"]
 
         # now do the create bit
         category_id = category_id or -1
@@ -1093,14 +1093,14 @@ class Storage(storage.Storage):
             activities = self.fetchall("select * from activities")
             statement = "update activities set search_name = ? where id = ?"
             for activity in activities:
-                self.execute(statement, (activity['name'].lower(), activity['id']))
+                self.execute(statement, (activity["name"].lower(), activity["id"]))
 
             # same for categories
             self.execute("ALTER TABLE categories ADD COLUMN search_name varchar2")
             categories = self.fetchall("select * from categories")
             statement = "update categories set search_name = ? where id = ?"
             for category in categories:
-                self.execute(statement, (category['name'].lower(), category['id']))
+                self.execute(statement, (category["name"].lower(), category["id"]))
 
         if version < 9:
             # adding full text search
@@ -1137,7 +1137,7 @@ def convert_datetime(s):
     # convert s from bytes to utf-8, and keep only data up to seconds
     # 10 chars for YYYY-MM-DD, 1 space, 8 chars for HH:MM:SS
     # note: let's leave any further rounding to dt.datetime.
-    datetime_string = s.decode('utf-8')[0:19]
+    datetime_string = s.decode("utf-8")[0:19]
 
     return dt.datetime.strptime(datetime_string, DATETIME_LOCAL_FMT)
 

@@ -271,12 +271,12 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-activate-row': (
+        "on-activate-row": (
             gobject.SIGNAL_RUN_LAST,
             gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT),
         ),
-        'on-delete-called': (
+        "on-delete-called": (
             gobject.SIGNAL_RUN_LAST,
             gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT,),
@@ -444,7 +444,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         hover_day, hover_fact = None, None
 
         for rec in self.visible_range:
-            if rec['y'] <= event.y <= (rec['y'] + rec['h']):
+            if rec["y"] <= event.y <= (rec["y"] + rec["h"]):
                 hover_day = rec
                 break
 
@@ -457,7 +457,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.hover_day = hover_day
 
         if self.hover_day:
-            for fact in self.hover_day.get('facts', []):
+            for fact in self.hover_day.get("facts", []):
                 if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
                     hover_fact = fact
                     break
@@ -625,9 +625,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         for rec in self.visible_range:
             g.save_context()
-            g.translate(0, rec['y'])
+            g.translate(0, rec["y"])
 
-            if not rec['facts']:
+            if not rec["facts"]:
                 "do a collapsy thing"
                 g.rectangle(0, 0, self.width, 10)
                 g.clip()
@@ -648,10 +648,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 continue
 
             g.set_color(colors["normal"])
-            self.date_label.show(g, rec['day'].strftime("%A\n%b %d"))
+            self.date_label.show(g, rec["day"].strftime("%A\n%b %d"))
 
             g.translate(105, 0)
-            for fact in rec['facts']:
+            for fact in rec["facts"]:
                 is_selected = (
                     self.current_fact is not None and fact.id == self.current_fact.id
                 )

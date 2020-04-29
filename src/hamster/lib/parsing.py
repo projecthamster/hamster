@@ -78,7 +78,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
         # look for tag
         m = re.search(tag_re, remaining_text)
         if m:
-            tag = m.group('tag').strip()
+            tag = m.group("tag").strip()
             # strip the matched string (including #)
             remaining_text = remaining_text[: m.start()]
             tags.append(tag)
@@ -96,7 +96,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     remaining_text = head.strip()
 
     # activity
-    split = remaining_text.rsplit('@', maxsplit=1)
+    split = remaining_text.rsplit("@", maxsplit=1)
     activity = split[0]
     category = split[1] if len(split) > 1 else ""
     res["activity"] = activity

@@ -33,30 +33,30 @@ def to_dbus_date(date):
 def from_dbus_fact_json(dbus_fact):
     """Convert D-Bus JSON to Fact."""
     d = loads(dbus_fact)
-    range_d = d['range']
+    range_d = d["range"]
     # should use pdt.datetime.fromisoformat,
     # but that appears only in python3.7, nevermind
-    start_s = range_d['start']
-    end_s = range_d['end']
+    start_s = range_d["start"]
+    end_s = range_d["end"]
     range = dt.Range(
         start=dt.datetime.parse(start_s) if start_s else None,
         end=dt.datetime.parse(end_s) if end_s else None,
     )
-    d['range'] = range
+    d["range"] = range
     return Fact(**d)
 
 
 def to_dbus_fact_json(fact):
     """Convert Fact to D-Bus JSON (str)."""
     d = {}
-    keys = ('activity', 'category', 'description', 'tags', 'id', 'activity_id')
+    keys = ("activity", "category", "description", "tags", "id", "activity_id")
     for key in keys:
         d[key] = getattr(fact, key)
     # isoformat(timespec="minutes") appears only in python3.6, nevermind
     # and fromisoformat is not available anyway, so let's talk hamster
     start = str(fact.range.start) if fact.range.start else None
     end = str(fact.range.end) if fact.range.end else None
-    d['range'] = {'start': start, 'end': end}
+    d["range"] = {"start": start, "end": end}
     return dumps(d)
 
 
@@ -91,7 +91,7 @@ old dbus_fact signature (types matching the to_dbus_fact output)
     i  date
     i  delta
 """
-fact_signature = '(iiissisasii)'
+fact_signature = "(iiissisasii)"
 
 
 def from_dbus_fact(dbus_fact):
@@ -121,11 +121,11 @@ def to_dbus_fact(fact):
         fact.id or 0,
         timegm(fact.start_time.timetuple()),
         timegm(fact.end_time.timetuple()) if fact.end_time else 0,
-        fact.description or '',
-        fact.activity or '',
+        fact.description or "",
+        fact.activity or "",
         fact.activity_id or 0,
-        fact.category or '',
-        dbus.Array(fact.tags, signature='s'),
+        fact.category or "",
+        dbus.Array(fact.tags, signature="s"),
         to_dbus_date(fact.date),
         fact.delta.days * 24 * 60 * 60 + fact.delta.seconds,
     )

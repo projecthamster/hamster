@@ -62,9 +62,9 @@ class date(pdt.date):
         """Return date from string."""
         m = cls.re.search(s)
         return cls(
-            year=int(m.group('year')),
-            month=int(m.group('month')),
-            day=int(m.group('day')),
+            year=int(m.group("year")),
+            month=int(m.group("month")),
+            day=int(m.group("day")),
         )
 
     @classmethod
@@ -466,7 +466,7 @@ class Range:
     """Time span between two datetimes."""
 
     # slight memory optimization; no further attributes besides start or end.
-    __slots__ = ('start', 'end')
+    __slots__ = ("start", "end")
 
     def __init__(self, start=None, end=None):
         self.start = start
@@ -580,9 +580,9 @@ class Range:
         else:
             rest = m.group("rest") or ""
 
-        if m.group('firstday'):
+        if m.group("firstday"):
             # only day given for start
-            firstday = hday.parse(m.group('firstday'))
+            firstday = hday.parse(m.group("firstday"))
             start = firstday.start
         else:
             firstday = None
@@ -599,13 +599,13 @@ class Range:
                 assert ref, "relative start needs ref"
                 start = ref + start
 
-        if m.group('lastday'):
-            lastday = hday.parse(m.group('lastday'))
+        if m.group("lastday"):
+            lastday = hday.parse(m.group("lastday"))
             end = lastday.end
         elif firstday:
             end = firstday.end
-        elif m.group('duration'):
-            duration = int(m.group('duration'))
+        elif m.group("duration"):
+            duration = int(m.group("duration"))
             end = start + timedelta(minutes=duration)
         else:
             end_default_day = start.hday() if start else default_day

@@ -126,17 +126,17 @@ class Tweener(object):
 
 class Tween(object):
     __slots__ = (
-        'tweenables',
-        'target',
-        'delta',
-        'duration',
-        'delay',
-        'ease',
-        'delta',
-        'complete',
-        'round',
-        'on_complete',
-        'on_update',
+        "tweenables",
+        "target",
+        "delta",
+        "duration",
+        "delay",
+        "ease",
+        "delta",
+        "complete",
+        "round",
+        "on_complete",
+        "on_update",
     )
 
     def __init__(
@@ -212,7 +212,7 @@ class Tween(object):
 class Tweenable(object):
     """a single attribute that has to be tweened from start to target"""
 
-    __slots__ = ('start_value', 'change', 'decode_func', 'target_value', 'update')
+    __slots__ = ("start_value", "change", "decode_func", "target_value", "update")
 
     hex_color_normal = re.compile("#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})")
     hex_color_short = re.compile("#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])")

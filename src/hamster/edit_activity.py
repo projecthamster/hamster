@@ -47,15 +47,15 @@ class CustomFactController(Controller):
         self._date = None  # for the date property
 
         self._gui = load_ui_file("edit_activity.ui")
-        self.window = self.get_widget('custom_fact_window')
+        self.window = self.get_widget("custom_fact_window")
         self.window.set_size_request(600, 200)
 
         self.action = action
         self.fact_id = fact_id
 
-        self.category_entry = widgets.CategoryEntry(widget=self.get_widget('category'))
+        self.category_entry = widgets.CategoryEntry(widget=self.get_widget("category"))
         self.activity_entry = widgets.ActivityEntry(
-            widget=self.get_widget('activity'), category_widget=self.category_entry
+            widget=self.get_widget("activity"), category_widget=self.category_entry
         )
 
         self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
@@ -65,7 +65,7 @@ class CustomFactController(Controller):
         self.dayline = widgets.DayLine()
         self._gui.get_object("day_preview").add(self.dayline)
 
-        self.description_box = self.get_widget('description')
+        self.description_box = self.get_widget("description")
         self.description_buffer = self.description_box.get_buffer()
 
         self.end_date = widgets.Calendar(

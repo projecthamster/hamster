@@ -132,7 +132,7 @@ class ICalWriter(ReportWriter):
 class TSVWriter(ReportWriter):
     def __init__(self, path):
         ReportWriter.__init__(self, path)
-        self.csv_writer = csv.writer(self.file, dialect='excel-tab')
+        self.csv_writer = csv.writer(self.file, dialect="excel-tab")
 
         headers = [  # column title in the TSV export format
             _("activity"),
@@ -235,19 +235,19 @@ class HTMLWriter(ReportWriter):
             template = os.path.join(runtime.data_dir, "report_template.html")
 
         self.main_template = ""
-        with open(template, 'r') as f:
+        with open(template, "r") as f:
             self.main_template = f.read()
 
-        self.fact_row_template = self._extract_template('all_activities')
+        self.fact_row_template = self._extract_template("all_activities")
 
-        self.by_date_row_template = self._extract_template('by_date_activity')
+        self.by_date_row_template = self._extract_template("by_date_activity")
 
-        self.by_date_template = self._extract_template('by_date')
+        self.by_date_template = self._extract_template("by_date")
 
         self.fact_rows = []
 
     def _extract_template(self, name):
-        pattern = re.compile('<%s>(.*)</%s>' % (name, name), re.DOTALL)
+        pattern = re.compile("<%s>(.*)</%s>" % (name, name), re.DOTALL)
 
         match = pattern.search(self.main_template)
 
@@ -263,7 +263,7 @@ class HTMLWriter(ReportWriter):
         # no having end time is fine
         end_time_str, end_time_iso_str = "", ""
         if fact.end_time:
-            end_time_str = fact.end_time.strftime('%H:%M')
+            end_time_str = fact.end_time.strftime("%H:%M")
             end_time_iso_str = fact.end_time.isoformat()
 
         category = ""
@@ -281,7 +281,7 @@ class HTMLWriter(ReportWriter):
             activity=fact.activity,
             category=category,
             tags=", ".join(fact.tags),
-            start=fact.start_time.strftime('%H:%M'),
+            start=fact.start_time.strftime("%H:%M"),
             start_iso=fact.start_time.isoformat(),
             end=end_time_str,
             end_iso=end_time_iso_str,
@@ -334,7 +334,7 @@ class HTMLWriter(ReportWriter):
             template_instructions=_(
                 "You can override it by storing your version in %(home_folder)s"
             )
-            % {'home_folder': runtime.home_data_dir},
+            % {"home_folder": runtime.home_data_dir},
             start_date=timegm(self.start_date.timetuple()),
             end_date=timegm(self.end_date.timetuple()),
             facts=json_dumps([fact.as_dict() for fact in facts]),

@@ -239,7 +239,7 @@ def chain(*steps):
     obj, params = steps[:2]
 
     if len(steps) > 2:
-        params['on_complete'] = on_done
+        params["on_complete"] = on_done
     if callable(obj):
         obj(**params)
     else:
@@ -280,14 +280,14 @@ class Graphics(object):
     """
 
     __slots__ = (
-        'context',
-        'extents',
-        'paths',
-        '_last_matrix',
-        '__new_instructions',
-        '__instruction_cache',
-        'cache_surface',
-        '_cache_layout',
+        "context",
+        "extents",
+        "paths",
+        "_last_matrix",
+        "__new_instructions",
+        "__instruction_cache",
+        "cache_surface",
+        "_cache_layout",
     )
     colors = Colors  # pointer to the color utilities instance
 
@@ -852,9 +852,9 @@ class Parent(object):
         """will print out the lines in console if debug is enabled for the
            specific sprite"""
         if getattr(self, "debug", False):
-            print(dt.datetime.now().time(), end=' ')
+            print(dt.datetime.now().time(), end=" ")
             for line in lines:
-                print(line, end=' ')
+                print(line, end=" ")
             print()
 
     def _add(self, sprite, index=None):
@@ -875,7 +875,7 @@ class Parent(object):
 
     def _sort(self):
         """sort sprites by z_order"""
-        self.__dict__['_z_ordered_sprites'] = sorted(
+        self.__dict__["_z_ordered_sprites"] = sorted(
             self.sprites, key=lambda sprite: sprite.z_order
         )
 
@@ -1044,15 +1044,15 @@ class Sprite(Parent, gobject.GObject):
     }
 
     transformation_attrs = set(
-        ('x', 'y', 'rotation', 'scale_x', 'scale_y', 'pivot_x', 'pivot_y')
+        ("x", "y", "rotation", "scale_x", "scale_y", "pivot_x", "pivot_y")
     )
 
-    visibility_attrs = set(('opacity', 'visible', 'z_order'))
+    visibility_attrs = set(("opacity", "visible", "z_order"))
 
-    cache_attrs = set(('_stroke_context', '_matrix', '_prev_parent_matrix', '_scene'))
+    cache_attrs = set(("_stroke_context", "_matrix", "_prev_parent_matrix", "_scene"))
 
     graphics_unrelated_attrs = set(
-        ('drag_x', 'drag_y', 'sprites', 'mouse_cursor', '_sprite_dirty', 'id')
+        ("drag_x", "drag_y", "sprites", "mouse_cursor", "_sprite_dirty", "id")
     )
 
     #: mouse-over cursor of the sprite. Can be either a gdk cursor
@@ -1088,7 +1088,7 @@ class Sprite(Parent, gobject.GObject):
         gobject.GObject.__init__(self)
 
         # a place where to store child handlers
-        self.__dict__['_child_handlers'] = defaultdict(list)
+        self.__dict__["_child_handlers"] = defaultdict(list)
 
         self._scene = None
 
@@ -1191,7 +1191,7 @@ class Sprite(Parent, gobject.GObject):
         self.__dict__[name] = val
 
         # prev parent matrix walks downwards
-        if name == '_prev_parent_matrix' and self.visible:
+        if name == "_prev_parent_matrix" and self.visible:
             # downwards recursive invalidation of parent matrix
             for sprite in self.sprites:
                 sprite._prev_parent_matrix = None
@@ -1201,7 +1201,7 @@ class Sprite(Parent, gobject.GObject):
 
         """all the other changes influence cache vars"""
 
-        if name == 'visible' and self.visible == False:
+        if name == "visible" and self.visible == False:
             # when transforms happen while sprite is invisible
             for sprite in self.sprites:
                 sprite._prev_parent_matrix = None
@@ -1219,19 +1219,19 @@ class Sprite(Parent, gobject.GObject):
             self.__dict__["_sprite_dirty"] = True
 
         # on parent change invalidate the matrix
-        if name == 'parent':
+        if name == "parent":
             self._prev_parent_matrix = None
             return
 
         if (
-            name == 'opacity'
+            name == "opacity"
             and getattr(self, "cache_as_bitmap", None)
             and hasattr(self, "graphics")
         ):
             # invalidating cache for the bitmap version as that paints opacity in the image
             self.graphics._last_matrix = None
 
-        if name == 'z_order' and getattr(self, "parent", None):
+        if name == "z_order" and getattr(self, "parent", None):
             self.parent._sort()
 
         self.redraw()
@@ -1367,7 +1367,7 @@ class Sprite(Parent, gobject.GObject):
         if not ext.width and not ext.height:
             ext = None
 
-        self.__dict__['_stroke_context'] = context
+        self.__dict__["_stroke_context"] = context
 
         return ext
 
@@ -1630,11 +1630,11 @@ class BitmapSprite(Sprite):
             return
 
         Sprite.__setattr__(self, name, val)
-        if name == 'image_data':
+        if name == "image_data":
             self._surface = None
             if self.image_data:
-                self.__dict__['width'] = self.image_data.get_width()
-                self.__dict__['height'] = self.image_data.get_height()
+                self.__dict__["width"] = self.image_data.get_width()
+                self.__dict__["height"] = self.image_data.get_height()
 
     def _draw(self, context, opacity=1, parent_matrix=None):
         if self.image_data is None or self.width is None or self.height is None:
@@ -1659,7 +1659,7 @@ class BitmapSprite(Sprite):
             self.graphics.clip()
             self.graphics.set_source_surface(surface)
             self.graphics.paint()
-            self.__dict__['_surface'] = surface
+            self.__dict__["_surface"] = surface
 
         Sprite._draw(self, context, opacity, parent_matrix)
 
@@ -1675,7 +1675,7 @@ class Image(BitmapSprite):
 
     def __setattr__(self, name, val):
         BitmapSprite.__setattr__(self, name, val)
-        if name == 'path':  # load when the value is set to avoid penalty on render
+        if name == "path":  # load when the value is set to avoid penalty on render
             self.image_data = cairo.ImageSurface.create_from_png(self.path)
 
 
@@ -1695,10 +1695,10 @@ class Icon(BitmapSprite):
     def __setattr__(self, name, val):
         BitmapSprite.__setattr__(self, name, val)
         if name in (
-            'name',
-            'size',
+            "name",
+            "size",
         ):  # no other reason to discard cache than just on path change
-            if self.__dict__.get('name') and self.__dict__.get('size'):
+            if self.__dict__.get("name") and self.__dict__.get("size"):
                 self.image_data = self.theme.load_icon(self.name, self.size, 0)
             else:
                 self.image_data = None
@@ -1794,8 +1794,8 @@ class Label(Sprite):
             if (
                 name == "width"
                 and val
-                and self.__dict__.get('_bounds_width')
-                and val * pango.SCALE == self.__dict__['_bounds_width']
+                and self.__dict__.get("_bounds_width")
+                and val * pango.SCALE == self.__dict__["_bounds_width"]
             ):
                 return
 
@@ -1804,9 +1804,9 @@ class Label(Sprite):
             if name == "width":
                 # setting width means consumer wants to contrain the label
                 if val is None or val == -1:
-                    self.__dict__['_bounds_width'] = None
+                    self.__dict__["_bounds_width"] = None
                 else:
-                    self.__dict__['_bounds_width'] = val * pango.SCALE
+                    self.__dict__["_bounds_width"] = val * pango.SCALE
 
             if name in (
                 "width",
@@ -1826,18 +1826,18 @@ class Label(Sprite):
                     if self.size:
                         self.font_desc.set_absolute_size(self.size * pango.SCALE)
                     markup = getattr(self, "markup", "")
-                    self.__dict__['width'], self.__dict__['height'] = self.measure(
+                    self.__dict__["width"], self.__dict__["height"] = self.measure(
                         markup or getattr(self, "text", ""), escape=len(markup) == 0
                     )
 
-            if name == 'text':
+            if name == "text":
                 if val:
-                    self.__dict__['markup'] = ""
-                self.emit('on-change')
-            elif name == 'markup':
+                    self.__dict__["markup"] = ""
+                self.emit("on-change")
+            elif name == "markup":
                 if val:
-                    self.__dict__['text'] = ""
-                self.emit('on-change')
+                    self.__dict__["text"] = ""
+                self.emit("on-change")
 
     def measure(self, text, escape=True, max_width=None):
         """measures given text with label's font and size.
@@ -2150,7 +2150,7 @@ class Scene(Parent, gtk.DrawingArea):
         self._z_ordered_sprites = []
 
         # a place where to store child handlers
-        self.__dict__['_child_handlers'] = defaultdict(list)
+        self.__dict__["_child_handlers"] = defaultdict(list)
 
         #: framerate of animation. This will limit how often call for
         #: redraw will be performed (that is - not more often than the framerate). It will
@@ -2256,11 +2256,11 @@ class Scene(Parent, gtk.DrawingArea):
         if self.__dict__.get(name, "hamster_graphics_no_value_really") is val:
             return
 
-        if name == '_focus_sprite':
-            prev_focus = getattr(self, '_focus_sprite', None)
+        if name == "_focus_sprite":
+            prev_focus = getattr(self, "_focus_sprite", None)
             if prev_focus:
                 prev_focus.focused = False
-                self.__dict__['_focus_sprite'] = val  # drop cache to avoid echoes
+                self.__dict__["_focus_sprite"] = val  # drop cache to avoid echoes
                 prev_focus._do_blur()
 
             if val:

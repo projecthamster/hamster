@@ -83,21 +83,21 @@ class Fact(object):
     def as_dict(self):
         date = self.date
         return {
-            'id': int(self.id) if self.id else "",
-            'activity': self.activity,
-            'category': self.category,
-            'description': self.description,
-            'tags': [tag.strip() for tag in self.tags],
-            'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.range.start
+            "id": int(self.id) if self.id else "",
+            "activity": self.activity,
+            "category": self.category,
+            "description": self.description,
+            "tags": [tag.strip() for tag in self.tags],
+            "date": calendar.timegm(date.timetuple()) if date else "",
+            "start_time": self.range.start
             if isinstance(self.range.start, str)
             else calendar.timegm(self.range.start.timetuple()),
-            'end_time': self.range.end
+            "end_time": self.range.end
             if isinstance(self.range.end, str)
             else calendar.timegm(self.range.end.timetuple())
             if self.range.end
             else "",
-            'delta': self.delta.total_seconds(),  # ugly, but needed for report.py
+            "delta": self.delta.total_seconds(),  # ugly, but needed for report.py
         }
 
     @property
@@ -205,10 +205,10 @@ class Fact(object):
             res += "@%s" % self.category
 
         if self.description:
-            res += ',, '
+            res += ",, "
             res += self.description
 
-        if '#' in self.activity or '#' in self.category or '#' in self.description:
+        if "#" in self.activity or "#" in self.category or "#" in self.description:
             # need a tag barrier
             res += ",, "
 

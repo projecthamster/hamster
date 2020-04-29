@@ -82,8 +82,8 @@ def add_hint(entry, hint):
     entry.real_get_text = entry.get_text
     entry.get_text = instancemethod(override_get_text, entry, gtk.Entry)
 
-    entry.connect('focus-in-event', entry._set_normal)
-    entry.connect('focus-out-event', entry._set_hint)
-    entry.connect('changed', entry._on_changed)
+    entry.connect("focus-in-event", entry._set_normal)
+    entry.connect("focus-out-event", entry._set_hint)
+    entry.connect("changed", entry._on_changed)
 
     entry._set_hint(entry, None)

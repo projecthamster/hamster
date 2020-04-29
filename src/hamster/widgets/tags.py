@@ -30,7 +30,7 @@ from hamster.lib.configuration import runtime
 
 class TagsEntry(gtk.Entry):
     __gsignals__ = {
-        'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        "tags-selected": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
     def __init__(self):
@@ -67,7 +67,7 @@ class TagsEntry(gtk.Entry):
         self.external_listeners = [
             (
                 runtime.storage,
-                runtime.storage.connect('tags-changed', self.refresh_ac_tags),
+                runtime.storage.connect("tags-changed", self.refresh_ac_tags),
             )
         ]
         self.show()
@@ -270,8 +270,8 @@ class TagsEntry(gtk.Entry):
 
 class TagBox(graphics.Scene):
     __gsignals__ = {
-        'tag-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
-        'tag-unselected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
+        "tag-selected": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
+        "tag-unselected": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (str,)),
     }
 
     def __init__(self, interactive=True):
@@ -372,9 +372,9 @@ class Tag(graphics.Sprite):
 
     def __setattr__(self, name, value):
         graphics.Sprite.__setattr__(self, name, value)
-        if name == 'text' and hasattr(self, 'label'):
+        if name == "text" and hasattr(self, "label"):
             self.label.text = value
-            self.__dict__['width'], self.__dict__['height'] = (
+            self.__dict__["width"], self.__dict__["height"] = (
                 int(self.label.x + self.label.width + self.label.height * 0.3),
                 self.label.height + 3,
             )

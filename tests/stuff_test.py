@@ -514,5 +514,5 @@ class TestDBus(unittest.TestCase):
         self.assertEqual(return_range, range)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
