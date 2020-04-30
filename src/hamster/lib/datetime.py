@@ -139,12 +139,12 @@ class time(pdt.time):
     def __new__(cls,
                 hour=0, minute=0,
                 second=0, microsecond=0,
-                tzinfo=None, fold=0):
+                tzinfo=None, **kwargs):
             # round down to zero seconds and microseconds
             return pdt.time.__new__(cls,
                                     hour=hour, minute=minute,
                                     second=0, microsecond=0,
-                                    tzinfo=None, fold=fold)
+                                    tzinfo=None, **kwargs)
 
     @classmethod
     def _extract_time(cls, match, h="hour", m="minute"):
@@ -220,12 +220,12 @@ class datetime(pdt.datetime):
     def __new__(cls, year, month, day,
                 hour=0, minute=0,
                 second=0, microsecond=0,
-                tzinfo=None, *, fold=0):
+                tzinfo=None, **kwargs):
             # round down to zero seconds and microseconds
             return pdt.datetime.__new__(cls, year, month, day,
                                         hour=hour, minute=minute,
                                         second=0, microsecond=0,
-                                        tzinfo=None, fold=fold)
+                                        tzinfo=None, **kwargs)
 
     def __add__(self, other):
         # python datetime.__add__ was not type stable prior to 3.8
@@ -234,11 +234,13 @@ class datetime(pdt.datetime):
     # similar to https://stackoverflow.com/q/51966126/3565696
     # __getnewargs_ex__ did not work, brute force required
     def __deepcopy__(self, memo):
+        kwargs = {}
+        if (hasattr(self, 'fold')):
+            kwargs['fold'] = self.fold
         return datetime(self.year, self.month, self.day,
                         self.hour, self.minute,
                         self.second, self.microsecond,
-                        self.tzinfo, fold=self.fold)
-
+                        self.tzinfo, **kwargs)
     __radd__ = __add__
 
     def __sub__(self, other):
@@ -327,10 +329,13 @@ class datetime(pdt.datetime):
     @classmethod
     def from_pdt(cls, t):
         """Convert python datetime to hamster datetime."""
+        kwargs = {}
+        if (hasattr(t, 'fold')):
+            kwargs['fold'] = t.fold
         return cls(t.year, t.month, t.day,
                    t.hour, t.minute,
                    t.second, t.microsecond,
-                   t.tzinfo, fold=t.fold)
+                   t.tzinfo, **kwargs)
 
     @classmethod
     def now(cls):
@@ -392,10 +397,13 @@ class datetime(pdt.datetime):
 
     def to_pdt(self):
         """Convert to python datetime."""
+        kwargs = {}
+        if (hasattr(self, 'fold')):
+            kwargs['fold'] = self.fold
         return pdt.datetime(self.year, self.month, self.day,
                             self.hour, self.minute,
                             self.second, self.microsecond,
-                            self.tzinfo, fold=self.fold)
+                            self.tzinfo, **kwargs)
 
 
 # outside class; need the class to be defined first
