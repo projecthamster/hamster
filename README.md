@@ -53,7 +53,8 @@ https://snapcraft.io/hamster-snap
 ### Install from sources
 
 #### Dependencies
-
+Hamster needs python 3.5 or newer (not included in below install
+commands). Older versions are not supported.
 
 ##### Debian-based
 
