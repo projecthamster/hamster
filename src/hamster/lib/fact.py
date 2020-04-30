@@ -232,7 +232,7 @@ class Fact(object):
         """
         for attr, value in kwds.items():
             if not hasattr(self, attr):
-                raise AttributeError(f"'{attr}' not found")
+                raise AttributeError("'{attr}' not found".format(attr=attr))
             else:
                 setattr(self, attr, value)
 
