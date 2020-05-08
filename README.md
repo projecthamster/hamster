@@ -46,6 +46,14 @@ pkill -ef hamster
 ##### OpenSUSE
 https://software.opensuse.org/package/hamster-time-tracker
 
+##### Fedora and EPEL
+
+Package status: https://apps.fedoraproject.org/packages/hamster-time-tracker
+
+Installation:
+```sudo dnf install hamster-time-tracker```
+(or graphical package installer).
+
 ##### Snap
 Easy installation on any distribution supporting snap:  
 https://snapcraft.io/hamster-snap
