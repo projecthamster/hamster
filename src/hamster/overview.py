@@ -33,7 +33,6 @@ from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
 import cairo
 
-import hamster.client
 from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import layout
@@ -410,8 +409,16 @@ class Totals(graphics.Scene):
 
 
 class Overview(Controller):
-    def __init__(self):
-        Controller.__init__(self)
+    """Controller for an overview window.
+
+    Args:
+        storage (storage.Storage):
+            A concrete storage instance,
+            usually a dbus.client.Storage,
+            sometimes a storage.db.Storage directly.
+    """
+    def __init__(self, storage, **kwds):
+        Controller.__init__(self, **kwds)
 
         self.prefs_dialog = None  # preferences dialog controller
 
@@ -419,7 +426,7 @@ class Overview(Controller):
         self.window.set_default_icon_name("org.gnome.Hamster.GUI")
         self.window.set_default_size(700, 500)
 
-        self.storage = hamster.client.Storage()
+        self.storage = storage
         self.storage.connect("facts-changed", self.on_facts_changed)
         self.storage.connect("activities-changed", self.on_facts_changed)
 
@@ -550,7 +557,7 @@ class Overview(Controller):
         if position == gtk.EntryIconPosition.SECONDARY:
             self.filter_entry.set_text("")
 
-    def on_facts_changed(self, event):
+    def on_facts_changed(self, storage):
         self.find_facts()
 
     def on_add_activity_clicked(self, button):

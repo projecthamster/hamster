@@ -24,7 +24,7 @@ from gi.repository import GObject as gobject
 from hamster import widgets
 from hamster.lib import datetime as dt
 from hamster.lib import stuff
-from hamster.lib.configuration import Controller, runtime, conf
+from hamster.lib.configuration import Controller, conf
 
 
 def get_prev(selection, model):
@@ -39,12 +39,13 @@ def get_prev(selection, model):
 
 
 class CategoryStore(gtk.ListStore):
-    def __init__(self):
+    def __init__(self, storage):
+        self.storage = storage
         #id, name, color_code, order
         gtk.ListStore.__init__(self, int, str)
 
     def load(self):
-        category_list = runtime.storage.get_categories()
+        category_list = self.storage.get_categories()
 
         for category in category_list:
             self.append([category['id'], category['name']])
@@ -53,7 +54,8 @@ class CategoryStore(gtk.ListStore):
 
 
 class ActivityStore(gtk.ListStore):
-    def __init__(self):
+    def __init__(self, storage):
+        self.storage = storage
         #id, name, category_id, order
         gtk.ListStore.__init__(self, int, str, int)
 
@@ -63,7 +65,7 @@ class ActivityStore(gtk.ListStore):
         if category_id is None:
             return
 
-        activity_list = runtime.storage.get_category_activities(category_id)
+        activity_list = self.storage.get_category_activities(category_id)
 
         for activity in activity_list:
             self.append([activity['id'],
@@ -72,18 +74,31 @@ class ActivityStore(gtk.ListStore):
 
 
 class PreferencesEditor(Controller):
+    """Preferences editor controller.
+
+    Args:
+        storage (storage.Storage):
+            A concrete storage instance,
+            usually a dbus.client.Storage,
+            sometimes a storage.db.Storage directly.
+            Used to manage activities, categories and tags.
+            Other preferences are managed through GSettings.
+    """
+
     TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
         ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
         ]
 
-    def __init__(self):
+    def __init__(self, storage):
         Controller.__init__(self, ui_file="preferences.ui")
+
+        self.storage = storage
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
         self.get_widget("activities_label").set_mnemonic_widget(self.activity_tree)
-        self.activity_store = ActivityStore()
+        self.activity_store = ActivityStore(self.storage)
 
         self.external_listeners = []
 
@@ -109,7 +124,7 @@ class PreferencesEditor(Controller):
         # create and fill category tree
         self.category_tree = self.get_widget('category_list')
         self.get_widget("categories_label").set_mnemonic_widget(self.category_tree)
-        self.category_store = CategoryStore()
+        self.category_store = CategoryStore(self.storage)
 
         self.categoryColumn = gtk.TreeViewColumn(_("Category"))
         self.categoryColumn.set_expand(True)
@@ -171,7 +186,7 @@ class PreferencesEditor(Controller):
     def load_config(self, *args):
         self.day_start.time = conf.day_start
 
-        self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
+        self.tags = [tag["name"] for tag in self.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
@@ -182,7 +197,7 @@ class PreferencesEditor(Controller):
 
         self.tags = updated_tags
 
-        runtime.storage.update_autocomplete_tags(updated_tags)
+        self.storage.update_autocomplete_tags(updated_tags)
 
     def drag_data_get_data(self, treeview, context, selection, target_id,
                            etime):
@@ -234,7 +249,7 @@ class PreferencesEditor(Controller):
         if drop_info:
             path, position = drop_info
             iter = model.get_iter(path)
-            changed = runtime.storage.change_category(int(data), model[iter][0])
+            changed = self.storage.change_category(int(data), model[iter][0])
 
             context.finish(changed, True, etime)
         else:
@@ -249,7 +264,7 @@ class PreferencesEditor(Controller):
             return False #ignoring unsorted category
 
         #look for dupes
-        categories = runtime.storage.get_categories()
+        categories = self.storage.get_categories()
         for category in categories:
             if category['name'].lower() == new_text.lower():
                 if id == -2: # that was a new category
@@ -258,10 +273,10 @@ class PreferencesEditor(Controller):
                 return False
 
         if id == -2: #new category
-            id = runtime.storage.add_category(new_text)
+            id = self.storage.add_category(new_text)
             model[path][0] = id
         else:
-            runtime.storage.update_category(id, new_text)
+            self.storage.update_category(id, new_text)
 
         model[path][1] = new_text
 
@@ -269,7 +284,7 @@ class PreferencesEditor(Controller):
         id = model[path][0]
         category_id = model[path][2]
 
-        activities = runtime.storage.get_category_activities(category_id)
+        activities = self.storage.get_category_activities(category_id)
         prev = None
         for activity in activities:
             if id == activity['id']:
@@ -283,10 +298,10 @@ class PreferencesEditor(Controller):
                     return False
 
         if id == -1: #new activity -> add
-            model[path][0] = runtime.storage.add_activity(new_text, category_id)
+            model[path][0] = self.storage.add_activity(new_text, category_id)
         else: #existing activity -> update
             new = new_text
-            runtime.storage.update_activity(id, new, category_id)
+            self.storage.update_activity(id, new, category_id)
 
         model[path][1] = new_text
         return True
@@ -411,7 +426,7 @@ class PreferencesEditor(Controller):
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
-        runtime.storage.remove_activity(model[iter][0])
+        self.storage.remove_activity(model[iter][0])
         self._del_selected_row(self.activity_tree)
 
     def on_category_remove_clicked(self, button):
@@ -446,7 +461,7 @@ class PreferencesEditor(Controller):
         (model, iter) = selection.get_selected()
         id = model[iter][0]
         if id != -1:
-            runtime.storage.remove_category(id)
+            self.storage.remove_category(id)
             self._del_selected_row(self.category_tree)
 
     def on_preferences_window_key_press(self, widget, event):
@@ -498,7 +513,7 @@ class PreferencesEditor(Controller):
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
-        runtime.storage.remove_activity(removable_id)
+        self.storage.remove_activity(removable_id)
 
     def on_day_start_changed(self, widget):
         day_start = self.day_start.time
