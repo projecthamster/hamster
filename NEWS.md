@@ -1,3 +1,10 @@
+## Changes in 3.0.2
+
+* Switch from deprecated xml2po to itstool for translating help files
+  (issue 583).
+* Fix off-by-one-day error in CSV exports (issue 576).
+* Support Python3.5 again, this was >= 3.6 (issue 582).
+
 ## Changes in 3.0.1
 
 * Fixed a rare crash in hamster-window-server (issue 571).
