@@ -1,0 +1,49 @@
+[flake8]
+exclude=wscript,waf,waflib
+builtins=_
+
+# This just ignores everything that currently fails. Over time, most of these
+# should probably be fixed in the code and removed here.
+extend-ignore =
+    E117, # over-indented
+    E122, # continuation line missing indentation or outdented
+    E124, # closing bracket does not match visual indentation
+    E125, # continuation line with same indent as next logical line
+    E127, # continuation line over-indented for visual indent
+    E128, # continuation line under-indented for visual indent
+    E129, # visually indented line with same indent as next logical line
+    E131, # continuation line unaligned for hanging indent
+    E202, # whitespace before ')'
+    E203, # whitespace before ':'
+    E211, # whitespace before '('
+    E221, # multiple spaces before operator
+    E222, # multiple spaces after operator
+    E225, # missing whitespace around operator
+    E227, # missing whitespace around bitwise or shift operator
+    E231, # missing whitespace after ':'
+    E251, # unexpected spaces around keyword / parameter equals
+    E261, # at least two spaces before inline comment
+    E262, # inline comment should start with '# '
+    E265, # block comment should start with '# '
+    E271, # multiple spaces after keyword
+    E272, # multiple spaces before keyword
+    E301, # expected 1 blank line, found 0
+    E302, # expected 2 blank lines, found 1
+    E303, # too many blank lines (2)
+    E305, # expected 2 blank lines after class or function definition, found 1
+    E306, # expected 1 blank line before a nested definition, found 0
+    E401, # multiple imports on one line
+    E402, # module level import not at top of file
+    E501, # line too long
+    E502, # the backslash is redundant between brackets
+    E701, # multiple statements on one line (colon)
+    E703, # statement ends with a semicolon
+    E711, # comparison to None should be 'if cond is not None:'
+    E712, # comparison to False should be 'if cond is False:' or 'if not cond:'
+    E722, # do not use bare 'except'
+    E731, # do not assign a lambda expression, use a def
+    F401, # 'xxx' imported but unused
+    F811, # redefinition of unused 'xxx' from line 32
+    F841, # local variable 'xxx' is assigned to but never used
+    W605, # invalid escape sequence
+

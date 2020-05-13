@@ -69,7 +69,7 @@ commands). Older versions are not supported.
 ###### Ubuntu (tested in 19.04 and 18.04)
 
 ```bash
-sudo apt install gettext intltool python3-gi-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev
+sudo apt install gettext intltool python3-gi python3-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache
 # and for documentation
 sudo apt install itstool yelp
 ```
@@ -159,6 +159,24 @@ D-Bus, so that all the traces are visible.
 
 Note: You'll need recent version of hamster installed on your system (or 
 [this workaround](https://github.com/projecthamster/hamster/issues/552#issuecomment-585166000)).
+
+#### Running tests
+
+Hamster has a limited test suite, that can be run using Python's builtin
+unittest module. From the top-level directory, just run:
+
+    python3 -m unittest
+
+This will let unittest automatically find all testcases in all files
+called `test_*.py`, and runs them.
+
+To run a subset of tests, specify the import path towards it. For
+example, to run just a single test file, class or method respectively
+run:
+
+    python3 -m unittest tests.test_stuff
+    python3 -m unittest tests.test_stuff.TestFactParsing
+    python3 -m unittest tests.test_stuff.TestFactParsing.test_plain_name
 
 #### Migrating from hamster-applet
 

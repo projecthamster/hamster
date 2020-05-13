@@ -1,0 +1,79 @@
+name: Testing
+on: [push, pull_request]
+
+jobs:
+  test:
+    # This runs the test suite. Since we need some system dependencies
+    # (e.g. pygobject) that cannot easily be installed inside a
+    # virtualenv using pip (that requires installing a dozen -dev
+    # packages and building parts of pygobject from source, which makes
+    # things way too complicated), this just runs with the Ubuntu system
+    # python (e.g. not using the standard setup-python action, which
+    # sets up a virtualenv).
+    name: Run test suite
+    strategy:
+      # Complete all combinations, even if one fails
+      fail-fast: false
+      matrix:
+        include:
+          # Test 3.5, which is our minimum version, on 16.04 since the
+          # latest Ubuntu does not have it.
+          - os: ubuntu-16.04
+            python-version: 3.5
+          # On the latest ubuntu, just test the default 3.x version.
+          - os: ubuntu-latest
+            python-version: 3
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Prepare repo
+        uses: actions/checkout@v2
+      - name: Install system packages
+        run: |
+          PACKAGES=""
+          # Install a specific python version as configured
+          PACKAGES="$PACKAGES python${{matrix.python-version}}"
+          # Normal dependencies
+          PACKAGES="$PACKAGES gettext intltool python3-gi python3-cairo python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0"
+          # The gtk-update-icon-cache used to live in libgtk2.0-bin,
+          # but was moved to its own package. Similar for distutils
+          # (included by default in python stdlib).
+          if [ "${{ matrix.os }}" == "ubuntu-16.04" ]; then
+            PACKAGES="$PACKAGES libgtk2.0-bin"
+          else
+            PACKAGES="$PACKAGES gtk-update-icon-cache"
+            PACKAGES="$PACKAGES python3-distutils"
+          fi
+          # For dbus-launch
+          PACKAGES="$PACKAGES dbus-x11"
+
+          sudo apt-get update
+          sudo apt-get install ${PACKAGES}
+      - name: Install hamster
+        # This serves two purposes:
+        #  1) Verify build and install still works and
+        #  2) install the needed stuff (e.g. gsettings schemas) to allow
+        #     running the tests
+        run: |
+          ./waf configure build
+          sudo ./waf install
+
+      - name: Run tests
+        run: |
+          dbus-launch python${{ matrix.python-version }} -m unittest
+
+  flake8:
+    name: Run code linting and checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare repo
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.5'
+      - name: Install flake8
+        run: |
+          pip install flake8
+      - name: Run flake8
+        run: |
+          flake8 --count --show-source --statistics
