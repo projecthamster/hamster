@@ -1,9 +1,16 @@
-Changes in 3.0.1
+## Changes in 3.0.2
 
-* Fixed a rare crash in hamster-window-server (Issue 571).
+* Switch from deprecated xml2po to itstool for translating help files
+  (issue 583).
+* Fix off-by-one-day error in CSV exports (issue 576).
+* Support Python3.5 again, this was >= 3.6 (issue 582).
+
+## Changes in 3.0.1
+
+* Fixed a rare crash in hamster-window-server (issue 571).
 
 
-Changes in 3.0
+## Changes in 3.0
 
 * Fixed dialogs placement (PR 549):
   - dialogs appear above their parent (the overview, if opened).
@@ -27,13 +34,13 @@ Changes in 3.0
 * Fixed update activity window to be resizable (PR 403)
 * Fixed database file monitoring (PR 401).
 * Fixed dark theme colors (PR 391).
-* Fixed hamster-service failure when there is no hamster.db (issue  394).
+* Fixed hamster-service failure when there is no hamster.db (issue 394).
 * New options for packagers (PR 565)
 * New 'version' or 'Version' command/methods available (PR 528).
 * New Gui is a Gtk.Application (PR 516)
-* New *JSON dbus methods to pass facts verbatim (PR 514).
+* New `*JSON` dbus methods to pass facts verbatim (PR 514).
 * New hamster.lib.datetime, customized replacement for python datetime (PR 510).
-* New CheckFact and check_fact methods available (PR 500).
+* New `CheckFact` and `check_fact` methods available (PR 500).
   Check a fact validity, with detailed error messages.
 * New AddFact accepts -1 as start or end, to mean explicit None (PR 492).
 * Moved Fact to new fact.py
@@ -71,7 +78,7 @@ Changes in 3.0
 * Improved Add/Update activity window
   - fixed description input (PR 430)
 * Improved consistency in date/time handling (PR 429) by
-    - switching to ISO date format (%Y-%m-%d) in lib/* 
+    - switching to ISO date format (%Y-%m-%d) in `lib/*`
       to be consistent with hamster-cli usage
     - rounding (i.e. truncating) all activity start/end timestamps
       to the minute
@@ -91,13 +98,13 @@ Changes in 3.0
   external, idle, ...
 
 
-Changes in 2.2.2
+## Changes in 2.2.2
 
 * Restore python3 < 3.6 compatibility.
 * Remove a PangoCairo warning.
 
 
-Changes in 2.2.1
+## Changes in 2.2.1
 
 * Activity can contain decimal numbers.
 * Add total duration to the `hamster list` output.
@@ -120,7 +127,7 @@ cloning and using the following command:
 gitk v2.1.1...v2.2.1
 
 
-Changes in 2.1.1
+## Changes in 2.1.1
 
 Migration to python3
 and minor usability fixes
@@ -129,7 +136,7 @@ More details by cloning and using the following command:
 gitk --no-merges v2.0-rc1...v2.1.1
 
 
-Changes in 2.0
+## Changes in 2.0
 
  This release marks the transition to Gtk3, and includes all the other
  feature additions and bugfixes that have been submitted since then and
@@ -138,7 +145,7 @@ Changes in 2.0
  Please check README.md for the current dependencies.
 
 
-Changes in 1.04
+## Changes in 1.04
 
  This version just packs all the contributed bugfixes of last 12 month (there
  were just a few)
@@ -149,22 +156,22 @@ Changes in 1.04
 
 
 
-Changes in 1.03.3
+## Changes in 1.03.3
 
  * fix exporting entries to file
 
 
-Changes in 1.03.2
+## Changes in 1.03.2
 
  * fix bug when trying to enter an activity with tags (mea culpa)
 
 
-Changes in 1.03.1
+## Changes in 1.03.1
 
  * fix silly bug with path
 
 
-Changes in 1.03
+## Changes in 1.03
 
  * fix issue #61 - installation was missing initial database for fresh installs
  * loosen backend dependencies so that hamster.client can be used outside the
@@ -174,12 +181,12 @@ Changes in 1.03
  * updated Bulgarian translation
 
 
-Changes in 1.02.1
+## Changes in 1.02.1
 
  * Drop gnome-keybindings as a dependency - not used anymore
 
 
-Changes in 1.02
+## Changes in 1.02
 
  This is the first release targetting GNOME v3+. The applet has been removed
  and recommended hamster remote is the shell extension, available on
@@ -198,7 +205,7 @@ Changes in 1.02
  * ~20 bug fixes https://github.com/projecthamster/hamster/issues?state=closed
 
 
-Changes in 2.91.2
+## Changes in 2.91.2
 
   * experimental trophy support (to try out need to install the achievement
     service from https://github.com/tbaugis/gnome-achievements)
@@ -231,7 +238,7 @@ Changes in 2.91.2
     * sr (Милош Поповић)
 
 
-Changes in 2.31.90
+## Changes in 2.31.90
 
   * maintaining selection on refresh in a more sane manner
   * self-monitor the database not only for updates but also for remove/create
@@ -246,7 +253,7 @@ Changes in 2.31.90
     * ro (Lucian Adrian Grijincu)
 
 
-Changes in 2.31.6
+## Changes in 2.31.6
 
   * the top graph in overview is now interactive and allows zooming in and out
   * sqlite utf-8 case sensitivity workarounds for queries
@@ -268,7 +275,7 @@ Changes in 2.31.6
 
 
 
-Changes in 2.31.5
+## Changes in 2.31.5
 
   * adjustments for custom widgets to better work with themes
   * if dialog windows are called from commandline, make sure they shut down
@@ -284,7 +291,7 @@ Changes in 2.31.5
     * zh_CN (TeliuTe)
 
 
-Changes in 2.31.4
+## Changes in 2.31.4
 
   * overview gets a menu, drops toolbars and now supports date range browsing
   * adjustments to starts and ends graph in statistics (should be more accurate)
@@ -300,19 +307,19 @@ Changes in 2.31.4
     * nb (Kjartan Maraas)
 
 
-Changes in 2.31.3.2
+## Changes in 2.31.3.2
 
   * respecting SYSCONFDIR environment variable to determine where to store
     gconf schema (bug 620965)
 
 
-Changes in 2.31.3.1
+## Changes in 2.31.3.1
 
   * including generated help pages in the tarball so that they appear in
     library.gnome.org
 
 
-Changes in 2.31.3
+## Changes in 2.31.3
 
   * dropped in-house global hotkey management in favour to Gnome's global
     hotkeys
@@ -332,7 +339,7 @@ Changes in 2.31.3
     * zh_CN (Ray Wang)
 
 
-Changes in 2.31.2
+## Changes in 2.31.2
 
   * optional integration with gtg (via preferences)
   * all kinds of bugfixes
@@ -343,17 +350,17 @@ Changes in 2.31.2
     * es (Jorge González)
 
 
-Changes in 2.31.1.2
+## Changes in 2.31.1.2
 
   * hamster-service had not been packed in the tarball
 
 
-Changes in 2.31.1.1
+## Changes in 2.31.1.1
 
   * forgot to pull in translations
 
 
-Changes in 2.31.1
+## Changes in 2.31.1
 
   * application has been split up in back-end d-bus daemon and clients
   * edit activity preview widget got some love
@@ -366,7 +373,7 @@ Changes in 2.31.1
 
 
 
-Changes in 2.30.0
+## Changes in 2.30.0
 
   Updated translations
     * ca (Gil Forcada)
@@ -391,7 +398,7 @@ Changes in 2.30.0
 
 
 
-Changes in 2.29.92
+## Changes in 2.29.92
 
   Bug fixes
     * depend on gnome-python-desktop to fulfill wnck-python dependency
@@ -412,7 +419,7 @@ Changes in 2.29.92
     * es (Jorge González)
 
 
-Changes in 2.29.91
+## Changes in 2.29.91
 
   * bug fixes - avoiding blank entries, not reusing fact ids; other details
 
@@ -435,7 +442,7 @@ Changes in 2.29.91
 
 
 
-Changes in 2.29.90
+## Changes in 2.29.90
 
   Updated translations
     * bn (Israt Jahan)
@@ -447,7 +454,7 @@ Changes in 2.29.90
     * es (Jorge González)
 
 
-Changes in 2.29.6
+## Changes in 2.29.6
 
   * workspace tracking - switch activity, when switching desktops
     (Ludwig Ortmann, Toms Baugis, Patryk Zawadzki)
@@ -469,7 +476,7 @@ Changes in 2.29.6
 
 
 
-Changes in 2.29.5
+## Changes in 2.29.5
 
   * searching
   * simplified save report dialog, thanks to the what you see is what you report
@@ -489,7 +496,7 @@ Changes in 2.29.5
    * uk (Maxim V. Dziumanenko)
 
 
-Changes in 2.29.4
+## Changes in 2.29.4
 
   * overview window overhaul(still in progress)
   * more progress on tag front (now showing in lists)
@@ -502,7 +509,7 @@ Changes in 2.29.4
    * zh_CN (Funda Wang)
 
 
-Changes in 2.29.3
+## Changes in 2.29.3
 
   * partial tag support (adding to a fact and editing autocomplete list,
     no reports yet)
@@ -518,7 +525,7 @@ Changes in 2.29.3
   * zh_CN (Ray Wang)
 
 
-Changes in 2.29.2
+## Changes in 2.29.2
 
   * fixed bug 599343 - the charts are now back again (for those who had lost them)
   * hamster midnight is now a preference
@@ -549,7 +556,7 @@ Changes in 2.29.2
 
 
 
-Changes in 2.28.0
+## Changes in 2.28.0
 
  Updated translations:
   * as (Amitakhya Phukan)
@@ -583,7 +590,7 @@ Changes in 2.28.0
   * zh_HK (Chao-Hsiung Liao)
 
 
-Changes in 2.27.92
+## Changes in 2.27.92
 
  Updated translations:
   * ar (Khaled Hosny)
@@ -613,7 +620,7 @@ Changes in 2.27.92
 
 
 
-Changes in 2.27.90
+## Changes in 2.27.90
 
   * Fixes to idle detection (now works with gnome screensaver 2.27+)
   * return of the day view
@@ -630,7 +637,7 @@ Changes in 2.27.90
 
 
 
-Changes in 2.27.5
+## Changes in 2.27.5
 
   * Better autocomplete
   * More skeptic on parsing time
@@ -643,7 +650,7 @@ Changes in 2.27.5
     * pa (Amanpreet Singh Alam)
 
 
-Changes in 2.27.4
+## Changes in 2.27.4
 
   * Now it is possible to copy/paste activities in the overview
   * mostly polishing and bug fixing the new stuff brought in in 2.27 cycle
@@ -657,7 +664,7 @@ Changes in 2.27.4
     * uk (Maxim V. Dziumanenko)
 
 
-Changes in 2.27.3
+## Changes in 2.27.3
 
   * A much better DBUS support (Felix Ontanon)
   * Switch days at 5am because humans tend to work late. Overlapping activities
@@ -672,7 +679,7 @@ Changes in 2.27.3
     * ta.po (Dr.T.Vasudevan)
 
 
-Changes in 2.27.2
+## Changes in 2.27.2
 
   * Now a reminder is displayed every configured amount of time also when no
     activity is being tracked. (Can be disabled in preferences)
@@ -692,7 +699,7 @@ Changes in 2.27.2
 
 
 
-Changes in 2.27.1
+## Changes in 2.27.1
 
   * Overview window graphs have been redone and now are less noisy
   * Tasks now can span over midnight, showing correct per-day totals in overview
@@ -732,7 +739,7 @@ Changes in 2.27.1
 
 
 
-Changes in 2.25.3
+## Changes in 2.25.3
 
   We were late for 2.25.1 and 2.25.2, so here we go - changes since 2.24.0!
 
@@ -767,7 +774,7 @@ Changes in 2.25.3
 
 
 
-Changes in 2.24.0
+## Changes in 2.24.0
 
   Applet
     * some more strings available for translation, but the main changes are
@@ -820,7 +827,7 @@ Changes in 2.24.0
     * zh_TW (Chao-Hsiung Liao)
 
 
-Changes in 2.23.92
+## Changes in 2.23.92
 
   Applet
     * fixed code so that it works also with Python 2.4
@@ -861,7 +868,7 @@ Changes in 2.23.92
     * zh_TW (Chao-Hsiung Liao)
 
 
-Changes in 2.23.91
+## Changes in 2.23.91
 
   Applet
 	* When adding earlier activity in current day, set default end time to now
@@ -897,7 +904,7 @@ Changes in 2.23.91
     * zh_TW (Chao-Hsiung Liao)
 
 
-Changes in 2.23.90
+## Changes in 2.23.90
 
   Applet
 	* Changing name from "Hamster" to "Time Tracker"
@@ -923,7 +930,7 @@ Changes in 2.23.90
 
 
 
-Changes in 2.23.6
+## Changes in 2.23.6
 
   Applet
 	* Follow GNOME version scheme
@@ -940,7 +947,7 @@ Changes in 2.23.6
 	* sv (Kalle Persson)
 
 
-Changes in 0.6.2
+## Changes in 0.6.2
 
   Applet
 	* Fixed the header info and updated the Spanish translations
@@ -965,7 +972,7 @@ Changes in 0.6.2
 	* sv (Kalle Persson)
 
 
-Changes in 0.6.1
+## Changes in 0.6.1
 
   Applet
 	* Do not eat up middle-click
@@ -981,7 +988,7 @@ Changes in 0.6.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.6
+## Changes in 0.6
 
   Applet
 	* Simple reporting via Overview dialog
@@ -995,7 +1002,7 @@ Changes in 0.6
 	* sv (Kalle Persson)
 
 
-Changes in 0.5
+## Changes in 0.5
 
   Applet
 	* Preferences are now editable via user interface
@@ -1009,7 +1016,7 @@ Changes in 0.5
 	* sv (Kalle Persson)
 
 
-Changes in 0.4.1
+## Changes in 0.4.1
 
   Applet
 	* Fixed lintian warnings, mentioned in bug 531965. Also, got rid of rest of them :)
@@ -1022,7 +1029,7 @@ Changes in 0.4.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.4.1
+## Changes in 0.4.1
 
   Miscellanous
 	* Fixed usage of spanish and italian translations
@@ -1034,7 +1041,7 @@ Changes in 0.4.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.4
+## Changes in 0.4
 
   Applet
 	* Fact editing!
@@ -1046,7 +1053,7 @@ Changes in 0.4
 	* sv (Kalle Persson)
 
 
-Changes in 0.3
+## Changes in 0.3
 
   Applet
 	* Many small fixes to activity editing window (setting, focus, F2 for
@@ -1059,7 +1066,7 @@ Changes in 0.3
 	* sv (Kalle Persson)
 
 
-Changes in 0.2
+## Changes in 0.2
 
   Applet
 	* change days on midnight also when there is no current activity
@@ -1072,7 +1079,7 @@ Changes in 0.2
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7.5
+## Changes in 0.1.7.5
 
   Applet
 	* Fixed midnight crasher
@@ -1083,7 +1090,7 @@ Changes in 0.1.7.5
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7.4
+## Changes in 0.1.7.4
 
   Applet
 	* Fixed licensing issues
@@ -1097,7 +1104,7 @@ Changes in 0.1.7.4
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7.3
+## Changes in 0.1.7.3
 
   Applet
 	* In stats the top caption shows what can be actually seen
@@ -1117,7 +1124,7 @@ Changes in 0.1.7.3
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7.2
+## Changes in 0.1.7.2
 
   Applet
 	* Fixed focus issues with global hotkeys
@@ -1127,7 +1134,7 @@ Changes in 0.1.7.2
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7.1
+## Changes in 0.1.7.1
 
   Applet
 	* Fixed regression with keys ignored in applet window
@@ -1137,7 +1144,7 @@ Changes in 0.1.7.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.7
+## Changes in 0.1.7
 
   Applet
 	* Fixed applet vertical sizing issues
@@ -1151,7 +1158,7 @@ Changes in 0.1.7
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.6.2
+## Changes in 0.1.6.2
 
   Applet
 	* Stop at 12 different activities a day, 12th being total of others
@@ -1163,7 +1170,7 @@ Changes in 0.1.6.2
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.6.1
+## Changes in 0.1.6.1
 
   Applet
 	* Kind of fixed problem with gconf schema not appearing
@@ -1173,7 +1180,7 @@ Changes in 0.1.6.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.6
+## Changes in 0.1.6
 
   Applet
 	* Enhanced drag and drop behaviour in edit activities window
@@ -1184,7 +1191,7 @@ Changes in 0.1.6
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5.5
+## Changes in 0.1.5.5
 
   Applet
 	* Fixed pysqlite dependency
@@ -1195,7 +1202,7 @@ Changes in 0.1.5.5
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5.4
+## Changes in 0.1.5.4
 
   Applet
 	* Hamster now has a process name for killall, which enables us to
@@ -1206,7 +1213,7 @@ Changes in 0.1.5.4
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5.3
+## Changes in 0.1.5.3
 
   Applet
 	* Fixed antialiasing problems in bar chart
@@ -1216,7 +1223,7 @@ Changes in 0.1.5.3
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5.2
+## Changes in 0.1.5.2
 
   Applet
 	* Minor changes and slight adjustments to Swedish translation
@@ -1226,7 +1233,7 @@ Changes in 0.1.5.2
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5.1
+## Changes in 0.1.5.1
 
   Applet
 	* Fixed window icons
@@ -1236,7 +1243,7 @@ Changes in 0.1.5.1
 	* sv (Kalle Persson)
 
 
-Changes in 0.1.5
+## Changes in 0.1.5
 
   Applet
 	* Initial release

@@ -18,7 +18,7 @@ except ImportError:
     # if defs is not there, we are running from sources
     from subprocess import getstatusoutput
     rc, output = getstatusoutput("git describe --tags --always --dirty=+")
-    __version__ = "3.0.1" if rc else "{} (uninstalled)".format(output)
+    __version__ = "3.0.2" if rc else "{} (uninstalled)".format(output)
     installed = False
     del getstatusoutput, rc, output
 
