@@ -1,3 +1,7 @@
+## Changes in 3.0.3 (unreleased)
+
+* Daily summary totals added to Overview screen (PR 596)
+
 ## Changes in 3.0.2
 
 * Switch from deprecated xml2po to itstool for translating help files
