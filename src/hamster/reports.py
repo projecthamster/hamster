@@ -51,6 +51,8 @@ def simple(facts, start_date, end_date, format, path = None):
 
     if format == "tsv":
         writer = TSVWriter(report_path)
+    if format == "json":
+        writer = JSONWriter(report_path)
     elif format == "xml":
         writer = XMLWriter(report_path)
     elif format == "ical":
@@ -323,3 +325,24 @@ class HTMLWriter(ReportWriter):
         self.file.write(Template(self.main_template).safe_substitute(data))
 
         return
+
+class JSONWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+        self.activity_list = []
+
+    def _write_fact(self, fact):
+        self.activity_list.append(
+            {
+                "name": fact.activity,
+                "start_time": str(fact.start_time),
+                "end_time": str(fact.end_time),
+                "duration_minutes": stuff.duration_minutes(fact.delta),
+                "category": fact.category,
+                "description": fact.description,
+                "tags": ": ".join(fact.tags),
+            }
+        )
+
+    def _finish(self, facts):
+        self.file.write(json.dumps(self.activity_list))
