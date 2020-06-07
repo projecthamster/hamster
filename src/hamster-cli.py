@@ -231,6 +231,10 @@ class HamsterCli(object):
         self.storage = client.Storage()
 
 
+    def setFormat(self, format:str):
+        self.format = format
+
+
     def assist(self, *args):
         assist_command = args[0] if args else ""
 
@@ -318,11 +322,19 @@ class HamsterCli(object):
     def current(self, *args):
         """prints current activity. kinda minimal right now"""
         facts = self.storage.get_todays_facts()
-        if facts and not facts[-1].end_time:
-            print("{} {}".format(str(facts[-1]).strip(),
-                                 facts[-1].delta.format(fmt="HH:MM")))
+
+        if not self.format or self.format == 'text':
+            if facts and not facts[-1].end_time:
+                print("{} {}".format(str(facts[-1]).strip(),
+                                     facts[-1].delta.format(fmt="HH:MM")))
+            else:
+                print((_("No activity")))
         else:
-            print((_("No activity")))
+            fact=[]
+            if facts:
+                fact = [facts[-1]]
+            now = dt.datetime.now()
+            reports.simple(fact, now, now, self.format)
 
 
     def search(self, *args):
@@ -467,6 +479,10 @@ Example usage:
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
+    parser.add_argument("-f", "--format",
+                        choices=('text', 'html', 'tsv', 'xml', 'ical'),
+                        default='',
+                        help="Set output format (default: %(default)s)")
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -487,6 +503,8 @@ Example usage:
         action = "preferences"
     else:
         action = args.action
+
+    hamster_client.setFormat(args.format)
 
     if action in ("about", "add", "edit", "overview", "preferences"):
         if action == "add" and args.action_args:
