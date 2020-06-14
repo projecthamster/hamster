@@ -227,6 +227,10 @@ class Storage(gobject.GObject):
         end_time = timegm((end_time or dt.datetime.now()).timetuple())
         return self.conn.StopTracking(end_time)
 
+    def stop_or_restart_tracking(self):
+        """Stop or restart tracking last activity."""
+        return self.conn.StopOrRestartTracking(0)
+
     def remove_fact(self, fact_id):
         "delete fact from database"
         self.conn.RemoveFact(fact_id)
