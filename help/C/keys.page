@@ -34,15 +34,15 @@ than one page.</p>
 All details of the selected activity, except start/end, are copied to the new activity.</p>
 
 <p><key>Ctrl</key>+<key>+</key>: Same as the <key>+</key> button.
-Create a new activity. 
-If an existing activity is selected, 
-it will be resumed (same as <key>Ctrl</key>+<key>R</key>), 
+Create a new activity.
+If an existing activity is selected,
+it will be resumed (same as <key>Ctrl</key>+<key>R</key>),
 otherwise, new from stratch (same as <key>Ctrl</key>+<key>N</key>).</p>
 
 
 
 <p><key>Ctrl</key>+<key>Space</key>: Stop tracking the ongoing activity, if
-any. Same as the stop button in the action bar.</p>
+any. Otherwise restart tracking the last activity. Useful for toggling tracking on and off.</p>
 
 <p><key>Return</key>: Edit/update the selected activity if any. Same as double
 click.</p>

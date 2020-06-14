@@ -146,6 +146,18 @@ class Storage(object):
             self.facts_changed()
 
 
+    def stop_or_restart_tracking(self):
+        """Stops or restarts tracking the last activity"""
+        facts = self.__get_todays_facts()
+        if facts:
+            if facts[-1].end_time:
+                self.add_fact(facts[-1].copy(start_time=dt.datetime.now(),
+                                             end_time = None))
+            else:
+                self.__touch_fact(facts[-1], end_time=dt.datetime.now())
+            self.facts_changed()
+
+
     def remove_fact(self, fact_id):
         """Remove fact from storage by it's ID"""
         self.start_transaction()

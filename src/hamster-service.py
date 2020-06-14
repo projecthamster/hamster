@@ -282,6 +282,12 @@ class Storage(db.Storage, dbus.service.Object):
         return self.stop_tracking(end_time)
 
 
+    @dbus.service.method("org.gnome.Hamster")
+    def StopOrRestartTracking(self):
+        """Stops or restarts tracking the last activity"""
+        return self.stop_or_restart_tracking()
+
+
     @dbus.service.method("org.gnome.Hamster", in_signature='i')
     def RemoveFact(self, fact_id):
         """Remove fact from storage by it's ID"""
