@@ -487,10 +487,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.facts = [fact.copy(id=fact.id) for fact in facts]
         del facts  # make sure facts is not used by inadvertance below.
 
-        self.y = 0
         self.hover_fact = None
         if self.vadjustment:
-            self.vadjustment.set_value(0)
+            self.vadjustment.set_value(self.y)
 
         if self.facts:
             start = self.facts[0].date
