@@ -1,0 +1,14 @@
+#!/bin/sh
+# Run git hamster from the source tree root without installation.
+# - mainly useful for development and testing
+
+[ -f build/data/gschemas.compiled ] || {
+  mkdir -p build/data
+  glib-compile-schemas --targetdir=build/data data
+}
+export GSETTINGS_SCHEMA_DIR=build/data
+
+pkill -ef hamster.*service 2>&1 >/dev/null
+
+python3 src/hamster-service.py &
+python3 src/hamster-cli.py $*
