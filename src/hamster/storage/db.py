@@ -400,6 +400,7 @@ class Storage(storage.Storage):
                     start_time=db_fact["start_time"],
                     end_time=db_fact["end_time"],
                     id=db_fact["id"],
+                    exporetd=db_fact["exported"],
                     activity_id=db_fact["activity_id"])
 
     def __get_fact(self, id):
@@ -410,7 +411,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported as exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -502,6 +504,7 @@ class Storage(storage.Storage):
         """
         if end_time is None or start_time is None:
             return
+        #TODO gso: end_time and start_time round
 
         # possible combinations and the OR clauses that catch them
         # (the side of the number marks if it catches the end or start time)
@@ -523,16 +526,20 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
+            if fact["start_time"] is None:
+                continue
+
             # fact is a sqlite.Row, indexable by column name
+            # handle case with not finished activities
             fact_end_time = fact["end_time"] or dt.datetime.now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
-            if start_time < fact["start_time"] and end_time > fact_end_time:
+            if start_time < fact["start_time"] and end_time >= fact_end_time:
                 continue
 
             # split - truncate until beginning of new entry and create new activity for end
             if fact["start_time"] < start_time < fact_end_time and \
-               fact["start_time"] < end_time < fact_end_time:
+               fact["start_time"] < end_time <= fact_end_time:
 
                 logger.info("splitting %s" % fact["name"])
                 # truncate until beginning of the new entry
@@ -540,6 +547,8 @@ class Storage(storage.Storage):
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
                 fact_name = fact["name"]
+
+                # TODO gso: move changes from master
 
                 # create new fact for the end
                 new_fact = Fact(activity=fact["name"],
@@ -558,13 +567,13 @@ class Storage(storage.Storage):
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
             # overlap start
-            elif start_time < fact["start_time"] < end_time:
+            elif start_time <= fact["start_time"] <= end_time:
                 logger.info("Overlapping start of %s" % fact["name"])
                 self.execute("UPDATE facts SET start_time=? WHERE id=?",
                              (end_time, fact["id"]))
 
             # overlap end
-            elif start_time < fact_end_time < end_time:
+            elif start_time < fact_end_time <= end_time:
                 logger.info("Overlapping end of %s" % fact["name"])
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
@@ -667,10 +676,10 @@ class Storage(storage.Storage):
 
         # finally add the new entry
         insert = """
-                    INSERT INTO facts (activity_id, start_time, end_time, description)
-                               VALUES (?, ?, ?, ?)
+                    INSERT INTO facts (activity_id, start_time, end_time, description, exported)
+                               VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, fact.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description, fact.exported))
 
         fact_id = self.__last_insert_rowid()
 
@@ -703,7 +712,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported as exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -722,6 +732,7 @@ class Storage(storage.Storage):
                 search_terms = search_terms[4:]
 
             search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
+            # TODO gso: add NOT operator
             query += """ AND a.id %s IN (SELECT id
                                          FROM fact_index
                                          WHERE fact_index MATCH '%s')""" % ('NOT' if reverse_search_terms else '',
