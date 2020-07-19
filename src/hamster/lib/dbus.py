@@ -123,4 +123,4 @@ def to_dbus_fact(fact):
             dbus.Array(fact.tags, signature = 's'),
             to_dbus_date(fact.date),
             fact.delta.days * 24 * 60 * 60 + fact.delta.seconds,
-            fact.exported),
+            fact.exported)

@@ -403,6 +403,11 @@ class Storage(db.Storage, dbus.service.Object):
         return [(row['name'], row['category'] or '') for row in self.get_activities(search)]
 
 
+    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
+    def GetExtActivities(self, search = ""):
+        return [(row['name'], row['category'] or '') for row in self.get_ext_activities(search)]
+
+
     @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')
     def ChangeCategory(self, id, category_id):
         return self.change_category(id, category_id)

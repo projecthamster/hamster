@@ -210,6 +210,9 @@ class Storage(object):
     def get_activities(self, search = ""):
         return self.__get_activities(search)
 
+    def get_ext_activities(self, search = ""):
+        return self.__get_ext_activities(search)
+
     def change_category(self, id, category_id):
         changed = self.__change_category(id, category_id)
         if changed:
