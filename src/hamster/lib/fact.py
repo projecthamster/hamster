@@ -220,11 +220,12 @@ class Fact(object):
                                      explicit_none=need_explicit)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
+        exported_marker = "[x] " if self.exported else ""
         assert range_pos in ("head", "tail")
         if range_pos == "head":
-            return "{}{}{}".format(datetime, space, name)
+            return "{}{}{}{}".format(exported_marker, datetime, space, name)
         else:
-            return "{}{}{}".format(name, space, datetime)
+            return "{}{}{}{}".format(exported_marker, name, space, datetime)
 
     def _set(self, **kwds):
         """Modify attributes.

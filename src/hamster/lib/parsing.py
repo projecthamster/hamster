@@ -37,7 +37,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     Returns found fields as a dict.
 
     Tentative syntax (not accurate):
-    start [- end_time] activity[@category][,, description][,,]{ #tag}
+    [[x] ]start [- end_time] activity[@category][,, description][,,]{ #tag}
     According to the legacy tests, # were allowed in the description
     """
 
@@ -46,6 +46,9 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     text = text.strip()
     if not text:
         return res
+
+    res["exported"] = text.startswith("[x]")
+    text = text.replace("[x]", "", 1).strip()
 
     # datetimes
     # force at least a space to avoid matching 10.00@cat

@@ -156,9 +156,9 @@ class Storage(object):
         self.end_transaction()
 
 
-    def get_facts(self, start, end=None, search_terms=""):
+    def get_facts(self, start, end=None, search_terms="", limit=0, asc_by_date=True):
         range = dt.Range.from_start_end(start, end)
-        return self.__get_facts(range, search_terms)
+        return self.__get_facts(range, search_terms, limit, asc_by_date)
 
 
     def get_todays_facts(self):

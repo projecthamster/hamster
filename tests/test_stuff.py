@@ -83,6 +83,21 @@ class TestFactParsing(unittest.TestCase):
         assert activity.end_time is None
         assert not activity.description
 
+    def test_exported(self):
+        # plain activity name
+        activity = Fact.parse("[x] just a simple case")
+        self.assertEqual(activity.activity, "just a simple case")
+        self.assertEqual(activity.exported, True)
+        assert activity.start_time is None
+        assert activity.end_time is None
+        assert not activity.description
+
+    def test_serialized_with_exported(self):
+        # plain activity name
+        exported = Fact("activity", exported=True)
+        not_exported = Fact("activity", exported=False)
+        self.assertNotEqual(exported, not_exported)
+
     def test_description(self):
         # plain activity name
         activity = Fact.parse("case,, with added descriptiön")

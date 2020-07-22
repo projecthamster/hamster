@@ -17,35 +17,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import bisect
-import itertools
-import webbrowser
+import logging
 
+logger = logging.getLogger(__name__)  # noqa: E402
+
+import sys
+import threading
+import webbrowser
 from collections import defaultdict
 from math import ceil
 
-from gi.repository import GLib as glib
-from gi.repository import Gtk as gtk
-from gi.repository import Gdk as gdk
-from gi.repository import GObject as gobject
-from gi.repository import PangoCairo as pangocairo
-from gi.repository import Pango as pango
 import cairo
+from gi.repository import GLib as glib
+from gi.repository import GObject as gobject
+from gi.repository import Gdk as gdk
+from gi.repository import Gtk as gtk
+from gi.repository import Pango as pango
+from gi.repository import PangoCairo as pangocairo
 
 import hamster.client
+from hamster import reports
+from hamster import widgets
 from hamster.lib import datetime as dt
 from hamster.lib import graphics
 from hamster.lib import layout
-from hamster import reports
 from hamster.lib import stuff
-from hamster import widgets
-
-from hamster.lib.configuration import Controller
-
-
+from hamster.lib.configuration import Controller, runtime
 from hamster.lib.pytweener import Easing
-
 from hamster.widgets.dates import RangePick
 from hamster.widgets.facttree import FactTree
 
@@ -91,17 +89,15 @@ class HeaderBar(gtk.HeaderBar):
         self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
-
         self.system_menu = gtk.Menu()
         self.system_button.set_popup(self.system_menu)
-        self.menu_export = gtk.MenuItem(label=_("Export..."))
+        self.menu_export = gtk.MenuItem(label=_("Export to file..."))
         self.system_menu.append(self.menu_export)
         self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
         self.system_menu.append(self.menu_prefs)
         self.menu_help = gtk.MenuItem(label=_("Help"))
         self.system_menu.append(self.menu_help)
         self.system_menu.show_all()
-
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
@@ -141,7 +137,6 @@ class StackedBar(layout.Widget):
 
         self._seen_keys = []
 
-
     def set_items(self, items):
         """expects a list of key, value to work with"""
         res = []
@@ -150,7 +145,6 @@ class StackedBar(layout.Widget):
             res.append((key, val, val * 1.0 / max_value))
         self._items = res
 
-
     def _take_color(self, key):
         if key in self._seen_keys:
             index = self._seen_keys.index(key)
@@ -158,7 +152,6 @@ class StackedBar(layout.Widget):
             self._seen_keys.append(key)
             index = len(self._seen_keys) - 1
         return self.colors[index % len(self.colors)]
-
 
     def on_render(self, sprite):
         if not self._items:
@@ -177,6 +170,7 @@ class StackedBar(layout.Widget):
 
 class Label(object):
     """a much cheaper label that would be suitable for cellrenderer"""
+
     def __init__(self, x=0, y=0, color=None, use_markup=False):
         self.x = x
         self.y = y
@@ -212,7 +206,7 @@ class HorizontalBarChart(graphics.Sprite):
         self._label_context = cairo.Context(cairo.ImageSurface(cairo.FORMAT_A1, 0, 0))
         self.layout = pangocairo.create_layout(self._label_context)
         self.layout.set_font_description(pango.FontDescription(graphics._font_desc))
-        self.layout.set_markup("Hamster") # dummy
+        self.layout.set_markup("Hamster")  # dummy
         # ellipsize the middle because depending on the use case,
         # the distinctive information can be either at the beginning or the end.
         self.layout.set_ellipsize(pango.EllipsizeMode.MIDDLE)
@@ -262,6 +256,96 @@ class HorizontalBarChart(graphics.Sprite):
         g.restore_context()
 
 
+class Exporter(gtk.Box):
+    def __init__(self, storage: hamster.client.Storage):
+        gtk.Box.__init__(self, orientation=gtk.Orientation.HORIZONTAL, spacing=8)
+        self.set_border_width(12)
+
+        self.progressbar = gtk.ProgressBar()
+        self.progressbar.set_show_text(True)
+        self.pack_start(self.progressbar, True, True, 0)
+
+        self.start_button = gtk.Button.new_with_label(_("📤 Start export"))
+        self.start_button.connect("clicked", self.on_start_button_clicked)
+        self.pack_start(self.start_button, False, False, 1)
+
+        self.connect("destroy", self.on_destroy_event)
+
+        self.storage = storage
+        self.export_thread: ExportThread = None
+        self.facts = []
+
+    def _init_labels(self):
+        if not self.export_thread:
+            self.progressbar.set_text(_("Waiting for action (%s activities to export)") % len(self.facts))
+            self.progressbar.set_fraction(0)
+            self.start_button.set_label(_("📤 Start export"))
+            self.start_button.set_sensitive(True)
+
+    def set_facts(self, facts):
+        self.facts = list(filter(lambda f: not f.exported, facts))
+        self._init_labels()
+
+    def on_start_button_clicked(self, button):
+        if not self.export_thread:
+            self.export_thread = ExportThread(self.facts, self._update_progressbar, self._finish_export, self.storage)
+            self.start_button.set_sensitive(False)
+            self.start_button.set_label(_("Exporting..."))
+            # start the thread
+            self.export_thread.start()
+
+    def _finish_export(self, interrupted):
+        if interrupted:
+            self.progressbar.set_text(_("Interrupted"))
+        else:
+            self.progressbar.set_fraction(1.0)
+            self.progressbar.set_text(_("Done"))
+        self.start_button.set_label(_("Done"))
+        self.start_button.set_sensitive(False)
+        self.export_thread = None
+
+    def _update_progressbar(self, fraction, label):
+        self.progressbar.set_fraction(fraction)
+        self.progressbar.set_text(label)
+        # self.done_button.set_label(_("Stop"))
+
+    def on_destroy_event(self, event):
+        if self.export_thread:
+            self.export_thread.shutdown()
+
+class ExportThread(threading.Thread):
+    def __init__(self, facts, callback, finish_callback, storage: hamster.client.Storage):
+        threading.Thread.__init__(self)
+        self.storage = storage
+        self.facts = facts
+        self.callback = callback
+        self.finish_callback = finish_callback
+        self.steps = (len(self.facts) + 1)
+        self.interrupt = False
+
+    def run(self):
+        glib.idle_add(self.callback, 0.0, _("Connecting to external source..."))
+        external = runtime.get_external()
+        for idx, fact in enumerate(self.facts):
+            if self.interrupt:
+                logger.info("Interrupting export thread")
+                break
+            fraction = float(idx + 1) / self.steps
+            label = _("Exporting: %s - %s") % (fact.activity, fact.delta)
+            glib.idle_add(self.callback, fraction, label)
+            exported = external.export(fact)
+            if exported:
+                # TODO mark as exported
+                fact.exported = True
+                self.storage.update_fact(fact.id, fact, False)
+                pass
+        #     TODO external.report(fact)
+        glib.idle_add(self.finish_callback, self.interrupt)
+
+    def shutdown(self):
+        logger.info("Trying to shutdown")
+        self.interrupt = True
+
 
 class Totals(graphics.Scene):
     def __init__(self):
@@ -301,9 +385,6 @@ class Totals(graphics.Scene):
 
         main.add_child(self.activities_chart, self.categories_chart, self.tag_chart)
 
-
-
-
         # for use in animation
         self.height_proxy = graphics.Sprite(x=0)
         self.height_proxy.height = 70
@@ -315,7 +396,6 @@ class Totals(graphics.Scene):
         self.connect("state-flags-changed", self.on_state_flags_changed)
         self.connect("style-updated", self.on_style_changed)
 
-
     def set_facts(self, facts):
         totals = defaultdict(lambda: defaultdict(dt.timedelta))
         for fact in facts:
@@ -324,7 +404,6 @@ class Totals(graphics.Scene):
 
             for tag in fact.tags:
                 totals["tag"][tag] += fact.delta
-
 
         for key, group in totals.items():
             totals[key] = sorted(group.items(), key=lambda x: x[1], reverse=True)
@@ -339,9 +418,9 @@ class Totals(graphics.Scene):
         grand_total = sum(delta.total_seconds() / 60
                           for __, delta in totals['activity'])
         self.category_totals.markup = "<b>Total: </b>%s; " % stuff.format_duration(grand_total)
-        self.category_totals.markup += ", ".join("<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in totals['category'])
-
-
+        self.category_totals.markup += ", ".join(
+            "<b>%s:</b> %s" % (stuff.escape_pango(cat), stuff.format_duration(hours)) for cat, hours in
+            totals['category'])
 
     def on_click(self, scene, sprite, event):
         self.collapsed = not self.collapsed
@@ -367,7 +446,6 @@ class Totals(graphics.Scene):
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
 
-
     def on_mouse_leave(self, scene, event):
         if not self.collapsed:
             return
@@ -387,6 +465,7 @@ class Totals(graphics.Scene):
 
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)
+
         def on_update_dummy(sprite):
             self.set_size_request(200, sprite.height)
 
@@ -417,7 +496,7 @@ class Overview(Controller):
 
         self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("org.gnome.Hamster.GUI")
-        self.window.set_default_size(700, 500)
+        self.window.set_default_size(1000, 700)
 
         self.storage = hamster.client.Storage()
         self.storage.connect("facts-changed", self.on_facts_changed)
@@ -430,7 +509,6 @@ class Overview(Controller):
         self.window.add(main)
 
         self.report_chooser = None
-
 
         self.search_box = gtk.Revealer()
 
@@ -445,15 +523,18 @@ class Overview(Controller):
         space.pack_start(self.filter_entry, True, True, 0)
         main.pack_start(self.search_box, False, True, 0)
 
-
         window = gtk.ScrolledWindow()
         window.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         self.fact_tree = FactTree()
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
         self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
+        self.fact_tree.connect("on-toggle-exported-row", self.on_row_toggle_exported_called)
 
         window.add(self.fact_tree)
         main.pack_start(window, True, True, 1)
+
+        self.exporter = Exporter(self.storage)
+        main.pack_start(self.exporter, False, True, 1)
 
         self.totals = Totals()
         main.pack_start(self.totals, False, True, 1)
@@ -470,7 +551,6 @@ class Overview(Controller):
         self.header_bar.menu_export.connect("activate", self.on_export_clicked)
         self.header_bar.menu_help.connect("activate", self.on_help_clicked)
 
-
         self.window.connect("key-press-event", self.on_key_press)
 
         self.facts = []
@@ -479,7 +559,6 @@ class Overview(Controller):
         # update every minute (necessary if an activity is running)
         gobject.timeout_add_seconds(60, self.on_timeout)
         self.window.show_all()
-
 
     def on_key_press(self, window, event):
         if self.filter_entry.has_focus():
@@ -503,7 +582,7 @@ class Overview(Controller):
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:
-                pass # TODO - deal with tab as our scenes eat up navigation
+                pass  # TODO - deal with tab as our scenes eat up navigation
 
         if event.state & gdk.ModifierType.CONTROL_MASK:
             # the ctrl+things
@@ -516,7 +595,7 @@ class Overview(Controller):
                 self.start_new_fact(clone_selected=True, fallback=False)
             elif event.keyval == gdk.KEY_space:
                 self.storage.stop_tracking()
-            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
+            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus, gdk.KEY_equal):
                 # same as pressing the + icon
                 self.start_new_fact(clone_selected=True, fallback=True)
 
@@ -527,10 +606,11 @@ class Overview(Controller):
         start, end = self.header_bar.range_pick.get_range()
         search_active = self.header_bar.search_button.get_active()
         search = "" if not search_active else self.filter_entry.get_text()
-        search = "%s*" % search if search else "" # search anywhere
+        search = "%s*" % search if search else ""  # search anywhere
         self.facts = self.storage.get_facts(start, end, search_terms=search)
         self.fact_tree.set_facts(self.facts)
         self.totals.set_facts(self.facts)
+        self.exporter.set_facts(self.facts)
         self.header_bar.stop_button.set_sensitive(
             self.facts and not self.facts[-1].end_time)
 
@@ -565,6 +645,10 @@ class Overview(Controller):
     def on_row_delete_called(self, tree, fact):
         self.storage.remove_fact(fact.id)
         self.find_facts()
+
+    def on_row_toggle_exported_called(self, tree, fact):
+        fact.exported = not fact.exported
+        self.storage.update_fact(fact.id, fact)
 
     def on_search_toggled(self, button):
         active = button.get_active()
@@ -613,7 +697,7 @@ class Overview(Controller):
                 try:
                     gtk.show_uri(None, "file://%s" % path, gdk.CURRENT_TIME)
                 except:
-                    pass # bug 626656 - no use in capturing this one i think
+                    pass  # bug 626656 - no use in capturing this one i think
 
         def on_report_chooser_closed(widget):
             self.report_chooser = None

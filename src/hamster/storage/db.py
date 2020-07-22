@@ -704,7 +704,7 @@ class Storage(storage.Storage):
     def __get_todays_facts(self):
         return self.__get_facts(dt.Range.today())
 
-    def __get_facts(self, range, search_terms=""):
+    def __get_facts(self, range, search_terms="", limit = 0, asc_by_date = True):
         datetime_from = range.start
         datetime_to = range.end
 
@@ -743,7 +743,13 @@ class Storage(storage.Storage):
                                          WHERE fact_index MATCH '%s')""" % ('NOT' if reverse_search_terms else '',
                                                                             search_terms)
 
-        query += " ORDER BY a.start_time, e.name"
+        if asc_by_date:
+            query += " ORDER BY a.start_time, e.name"
+        else:
+            query += " ORDER BY a.start_time desc, e.name"
+
+        if limit and limit > 0:
+            query += " LIMIT " + str(limit)
 
         fact_rows = self.fetchall(query, (self._unsorted_localized,
                                           datetime_from,

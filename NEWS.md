@@ -1,3 +1,10 @@
+## Changes in 3.1.0
+
+* Added new shortcuts:
+  - Ctrl-=: clone or fallback to new if none selected.
+  - e: edit selected activity
+  - x: toggle export flag
+
 ## Changes in 3.0.2
 
 * Switch from deprecated xml2po to itstool for translating help files

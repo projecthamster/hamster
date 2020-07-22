@@ -162,6 +162,13 @@ class Storage(gobject.GObject):
         """
         return self._to_dict(('name', 'category'), self.conn.GetActivities(search))
 
+    def get_ext_activities(self, search = ""):
+        """returns list of activities name matching search criteria.
+           results are sorted by most recent usage.
+           search is case insensitive
+        """
+        return self._to_dict(('name', 'category'), self.conn.GetExtActivities(search))
+
     def get_categories(self):
         """returns list of categories"""
         return self._to_dict(('id', 'name'), self.conn.GetCategories())

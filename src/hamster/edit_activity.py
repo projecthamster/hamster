@@ -82,6 +82,9 @@ class CustomFactController(Controller):
         self.tags_entry = widgets.TagsEntry()
         self.get_widget("tags box").add(self.tags_entry)
 
+        self.exported_checkbox = gtk.CheckButton(label=_("do not export"))
+        self.get_widget("exported box").add(self.exported_checkbox)
+
         self.save_button = self.get_widget("save_button")
 
         # this will set self.master_is_cmdline
@@ -123,6 +126,7 @@ class CustomFactController(Controller):
         self.activity_entry.connect("changed", self.on_activity_changed)
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
+        self.exported_checkbox.connect("toggled", self.on_exported_toggled)
 
         self._gui.connect_signals(self)
         self.validate_fields()
@@ -283,6 +287,9 @@ class CustomFactController(Controller):
             self.fact.tags = self.tags_entry.get_tags()
             self.update_cmdline()
 
+    def on_exported_toggled(self, widget):
+        self.fact.exported = self.exported_checkbox.get_active()
+
     def present(self):
         self.window.present()
 
@@ -308,6 +315,7 @@ class CustomFactController(Controller):
         self.category_entry.set_text(self.fact.category)
         self.description_buffer.set_text(self.fact.description)
         self.tags_entry.set_tags(self.fact.tags)
+        self.exported_checkbox.set_active(self.fact.exported)
         self.validate_fields()
 
     def update_status(self, status, markup):

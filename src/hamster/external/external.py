@@ -19,6 +19,9 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import time
+
+from hamster.lib import Fact, stuff
 
 logger = logging.getLogger(__name__)  # noqa: E402
 
@@ -34,7 +37,7 @@ except ImportError:
 
 SOURCE_NONE = ""
 SOURCE_JIRA = 'jira'
-JIRA_ISSUE_NAME_REGEX = "^(\w+-\d+): "
+JIRA_ISSUE_NAME_REGEX = "^(\w+-\d+):? "
 ERROR_ADDITIONAL_MESSAGE = '\n\nCheck settings and reopen main window.'
 MIN_QUERY_LENGTH = 3
 CURRENT_USER_ACTIVITIES_LIMIT = 5
@@ -46,7 +49,7 @@ class ExternalSource(object):
         #         gobject.GObject.__init__(self)
         self.source = conf.get("activities-source")
         # self.__gtg_connection = None
-        self.jira = None
+        self.jira: JIRA = None
         self.jira_projects = None
         self.jira_issue_types = None
         self.jira_query = None
@@ -189,3 +192,45 @@ class ExternalSource(object):
 
     def is_issue_from_existing_jira_project(self, issue):
         return issue.split('-', 1)[0].upper() in self.jira_projects
+
+    def __add_jira_worklog(self, issue_id, text, start_time, time_worked):
+        """
+        :type start_time: date
+        :param time_worked: int time spent in minutes
+        """
+        logger.info(_("updating issue #%s: %s min, comment: \n%s") % (issue_id, time_worked, text))
+        self.jira.add_worklog(issue=issue_id, comment=text, started=start_time, timeSpent="%sm" % time_worked)
+
+    def get_text(self, fact: Fact):
+        text = ""
+        if fact.description:
+            text += "%s\n" % (fact.description)
+        text += "%s, %s-%s" % (fact.date, fact.range.start.strftime("%H:%M"), fact.range.end.strftime("%H:%M"))
+        if fact.tags:
+            text += " ("+", ".join(fact.tags)+")"
+        return text
+
+    def export(self, fact: Fact) -> bool:
+        """
+        :return: bool fact was exported
+        """
+        logger.info("Exporting %s" % fact.activity)
+        if not fact.range.end:
+            logger.info("Skipping fact without end date")
+            return False
+        if self.source == SOURCE_JIRA:
+            jira_match = re.match(JIRA_ISSUE_NAME_REGEX, fact.activity)
+            if jira_match:
+                issue_id = jira_match.group(1)
+                comment = self.get_text(fact)
+                time_worked = stuff.duration_minutes(fact.delta)
+                try:
+                    self.__add_jira_worklog(issue_id, comment, fact.range.start, int(time_worked))
+                    return True
+                except Exception as e:
+                    logger.error(e)
+            else:
+                logger.warning("skipping fact %s - unknown issue" % fact.activity)
+        else:
+            logger.warning("invalid source, don't know where export to")
+        return False

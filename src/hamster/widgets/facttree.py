@@ -127,8 +127,9 @@ class TagLabel(Label):
 
 class FactRow(object):
     def __init__(self):
-        self.time_label = Label()
-        self.activity_label = Label(x=100)
+        self.to_export = Label()
+        self.time_label = Label(x=30)
+        self.activity_label = Label(x=130)
 
         self.category_label = Label()
         self.description_label = Label()
@@ -174,6 +175,8 @@ class FactRow(object):
         if fact.end_time:
             time_label += fact.end_time.strftime(" %H:%M")
         self.time_label.set_text(time_label)
+
+        self.to_export.set_text("🔸" if fact.exported else ("📤️" if fact.range.end else "⏳"))
 
         self.activity_label.set_text(stuff.escape_pango(fact.activity))
 
@@ -231,6 +234,7 @@ class FactRow(object):
         # Do not show the start/end time for Totals
         if not isinstance(self.fact, TotalFact):
             self.time_label.show(g)
+            self.to_export.show(g)
         self.activity_label.show(g, self.activity_label.get_text() if not isinstance(self.fact, TotalFact) else "<b>{}</b>".format(self.activity_label.get_text()))
 
         if self.fact.category:
@@ -289,6 +293,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         # enter or double-click, passes in current day and fact
         'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
         'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'on-toggle-exported-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
     hadjustment = gobject.property(type=gtk.Adjustment, default=None)
@@ -360,6 +365,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def activate_row(self, day, fact):
         self.emit("on-activate-row", day, fact)
 
+    def toggle_exported_row(self, day, fact):
+        self.emit("on-toggle-exported-row", fact)
+
     def delete_row(self, fact):
         self.emit("on-delete-called", fact)
 
@@ -404,7 +412,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.y -= self.height * 0.8
             self.on_scroll()
 
-        elif event.keyval == gdk.KEY_Return:
+        elif event.keyval == gdk.KEY_x:
+            if self.current_fact:
+                self.toggle_exported_row(self.hover_day, self.current_fact)
+
+        elif event.keyval in (gdk.KEY_Return, gdk.KEY_e):
             if self.current_fact:
                 self.activate_row(self.hover_day, self.current_fact)
 
