@@ -34,6 +34,8 @@ jobs:
           PACKAGES="$PACKAGES python${{matrix.python-version}}"
           # Normal dependencies
           PACKAGES="$PACKAGES gettext intltool python3-gi python3-cairo python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0"
+          # Jira dependencies (optional, python3-jira doesn't exists in ubuntu 16)
+          # PACKAGES="$PACKAGES python3-jira python3-urllib3"
           # The gtk-update-icon-cache used to live in libgtk2.0-bin,
           # but was moved to its own package. Similar for distutils
           # (included by default in python stdlib).

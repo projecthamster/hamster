@@ -10,6 +10,5 @@
 - [-] exporter invoked from command line (today facts)
 - [-] export to jira item in menu
 - [ ] add suggestions to hamster from external source
-- [ ] inserting fact between start and end time of another fact
-- [ ] compare all files with master
+- [ ] compare all files with `python-2.x` branch and move forgotten changes
 - [x] integrate exporting with overview window

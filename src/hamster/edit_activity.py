@@ -98,7 +98,8 @@ class CustomFactController(Controller):
         elif action == "clone":
             base_fact = runtime.storage.get_fact(fact_id)
             self.fact = base_fact.copy(start_time=dt.datetime.now(),
-                                       end_time=None)
+                                       end_time=None,
+                                       exported=False)
         else:
             self.fact = Fact(start_time=dt.datetime.now())
 
@@ -288,7 +289,9 @@ class CustomFactController(Controller):
             self.update_cmdline()
 
     def on_exported_toggled(self, widget):
-        self.fact.exported = self.exported_checkbox.get_active()
+        if not self.master_is_cmdline:
+            self.fact.exported = self.exported_checkbox.get_active()
+            self.update_cmdline()
 
     def present(self):
         self.window.present()

@@ -272,7 +272,7 @@ class Exporter(gtk.Box):
         self.connect("destroy", self.on_destroy_event)
 
         self.storage = storage
-        self.export_thread: ExportThread = None
+        self.export_thread = None
         self.facts = []
 
     def _init_labels(self):
