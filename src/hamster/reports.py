@@ -55,6 +55,8 @@ def simple(facts, start_date, end_date, format, path = None):
         writer = XMLWriter(report_path)
     elif format == "ical":
         writer = ICalWriter(report_path)
+    elif format == "hamster":
+        writer = HamsterWriter(report_path)
     else: #default to HTML
         writer = HTMLWriter(report_path, start_date, end_date)
 
@@ -153,6 +155,16 @@ class TSVWriter(ReportWriter):
                                   fact.category,
                                   fact.description,
                                   ", ".join(fact.tags)])
+    def _finish(self, facts):
+        pass
+
+class HamsterWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+
+    def _write_fact(self, fact):
+        self.file.write(fact.serialized() + "\n")
+
     def _finish(self, facts):
         pass
 

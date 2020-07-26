@@ -4,6 +4,8 @@
   - Ctrl-=: clone or fallback to new if none selected.
   - e: edit selected activity
   - x: toggle export flag
+* Gathering activities from external source (right now only Jira and only via dbus)
+* Export activities as worklogs to jira
 
 ## Changes in 3.0.2
 

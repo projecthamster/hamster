@@ -12,3 +12,5 @@
 - [ ] add suggestions to hamster from external source
 - [ ] compare all files with `python-2.x` branch and move forgotten changes
 - [x] integrate exporting with overview window
+- [x] exporting activities via DBUS
+- [ ] zsh completion

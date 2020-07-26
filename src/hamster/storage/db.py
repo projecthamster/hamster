@@ -786,6 +786,10 @@ class Storage(storage.Storage):
     def __get_ext_activities(self, search):
         return self.get_external().get_activities(search)
 
+    def __export_fact(self, fact_id) -> bool:
+        fact = self.get_fact(fact_id)
+        return self.get_external().export(fact)
+
     def __get_activities(self, search):
         """returns list of activities for autocomplete,
            activity names converted to lowercase"""

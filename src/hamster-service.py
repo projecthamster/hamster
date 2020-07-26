@@ -416,13 +416,18 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
-    def GetActivities(self, search = ""):
+    def GetActivities(self, search=""):
         return [(row['name'], row['category'] or '') for row in self.get_activities(search)]
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
-    def GetExtActivities(self, search = ""):
+    def GetExtActivities(self, search=""):
         return [(row['name'], row['category'] or '') for row in self.get_ext_activities(search)]
+
+
+    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='b')
+    def ExportFact(self, fact_id):
+        return self.export_fact(fact_id)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')

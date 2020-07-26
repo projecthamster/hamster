@@ -325,7 +325,6 @@ class ExportThread(threading.Thread):
 
     def run(self):
         glib.idle_add(self.callback, 0.0, _("Connecting to external source..."))
-        external = runtime.get_external()
         for idx, fact in enumerate(self.facts):
             if self.interrupt:
                 logger.info("Interrupting export thread")
@@ -333,13 +332,14 @@ class ExportThread(threading.Thread):
             fraction = float(idx + 1) / self.steps
             label = _("Exporting: %s - %s") % (fact.activity, fact.delta)
             glib.idle_add(self.callback, fraction, label)
-            exported = external.export(fact)
+            exported = self.storage.export_fact(fact.id)
             if exported:
-                # TODO mark as exported
                 fact.exported = True
                 self.storage.update_fact(fact.id, fact, False)
                 pass
-        #     TODO external.report(fact)
+            else:
+                logger.info("Fact not exported: %s" % fact.activity)
+
         glib.idle_add(self.finish_callback, self.interrupt)
 
     def shutdown(self):

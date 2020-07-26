@@ -37,7 +37,7 @@ except ImportError:
 
 SOURCE_NONE = ""
 SOURCE_JIRA = 'jira'
-JIRA_ISSUE_NAME_REGEX = "^(\w+-\d+):? "
+JIRA_ISSUE_NAME_REGEX = "^([a-zA-Z][a-zA-Z0-9]*-[0-9]+)"
 ERROR_ADDITIONAL_MESSAGE = '\n\nCheck settings and reopen main window.'
 MIN_QUERY_LENGTH = 3
 CURRENT_USER_ACTIVITIES_LIMIT = 5
@@ -74,7 +74,7 @@ class ExternalSource(object):
         self.jira_pass = conf.get("jira-pass")
         self.jira_query = conf.get("jira-query")
         self.jira_category = conf.get("jira-category-field")
-        self.jira_fields = ','.join(['summary', self.jira_category, 'issuetype'])
+        self.jira_fields = ','.join(['summary', self.jira_category, 'issuetype', 'assignee', 'project'])
         logger.info("user: %s, pass: *****" % self.jira_user)
         if self.jira_url and self.jira_user and self.jira_pass and self.__is_connected(self.jira_url):
             options = {'server': self.jira_url}
@@ -92,9 +92,9 @@ class ExternalSource(object):
         elif self.source == SOURCE_JIRA:
             activities = self.__jira_get_activities(query, self.jira_query)
             direct_issue = None
-            if query and re.match("^[a-zA-Z][a-zA-Z0-9]*-[0-9]+$", query):
+            if query and re.match(JIRA_ISSUE_NAME_REGEX, query):
                 if self.__jira_is_issue_from_existing_project(query):
-                    issue = self.jira.issue(query.upper())
+                    issue = self.jira.issue(query.upper(), fields=self.jira_fields)
                     if issue:
                         direct_issue = self.__jira_extract_activity_from_issue(issue)
                         if direct_issue not in activities:
@@ -137,16 +137,15 @@ class ExternalSource(object):
     def __jira_extract_activity_from_issue(self, issue):
         activity = {}
         issue_id = issue.key
-        activity['name'] = str(issue_id) + ': ' + issue.fields.summary.replace(",", " ")
-        if hasattr(issue.fields, self.jira_category):
-            activity['category'] = str(getattr(issue.fields, self.jira_category))
+        fields = issue.fields
+        activity['name'] = str(issue_id) + ': ' + fields.summary.replace(",", " ") + (" 👨‍💼" + fields.assignee.name if fields.assignee else "")
+        if hasattr(fields, self.jira_category):
+            activity['category'] = str(getattr(fields, self.jira_category))
         else:
             activity['category'] = ""
         if not activity['category'] or activity['category'] == "None":
             try:
-                activity['category'] = "%s/%s (%s)" % (
-                    getattr(issue.fields, 'project').key, getattr(issue.fields, 'issuetype').name,
-                    getattr(issue.fields, 'project').name)
+                activity['category'] = "%s/%s (%s)" % (fields.project.key, fields.issuetype.name, fields.project.name)
             except Exception as e:
                 logger.warning(e)
         return activity
