@@ -74,7 +74,7 @@ class ExternalSource(object):
         self.jira_pass = conf.get("jira-pass")
         self.jira_query = conf.get("jira-query")
         self.jira_category = conf.get("jira-category-field")
-        self.jira_fields = ','.join(['summary', self.jira_category, 'issuetype', 'assignee', 'project'])
+        self.jira_fields = ','.join(['summary', self.jira_category, 'issuetype', 'assignee', 'project', 'status'])
         logger.info("user: %s, pass: *****" % self.jira_user)
         if self.jira_url and self.jira_user and self.jira_pass and self.__is_connected(self.jira_url):
             options = {'server': self.jira_url}
@@ -138,7 +138,10 @@ class ExternalSource(object):
         activity = {}
         issue_id = issue.key
         fields = issue.fields
-        activity['name'] = str(issue_id) + ': ' + fields.summary.replace(",", " ") + (" 👨‍💼" + fields.assignee.name if fields.assignee else "")
+        activity['name'] = str(issue_id) \
+                           + ': ' + fields.summary.replace(",", " ") \
+                           + " (%s)" % fields.status.name \
+                           + (" 👨‍💼" + fields.assignee.name if fields.assignee else "")
         if hasattr(fields, self.jira_category):
             activity['category'] = str(getattr(fields, self.jira_category))
         else:
@@ -219,4 +222,3 @@ class ExternalSource(object):
         """
         logger.info(_("updating issue #%s: %s min, comment: \n%s") % (issue_id, time_worked, text))
         self.jira.add_worklog(issue=issue_id, comment=text, started=start_time, timeSpent="%sm" % time_worked)
-
