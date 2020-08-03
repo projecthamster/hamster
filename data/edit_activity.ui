@@ -479,7 +479,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">exported</property>
+                    <property name="label" translatable="yes">exported to external source</property>
                     <attributes>
                       <attribute name="style" value="italic"/>
                       <attribute name="weight" value="bold"/>
