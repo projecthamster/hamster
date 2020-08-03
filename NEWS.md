@@ -6,6 +6,7 @@
   - x: toggle export flag
 * Gathering activities from external source (right now only Jira and only via dbus)
 * Export activities as worklogs to jira
+* Export activities to external source from command line (`hamster export external` command)
 
 ## Changes in 3.0.2
 
