@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)  # noqa: E402
 
 from hamster.lib.cache import cache
 from gi.repository import Gtk as gtk
+from gi.repository import GLib as glib
 import re
 import urllib3
 
@@ -59,14 +60,20 @@ class ExternalSource(object):
             self.__connect(conf)
         except Exception as e:
             error_msg = self.source + ' connection failed: ' + str(e)
-            self.on_error(error_msg + ERROR_ADDITIONAL_MESSAGE)
-            logger.warning(error_msg)
             self.source = SOURCE_NONE
+            self.__on_error(error_msg + ERROR_ADDITIONAL_MESSAGE)
+            logger.warning(error_msg)
 
     def __connect(self, conf):
-        if JIRA and self.source == SOURCE_JIRA:
-            self.__http = urllib3.PoolManager()
-            self.__connect_to_jira(conf)
+        if self.source == SOURCE_JIRA:
+            if JIRA:
+                self.__http = urllib3.PoolManager()
+                self.__connect_to_jira(conf)
+            else:
+                self.source = SOURCE_NONE
+                self.__on_error(_("Is Jira module installed (see README)? "
+                                  "Didn't found it! "
+                                  "External activities feature will be disabled."))
 
     def __connect_to_jira(self, conf):
         self.jira_url = conf.get("jira-url")
@@ -82,8 +89,8 @@ class ExternalSource(object):
             self.jira_projects = self.__jira_get_projects()
             self.jira_issue_types = self.__jira_get_issue_types()
         else:
-            self.on_error("Invalid Jira credentials")
             self.source = SOURCE_NONE
+            self.__on_error("Invalid Jira credentials")
 
     def get_activities(self, query=None):
         query = query.strip()
@@ -163,7 +170,10 @@ class ExternalSource(object):
     def __jira_search_issues(self, jira_query=None):
         return self.jira.search_issues(jira_query, fields=self.jira_fields, maxResults=100)
 
-    def on_error(self, msg):
+    def __on_error(self, msg):
+        glib.idle_add(self.__on_error_dialog, msg)
+
+    def __on_error_dialog(self, msg):
         md = gtk.MessageDialog(None,
                                0, gtk.MessageType.ERROR,
                                gtk.ButtonsType.CLOSE, msg)
@@ -188,6 +198,9 @@ class ExternalSource(object):
         logger.info("Exporting %s" % fact.activity)
         if not fact.range.end:
             logger.info("Skipping fact without end date")
+            return False
+        if fact.exported:
+            logger.info("Skipping exported fact")
             return False
         if self.source == SOURCE_JIRA:
             jira_match = re.match(JIRA_ISSUE_NAME_REGEX, fact.activity)
