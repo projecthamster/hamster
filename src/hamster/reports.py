@@ -184,7 +184,7 @@ class ExternalWriter(ReportWriter):
             self.storage.update_fact(fact.id, fact, False)
             pass
         else:
-            self.file.write(_("Fact not exported: %s" % fact.activity) + "\n")
+            self.file.write(_("Activity not exported: %s" % fact.activity) + "\n")
 
     def _finish(self, facts):
         pass

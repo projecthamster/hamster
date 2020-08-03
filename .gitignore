@@ -32,3 +32,4 @@ build
 .pydevproject
 venv/
 .idea/
+*.iml
