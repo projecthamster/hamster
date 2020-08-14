@@ -1,3 +1,7 @@
+## Changes in 3.0.3 (unreleased)
+
+* Fixed Adding activities in retrospect is very hard (issue 627)
+
 ## Changes in 3.0.2
 
 * Switch from deprecated xml2po to itstool for translating help files
