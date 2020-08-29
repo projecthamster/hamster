@@ -138,7 +138,7 @@ class ExternalSource(object):
                 if query is None or all(item in activity['name'].lower() for item in query.lower().split(' ')):
                     activities.append(activity)
         except Exception as e:
-            logger.warn(e)
+            logger.warning(e)
         return activities
 
     def __jira_extract_activity_from_issue(self, issue):
@@ -185,7 +185,8 @@ class ExternalSource(object):
         try:
             self.__http.request('GET', url, timeout=1)
             return True
-        except urllib3.HTTPError as err:
+        except Exception as err:
+            logger.info(err)
             return False
 
     def __jira_is_issue_from_existing_project(self, issue):
