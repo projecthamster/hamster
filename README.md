@@ -74,7 +74,7 @@ sudo apt install gettext intltool python3-gi python3-cairo python3-distutils pyt
 sudo apt install python-tz
 # and for documentation
 sudo apt install itstool yelp
-# and for jira integration
+# and for jira integration (should be python3-jira>=2.0.0, if not - use pip)
 sudo apt install python3-jira python3-urllib3
 ```
 
@@ -87,7 +87,7 @@ sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
 sudo zypper install python-tz
 # and for documentation
 sudo zypper install itstool yelp
-# and for jira integration
+# and for jira integration (should be python3-jira>=2.0.0, if not - use pip)
 sudo zypper install python3-jira python3-urllib3
 ```
 
