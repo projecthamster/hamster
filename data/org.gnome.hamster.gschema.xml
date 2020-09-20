@@ -7,6 +7,14 @@
                 The folder the last report was saved to
             </description>
         </key>
+        
+        <key type="b" name="stop-on-shutdown">
+            <default>false</default>
+            <summary>Stop tracking on shutdown</summary>
+            <description>
+                Stop tracking current activity on shutdown
+            </description>
+        </key>
 
         <key type="u" name="day-start-minutes">
             <default>330</default>
