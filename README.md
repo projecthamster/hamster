@@ -58,6 +58,33 @@ Installation:
 Easy installation on any distribution supporting snap:  
 https://snapcraft.io/hamster-snap
 
+##### Flatpak
+
+[Flatpak](https://flatpak.org/) enables you to install Hamster in a versioned
+environment and then run it inside a sandbox. It is a method independent from
+your distribution-specific packaging system, ensuring that the application can
+always be reproducibly built, even without hunting down all of the dependencies
+yourself. Debugging is made easier as every user has the exact same environment
+at runtime. Permissions are limited to what the application really needs to
+function properly.
+
+If you downloaded the file with the Hamster bundle (ending in ``.flatpak``), you
+can directly install it with:
+
+```bash
+flatpak install --reinstall Hamster.flatpak
+```
+
+If you would like to install Hamster only for your user, please pass the
+``--user`` option to the above command.
+
+After installation, if you need to invoke Hamster from the command line,
+you can do so with:
+
+```bash
+flatpak run org.gnome.Hamster [args...]
+```
+
 ### Install from sources
 
 #### Dependencies
@@ -134,6 +161,20 @@ as discussed [here](https://github.com/projecthamster/hamster/pull/421#issuecomm
 
 Now restart your panels/docks and you should be able to add Hamster!
 
+##### Flatpak
+
+Alternatively, you can also build a sandboxed
+[flatpak](https://www.flatpak.org/) yourself. You might need to install the
+GNOME SDK beforehand (an error will notify you about it, if needed). Execute:
+
+```bash
+flatpak-builder --force-clean --user --install \
+    build/flatpak org.gnome.Hamster.json
+```
+
+This creates a temporary flatpack build folder in the ``build/flatpak``
+directory. Once the app is installed, the whole ``build/flatpack/`` directory
+can be removed.
 
 #### Uninstall
 
@@ -143,6 +184,14 @@ sudo ./waf uninstall
 ```
 Afterwards `find /usr -iname hamster` should only list unrelated files (if any).
 Otherwise, please see the [wiki section](https://github.com/projecthamster/hamster/wiki/Tips-and-Tricks#uninstall)
+
+##### Flatpak
+
+To remove the installed flatpak, just run:
+
+```bash
+flatpak uninstall org.gnome.Hamster
+```
 
 #### Troubleshooting
 
@@ -187,7 +236,31 @@ run:
     python3 -m unittest tests.test_stuff.TestFactParsing
     python3 -m unittest tests.test_stuff.TestFactParsing.test_plain_name
 
-#### Migrating from hamster-applet
+##### Flatpak
+
+To run the tests inside the flatpak, use:
+
+```bash
+flatpak-builder --run build/flatpak org.gnome.Hamster.json \
+    python3 -m unittest
+```
+
+#### Migrating
+
+##### Migrating data to flatpak
+
+If you would like to retain your data from a non-flatpak installation,
+you can do so by running:
+
+```bash
+gio copy -b \
+    ~/.local/share/hamster/hamster.db \
+    ~/.var/app/org.gnome.Hamster/data/hamster/
+```
+
+After checking everything works, you can remove the original database.
+
+##### Migrating from hamster-applet
 
 Previously Hamster was installed everywhere under `hamster-applet`. As
 the applet is long gone, the paths and file names have changed to

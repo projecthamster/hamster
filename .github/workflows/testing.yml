@@ -79,3 +79,42 @@ jobs:
       - name: Run flake8
         run: |
           flake8 --count --show-source --statistics
+
+  flatpak:
+    # This job builds Hamster for flatpak, and runs its tests
+    # inside the sandbox.
+    name: Test the flatpak build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Prepare repo
+        uses: actions/checkout@v2
+      - name: Install system packages
+        # It would be good to cache the GNOME Sdk, as it
+        # is rather big to download each time.
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          PACKAGES="flatpak flatpak-builder dbus-x11"
+
+          sudo apt-get update
+          sudo apt-get install -yq ${PACKAGES}
+      - name: Install GNOME SDK for flatpak
+        run: |
+          flatpak remote-add --user --if-not-exists --from flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y flathub org.gnome.Platform//3.36 org.gnome.Sdk//3.36
+      - name: Build application
+        run: |
+          flatpak-builder --repo=build/flatpak/repo build/flatpak/tmp org.gnome.Hamster.json
+      - name: Run tests inside sandbox
+        run: |
+          dbus-launch flatpak-builder --run build/flatpak/tmp org.gnome.Hamster.json python3 -m unittest
+      - name: Export bundle and try to install it
+        run: |
+          mkdir -p dist
+          flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo build/flatpak/repo dist/Hamster.flatpak org.gnome.Hamster
+          flatpak --user -y install dist/Hamster.flatpak
+      - name: Upload built artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Flatpak application
+          path: dist/Hamster.flatpak
