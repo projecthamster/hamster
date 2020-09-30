@@ -24,6 +24,7 @@ import bisect
 import cairo
 import re
 
+from xml.sax.saxutils import escape
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
@@ -51,7 +52,7 @@ def extract_search(text):
         search += "@%s" % fact.category
     if fact.tags:
         search += " #%s" % (" #".join(fact.tags))
-    return search
+    return search.lower()
 
 class DataRow(object):
     """want to split out visible label, description, activity data
@@ -227,6 +228,8 @@ class CmdLineEntry(gtk.Entry):
         box.add(self.complete_tree)
 
         self.storage = client.Storage()
+        self.todays_facts = None
+        self.local_suggestions = None
         self.load_suggestions()
         self.ignore_stroke = False
 
@@ -321,7 +324,7 @@ class CmdLineEntry(gtk.Entry):
             suggestions[label] += 0
 
         # list of (label, score), higher scores first
-        self.suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
+        self.local_suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
 
     def complete_first(self):
         text = self.get_text()
@@ -336,10 +339,8 @@ class CmdLineEntry(gtk.Entry):
 
         return text, None
 
-
     def update_entry(self, text):
         self.set_text(text or "")
-
 
     def update_suggestions(self, text=""):
         """
@@ -377,17 +378,16 @@ class CmdLineEntry(gtk.Entry):
                     looking_for = fields[fields.index(field)+1]
                 break
 
-
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
-
 
         search = extract_search(text)
 
         matches = []
-        for match, score in self.suggestions:
-            if search in match:
-                if match.startswith(search):
+        suggestions = self.local_suggestions
+        for match, score in suggestions:
+            if search in match.lower():
+                if match.lower().startswith(search):
                     score += 10**8 # boost beginnings
                 matches.append((match, score))
 
@@ -399,7 +399,7 @@ class CmdLineEntry(gtk.Entry):
             if fact.end_time:
                 label += fact.end_time.strftime("-%H:%M")
 
-            markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+            markup_label = label + " " + (self.__bold_search(match, search) if search else escape(match))
             label += " " + match
 
             res.append(DataRow(markup_label, match, label))
@@ -451,6 +451,9 @@ class CmdLineEntry(gtk.Entry):
 
         self.complete_tree.set_rows(res)
 
+    def __bold_search(self, match, search):
+        pattern = re.compile("(%s)" % re.escape(search), re.IGNORECASE)
+        return re.sub(pattern, r"<b>\1</b>", escape(match))
 
     def show_suggestions(self, text):
         if not self.get_window():

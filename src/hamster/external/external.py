@@ -94,7 +94,7 @@ class ExternalSource(object):
 
     def get_activities(self, query=None):
         query = query.strip()
-        if not self.source or not query:
+        if not self.source:
             return []
         elif self.source == SOURCE_JIRA:
             activities = self.__jira_get_activities(query, self.jira_query)
@@ -113,10 +113,10 @@ class ExternalSource(object):
                 jira_query = " AND ".join(
                     fragments) + " AND resolution = Unresolved order by priority desc, updated desc"
                 logging.info(jira_query)
-                third_activities = self.__jira_get_activities('', jira_query)
-                if activities and third_activities:
+                default_jira_activities = self.__jira_get_activities('', jira_query)
+                if activities and default_jira_activities:
                     activities.append({"name": "---------------------", "category": "other open"})
-                activities.extend(third_activities)
+                activities.extend(default_jira_activities)
             return activities
 
     def __generate_fragment_jira_query(self, word):
