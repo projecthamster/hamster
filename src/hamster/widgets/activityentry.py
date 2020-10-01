@@ -18,6 +18,8 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+
+MAX_USER_SUGGESTIONS = 10
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import bisect
@@ -404,7 +406,7 @@ class CmdLineEntry(gtk.Entry):
                 matches.append((match, score))
 
         # need to limit these guys, sorry
-        matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7]
+        matches = sorted(matches, key=lambda x: x[1], reverse=True)[:MAX_USER_SUGGESTIONS]
 
         for match, score in matches:
             label = (fact.start_time or now).strftime("%H:%M")
