@@ -115,8 +115,6 @@ class ExternalSource(object):
                     fragments) + " AND resolution = Unresolved order by priority desc, updated desc"
                 logging.info(jira_query)
                 default_jira_activities = self.__jira_get_activities('', jira_query)
-                if activities and default_jira_activities:
-                    activities.append({"name": "---------------------", "category": "other open"})
                 activities.extend(default_jira_activities)
             return activities
 
