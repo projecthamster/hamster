@@ -304,9 +304,11 @@ class CmdLineEntry(gtk.Entry):
             self.set_position(-1)
 
     def __load_ext_suggestions_with_timer(self, query=""):
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "emblem-synchronizing-symbolic")
         if self.ext_suggestion_filler_timer:
             gobject.source_remove(self.ext_suggestion_filler_timer)
-        self.ext_suggestion_filler_timer = gobject.timeout_add(1000, self.__refresh_ext_suggestions, extract_search_without_tags_and_category(query))
+        self.ext_suggestion_filler_timer = gobject.timeout_add(500, self.__refresh_ext_suggestions,
+                                                               extract_search_without_tags_and_category(query))
 
     def __refresh_ext_suggestions(self, query=""):
         suggestions = []
@@ -321,6 +323,8 @@ class CmdLineEntry(gtk.Entry):
         logger.debug("external suggestion refreshed for query: %s" % query)
         self.ext_suggestions = suggestions
         self.update_suggestions(self.get_text())
+        self.update_suggestions_popup()
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, None)
         self.ext_suggestion_filler_timer = None
 
     def load_suggestions(self):
@@ -483,7 +487,8 @@ class CmdLineEntry(gtk.Entry):
 
         self.complete_tree.set_rows(res)
 
-    def __bold_search(self, match, search):
+    @staticmethod
+    def __bold_search(match, search):
         result = escape(match)
         for word in search.split(" "):
             pattern = re.compile("(%s)" % re.escape(word), re.IGNORECASE)
@@ -495,18 +500,24 @@ class CmdLineEntry(gtk.Entry):
         if not self.get_window():
             return
 
+        self.popup.show_all()
+        self.update_suggestions(text)
+        self.update_suggestions_popup()
+        self.__load_ext_suggestions_with_timer(text)
+
+    def update_suggestions_popup(self):
+        if not self.get_window():
+            return
+
+        # self.popup.hide()
         entry_alloc = self.get_allocation()
         entry_x, entry_y = self.get_window().get_origin()[1:]
         x, y = entry_x + entry_alloc.x, entry_y + entry_alloc.y + entry_alloc.height
-
-        self.popup.show_all()
-        self.__load_ext_suggestions_with_timer(text)
-        self.update_suggestions(text)
-
         tree_w, tree_h = self.complete_tree.get_size_request()
 
         self.popup.move(x, y)
         self.popup.resize(entry_alloc.width, tree_h)
+        self.popup.queue_draw()
         self.popup.show_all()
 
 

@@ -49,7 +49,8 @@ class CustomFactController(Controller):
 
         self._gui = load_ui_file("edit_activity.ui")
         self.window = self.get_widget('custom_fact_window')
-        self.window.set_size_request(1000, 200)
+        self.window.set_size_request(600, 200)
+        self.window.set_default_size(1000, 200)
 
 
         self.action = action
