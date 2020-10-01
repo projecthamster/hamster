@@ -231,6 +231,8 @@ class CmdLineEntry(gtk.Entry):
         self.todays_facts = None
         self.local_suggestions = None
         self.load_suggestions()
+        self.ext_suggestions = None
+        self.load_ext_suggestions()
         self.ignore_stroke = False
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
@@ -294,6 +296,16 @@ class CmdLineEntry(gtk.Entry):
             self.update_entry(label)
             self.set_position(-1)
 
+    def load_ext_suggestions(self):
+        facts = self.storage.get_ext_activities()
+        self.ext_suggestions = []
+        for fact in facts:
+            label = fact.get("name")
+            category = fact.get("category")
+            if category:
+                label += "@%s" % category
+            score = 10**10
+            self.ext_suggestions.append((label, score))
 
     def load_suggestions(self):
         self.todays_facts = self.storage.get_todays_facts()
@@ -384,7 +396,7 @@ class CmdLineEntry(gtk.Entry):
         search = extract_search(text)
 
         matches = []
-        suggestions = self.local_suggestions
+        suggestions = self.local_suggestions + self.ext_suggestions
         for match, score in suggestions:
             if search in match.lower():
                 if match.lower().startswith(search):
