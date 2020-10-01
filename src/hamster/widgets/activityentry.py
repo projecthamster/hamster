@@ -56,6 +56,11 @@ def extract_search(text):
         search += " #%s" % (" #".join(fact.tags))
     return search.lower()
 
+def extract_search_without_tags_and_category(text):
+    fact = Fact.parse(text)
+    search = fact.activity
+    return search.lower()
+
 class DataRow(object):
     """want to split out visible label, description, activity data
       and activity data with time (full_data)"""
@@ -233,8 +238,10 @@ class CmdLineEntry(gtk.Entry):
         self.todays_facts = None
         self.local_suggestions = None
         self.load_suggestions()
-        self.ext_suggestions = None
-        self.load_ext_suggestions()
+
+        self.ext_suggestions = []
+        self.ext_suggestion_filler_timer = gobject.timeout_add(0, self.__refresh_ext_suggestions, "")
+
         self.ignore_stroke = False
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
@@ -243,8 +250,6 @@ class CmdLineEntry(gtk.Entry):
         self.connect("key-press-event", self.on_key_press)
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("icon-press", self.on_icon_press)
-
-
 
     def on_changed(self, entry):
         text = self.get_text()
@@ -298,16 +303,25 @@ class CmdLineEntry(gtk.Entry):
             self.update_entry(label)
             self.set_position(-1)
 
-    def load_ext_suggestions(self):
-        facts = self.storage.get_ext_activities()
-        self.ext_suggestions = []
+    def __load_ext_suggestions_with_timer(self, query=""):
+        if self.ext_suggestion_filler_timer:
+            gobject.source_remove(self.ext_suggestion_filler_timer)
+        self.ext_suggestion_filler_timer = gobject.timeout_add(1000, self.__refresh_ext_suggestions, extract_search_without_tags_and_category(query))
+
+    def __refresh_ext_suggestions(self, query=""):
+        suggestions = []
+        facts = self.storage.get_ext_activities(query)
         for fact in facts:
             label = fact.get("name")
             category = fact.get("category")
             if category:
                 label += "@%s" % category
             score = 10**10
-            self.ext_suggestions.append((label, score))
+            suggestions.append((label, score))
+        logger.debug("external suggestion refreshed for query: %s" % query)
+        self.ext_suggestions = suggestions
+        self.update_suggestions(self.get_text())
+        self.ext_suggestion_filler_timer = None
 
     def load_suggestions(self):
         self.todays_facts = self.storage.get_todays_facts()
@@ -398,7 +412,7 @@ class CmdLineEntry(gtk.Entry):
         search = extract_search(text)
 
         matches = []
-        suggestions = self.local_suggestions + self.ext_suggestions
+        suggestions = self.local_suggestions
         for match, score in suggestions:
             search_words = search.split(" ")
             match_words = match.lower().split(" ")
@@ -406,6 +420,8 @@ class CmdLineEntry(gtk.Entry):
                 if match.lower().startswith(search):
                     score += 10**8 # boost beginnings
                 matches.append((match, score))
+        for match, score in self.ext_suggestions:
+            matches.append((match, score))
 
         # need to limit these guys, sorry
         matches = sorted(matches, key=lambda x: x[1], reverse=True)[:MAX_USER_SUGGESTIONS]
@@ -484,7 +500,7 @@ class CmdLineEntry(gtk.Entry):
         x, y = entry_x + entry_alloc.x, entry_y + entry_alloc.y + entry_alloc.height
 
         self.popup.show_all()
-
+        self.__load_ext_suggestions_with_timer(text)
         self.update_suggestions(text)
 
         tree_w, tree_h = self.complete_tree.get_size_request()
