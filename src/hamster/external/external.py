@@ -29,12 +29,13 @@ from hamster.lib.cache import cache
 from gi.repository import Gtk as gtk
 from gi.repository import GLib as glib
 import re
-import urllib3
 
 try:
     from jira.client import JIRA
+    import urllib3
 except ImportError:
     JIRA = None
+    urllib3 = None
 
 SOURCE_NONE = ""
 SOURCE_JIRA = 'jira'
