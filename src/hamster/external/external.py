@@ -145,7 +145,7 @@ class ExternalSource(object):
         issue_id = issue.key
         fields = issue.fields
         activity['name'] = str(issue_id) \
-                           + ': ' + fields.summary.replace(",", " ") \
+                           + ': ' + fields.summary.replace(",", " ").replace("#", "*").replace("@", " ") \
                            + " (%s)" % fields.status.name \
                            + (" 👨‍💼" + fields.assignee.name if fields.assignee else "")
         if hasattr(fields, self.jira_category):
