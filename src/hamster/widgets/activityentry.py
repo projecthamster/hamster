@@ -400,7 +400,9 @@ class CmdLineEntry(gtk.Entry):
         matches = []
         suggestions = self.local_suggestions + self.ext_suggestions
         for match, score in suggestions:
-            if search in match.lower():
+            search_words = search.split(" ")
+            match_words = match.lower().split(" ")
+            if all(search_word in match_words for search_word in search_words):
                 if match.lower().startswith(search):
                     score += 10**8 # boost beginnings
                 matches.append((match, score))
@@ -466,8 +468,12 @@ class CmdLineEntry(gtk.Entry):
         self.complete_tree.set_rows(res)
 
     def __bold_search(self, match, search):
-        pattern = re.compile("(%s)" % re.escape(search), re.IGNORECASE)
-        return re.sub(pattern, r"<b>\1</b>", escape(match))
+        result = escape(match)
+        for word in search.split(" "):
+            pattern = re.compile("(%s)" % re.escape(word), re.IGNORECASE)
+            result = re.sub(pattern, r"<b>\1</b>", result)
+
+        return result
 
     def show_suggestions(self, text):
         if not self.get_window():
