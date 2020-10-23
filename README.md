@@ -43,6 +43,15 @@ pkill -ef hamster
 
 ### Install from packages
 
+##### Debian and Ubuntu
+
+Package status Debian: https://tracker.debian.org/pkg/hamster-time-tracker
+Package status Ubuntu: https://launchpad.net/ubuntu/+source/hamster-time-tracker
+
+Installation:
+```sudo apt install hamster-time-tracker```
+(or graphical package installer).
+
 ##### OpenSUSE
 https://software.opensuse.org/package/hamster-time-tracker
 
