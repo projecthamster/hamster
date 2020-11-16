@@ -119,17 +119,30 @@ class RangePick(gtk.ToggleButton):
         self._ui = None
 
     def on_toggle(self, button):
+        #print( "_hiding = %s" % self._hiding )
+        #print( "active %s" % self.get_active() )
+        #print( "---" )
         if self.get_active():
             if self._hiding:
                 self._hiding = False
-                self.set_active(False)
+                self.set_active(True)
+                self.show()
                 return
 
 
             self.show()
+            self._hiding = False
+            self.set_active(True)
         else:
-            self.hide()
+            if self._hiding:
+                self._hiding = False
+                self.set_active(True)
+                self.show()
+                return
 
+            self.hide()
+            self._hiding = True
+            self.set_active(False)
 
     def set_range(self, start_date, end_date=None):
         end_date = end_date or start_date
