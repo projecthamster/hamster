@@ -35,11 +35,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>The overview window</caption>
-      <image>https://github.com/projecthamster/hamster/blob/master/screenshot.png</image>
+      <image>https://raw.githubusercontent.com/projecthamster/hamster/master/screenshot.png</image>
     </screenshot>
     <screenshot>
       <caption>The overview window with statistics</caption>
-      <image>https://github.com/projecthamster/hamster/blob/master/data/screenshots/overview2.png</image>
+      <image>https://raw.githubusercontent.com/projecthamster/hamster/master/data/screenshots/overview2.png</image>
     </screenshot>
   </screenshots>
   ​<translation type="gettext">hamster</translation>
