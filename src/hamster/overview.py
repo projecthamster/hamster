@@ -523,19 +523,19 @@ class Overview(Controller):
         if event.keyval == gdk.KEY_Escape:
             self.close_window()
 
-    def find_facts(self):
+    def find_facts(self, scroll_to_top=False):
         start, end = self.header_bar.range_pick.get_range()
         search_active = self.header_bar.search_button.get_active()
         search = "" if not search_active else self.filter_entry.get_text()
         search = "%s*" % search if search else "" # search anywhere
         self.facts = self.storage.get_facts(start, end, search_terms=search)
-        self.fact_tree.set_facts(self.facts)
+        self.fact_tree.set_facts(self.facts, scroll_to_top=scroll_to_top)
         self.totals.set_facts(self.facts)
         self.header_bar.stop_button.set_sensitive(
             self.facts and not self.facts[-1].end_time)
 
     def on_range_selected(self, button, range_type, start, end):
-        self.find_facts()
+        self.find_facts(scroll_to_top=True)
 
     def on_search_changed(self, entry):
         if entry.get_text():
@@ -544,7 +544,7 @@ class Overview(Controller):
         else:
             self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY,
                                                       None)
-        self.find_facts()
+        self.find_facts(scroll_to_top=True)
 
     def on_search_icon_press(self, entry, position, event):
         if position == gtk.EntryIconPosition.SECONDARY:

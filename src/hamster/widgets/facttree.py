@@ -481,16 +481,18 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.vadjustment.connect("value_changed", self.on_scroll_value_changed)
         self.set_size_request(500, 300)
 
-    def set_facts(self, facts):
+    def set_facts(self, facts, scroll_to_top=False):
         # FactTree adds attributes to its facts. isolate these side effects
         # copy the id too; most of the checks are based on id here.
         self.facts = [fact.copy(id=fact.id) for fact in facts]
         del facts  # make sure facts is not used by inadvertance below.
 
-        self.y = 0
+        # If we get an entirely new set of facts, scroll back to the top
+        if scroll_to_top:
+            self.y = 0
         self.hover_fact = None
         if self.vadjustment:
-            self.vadjustment.set_value(0)
+            self.vadjustment.set_value(self.y)
 
         if self.facts:
             start = self.facts[0].date
