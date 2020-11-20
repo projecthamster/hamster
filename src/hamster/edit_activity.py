@@ -154,7 +154,7 @@ class CustomFactController(Controller):
 
     def increment_date(self, days):
         delta = dt.timedelta(days=days)
-        self.change_start_date(self.date + delta)
+        self.move_to_date(self.date + delta)
         self.update_fields()
 
     def show(self):
@@ -234,9 +234,11 @@ class CustomFactController(Controller):
     def on_start_date_changed(self, widget):
         if not self.master_is_cmdline:
             new_date = self.start_date.date
-            self.change_start_date(new_date)
+            self.move_to_date(new_date)
+            self.validate_fields()
+            self.update_cmdline()
 
-    def change_start_date(self, new_date):
+    def move_to_date(self, new_date):
         if self.fact.start_time:
             previous_date = self.fact.start_time.date()
             delta = new_date - previous_date
@@ -246,8 +248,6 @@ class CustomFactController(Controller):
                 self.fact.end_time += delta
                 self.end_date.date = self.fact.end_time
         self.date = self.fact.date or dt.hday.today()
-        self.validate_fields()
-        self.update_cmdline()
 
     def on_start_date_expander_activated(self, widget):
         # state has not changed yet, toggle also end_date calendar visibility
