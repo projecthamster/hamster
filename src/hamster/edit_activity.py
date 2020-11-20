@@ -298,8 +298,8 @@ class CustomFactController(Controller):
         self.start_time.time = self.fact.start_time
         self.end_time.time = self.fact.end_time
         self.end_time.set_start_time(self.fact.start_time)
-        self.start_date.date = self.fact.date or self.date
-        self.end_date.date = self.fact.date or self.date
+        self.start_date.date = self.fact.start_time
+        self.end_date.date = self.fact.end_time
         self.activity_entry.set_text(self.fact.activity)
         self.category_entry.set_text(self.fact.category)
         self.description_buffer.set_text(self.fact.description)
