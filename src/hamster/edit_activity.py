@@ -99,14 +99,11 @@ class CustomFactController(Controller):
         else:
             self.fact = Fact(start_time=dt.datetime.now())
 
-        original_fact = self.fact
         # TODO: should use hday, not date.
         self.date = self.fact.date
 
         self.update_fields()
         self.update_cmdline(select=True)
-
-        self.cmdline.original_fact = original_fact
 
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.

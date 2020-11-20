@@ -209,9 +209,6 @@ class CmdLineEntry(gtk.Entry):
         # default day for times without date
         self.default_day = None
 
-        # to be set by the caller, if editing an existing fact
-        self.original_fact = None
-
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
         self.popup.set_attached_to(self)  # attributes
