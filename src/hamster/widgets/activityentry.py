@@ -321,7 +321,7 @@ class CmdLineEntry(gtk.Entry):
 
     def complete_first(self):
         text = self.get_text()
-        fact = Fact.parse(text)
+        fact = Fact.parse(text, default_day=self.default_day)
         search = extract_search(fact)
         if not self.complete_tree.rows or not fact.activity:
             return text, None
@@ -357,7 +357,7 @@ class CmdLineEntry(gtk.Entry):
 
         res = []
 
-        fact = Fact.parse(text)
+        fact = Fact.parse(text, default_day=self.default_day)
         now = dt.datetime.now()
 
         # figure out what we are looking for
