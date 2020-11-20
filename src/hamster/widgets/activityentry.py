@@ -44,8 +44,7 @@ from hamster.lib.fact import Fact
 #       Code redundancy to be removed later.
 
 
-def extract_search(text):
-    fact = Fact.parse(text)
+def extract_search(fact):
     search = fact.activity
     if fact.category:
         search += "@%s" % fact.category
@@ -323,7 +322,7 @@ class CmdLineEntry(gtk.Entry):
     def complete_first(self):
         text = self.get_text()
         fact = Fact.parse(text)
-        search = extract_search(text)
+        search = extract_search(fact)
         if not self.complete_tree.rows or not fact.activity:
             return text, None
 
@@ -379,7 +378,7 @@ class CmdLineEntry(gtk.Entry):
         current_fragment = fragments[-1] if fragments else ""
 
 
-        search = extract_search(text)
+        search = extract_search(fact)
 
         matches = []
         for match, score in self.suggestions:
