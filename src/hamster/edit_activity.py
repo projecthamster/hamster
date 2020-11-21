@@ -197,6 +197,7 @@ class CustomFactController(Controller):
                 # no change to description here, keep the main one
                 fact.description = self.fact.description
             self.fact = fact
+            self.date = fact.date
             self.update_fields()
 
     def on_cmdline_focus_in_event(self, widget, event):
