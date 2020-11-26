@@ -32,13 +32,16 @@ class TagsEntry(gtk.Entry):
         'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self):
-        gtk.Entry.__init__(self)
+    def __init__(self, *, parent):
+        gtk.Entry.__init__(self, parent=parent)
         self.ac_tags = None  # "autocomplete" tags
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
 
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
+        self.popup.set_attached_to(self)
+        self.popup.set_transient_for(self.get_ancestor(gtk.Window))
+
         self.scroll_box = gtk.ScrolledWindow()
         self.scroll_box.set_shadow_type(gtk.ShadowType.IN)
         self.scroll_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)

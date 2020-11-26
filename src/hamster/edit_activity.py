@@ -79,8 +79,7 @@ class CustomFactController(Controller):
 
         self.start_time = widgets.TimeInput(parent=self.get_widget("start time box"))
 
-        self.tags_entry = widgets.TagsEntry()
-        self.get_widget("tags box").add(self.tags_entry)
+        self.tags_entry = widgets.TagsEntry(parent=self.get_widget("tags box"))
 
         self.save_button = self.get_widget("save_button")
 
