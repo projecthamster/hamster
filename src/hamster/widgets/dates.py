@@ -79,7 +79,7 @@ class Calendar():
         return getattr(self.widget, name)
 
 
-class RangePick(gtk.ToggleButton):
+class RangePick(gtk.MenuButton):
     """ a text entry widget with calendar popup"""
     __gsignals__ = {
         # day|week|month|manual, start, end
@@ -92,7 +92,9 @@ class RangePick(gtk.ToggleButton):
 
         self._ui = load_ui_file("date_range.ui")
 
-        self.popup = self.get_widget("range_popup")
+        popup = self.get_widget("range_popup")
+        popup.connect("show", self.on_show)
+        self.set_popover(popup)
 
         self.today = today
 
@@ -106,30 +108,7 @@ class RangePick(gtk.ToggleButton):
         self.start_date, self.end_date = None, None
         self.current_range = None
 
-        self.popup.connect("focus-out-event", self.on_focus_out)
-        self.connect("toggled", self.on_toggle)
-
         self._ui.connect_signals(self)
-        self.connect("destroy", self.on_destroy)
-        self._hiding = False
-
-    def on_destroy(self, window):
-        self.popup.destroy()
-        self.popup = None
-        self._ui = None
-
-    def on_toggle(self, button):
-        if self.get_active():
-            if self._hiding:
-                self._hiding = False
-                self.set_active(False)
-                return
-
-
-            self.show()
-        else:
-            self.hide()
-
 
     def set_range(self, start_date, end_date=None):
         end_date = end_date or start_date
@@ -142,7 +121,7 @@ class RangePick(gtk.ToggleButton):
     def emit_range(self, range, start, end):
         self.set_range(start, end)
         self.emit("range-selected", range, start, end)
-        self.hide()
+        self.set_active(False)
 
 
     def prev_range(self):
@@ -190,27 +169,7 @@ class RangePick(gtk.ToggleButton):
         return self._ui.get_object(name)
 
 
-    def on_focus_out(self, popup, event):
-        x, y = self.get_pointer()
-        button_w, button_h = self.get_allocation().width, self.get_allocation().height
-        # avoid double-toggling when focus goes from window to the toggle button
-        if 0 <= x <= button_w and 0 <= y <= button_h:
-            self._hiding = True
-
-        self.set_active(False)
-
-
-    def hide(self):
-        self.set_active(False)
-        self.popup.hide()
-
-    def show(self):
-        dummy, x, y = self.get_window().get_origin()
-
-        alloc = self.get_allocation()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-
+    def on_show(self, user_data):
         self.get_widget("day_preview").set_text(stuff.format_range(self.today, self.today))
         self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.today)))
         self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.today)))
@@ -223,9 +182,7 @@ class RangePick(gtk.ToggleButton):
         end_cal.select_month(self.end_date.month - 1, self.end_date.year)
         end_cal.select_day(self.end_date.day)
 
-        self.popup.show_all()
         self.get_widget("day").grab_focus()
-        self.set_active(True)
 
 
     def on_day_clicked(self, button):
