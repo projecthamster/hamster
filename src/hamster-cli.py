@@ -46,7 +46,7 @@ from hamster.preferences import PreferencesEditor
 from hamster.lib import default_logger, stuff
 from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
-
+from hamster.lib.notifsmanager import notifs_mgr
 
 logger = default_logger(__file__)
 

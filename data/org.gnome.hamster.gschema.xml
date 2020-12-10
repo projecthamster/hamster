@@ -18,5 +18,20 @@
                 then the activity belongs to the previous hamster day.
             </description>
         </key>
+
+        <key type="u" name="notify-interval-minutes">
+            <default>15</default>
+            <summary>After how many minutes to notify the user</summary>
+        </key>
+
+        <key type="b" name="notifications-enabled">
+            <default>false</default>
+            <summary>Enable notifications</summary>
+        </key>
+
+        <key type="b" name="notify-on-idle-enabled">
+            <default>false</default>
+            <summary>Send Notifications when no activity is set</summary>
+        </key>
     </schema>
 </schemalist>
