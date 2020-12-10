@@ -8,6 +8,7 @@ Icon=org.gnome.Hamster.GUI
 DBusActivatable=true
 Exec=@BINDIR@/hamster
 Categories=GNOME;GTK;Utility;
+Keywords=time tracking;time-log;personal productivity
 Actions=overview;add;
 
 [Desktop Action overview]
