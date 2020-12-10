@@ -203,7 +203,7 @@ class CompleteTree(graphics.Scene):
 
 
 class CmdLineEntry(gtk.Entry):
-    def __init__(self, updating=True, **kwargs):
+    def __init__(self, **kwargs):
         gtk.Entry.__init__(self, **kwargs)
 
         # default day for times without date
