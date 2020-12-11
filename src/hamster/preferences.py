@@ -133,8 +133,7 @@ class PreferencesEditor(Controller):
             (selection, selection.connect('changed', self.category_changed_cb, self.category_store))
         ])
 
-        self.day_start = widgets.TimeInput(dt.time(5,30))
-        self.get_widget("day_start_placeholder").add(self.day_start)
+        self.day_start = widgets.TimeInput(dt.time(5,30), parent=self.get_widget("day_start_placeholder"))
 
         self.load_config()
 
