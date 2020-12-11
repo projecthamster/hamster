@@ -1,3 +1,18 @@
+## Changes in 3.0.3 (unreleased)
+
+* A number changes to the overview screen:
+  - Add daily total rows. (PR 596)
+  - Remove lines previously shown for days without activity. (PR 650)
+  - Refactor the range selection dropdown, preventing a problem where it
+    would not be shown on systems using Wayland and some other systems.
+    (issue 639 and 645, PR 647)
+  - Do not periodically scroll to the top, only when displaying a new
+    set of facts.(issue 594, PR 648)
+* On Wayland, fix the popup below the tag field when editing activities
+  and the time field in the preferences window. (PR 652)
+* In addition to source downloads, packaged builds using the Flatpak
+  format are now available as well. (PR 61)
+
 ## Changes in 3.0.2
 
 * Switch from deprecated xml2po to itstool for translating help files
