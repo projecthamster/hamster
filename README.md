@@ -140,12 +140,14 @@ If familiar with github, just clone the repo and `cd` into it.
 Otherwise, to get the `master` development branch (intended to be quite stable):
 ```bash
 wget https://github.com/projecthamster/hamster/archive/master.zip
-cd hamster
+unzip master.zip
+cd hamster-master
 ```
 or a specific [release](https://github.com/projecthamster/hamster/releases):
 ```bash
 # replace 2.2.2 by the release version
 wget https://github.com/projecthamster/hamster/archive/v2.2.2.zip
+unzip v2.2.2.zip
 cd hamster-2.2.2
 ```
 
