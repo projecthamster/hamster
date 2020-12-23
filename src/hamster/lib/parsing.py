@@ -37,7 +37,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     Returns found fields as a dict.
 
     Tentative syntax (not accurate):
-    start [- end_time] activity[@category][,, description][,,]{ #tag}
+    start [- end_time] activity[@category][, description][,]{ #tag}
     According to the legacy tests, # were allowed in the description
     """
 
@@ -64,7 +64,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
         # especially the tags barrier
         m = re.search(tags_separator, remaining_text)
         remaining_text = remaining_text[:m.start()]
-        if m.group(1) == ",,":
+        if m.group(1) == ",":
             # tags  barrier found
             break
 
@@ -83,8 +83,8 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     res["tags"] = list(reversed(tags))
 
     # description
-    # first look for double comma (description hard left boundary)
-    head, sep, description = remaining_text.partition(",,")
+    # first look for comma (description hard left boundary)
+    head, sep, description = remaining_text.partition(",")
     res["description"] = description.strip()
     remaining_text = head.strip()
 

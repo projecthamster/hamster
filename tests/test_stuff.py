@@ -85,7 +85,7 @@ class TestFactParsing(unittest.TestCase):
 
     def test_description(self):
         # plain activity name
-        activity = Fact.parse("case,, with added descriptiön")
+        activity = Fact.parse("case, with added descriptiön")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.description, "with added descriptiön")
         assert not activity.category
@@ -95,7 +95,7 @@ class TestFactParsing(unittest.TestCase):
 
     def test_tags(self):
         # plain activity name
-        activity = Fact.parse("#case,, description with #hash,, #and, #some #tägs")
+        activity = Fact.parse("#case, description with #hash, #and #some #tägs")
         self.assertEqual(activity.activity, "#case")
         self.assertEqual(activity.description, "description with #hash")
         self.assertEqual(set(activity.tags), set(["and", "some", "tägs"]))
@@ -105,16 +105,17 @@ class TestFactParsing(unittest.TestCase):
 
     def test_full(self):
         # plain activity name
-        activity = Fact.parse("1225-1325 case@cat,, description #ta non-tag,, #tag #bäg")
+        activity = Fact.parse(
+            "1225-1325 case@cat, description #hash non-tag, #tag #bäg")
         self.assertEqual(activity.start_time.strftime("%H:%M"), "12:25")
         self.assertEqual(activity.end_time.strftime("%H:%M"), "13:25")
         self.assertEqual(activity.activity, "case")
         self.assertEqual(activity.category, "cat")
-        self.assertEqual(activity.description, "description #ta non-tag")
+        self.assertEqual(activity.description, "description #hash non-tag")
         self.assertEqual(set(activity.tags), set(["bäg", "tag"]))
 
     def test_copy(self):
-        fact1 = Fact.parse("12:25-13:25 case@cat,, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1.start_time, fact2.start_time)
         self.assertEqual(fact1.end_time, fact2.end_time)
@@ -132,7 +133,7 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(fact3.tags, ["changed"])
 
     def test_comparison(self):
-        fact1 = Fact.parse("12:25-13:25 case@cat,, description #tag #bäg")
+        fact1 = Fact.parse("12:25-13:25 case@cat, description #tag #bäg")
         fact2 = fact1.copy()
         self.assertEqual(fact1, fact2)
         fact2 = fact1.copy()
@@ -161,12 +162,12 @@ class TestFactParsing(unittest.TestCase):
 
     def test_decimal_in_activity(self):
         # cf. issue #270
-        fact = Fact.parse("12:25-13:25 10.0@ABC,, Two Words #tag #bäg")
+        fact = Fact.parse("12:25-13:25 10.0@ABC, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.0")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
         # should not pick up a time here
-        fact = Fact.parse("10.00@ABC,, Two Words #tag #bäg")
+        fact = Fact.parse("10.00@ABC, Two Words #tag #bäg")
         self.assertEqual(fact.activity, "10.00")
         self.assertEqual(fact.category, "ABC")
         self.assertEqual(fact.description, "Two Words")
@@ -186,18 +187,18 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(fact3.serialized(), "")
 
     def test_commas(self):
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma")
-        self.assertEqual(fact.activity, "activity, with comma")
+        fact = Fact.parse("11:00 12:00 activity@category, description, with comma")
+        self.assertEqual(fact.activity, "activity")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma")
         self.assertEqual(fact.tags, [])
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma, #tag1, #tag2")
-        self.assertEqual(fact.activity, "activity, with comma")
+        fact = Fact.parse("11:00 12:00 activity@category, description, with comma, #tag1 #tag2")
+        self.assertEqual(fact.activity, "activity")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma")
         self.assertEqual(fact.tags, ["tag1", "tag2"])
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma and #hash,, #tag1, #tag2")
-        self.assertEqual(fact.activity, "activity, with comma")
+        fact = Fact.parse("11:00 12:00 activity@category, description, with comma and #hash, #tag1 #tag2")
+        self.assertEqual(fact.activity, "activity")
         self.assertEqual(fact.category, "category")
         self.assertEqual(fact.description, "description, with comma and #hash")
         self.assertEqual(fact.tags, ["tag1", "tag2"])
@@ -215,7 +216,6 @@ class TestFactParsing(unittest.TestCase):
                 for activity in (
                     "activity",
                     "#123 with two #hash",
-                    "activity, with comma",
                     "17.00 tea",
                     ):
                     for category in (
@@ -453,7 +453,7 @@ class TestDatetime(unittest.TestCase):
 
 class TestDBus(unittest.TestCase):
     def test_round_trip(self):
-        fact = Fact.parse("11:00 12:00 activity, with comma@category,, description, with comma #and #tags")
+        fact = Fact.parse("11:00 12:00 activity@category, description, with comma #and #tags")
         dbus_fact = to_dbus_fact_json(fact)
         return_fact = from_dbus_fact_json(dbus_fact)
         self.assertEqual(return_fact, fact)
