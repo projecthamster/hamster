@@ -186,7 +186,7 @@ class Fact(object):
             res += "@%s" % self.category
 
         if self.description:
-            res += ',, '
+            res += ', '
             res += self.description
 
         if ('#' in self.activity
@@ -194,7 +194,7 @@ class Fact(object):
             or '#' in self.description
            ):
             # need a tag barrier
-            res += ",, "
+            res += ", "
 
         if self.tags:
             # double comma is a left barrier for tags,
