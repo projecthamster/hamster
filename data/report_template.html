@@ -260,25 +260,6 @@
                 return false;
             })
 
-            $("#show_details").click(function() {
-                if ($(this).attr("checked")) {
-                    $(".by_date_row").show();
-                } else {
-                    $(".by_date_row").hide();
-                }
-
-            })
-
-            $("#show_totals").click(function() {
-                if ($(this).attr("checked")) {
-                    $(".by_date_total_row").show();
-                } else {
-                    $(".by_date_total_row").hide();
-                }
-
-
-            })
-
             populateFactTable();
 
 
@@ -297,13 +278,13 @@
 
             // determine if we will be doing any internal counting
             var keys = [];
-            if ($("#show_activities").attr("checked"))
+            if ($("#show_activities")[0].checked)
                 keys.push("activity");
 
-            if ($("#show_categories").attr("checked"))
+            if ($("#show_categories")[0].checked)
                 keys.push("category");
 
-            if ($("#show_tags").attr("checked"))
+            if ($("#show_tags")[0].checked)
                 keys.push("tags");
 
 
@@ -404,13 +385,13 @@
                 <div class="by_day_controls">
                     $show_prompt
                     <input type="checkbox" id="show_activities" checked="checked"></input>
-                    <label for="show_details">$activity_totals_heading</label>
+                    <label for="show_activities">$activity_totals_heading</label>
 
                     <input type="checkbox" id="show_categories" checked="checked"></input>
-                    <label for="show_totals">$category_totals_heading</label>
+                    <label for="show_categories">$category_totals_heading</label>
 
                     <input type="checkbox" id="show_tags" checked="checked"></input>
-                    <label for="show_totals">$tag_totals_heading</label>
+                    <label for="show_tags">$tag_totals_heading</label>
                 </div>
 
                 <table id="date_facts"></table>
