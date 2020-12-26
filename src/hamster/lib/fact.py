@@ -189,17 +189,8 @@ class Fact(object):
             res += ', '
             res += self.description
 
-        if ('#' in self.activity
-            or '#' in self.category
-            or '#' in self.description
-           ):
-            # need a tag barrier
-            res += ", "
-
         if self.tags:
-            # double comma is a left barrier for tags,
-            # which is useful only if previous fields contain a hash
-            res += " %s" % " ".join("#%s" % tag for tag in self.tags)
+            res += ", %s" % " ".join("#%s" % tag for tag in self.tags)
         return res
 
     def serialized(self, range_pos="head", default_day=None):
