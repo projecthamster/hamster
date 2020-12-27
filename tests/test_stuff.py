@@ -230,6 +230,14 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(fact.description, "description, with comma and #hash")
         self.assertEqual(fact.tags, ["hash", "tag1", "tag2"])
 
+    def test_backwards_compat_double_comma(self):
+        fact = Fact.parse("act@cat,, My description,, #tag1 #tag2")
+        self.assertEqual(fact.description, "My description")
+        self.assertEqual(fact.tags, ["tag1", "tag2"])
+        fact = Fact.parse("act@cat,, My description, with comma,, #tag1 #tag2")
+        self.assertEqual(fact.description, "My description, with comma")
+        self.assertEqual(fact.tags, ["tag1", "tag2"])
+
     # ugly. Really need pytest
     def test_roundtrips(self):
         for start_time in (
