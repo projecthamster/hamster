@@ -248,7 +248,6 @@ class CustomFactController(Controller):
                     # preserve fact duration
                     self.fact.end_time += delta
                     self.end_date.date = self.fact.end_time
-            self.date = self.fact.date or dt.hday.today()
             self.validate_fields()
             self.update_cmdline()
 
