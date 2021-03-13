@@ -134,15 +134,8 @@ class CustomFactController(Controller):
 
     @date.setter
     def date(self, value):
-        delta = value - self._date if self._date else None
         self._date = value
         self.cmdline.default_day = value
-        if self.fact and delta:
-            if self.fact.start_time:
-                self.fact.start_time += delta
-            if self.fact.end_time:
-                self.fact.end_time += delta
-            # self.update_fields() here would enter an infinite loop
 
     def on_prev_day_clicked(self, button):
         self.increment_date(-1)
@@ -161,6 +154,7 @@ class CustomFactController(Controller):
     def increment_date(self, days):
         delta = dt.timedelta(days=days)
         self.date += delta
+        self.fact.date = self.date
         self.update_fields()
 
     def show(self):
