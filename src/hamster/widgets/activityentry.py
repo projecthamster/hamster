@@ -44,8 +44,7 @@ from hamster.lib.fact import Fact
 #       Code redundancy to be removed later.
 
 
-def extract_search(text):
-    fact = Fact.parse(text)
+def extract_search(fact):
     search = fact.activity
     if fact.category:
         search += "@%s" % fact.category
@@ -209,9 +208,6 @@ class CmdLineEntry(gtk.Entry):
         # default day for times without date
         self.default_day = None
 
-        # to be set by the caller, if editing an existing fact
-        self.original_fact = None
-
         self.popup = gtk.Window(type = gtk.WindowType.POPUP)
         self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
         self.popup.set_attached_to(self)  # attributes
@@ -325,8 +321,8 @@ class CmdLineEntry(gtk.Entry):
 
     def complete_first(self):
         text = self.get_text()
-        fact = Fact.parse(text)
-        search = extract_search(text)
+        fact = Fact.parse(text, default_day=self.default_day)
+        search = extract_search(fact)
         if not self.complete_tree.rows or not fact.activity:
             return text, None
 
@@ -361,7 +357,7 @@ class CmdLineEntry(gtk.Entry):
 
         res = []
 
-        fact = Fact.parse(text)
+        fact = Fact.parse(text, default_day=self.default_day)
         now = dt.datetime.now()
 
         # figure out what we are looking for
@@ -382,7 +378,7 @@ class CmdLineEntry(gtk.Entry):
         current_fragment = fragments[-1] if fragments else ""
 
 
-        search = extract_search(text)
+        search = extract_search(fact)
 
         matches = []
         for match, score in self.suggestions:
