@@ -11,7 +11,11 @@
 * On Wayland, fix the popup below the tag field when editing activities
   and the time field in the preferences window. (PR 652)
 * In addition to source downloads, packaged builds using the Flatpak
-  format are now available as well. (PR 61)
+  format are now available as well. (PR 610)
+* Fix exception in all calls to the dbus UpdateJSON method (issue 671,
+  PR 672).
+* Fix the start date picker in the update/add activity window. (issue
+  590, PR 674)
 
 ## Changes in 3.0.2
 
