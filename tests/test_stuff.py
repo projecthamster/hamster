@@ -94,6 +94,10 @@ class TestFactParsing(unittest.TestCase):
         assert activity.end_time is None
         assert not activity.category
 
+    def test_description_with_commas(self):
+        activity = Fact.parse("case, meet with a, b and c, #holiday")
+        self.assertEqual(activity.description, "meet with a, b and c")
+
     def test_tags(self):
         # plain activity name
         activity = Fact.parse("#case, description with #hash, #and #some #tägs")
