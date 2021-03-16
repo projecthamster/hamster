@@ -129,6 +129,12 @@ class TestFactParsing(unittest.TestCase):
         self.assertEqual(activity.description, "")
         self.assertEqual(set(activity.tags), set(["tag1", "tag2"]))
 
+    def test_tags_with_spaces(self):
+        activity = Fact.parse("case, #tag with space #tag2")
+        self.assertEqual(activity.activity, "case")
+        self.assertEqual(activity.description, "")
+        self.assertEqual(set(activity.tags), set(["tag with space", "tag2"]))
+
     def test_full(self):
         # plain activity name
         activity = Fact.parse(
