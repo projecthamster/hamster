@@ -1,3 +1,13 @@
+## Changes in 3.1.0
+
+* Added new shortcuts:
+  - Ctrl-=: clone or fallback to new if none selected.
+  - e: edit selected activity
+  - x: toggle export flag
+* Gathering activities from external source (right now only Jira and only via dbus)
+* Export activities as worklogs to jira
+* Export activities to external source from command line (`hamster export external` command)
+
 ## Changes in 3.0.2
 
 * Switch from deprecated xml2po to itstool for translating help files

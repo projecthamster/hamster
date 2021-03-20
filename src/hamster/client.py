@@ -115,7 +115,7 @@ class Storage(gobject.GObject):
                         see also:
                         https://github.com/projecthamster/hamster#kill-hamster-daemons
                     """.format(server_version, client_version)
-                    )
+                )
                 )
         return self._connection
 
@@ -155,12 +155,25 @@ class Storage(gobject.GObject):
         return [from_dbus_fact_json(fact)
                 for fact in self.conn.GetFactsJSON(dbus_range, search_terms)]
 
-    def get_activities(self, search = ""):
+    def get_activities(self, search=""):
         """returns list of activities name matching search criteria.
            results are sorted by most recent usage.
            search is case insensitive
         """
         return self._to_dict(('name', 'category'), self.conn.GetActivities(search))
+
+    def get_ext_activities(self, search=""):
+        """returns list of activities name matching search criteria.
+           results are sorted by most recent usage.
+           search is case insensitive
+        """
+        return self._to_dict(('name', 'category'), self.conn.GetExtActivities(search))
+
+    def export_fact(self, fact_id):
+        """export facts to external source.
+           :returns true if fact was exported
+        """
+        return self.conn.ExportFact(fact_id)
 
     def get_categories(self):
         """returns list of categories"""

@@ -235,9 +235,9 @@ class HamsterCli(object):
         assist_command = args[0] if args else ""
 
         if assist_command == "start":
-            hamster_client._activities(sys.argv[-1])
+            hamster_client._activities(" ".join(args[1:]))
         elif assist_command == "export":
-            formats = "html tsv xml ical".split()
+            formats = "html tsv xml ical hamster external".split()
             chosen = sys.argv[-1]
             formats = [f for f in formats if not chosen or f.startswith(chosen)]
             print("\n".join(formats))
@@ -422,7 +422,7 @@ Actions:
     * list [start-date [end-date]]: List activities
     * search [terms] [start-date [end-date]]: List activities matching a search
       term
-    * export [html|tsv|ical|xml] [start-date [end-date]]: Export activities with
+    * export [html|tsv|ical|xml|hamster|external] [start-date [end-date]]: Export activities with
       the specified format
     * current: Print current activity
     * activities: List all the activities names, one per line.

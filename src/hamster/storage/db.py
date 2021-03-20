@@ -36,6 +36,7 @@ except ImportError:
 
 import hamster
 from hamster.lib import datetime as dt
+from hamster.external.external import ExternalSource
 from hamster.lib.configuration import conf
 from hamster.lib.fact import Fact
 from hamster.storage import storage
@@ -47,6 +48,8 @@ from hamster.storage import storage
 
 class Storage(storage.Storage):
     con = None # Connection will be created on demand
+    external = None
+    external_need_update = False
     def __init__(self, unsorted_localized="Unsorted", database_dir=None):
         """Database storage.
 
@@ -100,6 +103,8 @@ class Storage(storage.Storage):
             self.__db_monitor.connect("changed", on_db_file_change)
 
         self.run_fixtures()
+
+        self.external = ExternalSource(conf)
 
     def __init_db_file(self, database_dir):
         if not database_dir:
@@ -400,6 +405,7 @@ class Storage(storage.Storage):
                     start_time=db_fact["start_time"],
                     end_time=db_fact["end_time"],
                     id=db_fact["id"],
+                    exported=db_fact["exported"],
                     activity_id=db_fact["activity_id"])
 
     def __get_fact(self, id):
@@ -410,7 +416,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category, coalesce(c.id, -1) as category_id,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported AS exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -441,7 +448,7 @@ class Storage(storage.Storage):
             # we need dict so we can modify it (sqlite.Row is read only)
             # in python 2.5, sqlite does not have keys() yet, so we hardcode them (yay!)
             keys = ["id", "start_time", "end_time", "description", "name",
-                    "activity_id", "category", "tag"]
+                    "activity_id", "category", "tag", "exported"]
             grouped_fact = dict([(key, grouped_fact[key]) for key in keys])
 
             grouped_fact["tags"] = [ft["tag"] for ft in fact_tags if ft["tag"]]
@@ -502,6 +509,7 @@ class Storage(storage.Storage):
         """
         if end_time is None or start_time is None:
             return
+        #TODO gso: end_time and start_time round
 
         # possible combinations and the OR clauses that catch them
         # (the side of the number marks if it catches the end or start time)
@@ -523,16 +531,20 @@ class Storage(storage.Storage):
                                           start_time, end_time))
 
         for fact in conflicts:
+            if fact["start_time"] is None:
+                continue
+
             # fact is a sqlite.Row, indexable by column name
+            # handle case with not finished activities
             fact_end_time = fact["end_time"] or dt.datetime.now()
 
             # won't eliminate as it is better to have overlapping entries than loosing data
-            if start_time < fact["start_time"] and end_time > fact_end_time:
+            if start_time < fact["start_time"] and end_time >= fact_end_time:
                 continue
 
             # split - truncate until beginning of new entry and create new activity for end
             if fact["start_time"] < start_time < fact_end_time and \
-               fact["start_time"] < end_time < fact_end_time:
+               fact["start_time"] < end_time <= fact_end_time:
 
                 logger.info("splitting %s" % fact["name"])
                 # truncate until beginning of the new entry
@@ -540,6 +552,8 @@ class Storage(storage.Storage):
                                    SET end_time = ?
                                  WHERE id = ?""", (start_time, fact["id"]))
                 fact_name = fact["name"]
+
+                # TODO gso: move changes from master
 
                 # create new fact for the end
                 new_fact = Fact(activity=fact["name"],
@@ -558,13 +572,13 @@ class Storage(storage.Storage):
                 self.execute(tag_update, (new_fact_id, fact["id"])) #clone tags
 
             # overlap start
-            elif start_time < fact["start_time"] < end_time:
+            elif start_time <= fact["start_time"] <= end_time:
                 logger.info("Overlapping start of %s" % fact["name"])
                 self.execute("UPDATE facts SET start_time=? WHERE id=?",
                              (end_time, fact["id"]))
 
             # overlap end
-            elif start_time < fact_end_time < end_time:
+            elif start_time < fact_end_time <= end_time:
                 logger.info("Overlapping end of %s" % fact["name"])
                 self.execute("UPDATE facts SET end_time=? WHERE id=?",
                              (start_time, fact["id"]))
@@ -667,10 +681,10 @@ class Storage(storage.Storage):
 
         # finally add the new entry
         insert = """
-                    INSERT INTO facts (activity_id, start_time, end_time, description)
-                               VALUES (?, ?, ?, ?)
+                    INSERT INTO facts (activity_id, start_time, end_time, description, exported)
+                               VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(insert, (activity_id, start_time, end_time, fact.description))
+        self.execute(insert, (activity_id, start_time, end_time, fact.description, fact.exported))
 
         fact_id = self.__last_insert_rowid()
 
@@ -690,7 +704,7 @@ class Storage(storage.Storage):
     def __get_todays_facts(self):
         return self.__get_facts(dt.Range.today())
 
-    def __get_facts(self, range, search_terms=""):
+    def __get_facts(self, range, search_terms="", limit = 0, asc_by_date = True):
         datetime_from = range.start
         datetime_to = range.end
 
@@ -703,7 +717,8 @@ class Storage(storage.Storage):
                           a.description as description,
                           b.name AS name, b.id as activity_id,
                           coalesce(c.name, ?) as category,
-                          e.name as tag
+                          e.name as tag,
+                          a.exported as exported
                      FROM facts a
                 LEFT JOIN activities b ON a.activity_id = b.id
                 LEFT JOIN categories c ON b.category_id = c.id
@@ -722,12 +737,19 @@ class Storage(storage.Storage):
                 search_terms = search_terms[4:]
 
             search_terms = search_terms.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_').replace("'", "''")
+            # TODO gso: add NOT operator
             query += """ AND a.id %s IN (SELECT id
                                          FROM fact_index
                                          WHERE fact_index MATCH '%s')""" % ('NOT' if reverse_search_terms else '',
                                                                             search_terms)
 
-        query += " ORDER BY a.start_time, e.name"
+        if asc_by_date:
+            query += " ORDER BY a.start_time, e.name"
+        else:
+            query += " ORDER BY a.start_time desc, e.name"
+
+        if limit and limit > 0:
+            query += " LIMIT " + str(limit)
 
         fact_rows = self.fetchall(query, (self._unsorted_localized,
                                           datetime_from,
@@ -760,6 +782,13 @@ class Storage(storage.Storage):
 
         return self.fetchall(query, (category_id, ))
 
+
+    def __get_ext_activities(self, search):
+        return self.get_external().get_activities(search)
+
+    def __export_fact(self, fact_id) -> bool:
+        fact = self.get_fact(fact_id)
+        return self.get_external().export(fact)
 
     def __get_activities(self, search):
         """returns list of activities for autocomplete,
@@ -862,7 +891,8 @@ class Storage(storage.Storage):
                               a.description as description,
                               b.name AS name, b.id as activity_id,
                               coalesce(c.name, ?) as category,
-                              e.name as tag
+                              e.name as tag,
+                              a.exported AS exported
                          FROM facts a
                     LEFT JOIN activities b ON a.activity_id = b.id
                     LEFT JOIN categories c ON b.category_id = c.id
@@ -970,7 +1000,7 @@ class Storage(storage.Storage):
 
         """upgrade DB to hamster version"""
         version = self.fetchone("SELECT version FROM version")["version"]
-        current_version = 9
+        current_version = 10
 
         if version < 8:
             # working around sqlite's utf-f case sensitivity (bug 624438)
@@ -993,6 +1023,10 @@ class Storage(storage.Storage):
             # adding full text search
             self.execute("""CREATE VIRTUAL TABLE fact_index
                                            USING fts3(id, name, category, description, tag)""")
+        if version < 10:
+            # adding exported
+            self.execute("""ALTER TABLE facts ADD COLUMN exported bool default false""")
+            self.execute("""UPDATE facts set exported=1""")
 
 
         # at the happy end, update version number
@@ -1002,6 +1036,15 @@ class Storage(storage.Storage):
             print("updated database from version %d to %d" % (version, current_version))
 
         self.end_transaction()
+
+    def get_external(self):
+        if self.external_need_update:
+            self.refresh_external(conf)
+        return self.external
+
+    def refresh_external(self, conf):
+        self.external = ExternalSource(conf)
+        self.external_need_update = False
 
 
 # datetime/sql conversions

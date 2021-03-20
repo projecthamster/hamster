@@ -106,8 +106,12 @@ commands). Older versions are not supported.
 
 ```bash
 sudo apt install gettext intltool python3-gi python3-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache
+# and for exporting issues
+sudo apt install python-tz
 # and for documentation
 sudo apt install itstool yelp
+# and for jira integration (should be python3-jira>=2.0.0, if not - use pip)
+sudo apt install python3-jira python3-urllib3
 ```
 
 ##### openSUSE
@@ -115,7 +119,12 @@ sudo apt install itstool yelp
 Leap-15.0 and Leap-15.1:
 ```bash
 sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
+# and for exporting issues
+sudo zypper install python-tz
+# and for documentation
 sudo zypper install itstool yelp
+# and for jira integration (should be python3-jira>=2.0.0, if not - use pip)
+sudo zypper install python3-jira python3-urllib3
 ```
 
 ##### RPM-based

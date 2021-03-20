@@ -301,6 +301,23 @@ class Storage(db.Storage, dbus.service.Object):
 
         Legacy. To be superceded by GetFactsJSON at some point.
         """
+        self.GetFactsLimited(start_date, end_date, search_terms, 0, True)
+
+    @dbus.service.method("org.gnome.Hamster",
+                         in_signature='uusib',
+                         out_signature='a{}'.format(fact_signature))
+    def GetFactsLimited(self, start_date, end_date, search_terms, limit, asc_by_date):
+        """Gets facts between the day of start_date and the day of end_date.
+        Parameters:
+        i start_date: Seconds since epoch (timestamp). Use 0 for today
+        i end_date: Seconds since epoch (timestamp). Use 0 for today
+        s search_terms: Bleh. If starts with "not ", the search terms will be reversed
+        i limit: 10
+        b asc_by_date: True
+        Returns an array of D-Bus fact structures.
+
+        Legacy. To be superceded by GetFactsJSON at some point.
+        """
         #TODO: Assert start > end ?
         start = dt.date.today()
         if start_date:
@@ -310,7 +327,7 @@ class Storage(db.Storage, dbus.service.Object):
         if end_date:
             end = dt.datetime.utcfromtimestamp(end_date).date()
 
-        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms)]
+        return [to_dbus_fact(fact) for fact in self.get_facts(start, end, search_terms, limit, asc_by_date)]
 
 
     @dbus.service.method("org.gnome.Hamster",
@@ -399,8 +416,18 @@ class Storage(db.Storage, dbus.service.Object):
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
-    def GetActivities(self, search = ""):
+    def GetActivities(self, search=""):
         return [(row['name'], row['category'] or '') for row in self.get_activities(search)]
+
+
+    @dbus.service.method("org.gnome.Hamster", in_signature='s', out_signature='a(ss)')
+    def GetExtActivities(self, search=""):
+        return [(row['name'], row['category'] or '') for row in self.get_ext_activities(search)]
+
+
+    @dbus.service.method("org.gnome.Hamster", in_signature='i', out_signature='b')
+    def ExportFact(self, fact_id):
+        return self.export_fact(fact_id)
 
 
     @dbus.service.method("org.gnome.Hamster", in_signature='ii', out_signature = 'b')

@@ -76,6 +76,10 @@ class WindowServer(dbus.service.Object):
     def preferences(self):
         self._open_window("prefs")
 
+    @dbus.service.method("org.gnome.Hamster.WindowServer")
+    def exporter(self):
+        self._open_window("exporter")
+
 
 if __name__ == '__main__':
     from hamster.lib import i18n

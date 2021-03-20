@@ -28,3 +28,8 @@ hamster-time-tracker-*.tar.gz
 .lock-waf*
 build
 *.deb
+.project
+.pydevproject
+venv/
+.idea/
+*.iml

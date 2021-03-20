@@ -18,12 +18,15 @@
 # along with Project Hamster.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+
+MAX_USER_SUGGESTIONS = 10
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import bisect
 import cairo
 import re
 
+from xml.sax.saxutils import escape
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
@@ -51,7 +54,12 @@ def extract_search(text):
         search += "@%s" % fact.category
     if fact.tags:
         search += " #%s" % (" #".join(fact.tags))
-    return search
+    return search.lower()
+
+def extract_search_without_tags_and_category(text):
+    fact = Fact.parse(text)
+    search = fact.activity
+    return search.lower()
 
 class DataRow(object):
     """want to split out visible label, description, activity data
@@ -227,7 +235,13 @@ class CmdLineEntry(gtk.Entry):
         box.add(self.complete_tree)
 
         self.storage = client.Storage()
+        self.todays_facts = None
+        self.local_suggestions = None
         self.load_suggestions()
+
+        self.ext_suggestions = []
+        self.ext_suggestion_filler_timer = gobject.timeout_add(0, self.__refresh_ext_suggestions, "")
+
         self.ignore_stroke = False
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
@@ -236,8 +250,6 @@ class CmdLineEntry(gtk.Entry):
         self.connect("key-press-event", self.on_key_press)
         self.connect("focus-out-event", self.on_focus_out)
         self.connect("icon-press", self.on_icon_press)
-
-
 
     def on_changed(self, entry):
         text = self.get_text()
@@ -291,6 +303,29 @@ class CmdLineEntry(gtk.Entry):
             self.update_entry(label)
             self.set_position(-1)
 
+    def __load_ext_suggestions_with_timer(self, query=""):
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "emblem-synchronizing-symbolic")
+        if self.ext_suggestion_filler_timer:
+            gobject.source_remove(self.ext_suggestion_filler_timer)
+        self.ext_suggestion_filler_timer = gobject.timeout_add(500, self.__refresh_ext_suggestions,
+                                                               extract_search_without_tags_and_category(query))
+
+    def __refresh_ext_suggestions(self, query=""):
+        suggestions = []
+        facts = self.storage.get_ext_activities(query)
+        for fact in facts:
+            label = fact.get("name")
+            category = fact.get("category")
+            if category:
+                label += "@%s" % category
+            score = 10**10
+            suggestions.append((label, score))
+        logger.debug("external suggestion refreshed for query: %s" % query)
+        self.ext_suggestions = suggestions
+        self.update_suggestions(self.get_text())
+        self.update_suggestions_popup()
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, None)
+        self.ext_suggestion_filler_timer = None
 
     def load_suggestions(self):
         self.todays_facts = self.storage.get_todays_facts()
@@ -321,7 +356,7 @@ class CmdLineEntry(gtk.Entry):
             suggestions[label] += 0
 
         # list of (label, score), higher scores first
-        self.suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
+        self.local_suggestions = sorted(suggestions.items(), key=lambda x: x[1], reverse=True)
 
     def complete_first(self):
         text = self.get_text()
@@ -336,10 +371,8 @@ class CmdLineEntry(gtk.Entry):
 
         return text, None
 
-
     def update_entry(self, text):
         self.set_text(text or "")
-
 
     def update_suggestions(self, text=""):
         """
@@ -377,29 +410,32 @@ class CmdLineEntry(gtk.Entry):
                     looking_for = fields[fields.index(field)+1]
                 break
 
-
         fragments = [f for f in re.split("[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
-
 
         search = extract_search(text)
 
         matches = []
-        for match, score in self.suggestions:
-            if search in match:
-                if match.startswith(search):
+        suggestions = self.local_suggestions
+        for match, score in suggestions:
+            search_words = search.split(" ")
+            match_words = match.lower().split(" ")
+            if all(search_word in match_words for search_word in search_words):
+                if match.lower().startswith(search):
                     score += 10**8 # boost beginnings
                 matches.append((match, score))
+        for match, score in self.ext_suggestions:
+            matches.append((match, score))
 
         # need to limit these guys, sorry
-        matches = sorted(matches, key=lambda x: x[1], reverse=True)[:7]
+        matches = sorted(matches, key=lambda x: x[1], reverse=True)[:MAX_USER_SUGGESTIONS]
 
         for match, score in matches:
             label = (fact.start_time or now).strftime("%H:%M")
             if fact.end_time:
                 label += fact.end_time.strftime("-%H:%M")
 
-            markup_label = label + " " + (stuff.escape_pango(match).replace(search, "<b>%s</b>" % search) if search else match)
+            markup_label = label + " " + (self.__bold_search(match, search) if search else escape(match))
             label += " " + match
 
             res.append(DataRow(markup_label, match, label))
@@ -451,23 +487,37 @@ class CmdLineEntry(gtk.Entry):
 
         self.complete_tree.set_rows(res)
 
+    @staticmethod
+    def __bold_search(match, search):
+        result = escape(match)
+        for word in search.split(" "):
+            pattern = re.compile("(%s)" % re.escape(word), re.IGNORECASE)
+            result = re.sub(pattern, r"<b>\1</b>", result)
+
+        return result
 
     def show_suggestions(self, text):
         if not self.get_window():
             return
 
+        self.popup.show_all()
+        self.update_suggestions(text)
+        self.update_suggestions_popup()
+        self.__load_ext_suggestions_with_timer(text)
+
+    def update_suggestions_popup(self):
+        if not self.get_window():
+            return
+
+        # self.popup.hide()
         entry_alloc = self.get_allocation()
         entry_x, entry_y = self.get_window().get_origin()[1:]
         x, y = entry_x + entry_alloc.x, entry_y + entry_alloc.y + entry_alloc.height
-
-        self.popup.show_all()
-
-        self.update_suggestions(text)
-
         tree_w, tree_h = self.complete_tree.get_size_request()
 
         self.popup.move(x, y)
         self.popup.resize(entry_alloc.width, tree_h)
+        self.popup.queue_draw()
         self.popup.show_all()
 
 

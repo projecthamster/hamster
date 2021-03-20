@@ -29,6 +29,7 @@ import codecs
 from string import Template
 from textwrap import dedent
 
+from hamster import client
 from hamster.lib import datetime as dt
 from hamster.lib.configuration import runtime
 from hamster.lib import stuff
@@ -55,6 +56,10 @@ def simple(facts, start_date, end_date, format, path = None):
         writer = XMLWriter(report_path)
     elif format == "ical":
         writer = ICalWriter(report_path)
+    elif format == "hamster":
+        writer = HamsterWriter(report_path)
+    elif format == "external":
+        writer = ExternalWriter(report_path)
     else: #default to HTML
         writer = HTMLWriter(report_path, start_date, end_date)
 
@@ -153,6 +158,34 @@ class TSVWriter(ReportWriter):
                                   fact.category,
                                   fact.description,
                                   ", ".join(fact.tags)])
+    def _finish(self, facts):
+        pass
+
+class HamsterWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+
+    def _write_fact(self, fact):
+        self.file.write(fact.serialized() + "\n")
+
+    def _finish(self, facts):
+        pass
+
+class ExternalWriter(ReportWriter):
+    def __init__(self, path):
+        ReportWriter.__init__(self, path)
+        self.storage = client.Storage()
+
+    def _write_fact(self, fact):
+        exported = self.storage.export_fact(fact.id)
+        if exported:
+            self.file.write(_("Exported: %s - %s") % (fact.activity, fact.delta) + "\n")
+            fact.exported = True
+            self.storage.update_fact(fact.id, fact, False)
+            pass
+        else:
+            self.file.write(_("Activity not exported: %s" % fact.activity) + "\n")
+
     def _finish(self, facts):
         pass
 

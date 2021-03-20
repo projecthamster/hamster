@@ -79,6 +79,41 @@ class PreferencesEditor(Controller):
 
     def __init__(self):
         Controller.__init__(self, ui_file="preferences.ui")
+        # activities source
+        self.activities_sources = [("", _("None")),
+                                   # ("evo", "Evolution"),
+                                   # ("gtg", "Getting Things Gnome"),
+                                   # ("rt", "Request Tracker"),
+                                   # ("redmine", "Redmine"),
+                                   ("jira", "JIRA")]
+        # gtk_combo_box_text_new
+        self.external_combo = gtk.ComboBoxText()
+        self.external_combo.set_entry_text_column(0)
+        for code, label in self.activities_sources:
+            self.external_combo.append_text(label)
+        self.external_combo.connect("changed", self.on_external_combo_changed)
+        self.get_widget("external_activities_pick").add(self.external_combo)
+        # JIRA prefs
+        self.jira_url = gtk.Entry()
+        self.jira_url.connect("changed", self.on_jira_url_changed)
+        self.get_widget('jira_url').add(self.jira_url)
+
+        self.jira_user = gtk.Entry()
+        self.jira_user.connect("changed", self.on_jira_user_changed)
+        self.get_widget('jira_user').add(self.jira_user)
+
+        self.jira_pass = gtk.Entry()
+        self.jira_pass.set_visibility(False)
+        self.jira_pass.connect("changed", self.on_jira_pass_changed)
+        self.get_widget('jira_pass').add(self.jira_pass)
+
+        self.jira_query = gtk.Entry()
+        self.jira_query.connect("changed", self.on_jira_query_changed)
+        self.get_widget('jira_query').add(self.jira_query)
+
+        self.jira_category_field = gtk.Entry()
+        self.jira_category_field.connect("changed", self.on_jira_category_field_changed)
+        self.get_widget('jira_category_field').add(self.jira_category_field)
 
         # create and fill activity tree
         self.activity_tree = self.get_widget('activity_list')
@@ -105,6 +140,7 @@ class PreferencesEditor(Controller):
         self.external_listeners.extend([
             (self.selection, self.selection.connect('changed', self.activity_changed, self.activity_store))
         ])
+
 
         # create and fill category tree
         self.category_tree = self.get_widget('category_list')
@@ -135,6 +171,7 @@ class PreferencesEditor(Controller):
 
         self.day_start = widgets.TimeInput(dt.time(5,30), parent=self.get_widget("day_start_placeholder"))
 
+
         self.load_config()
 
         # Allow enable drag and drop of rows including row move
@@ -163,15 +200,45 @@ class PreferencesEditor(Controller):
 
         self.show()
 
+
     def show(self):
         self.get_widget("notebook1").set_current_page(0)
         self.window.show_all()
+
+    def on_jira_url_changed(self, entry):
+        conf.set('jira-url', self.jira_url.get_text())
+
+    def on_jira_user_changed(self, entry):
+        conf.set('jira-user', self.jira_user.get_text())
+
+    def on_jira_pass_changed(self, entry):
+        conf.set('jira-pass', self.jira_pass.get_text())
+
+    def on_jira_query_changed(self, entry):
+        conf.set('jira-query', self.jira_query.get_text())
+
+    def on_jira_category_field_changed(self, entry):
+        conf.set('jira-category-field', self.jira_category_field.get_text())
+
+    def on_external_combo_changed(self, combo):
+        conf.set("activities-source", self.activities_sources[combo.get_active()][0])
 
     def load_config(self, *args):
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
+
+        current_source = conf.get("activities-source")
+        for i, (code, label) in enumerate(self.activities_sources):
+            if code == current_source:
+                self.external_combo.set_active(i)
+
+        self.jira_url.set_text(conf.get("jira-url"))
+        self.jira_user.set_text(conf.get("jira-user"))
+        self.jira_pass.set_text(conf.get("jira-pass"))
+        self.jira_query.set_text(conf.get("jira-query"))
+        self.jira_category_field.set_text(conf.get("jira-category-field"))
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
@@ -506,5 +573,6 @@ class PreferencesEditor(Controller):
 
         day_start = day_start.hour * 60 + day_start.minute
         conf.set("day-start-minutes", day_start)
+
     def on_close_button_clicked(self, button):
         self.close_window()

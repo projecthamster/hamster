@@ -22,6 +22,9 @@ License: GPLv2
 """
 
 import logging
+
+from hamster.external.external import ExternalSource
+
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os
@@ -109,6 +112,8 @@ class RuntimeStore(Singleton):
     data_dir = ""
     home_data_dir = ""
     storage = None
+    external = None
+    external_need_update = True
 
     def __init__(self):
         self.version = hamster.__version__
@@ -124,6 +129,14 @@ class RuntimeStore(Singleton):
         self.storage = Storage()
         self.home_data_dir = os.path.realpath(os.path.join(xdg_data_home, "hamster"))
 
+    def get_external(self) -> ExternalSource:
+        if self.external_need_update:
+            self.refresh_external(conf)
+        return self.external
+
+    def refresh_external(self, conf):
+        self.external = ExternalSource(conf)
+        self.external_need_update = False
 
 runtime = RuntimeStore()
 

@@ -7,6 +7,33 @@
                 The folder the last report was saved to
             </description>
         </key>
+        <key type="s" name="activities-source">
+            <default>""</default>
+            <summary>Activities source</summary>
+            <description>
+                The source of activities
+            </description>
+        </key>
+        <key type="s" name="jira-url">
+            <default>"https://jira.unity.pl"</default>
+            <summary>Jira URL</summary>
+        </key>
+        <key type="s" name="jira-user">
+            <default>""</default>
+            <summary>Jira user</summary>
+        </key>
+        <key type="s" name="jira-pass">
+            <default>""</default>
+            <summary>Jira password</summary>
+        </key>
+        <key type="s" name="jira-query">
+            <default>"resolution = Unresolved AND assignee = currentUser()"</default>
+            <summary>Jira query</summary>
+        </key>
+        <key type="s" name="jira-category-field">
+            <default>"customfield_10000"</default>
+            <summary>Jira category field</summary>
+        </key>
 
         <key type="u" name="day-start-minutes">
             <default>330</default>

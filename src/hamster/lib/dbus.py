@@ -45,7 +45,7 @@ def from_dbus_fact_json(dbus_fact):
 def to_dbus_fact_json(fact):
     """Convert Fact to D-Bus JSON (str)."""
     d = {}
-    keys = ('activity', 'category', 'description', 'tags', 'id', 'activity_id')
+    keys = ('activity', 'category', 'description', 'tags', 'id', 'activity_id', 'exported')
     for key in keys:
         d[key] = getattr(fact, key)
     # isoformat(timespec="minutes") appears only in python3.6, nevermind
@@ -85,8 +85,9 @@ old dbus_fact signature (types matching the to_dbus_fact output)
     as List of fact tags
     i  date
     i  delta
+    b  exported
 """
-fact_signature = '(iiissisasii)'
+fact_signature = '(iiissisasiib)'
 
 
 def from_dbus_fact(dbus_fact):
@@ -101,6 +102,7 @@ def from_dbus_fact(dbus_fact):
                 activity_id=dbus_fact[5],
                 category=dbus_fact[6],
                 tags=dbus_fact[7],
+                exported=dbus_fact[10],
                 id=dbus_fact[0]
                 )
 
@@ -120,4 +122,5 @@ def to_dbus_fact(fact):
             fact.category or '',
             dbus.Array(fact.tags, signature = 's'),
             to_dbus_date(fact.date),
-            fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)
+            fact.delta.days * 24 * 60 * 60 + fact.delta.seconds,
+            fact.exported)

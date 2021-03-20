@@ -24,7 +24,7 @@ class FactError(Exception):
 class Fact(object):
     def __init__(self, activity="", category=None, description=None, tags=None,
                  range=None, start=None, end=None, start_time=None, end_time=None,
-                 id=None, activity_id=None):
+                 id=None, activity_id=None, exported=False):
         """Homogeneous chunk of activity.
 
         The category, description and tags must be passed explicitly.
@@ -40,6 +40,7 @@ class Fact(object):
                            Mutually exclusive with `range`.
         start_time (dt.datetime): Deprecated. Same as start.
         end_time (dt.datetime): Deprecated. Same as end.
+        exported (bool): exported to external system flag
 
         id (int): id in the database.
                   Should be used with extreme caution, knowing exactly why.
@@ -66,6 +67,7 @@ class Fact(object):
             self.range = dt.Range(start, end)
         self.id = id
         self.activity_id = activity_id
+        self.exported = exported
 
     # TODO: might need some cleanup
     def as_dict(self):
@@ -79,7 +81,8 @@ class Fact(object):
             'date': calendar.timegm(date.timetuple()) if date else "",
             'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
             'end_time': self.range.end if isinstance(self.range.end, str) else calendar.timegm(self.range.end.timetuple()) if self.range.end else "",
-            'delta': self.delta.total_seconds()  # ugly, but needed for report.py
+            'delta': self.delta.total_seconds(),  # ugly, but needed for report.py
+            'exported': self.exported  # needed for report.py
         }
 
     @property
@@ -217,11 +220,12 @@ class Fact(object):
                                      explicit_none=need_explicit)
         # no need for space if name or datetime is missing
         space = " " if name and datetime else ""
+        exported_marker = "[x] " if self.exported else ""
         assert range_pos in ("head", "tail")
         if range_pos == "head":
-            return "{}{}{}".format(datetime, space, name)
+            return "{}{}{}{}".format(exported_marker, datetime, space, name)
         else:
-            return "{}{}{}".format(name, space, datetime)
+            return "{}{}{}{}".format(exported_marker, name, space, datetime)
 
     def _set(self, **kwds):
         """Modify attributes.
@@ -244,6 +248,7 @@ class Fact(object):
                 and self.range.end == other.range.end
                 and self.range.start == other.range.start
                 and self.tags == other.tags
+                and self.exported == other.exported
                 )
 
     def __repr__(self):
