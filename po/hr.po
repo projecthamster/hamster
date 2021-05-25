@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
-"PO-Revision-Date: 2021-05-14 17:57+0200\n"
+"PO-Revision-Date: 2021-05-25 13:37+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -52,7 +52,7 @@ msgstr "Prekini mjeriti vrijeme pri mirovanju"
 
 #: ../data/hamster.schemas.in.h:2
 msgid "Stop tracking current activity when computer becomes idle"
-msgstr "Prekini mjeriti vrijeme trenutačne aktivnost kad računalo miruje"
+msgstr "Prekini mjeriti vrijeme trenutačne aktivnosti kad računalo miruje"
 
 #: ../data/hamster.schemas.in.h:3 ../data/preferences.ui.h:2
 msgid "Stop tracking on shutdown"
@@ -60,7 +60,7 @@ msgstr "Prekini mjeriti vrijeme pri isključivanju"
 
 #: ../data/hamster.schemas.in.h:4
 msgid "Stop tracking current activity on shutdown"
-msgstr "Prekini mjeriti vrijeme trenutačne aktivnost kad se računalo isključi"
+msgstr "Prekini mjeriti vrijeme trenutačne aktivnosti kad se računalo isključi"
 
 #: ../data/hamster.schemas.in.h:5
 msgid "Remind of current task every x minutes"
@@ -95,7 +95,7 @@ msgid ""
 msgstr ""
 "Aktivnosti koje se događaju prije vremena koje je određeno kao početak dana "
 "uvrštavaju se u jučerašnje aktivnoti, a u današnje kad se događaju nakon toga. "
-"Aktivnosti koje traju dva dana prijeći će u onaj dan u kojem se nalazi veći dio "
+"Aktivnosti koje traju dva dana, prijeći će u onaj dan u kojem se nalazi veći dio "
 "aktivnosti."
 
 #: ../data/hamster.schemas.in.h:11
@@ -165,7 +165,7 @@ msgstr "Pregled mjerenja vremena"
 
 #: ../data/hamster-time-tracker-overview.desktop.in.in.h:2
 msgid "The overview window of hamster time tracker"
-msgstr "Prozor pregleda mjerača vremena Hrčka"
+msgstr "Prozor pregleda mjerača vremena Hrčak"
 
 #: ../data/overview_totals.ui.h:1
 msgid "Show Statistics"
@@ -247,7 +247,7 @@ msgstr "Prekini mjeriti vrijeme kad računalo miruje"
 
 #: ../data/preferences.ui.h:5
 msgid "Remind of current activity every:"
-msgstr "Podseti me na trenutnu aktivnost svakih:"
+msgstr "Podsjeti o trenutačnoj aktivnosti svakih:"
 
 #: ../data/preferences.ui.h:6
 msgid "New day starts at"
@@ -634,24 +634,25 @@ msgid ""
 "Activity report for %(start_B)s %(start_d)s, %(start_Y)s – %(end_B)s %(end_d)s, "
 "%(end_Y)s"
 msgstr ""
-"Izveštaj o aktivnostima za %(start_d)s.%(start_B)s.%(start_Y)s – %(end_d)s.%(end_B)s."
-"%(end_Y)s"
+"Izveštaj o aktivnostima za %(start_d)s. %(start_m)s. %(start_Y)s. – %(end_d)s. "
+"%(end_m)s. %(end_Y)s."
 
 #: ../src/hamster/reports.py:209
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_B)s %(end_d)s, %(end_Y)s"
 msgstr ""
-"Izveštaj o aktivnostima za %(start_d)s.%(start_B)s – %(end_d)s.%(end_B)s.%(end_Y)s"
+"Izveštaj o aktivnostima za %(start_d)s. %(start_m)s. – %(end_d)s. %(end_m)s. "
+"%(end_Y)s."
 
 #: ../src/hamster/reports.py:211
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s, %(start_Y)s"
-msgstr "Izveštaj o aktivnostima za %(start_d)s.%(start_B)s.%(start_Y)s"
+msgstr "Izveštaj o aktivnostima za %(start_d)s. %(start_m)s. %(start_Y)s"
 
 #: ../src/hamster/reports.py:213
 #, python-format
 msgid "Activity report for %(start_B)s %(start_d)s – %(end_d)s, %(end_Y)s"
-msgstr "Izveštaj o aktivnostima za %(start_d)s - %(end_d)s.%(start_B)s.%(end_Y)s"
+msgstr "Izveštaj o aktivnostima za %(start_d)s. - %(end_d)s. %(start_m)s. %(end_Y)s."
 
 #. date column format for each row in HTML report
 #. Using python datetime formatting syntax. See:
@@ -710,7 +711,7 @@ msgstr ""
 
 #: ../src/hamster/stats.py:180
 msgid "Collecting data — check back after a week has passed!"
-msgstr "Sakupljaju se podaci – navrati za tjedan dana!"
+msgstr "Sakupljanje podataka – navrati za tjedan dana!"
 
 #. date format for the first record if the year has not been selected
 #. Using python datetime formatting syntax. See:
@@ -763,9 +764,9 @@ msgstr "%d. %m. %Y."
 #, python-format
 msgid "Longest continuous work happened on %(date)s and was %(hours)s hour."
 msgid_plural "Longest continuous work happened on %(date)s and was %(hours)s hours."
-msgstr[0] "Najduži kontinuirani posao je bio %(date)s i trajao je %(hours)s sat."
-msgstr[1] "Najduži kontinuirani posao je bio %(date)s i trajao je %(hours)s sata."
-msgstr[2] "Najduži kontinuirani posao je bio %(date)s i trajao je %(hours)s sati."
+msgstr[0] "Najduži kontinuirani posao dogodio se %(date)s i trajao je %(hours)s sat."
+msgstr[1] "Najduži kontinuirani posao dogodio se %(date)s i trajao je %(hours)s sata."
+msgstr[2] "Najduži kontinuirani posao dogodio se %(date)s i trajao je %(hours)s sati."
 
 #. total records (in selected scope)
 #: ../src/hamster/stats.py:387
@@ -785,16 +786,16 @@ msgstr "Hrčak te želi još malo više promatrati!"
 msgid ""
 "With %s percent of all activities starting before 9am, you seem to be an early bird."
 msgstr ""
-"Zbog %s posto svih aktivnosti koje su započete prije 9 prijepodne, izgleda da si "
-"ranoranilac."
+"Zbog %s posto svih aktivnosti koje su započete prije 9 sati prijepodne, izgleda da "
+"si ranoranilac."
 
 #: ../src/hamster/stats.py:412
 #, python-format
 msgid ""
 "With %s percent of all activities starting after 11pm, you seem to be a night owl."
 msgstr ""
-"Zbog %s posto svih aktivnosti koje su započete nakon 11 uvečer, izgleda da si noćna "
-"ptica."
+"Zbog %s posto svih aktivnosti koje su započete nakon 11 sati uvečer, izgleda da si "
+"noćna ptica."
 
 #: ../src/hamster/stats.py:415
 #, python-format
@@ -848,58 +849,3 @@ msgstr "iCal"
 #: ../src/hamster/widgets/reportchooserdialog.py:97
 msgid "Time track"
 msgstr "Mjereno vrijeme"
-
-#~| msgid "activities"
-#~ msgid "Show activities window"
-#~ msgstr "Prikažite prozor aktivnosti"
-
-#~ msgid "Sto_p Tracking"
-#~ msgstr "Zaustavi _praćenje"
-
-#~ msgid "To_day"
-#~ msgstr "_Danas"
-
-#~ msgid "_Add earlier activity"
-#~ msgstr "Dod_aj raniju aktivnost"
-
-#~ msgid "Show _Overview"
-#~ msgstr "Prikaži _pregled"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Postavke"
-
-#~ msgid "_About"
-#~ msgstr "_O programu"
-
-#~ msgid "Year:"
-#~ msgstr "Godina:"
-
-#~ msgid "Starts and ends"
-#~ msgstr "Početak i kraj"
-
-#~ msgid "Preferences"
-#~ msgstr "Postavke"
-
-#~ msgid "Changed activity"
-#~ msgstr "Izmenjena aktivnost"
-
-#~ msgid "Switched to '%s'"
-#~ msgstr "Prebačena u „%s“"
-
-#~ msgid "Working on <b>%s</b>"
-#~ msgstr "Radim na <b>%s</b>"
-
-#~ msgid "Hamster time tracker. Usage:"
-#~ msgstr "Vredni hrčak praćenje vremena. Korišćenje:"
-
-#~ msgid "Project Hamster (GNOME Time Tracker)"
-#~ msgstr "Vredni hrčak (Praćenje vremena za Gnom)"
-
-#~ msgid "totals by activity"
-#~ msgstr "ukupno po aktivnostima"
-
-#~ msgid "totals by category"
-#~ msgstr "ukupno po kategorijama"
-
-#~ msgid "Show:"
-#~ msgstr "Prikaži:"
