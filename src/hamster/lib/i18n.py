@@ -14,16 +14,19 @@ def setup_i18n():
     # localedir/language.mo at it's best (after build)
     # and there does not seem to be any way to run straight from sources
     if hamster.installed:
-        from hamster import defs  # only available when running installed
-        locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
+        try:
+            from hamster import defs  # only available when running installed
+            locale_dir = os.path.realpath(os.path.join(defs.DATA_DIR, "locale"))
 
-        for module in (locale,gettext):
-            module.bindtextdomain('hamster', locale_dir)
-            module.textdomain('hamster')
+            for module in (locale,gettext):
+                module.bindtextdomain('hamster', locale_dir)
+                module.textdomain('hamster')
 
-            module.bind_textdomain_codeset('hamster','utf8')
+                module.bind_textdomain_codeset('hamster','utf8')
 
-        gettext.install("hamster", locale_dir)
+            gettext.install("hamster", locale_dir)
+        except:
+            gettext.install("hamster-uninstalled")
 
     else:
         gettext.install("hamster-uninstalled")
