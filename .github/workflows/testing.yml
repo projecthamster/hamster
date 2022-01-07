@@ -102,10 +102,10 @@ jobs:
           flatpak install --user -y flathub org.gnome.Platform//41 org.gnome.Sdk//41
       - name: Build application
         run: |
-          flatpak-builder --repo=build/flatpak/repo build/flatpak/tmp org.gnome.Hamster.json
+          flatpak-builder --repo=build/flatpak/repo build/flatpak/tmp org.gnome.Hamster.yml
       - name: Run tests inside sandbox
         run: |
-          dbus-launch flatpak-builder --run build/flatpak/tmp org.gnome.Hamster.json python3 -m unittest
+          dbus-launch flatpak-builder --run build/flatpak/tmp org.gnome.Hamster.yml python3 -m unittest
       - name: Export bundle and try to install it
         run: |
           mkdir -p dist

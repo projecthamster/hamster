@@ -1,0 +1,47 @@
+---
+app-id: org.gnome.Hamster
+runtime: org.gnome.Platform
+runtime-version: '41'
+sdk: org.gnome.Sdk
+command: hamster
+modules:
+- name: intltool
+  sources:
+  - type: archive
+    url: https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
+    md5: 12e517cac2b57a0121cda351570f1e63
+  cleanup:
+  - "*"
+- name: python3-hamster-dependencies
+  buildsystem: simple
+  ensure-writable:
+  - easy-install.pth
+  - setuptools.pth
+  build-commands:
+  - pip3 install --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST}
+    dbus-python pyxdg
+  sources:
+  - type: file
+    url: https://dbus.freedesktop.org/releases/dbus-python/dbus-python-1.2.18.tar.gz
+    sha256: 92bdd1e68b45596c833307a5ff4b217ee6929a1502f5341bae28fd120acf7260
+  - type: file
+    url: https://files.pythonhosted.org/packages/ea/13/de39ddf4f9f9cea0c7684cd54a50d79c97ea99c9f6aed798fd13d0bd4609/pyxdg-0.27-py2.py3-none-any.whl
+    sha256: 2d6701ab7c74bbab8caa6a95e0a0a129b1643cf6c298bf7c569adec06d0709a0
+- name: hamster
+  buildsystem: simple
+  builddir: true
+  prefix: "/app"
+  build-commands:
+  - "./waf configure --prefix=${FLATPAK_DEST}"
+  - "./waf build"
+  - "./waf install"
+  sources:
+  - type: dir
+    path: "."
+finish-args:
+- "--socket=wayland"
+- "--socket=fallback-x11"
+- "--filesystem=xdg-documents"
+- "--own-name=org.gnome.Hamster"
+- "--own-name=org.gnome.Hamster.GUI"
+- "--own-name=org.gnome.Hamster.WindowServer"
