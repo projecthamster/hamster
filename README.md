@@ -97,7 +97,7 @@ flatpak run org.gnome.Hamster [args...]
 ### Install from sources
 
 #### Dependencies
-Hamster needs python 3.5 or newer (not included in below install
+Hamster needs python 3.6 or newer (not included in below install
 commands). Older versions are not supported.
 
 ##### Debian-based
