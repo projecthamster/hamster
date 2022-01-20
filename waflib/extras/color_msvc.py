@@ -36,20 +36,15 @@ class ColorMSVCFormatter(Logs.formatter):
 					# Fix file case, it may be CL.EXE or cl.exe
 					argv0 = cmd[0].lower()
 					if 'cl.exe' in argv0:
-						lines = []
+						
 						# This will not work with "localized" versions
 						# of MSVC
-						for line in rec.msg.splitlines():
-							if ': warning ' in line:
-								lines.append(self.parseMessage(line, self.colors.YELLOW))
-							elif ': error ' in line:
-								lines.append(self.parseMessage(line, self.colors.RED))
-							elif ': fatal error ' in line:
-								lines.append(self.parseMessage(line, self.colors.RED + self.colors.BOLD))
-							elif ': note: ' in line:
-								lines.append(self.parseMessage(line, self.colors.CYAN))
-							else:
-								lines.append(line)
+                        lines = [self.parseMessage(line, self.colors.YELLOW) 
+                                 if ': warning ' in line else 
+                                                            self.parseMessage(line, self.colors.RED) if ': error ' in line else 
+                                                                self.parseMessage(line, self.colors.RED + self.colors.BOLD) if ': fatal error ' in line else 
+                                                                    self.parseMessage(line, self.colors.CYAN) if ': note: ' in line else 
+                                                                            line for line in rec.msg.splitlines()]
 						rec.msg = "\n".join(lines)
 			frame = frame.f_back
 		return Logs.formatter.format(self, rec)
