@@ -299,8 +299,6 @@ class FactTree(gtk.DrawingArea):
 
         self.day_padding = 20
 
-        self.hover_day = None
-        self.hover_fact = None
         self.current_fact = None
 
         self.colors = graphics.Colors
@@ -311,10 +309,8 @@ class FactTree(gtk.DrawingArea):
         self.set_size_request(500, 400)
 
         self.set_can_focus(True)
-        self.set_events(gdk.EventMask.POINTER_MOTION_MASK
-                        | gdk.EventMask.BUTTON_PRESS_MASK
+        self.set_events(gdk.EventMask.BUTTON_PRESS_MASK
                         | gdk.EventMask.KEY_PRESS_MASK)
-        self.connect("motion-notify-event", self.on_mouse_move)
         self.connect("button-press-event", self.on_mouse_down)
         self.connect("key-press-event", self.on_key_press)
 
@@ -325,24 +321,25 @@ class FactTree(gtk.DrawingArea):
         return facts_ids.index(self.current_fact.id)
 
     def on_mouse_down(self, widget, event):
+        hover_fact = self.get_hover_fact(event.y)
+
         if event.type == gdk.EventType.BUTTON_PRESS:
-            self.on_mouse_move(None, event)
             self.grab_focus()
-            if self.hover_fact:
+            if hover_fact:
                 # match either content or id
-                if (self.hover_fact == self.current_fact
-                        or (self.hover_fact
+                if (hover_fact == self.current_fact
+                        or (hover_fact
                             and self.current_fact
-                            and self.hover_fact.id == self.current_fact.id)
+                            and hover_fact.id == self.current_fact.id)
                         ):
                     self.unset_current_fact()
                 # Totals can't be selected
-                elif not isinstance(self.hover_fact, TotalFact):
-                    self.set_current_fact(self.hover_fact)
+                elif not isinstance(hover_fact, TotalFact):
+                    self.set_current_fact(hover_fact)
                 self.queue_draw()
         elif event.type == gdk.EventType._2BUTTON_PRESS:
-            if self.hover_fact and not isinstance(self.hover_fact, TotalFact):
-                self.activate_row(self.hover_fact)
+            if hover_fact and not isinstance(hover_fact, TotalFact):
+                self.activate_row(hover_fact)
 
     def activate_row(self, fact):
         self.emit("on-activate-row", fact)
@@ -421,22 +418,18 @@ class FactTree(gtk.DrawingArea):
                                                                     self.row_heights[start:end],
                                                                     self.days[start:end]))]
 
-    def on_mouse_move(self, widget, event):
+    def get_hover_fact(self, y):
         facts = []
-        hover_fact = None
 
-        y = event.y
         candidate = bisect.bisect(self.row_positions, y) - 1
         if candidate >= 0 and y < self.row_positions[candidate] + self.row_heights[candidate]:
             day, facts = self.days[candidate]
 
         for fact in facts:
             if fact.y <= y <= (fact.y + fact.height):
-                hover_fact = fact
-                break
+                return fact
 
-        # idem, always update hover_fact, not just if they appear different
-        self.hover_fact = hover_fact
+        return None
 
 
     def set_facts(self, facts, scroll_to_top=False):
