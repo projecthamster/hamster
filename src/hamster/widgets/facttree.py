@@ -33,20 +33,6 @@ from hamster.lib import stuff
 from hamster.lib.fact import Fact
 
 
-class ActionRow(graphics.Sprite):
-    def __init__(self):
-        graphics.Sprite.__init__(self)
-        self.visible = False
-
-        self.restart = graphics.Icon("view-refresh-symbolic", size=18,
-                                     interactive=True,
-                                     mouse_cursor=gdk.CursorType.HAND1,
-                                     y=4)
-        self.add_child(self.restart)
-
-        self.width = 50  # Simon says
-
-
 class TotalFact(Fact):
     """An extension of Fact that is used for daily totals.
     Instances of this class are rendered differently than instances
@@ -308,9 +294,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.fact_row = FactRow()
 
-        self.action_row = ActionRow()
-        # self.add_child(self.action_row)
-
         self.row_positions = []
         self.row_heights = []
 
@@ -356,6 +339,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             # Totals can't be selected
             elif not isinstance(self.hover_fact, TotalFact):
                 self.set_current_fact(self.hover_fact)
+            self.redraw()
 
     def activate_row(self, day, fact):
         self.emit("on-activate-row", day, fact)
@@ -445,11 +429,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 hover_day = rec
                 break
 
-        if hover_day != self.hover_day:
-            # Facts are considered equal if their content is the same,
-            # even if their id is different.
-            # redraw only cares about content, not id.
-            self.redraw()
         # make sure it is always fully updated, including facts ids.
         self.hover_day = hover_day
 
@@ -459,21 +438,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                     hover_fact = fact
                     break
 
-        if (hover_fact
-                and self.hover_fact
-                and hover_fact.id != self.hover_fact.id
-                ):
-            self.move_actions()
         # idem, always update hover_fact, not just if they appear different
         self.hover_fact = hover_fact
-
-    def move_actions(self):
-        if self.hover_fact:
-            self.action_row.visible = True
-            self.action_row.x = self.width - 80 - self.action_row.width
-            self.action_row.y = self.hover_fact.y - self.y
-        else:
-            self.action_row.visible = False
 
     def _on_vadjustment_change(self, scene, vadjustment):
         if not self.vadjustment:
@@ -596,7 +562,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.vadjustment.set_value(y_pos)
         self.y = y_pos
 
-        self.move_actions()
         self.redraw()
 
         self.visible_range = self.get_visible_range()
