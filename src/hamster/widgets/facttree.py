@@ -273,7 +273,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
@@ -341,15 +341,15 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 self.set_current_fact(self.hover_fact)
             self.redraw()
 
-    def activate_row(self, day, fact):
-        self.emit("on-activate-row", day, fact)
+    def activate_row(self, fact):
+        self.emit("on-activate-row", fact)
 
     def delete_row(self, fact):
         self.emit("on-delete-called", fact)
 
     def on_double_click(self, scene, event):
         if self.hover_fact and not isinstance(self.hover_fact, TotalFact):
-            self.activate_row(self.hover_day, self.hover_fact)
+            self.activate_row(self.hover_fact)
 
     def on_key_press(self, scene, event):
         # all keys should appear also in the Overview.on_key_press
@@ -390,7 +390,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         elif event.keyval == gdk.KEY_Return:
             if self.current_fact:
-                self.activate_row(self.hover_day, self.current_fact)
+                self.activate_row(self.current_fact)
 
         elif event.keyval == gdk.KEY_Delete:
             if self.current_fact:
