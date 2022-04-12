@@ -248,7 +248,7 @@ class FactRow(object):
         g.restore_context()
 
 
-class FactTree(graphics.Scene, gtk.Scrollable):
+class FactTree(gtk.DrawingArea, gtk.Scrollable):
     """
     The fact tree is a painter.
     It does not change facts by itself, only sends signals.
@@ -283,7 +283,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        super().__init__()
 
         self.date_label = Label(10, 3)
         fontdesc = pango.FontDescription(graphics._font_desc)
@@ -304,20 +304,26 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.hover_fact = None
         self.current_fact = None
 
-        self.style = self._style
+        self.colors = graphics.Colors
+        self.style = self.get_style_context()
+        self.style.add_class(gtk.STYLE_CLASS_VIEW)
 
         self.visible_range = None
         self.set_size_request(500, 400)
+        self.width = 0
+        self.height = 0
 
-        self.connect("on-mouse-scroll", self.on_scroll)
-        self.connect("on-mouse-move", self.on_mouse_move)
-        self.connect("on-mouse-down", self.on_mouse_down)
-
-        self.connect("on-resize", self.on_resize)
-        self.connect("on-key-press", self.on_key_press)
+        self.set_can_focus(True)
+        self.set_events(gdk.EventMask.POINTER_MOTION_MASK
+                        | gdk.EventMask.BUTTON_PRESS_MASK
+                        | gdk.EventMask.SCROLL_MASK
+                        | gdk.EventMask.KEY_PRESS_MASK)
+        self.connect("scroll-event", self.on_scroll)
+        self.connect("motion-notify-event", self.on_mouse_move)
+        self.connect("button-press-event", self.on_mouse_down)
+        self.connect("key-press-event", self.on_key_press)
+        self.connect("size-allocate", self.on_resize)
         self.connect("notify::vadjustment", self._on_vadjustment_change)
-        self.connect("on-enter-frame", self.on_enter_frame)
-        self.connect("on-double-click", self.on_double_click)
 
     @property
     def current_fact_index(self):
@@ -325,21 +331,25 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         facts_ids = [fact.id for fact in self.facts]
         return facts_ids.index(self.current_fact.id)
 
-    def on_mouse_down(self, scene, event):
-        self.on_mouse_move(None, event)
-        self.grab_focus()
-        if self.hover_fact:
-            # match either content or id
-            if (self.hover_fact == self.current_fact
-                    or (self.hover_fact
-                        and self.current_fact
-                        and self.hover_fact.id == self.current_fact.id)
-                    ):
-                self.unset_current_fact()
-            # Totals can't be selected
-            elif not isinstance(self.hover_fact, TotalFact):
-                self.set_current_fact(self.hover_fact)
-            self.redraw()
+    def on_mouse_down(self, widget, event):
+        if event.type == gdk.EventType.BUTTON_PRESS:
+            self.on_mouse_move(None, event)
+            self.grab_focus()
+            if self.hover_fact:
+                # match either content or id
+                if (self.hover_fact == self.current_fact
+                        or (self.hover_fact
+                            and self.current_fact
+                            and self.hover_fact.id == self.current_fact.id)
+                        ):
+                    self.unset_current_fact()
+                # Totals can't be selected
+                elif not isinstance(self.hover_fact, TotalFact):
+                    self.set_current_fact(self.hover_fact)
+                self.queue_draw()
+        elif event.type == gdk.EventType._2BUTTON_PRESS:
+            if self.hover_fact and not isinstance(self.hover_fact, TotalFact):
+                self.activate_row(self.hover_fact)
 
     def activate_row(self, fact):
         self.emit("on-activate-row", fact)
@@ -347,11 +357,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def delete_row(self, fact):
         self.emit("on-delete-called", fact)
 
-    def on_double_click(self, scene, event):
-        if self.hover_fact and not isinstance(self.hover_fact, TotalFact):
-            self.activate_row(self.hover_fact)
-
-    def on_key_press(self, scene, event):
+    def on_key_press(self, widget, event):
         # all keys should appear also in the Overview.on_key_press
         # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
@@ -421,7 +427,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                                                                     self.row_heights[start:end],
                                                                     self.days[start:end]))]
 
-    def on_mouse_move(self, tree, event):
+    def on_mouse_move(self, widget, event):
         hover_day, hover_fact = None, None
 
         for rec in self.visible_range:
@@ -537,7 +543,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.vadjustment.set_upper(max(maxy, self.height))
             self.vadjustment.set_page_size(self.height)
 
-    def on_resize(self, scene, event):
+    def on_resize(self, widget, event):
+        self.width = event.width
+        self.height = event.height
         self.set_row_heights()
         self.fact_row.width = self.width - 105
         self.on_scroll()
@@ -562,11 +570,11 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             self.vadjustment.set_value(y_pos)
         self.y = y_pos
 
-        self.redraw()
+        self.queue_draw()
 
         self.visible_range = self.get_visible_range()
 
-    def on_enter_frame(self, scene, context):
+    def do_draw(self, context):
         has_focus = self.get_toplevel().has_toplevel_focus()
         if has_focus:
             colors = {
