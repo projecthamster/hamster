@@ -428,21 +428,18 @@ class FactTree(gtk.DrawingArea, gtk.Scrollable):
                                                                     self.days[start:end]))]
 
     def on_mouse_move(self, widget, event):
-        hover_day, hover_fact = None, None
+        facts = []
+        hover_fact = None
 
-        for rec in self.visible_range:
-            if rec['y'] <= event.y <= (rec['y'] + rec['h']):
-                hover_day = rec
+        y = event.y
+        candidate = bisect.bisect(self.row_positions, y) - 1
+        if candidate >= 0 and y < self.row_positions[candidate] + self.row_heights[candidate]:
+            day, facts = self.days[candidate]
+
+        for fact in facts:
+            if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
+                hover_fact = fact
                 break
-
-        # make sure it is always fully updated, including facts ids.
-        self.hover_day = hover_day
-
-        if self.hover_day:
-            for fact in self.hover_day.get('facts', []):
-                if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
-                    hover_fact = fact
-                    break
 
         # idem, always update hover_fact, not just if they appear different
         self.hover_fact = hover_fact
