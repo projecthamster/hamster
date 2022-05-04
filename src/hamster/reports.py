@@ -26,6 +26,7 @@ import copy
 import itertools
 import re
 import codecs
+import html
 from string import Template
 from textwrap import dedent
 
@@ -248,9 +249,9 @@ class HTMLWriter(ReportWriter):
                    # http://docs.python.org/library/time.html#time.strftime
                    C_("html report","%b %d, %Y")),
             date_iso = fact.date.isoformat(),
-            activity = fact.activity,
-            category = category,
-            tags = ", ".join(fact.tags),
+            activity = html.escape(fact.activity),
+            category = html.escape(category),
+            tags = html.escape(", ".join(fact.tags)),
             start = fact.start_time.strftime('%H:%M'),
             start_iso = fact.start_time.isoformat(),
             end = end_time_str,
@@ -258,7 +259,8 @@ class HTMLWriter(ReportWriter):
             duration = fact.delta.format(),
             duration_minutes = "%d" % (stuff.duration_minutes(fact.delta)),
             duration_decimal = "%.2f" % (stuff.duration_minutes(fact.delta) / 60.0),
-            description = fact.description or ""
+            # not only escape html characters, but ensure \n is respected in output
+            description = html.escape(fact.description).replace('\n', '<br />') or ""
         )
         self.fact_rows.append(Template(self.fact_row_template).safe_substitute(data))
 
