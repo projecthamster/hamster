@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Input</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="highlight.pack.js"></script><script>
+document.addEventListener('DOMContentLoaded', function() {
+  var matches = document.querySelectorAll('code.syntax')
+  for (var i = 0; i < matches.length; i++) {
+    hljs.highlightBlock(matches[i]);
+  }
+}, false);</script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><main><div class="page">
+<header><div class="inner pagewide"><div class="trails" role="navigation"><div class="trail">
+<a class="trail" href="index.html" title="Hamster Manual">Hamster Manual</a> » </div></div></div></header><article><div class="hgroup pagewide"><h1 class="title"><span class="title">Input</span></h1></div>
+<div class="region">
+<div class="contents pagewide">
+<p class="p">
+    To start tracking, press the <span class="gui">+</span> button,
+    type in the activity name in the entry,
+    and hit the <span class="key"><kbd>Enter</kbd></span> key.
+    To specify more detail on the fly, use this syntax: 
+    `time_info activity name @category,, some description #tag #other tag with spaces`.
+</p>
+<div class="steps"><div class="inner"><div class="region"><ol class="steps">
+<li class="steps"><p class="p">Specify specific times as `13:10-13:45`, and "started 5 minutes ago" as `-5`.</p></li>
+<li class="steps"><p class="p">Next comes the activity name</p></li>
+<li class="steps"><p class="p">Place the category after the activity name, and start it with an at sign `@`, e.g. `@garden`</p></li>
+<li class="steps"><p class="p">If you want to add a description, add a double comma `,,`.</p></li>
+<li class="steps"><p class="p">The description is just freeform text immediately after the double comma, and runs until the end of the string or until the beginning of tags.</p></li>
+<li class="steps"><p class="p">Place tags at the end, and start each tag with a hash mark `#`.</p></li>
+<li class="steps"><p class="p">A double comma `,,` can also be placed to indicate the beginning of tags. Otherwise any `#` in the activity, category or description would be interpreted as a starting a tag.</p></li>
+</ol></div></div></div>
+<p class="p">
+    A few examples:
+</p>
+<div class="example"><div class="inner"><div class="region"><div class="contents">
+<div class="code"><pre class="contents"><code>12:30-12:45 watering flowers</code></pre></div>
+<p class="p">Forgot to note the important act of watering flowers over lunch.</p>
+</div></div></div></div>
+<div class="example"><div class="inner"><div class="region"><div class="contents">
+<div class="code"><pre class="contents"><code>tomatoes@garden,, digging holes</code></pre></div>
+<p class="p">
+        Need more tomatoes in the garden. Digging holes is purely informational,
+        so added it as a description.
+    </p>
+</div></div></div></div>
+<div class="example"><div class="inner"><div class="region"><div class="contents">
+<div class="code"><pre class="contents"><code>-7 existentialism,, thinking about the vastness of the universe</code></pre></div>
+<p class="p">
+        Corrected information by informing application that I've been
+        doing something else for the last seven minutes.
+    </p>
+</div></div></div></div>
+<div class="note" title="Note">
+<svg width="24" height="24" version="1.1">
+ <path class="yelp-svg-fill" d="m4 3h16c0.554 0 1 0.446 1 1v11h-6v6h-11c-0.554 0-1-0.446-1-1v-16c0-0.554 0.446-1 1-1z"></path>
+ <path class="yelp-svg-fill" d="m17 16h4l-5 5v-4c0-0.554 0.446-1 1-1z"></path>
+</svg><div class="inner">
+<div class="title title-note"><h2><span class="title">Time input</span></h2></div>
+<div class="region"><div class="contents"><div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list">
+<p class="p">Relative times work both for <span class="var">start</span> and <span class="var">end</span>,
+            provided they are preceded by an explicit sign, 
+            and <span class="em">separated by a space</span>.</p>
+<p class="p"><span class="code">-30 -10</span> means started 30 minutes ago and stopped 10 minutes ago.</p>
+<p class="p"><span class="code">-5 +30</span> means started 5 minutes ago and will stop in 30 minutes
+            (duration of 35 minutes).</p>
+</li>
+<li class="list">
+<p class="p">Duration can be given instead of <span class="var">end</span>, 
+            as 1, 2 or 3 digits without any sign.</p>
+<p class="p"><span class="code">-50 30</span> means started 50 minutes ago and lasted 30 minutes
+            (so it ended 20 minutes ago).</p>
+</li>
+<li class="list"><p class="p">Times can be entered with a colon (<span class="code">hh:mm</span>),
+            with a dot (<span class="code">hh.mm</span>) or just the 4 digits (<span class="code">hhmm</span>).</p></li>
+<li class="list"><p class="p">Date can be specified in ISO format (YYYY-MM-DD), e.g. `2019-12-24 19:00`. Otherwise, the time belongs to the current hamster day or, in the gui, to the day selected in the timeline.</p></li>
+</ul></div></div></div></div></div>
+</div>
+</div>
+</div>
+<section class="links" role="navigation"><div class="inner">
+<div class="hgroup pagewide"></div>
+<div class="contents pagewide">
+<div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul><li class="links ">
+<a href="index.html" title="Hamster Manual">Hamster Manual</a><span class="desc"> — Your personal time keeping tool.</span>
+</li></ul></div>
+</div></div>
+<div class="links seealsolinks"><div class="inner">
+<div class="title"><h2><span class="title">See Also</span></h2></div>
+<div class="region"><ul><li class="links ">
+<a href="tracking.html" title="How to track time">How to track time</a><span class="desc"> — Tips on how to track your activities effectively.</span>
+</li></ul></div>
+</div></div>
+</div>
+</div></section>
+</div>
+<div class="clear"></div></article><footer><div class="inner pagewide"></div></footer>
+</div></main></body>
+</html>
