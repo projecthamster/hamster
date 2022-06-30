@@ -21,7 +21,7 @@ def setup_i18n():
             module.bindtextdomain('hamster', locale_dir)
             module.textdomain('hamster')
 
-            module.bind_textdomain_codeset('hamster','utf8')
+#            module.bind_textdomain_codeset('hamster','utf8')
 
         gettext.install("hamster", locale_dir)
 
