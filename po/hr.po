@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: hamster-time-tracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-02 19:21+0100\n"
-"PO-Revision-Date: 2022-08-06 12:09+0200\n"
+"PO-Revision-Date: 2023-03-27 16:44+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -510,7 +510,7 @@ msgstr "Aktualiziraj aktivnost"
 #: ../src/hamster/lib/stuff.py:57
 #, python-format
 msgid "%dh"
-msgstr "%d s"
+msgstr "%d h"
 
 #. duration less than hour
 #: ../src/hamster/lib/stuff.py:60
@@ -522,7 +522,7 @@ msgstr "%d min"
 #: ../src/hamster/lib/stuff.py:63
 #, python-format
 msgid "%dh %dmin"
-msgstr "%d s %d min"
+msgstr "%d h %d min"
 
 #. label of date range if looking on single day
 #. date format for overview label when only single day is visible
