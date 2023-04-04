@@ -1,8 +1,11 @@
 #!/usr/bin/env python2
 import distutils
 import os
-from distutils.core import setup
 from distutils import sysconfig
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 data_dir = os.path.join(sysconfig.get_python_lib(), "hamster", "data")
 
