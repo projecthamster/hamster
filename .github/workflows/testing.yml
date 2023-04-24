@@ -54,7 +54,7 @@ jobs:
 
   flake8:
     name: Run code linting and checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Prepare repo
         uses: actions/checkout@v2
