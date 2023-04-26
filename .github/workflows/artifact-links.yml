@@ -1,0 +1,27 @@
+# This adds a comment to a PR with a link to any build artifacts. Because build
+# artifacts are not available until a workflow is completed, this is done in a
+# second workflow that triggers on completion of the workflow that builds the
+# artifacts.
+name: Linking to artifacts in PR
+on:
+  workflow_run:
+    workflows: ["Testing"]
+    types: [completed]
+
+jobs:
+  artifacts-url-comments:
+    name: Add artifact links to PRs
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.event == 'pull_request' }}
+    steps:
+      # This uses a third-party action that handles figuring out the
+      # pull request to comment on (which is no longer easily available
+      # in a followup workflow) and formatting the comment.
+      - name: Add artifact links to PR and issues
+        uses: tonyhallett/artifacts-url-comments@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prefix: "To test this PR, you can use flatpak with the build below. Download it and then install with `flatpak install Hamster-xxx.flatpak` (using the actual filename)."
+          suffix: "Note: This download will expire after some time."
+          format: name
