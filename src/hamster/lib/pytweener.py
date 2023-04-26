@@ -314,7 +314,7 @@ class Easing(object):
 
 
     def _elastic_in(t, springiness = 0, wave_length = 0):
-        if t in(0, 1):
+        if t in (0, 1):
             return t
 
         wave_length = wave_length or (1 - t) * 0.3
