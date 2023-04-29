@@ -38,7 +38,7 @@ jobs:
           # Install a specific python version as configured
           PACKAGES="$PACKAGES python${{matrix.python-version}}"
           # Normal dependencies
-          PACKAGES="$PACKAGES gettext intltool python3-gi python3-cairo python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache python3-distutils"
+          PACKAGES="$PACKAGES gettext intltool python3-gi python3-cairo python3-gi-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache"
           # For dbus-launch
           PACKAGES="$PACKAGES dbus-x11"
 
