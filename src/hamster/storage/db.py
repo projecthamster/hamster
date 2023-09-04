@@ -102,14 +102,9 @@ class Storage(storage.Storage):
         self.run_fixtures()
 
     def __init_db_file(self, database_dir):
+        from gi.repository import GLib
+        xdg_data_home = GLib.get_user_data_dir()
         if not database_dir:
-            try:
-                from xdg.BaseDirectory import xdg_data_home
-            except ImportError:
-                xdg_data_home = os.environ.get('XDG_DATA_HOME')
-                if not xdg_data_home:
-                    xdg_data_home = os.path.join(os.path.expanduser('~'), '.local', 'share')
-                    logger.warning("No xdg_data_home - assuming ~/.local/share")
             database_dir = os.path.join(xdg_data_home, 'hamster')
 
         if not os.path.exists(database_dir):

@@ -104,7 +104,7 @@ commands). Older versions are not supported.
 ###### Ubuntu (tested in 19.04 and 18.04)
 
 ```bash
-sudo apt install gettext intltool python3-gi python3-cairo python3-gi-cairo python3-distutils python3-dbus python3-xdg libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache
+sudo apt install gettext intltool python3-gi python3-cairo python3-gi-cairo python3-distutils python3-dbus libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache
 # and for documentation
 sudo apt install itstool yelp
 ```
@@ -113,7 +113,7 @@ sudo apt install itstool yelp
 
 Leap-15.0 and Leap-15.1:
 ```bash
-sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
+sudo zypper install intltool python3-cairo python3-gobject-Gdk
 sudo zypper install itstool yelp
 ```
 
