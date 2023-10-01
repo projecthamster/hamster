@@ -583,7 +583,7 @@ class vsnode_project(vsnode):
 		self.build_properties = ret
 
 	def get_build_params(self, props):
-		opt = '--execsolution=%s' % self.ctx.get_solution_node().win32path()
+		opt = '--execsolution="%s"' % self.ctx.get_solution_node().win32path()
 		return (self.get_waf(), opt)
 
 	def get_build_command(self, props):
@@ -681,7 +681,7 @@ class vsnode_target(vsnode_project):
 		"""
 		Override the default to add the target name
 		"""
-		opt = '--execsolution=%s' % self.ctx.get_solution_node().win32path()
+		opt = '--execsolution="%s"' % self.ctx.get_solution_node().win32path()
 		if getattr(self, 'tg', None):
 			opt += " --targets=%s" % self.tg.name
 		return (self.get_waf(), opt)
@@ -787,8 +787,12 @@ class msvs_generator(BuildContext):
 		self.collect_dirs()
 		default_project = getattr(self, 'default_project', None)
 		def sortfun(x):
-			if x.name == default_project:
+			# folders should sort to the top
+			if getattr(x, 'VS_GUID_SOLUTIONFOLDER', None):
 				return ''
+			# followed by the default project
+			elif x.name == default_project:
+				return ' '
 			return getattr(x, 'path', None) and x.path.win32path() or x.name
 		self.all_projects.sort(key=sortfun)
 

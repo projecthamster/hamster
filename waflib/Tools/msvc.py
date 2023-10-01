@@ -99,9 +99,30 @@ all_icl_platforms = [ ('intel64', 'amd64'), ('em64t', 'amd64'), ('ia32', 'x86'),
 """List of icl platforms"""
 
 def options(opt):
-	opt.add_option('--msvc_version', type='string', help = 'msvc version, eg: "msvc 10.0,msvc 9.0"', default='')
+	default_ver = ''
+	vsver = os.getenv('VSCMD_VER')
+	if vsver:
+		m = re.match(r'(^\d+\.\d+).*', vsver)
+		if m:
+			default_ver = 'msvc %s' % m.group(1)
+	opt.add_option('--msvc_version', type='string', help = 'msvc version, eg: "msvc 10.0,msvc 9.0"', default=default_ver)
 	opt.add_option('--msvc_targets', type='string', help = 'msvc targets, eg: "x64,arm"', default='')
 	opt.add_option('--no-msvc-lazy', action='store_false', help = 'lazily check msvc target environments', default=True, dest='msvc_lazy')
+
+class MSVCVersion(object):
+	def __init__(self, ver):
+		m = re.search(r'^(.*)\s+(\d+[.]\d+)', ver)
+		if m:
+			self.name = m.group(1)
+			self.number = float(m.group(2))
+		else:
+			self.name = ver
+			self.number = 0.
+
+	def __lt__(self, other):
+		if self.number == other.number:
+			return self.name < other.name
+		return self.number < other.number
 
 @conf
 def setup_msvc(conf, versiondict):
@@ -119,7 +140,7 @@ def setup_msvc(conf, versiondict):
 		platforms=Utils.to_list(conf.env.MSVC_TARGETS) or [i for i,j in all_msvc_platforms+all_icl_platforms+all_wince_platforms]
 	desired_versions = getattr(Options.options, 'msvc_version', '').split(',')
 	if desired_versions == ['']:
-		desired_versions = conf.env.MSVC_VERSIONS or list(reversed(sorted(versiondict.keys())))
+		desired_versions = conf.env.MSVC_VERSIONS or list(sorted(versiondict.keys(), key=MSVCVersion, reverse=True))
 
 	# Override lazy detection by evaluating after the fact.
 	lazy_detect = getattr(Options.options, 'msvc_lazy', True)
@@ -187,7 +208,7 @@ echo PATH=%%PATH%%
 echo INCLUDE=%%INCLUDE%%
 echo LIB=%%LIB%%;%%LIBPATH%%
 """ % (vcvars,target))
-	sout = conf.cmd_and_log(['cmd.exe', '/E:on', '/V:on', '/C', batfile.abspath()])
+	sout = conf.cmd_and_log(['cmd.exe', '/E:on', '/V:on', '/C', batfile.abspath()], stdin=getattr(Utils.subprocess, 'DEVNULL', None))
 	lines = sout.splitlines()
 
 	if not lines[0]:
