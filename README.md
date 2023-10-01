@@ -117,11 +117,12 @@ sudo zypper install intltool python3-pyxdg python3-cairo python3-gobject-Gdk
 sudo zypper install itstool yelp
 ```
 
-##### RPM-based
+##### Fedora
 
-*RPM-based instructions below should be updated for python3 (issue [#369](https://github.com/projecthamster/hamster/issues/369)).*
-
-`yum install gettext intltool dbus-python`
+```bash
+sudo dnf install gettext intltool python3-pyxdg python3-cairo python3-gobject
+sudo dnf install python3-dbus itstool yelp
+```
 
 ##### Help reader
 If the hamster help pages are not accessible ("unable to open `help:hamster-time-tracker`"),
