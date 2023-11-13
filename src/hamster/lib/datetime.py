@@ -54,7 +54,7 @@ class date(pdt.date):
         elif isinstance(other, pdt.date):
             return timedelta.from_pdt(self.to_pdt() - other)
         else:
-            raise NotImplementedError("subtract {}".format(type(other)))
+            return NotImplemented
 
     @classmethod
     def parse(cls, s):
@@ -250,7 +250,7 @@ class datetime(pdt.datetime):
         elif isinstance(other, datetime):
             return timedelta.from_pdt(self.to_pdt() - other)
         else:
-            raise NotImplementedError("subtract {}".format(type(other)))
+            return NotImplemented
 
     def __str__(self):
         if self.tzinfo:
