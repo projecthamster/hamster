@@ -7,8 +7,7 @@ from hamster.lib import datetime as dt
 
 
 # separator between times and activity
-ACTIVITY_SEPARATOR = "\s+"
-
+activity_separator = r"\s+"
 
 # match #tag followed by any space or # that will be ignored
 # tag must not contain '#' or ','
@@ -17,18 +16,30 @@ tag_re = re.compile(r"""
     (?P<tag>
         [^#,]+  # (anything but hash or comma)
     )
-    \s*         # maybe spaces
-                # forbid double comma (tag can not be before the tags barrier):
-    ,?          # single comma (or none)
-    \s*         # maybe space
-    $           # end of text
+""", flags=re.VERBOSE)
+
+tags_in_description = re.compile(r"""
+    \#
+    (?P<tag>
+        [a-zA-Z] # Starts with an alphabetic character (digits excluded)
+        [^\s]+   # followed by anything except spaces
+    )
 """, flags=re.VERBOSE)
 
 tags_separator = re.compile(r"""
-    (,{0,2})    # 0, 1 or 2 commas
+    ,{1,2}      # 1 or 2 commas
     \s*         # maybe spaces
-    $           # end of text
+    (?=\#)      # hash character (start of first tag, doesn't consume it)
 """, flags=re.VERBOSE)
+
+description_separator = re.compile(r"""
+    ,+          # 1 or more commas
+    \s*         # maybe spaces
+""", flags=re.VERBOSE)
+
+
+def get_tags_from_description(description):
+    return list(re.findall(tags_in_description, description))
 
 
 def parse_fact(text, range_pos="head", default_day=None, ref="now"):
@@ -37,7 +48,7 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     Returns found fields as a dict.
 
     Tentative syntax (not accurate):
-    start [- end_time] activity[@category][,, description][,,]{ #tag}
+    start [- end_time] activity[@category][, description][,]{ #tag}
     According to the legacy tests, # were allowed in the description
     """
 
@@ -50,43 +61,31 @@ def parse_fact(text, range_pos="head", default_day=None, ref="now"):
     # datetimes
     # force at least a space to avoid matching 10.00@cat
     (start, end), remaining_text = dt.Range.parse(text, position=range_pos,
-                                                   separator=ACTIVITY_SEPARATOR,
-                                                   default_day=default_day)
+                                                  separator=activity_separator,
+                                                  default_day=default_day)
     res["start_time"] = start
     res["end_time"] = end
 
     # tags
-    # Need to start from the end, because
-    # the description can hold some '#' characters
-    tags = []
-    while True:
-        # look for tags separators
-        # especially the tags barrier
-        m = re.search(tags_separator, remaining_text)
-        remaining_text = remaining_text[:m.start()]
-        if m.group(1) == ",,":
-            # tags  barrier found
-            break
-
-        # look for tag
-        m = re.search(tag_re, remaining_text)
-        if m:
-            tag = m.group('tag').strip()
-            # strip the matched string (including #)
-            remaining_text = remaining_text[:m.start()]
-            tags.append(tag)
-        else:
-            # no tag
-            break
-
-    # put tags back in input order
-    res["tags"] = list(reversed(tags))
+    split = re.split(tags_separator, remaining_text, 1)
+    remaining_text = split[0]
+    tags_part = split[1] if len(split) > 1 else None
+    if tags_part:
+        tags = list(map(lambda x: x.strip(), re.findall(tag_re, tags_part)))
+    else:
+        tags = []
 
     # description
-    # first look for double comma (description hard left boundary)
-    head, sep, description = remaining_text.partition(",,")
+    # first look for comma (description hard left boundary)
+    split = re.split(description_separator, remaining_text, 1)
+    head = split[0]
+    description = split[1] if len(split) > 1 else ""
+    # Extract tags from description, put them before other tags
+    tags = get_tags_from_description(description) + tags
     res["description"] = description.strip()
     remaining_text = head.strip()
+
+    res["tags"] = tags
 
     # activity
     split = remaining_text.rsplit('@', maxsplit=1)

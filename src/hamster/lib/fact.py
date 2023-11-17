@@ -14,7 +14,7 @@ import calendar
 from copy import deepcopy
 
 from hamster.lib import datetime as dt
-from hamster.lib.parsing import parse_fact
+from hamster.lib.parsing import parse_fact, get_tags_from_description
 
 
 class FactError(Exception):
@@ -186,20 +186,17 @@ class Fact(object):
             res += "@%s" % self.category
 
         if self.description:
-            res += ',, '
+            res += ', '
             res += self.description
 
-        if ('#' in self.activity
-            or '#' in self.category
-            or '#' in self.description
-           ):
-            # need a tag barrier
-            res += ",, "
-
         if self.tags:
-            # double comma is a left barrier for tags,
-            # which is useful only if previous fields contain a hash
-            res += " %s" % " ".join("#%s" % tag for tag in self.tags)
+            # Don't duplicate tags that are already in the description
+            seen_tags = get_tags_from_description(self.description)
+            remaining_tags = [
+                tag for tag in self.tags if tag not in seen_tags
+            ]
+            if remaining_tags:
+                res += ", %s" % " ".join("#%s" % tag for tag in remaining_tags)
         return res
 
     def serialized(self, range_pos="head", default_day=None):

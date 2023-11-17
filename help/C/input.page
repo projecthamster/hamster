@@ -11,19 +11,24 @@
     To start tracking, press the <gui style="button">+</gui> button,
     type in the activity name in the entry,
     and hit the <key>Enter</key> key.
-    To specify more detail on the fly, use this syntax: 
-    `time_info activity name @category,, some description #tag #other tag with spaces`.
+    To specify more detail on the fly, use this syntax:
+    `time_info activity name@category, some description, #tag #other tag with spaces`.
 </p>
 
 <steps>
     <item><p>Specify specific times as `13:10-13:45`, and "started 5 minutes ago" as `-5`.</p></item>
     <item><p>Next comes the activity name</p></item>
     <item><p>Place the category after the activity name, and start it with an at sign `@`, e.g. `@garden`</p></item>
-    <item><p>If you want to add a description, add a double comma `,,`.</p></item>
-    <item><p>The description is just freeform text immediately after the double comma, and runs until the end of the string or until the beginning of tags.</p></item>
-    <item><p>Place tags at the end, and start each tag with a hash mark `#`.</p></item>
-    <item><p>A double comma `,,` can also be placed to indicate the beginning of tags. Otherwise any `#` in the activity, category or description would be interpreted as a starting a tag.</p></item>
+    <item><p>If you want to add a description and/or tags, add a comma `,`.</p></item>
+    <item><p>The description is just freeform text immediately after the comma, and runs until the end of the string or until the beginning of tags.</p></item>
+    <item><p>Place tags at the end right after a comma, and start each tag with a hash mark `#`.</p></item>
 </steps>
+
+<p>Note that you can embed single-word tags in the description just by
+prepending a hash to any word. Note that sequences of alphanumeric
+characters that start with a digit are not considered as words so if you
+use <code>Fix bug #123</code> as your description, the hash will be kept
+and there will be no supplementary tag named <code>123</code>.</p>
 
 <p>
     A few examples:
@@ -33,17 +38,25 @@
     <p>Forgot to note the important act of watering flowers over lunch.</p>
 </example>
 <example>
-    <code>tomatoes@garden,, digging holes</code>
+    <code>tomatoes@garden, digging holes</code>
     <p>
         Need more tomatoes in the garden. Digging holes is purely informational,
         so added it as a description.
     </p>
 </example>
 <example>
-    <code>-7 existentialism,, thinking about the vastness of the universe</code>
+    <code>-7 existentialism, thinking about the vastness of the universe</code>
     <p>
         Corrected information by informing application that I've been
         doing something else for the last seven minutes.
+    </p>
+</example>
+<example>
+    <code>Hamster@Software, doing some #reviews of pull requests</code>
+    <code>Hamster@Software, doing some reviews of pull requests, #reviews</code>
+    <p>
+	Those two syntaxes are equivalent. Single word tags can be embedded in the
+	description (except on the first word).
     </p>
 </example>
 
@@ -52,14 +65,14 @@
     <list>
         <item>
             <p>Relative times work both for <var>start</var> and <var>end</var>,
-            provided they are preceded by an explicit sign, 
+            provided they are preceded by an explicit sign,
             and <em>separated by a space</em>.</p>
             <p><code>-30 -10</code> means started 30 minutes ago and stopped 10 minutes ago.</p>
             <p><code>-5 +30</code> means started 5 minutes ago and will stop in 30 minutes
             (duration of 35 minutes).</p>
         </item>
         <item>
-            <p>Duration can be given instead of <var>end</var>, 
+            <p>Duration can be given instead of <var>end</var>,
             as 1, 2 or 3 digits without any sign.</p>
             <p><code>-50 30</code> means started 50 minutes ago and lasted 30 minutes
             (so it ended 20 minutes ago).</p>
