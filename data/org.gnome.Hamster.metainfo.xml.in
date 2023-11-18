@@ -44,6 +44,9 @@
   </screenshots>
   ​<translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
+  <releases>
+    <release version="@VERSION@" />
+  </releases>
   <provides>
     <binary>hamster</binary>
   </provides>
