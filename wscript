@@ -1,15 +1,13 @@
 # -*- python -*-
 
 
-from subprocess import getstatusoutput
+import subprocess
 
 from waflib import Utils
 
-
-# slight code duplication with hamster/__init__.py, but this is finally cleaner.
-rc, output = getstatusoutput("git describe --tags --always --dirty=+")
-VERSION = "3.0.2" if rc else output
-
+# Reuse code from hamster to figure out the version number to use
+process = subprocess.run(["python3", "src/hamster/version.py"], check=True, stdout=subprocess.PIPE, text=True)
+VERSION = process.stdout
 APPNAME = 'hamster'
 
 top = '.'
