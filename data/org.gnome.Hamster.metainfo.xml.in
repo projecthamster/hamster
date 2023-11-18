@@ -45,7 +45,8 @@
   ​<translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
   <releases>
-    <release version="@VERSION@" />
+    <!-- Provide a (clearly) fake date, otherwise flatpak will ignore the entry -->
+    <release version="@VERSION@" date="1980-01-01" />
   </releases>
   <provides>
     <binary>hamster</binary>
