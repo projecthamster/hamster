@@ -17,7 +17,9 @@ def get_uninstalled_version():
     from subprocess import getstatusoutput
     rc, output = getstatusoutput("git describe --tags --always --dirty=+")
     if rc == 0:
-        return output
+        import re
+        # Strip "v" prefix that is used in git tags
+        return re.sub(r'^v', '', output)
     else:
         from pathlib import Path
         with open(Path(__file__).parent / 'VERSION', 'r') as f:
