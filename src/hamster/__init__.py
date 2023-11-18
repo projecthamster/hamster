@@ -18,7 +18,17 @@ except ImportError:
     # if defs is not there, we are running from sources
     from subprocess import getstatusoutput
     rc, output = getstatusoutput("git describe --tags --always --dirty=+")
-    __version__ = "3.0.2" if rc else "{} (uninstalled)".format(output)
+    if rc == 0:
+        # If available, prefer the git version, otherwise fall back to
+        # the VERSION file (which is meaningful only in released
+        # versions)
+        __version__ = "{} (uninstalled)".format(output)
+    else:
+        from pathlib import Path
+        with open(Path(__file__).parent / 'VERSION', 'r') as f:
+            __version__ = f.read()
+        del Path
+
     installed = False
     del getstatusoutput, rc, output
 
