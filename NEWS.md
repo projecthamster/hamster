@@ -1,21 +1,25 @@
 ## Changes in 3.0.3 (unreleased)
 
-* A number changes to the overview screen:
+* Tested and updated on python 3.10.
+* A number changes to the overview screen: 
   - Add daily total rows. (PR 596)
   - Remove lines previously shown for days without activity. (PR 650)
-  - Refactor the range selection dropdown, preventing a problem where it
-    would not be shown on systems using Wayland and some other systems.
-    (issue 639 and 645, PR 647)
+  - Refactor the range selection dropdown, preventing a problem where it would
+    not be shown on systems using Wayland and some other systems. (issue 639,
+    645, PR 647)
   - Do not periodically scroll to the top, only when displaying a new
     set of facts.(issue 594, PR 648)
 * On Wayland, fix the popup below the tag field when editing activities
   and the time field in the preferences window. (PR 652)
-* In addition to source downloads, packaged builds using the Flatpak
-  format are now available as well. (PR 610)
 * Fix exception in all calls to the dbus UpdateJSON method (issue 671,
   PR 672).
 * Fix the start date picker in the update/add activity window. (issue
   590, PR 674)
+* Added croation translation (PR 709)
+* Updated and improved flatpak packagaging (issue 123, 456, PR 321, 111, 333,
+  610) and dependencies and automatic tests (PR 663)
+* Minor updates to documentation (but far from complete for now)
+
 
 ## Changes in 3.0.2
 
@@ -23,6 +27,7 @@
   (issue 583).
 * Fix off-by-one-day error in CSV exports (issue 576).
 * Support Python3.5 again, this was >= 3.6 (issue 582).
+
 
 ## Changes in 3.0.1
 
