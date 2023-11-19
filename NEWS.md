@@ -1,3 +1,6 @@
+## Unreleased changes
+
+
 ## Changes in 3.0.3 (2023-11-19)
 After a long hiatus and slow development, finally a hamster release
 again! This version contains some usability fixes and makes hamster run
