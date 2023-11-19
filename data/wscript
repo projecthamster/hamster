@@ -15,7 +15,13 @@ def build(ctx):
         ctx(features='glib2',
             settings_schema_files=['org.gnome.hamster.gschema.xml'])
 
-    ctx.install_files('${DATADIR}/metainfo', 'org.gnome.Hamster.GUI.metainfo.xml')
+    filename = "org.gnome.Hamster.metainfo.xml"
+    ctx(features = "subst",
+        source= "%s.in" % filename,
+        target= "%s" % filename,
+        dict = ctx.env,
+        install_path = "${DATADIR}/metainfo"
+       )
 
     filename = "org.gnome.Hamster.GUI.desktop"
     ctx(features = "subst",

@@ -5,23 +5,14 @@ gi.require_version('PangoCairo', '1.0')  # noqa: E402
 from gi.repository import Gtk as gtk
 
 from hamster.lib import default_logger
+from hamster.version import get_version
 
 
 logger = default_logger(__name__)
 
-try:
-    # defs.py is created by waf from defs.py.in
-    from hamster import defs
-    __version__ = defs.VERSION
-    installed = True
-except ImportError:
-    # if defs is not there, we are running from sources
-    from subprocess import getstatusoutput
-    rc, output = getstatusoutput("git describe --tags --always --dirty=+")
-    __version__ = "3.0.2" if rc else "{} (uninstalled)".format(output)
-    installed = False
-    del getstatusoutput, rc, output
+(__version__, installed) = get_version()
 
 # cleanup namespace
+del get_version
 del default_logger
 del gtk  # performance is retained

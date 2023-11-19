@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>org.gnome.Hamster.GUI</id>
+  <id>org.gnome.Hamster</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
   <name>Hamster</name>
@@ -44,6 +44,10 @@
   </screenshots>
   ​<translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
+  <releases>
+    <!-- Provide a (clearly) fake date, otherwise flatpak will ignore the entry -->
+    <release version="@VERSION@" date="1980-01-01" />
+  </releases>
   <provides>
     <binary>hamster</binary>
   </provides>
