@@ -57,7 +57,9 @@ https://software.opensuse.org/package/hamster-time-tracker
 
 ##### Fedora and EPEL
 
-Package status: https://apps.fedoraproject.org/packages/hamster-time-tracker
+Package status: https://src.fedoraproject.org/rpms/hamster-time-tracker
+
+As of November 2023, hamster has only been packaged up to fc30 (with hamster version 2.0).
 
 Installation:
 ```sudo dnf install hamster-time-tracker```
