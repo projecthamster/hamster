@@ -69,10 +69,9 @@ Additional changes are:
   - Preserve newlines and special characters (PR 704)
   - Make checkboxes work (PR 665)
 * Updated and improved flatpak packagaging (issue 123, 456, PR 321, 111, 333,
-  610, 663, 685)
+  610, 685)
 * Rework handling of tags in the cmdline, see below for details (issue
-  657, PR 663)
-* Stop using pyxdg, GLib could already give the same information about
+  334, 657, PR 663)
   XDG directories (PR 727)
 * Minor updates to documentation (but far from complete for now)
 
@@ -164,11 +163,11 @@ Additional changes are:
       to the minute
     ** note that this only affects new and/or edited activities in the database
 * Improved keyboard handling:
-  - Ctrl+Space to stop tracking.
+  - Ctrl+Space to stop or restart tracking.
   - Left/Right arrows change date.
   - Resume: start now a clone of the selected activity.
     Ctrl-+: clone or fallback to new if none selected.
-            (same as pressing the + button)
+            (similar to pressing the + button)
     Ctrl-R: only Resume (clone) an existing fact.
     Ctrl-N: only new.
   - Up, down, Home, End, Page-Up, Page-Down, Return
