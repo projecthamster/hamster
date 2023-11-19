@@ -1,16 +1,96 @@
-## Changes in 3.0.2
+## Changes in 3.0.3 (2023-11-19)
+After a long hiatus and slow development, finally a hamster release
+again! This version contains some usability fixes and makes hamster run
+on newer systems.
+
+Starting with this release, the hamster project also provides flatpak
+builds of all releases (and also of git development versions). This is
+now the recommended way of installing hamster, if your distribution does
+not provide (up-to-date) packages.
+
+One notable change is the parsing of the hamster cmdline (the
+"activity@category, description, #tag, #other tag" string when you enter
+or edit an activity as a single string), which is a bit simplified, but
+no longer accepts everything it did before.
+
+In particular:
+* Remove the need for using a double comma to start the description,
+  a single comma can be used instead. Using double commas is still
+  allowed for compatibility. This does mean that a comma can no longer
+  be used in the activity or category.
+* The tags part must now be separated by a comma (previously, tags
+  could be appended directly to the activity, category or description.
+  This allows using # inside activity, category and description
+  (without needing a double comma to force a possibly empty tags part
+  at the end). For compatibility, the tags part can also be separated
+  by a double comma.
+* Simple #hashwords are now extracted from the description as
+  additional tags automatically (they can't start with numbers and
+  can't contain spaces, but those can still be written in the "tags
+  part" after a comma). This allows writing more natural descriptions
+  with embedded tags, like Coding, fix #bugs in #hamster.
+* Limitations on the fields are more consistent. All fields can now
+  contain any character, except:
+  * The activity cannot contain @, since that would start the category.
+  * The activity and category cannot contain ,, since that would start
+    the description.
+  * The description cannot start with # or contain the tag separator
+    (one or two commas followed by optional whitespace followed by
+    a hash, e.g. , #), since this would start the tags part.
+  * Tags in the tag part cannot contain a # or , (since that would
+    look like the start of the next tag).
+  * Tags in the description part must start with a letter (upper or
+    lowercase a-z) and cannot contain whitespace.
+
+
+Additional changes are:
+* A number changes to the overview screen:
+  - Add daily total rows. (PR 596)
+  - Remove lines previously shown for days without activity. (PR 650)
+  - Refactor the range selection dropdown, preventing a problem where it would
+    not be shown on systems using Wayland and some other systems. (issue 639,
+    645, PR 647)
+  - Do not periodically scroll to the top, only when displaying a new
+    set of facts.(issue 594, PR 648)
+  - Fix overlapping texts with wide fonts (issue 698, PR 699)
+* On Wayland, fix the popup below the tag field when editing activities
+  and the time field in the preferences window. (PR 652)
+* Fix exception when calling the dbus UpdateJSON method with a string
+  argument (issue 671, PR 672).
+* Fix the start date picker in the update/add activity window. (issue
+  590, PR 674)
+* Allow resuming last activity with ctrl-space (issue 595, PR 678)
+* Added croation translation (PR 709)
+* Fix running on Python 3.11 by removing call to deprecated
+  `bind_textdomain_codeset` gettext function (issue 715, PR 715)
+* Fix running on Python 3.12 by updating the waf build system to 2.0.26
+  (PR 732)
+* Improve HTML export:
+  - Preserve newlines and special characters (PR 704)
+  - Make checkboxes work (PR 665)
+* Updated and improved flatpak packagaging (issue 123, 456, PR 321, 111, 333,
+  610, 685)
+* Rework handling of tags in the cmdline, see below for details (issue
+  334, 657, PR 663)
+* Stop using pyxdg, GLib could already give the same information about
+  XDG directories (PR 727)
+* Minor updates to documentation (but far from complete for now)
+
+
+## Changes in 3.0.2 (2020-05-19)
 
 * Switch from deprecated xml2po to itstool for translating help files
   (issue 583).
 * Fix off-by-one-day error in CSV exports (issue 576).
 * Support Python3.5 again, this was >= 3.6 (issue 582).
 
-## Changes in 3.0.1
+
+## Changes in 3.0.1 (2020-03-01)
 
 * Fixed a rare crash in hamster-window-server (issue 571).
 
 
-## Changes in 3.0
+## Changes in 3.0 (2020-02-24)
 
 * Fixed dialogs placement (PR 549):
   - dialogs appear above their parent (the overview, if opened).
@@ -93,7 +173,7 @@
     Ctrl-N: only new.
   - Up, down, Home, End, Page-Up, Page-Down, Return
     work straight from the overview (no need to click).
-  - More info on PR #387.
+  - More info on PR 387.
 * Removed non-working stuff that will be developed elsewhere (issue 493):
   external, idle, ...
 
@@ -173,7 +253,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
 ## Changes in 1.03
 
- * fix issue #61 - installation was missing initial database for fresh installs
+ * fix issue 61 - installation was missing initial database for fresh installs
  * loosen backend dependencies so that hamster.client can be used outside the
    project see http://pypi.python.org/pypi/hamster-sqlite/ for details
  * desktop notification now once again correctly notifies of "No activity"
@@ -831,7 +911,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
   Applet
     * fixed code so that it works also with Python 2.4
-    * Fixed bug with tasks falling into unsorted category (bug #548914)
+    * Fixed bug with tasks falling into unsorted category (bug 548914)
     * Fixed error when switching tasks with doubleclick
 
 
@@ -951,7 +1031,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
   Applet
 	* Fixed the header info and updated the Spanish translations
-	* Updated the Dutch translation by Wouter Bolsterlee (#544975)
+	* Updated the Dutch translation by Wouter Bolsterlee (544975)
 	* Disable keybindings if not supported by g-c-c
 	* Properly integrate with GNOME's keyboard binding dialog
 	* Fixed problems with simple report
