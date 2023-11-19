@@ -1,7 +1,7 @@
 ---
 app-id: org.gnome.Hamster
 runtime: org.gnome.Platform
-runtime-version: '41'
+runtime-version: '45'
 sdk: org.gnome.Sdk
 command: hamster
 modules:

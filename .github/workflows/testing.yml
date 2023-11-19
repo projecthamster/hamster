@@ -95,7 +95,7 @@ jobs:
       - name: Install GNOME SDK for flatpak
         run: |
           flatpak remote-add --user --if-not-exists --from flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y flathub org.gnome.Platform//41 org.gnome.Sdk//41
+          flatpak install --user -y flathub org.gnome.Platform//45 org.gnome.Sdk//45
       - name: Build application
         run: |
           flatpak-builder --repo=build/flatpak/repo build/flatpak/tmp org.gnome.Hamster.yml
