@@ -112,7 +112,7 @@
     Ctrl-N: only new.
   - Up, down, Home, End, Page-Up, Page-Down, Return
     work straight from the overview (no need to click).
-  - More info on PR #387.
+  - More info on PR 387.
 * Removed non-working stuff that will be developed elsewhere (issue 493):
   external, idle, ...
 
@@ -192,7 +192,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
 ## Changes in 1.03
 
- * fix issue #61 - installation was missing initial database for fresh installs
+ * fix issue 61 - installation was missing initial database for fresh installs
  * loosen backend dependencies so that hamster.client can be used outside the
    project see http://pypi.python.org/pypi/hamster-sqlite/ for details
  * desktop notification now once again correctly notifies of "No activity"
@@ -850,7 +850,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
   Applet
     * fixed code so that it works also with Python 2.4
-    * Fixed bug with tasks falling into unsorted category (bug #548914)
+    * Fixed bug with tasks falling into unsorted category (bug 548914)
     * Fixed error when switching tasks with doubleclick
 
 
@@ -970,7 +970,7 @@ gitk --no-merges v2.0-rc1...v2.1.1
 
   Applet
 	* Fixed the header info and updated the Spanish translations
-	* Updated the Dutch translation by Wouter Bolsterlee (#544975)
+	* Updated the Dutch translation by Wouter Bolsterlee (544975)
 	* Disable keybindings if not supported by g-c-c
 	* Properly integrate with GNOME's keyboard binding dialog
 	* Fixed problems with simple report
