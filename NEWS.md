@@ -167,7 +167,7 @@ Additional changes are:
   - Left/Right arrows change date.
   - Resume: start now a clone of the selected activity.
     Ctrl-+: clone or fallback to new if none selected.
-            (similar to pressing the + button)
+            (same as pressing the + button)
     Ctrl-R: only Resume (clone) an existing fact.
     Ctrl-N: only new.
   - Up, down, Home, End, Page-Up, Page-Down, Return
