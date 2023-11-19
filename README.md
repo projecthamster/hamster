@@ -61,9 +61,11 @@ Package status: https://src.fedoraproject.org/rpms/hamster-time-tracker
 
 As of November 2023, hamster has only been packaged up to fc30 (with hamster version 2.0).
 
-Installation:
+Installation (on releases with existing package):
 ```sudo dnf install hamster-time-tracker```
 (or graphical package installer).
+
+For more recent releases, refer to compilation from sources above.
 
 ##### Snap
 Easy installation on any distribution supporting snap:  
