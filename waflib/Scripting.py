@@ -306,7 +306,7 @@ def distclean(ctx):
 
 	# remove a build folder, if any
 	cur = '.'
-	if ctx.options.no_lock_in_top:
+	if os.environ.get('NO_LOCK_IN_TOP') or ctx.options.no_lock_in_top:
 		cur = ctx.options.out
 
 	try:
@@ -333,9 +333,9 @@ def distclean(ctx):
 			remove_and_log(env.out_dir, shutil.rmtree)
 
 		env_dirs = [env.out_dir]
-		if not ctx.options.no_lock_in_top:
+		if not (os.environ.get('NO_LOCK_IN_TOP') or ctx.options.no_lock_in_top):
 			env_dirs.append(env.top_dir)
-		if not ctx.options.no_lock_in_run:
+		if not (os.environ.get('NO_LOCK_IN_RUN') or ctx.options.no_lock_in_run):
 			env_dirs.append(env.run_dir)
 		for k in env_dirs:
 			p = os.path.join(k, Options.lockfile)
@@ -388,7 +388,11 @@ class Dist(Context.Context):
 
 			for x in files:
 				archive_name = self.get_base_name() + '/' + x.path_from(self.base_path)
-				zip.write(x.abspath(), archive_name, zipfile.ZIP_DEFLATED)
+				if os.environ.get('SOURCE_DATE_EPOCH'):
+					# TODO: parse that timestamp
+					zip.writestr(zipfile.ZipInfo(archive_name), x.read(), zipfile.ZIP_DEFLATED)
+				else:
+					zip.write(x.abspath(), archive_name, zipfile.ZIP_DEFLATED)
 			zip.close()
 		else:
 			self.fatal('Valid algo types are tar.bz2, tar.gz, tar.xz or zip')
@@ -425,6 +429,8 @@ class Dist(Context.Context):
 		tinfo.gid   = 0
 		tinfo.uname = 'root'
 		tinfo.gname = 'root'
+		if os.environ.get('SOURCE_DATE_EPOCH'):
+			tinfo.mtime = int(os.environ.get('SOURCE_DATE_EPOCH'))
 
 		if os.path.isfile(p):
 			with open(p, 'rb') as f:

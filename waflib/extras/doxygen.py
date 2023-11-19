@@ -69,6 +69,7 @@ def parse_doxy(txt):
 class doxygen(Task.Task):
 	vars  = ['DOXYGEN', 'DOXYFLAGS']
 	color = 'BLUE'
+	ext_in = [ '.py', '.c', '.h', '.java', '.pb.cc' ]
 
 	def runnable_status(self):
 		'''
@@ -85,6 +86,12 @@ class doxygen(Task.Task):
 		if not getattr(self, 'pars', None):
 			txt = self.inputs[0].read()
 			self.pars = parse_doxy(txt)
+
+			# Override with any parameters passed to the task generator
+			if getattr(self.generator, 'pars', None):
+				for k, v in self.generator.pars.items():
+					self.pars[k] = v
+
 			if self.pars.get('OUTPUT_DIRECTORY'):
 				# Use the path parsed from the Doxyfile as an absolute path
 				output_node = self.inputs[0].parent.get_bld().make_node(self.pars['OUTPUT_DIRECTORY'])
@@ -93,11 +100,6 @@ class doxygen(Task.Task):
 				output_node = self.inputs[0].parent.get_bld().make_node(self.inputs[0].name + '.doxy')
 			output_node.mkdir()
 			self.pars['OUTPUT_DIRECTORY'] = output_node.abspath()
-
-			# Override with any parameters passed to the task generator
-			if getattr(self.generator, 'pars', None):
-				for k, v in self.generator.pars.items():
-					self.pars[k] = v
 
 			self.doxy_inputs = getattr(self, 'doxy_inputs', [])
 			if not self.pars.get('INPUT'):
@@ -206,10 +208,10 @@ def process_doxy(self):
 		self.bld.fatal('doxygen file %s not found' % self.doxyfile)
 
 	# the task instance
-	dsk = self.create_task('doxygen', node)
+	dsk = self.create_task('doxygen', node, always_run=getattr(self, 'always', False))
 
 	if getattr(self, 'doxy_tar', None):
-		tsk = self.create_task('tar')
+		tsk = self.create_task('tar', always_run=getattr(self, 'always', False))
 		tsk.input_tasks = [dsk]
 		tsk.set_outputs(self.path.find_or_declare(self.doxy_tar))
 		if self.doxy_tar.endswith('bz2'):

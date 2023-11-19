@@ -400,7 +400,7 @@ def feature(*k):
 	Decorator that registers a task generator method that will be executed when the
 	object attribute ``feature`` contains the corresponding key(s)::
 
-		from waflib.Task import feature
+		from waflib.TaskGen import feature
 		@feature('myfeature')
 		def myfunction(self):
 			print('that is my feature!')
@@ -631,12 +631,8 @@ def process_rule(self):
 			cls.scan = self.scan
 		elif has_deps:
 			def scan(self):
-				nodes = []
-				for x in self.generator.to_list(getattr(self.generator, 'deps', None)):
-					node = self.generator.path.find_resource(x)
-					if not node:
-						self.generator.bld.fatal('Could not find %r (was it declared?)' % x)
-					nodes.append(node)
+				deps = getattr(self.generator, 'deps', None)
+				nodes = self.generator.to_nodes(deps)
 				return [nodes, []]
 			cls.scan = scan
 

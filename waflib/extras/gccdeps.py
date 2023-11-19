@@ -17,7 +17,7 @@ Usage::
 
 import os, re, threading
 from waflib import Task, Logs, Utils, Errors
-from waflib.Tools import c_preproc
+from waflib.Tools import asm, c, c_preproc, cxx
 from waflib.TaskGen import before_method, feature
 
 lock = threading.Lock()
@@ -27,14 +27,7 @@ if not c_preproc.go_absolute:
 	gccdeps_flags = ['-MMD']
 
 # Third-party tools are allowed to add extra names in here with append()
-supported_compilers = ['gcc', 'icc', 'clang']
-
-def scan(self):
-	if not self.__class__.__name__ in self.env.ENABLE_GCCDEPS:
-		return super(self.derived_gccdeps, self).scan()
-	nodes = self.generator.bld.node_deps.get(self.uid(), [])
-	names = []
-	return (nodes, names)
+supported_compilers = ['gas', 'gcc', 'icc', 'clang']
 
 re_o = re.compile(r"\.o$")
 re_splitter = re.compile(r'(?<!\\)\s+') # split by space, except when spaces are escaped
@@ -61,28 +54,30 @@ def path_to_node(base_node, path, cached_nodes):
 	else:
 		# Not hashable, assume it is a list and join into a string
 		node_lookup_key = (base_node, os.path.sep.join(path))
+
 	try:
-		lock.acquire()
 		node = cached_nodes[node_lookup_key]
 	except KeyError:
-		node = base_node.find_resource(path)
-		cached_nodes[node_lookup_key] = node
-	finally:
-		lock.release()
+		# retry with lock on cache miss
+		with lock:
+			try:
+				node = cached_nodes[node_lookup_key]
+			except KeyError:
+				node = cached_nodes[node_lookup_key] = base_node.find_resource(path)
+
 	return node
 
 def post_run(self):
 	if not self.__class__.__name__ in self.env.ENABLE_GCCDEPS:
 		return super(self.derived_gccdeps, self).post_run()
 
-	name = self.outputs[0].abspath()
-	name = re_o.sub('.d', name)
+	deps_filename = self.outputs[0].abspath()
+	deps_filename = re_o.sub('.d', deps_filename)
 	try:
-		txt = Utils.readf(name)
+		deps_txt = Utils.readf(deps_filename)
 	except EnvironmentError:
 		Logs.error('Could not find a .d dependency file, are cflags/cxxflags overwritten?')
 		raise
-	#os.remove(name)
 
 	# Compilers have the choice to either output the file's dependencies
 	# as one large Makefile rule:
@@ -102,15 +97,16 @@ def post_run(self):
 	# So the first step is to sanitize the input by stripping out the left-
 	# hand side of all these lines. After that, whatever remains are the
 	# implicit dependencies of task.outputs[0]
-	txt = '\n'.join([remove_makefile_rule_lhs(line) for line in txt.splitlines()])
+	deps_txt = '\n'.join([remove_makefile_rule_lhs(line) for line in deps_txt.splitlines()])
 
 	# Now join all the lines together
-	txt = txt.replace('\\\n', '')
+	deps_txt = deps_txt.replace('\\\n', '')
 
-	val = txt.strip()
-	val = [x.replace('\\ ', ' ') for x in re_splitter.split(val) if x]
+	dep_paths = deps_txt.strip()
+	dep_paths = [x.replace('\\ ', ' ') for x in re_splitter.split(dep_paths) if x]
 
-	nodes = []
+	resolved_nodes = []
+	unresolved_names = []
 	bld = self.generator.bld
 
 	# Dynamically bind to the cache
@@ -119,39 +115,41 @@ def post_run(self):
 	except AttributeError:
 		cached_nodes = bld.cached_nodes = {}
 
-	for x in val:
+	for path in dep_paths:
 
 		node = None
-		if os.path.isabs(x):
-			node = path_to_node(bld.root, x, cached_nodes)
+		if os.path.isabs(path):
+			node = path_to_node(bld.root, path, cached_nodes)
 		else:
 			# TODO waf 1.9 - single cwd value
-			path = getattr(bld, 'cwdx', bld.bldnode)
+			base_node = getattr(bld, 'cwdx', bld.bldnode)
 			# when calling find_resource, make sure the path does not contain '..'
-			x = [k for k in Utils.split_path(x) if k and k != '.']
-			while '..' in x:
-				idx = x.index('..')
+			path = [k for k in Utils.split_path(path) if k and k != '.']
+			while '..' in path:
+				idx = path.index('..')
 				if idx == 0:
-					x = x[1:]
-					path = path.parent
+					path = path[1:]
+					base_node = base_node.parent
 				else:
-					del x[idx]
-					del x[idx-1]
+					del path[idx]
+					del path[idx-1]
 
-			node = path_to_node(path, x, cached_nodes)
+			node = path_to_node(base_node, path, cached_nodes)
 
 		if not node:
-			raise ValueError('could not find %r for %r' % (x, self))
+			raise ValueError('could not find %r for %r' % (path, self))
+
 		if id(node) == id(self.inputs[0]):
 			# ignore the source file, it is already in the dependencies
 			# this way, successful config tests may be retrieved from the cache
 			continue
-		nodes.append(node)
 
-	Logs.debug('deps: gccdeps for %s returned %s', self, nodes)
+		resolved_nodes.append(node)
 
-	bld.node_deps[self.uid()] = nodes
-	bld.raw_deps[self.uid()] = []
+	Logs.debug('deps: gccdeps for %s returned %s', self, resolved_nodes)
+
+	bld.node_deps[self.uid()] = resolved_nodes
+	bld.raw_deps[self.uid()] = unresolved_names
 
 	try:
 		del self.cache_sig
@@ -160,13 +158,36 @@ def post_run(self):
 
 	Task.Task.post_run(self)
 
+def scan(self):
+	if not self.__class__.__name__ in self.env.ENABLE_GCCDEPS:
+		return super(self.derived_gccdeps, self).scan()
+
+	resolved_nodes = self.generator.bld.node_deps.get(self.uid(), [])
+	unresolved_names = []
+	return (resolved_nodes, unresolved_names)
+
 def sig_implicit_deps(self):
 	if not self.__class__.__name__ in self.env.ENABLE_GCCDEPS:
 		return super(self.derived_gccdeps, self).sig_implicit_deps()
+	bld = self.generator.bld
+
 	try:
-		return Task.Task.sig_implicit_deps(self)
-	except Errors.WafError:
-		return Utils.SIG_NIL
+		return self.compute_sig_implicit_deps()
+	except Errors.TaskNotReady:
+		raise ValueError("Please specify the build order precisely with gccdeps (asm/c/c++ tasks)")
+	except EnvironmentError:
+		# If a file is renamed, assume the dependencies are stale and must be recalculated
+		for x in bld.node_deps.get(self.uid(), []):
+			if not x.is_bld() and not x.exists():
+				try:
+					del x.parent.children[x.name]
+				except KeyError:
+					pass
+
+	key = self.uid()
+	bld.node_deps[key] = []
+	bld.raw_deps[key] = []
+	return Utils.SIG_NIL
 
 def wrap_compiled_task(classname):
 	derived_class = type(classname, (Task.classes[classname],), {})
@@ -175,14 +196,14 @@ def wrap_compiled_task(classname):
 	derived_class.scan = scan
 	derived_class.sig_implicit_deps = sig_implicit_deps
 
-for k in ('c', 'cxx'):
+for k in ('asm', 'c', 'cxx'):
 	if k in Task.classes:
 		wrap_compiled_task(k)
 
 @before_method('process_source')
 @feature('force_gccdeps')
 def force_gccdeps(self):
-	self.env.ENABLE_GCCDEPS = ['c', 'cxx']
+	self.env.ENABLE_GCCDEPS = ['asm', 'c', 'cxx']
 
 def configure(conf):
 	# in case someone provides a --enable-gccdeps command-line option
@@ -191,6 +212,15 @@ def configure(conf):
 
 	global gccdeps_flags
 	flags = conf.env.GCCDEPS_FLAGS or gccdeps_flags
+	if conf.env.ASM_NAME in supported_compilers:
+		try:
+			conf.check(fragment='', features='asm force_gccdeps', asflags=flags, compile_filename='test.S', msg='Checking for asm flags %r' % ''.join(flags))
+		except Errors.ConfigurationError:
+			pass
+		else:
+			conf.env.append_value('ASFLAGS', flags)
+			conf.env.append_unique('ENABLE_GCCDEPS', 'asm')
+
 	if conf.env.CC_NAME in supported_compilers:
 		try:
 			conf.check(fragment='int main() { return 0; }', features='c force_gccdeps', cflags=flags, msg='Checking for c flags %r' % ''.join(flags))
