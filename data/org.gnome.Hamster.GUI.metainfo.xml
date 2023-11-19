@@ -5,7 +5,10 @@
   <project_license>GPL-3.0+ and CC-BY-SA-3.0</project_license>
   <name>Hamster</name>
   <summary>Your personal time keeping tool</summary>
-
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="3.0.2" date="2020-05-19" />
+  </releases>
   <description>
     <p>
       Hamster is time tracking for individuals. It helps you to keep track of how
