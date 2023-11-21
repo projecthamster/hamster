@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import sys
 
 from calendar import timegm
-from distutils.version import LooseVersion
 from gi.repository import GObject as gobject
 from textwrap import dedent
 
@@ -40,16 +39,6 @@ from hamster.lib.dbus import (
     )
 from hamster.lib.fact import Fact, FactError
 from hamster.lib import datetime as dt
-
-
-# bug fixed in dbus-python 1.2.14 (released on 2019-11-25)
-assert not (
-    sys.version_info >= (3, 8)
-    and LooseVersion(dbus.__version__) < LooseVersion("1.2.14")
-    ), """python3.8 changed str(<dbus integers>).
-       That broke hamster (https://github.com/projecthamster/hamster/issues/477).
-       Please upgrade to dbus-python >= 1.2.14.
-    """
 
 
 class Storage(gobject.GObject):
