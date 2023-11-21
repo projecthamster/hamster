@@ -6,7 +6,7 @@ import subprocess
 from waflib import Utils
 
 # Reuse code from hamster to figure out the version number to use
-process = subprocess.run(["python3", "src/hamster/version.py"], check=True, stdout=subprocess.PIPE, text=True)
+process = subprocess.run(["python3", "src/hamster/version.py"], check=True, stdout=subprocess.PIPE, encoding='UTF-8')
 VERSION = process.stdout
 APPNAME = 'hamster'
 
