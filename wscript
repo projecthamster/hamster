@@ -49,7 +49,6 @@ def configure(ctx):
 
     ctx.env.VERSION = VERSION
     ctx.env.GETTEXT_PACKAGE = "hamster"
-    ctx.env.PACKAGE = "hamster"
     
     ctx.recurse("help")
     
