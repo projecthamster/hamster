@@ -22,23 +22,23 @@ def options(ctx):
     # hence need to replace the whole option
     ctx.parser.remove_option('--prefix')
     default_prefix = '/usr'
-    
+
     ctx.add_option('--prefix', dest='prefix', default=default_prefix,
                    help='installation prefix [default: {}]'.format(default_prefix))
-    
+
     ctx.add_option('--skip-gsettings', dest='skip_gsettings', action='store_true',
                    help='skip gsettings schemas build and installation (for packagers)')
-    
+
     ctx.add_option('--skip-icon-cache-update', dest='skip_icon_cache_update', action='store_true',
                    help='skip icon cache update (for packagers)')
 
 
 def configure(ctx):
     ctx.load('gnu_dirs')  # for DATADIR
-    
+
     if not ctx.options.skip_gsettings:
         ctx.load('glib2')  # for GSettings support
-    
+
     ctx.load('python')
     ctx.check_python_version(minver=(3,4,0))
 
@@ -49,9 +49,9 @@ def configure(ctx):
 
     ctx.env.VERSION = VERSION
     ctx.env.GETTEXT_PACKAGE = "hamster"
-    
+
     ctx.recurse("help")
-    
+
     # options are tied to a specific ./waf invocation (one terminal line),
     # and woud have to be given again at any other ./waf invocation
     # that is trouble when one wants to ./waf uninstall much later;
@@ -61,7 +61,7 @@ def configure(ctx):
     for name in ('prefix', 'skip_gsettings', 'skip_icon_cache_update'):
         value = getattr(ctx.options, name)
         setattr(ctx.env, name, value)
-   
+
 
 def build(ctx):
     ctx.install_as('${LIBEXECDIR}/hamster/hamster-service', "src/hamster-service.py", chmod=Utils.O755)
