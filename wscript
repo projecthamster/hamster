@@ -84,23 +84,5 @@ def build(ctx):
         install_path="${PYTHONDIR}/hamster"
         )
 
-    ctx(features="subst",
-        source= "org.gnome.Hamster.service.in",
-        target= "org.gnome.Hamster.service",
-        install_path="${DATADIR}/dbus-1/services",
-        )
-
-    ctx(features="subst",
-        source= "org.gnome.Hamster.GUI.service.in",
-        target= "org.gnome.Hamster.GUI.service",
-        install_path="${DATADIR}/dbus-1/services",
-        )
-
-    ctx(features="subst",
-        source= "org.gnome.Hamster.WindowServer.service.in",
-        target= "org.gnome.Hamster.WindowServer.service",
-        install_path="${DATADIR}/dbus-1/services",
-        )
-
     # look for wscript into further directories
     ctx.recurse("po data help")

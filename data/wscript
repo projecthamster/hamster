@@ -51,6 +51,25 @@ def build(ctx):
     if not ctx.env.skip_icon_cache_update:
         ctx.add_post_fun(update_icon_cache)
 
+    # dbus service files
+    ctx(features="subst",
+        source= "org.gnome.Hamster.service.in",
+        target= "org.gnome.Hamster.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
+    ctx(features="subst",
+        source= "org.gnome.Hamster.GUI.service.in",
+        target= "org.gnome.Hamster.GUI.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
+    ctx(features="subst",
+        source= "org.gnome.Hamster.WindowServer.service.in",
+        target= "org.gnome.Hamster.WindowServer.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
 
 # icon cache update
 def update_icon_cache(ctx):
