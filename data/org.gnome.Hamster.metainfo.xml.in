@@ -41,6 +41,10 @@
       <caption>The overview window with statistics</caption>
       <image>https://raw.githubusercontent.com/projecthamster/hamster/master/data/screenshots/overview2.png</image>
     </screenshot>
+    <screenshot>
+      <caption>The editor window</caption>
+      <image>https://raw.githubusercontent.com/projecthamster/hamster/master/data/screenshots/editor.png</image>
+    </screenshot>
   </screenshots>
   ​<translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
