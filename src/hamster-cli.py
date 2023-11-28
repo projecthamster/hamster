@@ -261,6 +261,24 @@ class HamsterCli(object):
         return id_
 
 
+    def resume(self, *args, no_gap=False):
+        '''Resume the last activity.'''
+        facts = self.storage.get_todays_facts()
+        if facts and facts[-1].end_time:
+            no_gap = no_gap or "--no-gap" in args
+            self.storage.resume_tracking(no_gap)
+        else:
+            print((_("No activity to resume")))
+
+    def continue_(self, *args):
+        '''Continue the last activity.'''
+        facts = self.storage.get_todays_facts()
+        if facts and facts[-1].end_time:
+            self.storage.continue_tracking()
+        else:
+            print((_("No activity to continue")))
+
+
     def stop(self, *args):
         '''Stop tracking the current activity.'''
         self.storage.stop_tracking()
@@ -419,6 +437,10 @@ if __name__ == '__main__':
 Actions:
     * add [activity [start-time [end-time]]]: Add an activity
     * stop: Stop tracking current activity.
+    * resume: The last tracked activity is tracked again from now.
+      If --no-gap is specified, the activity is restarted without a gap
+      since its last end time
+    * continue: The last tracked activity is continued from its last end time.
     * list [start-date [end-date]]: List activities
     * search [terms] [start-date [end-date]]: List activities matching a search
       term
@@ -488,12 +510,16 @@ Example usage:
     else:
         action = args.action
 
-    if action in ("about", "add", "edit", "overview", "preferences"):
+    if action in ("about", "add", "edit", "overview", "preferences", "continue"):
         if action == "add" and args.action_args:
             assert not unknown_args, "unknown options: {}".format(unknown_args)
             # directly add fact from arguments
             id_ = hamster_client.start(*args.action_args)
             assert id_ > 0, "failed to add fact"
+            sys.exit(0)
+        elif action == "continue":
+            assert not unknown_args, "unknown options: {}".format(unknown_args)
+            hamster_client.continue_()
             sys.exit(0)
         else:
             app.register()

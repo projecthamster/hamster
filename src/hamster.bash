@@ -17,7 +17,7 @@ _hamster()
     #
     #  The basic options we'll complete.
     #
-    opts="activities categories current export list search start stop "
+    opts="activities categories current export list search start stop resume continue "
 
 
     #
@@ -27,6 +27,12 @@ _hamster()
 
     start|export)
         _hamster_helper "assist" "$prev" "$cur"
+        return 0
+        ;;
+    resume)
+        if [[ ${#COMP_WORDS[@]} -ge 2 ]]; then
+            COMPREPLY=($(compgen -W "--no-gap" -- ${cur}))
+        fi
         return 0
         ;;
 

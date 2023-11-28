@@ -457,6 +457,16 @@ class Storage(storage.Storage):
             """
             self.execute(query, (end_time, fact.id))
 
+
+    def __continue_fact(self, fact):
+        update = """
+                    UPDATE facts
+                        SET end_time = null
+                    WHERE id = ?
+        """
+        self.execute(update, (fact.id,))
+
+
     def __squeeze_in(self, start_time):
         """ tries to put task in the given date
             if there are conflicts, we will only truncate the ongoing task
