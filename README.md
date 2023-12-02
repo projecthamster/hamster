@@ -175,7 +175,7 @@ GNOME SDK beforehand (an error will notify you about it, if needed). Execute:
 
 ```bash
 flatpak-builder --force-clean --user --install \
-    build/flatpak org.gnome.Hamster.yml
+    build/flatpak data/org.gnome.Hamster.flatpak.yml
 ```
 
 This creates a temporary flatpack build folder in the ``build/flatpak``
@@ -247,7 +247,7 @@ run:
 To run the tests inside the flatpak, use:
 
 ```bash
-flatpak-builder --run build/flatpak org.gnome.Hamster.yml \
+flatpak-builder --run build/flatpak data/org.gnome.Hamster.flatpak.yml \
     python3 -m unittest
 ```
 
