@@ -488,30 +488,29 @@ Example usage:
     else:
         action = args.action
 
-    if action in ("about", "add", "edit", "overview", "preferences"):
-        if action == "add" and args.action_args:
-            assert not unknown_args, "unknown options: {}".format(unknown_args)
-            # directly add fact from arguments
-            id_ = hamster_client.start(*args.action_args)
-            assert id_ > 0, "failed to add fact"
-            sys.exit(0)
+    if action == "add" and args.action_args:
+        assert not unknown_args, "unknown options: {}".format(unknown_args)
+        # directly add fact from arguments
+        id_ = hamster_client.start(*args.action_args)
+        assert id_ > 0, "failed to add fact"
+        sys.exit(0)
+    elif action in ("about", "add", "edit", "overview", "preferences"):
+        app.register()
+        if action == "edit":
+            assert len(args.action_args) == 1, (
+                   "edit requires exactly one argument, got {}"
+                   .format(args.action_args))
+            id_ = int(args.action_args[0])
+            assert id_ > 0, "received non-positive id : {}".format(id_)
+            action_data = glib.Variant.new_int32(id_)
         else:
-            app.register()
-            if action == "edit":
-                assert len(args.action_args) == 1, (
-                       "edit requires exactly one argument, got {}"
-                       .format(args.action_args))
-                id_ = int(args.action_args[0])
-                assert id_ > 0, "received non-positive id : {}".format(id_)
-                action_data = glib.Variant.new_int32(id_)
-            else:
-                action_data = None
-            app.activate_action(action, action_data)
-            run_args = [sys.argv[0]] + unknown_args
-            logger.debug("run {}".format(run_args))
-            status = app.run(run_args)
-            logger.debug("app exited")
-            sys.exit(status)
+            action_data = None
+        app.activate_action(action, action_data)
+        run_args = [sys.argv[0]] + unknown_args
+        logger.debug("run {}".format(run_args))
+        status = app.run(run_args)
+        logger.debug("app exited")
+        sys.exit(status)
     elif hasattr(hamster_client, action):
         getattr(hamster_client, action)(*args.action_args)
     else:
