@@ -148,8 +148,8 @@ class Hamster(gtk.Application):
     def on_activate_window(self, action=None, data=None):
         self._open_window(action.get_name(), data)
 
-    def on_activate_quit(self, data=None):
-        self.on_activate_quit()
+    def on_activate_quit(self, action=None, data=None):
+        self.quit()
 
     def on_startup(self, data=None):
         logger.debug("startup")
