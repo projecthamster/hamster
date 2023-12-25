@@ -121,3 +121,17 @@ def to_dbus_fact(fact):
             dbus.Array(fact.tags, signature = 's'),
             to_dbus_date(fact.date),
             fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)
+
+
+def claim_bus_name(name):
+    """ Claim a bus name.
+
+    Returns (bus, name_obj), or (bus, None) when the name was already claimed.
+    """
+    bus = dbus.SessionBus()
+    try:
+        name_obj = dbus.service.BusName(name, bus=bus, do_not_queue=True)
+    except dbus.exceptions.NameExistsException as e:
+        return (bus, None)
+
+    return (bus, name_obj)
