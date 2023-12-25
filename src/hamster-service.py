@@ -460,6 +460,6 @@ if __name__ == '__main__':
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
 
-    print("hamster-service up")
     storage = Storage(loop)
+    logger.info("hamster-service up")
     loop.run()
