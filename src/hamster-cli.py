@@ -24,6 +24,7 @@
 
 import sys, os
 import argparse
+import time
 import re
 
 import gi
@@ -451,8 +452,6 @@ Example usage:
 """)
 
     hamster_client = HamsterCli()
-    app = Hamster()
-    logger.debug("app instanciated")
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
@@ -467,6 +466,8 @@ Example usage:
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
+    parser.add_argument("--replace", action='store_true',
+                        help="Replace an existing GUI process (if any) instead of activating it")
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -476,6 +477,29 @@ Example usage:
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
+
+    app = Hamster()
+    logger.debug("app instantiated")
+    if args.replace:
+        app.register()
+        if app.get_is_remote():
+            # This code is prone to race conditions (if processing the quit
+            # takes longer than the sleep below, or if another GUI is
+            # bus activated before the new app), but gio.Application
+            # does not offer any way to pass a pre-claimed name or dbus
+            # connection, and always passes DO_NOT_QUEUE when claiming
+            # the name, preventing properly handling this race
+            # condition. But it is only the GUI, so the user can always
+            # just manually quit any existing GUI.
+            logger.debug("sending quit")
+            app.activate_action("quit")
+            time.sleep(2)
+            app = Hamster()
+            logger.debug("app reinstantiated")
+            app.register()
+            if app.get_is_remote():
+                logger.error("Failed to replace existing GUI")
+                sys.exit(1)
 
     if not hamster.installed:
         logger.info("Running in devel mode")

@@ -81,9 +81,19 @@ if __name__ == '__main__':
 
     glib.set_prgname(str(_("hamster-windows-service")))
 
-    (bus, name_obj) = claim_bus_name("org.gnome.Hamster.WindowServer")
+    import argparse
+    parser = argparse.ArgumentParser(description="Hamster time tracker D-Bus service")
+    parser.add_argument("--replace", action='store_true',
+                        help="Replace an existing process (if any)")
+    args = parser.parse_args()
+
+    quit_method = (WindowServer.__dbus_object_path__, 'org.gnome.Hamster', 'Quit')
+    (bus, name_obj) = claim_bus_name("org.gnome.Hamster", quit_method=quit_method, replace=args.replace)
     if name_obj is None:
-        logger.error("Found hamster-windows-service already running, exiting")
+        if args.replace:
+            logger.error("Failed to replace existing hamster-windows-service (it did not quit within timeout), exiting")
+        else:
+            logger.error("Found hamster-windows-service already running, exiting")
         sys.exit(1)
     window_server = WindowServer(loop, bus, name_obj)
     logger.info("hamster-window-service up")
