@@ -10,7 +10,9 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
 
 import hamster
+from hamster.lib import default_logger
 
+logger = default_logger(__file__)
 
 DBusGMainLoop(set_as_default=True)
 loop = glib.MainLoop()
@@ -84,7 +86,6 @@ if __name__ == '__main__':
     glib.set_prgname(str(_("hamster-windows-service")))
 
     window_server = WindowServer(loop)
-
-    print("hamster-window-service up")
+    logger.info("hamster-window-service up")
 
     loop.run()
