@@ -33,6 +33,7 @@ import time
 import re
 import locale
 import os
+import sys
 
 from hamster.lib import datetime as dt
 
@@ -261,3 +262,18 @@ def escape_pango(text):
     text = text.replace("<", "&lt;")
     text = text.replace(">", "&gt;")
     return text
+
+def daemonize():
+    """
+    Minimal daemonization by forking and letting the parent exit.
+    """
+    pid = os.fork()
+    if pid == 0:
+        # Child, setsid to prevent getting signals sent to our parent
+        os.setsid()
+    else:
+        # Parent
+        sys.exit(0)
+
+    # Close input, but leave output file descriptors open for logging and errors
+    sys.stdin.close()

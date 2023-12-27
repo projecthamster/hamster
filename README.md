@@ -25,21 +25,16 @@ ls --reverse -clt ~/.local/share/hamster*/*.db
 ```
 Backup the last file in the list. 
 
+### Upgrading
 
-### Kill hamster daemons
+When installed from source, it is recommended to uninstall before
+installing a new version. When using system packages or flatpak, you
+should be able to just install the new version.
 
-When trying a different version, make sure to kill the running daemons:
+After upgrading, the hamster background services might still be running
+the old version. To replace them, you can either log out, or run:
 
-```bash
-# either step-by-step, totally safe
-pkill -f hamster-service
-pkill -f hamster-windows-service
-# check (should be empty)
-pgrep -af hamster
-
-# or be bold and kill them all at once:
-pkill -ef hamster
-```
+    hamster --replace-all
 
 ### Install from packages
 
@@ -206,22 +201,14 @@ flatpak uninstall org.gnome.Hamster
 #### Development
 
 During development (As explained above, backup `hamster.db` first !),
-if only python files are changed 
+if only python files are changed
 (*deeper changes such as the migration to gsettings require a new install*)
 the changes can be quickly tested by
 ```
-# either
-pgrep -af hamster
-# and kill them one by one
-# or be bold and kill all processes with "hamster" in their command line
-pkill -ef hamster
-python3 src/hamster-service.py &
-python3 src/hamster-cli.py
+    ./src/hamster-cli.py --replace-all
 ```
-Advantage: running uninstalled is detected, and windows are *not* called via
-D-Bus, so that all the traces are visible.
 
-Note: You'll need recent version of hamster installed on your system (or 
+Note: You'll need recent version of hamster installed on your system (or
 [this workaround](https://github.com/projecthamster/hamster/issues/552#issuecomment-585166000)).
 
 #### Running tests
