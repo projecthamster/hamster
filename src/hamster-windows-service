@@ -88,7 +88,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     quit_method = (WindowServer.__dbus_object_path__, 'org.gnome.Hamster', 'Quit')
-    (bus, name_obj) = claim_bus_name("org.gnome.Hamster", quit_method=quit_method, replace=args.replace)
+    (bus, name_obj) = claim_bus_name("org.gnome.Hamster.WindowServer", quit_method=quit_method, replace=args.replace)
     if name_obj is None:
         if args.replace:
             logger.error("Failed to replace existing hamster-windows-service (it did not quit within timeout), exiting")
