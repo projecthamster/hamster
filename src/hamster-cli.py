@@ -26,6 +26,8 @@ import sys, os
 import argparse
 import time
 import re
+import pathlib
+import subprocess
 
 import gi
 gi.require_version('Gdk', '3.0')  # noqa: E402
@@ -468,6 +470,8 @@ Example usage:
                         help="Set the logging level (default: %(default)s)")
     parser.add_argument("--replace", action='store_true',
                         help="Replace an existing GUI process (if any) instead of activating it")
+    parser.add_argument("--replace-all", action='store_true',
+                        help="Replace all existing hamster processes (if any)")
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -478,9 +482,21 @@ Example usage:
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
 
+    if args.replace_all:
+        if hamster.installed:
+            from hamster import defs  # only available when running installed
+            d = pathlib.Path(defs.LIBEXEC_DIR)
+            cmds = [d / 'hamster-service', d / 'hamster-windows-service']
+        else:
+            d = pathlib.Path(__file__).parent
+            cmds = [d / 'hamster-service.py', d / 'hamster-windows-service.py']
+
+        for cmd in cmds:
+            subprocess.run((cmd, '--replace'))
+
     app = Hamster()
     logger.debug("app instantiated")
-    if args.replace:
+    if args.replace or args.replace_all:
         app.register()
         if app.get_is_remote():
             # This code is prone to race conditions (if processing the quit

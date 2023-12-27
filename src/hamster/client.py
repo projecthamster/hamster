@@ -94,15 +94,10 @@ class Storage(gobject.GObject):
                         server: {}
                         client: {}
 
-                        This is sometimes used during bisections,
-                        but generally calls for trouble.
+                        To replace the running services, you can use:
 
-                        Remember to kill hamster daemons after any version change
-                        (this is safe):
-                        pkill -f hamster-service
-                        pkill -f hamster-windows-service
-                        see also:
-                        https://github.com/projecthamster/hamster#kill-hamster-daemons
+                           hamster --replace-all
+
                     """.format(server_version, client_version)
                     )
                 )
