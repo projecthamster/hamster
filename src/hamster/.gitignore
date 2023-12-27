@@ -1,4 +1,3 @@
 *.pyc
 defs.py
-
-
+.flatpak-builder

@@ -34,7 +34,7 @@ modules:
   - "./waf install"
   sources:
   - type: dir
-    path: "."
+    path: ".."
 finish-args:
 - "--socket=wayland"
 - "--socket=fallback-x11"

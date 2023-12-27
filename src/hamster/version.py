@@ -19,11 +19,11 @@ def get_uninstalled_version():
     if rc == 0:
         import re
         # Strip "v" prefix that is used in git tags
-        return re.sub(r'^v', '', output)
+        return re.sub(r'^v', '', output.strip())
     else:
         from pathlib import Path
         with open(Path(__file__).parent / 'VERSION', 'r') as f:
-            return f.read()
+            return f.read().strip()
 
 def get_version():
     """

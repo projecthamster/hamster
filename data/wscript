@@ -1,7 +1,7 @@
 # This file is meant to be included in the root wscript,
 # through the recurse("data") command.
 # An advantage of keeping it there
-# instead of blending it in the root wscript build() 
+# instead of blending it in the root wscript build()
 # is that the files are looked for in the same folder
 # (no need to prepend data/ everywhere)
 
@@ -30,15 +30,15 @@ def build(ctx):
         dict = ctx.env,
         install_path = "${DATADIR}/applications"
        )
-    
+
     start_dir = ctx.path.find_dir('.')
-    
+
     # glade builder files
     ctx.install_files('${DATADIR}/hamster', start_dir.ant_glob('*.ui'))
     # default files
     ctx.install_files('${DATADIR}/hamster', 'hamster.db')
     ctx.install_files('${DATADIR}/hamster', 'report_template.html')
-    
+
     # icons
     ctx.install_files('${DATADIR}/hamster/art', start_dir.ant_glob('art/*.png'))
     ctx.install_files('${DATADIR}/icons/hicolor/16x16/apps',   'art/16x16/org.gnome.Hamster.GUI.png')
@@ -50,6 +50,25 @@ def build(ctx):
 
     if not ctx.env.skip_icon_cache_update:
         ctx.add_post_fun(update_icon_cache)
+
+    # dbus service files
+    ctx(features="subst",
+        source= "org.gnome.Hamster.service.in",
+        target= "org.gnome.Hamster.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
+    ctx(features="subst",
+        source= "org.gnome.Hamster.GUI.service.in",
+        target= "org.gnome.Hamster.GUI.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
+
+    ctx(features="subst",
+        source= "org.gnome.Hamster.WindowServer.service.in",
+        target= "org.gnome.Hamster.WindowServer.service",
+        install_path="${DATADIR}/dbus-1/services",
+        )
 
 
 # icon cache update
