@@ -11,7 +11,7 @@ from gi.repository import Gio as gio
 
 import hamster
 from hamster import logger as hamster_logger
-from hamster.lib import i18n
+from hamster.lib import i18n, stuff
 i18n.setup_i18n()  # noqa: E402
 
 from hamster.storage import db
@@ -468,4 +468,8 @@ if __name__ == '__main__':
 
     storage = Storage(loop, bus, name_obj)
     logger.info("hamster-service up")
+
+    # Daemonize once we're succesfully started up and registered on dbus
+    stuff.daemonize()
+
     loop.run()

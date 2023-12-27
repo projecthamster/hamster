@@ -11,7 +11,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
 
 import hamster
-from hamster.lib import default_logger
+from hamster.lib import default_logger, stuff
 from hamster.lib.dbus import claim_bus_name
 
 logger = default_logger(__file__)
@@ -97,5 +97,8 @@ if __name__ == '__main__':
         sys.exit(1)
     window_server = WindowServer(loop, bus, name_obj)
     logger.info("hamster-window-service up")
+
+    # Daemonize once we're succesfully started up and registered on dbus
+    stuff.daemonize()
 
     loop.run()
