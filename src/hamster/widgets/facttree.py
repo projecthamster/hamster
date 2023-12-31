@@ -33,20 +33,6 @@ from hamster.lib import stuff
 from hamster.lib.fact import Fact
 
 
-class ActionRow(graphics.Sprite):
-    def __init__(self):
-        graphics.Sprite.__init__(self)
-        self.visible = False
-
-        self.restart = graphics.Icon("view-refresh-symbolic", size=18,
-                                     interactive=True,
-                                     mouse_cursor=gdk.CursorType.HAND1,
-                                     y=4)
-        self.add_child(self.restart)
-
-        self.width = 50  # Simon says
-
-
 class TotalFact(Fact):
     """An extension of Fact that is used for daily totals.
     Instances of this class are rendered differently than instances
@@ -263,7 +249,7 @@ class FactRow(object):
         g.restore_context()
 
 
-class FactTree(graphics.Scene, gtk.Scrollable):
+class FactTree(gtk.DrawingArea):
     """
     The fact tree is a painter.
     It does not change facts by itself, only sends signals.
@@ -288,7 +274,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
     __gsignals__ = {
         # enter or double-click, passes in current day and fact
-        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)),
+        'on-activate-row': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         'on-delete-called': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
     }
 
@@ -298,7 +284,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        super().__init__()
 
         self.date_label = Label(10, 3)
         fontdesc = pango.FontDescription(graphics._font_desc)
@@ -309,33 +295,25 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         self.fact_row = FactRow()
 
-        self.action_row = ActionRow()
-        # self.add_child(self.action_row)
-
         self.row_positions = []
         self.row_heights = []
 
-        self.y = 0
         self.day_padding = 20
 
-        self.hover_day = None
-        self.hover_fact = None
         self.current_fact = None
 
-        self.style = self._style
+        self.colors = graphics.Colors
+        self.style = self.get_style_context()
+        self.style.add_class(gtk.STYLE_CLASS_VIEW)
 
         self.visible_range = None
         self.set_size_request(500, 400)
 
-        self.connect("on-mouse-scroll", self.on_scroll)
-        self.connect("on-mouse-move", self.on_mouse_move)
-        self.connect("on-mouse-down", self.on_mouse_down)
-
-        self.connect("on-resize", self.on_resize)
-        self.connect("on-key-press", self.on_key_press)
-        self.connect("notify::vadjustment", self._on_vadjustment_change)
-        self.connect("on-enter-frame", self.on_enter_frame)
-        self.connect("on-double-click", self.on_double_click)
+        self.set_can_focus(True)
+        self.set_events(gdk.EventMask.BUTTON_PRESS_MASK
+                        | gdk.EventMask.KEY_PRESS_MASK)
+        self.connect("button-press-event", self.on_mouse_down)
+        self.connect("key-press-event", self.on_key_press)
 
     @property
     def current_fact_index(self):
@@ -343,32 +321,34 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         facts_ids = [fact.id for fact in self.facts]
         return facts_ids.index(self.current_fact.id)
 
-    def on_mouse_down(self, scene, event):
-        self.on_mouse_move(None, event)
-        self.grab_focus()
-        if self.hover_fact:
-            # match either content or id
-            if (self.hover_fact == self.current_fact
-                    or (self.hover_fact
-                        and self.current_fact
-                        and self.hover_fact.id == self.current_fact.id)
-                    ):
-                self.unset_current_fact()
-            # Totals can't be selected
-            elif not isinstance(self.hover_fact, TotalFact):
-                self.set_current_fact(self.hover_fact)
+    def on_mouse_down(self, widget, event):
+        hover_fact = self.get_hover_fact(event.y)
 
-    def activate_row(self, day, fact):
-        self.emit("on-activate-row", day, fact)
+        if event.type == gdk.EventType.BUTTON_PRESS:
+            self.grab_focus()
+            if hover_fact:
+                # match either content or id
+                if (hover_fact == self.current_fact
+                        or (hover_fact
+                            and self.current_fact
+                            and hover_fact.id == self.current_fact.id)
+                        ):
+                    self.unset_current_fact()
+                # Totals can't be selected
+                elif not isinstance(hover_fact, TotalFact):
+                    self.set_current_fact(hover_fact)
+                self.queue_draw()
+        elif event.type == gdk.EventType._2BUTTON_PRESS:
+            if hover_fact and not isinstance(hover_fact, TotalFact):
+                self.activate_row(hover_fact)
+
+    def activate_row(self, fact):
+        self.emit("on-activate-row", fact)
 
     def delete_row(self, fact):
         self.emit("on-delete-called", fact)
 
-    def on_double_click(self, scene, event):
-        if self.hover_fact and not isinstance(self.hover_fact, TotalFact):
-            self.activate_row(self.hover_day, self.hover_fact)
-
-    def on_key_press(self, scene, event):
+    def on_key_press(self, widget, event):
         # all keys should appear also in the Overview.on_key_press
         # to be forwarded here even without focus.
         if event.keyval == gdk.KEY_Up:
@@ -397,17 +377,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             if self.facts:
                 self.set_current_fact(self.facts[-1])
 
-        elif event.keyval == gdk.KEY_Page_Down:
-            self.y += self.height * 0.8
-            self.on_scroll()
-
-        elif event.keyval == gdk.KEY_Page_Up:
-            self.y -= self.height * 0.8
-            self.on_scroll()
-
         elif event.keyval == gdk.KEY_Return:
             if self.current_fact:
-                self.activate_row(self.hover_day, self.current_fact)
+                self.activate_row(self.current_fact)
 
         elif event.keyval == gdk.KEY_Delete:
             if self.current_fact:
@@ -416,71 +388,50 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     def set_current_fact(self, fact):
         self.current_fact = fact
 
-        if fact.y < self.y:
-            self.y = fact.y
-        if (fact.y + fact.height) > (self.y + self.height):
-            self.y = fact.y + fact.height - self.height
+        self.scroll_to(fact=fact)
+        self.queue_draw()
 
-        self.on_scroll()
+    def scroll_to(self, y=0, fact=None):
+        # If we are inside a scrollable viewport, that viewport will
+        # have a vadjustment property that stores the scroll position,
+        # so update that here.
+        parent = self.get_parent()
+        if parent and hasattr(parent, 'get_vadjustment'):
+            vadj = parent.get_vadjustment()
+            if fact is not None:
+                vadj.clamp_page(fact.y, fact.y + fact.height)
+            else:
+                vadj.set_value(y)
+
+        self.queue_draw()
 
     def unset_current_fact(self):
         """Deselect fact."""
         self.current_fact = None
-        self.on_scroll()
+        self.queue_draw()
 
-    def get_visible_range(self):
-        start, end = (bisect.bisect(self.row_positions, self.y) - 1,
-                      bisect.bisect(self.row_positions, self.y + self.height))
+    def get_visible_range(self, y0, y1):
+        start, end = (max(0, bisect.bisect(self.row_positions, y0) - 1),
+                      bisect.bisect(self.row_positions, y1))
 
-        y = self.y
-        return [{"i": start + i, "y": pos - y, "h": height, "day": day, "facts": facts}
+        return [{"i": start + i, "y": pos, "h": height, "day": day, "facts": facts}
                 for i, (pos, height, (day, facts)) in enumerate(zip(self.row_positions[start:end],
                                                                     self.row_heights[start:end],
                                                                     self.days[start:end]))]
 
-    def on_mouse_move(self, tree, event):
-        hover_day, hover_fact = None, None
+    def get_hover_fact(self, y):
+        facts = []
 
-        for rec in self.visible_range:
-            if rec['y'] <= event.y <= (rec['y'] + rec['h']):
-                hover_day = rec
-                break
+        candidate = bisect.bisect(self.row_positions, y) - 1
+        if candidate >= 0 and y < self.row_positions[candidate] + self.row_heights[candidate]:
+            day, facts = self.days[candidate]
 
-        if hover_day != self.hover_day:
-            # Facts are considered equal if their content is the same,
-            # even if their id is different.
-            # redraw only cares about content, not id.
-            self.redraw()
-        # make sure it is always fully updated, including facts ids.
-        self.hover_day = hover_day
+        for fact in facts:
+            if fact.y <= y <= (fact.y + fact.height):
+                return fact
 
-        if self.hover_day:
-            for fact in self.hover_day.get('facts', []):
-                if (fact.y - self.y) <= event.y <= (fact.y - self.y + fact.height):
-                    hover_fact = fact
-                    break
+        return None
 
-        if (hover_fact
-                and self.hover_fact
-                and hover_fact.id != self.hover_fact.id
-                ):
-            self.move_actions()
-        # idem, always update hover_fact, not just if they appear different
-        self.hover_fact = hover_fact
-
-    def move_actions(self):
-        if self.hover_fact:
-            self.action_row.visible = True
-            self.action_row.x = self.width - 80 - self.action_row.width
-            self.action_row.y = self.hover_fact.y - self.y
-        else:
-            self.action_row.visible = False
-
-    def _on_vadjustment_change(self, scene, vadjustment):
-        if not self.vadjustment:
-            return
-        self.vadjustment.connect("value_changed", self.on_scroll_value_changed)
-        self.set_size_request(500, 300)
 
     def set_facts(self, facts, scroll_to_top=False):
         # FactTree adds attributes to its facts. isolate these side effects
@@ -490,10 +441,8 @@ class FactTree(graphics.Scene, gtk.Scrollable):
 
         # If we get an entirely new set of facts, scroll back to the top
         if scroll_to_top:
-            self.y = 0
+            self.scroll_to(y=0)
         self.hover_fact = None
-        if self.vadjustment:
-            self.vadjustment.set_value(self.y)
 
         if self.facts:
             start = self.facts[0].date
@@ -527,10 +476,10 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         if (self.current_fact
                 and self.current_fact.id in (fact.id for fact in self.facts)
                 ):
-            self.on_scroll()
+            self.scroll_to(fact=self.current_fact)
         else:
-            # will also trigger an on_scroll
             self.unset_current_fact()
+        self.queue_draw()
 
     def set_row_heights(self):
         """
@@ -541,9 +490,6 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             This func creates a list of row start positions to be able to
             quickly determine what to display
         """
-        if not self.height:
-            return
-
         y, pos, heights = 0, [], []
 
         for date, facts in self.days:
@@ -564,45 +510,9 @@ class FactTree(graphics.Scene, gtk.Scrollable):
             y += height
 
         self.row_positions, self.row_heights = pos, heights
+        self.set_size_request(-1, max(y, 1))
 
-        maxy = max(y, 1)
-
-        if self.vadjustment:
-            self.vadjustment.set_lower(0)
-            self.vadjustment.set_upper(max(maxy, self.height))
-            self.vadjustment.set_page_size(self.height)
-
-    def on_resize(self, scene, event):
-        self.set_row_heights()
-        self.fact_row.width = self.width - 105
-        self.on_scroll()
-
-    def on_scroll_value_changed(self, scroll):
-        self.y = int(scroll.get_value())
-        self.on_scroll()
-
-    def on_scroll(self, scene=None, event=None):
-        if not self.height:
-            return
-        y_pos = self.y
-        direction = 0
-        if event and event.direction == gdk.ScrollDirection.UP:
-            direction = -1
-        elif event and event.direction == gdk.ScrollDirection.DOWN:
-            direction = 1
-
-        y_pos += 15 * direction
-        if self.vadjustment:
-            y_pos = max(0, min(self.vadjustment.get_upper() - self.height, y_pos))
-            self.vadjustment.set_value(y_pos)
-        self.y = y_pos
-
-        self.move_actions()
-        self.redraw()
-
-        self.visible_range = self.get_visible_range()
-
-    def on_enter_frame(self, scene, context):
+    def do_draw(self, context):
         has_focus = self.get_toplevel().has_toplevel_focus()
         if has_focus:
             colors = {
@@ -619,20 +529,24 @@ class FactTree(graphics.Scene, gtk.Scrollable):
                 "selected_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
             }
 
-        if not self.height:
-            return
+        width = self.get_allocation().width
+        self.fact_row.width = width - 105
 
         g = graphics.Graphics(context)
 
         g.set_line_style(1)
         g.translate(0.5, 0.5)
 
+        # The clip region tells us what part needs to be redrawn. This
+        # also prevents drawing things that are outside of the scroll
+        # area.
+        x0, y0, x1, y1 = context.clip_extents()
+
         date_bg_color = self.colors.mix(colors["normal_bg"], colors["normal"], 0.15)
-        g.fill_area(0, 0, 105, self.height, date_bg_color)
+        g.fill_area(0, y0, 105, (y1 - y0), date_bg_color)
+        g.fill_area(105, y0, width, (y1 - y0), colors["normal_bg"])
 
-        y = int(self.y)
-
-        for rec in self.visible_range:
+        for rec in self.get_visible_range(y0, y1):
             g.save_context()
             g.translate(0, rec['y'])
             g.set_color(colors["normal"])
