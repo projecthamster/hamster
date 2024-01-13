@@ -19,6 +19,7 @@ tag_re = re.compile(r"""
 """, flags=re.VERBOSE)
 
 tags_in_description = re.compile(r"""
+    \s
     \#
     (?P<tag>
         [a-zA-Z] # Starts with an alphabetic character (digits excluded)
