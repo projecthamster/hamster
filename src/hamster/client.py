@@ -210,6 +210,18 @@ class Storage(gobject.GObject):
 
         return new_id
 
+    def resume_tracking(self, no_gap = False):
+        """Resume tracking last activity.
+        Parameters:
+        b no_gap: Use the previous end time as start time to fill the untracked gap.
+                      Default is False.
+        """
+        return self.conn.ResumeTracking(no_gap)
+
+    def continue_tracking(self):
+        """Continue tracking last activity."""
+        return self.conn.ContinueTracking()
+
     def stop_tracking(self, end_time = None):
         """Stop tracking current activity. end_time can be passed in if the
         activity should have other end time than the current moment"""
