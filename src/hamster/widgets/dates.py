@@ -167,7 +167,7 @@ class RangePick(gtk.MenuButton):
         if today == self.today:
             return False  # unchanged
 
-        if self.current_range == "day":
+        if self.current_range == "day" or self.start_date == self.end_date:
             old_start = old_end = self.today
             new_start = new_end = today
         elif self.current_range == "week":
@@ -177,9 +177,12 @@ class RangePick(gtk.MenuButton):
             old_start, old_end = stuff.month(self.today)
             new_start, new_end = stuff.month(today)
         else:
-            # manual range not touched, just bump today
-            self.today = today
-            return False  # today changed under the hood but range not updated
+            old_start, old_end = self.start_date, self.end_date
+            if self.today < old_start or self.today > old_end:
+                self.today = today
+                return False
+            new_start = old_start + (today - self.today)
+            new_end = old_end + (today - self.today)
 
         # now we can already set it
         self.today = today
