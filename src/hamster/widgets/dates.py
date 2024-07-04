@@ -163,6 +163,41 @@ class RangePick(gtk.MenuButton):
         self.emit_range(self.current_range, start, end)
 
 
+    def update_today(self, today):
+        if today == self.today:
+            return False  # unchanged
+
+        if self.current_range == "day" or self.start_date == self.end_date:
+            old_start = old_end = self.today
+            new_start = new_end = today
+        elif self.current_range == "week":
+            old_start, old_end = stuff.week(self.today)
+            new_start, new_end = stuff.week(today)
+        elif self.current_range == "month":
+            old_start, old_end = stuff.month(self.today)
+            new_start, new_end = stuff.month(today)
+        else:
+            old_start, old_end = self.start_date, self.end_date
+            if self.today < old_start or self.today > old_end:
+                self.today = today
+                return False
+            new_start = old_start + (today - self.today)
+            new_end = old_end + (today - self.today)
+
+        # now we can already set it
+        self.today = today
+
+        if (old_start, old_end) == (new_start, new_end):
+            # current range unchanged
+            return False
+
+        if (self.start_date, self.end_date) != (old_start, old_end):
+            return False  # not a current range was selected
+
+        self.emit_range(self.current_range, new_start, new_end)
+        return True
+
+
 
     def get_widget(self, name):
         """ skip one variable (huh) """
