@@ -13,6 +13,7 @@ from hamster.lib import i18n
 i18n.setup_i18n()  # noqa: E402
 
 from hamster.storage import db
+from hamster.session import DbusSessionListener
 from hamster.lib import datetime as dt
 from hamster.lib import default_logger
 from hamster.lib.dbus import (
@@ -26,6 +27,7 @@ from hamster.lib.dbus import (
     to_dbus_fact_json
 )
 from hamster.lib.fact import Fact, FactError
+from hamster.lib.configuration import conf
 
 logger = default_logger(__file__)
 
@@ -38,7 +40,7 @@ if "org.gnome.Hamster" in dbus.SessionBus().list_names():
     quit()
 
 
-class Storage(db.Storage, dbus.service.Object):
+class Storage(db.Storage, dbus.service.Object, DbusSessionListener):
     __dbus_object_path__ = "/org/gnome/Hamster"
 
     def __init__(self, loop):
@@ -50,6 +52,7 @@ class Storage(db.Storage, dbus.service.Object):
         db.Storage.__init__(self, unsorted_localized="")
 
         self.mainloop = loop
+        DbusSessionListener.__init__(self)
 
         self.__file = gio.File.new_for_path(__file__)
         self.__monitor = self.__file.monitor_file(gio.FileMonitorFlags.WATCH_MOUNTS | \
@@ -78,6 +81,12 @@ class Storage(db.Storage, dbus.service.Object):
                 for activity in activities:
                     self.add_activity(activity, cat_id)
 
+
+    # stop current task on log out if requested
+    def end_session(self):
+        """Stop tracking on logout."""
+        if conf.get("stop-on-shutdown"):
+            self.stop_tracking(None)
 
     # stop service when we have been updated (will be brought back in next call)
     # anyway. should make updating simpler
