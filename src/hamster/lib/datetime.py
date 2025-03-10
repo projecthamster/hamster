@@ -468,14 +468,14 @@ class Range():
 
     @classmethod
     def parse(cls, text,
-              position="exact", separator="\s+", default_day=None, ref="now"):
+              position="exact", separator=r"\s+", default_day=None, ref="now"):
         """Parse a start-end range from text.
 
         position (str): "exact" to match exactly the full text
                         "head" to search only at the beginning of text, and
                         "tail" to search only at the end.
 
-        separator (str): regexp pattern (e.g. '\s+') meant to separate the datetime
+        separator (str): regexp pattern (e.g. r'\\s+') meant to separate the datetime
                          from the rest. Discarded for "exact" position.
 
         default_day (date): If start is given without any date (e.g. just hh:mm),

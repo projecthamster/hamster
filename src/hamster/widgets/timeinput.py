@@ -138,7 +138,7 @@ class TimeInput(gtk.Entry):
 
         # strip everything non-numeric and consider hours to be first number
         # and minutes - second number
-        numbers = re.split("\D", str_time)
+        numbers = re.split(r"\D", str_time)
         numbers = [x for x in numbers if x!=""]
 
         hours, minutes = None, None
