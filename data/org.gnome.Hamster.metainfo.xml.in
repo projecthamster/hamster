@@ -30,6 +30,7 @@
   <launchable type="desktop-id">org.gnome.Hamster.GUI.desktop</launchable>
   <provides>
     <id>hamster.desktop</id>
+    <binary>hamster</binary>
   </provides>
 
   <screenshots>
@@ -46,13 +47,10 @@
       <image>https://raw.githubusercontent.com/projecthamster/hamster/master/data/screenshots/editor.png</image>
     </screenshot>
   </screenshots>
-  ​<translation type="gettext">hamster</translation>
+  <translation type="gettext">hamster</translation>
   <url type="homepage">https://github.com/projecthamster/hamster/wiki</url>
   <releases>
     <!-- Provide a (clearly) fake date, otherwise flatpak will ignore the entry -->
     <release version="@VERSION@" date="1980-01-01" />
   </releases>
-  <provides>
-    <binary>hamster</binary>
-  </provides>
 </component>
