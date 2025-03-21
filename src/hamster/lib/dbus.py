@@ -95,8 +95,8 @@ def from_dbus_fact(dbus_fact):
     Legacy: to besuperceded by from_dbus_fact_json at some point.
     """
     return Fact(activity=dbus_fact[4],
-                start_time=dt.datetime.utcfromtimestamp(dbus_fact[1]),
-                end_time=dt.datetime.utcfromtimestamp(dbus_fact[2]) if dbus_fact[2] else None,
+                start_time=dt.datetime.fromtimestamp(dbus_fact[1], dt.UTC),
+                end_time=dt.datetime.fromtimestamp(dbus_fact[2], dt.UTC) if dbus_fact[2] else None,
                 description=dbus_fact[3],
                 activity_id=dbus_fact[5],
                 category=dbus_fact[6],
