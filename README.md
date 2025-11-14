@@ -67,6 +67,13 @@ Installation (on releases with existing package):
 
 For more recent releases, refer to compilation from sources above.
 
+##### Arch Linux
+
+Project status: https://archlinux.org/packages/extra/any/hamster-time-tracker/
+
+Installation:
+```sudo pacman -S hamster-time-tracker```
+
 ##### Snap
 
 Easy installation on any distribution supporting snap:  
