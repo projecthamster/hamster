@@ -305,7 +305,7 @@ msgstr "_Arrêter le suivi"
 
 #: src/hamster/overview.py:94
 #, fuzzy
-msgid "Add activity (Ctrl-+)"
+msgid "Add activity (Insert, Ctrl-+)"
 msgstr "Ajouter une activité"
 
 #: src/hamster/overview.py:100
