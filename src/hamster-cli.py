@@ -25,6 +25,7 @@
 import sys, os
 import argparse
 import re
+import dbus
 
 import gi
 gi.require_version('Gdk', '3.0')  # noqa: E402
@@ -37,18 +38,47 @@ from gi.repository import GLib as glib
 
 import hamster
 
-from hamster import client, reports
+from hamster import client
 from hamster import logger as hamster_logger
-from hamster.about import About
-from hamster.edit_activity import CustomFactController
-from hamster.overview import Overview
-from hamster.preferences import PreferencesEditor
 from hamster.lib import default_logger, stuff
 from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
 
 
 logger = default_logger(__file__)
+
+
+def _should_fallback_to_local_storage(error):
+    """Whether a D-Bus connection error should trigger local storage fallback."""
+    if not isinstance(error, dbus.DBusException):
+        return False
+
+    dbus_name = (error.get_dbus_name() or "").lower()
+    message = str(error).lower()
+
+    known_names = {
+        "org.freedesktop.dbus.error.noserver",
+        "org.freedesktop.dbus.error.filenotfound",
+        "org.freedesktop.dbus.error.spawn.execfailed",
+    }
+    if dbus_name in known_names:
+        return True
+
+    known_fragments = (
+        "unable to autolaunch a dbus-daemon",
+        "failed to connect to socket",
+        "cannot autolaunch d-bus",
+        "failed to open connection to session message bus",
+    )
+    return any(fragment in message for fragment in known_fragments)
+
+
+def _get_server_version(storage):
+    connection = dbus.Interface(
+        storage.bus.get_object('org.gnome.Hamster', '/org/gnome/Hamster'),
+        dbus_interface='org.gnome.Hamster'
+    )
+    return str(connection.Version())
 
 
 def word_wrap(line, max_len):
@@ -163,6 +193,7 @@ class Hamster(gtk.Application):
 
         if name == "about":
             if not self.about_controller:
+                from hamster.about import About
                 # silence warning "GtkDialog mapped without a transient parent"
                 # https://stackoverflow.com/a/38408127/3565696
                 _dummy = gtk.Window()
@@ -175,17 +206,20 @@ class Hamster(gtk.Application):
                 # Or should we just discard the forgotten one ?
                 logger.warning("Fact controller already active. Please close first.")
             else:
+                from hamster.edit_activity import CustomFactController
                 fact_id = data.get_int32() if data else None
                 self.fact_controller = CustomFactController(name, fact_id=fact_id)
                 logger.debug("new CustomFactController")
             controller = self.fact_controller
         elif name == "overview":
             if not self.overview_controller:
+                from hamster.overview import Overview
                 self.overview_controller = Overview()
                 logger.debug("new Overview")
             controller = self.overview_controller
         elif name == "preferences":
             if not self.preferences_controller:
+                from hamster.preferences import PreferencesEditor
                 self.preferences_controller = PreferencesEditor()
                 logger.debug("new PreferencesEditor")
             controller = self.preferences_controller
@@ -228,7 +262,44 @@ class HamsterCli(object):
     """Command line interface."""
 
     def __init__(self):
-        self.storage = client.Storage()
+        self.storage = None
+        force_dbus = os.getenv("HAMSTER_CLI_FORCE_DBUS", "").lower() in ("1", "true", "yes")
+
+        try:
+            self.storage = client.Storage()
+        except dbus.DBusException as error:
+            if not _should_fallback_to_local_storage(error):
+                raise
+
+            from hamster.storage import db
+            self.storage = db.Storage(unsorted_localized="")
+            logger.warning(
+                "Session D-Bus unavailable (%s). Falling back to direct local database access.",
+                error,
+            )
+
+        if isinstance(self.storage, client.Storage) and not hamster.installed and not force_dbus:
+            try:
+                server_version = _get_server_version(self.storage)
+                if server_version != hamster.__version__:
+                    from hamster.storage import db
+                    logger.warning(
+                        "Detected daemon version mismatch (server=%s, client=%s). "
+                        "Using local database access in development mode.",
+                        server_version,
+                        hamster.__version__,
+                    )
+                    self.storage = db.Storage(unsorted_localized="")
+            except dbus.DBusException as error:
+                if not _should_fallback_to_local_storage(error):
+                    raise
+                from hamster.storage import db
+                self.storage = db.Storage(unsorted_localized="")
+                logger.warning(
+                    "Session D-Bus unavailable during daemon probe (%s). "
+                    "Falling back to direct local database access.",
+                    error,
+                )
 
 
     def assist(self, *args):
@@ -267,6 +338,8 @@ class HamsterCli(object):
 
 
     def export(self, *args):
+        from hamster import reports
+
         args = args or []
         export_format, start_time, end_time = "html", None, None
         if args:
@@ -450,10 +523,6 @@ Example usage:
         August 2012. Will check against activity, category, description and tags
 """)
 
-    hamster_client = HamsterCli()
-    app = Hamster()
-    logger.debug("app instanciated")
-
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
 
@@ -489,7 +558,10 @@ Example usage:
         action = args.action
 
     if action in ("about", "add", "edit", "overview", "preferences"):
+        app = Hamster()
+        logger.debug("app instanciated")
         if action == "add" and args.action_args:
+            hamster_client = HamsterCli()
             assert not unknown_args, "unknown options: {}".format(unknown_args)
             # directly add fact from arguments
             id_ = hamster_client.start(*args.action_args)
@@ -512,7 +584,10 @@ Example usage:
             status = app.run(run_args)
             logger.debug("app exited")
             sys.exit(status)
-    elif hasattr(hamster_client, action):
+    else:
+        hamster_client = HamsterCli()
+
+    if hasattr(hamster_client, action):
         getattr(hamster_client, action)(*args.action_args)
     else:
         sys.exit(usage % {'prog': sys.argv[0]})

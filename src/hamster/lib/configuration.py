@@ -25,6 +25,7 @@ import logging
 logger = logging.getLogger(__name__)   # noqa: E402
 
 import os
+import dbus
 from hamster.client import Storage
 
 from gi.repository import Gdk as gdk
@@ -120,7 +121,11 @@ class RuntimeStore(Singleton):
             self.data_dir = os.path.join(module_dir, '..', '..', '..', 'data')
 
         self.data_dir = os.path.realpath(self.data_dir)
-        self.storage = Storage()
+        try:
+            self.storage = Storage()
+        except dbus.DBusException as error:
+            logger.warning("Session D-Bus unavailable, runtime storage disabled: %s", error)
+            self.storage = None
         self.home_data_dir = os.path.realpath(os.path.join(glib.get_user_data_dir(), "hamster"))
 
 
