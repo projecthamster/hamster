@@ -1440,9 +1440,13 @@ class Icon(BitmapSprite):
 
     def __setattr__(self, name, val):
         BitmapSprite.__setattr__(self, name, val)
-        if name in ('name', 'size'): # no other reason to discard cache than just on path change
+        if name in ('name', 'size'):  # no other reason to discard cache than just on path change
             if self.__dict__.get('name') and self.__dict__.get('size'):
-                self.image_data = self.theme.load_icon(self.name, self.size, 0)
+                try:
+                    self.image_data = self.theme.load_icon(self.name, self.size, 0)
+                except:
+                    # Missing / broken icon should not crash the app
+                    self.image_data = None
             else:
                 self.image_data = None
 
