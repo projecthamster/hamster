@@ -25,6 +25,11 @@ try:
 except: # we can also live without tweener. Scene.animate will not work
     pytweener = None
 
+try:
+    from hamster.lib.theme import get_theme_manager
+except ImportError:
+    get_theme_manager = None
+
 import colorsys
 from collections import deque
 
@@ -1869,6 +1874,15 @@ class Scene(Parent, gtk.DrawingArea):
 
         self.__last_mouse_move = None
 
+        # Theme support
+        self._theme_manager = None
+        self._theme_handler_id = None
+        if get_theme_manager:
+            self._theme_manager = get_theme_manager()
+            self._theme_handler_id = self._theme_manager.connect(
+                'changed', self._on_theme_changed)
+            self.connect("destroy", self._on_destroy_theme_cleanup)
+
         self.connect("realize", self.__on_realize)
 
         if interactive:
@@ -2241,6 +2255,27 @@ class Scene(Parent, gtk.DrawingArea):
             self.emit("on-drag-finish", drag_sprite, event)
         self.__check_mouse(event.x, event.y)
         return True
+
+    @property
+    def theme(self):
+        """Get the current theme palette colors.
+
+        Returns the ThemePalette from the ThemeManager, or None if
+        theme support is not available.
+        """
+        if self._theme_manager:
+            return self._theme_manager.colors
+        return None
+
+    def _on_theme_changed(self, theme_manager):
+        """Handle theme change by requesting a redraw."""
+        self.redraw()
+
+    def _on_destroy_theme_cleanup(self, widget):
+        """Disconnect theme handler on widget destroy."""
+        if self._theme_manager and self._theme_handler_id:
+            self._theme_manager.disconnect(self._theme_handler_id)
+            self._theme_handler_id = None
 
     def __on_realize(self, widget):
         # Store as soon as available. Maybe for performance reasons,

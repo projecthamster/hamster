@@ -46,6 +46,7 @@ from hamster.preferences import PreferencesEditor
 from hamster.lib import default_logger, stuff
 from hamster.lib import datetime as dt
 from hamster.lib.fact import Fact
+from hamster.lib.theme import get_theme_manager
 
 
 logger = default_logger(__file__)
@@ -113,6 +114,9 @@ class Hamster(gtk.Application):
                                  application_id="org.gnome.Hamster.GUI",
                                  #inactivity_timeout=10000,
                                  register_session=True)
+
+        # Initialize theme manager early to detect system theme
+        self.theme_manager = get_theme_manager()
 
         self.about_controller = None  # 'about' window controller
         self.fact_controller = None  # fact window controller

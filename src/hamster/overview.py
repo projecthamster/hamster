@@ -42,6 +42,7 @@ from hamster.lib import stuff
 from hamster import widgets
 
 from hamster.lib.configuration import Controller
+from hamster.lib.theme import get_theme_manager
 
 
 from hamster.lib.pytweener import Easing
@@ -135,11 +136,26 @@ class StackedBar(layout.Widget):
         self._items = []
         self.connect("on-render", self.on_render)
 
-        #: color scheme to use, graphics.colors.category10 by default
-        self.colors = graphics.Colors.category10
-        self.colors = ["#95CACF", "#A2CFB6", "#D1DEA1", "#E4C384", "#DE9F7B"]
+        #: color scheme to use, from theme palette
+        self._theme_manager = get_theme_manager()
+        self._update_colors()
+        # Connect to theme changes
+        if self._theme_manager:
+            self._theme_manager.connect('changed', self._on_theme_changed)
 
         self._seen_keys = []
+
+    def _on_theme_changed(self, manager):
+        """Handle theme change."""
+        self._update_colors()
+        self._seen_keys = []  # Reset color assignments
+
+    def _update_colors(self):
+        """Update color palette from theme."""
+        if self._theme_manager:
+            self.colors = list(self._theme_manager.colors.bar_colors)
+        else:
+            self.colors = ["#95CACF", "#A2CFB6", "#D1DEA1", "#E4C384", "#DE9F7B"]
 
 
     def set_items(self, items):
@@ -164,6 +180,9 @@ class StackedBar(layout.Widget):
         if not self._items:
             self.graphics.clear()
             return
+
+        # Refresh colors from theme in case it changed
+        self._update_colors()
 
         max_width = self.alloc_w - 1 * len(self._items)
         for i, (key, val, normalized) in enumerate(self._items):
@@ -291,8 +310,11 @@ class Totals(graphics.Scene):
         main = layout.HBox(padding_top=10)
         box.add_child(main)
 
+        # stub_label color will be set via theme in update_colors
+        theme_manager = get_theme_manager()
+        stub_color = theme_manager.colors.fg_muted if theme_manager else "#bbb"
         self.stub_label = layout.Label(markup="<b>Here be stats,\ntune in laters!</b>",
-                                       color="#bbb",
+                                       color=stub_color,
                                        size=60)
 
         self.activities_chart = HorizontalBarChart()
@@ -314,6 +336,11 @@ class Totals(graphics.Scene):
         self.connect("leave-notify-event", self.on_mouse_leave)
         self.connect("state-flags-changed", self.on_state_flags_changed)
         self.connect("style-updated", self.on_style_changed)
+
+        # Connect to theme changes
+        self._theme_manager = get_theme_manager()
+        if self._theme_manager:
+            self._theme_manager.connect('changed', self._on_theme_changed)
 
 
     def set_facts(self, facts):
@@ -384,6 +411,14 @@ class Totals(graphics.Scene):
 
     def on_style_changed(self, _):
         self.update_colors()
+
+    def _on_theme_changed(self, manager):
+        """Handle theme change from ThemeManager."""
+        self.update_colors()
+        # Update stub label color from theme
+        if self._theme_manager:
+            self.stub_label.color = self._theme_manager.colors.fg_muted
+        self.redraw()
 
     def change_height(self, new_height):
         self.stop_animation(self.height_proxy)

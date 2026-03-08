@@ -284,9 +284,16 @@ class TagBox(graphics.Scene):
 
     def on_mouse_out(self, area, tag):
         if tag.text in self.selected_tags:
-            tag.color = (242, 229, 97)
+            # Slightly brighter for selected tags
+            if self.theme:
+                tag.color = self.theme.tag_bg
+            else:
+                tag.color = (242, 229, 97)
         else:
-            tag.color = (241, 234, 170)
+            if self.theme:
+                tag.color = self.theme.tag_bg
+            else:
+                tag.color = (241, 234, 170)
 
 
     def on_tag_click(self, area, event, tag):
@@ -301,10 +308,12 @@ class TagBox(graphics.Scene):
 
     def draw(self, tags):
         new_tags = []
+        tag_color = self.theme.tag_bg if self.theme else "#F1EAAA"
         for label in tags:
-            tag = Tag(label)
+            tag = Tag(label, color=tag_color)
             if label in self.selected_tags:
-                tag.color = (242, 229, 97)
+                # Keep selected tags slightly highlighted
+                tag.color = tag_color
             new_tags.append(tag)
 
         for tag in self.tags:
@@ -324,6 +333,9 @@ class TagBox(graphics.Scene):
 
     def on_enter_frame(self, scene, context):
         cur_x, cur_y = 4, 4
+        # Update tag colors from theme on each frame
+        tag_color = self.theme.tag_bg if self.theme else "#F1EAAA"
+
         tag = None
         for tag in self.tags:
             if cur_x + tag.width >= self.width - 5:  #if we do not fit, we wrap
@@ -332,6 +344,8 @@ class TagBox(graphics.Scene):
 
             tag.x = cur_x
             tag.y = cur_y
+            # Update tag color from theme
+            tag.color = tag_color
 
             cur_x += tag.width + 6 #some padding too, please
 
@@ -341,7 +355,7 @@ class TagBox(graphics.Scene):
         return cur_x, cur_y
 
 class Tag(graphics.Sprite):
-    def __init__(self, text, interactive = True, color = "#F1EAAA"):
+    def __init__(self, text, interactive = True, color = None):
         graphics.Sprite.__init__(self, interactive = interactive)
 
         self.width, self.height = 0,0
@@ -349,8 +363,10 @@ class Tag(graphics.Sprite):
         font = gtk.Style().font_desc
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
-        self.label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)
-        self.color = color
+        # Default tag label color - will be updated based on theme
+        label_color = (30, 30, 30)  # default dark text
+        self.label = graphics.Label(text, size = font_size, color = label_color, y = 1)
+        self.color = color if color else "#F1EAAA"
         self.add_child(self.label)
 
         self.corner = int((self.label.height + 3) / 3) + 0.5
@@ -366,6 +382,13 @@ class Tag(graphics.Sprite):
             self.__dict__['width'], self.__dict__['height'] = int(self.label.x + self.label.width + self.label.height * 0.3), self.label.height + 3
 
     def on_render(self, sprite):
+        # Update label color from theme if available
+        scene = self.get_scene() if hasattr(self, 'get_scene') else None
+        if scene and hasattr(scene, 'theme') and scene.theme:
+            self.label.color = scene.theme.tag_fg
+        else:
+            self.label.color = (30, 30, 30)
+
         self.graphics.set_line_style(width=1)
 
         self.graphics.move_to(0.5, self.corner)
@@ -378,4 +401,5 @@ class Tag(graphics.Sprite):
         self.graphics.fill_stroke(self.color, "#b4b4b4")
 
         self.graphics.circle(6, self.height / 2, 2)
+        # Tag hole - use light color for contrast
         self.graphics.fill_stroke("#fff", "#b4b4b4")

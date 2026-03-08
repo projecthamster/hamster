@@ -177,5 +177,15 @@ class GSettingsStore(gobject.GObject, Singleton):
         hours, minutes = divmod(day_start_minutes, 60)
         return dt.time(hours, minutes)
 
+    @property
+    def theme_mode(self):
+        """Theme mode setting ('auto', 'light', or 'dark')."""
+        return self.get("theme-mode")
+
+    @theme_mode.setter
+    def theme_mode(self, value):
+        """Set theme mode ('auto', 'light', or 'dark')."""
+        self.set("theme-mode", value)
+
 
 conf = GSettingsStore()

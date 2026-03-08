@@ -36,9 +36,11 @@ class Selection(graphics.Sprite):
         self.fill = None # will be set to proper theme color on render
         self.fixed = False
 
+        # Colors will be updated based on theme in on_render
         self.start_label = graphics.Label("", 11, "#333", visible = False)
         self.end_label = graphics.Label("", 11, "#333", visible = False)
         self.duration_label = graphics.Label("", 11, "#FFF", visible = False)
+        self._theme_colors_set = False
 
         self.add_child(self.start_label, self.end_label, self.duration_label)
         self.connect("on-render", self.on_render)
@@ -47,6 +49,14 @@ class Selection(graphics.Sprite):
     def on_render(self, sprite):
         if not self.fill: # not ready yet
             return
+
+        # Update label colors based on theme (only once per render cycle)
+        if hasattr(self, 'parent') and self.parent and hasattr(self.parent, 'parent'):
+            scene = self.parent.parent
+            if hasattr(scene, 'theme') and scene.theme:
+                self.start_label.color = scene.theme.fg_primary
+                self.end_label.color = scene.theme.fg_primary
+                # duration_label uses contrasting color for visibility on selection
 
         self.graphics.rectangle(0, 0, self.width, self.height)
         self.graphics.fill_preserve(self.fill, 0.3)
@@ -123,8 +133,9 @@ class DayLine(graphics.Scene):
             self.plot_area.sprites.remove(bar)
 
         self.fact_bars = []
+        fact_bar_color = self.theme.fg_muted if self.theme else "#aaa"
         for fact in facts:
-            fact_bar = graphics.Rectangle(0, 0, fill="#aaa", stroke="#aaa") # dimensions will depend on screen situation
+            fact_bar = graphics.Rectangle(0, 0, fill=fact_bar_color, stroke=fact_bar_color) # dimensions will depend on screen situation
             fact_bar.fact = fact
 
             if fact.category in self.categories:
@@ -171,9 +182,15 @@ class DayLine(graphics.Scene):
 
         bottom = self.plot_area.y + self.plot_area.height
 
+        # Update fact bar colors from theme
+        fact_bar_color = self.theme.fg_muted if self.theme else "#aaa"
+
         for bar in self.fact_bars:
             bar.y = vertical * bar.category + 5
             bar.height = vertical
+            # Update colors on each frame for theme changes
+            bar.fill = fact_bar_color
+            bar.stroke = fact_bar_color
 
             bar_start_time = bar.fact.start_time - self.view_time
             minutes = bar_start_time.seconds / 60 + bar_start_time.days * self.scope_hours  * 60
@@ -245,4 +262,5 @@ class DayLine(graphics.Scene):
 
             g.move_to(minutes, self.plot_area.y)
             g.line_to(minutes, bottom)
-            g.stroke("#f00", 0.4)
+            current_time_color = self.theme.current_time if self.theme else "#f00"
+            g.stroke(current_time_color, 0.4)

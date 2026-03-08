@@ -18,5 +18,16 @@
                 then the activity belongs to the previous hamster day.
             </description>
         </key>
+
+        <key type="s" name="theme-mode">
+            <default>'auto'</default>
+            <summary>Color theme mode</summary>
+            <description>
+                Controls the color theme used by Hamster.
+                'auto' follows the system theme preference,
+                'light' forces light theme colors,
+                'dark' forces dark theme colors.
+            </description>
+        </key>
     </schema>
 </schemalist>

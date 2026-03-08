@@ -25,6 +25,7 @@ from hamster import widgets
 from hamster.lib import datetime as dt
 from hamster.lib import stuff
 from hamster.lib.configuration import Controller, runtime, conf
+from hamster.lib.theme import get_theme_manager
 
 
 def get_prev(selection, model):
@@ -172,6 +173,11 @@ class PreferencesEditor(Controller):
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
         self.get_widget("autocomplete_tags").set_text(", ".join(self.tags))
+
+        # Load theme preference
+        theme_combo = self.get_widget("theme_combo")
+        theme_mode = conf.theme_mode
+        theme_combo.set_active_id(theme_mode)
 
     def on_autocomplete_tags_view_focus_out_event(self, view, event):
         buf = self.get_widget("autocomplete_tags")
@@ -344,7 +350,9 @@ class PreferencesEditor(Controller):
         cell_id = model.get_value(iter, 0)
         cell_text = model.get_value(iter, 1)
         if cell_id == -1:
-            text = '<span color="#555" style="italic">%s</span>' % cell_text # TODO - should get color from theme
+            theme_manager = get_theme_manager()
+            muted_color = theme_manager.colors.fg_secondary if theme_manager else "#555"
+            text = '<span color="%s" style="italic">%s</span>' % (muted_color, cell_text)
             cell.set_property('markup', text)
         else:
             cell.set_property('text', cell_text)
@@ -506,5 +514,11 @@ class PreferencesEditor(Controller):
 
         day_start = day_start.hour * 60 + day_start.minute
         conf.set("day-start-minutes", day_start)
+
+    def on_theme_combo_changed(self, combo):
+        theme_mode = combo.get_active_id()
+        if theme_mode:
+            conf.theme_mode = theme_mode
+
     def on_close_button_clicked(self, button):
         self.close_window()

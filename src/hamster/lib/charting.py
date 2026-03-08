@@ -99,17 +99,22 @@ class Chart(graphics.Scene):
             self.connect("on-click", self.on_click)
 
     def find_colors(self):
-        bg_color = "#eee" #self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        if self.theme:
+            bg_color = self.theme.bg_secondary
+            fg_color = self.theme.fg_muted
+        else:
+            bg_color = "#eee"
+            fg_color = "#aaa"
         self.bar_color = self.colors.contrast(bg_color, 30)
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = "#aaa" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
-        self.label_color = self.colors.contrast(fg_color,  80)
+        self.label_color = self.colors.contrast(fg_color, 80)
 
 
     def on_mouse_over(self, scene, bar):
         if bar.key not in self.selected_keys:
-            bar.fill = "#999" #self.get_style().base[gtk.StateType.PRELIGHT].to_string()
+            hover_color = self.theme.fg_muted if self.theme else "#999"
+            bar.fill = hover_color
 
     def on_mouse_out(self, scene, bar):
         if bar.key not in self.selected_keys:
@@ -177,30 +182,32 @@ class Chart(graphics.Scene):
             bar.width = self.plot_area.width
 
             if bar.key in self.selected_keys:
-                bar.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
+                selected_bg = self.theme.fg_muted if self.theme else "#aaa"
+                selected_fg = self.theme.fg_secondary if self.theme else "#666"
+                bar.fill = selected_bg
 
                 if bar.normalized == 0:
-                    bar.label.color = "#666" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
-                    bar.label_background.fill = "#aaa" #self.get_style().bg[gtk.StateType.SELECTED].to_string()
+                    bar.label.color = selected_fg
+                    bar.label_background.fill = selected_bg
                     bar.label_background.visible = True
                 else:
                     bar.label_background.visible = False
                     if bar.label.x < round(bar.width * bar.normalized):
-                        bar.label.color = "#666" #self.get_style().fg[gtk.StateType.SELECTED].to_string()
+                        bar.label.color = selected_fg
                     else:
                         bar.label.color = self.label_color
 
-            if not bar.fill:
+            else:
+                # Not selected - use theme bar color
                 bar.fill = self.bar_color
-
                 bar.label.color = self.label_color
                 bar.label_background.fill = None
 
             label.y = y + (bar_width - label.height) / 2 + self.plot_area.y
 
             label.width = legend_width
-            if not label.color:
-                label.color = self.label_color
+            # Always update label color from theme
+            label.color = self.label_color
 
             y += bar_width + 1
 
@@ -277,8 +284,8 @@ class HorizontalDayChart(graphics.Scene):
 
 
         # now for the text - we want reduced contrast for relaxed visuals
-        fg_color = "#666" #self.get_style().fg[gtk.StateType.NORMAL].to_string()
-        label_color = self.colors.contrast(fg_color,  80)
+        fg_color = self.theme.fg_secondary if self.theme else "#666"
+        label_color = self.colors.contrast(fg_color, 80)
 
         self.layout.set_alignment(pango.Alignment.RIGHT)
         self.layout.set_ellipsize(pango.ELLIPSIZE_END)
@@ -289,8 +296,8 @@ class HorizontalDayChart(graphics.Scene):
         factor = max_bar_size / float(end_hour - start_hour)
 
         # determine bar color
-        bg_color = "#eee" #self.get_style().bg[gtk.StateType.NORMAL].to_string()
-        base_color = self.colors.contrast(bg_color,  30)
+        bg_color = self.theme.bg_secondary if self.theme else "#eee"
+        base_color = self.colors.contrast(bg_color, 30)
 
         for i, label in enumerate(keys):
             g.set_color(label_color)
@@ -323,7 +330,7 @@ class HorizontalDayChart(graphics.Scene):
         last_position = positions[keys[-1]]
 
 
-        grid_color = "#aaa" # self.get_style().bg[gtk.StateType.NORMAL].to_string()
+        grid_color = self.theme.fg_muted if self.theme else "#aaa"
 
         for i in range(start_hour + 60, end_hour, pace):
             x = round((i - start_hour) * factor)
