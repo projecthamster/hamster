@@ -168,6 +168,8 @@ class PreferencesEditor(Controller):
         self.window.show_all()
 
     def load_config(self, *args):
+        conf.bind("stop-on-shutdown", self.get_widget("shutdown_track"), "active")
+
         self.day_start.time = conf.day_start
 
         self.tags = [tag["name"] for tag in runtime.storage.get_tags(only_autocomplete=True)]
