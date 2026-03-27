@@ -88,7 +88,7 @@ class HeaderBar(gtk.HeaderBar):
         self.add_activity_button = gtk.Button()
         self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
             "list-add-symbolic", gtk.IconSize.MENU))
-        self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
+        self.add_activity_button.set_tooltip_markup(_("Add activity (Insert, Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
 
@@ -500,6 +500,8 @@ class Overview(Controller):
         elif event.keyval == gdk.KEY_Right:
             self.header_bar.time_forth.emit("clicked")
             return True
+        elif event.keyval == gdk.KEY_Insert:
+            self.start_new_fact(clone_selected=True, fallback=True)
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
             if event.keyval == gdk.KEY_Tab:
