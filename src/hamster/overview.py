@@ -559,7 +559,7 @@ class Overview(Controller):
     def on_stop_clicked(self, button):
         self.storage.stop_tracking()
 
-    def on_row_activated(self, tree, day, fact):
+    def on_row_activated(self, tree, fact):
         self.present_fact_controller("edit", fact_id=fact.id)
 
     def on_row_delete_called(self, tree, fact):
