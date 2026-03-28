@@ -281,6 +281,19 @@ class Storage(db.Storage, dbus.service.Object):
             end_time = dt.datetime.utcfromtimestamp(end_time)
         return self.stop_tracking(end_time)
 
+    @dbus.service.method("org.gnome.Hamster")
+    def ResumeTracking(self, no_gap = False):
+        """Resumes tracking the last activity.
+        Parameters:
+        b no_gap: Use the previous end time as start time to fill the untracked gap.
+                      Default is False.
+        """
+        return self.resume_tracking(no_gap)
+
+    @dbus.service.method("org.gnome.Hamster")
+    def ContinueTracking(self):
+        """Continue tracking the last activity"""
+        return self.continue_tracking()
 
     @dbus.service.method("org.gnome.Hamster")
     def StopOrRestartTracking(self):

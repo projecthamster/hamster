@@ -145,6 +145,28 @@ class Storage(object):
             self.__touch_fact(facts[-1], end_time)
             self.facts_changed()
 
+    def continue_tracking(self):
+        """Continue tracking the last activity"""
+        facts = self.__get_todays_facts()
+        if facts and facts[-1].end_time:
+            self.__continue_fact(facts[-1])
+            self.facts_changed()
+        else:
+            logger.warning("No activity to continue")
+
+    def resume_tracking(self, no_gap=False):
+        """Resume tracking the last activity"""
+        facts = self.__get_todays_facts()
+        if facts and facts[-1].end_time:
+            if no_gap:
+                self.add_fact(facts[-1].copy(start_time=facts[-1].end_time,
+                                             end_time=None))
+            else:
+                start_time = dt.datetime.now()
+                self.add_fact(facts[-1].copy(start_time=start_time,
+                                             end_time=None))
+        else:
+            logger.warning("No activity to resume")
 
     def stop_or_restart_tracking(self):
         """Stops or restarts tracking the last activity"""
