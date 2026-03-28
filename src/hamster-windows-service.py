@@ -5,20 +5,19 @@ import dbus
 import dbus.service
 import os.path
 import subprocess
+import sys
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib as glib
 
 import hamster
+from hamster.lib import default_logger, stuff
+from hamster.lib.dbus import claim_bus_name
 
+logger = default_logger(__file__)
 
 DBusGMainLoop(set_as_default=True)
 loop = glib.MainLoop()
-
-if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
-    print("Found hamster-window-service already running, exiting")
-    quit()
-
 
 # Legacy server. Still used by the shell-extension.
 # New code _could_ access the org.gnome.Hamster.GUI actions directly,
@@ -30,12 +29,11 @@ if "org.gnome.Hamster.WindowServer" in dbus.SessionBus().list_names():
 class WindowServer(dbus.service.Object):
     __dbus_object_path__ = "/org/gnome/Hamster/WindowServer"
 
-    def __init__(self, loop):
+    def __init__(self, loop, bus, name_obj):
         self.app = True
         self.mainloop = loop
-        self.bus = dbus.SessionBus()
-        bus_name = dbus.service.BusName("org.gnome.Hamster.WindowServer", bus=self.bus)
-        dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
+        self.bus = bus
+        dbus.service.Object.__init__(self, name_obj, self.__dbus_object_path__)
 
     @dbus.service.method("org.gnome.Hamster")
     def Quit(self):
@@ -83,8 +81,24 @@ if __name__ == '__main__':
 
     glib.set_prgname(str(_("hamster-windows-service")))
 
-    window_server = WindowServer(loop)
+    import argparse
+    parser = argparse.ArgumentParser(description="Hamster time tracker D-Bus service")
+    parser.add_argument("--replace", action='store_true',
+                        help="Replace an existing process (if any)")
+    args = parser.parse_args()
 
-    print("hamster-window-service up")
+    quit_method = (WindowServer.__dbus_object_path__, 'org.gnome.Hamster', 'Quit')
+    (bus, name_obj) = claim_bus_name("org.gnome.Hamster.WindowServer", quit_method=quit_method, replace=args.replace)
+    if name_obj is None:
+        if args.replace:
+            logger.error("Failed to replace existing hamster-windows-service (it did not quit within timeout), exiting")
+        else:
+            logger.error("Found hamster-windows-service already running, exiting")
+        sys.exit(1)
+    window_server = WindowServer(loop, bus, name_obj)
+    logger.info("hamster-window-service up")
+
+    # Daemonize once we're succesfully started up and registered on dbus
+    stuff.daemonize()
 
     loop.run()

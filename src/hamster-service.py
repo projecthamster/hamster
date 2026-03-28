@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # nicked off gwibber
 
+import sys
+
 import dbus
 import dbus.service
 
@@ -9,7 +11,7 @@ from gi.repository import Gio as gio
 
 import hamster
 from hamster import logger as hamster_logger
-from hamster.lib import i18n
+from hamster.lib import i18n, stuff
 i18n.setup_i18n()  # noqa: E402
 
 from hamster.storage import db
@@ -17,6 +19,7 @@ from hamster.lib import datetime as dt
 from hamster.lib import default_logger
 from hamster.lib.dbus import (
     DBusMainLoop,
+    claim_bus_name,
     fact_signature,
     from_dbus_date,
     from_dbus_fact,
@@ -33,20 +36,12 @@ logger = default_logger(__file__)
 DBusMainLoop(set_as_default=True)
 loop = glib.MainLoop()
 
-if "org.gnome.Hamster" in dbus.SessionBus().list_names():
-    print("Found hamster-service already running, exiting")
-    quit()
-
-
 class Storage(db.Storage, dbus.service.Object):
     __dbus_object_path__ = "/org/gnome/Hamster"
 
-    def __init__(self, loop):
-        self.bus = dbus.SessionBus()
-        bus_name = dbus.service.BusName("org.gnome.Hamster", bus=self.bus)
-
-
-        dbus.service.Object.__init__(self, bus_name, self.__dbus_object_path__)
+    def __init__(self, loop, bus, name_obj):
+        self.bus = bus
+        dbus.service.Object.__init__(self, name_obj, self.__dbus_object_path__)
         db.Storage.__init__(self, unsorted_localized="")
 
         self.mainloop = loop
@@ -452,6 +447,8 @@ if __name__ == '__main__':
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
+    parser.add_argument("--replace", action='store_true',
+                        help="Replace an existing process (if any)")
 
     args = parser.parse_args()
 
@@ -460,6 +457,19 @@ if __name__ == '__main__':
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
 
-    print("hamster-service up")
-    storage = Storage(loop)
+    quit_method = (Storage.__dbus_object_path__, 'org.gnome.Hamster', 'Quit')
+    (bus, name_obj) = claim_bus_name("org.gnome.Hamster", quit_method=quit_method, replace=args.replace)
+    if name_obj is None:
+        if args.replace:
+            logger.error("Failed to replace existing hamster-service (it did not quit within timeout), exiting")
+        else:
+            logger.error("Found hamster-service already running, exiting")
+        sys.exit(1)
+
+    storage = Storage(loop, bus, name_obj)
+    logger.info("hamster-service up")
+
+    # Daemonize once we're succesfully started up and registered on dbus
+    stuff.daemonize()
+
     loop.run()

@@ -1,3 +1,5 @@
+import time
+
 import dbus
 
 from dbus.mainloop.glib import DBusGMainLoop as DBusMainLoop
@@ -121,3 +123,46 @@ def to_dbus_fact(fact):
             dbus.Array(fact.tags, signature = 's'),
             to_dbus_date(fact.date),
             fact.delta.days * 24 * 60 * 60 + fact.delta.seconds)
+
+
+def claim_bus_name(name, quit_method=None, quit_timeout=5, replace=False):
+    """ Claim a bus name.
+
+    Returns (bus, name_obj), or (bus, None) when the name was already claimed.
+
+    If replace is true, quit_method should be an (object_path,
+    interface, method) tuple of a method to call to make the existing
+    name owner quit. That method is called to (atomically) replace the
+    existing name owner, waiting up to quit_timeout seconds for the
+    existing owner to quit.
+    """
+    bus = dbus.SessionBus()
+    con = bus.get_connection()
+
+    try:
+        name_obj = dbus.service.BusName(name, bus=bus, do_not_queue=not replace)
+    except dbus.exceptions.NameExistsException as e:
+        return (bus, None)
+
+    # If do_not_queue=False and the name is already taken, we get no
+    # exception or any other indication whether the name was claimed or
+    # queued (this is a todo in dbus-python), so we check manually by
+    # matching the connection names
+    def claimed_name():
+        return bus.get_name_owner(name) == con.get_unique_name()
+
+    if replace and not claimed_name():
+        (object_path, interface_name, method_name) = quit_method
+        method = bus.get_object(name, object_path).get_dbus_method(method_name, dbus_interface=interface_name)
+        method()
+
+        # It would be more elegant if this used NameOwnerChanged events
+        # rather than polling, but also more complicated, so stick to
+        # polling for now.
+        start = time.monotonic()
+        while not claimed_name() and time.monotonic() - start < quit_timeout:
+            time.sleep(0.1)
+        if not claimed_name():
+            name_obj = None
+
+    return (bus, name_obj)

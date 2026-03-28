@@ -24,7 +24,10 @@
 
 import sys, os
 import argparse
+import time
 import re
+import pathlib
+import subprocess
 
 import gi
 gi.require_version('Gdk', '3.0')  # noqa: E402
@@ -148,8 +151,8 @@ class Hamster(gtk.Application):
     def on_activate_window(self, action=None, data=None):
         self._open_window(action.get_name(), data)
 
-    def on_activate_quit(self, data=None):
-        self.on_activate_quit()
+    def on_activate_quit(self, action=None, data=None):
+        self.quit()
 
     def on_startup(self, data=None):
         logger.debug("startup")
@@ -451,8 +454,6 @@ Example usage:
 """)
 
     hamster_client = HamsterCli()
-    app = Hamster()
-    logger.debug("app instanciated")
 
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
@@ -467,6 +468,10 @@ Example usage:
                         choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'),
                         default='WARNING',
                         help="Set the logging level (default: %(default)s)")
+    parser.add_argument("--replace", action='store_true',
+                        help="Replace an existing GUI process (if any) instead of activating it")
+    parser.add_argument("--replace-all", action='store_true',
+                        help="Replace all existing hamster processes (if any)")
     parser.add_argument("action", nargs="?", default="overview")
     parser.add_argument('action_args', nargs=argparse.REMAINDER, default=[])
 
@@ -476,6 +481,41 @@ Example usage:
     logger.setLevel(args.log_level)
     # hamster_logger for the rest
     hamster_logger.setLevel(args.log_level)
+
+    if args.replace_all:
+        if hamster.installed:
+            from hamster import defs  # only available when running installed
+            d = pathlib.Path(defs.LIBEXEC_DIR)
+            cmds = [d / 'hamster-service', d / 'hamster-windows-service']
+        else:
+            d = pathlib.Path(__file__).parent
+            cmds = [d / 'hamster-service.py', d / 'hamster-windows-service.py']
+
+        for cmd in cmds:
+            subprocess.run((cmd, '--replace'))
+
+    app = Hamster()
+    logger.debug("app instantiated")
+    if args.replace or args.replace_all:
+        app.register()
+        if app.get_is_remote():
+            # This code is prone to race conditions (if processing the quit
+            # takes longer than the sleep below, or if another GUI is
+            # bus activated before the new app), but gio.Application
+            # does not offer any way to pass a pre-claimed name or dbus
+            # connection, and always passes DO_NOT_QUEUE when claiming
+            # the name, preventing properly handling this race
+            # condition. But it is only the GUI, so the user can always
+            # just manually quit any existing GUI.
+            logger.debug("sending quit")
+            app.activate_action("quit")
+            time.sleep(2)
+            app = Hamster()
+            logger.debug("app reinstantiated")
+            app.register()
+            if app.get_is_remote():
+                logger.error("Failed to replace existing GUI")
+                sys.exit(1)
 
     if not hamster.installed:
         logger.info("Running in devel mode")
@@ -488,30 +528,29 @@ Example usage:
     else:
         action = args.action
 
-    if action in ("about", "add", "edit", "overview", "preferences"):
-        if action == "add" and args.action_args:
-            assert not unknown_args, "unknown options: {}".format(unknown_args)
-            # directly add fact from arguments
-            id_ = hamster_client.start(*args.action_args)
-            assert id_ > 0, "failed to add fact"
-            sys.exit(0)
+    if action == "add" and args.action_args:
+        assert not unknown_args, "unknown options: {}".format(unknown_args)
+        # directly add fact from arguments
+        id_ = hamster_client.start(*args.action_args)
+        assert id_ > 0, "failed to add fact"
+        sys.exit(0)
+    elif action in ("about", "add", "edit", "overview", "preferences"):
+        app.register()
+        if action == "edit":
+            assert len(args.action_args) == 1, (
+                   "edit requires exactly one argument, got {}"
+                   .format(args.action_args))
+            id_ = int(args.action_args[0])
+            assert id_ > 0, "received non-positive id : {}".format(id_)
+            action_data = glib.Variant.new_int32(id_)
         else:
-            app.register()
-            if action == "edit":
-                assert len(args.action_args) == 1, (
-                       "edit requires exactly one argument, got {}"
-                       .format(args.action_args))
-                id_ = int(args.action_args[0])
-                assert id_ > 0, "received non-positive id : {}".format(id_)
-                action_data = glib.Variant.new_int32(id_)
-            else:
-                action_data = None
-            app.activate_action(action, action_data)
-            run_args = [sys.argv[0]] + unknown_args
-            logger.debug("run {}".format(run_args))
-            status = app.run(run_args)
-            logger.debug("app exited")
-            sys.exit(status)
+            action_data = None
+        app.activate_action(action, action_data)
+        run_args = [sys.argv[0]] + unknown_args
+        logger.debug("run {}".format(run_args))
+        status = app.run(run_args)
+        logger.debug("app exited")
+        sys.exit(status)
     elif hasattr(hamster_client, action):
         getattr(hamster_client, action)(*args.action_args)
     else:
