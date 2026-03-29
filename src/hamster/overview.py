@@ -573,8 +573,11 @@ class Overview(Controller):
             self.filter_entry.grab_focus()
 
     def on_timeout(self):
-        # TODO: should update only the running FactTree row (if any), and totals
-        self.find_facts()
+        # make sure the date is current
+        if not self.header_bar.range_pick.update_today(dt.hday.today()):
+            # TODO: should update only the running FactTree row (if any), and totals
+            self.find_facts()
+            # otherwise find_facts was already called by emitted event
         # The timeout will stop if returning False
         return True
 
