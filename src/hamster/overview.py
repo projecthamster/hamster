@@ -519,6 +519,8 @@ class Overview(Controller):
             elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
                 # same as pressing the + icon
                 self.start_new_fact(clone_selected=True, fallback=True)
+            elif event.keyval == gdk.KEY_q:
+                self.close_window()
 
         if event.keyval == gdk.KEY_Escape:
             self.close_window()
