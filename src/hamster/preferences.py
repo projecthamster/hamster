@@ -188,15 +188,22 @@ class PreferencesEditor(Controller):
             trigger=gtk.ShortcutTrigger.parse_string("Escape"),
             action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
         ))
-        shortcut_ctrl.add_shortcut(gtk.Shortcut(
-            trigger=gtk.ShortcutTrigger.parse_string("Delete"),
-            action=gtk.CallbackAction.new(self._on_delete_key),
-        ))
-        shortcut_ctrl.add_shortcut(gtk.Shortcut(
-            trigger=gtk.ShortcutTrigger.parse_string("F2"),
-            action=gtk.CallbackAction.new(self._on_f2_key),
-        ))
         self.window.add_controller(shortcut_ctrl)
+
+        # Delete/F2 shortcuts on trees only (not window-wide, to avoid
+        # intercepting keystrokes in the tags text view)
+        for tree in (self.activity_tree, self.category_tree):
+            tree_sc = gtk.ShortcutController()
+            tree_sc.set_scope(gtk.ShortcutScope.LOCAL)
+            tree_sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string("Delete"),
+                action=gtk.CallbackAction.new(self._on_delete_key),
+            ))
+            tree_sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string("F2"),
+                action=gtk.CallbackAction.new(self._on_f2_key),
+            ))
+            tree.add_controller(tree_sc)
 
         self.show()
 
