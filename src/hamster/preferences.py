@@ -176,9 +176,27 @@ class PreferencesEditor(Controller):
             self.get_widget("autocomplete_tags"), None))
         self.get_widget("autocomplete_tags_view").add_controller(focus_ctrl)
 
-        win_key_ctrl = gtk.EventControllerKey()
-        win_key_ctrl.connect("key-pressed", self.on_preferences_window_key_press)
-        self.window.add_controller(win_key_ctrl)
+        # Use keyboard shortcuts instead of a key controller
+        # (key controllers on windows intercept all keystrokes in GTK4)
+        shortcut_ctrl = gtk.ShortcutController()
+        shortcut_ctrl.set_scope(gtk.ShortcutScope.LOCAL)
+        shortcut_ctrl.add_shortcut(gtk.Shortcut(
+            trigger=gtk.ShortcutTrigger.parse_string("<Control>w"),
+            action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
+        ))
+        shortcut_ctrl.add_shortcut(gtk.Shortcut(
+            trigger=gtk.ShortcutTrigger.parse_string("Escape"),
+            action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
+        ))
+        shortcut_ctrl.add_shortcut(gtk.Shortcut(
+            trigger=gtk.ShortcutTrigger.parse_string("Delete"),
+            action=gtk.CallbackAction.new(self._on_delete_key),
+        ))
+        shortcut_ctrl.add_shortcut(gtk.Shortcut(
+            trigger=gtk.ShortcutTrigger.parse_string("F2"),
+            action=gtk.CallbackAction.new(self._on_f2_key),
+        ))
+        self.window.add_controller(shortcut_ctrl)
 
         self.show()
 
@@ -461,25 +479,17 @@ class PreferencesEditor(Controller):
         dialog.present()
         entry.grab_focus()
 
-    def on_preferences_window_key_press(self, controller, keyval, keycode, state):
+    def _on_delete_key(self, widget, args):
         if self.activity_tree.has_focus():
-            self.on_activity_list_key_pressed(self.activity_tree, keyval, keycode, state)
+            self.remove_current_activity()
         elif self.category_tree.has_focus():
-            self.on_category_list_key_pressed(self.category_tree, keyval, keycode, state)
+            self.remove_current_category()
 
-        if (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK):
-            self.close_window()
-
-        if keyval == gdk.KEY_Escape:
-            #check, maybe we are editing stuff
-            if self.activityCell.get_property("editable"):
-                self.activityCell.set_property("editable", False)
-                return
-            if self.categoryCell.get_property("editable"):
-                self.categoryCell.set_property("editable", False)
-                return
-
-            self.close_window()
+    def _on_f2_key(self, widget, args):
+        if self.activity_tree.has_focus():
+            self.on_activity_edit_clicked(None)
+        elif self.category_tree.has_focus():
+            self.on_category_edit_clicked(None)
 
     """button events"""
     def on_category_add_clicked(self, button):
