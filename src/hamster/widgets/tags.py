@@ -43,19 +43,17 @@ class TagsEntry(gtk.Entry):
         self.popup.set_transient_for(self.get_ancestor(gtk.Window))
 
         self.scroll_box = gtk.ScrolledWindow()
-        self.scroll_box.set_shadow_type(gtk.ShadowType.IN)
         self.scroll_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         viewport = gtk.Viewport()
-        viewport.set_shadow_type(gtk.ShadowType.NONE)
 
         self.tag_box = TagBox()
         self.tag_box.connect("tag-selected", self.on_tag_selected)
         self.tag_box.connect("tag-unselected", self.on_tag_unselected)
 
 
-        viewport.add(self.tag_box)
-        self.scroll_box.add(viewport)
-        self.popup.add(self.scroll_box)
+        viewport.set_child(self.tag_box)
+        self.scroll_box.set_child(viewport)
+        self.popup.set_child(self.scroll_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
@@ -116,8 +114,8 @@ class TagsEntry(gtk.Entry):
 
     def hide_popup(self):
         self.popup.hide()
-        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
-            self.get_toplevel().disconnect(self._parent_click_watcher)
+        if self._parent_click_watcher and self.get_root().handler_is_connected(self._parent_click_watcher):
+            self.get_root().disconnect(self._parent_click_watcher)
             self._parent_click_watcher = None
 
     def show_popup(self):
@@ -126,7 +124,7 @@ class TagsEntry(gtk.Entry):
             return
 
         if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
+            self._parent_click_watcher = self.get_root().connect("button-press-event", self._on_focus_out_event)
 
         alloc = self.get_allocation()
         _, x, y = self.get_parent_window().get_origin()
@@ -139,7 +137,6 @@ class TagsEntry(gtk.Entry):
 
         self.scroll_box.set_size_request(w, height)
         self.popup.resize(w, height)
-        self.popup.show_all()
 
     def refresh_activities(self):
         # scratch activities and categories so that they get repopulated on demand

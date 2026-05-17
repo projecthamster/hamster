@@ -54,15 +54,14 @@ class Controller(gobject.GObject):
             self._gui = None
             self.window = gtk.Window()
 
-        self.window.connect("delete-event", self.window_delete_event)
-        if self._gui:
-            self._gui.connect_signals(self)
+        self.window.connect("close-request", self.window_delete_event)
+        # connect_signals removed in GTK4; signals connected manually in subclasses
 
     def get_widget(self, name):
         """ skip one variable (huh) """
         return self._gui.get_object(name)
 
-    def window_delete_event(self, widget, event):
+    def window_delete_event(self, widget):
         self.close_window()
 
     def close_window(self):

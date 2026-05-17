@@ -98,17 +98,22 @@ class RangePick(gtk.MenuButton):
 
         self.today = today
 
-        hbox = gtk.HBox()
+        hbox = gtk.Box(orientation=gtk.Orientation.HORIZONTAL)
         hbox.set_spacing(3)
         self.label = gtk.Label()
-        hbox.add(self.label)
-        hbox.add(gtk.Arrow(gtk.ArrowType.DOWN, gtk.ShadowType.ETCHED_IN))
-        self.add(hbox)
+        hbox.append(self.label)
+        hbox.append(gtk.Image.new_from_icon_name("pan-down-symbolic"))
+        self.set_child(hbox)
 
         self.start_date, self.end_date = None, None
         self.current_range = None
 
-        self._ui.connect_signals(self)
+        self.get_widget("day").connect("clicked", self.on_day_clicked)
+        self.get_widget("week").connect("clicked", self.on_week_clicked)
+        self.get_widget("month").connect("clicked", self.on_month_clicked)
+        self.get_widget("start_calendar").connect("day-selected-double-click", self.on_manual_range_apply_clicked)
+        self.get_widget("end_calendar").connect("day-selected-double-click", self.on_manual_range_apply_clicked)
+        self.get_widget("manual_range_apply").connect("clicked", self.on_manual_range_apply_clicked)
 
     def set_range(self, start_date, end_date=None):
         end_date = end_date or start_date

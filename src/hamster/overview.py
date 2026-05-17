@@ -53,14 +53,14 @@ from hamster.widgets.facttree import FactTree
 class HeaderBar(gtk.HeaderBar):
     def __init__(self):
         gtk.HeaderBar.__init__(self)
-        self.set_show_close_button(True)
+        self.set_show_title_buttons(True)
 
-        box = gtk.Box(False)
-        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
-        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
+        box = gtk.Box()
+        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic")
+        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic")
 
-        box.add(self.time_back)
-        box.add(self.time_forth)
+        box.append(self.time_back)
+        box.append(self.time_forth)
         gtk.StyleContext.add_class(box.get_style_context(), "linked")
         self.pack_start(box)
 
@@ -68,40 +68,27 @@ class HeaderBar(gtk.HeaderBar):
         self.pack_start(self.range_pick)
 
         self.system_button = gtk.MenuButton()
-        self.system_button.set_image(gtk.Image.new_from_icon_name(
-            "open-menu-symbolic", gtk.IconSize.MENU))
+        self.system_button.set_icon_name("open-menu-symbolic")
         self.system_button.set_tooltip_markup(_("Menu"))
         self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
-        self.search_button.set_image(gtk.Image.new_from_icon_name(
-            "edit-find-symbolic", gtk.IconSize.MENU))
+        self.search_button.set_icon_name("edit-find-symbolic")
         self.search_button.set_tooltip_markup(_("Filter activities"))
         self.pack_end(self.search_button)
 
         self.stop_button = gtk.Button()
-        self.stop_button.set_image(gtk.Image.new_from_icon_name(
-            "process-stop-symbolic", gtk.IconSize.MENU))
+        self.stop_button.set_icon_name("process-stop-symbolic")
         self.stop_button.set_tooltip_markup(_("Stop tracking (Ctrl-SPACE)"))
         self.pack_end(self.stop_button)
 
         self.add_activity_button = gtk.Button()
-        self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
-            "list-add-symbolic", gtk.IconSize.MENU))
+        self.add_activity_button.set_icon_name("list-add-symbolic")
         self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
 
-        self.system_menu = gtk.Menu()
-        self.system_button.set_popup(self.system_menu)
-        self.menu_export = gtk.MenuItem(label=_("Export..."))
-        self.system_menu.append(self.menu_export)
-        self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
-        self.system_menu.append(self.menu_prefs)
-        self.menu_help = gtk.MenuItem(label=_("Help"))
-        self.system_menu.append(self.menu_help)
-        self.system_menu.show_all()
-
+        # Menu system replaced in Phase 3 (Gio.Menu + PopoverMenu)
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
@@ -415,7 +402,6 @@ class Overview(Controller):
 
         self.prefs_dialog = None  # preferences dialog controller
 
-        self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("org.gnome.Hamster.GUI")
         self.window.set_default_size(700, 500)
 
@@ -426,24 +412,29 @@ class Overview(Controller):
         self.header_bar = HeaderBar()
         self.window.set_titlebar(self.header_bar)
 
-        main = gtk.Box(orientation=1)
-        self.window.add(main)
+        main = gtk.Box(orientation=gtk.Orientation.VERTICAL)
+        self.window.set_child(main)
 
         self.report_chooser = None
 
 
         self.search_box = gtk.Revealer()
 
-        space = gtk.Box(border_width=5)
-        self.search_box.add(space)
+        space = gtk.Box()
+        space.set_margin_start(5)
+        space.set_margin_end(5)
+        space.set_margin_top(5)
+        space.set_margin_bottom(5)
+        self.search_box.set_child(space)
         self.filter_entry = gtk.Entry()
         self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY,
                                                   "edit-find-symbolic")
         self.filter_entry.connect("changed", self.on_search_changed)
         self.filter_entry.connect("icon-press", self.on_search_icon_press)
 
-        space.pack_start(self.filter_entry, True, True, 0)
-        main.pack_start(self.search_box, False, True, 0)
+        self.filter_entry.set_hexpand(True)
+        space.append(self.filter_entry)
+        main.append(self.search_box)
 
 
         window = gtk.ScrolledWindow()
@@ -452,11 +443,12 @@ class Overview(Controller):
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
         self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
 
-        window.add(self.fact_tree)
-        main.pack_start(window, True, True, 1)
+        window.set_child(self.fact_tree)
+        window.set_vexpand(True)
+        main.append(window)
 
         self.totals = Totals()
-        main.pack_start(self.totals, False, True, 1)
+        main.append(self.totals)
 
         # FIXME: should store and recall date_range from hamster.lib.configuration.conf
         hamster_day = dt.hday.today()
@@ -466,10 +458,7 @@ class Overview(Controller):
         self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
-        self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
-        self.header_bar.menu_export.connect("activate", self.on_export_clicked)
-        self.header_bar.menu_help.connect("activate", self.on_help_clicked)
-
+        # Menu action connections moved to Phase 3
 
         self.window.connect("key-press-event", self.on_key_press)
 
@@ -478,7 +467,6 @@ class Overview(Controller):
 
         # update every minute (necessary if an activity is running)
         gobject.timeout_add_seconds(60, self.on_timeout)
-        self.window.show_all()
 
 
     def on_key_press(self, window, event):

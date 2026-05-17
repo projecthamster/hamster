@@ -52,7 +52,6 @@ class About(object):
         about.set_logo_icon_name("org.gnome.Hamster.GUI")
 
         about.connect("response", lambda self, *args: self.destroy())
-        about.show_all()
 
     def present(self):
         self.window.present()

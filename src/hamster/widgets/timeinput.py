@@ -49,7 +49,6 @@ class TimeInput(gtk.Entry):
 
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
-        time_box.set_shadow_type(gtk.ShadowType.IN)
 
         self.time_tree = gtk.TreeView()
         self.time_tree.set_headers_visible(False)
@@ -61,8 +60,8 @@ class TimeInput(gtk.Entry):
         self.time_tree.connect("button-press-event",
                                self._on_time_tree_button_press_event)
 
-        time_box.add(self.time_tree)
-        self.popup.add(time_box)
+        time_box.set_child(self.time_tree)
+        self.popup.set_child(time_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
 
@@ -193,14 +192,14 @@ class TimeInput(gtk.Entry):
         self.emit("changed")
 
     def hide_popup(self):
-        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
-            self.get_toplevel().disconnect(self._parent_click_watcher)
+        if self._parent_click_watcher and self.get_root().handler_is_connected(self._parent_click_watcher):
+            self.get_root().disconnect(self._parent_click_watcher)
             self._parent_click_watcher = None
         self.popup.hide()
 
     def show_popup(self):
         if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
+            self._parent_click_watcher = self.get_root().connect("button-press-event", self._on_focus_out_event)
 
         # we will be adding things, need datetime
         i_time_0 = dt.datetime.combine(self.start_date or dt.date.today(),
@@ -256,7 +255,6 @@ class TimeInput(gtk.Entry):
 
         self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
         self.popup.resize(*self.time_tree.get_size_request())
-        self.popup.show_all()
 
     def toggle_popup(self):
         if self.popup.get_property("visible"):

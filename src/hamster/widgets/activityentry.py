@@ -98,7 +98,7 @@ class CompleteTree(graphics.Scene):
 
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        graphics.Scene.__init__(self, style_class="view")
 
         self.set_can_focus(False)
 
@@ -218,13 +218,12 @@ class CmdLineEntry(gtk.Entry):
         self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
 
         box = gtk.Frame()
-        box.set_shadow_type(gtk.ShadowType.IN)
-        self.popup.add(box)
+        self.popup.set_child(box)
 
         self.complete_tree = CompleteTree()
         self.tree_checker = self.complete_tree.connect("on-select-row", self.on_tree_select_row)
         self.complete_tree.connect("on-click", self.on_tree_click)
-        box.add(self.complete_tree)
+        box.set_child(self.complete_tree)
 
         self.storage = client.Storage()
         self.load_suggestions()
@@ -460,15 +459,12 @@ class CmdLineEntry(gtk.Entry):
         entry_x, entry_y = self.get_window().get_origin()[1:]
         x, y = entry_x + entry_alloc.x, entry_y + entry_alloc.y + entry_alloc.height
 
-        self.popup.show_all()
-
         self.update_suggestions(text)
 
         tree_w, tree_h = self.complete_tree.get_size_request()
 
         self.popup.move(x, y)
         self.popup.resize(entry_alloc.width, tree_h)
-        self.popup.show_all()
 
 
 class ActivityEntry():

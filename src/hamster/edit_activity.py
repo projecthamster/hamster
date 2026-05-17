@@ -64,7 +64,7 @@ class CustomFactController(Controller):
         self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
 
         self.dayline = widgets.DayLine()
-        self._gui.get_object("day_preview").add(self.dayline)
+        self._gui.get_object("day_preview").set_child(self.dayline)
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
@@ -123,9 +123,16 @@ class CustomFactController(Controller):
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
 
-        self._gui.connect_signals(self)
+        # Manual signal connections (replacing connect_signals removed in GTK4)
+        self.window.connect("close-request", self.on_close)
+        self.get_widget("button-prev-day").connect("clicked", self.on_prev_day_clicked)
+        self.get_widget("button-next-day").connect("clicked", self.on_next_day_clicked)
+        self.get_widget("delete_button").connect("clicked", self.on_delete_clicked)
+        self.get_widget("cancel_button").connect("clicked", self.on_cancel_clicked)
+        self.get_widget("save_button").connect("clicked", self.on_save_button_clicked)
+        # TODO Phase 4: Connect on_window_key_pressed using EventControllerKey
+
         self.validate_fields()
-        self.window.show_all()
 
     @property
     def date(self):
@@ -361,7 +368,7 @@ class CustomFactController(Controller):
     def on_cancel_clicked(self, button):
         self.close_window()
 
-    def on_close(self, widget, event):
+    def on_close(self, widget):
         self.close_window()
 
     def on_save_button_clicked(self, button):

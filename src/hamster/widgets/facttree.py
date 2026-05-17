@@ -298,7 +298,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        graphics.Scene.__init__(self, style_class="view")
 
         self.date_label = Label(10, 3)
         fontdesc = pango.FontDescription(graphics._font_desc)
@@ -603,7 +603,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.visible_range = self.get_visible_range()
 
     def on_enter_frame(self, scene, context):
-        has_focus = self.get_toplevel().has_toplevel_focus()
+        has_focus = self.get_root().has_toplevel_focus()
         if has_focus:
             colors = {
                 "normal": self.style.get_color(gtk.StateFlags.NORMAL),

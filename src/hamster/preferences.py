@@ -161,11 +161,20 @@ class PreferencesEditor(Controller):
             (self.day_start, self.day_start.connect("time-entered", self.on_day_start_changed))
         ])
 
+        # Manual signal connections (replacing connect_signals removed in GTK4)
+        self.get_widget("close_button").connect("clicked", self.on_close_button_clicked)
+        self.get_widget("category_add").connect("clicked", self.on_category_add_clicked)
+        self.get_widget("category_remove").connect("clicked", self.on_category_remove_clicked)
+        self.get_widget("category_edit").connect("clicked", self.on_category_edit_clicked)
+        self.get_widget("activity_add").connect("clicked", self.on_activity_add_clicked)
+        self.get_widget("activity_remove").connect("clicked", self.on_activity_remove_clicked)
+        self.get_widget("activity_edit").connect("clicked", self.on_activity_edit_clicked)
+        # Event-based signals (button-press, key-press, drag, focus-out) deferred to Phase 6
+
         self.show()
 
     def show(self):
         self.get_widget("notebook1").set_current_page(0)
-        self.window.show_all()
 
     def load_config(self, *args):
         self.day_start.time = conf.day_start

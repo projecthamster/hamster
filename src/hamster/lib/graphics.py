@@ -1779,7 +1779,7 @@ class Scene(Parent, gtk.DrawingArea):
         self._style = self.get_style_context()
 
         #: widget style. One of gtk.STYLE_CLASS_*. By default it's BACKGROUND
-        self.style_class = style_class or gtk.STYLE_CLASS_BACKGROUND
+        self.style_class = style_class or "background"
         self._style.add_class(self.style_class) # so we know our colors
 
         #: list of sprites in scene. use :func:`add_child` to add sprites
