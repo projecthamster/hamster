@@ -143,7 +143,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image3">
-                                                <property name="icon_name">gtk-edit</property>
+                                                <property name="icon_name">document-edit-symbolic</property>
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
@@ -224,7 +224,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image6">
-                                                <property name="icon_name">gtk-edit</property>
+                                                <property name="icon_name">document-edit-symbolic</property>
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
@@ -291,7 +291,7 @@
             <property name="halign">end</property>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="1">Close</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>              </object>
             </child>
