@@ -97,12 +97,6 @@ class HeaderBar(gtk.HeaderBar):
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
-        self.connect("button-press-event", self.on_button_press)
-
-    def on_button_press(self, bar, event):
-        """swallow clicks on the interactive parts to avoid triggering
-        switch to full-window"""
-        return True
 
     def on_time_back_click(self, button):
         self.range_pick.prev_range()
@@ -302,10 +296,10 @@ class Totals(graphics.Scene):
         self.add_child(self.height_proxy)
 
         self.connect("on-click", self.on_click)
-        self.connect("enter-notify-event", self.on_mouse_enter)
-        self.connect("leave-notify-event", self.on_mouse_leave)
+        self.connect("on-mouse-over", lambda scene, sprite: self.on_mouse_enter())
+        self.connect("on-mouse-out", lambda scene, sprite: self.on_mouse_leave())
         self.connect("state-flags-changed", self.on_state_flags_changed)
-        self.connect("style-updated", self.on_style_changed)
+        self.connect("notify::css-classes", lambda *a: self.update_colors())
 
 
     def set_facts(self, facts):
@@ -348,7 +342,7 @@ class Totals(graphics.Scene):
 
         self.mouse_cursor = gdk.Cursor.new_from_name("pointer") if self.collapsed else None
 
-    def on_mouse_enter(self, scene, event):
+    def on_mouse_enter(self, *args):
         if not self.collapsed:
             return
 
@@ -360,7 +354,7 @@ class Totals(graphics.Scene):
                                   on_update=lambda sprite: sprite.redraw())
 
 
-    def on_mouse_leave(self, scene, event):
+    def on_mouse_leave(self, *args):
         if not self.collapsed:
             return
 
@@ -371,10 +365,7 @@ class Totals(graphics.Scene):
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
 
-    def on_state_flags_changed(self, previous_state, _):
-        self.update_colors()
-
-    def on_style_changed(self, _):
+    def on_state_flags_changed(self, *args):
         self.update_colors()
 
     def change_height(self, new_height):
@@ -477,7 +468,9 @@ class Overview(Controller):
         help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
         self.window.add_action(help_action)
 
-        self.window.connect("key-press-event", self.on_key_press)
+        key_controller = gtk.EventControllerKey()
+        key_controller.connect("key-pressed", self.on_key_press)
+        self.window.add_controller(key_controller)
 
         self.facts = []
         self.find_facts()
@@ -486,46 +479,44 @@ class Overview(Controller):
         gobject.timeout_add_seconds(60, self.on_timeout)
 
 
-    def on_key_press(self, window, event):
+    def on_key_press(self, controller, keyval, keycode, state):
+        from hamster.lib.graphics import SceneEvent
+        event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
         if self.filter_entry.has_focus():
-            if event.keyval == gdk.KEY_Escape:
+            if keyval == gdk.KEY_Escape:
                 self.filter_entry.set_text("")
                 self.header_bar.search_button.set_active(False)
                 return True
-        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
+        elif keyval in (gdk.KEY_Up, gdk.KEY_Down,
                               gdk.KEY_Home, gdk.KEY_End,
                               gdk.KEY_Page_Up, gdk.KEY_Page_Down,
                               gdk.KEY_Return, gdk.KEY_Delete):
-            # These keys should work even when fact_tree does not have focus
             self.fact_tree.on_key_press(self, event)
-            return True  # stop event propagation
-        elif event.keyval == gdk.KEY_Left:
+            return True
+        elif keyval == gdk.KEY_Left:
             self.header_bar.time_back.emit("clicked")
             return True
-        elif event.keyval == gdk.KEY_Right:
+        elif keyval == gdk.KEY_Right:
             self.header_bar.time_forth.emit("clicked")
             return True
 
         if self.fact_tree.has_focus() or self.totals.has_focus():
-            if event.keyval == gdk.KEY_Tab:
-                pass # TODO - deal with tab as our scenes eat up navigation
+            if keyval == gdk.KEY_Tab:
+                pass
 
-        if event.state & gdk.ModifierType.CONTROL_MASK:
-            # the ctrl+things
-            if event.keyval == gdk.KEY_f:
+        if state & gdk.ModifierType.CONTROL_MASK:
+            if keyval == gdk.KEY_f:
                 self.header_bar.search_button.set_active(True)
-            elif event.keyval == gdk.KEY_n:
+            elif keyval == gdk.KEY_n:
                 self.start_new_fact(clone_selected=False)
-            elif event.keyval == gdk.KEY_r:
-                # Resume/run; clear separation between Ctrl-R and Ctrl-N
+            elif keyval == gdk.KEY_r:
                 self.start_new_fact(clone_selected=True, fallback=False)
-            elif event.keyval == gdk.KEY_space:
+            elif keyval == gdk.KEY_space:
                 self.storage.stop_or_restart_tracking()
-            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
-                # same as pressing the + icon
+            elif keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
                 self.start_new_fact(clone_selected=True, fallback=True)
 
-        if event.keyval == gdk.KEY_Escape:
+        if keyval == gdk.KEY_Escape:
             self.close_window()
 
     def find_facts(self, scroll_to_top=False):
