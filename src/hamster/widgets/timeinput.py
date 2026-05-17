@@ -66,13 +66,9 @@ class TimeInput(gtk.Entry):
         self.popup.set_child(time_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "pan-down-symbolic")
 
         self.connect("icon-release", self._on_icon_release)
-
-        # Replace button-press-event with GestureClick
-        entry_click = gtk.GestureClick()
-        entry_click.connect("pressed", self._on_button_press_gtk4)
-        self.add_controller(entry_click)
 
         # Replace key-press-event with EventControllerKey
         key_ctrl = gtk.EventControllerKey()
@@ -195,19 +191,19 @@ class TimeInput(gtk.Entry):
     def _on_focus_in_gtk4(self, controller):
         self.show_popup()
 
-    def _on_button_press_gtk4(self, gesture, n_press, x, y):
-        self.show_popup()
-
     def _on_focus_out_gtk4(self, controller):
         self.hide_popup()
         if self.news:
             self.emit("time-entered")
             self.news = False
 
-    def _on_icon_release(self, entry, icon_pos, event):
-        self.grab_focus()
-        self.set_text("")
-        self.emit("changed")
+    def _on_icon_release(self, entry, icon_pos):
+        if icon_pos == gtk.EntryIconPosition.PRIMARY:
+            self.grab_focus()
+            self.set_text("")
+            self.emit("changed")
+        elif icon_pos == gtk.EntryIconPosition.SECONDARY:
+            self.toggle_popup()
 
     def hide_popup(self):
         # GTK4: Popover handles click-outside dismissal automatically
