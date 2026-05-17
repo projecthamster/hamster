@@ -176,34 +176,9 @@ class PreferencesEditor(Controller):
             self.get_widget("autocomplete_tags"), None))
         self.get_widget("autocomplete_tags_view").add_controller(focus_ctrl)
 
-        # Use keyboard shortcuts instead of a key controller
-        # (key controllers on windows intercept all keystrokes in GTK4)
-        shortcut_ctrl = gtk.ShortcutController()
-        shortcut_ctrl.set_scope(gtk.ShortcutScope.LOCAL)
-        shortcut_ctrl.add_shortcut(gtk.Shortcut(
-            trigger=gtk.ShortcutTrigger.parse_string("<Control>w"),
-            action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
-        ))
-        shortcut_ctrl.add_shortcut(gtk.Shortcut(
-            trigger=gtk.ShortcutTrigger.parse_string("Escape"),
-            action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
-        ))
-        self.window.add_controller(shortcut_ctrl)
-
-        # Delete/F2 shortcuts on trees only (not window-wide, to avoid
-        # intercepting keystrokes in the tags text view)
-        for tree in (self.activity_tree, self.category_tree):
-            tree_sc = gtk.ShortcutController()
-            tree_sc.set_scope(gtk.ShortcutScope.LOCAL)
-            tree_sc.add_shortcut(gtk.Shortcut(
-                trigger=gtk.ShortcutTrigger.parse_string("Delete"),
-                action=gtk.CallbackAction.new(self._on_delete_key),
-            ))
-            tree_sc.add_shortcut(gtk.Shortcut(
-                trigger=gtk.ShortcutTrigger.parse_string("F2"),
-                action=gtk.CallbackAction.new(self._on_f2_key),
-            ))
-            tree.add_controller(tree_sc)
+        # No key/shortcut controllers on the window — they intercept
+        # keystrokes meant for the tags text view in GTK4.
+        # Ctrl+W/Escape close via the WM close button or window manager.
 
         self.show()
 
