@@ -131,10 +131,10 @@ class TagsEntry(gtk.Entry):
         # GTK4: Popover handles click-outside dismissal automatically
 
         alloc = self.get_allocation()
-        w = alloc.width
+        w = max(alloc.width, 300)
         height = self.tag_box.count_height(w)
 
-        self.scroll_box.set_size_request(w, height)
+        self.scroll_box.set_size_request(w, min(height, 300))
 
         # GTK4: Popover auto-positions, no need for manual move/resize
         self.popup.popup()
