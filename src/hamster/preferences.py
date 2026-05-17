@@ -446,12 +446,15 @@ class PreferencesEditor(Controller):
                                                          [-2, _("New category")])
 
         model = self.category_tree.get_model()
+        path = model.get_path(new_category)
 
-        self.categoryCell.set_property("editable", True)
-        self.category_tree.set_cursor_on_cell(model.get_path(new_category),
-                                         focus_column = self.category_tree.get_column(0),
-                                         focus_cell = None,
-                                         start_editing = True)
+        def start_edit():
+            self.categoryCell.set_property("editable", True)
+            self.category_tree.set_cursor(path, self.categoryColumn, True)
+            return False
+
+        from gi.repository import GLib
+        GLib.idle_add(start_edit)
 
     def on_activity_add_clicked(self, button):
         """ appends row, jumps to it and allows user to input name """
@@ -459,13 +462,16 @@ class PreferencesEditor(Controller):
 
         new_activity = self.activity_store.append([-1, _("New activity"), category_id])
 
-        (model, iter) = self.selection.get_selected()
+        model = self.activity_tree.get_model()
+        path = model.get_path(new_activity)
 
-        self.activityCell.set_property("editable", True)
-        self.activity_tree.set_cursor_on_cell(model.get_path(new_activity),
-                                              focus_column = self.activity_tree.get_column(0),
-                                              focus_cell = None,
-                                              start_editing = True)
+        def start_edit():
+            self.activityCell.set_property("editable", True)
+            self.activity_tree.set_cursor(path, self.activityColumn, True)
+            return False
+
+        from gi.repository import GLib
+        GLib.idle_add(start_edit)
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
