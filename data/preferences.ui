@@ -258,6 +258,8 @@
                                     <property name="focusable">1</property>                                    <property name="child">
                                       <object class="GtkTextView" id="autocomplete_tags_view">
                                         <property name="focusable">1</property>
+                                        <property name="editable">1</property>
+                                        <property name="cursor_visible">1</property>
                                         <property name="wrap_mode">word-char</property>
                                         <property name="left_margin">4</property>
                                         <property name="right_margin">4</property>
