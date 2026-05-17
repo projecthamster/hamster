@@ -470,8 +470,26 @@ class Overview(Controller):
             help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
             app.add_action(help_action)
 
+        # Ctrl+shortcuts via ShortcutController (doesn't intercept normal typing)
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.LOCAL)
+        for trigger, callback in [
+            ("<Control>f", lambda w, a: self.header_bar.search_button.set_active(True)),
+            ("<Control>n", lambda w, a: self.start_new_fact(clone_selected=False)),
+            ("<Control>r", lambda w, a: self.start_new_fact(clone_selected=True, fallback=False)),
+            ("<Control>space", lambda w, a: self.storage.stop_or_restart_tracking()),
+            ("<Control>plus", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
+            ("<Control>KP_Add", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
+            ("Escape", lambda w, a: self.close_window()),
+        ]:
+            sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string(trigger),
+                action=gtk.CallbackAction.new(callback),
+            ))
+        self.window.add_controller(sc)
+
+        # Arrow/nav keys forwarded to fact_tree via EventControllerKey
         key_controller = gtk.EventControllerKey()
-        key_controller.set_propagation_phase(gtk.PropagationPhase.CAPTURE)
         key_controller.connect("key-pressed", self.on_key_press)
         self.window.add_controller(key_controller)
 
@@ -483,17 +501,16 @@ class Overview(Controller):
 
 
     def on_key_press(self, controller, keyval, keycode, state):
+        if not self.window.is_active():
+            return False
+        if self.filter_entry.has_focus():
+            return False
         from hamster.lib.graphics import SceneEvent
         event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
-        if self.filter_entry.has_focus():
-            if keyval == gdk.KEY_Escape:
-                self.filter_entry.set_text("")
-                self.header_bar.search_button.set_active(False)
-                return True
-        elif keyval in (gdk.KEY_Up, gdk.KEY_Down,
-                              gdk.KEY_Home, gdk.KEY_End,
-                              gdk.KEY_Page_Up, gdk.KEY_Page_Down,
-                              gdk.KEY_Return, gdk.KEY_Delete):
+        if keyval in (gdk.KEY_Up, gdk.KEY_Down,
+                      gdk.KEY_Home, gdk.KEY_End,
+                      gdk.KEY_Page_Up, gdk.KEY_Page_Down,
+                      gdk.KEY_Return, gdk.KEY_Delete):
             self.fact_tree.on_key_press(self, event)
             return True
         elif keyval == gdk.KEY_Left:
@@ -502,25 +519,7 @@ class Overview(Controller):
         elif keyval == gdk.KEY_Right:
             self.header_bar.time_forth.emit("clicked")
             return True
-
-        if self.fact_tree.has_focus() or self.totals.has_focus():
-            if keyval == gdk.KEY_Tab:
-                pass
-
-        if state & gdk.ModifierType.CONTROL_MASK:
-            if keyval == gdk.KEY_f:
-                self.header_bar.search_button.set_active(True)
-            elif keyval == gdk.KEY_n:
-                self.start_new_fact(clone_selected=False)
-            elif keyval == gdk.KEY_r:
-                self.start_new_fact(clone_selected=True, fallback=False)
-            elif keyval == gdk.KEY_space:
-                self.storage.stop_or_restart_tracking()
-            elif keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
-                self.start_new_fact(clone_selected=True, fallback=True)
-
-        if keyval == gdk.KEY_Escape:
-            self.close_window()
+        return False
 
     def find_facts(self, scroll_to_top=False):
         start, end = self.header_bar.range_pick.get_range()
