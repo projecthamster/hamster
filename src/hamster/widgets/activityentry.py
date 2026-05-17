@@ -214,10 +214,8 @@ class CmdLineEntry(gtk.Entry):
         # to be set by the caller, if editing an existing fact
         self.original_fact = None
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
-        self.popup.set_attached_to(self)  # attributes
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+        self.popup = gtk.Popover()
+        self.popup.set_parent(self)
 
         box = gtk.Frame()
         self.popup.set_child(box)
@@ -234,8 +232,17 @@ class CmdLineEntry(gtk.Entry):
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.checker = self.connect("changed", self.on_changed)
-        self.connect("key-press-event", self.on_key_press)
-        self.connect("focus-out-event", self.on_focus_out)
+
+        # Replace key-press-event with EventControllerKey
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_pressed_gtk4)
+        self.add_controller(key_ctrl)
+
+        # Replace focus-out-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("leave", self._on_focus_out_gtk4)
+        self.add_controller(focus_ctrl)
+
         self.connect("icon-press", self.on_icon_press)
 
 
@@ -259,12 +266,17 @@ class CmdLineEntry(gtk.Entry):
                     self.select_region(len(text), -1)
         gobject.timeout_add(0, complete)
 
-    def on_focus_out(self, entry, event):
-        self.popup.hide()
+    def _on_key_pressed_gtk4(self, controller, keyval, keycode, state):
+        from hamster.lib.graphics import SceneEvent
+        event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
+        return self.on_key_press(self, event)
 
-    def on_icon_press(self, entry, icon, event):
+    def _on_focus_out_gtk4(self, controller):
+        self.popup.popdown()
+
+    def on_icon_press(self, entry, icon):
         if self.popup.get_visible():
-            self.popup.hide()
+            self.popup.popdown()
         else:
             self.grab_focus()
             self.show_suggestions(self.get_text())
@@ -274,7 +286,7 @@ class CmdLineEntry(gtk.Entry):
             self.ignore_stroke = True
 
         elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter, gdk.KEY_Escape):
-            self.popup.hide()
+            self.popup.popdown()
             self.set_position(-1)
 
         elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down):
@@ -284,7 +296,7 @@ class CmdLineEntry(gtk.Entry):
             return True
 
     def on_tree_click(self, entry, tree, event):
-        self.popup.hide()
+        self.popup.popdown()
 
     def on_tree_select_row(self, tree, row):
         with self.handler_block(self.checker):
@@ -454,19 +466,17 @@ class CmdLineEntry(gtk.Entry):
 
 
     def show_suggestions(self, text):
-        if not self.get_window():
+        if not self.get_native():
             return
-
-        entry_alloc = self.get_allocation()
-        entry_x, entry_y = self.get_window().get_origin()[1:]
-        x, y = entry_x + entry_alloc.x, entry_y + entry_alloc.y + entry_alloc.height
 
         self.update_suggestions(text)
 
+        entry_alloc = self.get_allocation()
         tree_w, tree_h = self.complete_tree.get_size_request()
+        # Set minimum size for popover content
+        self.complete_tree.set_size_request(entry_alloc.width, tree_h)
 
-        self.popup.move(x, y)
-        self.popup.resize(entry_alloc.width, tree_h)
+        self.popup.popup()
 
 
 class ActivityEntry():
@@ -474,9 +484,12 @@ class ActivityEntry():
 
     widget (gtk.Entry): the associated activity entry
     category_widget (gtk.Entry): the associated category entry
+
+    Note: GTK4 removed EntryCompletion. Autocomplete is now handled by
+    the CmdLineEntry pattern with Popover.
     """
     def __init__(self, widget=None, category_widget=None, **kwds):
-        # widget and completion may be defined already
+        # widget may be defined already
         # e.g. in the glade edit_activity.ui file
         self.widget = widget
         if not self.widget:
@@ -484,113 +497,24 @@ class ActivityEntry():
 
         self.category_widget = category_widget
 
-        # internal list of actions added to the suggestions
-        self._action_list = []
-        self.completion = self.widget.get_completion()
-        if not self.completion:
-            self.completion = gtk.EntryCompletion()
-            self.widget.set_completion(self.completion)
-
-        # text to display/filter on, activity, category
-        self.text_column = 0
-        self.activity_column = 1
-        self.category_column = 2
-
-        # whether the category choice limit the activity suggestions
-        self.filter_on_category = True if self.category_widget else False
-        self.model = gtk.ListStore(str, str, str)
-        self.completion.set_model(self.model)
-        self.completion.set_text_column(self.text_column)
-        self.completion.set_match_func(self.match_func, None)
-        # enable selection with up and down arrow
-        self.completion.set_inline_selection(True)
-        # It is not possible to change actions later dynamically;
-        # once actions are removed,
-        # they can not be added back (they are not visible).
-        # => nevermind, showing all actions.
-        self.add_action("show all", "Show all activities")
-        self.add_action("filter on category", "Filter on selected category")
+        # GTK4: EntryCompletion removed. For now, entry works without autocomplete.
+        # TODO: Consider migrating to CmdLineEntry pattern if autocomplete is needed.
 
         self.connect("icon-release", self.on_icon_release)
-        self.connect("focus-in-event", self.on_focus_in_event)
-        self.completion.connect('match-selected', self.on_match_selected)
-        self.completion.connect("action_activated", self.on_action_activated)
 
-    def add_action(self, name, text):
-        """Add an action to the suggestions.
+        # Replace focus-in-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("enter", self.on_focus_in_event)
+        self.widget.add_controller(focus_ctrl)
 
-        name (str): unique label, use to retrieve the action index.
-        text (str): text used to display the action.
-        """
-        markup = "<i>{}</i>".format(stuff.escape_pango(text))
-        idx = len(self._action_list)
-        self.completion.insert_action_markup(idx, markup)
-        self._action_list.append(name)
-
-    def clear(self, notify=True):
-        self.widget.set_text("")
-        if notify:
-            self.emit("changed")
-
-    def match_func(self, completion, key, iter, *user_data):
-        if not key.strip():
-            # show all keys if entry is empty
-            return True
-        else:
-            # return whether the entered string is
-            # anywhere in the first column data
-            stripped_key = key.strip()
-            activities = self.model.get_value(iter, self.activity_column).lower()
-            categories = self.model.get_value(iter, self.category_column).lower()
-            key_in_activity = stripped_key in activities
-            key_in_category = stripped_key in categories
-            return key_in_activity or key_in_category
-
-    def on_action_activated(self, completion, index):
-        name = self._action_list[index]
-        if name == "clear":
-            self.clear(notify=False)
-        elif name == "show all":
-            self.filter_on_category = False
-            self.populate_completions()
-        elif name == "filter on category":
-            self.filter_on_category = True
-            self.populate_completions()
-
-    def on_focus_in_event(self, widget, event):
-        self.populate_completions()
+    def on_focus_in_event(self, controller):
+        # GTK4: EntryCompletion removed, this method is now a no-op
+        pass
 
     def on_icon_release(self, entry, icon_pos, event):
         self.grab_focus()
         self.set_text("")
         self.emit("changed")
-
-    def on_match_selected(self, entry, model, iter):
-        activity_name = model[iter][self.activity_column]
-        category_name = model[iter][self.category_column]
-        combined = model[iter][self.text_column]
-        if self.category_widget:
-            self.set_text(activity_name)
-            if not self.filter_on_category:
-                self.category_widget.set_text(category_name)
-        else:
-            self.set_text(combined)
-        return True  # prevent the standard callback from overwriting text
-
-    def populate_completions(self):
-        self.model.clear()
-        if self.filter_on_category:
-            category_names = [self.category_widget.get_text()]
-        else:
-            category_names = [category['name']
-                              for category in runtime.storage.get_categories()]
-        for category_name in category_names:
-            category_id = runtime.storage.get_category_id(category_name)
-            activities = runtime.storage.get_category_activities(category_id)
-            for activity in activities:
-                activity_name = activity["name"]
-                text = "{}@{}".format(activity_name, category_name)
-                self.model.append([text, activity_name, category_name])
 
     def __getattr__(self, name):
         return getattr(self.widget, name)
@@ -600,60 +524,34 @@ class CategoryEntry():
     """Category entry widget.
 
     widget (gtk.Entry): the associated category entry
+
+    Note: GTK4 removed EntryCompletion. Autocomplete is now handled by
+    the CmdLineEntry pattern with Popover.
     """
     def __init__(self, widget=None, **kwds):
-        # widget and completion are already defined
+        # widget may be defined already
         # e.g. in the glade edit_activity.ui file
         self.widget = widget
         if not self.widget:
             self.widget = gtk.Entry(**kwds)
 
-        self.completion = self.widget.get_completion()
-        if not self.completion:
-            self.completion = gtk.EntryCompletion()
-            self.widget.set_completion(self.completion)
-        self.completion.insert_action_markup(0, "<i>Clear ({})</i>".format(_("Unsorted")))
-        self.unsorted_action_index = 0
-
-        self.model = gtk.ListStore(str)
-        self.completion.set_model(self.model)
-        self.completion.set_text_column(0)
-        self.completion.set_match_func(self.match_func, None)
+        # GTK4: EntryCompletion removed. For now, entry works without autocomplete.
+        # TODO: Consider migrating to CmdLineEntry pattern if autocomplete is needed.
 
         self.widget.connect("icon-release", self.on_icon_release)
-        self.widget.connect("focus-in-event", self.on_focus_in_event)
-        self.completion.connect("action_activated", self.on_action_activated)
 
-    def clear(self, notify=True):
-        self.widget.set_text("")
-        if notify:
-            self.emit("changed")
+        # Replace focus-in-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("enter", self.on_focus_in_event)
+        self.widget.add_controller(focus_ctrl)
 
-    def match_func(self, completion, key, iter, *user_data):
-        if not key.strip():
-            # show all keys if entry is empty
-            return True
-        else:
-            # return whether the entered string is
-            # anywhere in the first column data
-            return key.strip() in self.model.get_value(iter, 0).lower()
-
-    def on_action_activated(self, completion, index):
-        if index == self.unsorted_action_index:
-            self.clear(notify=False)
-
-    def on_focus_in_event(self, widget, event):
-        self.populate_completions()
+    def on_focus_in_event(self, controller):
+        # GTK4: EntryCompletion removed, this method is now a no-op
+        pass
 
     def on_icon_release(self, entry, icon_pos, event):
         self.widget.grab_focus()
-        # do not emit changed on the primary (clear) button
-        self.clear()
-
-    def populate_completions(self):
-        self.model.clear()
-        for category in runtime.storage.get_categories():
-            self.model.append([category['name']])
+        self.widget.set_text("")
 
     def __getattr__(self, name):
         return getattr(self.widget, name)

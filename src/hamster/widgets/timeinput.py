@@ -42,10 +42,8 @@ class TimeInput(gtk.Entry):
         self.set_start_time(start_time)
 
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
-        self.popup.set_attached_to(self)  # attributes
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+        self.popup = gtk.Popover()
+        self.popup.set_parent(self)
 
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
@@ -57,8 +55,10 @@ class TimeInput(gtk.Entry):
         self.time_tree.append_column(gtk.TreeViewColumn("Time",
                                                         gtk.CellRendererText(),
                                                         text=0))
-        self.time_tree.connect("button-press-event",
-                               self._on_time_tree_button_press_event)
+        # Replace button-press-event with GestureClick
+        click = gtk.GestureClick()
+        click.connect("pressed", self._on_tree_click_gtk4)
+        self.time_tree.add_controller(click)
 
         time_box.set_child(self.time_tree)
         self.popup.set_child(time_box)
@@ -66,11 +66,22 @@ class TimeInput(gtk.Entry):
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
 
         self.connect("icon-release", self._on_icon_release)
-        self.connect("button-press-event", self._on_button_press_event)
-        self.connect("key-press-event", self._on_key_press_event)
-        self.connect("focus-in-event", self._on_focus_in_event)
-        self.connect("focus-out-event", self._on_focus_out_event)
-        self._parent_click_watcher = None # bit lame but works
+
+        # Replace button-press-event with GestureClick
+        entry_click = gtk.GestureClick()
+        entry_click.connect("pressed", self._on_button_press_gtk4)
+        self.add_controller(entry_click)
+
+        # Replace key-press-event with EventControllerKey
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_press_gtk4)
+        self.add_controller(key_ctrl)
+
+        # Replace focus-in-event and focus-out-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("enter", self._on_focus_in_gtk4)
+        focus_ctrl.connect("leave", self._on_focus_out_gtk4)
+        self.add_controller(focus_ctrl)
 
         self.connect("changed", self._on_text_changed)
         self.show()
@@ -173,14 +184,19 @@ class TimeInput(gtk.Entry):
             return ""
         return time.strftime("%H:%M").lower()
 
+    def _on_tree_click_gtk4(self, gesture, n_press, x, y):
+        model, iter = self.time_tree.get_selection().get_selected()
+        if iter:
+            time = model.get_value(iter, 0)
+            self._select_time(time)
 
-    def _on_focus_in_event(self, entry, event):
+    def _on_focus_in_gtk4(self, controller):
         self.show_popup()
 
-    def _on_button_press_event(self, button, event):
+    def _on_button_press_gtk4(self, gesture, n_press, x, y):
         self.show_popup()
 
-    def _on_focus_out_event(self, event, something):
+    def _on_focus_out_gtk4(self, controller):
         self.hide_popup()
         if self.news:
             self.emit("time-entered")
@@ -192,14 +208,11 @@ class TimeInput(gtk.Entry):
         self.emit("changed")
 
     def hide_popup(self):
-        if self._parent_click_watcher and self.get_root().handler_is_connected(self._parent_click_watcher):
-            self.get_root().disconnect(self._parent_click_watcher)
-            self._parent_click_watcher = None
-        self.popup.hide()
+        # GTK4: Popover handles click-outside dismissal automatically
+        self.popup.popdown()
 
     def show_popup(self):
-        if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_root().connect("button-press-event", self._on_focus_out_event)
+        # GTK4: Popover handles click-outside dismissal automatically
 
         # we will be adding things, need datetime
         i_time_0 = dt.datetime.combine(self.start_date or dt.date.today(),
@@ -245,16 +258,13 @@ class TimeInput(gtk.Entry):
             selection.select_path(focus_row)
             self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
 
-        #move popup under the widget
+        # Set size for popup content
         alloc = self.get_allocation()
         w = alloc.width
         self.time_tree.set_size_request(w, alloc.height * 5)
 
-        window = self.get_parent_window()
-        dmmy, x, y= window.get_origin()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.popup.resize(*self.time_tree.get_size_request())
+        # GTK4: Popover auto-positions, no need for manual move/resize
+        self.popup.popup()
 
     def toggle_popup(self):
         if self.popup.get_property("visible"):
@@ -262,11 +272,13 @@ class TimeInput(gtk.Entry):
         else:
             self.show_popup()
 
-    def _on_time_tree_button_press_event(self, tree, event):
-        model, iter = tree.get_selection().get_selected()
-        time = model.get_value(iter, 0)
-        self._select_time(time)
-
+    def _on_key_press_gtk4(self, controller, keyval, keycode, state):
+        # Create event-like object for compatibility
+        class Event:
+            pass
+        event = Event()
+        event.keyval = keyval
+        return self._on_key_press_event(self, event)
 
     def _on_key_press_event(self, entry, event):
         if event.keyval not in (gdk.KEY_Up, gdk.KEY_Down, gdk.KEY_Return, gdk.KEY_KP_Enter):

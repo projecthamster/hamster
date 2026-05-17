@@ -38,9 +38,8 @@ class TagsEntry(gtk.Entry):
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_attached_to(self)
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))
+        self.popup = gtk.Popover()
+        self.popup.set_parent(self)
 
         self.scroll_box = gtk.ScrolledWindow()
         self.scroll_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
@@ -58,10 +57,16 @@ class TagsEntry(gtk.Entry):
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.connect("icon-press", self._on_icon_press)
-        self.connect("key-press-event", self._on_key_press_event)
-        self.connect("focus-out-event", self._on_focus_out_event)
 
-        self._parent_click_watcher = None # bit lame but works
+        # Replace key-press-event with EventControllerKey
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_press_gtk4)
+        self.add_controller(key_ctrl)
+
+        # Replace focus-out-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("leave", self._on_focus_out_gtk4)
+        self.add_controller(focus_ctrl)
 
         self.external_listeners = [
             (runtime.storage, runtime.storage.connect('tags-changed', self.refresh_ac_tags))
@@ -113,30 +118,24 @@ class TagsEntry(gtk.Entry):
         self.update_tagsline(add=True)
 
     def hide_popup(self):
-        self.popup.hide()
-        if self._parent_click_watcher and self.get_root().handler_is_connected(self._parent_click_watcher):
-            self.get_root().disconnect(self._parent_click_watcher)
-            self._parent_click_watcher = None
+        # GTK4: Popover handles click-outside dismissal automatically
+        self.popup.popdown()
 
     def show_popup(self):
         if not self.filter_tags:
-            self.popup.hide()
+            self.popup.popdown()
             return
 
-        if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_root().connect("button-press-event", self._on_focus_out_event)
+        # GTK4: Popover handles click-outside dismissal automatically
 
         alloc = self.get_allocation()
-        _, x, y = self.get_parent_window().get_origin()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-
         w = alloc.width
-
         height = self.tag_box.count_height(w)
 
         self.scroll_box.set_size_request(w, height)
-        self.popup.resize(w, height)
+
+        # GTK4: Popover auto-positions, no need for manual move/resize
+        self.popup.popup()
 
     def refresh_activities(self):
         # scratch activities and categories so that they get repopulated on demand
@@ -159,12 +158,10 @@ class TagsEntry(gtk.Entry):
 
         self.tag_box.draw(self.filter_tags)
 
-
-
-    def _on_focus_out_event(self, widget, event):
+    def _on_focus_out_gtk4(self, controller):
         self.hide_popup()
 
-    def _on_icon_press(self, entry, icon_pos, event):
+    def _on_icon_press(self, entry, icon_pos):
         # otherwise Esc could not hide popup
         self.grab_focus()
         # toggle popup
@@ -218,6 +215,14 @@ class TagsEntry(gtk.Entry):
             text = "{}, ".format(text)
         self.set_text(text)
         self.set_position(len(self.get_text()))
+
+    def _on_key_press_gtk4(self, controller, keyval, keycode, state):
+        # Create event-like object for compatibility
+        class Event:
+            pass
+        event = Event()
+        event.keyval = keyval
+        return self._on_key_press_event(self, event)
 
     def _on_key_press_event(self, entry, event):
         if event.keyval == gdk.KEY_Tab:
