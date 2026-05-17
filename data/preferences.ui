@@ -95,9 +95,6 @@
                                               <object class="GtkTreeSelection" id="treeview-selection1"/>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="category_list-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Category list</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </property>
@@ -116,9 +113,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="category_add-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Add category</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>
@@ -132,9 +126,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="category_remove-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Remove category</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>
@@ -148,9 +139,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="category_edit-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Edit category</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>
@@ -186,9 +174,6 @@
                                                   <object class="GtkTreeSelection" id="treeview-selection2"/>
                                                 </child>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="activity_list-atkobject">
-                                                    <property name="AtkObject::accessible-name" translatable="1">Activity list</property>
-                                                  </object>
                                                 </child>
                                               </object>
                                             </property>
@@ -209,9 +194,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="activity_add-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Add activity</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>
@@ -225,9 +207,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="activity_remove-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Remove activity</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>
@@ -241,9 +220,6 @@
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
-                                              <object class="AtkObject" id="activity_edit-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="1">Edit activity</property>
-                                              </object>
                                             </child>
                                           </object>
                                         </child>

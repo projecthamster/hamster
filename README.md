@@ -115,7 +115,7 @@ commands). Older versions are not supported.
 ###### Ubuntu (tested in 19.04 and 18.04)
 
 ```bash
-sudo apt install gettext intltool python3-gi python3-cairo python3-gi-cairo python3-distutils python3-dbus libglib2.0-dev libglib2.0-bin gir1.2-gtk-3.0 gtk-update-icon-cache
+sudo apt install gettext intltool python3-gi python3-cairo python3-gi-cairo python3-distutils python3-dbus libglib2.0-dev libglib2.0-bin gir1.2-gtk-4.0 gtk-update-icon-cache
 # and for documentation
 sudo apt install itstool yelp
 ```
@@ -307,7 +307,7 @@ for some time now. Hopefully the effort will be renewed in the future.
 In the meantime, this sub-project aims to pursue development of the "legacy" Hamster
 code base, maintaining database compatibility with the widely installed
 [v1.04](https://github.com/projecthamster/hamster/releases/tag/hamster-time-tracker-1.04),
-but migrating to `Gtk3` and `python3`.  
+but migrating to `Gtk4` and `python3`.  
 This will allow package maintainers to provide
 new packages for recent releases of mainstream Linux distributions for which the old
 1.04-based versions are no longer provided.

@@ -26,7 +26,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="day_preview">
+              <object class="GtkBox" id="day_preview">
                 <property name="hexpand">1</property>
                 <property name="height_request">70</property>
                 <property name="visible">True</property>

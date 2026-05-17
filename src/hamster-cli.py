@@ -453,7 +453,7 @@ Example usage:
     logger.debug("app instanciated")
 
     import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     parser = argparse.ArgumentParser(
         description="Time tracking utility",

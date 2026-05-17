@@ -47,8 +47,6 @@ class SceneEvent:
 
 
 
-# lemme know if you know a better way how to get default font
-_test_label = gtk.Label("Hello")
 _font_desc = "Sans 10"
 
 
