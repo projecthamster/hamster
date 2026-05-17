@@ -393,7 +393,7 @@ class CmdLineEntry(gtk.Entry):
                 break
 
 
-        fragments = [f for f in re.split("[\s|#]", text)]
+        fragments = [f for f in re.split(r"[\s|#]", text)]
         current_fragment = fragments[-1] if fragments else ""
 
 
