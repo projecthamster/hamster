@@ -10,6 +10,10 @@
       <object class="GtkBox" id="big_box">
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkNotebook" id="notebook1">
             <property name="vexpand">1</property>
@@ -18,6 +22,10 @@
               <object class="GtkNotebookPage">
                 <property name="child">
                   <object class="GtkBox" id="alignment2">
+                    <property name="margin-start">8</property>
+                    <property name="margin-end">8</property>
+                    <property name="margin-top">8</property>
+                    <property name="margin-bottom">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>                    <child>
                       <object class="GtkBox" id="tracking box">

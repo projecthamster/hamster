@@ -155,6 +155,8 @@ class DayLine(graphics.Scene):
         self.plot_area.height = self.height - 30
 
 
+        if not self.width:
+            return
         vertical = min(self.plot_area.height / 5, 7)
         minute_pixel = (self.scope_hours * 60.0 - 15) / self.width
 

@@ -10,6 +10,10 @@
               <object class="GtkBox" id="box1">
                 <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
+                <property name="margin-start">8</property>
+                <property name="margin-end">8</property>
+                <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
                 <child>
                   <object class="GtkButton" id="day">
                     <property name="vexpand">1</property>                    <property name="focusable">1</property>

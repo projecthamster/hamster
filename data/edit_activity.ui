@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkEntryCompletion" id="activity completion">
-    <property name="minimum_key_length">0</property>
-  </object>
-  <object class="GtkEntryCompletion" id="category completion">
-    <property name="minimum_key_length">0</property>
-  </object>
-  <object class="GtkWindow" id="custom_fact_window">    <property name="title" translatable="1">Add Earlier Activity</property>
+  <object class="GtkWindow" id="custom_fact_window">
+    <property name="title" translatable="1">Add Earlier Activity</property>
     <property name="destroy_with_parent">1</property>
-    <property name="icon_name">org.gnome.Hamster.GUI</property>    <property name="child">
+    <property name="icon_name">org.gnome.Hamster.GUI</property>
+    <property name="child">
       <object class="GtkBox" id="main vbox">
         <property name="orientation">vertical</property>
         <property name="spacing">5</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkBox" id="day box">
             <child>
