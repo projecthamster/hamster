@@ -341,8 +341,12 @@ class PreferencesEditor(Controller):
             path, column, cx, cy = tree.get_path_at_pos(int(x), int(y))
 
             if self.prev_selected_activity == path:
-                self.activityCell.set_property("editable", True)
-                tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
+                from gi.repository import GLib
+                def start_edit():
+                    self.activityCell.set_property("editable", True)
+                    tree.set_cursor(path, self.activityColumn, True)
+                    return False
+                GLib.idle_add(start_edit)
 
             self.prev_selected_activity = path
 
@@ -355,8 +359,12 @@ class PreferencesEditor(Controller):
 
             if self.prev_selected_category == path and \
                self._get_selected_category() != -1:
-                self.categoryCell.set_property("editable", True)
-                tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
+                from gi.repository import GLib
+                def start_edit():
+                    self.categoryCell.set_property("editable", True)
+                    tree.set_cursor(path, self.categoryColumn, True)
+                    return False
+                GLib.idle_add(start_edit)
             else:
                 self.categoryCell.set_property("editable", False)
 
@@ -366,12 +374,16 @@ class PreferencesEditor(Controller):
         self.remove_current_activity()
 
     def on_activity_edit_clicked(self, button):
-        self.activityCell.set_property("editable", True)
-
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
-        self.activity_tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
+        from gi.repository import GLib
+        def start_edit():
+            self.activityCell.set_property("editable", True)
+            self.activity_tree.grab_focus()
+            self.activity_tree.set_cursor(path, self.activityColumn, True)
+            return False
+        GLib.idle_add(start_edit)
 
     """keyboard events"""
     def on_activity_list_key_pressed(self, tree, keyval, keycode, state):
@@ -380,9 +392,13 @@ class PreferencesEditor(Controller):
         if keyval == gdk.KEY_Delete:
             self.remove_current_activity()
         elif keyval == gdk.KEY_F2:
-            self.activityCell.set_property("editable", True)
             path = model.get_path(iter)
-            tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
+            from gi.repository import GLib
+            def start_edit():
+                self.activityCell.set_property("editable", True)
+                tree.set_cursor(path, self.activityColumn, True)
+                return False
+            GLib.idle_add(start_edit)
 
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
@@ -394,12 +410,16 @@ class PreferencesEditor(Controller):
         self.remove_current_category()
 
     def on_category_edit_clicked(self, button):
-        self.categoryCell.set_property("editable", True)
-
         selection = self.category_tree.get_selection()
         (model, iter) = selection.get_selected()
         path = model.get_path(iter)
-        self.category_tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
+        from gi.repository import GLib
+        def start_edit():
+            self.categoryCell.set_property("editable", True)
+            self.category_tree.grab_focus()
+            self.category_tree.set_cursor(path, self.categoryColumn, True)
+            return False
+        GLib.idle_add(start_edit)
 
     def on_category_list_key_pressed(self, tree, keyval, keycode, state):
         if self._get_selected_category() == -1:
@@ -411,9 +431,13 @@ class PreferencesEditor(Controller):
         if keyval == gdk.KEY_Delete:
             self.remove_current_category()
         elif keyval == gdk.KEY_F2:
-            self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)
-            tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
+            from gi.repository import GLib
+            def start_edit():
+                self.categoryCell.set_property("editable", True)
+                tree.set_cursor(path, self.categoryColumn, True)
+                return False
+            GLib.idle_add(start_edit)
 
     def remove_current_category(self):
         selection = self.category_tree.get_selection()
@@ -448,12 +472,12 @@ class PreferencesEditor(Controller):
         model = self.category_tree.get_model()
         path = model.get_path(new_category)
 
+        from gi.repository import GLib
         def start_edit():
             self.categoryCell.set_property("editable", True)
+            self.category_tree.grab_focus()
             self.category_tree.set_cursor(path, self.categoryColumn, True)
             return False
-
-        from gi.repository import GLib
         GLib.idle_add(start_edit)
 
     def on_activity_add_clicked(self, button):
@@ -465,12 +489,12 @@ class PreferencesEditor(Controller):
         model = self.activity_tree.get_model()
         path = model.get_path(new_activity)
 
+        from gi.repository import GLib
         def start_edit():
             self.activityCell.set_property("editable", True)
+            self.activity_tree.grab_focus()
             self.activity_tree.set_cursor(path, self.activityColumn, True)
             return False
-
-        from gi.repository import GLib
         GLib.idle_add(start_edit)
 
     def on_activity_remove_clicked(self, button):
