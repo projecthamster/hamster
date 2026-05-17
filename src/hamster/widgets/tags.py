@@ -348,8 +348,6 @@ class Tag(graphics.Sprite):
     def __init__(self, text, interactive = True, color = "#F1EAAA"):
         graphics.Sprite.__init__(self, interactive = interactive)
 
-        self.width, self.height = 0,0
-
         font = pango.FontDescription(graphics._font_desc)
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
