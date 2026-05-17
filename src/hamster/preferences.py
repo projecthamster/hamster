@@ -72,10 +72,8 @@ class ActivityStore(gtk.ListStore):
 
 
 class PreferencesEditor(Controller):
-    TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_WIDGET, 0),
-        ('MY_TREE_MODEL_ROW', gtk.TargetFlags.SAME_APP, 0),
-        ]
+    # DnD temporarily removed during GTK4 migration
+    # TODO: Re-implement with Gtk.DragSource/DropTarget controllers
 
     def __init__(self):
         Controller.__init__(self, ui_file="preferences.ui")
@@ -137,18 +135,8 @@ class PreferencesEditor(Controller):
 
         self.load_config()
 
-        # Allow enable drag and drop of rows including row move
-        self.activity_tree.enable_model_drag_source(gdk.ModifierType.BUTTON1_MASK,
-                                                    self.TARGETS,
-                                                    gdk.DragAction.DEFAULT|
-                                                    gdk.DragAction.MOVE)
-
-        self.category_tree.enable_model_drag_dest(self.TARGETS,
-                                                  gdk.DragAction.MOVE)
-
-        self.activity_tree.connect("drag_data_get", self.drag_data_get_data)
-
-        self.category_tree.connect("drag_data_received", self.on_category_drop)
+        # DnD temporarily removed during GTK4 migration
+        # TODO: Re-implement with Gtk.DragSource/DropTarget controllers
 
         #select first category
         selection = self.category_tree.get_selection()
@@ -169,7 +157,34 @@ class PreferencesEditor(Controller):
         self.get_widget("activity_add").connect("clicked", self.on_activity_add_clicked)
         self.get_widget("activity_remove").connect("clicked", self.on_activity_remove_clicked)
         self.get_widget("activity_edit").connect("clicked", self.on_activity_edit_clicked)
-        # Event-based signals (button-press, key-press, drag, focus-out) deferred to Phase 6
+        # Event controllers for tree lists (replacing GTK3 event signals)
+        for tree, press_handler, release_handler, key_handler in [
+            (self.category_tree,
+             self.on_category_list_button_pressed,
+             self.on_category_list_button_released,
+             self.on_category_list_key_pressed),
+            (self.activity_tree,
+             self.on_activity_list_button_pressed,
+             self.on_activity_list_button_released,
+             self.on_activity_list_key_pressed),
+        ]:
+            click = gtk.GestureClick()
+            click.connect("pressed", lambda c, n, x, y, h=press_handler: h(c.get_widget(), n, x, y))
+            click.connect("released", lambda c, n, x, y, h=release_handler: h(c.get_widget(), n, x, y))
+            tree.add_controller(click)
+
+            key_ctrl = gtk.EventControllerKey()
+            key_ctrl.connect("key-pressed", lambda c, kv, kc, st, h=key_handler: h(c.get_widget(), kv, kc, st))
+            tree.add_controller(key_ctrl)
+
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("leave", lambda c: self.on_autocomplete_tags_view_focus_out_event(
+            self.get_widget("autocomplete_tags"), None))
+        self.get_widget("autocomplete_tags").add_controller(focus_ctrl)
+
+        win_key_ctrl = gtk.EventControllerKey()
+        win_key_ctrl.connect("key-pressed", self.on_preferences_window_key_press)
+        self.window.add_controller(win_key_ctrl)
 
         self.show()
 
@@ -360,13 +375,12 @@ class PreferencesEditor(Controller):
 
         return
 
-    def on_activity_list_button_pressed(self, tree, event):
+    def on_activity_list_button_pressed(self, tree, n_press, x, y):
         self.activityCell.set_property("editable", False)
 
-    def on_activity_list_button_released(self, tree, event):
-        if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
-            path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
+    def on_activity_list_button_released(self, tree, n_press, x, y):
+        if tree.get_path_at_pos(int(x), int(y)):
+            path, column, cx, cy = tree.get_path_at_pos(int(x), int(y))
 
             if self.prev_selected_activity == path:
                 self.activityCell.set_property("editable", True)
@@ -374,21 +388,19 @@ class PreferencesEditor(Controller):
 
             self.prev_selected_activity = path
 
-    def on_category_list_button_pressed(self, tree, event):
+    def on_category_list_button_pressed(self, tree, n_press, x, y):
         self.activityCell.set_property("editable", False)
 
-    def on_category_list_button_released(self, tree, event):
-        if event.button == 1 and tree.get_path_at_pos(int(event.x), int(event.y)):
-            # Get treeview path.
-            path, column, x, y = tree.get_path_at_pos(int(event.x), int(event.y))
+    def on_category_list_button_released(self, tree, n_press, x, y):
+        if tree.get_path_at_pos(int(x), int(y)):
+            path, column, cx, cy = tree.get_path_at_pos(int(x), int(y))
 
             if self.prev_selected_category == path and \
-               self._get_selected_category() != -1: #do not allow to edit unsorted
+               self._get_selected_category() != -1:
                 self.categoryCell.set_property("editable", True)
                 tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
             else:
                 self.categoryCell.set_property("editable", False)
-
 
             self.prev_selected_category = path
 
@@ -404,14 +416,12 @@ class PreferencesEditor(Controller):
         self.activity_tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
 
     """keyboard events"""
-    def on_activity_list_key_pressed(self, tree, event_key):
-        key = event_key.keyval
+    def on_activity_list_key_pressed(self, tree, keyval, keycode, state):
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
-        if (event_key.keyval == gdk.KEY_Delete):
+        if keyval == gdk.KEY_Delete:
             self.remove_current_activity()
-
-        elif key == gdk.KEY_F2 :
+        elif keyval == gdk.KEY_F2:
             self.activityCell.set_property("editable", True)
             path = model.get_path(iter)
             tree.set_cursor_on_cell(path, self.activityColumn, self.activityCell, True)
@@ -433,18 +443,16 @@ class PreferencesEditor(Controller):
         path = model.get_path(iter)
         self.category_tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
 
-    def on_category_list_key_pressed(self, tree, event_key):
-        key = event_key.keyval
-
+    def on_category_list_key_pressed(self, tree, keyval, keycode, state):
         if self._get_selected_category() == -1:
-            return #ignoring unsorted category
+            return
 
         selection = tree.get_selection()
         (model, iter) = selection.get_selected()
 
-        if  key == gdk.KEY_Delete:
+        if keyval == gdk.KEY_Delete:
             self.remove_current_category()
-        elif key == gdk.KEY_F2:
+        elif keyval == gdk.KEY_F2:
             self.categoryCell.set_property("editable", True)
             path = model.get_path(iter)
             tree.set_cursor_on_cell(path, self.categoryColumn, self.categoryCell, True)
@@ -457,14 +465,11 @@ class PreferencesEditor(Controller):
             runtime.storage.remove_category(id)
             self._del_selected_row(self.category_tree)
 
-    def on_preferences_window_key_press(self, widget, event):
-        # ctrl+w means close window
-        if (event.keyval == gdk.KEY_w \
-            and event.state & gdk.ModifierType.CONTROL_MASK):
+    def on_preferences_window_key_press(self, controller, keyval, keycode, state):
+        if (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
 
-        # escape can mean several things
-        if event.keyval == gdk.KEY_Escape:
+        if keyval == gdk.KEY_Escape:
             #check, maybe we are editing stuff
             if self.activityCell.get_property("editable"):
                 self.activityCell.set_property("editable", False)
