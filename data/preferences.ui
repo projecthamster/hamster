@@ -26,8 +26,7 @@
                     <property name="margin-end">8</property>
                     <property name="margin-top">8</property>
                     <property name="margin-bottom">8</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>                    <child>
+                    <child>
                       <object class="GtkBox" id="tracking box">
                         <property name="halign">start</property>
                         <property name="valign">start</property>
@@ -42,8 +41,6 @@
                             </child>
                             <child>
                               <object class="GtkBox" id="day_start_placeholder">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -67,8 +64,7 @@
                 <property name="position">1</property>
                 <property name="child">
                   <object class="GtkBox" id="alignment5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>                    <child>
+                    <child>
                       <object class="GtkBox" id="vbox2">
                         <property name="orientation">vertical</property>
                         <property name="spacing">15</property>
@@ -76,8 +72,7 @@
                         <child>
                           <object class="GtkBox" id="alignment7">
                             <property name="vexpand">1</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>                            <child>
+                            <child>
                               <object class="GtkPaned" id="categories | activities pane">
                                 <property name="resize-start-child">0</property>
                                 <property name="focusable">1</property>
@@ -103,8 +98,6 @@
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection1"/>
                                             </child>
-                                            <child internal-child="accessible">
-                                            </child>
                                           </object>
                                         </property>
                                       </object>
@@ -121,8 +114,6 @@
                                                 <property name="icon_name">list-add</property>
                                               </object>
                                             </child>
-                                            <child internal-child="accessible">
-                                            </child>
                                           </object>
                                         </child>
                                         <child>
@@ -134,8 +125,6 @@
                                                 <property name="icon_name">list-remove</property>
                                               </object>
                                             </child>
-                                            <child internal-child="accessible">
-                                            </child>
                                           </object>
                                         </child>
                                         <child>
@@ -146,8 +135,6 @@
                                               <object class="GtkImage" id="image3">
                                                 <property name="icon_name">document-edit-symbolic</property>
                                               </object>
-                                            </child>
-                                            <child internal-child="accessible">
                                             </child>
                                           </object>
                                         </child>
@@ -173,8 +160,6 @@
                                     <child>
                                       <object class="GtkBox" id="alignment8">
                                         <property name="vexpand">1</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
                                         <child>
                                           <object class="GtkScrolledWindow" id="scrolledwindow1">
                                             <property name="hexpand">1</property>
@@ -184,8 +169,6 @@
                                                 <property name="enable_tree_lines">1</property>
                                                 <child internal-child="selection">
                                                   <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                                </child>
-                                                <child internal-child="accessible">
                                                 </child>
                                               </object>
                                             </property>
@@ -205,8 +188,6 @@
                                                 <property name="icon_name">list-add</property>
                                               </object>
                                             </child>
-                                            <child internal-child="accessible">
-                                            </child>
                                           </object>
                                         </child>
                                         <child>
@@ -218,8 +199,6 @@
                                                 <property name="icon_name">list-remove</property>
                                               </object>
                                             </child>
-                                            <child internal-child="accessible">
-                                            </child>
                                           </object>
                                         </child>
                                         <child>
@@ -230,8 +209,6 @@
                                               <object class="GtkImage" id="image6">
                                                 <property name="icon_name">document-edit-symbolic</property>
                                               </object>
-                                            </child>
-                                            <child internal-child="accessible">
                                             </child>
                                           </object>
                                         </child>

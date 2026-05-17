@@ -176,10 +176,6 @@ class PreferencesEditor(Controller):
             self.get_widget("autocomplete_tags"), None))
         self.get_widget("autocomplete_tags_view").add_controller(focus_ctrl)
 
-        # No key/shortcut controllers on the window — they intercept
-        # keystrokes meant for the tags text view in GTK4.
-        # Ctrl+W/Escape close via the WM close button or window manager.
-
         self.show()
 
     def show(self):
