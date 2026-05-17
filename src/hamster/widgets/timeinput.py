@@ -68,7 +68,7 @@ class TimeInput(gtk.Entry):
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "pan-down-symbolic")
 
-        self.connect("icon-release", self._on_icon_release)
+        self.connect("icon-press", self._on_icon_press)
 
         # Replace key-press-event with EventControllerKey
         key_ctrl = gtk.EventControllerKey()
@@ -189,15 +189,14 @@ class TimeInput(gtk.Entry):
             self._select_time(time)
 
     def _on_focus_in_gtk4(self, controller):
-        self.show_popup()
+        pass
 
     def _on_focus_out_gtk4(self, controller):
-        self.hide_popup()
         if self.news:
             self.emit("time-entered")
             self.news = False
 
-    def _on_icon_release(self, entry, icon_pos):
+    def _on_icon_press(self, entry, icon_pos):
         if icon_pos == gtk.EntryIconPosition.PRIMARY:
             self.grab_focus()
             self.set_text("")
