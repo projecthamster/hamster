@@ -300,6 +300,7 @@ class Totals(graphics.Scene):
         self.connect("on-mouse-out", lambda scene, sprite: self.on_mouse_leave())
         self.connect("state-flags-changed", self.on_state_flags_changed)
         self.connect("notify::css-classes", lambda *a: self.update_colors())
+        self.connect("map", lambda w: self.update_colors())
 
 
     def set_facts(self, facts):
@@ -378,8 +379,14 @@ class Totals(graphics.Scene):
                      on_update=on_update_dummy,
                      easing=Easing.Expo.ease_out)
 
+    def _get_fg_color(self):
+        root = self.get_root()
+        if root:
+            return root.get_style_context().get_color()
+        return self._style.get_color()
+
     def update_colors(self):
-        color = self._style.get_color()
+        color = self._get_fg_color()
         self.instructions_label.color = color
         self.category_totals.color = color
         self.activities_chart.label_color = color
