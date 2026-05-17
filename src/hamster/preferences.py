@@ -335,12 +335,7 @@ class PreferencesEditor(Controller):
             path, column, cx, cy = tree.get_path_at_pos(int(x), int(y))
 
             if self.prev_selected_activity == path:
-                from gi.repository import GLib
-                def start_edit():
-                    self.activityCell.set_property("editable", True)
-                    tree.set_cursor(path, self.activityColumn, True)
-                    return False
-                GLib.idle_add(start_edit)
+                self.on_activity_edit_clicked(None)
 
             self.prev_selected_activity = path
 
@@ -353,14 +348,7 @@ class PreferencesEditor(Controller):
 
             if self.prev_selected_category == path and \
                self._get_selected_category() != -1:
-                from gi.repository import GLib
-                def start_edit():
-                    self.categoryCell.set_property("editable", True)
-                    tree.set_cursor(path, self.categoryColumn, True)
-                    return False
-                GLib.idle_add(start_edit)
-            else:
-                self.categoryCell.set_property("editable", False)
+                self.on_category_edit_clicked(None)
 
             self.prev_selected_category = path
 
@@ -370,14 +358,15 @@ class PreferencesEditor(Controller):
     def on_activity_edit_clicked(self, button):
         selection = self.activity_tree.get_selection()
         (model, iter) = selection.get_selected()
-        path = model.get_path(iter)
-        from gi.repository import GLib
-        def start_edit():
-            self.activityCell.set_property("editable", True)
-            self.activity_tree.grab_focus()
-            self.activity_tree.set_cursor(path, self.activityColumn, True)
-            return False
-        GLib.idle_add(start_edit)
+        if not iter:
+            return
+        current_name = model[iter][1]
+        activity_id = model[iter][0]
+        category_id = model[iter][2]
+        def on_name(name):
+            runtime.storage.update_activity(activity_id, name, category_id)
+            model[iter][1] = name
+        self._show_edit_dialog(_("Edit Activity"), current_name, on_name)
 
     """keyboard events"""
     def on_activity_list_key_pressed(self, tree, keyval, keycode, state):
@@ -386,13 +375,7 @@ class PreferencesEditor(Controller):
         if keyval == gdk.KEY_Delete:
             self.remove_current_activity()
         elif keyval == gdk.KEY_F2:
-            path = model.get_path(iter)
-            from gi.repository import GLib
-            def start_edit():
-                self.activityCell.set_property("editable", True)
-                tree.set_cursor(path, self.activityColumn, True)
-                return False
-            GLib.idle_add(start_edit)
+            self.on_activity_edit_clicked(None)
 
     def remove_current_activity(self):
         selection = self.activity_tree.get_selection()
@@ -406,14 +389,16 @@ class PreferencesEditor(Controller):
     def on_category_edit_clicked(self, button):
         selection = self.category_tree.get_selection()
         (model, iter) = selection.get_selected()
-        path = model.get_path(iter)
-        from gi.repository import GLib
-        def start_edit():
-            self.categoryCell.set_property("editable", True)
-            self.category_tree.grab_focus()
-            self.category_tree.set_cursor(path, self.categoryColumn, True)
-            return False
-        GLib.idle_add(start_edit)
+        if not iter:
+            return
+        cat_id = model[iter][0]
+        if cat_id == -1:
+            return
+        current_name = model[iter][1]
+        def on_name(name):
+            runtime.storage.update_category(cat_id, name)
+            model[iter][1] = name
+        self._show_edit_dialog(_("Edit Category"), current_name, on_name)
 
     def on_category_list_key_pressed(self, tree, keyval, keycode, state):
         if self._get_selected_category() == -1:
@@ -425,13 +410,7 @@ class PreferencesEditor(Controller):
         if keyval == gdk.KEY_Delete:
             self.remove_current_category()
         elif keyval == gdk.KEY_F2:
-            path = model.get_path(iter)
-            from gi.repository import GLib
-            def start_edit():
-                self.categoryCell.set_property("editable", True)
-                tree.set_cursor(path, self.categoryColumn, True)
-                return False
-            GLib.idle_add(start_edit)
+            self.on_category_edit_clicked(None)
 
     def remove_current_category(self):
         selection = self.category_tree.get_selection()
@@ -441,16 +420,52 @@ class PreferencesEditor(Controller):
             runtime.storage.remove_category(id)
             self._del_selected_row(self.category_tree)
 
-    def on_preferences_window_key_press(self, controller, keyval, keycode, state):
-        if self.activityCell.get_property("editable") or self.categoryCell.get_property("editable"):
-            return False
+    def _show_edit_dialog(self, title, current_text, callback):
+        """Show a simple dialog to edit a name, since GTK 4.22 broke
+        TreeView inline cell editing (css_node_insert_after assertion)."""
+        dialog = gtk.Window(title=title)
+        dialog.set_transient_for(self.window)
+        dialog.set_modal(True)
+        dialog.set_default_size(300, -1)
 
+        box = gtk.Box(orientation=gtk.Orientation.VERTICAL, spacing=10)
+        box.set_margin_start(15)
+        box.set_margin_end(15)
+        box.set_margin_top(15)
+        box.set_margin_bottom(15)
+
+        entry = gtk.Entry()
+        entry.set_text(current_text)
+        box.append(entry)
+
+        btn_box = gtk.Box(spacing=5)
+        btn_box.set_halign(gtk.Align.END)
+        cancel_btn = gtk.Button(label=_("Cancel"))
+        ok_btn = gtk.Button(label=_("OK"))
+        btn_box.append(cancel_btn)
+        btn_box.append(ok_btn)
+        box.append(btn_box)
+
+        dialog.set_child(box)
+
+        def on_ok(*args):
+            text = entry.get_text().strip()
+            if text:
+                callback(text)
+            dialog.destroy()
+
+        ok_btn.connect("clicked", on_ok)
+        entry.connect("activate", on_ok)
+        cancel_btn.connect("clicked", lambda b: dialog.destroy())
+
+        dialog.present()
+        entry.grab_focus()
+
+    def on_preferences_window_key_press(self, controller, keyval, keycode, state):
         if self.activity_tree.has_focus():
             self.on_activity_list_key_pressed(self.activity_tree, keyval, keycode, state)
-            return True
-        if self.category_tree.has_focus():
+        elif self.category_tree.has_focus():
             self.on_category_list_key_pressed(self.category_tree, keyval, keycode, state)
-            return True
 
         if (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
@@ -468,38 +483,29 @@ class PreferencesEditor(Controller):
 
     """button events"""
     def on_category_add_clicked(self, button):
-        """ appends row, jumps to it and allows user to input name """
-
-        new_category = self.category_store.insert_before(self.category_store.unsorted_category,
-                                                         [-2, _("New category")])
-
-        model = self.category_tree.get_model()
-        path = model.get_path(new_category)
-
-        from gi.repository import GLib
-        def start_edit():
-            self.categoryCell.set_property("editable", True)
-            self.category_tree.grab_focus()
-            self.category_tree.set_cursor(path, self.categoryColumn, True)
-            return False
-        GLib.idle_add(start_edit)
+        def on_name(name):
+            categories = runtime.storage.get_categories()
+            for cat in categories:
+                if cat['name'].lower() == name.lower():
+                    self.select_category(cat['id'])
+                    return
+            new_id = runtime.storage.add_category(name)
+            self.category_store.load()
+            self.select_category(new_id)
+        self._show_edit_dialog(_("New Category"), "", on_name)
 
     def on_activity_add_clicked(self, button):
-        """ appends row, jumps to it and allows user to input name """
         category_id = self._get_selected_category()
-
-        new_activity = self.activity_store.append([-1, _("New activity"), category_id])
-
-        model = self.activity_tree.get_model()
-        path = model.get_path(new_activity)
-
-        from gi.repository import GLib
-        def start_edit():
-            self.activityCell.set_property("editable", True)
-            self.activity_tree.grab_focus()
-            self.activity_tree.set_cursor(path, self.activityColumn, True)
-            return False
-        GLib.idle_add(start_edit)
+        def on_name(name):
+            activities = runtime.storage.get_category_activities(category_id)
+            for act in activities:
+                if act['name'].lower() == name.lower():
+                    self.select_activity(act['id'])
+                    return
+            new_id = runtime.storage.add_activity(name, category_id)
+            self.activity_store.load(category_id)
+            self.select_activity(new_id)
+        self._show_edit_dialog(_("New Activity"), "", on_name)
 
     def on_activity_remove_clicked(self, button):
         removable_id = self._del_selected_row(self.activity_tree)
