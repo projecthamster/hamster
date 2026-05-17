@@ -199,12 +199,11 @@ class RangePick(gtk.MenuButton):
 
     def on_manual_range_apply_clicked(self, button):
         self.current_range = "manual"
-        # GtkCalendar January is 0, hence the + 1
-        year, month, day = self.get_widget("start_calendar").get_date()
-        self.start_date = dt.date(year, month + 1, day)
+        gdate = self.get_widget("start_calendar").get_date()
+        self.start_date = dt.date(gdate.get_year(), gdate.get_month(), gdate.get_day_of_month())
 
-        year, month, day = self.get_widget("end_calendar").get_date()
-        self.end_date = dt.date(year, month + 1, day)
+        gdate = self.get_widget("end_calendar").get_date()
+        self.end_date = dt.date(gdate.get_year(), gdate.get_month(), gdate.get_day_of_month())
 
         # make sure we always have a valid range
         if self.end_date < self.start_date:
