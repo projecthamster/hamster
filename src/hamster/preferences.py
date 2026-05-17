@@ -157,25 +157,19 @@ class PreferencesEditor(Controller):
         self.get_widget("activity_add").connect("clicked", self.on_activity_add_clicked)
         self.get_widget("activity_remove").connect("clicked", self.on_activity_remove_clicked)
         self.get_widget("activity_edit").connect("clicked", self.on_activity_edit_clicked)
-        # Event controllers for tree lists (replacing GTK3 event signals)
-        for tree, press_handler, release_handler, key_handler in [
+        # Click controllers for tree lists (for double-click-to-edit)
+        for tree, press_handler, release_handler in [
             (self.category_tree,
              self.on_category_list_button_pressed,
-             self.on_category_list_button_released,
-             self.on_category_list_key_pressed),
+             self.on_category_list_button_released),
             (self.activity_tree,
              self.on_activity_list_button_pressed,
-             self.on_activity_list_button_released,
-             self.on_activity_list_key_pressed),
+             self.on_activity_list_button_released),
         ]:
             click = gtk.GestureClick()
             click.connect("pressed", lambda c, n, x, y, h=press_handler: h(c.get_widget(), n, x, y))
             click.connect("released", lambda c, n, x, y, h=release_handler: h(c.get_widget(), n, x, y))
             tree.add_controller(click)
-
-            key_ctrl = gtk.EventControllerKey()
-            key_ctrl.connect("key-pressed", lambda c, kv, kc, st, h=key_handler: h(c.get_widget(), kv, kc, st))
-            tree.add_controller(key_ctrl)
 
         focus_ctrl = gtk.EventControllerFocus()
         focus_ctrl.connect("leave", lambda c: self.on_autocomplete_tags_view_focus_out_event(
@@ -448,6 +442,16 @@ class PreferencesEditor(Controller):
             self._del_selected_row(self.category_tree)
 
     def on_preferences_window_key_press(self, controller, keyval, keycode, state):
+        if self.activityCell.get_property("editable") or self.categoryCell.get_property("editable"):
+            return False
+
+        if self.activity_tree.has_focus():
+            self.on_activity_list_key_pressed(self.activity_tree, keyval, keycode, state)
+            return True
+        if self.category_tree.has_focus():
+            self.on_category_list_key_pressed(self.category_tree, keyval, keycode, state)
+            return True
+
         if (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK):
             self.close_window()
 
