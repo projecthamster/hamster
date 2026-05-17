@@ -112,7 +112,7 @@ class DayLine(graphics.Scene):
         self.drag_start = None
         self.current_x = None
 
-        self.date_label = graphics.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
+        self.date_label = graphics.Label(color=self._style.get_color(),
                                          x=5, y=16)
 
         self.add_child(self.plot_area, self.date_label)

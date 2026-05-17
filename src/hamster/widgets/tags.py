@@ -32,8 +32,10 @@ class TagsEntry(gtk.Entry):
         'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self, *, parent):
-        gtk.Entry.__init__(self, parent=parent)
+    def __init__(self, *, parent=None):
+        gtk.Entry.__init__(self)
+        if parent:
+            parent.append(self)
         self.ac_tags = None  # "autocomplete" tags
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
@@ -348,7 +350,7 @@ class Tag(graphics.Sprite):
 
         self.width, self.height = 0,0
 
-        font = gtk.Style().font_desc
+        font = pango.FontDescription(graphics._font_desc)
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
         self.label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)

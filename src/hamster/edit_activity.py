@@ -60,11 +60,13 @@ class CustomFactController(Controller):
                                                     category_widget=self.category_entry)
 
         self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
-        self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
-        self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
+        cmdline_focus = gtk.EventControllerFocus()
+        cmdline_focus.connect("enter", lambda c: self.on_cmdline_focus_in_event(self.cmdline))
+        cmdline_focus.connect("leave", lambda c: self.on_cmdline_focus_out_event(self.cmdline))
+        self.cmdline.add_controller(cmdline_focus)
 
         self.dayline = widgets.DayLine()
-        self._gui.get_object("day_preview").set_child(self.dayline)
+        self._gui.get_object("day_preview").append(self.dayline)
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
@@ -198,10 +200,10 @@ class CustomFactController(Controller):
             self.fact = fact
             self.update_fields()
 
-    def on_cmdline_focus_in_event(self, widget, event):
+    def on_cmdline_focus_in_event(self, widget):
         self.master_is_cmdline = True
 
-    def on_cmdline_focus_out_event(self, widget, event):
+    def on_cmdline_focus_out_event(self, widget):
         self.master_is_cmdline = False
 
     def on_description_changed(self, text):

@@ -180,7 +180,7 @@ class PreferencesEditor(Controller):
         focus_ctrl = gtk.EventControllerFocus()
         focus_ctrl.connect("leave", lambda c: self.on_autocomplete_tags_view_focus_out_event(
             self.get_widget("autocomplete_tags"), None))
-        self.get_widget("autocomplete_tags").add_controller(focus_ctrl)
+        self.get_widget("autocomplete_tags_view").add_controller(focus_ctrl)
 
         win_key_ctrl = gtk.EventControllerKey()
         win_key_ctrl.connect("key-pressed", self.on_preferences_window_key_press)
@@ -207,13 +207,6 @@ class PreferencesEditor(Controller):
 
         runtime.storage.update_autocomplete_tags(updated_tags)
 
-    def drag_data_get_data(self, treeview, context, selection, target_id,
-                           etime):
-        treeselection = treeview.get_selection()
-        model, iter = treeselection.get_selected()
-        data = model.get_value(iter, 0) #get activity ID
-        selection.set(selection.target, 0, str(data))
-
     def select_activity(self, id):
         model = self.activity_tree.get_model()
         i = 0
@@ -229,41 +222,6 @@ class PreferencesEditor(Controller):
             if row[0] == id:
                 self.category_tree.set_cursor((i, ))
             i += 1
-
-    def on_category_list_drag_motion(self, treeview, drag_context, x, y, eventtime):
-        self.prev_selected_category = None
-        try:
-            target_path, drop_position = treeview.get_dest_row_at_pos(x, y)
-            model, source = treeview.get_selection().get_selected()
-
-        except:
-            return
-
-        drop_yes = ("drop_yes", gtk.TargetFlags.SAME_APP, 0)
-        drop_no = ("drop_no", gtk.TargetFlags.SAME_APP, 0)
-
-        if drop_position != gtk.TREE_VIEW_DROP_AFTER and \
-           drop_position != gtk.TREE_VIEW_DROP_BEFORE:
-            treeview.enable_model_drag_dest(self.TARGETS, gdk.DragAction.MOVE)
-        else:
-            treeview.enable_model_drag_dest([drop_no], gdk.DragAction.MOVE)
-
-    def on_category_drop(self, treeview, context, x, y, selection,
-                                info, etime):
-        model = self.category_tree.get_model()
-        data = selection.data
-        drop_info = treeview.get_dest_row_at_pos(x, y)
-
-        if drop_info:
-            path, position = drop_info
-            iter = model.get_iter(path)
-            changed = runtime.storage.change_category(int(data), model[iter][0])
-
-            context.finish(changed, True, etime)
-        else:
-            context.finish(False, True, etime)
-
-        return
 
     # callbacks
     def category_edited_cb(self, cell, path, new_text, model):

@@ -46,27 +46,19 @@ class Calendar():
     @property
     def date(self):
         """Selected day, as datetime.date."""
-        year, month, day = self.widget.get_date()
-        # months start at 0 in Gtk.Calendar and at 1 in python date
-        month += 1
-        return dt.date(year=year, month=month, day=day) if day else None
+        gdate = self.widget.get_date()
+        return dt.date(year=gdate.get_year(),
+                       month=gdate.get_month(),
+                       day=gdate.get_day_of_month())
 
     @date.setter
     def date(self, value):
-        """Set date.
-
-        value can be a python date or datetime.
-        """
         if value is None:
-            # unselect day
-            self.widget.select_day(0)
-        else:
-            year = value.year
-            # months start at 0 in Gtk.Calendar and at 1 in python date
-            month = value.month - 1
-            day = value.day
-            self.widget.select_month(month, year)
-            self.widget.select_day(day)
+            return
+        from gi.repository import GLib
+        gdate = GLib.DateTime.new_local(value.year, value.month, value.day,
+                                        0, 0, 0)
+        self.widget.select_day(gdate)
 
     def on_date_changed(self, widget):
         if self.expander:
@@ -111,8 +103,8 @@ class RangePick(gtk.MenuButton):
         self.get_widget("day").connect("clicked", self.on_day_clicked)
         self.get_widget("week").connect("clicked", self.on_week_clicked)
         self.get_widget("month").connect("clicked", self.on_month_clicked)
-        self.get_widget("start_calendar").connect("day-selected-double-click", self.on_manual_range_apply_clicked)
-        self.get_widget("end_calendar").connect("day-selected-double-click", self.on_manual_range_apply_clicked)
+        self.get_widget("start_calendar").connect("day-selected", self.on_manual_range_apply_clicked)
+        self.get_widget("end_calendar").connect("day-selected", self.on_manual_range_apply_clicked)
         self.get_widget("manual_range_apply").connect("clicked", self.on_manual_range_apply_clicked)
 
     def set_range(self, start_date, end_date=None):
@@ -179,13 +171,14 @@ class RangePick(gtk.MenuButton):
         self.get_widget("week_preview").set_text(stuff.format_range(*stuff.week(self.today)))
         self.get_widget("month_preview").set_text(stuff.format_range(*stuff.month(self.today)))
 
+        from gi.repository import GLib
         start_cal = self.get_widget("start_calendar")
-        start_cal.select_month(self.start_date.month - 1, self.start_date.year)
-        start_cal.select_day(self.start_date.day)
+        start_cal.select_day(GLib.DateTime.new_local(
+            self.start_date.year, self.start_date.month, self.start_date.day, 0, 0, 0))
 
         end_cal = self.get_widget("end_calendar")
-        end_cal.select_month(self.end_date.month - 1, self.end_date.year)
-        end_cal.select_day(self.end_date.day)
+        end_cal.select_day(GLib.DateTime.new_local(
+            self.end_date.year, self.end_date.month, self.end_date.day, 0, 0, 0))
 
         self.get_widget("day").grab_focus()
 

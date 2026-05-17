@@ -603,7 +603,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.visible_range = self.get_visible_range()
 
     def on_enter_frame(self, scene, context):
-        has_focus = self.get_root().has_toplevel_focus()
+        has_focus = self.get_root().is_active() if self.get_root() else True
         if has_focus:
             colors = {
                 "normal": self.style.get_color(),

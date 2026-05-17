@@ -90,9 +90,9 @@ class HeaderBar(gtk.HeaderBar):
 
 
         menu = gio.Menu()
-        menu.append(_("Export..."), "win.export")
-        menu.append(_("Tracking Settings"), "win.preferences")
-        menu.append(_("Help"), "win.help")
+        menu.append(_("Export..."), "app.hamster-export")
+        menu.append(_("Tracking Settings"), "app.hamster-prefs")
+        menu.append(_("Help"), "app.hamster-help")
         self.system_button.set_menu_model(menu)
 
         self.time_back.connect("clicked", self.on_time_back_click)
@@ -456,17 +456,19 @@ class Overview(Controller):
         self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
-        export_action = gio.SimpleAction.new("export", None)
-        export_action.connect("activate", lambda a, p: self.on_export_clicked(None))
-        self.window.add_action(export_action)
+        app = gtk.Application.get_default()
+        if app:
+            export_action = gio.SimpleAction.new("hamster-export", None)
+            export_action.connect("activate", lambda a, p: self.on_export_clicked(None))
+            app.add_action(export_action)
 
-        prefs_action = gio.SimpleAction.new("preferences", None)
-        prefs_action.connect("activate", lambda a, p: self.on_prefs_clicked(None))
-        self.window.add_action(prefs_action)
+            prefs_action = gio.SimpleAction.new("hamster-prefs", None)
+            prefs_action.connect("activate", lambda a, p: self.on_prefs_clicked(None))
+            app.add_action(prefs_action)
 
-        help_action = gio.SimpleAction.new("help", None)
-        help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
-        self.window.add_action(help_action)
+            help_action = gio.SimpleAction.new("hamster-help", None)
+            help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
+            app.add_action(help_action)
 
         key_controller = gtk.EventControllerKey()
         key_controller.connect("key-pressed", self.on_key_press)
