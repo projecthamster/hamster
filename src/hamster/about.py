@@ -25,7 +25,9 @@ from gi.repository import Gdk as gdk
 
 class About(object):
     def __init__(self, parent=None):
-        about = gtk.AboutDialog(parent=parent)
+        about = gtk.AboutDialog()
+        if parent:
+            about.set_transient_for(parent)
         self.window = about
         infos = {
             "program-name" : "Hamster",
@@ -51,7 +53,7 @@ class About(object):
 
         about.set_logo_icon_name("org.gnome.Hamster.GUI")
 
-        about.connect("response", lambda self, *args: self.destroy())
+        about.connect("close-request", lambda w: w.destroy())
 
     def present(self):
         self.window.present()

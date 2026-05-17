@@ -32,7 +32,7 @@ from collections import deque
 
 # lemme know if you know a better way how to get default font
 _test_label = gtk.Label("Hello")
-_font_desc = _test_label.get_style().font_desc.to_string()
+_font_desc = "Sans 10"
 
 
 class ColorUtils(object):
@@ -74,11 +74,6 @@ class ColorUtils(object):
                     match = self.hex_color_short.match(color)
                     color = [int(color + color, 16) / 255.0 for color in match.groups()]
 
-        elif isinstance(color, gdk.Color):
-            color = [color.red / 65535.0,
-                     color.green / 65535.0,
-                     color.blue / 65535.0]
-
         elif isinstance(color, (list, tuple)):
             # otherwise we assume we have color components in 0..255 range
             if color[0] > 1 or color[1] > 1 or color[2] > 1:
@@ -94,9 +89,9 @@ class ColorUtils(object):
         return [c * 255 for c in self.parse(color)]
 
     def gdk(self, color):
-        """returns gdk.Color object of the given color"""
+        """returns gdk.RGBA object of the given color"""
         c = self.parse(color)
-        return gdk.Color.from_floats(c)
+        return gdk.RGBA(red=c[0], green=c[1], blue=c[2], alpha=1.0)
 
     def hex(self, color):
         if isinstance(color, gdk.RGBA):
@@ -1028,15 +1023,15 @@ class Sprite(Parent, gobject.GObject):
     def _get_mouse_cursor(self):
         """Determine mouse cursor.
         By default look for self.mouse_cursor is defined and take that.
-        Otherwise use gdk.CursorType.FLEUR for draggable sprites and gdk.CursorType.HAND2 for
+        Otherwise use "move" cursor for draggable sprites and "pointer" cursor for
         interactive sprites. Defaults to scenes cursor.
         """
         if self.mouse_cursor is not None:
             return self.mouse_cursor
         elif self.interactive and self.draggable:
-            return gdk.CursorType.FLEUR
+            return gdk.Cursor.new_from_name("move")
         elif self.interactive:
-            return gdk.CursorType.HAND2
+            return gdk.Cursor.new_from_name("pointer")
 
     def bring_to_front(self):
         """adjusts sprite's z-order so that the sprite is on top of it's
@@ -1835,7 +1830,7 @@ class Scene(Parent, gtk.DrawingArea):
         #: can be overidden by child sprites
         self.default_mouse_cursor = None
 
-        self._blank_cursor = gdk.Cursor(gdk.CursorType.BLANK_CURSOR)
+        self._blank_cursor = gdk.Cursor.new_from_name("none")
 
         self.__previous_mouse_signal_time = None
 
@@ -1909,10 +1904,16 @@ class Scene(Parent, gtk.DrawingArea):
             self._style.add_class(val)
         elif name == "background_color":
             if val:
-                self.override_background_color(gtk.StateType.NORMAL,
-                                               gdk.RGBA(*Colors.parse(val)))
+                rgba = gdk.RGBA()
+                rgba.parse(Colors.hex(val))
+                css = "* {{ background-color: {}; }}".format(rgba.to_string())
+                provider = gtk.CssProvider()
+                provider.load_from_data(css.encode())
+                self.get_style_context().add_provider(
+                    provider, gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
             else:
-                self.override_background_color(gtk.StateType.NORMAL, None)
+                # Removing CSS provider is complex, skip for now
+                pass
 
         self.__dict__[name] = val
 
@@ -2084,15 +2085,17 @@ class Scene(Parent, gtk.DrawingArea):
             self._mouse_sprite = over
 
         if cursor is None:
-            cursor = self.default_mouse_cursor or gdk.CursorType.ARROW # default
+            cursor = self.default_mouse_cursor or gdk.Cursor.new_from_name("default")
         elif cursor is False:
             cursor = self._blank_cursor
 
         if self.__last_cursor is None or cursor != self.__last_cursor:
             if isinstance(cursor, gdk.Cursor):
-                self._window.set_cursor(cursor)
+                self.set_cursor(cursor)
+            elif isinstance(cursor, str):
+                self.set_cursor(gdk.Cursor.new_from_name(cursor))
             else:
-                self._window.set_cursor(gdk.Cursor(cursor))
+                self.set_cursor(cursor)
 
             self.__last_cursor = cursor
 

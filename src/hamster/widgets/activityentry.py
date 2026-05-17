@@ -167,11 +167,13 @@ class CompleteTree(graphics.Scene):
             return
 
         colors = {
-            "normal": self.style.get_color(gtk.StateFlags.NORMAL),
-            "normal_bg": self.style.get_background_color(gtk.StateFlags.NORMAL),
-            "selected": self.style.get_color(gtk.StateFlags.SELECTED),
-            "selected_bg": self.style.get_background_color(gtk.StateFlags.SELECTED),
+            "normal": self.style.get_color(),
+            "selected": self.style.get_color(),
         }
+        success, c = self.style.lookup_color("theme_bg_color")
+        colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+        success, c = self.style.lookup_color("theme_selected_bg_color")
+        colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
 
         g = graphics.Graphics(context)
         g.set_line_style(1)

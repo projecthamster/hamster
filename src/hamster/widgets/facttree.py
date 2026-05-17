@@ -40,7 +40,7 @@ class ActionRow(graphics.Sprite):
 
         self.restart = graphics.Icon("view-refresh-symbolic", size=18,
                                      interactive=True,
-                                     mouse_cursor=gdk.CursorType.HAND1,
+                                     mouse_cursor=gdk.Cursor.new_from_name("pointer"),
                                      y=4)
         self.add_child(self.restart)
 
@@ -606,18 +606,22 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         has_focus = self.get_root().has_toplevel_focus()
         if has_focus:
             colors = {
-                "normal": self.style.get_color(gtk.StateFlags.NORMAL),
-                "normal_bg": self.style.get_background_color(gtk.StateFlags.NORMAL),
-                "selected": self.style.get_color(gtk.StateFlags.SELECTED),
-                "selected_bg": self.style.get_background_color(gtk.StateFlags.SELECTED),
+                "normal": self.style.get_color(),
+                "selected": self.style.get_color(),
             }
+            success, c = self.style.lookup_color("theme_bg_color")
+            colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+            success, c = self.style.lookup_color("theme_selected_bg_color")
+            colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
         else:
             colors = {
-                "normal": self.style.get_color(gtk.StateFlags.BACKDROP),
-                "normal_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
-                "selected": self.style.get_color(gtk.StateFlags.BACKDROP),
-                "selected_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
+                "normal": self.style.get_color(),
+                "selected": self.style.get_color(),
             }
+            success, c = self.style.lookup_color("theme_bg_color")
+            colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+            success, c = self.style.lookup_color("theme_selected_bg_color")
+            colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
 
         if not self.height:
             return

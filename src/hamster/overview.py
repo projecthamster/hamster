@@ -28,6 +28,7 @@ from math import ceil
 from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
+from gi.repository import Gio as gio
 from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
@@ -88,7 +89,11 @@ class HeaderBar(gtk.HeaderBar):
         self.pack_end(self.add_activity_button)
 
 
-        # Menu system replaced in Phase 3 (Gio.Menu + PopoverMenu)
+        menu = gio.Menu()
+        menu.append(_("Export..."), "win.export")
+        menu.append(_("Tracking Settings"), "win.preferences")
+        menu.append(_("Help"), "win.help")
+        self.system_button.set_menu_model(menu)
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
@@ -265,10 +270,10 @@ class Totals(graphics.Scene):
         box.add_child(self.category_totals, self.stacked_bar)
 
         self.totals = {}
-        self.mouse_cursor = gdk.CursorType.HAND2
+        self.mouse_cursor = gdk.Cursor.new_from_name("pointer")
 
         self.instructions_label = layout.Label(_("Click to see stats"),
-                                               color=self._style.get_color(gtk.StateFlags.NORMAL),
+                                               color=self._style.get_color(),
                                                padding=10,
                                                expand=False)
 
@@ -341,7 +346,7 @@ class Totals(graphics.Scene):
             self.change_height(300)
             self.instructions_label.visible = False
 
-        self.mouse_cursor = gdk.CursorType.HAND2 if self.collapsed else None
+        self.mouse_cursor = gdk.Cursor.new_from_name("pointer") if self.collapsed else None
 
     def on_mouse_enter(self, scene, event):
         if not self.collapsed:
@@ -383,13 +388,15 @@ class Totals(graphics.Scene):
                      easing=Easing.Expo.ease_out)
 
     def update_colors(self):
-        color = self._style.get_color(self.get_state())
+        color = self._style.get_color()
         self.instructions_label.color = color
         self.category_totals.color = color
         self.activities_chart.label_color = color
         self.categories_chart.label_color = color
         self.tag_chart.label_color = color
-        bg_color = self._style.get_background_color(self.get_state())
+        success, bg_color = self._style.lookup_color("theme_bg_color")
+        if not success:
+            bg_color = gdk.RGBA(1, 1, 1, 1)
         bar_color = self.colors.mix(bg_color, color, 0.6)
         self.activities_chart.bar_color = bar_color
         self.categories_chart.bar_color = bar_color
@@ -458,7 +465,17 @@ class Overview(Controller):
         self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
-        # Menu action connections moved to Phase 3
+        export_action = gio.SimpleAction.new("export", None)
+        export_action.connect("activate", lambda a, p: self.on_export_clicked(None))
+        self.window.add_action(export_action)
+
+        prefs_action = gio.SimpleAction.new("preferences", None)
+        prefs_action.connect("activate", lambda a, p: self.on_prefs_clicked(None))
+        self.window.add_action(prefs_action)
+
+        help_action = gio.SimpleAction.new("help", None)
+        help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
+        self.window.add_action(help_action)
 
         self.window.connect("key-press-event", self.on_key_press)
 
@@ -569,12 +586,16 @@ class Overview(Controller):
     def on_help_clicked(self, menu):
         uri = "help:hamster"
         try:
-            gtk.show_uri(None, uri, gdk.CURRENT_TIME)
+            gtk.show_uri(self.window, uri, gdk.CURRENT_TIME)
         except glib.Error:
             msg = sys.exc_info()[1].args[0]
-            dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
-                                       gtk.ButtonsType.CLOSE,
-                                       _("Failed to open {}").format(uri))
+            dialog = gtk.MessageDialog(
+                transient_for=self.window,
+                modal=True,
+                message_type=gtk.MessageType.ERROR,
+                buttons=gtk.ButtonsType.CLOSE,
+                text=_("Failed to open {}").format(uri)
+            )
             fmt = _('Error: "{}" - is a help browser installed on this computer?')
             dialog.format_secondary_text(fmt.format(msg))
             dialog.run()
@@ -599,7 +620,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(None, "file://%s" % path, gdk.CURRENT_TIME)
+                    gtk.show_uri(self.window, "file://%s" % path, gdk.CURRENT_TIME)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 

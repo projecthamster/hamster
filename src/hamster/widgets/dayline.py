@@ -163,11 +163,13 @@ class DayLine(graphics.Scene):
 
 
         colors = {
-            "normal": self._style.get_color(gtk.StateFlags.NORMAL),
-            "normal_bg": self._style.get_background_color(gtk.StateFlags.NORMAL),
-            "selected": self._style.get_color(gtk.StateFlags.SELECTED),
-            "selected_bg": self._style.get_background_color(gtk.StateFlags.SELECTED),
+            "normal": self._style.get_color(),
+            "selected": self._style.get_color(),
         }
+        success, c = self._style.lookup_color("theme_bg_color")
+        colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+        success, c = self._style.lookup_color("theme_selected_bg_color")
+        colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
 
         bottom = self.plot_area.y + self.plot_area.height
 
