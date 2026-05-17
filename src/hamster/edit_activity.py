@@ -316,13 +316,13 @@ class CustomFactController(Controller):
         """Set save button sensitivity and tooltip."""
         self.save_button.set_tooltip_markup(markup)
         if status == "looks good":
-            self.save_button.set_label("gtk-save")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(True)
         elif status == "warning":
-            self.save_button.set_label("gtk-dialog-warning")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(True)
         elif status == "wrong":
-            self.save_button.set_label("gtk-save")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(False)
         else:
             raise ValueError("unknown status: '{}'".format(status))
