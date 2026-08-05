@@ -479,7 +479,7 @@ class Overview(Controller):
 
         # Ctrl+shortcuts via ShortcutController (doesn't intercept normal typing)
         sc = gtk.ShortcutController()
-        sc.set_scope(gtk.ShortcutScope.LOCAL)
+        sc.set_scope(gtk.ShortcutScope.MANAGED)
         for trigger, callback in [
             ("<Control>f", lambda w, a: self.header_bar.search_button.set_active(True)),
             ("<Control>n", lambda w, a: self.start_new_fact(clone_selected=False)),
@@ -488,6 +488,7 @@ class Overview(Controller):
             ("<Control>plus", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
             ("<Control>KP_Add", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
             ("Escape", lambda w, a: self.close_window()),
+            ("<Control>w", lambda w, a: self.close_window()),
         ]:
             sc.add_shortcut(gtk.Shortcut(
                 trigger=gtk.ShortcutTrigger.parse_string(trigger),
