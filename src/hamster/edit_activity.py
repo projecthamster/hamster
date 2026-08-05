@@ -132,7 +132,9 @@ class CustomFactController(Controller):
         self.get_widget("delete_button").connect("clicked", self.on_delete_clicked)
         self.get_widget("cancel_button").connect("clicked", self.on_cancel_clicked)
         self.get_widget("save_button").connect("clicked", self.on_save_button_clicked)
-        # TODO Phase 4: Connect on_window_key_pressed using EventControllerKey
+        key_controller = gtk.EventControllerKey()
+        key_controller.connect("key-pressed", self.on_window_key_pressed)
+        self.window.add_controller(key_controller)
 
         self.validate_fields()
 
@@ -380,23 +382,25 @@ class CustomFactController(Controller):
             runtime.storage.add_fact(self.fact)
         self.close_window()
 
-    def on_window_key_pressed(self, tree, event_key):
-        popups = (self.cmdline.popup.get_property("visible")
-                  or self.start_time.popup.get_property("visible")
-                  or self.end_time.popup.get_property("visible")
-                  or self.tags_entry.popup.get_property("visible"))
+    def on_window_key_pressed(self, controller, keyval, keycode, state):
+        popups = (self.cmdline.popup.get_visible()
+                  or self.start_time.popup.get_visible()
+                  or self.end_time.popup.get_visible()
+                  or self.tags_entry.popup.get_visible())
 
-        if (event_key.keyval == gdk.KEY_Escape or \
-           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
+        if (keyval == gdk.KEY_Escape or
+           (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK)):
             if popups:
                 return False
 
             self.close_window()
+            return True
 
-        elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
+        elif keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
             if popups:
                 return False
             if self.description_box.has_focus():
                 return False
             if self.validate_fields():
                 self.on_save_button_clicked(None)
+                return True
