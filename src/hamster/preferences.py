@@ -454,6 +454,14 @@ class PreferencesEditor(Controller):
         entry.connect("activate", on_ok)
         cancel_btn.connect("clicked", lambda b: dialog.destroy())
 
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.LOCAL)
+        sc.add_shortcut(gtk.Shortcut(
+            trigger=gtk.ShortcutTrigger.parse_string("Escape"),
+            action=gtk.CallbackAction.new(lambda w, a: dialog.destroy()),
+        ))
+        dialog.add_controller(sc)
+
         dialog.present()
         entry.grab_focus()
 
