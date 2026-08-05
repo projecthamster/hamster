@@ -264,7 +264,7 @@ class TimeInput(gtk.Entry):
         self.popup.popup()
 
     def toggle_popup(self):
-        if self.popup.get_property("visible"):
+        if self.popup.get_visible():
             self.hide_popup()
         else:
             self.show_popup()

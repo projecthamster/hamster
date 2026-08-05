@@ -5,7 +5,7 @@
     <property name="child">
       <object class="GtkFrame" id="frame1">        <child>
           <object class="GtkBox" id="alignment1">
-            <property name="visible">True</property>
+
             <child>
               <object class="GtkBox" id="box1">
                 <property name="orientation">vertical</property>
@@ -86,7 +86,7 @@
                 <child>
                   <object class="GtkBox" id="alignment6">
                     <property name="vexpand">1</property>
-                    <property name="visible">True</property>
+        
                     <child>
                       <object class="GtkBox" id="hbox9">
                         <property name="spacing">8</property>
@@ -107,7 +107,7 @@
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkBox" id="range_start_box">
-                                    <property name="visible">True</property>
+                        
                                     <child>
                                       <object class="GtkCalendar" id="start_calendar">
                                         <property name="focusable">1</property>
@@ -125,7 +125,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkBox" id="range_end_box">
-                                    <property name="visible">True</property>
+                        
                                     <child>
                                       <object class="GtkCalendar" id="end_calendar">
                                         <property name="focusable">1</property>
@@ -140,7 +140,7 @@
                             </child>
                             <child>
                               <object class="GtkBox" id="buttonbox1">
-                                <property name="visible">True</property>
+                    
                                 <child>
                                   <placeholder/>
                                 </child>

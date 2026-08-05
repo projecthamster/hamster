@@ -1800,11 +1800,9 @@ class Scene(Parent, gtk.DrawingArea):
                        style_class=None):
         gtk.DrawingArea.__init__(self)
 
-        self._style = self.get_style_context()
-
         #: widget style. One of gtk.STYLE_CLASS_*. By default it's BACKGROUND
         self.style_class = style_class or "background"
-        self._style.add_class(self.style_class) # so we know our colors
+        self.add_css_class(self.style_class)
 
         #: list of sprites in scene. use :func:`add_child` to add sprites
         self.sprites = []
@@ -1939,8 +1937,8 @@ class Scene(Parent, gtk.DrawingArea):
                 val._do_focus()
         elif name == "style_class":
             if hasattr(self, "style_class"):
-                self._style.remove_class(self.style_class)
-            self._style.add_class(val)
+                self.remove_css_class(self.style_class)
+            self.add_css_class(val)
         elif name == "background_color":
             if val:
                 rgba = gdk.RGBA()

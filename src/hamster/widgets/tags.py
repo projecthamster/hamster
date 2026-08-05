@@ -228,7 +228,7 @@ class TagsEntry(gtk.Entry):
 
     def _on_key_press_event(self, entry, event):
         if event.keyval == gdk.KEY_Tab:
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 #we have to replace
                 if self.get_text() and self.get_cursor_tag() != self.filter_tags[0]:
                     self.replace_tag(self.get_cursor_tag(), self.filter_tags[0])
@@ -239,7 +239,7 @@ class TagsEntry(gtk.Entry):
                 return False
 
         elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 if self.get_text():
                     self.hide_popup()
                 return True
@@ -249,7 +249,7 @@ class TagsEntry(gtk.Entry):
                 return False
 
         elif event.keyval == gdk.KEY_Escape:
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 self.hide_popup()
                 return True
             else:

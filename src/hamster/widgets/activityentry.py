@@ -107,7 +107,7 @@ class CompleteTree(graphics.Scene):
         self.current_row = None
         self.rows = []
 
-        self.style = self._style
+        self.style = self.get_style_context()
 
         self.label = Label(x=5, y=3)
         self.row_height = self.label.height + 10

@@ -62,7 +62,7 @@ class HeaderBar(gtk.HeaderBar):
 
         box.append(self.time_back)
         box.append(self.time_forth)
-        gtk.StyleContext.add_class(box.get_style_context(), "linked")
+        box.add_css_class("linked")
         self.pack_start(box)
 
         self.range_pick = RangePick(dt.hday.today())
@@ -267,7 +267,7 @@ class Totals(graphics.Scene):
         self.mouse_cursor = gdk.Cursor.new_from_name("pointer")
 
         self.instructions_label = layout.Label(_("Click to see stats"),
-                                               color=self._style.get_color(),
+                                               color=self.get_color(),
                                                padding=10,
                                                expand=False)
 
@@ -382,8 +382,8 @@ class Totals(graphics.Scene):
     def _get_fg_color(self):
         root = self.get_root()
         if root:
-            return root.get_style_context().get_color()
-        return self._style.get_color()
+            return root.get_color()
+        return self.get_color()
 
     def update_colors(self):
         color = self._get_fg_color()
@@ -392,7 +392,7 @@ class Totals(graphics.Scene):
         self.activities_chart.label_color = color
         self.categories_chart.label_color = color
         self.tag_chart.label_color = color
-        success, bg_color = self._style.lookup_color("theme_bg_color")
+        success, bg_color = self.get_style_context().lookup_color("theme_bg_color")
         if not success:
             bg_color = gdk.RGBA(1, 1, 1, 1)
         bar_color = self.colors.mix(bg_color, color, 0.6)

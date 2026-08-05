@@ -322,7 +322,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.hover_fact = None
         self.current_fact = None
 
-        self.style = self._style
+        self.style = self.get_style_context()
 
         self.visible_range = None
         self.set_size_request(500, 400)
