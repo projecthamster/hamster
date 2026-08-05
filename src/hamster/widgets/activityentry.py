@@ -217,6 +217,7 @@ class CmdLineEntry(gtk.Entry):
         self.original_fact = None
 
         self.popup = gtk.Popover()
+        self.popup.set_autohide(False)
         self.popup.set_parent(self)
 
         box = gtk.Frame()
