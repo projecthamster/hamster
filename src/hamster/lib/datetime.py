@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)   # noqa: E402
 import datetime as pdt  # standard datetime
 import re
 
+timezone = pdt.timezone
+
 from collections import namedtuple
 from textwrap import dedent
 from functools import lru_cache
@@ -336,6 +338,10 @@ class datetime(pdt.datetime):
                    t.hour, t.minute,
                    t.second, t.microsecond,
                    t.tzinfo, **kwargs)
+
+    @classmethod
+    def fromtimestamp(cls, timestamp, tz=None):
+        return cls.from_pdt(pdt.datetime.fromtimestamp(timestamp, tz=tz))
 
     @classmethod
     def now(cls):
