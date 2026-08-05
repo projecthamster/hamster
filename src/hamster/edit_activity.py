@@ -112,7 +112,9 @@ class CustomFactController(Controller):
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
-        self.cmdline.connect("activate", self.on_cmdline_activated)
+        self.cmdline.connect("activate", self.on_entry_activated)
+        self.start_time.connect("activate", self.on_entry_activated)
+        self.end_time.connect("activate", self.on_entry_activated)
         self.description_buffer.connect("changed", self.on_description_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
@@ -384,8 +386,8 @@ class CustomFactController(Controller):
     def on_close(self, widget):
         self.close_window()
 
-    def on_cmdline_activated(self, entry):
-        if not self.cmdline.popup.get_visible() and self.validate_fields():
+    def on_entry_activated(self, entry):
+        if self.validate_fields():
             self.on_save_button_clicked(None)
 
     def on_save_button_clicked(self, button):

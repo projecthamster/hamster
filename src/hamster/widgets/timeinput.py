@@ -289,6 +289,7 @@ class TimeInput(gtk.Entry):
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
+            self.emit("activate")
             return True
 
         # Up/Down: navigate the popup tree
