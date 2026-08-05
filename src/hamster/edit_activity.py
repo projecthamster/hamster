@@ -133,9 +133,17 @@ class CustomFactController(Controller):
         self.get_widget("delete_button").connect("clicked", self.on_delete_clicked)
         self.get_widget("cancel_button").connect("clicked", self.on_cancel_clicked)
         self.get_widget("save_button").connect("clicked", self.on_save_button_clicked)
-        key_controller = gtk.EventControllerKey()
-        key_controller.connect("key-pressed", self.on_window_key_pressed)
-        self.window.add_controller(key_controller)
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.LOCAL)
+        for trigger, callback in [
+            ("Escape", lambda w, a: self.close_window()),
+            ("<Control>w", lambda w, a: self.close_window()),
+        ]:
+            sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string(trigger),
+                action=gtk.CallbackAction.new(callback),
+            ))
+        self.window.add_controller(sc)
 
         self.validate_fields()
 
@@ -387,25 +395,3 @@ class CustomFactController(Controller):
             runtime.storage.add_fact(self.fact)
         self.close_window()
 
-    def on_window_key_pressed(self, controller, keyval, keycode, state):
-        popups = (self.cmdline.popup.get_visible()
-                  or self.start_time.popup.get_visible()
-                  or self.end_time.popup.get_visible()
-                  or self.tags_entry.popup.get_visible())
-
-        if (keyval == gdk.KEY_Escape or
-           (keyval == gdk.KEY_w and state & gdk.ModifierType.CONTROL_MASK)):
-            if popups:
-                return False
-
-            self.close_window()
-            return True
-
-        elif keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
-            if popups:
-                return False
-            if self.description_box.has_focus():
-                return False
-            if self.validate_fields():
-                self.on_save_button_clicked(None)
-                return True
