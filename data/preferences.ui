@@ -111,7 +111,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image1">
-                                                <property name="icon_name">list-add</property>
+                                                <property name="icon_name">list-add-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
@@ -122,7 +122,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image2">
-                                                <property name="icon_name">list-remove</property>
+                                                <property name="icon_name">list-remove-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
@@ -185,7 +185,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image4">
-                                                <property name="icon_name">list-add</property>
+                                                <property name="icon_name">list-add-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
@@ -196,7 +196,7 @@
                                             <property name="receives_default">1</property>
                                             <child>
                                               <object class="GtkImage" id="image5">
-                                                <property name="icon_name">list-remove</property>
+                                                <property name="icon_name">list-remove-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
