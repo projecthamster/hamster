@@ -279,39 +279,36 @@ class TimeInput(gtk.Entry):
 
     def _on_key_press_event(self, entry, event):
         if event.keyval not in (gdk.KEY_Up, gdk.KEY_Down, gdk.KEY_Return, gdk.KEY_KP_Enter):
-            #any kind of other input
             self.hide_popup()
             return False
 
-        model, iter = self.time_tree.get_selection().get_selected()
-        if not iter:
-            return
-
-
-        i = model.get_path(iter)[0]
-        if event.keyval == gdk.KEY_Up:
-            i-=1
-        elif event.keyval == gdk.KEY_Down:
-            i+=1
-        elif (event.keyval == gdk.KEY_Return or
-              event.keyval == gdk.KEY_KP_Enter):
-
-            if self.popup.get_property("visible"):
+        if event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
+            model, iter = self.time_tree.get_selection().get_selected()
+            if self.popup.get_visible() and iter:
+                i = model.get_path(iter)[0]
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
-        elif (event.keyval == gdk.KEY_Escape):
-            self.hide_popup()
-            return
+            return True
 
-        # keep it in sane limits
+        # Up/Down: navigate the popup tree
+        model, iter = self.time_tree.get_selection().get_selected()
+        if not iter:
+            if not self.popup.get_visible():
+                self.show_popup()
+            return True
+
+        i = model.get_path(iter)[0]
+        if event.keyval == gdk.KEY_Up:
+            i -= 1
+        elif event.keyval == gdk.KEY_Down:
+            i += 1
+
         i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
-
         self.time_tree.set_cursor(i)
-        self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+        self.time_tree.scroll_to_cell(i, use_align=True, row_align=0.4)
 
-        # if popup is not visible, display it on up and down
-        if event.keyval in (gdk.KEY_Up, gdk.KEY_Down) and self.popup.props.visible == False:
+        if not self.popup.get_visible():
             self.show_popup()
 
         return True
