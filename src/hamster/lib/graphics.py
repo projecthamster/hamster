@@ -2297,7 +2297,7 @@ class Scene(Parent, gtk.DrawingArea):
             handled = self._focus_sprite._do_key_press(event)
         if not handled:
             self.emit("on-key-press", event)
-        return True
+        return handled
 
     def __on_key_release(self, controller, keyval, keycode, state):
         event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
@@ -2306,4 +2306,4 @@ class Scene(Parent, gtk.DrawingArea):
             handled = self._focus_sprite._do_key_release(event)
         if not handled:
             self.emit("on-key-release", event)
-        return True
+        return handled
