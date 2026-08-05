@@ -151,6 +151,14 @@ class PreferencesEditor(Controller):
 
         # Manual signal connections (replacing connect_signals removed in GTK4)
         self.get_widget("close_button").connect("clicked", self.on_close_button_clicked)
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.MANAGED)
+        for trigger in ("Escape", "<Control>w"):
+            sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string(trigger),
+                action=gtk.CallbackAction.new(lambda w, a: self.close_window()),
+            ))
+        self.window.add_controller(sc)
         self.get_widget("category_add").connect("clicked", self.on_category_add_clicked)
         self.get_widget("category_remove").connect("clicked", self.on_category_remove_clicked)
         self.get_widget("category_edit").connect("clicked", self.on_category_edit_clicked)
