@@ -55,14 +55,12 @@ class ReportChooserDialog(gobject.GObject):
             dialog.set_initial_folder(gio.File.new_for_path(os.path.expanduser("~")))
 
         # Set suggested filename
-        # title in the report file name
-        vars = {"title": _("Time track"),
-                "start": start_date.strftime("%x").replace("/", "."),
-                "end": end_date.strftime("%x").replace("/", ".")}
+        start = start_date.strftime("%Y-%m-%d")
         if start_date != end_date:
-            filename = "%(title)s, %(start)s - %(end)s.html" % vars
+            end = end_date.strftime("%Y-%m-%d")
+            filename = "Time track {} - {}.html".format(start, end)
         else:
-            filename = "%(title)s, %(start)s.html" % vars
+            filename = "Time track {}.html".format(start)
 
         dialog.set_initial_name(filename)
 
