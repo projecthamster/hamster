@@ -19,6 +19,7 @@
 
 import time
 
+from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
@@ -88,7 +89,9 @@ class Selection(graphics.Sprite):
 class DayLine(graphics.Scene):
     def __init__(self, start_time = None):
         graphics.Scene.__init__(self)
-        self.set_can_focus(False) # no interaction
+        self.set_hexpand(True)
+        self.set_vexpand(True)
+        self.set_can_focus(False)
 
         self.day_start = conf.day_start
 
