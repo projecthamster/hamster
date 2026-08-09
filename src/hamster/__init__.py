@@ -1,5 +1,5 @@
 import gi
-gi.require_version('Gtk', '3.0')  # noqa: E402
+gi.require_version('Gtk', '4.0')  # noqa: E402
 gi.require_version('PangoCairo', '1.0')  # noqa: E402
 # for some reason performance is improved by importing Gtk early
 from gi.repository import Gtk as gtk

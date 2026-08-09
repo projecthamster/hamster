@@ -19,6 +19,7 @@
 
 import time
 
+from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
@@ -88,7 +89,9 @@ class Selection(graphics.Sprite):
 class DayLine(graphics.Scene):
     def __init__(self, start_time = None):
         graphics.Scene.__init__(self)
-        self.set_can_focus(False) # no interaction
+        self.set_hexpand(True)
+        self.set_vexpand(True)
+        self.set_can_focus(False)
 
         self.day_start = conf.day_start
 
@@ -112,7 +115,7 @@ class DayLine(graphics.Scene):
         self.drag_start = None
         self.current_x = None
 
-        self.date_label = graphics.Label(color=self._style.get_color(gtk.StateFlags.NORMAL),
+        self.date_label = graphics.Label(color=self.get_color(),
                                          x=5, y=16)
 
         self.add_child(self.plot_area, self.date_label)
@@ -155,6 +158,8 @@ class DayLine(graphics.Scene):
         self.plot_area.height = self.height - 30
 
 
+        if not self.width:
+            return
         vertical = min(self.plot_area.height / 5, 7)
         minute_pixel = (self.scope_hours * 60.0 - 15) / self.width
 
@@ -162,12 +167,15 @@ class DayLine(graphics.Scene):
         g.translate(0.5, 0.5)
 
 
+        style = self.get_style_context()
         colors = {
-            "normal": self._style.get_color(gtk.StateFlags.NORMAL),
-            "normal_bg": self._style.get_background_color(gtk.StateFlags.NORMAL),
-            "selected": self._style.get_color(gtk.StateFlags.SELECTED),
-            "selected_bg": self._style.get_background_color(gtk.StateFlags.SELECTED),
+            "normal": self.get_color(),
+            "selected": self.get_color(),
         }
+        success, c = style.lookup_color("theme_bg_color")
+        colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+        success, c = style.lookup_color("theme_selected_bg_color")
+        colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
 
         bottom = self.plot_area.y + self.plot_area.height
 

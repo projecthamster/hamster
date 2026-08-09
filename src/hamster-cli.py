@@ -27,8 +27,8 @@ import argparse
 import re
 
 import gi
-gi.require_version('Gdk', '3.0')  # noqa: E402
-gi.require_version('Gtk', '3.0')  # noqa: E402
+gi.require_version('Gdk', '4.0')  # noqa: E402
+gi.require_version('Gtk', '4.0')  # noqa: E402
 from gi.repository import GLib as glib
 from gi.repository import Gdk as gdk
 from gi.repository import Gtk as gtk
@@ -170,9 +170,7 @@ class Hamster(gtk.Application):
                 logger.debug("new About")
             controller = self.about_controller
         elif name in ("add", "clone", "edit"):
-            if self.fact_controller:
-                # Something is already going on, with other arguments, present it.
-                # Or should we just discard the forgotten one ?
+            if self.fact_controller and self.fact_controller.window:
                 logger.warning("Fact controller already active. Please close first.")
             else:
                 fact_id = data.get_int32() if data else None
@@ -200,8 +198,6 @@ class Hamster(gtk.Application):
         # https://specifications.freedesktop.org/wm-spec/wm-spec-1.3.html
         if name != "overview" and self.overview_controller:
             window.set_transient_for(self.overview_controller.window)
-            # so the dialog appears on top of the transient-for:
-            window.set_type_hint(gdk.WindowTypeHint.DIALOG)
         else:
             # toplevel
             window.set_transient_for(None)
@@ -455,7 +451,7 @@ Example usage:
     logger.debug("app instanciated")
 
     import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL) # gtk3 screws up ctrl+c
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     parser = argparse.ArgumentParser(
         description="Time tracking utility",

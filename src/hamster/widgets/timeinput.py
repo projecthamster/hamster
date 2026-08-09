@@ -33,8 +33,10 @@ class TimeInput(gtk.Entry):
     }
 
 
-    def __init__(self, time=None, start_time=None, *, parent, **kwargs):
-        gtk.Entry.__init__(self, parent=parent, **kwargs)
+    def __init__(self, time=None, start_time=None, *, parent=None, **kwargs):
+        gtk.Entry.__init__(self, **kwargs)
+        if parent:
+            parent.append(self)
         self.news = False
         self.set_width_chars(7) #7 is like 11:24pm
 
@@ -42,14 +44,11 @@ class TimeInput(gtk.Entry):
         self.set_start_time(start_time)
 
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_type_hint(gdk.WindowTypeHint.COMBO)  # why not
-        self.popup.set_attached_to(self)  # attributes
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))  # position
+        self.popup = gtk.Popover()
+        self.popup.set_parent(self)
 
         time_box = gtk.ScrolledWindow()
         time_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.ALWAYS)
-        time_box.set_shadow_type(gtk.ShadowType.IN)
 
         self.time_tree = gtk.TreeView()
         self.time_tree.set_headers_visible(False)
@@ -58,20 +57,29 @@ class TimeInput(gtk.Entry):
         self.time_tree.append_column(gtk.TreeViewColumn("Time",
                                                         gtk.CellRendererText(),
                                                         text=0))
-        self.time_tree.connect("button-press-event",
-                               self._on_time_tree_button_press_event)
+        # Replace button-press-event with GestureClick
+        click = gtk.GestureClick()
+        click.connect("pressed", self._on_tree_click_gtk4)
+        self.time_tree.add_controller(click)
 
-        time_box.add(self.time_tree)
-        self.popup.add(time_box)
+        time_box.set_child(self.time_tree)
+        self.popup.set_child(time_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY, "edit-clear-all-symbolic")
+        self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "pan-down-symbolic")
 
-        self.connect("icon-release", self._on_icon_release)
-        self.connect("button-press-event", self._on_button_press_event)
-        self.connect("key-press-event", self._on_key_press_event)
-        self.connect("focus-in-event", self._on_focus_in_event)
-        self.connect("focus-out-event", self._on_focus_out_event)
-        self._parent_click_watcher = None # bit lame but works
+        self.connect("icon-press", self._on_icon_press)
+
+        # Replace key-press-event with EventControllerKey
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_press_gtk4)
+        self.add_controller(key_ctrl)
+
+        # Replace focus-in-event and focus-out-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("enter", self._on_focus_in_gtk4)
+        focus_ctrl.connect("leave", self._on_focus_out_gtk4)
+        self.add_controller(focus_ctrl)
 
         self.connect("changed", self._on_text_changed)
         self.show()
@@ -138,7 +146,7 @@ class TimeInput(gtk.Entry):
 
         # strip everything non-numeric and consider hours to be first number
         # and minutes - second number
-        numbers = re.split("\D", str_time)
+        numbers = re.split(r"\D", str_time)
         numbers = [x for x in numbers if x!=""]
 
         hours, minutes = None, None
@@ -174,33 +182,34 @@ class TimeInput(gtk.Entry):
             return ""
         return time.strftime("%H:%M").lower()
 
+    def _on_tree_click_gtk4(self, gesture, n_press, x, y):
+        model, iter = self.time_tree.get_selection().get_selected()
+        if iter:
+            time = model.get_value(iter, 0)
+            self._select_time(time)
 
-    def _on_focus_in_event(self, entry, event):
-        self.show_popup()
+    def _on_focus_in_gtk4(self, controller):
+        pass
 
-    def _on_button_press_event(self, button, event):
-        self.show_popup()
-
-    def _on_focus_out_event(self, event, something):
-        self.hide_popup()
+    def _on_focus_out_gtk4(self, controller):
         if self.news:
             self.emit("time-entered")
             self.news = False
 
-    def _on_icon_release(self, entry, icon_pos, event):
-        self.grab_focus()
-        self.set_text("")
-        self.emit("changed")
+    def _on_icon_press(self, entry, icon_pos):
+        if icon_pos == gtk.EntryIconPosition.PRIMARY:
+            self.grab_focus()
+            self.set_text("")
+            self.emit("changed")
+        elif icon_pos == gtk.EntryIconPosition.SECONDARY:
+            self.toggle_popup()
 
     def hide_popup(self):
-        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
-            self.get_toplevel().disconnect(self._parent_click_watcher)
-            self._parent_click_watcher = None
-        self.popup.hide()
+        # GTK4: Popover handles click-outside dismissal automatically
+        self.popup.popdown()
 
     def show_popup(self):
-        if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
+        # GTK4: Popover handles click-outside dismissal automatically
 
         # we will be adding things, need datetime
         i_time_0 = dt.datetime.combine(self.start_date or dt.date.today(),
@@ -246,65 +255,61 @@ class TimeInput(gtk.Entry):
             selection.select_path(focus_row)
             self.time_tree.scroll_to_cell(focus_row, use_align = True, row_align = 0.4)
 
-        #move popup under the widget
+        # Set size for popup content
         alloc = self.get_allocation()
         w = alloc.width
         self.time_tree.set_size_request(w, alloc.height * 5)
 
-        window = self.get_parent_window()
-        dmmy, x, y= window.get_origin()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-        self.popup.resize(*self.time_tree.get_size_request())
-        self.popup.show_all()
+        # GTK4: Popover auto-positions, no need for manual move/resize
+        self.popup.popup()
 
     def toggle_popup(self):
-        if self.popup.get_property("visible"):
+        if self.popup.get_visible():
             self.hide_popup()
         else:
             self.show_popup()
 
-    def _on_time_tree_button_press_event(self, tree, event):
-        model, iter = tree.get_selection().get_selected()
-        time = model.get_value(iter, 0)
-        self._select_time(time)
-
+    def _on_key_press_gtk4(self, controller, keyval, keycode, state):
+        # Create event-like object for compatibility
+        class Event:
+            pass
+        event = Event()
+        event.keyval = keyval
+        return self._on_key_press_event(self, event)
 
     def _on_key_press_event(self, entry, event):
         if event.keyval not in (gdk.KEY_Up, gdk.KEY_Down, gdk.KEY_Return, gdk.KEY_KP_Enter):
-            #any kind of other input
             self.hide_popup()
             return False
 
-        model, iter = self.time_tree.get_selection().get_selected()
-        if not iter:
-            return
-
-
-        i = model.get_path(iter)[0]
-        if event.keyval == gdk.KEY_Up:
-            i-=1
-        elif event.keyval == gdk.KEY_Down:
-            i+=1
-        elif (event.keyval == gdk.KEY_Return or
-              event.keyval == gdk.KEY_KP_Enter):
-
-            if self.popup.get_property("visible"):
+        if event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
+            model, iter = self.time_tree.get_selection().get_selected()
+            if self.popup.get_visible() and iter:
+                i = model.get_path(iter)[0]
                 self._select_time(self.time_tree.get_model()[i][0])
             else:
                 self._select_time(entry.get_text())
-        elif (event.keyval == gdk.KEY_Escape):
-            self.hide_popup()
-            return
+            self.emit("activate")
+            return True
 
-        # keep it in sane limits
+        # Up/Down: navigate the popup tree
+        model, iter = self.time_tree.get_selection().get_selected()
+        if not iter:
+            if not self.popup.get_visible():
+                self.show_popup()
+            return True
+
+        i = model.get_path(iter)[0]
+        if event.keyval == gdk.KEY_Up:
+            i -= 1
+        elif event.keyval == gdk.KEY_Down:
+            i += 1
+
         i = min(max(i, 0), len(self.time_tree.get_model()) - 1)
-
         self.time_tree.set_cursor(i)
-        self.time_tree.scroll_to_cell(i, use_align = True, row_align = 0.4)
+        self.time_tree.scroll_to_cell(i, use_align=True, row_align=0.4)
 
-        # if popup is not visible, display it on up and down
-        if event.keyval in (gdk.KEY_Up, gdk.KEY_Down) and self.popup.props.visible == False:
+        if not self.popup.get_visible():
             self.show_popup()
 
         return True

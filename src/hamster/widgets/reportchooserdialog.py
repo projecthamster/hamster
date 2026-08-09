@@ -21,119 +21,103 @@
 import os
 from gi.repository import GObject as gobject
 from gi.repository import Gtk as gtk
+from gi.repository import Gio as gio
 from hamster.lib.configuration import conf
 
-class ReportChooserDialog(gtk.Dialog):
+
+class ReportChooserDialog(gobject.GObject):
     __gsignals__ = {
-        # format, path, start_date, end_date
+        # format, path
         'report-chosen': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
                           (gobject.TYPE_STRING, gobject.TYPE_STRING)),
         'report-chooser-closed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
+
     def __init__(self):
-        gtk.Dialog.__init__(self)
-
-
-        self.dialog = gtk.FileChooserDialog(title = _("Save Report — Time Tracker"),
-                                            parent = self,
-                                            action = gtk.FileChooserAction.SAVE,
-                                            buttons=(gtk.STOCK_CANCEL,
-                                                     gtk.ResponseType.CANCEL,
-                                                     gtk.STOCK_SAVE,
-                                                     gtk.ResponseType.OK))
-
-        # try to set path to last known folder or fall back to home
-        report_folder = os.path.expanduser(conf.get("last-report-folder"))
-        if os.path.exists(report_folder):
-            self.dialog.set_current_folder(report_folder)
-        else:
-            self.dialog.set_current_folder(os.path.expanduser("~"))
-
-        self.filters = {}
-
-        filter = gtk.FileFilter()
-        filter.set_name(_("HTML Report"))
-        filter.add_mime_type("text/html")
-        filter.add_pattern("*.html")
-        filter.add_pattern("*.htm")
-        self.filters[filter] = "html"
-        self.dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name(_("Tab-Separated Values (TSV)"))
-        filter.add_mime_type("text/plain")
-        filter.add_pattern("*.tsv")
-        filter.add_pattern("*.txt")
-        self.filters[filter] = "tsv"
-        self.dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name(_("XML"))
-        filter.add_mime_type("text/xml")
-        filter.add_pattern("*.xml")
-        self.filters[filter] = "xml"
-        self.dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name(_("iCal"))
-        filter.add_mime_type("text/calendar")
-        filter.add_pattern("*.ics")
-        self.filters[filter] = "ical"
-        self.dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name("All files")
-        filter.add_pattern("*")
-        self.dialog.add_filter(filter)
-
+        gobject.GObject.__init__(self)
+        self._dialog = None
+        self._filters = {}
 
     def show(self, start_date, end_date):
-        """setting suggested name to something readable, replace backslashes
-           with dots so the name is valid in linux"""
+        """Create and show the file save dialog with a suggested filename.
 
-        # title in the report file name
-        vars = {"title": _("Time track"),
-                "start": start_date.strftime("%x").replace("/", "."),
-                "end": end_date.strftime("%x").replace("/", ".")}
+        Setting suggested name to something readable, replace backslashes
+        with dots so the name is valid in linux.
+        """
+        dialog = gtk.FileDialog()
+        dialog.set_title(_("Save Report — Time Tracker"))
+
+        # Try to set path to last known folder or fall back to home
+        report_folder = os.path.expanduser(conf.get("last-report-folder"))
+        if os.path.exists(report_folder):
+            dialog.set_initial_folder(gio.File.new_for_path(report_folder))
+        else:
+            dialog.set_initial_folder(gio.File.new_for_path(os.path.expanduser("~")))
+
+        # Set suggested filename
+        start = start_date.strftime("%Y-%m-%d")
         if start_date != end_date:
-            filename = "%(title)s, %(start)s - %(end)s.html" % vars
+            end = end_date.strftime("%Y-%m-%d")
+            filename = "Time track {} - {}.html".format(start, end)
         else:
-            filename = "%(title)s, %(start)s.html" % vars
+            filename = "Time track {}.html".format(start)
 
-        self.dialog.set_current_name(filename)
+        dialog.set_initial_name(filename)
 
-        response = self.dialog.run()
+        # Create filters
+        filter_list = gio.ListStore.new(gtk.FileFilter)
 
-        if response != gtk.ResponseType.OK:
+        filters = {}
+        for name, mime, patterns, key in [
+            (_("HTML Report"), "text/html", ["*.html", "*.htm"], "html"),
+            (_("Tab-Separated Values (TSV)"), "text/plain", ["*.tsv", "*.txt"], "tsv"),
+            (_("XML"), "text/xml", ["*.xml"], "xml"),
+            (_("iCal"), "text/calendar", ["*.ics"], "ical"),
+        ]:
+            f = gtk.FileFilter()
+            f.set_name(name)
+            f.add_mime_type(mime)
+            for p in patterns:
+                f.add_pattern(p)
+            filters[f] = key
+            filter_list.append(f)
+
+        all_filter = gtk.FileFilter()
+        all_filter.set_name("All files")
+        all_filter.add_pattern("*")
+        filter_list.append(all_filter)
+
+        dialog.set_filters(filter_list)
+        self._filters = filters
+        self._dialog = dialog
+
+        # Save async
+        dialog.save(None, None, self._on_save_response)
+
+    def _on_save_response(self, dialog, result):
+        """Handle the async response from the file save dialog."""
+        try:
+            file = dialog.save_finish(result)
+        except Exception:
+            # User cancelled or error occurred
             self.emit("report-chooser-closed")
-            self.dialog.destroy()
-            self.dialog = None
-        else:
-            self.on_save_button_clicked()
+            return
 
+        path = file.get_path()
 
-    def present(self):
-        self.dialog.present()
-
-    def on_save_button_clicked(self):
-        path, format = None,  None
-
+        # Determine format from the selected filter
         format = "html"
-        if self.dialog.get_filter() in self.filters:
-            format = self.filters[self.dialog.get_filter()]
-        path = self.dialog.get_filename()
+        current_filter = self._dialog.get_default_filter()
+        if current_filter in self._filters:
+            format = self._filters[current_filter]
 
-        # append correct extension if it is missing
+        # Append correct extension if it is missing
         # TODO - proper way would be to change extension on filter change
         # only pointer in web is http://www.mail-archive.com/pygtk@daa.com.au/msg08740.html
-        if path.endswith(".%s" % format) == False:
+        if not path.endswith(".%s" % format):
             path = "%s.%s" % (path.rstrip("."), format)
-
-        categories = []
 
         conf.set("last-report-folder", os.path.dirname(path))
 
-        # format, path, start_date, end_date
+        # format, path
         self.emit("report-chosen", format, path)
-        self.dialog.destroy()
-        self.dialog = None

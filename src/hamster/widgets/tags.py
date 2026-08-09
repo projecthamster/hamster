@@ -32,38 +32,43 @@ class TagsEntry(gtk.Entry):
         'tags-selected': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
 
-    def __init__(self, *, parent):
-        gtk.Entry.__init__(self, parent=parent)
+    def __init__(self, *, parent=None):
+        gtk.Entry.__init__(self)
+        if parent:
+            parent.append(self)
         self.ac_tags = None  # "autocomplete" tags
         self.filter = None # currently applied filter string
         self.filter_tags = [] #filtered tags
 
-        self.popup = gtk.Window(type = gtk.WindowType.POPUP)
-        self.popup.set_attached_to(self)
-        self.popup.set_transient_for(self.get_ancestor(gtk.Window))
+        self.popup = gtk.Popover()
+        self.popup.set_parent(self)
 
         self.scroll_box = gtk.ScrolledWindow()
-        self.scroll_box.set_shadow_type(gtk.ShadowType.IN)
         self.scroll_box.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
         viewport = gtk.Viewport()
-        viewport.set_shadow_type(gtk.ShadowType.NONE)
 
         self.tag_box = TagBox()
         self.tag_box.connect("tag-selected", self.on_tag_selected)
         self.tag_box.connect("tag-unselected", self.on_tag_unselected)
 
 
-        viewport.add(self.tag_box)
-        self.scroll_box.add(viewport)
-        self.popup.add(self.scroll_box)
+        viewport.set_child(self.tag_box)
+        self.scroll_box.set_child(viewport)
+        self.popup.set_child(self.scroll_box)
 
         self.set_icon_from_icon_name(gtk.EntryIconPosition.SECONDARY, "go-down-symbolic")
 
         self.connect("icon-press", self._on_icon_press)
-        self.connect("key-press-event", self._on_key_press_event)
-        self.connect("focus-out-event", self._on_focus_out_event)
 
-        self._parent_click_watcher = None # bit lame but works
+        # Replace key-press-event with EventControllerKey
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_press_gtk4)
+        self.add_controller(key_ctrl)
+
+        # Replace focus-out-event with EventControllerFocus
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("leave", self._on_focus_out_gtk4)
+        self.add_controller(focus_ctrl)
 
         self.external_listeners = [
             (runtime.storage, runtime.storage.connect('tags-changed', self.refresh_ac_tags))
@@ -115,31 +120,24 @@ class TagsEntry(gtk.Entry):
         self.update_tagsline(add=True)
 
     def hide_popup(self):
-        self.popup.hide()
-        if self._parent_click_watcher and self.get_toplevel().handler_is_connected(self._parent_click_watcher):
-            self.get_toplevel().disconnect(self._parent_click_watcher)
-            self._parent_click_watcher = None
+        # GTK4: Popover handles click-outside dismissal automatically
+        self.popup.popdown()
 
     def show_popup(self):
         if not self.filter_tags:
-            self.popup.hide()
+            self.popup.popdown()
             return
 
-        if not self._parent_click_watcher:
-            self._parent_click_watcher = self.get_toplevel().connect("button-press-event", self._on_focus_out_event)
+        # GTK4: Popover handles click-outside dismissal automatically
 
         alloc = self.get_allocation()
-        _, x, y = self.get_parent_window().get_origin()
-
-        self.popup.move(x + alloc.x,y + alloc.y + alloc.height)
-
-        w = alloc.width
-
+        w = max(alloc.width, 300)
         height = self.tag_box.count_height(w)
 
-        self.scroll_box.set_size_request(w, height)
-        self.popup.resize(w, height)
-        self.popup.show_all()
+        self.scroll_box.set_size_request(w, min(height, 300))
+
+        # GTK4: Popover auto-positions, no need for manual move/resize
+        self.popup.popup()
 
     def refresh_activities(self):
         # scratch activities and categories so that they get repopulated on demand
@@ -162,12 +160,10 @@ class TagsEntry(gtk.Entry):
 
         self.tag_box.draw(self.filter_tags)
 
-
-
-    def _on_focus_out_event(self, widget, event):
+    def _on_focus_out_gtk4(self, controller):
         self.hide_popup()
 
-    def _on_icon_press(self, entry, icon_pos, event):
+    def _on_icon_press(self, entry, icon_pos):
         # otherwise Esc could not hide popup
         self.grab_focus()
         # toggle popup
@@ -222,9 +218,17 @@ class TagsEntry(gtk.Entry):
         self.set_text(text)
         self.set_position(len(self.get_text()))
 
+    def _on_key_press_gtk4(self, controller, keyval, keycode, state):
+        # Create event-like object for compatibility
+        class Event:
+            pass
+        event = Event()
+        event.keyval = keyval
+        return self._on_key_press_event(self, event)
+
     def _on_key_press_event(self, entry, event):
         if event.keyval == gdk.KEY_Tab:
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 #we have to replace
                 if self.get_text() and self.get_cursor_tag() != self.filter_tags[0]:
                     self.replace_tag(self.get_cursor_tag(), self.filter_tags[0])
@@ -235,7 +239,7 @@ class TagsEntry(gtk.Entry):
                 return False
 
         elif event.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 if self.get_text():
                     self.hide_popup()
                 return True
@@ -245,7 +249,7 @@ class TagsEntry(gtk.Entry):
                 return False
 
         elif event.keyval == gdk.KEY_Escape:
-            if self.popup.get_property("visible"):
+            if self.popup.get_visible():
                 self.hide_popup()
                 return True
             else:
@@ -344,9 +348,7 @@ class Tag(graphics.Sprite):
     def __init__(self, text, interactive = True, color = "#F1EAAA"):
         graphics.Sprite.__init__(self, interactive = interactive)
 
-        self.width, self.height = 0,0
-
-        font = gtk.Style().font_desc
+        font = pango.FontDescription(graphics._font_desc)
         font_size = int(font.get_size() * 0.8 / pango.SCALE) # 80% of default
 
         self.label = graphics.Label(text, size = font_size, color = (30, 30, 30), y = 1)

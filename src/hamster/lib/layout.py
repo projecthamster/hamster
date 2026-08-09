@@ -209,8 +209,10 @@ class Widget(graphics.Sprite):
         return self.padding_top + self.padding_bottom
 
     def __on_mouse_over(self, sprite):
-        cursor, mouse_x, mouse_y, mods = sprite.get_scene().get_window().get_pointer()
-        if self.tooltip and not gdk.ModifierType.BUTTON1_MASK & mods:
+        scene = sprite.get_scene()
+        mouse_x = scene.mouse_x if scene else 0
+        mouse_y = scene.mouse_y if scene else 0
+        if self.tooltip:
             self._set_tooltip(self.tooltip)
 
 

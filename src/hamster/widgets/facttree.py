@@ -40,7 +40,7 @@ class ActionRow(graphics.Sprite):
 
         self.restart = graphics.Icon("view-refresh-symbolic", size=18,
                                      interactive=True,
-                                     mouse_cursor=gdk.CursorType.HAND1,
+                                     mouse_cursor=gdk.Cursor.new_from_name("pointer"),
                                      y=4)
         self.add_child(self.restart)
 
@@ -298,7 +298,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
     vscroll_policy = gobject.property(type=gtk.ScrollablePolicy, default=gtk.ScrollablePolicy.MINIMUM)
 
     def __init__(self):
-        graphics.Scene.__init__(self, style_class=gtk.STYLE_CLASS_VIEW)
+        graphics.Scene.__init__(self, style_class="view")
 
         self.date_label = Label(10, 3)
         fontdesc = pango.FontDescription(graphics._font_desc)
@@ -322,7 +322,7 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.hover_fact = None
         self.current_fact = None
 
-        self.style = self._style
+        self.style = self.get_style_context()
 
         self.visible_range = None
         self.set_size_request(500, 400)
@@ -603,21 +603,25 @@ class FactTree(graphics.Scene, gtk.Scrollable):
         self.visible_range = self.get_visible_range()
 
     def on_enter_frame(self, scene, context):
-        has_focus = self.get_toplevel().has_toplevel_focus()
+        has_focus = self.get_root().is_active() if self.get_root() else True
         if has_focus:
             colors = {
-                "normal": self.style.get_color(gtk.StateFlags.NORMAL),
-                "normal_bg": self.style.get_background_color(gtk.StateFlags.NORMAL),
-                "selected": self.style.get_color(gtk.StateFlags.SELECTED),
-                "selected_bg": self.style.get_background_color(gtk.StateFlags.SELECTED),
+                "normal": self.style.get_color(),
+                "selected": self.style.get_color(),
             }
+            success, c = self.style.lookup_color("theme_bg_color")
+            colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+            success, c = self.style.lookup_color("theme_selected_bg_color")
+            colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
         else:
             colors = {
-                "normal": self.style.get_color(gtk.StateFlags.BACKDROP),
-                "normal_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
-                "selected": self.style.get_color(gtk.StateFlags.BACKDROP),
-                "selected_bg": self.style.get_background_color(gtk.StateFlags.BACKDROP),
+                "normal": self.style.get_color(),
+                "selected": self.style.get_color(),
             }
+            success, c = self.style.lookup_color("theme_bg_color")
+            colors["normal_bg"] = c if success else gdk.RGBA(1, 1, 1, 1)
+            success, c = self.style.lookup_color("theme_selected_bg_color")
+            colors["selected_bg"] = c if success else gdk.RGBA(0.2, 0.4, 0.8, 1)
 
         if not self.height:
             return

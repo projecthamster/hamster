@@ -60,11 +60,13 @@ class CustomFactController(Controller):
                                                     category_widget=self.category_entry)
 
         self.cmdline = widgets.CmdLineEntry(parent=self.get_widget("cmdline box"))
-        self.cmdline.connect("focus_in_event", self.on_cmdline_focus_in_event)
-        self.cmdline.connect("focus_out_event", self.on_cmdline_focus_out_event)
+        cmdline_focus = gtk.EventControllerFocus()
+        cmdline_focus.connect("enter", lambda c: self.on_cmdline_focus_in_event(self.cmdline))
+        cmdline_focus.connect("leave", lambda c: self.on_cmdline_focus_out_event(self.cmdline))
+        self.cmdline.add_controller(cmdline_focus)
 
         self.dayline = widgets.DayLine()
-        self._gui.get_object("day_preview").add(self.dayline)
+        self._gui.get_object("day_preview").append(self.dayline)
 
         self.description_box = self.get_widget('description')
         self.description_buffer = self.description_box.get_buffer()
@@ -110,6 +112,9 @@ class CustomFactController(Controller):
         # This signal should be emitted only after a manual modification,
         # not at init time when cmdline might not always be fully parsable.
         self.cmdline.connect("changed", self.on_cmdline_changed)
+        self.cmdline.connect("activate", self.on_entry_activated)
+        self.start_time.connect("activate", self.on_entry_activated)
+        self.end_time.connect("activate", self.on_entry_activated)
         self.description_buffer.connect("changed", self.on_description_changed)
         self.start_time.connect("changed", self.on_start_time_changed)
         self.start_date.connect("day-selected", self.on_start_date_changed)
@@ -123,9 +128,26 @@ class CustomFactController(Controller):
         self.category_entry.connect("changed", self.on_category_changed)
         self.tags_entry.connect("changed", self.on_tags_changed)
 
-        self._gui.connect_signals(self)
+        # Manual signal connections (replacing connect_signals removed in GTK4)
+        self.window.connect("close-request", self.on_close)
+        self.get_widget("button-prev-day").connect("clicked", self.on_prev_day_clicked)
+        self.get_widget("button-next-day").connect("clicked", self.on_next_day_clicked)
+        self.get_widget("delete_button").connect("clicked", self.on_delete_clicked)
+        self.get_widget("cancel_button").connect("clicked", self.on_cancel_clicked)
+        self.get_widget("save_button").connect("clicked", self.on_save_button_clicked)
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.LOCAL)
+        for trigger, callback in [
+            ("Escape", lambda w, a: self.close_window()),
+            ("<Control>w", lambda w, a: self.close_window()),
+        ]:
+            sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string(trigger),
+                action=gtk.CallbackAction.new(callback),
+            ))
+        self.window.add_controller(sc)
+
         self.validate_fields()
-        self.window.show_all()
 
     @property
     def date(self):
@@ -191,10 +213,10 @@ class CustomFactController(Controller):
             self.fact = fact
             self.update_fields()
 
-    def on_cmdline_focus_in_event(self, widget, event):
+    def on_cmdline_focus_in_event(self, widget):
         self.master_is_cmdline = True
 
-    def on_cmdline_focus_out_event(self, widget, event):
+    def on_cmdline_focus_out_event(self, widget):
         self.master_is_cmdline = False
 
     def on_description_changed(self, text):
@@ -307,13 +329,13 @@ class CustomFactController(Controller):
         """Set save button sensitivity and tooltip."""
         self.save_button.set_tooltip_markup(markup)
         if status == "looks good":
-            self.save_button.set_label("gtk-save")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(True)
         elif status == "warning":
-            self.save_button.set_label("gtk-dialog-warning")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(True)
         elif status == "wrong":
-            self.save_button.set_label("gtk-save")
+            self.save_button.set_label(_("Save"))
             self.save_button.set_sensitive(False)
         else:
             raise ValueError("unknown status: '{}'".format(status))
@@ -361,8 +383,12 @@ class CustomFactController(Controller):
     def on_cancel_clicked(self, button):
         self.close_window()
 
-    def on_close(self, widget, event):
+    def on_close(self, widget):
         self.close_window()
+
+    def on_entry_activated(self, entry):
+        if self.validate_fields():
+            self.on_save_button_clicked(None)
 
     def on_save_button_clicked(self, button):
         if self.action == "edit":
@@ -371,23 +397,3 @@ class CustomFactController(Controller):
             runtime.storage.add_fact(self.fact)
         self.close_window()
 
-    def on_window_key_pressed(self, tree, event_key):
-        popups = (self.cmdline.popup.get_property("visible")
-                  or self.start_time.popup.get_property("visible")
-                  or self.end_time.popup.get_property("visible")
-                  or self.tags_entry.popup.get_property("visible"))
-
-        if (event_key.keyval == gdk.KEY_Escape or \
-           (event_key.keyval == gdk.KEY_w and event_key.state & gdk.ModifierType.CONTROL_MASK)):
-            if popups:
-                return False
-
-            self.close_window()
-
-        elif event_key.keyval in (gdk.KEY_Return, gdk.KEY_KP_Enter):
-            if popups:
-                return False
-            if self.description_box.has_focus():
-                return False
-            if self.validate_fields():
-                self.on_save_button_clicked(None)

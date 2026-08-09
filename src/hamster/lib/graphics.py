@@ -27,12 +27,27 @@ except: # we can also live without tweener. Scene.animate will not work
 
 import colorsys
 from collections import deque
+from dataclasses import dataclass, field
+
+
+@dataclass
+class SceneEvent:
+    """Shim event object for GTK4 — replaces GTK3 Gdk.Event objects
+    that were passed through the Scene/Sprite event system."""
+    x: float = 0
+    y: float = 0
+    state: int = 0
+    keyval: int = 0
+    keycode: int = 0
+    button: int = 1
+
+    def copy(self):
+        return SceneEvent(self.x, self.y, self.state, self.keyval,
+                          self.keycode, self.button)
 
 
 
-# lemme know if you know a better way how to get default font
-_test_label = gtk.Label("Hello")
-_font_desc = _test_label.get_style().font_desc.to_string()
+_font_desc = "Sans 10"
 
 
 class ColorUtils(object):
@@ -74,11 +89,6 @@ class ColorUtils(object):
                     match = self.hex_color_short.match(color)
                     color = [int(color + color, 16) / 255.0 for color in match.groups()]
 
-        elif isinstance(color, gdk.Color):
-            color = [color.red / 65535.0,
-                     color.green / 65535.0,
-                     color.blue / 65535.0]
-
         elif isinstance(color, (list, tuple)):
             # otherwise we assume we have color components in 0..255 range
             if color[0] > 1 or color[1] > 1 or color[2] > 1:
@@ -94,9 +104,9 @@ class ColorUtils(object):
         return [c * 255 for c in self.parse(color)]
 
     def gdk(self, color):
-        """returns gdk.Color object of the given color"""
+        """returns gdk.RGBA object of the given color"""
         c = self.parse(color)
-        return gdk.Color.from_floats(c)
+        return gdk.RGBA(red=c[0], green=c[1], blue=c[2], alpha=1.0)
 
     def hex(self, color):
         if isinstance(color, gdk.RGBA):
@@ -1028,15 +1038,15 @@ class Sprite(Parent, gobject.GObject):
     def _get_mouse_cursor(self):
         """Determine mouse cursor.
         By default look for self.mouse_cursor is defined and take that.
-        Otherwise use gdk.CursorType.FLEUR for draggable sprites and gdk.CursorType.HAND2 for
+        Otherwise use "move" cursor for draggable sprites and "pointer" cursor for
         interactive sprites. Defaults to scenes cursor.
         """
         if self.mouse_cursor is not None:
             return self.mouse_cursor
         elif self.interactive and self.draggable:
-            return gdk.CursorType.FLEUR
+            return gdk.Cursor.new_from_name("move")
         elif self.interactive:
-            return gdk.CursorType.HAND2
+            return gdk.Cursor.new_from_name("pointer")
 
     def bring_to_front(self):
         """adjusts sprite's z-order so that the sprite is on top of it's
@@ -1395,6 +1405,10 @@ class BitmapSprite(Sprite):
             local_context = cairo.Context(surface)
             if isinstance(self.image_data, GdkPixbuf.Pixbuf):
                 gdk.cairo_set_source_pixbuf(local_context, self.image_data, 0, 0)
+            elif isinstance(self.image_data, gdk.Texture):
+                self.image_data.download(surface.get_data(), surface.get_stride())
+                surface.mark_dirty()
+                local_context.set_source_surface(surface)
             else:
                 local_context.set_source_surface(self.image_data)
             local_context.paint()
@@ -1430,7 +1444,7 @@ class Icon(BitmapSprite):
     """Displays icon by name and size in the theme"""
     def __init__(self, name, size=24, **kwargs):
         BitmapSprite.__init__(self, **kwargs)
-        self.theme = gtk.IconTheme.get_default()
+        self.theme = gtk.IconTheme.get_for_display(gdk.Display.get_default())
 
         #: icon name from theme
         self.name = name
@@ -1442,7 +1456,17 @@ class Icon(BitmapSprite):
         BitmapSprite.__setattr__(self, name, val)
         if name in ('name', 'size'): # no other reason to discard cache than just on path change
             if self.__dict__.get('name') and self.__dict__.get('size'):
-                self.image_data = self.theme.load_icon(self.name, self.size, 0)
+                icon_info = self.theme.lookup_icon(
+                    self.name, None, self.size, 1,
+                    gtk.TextDirection.NONE, gtk.IconLookupFlags.FORCE_SYMBOLIC)
+                icon_file = icon_info.get_file()
+                if icon_file:
+                    path = icon_file.get_path()
+                    if path and path.endswith('.png'):
+                        self.image_data = cairo.ImageSurface.create_from_png(path)
+                    elif path and path.endswith('.svg'):
+                        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path, self.size, self.size)
+                        self.image_data = pixbuf
             else:
                 self.image_data = None
 
@@ -1776,11 +1800,9 @@ class Scene(Parent, gtk.DrawingArea):
                        style_class=None):
         gtk.DrawingArea.__init__(self)
 
-        self._style = self.get_style_context()
-
         #: widget style. One of gtk.STYLE_CLASS_*. By default it's BACKGROUND
-        self.style_class = style_class or gtk.STYLE_CLASS_BACKGROUND
-        self._style.add_class(self.style_class) # so we know our colors
+        self.style_class = style_class or "background"
+        self.add_css_class(self.style_class)
 
         #: list of sprites in scene. use :func:`add_child` to add sprites
         self.sprites = []
@@ -1835,7 +1857,7 @@ class Scene(Parent, gtk.DrawingArea):
         #: can be overidden by child sprites
         self.default_mouse_cursor = None
 
-        self._blank_cursor = gdk.Cursor(gdk.CursorType.BLANK_CURSOR)
+        self._blank_cursor = gdk.Cursor.new_from_name("none")
 
         self.__previous_mouse_signal_time = None
 
@@ -1869,23 +1891,33 @@ class Scene(Parent, gtk.DrawingArea):
 
         self.__last_mouse_move = None
 
-        self.connect("realize", self.__on_realize)
+        self.set_draw_func(self._do_draw)
 
         if interactive:
             self.set_can_focus(True)
-            self.set_events(gdk.EventMask.POINTER_MOTION_MASK
-                            | gdk.EventMask.LEAVE_NOTIFY_MASK | gdk.EventMask.ENTER_NOTIFY_MASK
-                            | gdk.EventMask.BUTTON_PRESS_MASK | gdk.EventMask.BUTTON_RELEASE_MASK
-                            | gdk.EventMask.SCROLL_MASK
-                            | gdk.EventMask.KEY_PRESS_MASK)
-            self.connect("motion-notify-event", self.__on_mouse_move)
-            self.connect("enter-notify-event", self.__on_mouse_enter)
-            self.connect("leave-notify-event", self.__on_mouse_leave)
-            self.connect("button-press-event", self.__on_button_press)
-            self.connect("button-release-event", self.__on_button_release)
-            self.connect("scroll-event", self.__on_scroll)
-            self.connect("key-press-event", self.__on_key_press)
-            self.connect("key-release-event", self.__on_key_release)
+            self.set_focusable(True)
+
+            motion = gtk.EventControllerMotion()
+            motion.connect("motion", self.__on_mouse_move)
+            motion.connect("enter", self.__on_mouse_enter)
+            motion.connect("leave", self.__on_mouse_leave)
+            self.add_controller(motion)
+
+            click = gtk.GestureClick()
+            click.set_button(0)
+            click.connect("pressed", self.__on_button_press)
+            click.connect("released", self.__on_button_release)
+            self.add_controller(click)
+
+            scroll = gtk.EventControllerScroll(
+                flags=gtk.EventControllerScrollFlags.VERTICAL)
+            scroll.connect("scroll", self.__on_scroll)
+            self.add_controller(scroll)
+
+            key = gtk.EventControllerKey()
+            key.connect("key-pressed", self.__on_key_press)
+            key.connect("key-released", self.__on_key_release)
+            self.add_controller(key)
 
 
 
@@ -1905,14 +1937,20 @@ class Scene(Parent, gtk.DrawingArea):
                 val._do_focus()
         elif name == "style_class":
             if hasattr(self, "style_class"):
-                self._style.remove_class(self.style_class)
-            self._style.add_class(val)
+                self.remove_css_class(self.style_class)
+            self.add_css_class(val)
         elif name == "background_color":
             if val:
-                self.override_background_color(gtk.StateType.NORMAL,
-                                               gdk.RGBA(*Colors.parse(val)))
+                rgba = gdk.RGBA()
+                rgba.parse(Colors.hex(val))
+                css = "* {{ background-color: {}; }}".format(rgba.to_string())
+                provider = gtk.CssProvider()
+                provider.load_from_data(css.encode())
+                self.get_style_context().add_provider(
+                    provider, gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
             else:
-                self.override_background_color(gtk.StateType.NORMAL, None)
+                # Removing CSS provider is complex, skip for now
+                pass
 
         self.__dict__[name] = val
 
@@ -1976,7 +2014,17 @@ class Scene(Parent, gtk.DrawingArea):
         return self.__drawing_queued
 
 
-    def do_draw(self, context):
+    def _do_draw(self, area, context, draw_width, draw_height):
+        old_w, old_h = self.width, self.height
+        self.width, self.height = draw_width, draw_height
+
+        if self._original_width is None:
+            self._original_width = float(draw_width)
+            self._original_height = float(draw_height)
+
+        if old_w != draw_width or old_h != draw_height:
+            self.emit("on-resize", SceneEvent())
+
         if self.scale:
             aspect_x = self.width / self._original_width
             aspect_y = self.height / self._original_height
@@ -1987,19 +2035,19 @@ class Scene(Parent, gtk.DrawingArea):
         if self.fps is None:
             self.emit("on-first-frame", context)
 
-        cursor, self.mouse_x, self.mouse_y, mods = self._window.get_pointer()
+        if self.mouse_x is None:
+            self.mouse_x = 0
+        if self.mouse_y is None:
+            self.mouse_y = 0
 
-
-        # update tweens
         now = dt.datetime.now()
         delta = (now - (self._last_frame_time or dt.datetime.now())).total_seconds()
         self._last_frame_time = now
         if self.tweener:
             self.tweener.update(delta)
 
-        self.fps = 1 / delta
+        self.fps = 1 / delta if delta > 0 else 60
 
-        # start drawing
         self.emit("on-enter-frame", context)
         for sprite in self._z_ordered_sprites:
             sprite._draw(context)
@@ -2007,20 +2055,7 @@ class Scene(Parent, gtk.DrawingArea):
         self.__check_mouse(self.mouse_x, self.mouse_y)
         self.emit("on-finish-frame", context)
 
-        # reset the mouse signal time as redraw means we are good now
         self.__previous_mouse_signal_time = None
-
-
-    def do_configure_event(self, event):
-        if self._original_width is None:
-            self._original_width = float(event.width)
-            self._original_height = float(event.height)
-
-        width, height = self.width, self.height
-        self.width, self.height = event.width, event.height
-
-        if width != event.width or height != event.height:
-            self.emit("on-resize", event) # so that sprites can listen to it
 
 
 
@@ -2084,45 +2119,51 @@ class Scene(Parent, gtk.DrawingArea):
             self._mouse_sprite = over
 
         if cursor is None:
-            cursor = self.default_mouse_cursor or gdk.CursorType.ARROW # default
+            cursor = self.default_mouse_cursor or gdk.Cursor.new_from_name("default")
         elif cursor is False:
             cursor = self._blank_cursor
 
         if self.__last_cursor is None or cursor != self.__last_cursor:
             if isinstance(cursor, gdk.Cursor):
-                self._window.set_cursor(cursor)
+                self.set_cursor(cursor)
+            elif isinstance(cursor, str):
+                self.set_cursor(gdk.Cursor.new_from_name(cursor))
             else:
-                self._window.set_cursor(gdk.Cursor(cursor))
+                self.set_cursor(cursor)
 
             self.__last_cursor = cursor
 
 
     """ mouse events """
-    def __on_mouse_move(self, scene, event):
+    def __on_mouse_move(self, controller, x, y):
         if self.__last_mouse_move:
             gobject.source_remove(self.__last_mouse_move)
             self.__last_mouse_move = None
 
-        self.mouse_x, self.mouse_y = event.x, event.y
+        self.mouse_x, self.mouse_y = x, y
+        state = controller.get_current_event_state() if hasattr(controller, 'get_current_event_state') else 0
+        event = SceneEvent(x=x, y=y, state=state)
 
-        # don't emit mouse move signals more often than every 0.05 seconds
         timeout = dt.timedelta(seconds=0.05)
         if self.__previous_mouse_signal_time and dt.datetime.now() - self.__previous_mouse_signal_time < timeout:
-            self.__last_mouse_move = gobject.timeout_add((timeout - (dt.datetime.now() - self.__previous_mouse_signal_time)).microseconds / 1000,
-                                                         self.__on_mouse_move,
-                                                         scene,
-                                                         event.copy())
+            self.__last_mouse_move = gobject.timeout_add(
+                int((timeout - (dt.datetime.now() - self.__previous_mouse_signal_time)).microseconds / 1000),
+                self._deferred_mouse_move, event.copy())
             return
 
-        state = event.state
+        self._process_mouse_move(event)
 
+    def _deferred_mouse_move(self, event):
+        self.__last_mouse_move = None
+        self._process_mouse_move(event)
+        return False
 
+    def _process_mouse_move(self, event):
         if self._mouse_down_sprite and self._mouse_down_sprite.interactive \
            and self._mouse_down_sprite.draggable and gdk.ModifierType.BUTTON1_MASK & event.state:
-            # dragging around
             if not self.__drag_started:
-                drag_started = (self.__drag_start_x is not None and \
-                               (self.__drag_start_x - event.x) ** 2 + \
+                drag_started = (self.__drag_start_x is not None and
+                               (self.__drag_start_x - event.x) ** 2 +
                                (self.__drag_start_y - event.y) ** 2 > self.drag_distance ** 2)
 
                 if drag_started:
@@ -2132,7 +2173,6 @@ class Scene(Parent, gtk.DrawingArea):
                     self.start_drag(self._drag_sprite, self.__drag_start_x, self.__drag_start_y)
 
         else:
-            # avoid double mouse checks - the redraw will also check for mouse!
             if not self.__drawing_queued:
                 self.__check_mouse(event.x, event.y)
 
@@ -2150,7 +2190,6 @@ class Scene(Parent, gtk.DrawingArea):
 
         if self._mouse_sprite:
             sprite_event = event.copy()
-
             sprite_event.x, sprite_event.y = self._mouse_sprite.from_scene_coords(event.x, event.y)
             self._mouse_sprite._do_mouse_move(sprite_event)
 
@@ -2168,10 +2207,10 @@ class Scene(Parent, gtk.DrawingArea):
         self.__drag_started = True
 
 
-    def __on_mouse_enter(self, scene, event):
+    def __on_mouse_enter(self, controller, x, y):
         self._mouse_in = True
 
-    def __on_mouse_leave(self, scene, event):
+    def __on_mouse_leave(self, controller):
         self._mouse_in = False
         if self._mouse_sprite:
             self._mouse_sprite._do_mouse_out()
@@ -2179,93 +2218,90 @@ class Scene(Parent, gtk.DrawingArea):
             self._mouse_sprite = None
 
 
-    def __on_button_press(self, scene, event):
-        target = self.get_sprite_at_position(event.x, event.y)
+    def __on_button_press(self, controller, n_press, x, y):
+        event = SceneEvent(x=x, y=y, button=controller.get_current_button())
+        target = self.get_sprite_at_position(x, y)
         if not self.__drag_started:
-            self.__drag_start_x, self.__drag_start_y = event.x, event.y
+            self.__drag_start_x, self.__drag_start_y = x, y
 
         self._mouse_down_sprite = target
 
-        # differentiate between the click count!
-        if event.type == gdk.EventType.BUTTON_PRESS:
+        if n_press == 1:
             self.emit("on-mouse-down", event)
             if target:
                 target_event = event.copy()
-                target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
+                target_event.x, target_event.y = target.from_scene_coords(x, y)
                 target._do_mouse_down(target_event)
             else:
-                scene._focus_sprite = None  # lose focus if mouse ends up nowhere
-        elif event.type == gdk.EventType._2BUTTON_PRESS:
+                self._focus_sprite = None
+        elif n_press == 2:
             self.emit("on-double-click", event)
             if target:
                 target_event = event.copy()
-                target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
+                target_event.x, target_event.y = target.from_scene_coords(x, y)
                 target._do_double_click(target_event)
-        elif event.type == gdk.EventType._3BUTTON_PRESS:
+        elif n_press == 3:
             self.emit("on-triple-click", event)
             if target:
                 target_event = event.copy()
-                target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
+                target_event.x, target_event.y = target.from_scene_coords(x, y)
                 target._do_triple_click(target_event)
 
-        self.__check_mouse(event.x, event.y)
-        return True
+        self.__check_mouse(x, y)
 
 
-    def __on_button_release(self, scene, event):
-        target = self.get_sprite_at_position(event.x, event.y)
+    def __on_button_release(self, controller, n_press, x, y):
+        event = SceneEvent(x=x, y=y, button=controller.get_current_button())
+        target = self.get_sprite_at_position(x, y)
 
         if target:
             target._do_mouse_up(event)
         self.emit("on-mouse-up", event)
 
-        # trying to not emit click and drag-finish at the same time
-        click = not self.__drag_started or (event.x - self.__drag_start_x) ** 2 + \
-                                           (event.y - self.__drag_start_y) ** 2 < self.drag_distance
+        click = not self.__drag_started or (x - self.__drag_start_x) ** 2 + \
+                                           (y - self.__drag_start_y) ** 2 < self.drag_distance
         if (click and self.__drag_started == False) or not self._drag_sprite:
             if target and target == self._mouse_down_sprite:
                 target_event = event.copy()
-                target_event.x, target_event.y = target.from_scene_coords(event.x, event.y)
+                target_event.x, target_event.y = target.from_scene_coords(x, y)
                 target._do_click(target_event)
 
             self.emit("on-click", event, target)
 
         self._mouse_down_sprite = None
         self.__drag_started = False
-        self.__drag_start_x, self__drag_start_y = None, None
+        self.__drag_start_x, self.__drag_start_y = None, None
 
         if self._drag_sprite:
             self._drag_sprite.drag_x, self._drag_sprite.drag_y = None, None
             drag_sprite, self._drag_sprite = self._drag_sprite, None
             drag_sprite.emit("on-drag-finish", event)
             self.emit("on-drag-finish", drag_sprite, event)
-        self.__check_mouse(event.x, event.y)
-        return True
+        self.__check_mouse(x, y)
 
-    def __on_realize(self, widget):
-        # Store as soon as available. Maybe for performance reasons,
-        # to avoid get_window() calls in __on_mouse_move ?
-        self._window = self.get_window()
-
-    def __on_scroll(self, scene, event):
+    def __on_scroll(self, controller, dx, dy):
+        event = SceneEvent(x=self.mouse_x or 0, y=self.mouse_y or 0)
+        event.dy = dy
         target = self.get_sprite_at_position(event.x, event.y)
         if target:
             target.emit("on-mouse-scroll", event)
         self.emit("on-mouse-scroll", event)
         return True
 
-    def __on_key_press(self, scene, event):
+    def __on_key_press(self, controller, keyval, keycode, state):
+        event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
         handled = False
         if self._focus_sprite:
             handled = self._focus_sprite._do_key_press(event)
         if not handled:
             self.emit("on-key-press", event)
-        return True
+        return handled
 
-    def __on_key_release(self, scene, event):
+    def __on_key_release(self, controller, keyval, keycode, state):
+        event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
         handled = False
         if self._focus_sprite:
             handled = self._focus_sprite._do_key_release(event)
         if not handled:
             self.emit("on-key-release", event)
-        return True
+        return handled

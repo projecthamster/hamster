@@ -28,6 +28,7 @@ from math import ceil
 from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 from gi.repository import Gdk as gdk
+from gi.repository import Gio as gio
 from gi.repository import GObject as gobject
 from gi.repository import PangoCairo as pangocairo
 from gi.repository import Pango as pango
@@ -53,64 +54,49 @@ from hamster.widgets.facttree import FactTree
 class HeaderBar(gtk.HeaderBar):
     def __init__(self):
         gtk.HeaderBar.__init__(self)
-        self.set_show_close_button(True)
+        self.set_show_title_buttons(True)
 
-        box = gtk.Box(False)
-        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic", gtk.IconSize.MENU)
-        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic", gtk.IconSize.MENU)
+        box = gtk.Box()
+        self.time_back = gtk.Button.new_from_icon_name("go-previous-symbolic")
+        self.time_forth = gtk.Button.new_from_icon_name("go-next-symbolic")
 
-        box.add(self.time_back)
-        box.add(self.time_forth)
-        gtk.StyleContext.add_class(box.get_style_context(), "linked")
+        box.append(self.time_back)
+        box.append(self.time_forth)
+        box.add_css_class("linked")
         self.pack_start(box)
 
         self.range_pick = RangePick(dt.hday.today())
         self.pack_start(self.range_pick)
 
         self.system_button = gtk.MenuButton()
-        self.system_button.set_image(gtk.Image.new_from_icon_name(
-            "open-menu-symbolic", gtk.IconSize.MENU))
+        self.system_button.set_icon_name("open-menu-symbolic")
         self.system_button.set_tooltip_markup(_("Menu"))
         self.pack_end(self.system_button)
 
         self.search_button = gtk.ToggleButton()
-        self.search_button.set_image(gtk.Image.new_from_icon_name(
-            "edit-find-symbolic", gtk.IconSize.MENU))
+        self.search_button.set_icon_name("edit-find-symbolic")
         self.search_button.set_tooltip_markup(_("Filter activities"))
         self.pack_end(self.search_button)
 
         self.stop_button = gtk.Button()
-        self.stop_button.set_image(gtk.Image.new_from_icon_name(
-            "process-stop-symbolic", gtk.IconSize.MENU))
+        self.stop_button.set_icon_name("process-stop-symbolic")
         self.stop_button.set_tooltip_markup(_("Stop tracking (Ctrl-SPACE)"))
         self.pack_end(self.stop_button)
 
         self.add_activity_button = gtk.Button()
-        self.add_activity_button.set_image(gtk.Image.new_from_icon_name(
-            "list-add-symbolic", gtk.IconSize.MENU))
+        self.add_activity_button.set_icon_name("list-add-symbolic")
         self.add_activity_button.set_tooltip_markup(_("Add activity (Ctrl-+)"))
         self.pack_end(self.add_activity_button)
 
 
-        self.system_menu = gtk.Menu()
-        self.system_button.set_popup(self.system_menu)
-        self.menu_export = gtk.MenuItem(label=_("Export..."))
-        self.system_menu.append(self.menu_export)
-        self.menu_prefs = gtk.MenuItem(label=_("Tracking Settings"))
-        self.system_menu.append(self.menu_prefs)
-        self.menu_help = gtk.MenuItem(label=_("Help"))
-        self.system_menu.append(self.menu_help)
-        self.system_menu.show_all()
-
+        menu = gio.Menu()
+        menu.append(_("Export..."), "app.hamster-export")
+        menu.append(_("Tracking Settings"), "app.hamster-prefs")
+        menu.append(_("Help"), "app.hamster-help")
+        self.system_button.set_menu_model(menu)
 
         self.time_back.connect("clicked", self.on_time_back_click)
         self.time_forth.connect("clicked", self.on_time_forth_click)
-        self.connect("button-press-event", self.on_button_press)
-
-    def on_button_press(self, bar, event):
-        """swallow clicks on the interactive parts to avoid triggering
-        switch to full-window"""
-        return True
 
     def on_time_back_click(self, button):
         self.range_pick.prev_range()
@@ -278,10 +264,10 @@ class Totals(graphics.Scene):
         box.add_child(self.category_totals, self.stacked_bar)
 
         self.totals = {}
-        self.mouse_cursor = gdk.CursorType.HAND2
+        self.mouse_cursor = gdk.Cursor.new_from_name("pointer")
 
         self.instructions_label = layout.Label(_("Click to see stats"),
-                                               color=self._style.get_color(gtk.StateFlags.NORMAL),
+                                               color=self.get_color(),
                                                padding=10,
                                                expand=False)
 
@@ -310,10 +296,11 @@ class Totals(graphics.Scene):
         self.add_child(self.height_proxy)
 
         self.connect("on-click", self.on_click)
-        self.connect("enter-notify-event", self.on_mouse_enter)
-        self.connect("leave-notify-event", self.on_mouse_leave)
+        self.connect("on-mouse-over", lambda scene, sprite: self.on_mouse_enter())
+        self.connect("on-mouse-out", lambda scene, sprite: self.on_mouse_leave())
         self.connect("state-flags-changed", self.on_state_flags_changed)
-        self.connect("style-updated", self.on_style_changed)
+        self.connect("notify::css-classes", lambda *a: self.update_colors())
+        self.connect("map", lambda w: self.update_colors())
 
 
     def set_facts(self, facts):
@@ -354,9 +341,9 @@ class Totals(graphics.Scene):
             self.change_height(300)
             self.instructions_label.visible = False
 
-        self.mouse_cursor = gdk.CursorType.HAND2 if self.collapsed else None
+        self.mouse_cursor = gdk.Cursor.new_from_name("pointer") if self.collapsed else None
 
-    def on_mouse_enter(self, scene, event):
+    def on_mouse_enter(self, *args):
         if not self.collapsed:
             return
 
@@ -368,7 +355,7 @@ class Totals(graphics.Scene):
                                   on_update=lambda sprite: sprite.redraw())
 
 
-    def on_mouse_leave(self, scene, event):
+    def on_mouse_leave(self, *args):
         if not self.collapsed:
             return
 
@@ -379,10 +366,7 @@ class Totals(graphics.Scene):
                                   on_complete=delayed_leave,
                                   on_update=lambda sprite: sprite.redraw())
 
-    def on_state_flags_changed(self, previous_state, _):
-        self.update_colors()
-
-    def on_style_changed(self, _):
+    def on_state_flags_changed(self, *args):
         self.update_colors()
 
     def change_height(self, new_height):
@@ -395,14 +379,22 @@ class Totals(graphics.Scene):
                      on_update=on_update_dummy,
                      easing=Easing.Expo.ease_out)
 
+    def _get_fg_color(self):
+        root = self.get_root()
+        if root:
+            return root.get_color()
+        return self.get_color()
+
     def update_colors(self):
-        color = self._style.get_color(self.get_state())
+        color = self._get_fg_color()
         self.instructions_label.color = color
         self.category_totals.color = color
         self.activities_chart.label_color = color
         self.categories_chart.label_color = color
         self.tag_chart.label_color = color
-        bg_color = self._style.get_background_color(self.get_state())
+        success, bg_color = self.get_style_context().lookup_color("theme_bg_color")
+        if not success:
+            bg_color = gdk.RGBA(1, 1, 1, 1)
         bar_color = self.colors.mix(bg_color, color, 0.6)
         self.activities_chart.bar_color = bar_color
         self.categories_chart.bar_color = bar_color
@@ -415,7 +407,6 @@ class Overview(Controller):
 
         self.prefs_dialog = None  # preferences dialog controller
 
-        self.window.set_position(gtk.WindowPosition.CENTER)
         self.window.set_default_icon_name("org.gnome.Hamster.GUI")
         self.window.set_default_size(700, 500)
 
@@ -426,24 +417,29 @@ class Overview(Controller):
         self.header_bar = HeaderBar()
         self.window.set_titlebar(self.header_bar)
 
-        main = gtk.Box(orientation=1)
-        self.window.add(main)
+        main = gtk.Box(orientation=gtk.Orientation.VERTICAL)
+        self.window.set_child(main)
 
         self.report_chooser = None
 
 
         self.search_box = gtk.Revealer()
 
-        space = gtk.Box(border_width=5)
-        self.search_box.add(space)
+        space = gtk.Box()
+        space.set_margin_start(5)
+        space.set_margin_end(5)
+        space.set_margin_top(5)
+        space.set_margin_bottom(5)
+        self.search_box.set_child(space)
         self.filter_entry = gtk.Entry()
         self.filter_entry.set_icon_from_icon_name(gtk.EntryIconPosition.PRIMARY,
                                                   "edit-find-symbolic")
         self.filter_entry.connect("changed", self.on_search_changed)
         self.filter_entry.connect("icon-press", self.on_search_icon_press)
 
-        space.pack_start(self.filter_entry, True, True, 0)
-        main.pack_start(self.search_box, False, True, 0)
+        self.filter_entry.set_hexpand(True)
+        space.append(self.filter_entry)
+        main.append(self.search_box)
 
 
         window = gtk.ScrolledWindow()
@@ -452,11 +448,12 @@ class Overview(Controller):
         self.fact_tree.connect("on-activate-row", self.on_row_activated)
         self.fact_tree.connect("on-delete-called", self.on_row_delete_called)
 
-        window.add(self.fact_tree)
-        main.pack_start(window, True, True, 1)
+        window.set_child(self.fact_tree)
+        window.set_vexpand(True)
+        main.append(window)
 
         self.totals = Totals()
-        main.pack_start(self.totals, False, True, 1)
+        main.append(self.totals)
 
         # FIXME: should store and recall date_range from hamster.lib.configuration.conf
         hamster_day = dt.hday.today()
@@ -466,62 +463,72 @@ class Overview(Controller):
         self.header_bar.stop_button.connect("clicked", self.on_stop_clicked)
         self.header_bar.search_button.connect("toggled", self.on_search_toggled)
 
-        self.header_bar.menu_prefs.connect("activate", self.on_prefs_clicked)
-        self.header_bar.menu_export.connect("activate", self.on_export_clicked)
-        self.header_bar.menu_help.connect("activate", self.on_help_clicked)
+        app = gtk.Application.get_default()
+        if app:
+            export_action = gio.SimpleAction.new("hamster-export", None)
+            export_action.connect("activate", lambda a, p: self.on_export_clicked(None))
+            app.add_action(export_action)
 
+            prefs_action = gio.SimpleAction.new("hamster-prefs", None)
+            prefs_action.connect("activate", lambda a, p: self.on_prefs_clicked(None))
+            app.add_action(prefs_action)
 
-        self.window.connect("key-press-event", self.on_key_press)
+            help_action = gio.SimpleAction.new("hamster-help", None)
+            help_action.connect("activate", lambda a, p: self.on_help_clicked(None))
+            app.add_action(help_action)
+
+        # Ctrl+shortcuts via ShortcutController (doesn't intercept normal typing)
+        sc = gtk.ShortcutController()
+        sc.set_scope(gtk.ShortcutScope.MANAGED)
+        for trigger, callback in [
+            ("<Control>f", lambda w, a: self.header_bar.search_button.set_active(True)),
+            ("<Control>n", lambda w, a: self.start_new_fact(clone_selected=False)),
+            ("<Control>r", lambda w, a: self.start_new_fact(clone_selected=True, fallback=False)),
+            ("<Control>space", lambda w, a: self.storage.stop_or_restart_tracking()),
+            ("<Control>plus", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
+            ("<Control>KP_Add", lambda w, a: self.start_new_fact(clone_selected=True, fallback=True)),
+            ("Escape", lambda w, a: self.close_window()),
+            ("<Control>w", lambda w, a: self.close_window()),
+        ]:
+            sc.add_shortcut(gtk.Shortcut(
+                trigger=gtk.ShortcutTrigger.parse_string(trigger),
+                action=gtk.CallbackAction.new(callback),
+            ))
+        self.window.add_controller(sc)
+
+        # Arrow/nav keys forwarded to fact_tree via EventControllerKey
+        key_controller = gtk.EventControllerKey()
+        key_controller.connect("key-pressed", self.on_key_press)
+        self.window.add_controller(key_controller)
 
         self.facts = []
         self.find_facts()
 
         # update every minute (necessary if an activity is running)
         gobject.timeout_add_seconds(60, self.on_timeout)
-        self.window.show_all()
 
 
-    def on_key_press(self, window, event):
+    def on_key_press(self, controller, keyval, keycode, state):
+        if not self.window.is_active():
+            return False
         if self.filter_entry.has_focus():
-            if event.keyval == gdk.KEY_Escape:
-                self.filter_entry.set_text("")
-                self.header_bar.search_button.set_active(False)
-                return True
-        elif event.keyval in (gdk.KEY_Up, gdk.KEY_Down,
-                              gdk.KEY_Home, gdk.KEY_End,
-                              gdk.KEY_Page_Up, gdk.KEY_Page_Down,
-                              gdk.KEY_Return, gdk.KEY_Delete):
-            # These keys should work even when fact_tree does not have focus
-            self.fact_tree.on_key_press(self, event)
-            return True  # stop event propagation
-        elif event.keyval == gdk.KEY_Left:
+            return False
+        from hamster.lib.graphics import SceneEvent
+        event = SceneEvent(keyval=keyval, keycode=keycode, state=state)
+        if keyval in (gdk.KEY_Up, gdk.KEY_Down,
+                      gdk.KEY_Home, gdk.KEY_End,
+                      gdk.KEY_Page_Up, gdk.KEY_Page_Down,
+                      gdk.KEY_Return, gdk.KEY_Delete):
+            if not self.fact_tree.has_focus():
+                self.fact_tree.on_key_press(self, event)
+            return True
+        elif keyval == gdk.KEY_Left:
             self.header_bar.time_back.emit("clicked")
             return True
-        elif event.keyval == gdk.KEY_Right:
+        elif keyval == gdk.KEY_Right:
             self.header_bar.time_forth.emit("clicked")
             return True
-
-        if self.fact_tree.has_focus() or self.totals.has_focus():
-            if event.keyval == gdk.KEY_Tab:
-                pass # TODO - deal with tab as our scenes eat up navigation
-
-        if event.state & gdk.ModifierType.CONTROL_MASK:
-            # the ctrl+things
-            if event.keyval == gdk.KEY_f:
-                self.header_bar.search_button.set_active(True)
-            elif event.keyval == gdk.KEY_n:
-                self.start_new_fact(clone_selected=False)
-            elif event.keyval == gdk.KEY_r:
-                # Resume/run; clear separation between Ctrl-R and Ctrl-N
-                self.start_new_fact(clone_selected=True, fallback=False)
-            elif event.keyval == gdk.KEY_space:
-                self.storage.stop_or_restart_tracking()
-            elif event.keyval in (gdk.KEY_KP_Add, gdk.KEY_plus):
-                # same as pressing the + icon
-                self.start_new_fact(clone_selected=True, fallback=True)
-
-        if event.keyval == gdk.KEY_Escape:
-            self.close_window()
+        return False
 
     def find_facts(self, scroll_to_top=False):
         start, end = self.header_bar.range_pick.get_range()
@@ -581,12 +588,16 @@ class Overview(Controller):
     def on_help_clicked(self, menu):
         uri = "help:hamster"
         try:
-            gtk.show_uri(None, uri, gdk.CURRENT_TIME)
+            gtk.show_uri(self.window, uri, gdk.CURRENT_TIME)
         except glib.Error:
             msg = sys.exc_info()[1].args[0]
-            dialog = gtk.MessageDialog(self.window, 0, gtk.MessageType.ERROR,
-                                       gtk.ButtonsType.CLOSE,
-                                       _("Failed to open {}").format(uri))
+            dialog = gtk.MessageDialog(
+                transient_for=self.window,
+                modal=True,
+                message_type=gtk.MessageType.ERROR,
+                buttons=gtk.ButtonsType.CLOSE,
+                text=_("Failed to open {}").format(uri)
+            )
             fmt = _('Error: "{}" - is a help browser installed on this computer?')
             dialog.format_secondary_text(fmt.format(msg))
             dialog.run()
@@ -611,7 +622,7 @@ class Overview(Controller):
                 webbrowser.open_new("file://%s" % path)
             else:
                 try:
-                    gtk.show_uri(None, "file://%s" % path, gdk.CURRENT_TIME)
+                    gtk.show_uri(self.window, "file://%s" % path, gdk.CURRENT_TIME)
                 except:
                     pass # bug 626656 - no use in capturing this one i think
 
