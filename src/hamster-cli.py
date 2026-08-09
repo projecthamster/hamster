@@ -170,9 +170,7 @@ class Hamster(gtk.Application):
                 logger.debug("new About")
             controller = self.about_controller
         elif name in ("add", "clone", "edit"):
-            if self.fact_controller:
-                # Something is already going on, with other arguments, present it.
-                # Or should we just discard the forgotten one ?
+            if self.fact_controller and self.fact_controller.window:
                 logger.warning("Fact controller already active. Please close first.")
             else:
                 fact_id = data.get_int32() if data else None

@@ -519,7 +519,8 @@ class Overview(Controller):
                       gdk.KEY_Home, gdk.KEY_End,
                       gdk.KEY_Page_Up, gdk.KEY_Page_Down,
                       gdk.KEY_Return, gdk.KEY_Delete):
-            self.fact_tree.on_key_press(self, event)
+            if not self.fact_tree.has_focus():
+                self.fact_tree.on_key_press(self, event)
             return True
         elif keyval == gdk.KEY_Left:
             self.header_bar.time_back.emit("clicked")
