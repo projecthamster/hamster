@@ -324,12 +324,11 @@ class PreferencesEditor(Controller):
         cell_id = model.get_value(iter, 0)
         cell_text = model.get_value(iter, 1)
         if cell_id == -1:
-            text = '<span color="#555" style="italic">%s</span>' % cell_text # TODO - should get color from theme
-            cell.set_property('markup', text)
+            cell.set_property('markup', '<i>%s</i>' % cell_text)
+            cell.set_property('sensitive', False)
         else:
             cell.set_property('text', cell_text)
-
-        return
+            cell.set_property('sensitive', True)
 
     def on_activity_list_button_pressed(self, tree, n_press, x, y):
         self.activityCell.set_property("editable", False)

@@ -236,8 +236,8 @@ class CmdLineEntry(gtk.Entry):
 
         self.checker = self.connect("changed", self.on_changed)
 
-        # Replace key-press-event with EventControllerKey
         key_ctrl = gtk.EventControllerKey()
+        key_ctrl.set_propagation_phase(gtk.PropagationPhase.CAPTURE)
         key_ctrl.connect("key-pressed", self._on_key_pressed_gtk4)
         self.add_controller(key_ctrl)
 
@@ -482,79 +482,132 @@ class CmdLineEntry(gtk.Entry):
         self.popup.popup()
 
 
-class ActivityEntry():
-    """Activity entry widget.
+class _AutocompleteEntry():
+    """Entry with Popover-based autocomplete (replaces GTK3 EntryCompletion)."""
 
-    widget (gtk.Entry): the associated activity entry
-    category_widget (gtk.Entry): the associated category entry
+    def __init__(self, widget=None, **kwds):
+        self.widget = widget or gtk.Entry(**kwds)
+        self._storage = client.Storage()
 
-    Note: GTK4 removed EntryCompletion. Autocomplete is now handled by
-    the CmdLineEntry pattern with Popover.
-    """
+        self._popup = gtk.Popover()
+        self._popup.set_autohide(False)
+        self._popup.set_parent(self.widget)
+        sw = gtk.ScrolledWindow()
+        sw.set_policy(gtk.PolicyType.NEVER, gtk.PolicyType.AUTOMATIC)
+        sw.set_max_content_height(200)
+        sw.set_propagate_natural_height(True)
+        self._listbox = gtk.ListBox()
+        self._listbox.set_selection_mode(gtk.SelectionMode.SINGLE)
+        self._listbox.connect("row-activated", self._on_row_activated)
+        sw.set_child(self._listbox)
+        self._popup.set_child(sw)
+
+        self.widget.set_icon_from_icon_name(
+            gtk.EntryIconPosition.SECONDARY, "pan-down-symbolic")
+        self._changed_handler = self.widget.connect("changed", self._on_changed)
+        self.widget.connect("icon-press", self._on_icon_press)
+
+        key_ctrl = gtk.EventControllerKey()
+        key_ctrl.connect("key-pressed", self._on_key_press)
+        self.widget.add_controller(key_ctrl)
+
+        focus_ctrl = gtk.EventControllerFocus()
+        focus_ctrl.connect("leave", lambda c: self._popup.popdown())
+        self.widget.add_controller(focus_ctrl)
+
+    def _get_suggestions(self):
+        return []
+
+    def _suggestion_label(self, item):
+        return str(item)
+
+    def _on_select(self, text):
+        with self.widget.handler_block(self._changed_handler):
+            self.widget.set_text(text)
+            self.widget.set_position(-1)
+        self.widget.emit("changed")
+
+    def _update_listbox(self, text):
+        while child := self._listbox.get_first_child():
+            self._listbox.remove(child)
+        text_lower = text.lower().strip()
+        for item in self._get_suggestions():
+            label = self._suggestion_label(item)
+            if text_lower and text_lower not in label.lower():
+                continue
+            row = gtk.ListBoxRow()
+            row._value = label
+            row.set_child(gtk.Label(label=label, xalign=0))
+            self._listbox.append(row)
+
+    def _show_suggestions(self):
+        self._update_listbox(self.widget.get_text())
+        if self._listbox.get_first_child():
+            entry_alloc = self.widget.get_allocation()
+            self._listbox.set_size_request(entry_alloc.width, -1)
+            self._popup.popup()
+        else:
+            self._popup.popdown()
+
+    def _on_changed(self, entry):
+        if self.widget.has_focus():
+            self._show_suggestions()
+
+    def _on_icon_press(self, entry, icon):
+        if icon == gtk.EntryIconPosition.SECONDARY:
+            if self._popup.get_visible():
+                self._popup.popdown()
+            else:
+                self.widget.grab_focus()
+                self._show_suggestions()
+        elif icon == gtk.EntryIconPosition.PRIMARY:
+            self.widget.grab_focus()
+            with self.widget.handler_block(self._changed_handler):
+                self.widget.set_text("")
+            self.widget.emit("changed")
+
+    def _on_key_press(self, controller, keyval, keycode, state):
+        if keyval in (gdk.KEY_Escape, gdk.KEY_Return, gdk.KEY_KP_Enter):
+            self._popup.popdown()
+            return False
+        if keyval in (gdk.KEY_Up, gdk.KEY_Down) and self._popup.get_visible():
+            row = self._listbox.get_selected_row()
+            if keyval == gdk.KEY_Down:
+                next_row = row.get_next_sibling() if row else self._listbox.get_first_child()
+            else:
+                next_row = row.get_prev_sibling() if row else None
+            if next_row:
+                self._listbox.select_row(next_row)
+                self._on_select(next_row._value)
+            return True
+        return False
+
+    def _on_row_activated(self, listbox, row):
+        self._on_select(row._value)
+        self._popup.popdown()
+
+    def __getattr__(self, name):
+        return getattr(self.widget, name)
+
+
+class ActivityEntry(_AutocompleteEntry):
     def __init__(self, widget=None, category_widget=None, **kwds):
-        # widget may be defined already
-        # e.g. in the glade edit_activity.ui file
-        self.widget = widget
-        if not self.widget:
-            self.widget = gtk.Entry(**kwds)
-
+        super().__init__(widget=widget, **kwds)
         self.category_widget = category_widget
 
-        # GTK4: EntryCompletion removed. For now, entry works without autocomplete.
-        # TODO: Consider migrating to CmdLineEntry pattern if autocomplete is needed.
+    def _get_suggestions(self):
+        return self._storage.get_activities()
 
-        self.connect("icon-release", self.on_icon_release)
-
-        # Replace focus-in-event with EventControllerFocus
-        focus_ctrl = gtk.EventControllerFocus()
-        focus_ctrl.connect("enter", self.on_focus_in_event)
-        self.widget.add_controller(focus_ctrl)
-
-    def on_focus_in_event(self, controller):
-        # GTK4: EntryCompletion removed, this method is now a no-op
-        pass
-
-    def on_icon_release(self, entry, icon_pos, event):
-        self.grab_focus()
-        self.set_text("")
-        self.emit("changed")
-
-    def __getattr__(self, name):
-        return getattr(self.widget, name)
+    def _suggestion_label(self, item):
+        return item['name']
 
 
-class CategoryEntry():
-    """Category entry widget.
-
-    widget (gtk.Entry): the associated category entry
-
-    Note: GTK4 removed EntryCompletion. Autocomplete is now handled by
-    the CmdLineEntry pattern with Popover.
-    """
+class CategoryEntry(_AutocompleteEntry):
     def __init__(self, widget=None, **kwds):
-        # widget may be defined already
-        # e.g. in the glade edit_activity.ui file
-        self.widget = widget
-        if not self.widget:
-            self.widget = gtk.Entry(**kwds)
+        super().__init__(widget=widget, **kwds)
 
-        # GTK4: EntryCompletion removed. For now, entry works without autocomplete.
-        # TODO: Consider migrating to CmdLineEntry pattern if autocomplete is needed.
+    def _get_suggestions(self):
+        return self._storage.get_categories()
 
-        self.widget.connect("icon-release", self.on_icon_release)
-
-        # Replace focus-in-event with EventControllerFocus
-        focus_ctrl = gtk.EventControllerFocus()
-        focus_ctrl.connect("enter", self.on_focus_in_event)
-        self.widget.add_controller(focus_ctrl)
-
-    def on_focus_in_event(self, controller):
-        # GTK4: EntryCompletion removed, this method is now a no-op
-        pass
-
-    def on_icon_release(self, entry, icon_pos, event):
-        self.widget.grab_focus()
-        self.widget.set_text("")
-
-    def __getattr__(self, name):
-        return getattr(self.widget, name)
+    def _suggestion_label(self, item):
+        return item['name']
