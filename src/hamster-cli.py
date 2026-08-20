@@ -142,7 +142,9 @@ class Hamster(gtk.Application):
 
     def on_activate(self, data=None):
         logger.debug("activate")
-        if not self.get_windows():
+        if window := self.get_active_window():
+            window.present()
+        else:
             self.activate_action("overview")
 
     def on_activate_window(self, action=None, data=None):
