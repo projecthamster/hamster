@@ -223,6 +223,24 @@ class TestFactParsing(unittest.TestCase):
         fact = Fact()
         self.assertEqual(fact.serialized(), "")
 
+    def test_as_dict_of_fact_without_times(self):
+        # start and end default to None; as_dict must not crash on them
+        fact = Fact(activity="activity")
+        d = fact.as_dict()
+        self.assertEqual(d["start_time"], "")
+        self.assertEqual(d["end_time"], "")
+        self.assertEqual(d["delta"], "")
+        self.assertEqual(d["activity"], "activity")
+
+    def test_as_dict_of_fact_with_start_only(self):
+        start = dt.datetime(2020, 1, 15, 13, 30)
+        fact = Fact(activity="activity", start=start)
+        d = fact.as_dict()
+        import calendar
+        self.assertEqual(d["start_time"], calendar.timegm(start.timetuple()))
+        self.assertEqual(d["end_time"], "")
+        self.assertGreaterEqual(d["delta"], 0)
+
     def test_commas(self):
         fact = Fact.parse("11:00 12:00 activity@category, description, with comma")
         self.assertEqual(fact.activity, "activity")
