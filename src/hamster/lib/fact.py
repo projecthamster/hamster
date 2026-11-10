@@ -77,9 +77,9 @@ class Fact(object):
             'description': self.description,
             'tags': [tag.strip() for tag in self.tags],
             'date': calendar.timegm(date.timetuple()) if date else "",
-            'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()),
+            'start_time': self.range.start if isinstance(self.range.start, str) else calendar.timegm(self.range.start.timetuple()) if self.range.start else "",
             'end_time': self.range.end if isinstance(self.range.end, str) else calendar.timegm(self.range.end.timetuple()) if self.range.end else "",
-            'delta': self.delta.total_seconds()  # ugly, but needed for report.py
+            'delta': self.delta.total_seconds() if self.range.start else "",  # ugly, but needed for report.py
         }
 
     @property
